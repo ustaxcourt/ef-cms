@@ -1,4 +1,4 @@
-#!/bin/bash -e
+#!/bin/bash
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
@@ -10,10 +10,13 @@
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
-set +e
+CODE=$?
+if [[ "${CODE}" == "1" ]]; then
+  exit 1
+fi
+
 node web-api/is-migration-needed.js
 SKIP_MIGRATION="$?"
-set -e
 
 if [[ "${SKIP_MIGRATION}" == "1" ]]; then
   exit 0
