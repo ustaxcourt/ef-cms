@@ -1,7 +1,8 @@
-#!/bin/bash -e
+#!/bin/bash
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
 
+set -e
 ./check-env-variables.sh \
   "ENV" \
   "EFCMS_DOMAIN" \
@@ -9,11 +10,10 @@
   "AWS_ACCOUNT_ID" \
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
-
 set +e
+
 node web-api/is-migration-needed.js
 SKIP_MIGRATION="$?"
-set -e
 
 if [[ "${SKIP_MIGRATION}" == "1" ]]; then
   exit 0
