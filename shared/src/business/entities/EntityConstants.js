@@ -53,6 +53,24 @@ const PARTY_VIEW_TABS = {
   respondentCounsel: 'Respondent Counsel',
 };
 
+const ALLOWLIST_FEATURE_FLAGS = {
+  EXTERNAL_ORDER_SEARCH: {
+    disabledMessage:
+      'Order search has been temporarily disabled. Please try again later.',
+    key: 'external-order-search-enabled',
+  },
+  INTERNAL_OPINION_SEARCH: {
+    disabledMessage:
+      'Opinion search has been temporarily disabled. Please try again later.',
+    key: 'internal-opinion-search-enabled',
+  },
+  INTERNAL_ORDER_SEARCH: {
+    disabledMessage:
+      'Order search has been temporarily disabled. Please try again later.',
+    key: 'internal-order-search-enabled',
+  },
+};
+
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
 const SERVICE_INDICATOR_TYPES = {
@@ -1220,6 +1238,7 @@ module.exports = deepFreeze({
   UNIQUE_OTHER_FILER_TYPE,
   UNSERVABLE_EVENT_CODES,
   LEGACY_TRIAL_CITY_STRINGS,
+  ALLOWLIST_FEATURE_FLAGS,
   US_STATES,
   US_STATES_OTHER,
   filter8684CategoryMap,

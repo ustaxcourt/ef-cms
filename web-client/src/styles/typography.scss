@@ -113,6 +113,7 @@ h6 {
     }
   }
 }
+
 p:not(.site-banner):not(.beta) {
   p {
     font-size: 17px;
@@ -125,6 +126,7 @@ p.lead {
   font-size: 20px;
   font-weight: $font-regular;
   line-height: 1.7em;
+
   &.bold {
     font-weight: $font-bold;
   }
@@ -133,6 +135,7 @@ p.lead {
 p.semi-bold {
   font-size: 17px;
   font-weight: $font-semibold;
+
   &.label {
     margin-bottom: 5px;
   }

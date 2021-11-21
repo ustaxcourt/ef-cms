@@ -5,16 +5,30 @@ const { deleteUserConnection } = require('./deleteUserConnection');
 
 describe('deleteUserConnection', () => {
   it('attempts to to delete the user connection', async () => {
-    applicationContext.getDocumentClient().query.mockReturnValue({
+    applicationContext.getDocumentClient().get.mockReturnValueOnce({
       promise: () =>
         Promise.resolve({
-          Items: [{ pk: 'connections-123', sk: 'abc' }],
+          Item: {
+            connectionId: '123',
+            pk: 'connection|123',
+            sk: 'connection|123',
+            userId: 'abc',
+          },
+        }),
+    });
+    applicationContext.getDocumentClient().get.mockReturnValueOnce({
+      promise: () =>
+        Promise.resolve({
+          Item: {
+            pk: 'user|abc',
+            sk: 'connection|123',
+          },
         }),
     });
 
     await deleteUserConnection({
       applicationContext,
-      connectionId: 'abc',
+      connectionId: '123',
     });
 
     expect(
@@ -25,8 +39,16 @@ describe('deleteUserConnection', () => {
           {
             DeleteRequest: {
               Key: {
-                pk: 'connections-123',
-                sk: 'abc',
+                pk: 'user|abc',
+                sk: 'connection|123',
+              },
+            },
+          },
+          {
+            DeleteRequest: {
+              Key: {
+                pk: 'connection|123',
+                sk: 'connection|123',
               },
             },
           },

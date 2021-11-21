@@ -198,6 +198,9 @@ const {
   getEligibleCasesForTrialSessionLambda,
 } = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
 const {
+  getFeatureFlagValueLambda,
+} = require('./featureFlag/getFeatureFlagValueLambda');
+const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
@@ -215,9 +218,6 @@ const {
 const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
-const {
-  getOrderSearchEnabledLambda,
-} = require('./search/getOrderSearchEnabledLambda');
 const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
@@ -415,6 +415,7 @@ const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
 const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
+const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
@@ -777,6 +778,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  */
 {
   app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
+  app.put('/documents/:key/sanitize', lambdaWrapper(sanitizePdfLambda));
   app.get(
     '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),
@@ -889,16 +891,6 @@ app.get(
   app.post(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
-  );
-}
-
-/**
- * search
- */
-{
-  app.get(
-    '/search/order-search-enabled',
-    lambdaWrapper(getOrderSearchEnabledLambda),
   );
 }
 
@@ -1084,5 +1076,10 @@ app.get(
  * maintenance-mode
  */
 app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
+
+/**
+ * feature-flag
+ */
+app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;
