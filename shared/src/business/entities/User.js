@@ -79,13 +79,11 @@ const USER_CONTACT_VALIDATION_RULES = {
     otherwise: JoiValidationConstants.US_POSTAL_CODE.required(),
     then: JoiValidationConstants.STRING.max(100).required(),
   }),
-  state: JoiValidationConstants.STRING.valid(
-    ...Object.keys(US_STATES),
-    ...US_STATES_OTHER,
-    STATE_NOT_AVAILABLE,
-  ).when('countryType', {
+  state: JoiValidationConstants.STRING.when('countryType', {
     is: COUNTRY_TYPES.INTERNATIONAL,
-    otherwise: joi.required(),
+    otherwise: joi
+      .valid(...Object.keys(US_STATES), ...US_STATES_OTHER, STATE_NOT_AVAILABLE)
+      .required(),
     then: joi.optional().allow(null),
   }),
 };
