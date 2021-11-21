@@ -121,6 +121,64 @@ describe('createCaseFromPaperInteractor', () => {
     expect(caseFromPaper).toBeDefined();
   });
 
+  it('adds a applicationForWaiverOfFilingFee docket entry to the case', async () => {
+    const caseFromPaper = await createCaseFromPaperInteractor(
+      applicationContext,
+      {
+        applicationForWaiverOfFilingFeeFileId:
+          '413f62ce-7c8d-446e-aeda-14a2a625a611',
+        archivedDocketEntries: [],
+        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
+        petitionMetadata: {
+          caseCaption: 'caseCaption',
+          caseType: CASE_TYPES_MAP.other,
+          contactSecondary: {},
+          filingType: 'Myself',
+          hasIrsNotice: true,
+          irsNoticeDate: DATE,
+          mailingDate: 'testing',
+          partyType: PARTY_TYPES.petitioner,
+          petitionFile: new File([], 'petitionFile.pdf'),
+          petitionFileSize: 1,
+          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
+          petitioners: [
+            {
+              address1: '99 South Oak Lane',
+              address2: 'Culpa numquam saepe ',
+              address3: 'Eaque voluptates com',
+              city: 'Dignissimos voluptat',
+              contactType: CONTACT_TYPES.primary,
+              countryType: COUNTRY_TYPES.DOMESTIC,
+              email: 'petitioner1@example.com',
+              name: 'Diana Prince',
+              phone: '+1 (215) 128-6587',
+              postalCode: '69580',
+              state: 'AR',
+            },
+          ],
+          preferredTrialCity: 'Fresno, California',
+          procedureType: 'Small',
+          receivedAt: applicationContext.getUtilities().createISODateString(),
+          requestForPlaceOfTrialFile: new File(
+            [],
+            'requestForPlaceOfTrialFile.pdf',
+          ),
+          requestForPlaceOfTrialFileSize: 1,
+          stinFile: new File([], 'stinFile.pdf'),
+          stinFileSize: 1,
+        },
+      },
+    );
+
+    const applicationForWaiverOfFilingFeeDocketEntry =
+      caseFromPaper.docketEntries.find(
+        d =>
+          d.eventCode ===
+          INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.eventCode,
+      );
+    expect(applicationForWaiverOfFilingFeeDocketEntry).toBeDefined();
+  });
+
   it('adds a STIN docket entry to the case with index 0', async () => {
     const caseFromPaper = await createCaseFromPaperInteractor(
       applicationContext,
@@ -343,7 +401,6 @@ describe('createCaseFromPaperInteractor', () => {
           stinFileSize: 1,
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
       },
     );
 
@@ -353,59 +410,6 @@ describe('createCaseFromPaperInteractor', () => {
     );
 
     expect(reqForPlaceOfTrialDocketEntry).toBeDefined();
-
-    expect(caseFromPaper).toBeDefined();
-  });
-
-  it('creates a case from paper with Application for Waiver of Filing Fee', async () => {
-    const caseFromPaper = await createCaseFromPaperInteractor(
-      applicationContext,
-      {
-        applicationForWaiverOfFilingFeeFileId:
-          '413f62ce-7c8d-446e-aeda-14a2a625a611',
-        archivedDocketEntries: [],
-        petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
-        petitionMetadata: {
-          caseCaption: 'caseCaption',
-          caseType: CASE_TYPES_MAP.other,
-          contactSecondary: {},
-          filingType: 'Myself',
-          hasIrsNotice: true,
-          irsNoticeDate: DATE,
-          mailingDate: 'testing',
-          partyType: PARTY_TYPES.petitioner,
-          petitionFile: new File([], 'petitionFile.pdf'),
-          petitionFileSize: 1,
-          petitionPaymentStatus: PAYMENT_STATUS.UNPAID,
-          petitioners: [
-            {
-              address1: '99 South Oak Lane',
-              address2: 'Culpa numquam saepe ',
-              address3: 'Eaque voluptates com',
-              city: 'Dignissimos voluptat',
-              contactType: CONTACT_TYPES.primary,
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              email: 'petitioner1@example.com',
-              name: 'Diana Prince',
-              phone: '+1 (215) 128-6587',
-              postalCode: '69580',
-              state: 'AR',
-            },
-          ],
-          preferredTrialCity: 'Fresno, California',
-          procedureType: 'Small',
-          receivedAt: applicationContext.getUtilities().createISODateString(),
-          requestForPlaceOfTrialFile: new File(
-            [],
-            'requestForPlaceOfTrialFile.pdf',
-          ),
-          requestForPlaceOfTrialFileSize: 1,
-          stinFile: new File([], 'stinFile.pdf'),
-          stinFileSize: 1,
-        },
-        stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      },
-    );
 
     expect(caseFromPaper).toBeDefined();
   });
