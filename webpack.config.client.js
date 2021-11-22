@@ -30,6 +30,7 @@ module.exports = {
       },
     ],
   },
+  parallelism: 66,
   plugins: [
     new HtmlWebpackPugPlugin(),
     new webpack.ProvidePlugin({
