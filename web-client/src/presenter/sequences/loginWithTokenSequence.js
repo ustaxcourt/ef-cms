@@ -1,9 +1,12 @@
 import { decodeTokenAction } from '../actions/decodeTokenAction';
+import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getUserAction } from '../actions/getUserAction';
+import { navigateToMaintenanceAction } from '../actions/navigateToMaintenanceAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
+import { setupConfigSequence } from './setupConfigSequence';
 
 /**
  * Combine several sequences; set login value, and
@@ -14,8 +17,15 @@ import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 export const loginWithTokenSequence = [
   decodeTokenAction,
   setTokenAction,
-  getUserAction,
-  setUserAction,
-  setUserPermissionsAction,
-  navigateToPathAction,
+  getMaintenanceModeAction,
+  {
+    maintenanceOff: [
+      getUserAction,
+      setUserAction,
+      setUserPermissionsAction,
+      setupConfigSequence,
+      navigateToPathAction,
+    ],
+    maintenanceOn: [navigateToMaintenanceAction],
+  },
 ];

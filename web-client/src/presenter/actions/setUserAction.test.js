@@ -42,4 +42,20 @@ describe('setUserAction', () => {
       value: user,
     });
   });
+
+  it('stores the permissions onto state after running', async () => {
+    applicationContext.getCurrentUserPermissions.mockReturnValue(true);
+    const result = await runAction(setUserAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        user: {
+          userId: 'petitioner',
+        },
+      },
+      state: {},
+    });
+    expect(result.state.permissions).toBeDefined();
+  });
 });

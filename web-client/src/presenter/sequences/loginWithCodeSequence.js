@@ -1,10 +1,13 @@
 import { authenticateCodeAction } from '../actions/authenticateCodeAction';
 import { decodeTokenAction } from '../actions/decodeTokenAction';
+import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getUserAction } from '../actions/getUserAction';
+import { navigateToMaintenanceAction } from '../actions/navigateToMaintenanceAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
 import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
+import { setupConfigSequence } from './setupConfigSequence';
 import { startRefreshIntervalAction } from '../actions/startRefreshIntervalAction';
 
 /**
@@ -18,8 +21,15 @@ export const loginWithCodeSequence = [
   decodeTokenAction,
   setTokenAction,
   startRefreshIntervalAction,
-  getUserAction,
-  setUserAction,
-  setUserPermissionsAction,
-  navigateToPathAction,
+  getMaintenanceModeAction,
+  {
+    maintenanceOff: [
+      getUserAction,
+      setUserAction,
+      setUserPermissionsAction,
+      setupConfigSequence,
+      navigateToPathAction,
+    ],
+    maintenanceOn: [navigateToMaintenanceAction],
+  },
 ];
