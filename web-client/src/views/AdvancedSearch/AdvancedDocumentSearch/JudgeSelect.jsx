@@ -15,6 +15,7 @@ export const JudgeSelect = connect(
           Judge
         </label>
         <BindedSelect
+          aria-label="order-judge"
           bind={formValue}
           className="usa-input"
           id="order-judge"
@@ -22,7 +23,7 @@ export const JudgeSelect = connect(
         >
           <option value="">All judges</option>
           {judges.map(judge => (
-            <option key={judge.judgeFullName} value={judge.judgeFullName}>
+            <option key={judge.judgeFullName} value={judge.lastName}>
               {judge.name}
             </option>
           ))}

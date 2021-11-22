@@ -1,16 +1,19 @@
 /* eslint-disable max-lines */
 const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
+const { set } = require('lodash');
+
+const createApplicationContext = require('./applicationContext');
+const applicationContext = createApplicationContext();
 
 const app = express();
 
 app.use(cors());
-app.use(bodyParser.json({ limit: '1200kb' }));
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(express.json({ limit: '1200kb' }));
+app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
@@ -21,6 +24,12 @@ app.use((req, res, next) => {
   return next();
 });
 app.use(awsServerlessExpressMiddleware.eventContext());
+app.use((req, res, next) => {
+  if (process.env.NODE_ENV !== 'production') {
+    set(req, 'apiGateway.event.requestContext.identity.sourceIp', 'localhost');
+  }
+  next();
+});
 app.use(logger());
 
 const {
@@ -189,6 +198,9 @@ const {
   getEligibleCasesForTrialSessionLambda,
 } = require('./trialSessions/getEligibleCasesForTrialSessionLambda');
 const {
+  getFeatureFlagValueLambda,
+} = require('./featureFlag/getFeatureFlagValueLambda');
+const {
   getInboxMessagesForSectionLambda,
 } = require('./messages/getInboxMessagesForSectionLambda');
 const {
@@ -206,9 +218,6 @@ const {
 const {
   getOpenConsolidatedCasesLambda,
 } = require('./cases/getOpenConsolidatedCasesLambda');
-const {
-  getOrderSearchEnabledLambda,
-} = require('./search/getOrderSearchEnabledLambda');
 const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
@@ -379,6 +388,7 @@ const {
 } = require('./users/verifyUserPendingEmailLambda');
 const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
+const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
@@ -402,14 +412,15 @@ const { getUserCaseNoteLambda } = require('./caseNote/getUserCaseNoteLambda');
 const { getUserLambda } = require('./users/getUserLambda');
 const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
+const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
+const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
 const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
 const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
-const { slowDownLimiter } = require('./middleware/slowDownLimiter');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
@@ -491,14 +502,28 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.get(
     '/case-documents/opinion-search',
+    ipLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+    }),
     userIdLimiter('opinion-search'),
-    slowDownLimiter('document-search-limiter'),
+    advancedQueryLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+    }),
     lambdaWrapper(opinionAdvancedSearchLambda),
   );
   app.get(
     '/case-documents/order-search',
+    ipLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+    }),
     userIdLimiter('order-search'),
-    slowDownLimiter('document-search-limiter'),
+    advancedQueryLimiter({
+      applicationContext,
+      key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+    }),
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST
@@ -753,6 +778,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  */
 {
   app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
+  app.put('/documents/:key/sanitize', lambdaWrapper(sanitizePdfLambda));
   app.get(
     '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),
@@ -865,16 +891,6 @@ app.get(
   app.post(
     '/reports/planning-report',
     lambdaWrapper(runTrialSessionPlanningReportLambda),
-  );
-}
-
-/**
- * search
- */
-{
-  app.get(
-    '/search/order-search-enabled',
-    lambdaWrapper(getOrderSearchEnabledLambda),
   );
 }
 
@@ -1060,5 +1076,10 @@ app.get(
  * maintenance-mode
  */
 app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
+
+/**
+ * feature-flag
+ */
+app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;

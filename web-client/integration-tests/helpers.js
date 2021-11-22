@@ -65,6 +65,7 @@ import FormDataHelper from 'form-data';
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
+import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
@@ -248,6 +249,14 @@ export const getFormattedDocumentQCMyInbox = async cerebralTest => {
   });
 };
 
+const featureFlagHelperComputed = withAppContextDecorator(featureFlagHelper);
+
+export const getFeatureFlagHelper = cerebralTest => {
+  return runCompute(featureFlagHelperComputed, {
+    state: cerebralTest.getState(),
+  });
+};
+
 export const getFormattedDocketEntriesForTest = async cerebralTest => {
   await cerebralTest.runSequence('gotoCaseDetailSequence', {
     docketNumber: cerebralTest.docketNumber,
@@ -276,15 +285,27 @@ export const getCaseMessagesForCase = async cerebralTest => {
 
 const client = require('../../shared/src/persistence/dynamodbClientService');
 
-export const getEmailsForAddress = address => {
+export const getConnectionsByUserId = userId => {
   return client.query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
+      '#sk': 'sk',
     },
     ExpressionAttributeValues: {
-      ':pk': `email-${address}`,
+      ':pk': `user|${userId}`,
+      ':prefix': 'connection',
     },
-    KeyConditionExpression: '#pk = :pk',
+    KeyConditionExpression: '#pk = :pk and begins_with(#sk, :prefix)',
+    applicationContext,
+  });
+};
+
+export const getConnection = connectionId => {
+  return client.get({
+    Key: {
+      pk: `connection|${connectionId}`,
+      sk: `connection|${connectionId}`,
+    },
     applicationContext,
   });
 };
@@ -299,18 +320,26 @@ export const getUserRecordById = userId => {
   });
 };
 
-export const deleteEmails = emails => {
-  return Promise.all(
-    emails.map(email =>
-      client.delete({
-        applicationContext,
-        key: {
-          pk: email.pk,
-          sk: email.sk,
-        },
-      }),
-    ),
-  );
+export const setWhitelistIps = ips => {
+  return client.put({
+    Item: {
+      ips,
+      pk: 'allowed-terminal-ips',
+      sk: 'allowed-terminal-ips',
+    },
+    applicationContext,
+  });
+};
+
+export const setOpinionSearchEnabled = isEnabled => {
+  return client.put({
+    Item: {
+      current: isEnabled,
+      pk: 'internal-opinion-search-enabled',
+      sk: 'internal-opinion-search-enabled',
+    },
+    applicationContext,
+  });
 };
 
 export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
@@ -886,14 +915,23 @@ export const embedWithLegalIpsumText = (phrase = '') => {
   As a condition to exercising the rights set forth in the documentation and/or other rights consistent with the Work can be reasonably considered independent and separate works in conjunction with the library. If this is to make arrangements wholly outside of your status as Current Maintainer. If the Recipient shall meet all of the initial Contributor, the initial Contributor, the initial grant or subsequently acquired, any and all related documents be drafted in English.`;
 };
 
-export const updateOpinionForm = async (cerebralTest, formValues) => {
+export const updateForm = async (cerebralTest, formValues, sequenceName) => {
   for (let [key, value] of Object.entries(formValues)) {
-    await cerebralTest.runSequence(
-      'updateAdvancedOpinionSearchFormValueSequence',
-      {
-        key,
-        value,
-      },
-    );
+    await cerebralTest.runSequence(sequenceName, {
+      key,
+      value,
+    });
   }
+};
+
+export const updateOpinionForm = async (cerebralTest, formValues) => {
+  await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+    formType: 'opinionSearch',
+  });
+
+  await updateForm(
+    cerebralTest,
+    formValues,
+    'updateAdvancedOpinionSearchFormValueSequence',
+  );
 };

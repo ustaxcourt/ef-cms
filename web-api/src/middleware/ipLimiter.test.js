@@ -1,24 +1,18 @@
 const { ipLimiter } = require('./ipLimiter');
 
-let mockPersistenceGateway = {};
-
-jest.mock('../applicationContext', () => () => ({
-  getPersistenceGateway: () => mockPersistenceGateway,
-}));
+const {
+  applicationContext,
+} = require('../../../shared/src/business/test/createTestApplicationContext');
 
 describe('ipLimiter', () => {
-  let incrementKeyCountMock = jest.fn();
-  const deleteKeyCountMock = jest.fn();
   let statusMock;
+  let jsonMock;
   let res;
 
   beforeEach(() => {
-    mockPersistenceGateway.deleteKeyCount = deleteKeyCountMock;
-    mockPersistenceGateway.incrementKeyCount = incrementKeyCountMock;
-    mockPersistenceGateway.setExpiresAt = jest.fn();
-
+    jsonMock = jest.fn();
     statusMock = jest.fn(() => ({
-      json: () => jest.fn(),
+      json: jsonMock,
     }));
     res = {
       set: jest.fn(() => ({
@@ -29,11 +23,13 @@ describe('ipLimiter', () => {
 
   it('should return a 429 response', async () => {
     const next = jest.fn();
-    incrementKeyCountMock.mockReturnValue({
-      expiresAt: Date.now() + 1e6,
-      id: 20,
-    });
-    await ipLimiter('order-search')(
+    applicationContext
+      .getPersistenceGateway()
+      .incrementKeyCount.mockReturnValue({
+        expiresAt: Date.now() + 1e6,
+        id: 20,
+      });
+    await ipLimiter({ applicationContext, key: 'order-search' })(
       {
         apiGateway: {
           event: {
@@ -48,15 +44,21 @@ describe('ipLimiter', () => {
     );
     expect(statusMock).toBeCalledWith(429);
     expect(next).not.toBeCalled();
+    expect(jsonMock.mock.calls[0][0]).toMatchObject({
+      message: 'you are only allowed 15 requests in a 60 second window time',
+      type: 'ip-limiter',
+    });
   });
 
   it('should call next if limit is not reached', async () => {
     const next = jest.fn();
-    incrementKeyCountMock.mockReturnValue({
-      expiresAt: Date.now() + 1e6,
-      id: 0,
-    });
-    await ipLimiter('order-search')(
+    applicationContext
+      .getPersistenceGateway()
+      .incrementKeyCount.mockReturnValue({
+        expiresAt: Date.now() + 1e6,
+        id: 0,
+      });
+    await ipLimiter({ applicationContext, key: 'order-search' })(
       {
         apiGateway: {
           event: {
@@ -64,13 +66,6 @@ describe('ipLimiter', () => {
               identity: '127.0.0.1',
             },
           },
-        },
-        applicationContext: {
-          getPersistenceGateway: () => ({
-            deleteKeyCount: jest.fn(),
-            incrementKeyCount: incrementKeyCountMock,
-            setExpiresAt: jest.fn(),
-          }),
         },
       },
       res,
@@ -81,11 +76,13 @@ describe('ipLimiter', () => {
 
   it('should delete the limiter key if expires at is passed', async () => {
     const next = jest.fn();
-    incrementKeyCountMock.mockReturnValue({
-      expiresAt: Date.now() - 1e6,
-      id: 30,
-    });
-    await ipLimiter('order-search')(
+    applicationContext
+      .getPersistenceGateway()
+      .incrementKeyCount.mockReturnValue({
+        expiresAt: Date.now() - 1e6,
+        id: 30,
+      });
+    await ipLimiter({ applicationContext, key: 'order-search' })(
       {
         apiGateway: {
           event: {
@@ -94,33 +91,30 @@ describe('ipLimiter', () => {
             },
           },
         },
-        applicationContext: {
-          getPersistenceGateway: () => ({
-            deleteKeyCount: deleteKeyCountMock,
-            incrementKeyCount: incrementKeyCountMock,
-            setExpiresAt: jest.fn(),
-          }),
-        },
       },
       res,
       next,
     );
-    expect(deleteKeyCountMock).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().deleteKeyCount,
+    ).toBeCalled();
     expect(next).toBeCalled();
   });
 
   it('should be able to be invoked exactly 15 times before locking next if limit is not reached', async () => {
     const next = jest.fn();
     let count = 0;
-    incrementKeyCountMock.mockImplementation(() => {
-      return {
-        expiresAt: Date.now() + 1e6,
-        id: ++count,
-      };
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .incrementKeyCount.mockImplementation(() => {
+        return {
+          expiresAt: Date.now() + 1e6,
+          id: ++count,
+        };
+      });
 
     for (let i = 0; i < 15; i++) {
-      await ipLimiter('order-search')(
+      await ipLimiter({ applicationContext, key: 'order-search' })(
         {
           apiGateway: {
             event: {
@@ -129,20 +123,13 @@ describe('ipLimiter', () => {
               },
             },
           },
-          applicationContext: {
-            getPersistenceGateway: () => ({
-              deleteKeyCount: jest.fn(),
-              incrementKeyCount: incrementKeyCountMock,
-              setExpiresAt: jest.fn(),
-            }),
-          },
         },
         res,
         next,
       );
     }
 
-    await ipLimiter('order-search')(
+    await ipLimiter({ applicationContext, key: 'order-search' })(
       {
         apiGateway: {
           event: {
@@ -151,13 +138,7 @@ describe('ipLimiter', () => {
             },
           },
         },
-        applicationContext: {
-          getPersistenceGateway: () => ({
-            deleteKeyCount: jest.fn(),
-            incrementKeyCount: incrementKeyCountMock,
-            setExpiresAt: jest.fn(),
-          }),
-        },
+        applicationContext,
       },
       res,
       next,

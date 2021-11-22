@@ -25,12 +25,12 @@ describe('Modify Petitioner Email', () => {
   let caseDetail;
   cerebralTest.createdDocketNumbers = [];
 
-  loginAs(cerebralTest, 'petitioner4@example.com');
+  loginAs(cerebralTest, 'petitioner9@example.com');
   it('petitioner creates a case', async () => {
     caseDetail = await uploadPetition(
       cerebralTest,
       {},
-      'petitioner4@example.com',
+      'petitioner9@example.com',
     );
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
@@ -40,7 +40,7 @@ describe('Modify Petitioner Email', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
-  loginAs(cerebralTest, 'petitioner4@example.com');
+  loginAs(cerebralTest, 'petitioner9@example.com');
   userUpdatesEmailAddressToOneAlreadyInUse(cerebralTest, 'petitioner');
 
   const mockUpdatedEmail = `${faker.internet.userName()}_no_error@example.com`;
@@ -52,7 +52,7 @@ describe('Modify Petitioner Email', () => {
 
   userVerifiesUpdatedEmailAddress(cerebralTest, 'petitioner');
 
-  loginAs(cerebralTest, 'petitioner4@example.com');
+  loginAs(cerebralTest, 'petitioner9@example.com');
   userLogsInAndChecksVerifiedEmailAddress(
     cerebralTest,
     'petitioner',

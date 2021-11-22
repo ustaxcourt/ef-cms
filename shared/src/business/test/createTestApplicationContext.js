@@ -164,11 +164,15 @@ const {
   updateUserRecords,
 } = require('../../persistence/dynamo/users/updateUserRecords');
 const {
+  uploadDocumentAndMakeSafeInteractor,
+} = require('../useCases/uploadDocumentAndMakeSafeInteractor');
+const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketEntry } = require('../entities/DocketEntry');
+const { ERROR_MAP_429 } = require('../../sharedAppContext');
 const { filterEmptyStrings } = require('../utilities/filterEmptyStrings');
 const { formatDollars } = require('../utilities/formatDollars');
 const { getConstants } = require('../../../../web-client/src/getConstants');
@@ -366,6 +370,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     post: jest.fn(),
   };
 
+  const mockGetUseCases = appContextProxy({
+    uploadDocumentAndMakeSafeInteractor: jest
+      .fn()
+      .mockImplementation(uploadDocumentAndMakeSafeInteractor),
+  });
+
   const mockGetUseCaseHelpers = appContextProxy({
     appendPaperServiceAddressPageToPdf: jest
       .fn()
@@ -435,6 +445,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createElasticsearchReindexRecord: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
+    deleteKeyCount: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
     deleteWorkItem: jest.fn(deleteWorkItem),
     fetchPendingItems: jest.fn(),
@@ -469,9 +480,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getJudgesChambersWithLegacy: jest
       .fn()
       .mockImplementation(getJudgesChambersWithLegacy),
+    getLimiterByKey: jest.fn(),
     getMaintenanceMode: jest.fn(),
     getMessagesByDocketNumber: jest.fn(),
-    getOrderSearchEnabled: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
@@ -479,6 +490,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
     getWorkItemsByDocketNumber: jest.fn().mockReturnValue([]),
     incrementCounter,
+    incrementKeyCount: jest.fn(),
     isEmailAvailable: jest.fn(),
     isFileExists: jest.fn(),
     persistUser: jest.fn(),
@@ -486,6 +498,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeItem: jest.fn().mockImplementation(removeItem),
     saveDocumentFromLambda: jest.fn(),
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
+    setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
@@ -553,7 +566,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     getCognitoClientId: jest.fn(),
     getCognitoRedirectUrl: jest.fn(),
     getCognitoTokenUrl: jest.fn(),
-    getConstants: jest.fn().mockImplementation(getConstants),
+    getConstants: jest.fn().mockImplementation(() => {
+      return {
+        ...getConstants(),
+        ERROR_MAP_429,
+      };
+    }),
     getCurrentUser: jest.fn().mockImplementation(() => {
       return new User(
         user || {
@@ -604,7 +622,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
-    getUseCases: emptyAppContextProxy,
+    getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
     isFeatureEnabled: jest.fn(),
     logger: {

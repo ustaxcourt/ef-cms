@@ -41,6 +41,7 @@ describe('orderAdvancedSearchInteractor', () => {
             signedJudgeName: 'Guy Fieri',
           },
         ],
+        totalCount: 2,
       });
   });
 
@@ -110,8 +111,8 @@ describe('orderAdvancedSearchInteractor', () => {
 
     expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
       from: 0,
-      size: result.length,
       timestamp: expect.anything(),
+      totalCount: result.length,
       userRole: ROLES.petitionsClerk,
     });
   });

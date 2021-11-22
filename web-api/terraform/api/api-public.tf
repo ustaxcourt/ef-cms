@@ -20,6 +20,16 @@ resource "aws_lambda_function" "api_public_lambda" {
   }
 }
 
+resource "aws_api_gateway_authorizer" "public_authorizer" {
+  name                             = "public_authorizer_${var.environment}_${var.current_color}"
+  rest_api_id                      = aws_api_gateway_rest_api.gateway_for_api_public.id
+  authorizer_uri                   = var.public_authorizer_uri
+  type                             = "REQUEST"
+  identity_source                  = "context.identity.sourceIp"
+  authorizer_result_ttl_in_seconds = 300
+  authorizer_credentials           = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
+}
+
 resource "aws_api_gateway_rest_api" "gateway_for_api_public" {
   name = "gateway_api_public_${var.environment}_${var.current_color}"
 
@@ -62,7 +72,8 @@ resource "aws_api_gateway_method" "api_public_method" {
   rest_api_id   = aws_api_gateway_rest_api.gateway_for_api_public.id
   resource_id   = aws_api_gateway_resource.api_public_resource.id
   http_method   = "ANY"
-  authorization = "NONE"
+  authorization = "CUSTOM"
+  authorizer_id = aws_api_gateway_authorizer.public_authorizer.id
 }
 
 resource "aws_api_gateway_integration" "api_public_integration" {
@@ -84,16 +95,14 @@ resource "aws_lambda_permission" "apigw_public_lambda" {
 }
 
 resource "aws_api_gateway_deployment" "api_public_deployment" {
-  depends_on = [
-    aws_api_gateway_method.api_public_method,
-    aws_api_gateway_integration.api_public_integration
-  ]
   rest_api_id       = aws_api_gateway_rest_api.gateway_for_api_public.id
 
   triggers = {
-      redeployment = sha1(jsonencode([
-        aws_api_gateway_rest_api.gateway_for_api_public,
-      ]))
+    redeployment = sha1(jsonencode([
+      aws_api_gateway_method.api_public_method,
+      aws_api_gateway_integration.api_public_integration,
+      aws_api_gateway_authorizer.public_authorizer
+    ]))
   }
 
   lifecycle {

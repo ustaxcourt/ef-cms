@@ -10,6 +10,7 @@ describe('userIdLimiter', () => {
   let incrementKeyCountMock = jest.fn();
   const deleteKeyCountMock = jest.fn();
   let statusMock;
+  let jsonMock;
   let res;
 
   beforeEach(() => {
@@ -17,8 +18,9 @@ describe('userIdLimiter', () => {
     mockPersistenceGateway.incrementKeyCount = incrementKeyCountMock;
     mockPersistenceGateway.setExpiresAt = jest.fn();
 
+    jsonMock = jest.fn();
     statusMock = jest.fn(() => ({
-      json: () => jest.fn(),
+      json: jsonMock,
     }));
     res = {
       set: jest.fn(() => ({
@@ -88,6 +90,10 @@ describe('userIdLimiter', () => {
       res,
       next,
     );
+    expect(jsonMock.mock.calls[0][0]).toMatchObject({
+      message: 'you are only allowed 15 requests in a 60 second window time',
+      type: 'user-id-limiter',
+    });
     expect(statusMock).toBeCalledWith(429);
     expect(next).not.toBeCalled();
   });
@@ -125,7 +131,7 @@ describe('userIdLimiter', () => {
     expect(next).toBeCalled();
   });
 
-  it('should delete the limiter key if expires at is passed', async () => {
+  it('should reset the limiter counter if the current time is greater than expiresAt', async () => {
     const next = jest.fn();
     incrementKeyCountMock.mockReturnValue({
       expiresAt: Date.now() - 1e6,

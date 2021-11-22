@@ -1,10 +1,14 @@
 const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
 const bodyParser = require('body-parser');
 const cors = require('cors');
+const createApplicationContext = require('./applicationContext');
 const express = require('express');
 const logger = require('./logger');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
+const { set } = require('lodash');
+
+const applicationContext = createApplicationContext();
 
 app.use(cors());
 app.use(bodyParser.json());
@@ -19,6 +23,35 @@ app.use((req, res, next) => {
   return next();
 });
 app.use(awsServerlessExpressMiddleware.eventContext());
+
+app.use(async (req, res, next) => {
+  // This code is here so that we have a way to mock out the terminal user
+  // via using dynamo locally.  This is only ran locally and on CI/CD which is
+  // why we also lazy require some of these packages.  See story 8955 for more info.
+  if (process.env.NODE_ENV !== 'production') {
+    set(req, 'apiGateway.event.requestContext.identity.sourceIp', 'localhost');
+    const {
+      get,
+    } = require('../../shared/src/persistence/dynamodbClientService.js');
+    const whitelist = await get({
+      Key: {
+        pk: 'allowed-terminal-ips',
+        sk: 'allowed-terminal-ips',
+      },
+      applicationContext,
+    });
+    const ips = whitelist?.ips ?? [];
+
+    if (ips.includes('localhost')) {
+      set(
+        req,
+        'apiGateway.event.requestContext.authorizer.isTerminalUser',
+        'true',
+      );
+    }
+  }
+  return next();
+});
 app.use(logger());
 
 const {
@@ -30,6 +63,9 @@ const {
 const {
   getCaseForPublicDocketSearchLambda,
 } = require('./public-api/getCaseForPublicDocketSearchLambda');
+const {
+  getFeatureFlagValueLambda,
+} = require('./featureFlag/getFeatureFlagValueLambda');
 const {
   getMaintenanceModeLambda,
 } = require('./maintenance/getMaintenanceModeLambda');
@@ -49,9 +85,11 @@ const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 // const {
 //   opinionPublicSearchLambda,
 // } = require('./public-api/opinionPublicSearchLambda');
-// const {
-//   orderPublicSearchLambda,
-// } = require('./public-api/orderPublicSearchLambda');
+const {
+  orderPublicSearchLambda,
+} = require('./public-api/orderPublicSearchLambda');
+const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
+const { ipLimiter } = require('./middleware/ipLimiter');
 
 /**
  * public-api
@@ -63,9 +101,32 @@ app.head(
 );
 app.get('/public-api/cases/:docketNumber', lambdaWrapper(getPublicCaseLambda));
 
+app.get(
+  '/public-api/order-search',
+  ipLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+  }),
+  advancedQueryLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+  }),
+  lambdaWrapper(orderPublicSearchLambda),
+);
+
 // Temporarily disabled for story 7387
-// app.get('/public-api/order-search', lambdaWrapper(orderPublicSearchLambda));
-// app.get('/public-api/opinion-search', lambdaWrapper(opinionPublicSearchLambda));
+// app.get(
+//   '/public-api/opinion-search',
+//   ipLimiter({
+//     applicationContext,
+//     key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+//   }),
+//   advancedQueryLimiter({
+//     applicationContext,
+//     key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+//   }),
+//   lambdaWrapper(opinionPublicSearchLambda),
+// );
 
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 
@@ -79,6 +140,7 @@ app.get(
   '/public-api/docket-number-search/:docketNumber',
   lambdaWrapper(getCaseForPublicDocketSearchLambda),
 );
+
 app.post(
   '/public-api/cases/:docketNumber/generate-docket-record',
   lambdaWrapper(generatePublicDocketRecordPdfLambda),
@@ -88,9 +150,13 @@ app.get(
   lambdaWrapper(getPublicDocumentDownloadUrlLambda),
 );
 app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
+
 app.get(
   '/public-api/maintenance-mode',
+  cors({ exposedHeaders: ['X-Terminal-User'] }),
   lambdaWrapper(getMaintenanceModeLambda),
 );
+
+app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 exports.app = app;

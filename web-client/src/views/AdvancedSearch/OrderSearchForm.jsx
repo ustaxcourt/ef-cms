@@ -18,7 +18,6 @@ export const OrderSearchForm = connect(
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    judges: state.legacyAndCurrentJudges,
     updateAdvancedOrderSearchFormValueSequence:
       sequences.updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence: sequences.validateOrderSearchSequence,
@@ -28,7 +27,6 @@ export const OrderSearchForm = connect(
     advancedDocumentSearchHelper,
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
-    judges,
     submitAdvancedSearchSequence,
     updateAdvancedOrderSearchFormValueSequence,
     validateOrderSearchSequence,
@@ -85,7 +83,7 @@ export const OrderSearchForm = connect(
                 <div className="judge-search-row margin-top-4">
                   <JudgeSelect
                     formValue={'advancedSearchForm.orderSearch.judge'}
-                    judges={judges}
+                    judges={advancedDocumentSearchHelper.formattedJudges}
                   />
                 </div>
                 <div className="margin-top-4">
@@ -168,7 +166,7 @@ export const OrderSearchForm = connect(
                     <div className="width-card-lg">
                       <JudgeSelect
                         formValue={'advancedSearchForm.orderSearch.judge'}
-                        judges={judges}
+                        judges={advancedDocumentSearchHelper.formattedJudges}
                       />
                     </div>
                     <div className="width-card-lg tablet:padding-bottom-5">
@@ -216,6 +214,7 @@ export const OrderSearchForm = connect(
             <Button
               link
               className="padding-0 margin-top-2 text-center"
+              id="clear-search"
               onClick={e => {
                 e.preventDefault();
                 clearAdvancedSearchFormSequence({

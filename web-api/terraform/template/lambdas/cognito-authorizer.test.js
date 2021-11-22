@@ -5,13 +5,42 @@ jest.mock('../../../src/createLogger', () => {
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../src/createLogger',
 );
+const authorizer = require('./cognito-authorizer');
 const axios = require('axios');
 const fs = require('fs');
 const jwk = require('jsonwebtoken');
 const jwkToPem = require('jwk-to-pem');
 const { createLogger } = require('../../../src/createLogger');
-const { handler } = require('./cognito-authorizer');
+const { handler } = authorizer;
 const { transports } = require('winston');
+
+const TOKEN_VALUE =
+  'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA';
+
+const setupHappyPath = verifyObject => {
+  axios.get.mockImplementation(() => {
+    return Promise.resolve({
+      data: { keys: [{ kid: 'key-identifier' }] },
+    });
+  });
+
+  jwkToPem.mockImplementation(key => {
+    if (key.kid !== 'key-identifier') {
+      throw new Error('wrong key was given');
+    }
+
+    return 'test-pem';
+  });
+
+  jwk.verify.mockImplementation((token, pem, options, callback) => {
+    if (token !== TOKEN_VALUE || pem !== 'test-pem') {
+      throw new Error('wrong token or pem was passed to verification');
+    }
+
+    expect(options.issuer).toBeDefined();
+    callback(null, verifyObject);
+  });
+};
 
 describe('cognito-authorizer', () => {
   let event, context, transport;
@@ -21,7 +50,7 @@ describe('cognito-authorizer', () => {
     jest.spyOn(jwk, 'decode').mockImplementation(token => {
       // This test code does not need to be resistant to timing attacks.
       // eslint-disable-next-line security/detect-possible-timing-attacks
-      if (token === 'tokenValue') {
+      if (token === TOKEN_VALUE) {
         return {
           header: { kid: 'key-identifier' },
           payload: { iss: `issuer-url-${Math.random()}` },
@@ -41,7 +70,8 @@ describe('cognito-authorizer', () => {
     });
 
     event = {
-      authorizationToken: 'Bearer tokenValue',
+      authorizationToken:
+        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
       methodArn:
         'arn:aws:execute-api:us-east-1:aws-account-id:api-gateway-id/stage/GET/path',
       type: 'TOKEN',
@@ -148,7 +178,7 @@ describe('cognito-authorizer', () => {
     });
 
     jwk.verify.mockImplementation((token, pem, options, callback) => {
-      if (token !== 'tokenValue' || pem !== 'test-pem') {
+      if (token !== TOKEN_VALUE || pem !== 'test-pem') {
         throw new Error('wrong token or pem was passed to verification');
       }
 
@@ -169,28 +199,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns IAM policy to allow invoking requested lambda when authorized', async () => {
-    axios.get.mockImplementation(() => {
-      return Promise.resolve({
-        data: { keys: [{ kid: 'key-identifier' }] },
-      });
-    });
-
-    jwkToPem.mockImplementation(key => {
-      if (key.kid !== 'key-identifier') {
-        throw new Error('wrong key was given');
-      }
-
-      return 'test-pem';
-    });
-
-    jwk.verify.mockImplementation((token, pem, options, callback) => {
-      if (token !== 'tokenValue' || pem !== 'test-pem') {
-        throw new Error('wrong token or pem was passed to verification');
-      }
-
-      expect(options.issuer).toBeDefined();
-      callback(null, { sub: 'test-sub' });
-    });
+    setupHappyPath({ sub: 'test-sub' });
 
     const policy = await handler(event, context);
 
@@ -222,28 +231,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns IAM policy to allow invoking requested lambda when authorized using the payload custom:userId instead of sub', async () => {
-    axios.get.mockImplementation(() => {
-      return Promise.resolve({
-        data: { keys: [{ kid: 'key-identifier' }] },
-      });
-    });
-
-    jwkToPem.mockImplementation(key => {
-      if (key.kid !== 'key-identifier') {
-        throw new Error('wrong key was given');
-      }
-
-      return 'test-pem';
-    });
-
-    jwk.verify.mockImplementation((token, pem, options, callback) => {
-      if (token !== 'tokenValue' || pem !== 'test-pem') {
-        throw new Error('wrong token or pem was passed to verification');
-      }
-
-      expect(options.issuer).toBeDefined();
-      callback(null, { 'custom:userId': 'test-custom:userId' });
-    });
+    setupHappyPath({ 'custom:userId': 'test-custom:userId' });
 
     const policy = await handler(event, context);
 
@@ -303,5 +291,50 @@ describe('cognito-authorizer', () => {
 
     // Second call is cached
     expect(axios.get).toHaveBeenCalledTimes(1);
+  });
+
+  it('should throw an unauthorized error if there was an issue decoding the token', async () => {
+    jest.spyOn(jwk, 'decode').mockImplementation(() => {
+      throw new Error();
+    });
+    await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
+  });
+
+  it('should throw an unauthorized error if there are issues getting the token from the event', async () => {
+    event = new Proxy(
+      { queryStringParameters: null },
+      {
+        get() {
+          throw new Error();
+        },
+      },
+    );
+    await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
+  });
+
+  it('should return a policy if the authorization header if provided', async () => {
+    setupHappyPath({ sub: 'test-sub' });
+
+    event = {
+      headers: {
+        authorization: `Bearer ${TOKEN_VALUE}`,
+      },
+      methodArn: 'a/b/c',
+    };
+    const policy = await handler(event, context);
+    expect(policy).toBeDefined();
+  });
+
+  it('should return a policy if the token is provided in the query string', async () => {
+    setupHappyPath({ sub: 'test-sub' });
+
+    event = {
+      methodArn: 'a/b/c',
+      queryStringParameters: {
+        token: TOKEN_VALUE,
+      },
+    };
+    const policy = await handler(event, context);
+    expect(policy).toBeDefined();
   });
 });

@@ -12,6 +12,8 @@ const {
   MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } = require('../../business/entities/EntityConstants');
+const { formatNow, FORMATS } = require('../utilities/DateHandler');
+const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
 
 /**
@@ -54,16 +56,27 @@ exports.opinionAdvancedSearchInteractor = async (
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const results = (
-    await applicationContext.getPersistenceGateway().advancedDocumentSearch({
+  const { results, totalCount } = await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       isOpinionSearch: true,
       ...rawSearch,
-    })
-  ).results.slice(0, MAX_SEARCH_RESULTS);
+    });
 
-  return InternalDocumentSearchResult.validateRawCollection(results, {
+  const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+  await applicationContext.logger.info('private opinion search', {
+    ...omit(rawSearch, 'entityName'),
+    timestamp,
+    totalCount,
+    userId: authorizedUser.userId,
+    userRole: authorizedUser.role,
+  });
+
+  const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
+
+  return InternalDocumentSearchResult.validateRawCollection(filteredResults, {
     applicationContext,
   });
 };

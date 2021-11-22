@@ -17,13 +17,12 @@ export const addCaseToTrialSessionAction = async ({
   const { calendarNotes, trialSessionId } = get(state.modal);
   const trialSessions = get(state.trialSessions);
 
-  const selectedTrialSession =
-    trialSessions &&
-    trialSessions.find(session => session.trialSessionId === trialSessionId);
+  const selectedTrialSession = trialSessions.find(
+    session => session.trialSessionId === trialSessionId,
+  );
 
   const sessionIsCalendared =
     selectedTrialSession && selectedTrialSession.isCalendared;
-
   try {
     const caseDetail = await applicationContext
       .getUseCases()

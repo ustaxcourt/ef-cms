@@ -7,6 +7,8 @@ const {
 } = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { filterForPublic } = require('./publicHelpers');
+const { formatNow, FORMATS } = require('../../utilities/DateHandler');
+const { omit } = require('lodash');
 
 /**
  * orderPublicSearchInteractor
@@ -45,7 +47,7 @@ exports.orderPublicSearchInteractor = async (
 
   const rawSearch = orderSearch.validate().toRawObject();
 
-  const { results } = await applicationContext
+  const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
@@ -54,6 +56,13 @@ exports.orderPublicSearchInteractor = async (
       isOpinionSearch: false,
       omitSealed: true,
     });
+
+  const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+  await applicationContext.logger.info('public order search', {
+    ...omit(rawSearch, 'entityName'),
+    timestamp,
+    totalCount,
+  });
 
   const filteredResults = (
     await filterForPublic({

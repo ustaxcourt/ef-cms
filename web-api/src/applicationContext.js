@@ -241,6 +241,7 @@ const {
 } = require('../../shared/src/persistence/s3/deleteDocumentFromS3');
 const {
   deleteKeyCount,
+  getLimiterByKey,
   incrementKeyCount,
   setExpiresAt,
 } = require('../../shared/src/persistence/dynamo/helpers/store');
@@ -522,6 +523,12 @@ const {
   getUniqueId,
 } = require('../../shared/src/sharedAppContext.js');
 const {
+  getFeatureFlagValue,
+} = require('../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue');
+const {
+  getFeatureFlagValueInteractor,
+} = require('../../shared/src/business/useCases/featureFlag/getFeatureFlagValueInteractor');
+const {
   getFirstSingleCaseRecord,
 } = require('../../shared/src/persistence/elasticsearch/getFirstSingleCaseRecord');
 const {
@@ -578,12 +585,6 @@ const {
 const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
-const {
-  getOrderSearchEnabled,
-} = require('../../shared/src/persistence/dynamo/deployTable/getOrderSearchEnabled');
-const {
-  getOrderSearchEnabledInteractor,
-} = require('../../shared/src/business/useCases/search/getOrderSearchEnabledInteractor');
 const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
@@ -874,6 +875,9 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
+  sanitizePdfInteractor,
+} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
+const {
   saveCalendarNoteInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor');
 const {
@@ -930,6 +934,9 @@ const {
 const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
+const {
+  sendUpdatePetitionerCasesMessage,
+} = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
 const {
   serveCaseDocument,
 } = require('../../shared/src/business/utilities/serveCaseDocument');
@@ -1096,6 +1103,9 @@ const {
 const {
   updateOtherStatisticsInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/updateOtherStatisticsInteractor');
+const {
+  updatePetitionerCasesInteractor,
+} = require('../../shared/src/business/useCases/users/updatePetitionerCasesInteractor');
 const {
   updatePetitionerInformationInteractor,
 } = require('../../shared/src/business/useCases/updatePetitionerInformationInteractor');
@@ -1368,6 +1378,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getFeatureFlagValue,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
@@ -1448,11 +1459,11 @@ const gatewayMethods = {
   getEligibleCasesForTrialSession,
   getFirstSingleCaseRecord,
   getInternalUsers,
+  getLimiterByKey,
   getMessageById,
   getMessageThreadByParentId,
   getMessages,
   getMessagesByDocketNumber,
-  getOrderSearchEnabled,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,
@@ -1577,7 +1588,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
       }
     },
     getConstants: () => ({
-      CASE_INVENTORY_MAX_PAGE_SIZE: 20000, // the Chief Judge will have ~15k records, so setting to 20k to be safe
+      ADVANCED_DOCUMENT_IP_LIMITER_KEY: 'document-search-ip-limiter',
+      ADVANCED_DOCUMENT_LIMITER_KEY: 'document-search-limiter',
+      CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
+      // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
@@ -1655,6 +1669,24 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getEnvironment,
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
+    getMessageGateway: () => ({
+      sendUpdatePetitionerCasesMessage: ({
+        applicationContext: appContext,
+        user: userToSendTo,
+      }) => {
+        if (environment.stage === 'local') {
+          updatePetitionerCasesInteractor({
+            applicationContext: appContext,
+            user: userToSendTo,
+          });
+        } else {
+          sendUpdatePetitionerCasesMessage({
+            applicationContext: appContext,
+            user: userToSendTo,
+          });
+        }
+      },
+    }),
     getMessagingClient: () => {
       if (!sqsCache) {
         sqsCache = new SQS({
@@ -1667,7 +1699,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return sass;
     },
     getNotificationClient: ({ endpoint }) => {
-      if (endpoint.indexOf('localhost') !== -1) {
+      if (endpoint.includes('localhost')) {
         endpoint = 'http://localhost:3011';
       }
       return new AWS.ApiGatewayManagementApi({
@@ -1858,6 +1890,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getDocumentQCServedForUserInteractor,
         getDownloadPolicyUrlInteractor,
         getEligibleCasesForTrialSessionInteractor,
+        getFeatureFlagValueInteractor,
         getHealthCheckInteractor,
         getInboxMessagesForSectionInteractor,
         getInboxMessagesForUserInteractor,
@@ -1870,10 +1903,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
         getOpenConsolidatedCasesInteractor,
-        getOrderSearchEnabledInteractor: applicationContext =>
-          environment.stage === 'local'
-            ? true
-            : getOrderSearchEnabledInteractor(applicationContext),
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,
@@ -1914,6 +1943,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
+        sanitizePdfInteractor,
         saveCalendarNoteInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
@@ -1948,6 +1978,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         updateDeficiencyStatisticInteractor,
         updateDocketEntryMetaInteractor,
         updateOtherStatisticsInteractor,
+        updatePetitionerCasesInteractor,
         updatePetitionerInformationInteractor,
         updatePractitionerUserInteractor,
         updateQcCompleteForTrialInteractor,

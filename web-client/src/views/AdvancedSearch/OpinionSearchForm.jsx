@@ -20,7 +20,6 @@ export const OpinionSearchForm = connect(
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
     advancedSearchForm: state.advancedSearchForm,
     clearAdvancedSearchFormSequence: sequences.clearAdvancedSearchFormSequence,
-    judges: state.legacyAndCurrentJudges,
     updateAdvancedOpinionSearchFormValueSequence:
       sequences.updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence: sequences.validateOpinionSearchSequence,
@@ -31,7 +30,6 @@ export const OpinionSearchForm = connect(
     advancedDocumentSearchHelper,
     advancedSearchForm,
     clearAdvancedSearchFormSequence,
-    judges,
     submitAdvancedSearchSequence,
     updateAdvancedOpinionSearchFormValueSequence,
     validateOpinionSearchSequence,
@@ -40,6 +38,7 @@ export const OpinionSearchForm = connect(
     return (
       <>
         <form
+          id="opinion-search"
           onSubmit={e => {
             e.preventDefault();
             submitAdvancedSearchSequence();
@@ -95,7 +94,7 @@ export const OpinionSearchForm = connect(
                 <div className="judge-search-row margin-top-4">
                   <JudgeSelect
                     formValue={'advancedSearchForm.opinionSearch.judge'}
-                    judges={judges}
+                    judges={advancedDocumentSearchHelper.formattedJudges}
                   />
                 </div>
                 <div className="margin-top-4">
@@ -217,7 +216,7 @@ export const OpinionSearchForm = connect(
                     <div className="width-card-lg">
                       <JudgeSelect
                         formValue={'advancedSearchForm.opinionSearch.judge'}
-                        judges={judges}
+                        judges={advancedDocumentSearchHelper.formattedJudges}
                       />
                     </div>
                     <div className="width-card-lg tablet:padding-bottom-5">

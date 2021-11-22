@@ -6,6 +6,8 @@ const {
   PublicDocumentSearchResult,
 } = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
+const { formatNow, FORMATS } = require('../../utilities/DateHandler');
+const { omit } = require('lodash');
 
 /**
  * opinionPublicSearchInteractor
@@ -47,16 +49,25 @@ exports.opinionPublicSearchInteractor = async (
 
   const rawSearch = opinionSearch.validate().toRawObject();
 
-  const results = (
-    await applicationContext.getPersistenceGateway().advancedDocumentSearch({
+  const { results, totalCount } = await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
       applicationContext,
       ...rawSearch,
       documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       isOpinionSearch: true,
-    })
-  ).results.slice(0, MAX_SEARCH_RESULTS);
+    });
 
-  return PublicDocumentSearchResult.validateRawCollection(results, {
+  const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
+  await applicationContext.logger.info('public opinion search', {
+    ...omit(rawSearch, 'entityName'),
+    timestamp,
+    totalCount,
+  });
+
+  const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
+
+  return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
     applicationContext,
   });
 };

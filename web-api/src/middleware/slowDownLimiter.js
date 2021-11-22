@@ -1,5 +1,8 @@
 const createApplicationContext = require('../applicationContext');
 
+/*
+  This is no longer used, but we decided to keep it around for now.
+*/
 exports.slowDownLimiter = key => async (req, res, next) => {
   const DELAY_TIME = 200;
   const WINDOW_TIME = 10000;

@@ -18,11 +18,40 @@ resource "aws_apigatewayv2_route" "disconnect" {
   target    = "integrations/${aws_apigatewayv2_integration.websockets_disconnect_integration.id}"
 }
 
+resource "aws_apigatewayv2_route" "default" {
+  api_id    = aws_apigatewayv2_api.websocket_api.id
+  route_key = "$default"
+  target    = "integrations/${aws_apigatewayv2_integration.websockets_default_integration.id}"
+}
+
+
 resource "aws_lambda_function" "websockets_connect_lambda" {
   depends_on       = [var.websockets_object]
   function_name    = "websockets_connect_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
   handler          = "websockets.connectHandler"
+  s3_bucket        = var.lambda_bucket_id
+  s3_key           = "websockets_${var.current_color}.js.zip"
+  source_code_hash = var.websockets_object_hash
+  timeout          = "29"
+  memory_size      = "3008"
+
+  runtime = "nodejs14.x"
+
+  environment {
+    variables = var.lambda_environment
+  }
+
+  layers = [
+    aws_lambda_layer_version.puppeteer_layer.arn
+  ]
+}
+
+resource "aws_lambda_function" "websockets_default_lambda" {
+  depends_on       = [var.websockets_object]
+  function_name    = "websockets_default_${var.environment}_${var.current_color}"
+  role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
+  handler          = "websockets.defaultHandler"
   s3_bucket        = var.lambda_bucket_id
   s3_key           = "websockets_${var.current_color}.js.zip"
   source_code_hash = var.websockets_object_hash
@@ -84,6 +113,17 @@ resource "aws_apigatewayv2_integration" "websockets_disconnect_integration" {
   content_handling_strategy = "CONVERT_TO_TEXT"
 }
 
+
+resource "aws_apigatewayv2_integration" "websockets_default_integration" {
+  api_id                    = aws_apigatewayv2_api.websocket_api.id
+  integration_type          = "AWS_PROXY"
+  integration_method        = "POST"
+  integration_uri           = aws_lambda_function.websockets_default_lambda.invoke_arn
+  passthrough_behavior      = "WHEN_NO_MATCH"
+  credentials_arn           = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
+  content_handling_strategy = "CONVERT_TO_TEXT"
+}
+
 resource "aws_lambda_permission" "apigw_connect_lambda" {
   statement_id  = "AllowExecutionFromAPIGateway"
   action        = "lambda:InvokeFunction"
@@ -101,6 +141,15 @@ resource "aws_lambda_permission" "apigw_disconnect_lambda" {
   source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
 }
 
+resource "aws_lambda_permission" "apigw_default_lambda" {
+  statement_id  = "AllowExecutionFromAPIGateway"
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.websockets_default_lambda.function_name
+  principal     = "apigateway.amazonaws.com"
+  source_arn    = "${aws_apigatewayv2_api.websocket_api.execution_arn}/*/*"
+}
+
+
 resource "aws_apigatewayv2_stage" "stage" {
   api_id        = aws_apigatewayv2_api.websocket_api.id
   name          = var.environment
@@ -113,6 +162,7 @@ resource "aws_apigatewayv2_deployment" "websocket_deploy" {
   depends_on = [
     aws_apigatewayv2_route.connect,
     aws_apigatewayv2_route.disconnect,
+    aws_apigatewayv2_route.default,
   ]
 
   lifecycle {

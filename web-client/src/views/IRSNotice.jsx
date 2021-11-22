@@ -1,8 +1,8 @@
-import { CalculatePenaltiesModal } from '../StartCaseInternal/CalculatePenaltiesModal';
-import { CaseTypeSelect } from '../StartCase/CaseTypeSelect';
-import { DateInput } from '../../ustc-ui/DateInput/DateInput';
-import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { StatisticsForm } from '../StartCaseInternal/StatisticsForm';
+import { CalculatePenaltiesModal } from './StartCaseInternal/CalculatePenaltiesModal';
+import { CaseTypeSelect } from './StartCase/CaseTypeSelect';
+import { DateInput } from '../ustc-ui/DateInput/DateInput';
+import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
+import { StatisticsForm } from './StartCaseInternal/StatisticsForm';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React from 'react';
