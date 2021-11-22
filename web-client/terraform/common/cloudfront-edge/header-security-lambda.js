@@ -41,7 +41,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const pdfjsExpressUrl = 'https://*.pdfjs.express';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
+    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
