@@ -656,7 +656,7 @@ export const loginAs = (cerebralTest, user) =>
       value: user,
     });
 
-    await cerebralTest.runSequence('submitLoginSequence', {
+    await cerebralTest.runSequence('submitLocalLoginSequence', {
       path: '/',
     });
 
