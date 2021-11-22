@@ -78,6 +78,11 @@ const connectPrivatePractitioners = ({
     { applicationContext },
   );
 
+  console.log(
+    'validPrivatePractitioners in connectPP',
+    validPrivatePractitioners,
+  );
+
   return validPrivatePractitioners.map(practitioner =>
     applicationContext.getPersistenceGateway().updatePrivatePractitionerOnCase({
       applicationContext,
