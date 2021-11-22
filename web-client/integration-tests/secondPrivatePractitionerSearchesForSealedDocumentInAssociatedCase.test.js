@@ -1,5 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesOrder } from './journey/petitionsClerkServesOrder';
@@ -41,9 +43,14 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   // create and serve an order
   petitionsClerkCreateOrder(cerebralTest);
   petitionsClerkSignsOrder(cerebralTest);
+  petitionsClerkAddsDocketEntryFromOrder(cerebralTest);
   petitionsClerkServesOrder(cerebralTest);
 
   // seal the case
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSealsCase(cerebralTest);
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
 
   petitionsClerkAddsPractitionersToCase(cerebralTest, false);
 });
