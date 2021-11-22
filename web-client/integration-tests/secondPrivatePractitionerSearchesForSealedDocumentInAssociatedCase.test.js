@@ -2,6 +2,7 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
+import { petitionsClerkAddsPractitionerToPrimaryContact } from './journey/petitionsClerkAddsPractitionerToPrimaryContact';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -53,5 +54,7 @@ describe('Petitions Clerk Counsel Association Journey', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-  petitionsClerkAddsPractitionersToCase(cerebralTest, true, true);
+  // petitionsClerkAddsPractitionersToCase(cerebralTest, true, true);
+  petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT1234');
+  petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
 });
