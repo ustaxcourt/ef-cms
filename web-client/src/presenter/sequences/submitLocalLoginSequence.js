@@ -1,7 +1,9 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { createTokenAction } from '../actions/createTokenAction';
 import { decodeTokenAction } from '../actions/decodeTokenAction';
+import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getUserAction } from '../actions/getUserAction';
+import { navigateToMaintenanceAction } from '../actions/navigateToMaintenanceAction';
 import { navigateToPathAction } from '../actions/navigateToPathAction';
 import { setTokenAction } from '../actions/setTokenAction';
 import { setUserAction } from '../actions/setUserAction';
@@ -16,7 +18,13 @@ export const submitLocalLoginSequence = showProgressSequenceDecorator([
   getUserAction,
   setUserAction,
   setUserPermissionsAction,
-  setupConfigSequence,
-  clearAlertsAction,
-  navigateToPathAction,
+  getMaintenanceModeAction,
+  {
+    maintenanceOff: [
+      setupConfigSequence,
+      clearAlertsAction,
+      navigateToPathAction,
+    ],
+    maintenanceOn: [navigateToMaintenanceAction],
+  },
 ]);
