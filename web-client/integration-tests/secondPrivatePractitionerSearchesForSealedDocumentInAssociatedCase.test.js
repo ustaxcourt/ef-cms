@@ -52,4 +52,9 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT1234');
   petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
+
+  // login as privatePractitioner1
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
+
+  // search for sealed document
 });
