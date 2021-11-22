@@ -932,7 +932,7 @@ workflows:
                 - migration
       - switch-colors:
           requires:
-            - disable-reindex-cron
+            - smoketests-readonly
           filters:
             branches:
               only:
