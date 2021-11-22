@@ -70,16 +70,23 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
 };
 
 const caseSearchFilter = (cases, currentUser) => {
-  const caseSearchFilterConditionals = caseRaw =>
-    !isSealedCase(caseRaw) ||
-    isAssociatedUser({ caseRaw, user: currentUser }) ||
-    isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE);
+  const caseIsAssociatedUser = isAssociatedUser({
+    caseRaw: cases[0],
+    user: currentUser,
+  });
+  console.log(
+    '***** isAssociatedUser in caseSearchFilter',
+    caseIsAssociatedUser,
+  );
 
-  return cases
-    .filter(caseSearchFilterConditionals)
-    .map(filteredCase =>
-      caseContactAddressSealedFormatter(filteredCase, currentUser),
-    );
+  const caseSearchFilterConditionals = caseRaw =>
+    !isSealedCase(caseRaw) || caseIsAssociatedUser;
+  isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE);
+
+  return cases.filter(caseSearchFilterConditionals);
+  // .map(filteredCase =>
+  //   caseContactAddressSealedFormatter(filteredCase, currentUser),
+  // );
 };
 
 module.exports = {

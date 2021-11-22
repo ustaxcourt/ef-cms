@@ -361,6 +361,7 @@ const assignContacts = ({ applicationContext, obj, rawCase }) => {
 };
 
 const assignPractitioners = ({ obj, rawCase }) => {
+  console.log('calling assignPractitioners');
   if (Array.isArray(rawCase.privatePractitioners)) {
     obj.privatePractitioners = rawCase.privatePractitioners.map(
       practitioner => new PrivatePractitioner(practitioner),
@@ -368,6 +369,8 @@ const assignPractitioners = ({ obj, rawCase }) => {
   } else {
     obj.privatePractitioners = [];
   }
+
+  console.log('obj.privatePractitioners', obj.privatePractitioners);
 
   if (Array.isArray(rawCase.irsPractitioners)) {
     obj.irsPractitioners = rawCase.irsPractitioners.map(
@@ -974,6 +977,7 @@ Case.prototype.removeIrsPractitioner = function (practitionerToRemove) {
  * @param {string} practitioner the privatePractitioner to add to the case
  */
 Case.prototype.attachPrivatePractitioner = function (practitioner) {
+  console.log('attachPrivatePractitioner!!!');
   this.privatePractitioners.push(practitioner);
 };
 
@@ -1565,6 +1569,16 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isIrsPractitioner =
     caseRaw.irsPractitioners &&
     caseRaw.irsPractitioners.find(r => r.userId === user.userId);
+
+  console.log(
+    '-in Case.js: caseRaw.privatePractitioners',
+    caseRaw.privatePractitioners.map(
+      p => `${p.barNumber}, userId: ${p.userId}`,
+    ),
+  );
+
+  console.log("-in Case.js: current user's userId", user.userId);
+
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
