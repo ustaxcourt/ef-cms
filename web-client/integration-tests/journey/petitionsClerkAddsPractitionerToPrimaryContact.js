@@ -16,7 +16,7 @@ export const petitionsClerkAddsPractitionerToPrimaryContact = (
     });
 
     const beforePrivatePractitionersLength = cerebralTest.getState(
-      'formattedCaseDetail.privatePractitioners',
+      'caseDetail.privatePractitioners',
     ).length;
 
     await cerebralTest.runSequence('openAddPrivatePractitionerModalSequence');
