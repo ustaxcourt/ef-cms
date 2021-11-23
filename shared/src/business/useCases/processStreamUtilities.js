@@ -146,7 +146,12 @@ const processCaseEntries = async ({
 };
 
 const processPractitionerMappingEntries = async ({applicationContext, practitionerMappingEntries, utils}) => {
+  if(!practitionerMappingEntries.length) return;
 
+  await utils.getCaseMetadataWithCounsel({
+    applicationContext,
+    docketNumber: '105-20', //todo: dont hardcode
+  });
 }
 
 /**

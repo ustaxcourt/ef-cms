@@ -12,6 +12,31 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamUtilities', () => {
+  const mockPractitionerMappingRecord = {
+    dynamodb: {
+      Keys: {
+        pk: {
+          S: 'case|123-45',
+        },
+        sk: {
+          S: 'privatePractitioner|PT1234',
+        },
+      },
+      NewImage: {
+        entityName: {
+          S: 'PrivatePractitioner',
+        },
+        pk: {
+          S: 'case|123-45',
+        },
+        sk: {
+          S: 'privatePractitioner|PT1234',
+        },
+      },
+    },
+    eventName: 'MODIFY',
+  };
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -119,30 +144,7 @@ describe('processStreamUtilities', () => {
         eventName: 'MODIFY',
       };
 
-      const practitionerMappingRecord = {
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: 'case|123-45',
-            },
-            sk: {
-              S: 'privatePractitioner|PT1234',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'PrivatePractitioner',
-            },
-            pk: {
-              S: 'case|123-45',
-            },
-            sk: {
-              S: 'privatePractitioner|PT1234',
-            },
-          },
-        },
-        eventName: 'MODIFY',
-      };
+      const practitionerMappingRecord = mockPractitionerMappingRecord;
 
       const otherRecord = {
         dynamodb: {
@@ -1038,7 +1040,7 @@ describe('processStreamUtilities', () => {
   });
 
   describe('processPractitionerMappingEntries', () => {
-    it('map practitioner entries to docket numbers', async () => {
+    it('should do nothing when no practitionerMappingEntries are provided', async () => {
       const mockGetCaseMetadataWithCounsel = jest.fn();
 
       const utils = {
@@ -1052,6 +1054,24 @@ describe('processStreamUtilities', () => {
       });
 
       expect(mockGetCaseMetadataWithCounsel).not.toHaveBeenCalled();
+    });
+
+    it('should retrieve the case with counsel for each practitioner mapping record', async () => {
+      const mockGetCaseMetadataWithCounsel = jest.fn();
+
+      const utils = {
+        getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
+      };
+
+      const mockPractitionerMappingEntries = [mockPractitionerMappingRecord, mockPractitionerMappingRecord];
+
+      await processPractitionerMappingEntries({
+        applicationContext,
+        practitionerMappingEntries: mockPractitionerMappingEntries,
+        utils,
+      });
+
+      expect(mockGetCaseMetadataWithCounsel).toHaveBeenCalledTimes(mockPractitionerMappingEntries.length);
     });
   });
 
