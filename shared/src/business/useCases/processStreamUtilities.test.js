@@ -61,6 +61,25 @@ describe('processStreamUtilities', () => {
         eventName: 'MODIFY',
       };
 
+      const workItemRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'work-item|820ed226-7022-4ee9-8fe8-4d9029cb90ae',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'WorkItem',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
+
       const docketEntryRecord = {
         dynamodb: {
           Keys: {
@@ -113,6 +132,12 @@ describe('processStreamUtilities', () => {
             entityName: {
               S: 'PrivatePractitioner',
             },
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'privatePractitioner|PT1234',
+            },
           },
         },
         eventName: 'MODIFY',
@@ -144,16 +169,19 @@ describe('processStreamUtilities', () => {
         { ...messageRecord },
         { ...practitionerMappingRecord },
         { ...otherRecord },
+        { ...workItemRecord },
       ];
 
       const result = partitionRecords(records);
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         caseEntityRecords: [caseRecord],
         docketEntryRecords: [docketEntryRecord],
         messageRecords: [messageRecord],
         otherRecords: [otherRecord],
+        practitionerMappingRecords: [practitionerMappingRecord],
         removeRecords: [removeRecord],
+        workItemRecords: [workItemRecord],
       });
     });
   });
