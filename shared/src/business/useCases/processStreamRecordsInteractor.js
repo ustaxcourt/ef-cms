@@ -51,6 +51,7 @@ exports.processStreamRecordsInteractor = async (
     docketEntryRecords,
     messageRecords,
     otherRecords,
+    practitionerMappingRecords,
     removeRecords,
     workItemRecords,
   } = partitionRecords(recordsToProcess);
@@ -75,6 +76,7 @@ exports.processStreamRecordsInteractor = async (
     await processCaseEntries({
       applicationContext,
       caseEntityRecords,
+      practitionerMappingRecords,
       utils,
     }).catch(err => {
       applicationContext.logger.error('failed to processCaseEntries', {
