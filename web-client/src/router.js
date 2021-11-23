@@ -1227,7 +1227,7 @@ const router = {
       const { path, token } = queryStringDecoder();
       if (token) {
         setPageTitle('Mock login');
-        return app.getSequence('submitLoginSequence')({
+        return app.getSequence('submitLocalLoginSequence')({
           path,
           token: `${token}@example.com`,
         });
