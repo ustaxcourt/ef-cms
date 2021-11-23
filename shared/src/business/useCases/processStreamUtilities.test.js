@@ -1036,6 +1036,12 @@ describe('processStreamUtilities', () => {
     });
   });
 
+  describe('processPractitionerMappingEntries', () => {
+    it('map practitioner entries to docket numbers', async () => {
+      // Test the minimal functionality
+    });
+  });
+
   describe('processOtherEntries', () => {
     it('does nothing when no other records are found', async () => {
       await processOtherEntries({
