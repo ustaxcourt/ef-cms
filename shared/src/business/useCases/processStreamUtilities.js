@@ -37,7 +37,8 @@ const partitionRecords = records => {
     record =>
       record.dynamodb.NewImage.entityName &&
       record.dynamodb.NewImage.entityName.S === 'PrivatePractitioner' &&
-      record.dynamodb.NewImage.pk.S.startsWith('case|'),
+      record.dynamodb.NewImage.pk.S.startsWith('case|') &&
+      record.dynamodb.NewImage.sk.S.startsWith('privatePractitioner|'),
   );
 
   const [messageRecords, otherRecords] = partition(
