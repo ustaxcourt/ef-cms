@@ -12,6 +12,7 @@ module.exports = {
         test: /\.(js|jsx)$/,
         use: ['babel-loader'],
       },
+
       {
         test: /\.(png|svg|jpg|jpeg|gif|pdf|woff|woff2|ttf)$/i,
         type: 'asset',
@@ -30,7 +31,6 @@ module.exports = {
       },
     ],
   },
-  parallelism: 66,
   plugins: [
     new HtmlWebpackPugPlugin(),
     new webpack.ProvidePlugin({
