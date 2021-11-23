@@ -99,6 +99,25 @@ describe('processStreamUtilities', () => {
         eventName: 'MODIFY',
       };
 
+      const practitionerMappingRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'privatePractitioner|PT1234',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'PrivatePractitioner',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
+
       const otherRecord = {
         dynamodb: {
           Keys: {
@@ -123,6 +142,7 @@ describe('processStreamUtilities', () => {
         { ...caseRecord },
         { ...docketEntryRecord },
         { ...messageRecord },
+        { ...practitionerMappingRecord },
         { ...otherRecord },
       ];
 
