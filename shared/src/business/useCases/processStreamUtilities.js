@@ -313,14 +313,12 @@ const processMessageEntries = async ({
   }
 };
 
-const processOtherEntries = ({ applicationContext, otherRecords }) => {
-  console.log('otherRecords', otherRecords);
+const processOtherEntries = ({ applicationContext, otherRecords }) =>
   processEntries({
     applicationContext,
     recordType: 'otherRecords',
     records: otherRecords,
   });
-};
 
 const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   if (!removeRecords.length) return;
