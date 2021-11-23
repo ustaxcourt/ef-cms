@@ -150,7 +150,7 @@ const processPractitionerMappingEntries = async ({
 }) => {
   if (!practitionerMappingEntries.length) return;
 
-  const indexRecords = await Promise.all(
+  const cases = await Promise.all(
     practitionerMappingEntries.map(async entry => {
       return await utils.getCaseMetadataWithCounsel({
         applicationContext,
@@ -158,6 +158,27 @@ const processPractitionerMappingEntries = async ({
       });
     }),
   );
+
+  const dynamoDbCases = cases.map(record => {
+    return AWS.DynamoDB.Converter.marshall(record);
+  });
+
+  const indexRecords = dynamoDbCases.map(dynamoDbCase => {
+    return {
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: 'dogcow', //TODO: not dogcow, but something like caseNewImage.pk.S,
+          },
+          sk: {
+            S: 'moof!', //TODO: not moof, but something like caseNewImage.sk.S,
+          },
+        },
+        NewImage: dynamoDbCase,
+      },
+      eventName: 'MODIFY',
+    };
+  });
 
   const { failedRecords } = await applicationContext
     .getPersistenceGateway()
