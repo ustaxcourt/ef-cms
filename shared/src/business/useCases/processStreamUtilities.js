@@ -150,19 +150,21 @@ const processPractitionerMappingEntries = async ({
 }) => {
   if (!practitionerMappingEntries.length) return;
 
-  const indexRecords = practitionerMappingEntries.map(async entry => {
-    return await utils.getCaseMetadataWithCounsel({
-      applicationContext,
-      docketNumber: entry.dynamodb.NewImage.pk.S.substring('case|'.length),
-    });
-  });
+  const indexRecords = await Promise.all(
+    practitionerMappingEntries.map(async entry => {
+      return await utils.getCaseMetadataWithCounsel({
+        applicationContext,
+        docketNumber: entry.dynamodb.NewImage.pk.S.substring('case|'.length),
+      });
+    }),
+  );
 
   const { failedRecords } = await applicationContext
-  .getPersistenceGateway()
-  .bulkIndexRecords({
-    applicationContext,
-    records: flattenDeep(indexRecords),
-  });
+    .getPersistenceGateway()
+    .bulkIndexRecords({
+      applicationContext,
+      records: flattenDeep(indexRecords),
+    });
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
