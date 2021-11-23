@@ -121,6 +121,7 @@ jobs:
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -460,7 +461,6 @@ jobs:
           name: 'Deploy - Web Client - S3'
           command: |
             docker run \
-             -e "CI=${CI}" \
              -e "ENV=${ENV}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -478,7 +478,6 @@ jobs:
           name: 'Deploy - Public Web Client - S3'
           command: |
             docker run \
-             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
