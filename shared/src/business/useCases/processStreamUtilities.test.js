@@ -5,6 +5,7 @@ const {
   processDocketEntries,
   processMessageEntries,
   processOtherEntries,
+  processPractitionerMappingEntries,
   processRemoveEntries,
   processWorkItemEntries,
 } = require('./processStreamUtilities');
@@ -1038,7 +1039,19 @@ describe('processStreamUtilities', () => {
 
   describe('processPractitionerMappingEntries', () => {
     it('map practitioner entries to docket numbers', async () => {
-      // Test the minimal functionality
+      const mockGetCaseMetadataWithCounsel = jest.fn();
+
+      const utils = {
+        getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
+      };
+
+      await processPractitionerMappingEntries({
+        applicationContext,
+        practitionerMappingEntries: [],
+        utils,
+      });
+
+      expect(mockGetCaseMetadataWithCounsel).not.toHaveBeenCalled();
     });
   });
 

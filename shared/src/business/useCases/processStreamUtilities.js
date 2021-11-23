@@ -4,6 +4,7 @@ const {
   ORDER_EVENT_CODES,
 } = require('../entities/EntityConstants');
 const { compact, flattenDeep, partition } = require('lodash');
+const { applicationContext } = require("../test/createTestApplicationContext");
 
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
@@ -143,6 +144,10 @@ const processCaseEntries = async ({
     throw new Error('failed to index case entry or docket entry records');
   }
 };
+
+const processPractitionerMappingEntries = async ({applicationContext, practitionerMappingEntries, utils}) => {
+
+}
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
@@ -361,6 +366,7 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
 
 exports.partitionRecords = partitionRecords;
 exports.processCaseEntries = processCaseEntries;
+exports.processPractitionerMappingEntries = processPractitionerMappingEntries;
 exports.processDocketEntries = processDocketEntries;
 exports.processMessageEntries = processMessageEntries;
 exports.processOtherEntries = processOtherEntries;
