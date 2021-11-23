@@ -1063,7 +1063,10 @@ describe('processStreamUtilities', () => {
         getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
       };
 
-      const mockPractitionerMappingEntries = [mockPractitionerMappingRecord, mockPractitionerMappingRecord];
+      const mockPractitionerMappingEntries = [
+        mockPractitionerMappingRecord,
+        mockPractitionerMappingRecord,
+      ];
 
       await processPractitionerMappingEntries({
         applicationContext,
@@ -1071,7 +1074,9 @@ describe('processStreamUtilities', () => {
         utils,
       });
 
-      expect(mockGetCaseMetadataWithCounsel).toHaveBeenCalledTimes(mockPractitionerMappingEntries.length);
+      expect(mockGetCaseMetadataWithCounsel).toHaveBeenCalledTimes(
+        mockPractitionerMappingEntries.length,
+      );
     });
   });
 

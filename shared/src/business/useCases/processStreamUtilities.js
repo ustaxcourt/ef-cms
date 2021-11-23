@@ -145,14 +145,20 @@ const processCaseEntries = async ({
   }
 };
 
-const processPractitionerMappingEntries = async ({applicationContext, practitionerMappingEntries, utils}) => {
-  if(!practitionerMappingEntries.length) return;
+const processPractitionerMappingEntries = async ({
+  applicationContext,
+  practitionerMappingEntries,
+  utils,
+}) => {
+  if (!practitionerMappingEntries.length) return;
 
-  await utils.getCaseMetadataWithCounsel({
-    applicationContext,
-    docketNumber: '105-20', //todo: dont hardcode
+  practitionerMappingEntries.map(async entry => {
+    await utils.getCaseMetadataWithCounsel({
+      applicationContext,
+      docketNumber: entry.dynamodb.NewImage.pk.S.substring(5), //todo: dont hardcode
+    });
   });
-}
+};
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
