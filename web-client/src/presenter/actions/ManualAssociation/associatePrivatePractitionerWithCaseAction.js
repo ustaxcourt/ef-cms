@@ -14,7 +14,6 @@ export const associatePrivatePractitionerWithCaseAction = async ({
   get,
   path,
 }) => {
-  console.log('gonna associatePrivatePractitionerWithCaseAction');
   const userId = get(state.modal.user.userId);
   const { representing, serviceIndicator } = get(state.modal);
   const docketNumber = get(state.caseDetail.docketNumber);

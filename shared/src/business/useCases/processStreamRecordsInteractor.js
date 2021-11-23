@@ -46,8 +46,6 @@ exports.processStreamRecordsInteractor = async (
   applicationContext,
   { recordsToProcess },
 ) => {
-  console.log('PAK::processStreamRecordsInteractor');
-  console.log('recordsToProcess', recordsToProcess);
   const {
     caseEntityRecords,
     docketEntryRecords,
