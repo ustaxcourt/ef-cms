@@ -48,7 +48,6 @@ exports.orderAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  console.log('docketNumber', docketNumber);
   const isAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
@@ -62,21 +61,10 @@ exports.orderAdvancedSearchInteractor = async (
     ROLE_PERMISSIONS.VIEW_SEALED_CASE,
   );
 
-  console.log(
-    'canViewSealedCase in orderAdvancedSearchInteractor:',
-    canViewSealedCase,
-  );
-  console.log(
-    '~~ isAssociated in orderAdvancedSearchInteractor: ',
-    isAssociated,
-  );
-
   let omitSealed = false;
   if (!canViewSealedCase && !isAssociated) {
     omitSealed = true;
   }
-
-  console.log('omitSealed [we want it to be false]...', omitSealed);
 
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
@@ -102,11 +90,6 @@ exports.orderAdvancedSearchInteractor = async (
       ...rawSearch,
     });
 
-  console.log(
-    'results',
-    results.map(r => `${r.docketNumber}, ${r.documentTitle}`),
-  );
-
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
   await applicationContext.logger.info('private order search', {
     ...omit(rawSearch, 'entityName'),
@@ -120,8 +103,6 @@ exports.orderAdvancedSearchInteractor = async (
     0,
     MAX_SEARCH_RESULTS,
   );
-
-  console.log('filteredResults [should have results]', filteredResults);
 
   return InternalDocumentSearchResult.validateRawCollection(filteredResults, {
     applicationContext,

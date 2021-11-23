@@ -29,11 +29,6 @@ exports.associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-  console.log(
-    '** isAssociated in associatePrivatePractitionerToCase: ',
-    isAssociated,
-  );
-
   if (!isAssociated) {
     const caseToUpdate = await applicationContext
       .getPersistenceGateway()
@@ -73,19 +68,6 @@ exports.associatePrivatePractitionerToCase = async ({
       applicationContext,
       caseToUpdate: caseEntity,
     });
-
-    const isAssociated2 = await applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser({
-        applicationContext,
-        docketNumber,
-        userId: user.userId,
-      });
-
-    console.log(
-      '222222** isAssociated in associatePrivatePractitionerToCase: ',
-      isAssociated2,
-    );
 
     return caseEntity.toRawObject();
   }

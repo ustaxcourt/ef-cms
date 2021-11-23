@@ -50,10 +50,6 @@ exports.addExistingUserToCase = async ({
 
   const contact = caseEntity.getPetitionerById(contactId);
 
-  console.log(
-    'adding existing user caseEntity.privatePractitioners',
-    caseEntity.privatePractitioners,
-  );
   caseEntity.privatePractitioners.forEach(practitioner => {
     const representingArray = practitioner.representing;
 

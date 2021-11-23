@@ -285,11 +285,6 @@ const updatePrivatePractitioners = ({
     { applicationContext },
   );
 
-  console.log(
-    'validPrivatePractitioners! on updatePP',
-    validPrivatePractitioners,
-  );
-
   const deletePractitionerFunctions = deletedPrivatePractitioners.map(
     practitioner =>
       function deletePrivatePractitioner_cb() {
