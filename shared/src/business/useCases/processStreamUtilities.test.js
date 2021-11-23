@@ -12,11 +12,12 @@ const {
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamUtilities', () => {
+  const docketNumberInPractitionerMapping = '123-45';
   const mockPractitionerMappingRecord = {
     dynamodb: {
       Keys: {
         pk: {
-          S: 'case|123-45',
+          S: `case|${docketNumberInPractitionerMapping}`,
         },
         sk: {
           S: 'privatePractitioner|PT1234',
@@ -1077,6 +1078,9 @@ describe('processStreamUtilities', () => {
       expect(mockGetCaseMetadataWithCounsel).toHaveBeenCalledTimes(
         mockPractitionerMappingEntries.length,
       );
+      expect(
+        mockGetCaseMetadataWithCounsel.mock.calls[0][0].docketNumber,
+      ).toEqual(docketNumberInPractitionerMapping);
     });
   });
 

@@ -3,8 +3,8 @@ const {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
 } = require('../entities/EntityConstants');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { compact, flattenDeep, partition } = require('lodash');
-const { applicationContext } = require("../test/createTestApplicationContext");
 
 const partitionRecords = records => {
   const [removeRecords, insertModifyRecords] = partition(
@@ -155,7 +155,7 @@ const processPractitionerMappingEntries = async ({
   practitionerMappingEntries.map(async entry => {
     await utils.getCaseMetadataWithCounsel({
       applicationContext,
-      docketNumber: entry.dynamodb.NewImage.pk.S.substring(5), //todo: dont hardcode
+      docketNumber: entry.dynamodb.NewImage.pk.S.substring(5),
     });
   });
 };
