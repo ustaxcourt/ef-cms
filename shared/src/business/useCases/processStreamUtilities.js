@@ -67,6 +67,7 @@ const partitionRecords = records => {
 const processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
+  practitionerMappingRecords,
   utils,
 }) => {
   if (!caseEntityRecords.length) return;
