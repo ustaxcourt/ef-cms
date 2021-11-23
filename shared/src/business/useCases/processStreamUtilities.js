@@ -3,7 +3,6 @@ const {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
 } = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
 const { compact, flattenDeep, partition } = require('lodash');
 
 const partitionRecords = records => {
@@ -68,7 +67,6 @@ const partitionRecords = records => {
 const processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
-  practitionerMappingRecords,
   utils,
 }) => {
   if (!caseEntityRecords.length) return;
@@ -152,12 +150,27 @@ const processPractitionerMappingEntries = async ({
 }) => {
   if (!practitionerMappingEntries.length) return;
 
-  practitionerMappingEntries.map(async entry => {
-    await utils.getCaseMetadataWithCounsel({
+  const indexRecords = practitionerMappingEntries.map(async entry => {
+    return await utils.getCaseMetadataWithCounsel({
       applicationContext,
-      docketNumber: entry.dynamodb.NewImage.pk.S.substring(5),
+      docketNumber: entry.dynamodb.NewImage.pk.S.substring('case|'.length),
     });
   });
+
+  const { failedRecords } = await applicationContext
+  .getPersistenceGateway()
+  .bulkIndexRecords({
+    applicationContext,
+    records: flattenDeep(indexRecords),
+  });
+
+  if (failedRecords.length > 0) {
+    applicationContext.logger.error(
+      'the case or docket entry records that failed to index',
+      { failedRecords },
+    );
+    throw new Error('failed to index case entry or docket entry records');
+  }
 };
 
 /**

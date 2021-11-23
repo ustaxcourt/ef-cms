@@ -1040,7 +1040,7 @@ describe('processStreamUtilities', () => {
     });
   });
 
-  describe('processPractitionerMappingEntries', () => {
+  describe.only('processPractitionerMappingEntries', () => {
     it('should do nothing when no practitionerMappingEntries are provided', async () => {
       const mockGetCaseMetadataWithCounsel = jest.fn();
 
@@ -1057,7 +1057,7 @@ describe('processStreamUtilities', () => {
       expect(mockGetCaseMetadataWithCounsel).not.toHaveBeenCalled();
     });
 
-    it('should retrieve the case with counsel for each practitioner mapping record', async () => {
+    it('should send each case for each practitioner mapping record to bulkIndexRecords', async () => {
       const mockGetCaseMetadataWithCounsel = jest.fn();
 
       const utils = {
@@ -1081,6 +1081,9 @@ describe('processStreamUtilities', () => {
       expect(
         mockGetCaseMetadataWithCounsel.mock.calls[0][0].docketNumber,
       ).toEqual(docketNumberInPractitionerMapping);
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords,
+      ).toHaveBeenCalled();
     });
   });
 
