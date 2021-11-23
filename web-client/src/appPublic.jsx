@@ -94,6 +94,7 @@ const appPublic = {
     ReactDOM.render(
       <Container app={cerebralApp}>
         <AppComponentPublic />
+        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       window.document.querySelector('#app-public'),
     );
