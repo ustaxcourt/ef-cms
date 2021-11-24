@@ -119,7 +119,10 @@ exports.processStreamRecordsInteractor = async (
 
     await processPractitionerMappingEntries({
       applicationContext,
-      practitionerMappingEntries: [...privatePractitionerMappingRecords, ...irsPractitionerMappingRecords],
+      practitionerMappingEntries: [
+        ...privatePractitionerMappingRecords,
+        ...irsPractitionerMappingRecords,
+      ],
       utils,
     }).catch(err => {
       applicationContext.logger.error(
