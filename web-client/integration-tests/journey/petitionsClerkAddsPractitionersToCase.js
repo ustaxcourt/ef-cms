@@ -50,7 +50,7 @@ export const petitionsClerkAddsPractitionersToCase = (
       practitionerMatch.userId,
     );
 
-    let formattedCase = runCompute(formattedCaseDetail, {
+    const formattedCase = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
     const contactPrimary = formattedCase.petitioners[0];
@@ -118,10 +118,6 @@ export const petitionsClerkAddsPractitionersToCase = (
       expect(cerebralTest.getState('modal.user.userId')).toEqual(
         practitionerMatch.userId,
       );
-
-      formattedCase = runCompute(formattedCaseDetail, {
-        state: cerebralTest.getState(),
-      });
 
       const contactSecondary = formattedCase.petitioners[1];
       await cerebralTest.runSequence('updateModalValueSequence', {
