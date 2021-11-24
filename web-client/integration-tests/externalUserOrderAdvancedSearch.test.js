@@ -108,14 +108,10 @@ describe('external users perform an advanced search for orders', () => {
   });
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
-  associatedUserSearchesForServedOrder(
-    cerebralTest,
-    {
-      draftOrderIndex: 0,
-      keyword: 'Jiminy Cricket',
-    },
-    true,
-  );
+  associatedUserSearchesForServedOrder(cerebralTest, {
+    draftOrderIndex: 0,
+    keyword: 'Jiminy Cricket',
+  });
 
   loginAs(cerebralTest, 'privatePractitioner1@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
@@ -124,14 +120,10 @@ describe('external users perform an advanced search for orders', () => {
   });
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
-  associatedUserSearchesForServedOrder(
-    cerebralTest,
-    {
-      draftOrderIndex: 0,
-      keyword: 'Jiminy Cricket',
-    },
-    true,
-  );
+  associatedUserSearchesForServedOrder(cerebralTest, {
+    draftOrderIndex: 0,
+    keyword: 'Jiminy Cricket',
+  });
 
   loginAs(cerebralTest, 'irsPractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
