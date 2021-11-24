@@ -935,3 +935,15 @@ export const updateOpinionForm = async (cerebralTest, formValues) => {
     'updateAdvancedOpinionSearchFormValueSequence',
   );
 };
+
+export const updateOrderForm = async (cerebralTest, formValues) => {
+  await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+    formType: 'orderSearch',
+  });
+
+  await updateForm(
+    cerebralTest,
+    formValues,
+    'updateAdvancedOrderSearchFormValueSequence',
+  );
+};

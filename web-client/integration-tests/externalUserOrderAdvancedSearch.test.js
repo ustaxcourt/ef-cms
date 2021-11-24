@@ -1,10 +1,18 @@
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { associatedUserSearchesForServedOrder } from './journey/associatedUserSearchesForServedOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  updateOrderForm,
+  uploadPetition,
+} from './helpers';
+import { petitionsClerkAddsPractitionerToPrimaryContact } from './journey/petitionsClerkAddsPractitionerToPrimaryContact';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -74,32 +82,46 @@ describe('external users perform an advanced search for orders', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
-
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
-  associatedUserSearchesForServedOrder(
-    cerebralTest,
-    {
-      draftOrderIndex: 0,
-      keyword: 'Jiminy Cricket',
-    },
-    true,
-  );
+  petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
 
   loginAs(cerebralTest, 'privatePractitioner1@example.com');
+  it('search for order in sealed case as the second practitioner associated to the petitioner', async () => {
+    await refreshElasticsearchIndex();
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  associatedUserSearchesForServedOrder(cerebralTest, {
+    draftOrderIndex: 0,
+    keyword: 'Jiminy Cricket',
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
-  associatedUserSearchesForServedOrder(
-    cerebralTest,
-    {
-      draftOrderIndex: 0,
-      keyword: 'Jiminy Cricket',
-    },
-    true,
-  );
+  associatedUserSearchesForServedOrder(cerebralTest, {
+    draftOrderIndex: 0,
+    keyword: 'Jiminy Cricket',
+  });
 
   loginAs(cerebralTest, 'irsPractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
