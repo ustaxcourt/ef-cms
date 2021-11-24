@@ -14,6 +14,6 @@ export const PdfPreview = connect(
       return noDocumentText || '';
     }
 
-    return <PdfViewer src={pdfPreviewUrl} />;
+    return <PdfViewer className="pdf-preview-viewer" src={pdfPreviewUrl} />;
   },
 );
