@@ -414,12 +414,6 @@ const processMessageEntries = async ({
   }
 };
 
-// processPractitionerMappingEntries?
-// if pk is case| and sk is privatePractitioner| (or irsPractitioner|?) && entity name is PrivatePractitioner (OR IrsPractitioner?)
-//     get case metadata with counsel
-//     marshall case
-//     create modify record for case with added practitioner
-
 const processOtherEntries = ({ applicationContext, otherRecords }) =>
   processEntries({
     applicationContext,
