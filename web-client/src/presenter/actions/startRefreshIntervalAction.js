@@ -11,11 +11,15 @@ export const startRefreshIntervalAction = ({
   get,
   store,
 }) => {
+  const broadcastChannel = applicationContext.getBroadcastGateway();
   const oldInterval = get(state.refreshTokenInterval);
-  clearInterval(oldInterval);
-  const refreshToken = get(state.refreshToken);
-  const time = applicationContext.getConstants().REFRESH_INTERVAL;
-  const interval = setInterval(async () => {
+  const currentRefreshToken = get(state.refreshToken);
+
+  if (!currentRefreshToken) {
+    broadcastChannel.postMessage({ subject: 'requestToken' });
+  }
+
+  const refreshTokenRequest = async ({ refreshToken }) => {
     const response = await applicationContext
       .getUseCases()
       .refreshTokenInteractor(applicationContext, {
@@ -24,13 +28,22 @@ export const startRefreshIntervalAction = ({
 
     store.set(state.token, response.token);
     applicationContext.setCurrentUserToken(response.token);
-
     await applicationContext
       .getUseCases()
       .setItemInteractor(applicationContext, {
         key: 'token',
         value: response.token,
       });
+  };
+
+  clearInterval(oldInterval);
+  const time = 10 * 1000; // applicationContext.getConstants().REFRESH_INTERVAL;
+  const interval = setInterval(async () => {
+    const refreshToken = get(state.refreshToken);
+    if (!refreshToken) {
+      return;
+    }
+    await refreshTokenRequest({ refreshToken });
   }, time);
   store.set(state.refreshTokenInterval, interval);
 };

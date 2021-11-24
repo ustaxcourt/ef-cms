@@ -15,13 +15,17 @@ import React from 'react';
 export const AppInstanceManager = connect(
   {
     appInstanceManagerHelper: state.appInstanceManagerHelper,
+    broadcastRefreshTokenSequence: sequences.broadcastRefreshTokenSequence,
     confirmStayLoggedInSequence: sequences.confirmStayLoggedInSequence,
     resetIdleTimerSequence: sequences.resetIdleTimerSequence,
+    saveRefreshTokenSequence: sequences.saveRefreshTokenSequence,
   },
   function AppInstanceManager({
     appInstanceManagerHelper,
+    broadcastRefreshTokenSequence,
     confirmStayLoggedInSequence,
     resetIdleTimerSequence,
+    saveRefreshTokenSequence,
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
@@ -32,6 +36,12 @@ export const AppInstanceManager = connect(
           break;
         case 'stayLoggedIn':
           confirmStayLoggedInSequence();
+          break;
+        case 'receiveToken':
+          saveRefreshTokenSequence(msg);
+          break;
+        case 'requestToken':
+          broadcastRefreshTokenSequence();
           break;
       }
     };

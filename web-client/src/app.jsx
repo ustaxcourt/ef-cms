@@ -276,6 +276,7 @@ const app = {
 
     initializeSocketProvider(cerebralApp, applicationContext);
     router.initialize(cerebralApp, route);
+    await cerebralApp.getSequence('startRefreshIntervalSequence')();
 
     ReactDOM.render(
       <Container app={cerebralApp}>
