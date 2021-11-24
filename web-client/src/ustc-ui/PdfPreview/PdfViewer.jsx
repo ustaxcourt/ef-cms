@@ -137,5 +137,5 @@ const PdfViewerComponent = function PdfViewerComponent({
     return '';
   }
 
-  return <div {...viewerProps} className="pdfViewer" ref={webViewer}></div>;
+  return <div {...viewerProps} ref={webViewer}></div>;
 };
