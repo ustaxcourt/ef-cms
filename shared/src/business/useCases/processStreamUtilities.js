@@ -71,10 +71,6 @@ const processCaseEntries = async ({
 }) => {
   if (!caseEntityRecords.length) return;
 
-  applicationContext.logger.debug(
-    `going to index ${caseEntityRecords.length} caseEntityRecords`,
-  );
-
   const indexCaseEntry = async caseRecord => {
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords = [];
@@ -150,35 +146,63 @@ const processPractitionerMappingEntries = async ({
 }) => {
   if (!practitionerMappingEntries.length) return;
 
-  const cases = await Promise.all(
-    practitionerMappingEntries.map(async entry => {
-      return await utils.getCaseMetadataWithCounsel({
+  const indexCaseEntryForPractitionerMapping =
+    async practitionerMappingRecord => {
+      const practitionerMappingNewImage =
+        practitionerMappingRecord.dynamodb.NewImage;
+      const caseRecords = [];
+
+      const caseMetadataWithCounsel = await utils.getCaseMetadataWithCounsel({
         applicationContext,
-        docketNumber: entry.dynamodb.NewImage.pk.S.substring('case|'.length),
+        docketNumber: practitionerMappingNewImage.pk.S.substring(
+          'case|'.length,
+        ),
       });
-    }),
-  );
 
-  const dynamoDbCases = cases.map(record => {
-    return AWS.DynamoDB.Converter.marshall(record);
-  });
+      const marshalledCase = AWS.DynamoDB.Converter.marshall(
+        caseMetadataWithCounsel,
+      );
 
-  const indexRecords = dynamoDbCases.map(dynamoDbCase => {
-    return {
-      dynamodb: {
-        Keys: {
-          pk: {
-            S: 'dogcow', //TODO: not dogcow, but something like caseNewImage.pk.S,
+      caseRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: practitionerMappingNewImage.pk.S,
+            },
+            sk: {
+              S: practitionerMappingNewImage.pk.S,
+            },
           },
-          sk: {
-            S: 'moof!', //TODO: not moof, but something like caseNewImage.sk.S,
-          },
+          NewImage: {
+            ...marshalledCase,
+            case_relations: { name: 'case' },
+            entityName: { S: 'CaseDocketEntryMapping' },
+          }, // Create a mapping record on the docket-entry index for parent-child relationships
         },
-        NewImage: dynamoDbCase,
-      },
-      eventName: 'MODIFY',
+        eventName: 'MODIFY',
+      });
+
+      caseRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: practitionerMappingNewImage.pk.S,
+            },
+            sk: {
+              S: practitionerMappingNewImage.sk.S,
+            },
+          },
+          NewImage: marshalledCase,
+        },
+        eventName: 'MODIFY',
+      });
+
+      return caseRecords;
     };
-  });
+
+  const indexRecords = await Promise.all(
+    practitionerMappingEntries.map(indexCaseEntryForPractitionerMapping),
+  );
 
   const { failedRecords } = await applicationContext
     .getPersistenceGateway()
