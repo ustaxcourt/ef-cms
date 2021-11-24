@@ -7,6 +7,10 @@ export const petitionsClerkCreateOrder = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
+    const beforeDocketEntriesCount = cerebralTest.getState(
+      'caseDetail.docketEntries',
+    ).length;
+
     await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
       value: 'O',
@@ -33,7 +37,9 @@ export const petitionsClerkCreateOrder = cerebralTest => {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(4);
+    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
+      beforeDocketEntriesCount + 1,
+    );
 
     const { draftDocuments } = applicationContext
       .getUtilities()

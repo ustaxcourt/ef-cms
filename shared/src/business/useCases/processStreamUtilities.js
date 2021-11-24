@@ -32,8 +32,30 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.entityName.S === 'WorkItem',
   );
 
-  const [messageRecords, otherRecords] = partition(
+  const [
+    privatePractitionerMappingRecords,
+    nonPrivatePractitionerMappingRecords,
+  ] = partition(
     nonWorkItemRecords,
+    record =>
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'PrivatePractitioner' &&
+      record.dynamodb.NewImage.pk.S.startsWith('case|') &&
+      record.dynamodb.NewImage.sk.S.startsWith('privatePractitioner|'),
+  );
+
+  const [irsPractitionerMappingRecords, nonIrsPractitionerMappingRecords] =
+    partition(
+      nonPrivatePractitionerMappingRecords,
+      record =>
+        record.dynamodb.NewImage.entityName &&
+        record.dynamodb.NewImage.entityName.S === 'IrsPractitioner' &&
+        record.dynamodb.NewImage.pk.S.startsWith('case|') &&
+        record.dynamodb.NewImage.sk.S.startsWith('irsPractitioner|'),
+    );
+
+  const [messageRecords, otherRecords] = partition(
+    nonIrsPractitionerMappingRecords,
     record =>
       record.dynamodb.NewImage.entityName &&
       record.dynamodb.NewImage.entityName.S === 'Message',
@@ -42,8 +64,10 @@ const partitionRecords = records => {
   return {
     caseEntityRecords,
     docketEntryRecords,
+    irsPractitionerMappingRecords,
     messageRecords,
     otherRecords,
+    privatePractitionerMappingRecords,
     removeRecords,
     workItemRecords,
   };
@@ -60,10 +84,6 @@ const processCaseEntries = async ({
   utils,
 }) => {
   if (!caseEntityRecords.length) return;
-
-  applicationContext.logger.debug(
-    `going to index ${caseEntityRecords.length} caseEntityRecords`,
-  );
 
   const indexCaseEntry = async caseRecord => {
     const caseNewImage = caseRecord.dynamodb.NewImage;
@@ -130,6 +150,87 @@ const processCaseEntries = async ({
       { failedRecords },
     );
     throw new Error('failed to index case entry or docket entry records');
+  }
+};
+
+const processPractitionerMappingEntries = async ({
+  applicationContext,
+  practitionerMappingEntries,
+  utils,
+}) => {
+  if (!practitionerMappingEntries.length) return;
+
+  const indexCaseEntryForPractitionerMapping =
+    async practitionerMappingRecord => {
+      const practitionerMappingNewImage =
+        practitionerMappingRecord.dynamodb.NewImage;
+      const caseRecords = [];
+
+      const caseMetadataWithCounsel = await utils.getCaseMetadataWithCounsel({
+        applicationContext,
+        docketNumber: practitionerMappingNewImage.pk.S.substring(
+          'case|'.length,
+        ),
+      });
+
+      const marshalledCase = AWS.DynamoDB.Converter.marshall(
+        caseMetadataWithCounsel,
+      );
+
+      caseRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: practitionerMappingNewImage.pk.S,
+            },
+            sk: {
+              S: practitionerMappingNewImage.pk.S,
+            },
+          },
+          NewImage: {
+            ...marshalledCase,
+            case_relations: { name: 'case' },
+            entityName: { S: 'CaseDocketEntryMapping' },
+          }, // Create a mapping record on the docket-entry index for parent-child relationships
+        },
+        eventName: 'MODIFY',
+      });
+
+      caseRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: practitionerMappingNewImage.pk.S,
+            },
+            sk: {
+              S: practitionerMappingNewImage.sk.S,
+            },
+          },
+          NewImage: marshalledCase,
+        },
+        eventName: 'MODIFY',
+      });
+
+      return caseRecords;
+    };
+
+  const indexRecords = await Promise.all(
+    practitionerMappingEntries.map(indexCaseEntryForPractitionerMapping),
+  );
+
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkIndexRecords({
+      applicationContext,
+      records: flattenDeep(indexRecords),
+    });
+
+  if (failedRecords.length > 0) {
+    applicationContext.logger.error(
+      'the practitioner mapping record that failed to index',
+      { failedRecords },
+    );
+    throw new Error('failed to index practitioner mapping records');
   }
 };
 
@@ -344,6 +445,7 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
 
 exports.partitionRecords = partitionRecords;
 exports.processCaseEntries = processCaseEntries;
+exports.processPractitionerMappingEntries = processPractitionerMappingEntries;
 exports.processDocketEntries = processDocketEntries;
 exports.processMessageEntries = processMessageEntries;
 exports.processOtherEntries = processOtherEntries;

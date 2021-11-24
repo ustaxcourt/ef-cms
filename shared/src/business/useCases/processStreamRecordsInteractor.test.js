@@ -5,6 +5,7 @@ const {
   processDocketEntries,
   processMessageEntries,
   processOtherEntries,
+  processPractitionerMappingEntries,
   processRemoveEntries,
   processWorkItemEntries,
 } = require('./processStreamUtilities');
@@ -15,37 +16,37 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
-    // mocked in the order they are called.
     processRemoveEntries.mockResolvedValue([]);
     processCaseEntries.mockResolvedValue([]);
     processDocketEntries.mockResolvedValue([]);
     processWorkItemEntries.mockResolvedValue([]);
     processMessageEntries.mockResolvedValue([]);
+    processPractitionerMappingEntries.mockResolvedValue([]);
     processOtherEntries.mockResolvedValue([]);
 
     partitionRecords.mockReturnValue({
       caseEntityRecords: [],
       docketEntryRecords: [],
+      irsPractitionerMappingRecords: [],
       otherRecords: [],
+      privatePractitionerMappingRecords: [],
       removeRecords: [],
       workItemRecords: [],
     });
   });
 
-  it('sanity check', async () => {
+  it('should partition records by type and call helper methods to process each type of record', async () => {
     await processStreamRecordsInteractor(applicationContext, {
       recordsToProcess: [{ my: 'record' }],
     });
 
     expect(partitionRecords).toHaveBeenCalled();
-
     expect(processRemoveEntries).toHaveBeenCalled();
     expect(processCaseEntries).toHaveBeenCalled();
     expect(processDocketEntries).toHaveBeenCalled();
     expect(processWorkItemEntries).toHaveBeenCalled();
     expect(processMessageEntries).toHaveBeenCalled();
     expect(processOtherEntries).toHaveBeenCalled();
-
     expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 

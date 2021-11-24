@@ -9,7 +9,7 @@ const formattedCaseDetail = withAppContextDecorator(
 
 export const petitionsClerkAddsPractitionersToCase = (
   cerebralTest,
-  skipSecondary,
+  skipAddingPractitionerToSecondaryPetitioner,
 ) => {
   return it('Petitions clerk manually adds multiple privatePractitioners to case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -104,7 +104,7 @@ export const petitionsClerkAddsPractitionersToCase = (
     cerebralTest.privatePractitioners = formatted.privatePractitioners[0];
 
     //add a second practitioner
-    if (!skipSecondary) {
+    if (!skipAddingPractitionerToSecondaryPetitioner) {
       await cerebralTest.runSequence('updateFormValueSequence', {
         key: 'practitionerSearch',
         value: 'PT5432',
