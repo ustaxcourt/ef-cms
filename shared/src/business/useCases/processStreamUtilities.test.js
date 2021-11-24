@@ -1147,6 +1147,7 @@ describe('processStreamUtilities', () => {
         .bulkIndexRecords.mockReturnValueOnce({
           failedRecords: [{ id: 'failed record' }],
         });
+
       await expect(
         processPractitionerMappingEntries({
           applicationContext,
@@ -1162,6 +1163,7 @@ describe('processStreamUtilities', () => {
               eventName: 'MODIFY',
             },
           ],
+          utils,
         }),
       ).rejects.toThrow('failed to index practitioner mapping records');
       expect(applicationContext.logger.error).toHaveBeenCalled();
