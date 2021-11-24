@@ -31,8 +31,8 @@ describe('PdfViewer', () => {
         <PdfViewer />
       </Container>,
     );
-
-    expect(wrapper.find('.default-iframe').length).toBe(1);
+    expect(wrapper.find('.pdf-express-viewer').exists()).toBe(false);
+    expect(wrapper.find('.default-iframe').exists()).toBe(true);
   });
 
   it('should render the PdfViwer if isPdfJsEnabled if true', () => {
@@ -53,6 +53,7 @@ describe('PdfViewer', () => {
       </Container>,
     );
 
-    expect(wrapper.find('.pdf-express-viewer').length).toBe(1);
+    expect(wrapper.find('.default-iframe').exists()).toBe(false);
+    expect(wrapper.find('.pdf-express-viewer').exists()).toBe(true);
   });
 });

@@ -20,7 +20,7 @@ export const PdfViewer = connect(
       pdfProps.className = classNames.join(' ');
       return <PdfViewerComponent {...pdfProps} />;
     } else {
-      classNames.push('pdf-express-viewer');
+      classNames.push('default-iframe');
       pdfProps.className = classNames.join(' ');
       return <iframe {...pdfProps} />;
     }
