@@ -1,11 +1,12 @@
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { associatedUserSearchesForServedOrder } from './journey/associatedUserSearchesForServedOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-import { docketClerkAddsPractitionerToPrimaryContact } from './journey/docketClerkAddsPractitionerToPrimaryContact';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest, updateOrderForm, uploadPetition } from './helpers';
+import { petitionsClerkAddsPractitionerToPrimaryContact } from './journey/petitionsClerkAddsPractitionerToPrimaryContact';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
@@ -79,10 +80,25 @@ describe('external users perform an advanced search for orders', () => {
   docketClerkSealsCase(cerebralTest);
 
   // associate multiple counsel to one petitioner
-  docketClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
-  // associate a second pratitioner to contact primary
+  petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
   // search for order by docket number as second practitioner
+  it('when searching by docket number that is present in served orders', async () => {
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
 
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
+  });
   // search by keyword is broken?
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
