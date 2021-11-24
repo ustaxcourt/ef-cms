@@ -32,7 +32,7 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.entityName.S === 'WorkItem',
   );
 
-  const [practitionerMappingRecords, nonPractitionerMappingRecords] = partition(
+  const [privatePractitionerMappingRecords, nonPrivatePractitionerMappingRecords] = partition(
     nonWorkItemRecords,
     record =>
       record.dynamodb.NewImage.entityName &&
@@ -41,8 +41,17 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.sk.S.startsWith('privatePractitioner|'),
   );
 
+  const [irsPractitionerMappingRecords, nonIrsPractitionerMappingRecords] = partition(
+    nonPrivatePractitionerMappingRecords,
+    record =>
+      record.dynamodb.NewImage.entityName &&
+      record.dynamodb.NewImage.entityName.S === 'IrsPractitioner' &&
+      record.dynamodb.NewImage.pk.S.startsWith('case|') &&
+      record.dynamodb.NewImage.sk.S.startsWith('irsPractitioner|'),
+  );
+
   const [messageRecords, otherRecords] = partition(
-    nonPractitionerMappingRecords,
+    nonIrsPractitionerMappingRecords,
     record =>
       record.dynamodb.NewImage.entityName &&
       record.dynamodb.NewImage.entityName.S === 'Message',
@@ -53,7 +62,8 @@ const partitionRecords = records => {
     docketEntryRecords,
     messageRecords,
     otherRecords,
-    practitionerMappingRecords,
+    privatePractitionerMappingRecords,
+    irsPractitionerMappingRecords,
     removeRecords,
     workItemRecords,
   };
