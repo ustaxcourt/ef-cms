@@ -7,12 +7,20 @@ export const PdfViewer = connect(
   {
     featureFlagHelper: state.featureFlagHelper,
   },
-  ({ featureFlagHelper, id, src, title }) => {
-    const pdfProps = { id, src, title };
+  ({ className, featureFlagHelper, id, src, title }) => {
+    const pdfProps = { className, id, src, title };
+
+    let classNames = [];
+    if (className) {
+      classNames = className.split(' ');
+    }
+    classNames.push('pdf-express-viewer');
+    pdfProps.className = classNames.join(' ');
+
     if (featureFlagHelper.isPdfJsEnabled) {
       return <PdfViewerComponent {...pdfProps} />;
     } else {
-      return <iframe className="viewer-iframe" {...pdfProps} />;
+      return <iframe {...pdfProps} />;
     }
   },
 );
@@ -113,15 +121,17 @@ function useHookWithRefCallback({ src }) {
   return setRef;
 }
 
-const PdfViewerComponent = function PdfViewerComponent({ id, src, title }) {
+const PdfViewerComponent = function PdfViewerComponent({
+  className,
+  id,
+  src,
+  title,
+}) {
   const webViewer = useHookWithRefCallback({ src });
-  const viewerProps = { id, title };
-
+  const viewerProps = { className, id, title };
   if (!src || process.env.CI) {
     return '';
   }
 
-  return (
-    <div {...viewerProps} className="express-pdf-viewer" ref={webViewer}></div>
-  );
+  return <div {...viewerProps} ref={webViewer}></div>;
 };

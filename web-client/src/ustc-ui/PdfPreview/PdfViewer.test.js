@@ -32,7 +32,7 @@ describe('PdfViewer', () => {
       </Container>,
     );
 
-    expect(wrapper.find('.viewer-iframe').length).toBe(1);
+    expect(wrapper.find('.default-iframe').length).toBe(1);
   });
 
   it('should render the PdfViwer if isPdfJsEnabled if true', () => {
@@ -53,6 +53,6 @@ describe('PdfViewer', () => {
       </Container>,
     );
 
-    expect(wrapper.find('.express-pdf-viewer').length).toBe(1);
+    expect(wrapper.find('.pdf-express-viewer').length).toBe(1);
   });
 });
