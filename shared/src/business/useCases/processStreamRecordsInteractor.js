@@ -9,34 +9,6 @@ const {
   processWorkItemEntries,
 } = require('./processStreamUtilities');
 
-const getDocument = ({ applicationContext: appContext, documentContentsId }) =>
-  appContext.getPersistenceGateway().getDocument({
-    applicationContext: appContext,
-    key: documentContentsId,
-    protocol: 'S3',
-    useTempBucket: false,
-  });
-
-const getCaseMetadataWithCounsel = ({
-  applicationContext: appContext,
-  docketNumber,
-}) =>
-  appContext.getPersistenceGateway().getCaseMetadataWithCounsel({
-    applicationContext: appContext,
-    docketNumber,
-  });
-
-const getMessage = ({
-  applicationContext: appContext,
-  docketNumber,
-  messageId,
-}) =>
-  appContext.getPersistenceGateway().getMessageById({
-    applicationContext: appContext,
-    docketNumber,
-    messageId,
-  });
-
 /**
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -57,12 +29,6 @@ exports.processStreamRecordsInteractor = async (
     workItemRecords,
   } = partitionRecords(recordsToProcess);
 
-  const utils = {
-    getCaseMetadataWithCounsel,
-    getDocument,
-    getMessage,
-  };
-
   try {
     await processRemoveEntries({
       applicationContext,
@@ -77,7 +43,6 @@ exports.processStreamRecordsInteractor = async (
     await processCaseEntries({
       applicationContext,
       caseEntityRecords,
-      utils,
     }).catch(err => {
       applicationContext.logger.error('failed to processCaseEntries', {
         err,
@@ -88,7 +53,6 @@ exports.processStreamRecordsInteractor = async (
     await processDocketEntries({
       applicationContext,
       docketEntryRecords,
-      utils,
     }).catch(err => {
       applicationContext.logger.error('failed to processDocketEntries', {
         err,
@@ -108,7 +72,6 @@ exports.processStreamRecordsInteractor = async (
     await processMessageEntries({
       applicationContext,
       messageRecords,
-      utils,
     }).catch(err => {
       applicationContext.logger.error('failed to process message records', {
         err,
@@ -119,7 +82,6 @@ exports.processStreamRecordsInteractor = async (
     await processPractitionerMappingEntries({
       applicationContext,
       practitionerMappingRecords,
-      utils,
     }).catch(err => {
       applicationContext.logger.error(
         'failed to process practitioner mapping records',

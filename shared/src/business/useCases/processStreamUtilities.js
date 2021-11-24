@@ -95,7 +95,6 @@ const partitionRecords = records => {
 const processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
-  utils,
 }) => {
   if (!caseEntityRecords.length) return;
 
@@ -103,10 +102,12 @@ const processCaseEntries = async ({
     const caseNewImage = caseRecord.dynamodb.NewImage;
     const caseRecords = [];
 
-    const caseMetadataWithCounsel = await utils.getCaseMetadataWithCounsel({
-      applicationContext,
-      docketNumber: caseNewImage.docketNumber.S,
-    });
+    const caseMetadataWithCounsel = await applicationContext
+      .getPersistenceGateway()
+      .getCaseMetadataWithCounsel({
+        applicationContext,
+        docketNumber: caseNewImage.docketNumber.S,
+      });
 
     const marshalledCase = AWS.DynamoDB.Converter.marshall(
       caseMetadataWithCounsel,
@@ -170,7 +171,6 @@ const processCaseEntries = async ({
 const processPractitionerMappingEntries = async ({
   applicationContext,
   practitionerMappingRecords,
-  utils,
 }) => {
   if (!practitionerMappingRecords.length) return;
 
@@ -181,12 +181,14 @@ const processPractitionerMappingEntries = async ({
         practitionerMappingRecord.dynamodb.OldImage;
       const caseRecords = [];
 
-      const caseMetadataWithCounsel = await utils.getCaseMetadataWithCounsel({
-        applicationContext,
-        docketNumber: practitionerMappingNewImage.pk.S.substring(
-          'case|'.length,
-        ),
-      });
+      const caseMetadataWithCounsel = await applicationContext
+        .getPersistenceGateway()
+        .getCaseMetadataWithCounsel({
+          applicationContext,
+          docketNumber: practitionerMappingNewImage.pk.S.substring(
+            'case|'.length,
+          ),
+        });
 
       const marshalledCase = AWS.DynamoDB.Converter.marshall(
         caseMetadataWithCounsel,
@@ -257,7 +259,6 @@ const processPractitionerMappingEntries = async ({
 const processDocketEntries = async ({
   applicationContext,
   docketEntryRecords: records,
-  utils,
 }) => {
   if (!records.length) return;
 
@@ -280,10 +281,14 @@ const processDocketEntries = async ({
       if (isSearchable && fullDocketEntry.documentContentsId) {
         // TODO: for performance, we should not re-index doc contents if we do not have to (use a contents hash?)
         try {
-          const buffer = await utils.getDocument({
-            applicationContext,
-            documentContentsId: fullDocketEntry.documentContentsId,
-          });
+          const buffer = await applicationContext
+            .getPersistenceGateway()
+            .getDocument({
+              applicationContext,
+              key: fullDocketEntry.documentContentsId,
+              protocol: 'S3',
+              useTempBucket: false,
+            });
           const { documentContents } = JSON.parse(buffer.toString());
 
           fullDocketEntry.documentContents = documentContents;
@@ -368,7 +373,6 @@ const processWorkItemEntries = ({ applicationContext, workItemRecords }) =>
 const processMessageEntries = async ({
   applicationContext,
   messageRecords,
-  utils,
 }) => {
   if (!messageRecords.length) return;
 
@@ -382,11 +386,13 @@ const processMessageEntries = async ({
     // go get the latest message if we're indexing a message with isRepliedTo set to false - it might
     // have been updated in dynamo since this record was created to be processed
     if (!messageNewImage.isRepliedTo.BOOL) {
-      const latestMessageData = await utils.getMessage({
-        applicationContext,
-        docketNumber: messageNewImage.docketNumber.S,
-        messageId: messageNewImage.messageId.S,
-      });
+      const latestMessageData = await applicationContext
+        .getPersistenceGateway()
+        .getMessage({
+          applicationContext,
+          docketNumber: messageNewImage.docketNumber.S,
+          messageId: messageNewImage.messageId.S,
+        });
 
       if (!latestMessageData.isRepliedTo) {
         const marshalledMessage =
