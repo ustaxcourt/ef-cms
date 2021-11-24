@@ -82,6 +82,9 @@ describe('external users perform an advanced search for orders', () => {
   // associate multiple counsel to one petitioner
   petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
   // search for order by docket number as second practitioner
+  // search by keyword is broken?
+
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
   it('when searching by docket number that is present in served orders', async () => {
     await updateOrderForm(cerebralTest, {
       docketNumber: cerebralTest.docketNumber,
@@ -99,9 +102,6 @@ describe('external users perform an advanced search for orders', () => {
       ]),
     );
   });
-  // search by keyword is broken?
-
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedUserSearchesForServedOrder(
     cerebralTest,
     {
