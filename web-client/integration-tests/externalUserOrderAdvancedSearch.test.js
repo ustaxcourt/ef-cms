@@ -1,5 +1,6 @@
 import { associatedUserSearchesForServedOrder } from './journey/associatedUserSearchesForServedOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
+import { docketClerkAddsPractitionerToPrimaryContact } from './journey/docketClerkAddsPractitionerToPrimaryContact';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
@@ -29,6 +30,8 @@ describe('external users perform an advanced search for orders', () => {
     const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    console.log('docketNumber', cerebralTest.docketNumber);
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -74,6 +77,13 @@ describe('external users perform an advanced search for orders', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
+
+  // associate multiple counsel to one petitioner
+  docketClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
+  // associate a second pratitioner to contact primary
+  // search for order by docket number as second practitioner
+
+  // search by keyword is broken?
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedUserSearchesForServedOrder(
