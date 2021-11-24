@@ -213,10 +213,10 @@ const processPractitionerMappingEntries = async ({
 
   if (failedRecords.length > 0) {
     applicationContext.logger.error(
-      'the case or docket entry records that failed to index',
+      'the practitioner mapping record that failed to index',
       { failedRecords },
     );
-    throw new Error('failed to index case entry or docket entry records');
+    throw new Error('failed to index practitioner mapping records');
   }
 };
 
