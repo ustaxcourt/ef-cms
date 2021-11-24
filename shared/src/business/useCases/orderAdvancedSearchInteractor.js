@@ -48,24 +48,6 @@ exports.orderAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const isAssociated = await applicationContext
-    .getPersistenceGateway()
-    .verifyCaseForUser({
-      applicationContext,
-      docketNumber,
-      userId: authorizedUser.userId,
-    });
-
-  const canViewSealedCase = isAuthorized(
-    authorizedUser,
-    ROLE_PERMISSIONS.VIEW_SEALED_CASE,
-  );
-
-  let omitSealed = false;
-  if (!canViewSealedCase && !isAssociated) {
-    omitSealed = true;
-  }
-
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     dateRange,
@@ -86,7 +68,7 @@ exports.orderAdvancedSearchInteractor = async (
       applicationContext,
       documentEventCodes: ORDER_EVENT_CODES,
       isOpinionSearch: false,
-      omitSealed,
+      omitSealed: false,
       ...rawSearch,
     });
 

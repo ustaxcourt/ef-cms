@@ -5,12 +5,39 @@ const {
   processDocketEntries,
   processMessageEntries,
   processOtherEntries,
+  processPractitionerMappingEntries,
   processRemoveEntries,
   processWorkItemEntries,
 } = require('./processStreamUtilities');
 const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamUtilities', () => {
+  const docketNumberInPractitionerMapping = '123-45';
+  const mockPrivatePractitionerMappingRecord = {
+    dynamodb: {
+      Keys: {
+        pk: {
+          S: `case|${docketNumberInPractitionerMapping}`,
+        },
+        sk: {
+          S: 'privatePractitioner|PT1234',
+        },
+      },
+      NewImage: {
+        entityName: {
+          S: 'PrivatePractitioner',
+        },
+        pk: {
+          S: 'case|123-45',
+        },
+        sk: {
+          S: 'privatePractitioner|PT1234',
+        },
+      },
+    },
+    eventName: 'MODIFY',
+  };
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -61,6 +88,25 @@ describe('processStreamUtilities', () => {
         eventName: 'MODIFY',
       };
 
+      const workItemRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'work-item|820ed226-7022-4ee9-8fe8-4d9029cb90ae',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'WorkItem',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
+
       const docketEntryRecord = {
         dynamodb: {
           Keys: {
@@ -99,6 +145,32 @@ describe('processStreamUtilities', () => {
         eventName: 'MODIFY',
       };
 
+      const privatePractitionerMappingRecord =
+        mockPrivatePractitionerMappingRecord;
+      const irsPractitionerMappingRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: `case|${docketNumberInPractitionerMapping}`,
+            },
+            sk: {
+              S: 'irsPractitioner|PT1234',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'IrsPractitioner',
+            },
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'irsPractitioner|PT1234',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
       const otherRecord = {
         dynamodb: {
           Keys: {
@@ -123,17 +195,23 @@ describe('processStreamUtilities', () => {
         { ...caseRecord },
         { ...docketEntryRecord },
         { ...messageRecord },
+        { ...privatePractitionerMappingRecord },
+        { ...irsPractitionerMappingRecord },
         { ...otherRecord },
+        { ...workItemRecord },
       ];
 
       const result = partitionRecords(records);
 
-      expect(result).toMatchObject({
+      expect(result).toEqual({
         caseEntityRecords: [caseRecord],
         docketEntryRecords: [docketEntryRecord],
+        irsPractitionerMappingRecords: [irsPractitionerMappingRecord],
         messageRecords: [messageRecord],
         otherRecords: [otherRecord],
+        privatePractitionerMappingRecords: [privatePractitionerMappingRecord],
         removeRecords: [removeRecord],
+        workItemRecords: [workItemRecord],
       });
     });
   });
@@ -984,6 +1062,110 @@ describe('processStreamUtilities', () => {
           ],
         }),
       ).rejects.toThrow('failed to index message records');
+      expect(applicationContext.logger.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('processPractitionerMappingEntries', () => {
+    const mockGetCaseMetadataWithCounsel = jest.fn();
+
+    const caseData = {
+      docketNumber: docketNumberInPractitionerMapping,
+      entityName: 'Case',
+      irsPractitioners: [
+        {
+          name: 'bob',
+        },
+      ],
+      pk: `case|${docketNumberInPractitionerMapping}`,
+      privatePractitioners: [
+        {
+          name: 'jane',
+        },
+      ],
+      sk: `case|${docketNumberInPractitionerMapping}`,
+    };
+
+    mockGetCaseMetadataWithCounsel.mockReturnValue({
+      ...caseData,
+    });
+
+    const utils = {
+      getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
+    };
+
+    it('should do nothing when no practitionerMappingEntries are provided', async () => {
+      await processPractitionerMappingEntries({
+        applicationContext,
+        practitionerMappingEntries: [],
+        utils,
+      });
+
+      expect(mockGetCaseMetadataWithCounsel).not.toHaveBeenCalled();
+    });
+
+    it('should send each case for each practitioner mapping record to bulkIndexRecords', async () => {
+      const mockPractitionerMappingEntries = [
+        mockPrivatePractitionerMappingRecord,
+        mockPrivatePractitionerMappingRecord,
+      ];
+
+      await processPractitionerMappingEntries({
+        applicationContext,
+        practitionerMappingEntries: mockPractitionerMappingEntries,
+        utils,
+      });
+
+      expect(mockGetCaseMetadataWithCounsel).toHaveBeenCalledTimes(
+        mockPractitionerMappingEntries.length,
+      );
+      expect(
+        mockGetCaseMetadataWithCounsel.mock.calls[0][0].docketNumber,
+      ).toEqual(docketNumberInPractitionerMapping);
+      expect(
+        applicationContext.getPersistenceGateway().bulkIndexRecords,
+      ).toHaveBeenCalled();
+    });
+
+    it('logs errors and throws an exception if bulk indexing fails', async () => {
+      const practitionerData = {
+        docketEntryId: '123',
+        entityName: 'PrivatePractitioner',
+        pk: 'case|123',
+        sk: 'privatePractitioner|123',
+      };
+
+      const practitionerDataMarshalled = {
+        docketEntryId: { S: '123' },
+        entityName: { S: 'PrivatePractitioner' },
+        pk: { S: 'case|123' },
+        sk: { S: 'privatePractitioner|123' },
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .bulkIndexRecords.mockReturnValueOnce({
+          failedRecords: [{ id: 'failed record' }],
+        });
+
+      await expect(
+        processPractitionerMappingEntries({
+          applicationContext,
+          practitionerMappingEntries: [
+            {
+              dynamodb: {
+                Keys: {
+                  pk: { S: practitionerData.pk },
+                  sk: { S: practitionerData.sk },
+                },
+                NewImage: practitionerDataMarshalled,
+              },
+              eventName: 'MODIFY',
+            },
+          ],
+          utils,
+        }),
+      ).rejects.toThrow('failed to index practitioner mapping records');
       expect(applicationContext.logger.error).toHaveBeenCalled();
     });
   });

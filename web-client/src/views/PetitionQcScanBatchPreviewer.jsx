@@ -264,7 +264,7 @@ export const PetitionQcScanBatchPreviewer = connect(
       );
     };
 
-    const renderIframePreview = () => {
+    const renderPdfPreview = () => {
       return (
         <>
           {pdfPreviewUrl && (
@@ -518,7 +518,7 @@ export const PetitionQcScanBatchPreviewer = connect(
           {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}
 
           {scanBatchPreviewerHelper.uploadMode === 'preview' &&
-            renderIframePreview()}
+            renderPdfPreview()}
         </div>
 
         {scanBatchPreviewerHelper.uploadMode === 'scan' &&
