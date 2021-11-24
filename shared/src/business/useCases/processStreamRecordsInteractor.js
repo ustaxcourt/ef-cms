@@ -50,9 +50,10 @@ exports.processStreamRecordsInteractor = async (
   const {
     caseEntityRecords,
     docketEntryRecords,
+    irsPractitionerMappingRecords,
     messageRecords,
     otherRecords,
-    practitionerMappingRecords,
+    privatePractitionerMappingRecords,
     removeRecords,
     workItemRecords,
   } = partitionRecords(recordsToProcess);
@@ -118,7 +119,7 @@ exports.processStreamRecordsInteractor = async (
 
     await processPractitionerMappingEntries({
       applicationContext,
-      practitionerMappingEntries: practitionerMappingRecords,
+      practitionerMappingEntries: [...privatePractitionerMappingRecords, ...irsPractitionerMappingRecords],
       utils,
     }).catch(err => {
       applicationContext.logger.error(
