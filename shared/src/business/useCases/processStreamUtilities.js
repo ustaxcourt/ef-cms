@@ -32,7 +32,10 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.entityName.S === 'WorkItem',
   );
 
-  const [privatePractitionerMappingRecords, nonPrivatePractitionerMappingRecords] = partition(
+  const [
+    privatePractitionerMappingRecords,
+    nonPrivatePractitionerMappingRecords,
+  ] = partition(
     nonWorkItemRecords,
     record =>
       record.dynamodb.NewImage.entityName &&
@@ -41,14 +44,15 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.sk.S.startsWith('privatePractitioner|'),
   );
 
-  const [irsPractitionerMappingRecords, nonIrsPractitionerMappingRecords] = partition(
-    nonPrivatePractitionerMappingRecords,
-    record =>
-      record.dynamodb.NewImage.entityName &&
-      record.dynamodb.NewImage.entityName.S === 'IrsPractitioner' &&
-      record.dynamodb.NewImage.pk.S.startsWith('case|') &&
-      record.dynamodb.NewImage.sk.S.startsWith('irsPractitioner|'),
-  );
+  const [irsPractitionerMappingRecords, nonIrsPractitionerMappingRecords] =
+    partition(
+      nonPrivatePractitionerMappingRecords,
+      record =>
+        record.dynamodb.NewImage.entityName &&
+        record.dynamodb.NewImage.entityName.S === 'IrsPractitioner' &&
+        record.dynamodb.NewImage.pk.S.startsWith('case|') &&
+        record.dynamodb.NewImage.sk.S.startsWith('irsPractitioner|'),
+    );
 
   const [messageRecords, otherRecords] = partition(
     nonIrsPractitionerMappingRecords,
@@ -60,10 +64,10 @@ const partitionRecords = records => {
   return {
     caseEntityRecords,
     docketEntryRecords,
+    irsPractitionerMappingRecords,
     messageRecords,
     otherRecords,
     privatePractitionerMappingRecords,
-    irsPractitionerMappingRecords,
     removeRecords,
     workItemRecords,
   };

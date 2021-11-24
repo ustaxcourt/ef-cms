@@ -13,7 +13,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamUtilities', () => {
   const docketNumberInPractitionerMapping = '123-45';
-  const mockPractitionerMappingRecord = {
+  const mockPrivatePractitionerMappingRecord = {
     dynamodb: {
       Keys: {
         pk: {
@@ -145,8 +145,32 @@ describe('processStreamUtilities', () => {
         eventName: 'MODIFY',
       };
 
-      const practitionerMappingRecord = mockPractitionerMappingRecord;
-
+      const privatePractitionerMappingRecord =
+        mockPrivatePractitionerMappingRecord;
+      const irsPractitionerMappingRecord = {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: `case|${docketNumberInPractitionerMapping}`,
+            },
+            sk: {
+              S: 'irsPractitioner|PT1234',
+            },
+          },
+          NewImage: {
+            entityName: {
+              S: 'IrsPractitioner',
+            },
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'irsPractitioner|PT1234',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      };
       const otherRecord = {
         dynamodb: {
           Keys: {
@@ -171,7 +195,8 @@ describe('processStreamUtilities', () => {
         { ...caseRecord },
         { ...docketEntryRecord },
         { ...messageRecord },
-        { ...practitionerMappingRecord },
+        { ...privatePractitionerMappingRecord },
+        { ...irsPractitionerMappingRecord },
         { ...otherRecord },
         { ...workItemRecord },
       ];
@@ -181,9 +206,10 @@ describe('processStreamUtilities', () => {
       expect(result).toEqual({
         caseEntityRecords: [caseRecord],
         docketEntryRecords: [docketEntryRecord],
+        irsPractitionerMappingRecords: [irsPractitionerMappingRecord],
         messageRecords: [messageRecord],
         otherRecords: [otherRecord],
-        practitionerMappingRecords: [practitionerMappingRecord],
+        privatePractitionerMappingRecords: [privatePractitionerMappingRecord],
         removeRecords: [removeRecord],
         workItemRecords: [workItemRecord],
       });
@@ -1040,14 +1066,35 @@ describe('processStreamUtilities', () => {
     });
   });
 
-  describe.only('processPractitionerMappingEntries', () => {
+  describe('processPractitionerMappingEntries', () => {
+    const mockGetCaseMetadataWithCounsel = jest.fn();
+
+    const caseData = {
+      docketNumber: docketNumberInPractitionerMapping,
+      entityName: 'Case',
+      irsPractitioners: [
+        {
+          name: 'bob',
+        },
+      ],
+      pk: `case|${docketNumberInPractitionerMapping}`,
+      privatePractitioners: [
+        {
+          name: 'jane',
+        },
+      ],
+      sk: `case|${docketNumberInPractitionerMapping}`,
+    };
+
+    mockGetCaseMetadataWithCounsel.mockReturnValue({
+      ...caseData,
+    });
+
+    const utils = {
+      getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
+    };
+
     it('should do nothing when no practitionerMappingEntries are provided', async () => {
-      const mockGetCaseMetadataWithCounsel = jest.fn();
-
-      const utils = {
-        getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
-      };
-
       await processPractitionerMappingEntries({
         applicationContext,
         practitionerMappingEntries: [],
@@ -1058,15 +1105,9 @@ describe('processStreamUtilities', () => {
     });
 
     it('should send each case for each practitioner mapping record to bulkIndexRecords', async () => {
-      const mockGetCaseMetadataWithCounsel = jest.fn();
-
-      const utils = {
-        getCaseMetadataWithCounsel: mockGetCaseMetadataWithCounsel,
-      };
-
       const mockPractitionerMappingEntries = [
-        mockPractitionerMappingRecord,
-        mockPractitionerMappingRecord,
+        mockPrivatePractitionerMappingRecord,
+        mockPrivatePractitionerMappingRecord,
       ];
 
       await processPractitionerMappingEntries({
@@ -1084,6 +1125,46 @@ describe('processStreamUtilities', () => {
       expect(
         applicationContext.getPersistenceGateway().bulkIndexRecords,
       ).toHaveBeenCalled();
+    });
+
+    it('logs errors and throws an exception if bulk indexing fails', async () => {
+      const practitionerData = {
+        docketEntryId: '123',
+        entityName: 'PrivatePractitioner',
+        pk: 'case|123',
+        sk: 'privatePractitioner|123',
+      };
+
+      const practitionerDataMarshalled = {
+        docketEntryId: { S: '123' },
+        entityName: { S: 'PrivatePractitioner' },
+        pk: { S: 'case|123' },
+        sk: { S: 'privatePractitioner|123' },
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .bulkIndexRecords.mockReturnValueOnce({
+          failedRecords: [{ id: 'failed record' }],
+        });
+      await expect(
+        processPractitionerMappingEntries({
+          applicationContext,
+          practitionerMappingEntries: [
+            {
+              dynamodb: {
+                Keys: {
+                  pk: { S: practitionerData.pk },
+                  sk: { S: practitionerData.sk },
+                },
+                NewImage: practitionerDataMarshalled,
+              },
+              eventName: 'MODIFY',
+            },
+          ],
+        }),
+      ).rejects.toThrow('failed to index practitioner mapping records');
+      expect(applicationContext.logger.error).toHaveBeenCalled();
     });
   });
 
