@@ -113,7 +113,7 @@ describe('external users perform an advanced search for orders', () => {
     keyword: 'Jiminy Cricket',
   });
 
-  loginAs(cerebralTest, 'privatePractitioner1@example.com');
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
