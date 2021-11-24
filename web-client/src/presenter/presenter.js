@@ -25,6 +25,7 @@ import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequen
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
+import { broadcastRefreshTokenSequence } from './sequences/broadcastRefreshTokenSequence';
 import { broadcastStayLoggedInSequence } from './sequences/broadcastStayLoggedInSequence';
 import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
@@ -281,6 +282,7 @@ import { reviewExternalDocumentInformationSequence } from './sequences/reviewExt
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
+import { saveRefreshTokenSequence } from './sequences/saveRefreshTokenSequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealAddressSequence } from './sequences/sealAddressSequence';
@@ -328,6 +330,7 @@ import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
+import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
@@ -510,6 +513,7 @@ export const presenter = {
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
     broadcastIdleStatusActiveSequence,
+    broadcastRefreshTokenSequence,
     broadcastStayLoggedInSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
@@ -765,6 +769,7 @@ export const presenter = {
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
     saveDocumentSigningSequence,
+    saveRefreshTokenSequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
     sealAddressSequence,
@@ -811,6 +816,7 @@ export const presenter = {
     showViewPetitionerCounselModalSequence,
     signOutSequence,
     skipSigningOrderSequence,
+    startRefreshIntervalSequence,
     startScanSequence,
     strikeDocketEntrySequence,
     submitAddConsolidatedCaseSequence,
