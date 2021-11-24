@@ -26,6 +26,7 @@ exports.getTodaysOpinionsInteractor = async applicationContext => {
       documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       endDate: currentDateEnd,
       isOpinionSearch: true,
+      omitSealed: true,
       startDate: currentDateStart,
     });
   return results;
