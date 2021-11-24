@@ -4,6 +4,7 @@ const {
   processDocketEntries,
   processMessageEntries,
   processOtherEntries,
+  processPractitionerMappingEntries,
   processRemoveEntries,
   processWorkItemEntries,
 } = require('./processStreamUtilities');
@@ -76,7 +77,6 @@ exports.processStreamRecordsInteractor = async (
     await processCaseEntries({
       applicationContext,
       caseEntityRecords,
-      practitionerMappingRecords,
       utils,
     }).catch(err => {
       applicationContext.logger.error('failed to processCaseEntries', {
@@ -113,6 +113,20 @@ exports.processStreamRecordsInteractor = async (
       applicationContext.logger.error('failed to process message records', {
         err,
       });
+      throw err;
+    });
+
+    await processPractitionerMappingEntries({
+      applicationContext,
+      practitionerMappingEntries: practitionerMappingRecords,
+      utils,
+    }).catch(err => {
+      applicationContext.logger.error(
+        'failed to process practitioner mapping records',
+        {
+          err,
+        },
+      );
       throw err;
     });
 
