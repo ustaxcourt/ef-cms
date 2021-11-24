@@ -14,12 +14,14 @@ export const PdfViewer = connect(
     if (className) {
       classNames = className.split(' ');
     }
-    classNames.push('pdf-express-viewer');
-    pdfProps.className = classNames.join(' ');
 
     if (featureFlagHelper.isPdfJsEnabled) {
+      classNames.push('pdf-express-viewer');
+      pdfProps.className = classNames.join(' ');
       return <PdfViewerComponent {...pdfProps} />;
     } else {
+      classNames.push('pdf-express-viewer');
+      pdfProps.className = classNames.join(' ');
       return <iframe {...pdfProps} />;
     }
   },
