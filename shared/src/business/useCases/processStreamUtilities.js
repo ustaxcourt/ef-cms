@@ -5,33 +5,25 @@ const {
 } = require('../entities/EntityConstants');
 const { compact, flattenDeep, partition } = require('lodash');
 
-const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
-const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
+const processEntries = async ({ applicationContext, records, recordType }) => {
+  if (!records.length) return;
 
-const isPractitionerMappingRemoveRecord = record => {
-  if (record.dynamodb.OldImage) {
-    const trimmedSk = record.dynamodb.OldImage.sk.S.split('|')[0];
+  applicationContext.logger.debug(
+    `going to index ${records.length} ${recordType}`,
+  );
 
-    return (
-      record.eventName === 'REMOVE' &&
-      record.dynamodb.OldImage.entityName &&
-      practitionerEntityTypes.includes(record.dynamodb.OldImage.entityName.S) &&
-      record.dynamodb.OldImage.pk.S.startsWith('case|') &&
-      practitionerSortKeys.includes(trimmedSk)
-    );
-  }
-};
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkIndexRecords({
+      applicationContext,
+      records,
+    });
 
-const isPractitionerMappingInsertModifyRecord = record => {
-  if (record.dynamodb.NewImage) {
-    const trimmedSk = record.dynamodb.NewImage.sk.S.split('|')[0];
-
-    return (
-      record.dynamodb.NewImage.entityName &&
-      practitionerEntityTypes.includes(record.dynamodb.NewImage.entityName.S) &&
-      record.dynamodb.NewImage.pk.S.startsWith('case|') &&
-      practitionerSortKeys.includes(trimmedSk)
-    );
+  if (failedRecords.length > 0) {
+    applicationContext.logger.error('the records that failed to index', {
+      failedRecords,
+    });
+    throw new Error('failed to index records');
   }
 };
 
@@ -85,6 +77,28 @@ const partitionRecords = records => {
     removeRecords,
     workItemRecords,
   };
+};
+
+const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
+  if (!removeRecords.length) return;
+
+  applicationContext.logger.debug(
+    `going to index ${removeRecords.length} removeRecords`,
+  );
+
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkDeleteRecords({
+      applicationContext,
+      records: removeRecords,
+    });
+
+  if (failedRecords.length > 0) {
+    applicationContext.logger.error('the records that failed to delete', {
+      failedRecords,
+    });
+    throw new Error('failed to delete records');
+  }
 };
 
 /**
@@ -165,89 +179,6 @@ const processCaseEntries = async ({
       { failedRecords },
     );
     throw new Error('failed to index case entry or docket entry records');
-  }
-};
-
-const processPractitionerMappingEntries = async ({
-  applicationContext,
-  practitionerMappingRecords,
-}) => {
-  if (!practitionerMappingRecords.length) return;
-
-  const indexCaseEntryForPractitionerMapping =
-    async practitionerMappingRecord => {
-      const practitionerMappingNewImage =
-        practitionerMappingRecord.dynamodb.NewImage ||
-        practitionerMappingRecord.dynamodb.OldImage;
-      const caseRecords = [];
-
-      const caseMetadataWithCounsel = await applicationContext
-        .getPersistenceGateway()
-        .getCaseMetadataWithCounsel({
-          applicationContext,
-          docketNumber: practitionerMappingNewImage.pk.S.substring(
-            'case|'.length,
-          ),
-        });
-
-      const marshalledCase = AWS.DynamoDB.Converter.marshall(
-        caseMetadataWithCounsel,
-      );
-
-      caseRecords.push({
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: practitionerMappingNewImage.pk.S,
-            },
-            sk: {
-              S: practitionerMappingNewImage.pk.S,
-            },
-          },
-          NewImage: {
-            ...marshalledCase,
-            case_relations: { name: 'case' },
-            entityName: { S: 'CaseDocketEntryMapping' },
-          }, // Create a mapping record on the docket-entry index for parent-child relationships
-        },
-        eventName: 'MODIFY',
-      });
-
-      caseRecords.push({
-        dynamodb: {
-          Keys: {
-            pk: {
-              S: practitionerMappingNewImage.pk.S,
-            },
-            sk: {
-              S: practitionerMappingNewImage.sk.S,
-            },
-          },
-          NewImage: marshalledCase,
-        },
-        eventName: 'MODIFY',
-      });
-
-      return caseRecords;
-    };
-
-  const indexRecords = await Promise.all(
-    practitionerMappingRecords.map(indexCaseEntryForPractitionerMapping),
-  );
-
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records: flattenDeep(indexRecords),
-    });
-
-  if (failedRecords.length > 0) {
-    applicationContext.logger.error(
-      'the practitioner mapping record that failed to index',
-      { failedRecords },
-    );
-    throw new Error('failed to index practitioner mapping records');
   }
 };
 
@@ -341,28 +272,6 @@ const processDocketEntries = async ({
   }
 };
 
-const processEntries = async ({ applicationContext, records, recordType }) => {
-  if (!records.length) return;
-
-  applicationContext.logger.debug(
-    `going to index ${records.length} ${recordType}`,
-  );
-
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkIndexRecords({
-      applicationContext,
-      records,
-    });
-
-  if (failedRecords.length > 0) {
-    applicationContext.logger.error('the records that failed to index', {
-      failedRecords,
-    });
-    throw new Error('failed to index records');
-  }
-};
-
 const processWorkItemEntries = ({ applicationContext, workItemRecords }) =>
   processEntries({
     applicationContext,
@@ -435,34 +344,130 @@ const processMessageEntries = async ({
   }
 };
 
+const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
+const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
+
+const isPractitionerMappingRemoveRecord = record => {
+  const oldImage = record.dynamodb.OldImage;
+  if (oldImage) {
+    const trimmedSk = oldImage.sk.S.split('|')[0];
+
+    return (
+      record.eventName === 'REMOVE' &&
+      oldImage.entityName &&
+      practitionerEntityTypes.includes(oldImage.entityName.S) &&
+      oldImage.pk.S.startsWith('case|') &&
+      practitionerSortKeys.includes(trimmedSk)
+    );
+  }
+
+  return false;
+};
+
+const isPractitionerMappingInsertModifyRecord = record => {
+  const newImage = record.dynamodb.NewImage;
+
+  if (newImage) {
+    const trimmedSk = newImage.sk.S.split('|')[0];
+
+    return (
+      newImage.entityName &&
+      practitionerEntityTypes.includes(newImage.entityName.S) &&
+      newImage.pk.S.startsWith('case|') &&
+      practitionerSortKeys.includes(trimmedSk)
+    );
+  }
+
+  return false;
+};
+
+const processPractitionerMappingEntries = async ({
+  applicationContext,
+  practitionerMappingRecords,
+}) => {
+  if (!practitionerMappingRecords.length) return;
+
+  const indexCaseEntryForPractitionerMapping =
+    async practitionerMappingRecord => {
+      const practitionerMappingData =
+        practitionerMappingRecord.dynamodb.NewImage ||
+        practitionerMappingRecord.dynamodb.OldImage;
+      const caseRecords = [];
+
+      const caseMetadataWithCounsel = await applicationContext
+        .getPersistenceGateway()
+        .getCaseMetadataWithCounsel({
+          applicationContext,
+          docketNumber: practitionerMappingData.pk.S.substring('case|'.length),
+        });
+
+      const marshalledCase = AWS.DynamoDB.Converter.marshall(
+        caseMetadataWithCounsel,
+      );
+
+      caseRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: practitionerMappingData.pk.S,
+            },
+            sk: {
+              S: practitionerMappingData.pk.S,
+            },
+          },
+          NewImage: {
+            ...marshalledCase,
+            case_relations: { name: 'case' },
+            entityName: { S: 'CaseDocketEntryMapping' },
+          }, // Create a mapping record on the docket-entry index for parent-child relationships
+        },
+        eventName: 'MODIFY',
+      });
+
+      caseRecords.push({
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: practitionerMappingData.pk.S,
+            },
+            sk: {
+              S: practitionerMappingData.sk.S,
+            },
+          },
+          NewImage: marshalledCase,
+        },
+        eventName: 'MODIFY',
+      });
+
+      return caseRecords;
+    };
+
+  const indexRecords = await Promise.all(
+    practitionerMappingRecords.map(indexCaseEntryForPractitionerMapping),
+  );
+
+  const { failedRecords } = await applicationContext
+    .getPersistenceGateway()
+    .bulkIndexRecords({
+      applicationContext,
+      records: flattenDeep(indexRecords),
+    });
+
+  if (failedRecords.length > 0) {
+    applicationContext.logger.error(
+      'the practitioner mapping record that failed to index',
+      { failedRecords },
+    );
+    throw new Error('failed to index practitioner mapping records');
+  }
+};
+
 const processOtherEntries = ({ applicationContext, otherRecords }) =>
   processEntries({
     applicationContext,
     recordType: 'otherRecords',
     records: otherRecords,
   });
-
-const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
-  if (!removeRecords.length) return;
-
-  applicationContext.logger.debug(
-    `going to index ${removeRecords.length} removeRecords`,
-  );
-
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkDeleteRecords({
-      applicationContext,
-      records: removeRecords,
-    });
-
-  if (failedRecords.length > 0) {
-    applicationContext.logger.error('the records that failed to delete', {
-      failedRecords,
-    });
-    throw new Error('failed to delete records');
-  }
-};
 
 exports.partitionRecords = partitionRecords;
 exports.processCaseEntries = processCaseEntries;
