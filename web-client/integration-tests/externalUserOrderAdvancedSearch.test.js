@@ -5,7 +5,13 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { loginAs, setupTest, updateOrderForm, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  updateOrderForm,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkAddsPractitionerToPrimaryContact } from './journey/petitionsClerkAddsPractitionerToPrimaryContact';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
@@ -78,14 +84,12 @@ describe('external users perform an advanced search for orders', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
-
-  // associate multiple counsel to one petitioner
   petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
-  // search for order by docket number as second practitioner
-  // search by keyword is broken?
 
   loginAs(cerebralTest, 'privatePractitioner1@example.com');
-  it('when searching by docket number that is present in served orders', async () => {
+  it('search for order in sealed case as the second practitioner associated to the petitioner', async () => {
+    await refreshElasticsearchIndex();
+
     await updateOrderForm(cerebralTest, {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -102,6 +106,8 @@ describe('external users perform an advanced search for orders', () => {
       ]),
     );
   });
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedUserSearchesForServedOrder(
     cerebralTest,
     {
