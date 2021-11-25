@@ -64,10 +64,12 @@ const partitionRecords = records => {
   return {
     caseEntityRecords,
     docketEntryRecords,
-    irsPractitionerMappingRecords,
     messageRecords,
     otherRecords,
-    privatePractitionerMappingRecords,
+    practitionerRecords: [
+      ...privatePractitionerMappingRecords,
+      ...irsPractitionerMappingRecords,
+    ],
     removeRecords,
     workItemRecords,
   };
@@ -155,10 +157,10 @@ const processCaseEntries = async ({
 
 const processPractitionerMappingEntries = async ({
   applicationContext,
-  practitionerMappingEntries,
+  practitionerMappingRecords,
   utils,
 }) => {
-  if (!practitionerMappingEntries.length) return;
+  if (!practitionerMappingRecords.length) return;
 
   const indexCaseEntryForPractitionerMapping =
     async practitionerMappingRecord => {
@@ -215,7 +217,7 @@ const processPractitionerMappingEntries = async ({
     };
 
   const indexRecords = await Promise.all(
-    practitionerMappingEntries.map(indexCaseEntryForPractitionerMapping),
+    practitionerMappingRecords.map(indexCaseEntryForPractitionerMapping),
   );
 
   const { failedRecords } = await applicationContext
