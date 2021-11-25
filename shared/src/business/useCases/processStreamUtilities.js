@@ -5,9 +5,48 @@ const {
 } = require('../entities/EntityConstants');
 const { compact, flattenDeep, partition } = require('lodash');
 
+const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
+const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
+
+const isPractitionerMappingRemoveRecord = record => {
+  console.log('&&&&&&&&&&& ', record.dynamodb.OldImage);
+
+  if (record.dynamodb.OldImage) {
+    const trimmedSk = record.dynamodb.OldImage.sk.S.split('|')[0];
+
+    return (
+      record.eventName === 'REMOVE' &&
+      record.dynamodb.OldImage.entityName &&
+      practitionerEntityTypes.includes(record.dynamodb.OldImage.entityName.S) &&
+      record.dynamodb.OldImage.pk.S.startsWith('case|') &&
+      practitionerSortKeys.includes(trimmedSk)
+    );
+  }
+};
+
+const isPractitionerMappingInsertModifyRecord = record => {
+  if (record.dynamodb.NewImage) {
+    const trimmedSk = record.dynamodb.NewImage.sk.S.split('|')[0];
+
+    return (
+      record.dynamodb.NewImage.entityName &&
+      practitionerEntityTypes.includes(record.dynamodb.NewImage.entityName.S) &&
+      record.dynamodb.NewImage.pk.S.startsWith('case|') &&
+      practitionerSortKeys.includes(trimmedSk)
+    );
+  }
+};
+
 const partitionRecords = records => {
-  const [removeRecords, insertModifyRecords] = partition(
+  const [practitionerMappingRecords, nonPractitionerMappingRecords] = partition(
     records,
+    record =>
+      isPractitionerMappingRemoveRecord(record) ||
+      isPractitionerMappingInsertModifyRecord(record),
+  );
+
+  const [removeRecords, insertModifyRecords] = partition(
+    nonPractitionerMappingRecords,
     record => record.eventName === 'REMOVE',
   );
 
@@ -32,30 +71,8 @@ const partitionRecords = records => {
       record.dynamodb.NewImage.entityName.S === 'WorkItem',
   );
 
-  const [
-    privatePractitionerMappingRecords,
-    nonPrivatePractitionerMappingRecords,
-  ] = partition(
-    nonWorkItemRecords,
-    record =>
-      record.dynamodb.NewImage.entityName &&
-      record.dynamodb.NewImage.entityName.S === 'PrivatePractitioner' &&
-      record.dynamodb.NewImage.pk.S.startsWith('case|') &&
-      record.dynamodb.NewImage.sk.S.startsWith('privatePractitioner|'),
-  );
-
-  const [irsPractitionerMappingRecords, nonIrsPractitionerMappingRecords] =
-    partition(
-      nonPrivatePractitionerMappingRecords,
-      record =>
-        record.dynamodb.NewImage.entityName &&
-        record.dynamodb.NewImage.entityName.S === 'IrsPractitioner' &&
-        record.dynamodb.NewImage.pk.S.startsWith('case|') &&
-        record.dynamodb.NewImage.sk.S.startsWith('irsPractitioner|'),
-    );
-
   const [messageRecords, otherRecords] = partition(
-    nonIrsPractitionerMappingRecords,
+    nonWorkItemRecords,
     record =>
       record.dynamodb.NewImage.entityName &&
       record.dynamodb.NewImage.entityName.S === 'Message',
@@ -66,10 +83,7 @@ const partitionRecords = records => {
     docketEntryRecords,
     messageRecords,
     otherRecords,
-    practitionerMappingRecords: [
-      ...privatePractitionerMappingRecords,
-      ...irsPractitionerMappingRecords,
-    ],
+    practitionerMappingRecords,
     removeRecords,
     workItemRecords,
   };
@@ -165,7 +179,8 @@ const processPractitionerMappingEntries = async ({
   const indexCaseEntryForPractitionerMapping =
     async practitionerMappingRecord => {
       const practitionerMappingNewImage =
-        practitionerMappingRecord.dynamodb.NewImage;
+        practitionerMappingRecord.dynamodb.NewImage ||
+        practitionerMappingRecord.dynamodb.OldImage;
       const caseRecords = [];
 
       const caseMetadataWithCounsel = await utils.getCaseMetadataWithCounsel({

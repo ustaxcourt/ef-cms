@@ -37,6 +37,8 @@ describe('external users perform an advanced search for orders', () => {
     const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    console.log('docket number is: ', cerebralTest.docketNumber);
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
