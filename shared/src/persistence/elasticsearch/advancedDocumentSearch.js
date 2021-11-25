@@ -223,5 +223,7 @@ exports.advancedDocumentSearch = async ({
     searchParameters: documentQuery,
   });
 
+  console.log('********** results are: ', JSON.stringify(results, null, 2));
+
   return { results, totalCount: total };
 };
