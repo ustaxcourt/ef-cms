@@ -54,7 +54,6 @@ describe('processStreamUtilities', () => {
     it('separates records by type', () => {
       const removeRecord = {
         dynamodb: {
-          Keys: {},
           NewImage: {
             entityName: {
               S: 'Case',
@@ -72,7 +71,6 @@ describe('processStreamUtilities', () => {
 
       const caseRecord = {
         dynamodb: {
-          Keys: {},
           NewImage: {
             entityName: {
               S: 'Case',
@@ -90,7 +88,6 @@ describe('processStreamUtilities', () => {
 
       const workItemRecord = {
         dynamodb: {
-          Keys: {},
           NewImage: {
             entityName: {
               S: 'WorkItem',
@@ -108,7 +105,6 @@ describe('processStreamUtilities', () => {
 
       const docketEntryRecord = {
         dynamodb: {
-          Keys: {},
           NewImage: {
             entityName: {
               S: 'DocketEntry',
@@ -126,7 +122,6 @@ describe('processStreamUtilities', () => {
 
       const messageRecord = {
         dynamodb: {
-          Keys: {},
           NewImage: {
             entityName: {
               S: 'Message',
