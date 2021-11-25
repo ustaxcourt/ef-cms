@@ -66,7 +66,7 @@ const partitionRecords = records => {
     docketEntryRecords,
     messageRecords,
     otherRecords,
-    practitionerRecords: [
+    practitionerMappingRecords: [
       ...privatePractitionerMappingRecords,
       ...irsPractitionerMappingRecords,
     ],
