@@ -1,5 +1,7 @@
 /* eslint-disable max-lines */
 const {
+  isPractitionerMappingInsertModifyRecord,
+  isPractitionerMappingRemoveRecord,
   partitionRecords,
   processCaseEntries,
   processDocketEntries,
@@ -13,7 +15,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamUtilities', () => {
   const docketNumberInPractitionerMapping = '123-45';
-  const mockPrivatePractitionerMappingRecord = {
+  let mockPrivatePractitionerMappingRecord = {
     dynamodb: {
       Keys: {
         pk: {
@@ -1357,6 +1359,215 @@ describe('processStreamUtilities', () => {
         }),
       ).rejects.toThrow('failed to index records');
       expect(applicationContext.logger.error).toHaveBeenCalled();
+    });
+  });
+
+  describe('isPractitionerMappingRemoveRecord', () => {
+    let mockIrsPractitionerMappingRecord;
+    let mockPrivatePractitionerMappingRecordObject;
+    beforeEach(() => {
+      mockPrivatePractitionerMappingRecordObject = {
+        dynamodb: {
+          OldImage: {
+            entityName: {
+              S: 'PrivatePractitioner',
+            },
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'privatePractitioner|PT1234',
+            },
+          },
+        },
+        eventName: 'REMOVE',
+      };
+      mockIrsPractitionerMappingRecord = {
+        dynamodb: {
+          OldImage: {
+            entityName: {
+              S: 'IrsPractitioner',
+            },
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'irsPractitioner|PT1234',
+            },
+          },
+        },
+        eventName: 'REMOVE',
+      };
+    });
+
+    beforeAll(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .bulkDeleteRecords.mockReturnValue({ failedRecords: [] });
+
+      applicationContext
+        .getPersistenceGateway()
+        .bulkIndexRecords.mockReturnValue({ failedRecords: [] });
+    });
+
+    it('should return true when the record is a private practitioner mapping record being removed', () => {
+      const result = isPractitionerMappingRemoveRecord(
+        mockPrivatePractitionerMappingRecordObject,
+      );
+
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when the record is a private practitioner mapping record being modified', () => {
+      delete mockPrivatePractitionerMappingRecordObject.OldImage;
+      mockPrivatePractitionerMappingRecordObject.eventName = 'MODIFY';
+      mockPrivatePractitionerMappingRecordObject.NewImage = {
+        entityName: {
+          S: 'PrivatePractitioner',
+        },
+        pk: {
+          S: 'case|123-45',
+        },
+        sk: {
+          S: 'privatePractitioner|PT1234',
+        },
+      };
+
+      const result = isPractitionerMappingRemoveRecord(
+        mockPrivatePractitionerMappingRecordObject,
+      );
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true when the record is an IRS practitioner mapping record being removed', () => {
+      const result = isPractitionerMappingRemoveRecord(
+        mockIrsPractitionerMappingRecord,
+      );
+
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when the record is an IRS practitioner mapping record being modified', () => {
+      delete mockIrsPractitionerMappingRecord.OldImage;
+      mockIrsPractitionerMappingRecord.eventName = 'MODIFY';
+      mockIrsPractitionerMappingRecord.NewImage = {
+        entityName: {
+          S: 'IrsPractitioner',
+        },
+        pk: {
+          S: 'case|123-45',
+        },
+        sk: {
+          S: 'irsPractitioner|PT1234',
+        },
+      };
+
+      const result = isPractitionerMappingRemoveRecord(
+        mockIrsPractitionerMappingRecord,
+      );
+
+      expect(result).toBeFalsy();
+    });
+  });
+
+  describe('isPractitionerMappingInsertModifyRecord', () => {
+    let mockIrsPractitionerMappingRecord;
+    let privatePractitionerMappingRecordMock;
+    beforeEach(() => {
+      privatePractitionerMappingRecordMock = {
+        dynamodb: {
+          NewImage: {
+            entityName: {
+              S: 'PrivatePractitioner',
+            },
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'privatePractitioner|PT1234',
+            },
+          },
+        },
+        entityName: 'PrivatePractitioner',
+        eventName: 'MODIFY',
+      };
+      mockIrsPractitionerMappingRecord = {
+        dynamodb: {
+          NewImage: {
+            entityName: {
+              S: 'IrsPractitioner',
+            },
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'irsPractitioner|PT1234',
+            },
+          },
+        },
+        eventName: 'INSERT',
+      };
+    });
+
+    it('should return true when the record is a private practitioner mapping record being modified', () => {
+      const result = isPractitionerMappingInsertModifyRecord(
+        privatePractitionerMappingRecordMock,
+      );
+
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when the record is a private practitioner mapping record being removed', () => {
+      privatePractitionerMappingRecordMock.dynamodb.NewImage = undefined;
+      privatePractitionerMappingRecordMock.eventName = 'REMOVE';
+      privatePractitionerMappingRecordMock.dynamodb.OldImage = {
+        entityName: {
+          S: 'PrivatePractitioner',
+        },
+        pk: {
+          S: 'case|123-45',
+        },
+        sk: {
+          S: 'privatePractitioner|PT1234',
+        },
+      };
+
+      const result = isPractitionerMappingInsertModifyRecord(
+        privatePractitionerMappingRecordMock,
+      );
+
+      expect(result).toBeFalsy();
+    });
+
+    it('should return true when the record is an IRS practitioner mapping record being inserted', () => {
+      const result = isPractitionerMappingInsertModifyRecord(
+        mockIrsPractitionerMappingRecord,
+      );
+
+      expect(result).toBeTruthy();
+    });
+
+    it('should return false when the record is an IRS practitioner mapping record being removed', () => {
+      delete mockIrsPractitionerMappingRecord.dynamodb.NewImage;
+      mockIrsPractitionerMappingRecord.eventName = 'REMOVE';
+      mockIrsPractitionerMappingRecord.dynamodb.OldImage = {
+        entityName: {
+          S: 'IrsPractitioner',
+        },
+        pk: {
+          S: 'case|123-45',
+        },
+        sk: {
+          S: 'irsPractitioner|PT1234',
+        },
+      };
+
+      const result = isPractitionerMappingInsertModifyRecord(
+        mockIrsPractitionerMappingRecord,
+      );
+
+      expect(result).toBeFalsy();
     });
   });
 });
