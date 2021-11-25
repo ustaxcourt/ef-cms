@@ -8,7 +8,7 @@ const { compact, flattenDeep, partition } = require('lodash');
 const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
 const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
 
-export const isPractitionerMappingRemoveRecord = record => {
+const isPractitionerMappingRemoveRecord = record => {
   if (record.dynamodb.OldImage) {
     const trimmedSk = record.dynamodb.OldImage.sk.S.split('|')[0];
 
@@ -22,7 +22,7 @@ export const isPractitionerMappingRemoveRecord = record => {
   }
 };
 
-export const isPractitionerMappingInsertModifyRecord = record => {
+const isPractitionerMappingInsertModifyRecord = record => {
   if (record.dynamodb.NewImage) {
     const trimmedSk = record.dynamodb.NewImage.sk.S.split('|')[0];
 
@@ -466,3 +466,6 @@ exports.processMessageEntries = processMessageEntries;
 exports.processOtherEntries = processOtherEntries;
 exports.processRemoveEntries = processRemoveEntries;
 exports.processWorkItemEntries = processWorkItemEntries;
+exports.isPractitionerMappingRemoveRecord = isPractitionerMappingRemoveRecord;
+exports.isPractitionerMappingInsertModifyRecord =
+  isPractitionerMappingInsertModifyRecord;
