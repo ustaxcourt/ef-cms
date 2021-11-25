@@ -9,8 +9,6 @@ const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
 const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
 
 const isPractitionerMappingRemoveRecord = record => {
-  console.log('&&&&&&&&&&& ', record.dynamodb.OldImage);
-
   if (record.dynamodb.OldImage) {
     const trimmedSk = record.dynamodb.OldImage.sk.S.split('|')[0];
 
