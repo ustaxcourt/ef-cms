@@ -52,17 +52,16 @@ describe('processStreamUtilities', () => {
     it('separates records by type', () => {
       const removeRecord = {
         dynamodb: {
-          Keys: {
+          Keys: {},
+          NewImage: {
+            entityName: {
+              S: 'Case',
+            },
             pk: {
               S: 'case|123-45',
             },
             sk: {
               S: 'case|123-45',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'Case',
             },
           },
         },
@@ -71,17 +70,16 @@ describe('processStreamUtilities', () => {
 
       const caseRecord = {
         dynamodb: {
-          Keys: {
+          Keys: {},
+          NewImage: {
+            entityName: {
+              S: 'Case',
+            },
             pk: {
               S: 'case|123-45',
             },
             sk: {
               S: 'case|123-45',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'Case',
             },
           },
         },
@@ -90,17 +88,16 @@ describe('processStreamUtilities', () => {
 
       const workItemRecord = {
         dynamodb: {
-          Keys: {
+          Keys: {},
+          NewImage: {
+            entityName: {
+              S: 'WorkItem',
+            },
             pk: {
               S: 'case|123-45',
             },
             sk: {
               S: 'work-item|820ed226-7022-4ee9-8fe8-4d9029cb90ae',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'WorkItem',
             },
           },
         },
@@ -109,17 +106,16 @@ describe('processStreamUtilities', () => {
 
       const docketEntryRecord = {
         dynamodb: {
-          Keys: {
+          Keys: {},
+          NewImage: {
+            entityName: {
+              S: 'DocketEntry',
+            },
             pk: {
               S: 'case|123-45',
             },
             sk: {
               S: 'docket-entry|123',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'DocketEntry',
             },
           },
         },
@@ -128,17 +124,16 @@ describe('processStreamUtilities', () => {
 
       const messageRecord = {
         dynamodb: {
-          Keys: {
+          Keys: {},
+          NewImage: {
+            entityName: {
+              S: 'Message',
+            },
             pk: {
               S: 'case|123-45',
             },
             sk: {
               S: 'message|123',
-            },
-          },
-          NewImage: {
-            entityName: {
-              S: 'Message',
             },
           },
         },
@@ -185,6 +180,12 @@ describe('processStreamUtilities', () => {
             entityName: {
               S: 'OtherRecord',
             },
+            pk: {
+              S: 'other-record|123',
+            },
+            sk: {
+              S: 'other-record|123',
+            },
           },
         },
         eventName: 'MODIFY',
@@ -202,14 +203,15 @@ describe('processStreamUtilities', () => {
       ];
 
       const result = partitionRecords(records);
-
       expect(result).toEqual({
         caseEntityRecords: [caseRecord],
         docketEntryRecords: [docketEntryRecord],
-        irsPractitionerMappingRecords: [irsPractitionerMappingRecord],
         messageRecords: [messageRecord],
         otherRecords: [otherRecord],
-        privatePractitionerMappingRecords: [privatePractitionerMappingRecord],
+        practitionerMappingRecords: [
+          privatePractitionerMappingRecord,
+          irsPractitionerMappingRecord,
+        ],
         removeRecords: [removeRecord],
         workItemRecords: [workItemRecord],
       });
@@ -1097,7 +1099,7 @@ describe('processStreamUtilities', () => {
     it('should do nothing when no practitionerMappingEntries are provided', async () => {
       await processPractitionerMappingEntries({
         applicationContext,
-        practitionerMappingEntries: [],
+        practitionerMappingRecords: [],
         utils,
       });
 
@@ -1112,7 +1114,7 @@ describe('processStreamUtilities', () => {
 
       await processPractitionerMappingEntries({
         applicationContext,
-        practitionerMappingEntries: mockPractitionerMappingEntries,
+        practitionerMappingRecords: mockPractitionerMappingEntries,
         utils,
       });
 
@@ -1151,7 +1153,7 @@ describe('processStreamUtilities', () => {
       await expect(
         processPractitionerMappingEntries({
           applicationContext,
-          practitionerMappingEntries: [
+          practitionerMappingRecords: [
             {
               dynamodb: {
                 Keys: {
