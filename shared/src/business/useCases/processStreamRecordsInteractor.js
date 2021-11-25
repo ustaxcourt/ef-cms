@@ -57,15 +57,6 @@ exports.processStreamRecordsInteractor = async (
     workItemRecords,
   } = partitionRecords(recordsToProcess);
 
-  console.log(
-    '********** removeEntries are: ',
-    JSON.stringify(removeRecords, null, 2),
-  );
-  console.log(
-    '********** practitionerMappingRecords are: ',
-    JSON.stringify(practitionerMappingRecords, null, 2),
-  );
-
   const utils = {
     getCaseMetadataWithCounsel,
     getDocument,
