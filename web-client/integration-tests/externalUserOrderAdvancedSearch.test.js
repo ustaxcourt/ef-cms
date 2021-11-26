@@ -105,6 +105,47 @@ describe('external users perform an advanced search for orders', () => {
     );
   });
 
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  it('removes second private practitioner associated to the petitioner from case', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber: 'PT5432',
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerCounsel',
+    );
+
+    await cerebralTest.runSequence('openRemovePetitionerCounselModalSequence');
+
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'RemovePetitionerCounselModal',
+    );
+
+    await cerebralTest.runSequence('removePetitionerCounselFromCaseSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
+  it('search for order in sealed case as an unassociated practitioner', async () => {
+    await refreshElasticsearchIndex();
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual([]);
+  });
+
   loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
