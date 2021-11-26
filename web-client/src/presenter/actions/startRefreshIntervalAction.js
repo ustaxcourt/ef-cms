@@ -13,13 +13,12 @@ export const startRefreshIntervalAction = ({
 }) => {
   const broadcastChannel = applicationContext.getBroadcastGateway();
   const oldInterval = get(state.refreshTokenInterval);
-  const currentRefreshToken = get(state.refreshToken);
-
-  if (!currentRefreshToken) {
-    broadcastChannel.postMessage({ subject: 'requestToken' });
-  }
 
   const refreshTokenRequest = async ({ refreshToken }) => {
+    const isLocal = process.env.IS_LOCAL === 'true';
+    if (isLocal) {
+      return;
+    }
     const response = await applicationContext
       .getUseCases()
       .refreshTokenInteractor(applicationContext, {
@@ -41,7 +40,7 @@ export const startRefreshIntervalAction = ({
   const interval = setInterval(async () => {
     const refreshToken = get(state.refreshToken);
     if (!refreshToken) {
-      return;
+      return broadcastChannel.postMessage({ subject: 'requestToken' });
     }
     await refreshTokenRequest({ refreshToken });
   }, time);

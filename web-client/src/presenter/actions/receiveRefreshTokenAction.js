@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store allows us to set the value in state
  */
 export const receiveRefreshTokenAction = ({ props, store }) => {
-  if (!process.env.IS_LOCAL) {
+  if (props.refreshToken) {
     store.set(state.refreshToken, props.refreshToken);
   }
 };

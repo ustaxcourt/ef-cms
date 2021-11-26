@@ -27,4 +27,15 @@ describe('broadcastRefreshTokenAction', () => {
       subject: 'receiveToken',
     });
   });
+  it('does not post a message to the broadcast channel with subject "receiveToken" if own refreshToken is undefined', async () => {
+    await runAction(broadcastRefreshTokenAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        refreshToken: undefined,
+      },
+    });
+    expect(postMessageMock).not.toHaveBeenCalled();
+  });
 });
