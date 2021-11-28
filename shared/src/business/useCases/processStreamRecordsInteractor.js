@@ -7,7 +7,7 @@ const {
   processPractitionerMappingEntries,
   processRemoveEntries,
   processWorkItemEntries,
-} = require('./processStreamUtilities');
+} = require('./elasticsearch/processStreamUtilities');
 
 /**
  * @param {object} applicationContext the application context
