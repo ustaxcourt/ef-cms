@@ -1,6 +1,5 @@
 const {
   partitionRecords,
-  processCaseEntries,
   processDocketEntries,
   processMessageEntries,
   processOtherEntries,
@@ -8,6 +7,7 @@ const {
   processRemoveEntries,
   processWorkItemEntries,
 } = require('./elasticsearch/processStreamUtilities');
+const { processCaseEntries } = require('./elasticsearch/processCaseEntries');
 
 /**
  * @param {object} applicationContext the application context

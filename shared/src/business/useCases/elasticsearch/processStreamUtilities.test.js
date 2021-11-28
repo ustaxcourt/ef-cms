@@ -3,7 +3,6 @@ const {
   isPractitionerMappingInsertModifyRecord,
   isPractitionerMappingRemoveRecord,
   partitionRecords,
-  processCaseEntries,
   processDocketEntries,
   processMessageEntries,
   processOtherEntries,
@@ -377,83 +376,6 @@ describe('processStreamUtilities', () => {
           removeRecords: [mockRemoveRecord],
         }),
       ).rejects.toThrow('failed to delete records');
-
-      expect(applicationContext.logger.error).toHaveBeenCalled();
-    });
-  });
-
-  describe('processCaseEntries', () => {
-    beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseMetadataWithCounsel.mockReturnValue(mockCaseRecord);
-    });
-
-    it('should do nothing when no case records are found', async () => {
-      await processCaseEntries({
-        applicationContext,
-        caseEntityRecords: [],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should make a call to fetch the full case record with counsel from persistence', async () => {
-      await processCaseEntries({
-        applicationContext,
-        caseEntityRecords: [mockCaseRecord],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().getCaseMetadataWithCounsel
-          .mock.calls[0][0],
-      ).toMatchObject({
-        docketNumber: mockCaseRecord.dynamodb.NewImage.docketNumber.S,
-      });
-    });
-
-    it('should index the provided case record', async () => {
-      await processCaseEntries({
-        applicationContext,
-        caseEntityRecords: [mockCaseRecord],
-      });
-
-      const caseRecord =
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records[1].dynamodb.NewImage.dynamodb.M.NewImage.M
-          .entityName.M.S.S;
-
-      expect(caseRecord).toEqual('Case');
-    });
-
-    it('should index a case docket entry mapping record', async () => {
-      await processCaseEntries({
-        applicationContext,
-        caseEntityRecords: [mockCaseRecord],
-      });
-
-      const caseDocketEntryMappingRecord =
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records[0].dynamodb.NewImage.entityName.S;
-
-      expect(caseDocketEntryMappingRecord).toEqual('CaseDocketEntryMapping');
-    });
-
-    it('should log an error and throw an exception when bulk index returns failed records', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .bulkIndexRecords.mockReturnValueOnce({
-          failedRecords: [{ id: 'failed record' }],
-        });
-
-      await expect(
-        processCaseEntries({
-          applicationContext,
-          caseEntityRecords: [mockCaseRecord],
-        }),
-      ).rejects.toThrow('failed to index case entry');
 
       expect(applicationContext.logger.error).toHaveBeenCalled();
     });
