@@ -1,4 +1,4 @@
-export const processRemoveEntries = async ({
+exports.processRemoveEntries = async ({
   applicationContext,
   removeRecords,
 }) => {

@@ -9,7 +9,7 @@ const {
  *
  * @param {array} docketEntryRecords all of the event stream records associated with docket entries
  */
-export const processDocketEntries = async ({
+exports.processDocketEntries = async ({
   applicationContext,
   docketEntryRecords: records,
 }) => {
