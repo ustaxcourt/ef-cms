@@ -76,13 +76,6 @@ const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
   }
 };
 
-const processWorkItemEntries = ({ applicationContext, workItemRecords }) =>
-  processEntries({
-    applicationContext,
-    recordType: 'workItemRecords',
-    records: workItemRecords,
-  });
-
 const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
 const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
 
@@ -212,7 +205,6 @@ exports.partitionRecords = partitionRecords;
 exports.processPractitionerMappingEntries = processPractitionerMappingEntries;
 exports.processOtherEntries = processOtherEntries;
 exports.processRemoveEntries = processRemoveEntries;
-exports.processWorkItemEntries = processWorkItemEntries;
 exports.isPractitionerMappingRemoveRecord = isPractitionerMappingRemoveRecord;
 exports.isPractitionerMappingInsertModifyRecord =
   isPractitionerMappingInsertModifyRecord;
