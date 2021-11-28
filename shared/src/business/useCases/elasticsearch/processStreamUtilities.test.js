@@ -1,11 +1,11 @@
-/* eslint-disable max-lines */
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
 const {
   isPractitionerMappingInsertModifyRecord,
   isPractitionerMappingRemoveRecord,
   partitionRecords,
-  processOtherEntries,
 } = require('./processStreamUtilities');
-const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('processStreamUtilities', () => {
   const mockRemoveRecord = {
@@ -309,54 +309,6 @@ describe('processStreamUtilities', () => {
       ]);
 
       expect(result.otherRecords).toEqual([mockOtherRecord]);
-    });
-  });
-
-  describe('processOtherEntries', () => {
-    const mockOtherRecord = {
-      docketEntryId: { S: '123' },
-      entityName: { S: 'OtherEntry' },
-      pk: { S: 'other-entry|123' },
-      sk: { S: 'other-entry|123' },
-    };
-
-    it('does nothing when no other records are found', async () => {
-      await processOtherEntries({
-        applicationContext,
-        otherRecords: [],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('attempts to bulk import the records passed in', async () => {
-      await processOtherEntries({
-        applicationContext,
-        otherRecords: [mockOtherRecord],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records,
-      ).toEqual([mockOtherRecord]);
-    });
-
-    it('should log an error and throw an exception when bulk index returns failed records', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .bulkIndexRecords.mockReturnValueOnce({
-          failedRecords: [{ id: 'failed record' }],
-        });
-
-      await expect(
-        processOtherEntries({
-          applicationContext,
-          otherRecords: [mockOtherRecord],
-        }),
-      ).rejects.toThrow('failed to index records');
-      expect(applicationContext.logger.error).toHaveBeenCalled();
     });
   });
 

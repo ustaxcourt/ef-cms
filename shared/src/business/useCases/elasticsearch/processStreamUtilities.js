@@ -1,5 +1,4 @@
 const { partition } = require('lodash');
-const { processEntries } = require('./processEntries');
 
 const partitionRecords = records => {
   const [practitionerMappingRecords, nonPractitionerMappingRecords] = partition(
@@ -90,15 +89,7 @@ const isPractitionerMappingInsertModifyRecord = record => {
   return false;
 };
 
-const processOtherEntries = ({ applicationContext, otherRecords }) =>
-  processEntries({
-    applicationContext,
-    recordType: 'otherRecords',
-    records: otherRecords,
-  });
-
 exports.partitionRecords = partitionRecords;
-exports.processOtherEntries = processOtherEntries;
 exports.isPractitionerMappingRemoveRecord = isPractitionerMappingRemoveRecord;
 exports.isPractitionerMappingInsertModifyRecord =
   isPractitionerMappingInsertModifyRecord;
