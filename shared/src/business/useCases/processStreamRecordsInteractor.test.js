@@ -1,18 +1,33 @@
-jest.mock('./processStreamUtilities');
+jest.mock('./elasticsearch/processStreamUtilities');
+jest.mock('./elasticsearch/processDocketEntries');
+jest.mock('./elasticsearch/processMessageEntries');
+jest.mock('./elasticsearch/processPractitionerMappingEntries');
+jest.mock('./elasticsearch/processRemoveEntries');
+jest.mock('./elasticsearch/processWorkItemEntries');
+jest.mock('./elasticsearch/processCaseEntries');
+jest.mock('./elasticsearch/processOtherEntries');
 const {
-  partitionRecords,
-  processCaseEntries,
   processDocketEntries,
+} = require('./elasticsearch/processDocketEntries');
+const {
   processMessageEntries,
-  processOtherEntries,
+} = require('./elasticsearch/processMessageEntries');
+const {
   processPractitionerMappingEntries,
+} = require('./elasticsearch/processPractitionerMappingEntries');
+const {
   processRemoveEntries,
-  processWorkItemEntries,
-} = require('./processStreamUtilities');
+} = require('./elasticsearch/processRemoveEntries');
 const {
   processStreamRecordsInteractor,
 } = require('./processStreamRecordsInteractor');
+const {
+  processWorkItemEntries,
+} = require('./elasticsearch/processWorkItemEntries');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { partitionRecords } = require('./elasticsearch/processStreamUtilities');
+const { processCaseEntries } = require('./elasticsearch/processCaseEntries');
+const { processOtherEntries } = require('./elasticsearch/processOtherEntries');
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
