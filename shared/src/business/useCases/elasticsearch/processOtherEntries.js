@@ -1,6 +1,6 @@
 const { processEntries } = require('./processEntries');
 
-export const processOtherEntries = ({ applicationContext, otherRecords }) =>
+exports.processOtherEntries = ({ applicationContext, otherRecords }) =>
   processEntries({
     applicationContext,
     recordType: 'otherRecords',

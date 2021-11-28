@@ -1,7 +1,7 @@
 const AWS = require('aws-sdk');
 const { compact } = require('lodash');
 
-export const processMessageEntries = async ({
+exports.processMessageEntries = async ({
   applicationContext,
   messageRecords,
 }) => {
@@ -19,7 +19,7 @@ export const processMessageEntries = async ({
     if (!messageNewImage.isRepliedTo.BOOL) {
       const latestMessageData = await applicationContext
         .getPersistenceGateway()
-        .getMessage({
+        .getMessageById({
           applicationContext,
           docketNumber: messageNewImage.docketNumber.S,
           messageId: messageNewImage.messageId.S,

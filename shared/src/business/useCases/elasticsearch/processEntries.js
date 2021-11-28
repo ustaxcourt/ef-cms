@@ -1,4 +1,4 @@
-export const processEntries = async ({
+exports.processEntries = async ({
   applicationContext,
   records,
   recordType,

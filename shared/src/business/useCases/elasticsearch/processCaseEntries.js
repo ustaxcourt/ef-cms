@@ -6,7 +6,7 @@ const { flattenDeep } = require('lodash');
  *
  * @param {array} caseEntityRecords all of the event stream records associated with case entities
  */
-export const processCaseEntries = async ({
+exports.processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
 }) => {
