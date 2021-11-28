@@ -6,7 +6,6 @@ const {
   processOtherEntries,
   processPractitionerMappingEntries,
   processRemoveEntries,
-  processWorkItemEntries,
 } = require('./processStreamUtilities');
 const { applicationContext } = require('../test/createTestApplicationContext');
 
@@ -352,48 +351,6 @@ describe('processStreamUtilities', () => {
           removeRecords: [mockRemoveRecord],
         }),
       ).rejects.toThrow('failed to delete records');
-
-      expect(applicationContext.logger.error).toHaveBeenCalled();
-    });
-  });
-
-  describe('processWorkItemEntries', () => {
-    it('should do nothing when no work item records are found', async () => {
-      await processWorkItemEntries({
-        applicationContext,
-        workItemRecords: [],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should index the provided work item record', async () => {
-      await processWorkItemEntries({
-        applicationContext,
-        workItemRecords: [mockWorkItemRecord],
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-          .calls[0][0].records,
-      ).toEqual([mockWorkItemRecord]);
-    });
-
-    it('should log an error and throw an exception when bulk index returns failed records', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .bulkIndexRecords.mockReturnValueOnce({
-          failedRecords: [{ id: 'failed record' }],
-        });
-
-      await expect(
-        processWorkItemEntries({
-          applicationContext,
-          workItemRecords: [mockWorkItemRecord],
-        }),
-      ).rejects.toThrow('failed to index records');
 
       expect(applicationContext.logger.error).toHaveBeenCalled();
     });

@@ -3,7 +3,6 @@ const {
   processOtherEntries,
   processPractitionerMappingEntries,
   processRemoveEntries,
-  processWorkItemEntries,
 } = require('./elasticsearch/processStreamUtilities');
 const {
   processDocketEntries,
@@ -11,6 +10,9 @@ const {
 const {
   processMessageEntries,
 } = require('./elasticsearch/processMessageEntries');
+const {
+  processWorkItemEntries,
+} = require('./elasticsearch/processWorkItemEntries');
 const { processCaseEntries } = require('./elasticsearch/processCaseEntries');
 
 /**
