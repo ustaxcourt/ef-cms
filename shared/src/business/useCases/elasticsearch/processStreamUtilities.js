@@ -54,28 +54,6 @@ const partitionRecords = records => {
   };
 };
 
-const processRemoveEntries = async ({ applicationContext, removeRecords }) => {
-  if (!removeRecords.length) return;
-
-  applicationContext.logger.debug(
-    `going to index ${removeRecords.length} removeRecords`,
-  );
-
-  const { failedRecords } = await applicationContext
-    .getPersistenceGateway()
-    .bulkDeleteRecords({
-      applicationContext,
-      records: removeRecords,
-    });
-
-  if (failedRecords.length > 0) {
-    applicationContext.logger.error('the records that failed to delete', {
-      failedRecords,
-    });
-    throw new Error('failed to delete records');
-  }
-};
-
 const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
 const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
 
@@ -204,7 +182,6 @@ const processOtherEntries = ({ applicationContext, otherRecords }) =>
 exports.partitionRecords = partitionRecords;
 exports.processPractitionerMappingEntries = processPractitionerMappingEntries;
 exports.processOtherEntries = processOtherEntries;
-exports.processRemoveEntries = processRemoveEntries;
 exports.isPractitionerMappingRemoveRecord = isPractitionerMappingRemoveRecord;
 exports.isPractitionerMappingInsertModifyRecord =
   isPractitionerMappingInsertModifyRecord;
