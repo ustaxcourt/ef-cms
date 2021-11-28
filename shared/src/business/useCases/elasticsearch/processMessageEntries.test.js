@@ -49,7 +49,7 @@ describe('processMessageEntries', () => {
   it('should retrieve the latest message when the message has not been replied to', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getMessage.mockReturnValue(mockRepliedToMessageRecord);
+      .getMessageById.mockReturnValue(mockRepliedToMessageRecord);
 
     await processMessageEntries({
       applicationContext,
@@ -68,7 +68,8 @@ describe('processMessageEntries', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getMessage.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().getMessageById.mock
+        .calls[0][0],
     ).toMatchObject({
       docketNumber: mockRepliedToMessageRecord.dynamodb.NewImage.docketNumber.S,
       messageId: mockRepliedToMessageRecord.dynamodb.NewImage.messageId.S,
@@ -82,12 +83,12 @@ describe('processMessageEntries', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().getMessage,
+      applicationContext.getPersistenceGateway().getMessageById,
     ).not.toHaveBeenCalled();
   });
 
   it('should not return any data to be indexed when the messageNewImage.isRepliedTo is false and the message from dynamo has isRepliedTo = true', async () => {
-    applicationContext.getPersistenceGateway().getMessage.mockReturnValue({
+    applicationContext.getPersistenceGateway().getMessageById.mockReturnValue({
       isRepliedTo: true,
     });
 
@@ -113,7 +114,7 @@ describe('processMessageEntries', () => {
     ).toEqual([]);
   });
 
-  it('should index the data returned from getMessage instead of the NewImage if the messageNewImage.isRepliedTo is false and the message from dynamo has isRepliedTo = false', async () => {
+  it('should index the data returned from getMessageById instead of the NewImage if the messageNewImage.isRepliedTo is false and the message from dynamo has isRepliedTo = false', async () => {
     const mockNewestMessageInThread = {
       dynamodb: {
         NewImage: {
@@ -129,7 +130,7 @@ describe('processMessageEntries', () => {
     };
     applicationContext
       .getPersistenceGateway()
-      .getMessage.mockReturnValue(mockNewestMessageInThread);
+      .getMessageById.mockReturnValue(mockNewestMessageInThread);
 
     await processMessageEntries({
       applicationContext,
