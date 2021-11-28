@@ -1,7 +1,6 @@
 const {
   partitionRecords,
   processOtherEntries,
-  processPractitionerMappingEntries,
 } = require('./elasticsearch/processStreamUtilities');
 const {
   processDocketEntries,
@@ -9,6 +8,9 @@ const {
 const {
   processMessageEntries,
 } = require('./elasticsearch/processMessageEntries');
+const {
+  processPractitionerMappingEntries,
+} = require('./elasticsearch/processPractitionerMappingEntries');
 const {
   processRemoveEntries,
 } = require('./elasticsearch/processRemoveEntries');
