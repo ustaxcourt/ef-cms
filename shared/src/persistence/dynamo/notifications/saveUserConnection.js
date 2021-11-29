@@ -18,14 +18,28 @@ exports.saveUserConnection = ({
   endpoint,
   userId,
 }) =>
-  put({
-    Item: {
-      connectionId,
-      endpoint,
-      gsi1pk: 'connection',
-      pk: `user|${userId}`,
-      sk: `connection|${connectionId}`,
-      ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
-    },
-    applicationContext,
-  });
+  Promise.all([
+    put({
+      Item: {
+        connectionId,
+        endpoint,
+        gsi1pk: 'connection',
+        pk: `user|${userId}`,
+        sk: `connection|${connectionId}`,
+        ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
+        userId,
+      },
+      applicationContext,
+    }),
+    put({
+      Item: {
+        connectionId,
+        endpoint,
+        pk: `connection|${connectionId}`,
+        sk: `connection|${connectionId}`,
+        ttl: Math.floor(Date.now() / 1000) + TIME_TO_EXIST,
+        userId,
+      },
+      applicationContext,
+    }),
+  ]);

@@ -79,7 +79,7 @@ export const EditCaseDetails = connect(
                   }}
                 >
                   <option value="">- Select -</option>
-                  <TrialCityOptions />
+                  <TrialCityOptions procedureType="All" />
                 </select>
               </FormGroup>
             </div>

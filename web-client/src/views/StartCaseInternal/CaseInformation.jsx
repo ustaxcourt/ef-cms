@@ -28,7 +28,6 @@ export const CaseInformation = connect(
     constants,
     form,
     startCaseInternalHelper,
-    trialCitiesHelper,
     updateFormValueSequence,
     updateOrderForDesignatingPlaceOfTrialSequence,
     updatePetitionPaymentFormValueSequence,
@@ -133,13 +132,11 @@ export const CaseInformation = connect(
         </FormGroup>
         <TrialCity
           label="Trial location"
+          procedureType={form.procedureType}
           showDefaultOption={true}
           showHint={false}
           showRegularTrialCitiesHint={false}
           showSmallTrialCitiesHint={false}
-          trialCitiesByState={
-            trialCitiesHelper(form.procedureType).trialCitiesByState
-          }
           value={form.preferredTrialCity}
           onChange={e => {
             updateOrderForDesignatingPlaceOfTrialSequence({

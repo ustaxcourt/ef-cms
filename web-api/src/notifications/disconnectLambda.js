@@ -16,7 +16,7 @@ exports.disconnectLambda = event =>
           connectionId: event.requestContext.connectionId,
         });
 
-      applicationContext.logger.info('Websocket disconnected', {
+      applicationContext.logger.debug('Websocket disconnected', {
         requestId: {
           connection: event.requestContext.connectionId,
         },

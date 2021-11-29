@@ -38,6 +38,7 @@ export const OpinionSearchForm = connect(
     return (
       <>
         <form
+          id="opinion-search"
           onSubmit={e => {
             e.preventDefault();
             submitAdvancedSearchSequence();

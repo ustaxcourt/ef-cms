@@ -45,6 +45,9 @@ export const AppInstanceManager = connect(
         case 'requestToken':
           broadcastRefreshTokenSequence();
           break;
+        default:
+          console.warn('unhandled broadcast event', msg);
+          break;
       }
     };
 

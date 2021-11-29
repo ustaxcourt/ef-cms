@@ -22,55 +22,31 @@ exports.filePetitionInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  /**
-   * uploads a document and then immediately processes it to scan for viruses and validate the document.
-   *
-   * @param {object} document the documentFile
-   * @param {Function} onUploadProgress the progressFunction
-   * @returns {Promise<string>} the key returned from a successful upload
-   */
-  const uploadDocumentAndMakeSafeInteractor = async (doc, onUploadProgress) => {
-    const key = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocumentFromClient({
-        applicationContext,
-        document: doc,
-        onUploadProgress,
-      });
-
-    await applicationContext
-      .getUseCases()
-      .getStatusOfVirusScanInteractor(applicationContext, {
-        key,
-      });
-    await applicationContext
-      .getUseCases()
-      .validatePdfInteractor(applicationContext, {
-        key,
-      });
-
-    return key;
-  };
-
-  const petitionFileUpload = uploadDocumentAndMakeSafeInteractor(
-    petitionFile,
-    petitionUploadProgress,
-  );
+  const petitionFileUpload = applicationContext
+    .getUseCases()
+    .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+      document: petitionFile,
+      onUploadProgress: petitionUploadProgress,
+    });
 
   let ownershipDisclosureFileUpload;
   if (ownershipDisclosureFile) {
-    ownershipDisclosureFileUpload = uploadDocumentAndMakeSafeInteractor(
-      ownershipDisclosureFile,
-      ownershipDisclosureUploadProgress,
-    );
+    ownershipDisclosureFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: ownershipDisclosureFile,
+        onUploadProgress: ownershipDisclosureUploadProgress,
+      });
   }
 
   let stinFileUpload;
   if (stinFile) {
-    stinFileUpload = uploadDocumentAndMakeSafeInteractor(
-      stinFile,
-      stinUploadProgress,
-    );
+    stinFileUpload = applicationContext
+      .getUseCases()
+      .uploadDocumentAndMakeSafeInteractor(applicationContext, {
+        document: stinFile,
+        onUploadProgress: stinUploadProgress,
+      });
   }
 
   const [ownershipDisclosureFileId, petitionFileId, stinFileId] =

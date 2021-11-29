@@ -103,8 +103,7 @@ describe('Practitioner Search', () => {
   });
 });
 
-// Temporarily disabled for story 7387
-describe.skip('Opinion Search', () => {
+describe('Opinion Search', () => {
   before(async () => {
     const results = await getUserToken(
       'docketclerk1@example.com',

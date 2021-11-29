@@ -50,6 +50,9 @@ module.exports = {
     'irsPractitioners.L.M.userId.S': {
       type: 'keyword',
     },
+    'isFileAttached.BOOL': {
+      type: 'boolean',
+    },
     'isLegacyServed.BOOL': {
       type: 'boolean',
     },

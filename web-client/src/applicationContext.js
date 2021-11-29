@@ -23,8 +23,8 @@ import {
   getServedPartiesCode,
   isServed,
 } from '../../shared/src/business/entities/DocketEntry';
-import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import {
+  ERROR_MAP_429,
   chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
@@ -32,6 +32,7 @@ import {
   getPublicSiteUrl,
   getUniqueId,
 } from '../../shared/src/sharedAppContext.js';
+import { ErrorFactory } from './presenter/errors/ErrorFactory';
 import { closeTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/closeTrialSessionProxy';
 import {
   compareISODateStrings,
@@ -49,6 +50,7 @@ import { getCompletedMessagesForSectionInteractor } from '../../shared/src/proxi
 import { getCompletedMessagesForUserInteractor } from '../../shared/src/proxies/messages/getCompletedMessagesForUserProxy';
 import { getCropBox } from '../../shared/src/business/utilities/getCropBox';
 import { getDocumentTitleWithAdditionalInfo } from '../../shared/src/business/utilities/getDocumentTitleWithAdditionalInfo';
+import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
@@ -187,7 +189,6 @@ import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/ge
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
 import { getOpenConsolidatedCasesInteractor } from '../../shared/src/proxies/getOpenConsolidatedCasesProxy';
-import { getOrderSearchEnabledInteractor } from '../../shared/src/proxies/search/getOrderSearchEnabledProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
@@ -224,6 +225,7 @@ import { removeSignatureFromDocumentInteractor } from '../../shared/src/proxies/
 import { replaceBracketed } from '../../shared/src/business/utilities/replaceBracketed';
 import { replyToMessageInteractor } from '../../shared/src/proxies/messages/replyToMessageProxy';
 import { runTrialSessionPlanningReportInteractor } from '../../shared/src/proxies/trialSessions/runTrialSessionPlanningReportProxy';
+import { sanitizePdfInteractor } from '../../shared/src/proxies/documents/sanitizePdfProxy';
 import { saveCalendarNoteInteractor } from '../../shared/src/proxies/trialSessions/saveCalendarNoteProxy';
 import { saveCaseDetailInternalEditInteractor } from '../../shared/src/proxies/saveCaseDetailInternalEditProxy';
 import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCaseNoteProxy';
@@ -409,6 +411,7 @@ const allUseCases = {
   getDocumentQCServedForSectionInteractor,
   getDocumentQCServedForUserInteractor,
   getEligibleCasesForTrialSessionInteractor,
+  getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
   getInboxMessagesForSectionInteractor,
   getInboxMessagesForUserInteractor,
@@ -421,7 +424,6 @@ const allUseCases = {
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
   getOpenConsolidatedCasesInteractor,
-  getOrderSearchEnabledInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPdfFromUrlInteractor,
@@ -459,6 +461,7 @@ const allUseCases = {
   removeSignatureFromDocumentInteractor,
   replyToMessageInteractor,
   runTrialSessionPlanningReportInteractor,
+  sanitizePdfInteractor,
   saveCalendarNoteInteractor,
   saveCaseDetailInternalEditInteractor,
   saveCaseNoteInteractor,
@@ -543,9 +546,10 @@ const allUseCases = {
 };
 tryCatchDecorator(allUseCases);
 
-const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)(
-  getConstants(),
-);
+const appConstants = (process.env.USTC_DEBUG ? i => i : deepFreeze)({
+  ...getConstants(),
+  ERROR_MAP_429,
+});
 
 const applicationContext = {
   convertBlobToUInt8Array: async blob => {

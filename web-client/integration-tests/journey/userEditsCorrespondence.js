@@ -2,9 +2,9 @@ import { fakeFile1 } from '../helpers';
 import axios from 'axios';
 
 export const userEditsCorrespondence = (cerebralTest, user) =>
-  it(`${user} edits the documentTitle for a correspondence`, async () => {
+  it(`${user} edits the documentTitle for a correspondence and replaces the document`, async () => {
     const { docketNumber } = cerebralTest.getState('caseDetail');
-    let docketEntryId = cerebralTest.getState('docketEntryId');
+    const docketEntryId = cerebralTest.getState('docketEntryId');
 
     await cerebralTest.runSequence('openCaseDocumentDownloadUrlSequence', {
       docketEntryId,
@@ -12,14 +12,14 @@ export const userEditsCorrespondence = (cerebralTest, user) =>
       isForIFrame: true,
     });
 
-    let iframeSrc = cerebralTest.getState('iframeSrc');
-    let response = await axios.get(iframeSrc, { contentType: 'blob' });
-
-    const initialDocumentLength = response.data.length;
+    const iframeSrc = cerebralTest.getState('iframeSrc');
+    const initialDocumentLength = (
+      await axios.get(iframeSrc, { contentType: 'blob' })
+    ).data.length;
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'documentTitle',
-      value: 'My edited correspondence',
+      value: `My edited correspondence ${user}`,
     });
 
     await cerebralTest.runSequence('clearExistingDocumentSequence');
@@ -30,17 +30,18 @@ export const userEditsCorrespondence = (cerebralTest, user) =>
 
     await cerebralTest.runSequence('editCorrespondenceDocumentSequence');
 
-    response = await axios.get(iframeSrc, { contentType: 'blob' });
-    const updatedDocumentLength = response.data.length;
+    const updatedDocumentLength = (
+      await axios.get(iframeSrc, { contentType: 'blob' })
+    ).data.length;
 
-    expect(initialDocumentLength).not.toEqual(updatedDocumentLength);
+    expect(updatedDocumentLength).not.toEqual(initialDocumentLength);
 
     expect(cerebralTest.getState('caseDetail.correspondence')).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           correspondenceId:
             cerebralTest.correspondenceDocument.correspondenceId,
-          documentTitle: 'My edited correspondence',
+          documentTitle: `My edited correspondence ${user}`,
         }),
       ]),
     );

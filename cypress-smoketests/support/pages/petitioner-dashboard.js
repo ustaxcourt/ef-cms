@@ -20,14 +20,6 @@ exports.goToFileYourDocument = () => {
 };
 exports.goToReviewDocument = exports.goToFileYourDocument;
 
-exports.selectDocumentType = documentType => {
-  cy.get('#document-type').children().first().click();
-  cy.get('div.select-react-element__menu-list')
-    .find('div')
-    .contains(documentType)
-    .click();
-};
-
 exports.uploadDocumentFile = () => {
   cy.get('#primary-document').attachFile('../fixtures/w3-dummy.pdf');
 };

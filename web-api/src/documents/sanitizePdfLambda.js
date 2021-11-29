@@ -1,14 +1,18 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * gets the order search enabled flag
+ * used for sanitizing PDF documents
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.getOrderSearchEnabledLambda = event =>
+exports.sanitizePdfLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    const { key } = event.pathParameters || {};
+
     return await applicationContext
       .getUseCases()
-      .getOrderSearchEnabledInteractor(applicationContext);
+      .sanitizePdfInteractor(applicationContext, {
+        key,
+      });
   });

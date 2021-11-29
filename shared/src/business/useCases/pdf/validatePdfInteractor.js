@@ -20,10 +20,10 @@ exports.removePdf = removePdf;
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.key the key of the document to validate
- * @returns {object} errors (null if no errors)
+ * @throws {Error} if pdf is invalid
  */
 exports.validatePdfInteractor = async (applicationContext, { key }) => {
-  let { Body: pdfData } = await applicationContext
+  const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
@@ -38,12 +38,10 @@ exports.validatePdfInteractor = async (applicationContext, { key }) => {
   applicationContext.logger.debug('pdfHeaderBytes', pdfHeaderBytes);
   applicationContext.logger.debug('pdfHeaderString', pdfHeaderString);
 
-  let pdfIsEncrypted = false;
-
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   const pdfDoc = await PDFDocument.load(pdfData, { ignoreEncryption: true });
-  pdfIsEncrypted = pdfDoc.isEncrypted;
+  const pdfIsEncrypted = pdfDoc.isEncrypted;
 
   applicationContext.logger.debug('pdfIsEncrypted', pdfIsEncrypted);
 
@@ -68,6 +66,4 @@ exports.validatePdfInteractor = async (applicationContext, { key }) => {
 
     throw new Error('pdf pages cannot be read');
   }
-
-  return true;
 };

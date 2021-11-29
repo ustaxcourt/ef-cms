@@ -28,10 +28,11 @@ describe('validatePdfInteractor', () => {
   });
 
   it('validates a clean PDF', async () => {
-    const result = await validatePdfInteractor(applicationContext, {
-      key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
-    });
-    expect(result).toBeTruthy();
+    await expect(
+      validatePdfInteractor(applicationContext, {
+        key: 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      }),
+    ).resolves.not.toBeDefined();
   });
 
   it('throws an error and deletes the document from S3 when the PDF is encrypted', async () => {

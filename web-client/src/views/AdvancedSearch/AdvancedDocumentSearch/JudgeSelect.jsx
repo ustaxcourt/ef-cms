@@ -15,6 +15,7 @@ export const JudgeSelect = connect(
           Judge
         </label>
         <BindedSelect
+          aria-label="order-judge"
           bind={formValue}
           className="usa-input"
           id="order-judge"

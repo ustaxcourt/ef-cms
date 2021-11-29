@@ -6,11 +6,13 @@ const {
 
 describe('ipLimiter', () => {
   let statusMock;
+  let jsonMock;
   let res;
 
   beforeEach(() => {
+    jsonMock = jest.fn();
     statusMock = jest.fn(() => ({
-      json: () => jest.fn(),
+      json: jsonMock,
     }));
     res = {
       set: jest.fn(() => ({
@@ -42,6 +44,10 @@ describe('ipLimiter', () => {
     );
     expect(statusMock).toBeCalledWith(429);
     expect(next).not.toBeCalled();
+    expect(jsonMock.mock.calls[0][0]).toMatchObject({
+      message: 'you are only allowed 15 requests in a 60 second window time',
+      type: 'ip-limiter',
+    });
   });
 
   it('should call next if limit is not reached', async () => {

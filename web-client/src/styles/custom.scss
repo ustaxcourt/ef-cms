@@ -66,9 +66,11 @@ hr {
   text-align: right;
 }
 
+/* stylelint-disable selector-id-pattern */
 #dwtcontrolContainer {
   display: none;
 }
+/* stylelint-enable selector-id-pattern */
 
 .inline-block {
   display: inline-block;
@@ -87,6 +89,7 @@ hr {
   margin-right: 20px;
   float: left;
 }
+
 .clear-both {
   clear: both;
 }
@@ -97,6 +100,7 @@ hr {
   &.sticky-footer--space {
     height: 135px;
   }
+
   &.sticky-footer--container {
     position: fixed;
     bottom: 0;
@@ -125,10 +129,6 @@ hr {
   textarea {
     height: 60px;
   }
-}
-
-.flagged-name {
-  color: color($theme-color-secondary)-dark;
 }
 
 iframe {
@@ -207,7 +207,7 @@ select[disabled] {
   }
 
   p {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 
   .completed-message {
@@ -216,8 +216,8 @@ select[disabled] {
 }
 
 .numbered-list {
-  padding: 0px 20px;
-  margin: 0px;
+  padding: 0 20px;
+  margin: 0;
 
   li {
     margin-bottom: 0.5em;
@@ -332,8 +332,9 @@ select[disabled] {
     padding: 30px;
     border: 1px solid color($theme-color-primary);
     margin-bottom: 2rem;
-    box-shadow: 0 4px 4px rgba(0, 0, 0, 0.15),
-      inset 0 4px 4px rgba(0, 0, 0, 0.15);
+    box-shadow:
+      0 4px 4px rgb(0 0 0 / 15%),
+      inset 0 4px 4px rgb(0 0 0 / 15%);
   }
 
   .usa-banner__button-text {
@@ -364,7 +365,7 @@ select[disabled] {
 
 .create-case-review {
   p.address-name {
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 }
 
@@ -466,6 +467,7 @@ select[disabled] {
   span {
     max-width: 700px;
   }
+
   display: inline-block;
   padding: 10px;
   border-left: 5px solid color($theme-color-warning);
@@ -493,11 +495,9 @@ select[disabled] {
   span {
     max-width: 700px;
   }
+
   display: inline-block;
-  padding-top: 1.25rem;
-  padding-right: 1.25rem;
-  padding-bottom: 1rem;
-  padding-left: 1.75rem;
+  padding: 1.25rem 1.25rem 1rem 1.75rem;
   border-left: 5px solid color($theme-color-primary-vivid);
   background: color($theme-color-base-lightest);
   color: color($theme-color-base-dark);
@@ -523,6 +523,7 @@ select[disabled] {
   span {
     max-width: 700px;
   }
+
   display: inline-block;
   padding: 16px;
   border-left: 5px solid color($theme-color-secondary-dark);
@@ -591,6 +592,7 @@ select[disabled] {
       margin-top: 30px;
       margin-bottom: 30px;
     }
+
     /* little screens */
     @media only screen and (max-width: $medium-screen - 1) {
       margin-top: 20px;
@@ -628,6 +630,7 @@ select[disabled] {
 
   .caseItem__heading {
     min-height: 80px;
+
     @media only screen and (min-width: $medium-screen) {
       min-height: 0;
       padding-left: 86px;
@@ -641,6 +644,7 @@ select[disabled] {
     }
   }
 }
+
 .before-starting-case {
   .caseItem__icon {
     top: 0;
@@ -680,6 +684,7 @@ select[disabled] {
   .caseItem__heading {
     min-height: 80px;
     padding-left: 86px;
+
     @media only screen and (min-width: $medium-screen) {
       min-height: 0;
       padding-left: 100px;
@@ -702,10 +707,12 @@ select.ustc-input-error {
   position: relative;
   width: 100%;
   height: 65px;
+
   .horizontal-tabs {
     position: absolute;
     bottom: 0;
   }
+
   .button-wrapper {
     position: absolute;
     right: 0;
@@ -740,8 +747,8 @@ select.ustc-input-error {
   .usa-form-group--error textarea,
   .usa-form-group--error select {
     width: 100%;
-    border-color: color($theme-color-secondary)-dark;
-    box-shadow: 0 0 0 2px color($theme-color-secondary)-dark;
+    border-color: color($theme-color-secondary) -dark;
+    box-shadow: 0 0 0 2px color($theme-color-secondary) -dark;
   }
 }
 
@@ -750,7 +757,7 @@ select.ustc-input-error {
 }
 
 .usa-form-group--error {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 textarea#case-caption {
@@ -760,7 +767,7 @@ textarea#case-caption {
 
 .filed-by {
   display: inline-block;
-  padding: 0px;
+  padding: 0;
   margin-bottom: 10px;
   font-size: 17px;
 }
@@ -795,6 +802,7 @@ textarea#case-caption {
   padding: 10px;
   background-color: color($theme-color-warning-lighter);
   font-weight: $font-bold;
+
   a {
     color: color($theme-color-base-darkest);
   }
@@ -853,7 +861,7 @@ header.usa-header {
   height: 100px;
   flex-direction: row;
   border-bottom: none;
-  margin-bottom: 0px;
+  margin-bottom: 0;
 
   @media (max-width: units('desktop')) {
     height: auto;
@@ -881,6 +889,7 @@ header.usa-header {
       }
     }
   }
+
   &.open {
     .reports-button-container {
       background-color: color($theme-color-primary);
@@ -890,6 +899,7 @@ header.usa-header {
       }
     }
   }
+
   .reports-menu-content {
     position: absolute;
     bottom: 0;
@@ -937,44 +947,54 @@ header.usa-header {
   margin-bottom: 20px;
   background-color: color($theme-color-primary-darker);
   color: $color-white;
+
   h1 {
     display: inline-block;
     margin: 0 15px 0 0;
     color: $color-white;
   }
+
   a,
   button {
     color: $color-white;
   }
+
   a:not(.usa-button):hover,
   button:hover {
     color: $color-primary-alt;
   }
+
   .usa-button--outline {
     background-color: $color-white;
     color: color($theme-color-primary);
+
     &:hover {
       color: color($theme-color-primary-dark);
     }
   }
+
   .usa-tag {
     background: $color-white;
     color: color($theme-color-primary-darker);
     font-weight: $font-bold;
     white-space: nowrap;
+
     &.ustc-tag--yellow {
       background: color($theme-color-warning);
     }
   }
+
   .unread {
     position: relative;
     top: -3px;
     background: $color-white;
     color: color($theme-color-primary-darker);
   }
+
   .space-between {
     justify-content: space-between;
   }
+
   #case-title {
     span {
       margin-right: 15px;
@@ -993,7 +1013,7 @@ header.usa-header {
     padding-bottom: 10px;
     border-bottom: 3px solid color($theme-color-primary);
     margin-top: -2px;
-    margin-bottom: 0px;
+    margin-bottom: 0;
   }
 }
 
@@ -1046,6 +1066,7 @@ hr.lighter {
   }
 }
 
+/* stylelint-disable selector-id-pattern */
 #tab-document-info-panel,
 #tabContent-caseInfo {
   .label + p {
@@ -1053,6 +1074,7 @@ hr.lighter {
     margin-bottom: 20px;
   }
 }
+/* stylelint-enable selector-id-pattern */
 
 .document-viewer-top-margin {
   margin-top: 57px;
@@ -1120,11 +1142,12 @@ hr.lighter {
   position: relative;
   padding: 30px 0;
   background-color: color($theme-color-base);
+
   #signature {
     position: absolute;
     padding: 10px;
     border: 1px solid #eee;
-    background-color: rgba(255, 255, 255, 0.8);
+    background-color: rgb(255 255 255 / 80%);
     font-family: 'Times New Roman', Times, serif;
     font-weight: $font-bold;
     text-align: center;
@@ -1138,10 +1161,12 @@ hr.lighter {
     margin-top: -60px;
     background-color: transparent;
     color: transparent;
+
     &:hover {
       background-color: $color-error;
       color: black;
     }
+
     font-weight: $font-bold;
     overflow-y: overlay;
     text-align: center;
@@ -1150,7 +1175,7 @@ hr.lighter {
   #sign-pdf-canvas {
     display: block;
     margin: auto;
-    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
   }
 }
 
@@ -1166,51 +1191,39 @@ hr.lighter {
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='10px']::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='10px']::before {
   content: '10px';
   font-size: 10px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='12px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='12px']::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='12px']::before {
   content: '12px';
   font-size: 12px !important;
 }
 
 /* default */
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='14px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='14px']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='14px']::before,
 .ql-snow .ql-picker.ql-size .ql-picker-label:not(.ql-active)::before {
   content: '14px';
   font-size: 14px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='16px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='16px']::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='16px']::before {
   content: '16px';
   font-size: 16px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='18px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='18px']::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='18px']::before {
   content: '18px';
   font-size: 18px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='20px']::before,
-.ql-snow
-  .ql-picker.ql-size
-  .ql-picker-label.ql-active[data-value='20px']::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='20px']::before {
   content: '20px';
   font-size: 20px !important;
 }
@@ -1231,6 +1244,7 @@ hr.lighter {
 
 .all-columns-view {
   column-count: 4;
+
   > button {
     width: 100%;
     margin-bottom: 20px;
@@ -1242,9 +1256,11 @@ hr.lighter {
   padding-top: 10px;
   padding-bottom: 10px;
   border-top: 1px solid color($theme-color-base-lighter);
+
   &:last-child {
     border-bottom: 1px solid color($theme-color-base-lighter);
   }
+
   button {
     line-height: 24px;
     text-decoration: none;
@@ -1265,6 +1281,7 @@ hr.lighter {
     color: $color-white;
     text-decoration: none;
   }
+
   a:not(.usa-button):hover,
   button:hover {
     color: $color-primary-alt;
@@ -1279,8 +1296,10 @@ hr.lighter {
   .modal-dialog {
     width: 700px;
   }
+
   .includeItem {
     position: relative;
+
     .includeItem__icon {
       position: absolute;
       top: 0;
@@ -1423,7 +1442,7 @@ button.change-scanner-button {
   min-height: 425px;
   padding: 20px;
   border: 1px solid color($theme-color-base-lighter);
-  border-top: 0px;
+  border-top: 0;
   background-color: $color-primary-alt-lightest;
 
   .ustc-ui-tabs.container-tabs.document-select li.active {
@@ -1445,9 +1464,9 @@ button.change-scanner-button {
 
 .preview-container {
   padding: 20px;
-  padding-top: 0px;
+  padding-top: 0;
   border: 1px solid color($theme-color-base-lighter);
-  border-top: 0px;
+  border-top: 0;
   background-color: white;
 
   .preview-container--image-area {
@@ -1499,9 +1518,11 @@ button.change-scanner-button {
   h3 {
     margin-bottom: 0;
   }
+
   button {
     color: $color-white;
   }
+
   a:not(.usa-button):hover,
   button:hover {
     color: $color-primary-alt;
@@ -1525,9 +1546,11 @@ button.change-scanner-button {
 .advanced-search {
   .advanced-search-panel {
     display: inline-flex;
+
     @media only screen and (max-width: $medium-screen) {
       flex-wrap: wrap;
     }
+
     margin-bottom: 10px;
   }
 
@@ -1542,10 +1565,12 @@ button.change-scanner-button {
       width: calc(6 / 12 * 100%);
       flex: 0 1 auto;
     }
+
     @media only screen and (min-width: 1250px) {
       width: calc(6.5 / 12 * 100%);
       flex: 0 10 auto;
     }
+
     @media only screen and (min-width: 1400px) {
       width: calc(7 / 12 * 100%);
       flex: 0 2 auto;
@@ -1557,10 +1582,12 @@ button.change-scanner-button {
       width: calc(6 / 12 * 100%);
       flex: 0 10 auto;
     }
+
     @media only screen and (min-width: 1250px) {
       width: calc(5.5 / 12 * 100%);
       flex: 0 1 auto;
     }
+
     @media only screen and (min-width: 1400px) {
       width: calc(5 / 12 * 100%);
       flex: 0 1 auto;
@@ -1589,6 +1616,7 @@ button.change-scanner-button {
       flex-wrap: nowrap;
     }
   }
+
   /* little screens */
   @media only screen and (max-width: $medium-screen - 1) {
     input#petitioner-name,
@@ -1605,8 +1633,9 @@ button.change-scanner-button {
 .hide-radio {
   cursor: default;
   pointer-events: none;
-  &:before {
-    opacity: 0;
+
+  &::before {
+    opacity: 0%;
   }
 }
 
@@ -1830,6 +1859,7 @@ button.change-scanner-button {
       li {
         border-top: 1px solid #dcdee0;
         margin-left: 0;
+
         a,
         button {
           padding-right: 0.5em;
@@ -1920,6 +1950,7 @@ button.change-scanner-button {
   .usa-button--outline {
     background-color: $color-white;
     color: color($theme-color-primary);
+
     &:hover {
       color: color($theme-color-primary-dark);
     }
