@@ -107,6 +107,7 @@ import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from './presenter/presenter';
+import { requestTokensFromParentTab } from './presenter/utilities/requestTokensFromParentTab';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
@@ -169,37 +170,11 @@ const app = {
     let startRefreshSequence = false;
     const isNewTabOpened = !window.location.href.includes('?code');
     if (isNewTabOpened && !process.env.IS_LOCAL) {
-      try {
-        await new Promise((resolve, reject) => {
-          const rejectTimeout = setTimeout(() => {
-            reject();
-          }, 1000);
-
-          const broadcastGateway = applicationContext.getBroadcastGateway();
-          broadcastGateway.onmessage = msg => {
-            switch (msg.subject) {
-              case 'receiveToken':
-                presenter.state.refreshToken = msg.refreshToken;
-                presenter.state.token = msg.token;
-                applicationContext.setCurrentUserToken(msg.token);
-                startRefreshSequence = true;
-                clearTimeout(rejectTimeout);
-                resolve();
-                break;
-            }
-          };
-          broadcastGateway.postMessage({ subject: 'requestToken' });
-        });
-      } catch (err) {
-        window.location.href = presenter.state.cognitoLoginUrl;
-        return;
-      }
-
-      const user = await applicationContext
-        .getUseCases()
-        .getUserInteractor(applicationContext);
-      presenter.state.user = user;
-      applicationContext.setCurrentUser(user);
+      startRefreshSequence = await requestTokensFromParentTab({
+        applicationContext,
+        presenter,
+        redirect: url => (window.location.href = url),
+      });
     }
 
     const userPermissions = applicationContext.getCurrentUserPermissions();
