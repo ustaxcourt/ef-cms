@@ -1,21 +1,27 @@
 const {
+  partitionRecords,
+} = require('./processStreamRecords/processStreamUtilities');
+const {
+  processCaseEntries,
+} = require('./processStreamRecords/processCaseEntries');
+const {
   processDocketEntries,
-} = require('./elasticsearch/processDocketEntries');
+} = require('./processStreamRecords/processDocketEntries');
 const {
   processMessageEntries,
-} = require('./elasticsearch/processMessageEntries');
+} = require('./processStreamRecords/processMessageEntries');
+const {
+  processOtherEntries,
+} = require('./processStreamRecords/processOtherEntries');
 const {
   processPractitionerMappingEntries,
-} = require('./elasticsearch/processPractitionerMappingEntries');
+} = require('./processStreamRecords/processPractitionerMappingEntries');
 const {
   processRemoveEntries,
-} = require('./elasticsearch/processRemoveEntries');
+} = require('./processStreamRecords/processRemoveEntries');
 const {
   processWorkItemEntries,
-} = require('./elasticsearch/processWorkItemEntries');
-const { partitionRecords } = require('./elasticsearch/processStreamUtilities');
-const { processCaseEntries } = require('./elasticsearch/processCaseEntries');
-const { processOtherEntries } = require('./elasticsearch/processOtherEntries');
+} = require('./processStreamRecords/processWorkItemEntries');
 
 /**
  * @param {object} applicationContext the application context
