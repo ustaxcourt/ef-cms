@@ -54,7 +54,6 @@ const ifHasAccess = (
 ) => {
   return function () {
     if (!app.getState('user')) {
-      console.log('router gotoLoginPage');
       return redirect.gotoLoginPage(app);
     } else if (app.getState('maintenanceMode')) {
       return redirect.gotoMaintenancePage(app);
