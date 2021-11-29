@@ -11,13 +11,7 @@ export const startRefreshIntervalAction = ({
   get,
   store,
 }) => {
-  const broadcastChannel = applicationContext.getBroadcastGateway();
   const oldInterval = get(state.refreshTokenInterval);
-  const currentRefreshToken = get(state.refreshToken);
-
-  if (!currentRefreshToken) {
-    broadcastChannel.postMessage({ subject: 'requestToken' });
-  }
 
   const refreshTokenRequest = async ({ refreshToken }) => {
     const response = await applicationContext
@@ -28,22 +22,23 @@ export const startRefreshIntervalAction = ({
 
     store.set(state.token, response.token);
     applicationContext.setCurrentUserToken(response.token);
-    await applicationContext
-      .getUseCases()
-      .setItemInteractor(applicationContext, {
-        key: 'token',
-        value: response.token,
-      });
+    if (process.env.IS_LOCAL) {
+      await applicationContext
+        .getUseCases()
+        .setItemInteractor(applicationContext, {
+          key: 'token',
+          value: response.token,
+        });
+    }
   };
 
   clearInterval(oldInterval);
-  const time = 10 * 1000; // applicationContext.getConstants().REFRESH_INTERVAL;
-  const interval = setInterval(async () => {
+  const time = 10 * 1000; //applicationContext.getConstants().REFRESH_INTERVAL;
+  const getNewIdToken = async () => {
     const refreshToken = get(state.refreshToken);
-    if (!refreshToken) {
-      return;
-    }
     await refreshTokenRequest({ refreshToken });
-  }, time);
+  };
+  const interval = setInterval(getNewIdToken, time);
+  getNewIdToken();
   store.set(state.refreshTokenInterval, interval);
 };

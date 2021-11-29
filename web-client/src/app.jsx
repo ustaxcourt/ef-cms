@@ -128,17 +128,14 @@ const app = {
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
 
-    const user =
-      (await applicationContext
-        .getUseCases()
-        .getItemInteractor(applicationContext, { key: 'user' })) ||
-      presenter.state.user;
-    presenter.state.user = user;
-    applicationContext.setCurrentUser(user);
-
-    const userPermissions = applicationContext.getCurrentUserPermissions();
-    if (userPermissions) {
-      presenter.state.permissions = userPermissions;
+    if (process.env.IS_LOCAL) {
+      const user =
+        (await applicationContext
+          .getUseCases()
+          .getItemInteractor(applicationContext, { key: 'user' })) ||
+        presenter.state.user;
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
     }
 
     const maintenanceMode = await applicationContext
@@ -154,17 +151,70 @@ const app = {
       return value;
     });
 
-    const token =
-      (await applicationContext
-        .getUseCases()
-        .getItemInteractor(applicationContext, { key: 'token' })) ||
-      presenter.state.token;
-    presenter.state.token = token;
-    applicationContext.setCurrentUserToken(token);
+    if (process.env.IS_LOCAL) {
+      const token =
+        (await applicationContext
+          .getUseCases()
+          .getItemInteractor(applicationContext, { key: 'token' })) ||
+        presenter.state.token;
+      presenter.state.token = token;
+      applicationContext.setCurrentUserToken(token);
+    }
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
     presenter.state.constants = applicationContext.getConstants();
+
+    // we must do all this logic before we start the router or render react
+    let startRefreshSequence = false;
+    const isNewTabOpened = !window.location.href.includes('?code');
+    if (isNewTabOpened && !process.env.IS_LOCAL) {
+      console.log('isNewTabOpened', isNewTabOpened);
+      try {
+        await new Promise((resolve, reject) => {
+          const rejectTimeout = setTimeout(() => {
+            reject();
+          }, 1000);
+
+          const broadcastGateway = applicationContext.getBroadcastGateway();
+          broadcastGateway.onmessage = msg => {
+            console.log('got msg', msg);
+            switch (msg.subject) {
+              case 'receiveToken':
+                presenter.state.refreshToken = msg.refreshToken;
+                presenter.state.token = msg.token;
+                applicationContext.setCurrentUserToken(msg.token);
+                console.log('setting token', msg.token);
+                startRefreshSequence = true;
+                clearTimeout(rejectTimeout);
+                resolve();
+                break;
+            }
+          };
+          console.log('broadcast requestToken');
+          broadcastGateway.postMessage({ subject: 'requestToken' });
+        });
+      } catch (err) {
+        window.location.href = presenter.state.cognitoLoginUrl;
+        console.log(
+          'did not get receiveToken back within 1 second, redirecting to cognito',
+        );
+        // TODO: maybe render out a spinner on the page?
+        return;
+      }
+
+      const user = await applicationContext
+        .getUseCases()
+        .getUserInteractor(applicationContext);
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
+      console.log('got user', user);
+    }
+
+    const userPermissions = applicationContext.getCurrentUserPermissions();
+    if (userPermissions) {
+      presenter.state.permissions = userPermissions;
+    }
 
     config.autoAddCss = false;
     library.add(
@@ -276,8 +326,13 @@ const app = {
 
     initializeSocketProvider(cerebralApp, applicationContext);
     router.initialize(cerebralApp, route);
-    await cerebralApp.getSequence('startRefreshIntervalSequence')();
 
+    if (startRefreshSequence) {
+      console.log('starting refresh sequence');
+      await cerebralApp.getSequence('startRefreshIntervalSequence')();
+    }
+
+    console.log('about to render react');
     ReactDOM.render(
       <Container app={cerebralApp}>
         {!process.env.CI && (
