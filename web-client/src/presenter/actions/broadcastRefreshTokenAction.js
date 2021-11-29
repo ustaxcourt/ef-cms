@@ -12,6 +12,12 @@ export const broadcastRefreshTokenAction = async ({
   get,
 }) => {
   const refreshToken = get(state.refreshToken);
+  const token = get(state.token);
   const broadcastChannel = applicationContext.getBroadcastGateway();
-  await broadcastChannel.postMessage({ refreshToken, subject: 'receiveToken' });
+  console.log('broadcasting receiveToken');
+  await broadcastChannel.postMessage({
+    refreshToken,
+    subject: 'receiveToken',
+    token,
+  });
 };

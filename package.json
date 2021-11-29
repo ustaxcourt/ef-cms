@@ -237,7 +237,7 @@
     "start:client:ci": "CI=true SKIP_VIRUS_SCAN=true NODE_ENV=production npm run start:client",
     "start:client:debug": "USTC_DEBUG=true npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
-    "start:client": "FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev webpack serve --config webpack.config.client.dev.js",
+    "start:client": "IS_LOCAL=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev webpack serve --config webpack.config.client.dev.js",
     "start:madge": "node ./graph-generators/index.js",
     "start:migration": "node ./web-api/send-migration-segment-messages.js",
     "start:public:ci": "npm run clean:public && CI=true npm run start:public",

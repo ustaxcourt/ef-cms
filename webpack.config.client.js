@@ -47,6 +47,7 @@ module.exports = {
       COGNITO_TOKEN_URL: null,
       ENV: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
+      IS_LOCAL: null,
       NO_SCANNER: null,
       PUBLIC_SITE_URL: null,
       SCANNER_RESOURCE_URI: null,
