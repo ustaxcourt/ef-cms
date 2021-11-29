@@ -169,7 +169,6 @@ const app = {
     let startRefreshSequence = false;
     const isNewTabOpened = !window.location.href.includes('?code');
     if (isNewTabOpened && !process.env.IS_LOCAL) {
-      console.log('isNewTabOpened', isNewTabOpened);
       try {
         await new Promise((resolve, reject) => {
           const rejectTimeout = setTimeout(() => {
@@ -178,28 +177,21 @@ const app = {
 
           const broadcastGateway = applicationContext.getBroadcastGateway();
           broadcastGateway.onmessage = msg => {
-            console.log('got msg', msg);
             switch (msg.subject) {
               case 'receiveToken':
                 presenter.state.refreshToken = msg.refreshToken;
                 presenter.state.token = msg.token;
                 applicationContext.setCurrentUserToken(msg.token);
-                console.log('setting token', msg.token);
                 startRefreshSequence = true;
                 clearTimeout(rejectTimeout);
                 resolve();
                 break;
             }
           };
-          console.log('broadcast requestToken');
           broadcastGateway.postMessage({ subject: 'requestToken' });
         });
       } catch (err) {
         window.location.href = presenter.state.cognitoLoginUrl;
-        console.log(
-          'did not get receiveToken back within 1 second, redirecting to cognito',
-        );
-        // TODO: maybe render out a spinner on the page?
         return;
       }
 
@@ -208,7 +200,6 @@ const app = {
         .getUserInteractor(applicationContext);
       presenter.state.user = user;
       applicationContext.setCurrentUser(user);
-      console.log('got user', user);
     }
 
     const userPermissions = applicationContext.getCurrentUserPermissions();
@@ -328,11 +319,9 @@ const app = {
     router.initialize(cerebralApp, route);
 
     if (startRefreshSequence) {
-      console.log('starting refresh sequence');
       await cerebralApp.getSequence('startRefreshIntervalSequence')();
     }
 
-    console.log('about to render react');
     ReactDOM.render(
       <Container app={cerebralApp}>
         {!process.env.CI && (

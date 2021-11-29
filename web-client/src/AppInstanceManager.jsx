@@ -29,9 +29,7 @@ export const AppInstanceManager = connect(
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
-    console.log('overwrite onmessage');
     channelHandle.onmessage = msg => {
-      console.log('channelHandle.onmessage', msg);
       switch (msg.subject) {
         case 'idleStatusActive':
           resetIdleTimerSequence();
