@@ -6,6 +6,7 @@ const {
 
 describe('advancedQueryLimiter', () => {
   let statusMock;
+  let jsonMock;
   let res;
   const MAX_INVOCATIONS = 5;
 
@@ -15,8 +16,9 @@ describe('advancedQueryLimiter', () => {
       windowTime: 1000,
     });
 
+    jsonMock = jest.fn();
     statusMock = jest.fn(() => ({
-      json: () => jest.fn(),
+      json: jsonMock,
     }));
     res = {
       set: jest.fn(() => ({
@@ -40,6 +42,10 @@ describe('advancedQueryLimiter', () => {
     })(null, res, next);
     expect(statusMock).toBeCalledWith(429);
     expect(next).not.toBeCalled();
+    expect(jsonMock.mock.calls[0][0]).toMatchObject({
+      message: 'you are only allowed 5 requests in a 1 second window time',
+      type: 'advanced-query-limiter',
+    });
   });
 
   it('should call next if limit is not reached', async () => {

@@ -24,67 +24,87 @@ describe('Adds correspondence to a case', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'petitioner@example.com');
-  it('create case', async () => {
-    caseDetail = await uploadPetition(cerebralTest);
-    expect(caseDetail).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
+  describe('setup - petitioner creates a case', () => {
+    loginAs(cerebralTest, 'petitioner@example.com');
+    it('create case', async () => {
+      caseDetail = await uploadPetition(cerebralTest);
+      expect(caseDetail).toBeDefined();
+      cerebralTest.docketNumber = caseDetail.docketNumber;
+    });
   });
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  userNavigatesToAddCorrespondence(cerebralTest, 'DocketClerk');
-  userAddsCorrespondence(cerebralTest, firstCorrespondenceTitle, 'DocketClerk');
-  userAddsCorrespondence(
-    cerebralTest,
-    secondCorrespondenceTitle,
-    'DocketClerk',
-  );
-  userNavigatesToEditCorrespondence(
-    cerebralTest,
-    firstCorrespondenceTitle,
-    'DocketClerk',
-  );
-  docketClerkCreatesMessageWithCorrespondence(cerebralTest);
-  docketClerkViewsMessageWithCorrespondence(cerebralTest);
-  userNavigatesToEditCorrespondence(
-    cerebralTest,
-    firstCorrespondenceTitle,
-    'DocketClerk',
-  );
-  userEditsCorrespondence(cerebralTest, 'DocketClerk');
-  docketClerkDeletesCorrespondence(cerebralTest, firstCorrespondenceTitle);
+  describe('docket clerk adds two correspondence. deletes only the first one', () => {
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    userNavigatesToAddCorrespondence(cerebralTest, 'DocketClerk');
+    userAddsCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} dc`,
+      'DocketClerk',
+    );
+    userAddsCorrespondence(
+      cerebralTest,
+      `${secondCorrespondenceTitle} dc`,
+      'DocketClerk',
+    );
+    userNavigatesToEditCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} dc`,
+      'DocketClerk',
+    );
+    docketClerkCreatesMessageWithCorrespondence(cerebralTest);
+    docketClerkViewsMessageWithCorrespondence(cerebralTest);
+    userNavigatesToEditCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} dc`,
+      'DocketClerk',
+    );
+    userEditsCorrespondence(cerebralTest, 'DocketClerk');
+    docketClerkDeletesCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} dc`,
+      'DocketClerk',
+    );
+  });
 
-  loginAs(cerebralTest, 'admissionsclerk@example.com');
-  userNavigatesToAddCorrespondence(cerebralTest, 'AdmissionsClerk');
-  userAddsCorrespondence(
-    cerebralTest,
-    firstCorrespondenceTitle,
-    'AdmissionsClerk',
-  );
-  userNavigatesToEditCorrespondence(
-    cerebralTest,
-    firstCorrespondenceTitle,
-    'AdmissionsClerk',
-  );
-  userEditsCorrespondence(cerebralTest, 'AdmissionsClerk');
-  userDeletesCorrespondence(
-    cerebralTest,
-    firstCorrespondenceTitle,
-    'AdmissionsClerk',
-  );
+  describe('admissions clerk adds one correspondence, edits it, deletes it', () => {
+    loginAs(cerebralTest, 'admissionsclerk@example.com');
+    userNavigatesToAddCorrespondence(cerebralTest, 'AdmissionsClerk');
+    userAddsCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} ac`,
+      'AdmissionsClerk',
+    );
+    userNavigatesToEditCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} ac`,
+      'AdmissionsClerk',
+    );
+    userEditsCorrespondence(cerebralTest, 'AdmissionsClerk');
+    userDeletesCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} ac`,
+      'AdmissionsClerk',
+    );
+  });
 
-  loginAs(cerebralTest, 'general@example.com');
-  userNavigatesToAddCorrespondence(cerebralTest, 'General user');
-  userAddsCorrespondence(
-    cerebralTest,
-    firstCorrespondenceTitle,
-    'General user',
-  );
-  userNavigatesToEditCorrespondence(
-    cerebralTest,
-    firstCorrespondenceTitle,
-    'General user',
-  );
-  userEditsCorrespondence(cerebralTest, 'General user');
-  userDeletesCorrespondence(cerebralTest, firstCorrespondenceTitle);
+  describe('general role adds one correspondence, edits it, deletes it', () => {
+    loginAs(cerebralTest, 'general@example.com');
+    userNavigatesToAddCorrespondence(cerebralTest, 'General user');
+    userAddsCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} general`,
+      'General user',
+    );
+    userNavigatesToEditCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} general`,
+      'General user',
+    );
+    userEditsCorrespondence(cerebralTest, 'General user');
+    userDeletesCorrespondence(
+      cerebralTest,
+      `${firstCorrespondenceTitle} general`,
+      'General user',
+    );
+  });
 });

@@ -11,10 +11,8 @@ describe('v2ApiWrapper', () => {
     try {
       await v2ApiWrapper(throwWithStatus(undefined, 'Test error'));
     } catch (err) {
-      /* eslint-disable jest/no-try-expect */
       expect(JSON.stringify(err.message)).toBe('{"message":"Test error"}');
       expect(err.statusCode).toBe(500);
-      /* eslint-enable jest/no-try-expect */
     }
   });
 
@@ -22,12 +20,10 @@ describe('v2ApiWrapper', () => {
     try {
       await v2ApiWrapper(throwWithStatus(undefined));
     } catch (err) {
-      /* eslint-disable jest/no-try-expect */
       expect(JSON.stringify(err.message)).toBe(
         '{"message":"An unexpected error occurred"}',
       );
       expect(err.statusCode).toBe(500);
-      /* eslint-enable jest/no-try-expect */
     }
   });
   [401, 403, 404, 500].forEach(statusCode =>
