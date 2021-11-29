@@ -22,19 +22,4 @@ describe('receiveRefreshTokenAction', () => {
     });
     expect(result.state.refreshToken).toBe('someThing');
   });
-
-  it('should NOT set the refresh token action in state if no refresh token value is in props', async () => {
-    const result = await runAction(receiveRefreshTokenAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        refreshToken: undefined,
-      },
-      state: {
-        refreshToken: 'old-value',
-      },
-    });
-    expect(result.state.refreshToken).toBe('old-value');
-  });
 });
