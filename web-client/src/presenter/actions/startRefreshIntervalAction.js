@@ -14,10 +14,6 @@ export const startRefreshIntervalAction = ({
   const oldInterval = get(state.refreshTokenInterval);
 
   const refreshTokenRequest = async ({ refreshToken }) => {
-    const isLocal = process.env.IS_LOCAL === 'true';
-    if (isLocal) {
-      return;
-    }
     const response = await applicationContext
       .getUseCases()
       .refreshTokenInteractor(applicationContext, {
@@ -37,7 +33,7 @@ export const startRefreshIntervalAction = ({
   };
 
   clearInterval(oldInterval);
-  const time = 10 * 1000; //applicationContext.getConstants().REFRESH_INTERVAL;
+  const time = applicationContext.getConstants().REFRESH_INTERVAL;
   const getNewIdToken = async () => {
     const refreshToken = get(state.refreshToken);
     await refreshTokenRequest({ refreshToken });
