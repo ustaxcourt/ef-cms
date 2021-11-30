@@ -1,6 +1,6 @@
 const {
-  over3000Characters,
-} = require('../../test/createTestApplicationContext');
+  getTextByCount,
+} = require('../../../../../web-client/integration-tests/helpers');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
@@ -31,7 +31,7 @@ describe('ExternalDocumentStandard', () => {
     it('should be invalid when documentTitle is over 3000 characters', () => {
       const extDoc = ExternalDocumentFactory({
         category: 'Application',
-        documentTitle: over3000Characters,
+        documentTitle: getTextByCount(3001),
         documentType: 'Application for Waiver of Filing Fee',
         scenario: 'Standard',
       });

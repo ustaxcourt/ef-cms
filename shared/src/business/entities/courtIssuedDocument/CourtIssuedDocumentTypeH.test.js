@@ -1,6 +1,6 @@
 const {
-  over1000Characters,
-} = require('../../test/createTestApplicationContext');
+  getTextByCount,
+} = require('../../../../../web-client/integration-tests/helpers');
 const { calculateISODate } = require('../../utilities/DateHandler');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
@@ -63,7 +63,7 @@ describe('CourtIssuedDocumentTypeH', () => {
         date: '2019-04-10T04:00:00.000Z',
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
-        freeText: over1000Characters,
+        freeText: getTextByCount(1001),
         scenario: 'Type H',
       });
 

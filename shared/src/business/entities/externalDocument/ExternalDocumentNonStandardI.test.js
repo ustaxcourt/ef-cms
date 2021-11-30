@@ -1,7 +1,6 @@
 const {
-  over1000Characters,
-  over3000Characters,
-} = require('../../test/createTestApplicationContext');
+  getTextByCount,
+} = require('../../../../../web-client/integration-tests/helpers');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
@@ -38,7 +37,7 @@ describe('ExternalDocumentNonStandardI', () => {
         category: 'Miscellaneous',
         documentTitle: '[First, Second, etc.] Amendment to [anything]',
         documentType: 'Amendment [anything]',
-        freeText: over1000Characters,
+        freeText: getTextByCount(1001),
         ordinalValue: 'First',
         scenario: 'Nonstandard I',
       });
@@ -51,7 +50,7 @@ describe('ExternalDocumentNonStandardI', () => {
     it('should be invalid when documentTitle is over 3000 characters', () => {
       const extDoc = ExternalDocumentFactory({
         category: 'Miscellaneous',
-        documentTitle: over3000Characters,
+        documentTitle: getTextByCount(3001),
         documentType: 'Amendment [anything]',
         freeText: 'Test',
         ordinalValue: 'First',

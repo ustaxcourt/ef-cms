@@ -3,8 +3,8 @@ const {
   createISODateString,
 } = require('../../utilities/DateHandler');
 const {
-  over1000Characters,
-} = require('../../test/createTestApplicationContext');
+  getTextByCount,
+} = require('../../../../../web-client/integration-tests/helpers');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
@@ -98,7 +98,7 @@ describe('CourtIssuedDocumentTypeD', () => {
         documentTitle:
           'Order for Amended Petition and Filing Fee on [Date] [Anything]',
         documentType: 'Order for Amended Petition and Filing Fee',
-        freeText: over1000Characters,
+        freeText: getTextByCount(1001),
         scenario: 'Type D',
       });
 

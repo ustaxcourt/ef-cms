@@ -1,7 +1,6 @@
 const {
-  over1000Characters,
-  over3000Characters,
-} = require('../../test/createTestApplicationContext');
+  getTextByCount,
+} = require('../../../../../web-client/integration-tests/helpers');
 const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
@@ -38,8 +37,8 @@ describe('ExternalDocumentNonStandardJ', () => {
         category: 'Decision',
         documentTitle: 'Stipulated Decision Entered [judge] [anything]',
         documentType: 'Stipulated Decision',
-        freeText: over1000Characters,
-        freeText2: over1000Characters,
+        freeText: getTextByCount(1001),
+        freeText2: getTextByCount(1001),
         scenario: 'Nonstandard J',
       });
       expect(extDoc.getFormattedValidationErrors()).toEqual({
@@ -51,7 +50,7 @@ describe('ExternalDocumentNonStandardJ', () => {
     it('should be invalid when documentTitle is over 3000 characters', () => {
       const extDoc = ExternalDocumentFactory({
         category: 'Decision',
-        documentTitle: over3000Characters,
+        documentTitle: getTextByCount(3001),
         documentType: 'Stipulated Decision',
         freeText: 'Test',
         freeText2: 'Test2',
