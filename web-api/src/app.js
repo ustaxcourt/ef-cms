@@ -429,6 +429,7 @@ const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
 const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
+const { authenticationLambda } = require('./auth/authenticationLambda');
 
 /**
  * Important note: order of routes DOES matter!
@@ -1081,5 +1082,10 @@ app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
  * feature-flag
  */
 app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+
+/**
+ * Authentication/Authorization
+ */
+app.post('/auth', lambdaWrapper(authenticationLambda));
 
 exports.app = app;
