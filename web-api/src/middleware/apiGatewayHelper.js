@@ -5,7 +5,7 @@ const {
   UnsanitizedEntityError,
 } = require('../../../shared/src/errors/errors');
 const { pick } = require('lodash');
-const headers = {
+const defaultHeaders = {
   'Access-Control-Allow-Origin': '*',
   'Access-Control-Expose-Headers': "['X-Terminal-User']",
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
@@ -15,7 +15,7 @@ const headers = {
 };
 const createApplicationContext = require('../applicationContext');
 
-exports.headers = headers;
+exports.headers = defaultHeaders;
 
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
@@ -36,17 +36,18 @@ exports.handle = async (event, fun) => {
       response.indexOf('%PDF-') > -1;
 
     if (response.body && response.headers && response.statusCode) {
+      // the lambda function is more advanced and wants to control more aspects of the response
       console.log('this this called', {
         ...response,
         headers: {
-          ...headers,
+          ...defaultHeaders,
           ...response.headers,
         },
       });
       return {
         ...response,
         headers: {
-          ...headers,
+          ...defaultHeaders,
           ...response.headers,
         },
       };
@@ -54,7 +55,7 @@ exports.handle = async (event, fun) => {
       return {
         body: response.toString('base64'),
         headers: {
-          ...headers,
+          ...defaultHeaders,
           'Content-Type': 'application/pdf',
           'accept-ranges': 'bytes',
         },
@@ -125,13 +126,13 @@ exports.redirect = async (event, fun, statusCode = 302) => {
 exports.sendError = err => {
   return {
     body: JSON.stringify(err.message),
-    headers,
+    headers: defaultHeaders,
     statusCode: err.statusCode || '400',
   };
 };
 
 /**
- * returns a lambda api-gateway object with a 400 status code and the response payload passed in
+ * returns a lambda api-gateway object with a 200 status code and the response payload passed in
  *
  * @param {object} response the object to send back from the api
  * @param {number} statusCode the statusCode of the request
@@ -140,7 +141,7 @@ exports.sendError = err => {
 exports.sendOk = (response, statusCode = '200') => {
   return {
     body: JSON.stringify(response),
-    headers,
+    headers: defaultHeaders,
     statusCode,
   };
 };
