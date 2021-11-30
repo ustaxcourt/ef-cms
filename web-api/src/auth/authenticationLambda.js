@@ -14,8 +14,9 @@ exports.authenticationLambda = event =>
     return {
       body: JSON.stringify({ message: 'success' }),
       headers: {
-        'Set-Cookie': [`idToken=${idToken}`, `refreshToken=${refreshToken}`],
+        'Set-Cookie': `idToken=MOOF`,
       },
       statusCode: 200,
     };
+    //'Set-Cookie': [`idToken=${idToken}`, `refreshToken=${refreshToken}`],
   });

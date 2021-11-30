@@ -34,6 +34,7 @@ export const lambdaWrapper = lambda => {
       Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': isTerminalUser,
+      ...response.headers, //TODO: revaluate how we pipe custom headers to here
     });
 
     if (
