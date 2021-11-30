@@ -15371,8 +15371,9 @@
     "signedByUserId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-09-30T20:25:32.869Z",
     "docketNumber": "999-15",
-    "isSealed": false,
-    "isLegacySealed": false
+    "isSealed": true,
+    "isLegacySealed": true,
+    "isLegacy": true
   },
   {
     "servedParties": [

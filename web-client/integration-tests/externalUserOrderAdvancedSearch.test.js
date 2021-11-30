@@ -5,6 +5,7 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -168,5 +169,29 @@ describe('external users perform an advanced search for orders', () => {
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
+  });
+
+  // seed sealed case with sealed docket entry
+  cerebralTest.docketNumber = '999-15';
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSealsCase(cerebralTest);
+
+  // unseal case
+  docketClerkUnsealsCase(cerebralTest);
+
+  // search for sealed docket entry as unassociated practitioner
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  it('search for sealed order in unsealed case as an unassociated practitioner', async () => {
+    await refreshElasticsearchIndex();
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual([]);
   });
 });
