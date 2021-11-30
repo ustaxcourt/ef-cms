@@ -35,12 +35,17 @@ exports.handle = async (event, fun) => {
       typeof response[Symbol.iterator] === 'function' &&
       response.indexOf('%PDF-') > -1;
 
-    if (response.body && response.headers && response.statusCode) {
+    if (
+      response.body &&
+      response.statusCode &&
+      (response.headers || response.multiValueHeaders)
+    ) {
       // the lambda function is more advanced and wants to control more aspects of the response
       return exports.sendOk(
         response.body,
         response.statusCode,
         response.headers,
+        response.multiValueHeaders,
       );
     } else if (isPdfBuffer) {
       return {
@@ -128,15 +133,22 @@ exports.sendError = err => {
  * @param {object} response the object to send back from the api
  * @param {number} statusCode the statusCode of the request.  Defaults to '200'.
  * @param {object} headers any headers that you want to add to the response.  Defaults to no additional headers.
+ * @param {object} multiValueHeaders any multi-value headers that you want to add to the response.  Defaults to no additional headers.
  * @returns {object} an api gateway response object
  */
-exports.sendOk = (response, statusCode = '200', headers = {}) => {
+exports.sendOk = (
+  response,
+  statusCode = '200',
+  headers = {},
+  multiValueHeaders = {},
+) => {
   return {
     body: JSON.stringify(response),
     headers: {
       ...headers,
       ...defaultHeaders,
     },
+    multiValueHeaders,
     statusCode,
   };
 };
