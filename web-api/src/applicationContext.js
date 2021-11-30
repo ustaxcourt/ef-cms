@@ -67,6 +67,9 @@ const {
   associateUserWithCasePending,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
 const {
+  authenticateUserInteractor,
+} = require('../../shared/src/business/useCases/auth/authenticateUserInteractor');
+const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
 const {
@@ -1826,6 +1829,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
         associatePrivatePractitionerWithCaseInteractor,
+        authenticateUserInteractor,
         batchDownloadTrialSessionInteractor,
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,

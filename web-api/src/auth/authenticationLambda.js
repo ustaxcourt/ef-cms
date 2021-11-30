@@ -8,8 +8,7 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.authenticationLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    // return await applicationContext
-    //   .getUseCases()
-    //   .getFeatureFlagValueInteractor(applicationContext, event.pathParameters);
-    return 'super cool Auth API';
+    return await applicationContext
+      .getUseCases()
+      .authenticateUserInteractor(applicationContext, event.body);
   });
