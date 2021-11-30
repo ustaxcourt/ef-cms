@@ -9,17 +9,18 @@ describe('receiveRefreshTokenAction', () => {
   });
 
   it('should set the refresh token action in state', async () => {
+    const expectedRefreshToken = 'someThing';
     const result = await runAction(receiveRefreshTokenAction, {
       modules: {
         presenter,
       },
       props: {
-        refreshToken: 'someThing',
+        refreshToken: expectedRefreshToken,
       },
       state: {
         refreshToken: 'old-value',
       },
     });
-    expect(result.state.refreshToken).toBe('someThing');
+    expect(result.state.refreshToken).toBe(expectedRefreshToken);
   });
 });
