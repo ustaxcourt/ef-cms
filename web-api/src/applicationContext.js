@@ -144,6 +144,9 @@ const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
 const {
+  confirmAuthCode,
+} = require('../../shared/src/persistence/cognito/confirmAuthCode');
+const {
   Correspondence,
 } = require('../../shared/src/business/entities/Correspondence');
 const {
@@ -1418,6 +1421,7 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
+  confirmAuthCode,
   createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseDeadline,
