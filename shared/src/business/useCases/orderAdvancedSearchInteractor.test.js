@@ -108,15 +108,4 @@ describe('orderAdvancedSearchInteractor', () => {
       documentEventCodes: ORDER_EVENT_CODES,
     });
   });
-
-  it('should set isOpinionSearch as false', async () => {
-    await orderAdvancedSearchInteractor(applicationContext, {});
-
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0],
-    ).toMatchObject({
-      isOpinionSearch: false,
-    });
-  });
 });

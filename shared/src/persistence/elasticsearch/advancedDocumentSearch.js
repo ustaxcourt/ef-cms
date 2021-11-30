@@ -13,7 +13,7 @@ exports.advancedDocumentSearch = async ({
   documentEventCodes,
   endDate,
   from = 0,
-  isOpinionSearch,
+  isOpinionSearch = false,
   judge,
   keyword,
   omitSealed,

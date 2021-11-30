@@ -199,7 +199,6 @@ describe('advancedDocumentSearch', () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
-      isOpinionSearch: false,
       judge: 'Judge Guy Fieri',
     });
 
@@ -350,7 +349,6 @@ describe('advancedDocumentSearch', () => {
       applicationContext,
       docketNumber: '101-20',
       documentEventCodes: orderEventCodes,
-      isOpinionSearch: false,
     });
 
     expect(
@@ -559,7 +557,6 @@ describe('advancedDocumentSearch', () => {
       await advancedDocumentSearch({
         applicationContext,
         documentEventCodes: opinionEventCodes,
-        isOpinionSearch: false,
         judge: 'Legacy Guy Fieri',
       });
 
