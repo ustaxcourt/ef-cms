@@ -13,10 +13,9 @@ exports.authenticationLambda = event =>
       .authenticateUserInteractor(applicationContext, JSON.parse(event.body));
     return {
       body: JSON.stringify({ message: 'success' }),
-      headers: {
-        'Set-Cookie': `idToken=MOOF`,
+      multiValueHeaders: {
+        'Set-Cookie': [`idToken=${idToken}`, `refreshToken=${refreshToken}`],
       },
       statusCode: 200,
     };
-    //'Set-Cookie': [`idToken=${idToken}`, `refreshToken=${refreshToken}`],
   });
