@@ -35,6 +35,7 @@ exports.advancedDocumentSearch = async ({
     'irsPractitioners',
     'isFileAttached',
     'isSealed',
+    'isLegacySealed',
     'isStricken',
     'judge',
     'numberOfPages',
@@ -209,6 +210,8 @@ exports.advancedDocumentSearch = async ({
       sort = [{ 'filingDate.S': sortOrder }];
       break;
   }
+
+  console.log('********** docketEntryMustNot', docketEntryMustNot);
 
   const documentQuery = {
     body: {
