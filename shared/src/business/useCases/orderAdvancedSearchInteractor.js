@@ -67,7 +67,6 @@ exports.orderAdvancedSearchInteractor = async (
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: ORDER_EVENT_CODES,
-      isOpinionSearch: false,
       omitSealed: false,
       ...rawSearch,
     });

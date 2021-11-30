@@ -37,7 +37,7 @@ describe('orderPublicSearchInteractor', () => {
   });
 
   it('should only search for order document types', async () => {
-    const result = await orderPublicSearchInteractor(applicationContext, {
+    await orderPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
@@ -48,29 +48,25 @@ describe('orderPublicSearchInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       documentEventCodes: ORDER_EVENT_CODES,
-      omitSealed: true,
     });
-    expect(result).toMatchObject([
-      {
-        caseCaption: 'Samson Workman, Petitioner',
-        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-        docketNumber: '103-19',
-        documentTitle: 'Order for More Candy',
-        eventCode: 'ODD',
-        signedJudgeName: 'Guy Fieri',
-      },
-      {
-        caseCaption: 'Samson Workman, Petitioner',
-        docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
-        docketNumber: '103-19',
-        documentTitle: 'Order for KitKats',
-        eventCode: 'ODD',
-        signedJudgeName: 'Guy Fieri',
-      },
-    ]);
   });
 
-  it('returns no more than MAX_SEARCH_RESULTS', async () => {
+  it('should omit sealed cases and sealed documents from the search results', async () => {
+    await orderPublicSearchInteractor(applicationContext, {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+      keyword: 'fish',
+      startDate: '01/01/2001',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
+        .calls[0][0],
+    ).toMatchObject({
+      omitSealed: true,
+    });
+  });
+
+  it('should limit results length to MAX_SEARCH_RESULTS', async () => {
     const maxPlusOneResults = new Array(MAX_SEARCH_RESULTS + 1).fill({
       caseCaption: 'Samson Workman, Petitioner',
       docketEntryId: 'c5bee7c0-bd98-4504-890b-b00eb398e547',
@@ -93,7 +89,7 @@ describe('orderPublicSearchInteractor', () => {
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
 
-  it('throws an error if the search results do not validate', async () => {
+  it('should throw an error when the search results do not validate', async () => {
     applicationContext
       .getPersistenceGateway()
       .advancedDocumentSearch.mockResolvedValue({
@@ -109,6 +105,7 @@ describe('orderPublicSearchInteractor', () => {
           },
         ],
       });
+
     await expect(
       orderPublicSearchInteractor(applicationContext, {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -116,30 +113,5 @@ describe('orderPublicSearchInteractor', () => {
         startDate: '01/01/2001',
       }),
     ).rejects.toThrow('entity was invalid');
-  });
-
-  it('filters out results belonging to sealed cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockResolvedValue({ sealedDate: 'some date' });
-
-    const results = await orderPublicSearchInteractor(applicationContext, {
-      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-      keyword: 'fish',
-      startDate: '01/01/2001',
-    });
-
-    expect(results.length).toBe(0);
-  });
-
-  it('should set isOpinionSearch as false', async () => {
-    await orderPublicSearchInteractor(applicationContext, {});
-
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0],
-    ).toMatchObject({
-      isOpinionSearch: false,
-    });
   });
 });
