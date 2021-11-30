@@ -53,6 +53,9 @@ module.exports = {
     'isFileAttached.BOOL': {
       type: 'boolean',
     },
+    'isLegacySealed.BOOL': {
+      type: 'boolean',
+    },
     'isLegacyServed.BOOL': {
       type: 'boolean',
     },
