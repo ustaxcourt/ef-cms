@@ -6,25 +6,22 @@ exports.authenticateUserInteractor = async (applicationContext, { code }) => {
   const COGNITO_SUFFIX = 'flexion-efcms'; //process.env.COGNITO_SUFFIX
   // const EFCMS_DOMAIN = 'exp3.ustc-case-mgmt.flexion.us'; //process.env.EFCMS_DOMAIN
 
-  const data = {
-    client_id: '3pt563plfbm7k4do29u4n13tel',
-    code,
-    grant_type: 'authorization_code',
-    redirect_uri: 'http://localhost:1234/log-in',
-  };
-  const options = {
-    data: qs.stringify(data),
-    headers: { 'content-type': 'application/x-www-form-urlencoded' },
+  const response = await axios({
+    data: qs.stringify({
+      client_id: '3pt563plfbm7k4do29u4n13tel',
+      code,
+      grant_type: 'authorization_code',
+      redirect_uri: 'http://localhost:1234/log-in',
+    }),
+    headers: {
+      'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
+    },
     method: 'POST',
     url: `https://auth-${STAGE}-${COGNITO_SUFFIX}.auth.us-east-1.amazoncognito.com/oauth2/token`,
-  };
-  const response = await axios(options);
-
-  console.log('response', JSON.stringify(response));
+  });
 
   return {
-    idToken: '',
-    refreshToken: '',
-    ...response,
+    idToken: response.data.id_token,
+    refreshToken: response.data.refresh_token,
   };
 };
