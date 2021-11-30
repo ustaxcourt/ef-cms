@@ -35,7 +35,22 @@ exports.handle = async (event, fun) => {
       typeof response[Symbol.iterator] === 'function' &&
       response.indexOf('%PDF-') > -1;
 
-    if (isPdfBuffer) {
+    if (response.body && response.headers && response.statusCode) {
+      console.log('this this called', {
+        ...response,
+        headers: {
+          ...headers,
+          ...response.headers,
+        },
+      });
+      return {
+        ...response,
+        headers: {
+          ...headers,
+          ...response.headers,
+        },
+      };
+    } else if (isPdfBuffer) {
       return {
         body: response.toString('base64'),
         headers: {

@@ -1,16 +1,16 @@
 const qs = require('querystring');
 
 exports.confirmAuthCode = async (applicationContext, { code }) => {
-  const STAGE = 'exp3'; //process.env.STAGE
-  const COGNITO_SUFFIX = 'flexion-efcms'; //process.env.COGNITO_SUFFIX
-  // const EFCMS_DOMAIN = 'exp3.ustc-case-mgmt.flexion.us'; //process.env.EFCMS_DOMAIN
+  const STAGE = 'exp3'; //process.env.STAGE // TODO: should not be hard coded
+  const COGNITO_SUFFIX = 'flexion-efcms'; //process.env.COGNITO_SUFFIX // TODO: should not be hard coded
+  // const EFCMS_DOMAIN = 'exp3.ustc-case-mgmt.flexion.us'; //process.env.EFCMS_DOMAIN // TODO: should not be hard coded
 
   const response = await applicationContext.getHttpClient()({
     data: qs.stringify({
-      client_id: '3pt563plfbm7k4do29u4n13tel',
+      client_id: '3pt563plfbm7k4do29u4n13tel', // TODO: should not be hard coded
       code,
       grant_type: 'authorization_code',
-      redirect_uri: 'http://localhost:1234/log-in',
+      redirect_uri: 'http://localhost:1234/log-in', // TODO: should not be hard coded
     }),
     headers: {
       'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',

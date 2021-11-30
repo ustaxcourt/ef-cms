@@ -8,7 +8,14 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.authenticationLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    return await applicationContext
+    const { idToken, refreshToken } = await applicationContext
       .getUseCases()
       .authenticateUserInteractor(applicationContext, JSON.parse(event.body));
+    return {
+      body: JSON.stringify({ message: 'success' }),
+      headers: {
+        'Set-Cookie': [`idToken=${idToken}`, `refreshToken=${refreshToken}`],
+      },
+      statusCode: 200,
+    };
   });
