@@ -80,6 +80,8 @@ exports.orderAdvancedSearchInteractor = async (
     userRole: authorizedUser.role,
   });
 
+  console.log(results);
+
   const filteredResults = caseSearchFilter(results, authorizedUser).slice(
     0,
     MAX_SEARCH_RESULTS,
