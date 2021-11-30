@@ -37,20 +37,11 @@ exports.handle = async (event, fun) => {
 
     if (response.body && response.headers && response.statusCode) {
       // the lambda function is more advanced and wants to control more aspects of the response
-      console.log('this this called', {
-        ...response,
-        headers: {
-          ...defaultHeaders,
-          ...response.headers,
-        },
-      });
-      return {
-        ...response,
-        headers: {
-          ...defaultHeaders,
-          ...response.headers,
-        },
-      };
+      return exports.sendOk(
+        response.body,
+        response.statusCode,
+        response.headers,
+      );
     } else if (isPdfBuffer) {
       return {
         body: response.toString('base64'),
@@ -135,13 +126,17 @@ exports.sendError = err => {
  * returns a lambda api-gateway object with a 200 status code and the response payload passed in
  *
  * @param {object} response the object to send back from the api
- * @param {number} statusCode the statusCode of the request
+ * @param {number} statusCode the statusCode of the request.  Defaults to '200'.
+ * @param {object} headers any headers that you want to add to the response.  Defaults to no additional headers.
  * @returns {object} an api gateway response object
  */
-exports.sendOk = (response, statusCode = '200') => {
+exports.sendOk = (response, statusCode = '200', headers = {}) => {
   return {
     body: JSON.stringify(response),
-    headers: defaultHeaders,
+    headers: {
+      ...headers,
+      ...defaultHeaders,
+    },
     statusCode,
   };
 };

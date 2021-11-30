@@ -1,4 +1,12 @@
 const { get } = require('lodash');
+const headerOverride = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Expose-Headers': "['X-Terminal-User']",
+  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
+  'Content-Type': 'application/json',
+  Pragma: 'no-cache',
+  'X-Content-Type-Options': 'nosniff',
+};
 
 export const lambdaWrapper = lambda => {
   return async (req, res) => {
@@ -26,15 +34,9 @@ export const lambdaWrapper = lambda => {
     res.status(response.statusCode);
 
     res.set({
-      'Access-Control-Allow-Origin': '*',
-      'Cache-Control':
-        'max-age=0, private, no-cache, no-store, must-revalidate',
-      'Content-Type': 'application/json',
-      Pragma: 'no-cache',
-      Vary: 'Authorization',
-      'X-Content-Type-Options': 'nosniff',
+      ...response.headers,
+      ...headerOverride,
       'X-Terminal-User': isTerminalUser,
-      ...response.headers, //TODO: revaluate how we pipe custom headers to here
     });
 
     if (
