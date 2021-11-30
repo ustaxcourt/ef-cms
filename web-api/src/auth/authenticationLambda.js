@@ -10,5 +10,5 @@ exports.authenticationLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .authenticateUserInteractor(applicationContext, event.body);
+      .authenticateUserInteractor(applicationContext, JSON.parse(event.body));
   });
