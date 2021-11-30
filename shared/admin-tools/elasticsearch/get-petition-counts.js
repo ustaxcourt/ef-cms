@@ -28,8 +28,8 @@ const getAllItems = async () => {
             {
               range: {
                 'receivedAt.S': {
-                  gte: '2021-01-01T05:00:00.000Z',
-                  lte: '2021-12-01T05:00:00.000Z',
+                  gte: computeDate({ day: 1, month: 1, year: 2021 }),
+                  lte: computeDate({ day: 1, month: 1, year: 2022 }),
                 },
               },
             },
@@ -67,8 +67,6 @@ const getAllItems = async () => {
 };
 
 const getPetitions = async ({ gte, lte }) => {
-  console.log({ gte, lte });
-
   const esClient = await getClient({ environmentName });
   const query = {
     body: {
@@ -96,7 +94,7 @@ const getPetitions = async ({ gte, lte }) => {
     size: 10000,
   };
   const results = await esClient.search(query);
-  console.log(`Total: ${results.hits.total.value}`);
+  // console.log(`Total: ${results.hits.total.value}`);
   return results.hits.hits;
 };
 
@@ -123,7 +121,7 @@ const getCounts = async ({ isPaper, month, showCases = false }) => {
     return paperPetitions.length;
   } else {
     allPetitions = await getAllItems();
-    console.log(`allPetitions.length: ${allPetitions.length};`);
+    // console.log(`allPetitions.length: ${allPetitions.length};`);
     allPetitions = allPetitions.filter(p => !p.isPaper?.BOOL);
     return allPetitions.filter(
       p =>
@@ -136,12 +134,13 @@ const getCounts = async ({ isPaper, month, showCases = false }) => {
 (async () => {
   const results = {};
 
-  // for (let month = 1; month <= 12; month++) {
-  //   results[month] = {
-  //     isElectronic: await getCounts({ isPaper: false, month }),
-  //     isPaper: await getCounts({ isPaper: true, month }),
-  //   };
-  // }
-  await getCounts({ isPaper: true, month: 7, showCases: true });
-  console.log(results);
+  for (let month = 1; month <= 12; month++) {
+    const isElectronic = await getCounts({ isPaper: false, month });
+    const isPaper = await getCounts({ isPaper: true, month });
+    results[month] = {
+      isElectronic,
+      isPaper,
+    };
+    console.log([isElectronic, isPaper, isElectronic + isPaper].join('\t'));
+  }
 })();
