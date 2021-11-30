@@ -3,7 +3,9 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('./EntityConstants');
-const { over1000Characters } = require('../test/createTestApplicationContext');
+const {
+  getTextByCount,
+} = require('../../../../web-client/integration-tests/helpers');
 const { Practitioner } = require('./Practitioner');
 
 describe('Practitioner', () => {
@@ -166,7 +168,7 @@ describe('Practitioner', () => {
   it('should fail validation when practitionerNotes is more than 500 characters', () => {
     const user = new Practitioner({
       ...mockPractitioner,
-      practitionerNotes: over1000Characters,
+      practitionerNotes: getTextByCount(1001),
     });
 
     expect(user.isValid()).toBeFalsy();

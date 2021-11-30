@@ -1,15 +1,15 @@
 const {
-  applicationContext,
-  over1000Characters,
-} = require('../test/createTestApplicationContext');
+  getTextByCount,
+} = require('../../../../web-client/integration-tests/helpers');
 const {
   validateCalendarNoteInteractor,
 } = require('./validateCalendarNoteInteractor');
+const { applicationContext } = require('../test/createTestApplicationContext');
 
 describe('validateCalendarNoteInteractor', () => {
   it('returns the expected errors object on a note that is over the valid length', () => {
     const errors = validateCalendarNoteInteractor(applicationContext, {
-      note: over1000Characters,
+      note: getTextByCount(1001),
     });
 
     expect(Object.keys(errors)).toEqual(['note']);

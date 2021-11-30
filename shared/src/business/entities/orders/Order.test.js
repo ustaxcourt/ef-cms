@@ -1,6 +1,6 @@
 const {
-  over1000Characters,
-} = require('../../test/createTestApplicationContext');
+  getTextByCount,
+} = require('../../../../../web-client/integration-tests/helpers');
 const { Order } = require('./Order');
 
 describe('Order', () => {
@@ -21,7 +21,7 @@ describe('Order', () => {
 
     it('should be invalid when documentTitle is over 100 characters long', () => {
       const order = new Order({
-        documentTitle: over1000Characters,
+        documentTitle: getTextByCount(1001),
         documentType: 'Order',
         orderBody: 'some text',
       });
