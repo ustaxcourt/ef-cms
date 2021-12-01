@@ -74,6 +74,9 @@ exports.advancedDocumentSearch = async ({
       {
         term: { 'isSealed.BOOL': true },
       },
+      {
+        term: { 'hasSealedDocuments.BOOL': true },
+      },
     ];
     docketEntryMustNot = [
       ...docketEntryMustNot,
