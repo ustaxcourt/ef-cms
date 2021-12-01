@@ -13,10 +13,6 @@ const isCaseRecord = item => {
 };
 
 const migrateItems = async (items, documentClient) => {
-  //if the item is a case
-  //aggregate the whole case
-  //instantiate case entity
-  //validate
   const itemsAfter = [];
 
   for (const item of items) {
