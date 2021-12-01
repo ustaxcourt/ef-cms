@@ -162,10 +162,7 @@ exports.handler = async event => {
   );
 
   const ranMigrations = {
-    ...(await hasMigrationRan('0001-update-websockets-gsi1pk.js')),
-    ...(await hasMigrationRan('0002-session-scope.js')),
-    ...(await hasMigrationRan('bug-0039-notice-of-trial-date.js')),
-    ...(await hasMigrationRan('bug-0040-case-received-at.js')),
+    // example: ...(await hasMigrationRan('9999-example-migration.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
