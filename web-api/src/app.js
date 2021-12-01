@@ -390,6 +390,7 @@ const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
 const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
+const { authenticationLambda } = require('./auth/authenticationLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
@@ -414,6 +415,7 @@ const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
 const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
+const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -429,7 +431,6 @@ const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
 const { userIdLimiter } = require('./middleware/userIdLimiter');
 const { validatePdfLambda } = require('./documents/validatePdfLambda');
-const { authenticationLambda } = require('./auth/authenticationLambda');
 
 /**
  * Important note: order of routes DOES matter!
@@ -1087,5 +1088,6 @@ app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
  * Authentication/Authorization
  */
 app.post('/auth', lambdaWrapper(authenticationLambda));
+app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 
 exports.app = app;
