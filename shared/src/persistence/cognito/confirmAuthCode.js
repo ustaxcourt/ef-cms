@@ -8,6 +8,7 @@ exports.confirmAuthCode = async (applicationContext, { code }) => {
 
   const clientId = await getClientId({ userPoolId: process.env.USER_POOL_ID });
 
+  // TODO: use URLSearchParams instead
   const response = await applicationContext.getHttpClient()({
     data: qs.stringify({
       client_id: clientId,
