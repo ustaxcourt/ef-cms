@@ -213,7 +213,7 @@ import { loadPDFForSigningInteractor } from '../../shared/src/business/useCases/
 import { opinionAdvancedSearchInteractor } from '../../shared/src/proxies/opinionAdvancedSearchProxy';
 import { orderAdvancedSearchInteractor } from '../../shared/src/proxies/orderAdvancedSearchProxy';
 import { prioritizeCaseInteractor } from '../../shared/src/proxies/prioritizeCaseProxy';
-import { refreshTokenInteractor } from '../../shared/src/business/useCases/refreshTokenInteractor';
+import { refreshTokenInteractor } from '../../shared/src/proxies/auth/refreshTokenProxy';
 import { removeCaseFromTrialInteractor } from '../../shared/src/proxies/trialSessions/removeCaseFromTrialProxy';
 import { removeCasePendingItemInteractor } from '../../shared/src/proxies/removeCasePendingItemProxy';
 import { removeConsolidatedCasesInteractor } from '../../shared/src/proxies/removeConsolidatedCasesProxy';

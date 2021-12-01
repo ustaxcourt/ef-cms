@@ -13,12 +13,10 @@ export const startRefreshIntervalAction = ({
 }) => {
   const oldInterval = get(state.refreshTokenInterval);
 
-  const refreshTokenRequest = async ({ refreshToken }) => {
+  const refreshTokenRequest = async () => {
     const response = await applicationContext
       .getUseCases()
-      .refreshTokenInteractor(applicationContext, {
-        refreshToken,
-      });
+      .refreshTokenInteractor(applicationContext);
 
     store.set(state.token, response.token);
     applicationContext.setCurrentUserToken(response.token);
