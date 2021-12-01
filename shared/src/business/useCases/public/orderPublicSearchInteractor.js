@@ -6,7 +6,6 @@ const {
   PublicDocumentSearchResult,
 } = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
-const { filterForPublic } = require('./publicHelpers');
 const { formatNow, FORMATS } = require('../../utilities/DateHandler');
 const { omit } = require('lodash');
 
@@ -53,7 +52,6 @@ exports.orderPublicSearchInteractor = async (
       applicationContext,
       ...rawSearch,
       documentEventCodes: ORDER_EVENT_CODES,
-      isOpinionSearch: false,
       omitSealed: true,
     });
 
@@ -64,14 +62,9 @@ exports.orderPublicSearchInteractor = async (
     totalCount,
   });
 
-  const filteredResults = (
-    await filterForPublic({
-      applicationContext,
-      unfiltered: results,
-    })
-  ).slice(0, MAX_SEARCH_RESULTS);
+  const slicedResults = results.slice(0, MAX_SEARCH_RESULTS);
 
-  return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
+  return PublicDocumentSearchResult.validateRawCollection(slicedResults, {
     applicationContext,
   });
 };
