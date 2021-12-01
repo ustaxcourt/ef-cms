@@ -80,9 +80,6 @@ exports.advancedDocumentSearch = async ({
       {
         term: { 'isSealed.BOOL': true },
       },
-      {
-        term: { 'isLegacySealed.BOOL': true },
-      },
     ];
   }
   const caseQueryParams = {
