@@ -256,11 +256,6 @@ describe('advancedDocumentSearch', () => {
             'isSealed.BOOL': true,
           },
         },
-        {
-          term: {
-            'isLegacySealed.BOOL': true,
-          },
-        },
       ],
     });
   });
