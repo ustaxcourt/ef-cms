@@ -151,10 +151,6 @@ variable "seal_in_lower_object_hash" {
   type = string
 }
 
-variable "is_production" {
-  type = bool
-}
-
 variable "prod_env_account_id" {
   type = string
 }
