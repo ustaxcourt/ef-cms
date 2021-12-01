@@ -5,7 +5,6 @@ import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -21,10 +20,10 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { unassociatedUserSearchesForServedOrderInSealedCase } from './journey/unassociatedUserSearchesForServedOrderInSealedCase';
 import { unassociatedUserSearchesForServedOrderInUnsealedCase } from './journey/unassociatedUserSearchesForServedOrderInUnsealedCase';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('external users perform an advanced search for orders', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -171,18 +170,14 @@ describe('external users perform an advanced search for orders', () => {
     keyword: 'Jiminy Cricket',
   });
 
-  // seed sealed case with sealed docket entry
-  cerebralTest.docketNumber = '999-15';
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkSealsCase(cerebralTest);
-
-  // unseal case
-  docketClerkUnsealsCase(cerebralTest);
-
-  // search for sealed docket entry as unassociated practitioner
   loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('search for sealed order in unsealed case as an unassociated practitioner', async () => {
-    await refreshElasticsearchIndex();
+    cerebralTest.docketNumber = '999-15';
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
 
     await updateOrderForm(cerebralTest, {
       docketNumber: cerebralTest.docketNumber,
