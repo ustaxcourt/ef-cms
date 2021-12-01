@@ -290,10 +290,9 @@ const assignDocketEntries = ({
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
     obj.isSealed = isSealedCase(rawCase);
-    obj.hasSealedDocuments =
-      obj.docketEntries.some(
-        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-      ) || false;
+    obj.hasSealedDocuments = obj.docketEntries.some(
+      docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+    );
 
     if (
       filtered &&
