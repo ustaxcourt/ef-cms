@@ -13,7 +13,7 @@ exports.advancedDocumentSearch = async ({
   documentEventCodes,
   endDate,
   from = 0,
-  isOpinionSearch,
+  isOpinionSearch = false,
   judge,
   keyword,
   omitSealed,
@@ -55,7 +55,8 @@ exports.advancedDocumentSearch = async ({
   ];
 
   const docketEntryQueryParams = [];
-  const caseMustNot = [];
+  let caseMustNot = [];
+  let docketEntryMustNot = [{ term: { 'isStricken.BOOL': true } }];
   const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
   if (keyword) {
@@ -69,9 +70,20 @@ exports.advancedDocumentSearch = async ({
     });
   }
   if (omitSealed) {
-    caseMustNot.push({
-      term: { 'isSealed.BOOL': true },
-    });
+    caseMustNot = [
+      {
+        term: { 'isSealed.BOOL': true },
+      },
+    ];
+    docketEntryMustNot = [
+      ...docketEntryMustNot,
+      {
+        term: { 'isSealed.BOOL': true },
+      },
+      {
+        term: { 'isLegacySealed.BOOL': true },
+      },
+    ];
   }
   const caseQueryParams = {
     has_parent: {
@@ -209,7 +221,7 @@ exports.advancedDocumentSearch = async ({
         bool: {
           filter: documentQueryFilter,
           must: docketEntryQueryParams,
-          must_not: [{ term: { 'isStricken.BOOL': true } }],
+          must_not: docketEntryMustNot,
         },
       },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,

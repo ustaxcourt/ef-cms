@@ -20,10 +20,10 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { unassociatedUserSearchesForServedOrderInSealedCase } from './journey/unassociatedUserSearchesForServedOrderInSealedCase';
 import { unassociatedUserSearchesForServedOrderInUnsealedCase } from './journey/unassociatedUserSearchesForServedOrderInUnsealedCase';
 
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
 describe('external users perform an advanced search for orders', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -168,5 +168,25 @@ describe('external users perform an advanced search for orders', () => {
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  it('search for sealed order in unsealed case as an unassociated practitioner', async () => {
+    cerebralTest.docketNumber = '999-15';
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual([]);
   });
 });
