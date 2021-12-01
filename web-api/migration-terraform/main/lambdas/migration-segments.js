@@ -34,7 +34,7 @@ const migrateRecords = async ({
 }) => {
   if (!ranMigrations['0003-case-has-sealed-documents.js']) {
     applicationContext.logger.debug('about to run migration 0003');
-    items = migration0003(items, documentClient);
+    items = await migration0003(items, documentClient);
   }
 
   applicationContext.logger.debug('about to run validation migration');
