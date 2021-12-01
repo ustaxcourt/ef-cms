@@ -296,7 +296,6 @@ module "api-west-green" {
   seal_in_lower_object           = ""
   seal_in_lower_object_hash      = ""
   create_seal_in_lower           = 0
-  is_production                  = var.prod_env_account_id == data.aws_caller_identity.current.account_id
   lower_env_account_id           = var.lower_env_account_id
   prod_env_account_id            = var.prod_env_account_id
 }
@@ -351,7 +350,6 @@ module "api-west-blue" {
   seal_in_lower_object           = ""
   seal_in_lower_object_hash      = ""
   create_seal_in_lower           = 0
-  is_production                  = var.prod_env_account_id == data.aws_caller_identity.current.account_id
   lower_env_account_id           = var.lower_env_account_id
   prod_env_account_id            = var.prod_env_account_id
 }
