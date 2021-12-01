@@ -71,7 +71,14 @@ exports.advancedDocumentSearch = async ({
     });
   }
   if (omitSealed) {
-    const omitSealedQueryList = [
+    caseMustNot = [
+      ...caseMustNot,
+      {
+        term: { 'isSealed.BOOL': true },
+      },
+    ];
+    docketEntryMustNot = [
+      ...docketEntryMustNot,
       {
         term: { 'isSealed.BOOL': true },
       },
@@ -79,9 +86,6 @@ exports.advancedDocumentSearch = async ({
         term: { 'isLegacySealed.BOOL': true },
       },
     ];
-
-    caseMustNot = [...caseMustNot, ...omitSealedQueryList];
-    docketEntryMustNot = [...docketEntryMustNot, ...omitSealedQueryList];
   }
   const caseQueryParams = {
     has_parent: {
