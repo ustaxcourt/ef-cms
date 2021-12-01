@@ -72,7 +72,6 @@ exports.advancedDocumentSearch = async ({
   }
   if (omitSealed) {
     caseMustNot = [
-      ...caseMustNot,
       {
         term: { 'isSealed.BOOL': true },
       },
