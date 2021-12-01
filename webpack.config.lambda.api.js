@@ -14,8 +14,8 @@ module.exports = {
       './web-api/terraform/template/lambdas/maintenance-notify.js',
     'public-api-authorizer':
       './web-api/terraform/template/lambdas/public-api-authorizer.js',
-    'seal-case-in-lower-environment':
-      './web-api/terraform/template/lambdas/seal-case-in-lower-environment.js',
+    'seal-in-lower-environment':
+      './web-api/terraform/template/lambdas/seal-in-lower-environment.js',
     streams: './web-api/terraform/template/lambdas/streams.js',
     websockets: './web-api/terraform/template/lambdas/websockets.js',
   },
