@@ -290,6 +290,10 @@ const assignDocketEntries = ({
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
     obj.isSealed = isSealedCase(rawCase);
+    obj.hasSealedDocuments =
+      obj.docketEntries.some(
+        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+      ) || false;
 
     if (
       filtered &&
@@ -522,6 +526,7 @@ Case.VALIDATION_RULES = {
     ...FILING_TYPES[ROLES.privatePractitioner],
   ).optional(),
   hasPendingItems: joi.boolean().optional(),
+  hasSealedDocuments: joi.boolean().required(),
   hasVerifiedIrsNotice: joi
     .boolean()
     .optional()
