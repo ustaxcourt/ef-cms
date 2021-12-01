@@ -841,6 +841,12 @@ const {
   receiptOfFiling,
 } = require('../../shared/src/business/utilities/documentGenerators/receiptOfFiling');
 const {
+  refreshAuthTokenInteractor,
+} = require('../../shared/src/business/useCases/auth/refreshAuthTokenInteractor');
+const {
+  refreshToken,
+} = require('../../shared/src/persistence/cognito/refreshToken');
+const {
   removeCaseFromHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/removeCaseFromHearing');
 const {
@@ -1499,6 +1505,7 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
+  refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
@@ -1943,6 +1950,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         orderPublicSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
+        refreshAuthTokenInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
