@@ -11,5 +11,8 @@ exports.refreshTokenInteractor = applicationContext => {
   return post({
     applicationContext,
     endpoint: '/auth/refresh',
+    options: {
+      withCredentials: true,
+    },
   });
 };
