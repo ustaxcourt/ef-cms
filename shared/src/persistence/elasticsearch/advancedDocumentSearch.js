@@ -35,7 +35,6 @@ exports.advancedDocumentSearch = async ({
     'irsPractitioners',
     'isFileAttached',
     'isSealed',
-    'isLegacySealed',
     'isStricken',
     'judge',
     'numberOfPages',
