@@ -4,8 +4,6 @@ const { get } = require('lodash');
 exports.search = async ({ applicationContext, searchParameters }) => {
   const caseMap = {};
   const formatHit = hit => {
-    console.log('******* hit', hit);
-
     const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
       hit['_source'],
     );
@@ -21,16 +19,19 @@ exports.search = async ({ applicationContext, searchParameters }) => {
 
       let foundCase = caseMap[docketNumber];
 
-      console.log('******* casePk', casePk);
-
       if (!foundCase) {
-        // DONT FORGET THAT THIS IS PROBABLY THE PROBLEM
         hit.inner_hits['case-mappings'].hits.hits.some(innerHit => {
           const innerHitDocketNumber = innerHit['_source'].docketNumber.S;
-          caseMap[innerHitDocketNumber] = innerHit['_source'];
 
-          console.log('******* innerHit[_source]', innerHit['_source']);
-          console.log('******* sourceUnmarshalled', sourceUnmarshalled);
+          const isCaseOrDocketEntrySealed =
+            !!innerHit['_source'].isSealed?.BOOL ||
+            !!hit['_source'].isSealed?.BOOL;
+
+          innerHit['_source'] = {
+            ...innerHit['_source'],
+            isSealed: { BOOL: isCaseOrDocketEntrySealed },
+          };
+          caseMap[innerHitDocketNumber] = innerHit['_source'];
 
           if (innerHitDocketNumber === docketNumber) {
             foundCase = innerHit['_source'];

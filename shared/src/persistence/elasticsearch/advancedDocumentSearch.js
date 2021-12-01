@@ -215,8 +215,6 @@ exports.advancedDocumentSearch = async ({
       break;
   }
 
-  console.log('********** docketEntryMustNot', docketEntryMustNot);
-
   const documentQuery = {
     body: {
       _source: sourceFields,
