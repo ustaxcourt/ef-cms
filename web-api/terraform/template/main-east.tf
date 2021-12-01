@@ -159,6 +159,23 @@ resource "null_resource" "streams_east_object" {
   }
 }
 
+data "archive_file" "zip_seal_in_lower" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/seal-in-lower-environment.js.zip"
+  source_file = "${path.module}/../template/lambdas/dist/seal-in-lower-environment.js"
+}
+
+resource "null_resource" "seal_in_lower_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_seal_in_lower.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/seal_in_lower_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 resource "aws_acm_certificate" "api_gateway_cert_east" {
   domain_name       = "*.${var.dns_domain}"
   validation_method = "DNS"
@@ -254,6 +271,18 @@ data "aws_s3_bucket_object" "streams_green_east_object" {
   depends_on = [null_resource.streams_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
   key        = "streams_green.js.zip"
+}
+
+data "aws_s3_bucket_object" "seal_in_lower_blue_east_object" {
+  depends_on = [null_resource.seal_in_lower_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "seal_in_lower_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "seal_in_lower_green_east_object" {
+  depends_on = [null_resource.seal_in_lower_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "seal_in_lower_green.js.zip"
 }
 
 data "aws_s3_bucket_object" "triggers_green_east_object" {
@@ -406,6 +435,14 @@ module "api-east-green" {
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+
+  # lambda to seal cases in lower environment (only deployed to lower environments)
+  seal_in_lower_object           = null_resource.seal_in_lower_east_object
+  seal_in_lower_object_hash      = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_green_east_object.etag : ""
+  create_seal_in_lower           = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
+  is_production                  = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? true : false
+  lower_env_account_id           = var.lower_env_account_id
+  prod_env_account_id            = var.prod_env_account_id
 }
 
 module "api-east-blue" {
@@ -452,4 +489,12 @@ module "api-east-blue" {
   web_acl_arn                    = module.api-east-waf.web_acl_arn
   triggers_object                = null_resource.triggers_east_object
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
+
+  # lambda to seal cases in lower environment (only deployed to lower environments)
+  seal_in_lower_object           = null_resource.seal_in_lower_east_object
+  seal_in_lower_object_hash      = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_blue_east_object.etag : ""
+  create_seal_in_lower           = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
+  is_production                  = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? true : false
+  lower_env_account_id           = var.lower_env_account_id
+  prod_env_account_id            = var.prod_env_account_id
 }
