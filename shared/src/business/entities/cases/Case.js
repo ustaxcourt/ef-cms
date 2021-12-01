@@ -2312,16 +2312,8 @@ Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
   );
 };
 
-const isSealedCase = rawCase => {
-  const isSealed =
-    rawCase.isSealed ||
-    !!rawCase.sealedDate ||
-    (Array.isArray(rawCase.docketEntries) &&
-      rawCase.docketEntries.some(
-        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-      ));
-  return isSealed;
-};
+const isSealedCase = rawCase =>
+  rawCase.isSealed || !!rawCase.sealedDate || rawCase.hasSealedDocuments;
 
 const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));
