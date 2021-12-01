@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { authenticateCodeAction } from './authenticateCodeAction';
+import { authenticateUserAction } from './authenticateUserAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('authenticateCodeAction', () => {
+describe('authenticateUserAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
@@ -17,7 +17,7 @@ describe('authenticateCodeAction', () => {
   });
 
   it('calls the authorizeCodeInteractor with the given code from props, returning its response tokens', async () => {
-    const result = await runAction(authenticateCodeAction, {
+    const result = await runAction(authenticateUserAction, {
       modules: {
         presenter,
       },

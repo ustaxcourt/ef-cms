@@ -6,15 +6,15 @@ const { genericHandler } = require('../genericHandler');
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.authenticationLambda = event =>
+exports.authenticationUserLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { idToken, refreshToken } = await applicationContext
+    const { refreshToken, token } = await applicationContext
       .getUseCases()
       .authenticateUserInteractor(applicationContext, JSON.parse(event.body));
     return {
-      body: JSON.stringify({ message: 'success' }),
-      multiValueHeaders: {
-        'Set-Cookie': [`idToken=${idToken}`, `refreshToken=${refreshToken}`],
+      body: JSON.stringify({ token }),
+      headers: {
+        'Set-Cookie': `refreshToken=${refreshToken}; Secure; HttpOnly`,
       },
       statusCode: 200,
     };

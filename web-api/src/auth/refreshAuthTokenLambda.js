@@ -8,18 +8,19 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.refreshAuthTokenLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
+    // TODO: find library that will parse cookies from headers without writing this custom logic
     const cookiesInHeader = event.headers.cookie.split(';');
     const cookies = {};
     cookiesInHeader.forEach(cookieString => {
       const [key, value] = cookieString.split('=');
       cookies[key.trim()] = value;
     });
-    const { idToken } = await applicationContext
+    const { token } = await applicationContext
       .getUseCases()
       .refreshAuthTokenInteractor(applicationContext, {
         refreshToken: cookies.refreshToken,
       });
     return {
-      idToken,
+      token,
     };
   });

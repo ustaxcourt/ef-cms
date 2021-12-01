@@ -6,17 +6,16 @@
  * @param {Function} providers.props the cerebral props argument stream containing 'code'
  * @returns {Promise} async action
  */
-export const authenticateCodeAction = async ({ applicationContext, props }) => {
+export const authenticateUserAction = async ({ applicationContext, props }) => {
   const { code } = props;
 
   const response = await applicationContext
     .getUseCases()
-    .authorizeCodeInteractor(applicationContext, {
+    .authenticateUserInteractor(applicationContext, {
       code,
     });
 
   return {
-    refreshToken: response.refreshToken,
     token: response.token,
   };
 };
