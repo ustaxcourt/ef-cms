@@ -11,7 +11,12 @@ const applicationContext = createApplicationContext();
 
 const app = express();
 
-app.use(cors());
+const authenticationCorsOptions = {
+  credentials: true,
+  origin: true,
+};
+
+app.use(cors(authenticationCorsOptions));
 app.use(express.json({ limit: '1200kb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
@@ -1088,6 +1093,7 @@ app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 /**
  * Authentication/Authorization
  */
+
 app.post('/auth/login', lambdaWrapper(authenticateUserLambda));
 app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 app.delete('/auth/logout', lambdaWrapper(deleteAuthCookieLambda));
