@@ -15376,6 +15376,51 @@
     "isLegacy": true
   },
   {
+    "date": null,
+    "servedParties": [
+      {
+        "name": "Stacy Russold"
+      }
+    ],
+    "serviceStamp": "Served",
+    "attachments": false,
+    "isStricken": false,
+    "documentType": "Order",
+    "filingDate": "2020-09-30T20:25:33.209Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2020-09-30T20:25:22.035Z",
+    "isOnDocketRecord": true,
+    "signedJudgeName": "Fieri",
+    "createdAt": "2020-09-30T20:25:25.087Z",
+    "numberOfPages": 1,
+    "scenario": "Type A",
+    "entityName": "DocketEntry",
+    "docketEntryId": "67a204c3-7111-48f3-8ddd-3c2e60f4d1ae",
+    "sk": "docket-entry|67a204c3-7111-48f3-8ddd-3c2e60f4d1ae",
+    "documentIdBeforeSignature": "106e58ba-d431-457c-9ace-746f8f488b77",
+    "documentTitle": "This is a legacy judge's order 4",
+    "relationship": "primaryDocument",
+    "draftOrderState": null,
+    "index": 4,
+    "isFileAttached": true,
+    "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "O",
+    "processingStatus": "complete",
+    "filers": [],
+    "freeText": "This is a legacy judge's order",
+    "signedAt": "2020-09-30T20:25:25.088Z",
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"This is a legacy judge's order\",\"date\":null,\"generatedDocumentTitle\":\"This is a legacy judge's order\",\"serviceStamp\":\"Served\",\"docketEntryId\":\"67a204c3-7111-48f3-8ddd-3c2e60f4d1af\",\"docketNumber\":\"999-15\"}",
+    "pk": "case|999-15",
+    "signedByUserId": "dadbad42-18d0-43ec-bafb-654e83405416",
+    "servedAt": "2020-09-30T20:25:32.869Z",
+    "docketNumber": "999-15",
+    "isSealed": false,
+    "isLegacySealed": false,
+    "isLegacy": false
+  },
+  {
     "servedParties": [
       {
         "name": "IRS",
