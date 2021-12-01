@@ -290,9 +290,6 @@ const assignDocketEntries = ({
       .sort((a, b) => compareStrings(a.createdAt, b.createdAt));
 
     obj.isSealed = isSealedCase(rawCase);
-    obj.hasSealedDocuments = obj.docketEntries.some(
-      docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-    );
 
     if (
       filtered &&
@@ -307,6 +304,10 @@ const assignDocketEntries = ({
   } else {
     obj.docketEntries = [];
   }
+
+  obj.hasSealedDocuments = obj.docketEntries.some(
+    docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+  );
 };
 
 const assignHearings = ({ applicationContext, obj, rawCase }) => {
