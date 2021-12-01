@@ -1,16 +1,19 @@
 const qs = require('querystring');
+const { getClientId } = require('./getClientId');
 
 exports.confirmAuthCode = async (applicationContext, { code }) => {
-  const STAGE = 'exp3'; //process.env.STAGE // TODO: should not be hard coded
-  const COGNITO_SUFFIX = 'flexion-efcms'; //process.env.COGNITO_SUFFIX // TODO: should not be hard coded
-  // const EFCMS_DOMAIN = 'exp3.ustc-case-mgmt.flexion.us'; //process.env.EFCMS_DOMAIN // TODO: should not be hard coded
+  const { STAGE } = process.env;
+  const { COGNITO_SUFFIX } = process.env;
+  const { EFCMS_DOMAIN } = process.env;
+
+  const clientId = await getClientId({ userPoolId: process.env.USER_POOL_ID });
 
   const response = await applicationContext.getHttpClient()({
     data: qs.stringify({
-      client_id: '3pt563plfbm7k4do29u4n13tel', // TODO: should not be hard coded
+      client_id: clientId,
       code,
       grant_type: 'authorization_code',
-      redirect_uri: 'http://localhost:1234/log-in', // TODO: should not be hard coded
+      redirect_uri: `https://app.${EFCMS_DOMAIN}/log-in`,
     }),
     headers: {
       'content-type': 'application/x-www-form-urlencoded;charset=UTF-8',
@@ -20,7 +23,7 @@ exports.confirmAuthCode = async (applicationContext, { code }) => {
   });
 
   return {
-    idToken: response.data.id_token,
     refreshToken: response.data.refresh_token,
+    token: response.data.id_token,
   };
 };

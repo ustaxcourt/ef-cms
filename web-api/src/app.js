@@ -390,11 +390,12 @@ const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
 const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
-const { authenticationLambda } = require('./auth/authenticationLambda');
+const { authenticationUserLambda } = require('./auth/authenticationUserLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
+const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { editPaperFilingLambda } = require('./documents/editPaperFilingLambda');
 const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
@@ -1087,7 +1088,8 @@ app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 /**
  * Authentication/Authorization
  */
-app.post('/auth', lambdaWrapper(authenticationLambda));
+app.post('/auth/login', lambdaWrapper(authenticationUserLambda));
 app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
+app.delete('/auth/logout', lambdaWrapper(deleteAuthCookieLambda));
 
 exports.app = app;
