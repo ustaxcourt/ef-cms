@@ -35,7 +35,6 @@ exports.advancedDocumentSearch = async ({
     'irsPractitioners',
     'isFileAttached',
     'isSealed',
-    'isLegacySealed',
     'isStricken',
     'judge',
     'numberOfPages',
@@ -72,7 +71,6 @@ exports.advancedDocumentSearch = async ({
   }
   if (omitSealed) {
     caseMustNot = [
-      ...caseMustNot,
       {
         term: { 'isSealed.BOOL': true },
       },
