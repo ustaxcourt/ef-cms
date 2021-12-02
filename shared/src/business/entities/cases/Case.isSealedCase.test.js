@@ -7,6 +7,7 @@ describe('isSealedCase', () => {
   it('returns false for objects without any truthy sealed attributes', () => {
     const result = isSealedCase({
       docketEntries: [],
+      hasSealedDocuments: false,
       isSealed: false,
       name: 'Johnny Appleseed',
       sealedDate: false,
@@ -23,21 +24,12 @@ describe('isSealedCase', () => {
     ).toBe(true);
   });
 
-  it('returns true if the object has a docket entry with truthy values for isSealed or isLegacySealed', () => {
+  it('returns true if the object has truthy values for hasSealedDocuments', () => {
     expect(
       isSealedCase({
-        docketEntries: [{ isSealed: true }],
+        hasSealedDocuments: true,
         isSealed: false,
-        name: 'Johnny Appleseed',
-        sealedDate: false,
-      }),
-    ).toBe(true);
-    expect(
-      isSealedCase({
-        docketEntries: [{ isLegacySealed: true }],
-        isSealed: false,
-        name: 'Johnny Appleseed',
-        sealedDate: false,
+        sealedDate: null,
       }),
     ).toBe(true);
   });
