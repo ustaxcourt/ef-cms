@@ -1105,7 +1105,6 @@ describe('Case entity', () => {
       caseCaption: 'Enter a case caption',
       caseType: 'Select a case type',
       docketNumber: 'Docket number is required',
-      hasSealedDocuments: '"hasSealedDocuments" is required',
       partyType: 'Select a party type',
       procedureType: 'Select a case procedure',
       sortableDocketNumber: 'Sortable docket number is required',
