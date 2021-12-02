@@ -3,20 +3,35 @@ const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middl
 const cors = require('cors');
 const express = require('express');
 const logger = require('./logger');
-const { createLambdaWrapper } = require('./createLambdaWrapper');
+const { lambdaWrapper } = require('./lambdaWrapper');
 const { set } = require('lodash');
 
-const lambdaWrapper = createLambdaWrapper(
-  `https://app.${process.env.EFCMS_DOMAIN}`,
-);
 const createApplicationContext = require('./applicationContext');
 const applicationContext = createApplicationContext();
 
 const app = express();
 
+const allowAccessOriginFunction = (origin, callback) => {
+  //Origin header wasn't provided
+  if (!origin || origin === '') {
+    callback(null, '*');
+    return;
+  }
+
+  //if the backend is running locally or if an official deployed frontend called the backend, parrot out the Origin
+  //this is required for the browser to support receiving and sending cookies
+  if (process.env.IS_LOCAL || origin.includes(process.env.EFCMS_DOMAIN)) {
+    callback(null, origin);
+    return;
+  }
+
+  //some unknown frontend called us
+  callback(null, '*');
+};
+
 const authenticationCorsOptions = {
-  credentials: true,
-  origin: true,
+  credentials: true, //TODO: move this to the auth lambdas
+  origin: allowAccessOriginFunction,
 };
 
 app.use(cors(authenticationCorsOptions));

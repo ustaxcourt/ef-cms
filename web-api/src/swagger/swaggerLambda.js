@@ -1,4 +1,4 @@
-const { headerOverride } = require('../createLambdaWrapper');
+const { headerOverride } = require('../lambdaWrapper');
 
 /**
  * render the swagger html page
