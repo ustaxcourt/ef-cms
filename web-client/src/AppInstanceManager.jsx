@@ -36,7 +36,6 @@ export const AppInstanceManager = connect(
           confirmStayLoggedInSequence();
           break;
         case 'logout':
-          console.log('signOutSequence');
           signOutSequence({
             skipBroadcast: true,
           });
