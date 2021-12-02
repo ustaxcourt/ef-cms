@@ -12,5 +12,8 @@ exports.authenticateUserInteractor = (applicationContext, { code }) => {
     applicationContext,
     body: { code },
     endpoint: '/auth/login',
+    options: {
+      withCredentials: true,
+    },
   });
 };
