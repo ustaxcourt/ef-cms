@@ -1,6 +1,5 @@
 const { get } = require('lodash');
 const headerOverride = {
-  'Access-Control-Allow-Origin': 'https://app.exp3.ustc-case-mgmt.flexion.us',
   'Access-Control-Expose-Headers': "['X-Terminal-User']",
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
@@ -8,7 +7,7 @@ const headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-export const lambdaWrapper = lambda => {
+export const createLambdaWrapper = allowOrigin => lambda => {
   return async (req, res) => {
     // If you'd like to test the terminal user functionality locally, make this boolean true
     let isTerminalUser =
@@ -37,6 +36,7 @@ export const lambdaWrapper = lambda => {
       ...response.headers,
       'X-Terminal-User': isTerminalUser,
       ...headerOverride,
+      'Access-Control-Allow-Origin': allowOrigin,
     });
 
     if (
