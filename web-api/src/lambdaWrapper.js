@@ -5,7 +5,6 @@ export const headerOverride = {
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
   'X-Content-Type-Options': 'nosniff',
-  // 'access-control-allow-credentials': 'true',  //TODO: move this to the auth lambdas
 };
 
 export const lambdaWrapper = lambda => {
