@@ -169,11 +169,15 @@ const app = {
     // attached to our users browser which can be used to get a new token
     const isNewTabOpened = !window.location.href.includes('?code');
     if (isNewTabOpened && !process.env.IS_LOCAL) {
-      const response = await applicationContext
-        .getUseCases()
-        .refreshTokenInteractor(applicationContext);
-      presenter.state.token = response.token;
-      applicationContext.setCurrentUserToken(response.token);
+      try {
+        const response = await applicationContext
+          .getUseCases()
+          .refreshTokenInteractor(applicationContext);
+        presenter.state.token = response.token;
+        applicationContext.setCurrentUserToken(response.token);
+      } catch (err) {
+        window.location.href = presenter.state.cognitoLoginUrl;
+      }
 
       const user = await applicationContext
         .getUseCases()
