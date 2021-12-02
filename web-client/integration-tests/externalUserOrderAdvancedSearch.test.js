@@ -172,12 +172,9 @@ describe('external users perform an advanced search for orders', () => {
 
   loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('search for sealed order in unsealed case as an unassociated practitioner', async () => {
-    cerebralTest.docketNumber = '999-15';
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
-    expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
+    cerebralTest.docketNumber = '999-15';
 
     await updateOrderForm(cerebralTest, {
       docketNumber: cerebralTest.docketNumber,
