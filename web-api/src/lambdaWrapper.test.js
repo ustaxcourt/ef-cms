@@ -37,15 +37,16 @@ describe('createLambdaWrapper', () => {
     })(req, res);
 
     expect(res.set).toHaveBeenCalledWith({
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Expose-Headers': "['X-Terminal-User']",
       'Cache-Control':
         'max-age=0, private, no-cache, no-store, must-revalidate',
       'Content-Type': 'application/json',
       Pragma: 'no-cache',
-      Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': false,
     });
+    expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
+    expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
   });
 
   it('sends response.body if header is application/pdf', async () => {
@@ -152,15 +153,16 @@ describe('createLambdaWrapper', () => {
       };
     })(req, res);
 
-    expect(res.set).toHaveBeenCalledWith({
-      'Access-Control-Allow-Origin': '*',
+    expect(res.set.mock.calls[0][0]).toEqual({
+      'Access-Control-Expose-Headers': "['X-Terminal-User']",
       'Cache-Control':
         'max-age=0, private, no-cache, no-store, must-revalidate',
       'Content-Type': 'application/json',
       Pragma: 'no-cache',
-      Vary: 'Authorization',
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': true,
     });
+    expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
+    expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
   });
 });
