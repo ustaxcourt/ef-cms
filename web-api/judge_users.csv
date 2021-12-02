@@ -1,4 +1,6 @@
 name,judgeTitle,judgeFullName,email,role,section
+Choi,Special Trial Judge,Eunkyong Choi,stjudge.choi@dawson.ustaxcourt.gov,judge,choisChambers
+Landy,Special Trial Judge,Adam B. Landy,stjudge.landy@dawson.ustaxcourt.gov,judge,landysChambers
 Aarons,Judge,Aarons,legacy.judge.aarons@example.com,legacyJudge,legacyJudgesChambers
 Armen,Special Trial Judge,Armen,legacy.judge.armen@example.com,legacyJudge,legacyJudgesChambers
 Ashford,Judge,Tamara W. Ashford,judge.ashford@example.com,judge,ashfordsChambers
@@ -81,3 +83,5 @@ Wiles,Judge,Wiles,legacy.judge.wiles@example.com,legacyJudge,legacyJudgesChamber
 Williams,Judge,Williams,legacy.judge.williams@example.com,legacyJudge,legacyJudgesChambers
 Wolfe,Special Trial Judge,Wolfe,legacy.judge.wolfe@example.com,legacyJudge,legacyJudgesChambers
 Wright,Judge,Wright,legacy.judge.wright@example.com,legacyJudge,legacyJudgesChambers
+Choi,Special Trial Judge,Eunkyong Choi,stjudge.choi@dawson.ustaxcourt.gov,judge,choisChambers
+Landy,Special Trial Judge,Adam B. Landy,stjudge.landy@dawson.ustaxcourt.gov,judge,landysChambers
