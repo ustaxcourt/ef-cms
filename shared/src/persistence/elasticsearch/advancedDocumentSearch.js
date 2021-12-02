@@ -32,6 +32,7 @@ exports.advancedDocumentSearch = async ({
     'documentType',
     'eventCode',
     'filingDate',
+    'hasSealedDocuments',
     'irsPractitioners',
     'isFileAttached',
     'isSealed',
@@ -74,14 +75,14 @@ exports.advancedDocumentSearch = async ({
       {
         term: { 'isSealed.BOOL': true },
       },
+      {
+        term: { 'hasSealedDocuments.BOOL': true },
+      },
     ];
     docketEntryMustNot = [
       ...docketEntryMustNot,
       {
         term: { 'isSealed.BOOL': true },
-      },
-      {
-        term: { 'isLegacySealed.BOOL': true },
       },
     ];
   }

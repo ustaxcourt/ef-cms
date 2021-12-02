@@ -27,6 +27,7 @@ describe('advancedDocumentSearch', () => {
       'documentType',
       'eventCode',
       'filingDate',
+      'hasSealedDocuments',
       'irsPractitioners',
       'isFileAttached',
       'isSealed',
@@ -234,6 +235,7 @@ describe('advancedDocumentSearch', () => {
     ];
     expectation[0].has_parent.query.bool.must_not = [
       { term: { 'isSealed.BOOL': true } },
+      { term: { 'hasSealedDocuments.BOOL': true } },
     ];
 
     expect(search.mock.calls[0][0].searchParameters.body.query.bool).toEqual({
@@ -254,11 +256,6 @@ describe('advancedDocumentSearch', () => {
         {
           term: {
             'isSealed.BOOL': true,
-          },
-        },
-        {
-          term: {
-            'isLegacySealed.BOOL': true,
           },
         },
       ],
@@ -308,6 +305,7 @@ describe('advancedDocumentSearch', () => {
     ];
     expectation[0].has_parent.query.bool.must_not = [
       { term: { 'isSealed.BOOL': true } },
+      { term: { 'hasSealedDocuments.BOOL': true } },
     ];
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool,
