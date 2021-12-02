@@ -27,6 +27,7 @@ describe('advancedDocumentSearch', () => {
       'documentType',
       'eventCode',
       'filingDate',
+      'hasSealedDocuments',
       'irsPractitioners',
       'isFileAttached',
       'isSealed',
