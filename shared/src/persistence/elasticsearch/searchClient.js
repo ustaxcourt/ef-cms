@@ -20,22 +20,12 @@ exports.search = async ({ applicationContext, searchParameters }) => {
       let foundCase = caseMap[docketNumber];
 
       if (!foundCase) {
-        hit.inner_hits['case-mappings'].hits.hits.some(associatedCase => {
-          const associatedDocketEntry = hit;
-          const caseDocketNumber = associatedCase['_source'].docketNumber.S;
+        hit.inner_hits['case-mappings'].hits.hits.some(innerHit => {
+          const innerHitDocketNumber = innerHit['_source'].docketNumber.S;
+          caseMap[innerHitDocketNumber] = innerHit['_source'];
 
-          const isCaseOrDocketEntrySealed =
-            !!associatedCase['_source'].isSealed?.BOOL ||
-            !!associatedDocketEntry['_source'].isSealed?.BOOL;
-
-          associatedCase['_source'] = {
-            ...associatedCase['_source'],
-            isSealed: { BOOL: isCaseOrDocketEntrySealed },
-          };
-          caseMap[caseDocketNumber] = associatedCase['_source'];
-
-          if (caseDocketNumber === docketNumber) {
-            foundCase = associatedCase['_source'];
+          if (innerHitDocketNumber === docketNumber) {
+            foundCase = innerHit['_source'];
             return true;
           }
         });
