@@ -22,6 +22,8 @@ resource "aws_lambda_function" "zip_seal" {
 }
 
 resource "aws_lambda_permission" "allow_topic_to_seal" {
+  depends_on    = [aws_lambda_function.zip_seal]
+  count         = var.create_seal_in_lower
   statement_id  = "AllowExecutionFromSNS"
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.zip_seal[0].function_name
