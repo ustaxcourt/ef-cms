@@ -35,7 +35,6 @@ export const lambdaWrapper = lambda => {
 
     res.set({
       ...response.headers,
-      ...response.multiValueHeaders,
       'X-Terminal-User': isTerminalUser,
       ...headerOverride,
     });
