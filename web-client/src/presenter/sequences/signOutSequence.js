@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearLoginFormAction } from '../actions/clearLoginFormAction';
 import { clearMaintenanceModeAction } from '../actions/clearMaintenanceModeAction';
 import { clearUserAction } from '../actions/clearUserAction';
+import { deleteAuthCookieAction } from '../actions/deleteAuthCookieAction';
 import { navigateToCognitoAction } from '../actions/navigateToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { stopWebSocketConnectionAction } from '../actions/WebSocketConnection/stopWebSocketConnectionAction';
@@ -9,6 +10,7 @@ import { stopWebSocketConnectionAction } from '../actions/WebSocketConnection/st
 export const signOutSequence = [
   setCurrentPageAction('Interstitial'),
   stopWebSocketConnectionAction,
+  deleteAuthCookieAction,
   clearAlertsAction,
   clearUserAction,
   clearMaintenanceModeAction,

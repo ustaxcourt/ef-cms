@@ -134,7 +134,12 @@ exports.put = async ({ applicationContext, body, endpoint }) => {
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-exports.remove = async ({ applicationContext, endpoint, params }) => {
+exports.remove = async ({
+  applicationContext,
+  endpoint,
+  params,
+  options = {},
+}) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
@@ -143,6 +148,7 @@ exports.remove = async ({ applicationContext, endpoint, params }) => {
         Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
       },
       params,
+      ...options,
     })
     .then(response => response.data);
 };

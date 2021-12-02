@@ -1,4 +1,3 @@
-const { DateTime } = require('luxon');
 const { genericHandler } = require('../genericHandler');
 
 /**
@@ -17,10 +16,8 @@ exports.authenticateUserLambda = event =>
       howMuch: 29,
       units: 'days',
     });
-    // TODO: is this correct?  should we have the zone set to new york?
-    const expiresAtUtc = DateTime.fromISO(expiresAtIso, {
-      zone: 'America/New_York',
-    }).toUTC();
+    // eslint-disable-next-line @miovision/disallow-date/no-new-date
+    const expiresAtUtc = new Date(expiresAtIso).toUTCString();
     return {
       body: JSON.stringify({ token }),
       headers: {

@@ -174,6 +174,12 @@ const app = {
         .refreshTokenInteractor(applicationContext);
       presenter.state.token = response.token;
       applicationContext.setCurrentUserToken(response.token);
+
+      const user = await applicationContext
+        .getUseCases()
+        .getUserInteractor(applicationContext);
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
     }
 
     const userPermissions = applicationContext.getCurrentUserPermissions();
