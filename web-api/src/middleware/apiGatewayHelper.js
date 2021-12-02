@@ -6,7 +6,6 @@ const {
 } = require('../../../shared/src/errors/errors');
 const { pick } = require('lodash');
 const defaultHeaders = {
-  'Access-Control-Allow-Origin': 'https://app.exp3.ustc-case-mgmt.flexion.us',
   'Access-Control-Expose-Headers': "['X-Terminal-User']",
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',

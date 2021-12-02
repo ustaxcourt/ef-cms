@@ -3,9 +3,12 @@ const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middl
 const cors = require('cors');
 const express = require('express');
 const logger = require('./logger');
-const { lambdaWrapper } = require('./lambdaWrapper');
+const { createLambdaWrapper } = require('./createLambdaWrapper');
 const { set } = require('lodash');
 
+const lambdaWrapper = createLambdaWrapper(
+  `https://app.${process.env.EFCMS_DOMAIN}`,
+);
 const createApplicationContext = require('./applicationContext');
 const applicationContext = createApplicationContext();
 

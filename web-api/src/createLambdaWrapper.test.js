@@ -1,9 +1,13 @@
-const { lambdaWrapper } = require('./lambdaWrapper');
+const { createLambdaWrapper } = require('./createLambdaWrapper');
 
-describe('lambdaWrapper', () => {
-  let req, res;
+describe('createLambdaWrapper', () => {
+  let req, res, lambdaWrapper;
+
   beforeAll(() => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
+    lambdaWrapper = createLambdaWrapper(
+      'https://app.exp3.ustc-case-mgmt.flexion.us',
+    );
   });
 
   beforeEach(() => {
