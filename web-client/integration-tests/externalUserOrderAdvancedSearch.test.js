@@ -172,6 +172,8 @@ describe('external users perform an advanced search for orders', () => {
 
   loginAs(cerebralTest, 'privatePractitioner2@example.com');
   it('search for sealed order in unsealed case as an unassociated practitioner', async () => {
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
     cerebralTest.docketNumber = '999-15';
 
     await updateOrderForm(cerebralTest, {
