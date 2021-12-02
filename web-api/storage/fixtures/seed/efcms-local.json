@@ -2193,14 +2193,6 @@
     "completedBy": "Test Petitionsclerk1"
   },
   {
-    "sk": "connection|469484ad-175f-4389-a835-db37384853fc",
-    "connectionId": "469484ad-175f-4389-a835-db37384853fc",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|469484ad-175f-4389-a835-db37384853fc",
-    "ttl": 1638548830,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "isPaper": false,
@@ -5383,14 +5375,6 @@
     "docketNumber": "113-19"
   },
   {
-    "sk": "connection|652e1501-678a-4664-99bf-46f315681344",
-    "connectionId": "652e1501-678a-4664-99bf-46f315681344",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|652e1501-678a-4664-99bf-46f315681344",
-    "ttl": 1638548263,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "role": "clerkofcourt",
     "entityName": "User",
     "sk": "user|23dd8806-c0c7-4265-81f0-5f264ef78248",
@@ -8502,52 +8486,6 @@
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
-    "endpoint": "ws://localhost:3011",
-    "gsi1pk": "connection",
-    "sk": "connection|7e666b18-5601-49c5-8f9a-ed2f651946d8",
-    "connectionId": "7e666b18-5601-49c5-8f9a-ed2f651946d8",
-    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
-    "ttl": 1638548231,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "endpoint": "ws://localhost:3011",
-    "gsi1pk": "connection",
-    "sk": "connection|cd713f8c-e93a-4c5d-b4b5-a02fccc5d203",
-    "connectionId": "cd713f8c-e93a-4c5d-b4b5-a02fccc5d203",
-    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
-    "ttl": 1638548820,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "endpoint": "ws://localhost:3011",
-    "gsi1pk": "connection",
-    "sk": "connection|e81567b0-9d54-40f4-b102-b49170f5421a",
-    "connectionId": "e81567b0-9d54-40f4-b102-b49170f5421a",
-    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
-    "ttl": 1638548206,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "endpoint": "ws://localhost:3011",
-    "gsi1pk": "connection",
-    "sk": "connection|f4a3a25f-f0ff-464a-8441-0edf250f92d6",
-    "connectionId": "f4a3a25f-f0ff-464a-8441-0edf250f92d6",
-    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
-    "ttl": 1638548819,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "role": "docketclerk",
-    "entityName": "User",
-    "sk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
-    "name": "Test Docketclerk",
-    "section": "docket",
-    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "email": "docketclerk@example.com"
-  },
-  {
     "associatedJudge": "Chief Judge",
     "isSealed": false,
     "procedureType": "Regular",
@@ -9539,14 +9477,6 @@
     "email": "cohensChambers@example.com"
   },
   {
-    "sk": "connection|e81567b0-9d54-40f4-b102-b49170f5421a",
-    "connectionId": "e81567b0-9d54-40f4-b102-b49170f5421a",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|e81567b0-9d54-40f4-b102-b49170f5421a",
-    "ttl": 1638548206,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "admissionsStatus": "Inactive",
     "lastName": "Practitioner",
     "role": "inactivePractitioner",
@@ -9608,24 +9538,6 @@
     "pk": "trial-session-working-copy|c5bee7c0-bd98-4504-890b-b00eb398e547",
     "userId": "dabbad00-18d0-43ec-bafb-654e83405416",
     "trialSessionId": "c5bee7c0-bd98-4504-890b-b00eb398e547"
-  },
-  {
-    "endpoint": "ws://localhost:3011",
-    "gsi1pk": "connection",
-    "sk": "connection|f04ba061-fedb-4c3f-b4b6-8413eb3916ae",
-    "connectionId": "f04ba061-fedb-4c3f-b4b6-8413eb3916ae",
-    "pk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "ttl": 1638488648,
-    "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1"
-  },
-  {
-    "endpoint": "ws://localhost:3011",
-    "gsi1pk": "connection",
-    "sk": "connection|f14d588c-1c2e-4e39-921d-2e571b2f2710",
-    "connectionId": "f14d588c-1c2e-4e39-921d-2e571b2f2710",
-    "pk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
-    "ttl": 1638488961,
-    "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1"
   },
   {
     "admissionsStatus": "Active",
@@ -9963,14 +9875,6 @@
     "id": 1,
     "pk": "user-limiter-order-search|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
     "expiresAt": 1638454128035
-  },
-  {
-    "sk": "connection|cd713f8c-e93a-4c5d-b4b5-a02fccc5d203",
-    "connectionId": "cd713f8c-e93a-4c5d-b4b5-a02fccc5d203",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|cd713f8c-e93a-4c5d-b4b5-a02fccc5d203",
-    "ttl": 1638548820,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
   },
   {
     "caseOrder": [],
@@ -12323,14 +12227,6 @@
     "email": "judgeFoley@example.com"
   },
   {
-    "sk": "connection|f4a3a25f-f0ff-464a-8441-0edf250f92d6",
-    "connectionId": "f4a3a25f-f0ff-464a-8441-0edf250f92d6",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|f4a3a25f-f0ff-464a-8441-0edf250f92d6",
-    "ttl": 1638548819,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
     "sk": "case-deadline|307fd0e4-eeed-41bc-bbc3-a9555fccc231",
     "pk": "case|107-19"
   },
@@ -13122,14 +13018,6 @@
     "pk": "section|urdasChambers"
   },
   {
-    "sk": "connection|f14d588c-1c2e-4e39-921d-2e571b2f2710",
-    "connectionId": "f14d588c-1c2e-4e39-921d-2e571b2f2710",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|f14d588c-1c2e-4e39-921d-2e571b2f2710",
-    "ttl": 1638488961,
-    "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1"
-  },
-  {
     "sk": "case|105-19",
     "pk": "case-by-docket-number|105-19"
   },
@@ -13607,14 +13495,6 @@
   {
     "sk": "user|2d9a7229-7d5a-459f-84ad-754504a9f10f",
     "pk": "irsPractitioner|Nero West"
-  },
-  {
-    "sk": "connection|24d7fb2e-1d70-43c6-99c9-4eb2ecc6a274",
-    "connectionId": "24d7fb2e-1d70-43c6-99c9-4eb2ecc6a274",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|24d7fb2e-1d70-43c6-99c9-4eb2ecc6a274",
-    "ttl": 1638540951,
-    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728"
   },
   {
     "sk": "dabbad00-18d0-43ec-bafb-654e83405416",
@@ -21117,14 +20997,6 @@
     "updatedAt": "2021-05-25T13:23:58.961Z"
   },
   {
-    "sk": "connection|157fee0b-f0f9-44f6-ae4c-4bfe885525d4",
-    "connectionId": "157fee0b-f0f9-44f6-ae4c-4bfe885525d4",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|157fee0b-f0f9-44f6-ae4c-4bfe885525d4",
-    "ttl": 1638540450,
-    "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728"
-  },
-  {
     "sk": "user|49421c68-0c09-4b4b-b32c-a535279be8d0",
     "pk": "section|buchsChambers"
   },
@@ -21810,22 +21682,6 @@
   {
     "sk": "user|dadbad42-18d0-43ec-bafb-654e83405416",
     "pk": "section|legacyJudgesChambers"
-  },
-  {
-    "sk": "connection|7e666b18-5601-49c5-8f9a-ed2f651946d8",
-    "connectionId": "7e666b18-5601-49c5-8f9a-ed2f651946d8",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|7e666b18-5601-49c5-8f9a-ed2f651946d8",
-    "ttl": 1638548231,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-  },
-  {
-    "sk": "connection|f04ba061-fedb-4c3f-b4b6-8413eb3916ae",
-    "connectionId": "f04ba061-fedb-4c3f-b4b6-8413eb3916ae",
-    "endpoint": "ws://localhost:3011",
-    "pk": "connection|f04ba061-fedb-4c3f-b4b6-8413eb3916ae",
-    "ttl": 1638488648,
-    "userId": "8e4959cd-3e13-4bf6-95bf-a276cc63b9e1"
   },
   {
     "createdAt": "2020-01-21T16:41:39.474Z",
