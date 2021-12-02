@@ -33,37 +33,12 @@ const defaultCorsOptions = {
   origin: allowAccessOriginFunction,
 };
 
-/**
- * Authentication/Authorization
- */
-const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
-const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
-const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
-
 const authCorsOptions = {
   ...defaultCorsOptions,
   credentials: true,
 };
 
-app.options('/auth/login', cors(authCorsOptions));
-app.post(
-  '/auth/login',
-  cors(authCorsOptions),
-  lambdaWrapper(authenticateUserLambda),
-);
-app.options('/auth/refresh', cors(authCorsOptions));
-app.post(
-  '/auth/refresh',
-  cors(authCorsOptions),
-  lambdaWrapper(refreshAuthTokenLambda),
-);
-app.options('/auth/logout', cors(authCorsOptions));
-app.delete(
-  '/auth/logout',
-  cors(authCorsOptions),
-  lambdaWrapper(deleteAuthCookieLambda),
-);
-
+app.use('/auth', cors(authCorsOptions));
 app.use(cors(defaultCorsOptions));
 app.use(express.json({ limit: '1200kb' }));
 app.use(express.urlencoded({ extended: true }));
@@ -443,10 +418,12 @@ const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
 const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
+const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
+const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { editPaperFilingLambda } = require('./documents/editPaperFilingLambda');
 const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
@@ -467,6 +444,7 @@ const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
 const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
+const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -1134,5 +1112,12 @@ app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
  * feature-flag
  */
 app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+
+/**
+ * Authentication/Authorization
+ */
+app.post('/auth/login', lambdaWrapper(authenticateUserLambda));
+app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
+app.delete('/auth/logout', lambdaWrapper(deleteAuthCookieLambda));
 
 exports.app = app;
