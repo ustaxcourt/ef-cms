@@ -107,7 +107,6 @@ import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
 import { presenter } from './presenter/presenter';
-import { requestTokensFromParentTab } from './presenter/utilities/requestTokensFromParentTab';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
 import { withAppContextDecorator } from './withAppContext';
@@ -166,15 +165,15 @@ const app = {
 
     presenter.state.constants = applicationContext.getConstants();
 
-    // we must do all this logic before we start the router or render react
-    let startRefreshSequence = false;
+    // if we open a new tab, there may or may not be a cookie
+    // attached to our users browser which can be used to get a new token
     const isNewTabOpened = !window.location.href.includes('?code');
     if (isNewTabOpened && !process.env.IS_LOCAL) {
-      startRefreshSequence = await requestTokensFromParentTab({
-        applicationContext,
-        presenter,
-        redirect: url => (window.location.href = url),
-      });
+      const response = await applicationContext
+        .getUseCases()
+        .refreshTokenInteractor(applicationContext);
+      presenter.state.token = response.token;
+      applicationContext.setCurrentUserToken(response.token);
     }
 
     const userPermissions = applicationContext.getCurrentUserPermissions();
@@ -292,10 +291,6 @@ const app = {
 
     initializeSocketProvider(cerebralApp, applicationContext);
     router.initialize(cerebralApp, route);
-
-    if (startRefreshSequence) {
-      await cerebralApp.getSequence('startRefreshIntervalSequence')();
-    }
 
     ReactDOM.render(
       <Container app={cerebralApp}>

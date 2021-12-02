@@ -1,3 +1,4 @@
+const { DateTime } = require('luxon');
 const { genericHandler } = require('../genericHandler');
 
 /**
@@ -11,10 +12,19 @@ exports.authenticateUserLambda = event =>
     const { refreshToken, token } = await applicationContext
       .getUseCases()
       .authenticateUserInteractor(applicationContext, JSON.parse(event.body));
+    const expiresAtIso = applicationContext.getUtilities().calculateISODate({
+      dateString: applicationContext.getUtilities().createISODateString(),
+      howMuch: 29,
+      units: 'days',
+    });
+    // TODO: is this correct?  should we have the zone set to new york?
+    const expiresAtUtc = DateTime.fromISO(expiresAtIso, {
+      zone: 'America/New_York',
+    }).toUTC();
     return {
       body: JSON.stringify({ token }),
       headers: {
-        'Set-Cookie': `refreshToken=${refreshToken}; Secure; HttpOnly; Domain=${process.env.EFCMS_DOMAIN}`,
+        'Set-Cookie': `refreshToken=${refreshToken}; Expires=${expiresAtUtc}; Secure; HttpOnly; Domain=${process.env.EFCMS_DOMAIN}`,
       },
       statusCode: 200,
     };
