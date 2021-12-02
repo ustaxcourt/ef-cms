@@ -926,6 +926,9 @@ const {
   sendMaintenanceNotificationsInteractor,
 } = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
 const {
+  sendNotificationOfSealing,
+} = require('../../shared/src/notifications/sendNotificationOfSealing');
+const {
   sendNotificationToConnection,
 } = require('../../shared/src/notifications/sendNotificationToConnection');
 const {
@@ -1308,6 +1311,7 @@ let s3Cache;
 let sesCache;
 let sqsCache;
 let searchClientCache;
+let notificationServiceCache;
 
 const entitiesByName = {
   Case,
@@ -1711,9 +1715,25 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getNotificationGateway: () => ({
       retrySendNotificationToConnections,
+      sendNotificationOfSealing,
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
+    getNotificationService: () => {
+      if (notificationServiceCache) {
+        return notificationServiceCache;
+      }
+
+      if (environment.stage == 'local') {
+        notificationServiceCache = {
+          publish: () => {},
+        };
+      } else {
+        notificationServiceCache = new AWS.SNS({});
+      }
+
+      return notificationServiceCache;
+    },
     getPdfJs: () => {
       const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';

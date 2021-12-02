@@ -35,5 +35,10 @@ exports.sealCaseInteractor = async (applicationContext, { docketNumber }) => {
       caseToUpdate: newCase,
     });
 
+  await applicationContext.getNotificationGateway().sendNotificationOfSealing({
+    applicationContext,
+    docketNumber,
+  });
+
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
