@@ -15,17 +15,15 @@ import React from 'react';
 export const AppInstanceManager = connect(
   {
     appInstanceManagerHelper: state.appInstanceManagerHelper,
-    broadcastRefreshTokenSequence: sequences.broadcastRefreshTokenSequence,
     confirmStayLoggedInSequence: sequences.confirmStayLoggedInSequence,
     resetIdleTimerSequence: sequences.resetIdleTimerSequence,
-    saveRefreshTokenSequence: sequences.saveRefreshTokenSequence,
+    signOutSequence: sequences.signOutSequence,
   },
   function AppInstanceManager({
     appInstanceManagerHelper,
-    broadcastRefreshTokenSequence,
     confirmStayLoggedInSequence,
     resetIdleTimerSequence,
-    saveRefreshTokenSequence,
+    signOutSequence,
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
@@ -37,11 +35,10 @@ export const AppInstanceManager = connect(
         case 'stayLoggedIn':
           confirmStayLoggedInSequence();
           break;
-        case 'receiveToken':
-          saveRefreshTokenSequence(msg);
-          break;
-        case 'requestToken':
-          broadcastRefreshTokenSequence();
+        case 'logout':
+          signOutSequence({
+            skipBroadcast: true,
+          });
           break;
         default:
           console.warn('unhandled broadcast event', msg);

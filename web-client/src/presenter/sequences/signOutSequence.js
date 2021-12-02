@@ -1,3 +1,4 @@
+import { broadcastLogoutAction } from '../actions/broadcastLogoutAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearLoginFormAction } from '../actions/clearLoginFormAction';
 import { clearMaintenanceModeAction } from '../actions/clearMaintenanceModeAction';
@@ -10,6 +11,7 @@ import { stopWebSocketConnectionAction } from '../actions/WebSocketConnection/st
 export const signOutSequence = [
   setCurrentPageAction('Interstitial'),
   stopWebSocketConnectionAction,
+  broadcastLogoutAction,
   deleteAuthCookieAction,
   clearAlertsAction,
   clearUserAction,
