@@ -11,8 +11,7 @@ exports.deleteAuthCookieLambda = event =>
     return {
       body: JSON.stringify({ message: 'success' }),
       headers: {
-        'Set-Cookie':
-          'refreshToken=deleted; expires=Thu, 01 Jan 1970 00:00:00 GMT',
+        'Set-Cookie': `refreshToken=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; Domain=${process.env.EFCMS_DOMAIN}`,
       },
       statusCode: 200,
     };

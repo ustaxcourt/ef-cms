@@ -123,6 +123,7 @@ import { createJudgeUserInteractor } from '../../shared/src/proxies/judges/creat
 import { createMessageInteractor } from '../../shared/src/proxies/messages/createMessageProxy';
 import { createPractitionerUserInteractor } from '../../shared/src/proxies/practitioners/createPractitionerUserProxy';
 import { createTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/createTrialSessionProxy';
+import { deleteAuthCookieInteractor } from '../../shared/src/proxies/auth/deleteAuthCookieProxy';
 import { deleteCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/deleteCaseDeadlineProxy';
 import { deleteCaseNoteInteractor } from '../../shared/src/proxies/caseNote/deleteCaseNoteProxy';
 import { deleteCounselFromCaseInteractor } from '../../shared/src/proxies/caseAssociation/deleteCounselFromCaseProxy';
@@ -365,6 +366,7 @@ const allUseCases = {
   createMessageInteractor,
   createPractitionerUserInteractor,
   createTrialSessionInteractor,
+  deleteAuthCookieInteractor,
   deleteCaseDeadlineInteractor,
   deleteCaseNoteInteractor,
   deleteCounselFromCaseInteractor,
