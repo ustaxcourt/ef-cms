@@ -5,10 +5,10 @@ export const headerOverride = {
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
   'X-Content-Type-Options': 'nosniff',
-  'access-control-allow-credentials': 'true',
+  // 'access-control-allow-credentials': 'true',  //TODO: move this to the auth lambdas
 };
 
-export const createLambdaWrapper = allowOrigin => lambda => {
+export const lambdaWrapper = lambda => {
   return async (req, res) => {
     // If you'd like to test the terminal user functionality locally, make this boolean true
     let isTerminalUser =
@@ -37,7 +37,6 @@ export const createLambdaWrapper = allowOrigin => lambda => {
       ...response.headers,
       'X-Terminal-User': isTerminalUser,
       ...headerOverride,
-      'Access-Control-Allow-Origin': allowOrigin,
     });
 
     if (

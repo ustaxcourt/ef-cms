@@ -4,13 +4,9 @@ const cors = require('cors');
 const createApplicationContext = require('./applicationContext');
 const express = require('express');
 const logger = require('./logger');
-const { createLambdaWrapper } = require('./createLambdaWrapper');
+const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
 const { set } = require('lodash');
-
-const lambdaWrapper = createLambdaWrapper(
-  `https://${process.env.EFCMS_DOMAIN}`,
-);
 
 const applicationContext = createApplicationContext();
 

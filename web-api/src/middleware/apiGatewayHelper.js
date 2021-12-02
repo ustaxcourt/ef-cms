@@ -5,7 +5,7 @@ const {
   UnauthorizedError,
   UnsanitizedEntityError,
 } = require('../../../shared/src/errors/errors');
-const { headerOverride } = require('../createLambdaWrapper');
+const { headerOverride } = require('../lambdaWrapper');
 const { pick } = require('lodash');
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
