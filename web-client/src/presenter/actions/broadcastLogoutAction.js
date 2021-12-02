@@ -7,6 +7,7 @@
  */
 export const broadcastLogoutAction = async ({ applicationContext, props }) => {
   if (!props.skipBroadcast) {
+    console.log('should be broadcasting logout');
     const broadcastChannel = applicationContext.getBroadcastGateway();
     await broadcastChannel.postMessage({ subject: 'logout' });
   }
