@@ -46,6 +46,18 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
 
+  // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
+  this.docketEntries = (rawCase.docketEntries || [])
+    .filter(docketEntry => !docketEntry.isDraft && docketEntry.isOnDocketRecord)
+    .map(
+      docketEntry => new PublicDocketEntry(docketEntry, { applicationContext }),
+    )
+    .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
+
+  this.hasSealedDocuments = this.docketEntries.some(
+    docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+  );
+
   this.isSealed = isSealedCase(rawCase);
 
   const currentUser = applicationContext.getCurrentUser();
@@ -66,14 +78,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
       this.petitioners.push(publicPetitionerContact);
     });
   }
-
-  // rawCase.docketEntries is not returned in elasticsearch queries due to _source definition
-  this.docketEntries = (rawCase.docketEntries || [])
-    .filter(docketEntry => !docketEntry.isDraft && docketEntry.isOnDocketRecord)
-    .map(
-      docketEntry => new PublicDocketEntry(docketEntry, { applicationContext }),
-    )
-    .sort((a, b) => compareStrings(a.receivedAt, b.receivedAt));
 };
 
 const publicCaseSchema = {
