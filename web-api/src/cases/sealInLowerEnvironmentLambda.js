@@ -7,12 +7,20 @@ const createApplicationContext = require('../applicationContext');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.sealInLowerEnvironmentLambda = async event => {
-  const applicationContext = createApplicationContext({});
-  applicationContext.logger.debug('received a stream event of', event);
-  // TODO: When we can seal a document, maybe that's included in the event, and we can call that lambda to seal it in the lower environment
-  return await applicationContext
-    .getUseCases()
-    .sealCaseInteractor(applicationContext, {
-      docketNumber: event.docketNumber,
-    });
+  const user = { role: 'docketclerk' };
+  const applicationContext = createApplicationContext(user);
+
+  applicationContext.logger.info('received a stream event of', event);
+
+  const { docketEntryId, docketNumber } = JSON.parse(event.Message);
+
+  if (docketEntryId && docketNumber) {
+    // TODO: seal case in
+  } else if (docketNumber) {
+    return await applicationContext
+      .getUseCases()
+      .sealCaseInteractor(applicationContext, {
+        docketNumber: event.docketNumber,
+      });
+  }
 };
