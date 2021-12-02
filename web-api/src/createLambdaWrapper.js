@@ -1,10 +1,11 @@
 const { get } = require('lodash');
-const headerOverride = {
+export const headerOverride = {
   'Access-Control-Expose-Headers': "['X-Terminal-User']",
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
   'X-Content-Type-Options': 'nosniff',
+  'access-control-allow-credentials': 'true',
 };
 
 export const createLambdaWrapper = allowOrigin => lambda => {

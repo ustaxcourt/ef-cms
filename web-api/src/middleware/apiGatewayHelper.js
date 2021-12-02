@@ -1,22 +1,12 @@
+const createApplicationContext = require('../applicationContext');
 const jwt = require('jsonwebtoken');
 const {
   NotFoundError,
   UnauthorizedError,
   UnsanitizedEntityError,
 } = require('../../../shared/src/errors/errors');
+const { headerOverride } = require('../createLambdaWrapper');
 const { pick } = require('lodash');
-const defaultHeaders = {
-  'Access-Control-Expose-Headers': "['X-Terminal-User']",
-  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
-  'Content-Type': 'application/json',
-  Pragma: 'no-cache',
-  'X-Content-Type-Options': 'nosniff',
-  'access-control-allow-credentials': 'true',
-};
-const createApplicationContext = require('../applicationContext');
-
-exports.headers = defaultHeaders;
-
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
  *
@@ -46,7 +36,7 @@ exports.handle = async (event, fun) => {
       return {
         body: response.toString('base64'),
         headers: {
-          ...defaultHeaders,
+          ...headerOverride,
           'Content-Type': 'application/pdf',
           'accept-ranges': 'bytes',
         },
@@ -117,7 +107,7 @@ exports.redirect = async (event, fun, statusCode = 302) => {
 exports.sendError = err => {
   return {
     body: JSON.stringify(err.message),
-    headers: defaultHeaders,
+    headers: headerOverride,
     statusCode: err.statusCode || '400',
   };
 };
@@ -135,7 +125,7 @@ exports.sendOk = (response, statusCode = '200', headers = {}) => {
     body: JSON.stringify(response),
     headers: {
       ...headers,
-      ...defaultHeaders,
+      ...headerOverride,
     },
     statusCode,
   };
