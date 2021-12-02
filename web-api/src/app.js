@@ -29,12 +29,11 @@ const allowAccessOriginFunction = (origin, callback) => {
   callback(null, '*');
 };
 
-const authenticationCorsOptions = {
-  credentials: true, //TODO: move this to the auth lambdas
+const defaultCorsOptions = {
   origin: allowAccessOriginFunction,
 };
 
-app.use(cors(authenticationCorsOptions));
+app.use(cors(defaultCorsOptions));
 app.use(express.json({ limit: '1200kb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
@@ -1111,9 +1110,24 @@ app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 /**
  * Authentication/Authorization
  */
-
-app.post('/auth/login', lambdaWrapper(authenticateUserLambda));
-app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
-app.delete('/auth/logout', lambdaWrapper(deleteAuthCookieLambda));
+const authCorsOptions = {
+  ...defaultCorsOptions,
+  credentials: true,
+};
+app.post(
+  '/auth/login',
+  cors(authCorsOptions),
+  lambdaWrapper(authenticateUserLambda),
+);
+app.post(
+  '/auth/refresh',
+  cors(authCorsOptions),
+  lambdaWrapper(refreshAuthTokenLambda),
+);
+app.delete(
+  '/auth/logout',
+  cors(authCorsOptions),
+  lambdaWrapper(deleteAuthCookieLambda),
+);
 
 exports.app = app;
