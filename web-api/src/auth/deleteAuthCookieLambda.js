@@ -1,3 +1,4 @@
+const { deleteCookieString } = require('../utilities/cookieFormatting');
 const { genericHandler } = require('../genericHandler');
 
 /**
@@ -13,7 +14,10 @@ exports.deleteAuthCookieLambda = event =>
       return {
         body: JSON.stringify({ message: 'success' }),
         headers: {
-          'Set-Cookie': `refreshToken=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; Domain=${process.env.EFCMS_DOMAIN}`,
+          'Set-Cookie': deleteCookieString(
+            'refreshToken',
+            process.env.EFCMS_DOMAIN,
+          ),
         },
         statusCode: 200,
       };
