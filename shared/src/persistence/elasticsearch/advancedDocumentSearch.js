@@ -56,7 +56,6 @@ exports.advancedDocumentSearch = async ({
   ];
 
   const docketEntryQueryParams = [];
-  let caseMustNot = [];
   let docketEntryMustNot = [{ term: { 'isStricken.BOOL': true } }];
   const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
@@ -70,22 +69,7 @@ exports.advancedDocumentSearch = async ({
       },
     });
   }
-  if (omitSealed) {
-    caseMustNot = [
-      {
-        term: { 'isSealed.BOOL': true },
-      },
-      {
-        term: { 'hasSealedDocuments.BOOL': true },
-      },
-    ];
-    docketEntryMustNot = [
-      ...docketEntryMustNot,
-      {
-        term: { 'isSealed.BOOL': true },
-      },
-    ];
-  }
+
   const caseQueryParams = {
     has_parent: {
       inner_hits: {
@@ -95,10 +79,55 @@ exports.advancedDocumentSearch = async ({
         name: 'case-mappings',
       },
       parent_type: 'case',
-      query: { bool: { filter: [], must_not: caseMustNot } },
+      query: {
+        bool: {
+          filter: [],
+        },
+      },
       score: true,
     },
   };
+
+  if (omitSealed) {
+    const caseShould = {
+      bool: {
+        minimum_should_match: 1,
+        should: [
+          {
+            bool: {
+              must: {
+                term: { 'isSealed.BOOL': false },
+              },
+            },
+          },
+          {
+            bool: {
+              must_not: {
+                exists: { field: 'isSealed' },
+              },
+            },
+          },
+        ],
+      },
+    };
+    const caseMust = {
+      term: { 'hasSealedDocuments.BOOL': false },
+    };
+
+    let mustShowResults = [];
+    mustShowResults.push(caseMust);
+    mustShowResults.push(caseShould);
+
+    const caseQuery = { bool: { must: mustShowResults } };
+
+    docketEntryMustNot = [
+      ...docketEntryMustNot,
+      {
+        term: { 'isSealed.BOOL': true },
+      },
+    ];
+    caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
+  }
 
   if (docketNumber) {
     caseQueryParams.has_parent.query.bool.filter.push({
