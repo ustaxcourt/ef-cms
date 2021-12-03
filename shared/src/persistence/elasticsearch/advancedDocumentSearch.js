@@ -56,7 +56,7 @@ exports.advancedDocumentSearch = async ({
   ];
 
   const docketEntryQueryParams = [];
-  let caseMustNot = [];
+  let caseMust = [];
   let docketEntryMustNot = [{ term: { 'isStricken.BOOL': true } }];
   const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
@@ -71,14 +71,17 @@ exports.advancedDocumentSearch = async ({
     });
   }
   if (omitSealed) {
+    caseMust = [
+      {
+        term: { 'hasSealedDocuments.BOOL': false },
+      },
+    ];
     caseMustNot = [
       {
         term: { 'isSealed.BOOL': true },
       },
-      {
-        term: { 'hasSealedDocuments.BOOL': true },
-      },
     ];
+
     docketEntryMustNot = [
       ...docketEntryMustNot,
       {
@@ -95,7 +98,36 @@ exports.advancedDocumentSearch = async ({
         name: 'case-mappings',
       },
       parent_type: 'case',
-      query: { bool: { filter: [], must_not: caseMustNot } },
+      query: {
+        bool: {
+          must: [
+            {
+              term: { 'hasSealedDocuments.BOOL': false },
+            },
+          ],
+          filter: [
+            {
+              bool: {
+                should: [
+                  {
+                    bool: {
+                      must_not: [
+                        {
+                          term: { 'isSealed.BOOL': true },
+                        },
+                      ],
+                    },
+                  },
+                ],
+              },
+            },
+          ],
+          //
+          // must: caseMust,
+          // must_not: caseMustNot,
+          // todo: try with an exist
+        },
+      },
       score: true,
     },
   };
