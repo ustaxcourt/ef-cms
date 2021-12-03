@@ -92,8 +92,6 @@ exports.advancedDocumentSearch = async ({
   };
 
   if (omitSealed) {
-    console.log('in omitSealed');
-
     // show order result for public user if:
     // hasSealedDocuments = false AND (isSealed = false OR isSealed = undefined)
     caseShould = {
@@ -113,10 +111,8 @@ exports.advancedDocumentSearch = async ({
               },
             },
           },
-          // {
-          //   term: { 'hasSealedDocuments.BOOL': false },
-          // },
         ],
+        minimum_should_match: 1,
       },
     };
     caseMust = {
@@ -124,21 +120,19 @@ exports.advancedDocumentSearch = async ({
     };
 
     let mustShowResults = [];
-    // mustShowResults.push(caseMust);
+    mustShowResults.push(caseMust);
     mustShowResults.push(caseShould);
 
     caseQuery = { bool: { must: mustShowResults } };
 
-    // docketEntryMustNot = [
-    //   ...docketEntryMustNot,
-    //   {
-    //     term: { 'isSealed.BOOL': true },
-    //   },
-    // ];
+    docketEntryMustNot = [
+      ...docketEntryMustNot,
+      {
+        term: { 'isSealed.BOOL': true },
+      },
+    ];
     caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
   }
-
-  console.log('caseQueryParams', caseQueryParams.has_parent.query.bool.filter);
 
   if (docketNumber) {
     caseQueryParams.has_parent.query.bool.filter.push({
@@ -254,8 +248,6 @@ exports.advancedDocumentSearch = async ({
       break;
   }
 
-  console.log('docketEntryQueryParams', { docketEntryQueryParams });
-
   const documentQuery = {
     body: {
       _source: sourceFields,
@@ -264,7 +256,7 @@ exports.advancedDocumentSearch = async ({
         bool: {
           filter: documentQueryFilter,
           must: docketEntryQueryParams,
-          // must_not: docketEntryMustNot,
+          must_not: docketEntryMustNot,
         },
       },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
