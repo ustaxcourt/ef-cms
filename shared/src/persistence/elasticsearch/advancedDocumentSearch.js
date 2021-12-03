@@ -96,6 +96,7 @@ exports.advancedDocumentSearch = async ({
     // hasSealedDocuments = false AND (isSealed = false OR isSealed = undefined)
     caseShould = {
       bool: {
+        minimum_should_match: 1,
         should: [
           {
             bool: {
@@ -112,7 +113,6 @@ exports.advancedDocumentSearch = async ({
             },
           },
         ],
-        minimum_should_match: 1,
       },
     };
     caseMust = {
