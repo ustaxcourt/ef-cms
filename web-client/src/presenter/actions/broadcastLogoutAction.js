@@ -5,10 +5,10 @@
  * @param {object} providers.applicationContext application context used to get the broadcast gateway
  * @returns {Promise} upon posting of message
  */
-export const broadcastLogoutAction = ({ applicationContext, props }) => {
+export const broadcastLogoutAction = async ({ applicationContext, props }) => {
   // for some reason this causes jest integration tests to never finish, so don't run in CI
   if (!process.env.CI && !props.skipBroadcast) {
     const broadcastChannel = applicationContext.getBroadcastGateway();
-    broadcastChannel.postMessage({ subject: 'logout' });
+    await broadcastChannel.postMessage({ subject: 'logout' });
   }
 };
