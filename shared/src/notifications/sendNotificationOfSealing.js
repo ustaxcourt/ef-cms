@@ -23,6 +23,25 @@ exports.sendNotificationOfSealing = async ({
     TopicArn: `arn:aws:sns:us-east-1:${process.env.AWS_ACCOUNT_ID}:seal_notifier`,
   };
 
-  await applicationContext.getNotificationService().publish(params);
-  // TODO: what if it fails? Need to retry
+  const maxRetries = 5;
+
+  for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
+    try {
+      const res = await applicationContext
+        .getNotificationService()
+        .publish(params)
+        .promise();
+      applicationContext.logger.info('sent notification of sealing', {
+        MessageId: res.MessageId,
+        docketEntryId,
+        docketNumber,
+      });
+      return;
+    } catch (err) {
+      applicationContext.logger.error('error attempting to send notification', {
+        err,
+        retryCount,
+      });
+    }
+  }
 };
