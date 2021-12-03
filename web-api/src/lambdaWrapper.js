@@ -1,5 +1,6 @@
 const { get } = require('lodash');
-export const headerOverride = {
+
+exports.headerOverride = {
   'Access-Control-Expose-Headers': "['X-Terminal-User']",
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
@@ -7,7 +8,7 @@ export const headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-export const lambdaWrapper = lambda => {
+exports.ambdaWrapper = lambda => {
   return async (req, res) => {
     // If you'd like to test the terminal user functionality locally, make this boolean true
     let isTerminalUser =
@@ -35,7 +36,7 @@ export const lambdaWrapper = lambda => {
     res.set({
       ...response.headers,
       'X-Terminal-User': isTerminalUser,
-      ...headerOverride,
+      ...exports.headerOverride,
     });
 
     if (
