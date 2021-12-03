@@ -11,16 +11,10 @@ const { post } = require('../requests');
  */
 exports.setNoticesForCalendaredTrialSessionInteractor = (
   applicationContext,
-  {
-    docketNumber = null, // because sending undefined in an http request breaks lambda
-    trialSessionId,
-  },
+  { trialSessionId },
 ) => {
   return post({
     applicationContext,
-    body: {
-      docketNumber,
-    },
     endpoint: `/async/trial-sessions/${trialSessionId}/generate-notices`,
   });
 };

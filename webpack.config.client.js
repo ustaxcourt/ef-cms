@@ -5,6 +5,7 @@ const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 const webpack = require('webpack');
 
 module.exports = {
+  devtool: false,
   module: {
     rules: [
       {
