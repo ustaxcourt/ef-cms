@@ -56,9 +56,6 @@ exports.advancedDocumentSearch = async ({
   ];
 
   const docketEntryQueryParams = [];
-  let caseMust = [];
-  let caseShould = [];
-  let caseQuery = [];
   let docketEntryMustNot = [{ term: { 'isStricken.BOOL': true } }];
   const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
@@ -92,9 +89,7 @@ exports.advancedDocumentSearch = async ({
   };
 
   if (omitSealed) {
-    // show order result for public user if:
-    // hasSealedDocuments = false AND (isSealed = false OR isSealed = undefined)
-    caseShould = {
+    const caseShould = {
       bool: {
         minimum_should_match: 1,
         should: [
@@ -115,7 +110,7 @@ exports.advancedDocumentSearch = async ({
         ],
       },
     };
-    caseMust = {
+    const caseMust = {
       term: { 'hasSealedDocuments.BOOL': false },
     };
 
@@ -123,7 +118,7 @@ exports.advancedDocumentSearch = async ({
     mustShowResults.push(caseMust);
     mustShowResults.push(caseShould);
 
-    caseQuery = { bool: { must: mustShowResults } };
+    const caseQuery = { bool: { must: mustShowResults } };
 
     docketEntryMustNot = [
       ...docketEntryMustNot,
