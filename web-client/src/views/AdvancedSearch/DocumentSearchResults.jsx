@@ -70,7 +70,7 @@ export const DocumentSearchResults = connect(
                       </td>
                       <td aria-hidden="true" className="small-column">
                         {advancedDocumentSearchHelper.showSealedIcon &&
-                          result.isSealed && (
+                          (result.isSealed || result.hasSealedDocuments) && (
                             <Icon
                               aria-label="sealed"
                               className="iconSealed"

@@ -82,7 +82,6 @@ describe('advancedDocumentSearch', () => {
     let query = {
       bool: {
         filter: [],
-        must_not: [],
       },
     };
 
@@ -238,28 +237,35 @@ describe('advancedDocumentSearch', () => {
       { term: { 'hasSealedDocuments.BOOL': true } },
     ];
 
-    expect(search.mock.calls[0][0].searchParameters.body.query.bool).toEqual({
-      filter: expect.arrayContaining([
-        {
-          term: {
-            'eventCode.S': 'SOP',
-          },
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+    ).toEqual([
+      {
+        term: {
+          'entityName.S': 'DocketEntry',
         },
-      ]),
-      must: expectation,
-      must_not: [
-        {
-          term: {
-            'isStricken.BOOL': true,
-          },
+      },
+      {
+        exists: {
+          field: 'servedAt',
         },
-        {
-          term: {
-            'isSealed.BOOL': true,
-          },
+      },
+      {
+        terms: {
+          'eventCode.S': ['O', 'OOD'],
         },
-      ],
-    });
+      },
+      {
+        term: {
+          'isFileAttached.BOOL': true,
+        },
+      },
+      {
+        term: {
+          'eventCode.S': 'SOP',
+        },
+      },
+    ]);
   });
 
   it('does a search by multiple opinion types when multiple opinion document types are provided', async () => {
@@ -303,15 +309,24 @@ describe('advancedDocumentSearch', () => {
     const expectation = [
       getCaseMappingQueryParams(), // match all parents
     ];
-    expectation[0].has_parent.query.bool.must_not = [
+    expectation[0].has_parent.query.bool.must = [
       { term: { 'isSealed.BOOL': true } },
       { term: { 'hasSealedDocuments.BOOL': true } },
     ];
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool,
-    ).toMatchObject({
-      must: expectation,
-    });
+      search.mock.calls[0][0].searchParameters.body.query.bool.must_not,
+    ).toEqual([
+      {
+        term: {
+          'isStricken.BOOL': true,
+        },
+      },
+      {
+        term: {
+          'isSealed.BOOL': true,
+        },
+      },
+    ]);
   });
 
   it('does a search for a judge when searching for opinions', async () => {
