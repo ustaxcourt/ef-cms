@@ -19,6 +19,16 @@ exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
   const pdfDoc = await PDFDocument.load(pdfData, { ignoreEncryption: true });
   const form = pdfDoc.getForm();
   const fieldCount = form.getFields().length;
+  const fields = form.getFields();
+
+  fields.forEach(field => {
+    const type = field.constructor.name;
+    if (type === 'PDFTextField') {
+      const text = field.getText();
+
+      field.setText(text);
+    }
+  });
 
   if (fieldCount > 0) {
     form.flatten();
