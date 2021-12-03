@@ -20,6 +20,7 @@ exports.authenticateUserLambda = event =>
       units: 'days',
     });
 
+    //unilaterally converts the ET timezone'd date/time to UTC without actually changing the hour
     const expiresAtUtc = applicationContext
       .getUtilities()
       .formatDateString(expiresAtIso, FORMATS.COOKIE);
