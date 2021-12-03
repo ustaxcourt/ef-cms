@@ -1,10 +1,10 @@
 const AWS = require('aws-sdk');
 const axios = require('axios');
 const fs = require('fs');
-const parse = require('csv-parse');
 const { formatRecord } = require('./bulkImportPractitionerUsers.helpers');
 const { gatherRecords, getCsvOptions } = require('../shared/src/tools/helpers');
 const { getUserToken } = require('./storage/scripts/loadTest/loadTestHelpers');
+const { parse } = require('csv-parse');
 
 const main = async () => {
   const files = [];

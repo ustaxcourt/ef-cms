@@ -5,11 +5,17 @@ import { state } from 'cerebral';
 export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
   const isPublic = get(state.isPublic);
+  const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
-  const { ADVANCED_SEARCH_TABS, DATE_RANGE_SEARCH_OPTIONS } =
-    applicationContext.getConstants();
-  const { MAX_SEARCH_RESULTS } = applicationContext.getConstants();
+
+  const {
+    ADVANCED_SEARCH_TABS,
+    DATE_RANGE_SEARCH_OPTIONS,
+    MAX_SEARCH_RESULTS,
+  } = applicationContext.getConstants();
+
+  const isInternalUser = applicationContext.getUtilities().isInternalUser(role);
 
   const dateRangeType = get(
     state.advancedSearchForm[`${advancedSearchTab}Search`].dateRange,
@@ -57,6 +63,7 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     ...paginatedResults,
     documentTypeVerbiage,
     formattedJudges,
+    isInternalUser,
     isPublic,
     manyResults: MAX_SEARCH_RESULTS,
     showDateRangePicker,

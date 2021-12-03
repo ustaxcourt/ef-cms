@@ -2,12 +2,20 @@
 
 ENVIRONMENT=$1
 
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+
+echo "Running terraform with the following environment configs:"
+echo "  - ENVIRONMENT=${ENVIRONMENT}"
+
+../../../scripts/verify-terraform-version.sh
+
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="migrations-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
 rm -rf .terraform
+
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
@@ -21,15 +29,15 @@ else
   echo "dynamodb lock table already exists"
 fi
 
-# exit on any failure
 set -eo pipefail
 npm run build:lambda:migration
 
-export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_stream_arn=$STREAM_ARN
-export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_destination_table=$DESTINATION_TABLE
+export TF_VAR_documents_bucket_name=$DOCUMENTS_BUCKET_NAME
+export TF_VAR_environment=$ENVIRONMENT
+export TF_VAR_source_table=$SOURCE_TABLE
+export TF_VAR_stream_arn=$STREAM_ARN
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform plan
-terraform destroy
+terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform plan -destroy -out execution-plan
+terraform destroy -auto-approve  

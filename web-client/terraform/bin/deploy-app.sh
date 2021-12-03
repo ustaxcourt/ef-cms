@@ -1,20 +1,21 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ENVIRONMENT=$1
+
+[ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
+
+echo "Running terraform with the following environment configs:"
+echo "  - ENVIRONMENT=${ENVIRONMENT}"
+
+../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="ui-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
-tf_version=$(terraform --version)
-
-if [[ ${tf_version} != *"1.0.9"* ]]; then
-  echo "Please set your terraform version to 1.0.9 before deploying."
-  exit 1
-fi
-
 rm -rf .terraform
+
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
@@ -28,25 +29,24 @@ else
   echo "dynamodb lock table already exists"
 fi
 
-# exit on any failure
 set -eo pipefail
 
-DYNAMSOFT_URL="https://dynamsoft-lib.${EFCMS_DOMAIN}"
+DYNAMSOFT_URL="https://dynamsoft-lib-${ENVIRONMENT}.${EFCMS_DOMAIN}"
 
 if [[ -z "${IS_DYNAMSOFT_ENABLED}" ]]
 then
   IS_DYNAMSOFT_ENABLED="1"
 fi
 
-export TF_VAR_zone_name=$ZONE_NAME
+export TF_PLUGIN_CACHE_DIR=./terraform-cache
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
-export TF_VAR_environment=$ENVIRONMENT
-export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
 export TF_VAR_dynamsoft_product_keys=$DYNAMSOFT_PRODUCT_KEYS
 export TF_VAR_dynamsoft_s3_zip_path=$DYNAMSOFT_S3_ZIP_PATH
+export TF_VAR_dynamsoft_url=$DYNAMSOFT_URL
+export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_is_dynamsoft_enabled=$IS_DYNAMSOFT_ENABLED
-export TF_PLUGIN_CACHE_DIR=./terraform-cache
 export TF_VAR_statuspage_dns_record=$STATUSPAGE_DNS_RECORD
+export TF_VAR_zone_name=$ZONE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan

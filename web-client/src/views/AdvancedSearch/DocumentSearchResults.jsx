@@ -89,7 +89,7 @@ export const DocumentSearchResults = connect(
                               docketEntryId: result.docketEntryId,
                               docketNumber: result.docketNumber,
                               isPublic: advancedDocumentSearchHelper.isPublic,
-                              useSameTab: advancedDocumentSearchHelper.isPublic,
+                              useSameTab: false,
                             });
                           }}
                         >
@@ -103,7 +103,11 @@ export const DocumentSearchResults = connect(
                         <CaseLink
                           formattedCase={result}
                           rel="noreferrer"
-                          target="_blank"
+                          target={
+                            advancedDocumentSearchHelper.isInternalUser
+                              ? '_blank'
+                              : ''
+                          }
                         />
                       </td>
                     </tr>

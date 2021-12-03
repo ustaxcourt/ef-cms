@@ -100,6 +100,7 @@ import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons/faThumbtack';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
+import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
@@ -274,6 +275,7 @@ const app = {
       faTimesCircle,
       faTimesCircleRegular,
       faTrash,
+      faUnlock,
       faUser,
       faUserCheck,
       faUserFriends,
@@ -312,7 +314,6 @@ const app = {
         )}
 
         <AppComponent />
-
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       window.document.querySelector('#app'),

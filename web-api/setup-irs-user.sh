@@ -3,16 +3,13 @@
 # Usage
 #   creates the IRS user in the IRS user pool
 
-# Requirements
-#   - curl must be installed on your machine
-#   - jq must be installed on your machine
-#   - aws cli must be installed on your machine
-#   - aws credentials must be setup on your machine
-
 # Arguments
 #   - $1 - the environment [dev, stg, prod, exp1, exp1, etc]
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
+( ! command -v curl > /dev/null ) && echo "curl was not found on your path. Please install curl." && exit 1
+( ! command -v aws > /dev/null ) && echo "aws was not found on your path. Please install aws." && exit 1
+
 [ -z "$1" ] && echo "The ENV to deploy to must be provided as the \$1 argument.  An example value of this includes [dev, stg, prod... ]" && exit 1
 [ -z "${USTC_ADMIN_PASS}" ] && echo "You must have USTC_ADMIN_PASS set in your environment" && exit 1
 [ -z "${USTC_ADMIN_USER}" ] && echo "You must have USTC_ADMIN_USER set in your environment" && exit 1

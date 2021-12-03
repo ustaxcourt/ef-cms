@@ -7,6 +7,8 @@ module.exports = {
     '!jest-scripts.config.js',
     '!coverage/**',
     '!set-maintenance-mode-locally.js',
+    '!data-import/judge/bulkImportJudgeUsers.js',
+    '!irs-super-user.js',
   ],
   coverageThreshold: {
     global: {

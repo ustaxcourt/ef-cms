@@ -5,8 +5,8 @@
  */
 
 const fs = require('fs');
-const parse = require('csv-parse');
 const { gatherRecords, getCsvOptions, sortableTitle } = require('./helpers');
+const { parse } = require('csv-parse');
 const { remove } = require('lodash');
 
 const USAGE = `
