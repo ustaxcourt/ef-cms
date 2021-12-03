@@ -6,6 +6,7 @@ exports.headerOverride = {
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
+  Vary: 'Authorization',
   'X-Content-Type-Options': 'nosniff',
 };
 
