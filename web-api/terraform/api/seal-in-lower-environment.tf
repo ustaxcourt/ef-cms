@@ -28,5 +28,5 @@ resource "aws_lambda_permission" "allow_topic_to_seal" {
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.zip_seal[0].function_name
   principal     = "sns.amazonaws.com"
-  source_arn    = "arn:aws:sns:us-east-1:${var.prod_env_account_id}:sealed_case_notifier"
+  source_arn    = "arn:aws:sns:us-east-1:${var.prod_env_account_id}:seal_notifier"
 }

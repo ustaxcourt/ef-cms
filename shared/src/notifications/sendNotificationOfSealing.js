@@ -14,13 +14,13 @@ exports.sendNotificationOfSealing = async ({
   docketEntryId,
   docketNumber,
 }) => {
-  if (applicationContext.environment.stage != 'prod') {
+  if (process.env.PROD_ENV_ACCOUNT_ID !== process.env.AWS_ACCOUNT_ID) {
     return;
   }
 
   const params = {
     Message: JSON.stringify({ docketEntryId, docketNumber }),
-    TopicArn: `arn:aws:sns:us-east-1:${process.env.AWS_ACCOUNT_ID}:sealed_case_notifier`,
+    TopicArn: `arn:aws:sns:us-east-1:${process.env.AWS_ACCOUNT_ID}:seal_notifier`,
   };
 
   await applicationContext.getNotificationService().publish(params);

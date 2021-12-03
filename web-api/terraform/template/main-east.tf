@@ -438,8 +438,8 @@ module "api-east-green" {
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object           = null_resource.seal_in_lower_east_object
-  seal_in_lower_object_hash      = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_green_east_object.etag : ""
-  create_seal_in_lower           = var.prod_env_account_id != data.aws_caller_identity.current.account_id ? 1 : 0
+  seal_in_lower_object_hash      = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_green_east_object.etag : ""
+  create_seal_in_lower           = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
   lower_env_account_id           = var.lower_env_account_id
   prod_env_account_id            = var.prod_env_account_id
 }
@@ -491,8 +491,8 @@ module "api-east-blue" {
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
   seal_in_lower_object           = null_resource.seal_in_lower_east_object
-  seal_in_lower_object_hash      = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_blue_east_object.etag : ""
-  create_seal_in_lower           = var.prod_env_account_id != data.aws_caller_identity.current.account_id ? 1 : 0
+  seal_in_lower_object_hash      = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_blue_east_object.etag : ""
+  create_seal_in_lower           = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
   lower_env_account_id           = var.lower_env_account_id
   prod_env_account_id            = var.prod_env_account_id
 }
