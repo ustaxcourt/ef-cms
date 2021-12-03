@@ -1,6 +1,6 @@
 // Creates an SNS Topic that a Lambda can subscribe to in order seal cases in lower environments
-resource "aws_sns_topic" "sealed_case_notifier" {
-  name = "sealed_case_notifier"
+resource "aws_sns_topic" "seal_notifier" {
+  name = "seal_notifier"
   count = var.prod_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
   policy = <<EOF
 {
@@ -13,7 +13,7 @@ resource "aws_sns_topic" "sealed_case_notifier" {
     "SNS:Subscribe",
     "SNS:Receive"
   ],
-  "Resource": "arn:aws:sns:us-east-1:${var.prod_env_account_id}:sealed_case_notifier"
+  "Resource": "arn:aws:sns:us-east-1:${var.prod_env_account_id}:seal_notifier"
 }
 EOF
 }

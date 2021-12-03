@@ -24,5 +24,6 @@ data "null_data_source" "locals" {
     LOG_LEVEL                          = var.log_level
     SCANNER_RESOURCE_URI               = var.scanner_resource_uri
     AWS_ACCOUNT_ID                     = data.aws_caller_identity.current.account_id
+    PROD_ENV_ACCOUNT_ID                = var.prod_env_account_id
   }
 }
