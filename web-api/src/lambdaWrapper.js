@@ -9,7 +9,7 @@ exports.headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-exports.ambdaWrapper = lambda => {
+exports.lambdaWrapper = lambda => {
   return async (req, res) => {
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
