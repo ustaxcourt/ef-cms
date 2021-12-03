@@ -10,17 +10,32 @@ exports.sealInLowerEnvironmentLambda = async event => {
   const user = { role: 'docketclerk' };
   const applicationContext = createApplicationContext(user);
 
-  applicationContext.logger.info('received a stream event of', event);
+  applicationContext.logger.info('received a stream event of', {
+    message: event,
+  });
 
   const { docketEntryId, docketNumber } = JSON.parse(event.Message);
 
   if (docketEntryId && docketNumber) {
-    // TODO: seal case in
+    // TODO: once we can seal document: https://github.com/flexion/ef-cms/issues/4252
+    // return await applicationContext
+    //   .getUseCases()
+    //   .sealDocumentInteractor(applicationContext, {
+    //     docketEntryId,
+    //     docketNumber,
+    //   });
   } else if (docketNumber) {
     return await applicationContext
       .getUseCases()
       .sealCaseInteractor(applicationContext, {
-        docketNumber: event.docketNumber,
+        docketNumber,
       });
   }
+
+  applicationContext.logger.warn(
+    'Did not receive a valid docketEntryId or docketNumber to seal',
+    {
+      event,
+    },
+  );
 };
