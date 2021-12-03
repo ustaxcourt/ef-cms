@@ -1,3 +1,6 @@
+const {
+  FORMATS,
+} = require('../../../shared/src/business/utilities/DateHandler');
 const { genericHandler } = require('../genericHandler');
 
 /**
@@ -16,8 +19,10 @@ exports.authenticateUserLambda = event =>
       howMuch: 29,
       units: 'days',
     });
-    // eslint-disable-next-line @miovision/disallow-date/no-new-date
-    const expiresAtUtc = new Date(expiresAtIso).toUTCString();
+
+    const expiresAtUtc = applicationContext
+      .getUtilities()
+      .formatDateString(expiresAtIso, FORMATS.COOKIE);
     return {
       body: JSON.stringify({ token }),
       headers: {

@@ -1,6 +1,7 @@
 const { DateTime } = require('luxon');
 
 const FORMATS = {
+  COOKIE: "EEE, dd MMM yyyy HH':'mm':'ss 'GMT'",
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
   FILENAME_DATE: 'MMMM_d_yyyy',
