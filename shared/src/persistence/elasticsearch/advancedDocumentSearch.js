@@ -71,17 +71,16 @@ exports.advancedDocumentSearch = async ({
     });
   }
   if (omitSealed) {
+    // case must either have a FALSE isSealed, or a nonexistent isSealed
+    // AND hasSealedDocuments is FALSE
     caseMust = [
+      {
+        term: { 'isSealed.BOOL': false },
+      },
       {
         term: { 'hasSealedDocuments.BOOL': false },
       },
     ];
-    caseMustNot = [
-      {
-        term: { 'isSealed.BOOL': true },
-      },
-    ];
-
     docketEntryMustNot = [
       ...docketEntryMustNot,
       {
@@ -100,32 +99,9 @@ exports.advancedDocumentSearch = async ({
       parent_type: 'case',
       query: {
         bool: {
-          must: [
-            {
-              term: { 'hasSealedDocuments.BOOL': false },
-            },
-          ],
-          filter: [
-            {
-              bool: {
-                should: [
-                  {
-                    bool: {
-                      must_not: [
-                        {
-                          term: { 'isSealed.BOOL': true },
-                        },
-                      ],
-                    },
-                  },
-                ],
-              },
-            },
-          ],
-          //
-          // must: caseMust,
-          // must_not: caseMustNot,
-          // todo: try with an exist
+          filter: [],
+          must: caseMust,
+          // minimum_should_match: 1,
         },
       },
       score: true,
