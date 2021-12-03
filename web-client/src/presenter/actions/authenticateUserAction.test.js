@@ -7,16 +7,15 @@ describe('authenticateUserAction', () => {
   beforeAll(() => {
     applicationContext
       .getUseCases()
-      .authorizeCodeInteractor.mockImplementation((appContext, { code }) => {
+      .authenticateUserInteractor.mockImplementation((appContext, { code }) => {
         return {
-          refreshToken: `refresh-token-${code}`,
           token: `token-${code}`,
         };
       });
     presenter.providers.applicationContext = applicationContext;
   });
 
-  it('calls the authorizeCodeInteractor with the given code from props, returning its response tokens', async () => {
+  it('calls the authenticateUserInteractor with the given code from props, returning its response tokens', async () => {
     const result = await runAction(authenticateUserAction, {
       modules: {
         presenter,
@@ -28,12 +27,11 @@ describe('authenticateUserAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().authorizeCodeInteractor.mock.calls
+      applicationContext.getUseCases().authenticateUserInteractor.mock.calls
         .length,
     ).toEqual(1);
 
     expect(result.output).toEqual({
-      refreshToken: 'refresh-token-123',
       token: 'token-123',
     });
   });
