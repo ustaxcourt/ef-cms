@@ -10,11 +10,15 @@ exports.sealInLowerEnvironmentLambda = async event => {
   const user = { role: 'docketclerk' };
   const applicationContext = createApplicationContext(user);
 
+  const [record] = event.Records;
+  const message = record.Sns.Message;
+
   applicationContext.logger.info('received a stream event of', {
-    message: event,
+    event: JSON.stringify(event),
+    message,
   });
 
-  const { docketEntryId, docketNumber } = JSON.parse(event.Message);
+  const { docketEntryId, docketNumber } = JSON.parse(message);
 
   if (docketEntryId && docketNumber) {
     // TODO: once we can seal document: https://github.com/flexion/ef-cms/issues/4252
