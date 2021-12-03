@@ -6,7 +6,7 @@ resource "aws_lambda_function" "zip_seal" {
   source_code_hash = var.seal_in_lower_object_hash
   function_name    = "seal_in_lower_${var.environment}_${var.current_color}"
   role             = "arn:aws:iam::${var.account_id}:role/lambda_role_${var.environment}"
-  handler          = ".handler"
+  handler          = "seal-in-lower-environment.handler"
   timeout          = "60"
   memory_size      = "768"
 
@@ -29,4 +29,8 @@ resource "aws_lambda_permission" "allow_topic_to_seal" {
   function_name = aws_lambda_function.zip_seal[0].function_name
   principal     = "sns.amazonaws.com"
   source_arn    = "arn:aws:sns:us-east-1:${var.prod_env_account_id}:seal_notifier"
+}
+
+resource "aws_cloudwatch_log_group" "api_stage_logs" {
+  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api.name}"
 }
