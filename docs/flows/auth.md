@@ -20,3 +20,5 @@ note over UI: user clicks log out
 UI->API: DELETE@/auth
 API->UI: clear cookies
 UI->Cognito UI: redirect
+
+![Flow](cookie_auth_flow.png)
