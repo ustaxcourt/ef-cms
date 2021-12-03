@@ -57,6 +57,8 @@ exports.advancedDocumentSearch = async ({
 
   const docketEntryQueryParams = [];
   let caseMust = [];
+  let caseShould = [];
+  let caseQuery = [];
   let docketEntryMustNot = [{ term: { 'isStricken.BOOL': true } }];
   const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
@@ -70,24 +72,7 @@ exports.advancedDocumentSearch = async ({
       },
     });
   }
-  if (omitSealed) {
-    // case must either have a FALSE isSealed, or a nonexistent isSealed
-    // AND hasSealedDocuments is FALSE
-    caseMust = [
-      {
-        term: { 'isSealed.BOOL': false },
-      },
-      {
-        term: { 'hasSealedDocuments.BOOL': false },
-      },
-    ];
-    docketEntryMustNot = [
-      ...docketEntryMustNot,
-      {
-        term: { 'isSealed.BOOL': true },
-      },
-    ];
-  }
+
   const caseQueryParams = {
     has_parent: {
       inner_hits: {
@@ -100,13 +85,60 @@ exports.advancedDocumentSearch = async ({
       query: {
         bool: {
           filter: [],
-          must: caseMust,
-          // minimum_should_match: 1,
         },
       },
       score: true,
     },
   };
+
+  if (omitSealed) {
+    console.log('in omitSealed');
+
+    // show order result for public user if:
+    // hasSealedDocuments = false AND (isSealed = false OR isSealed = undefined)
+    caseShould = {
+      bool: {
+        should: [
+          {
+            bool: {
+              must: {
+                term: { 'isSealed.BOOL': false },
+              },
+            },
+          },
+          {
+            bool: {
+              must_not: {
+                exists: { field: 'isSealed' },
+              },
+            },
+          },
+          // {
+          //   term: { 'hasSealedDocuments.BOOL': false },
+          // },
+        ],
+      },
+    };
+    caseMust = {
+      term: { 'hasSealedDocuments.BOOL': false },
+    };
+
+    let mustShowResults = [];
+    // mustShowResults.push(caseMust);
+    mustShowResults.push(caseShould);
+
+    caseQuery = { bool: { must: mustShowResults } };
+
+    // docketEntryMustNot = [
+    //   ...docketEntryMustNot,
+    //   {
+    //     term: { 'isSealed.BOOL': true },
+    //   },
+    // ];
+    caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
+  }
+
+  console.log('caseQueryParams', caseQueryParams.has_parent.query.bool.filter);
 
   if (docketNumber) {
     caseQueryParams.has_parent.query.bool.filter.push({
@@ -222,6 +254,8 @@ exports.advancedDocumentSearch = async ({
       break;
   }
 
+  console.log('docketEntryQueryParams', { docketEntryQueryParams });
+
   const documentQuery = {
     body: {
       _source: sourceFields,
@@ -230,7 +264,7 @@ exports.advancedDocumentSearch = async ({
         bool: {
           filter: documentQueryFilter,
           must: docketEntryQueryParams,
-          must_not: docketEntryMustNot,
+          // must_not: docketEntryMustNot,
         },
       },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
