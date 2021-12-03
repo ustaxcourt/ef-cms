@@ -11,6 +11,7 @@ describe('DateHandler', () => {
     const mockTimeValue = 1530518207007; // '2018-07-02T07:56:47.007Z'
 
     const FORMATS_EXPECTED_OUTPUT = {
+      COOKIE: 'Mon, 02 Jul 2018 03:56:47 GMT',
       DATE_TIME: '07/02/18 03:56 am',
       DATE_TIME_TZ: '07/02/18 3:56 am ET',
       FILENAME_DATE: 'July_2_2018',
