@@ -1117,8 +1117,10 @@ app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 /**
  * Authentication/Authorization
  */
-app.post('/auth/login', lambdaWrapper(authenticateUserLambda));
+app
+  .route('/auth/login')
+  .post(lambdaWrapper(authenticateUserLambda))
+  .delete(lambdaWrapper(deleteAuthCookieLambda));
 app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
-app.delete('/auth/logout', lambdaWrapper(deleteAuthCookieLambda));
 
 exports.app = app;
