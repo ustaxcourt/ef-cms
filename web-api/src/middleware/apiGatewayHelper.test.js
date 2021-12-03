@@ -18,6 +18,7 @@ const EXPECTED_HEADERS = {
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
+  Vary: 'Authorization',
   'X-Content-Type-Options': 'nosniff',
 };
 
@@ -54,6 +55,7 @@ describe('handle', () => {
           'max-age=0, private, no-cache, no-store, must-revalidate',
         'Content-Type': 'application/json',
         Pragma: 'no-cache',
+        Vary: 'Authorization',
         'X-Content-Type-Options': 'nosniff',
       },
       statusCode: 200,
