@@ -1,6 +1,7 @@
 const {
   FORMATS,
 } = require('../../../shared/src/business/utilities/DateHandler');
+const { createCookieString } = require('../utilities/cookieFormatting');
 const { genericHandler } = require('../genericHandler');
 
 /**
@@ -26,7 +27,12 @@ exports.authenticateUserLambda = event =>
     return {
       body: JSON.stringify({ token }),
       headers: {
-        'Set-Cookie': `refreshToken=${refreshToken}; Expires=${expiresAtUtc}; Secure; HttpOnly; Domain=${process.env.EFCMS_DOMAIN}`,
+        'Set-Cookie': createCookieString(
+          'refreshToken',
+          refreshToken,
+          expiresAtUtc,
+          process.env.EFCMS_DOMAIN,
+        ),
       },
       statusCode: 200,
     };
