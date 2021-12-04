@@ -30,7 +30,3 @@ resource "aws_lambda_permission" "allow_topic_to_seal" {
   principal     = "sns.amazonaws.com"
   source_arn    = "arn:aws:sns:us-east-1:${var.prod_env_account_id}:seal_notifier"
 }
-
-resource "aws_cloudwatch_log_group" "api_stage_logs" {
-  name = "/aws/apigateway/${aws_api_gateway_rest_api.gateway_for_api.name}"
-}
