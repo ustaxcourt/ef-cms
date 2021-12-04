@@ -159,6 +159,7 @@
     ]
   },
   "scripts": {
+    "admin:create-user": "node shared/admin-tools/user/add-user.js",
     "admin:become-user": "node shared/admin-tools/glue/become-user.js",
     "admin:lookup-user": "node shared/admin-tools/glue/lookup-user.js",
     "build:all": "npm run clean && npm run build:assets && npm run build:client",
