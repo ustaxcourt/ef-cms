@@ -9,7 +9,7 @@ exports.getDocketNumbersByUser = async ({ applicationContext, userId }) => {
 };
 
 exports.getCasesAssociatedWithUser = ({ applicationContext, userId }) =>
-  client.query({
+  client.queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',
       '#sk': 'sk',
