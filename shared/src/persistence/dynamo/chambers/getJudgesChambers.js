@@ -13,6 +13,10 @@ const JUDGES_CHAMBERS = {
     label: 'Carluzzo’s Chambers',
     section: 'carluzzosChambers',
   },
+  CHOIS_CHAMBERS_SECTION: {
+    label: 'Choi’s Chambers',
+    section: 'choisChambers',
+  },
   COHENS_CHAMBERS_SECTION: {
     label: 'Cohen’s Chambers',
     section: 'cohensChambers',
@@ -64,6 +68,10 @@ const JUDGES_CHAMBERS = {
   KERRIGANS_CHAMBERS_SECTION: {
     label: 'Kerrigan’s Chambers',
     section: 'kerrigansChambers',
+  },
+  LANDYS_CHAMBERS_SECTION: {
+    label: 'Landy’s Chambers',
+    section: 'landysChambers',
   },
   LAUBERS_CHAMBERS_SECTION: {
     label: 'Lauber’s Chambers',
