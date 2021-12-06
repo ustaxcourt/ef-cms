@@ -1,4 +1,5 @@
 const { genericHandler } = require('../genericHandler');
+const { parseCookieString } = require('../utilities/cookieFormatting');
 
 /**
  * Sets the authentication cookie based on the OAuth code
@@ -8,17 +9,11 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.refreshAuthTokenLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    // TODO: find library that will parse cookies from headers without writing this custom logic
-    const cookiesInHeader = event.headers.cookie.split(';');
-    const cookies = {};
-    cookiesInHeader.forEach(cookieString => {
-      const [key, value] = cookieString.split('=');
-      cookies[key.trim()] = value;
-    });
+    const { refreshToken } = parseCookieString(event.headers.cookie);
     const { token } = await applicationContext
       .getUseCases()
       .refreshAuthTokenInteractor(applicationContext, {
-        refreshToken: cookies.refreshToken,
+        refreshToken,
       });
     return {
       token,

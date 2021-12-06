@@ -1,3 +1,5 @@
+const cookie = require('cookie');
+
 exports.createCookieString = (
   cookieKey,
   cookieValue,
@@ -6,16 +8,13 @@ exports.createCookieString = (
   secure = true,
   httpOnly = true,
 ) => {
-  let cookieString = `${cookieKey}=${cookieValue}; Expires=${expiresDateTime}; Domain=${domain}`;
-
-  if (secure) {
-    cookieString += '; Secure';
-  }
-  if (httpOnly) {
-    cookieString += '; HttpOnly';
-  }
-
-  return cookieString;
+  return cookie.serialize(cookieKey, cookieValue, {
+    domain,
+    // eslint-disable-next-line @miovision/disallow-date/no-new-date
+    expires: new Date(expiresDateTime),
+    httpOnly,
+    secure,
+  });
 };
 
 exports.deleteCookieString = (
@@ -24,15 +23,15 @@ exports.deleteCookieString = (
   secure = true,
   httpOnly = true,
 ) => {
-  const expiresDate = 'Thu, 01 Jan 1970 00:00:00 GMT';
-  let cookieString = `${cookieKey}=deleted; Expires=${expiresDate}; Domain=${domain}`;
+  return cookie.serialize(cookieKey, 'deleted', {
+    domain,
+    // eslint-disable-next-line @miovision/disallow-date/no-new-date
+    expires: new Date('Thu, 01 Jan 1970 00:00:00 GMT'),
+    httpOnly,
+    secure,
+  });
+};
 
-  if (secure) {
-    cookieString += '; Secure';
-  }
-  if (httpOnly) {
-    cookieString += '; HttpOnly';
-  }
-
-  return cookieString;
+exports.parseCookieString = cookieString => {
+  return cookie.parse(cookieString);
 };
