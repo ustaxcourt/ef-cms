@@ -3,6 +3,11 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const { sendNotificationOfSealing } = require('./sendNotificationOfSealing');
 
+const tempEnvironmentVariables = {
+  AWS_ACCOUNT_ID: process.env.AWS_ACCOUNT_ID,
+  PROD_ENV_ACCOUNT_ID: process.env.PROD_ENV_ACCOUNT_ID,
+};
+
 describe('send notification to notification service', () => {
   const publish = jest
     .fn()
@@ -14,8 +19,13 @@ describe('send notification to notification service', () => {
     });
   });
 
+  afterAll(() => {
+    process.env.AWS_ACCOUNT_ID = tempEnvironmentVariables.AWS_ACCOUNT_ID;
+    process.env.PROD_ENV_ACCOUNT_ID =
+      tempEnvironmentVariables.PROD_ENV_ACCOUNT_ID;
+  });
+
   it('should send notification if we are in the production environment', async () => {
-    // applicationContext.environment.stage = 'prod';
     process.env.PROD_ENV_ACCOUNT_ID = '123';
     process.env.AWS_ACCOUNT_ID = '123';
 
@@ -32,7 +42,6 @@ describe('send notification to notification service', () => {
   });
 
   it('should NOT send notification if we are NOT in the production environment', async () => {
-    // applicationContext.environment.stage = 'test';
     process.env.PROD_ENV_ACCOUNT_ID = '123';
     process.env.AWS_ACCOUNT_ID = '789';
     await sendNotificationOfSealing(applicationContext, {
