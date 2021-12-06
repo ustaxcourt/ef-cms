@@ -2,7 +2,7 @@ const { lambdaWrapper } = require('./lambdaWrapper');
 jest.mock('@vendia/serverless-express');
 const { getCurrentInvoke } = require('@vendia/serverless-express');
 
-describe('createLambdaWrapper', () => {
+describe('lambdaWrapper', () => {
   let req, res;
 
   beforeAll(() => {
