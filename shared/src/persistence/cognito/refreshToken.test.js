@@ -8,11 +8,13 @@ const aws = require('aws-sdk');
 
 describe('refreshToken', () => {
   const expectedToken = '123';
-  const mockAxios = jest.fn().mockReturnValue({
-    data: {
-      id_token: expectedToken,
-    },
-  });
+  const mockAxios = {
+    post: jest.fn().mockReturnValue({
+      data: {
+        id_token: expectedToken,
+      },
+    }),
+  };
 
   beforeEach(() => {
     const expectedClientId = '82b35e7c-9830-4104-bb15-24a2eda7f84e';
@@ -33,7 +35,7 @@ describe('refreshToken', () => {
       refreshToken: 'abc',
     });
 
-    expect(mockAxios).toHaveBeenCalled();
+    expect(mockAxios.post).toHaveBeenCalled();
 
     expect(result).toEqual({
       token: expectedToken,

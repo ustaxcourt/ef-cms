@@ -110,7 +110,9 @@ import { isFunction, mapValues } from 'lodash';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
+import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACognitoLogin';
 import { withAppContextDecorator } from './withAppContext';
+
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -166,10 +168,10 @@ const app = {
 
     presenter.state.constants = applicationContext.getConstants();
 
-    // if we open a new tab, there may or may not be a cookie
-    // attached to our users browser which can be used to get a new token
-    const isNewTabOpened = !window.location.href.includes('?code');
-    if (isNewTabOpened && !process.env.IS_LOCAL) {
+    if (
+      !wasAppLoadedFromACognitoLogin(window.location.href) &&
+      !process.env.IS_LOCAL
+    ) {
       try {
         const response = await applicationContext
           .getUseCases()

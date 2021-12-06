@@ -7,12 +7,14 @@ jest.mock('aws-sdk');
 const aws = require('aws-sdk');
 
 describe('confirmAuthCode', () => {
-  const mockAxios = jest.fn().mockReturnValue({
-    data: {
-      id_token: '123',
-      refresh_token: 'abc',
-    },
-  });
+  const mockAxios = {
+    post: jest.fn().mockReturnValue({
+      data: {
+        id_token: '123',
+        refresh_token: 'abc',
+      },
+    }),
+  };
 
   beforeEach(() => {
     const expectedClientId = '82b35e7c-9830-4104-bb15-24a2eda7f84e';
@@ -33,7 +35,7 @@ describe('confirmAuthCode', () => {
       code: 'abc',
     });
 
-    expect(mockAxios).toHaveBeenCalled();
+    expect(mockAxios.post).toHaveBeenCalled();
 
     expect(result).toEqual({
       refreshToken: 'abc',
