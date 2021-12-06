@@ -2,7 +2,7 @@
 
 ## Problem
 
-Sealed cases in production remain unsealed in Lower Environments
+Sealed cases in production remain unsealed in Lower Environments that have Production data
 
 ## Solution
 
@@ -10,7 +10,7 @@ Sealed cases in production remain unsealed in Lower Environments
 
 ### In Production
 
-The `sealCaseInteractor` makes a call to a new dispatcher that has been made available. This dispatcher, `sendNotificationOfSealing`, only runs if the current environment is production. If the environment is not production, it does nothing.
+The `sealCaseInteractor` makes a call to a new dispatcher that has been made available in the codebase. This dispatcher, `sendNotificationOfSealing`, only runs if the current environment is production. If the environment is not production, it does nothing.
 
 This dispatcher publishes a message to an SNS topic called `seal_notifier` that also only exists in production. Its message is simply the `docketNumber` in a stringified JSON object. When we are [able to seal individual documents](https://github.com/flexion/ef-cms/issues/4252), we may opt to also include a `docketEntryId` in order to seal that document in a lower environment.
 
@@ -24,7 +24,7 @@ resource "aws_sns_topic" "seal_notifier" {
 
 ```
 
-The terraform also needs to allow a Lambda in a lower environment to subscribe to it. Another newly introduced environment variable `LOWER_ENV_ACCOUNT_ID` is used to generate the `sns_topic_policy`.
+The terraform config also permits a specified lambda in a lower environment to subscribe to it. Another newly introduced environment variable `LOWER_ENV_ACCOUNT_ID` is used to generate the `sns_topic_policy` that grants access to those lambda functions.
 
 ## In the Lower Environments
 
@@ -32,7 +32,7 @@ In any environment that is not production, a new lambda named `seal_in_lower` is
 
 Since it needs to make use of the `applicationContext` and seal cases via the `sealCaseInteractor`, we make a webpack bundle for it, include it in the build step, and deploy it via the `blue`/`green` template.
 
-We need to make use of the `PROD_ENV_ACCOUNT_ID` in order to grant the ability to invoke this function to the `seal_notifier`, and we include that as an `aws_lambda_permission` in the [terraform configuration for the lambda](../../web-ap/terraform/../../web-api/terraform/api/seal-in-lower-environment.tf).
+We need to make use of the `PROD_ENV_ACCOUNT_ID` in order to grant the ability to invoke this function to the `seal_notifier` topic, and we include that as an `aws_lambda_permission` in the [terraform configuration for the lambda](../../web-api/terraform/api/seal-in-lower-environment.tf).
 
 ## Establishing the connection
 
@@ -43,7 +43,13 @@ aws sns subscribe \
     --topic-arn "arn:aws:sns:us-east-1:<PROD_ENV_ACCOUNT_ID>:seal_notifier" \
     --protocol "lambda" \
     --notification-endpoint "arn:aws:lambda:us-east-1:<LOWER_ENV_ACCOUNT_ID>:function:seal_in_lower_dev_blue"
+aws sns subscribe \
+    --topic-arn "arn:aws:sns:us-east-1:<PROD_ENV_ACCOUNT_ID>:seal_notifier" \
+    --protocol "lambda" \
+    --notification-endpoint "arn:aws:lambda:us-east-1:<LOWER_ENV_ACCOUNT_ID>:function:seal_in_lower_dev_blue"
 ```
+
+We subscribe both the `blue` and `green` lambda functions to the topic. As it executes, the lambda retrieves the currently deployed color, and only the lambda of the currently deployed color will respond to the notification.
 
 ## Dispatcher
 
