@@ -12,14 +12,14 @@ exports.deleteAuthCookieLambda = event =>
     event,
     () => {
       return {
-        body: JSON.stringify({ message: 'success' }),
+        body: '',
         headers: {
           'Set-Cookie': deleteCookieString(
             'refreshToken',
             process.env.EFCMS_DOMAIN,
           ),
         },
-        statusCode: 200,
+        statusCode: 204,
       };
     },
     {

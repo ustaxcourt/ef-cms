@@ -25,7 +25,12 @@ exports.handle = async (event, fun) => {
       typeof response[Symbol.iterator] === 'function' &&
       response.indexOf('%PDF-') > -1;
 
-    if (response && response.body && response.statusCode && response.headers) {
+    if (
+      response &&
+      response.body !== undefined &&
+      response.statusCode &&
+      response.headers
+    ) {
       // the lambda function is more advanced and wants to control more aspects of the response
       return exports.sendOk(
         response.body,

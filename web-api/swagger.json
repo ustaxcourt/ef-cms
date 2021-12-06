@@ -24,17 +24,13 @@
       "description": "rawDocument service"
     }
   ],
-  "schemes": [
-    "https"
-  ],
+  "schemes": ["https"],
   "paths": {
     "/api/court-issued-order": {
       "post": {
         "summary": "create a court issued order pdf preview",
         "description": "create a court issued order pdf preview.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -47,12 +43,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -78,9 +70,7 @@
       "post": {
         "summary": "create a pdf of the docket record for a case",
         "description": "create a pdf of the docket record for a case.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -93,12 +83,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -122,14 +108,10 @@
     },
     "/api/notifications": {
       "get": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "gets notifications such as unread item counts",
         "description": "Get notifications.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -145,12 +127,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -185,9 +163,7 @@
         "tags": [],
         "summary": "get feature flag value",
         "description": "get feature flag value.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -203,12 +179,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -235,9 +207,7 @@
         "tags": [],
         "summary": "get all pending items",
         "description": "get all pending items.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -253,12 +223,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -284,9 +250,7 @@
       "get": {
         "summary": "create a pdf of the pending report",
         "description": "create a pdf of the pending report.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -299,12 +263,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -347,9 +307,7 @@
     },
     "/api/swagger": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -357,12 +315,8 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -386,9 +340,7 @@
     },
     "/api/swagger.json": {
       "get": {
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -396,12 +348,8 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -427,9 +375,7 @@
       "post": {
         "summary": "create a pdf of the trial session calendar",
         "description": "create a pdf of the trial session calendar.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -442,12 +388,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -471,14 +413,10 @@
     },
     "/cases": {
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "create a case",
         "description": "Create a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -494,12 +432,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -537,14 +471,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Updates the counsel on the case",
         "description": "Updates the counsel on the case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -560,14 +490,10 @@
         ]
       },
       "delete": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Deletes the counsel from the case",
         "description": "Deletes the counsel from the case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -583,12 +509,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -620,14 +542,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Updates the primary contact info on a case",
         "description": "Updates the primary contact info on a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -643,12 +561,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -680,14 +594,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Updates the secondary contact info on a case",
         "description": "Updates the secondary contact info on a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -703,12 +613,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -732,14 +638,10 @@
     },
     "/cases/paper": {
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "create a case from a paper submission",
         "description": "Create a case from a paper submission.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -755,12 +657,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -794,9 +692,7 @@
       "post": {
         "summary": "create a pdf of the docket record for a case",
         "description": "create a pdf of the docket record for a case.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -809,12 +705,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -838,14 +730,10 @@
     },
     "/public-api/order-search": {
       "get": {
-        "tags": [
-          "case-documents"
-        ],
+        "tags": ["case-documents"],
         "summary": "search for an order-related document type by keyword within its title or contents",
         "description": "Search for an order-related document type by keyword within its title or contents.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -861,12 +749,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -890,14 +774,10 @@
     },
     "/public-api/search": {
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "search for a case by name, country, state, and/or year filed",
         "description": "Search for a case by name, country, state, and/or year filed.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -913,12 +793,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -942,14 +818,10 @@
     },
     "/cases/search": {
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "search for a case by name, country, state, and/or year filed",
         "description": "Search for a case by name, country, state, and/or year filed.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -965,12 +837,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1002,14 +870,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "get all blocked cases",
         "description": "get all blocked cases.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1025,12 +889,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1080,14 +940,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "get case inventory report",
         "description": "get case inventory report.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1103,12 +959,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1146,14 +998,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "generate printable case inventory report",
         "description": "generate printable case inventory report.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1169,12 +1017,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1206,14 +1050,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "get a case by docket number",
         "description": "Get a case by docket number.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1229,14 +1069,10 @@
         ]
       },
       "head": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "get a case existence by docket number",
         "description": "Get a case existence by docket number.\n",
-        "produces": [
-          "text/plain"
-        ],
+        "produces": ["text/plain"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1250,16 +1086,12 @@
             "CognitoUserPool": []
           }
         ]
-      },      
+      },
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "update a case",
         "description": "Update a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1281,12 +1113,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1310,14 +1138,10 @@
     },
     "/cases/open": {
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Retrieve open cases",
         "description": "Retrieve open cases.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1333,12 +1157,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1362,14 +1182,10 @@
     },
     "/cases/closed": {
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Retrieve closed cases",
         "description": "Retrieve closed cases.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1385,12 +1201,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1422,14 +1234,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "get a case by docket number",
         "description": "Get a case by docket number.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1445,12 +1253,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1482,14 +1286,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "get a case by docket number",
         "description": "Get a case by docketNumber.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1505,12 +1305,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1542,14 +1338,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "add a block to a case",
         "description": "add a block to a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1565,14 +1357,10 @@
         ]
       },
       "delete": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "removed the block from a case",
         "description": "removed the block from a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1588,12 +1376,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1631,14 +1415,10 @@
         }
       ],
       "delete": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "removes a pending item from a case",
         "description": "removes a pending item from a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1654,12 +1434,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1697,14 +1473,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "updates statistics on a case",
         "description": "updates statistics on a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1720,14 +1492,10 @@
         ]
       },
       "delete": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "removes a statistics entry off a case",
         "description": "removes a statistics entry off a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1743,12 +1511,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1780,14 +1544,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "sets a case as high priority",
         "description": "sets a case as high priority.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1803,14 +1563,10 @@
         ]
       },
       "delete": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "removes the high priority from a case",
         "description": "removes the high priority from a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1826,12 +1582,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1863,14 +1615,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "update other statistics on a case",
         "description": "update other statistics on a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1886,12 +1634,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1923,14 +1667,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "add a statistic to a case",
         "description": "add a statistic to a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1946,12 +1686,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -1983,17 +1719,11 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Updates the caption, status, and judge on the given case.",
         "description": "Updates the caption, status, and judge on the given case.\n",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2009,12 +1739,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2046,17 +1772,11 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Consolidates two or more cases associated with the given docket number.",
         "description": "Consolidates two or more cases associated with the given docket number.\n",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2080,17 +1800,11 @@
             "type": "string"
           }
         ],
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Unconsolidates the cases passed in the query string.",
         "description": "Unconsolidates the cases passed in the query string.\n",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2106,12 +1820,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2143,17 +1853,11 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "Returns all consolidated cases associated with the given docket number.",
         "description": "Returns all consolidated cases associated with the given docket number.\n",
-        "produces": [
-          "application/json"
-        ],
-        "consumes": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
+        "consumes": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2169,12 +1873,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2198,14 +1898,10 @@
     },
     "/case-documents/order-search": {
       "get": {
-        "tags": [
-          "case-documents"
-        ],
+        "tags": ["case-documents"],
         "summary": "search for an order-related document type by keyword within its title or contents",
         "description": "Search for an order-related document type by keyword within its title or contents.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2221,12 +1917,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2258,14 +1950,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "file a new external document on a case",
         "description": "Creates a new external document and attaches it to a case. It will also create a work item.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2281,12 +1969,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2318,14 +2002,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "case-documents"
-        ],
+        "tags": ["case-documents"],
         "summary": "retrieves document contents for a given document contents id",
         "description": "Retrieves document's contents from S3 for a given ID.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2341,12 +2021,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2378,14 +2054,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "file a new paper docket entry on a case",
         "description": "Creates a new paper docket entry/document and attaches it to a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2401,14 +2073,10 @@
         ]
       },
       "put": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "updates a current paper docket entry on a case",
         "description": "Updates a paper docket entry/document and attaches it to a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2424,12 +2092,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2461,15 +2125,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "documents",
-          "docket record"
-        ],
+        "tags": ["documents", "docket record"],
         "summary": "Updates the docket entry meta data on a case",
         "description": "Updates the docket entry meta on a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2485,12 +2144,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2522,14 +2177,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "updates a current docket entry on a case that is in progress",
         "description": "Updates a docket entry on a case that is in progress.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2545,12 +2196,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2582,14 +2229,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "completes a docket entry on a case that was previously in progress",
         "description": "Completes a docket entry on a case that was previously in progress.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2605,12 +2248,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2642,14 +2281,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "sends the case to the holding queue",
         "description": "Send a packaged case to the respondent.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2679,14 +2314,10 @@
             "type": "string"
           }
         ],
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "deletes the petition on the case from the holding queue",
         "description": "Deletes the petition on the case from the holding queue.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2708,12 +2339,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2737,14 +2364,10 @@
     },
     "/documents/upload-policy": {
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "create a pre-signed url for uploads",
         "description": "Create a pre-signed url for  document uploads to S3.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2760,12 +2383,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2803,14 +2422,10 @@
         }
       ],
       "delete": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "deletes a document from a case",
         "description": "Deletes a document from a case and from S3.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -2818,14 +2433,10 @@
         }
       },
       "put": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "archives a document on a case, but does not delete it",
         "description": "Archives a document on a case, but does not delete it.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -2833,12 +2444,8 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2876,14 +2483,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "redirects to the s3 url for downloading a document",
         "description": "Create and redirects the user to a pre-signed url for document downloads from S3.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "302": {
             "description": "302 response",
@@ -2894,12 +2497,8 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2937,14 +2536,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "redirects to the s3 url for downloading a public document",
         "description": "Create and redirects the user to a pre-signed url for document downloads from S3.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "302": {
             "description": "302 response",
@@ -2955,12 +2550,8 @@
         }
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -2998,14 +2589,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "create a pre-signed url for downloads",
         "description": "Create a pre-signed url for  document downloads from S3.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3021,12 +2608,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3050,14 +2633,10 @@
     },
     "/public-api/health": {
       "get": {
-        "tags": [
-          "health"
-        ],
+        "tags": ["health"],
         "summary": "returns the health of various services",
         "description": "Returns the health of various services.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3073,12 +2652,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3110,14 +2685,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "gets the status of the virus scan for the document",
         "description": "Endpoint that the status of the virus scan for the document.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -3130,12 +2701,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3167,14 +2734,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "triggers the pdf validation function",
         "description": "Endpoint that triggers the PDF validation function for the specified document.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -3187,12 +2750,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3224,14 +2783,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "get all cases for a user",
         "description": "Get all cases for a user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3247,12 +2802,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3290,14 +2841,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "get the section document qc inbox work items",
         "description": "get the section document qc inbox work items.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3313,12 +2860,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3350,14 +2893,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "get the section document qc served work items",
         "description": "get the section document qc served work items.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3373,12 +2912,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3416,14 +2951,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "creates a new work item and attaches it to the case document",
         "description": "creates a new work item and attaches it to the case document\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3439,12 +2970,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3482,14 +3009,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "serves a court issued document",
         "description": "serves a court issued document\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3505,12 +3028,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3548,14 +3067,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "serves an externally-filed document",
         "description": "serves an externally-filed document\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3571,12 +3086,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3614,14 +3125,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "case-documents"
-        ],
+        "tags": ["case-documents"],
         "summary": "deletes the pdf from a given docket entry",
         "description": "Deletes the pdf from a given docket entry\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3637,12 +3144,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3674,14 +3177,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "get all users in a section",
         "description": "get all users in a section\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3697,12 +3196,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3726,14 +3221,10 @@
     },
     "/users": {
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "gets user data",
         "description": "gets user data.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3749,14 +3240,10 @@
         ]
       },
       "post": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "creates a user",
         "description": "creates a user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3778,12 +3265,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3807,14 +3290,10 @@
     },
     "/judges": {
       "post": {
-        "tags": [
-          "judges"
-        ],
+        "tags": ["judges"],
         "summary": "creates a judge user",
         "description": "creates a judge user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3830,12 +3309,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3867,14 +3342,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "practitioners"
-        ],
+        "tags": ["practitioners"],
         "summary": "gets a practitioner by name",
         "description": "Gets a practitioner by name.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3890,14 +3361,10 @@
         ]
       },
       "post": {
-        "tags": [
-          "practitioners"
-        ],
+        "tags": ["practitioners"],
         "summary": "creates a practitioner user",
         "description": "creates a practitioner user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3913,12 +3380,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3950,14 +3413,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "practitioners"
-        ],
+        "tags": ["practitioners"],
         "summary": "generates a printable case list for the practitioner userId provided",
         "description": "Generates a printable case list for the practitioner userId provided.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -3983,14 +3442,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "practitioners"
-        ],
+        "tags": ["practitioners"],
         "summary": "get the practitioner via bar number",
         "description": "Get the practitioner via bar number.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4006,14 +3461,10 @@
         ]
       },
       "put": {
-        "tags": [
-          "practitioners"
-        ],
+        "tags": ["practitioners"],
         "summary": "updates a practitioner user",
         "description": "updates a practitioner user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4029,12 +3480,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4058,14 +3505,10 @@
     },
     "/users/internal": {
       "get": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "get all internal users",
         "description": "get all internal users\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4081,12 +3524,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4118,14 +3557,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "get all cases for a user",
         "description": "Get all cases for a user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4141,12 +3576,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4178,14 +3609,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "get pending email for a user",
         "description": "Get pending email for a user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4201,12 +3628,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4244,14 +3667,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "verify if user has pending association with the case",
         "description": "Verify if user has pending associationwith the case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -4264,14 +3683,10 @@
         ]
       },
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "add pending association for practitioner for case if not associated with the case",
         "description": "Add pending association for practitioner for case if not associated with the case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -4284,12 +3699,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4321,14 +3732,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "updates a user's contact information",
         "description": "updates a user's contact information.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4344,12 +3751,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4373,14 +3776,10 @@
     },
     "/users/pending-email": {
       "put": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "updates a user with a pending email",
         "description": "updates a user with a pending email.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4396,12 +3795,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4425,14 +3820,10 @@
     },
     "/async/users/verify-email": {
       "put": {
-        "tags": [
-          "user"
-        ],
+        "tags": ["user"],
         "summary": "verifies a user's pending email with a token",
         "description": "verifies a user's pending email with a token.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4448,12 +3839,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4485,14 +3872,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "get the inbox items from the users document qc section",
         "description": "get the inbox items from the users document qc section\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4508,12 +3891,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4545,14 +3924,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "get the served items from the users document qc section",
         "description": "get the served items from the users document qc section\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4568,12 +3943,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4597,14 +3968,10 @@
     },
     "/work-items": {
       "put": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "assigns an assigneId to a list of work item ids",
         "description": "Get a workitem.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4620,12 +3987,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4657,14 +4020,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "get a workitem by workItemId",
         "description": "Get a workitem.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4680,14 +4039,10 @@
         ]
       },
       "put": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "update a workitem by workItemId",
         "description": "Update a workitem.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4703,12 +4058,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4740,14 +4091,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "sets the assigneeId of the workitem to a new user",
         "description": "sets the assigneeId of the workitem to a new user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4763,12 +4110,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4800,14 +4143,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "marks the work item as read",
         "description": "marks the work item as read.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4823,12 +4162,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4866,14 +4201,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "creates a coversheet and prepends it to the existing s3 document",
         "description": "creates a coversheet and prepends it to the existing s3 document.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -4886,12 +4217,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4929,14 +4256,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "documents"
-        ],
+        "tags": ["documents"],
         "summary": "creates a copy of an existing document, adds a signature, and adds it to the associated case",
         "description": "creates a copy of an existing document, adds a signature, and adds it to the associated case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -4949,12 +4272,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -4986,14 +4305,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "workitems"
-        ],
+        "tags": ["workitems"],
         "summary": "marks the workitem complete",
         "description": "marks the workitem complete.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5009,12 +4324,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5038,14 +4349,10 @@
     },
     "/trial-sessions": {
       "get": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "gets all trial sessions",
         "description": "gets all trial sessions.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5061,14 +4368,10 @@
         ]
       },
       "post": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "creates a new trial session",
         "description": "creates a new trial session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5084,14 +4387,10 @@
         ]
       },
       "put": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "updates a trial session",
         "description": "updates a trial session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5107,12 +4406,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5144,14 +4439,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "gets a trial session",
         "description": "gets a trial session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5167,12 +4458,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5204,14 +4491,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "sets a trial session as a swing session",
         "description": "sets a trial session as a swing session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5227,12 +4510,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5264,14 +4543,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "gets eligible cases for a trial session",
         "description": "gets eligible cases for a trial session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5287,12 +4562,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5324,14 +4595,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "sets the calendar for a trial session",
         "description": "sets the calendar for a trial session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5347,12 +4614,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5384,14 +4647,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "generates notices of trial and standing pretrial document for cases within a given trial session and returns a PDF for any paper service parties associated",
         "description": "generates notices of trial and standing pretrial document for cases within a given trial session and returns a PDF for any paper service parties associated.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -5404,12 +4663,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5441,14 +4696,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "gets the cases associated with a trial session",
         "description": "gets the cases associated with a trial session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5464,12 +4715,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5507,14 +4754,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "adds the case to the given hearing",
         "description": "adds the case to the given hearing.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5530,12 +4773,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5573,14 +4812,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "removes a case from a trial session",
         "description": "removes a case from a trial session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5596,12 +4831,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5639,14 +4870,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "adds a case to a trial session",
         "description": "adds a case to a trial session.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5662,12 +4889,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5693,9 +4916,7 @@
       "post": {
         "summary": "create a pdf of the trial session planning report",
         "description": "create a pdf of the trial session planning report.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -5708,12 +4929,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5747,9 +4964,7 @@
       "post": {
         "summary": "creates a docket entry for a court-issued document on the case",
         "description": "creates a docket entry for a court-issued document on the case.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -5764,9 +4979,7 @@
       "put": {
         "summary": "updates a docket entry for a court-issued document on the case",
         "description": "updates a docket entry for a court-issued document on the case.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -5779,12 +4992,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5818,9 +5027,7 @@
       "post": {
         "summary": "files a court issued order on the case",
         "description": "files a court issued order on the case.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -5833,12 +5040,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5911,9 +5114,7 @@
       "put": {
         "summary": "updates the draft court issued order",
         "description": "updates the draft court issued order.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -5926,12 +5127,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -5957,9 +5154,7 @@
       "post": {
         "summary": "create a pdf receipt for filing a document or documents",
         "description": "create a pdf receipt for filing a document or documents.\n",
-        "produces": [
-          "application/pdf"
-        ],
+        "produces": ["application/pdf"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -5972,12 +5167,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6001,14 +5192,10 @@
     },
     "/case-deadlines": {
       "get": {
-        "tags": [
-          "caseDeadlines"
-        ],
+        "tags": ["caseDeadlines"],
         "summary": "get all case deadlines",
         "description": "get all case deadlines.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6024,12 +5211,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6061,14 +5244,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "caseDeadlines"
-        ],
+        "tags": ["caseDeadlines"],
         "summary": "gets deadlines for a case",
         "description": "gets deadlines for a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6084,14 +5263,10 @@
         ]
       },
       "post": {
-        "tags": [
-          "caseDeadlines"
-        ],
+        "tags": ["caseDeadlines"],
         "summary": "create and associate a deadline to a case",
         "description": "create and associate a deadline to a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6107,12 +5282,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6150,14 +5321,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "caseDeadlines"
-        ],
+        "tags": ["caseDeadlines"],
         "summary": "updates a case deadline",
         "description": "updates a case deadline.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6173,14 +5340,10 @@
         ]
       },
       "delete": {
-        "tags": [
-          "caseDeadlines"
-        ],
+        "tags": ["caseDeadlines"],
         "summary": "delete a case deadline",
         "description": "delete a case deadline.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response"
@@ -6193,12 +5356,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6230,14 +5389,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "updates the case details on the case",
         "description": "updates the case details on the case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6253,12 +5408,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6290,14 +5441,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "updates the petitioner information on the case",
         "description": "updates the petitioner information on the case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6313,12 +5460,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6366,14 +5509,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "updates the case to be marked as QCed",
         "description": "updates the case to be marked as QCed.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6389,12 +5528,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6426,14 +5561,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "updates the case as sealed",
         "description": "updates the case as sealed.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6449,12 +5580,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6492,14 +5619,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "updates the specified case contact address as sealed",
         "description": "updates the case contact address as sealed.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6515,12 +5638,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6552,14 +5671,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "adds a petitioner to the case",
         "description": "adds a petitioner to the case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6575,12 +5690,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6612,14 +5723,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "associates a practitioner with a case",
         "description": "associates a practitioner with a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6635,12 +5742,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6672,14 +5775,10 @@
         }
       ],
       "post": {
-        "tags": [
-          "cases"
-        ],
+        "tags": ["cases"],
         "summary": "associates a respondent with a case",
         "description": "associates a respondent with a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6695,12 +5794,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6732,14 +5827,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "gets the trial session working copy for a trial session for the logged in user",
         "description": "gets the trial session working copy for a trial session for the logged in user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6755,14 +5846,10 @@
         ]
       },
       "put": {
-        "tags": [
-          "trialsessions"
-        ],
+        "tags": ["trialsessions"],
         "summary": "updates the trial session working copy for a trial session for the logged in user",
         "description": "updates the trial session working copy for a trial session for the logged in user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6778,12 +5865,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6815,14 +5898,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "caseNotes"
-        ],
+        "tags": ["caseNotes"],
         "summary": "gets the logged in user's note for a case",
         "description": "gets the logged in user's note for a case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6838,14 +5917,10 @@
         ]
       },
       "post": {
-        "tags": [
-          "caseNotes"
-        ],
+        "tags": ["caseNotes"],
         "summary": "create and associate a note to a case for the logged in user",
         "description": "create and associate a note to a case for the logged in user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6861,14 +5936,10 @@
         ]
       },
       "put": {
-        "tags": [
-          "caseNotes"
-        ],
+        "tags": ["caseNotes"],
         "summary": "update a user's note for the logged in user",
         "description": "update a user's note for the logged in user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6884,14 +5955,10 @@
         ]
       },
       "delete": {
-        "tags": [
-          "caseNotes"
-        ],
+        "tags": ["caseNotes"],
         "summary": "delete the user's note for the logged in user",
         "description": "delete the user's note for the logged in user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6907,12 +5974,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6944,14 +6007,10 @@
         }
       ],
       "put": {
-        "tags": [
-          "caseNotes"
-        ],
+        "tags": ["caseNotes"],
         "summary": "update a case procedural note",
         "description": "update a case procedural note.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6967,14 +6026,10 @@
         ]
       },
       "delete": {
-        "tags": [
-          "caseNotes"
-        ],
+        "tags": ["caseNotes"],
         "summary": "delete the case procedural note",
         "description": "delete the case procedural note.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -6990,12 +6045,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7019,14 +6070,10 @@
     },
     "/messages": {
       "post": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "create a message",
         "description": "Create a message.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7042,12 +6089,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7079,14 +6122,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "gets the message for the specific id",
         "description": "Gets the message for the specific id.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7102,12 +6141,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7139,14 +6174,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "gets the inbox messages for the specific user id",
         "description": "Gets the inbox messages for the specific user id.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7162,12 +6193,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7199,14 +6226,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "gets the inbox messages for the specific section",
         "description": "Gets the inbox messages for the specific user section.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7222,12 +6245,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7259,14 +6278,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "gets the outbox messages for the specific user id",
         "description": "Gets the outbox messages for the specific user id.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7282,12 +6297,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7319,14 +6330,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "gets the outbox messages for the specific section",
         "description": "Gets the outbox messages for the specific user section.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7342,12 +6349,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7379,14 +6382,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "gets the completed messages for the specific section",
         "description": "Gets the completed messages for the specific user section.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7402,12 +6401,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7439,14 +6434,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "gets the completed messages for the specific user",
         "description": "Gets the completed messages for the specific user.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7462,12 +6453,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7499,14 +6486,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "gets the messages for the specific case",
         "description": "Gets the messages for the specific case.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7522,12 +6505,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7551,14 +6530,10 @@
     },
     "/messages/{parentMessageId}/complete": {
       "post": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "complete a message",
         "description": "Complete a message.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7595,12 +6570,8 @@
         }
       ],
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7624,14 +6595,10 @@
     },
     "/messages/{parentMessageId}/reply": {
       "post": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "reply to a message",
         "description": "Reply to a message.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7683,12 +6650,8 @@
         }
       ],
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7712,14 +6675,10 @@
     },
     "/messages/{parentMessageId}/forward": {
       "post": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "forward a message",
         "description": "Forward a message.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7771,12 +6730,8 @@
         }
       ],
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7800,14 +6755,10 @@
     },
     "/messages/{messageId}/read": {
       "post": {
-        "tags": [
-          "messages"
-        ],
+        "tags": ["messages"],
         "summary": "marks a message as read",
         "description": "Marks a message as read.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7844,12 +6795,8 @@
         }
       ],
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7873,14 +6820,10 @@
     },
     "/public-api/todays-opinions": {
       "get": {
-        "tags": [
-          "case-documents"
-        ],
+        "tags": ["case-documents"],
         "summary": "returns the opinions created for the current date",
         "description": "Returns the opinions created for the current date.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7896,12 +6839,8 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
-        ],
-        "produces": [
-          "application/json"
-        ],
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7939,14 +6878,10 @@
         }
       ],
       "get": {
-        "tags": [
-          "case-documents"
-        ],
+        "tags": ["case-documents"],
         "summary": "returns the orders served on the current date",
         "description": "Returns the orders served on the current date.\n",
-        "produces": [
-          "application/json"
-        ],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7962,12 +6897,157 @@
         ]
       },
       "options": {
-        "consumes": [
-          "application/json"
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/login": {
+      "delete": {
+        "tags": ["auth"],
+        "summary": "expires the refreshToken cookie by setting an old expiration date",
+        "description": "Expires the refreshToken cookie by setting an old expiration date.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "204": {
+            "description": "delete the refreshToken cookie",
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; Domain=http://example.com"
+                },
+                "description": "an expired refreshToken cookie; the browser will delete this old cookie"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "post": {
+        "parameters": [
+          {
+            "in": "body",
+            "name": "the oauth2 authorization code",
+            "description": "the oauth2 authorization code",
+            "schema": {
+              "type": "object",
+              "properties": {
+                "code": {
+                  "type": "string",
+                  "required": true
+                }
+              }
+            }
+          }
         ],
-        "produces": [
-          "application/json"
+        "tags": ["auth"],
+        "summary": "uses the oauth2 authorization code to generate a refresh and access token",
+        "description": "Uses the oauth2 authorization code to generate a refresh and access token.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/authorization"
+            },
+            "headers": {
+              "Set-Cookie": {
+                "schema": {
+                  "type": "string",
+                  "example": "refreshToken=abc; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; Domain=http://example.com"
+                },
+                "description": "the cookie that securly stores the refreshToken which can be used later when hitting the /auth/refresh endpoint"
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/refresh": {
+      "post": {
+        "parameters": [
+          {
+            "in": "header",
+            "name": "Cookie",
+            "description": "the refreshToken cookie",
+            "schema": {
+              "type": "string"
+            },
+            "required": "true"
+          }
         ],
+        "tags": ["auth"],
+        "summary": "uses the provided refreshToken cookie to generate a new access token",
+        "description": "Uses the provided refreshToken cookie to generate a new access token.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "the newly created access token",
+            "schema": {
+              "$ref": "#/definitions/authorization"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
         "responses": {
           "200": {
             "description": "200 response",
@@ -7999,6 +7079,15 @@
     }
   },
   "definitions": {
+    "authorization": {
+      "type": "object",
+      "properties": {
+        "token": {
+          "type": "string",
+          "description": "the access token"
+        }
+      }
+    },
     "file": {
       "type": "object",
       "properties": {
@@ -8154,9 +7243,7 @@
     },
     "unprocessableEntityError": {
       "type": "object",
-      "required": [
-        "message"
-      ],
+      "required": ["message"],
       "properties": {
         "message": {
           "type": "string"
