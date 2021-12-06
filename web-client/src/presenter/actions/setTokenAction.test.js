@@ -56,7 +56,7 @@ describe('setTokenAction,', () => {
     );
   });
 
-  it('should save the token into localStoragae if running locally', async () => {
+  it('should save the token into localStorage if running locally', async () => {
     process.env.IS_LOCAL = 'true';
     await runAction(setTokenAction, {
       modules: {
