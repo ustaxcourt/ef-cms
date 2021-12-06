@@ -876,6 +876,7 @@ const {
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
   sanitizePdfInteractor,
+  setPdfField,
 } = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
 const {
   saveCalendarNoteInteractor,
@@ -1802,6 +1803,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        setPdfField,
         updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,

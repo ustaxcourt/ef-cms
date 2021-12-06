@@ -1,10 +1,27 @@
 /**
+ * setPdfField helper function
+ *
+ * @param {array} fields array of pdf form fields
+ */
+
+exports.setPdfField = fields => {
+  fields.forEach(field => {
+    const fieldType = field.constructor.name;
+    if (fieldType === 'PDFTextField') {
+      const text = field.getText();
+      field.setText(text);
+    }
+  });
+};
+
+/**
  * sanitizePdfInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.key the key of the document to sanitize
  */
+
 exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -21,14 +38,7 @@ exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
   const fieldCount = form.getFields().length;
   const fields = form.getFields();
 
-  fields.forEach(field => {
-    const type = field.constructor.name;
-    if (type === 'PDFTextField') {
-      const text = field.getText();
-
-      field.setText(text);
-    }
-  });
+  applicationContext.getUseCaseHelpers().setPdfField(fields);
 
   if (fieldCount > 0) {
     form.flatten();
