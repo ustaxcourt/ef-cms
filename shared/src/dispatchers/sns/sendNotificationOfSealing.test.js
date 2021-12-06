@@ -1,6 +1,6 @@
 const {
   applicationContext,
-} = require('../business/test/createTestApplicationContext');
+} = require('../../business/test/createTestApplicationContext');
 const { sendNotificationOfSealing } = require('./sendNotificationOfSealing');
 
 describe('send notification to notification service', () => {

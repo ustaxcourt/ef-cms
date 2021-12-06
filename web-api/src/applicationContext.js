@@ -930,7 +930,7 @@ const {
 } = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
 const {
   sendNotificationOfSealing,
-} = require('../../shared/src/notifications/sendNotificationOfSealing');
+} = require('../../shared/src/dispatchers/sns/sendNotificationOfSealing');
 const {
   sendNotificationToConnection,
 } = require('../../shared/src/notifications/sendNotificationToConnection');
@@ -1613,6 +1613,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
+      sendNotificationOfSealing,
     }),
     getDocumentClient,
     getDocumentGenerators: () => ({
@@ -1718,7 +1719,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getNotificationGateway: () => ({
       retrySendNotificationToConnections,
-      sendNotificationOfSealing,
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
