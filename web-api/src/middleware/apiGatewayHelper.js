@@ -1,22 +1,12 @@
+const createApplicationContext = require('../applicationContext');
 const jwt = require('jsonwebtoken');
 const {
   NotFoundError,
   UnauthorizedError,
   UnsanitizedEntityError,
 } = require('../../../shared/src/errors/errors');
+const { headerOverride } = require('../lambdaWrapper');
 const { pick } = require('lodash');
-const headers = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Expose-Headers': "['X-Terminal-User']",
-  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
-  'Content-Type': 'application/json',
-  Pragma: 'no-cache',
-  'X-Content-Type-Options': 'nosniff',
-};
-const createApplicationContext = require('../applicationContext');
-
-exports.headers = headers;
-
 /**
  * invokes the param fun and returns a lambda specific object containing error messages and status codes depending on any caught exceptions (or none)
  *
@@ -35,11 +25,18 @@ exports.handle = async (event, fun) => {
       typeof response[Symbol.iterator] === 'function' &&
       response.indexOf('%PDF-') > -1;
 
-    if (isPdfBuffer) {
+    if (response && response.body && response.statusCode && response.headers) {
+      // the lambda function is more advanced and wants to control more aspects of the response
+      return exports.sendOk(
+        response.body,
+        response.statusCode,
+        response.headers,
+      );
+    } else if (isPdfBuffer) {
       return {
         body: response.toString('base64'),
         headers: {
-          ...headers,
+          ...headerOverride,
           'Content-Type': 'application/pdf',
           'accept-ranges': 'bytes',
         },
@@ -110,22 +107,26 @@ exports.redirect = async (event, fun, statusCode = 302) => {
 exports.sendError = err => {
   return {
     body: JSON.stringify(err.message),
-    headers,
+    headers: headerOverride,
     statusCode: err.statusCode || '400',
   };
 };
 
 /**
- * returns a lambda api-gateway object with a 400 status code and the response payload passed in
+ * returns a lambda api-gateway object with a 200 status code and the response payload passed in
  *
  * @param {object} response the object to send back from the api
- * @param {number} statusCode the statusCode of the request
+ * @param {number} statusCode the statusCode of the request.  Defaults to '200'.
+ * @param {object} headers any headers that you want to add to the response.  Defaults to no additional headers.
  * @returns {object} an api gateway response object
  */
-exports.sendOk = (response, statusCode = '200') => {
+exports.sendOk = (response, statusCode = '200', headers = {}) => {
   return {
     body: JSON.stringify(response),
-    headers,
+    headers: {
+      ...headers,
+      ...headerOverride,
+    },
     statusCode,
   };
 };

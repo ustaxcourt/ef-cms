@@ -67,6 +67,9 @@ const {
   associateUserWithCasePending,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
 const {
+  authenticateUserInteractor,
+} = require('../../shared/src/business/useCases/auth/authenticateUserInteractor');
+const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
 const {
@@ -140,6 +143,9 @@ const {
 const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
+const {
+  confirmAuthCode,
+} = require('../../shared/src/persistence/cognito/confirmAuthCode');
 const {
   Correspondence,
 } = require('../../shared/src/business/entities/Correspondence');
@@ -835,6 +841,12 @@ const {
   receiptOfFiling,
 } = require('../../shared/src/business/utilities/documentGenerators/receiptOfFiling');
 const {
+  refreshAuthTokenInteractor,
+} = require('../../shared/src/business/useCases/auth/refreshAuthTokenInteractor');
+const {
+  refreshToken,
+} = require('../../shared/src/persistence/cognito/refreshToken');
+const {
   removeCaseFromHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/removeCaseFromHearing');
 const {
@@ -1418,6 +1430,7 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
+  confirmAuthCode,
   createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseDeadline,
@@ -1495,6 +1508,7 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
+  refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
@@ -1829,6 +1843,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
         associatePrivatePractitionerWithCaseInteractor,
+        authenticateUserInteractor,
         batchDownloadTrialSessionInteractor,
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,
@@ -1938,6 +1953,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         orderPublicSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
+        refreshAuthTokenInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,

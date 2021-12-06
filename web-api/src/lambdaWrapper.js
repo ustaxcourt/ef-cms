@@ -1,7 +1,16 @@
 const { get } = require('lodash');
 const { getCurrentInvoke } = require('@vendia/serverless-express');
 
-export const lambdaWrapper = lambda => {
+exports.headerOverride = {
+  'Access-Control-Expose-Headers': "['X-Terminal-User']",
+  'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
+  'Content-Type': 'application/json',
+  Pragma: 'no-cache',
+  Vary: 'Authorization',
+  'X-Content-Type-Options': 'nosniff',
+};
+
+exports.lambdaWrapper = lambda => {
   return async (req, res) => {
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
@@ -26,14 +35,9 @@ export const lambdaWrapper = lambda => {
     res.status(response.statusCode);
 
     res.set({
-      'Access-Control-Allow-Origin': '*',
-      'Cache-Control':
-        'max-age=0, private, no-cache, no-store, must-revalidate',
-      'Content-Type': 'application/json',
-      Pragma: 'no-cache',
-      Vary: 'Authorization',
-      'X-Content-Type-Options': 'nosniff',
+      ...response.headers,
       'X-Terminal-User': isTerminalUser,
+      ...exports.headerOverride,
     });
 
     if (

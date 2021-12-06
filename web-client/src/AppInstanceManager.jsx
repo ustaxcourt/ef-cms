@@ -17,11 +17,13 @@ export const AppInstanceManager = connect(
     appInstanceManagerHelper: state.appInstanceManagerHelper,
     confirmStayLoggedInSequence: sequences.confirmStayLoggedInSequence,
     resetIdleTimerSequence: sequences.resetIdleTimerSequence,
+    signOutSequence: sequences.signOutSequence,
   },
   function AppInstanceManager({
     appInstanceManagerHelper,
     confirmStayLoggedInSequence,
     resetIdleTimerSequence,
+    signOutSequence,
   }) {
     const { channelHandle } = appInstanceManagerHelper;
 
@@ -32,6 +34,14 @@ export const AppInstanceManager = connect(
           break;
         case 'stayLoggedIn':
           confirmStayLoggedInSequence();
+          break;
+        case 'logout':
+          signOutSequence({
+            skipBroadcast: true,
+          });
+          break;
+        default:
+          console.warn('unhandled broadcast event', msg);
           break;
       }
     };
