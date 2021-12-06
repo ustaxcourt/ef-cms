@@ -37,10 +37,14 @@ exports.sendNotificationOfSealing = async (
       });
       return;
     } catch (err) {
-      applicationContext.logger.error('error attempting to send notification', {
+      applicationContext.logger.warn('error attempting to send notification', {
         err,
         retryCount,
       });
     }
   }
+
+  applicationContext.logger.error(
+    'complete failure attempting to send notification of sealing an item',
+  );
 };

@@ -10,16 +10,16 @@ describe('send notification to notification service', () => {
 
   beforeEach(() => {
     applicationContext.getNotificationService.mockImplementation(() => {
-      console.log('wat');
       return { publish };
     });
   });
 
   it('should send notification if we are in the production environment', async () => {
-    applicationContext.environment.stage = 'prod';
+    // applicationContext.environment.stage = 'prod';
+    process.env.PROD_ENV_ACCOUNT_ID = '123';
+    process.env.AWS_ACCOUNT_ID = '123';
 
-    await sendNotificationOfSealing({
-      applicationContext,
+    await sendNotificationOfSealing(applicationContext, {
       docketNumber: '123-21',
     });
 
@@ -32,9 +32,10 @@ describe('send notification to notification service', () => {
   });
 
   it('should NOT send notification if we are NOT in the production environment', async () => {
-    applicationContext.environment.stage = 'test';
-    await sendNotificationOfSealing({
-      applicationContext,
+    // applicationContext.environment.stage = 'test';
+    process.env.PROD_ENV_ACCOUNT_ID = '123';
+    process.env.AWS_ACCOUNT_ID = '789';
+    await sendNotificationOfSealing(applicationContext, {
       docketNumber: '123-21',
     });
 
