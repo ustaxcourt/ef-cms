@@ -69,15 +69,14 @@ export const DocumentSearchResults = connect(
                         {idx + 1}
                       </td>
                       <td aria-hidden="true" className="small-column">
-                        {advancedDocumentSearchHelper.showSealedIcon &&
-                          (result.isSealed || result.hasSealedDocuments) && (
-                            <Icon
-                              aria-label="sealed"
-                              className="iconSealed"
-                              icon={['fa', 'lock']}
-                              size="1x"
-                            />
-                          )}
+                        {result.showSealedIcon && (
+                          <Icon
+                            aria-label="sealed"
+                            className="iconSealed"
+                            icon={['fa', 'lock']}
+                            size="1x"
+                          />
+                        )}
                       </td>
                       <td>{result.formattedFiledDate}</td>
                       <td>
