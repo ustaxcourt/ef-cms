@@ -26,6 +26,7 @@ exports.authenticateUserLambda = event =>
           refreshToken,
           expiresAt,
           process.env.EFCMS_DOMAIN,
+          !process.env.IS_LOCAL,
         ),
       },
       statusCode: 200,
