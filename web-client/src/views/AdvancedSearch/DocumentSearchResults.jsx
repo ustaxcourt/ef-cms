@@ -10,12 +10,14 @@ export const DocumentSearchResults = connect(
   {
     MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
+    isPublic: state.isPublic,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
+    isPublic,
     MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
@@ -87,7 +89,7 @@ export const DocumentSearchResults = connect(
                             openCaseDocumentDownloadUrlSequence({
                               docketEntryId: result.docketEntryId,
                               docketNumber: result.docketNumber,
-                              isPublic: advancedDocumentSearchHelper.isPublic,
+                              isPublic,
                               useSameTab: false,
                             });
                           }}
