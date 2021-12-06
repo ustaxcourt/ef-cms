@@ -754,6 +754,9 @@ const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
+  isCurrentColorActive,
+} = require('../../shared/src/persistence/dynamo/helpers/isCurrentColorActive');
+const {
   isEmailAvailable,
 } = require('../../shared/src/persistence/cognito/isEmailAvailable');
 const {
@@ -2047,6 +2050,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       };
     },
     isAuthorized,
+    isCurrentColorActive,
     logger: {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),
