@@ -4,7 +4,6 @@ import { state } from 'cerebral';
 
 export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
-  const isPublic = get(state.isPublic);
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
@@ -62,7 +61,6 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     documentTypeVerbiage,
     formattedJudges,
     isInternalUser,
-    isPublic,
     manyResults: MAX_SEARCH_RESULTS,
     showDateRangePicker,
     showManyResultsMessage,
