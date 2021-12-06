@@ -2,11 +2,18 @@ const client = require('../../dynamodbClientService');
 const { isCurrentColorActive } = require('./isCurrentColorActive');
 
 describe('isCurrentColorActive', () => {
+  const OLD_ENV = process.env;
+
   beforeEach(() => {
     client.query = jest.fn().mockReturnValue([{ value: 'blue' }]);
     client.getDeployTableName = jest
       .fn()
       .mockReturnValue([{ value: 'efcms-local-deploy' }]);
+    process.env = { ...OLD_ENV }; // make a copy
+  });
+
+  afterAll(() => {
+    process.env = OLD_ENV;
   });
 
   it('checks where the current color in the deploy table matches the current color of the environment', async () => {
