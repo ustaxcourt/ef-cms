@@ -81,6 +81,7 @@ exports.get = process.env.CI ? get : getMemoized;
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.body the body to send with the request
  * @param {string} providers.endpoint the endpoint to call
+ * @param {object} providers.options the options we can pass through to the http client
  * @returns {Promise<*>} the response data
  */
 exports.post = async ({
@@ -132,6 +133,7 @@ exports.put = async ({ applicationContext, body, endpoint }) => {
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.endpoint the endpoint to call
  * @param {object} providers.params the params to send to the endpoint
+ * @param {object} providers.options the options we can pass through to the http client
  * @returns {Promise<*>} the response data
  */
 exports.remove = async ({
