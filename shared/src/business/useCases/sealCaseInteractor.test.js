@@ -45,7 +45,7 @@ describe('sealCaseInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
     expect(
-      applicationContext.getNotificationGateway().sendNotificationOfSealing,
+      applicationContext.getDispatchers().sendNotificationOfSealing,
     ).toBeCalled();
   });
 });
