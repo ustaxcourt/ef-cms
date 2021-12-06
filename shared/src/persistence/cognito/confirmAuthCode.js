@@ -2,9 +2,7 @@ const qs = require('querystring');
 const { getClientId } = require('./getClientId');
 
 exports.confirmAuthCode = async (applicationContext, { code }) => {
-  const { STAGE } = process.env;
-  const { COGNITO_SUFFIX } = process.env;
-  const { EFCMS_DOMAIN } = process.env;
+  const { COGNITO_SUFFIX, EFCMS_DOMAIN, STAGE } = process.env;
 
   const clientId = await getClientId({ userPoolId: process.env.USER_POOL_ID });
 
