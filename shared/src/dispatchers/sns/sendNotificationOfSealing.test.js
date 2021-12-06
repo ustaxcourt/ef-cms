@@ -3,12 +3,8 @@ const {
 } = require('../../business/test/createTestApplicationContext');
 const { sendNotificationOfSealing } = require('./sendNotificationOfSealing');
 
-const tempEnvironmentVariables = {
-  AWS_ACCOUNT_ID: process.env.AWS_ACCOUNT_ID,
-  PROD_ENV_ACCOUNT_ID: process.env.PROD_ENV_ACCOUNT_ID,
-};
-
 describe('send notification to notification service', () => {
+  const OLD_ENV = process.env;
   const publish = jest
     .fn()
     .mockReturnValue({ promise: () => Promise.resolve('ok') });
@@ -17,12 +13,11 @@ describe('send notification to notification service', () => {
     applicationContext.getNotificationService.mockImplementation(() => {
       return { publish };
     });
+    process.env = { ...OLD_ENV }; // make a copy
   });
 
   afterAll(() => {
-    process.env.AWS_ACCOUNT_ID = tempEnvironmentVariables.AWS_ACCOUNT_ID;
-    process.env.PROD_ENV_ACCOUNT_ID =
-      tempEnvironmentVariables.PROD_ENV_ACCOUNT_ID;
+    process.env = OLD_ENV;
   });
 
   it('should send notification if we are in the production environment', async () => {
