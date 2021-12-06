@@ -182,6 +182,7 @@ const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
+const { sealCaseInteractor } = require('../useCases/sealCaseInteractor');
 const { serveCaseDocument } = require('../utilities/serveCaseDocument');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
@@ -371,6 +372,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCases = appContextProxy({
+    sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),
@@ -587,6 +589,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
+      sendNotificationOfSealing: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
