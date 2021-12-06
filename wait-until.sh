@@ -5,9 +5,6 @@
 # Usage
 #   URL=http://localhost:4000/api/swagger wait-until.sh
 
-./check-env-variables.sh \
-  "URL"
-
 ( ! command -v curl > /dev/null ) && echo "Curl was not found on your path. Please install curl." && exit 1
 max_tries=900
 try_count=0
