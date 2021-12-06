@@ -2,8 +2,7 @@ const qs = require('querystring');
 const { getClientId } = require('./getClientId');
 
 exports.refreshToken = async (applicationContext, { refreshToken }) => {
-  const { STAGE } = process.env;
-  const { COGNITO_SUFFIX } = process.env;
+  const { COGNITO_SUFFIX, STAGE } = process.env;
 
   const clientId = await getClientId({ userPoolId: process.env.USER_POOL_ID });
 
