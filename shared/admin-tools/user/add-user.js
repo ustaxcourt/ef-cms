@@ -78,6 +78,7 @@ const checkParams = params => {
           'reportersOffice',
           'ashfordsChambers',
           'buchsChambers',
+          'choisChambers',
           'cohensChambers',
           'colvinsChambers',
           'copelandsChambers',
@@ -90,6 +91,7 @@ const checkParams = params => {
           'holmesChambers',
           'jonesChambers',
           'kerrigansChambers',
+          'landysChambers',
           'laubersChambers',
           'marshallsChambers',
           'marvelsChambers',
@@ -143,7 +145,6 @@ const sendWelcomeEmail = async email => {
 (async () => {
   const params = {
     email: process.argv[2],
-    employer: 'US Tax Court',
     name: process.argv[3],
     role: process.argv[4],
     section: process.argv[5],
