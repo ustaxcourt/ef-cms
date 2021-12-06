@@ -1,6 +1,7 @@
 const {
   createCookieString,
   deleteCookieString,
+  parseCookieString,
 } = require('./cookieFormatting');
 
 describe('createCookieString', () => {
@@ -135,5 +136,14 @@ describe('deleteCookieString', () => {
     expect(actualCookieString).toContain(`Domain=${domain}`);
     expect(actualCookieString).not.toContain('Secure');
     expect(actualCookieString).not.toContain('HttpOnly');
+  });
+});
+
+describe('parseCookieString', () => {
+  it('should parse a provided cookie string', () => {
+    const cookie = parseCookieString('refreshToken=abc');
+    expect(cookie).toEqual({
+      refreshToken: 'abc',
+    });
   });
 });
