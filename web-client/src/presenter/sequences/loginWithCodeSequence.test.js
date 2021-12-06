@@ -15,10 +15,11 @@ describe('loginWithCodeSequence', () => {
     role: ROLES.petitionsClerk,
   };
   beforeAll(() => {
-    applicationContext.getUseCases().authorizeCodeInteractor.mockReturnValue({
-      refreshToken: TOKEN,
-      token: TOKEN,
-    });
+    applicationContext
+      .getUseCases()
+      .authenticateUserInteractor.mockReturnValue({
+        token: TOKEN,
+      });
     applicationContext.getUseCases().getUserInteractor.mockReturnValue(USER);
     applicationContext.getUseCases().setItemInteractor.mockReturnValue(null);
 
@@ -44,12 +45,7 @@ describe('loginWithCodeSequence', () => {
     await cerebralTest.runSequence('loginWithCodeSequence', {
       code: 'abc',
     });
-    expect(
-      applicationContext.getUseCases().refreshTokenInteractor.mock.calls[0][1]
-        .refreshToken,
-    ).toEqual(TOKEN);
     expect(cerebralTest.getState('token')).toEqual(NEW_TOKEN);
-    expect(cerebralTest.getState('refreshToken')).toEqual(NEW_TOKEN);
     expect(cerebralTest.getState('user')).toEqual(USER);
     expect(cerebralTest.getState('refreshTokenInterval')).toBeDefined();
   });

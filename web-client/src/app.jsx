@@ -110,7 +110,9 @@ import { isFunction, mapValues } from 'lodash';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
+import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACognitoLogin';
 import { withAppContextDecorator } from './withAppContext';
+
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -129,17 +131,14 @@ const app = {
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
 
-    const user =
-      (await applicationContext
-        .getUseCases()
-        .getItemInteractor(applicationContext, { key: 'user' })) ||
-      presenter.state.user;
-    presenter.state.user = user;
-    applicationContext.setCurrentUser(user);
-
-    const userPermissions = applicationContext.getCurrentUserPermissions();
-    if (userPermissions) {
-      presenter.state.permissions = userPermissions;
+    if (process.env.IS_LOCAL) {
+      const user =
+        (await applicationContext
+          .getUseCases()
+          .getItemInteractor(applicationContext, { key: 'user' })) ||
+        presenter.state.user;
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
     }
 
     const maintenanceMode = await applicationContext
@@ -155,17 +154,45 @@ const app = {
       return value;
     });
 
-    const token =
-      (await applicationContext
-        .getUseCases()
-        .getItemInteractor(applicationContext, { key: 'token' })) ||
-      presenter.state.token;
-    presenter.state.token = token;
-    applicationContext.setCurrentUserToken(token);
+    if (process.env.IS_LOCAL) {
+      const token =
+        (await applicationContext
+          .getUseCases()
+          .getItemInteractor(applicationContext, { key: 'token' })) ||
+        presenter.state.token;
+      presenter.state.token = token;
+      applicationContext.setCurrentUserToken(token);
+    }
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
 
     presenter.state.constants = applicationContext.getConstants();
+
+    if (
+      !wasAppLoadedFromACognitoLogin(window.location.href) &&
+      !process.env.IS_LOCAL
+    ) {
+      try {
+        const response = await applicationContext
+          .getUseCases()
+          .refreshTokenInteractor(applicationContext);
+        presenter.state.token = response.token;
+        applicationContext.setCurrentUserToken(response.token);
+      } catch (err) {
+        window.location.href = presenter.state.cognitoLoginUrl;
+      }
+
+      const user = await applicationContext
+        .getUseCases()
+        .getUserInteractor(applicationContext);
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
+    }
+
+    const userPermissions = applicationContext.getCurrentUserPermissions();
+    if (userPermissions) {
+      presenter.state.permissions = userPermissions;
+    }
 
     config.autoAddCss = false;
     library.add(
