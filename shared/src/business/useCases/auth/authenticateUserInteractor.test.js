@@ -4,11 +4,15 @@ const {
 const { authenticateUserInteractor } = require('./authenticateUserInteractor');
 
 describe('authenticateUserInteractor', () => {
+  const refreshTokenAndToken = {
+    refreshToken: 'abc',
+    token: '123',
+  };
+
   beforeEach(() => {
-    applicationContext.getPersistenceGateway().confirmAuthCode.mockReturnValue({
-      refreshToken: 'abc',
-      token: '123',
-    });
+    applicationContext
+      .getPersistenceGateway()
+      .confirmAuthCode.mockReturnValue(refreshTokenAndToken);
   });
 
   it('attempts to hit cognito and get an id token and refresh token', async () => {
@@ -20,9 +24,6 @@ describe('authenticateUserInteractor', () => {
       applicationContext.getPersistenceGateway().confirmAuthCode.mock
         .calls[0][1],
     ).toEqual({ code: expectedCode });
-    expect(result).toEqual({
-      refreshToken: 'abc',
-      token: '123',
-    });
+    expect(result).toEqual(refreshTokenAndToken);
   });
 });
