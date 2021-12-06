@@ -1,4 +1,5 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
+import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from '../src/presenter/computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { associatedUserSearchesForServedOrder } from './journey/associatedUserSearchesForServedOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -17,8 +18,10 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import { runCompute } from 'cerebral/test';
 import { unassociatedUserSearchesForServedOrderInSealedCase } from './journey/unassociatedUserSearchesForServedOrderInSealedCase';
 import { unassociatedUserSearchesForServedOrderInUnsealedCase } from './journey/unassociatedUserSearchesForServedOrderInUnsealedCase';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('external users perform an advanced search for orders', () => {
   const cerebralTest = setupTest();
@@ -94,6 +97,14 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
+    const advancedDocumentSearchHelper = withAppContextDecorator(
+      advancedDocumentSearchHelperComputed,
+    );
+    const searchHelper = runCompute(advancedDocumentSearchHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(searchHelper.searchResults[0].showSealedIcon).toBe(true);
     expect(
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).toEqual(
@@ -185,5 +196,38 @@ describe('external users perform an advanced search for orders', () => {
     expect(
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).toEqual([]);
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  it('search for sealed order in unsealed case as an associated practitioner', async () => {
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.docketNumber = '999-15';
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const advancedDocumentSearchHelper = withAppContextDecorator(
+      advancedDocumentSearchHelperComputed,
+    );
+    const searchHelper = runCompute(advancedDocumentSearchHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(searchHelper.searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+          showSealedIcon: true,
+        }),
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+          showSealedIcon: true,
+        }),
+      ]),
+    );
   });
 });

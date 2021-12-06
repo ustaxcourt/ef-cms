@@ -89,36 +89,34 @@ exports.advancedDocumentSearch = async ({
   };
 
   if (omitSealed) {
-    const caseShould = {
-      bool: {
-        minimum_should_match: 1,
-        should: [
-          {
-            bool: {
-              must: {
-                term: { 'isSealed.BOOL': false },
-              },
-            },
-          },
-          {
-            bool: {
-              must_not: {
-                exists: { field: 'isSealed' },
-              },
-            },
-          },
-        ],
+    const caseMust = [
+      {
+        term: { 'hasSealedDocuments.BOOL': false },
       },
-    };
-    const caseMust = {
-      term: { 'hasSealedDocuments.BOOL': false },
-    };
+      {
+        bool: {
+          minimum_should_match: 1,
+          should: [
+            {
+              bool: {
+                must: {
+                  term: { 'isSealed.BOOL': false },
+                },
+              },
+            },
+            {
+              bool: {
+                must_not: {
+                  exists: { field: 'isSealed' },
+                },
+              },
+            },
+          ],
+        },
+      },
+    ];
 
-    let mustShowResults = [];
-    mustShowResults.push(caseMust);
-    mustShowResults.push(caseShould);
-
-    const caseQuery = { bool: { must: mustShowResults } };
+    const caseQuery = { bool: { must: caseMust } };
 
     docketEntryMustNot = [
       ...docketEntryMustNot,
