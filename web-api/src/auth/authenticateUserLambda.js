@@ -1,6 +1,4 @@
-const {
-  FORMATS,
-} = require('../../../shared/src/business/utilities/DateHandler');
+const { createCookieString } = require('../utilities/cookieFormatting');
 const { genericHandler } = require('../genericHandler');
 
 /**
@@ -14,20 +12,21 @@ exports.authenticateUserLambda = event =>
     const { refreshToken, token } = await applicationContext
       .getUseCases()
       .authenticateUserInteractor(applicationContext, JSON.parse(event.body));
-    const expiresAtIso = applicationContext.getUtilities().calculateISODate({
+    const expiresAt = applicationContext.getUtilities().calculateISODate({
       dateString: applicationContext.getUtilities().createISODateString(),
       howMuch: 29,
       units: 'days',
     });
 
-    //unilaterally converts the ET timezone'd date/time to UTC without actually changing the hour
-    const expiresAtUtc = applicationContext
-      .getUtilities()
-      .formatDateString(expiresAtIso, FORMATS.COOKIE);
     return {
       body: JSON.stringify({ token }),
       headers: {
-        'Set-Cookie': `refreshToken=${refreshToken}; Expires=${expiresAtUtc}; Secure; HttpOnly; Domain=${process.env.EFCMS_DOMAIN}`,
+        'Set-Cookie': createCookieString(
+          'refreshToken',
+          refreshToken,
+          expiresAt,
+          process.env.EFCMS_DOMAIN,
+        ),
       },
       statusCode: 200,
     };

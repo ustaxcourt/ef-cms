@@ -1,4 +1,3 @@
-const querystring = require('querystring');
 const { get } = require('./requests');
 
 /**
@@ -13,10 +12,9 @@ exports.orderAdvancedSearchInteractor = (
   applicationContext,
   { searchParams },
 ) => {
-  const queryString = querystring.stringify(searchParams);
-
   return get({
     applicationContext,
-    endpoint: `/case-documents/order-search?${queryString}`,
+    endpoint: '/case-documents/order-search',
+    params: searchParams,
   });
 };
