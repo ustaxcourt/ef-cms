@@ -1,7 +1,8 @@
 /**
- * deletes the auth cookie by calling the logout /auth endpoint
+ * deleteAuthCookieAction deletes the auth cookie by calling the logout endpoint
  *
- * @returns {Promise} async action
+ * @param {object} applicationContext an object
+ * @param {object} applicationContext.applicationContext the application context
  */
 export const deleteAuthCookieAction = async ({ applicationContext }) => {
   await applicationContext
