@@ -6931,10 +6931,7 @@
             "description": "delete the refreshToken cookie",
             "headers": {
               "Set-Cookie": {
-                "schema": {
-                  "type": "string",
-                  "example": "refreshToken=deleted; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; Domain=http://example.com"
-                },
+                "type": "string",
                 "description": "an expired refreshToken cookie; the browser will delete this old cookie"
               }
             }
@@ -6956,8 +6953,7 @@
               "type": "object",
               "properties": {
                 "code": {
-                  "type": "string",
-                  "required": true
+                  "type": "string"
                 }
               }
             }
@@ -6969,16 +6965,13 @@
         "produces": ["application/json"],
         "responses": {
           "200": {
-            "description": "200 response",
+            "description": "the freshly created access token",
             "schema": {
               "$ref": "#/definitions/authorization"
             },
             "headers": {
               "Set-Cookie": {
-                "schema": {
-                  "type": "string",
-                  "example": "refreshToken=abc; Expires=Thu, 01 Jan 1970 00:00:00 GMT; Secure; HttpOnly; Domain=http://example.com"
-                },
+                "type": "string",
                 "description": "the cookie that securly stores the refreshToken which can be used later when hitting the /auth/refresh endpoint"
               }
             }
@@ -7021,10 +7014,8 @@
             "in": "header",
             "name": "Cookie",
             "description": "the refreshToken cookie",
-            "schema": {
-              "type": "string"
-            },
-            "required": "true"
+            "type": "string",
+            "required": true
           }
         ],
         "tags": ["auth"],
