@@ -1,3 +1,4 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
@@ -65,6 +66,11 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'pending',
       value: true,
+    });
+
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'objections',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     await cerebralTest.runSequence('submitPaperFilingSequence');
