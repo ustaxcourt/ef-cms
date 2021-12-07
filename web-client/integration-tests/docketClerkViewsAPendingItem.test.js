@@ -14,13 +14,16 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/prese
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
-const cerebralTest = setupTest();
-
 describe('a docket clerk uploads a pending item and sees that it is pending', () => {
+  let caseDetail;
+  let pendingItemsCount;
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
+
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
     global.window.pdfjsObj = {
@@ -35,9 +38,6 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  let caseDetail;
-  let pendingItemsCount;
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
