@@ -6,20 +6,6 @@ const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEven
 const { flatten, sortBy, union, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
-const ENABLE_8684 = false;
-
-const filter8684CategoryMap = (categoryMap, showMOTR) => {
-  Object.keys(categoryMap).forEach(category => {
-    categoryMap[category] = categoryMap[category].filter(
-      document => document.eventCode !== 'MOTR' || showMOTR,
-    );
-  });
-};
-
-// feature flag filter for 8684
-filter8684CategoryMap(DOCUMENT_EXTERNAL_CATEGORIES_MAP, ENABLE_8684);
-filter8684CategoryMap(DOCUMENT_INTERNAL_CATEGORIES_MAP, ENABLE_8684);
-
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
 // a number (100 to 99999) followed by a - and a 2 digit year
 const DOCKET_NUMBER_MATCHER = /^([1-9]\d{2,4}-\d{2})$/;
@@ -1241,5 +1227,4 @@ module.exports = deepFreeze({
   ALLOWLIST_FEATURE_FLAGS,
   US_STATES,
   US_STATES_OTHER,
-  filter8684CategoryMap,
 });
