@@ -4,6 +4,7 @@ const { getCurrentInvoke } = require('@vendia/serverless-express');
 
 describe('lambdaWrapper', () => {
   let req, res;
+
   beforeAll(() => {
     jest.spyOn(console, 'log').mockImplementation(() => {});
   });
@@ -38,7 +39,7 @@ describe('lambdaWrapper', () => {
     })(req, res);
 
     expect(res.set).toHaveBeenCalledWith({
-      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Expose-Headers': "['X-Terminal-User']",
       'Cache-Control':
         'max-age=0, private, no-cache, no-store, must-revalidate',
       'Content-Type': 'application/json',
@@ -47,6 +48,8 @@ describe('lambdaWrapper', () => {
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': false,
     });
+    expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
+    expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
   });
 
   it('sends response.body if header is application/pdf', async () => {
@@ -139,8 +142,8 @@ describe('lambdaWrapper', () => {
       };
     })(req, res);
 
-    expect(res.set).toHaveBeenCalledWith({
-      'Access-Control-Allow-Origin': '*',
+    expect(res.set.mock.calls[0][0]).toEqual({
+      'Access-Control-Expose-Headers': "['X-Terminal-User']",
       'Cache-Control':
         'max-age=0, private, no-cache, no-store, must-revalidate',
       'Content-Type': 'application/json',
@@ -149,5 +152,7 @@ describe('lambdaWrapper', () => {
       'X-Content-Type-Options': 'nosniff',
       'X-Terminal-User': true,
     });
+    expect(res.set.mock.calls[1][0]).toEqual('Content-Type');
+    expect(res.set.mock.calls[1][1]).toEqual('application/pdf');
   });
 });
