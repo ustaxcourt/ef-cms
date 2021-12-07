@@ -1430,7 +1430,12 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
-  confirmAuthCode,
+  confirmAuthCode: process.env.IS_LOCAL
+    ? () => ({
+        refreshToken: 'Moof',
+        token: 'DogCow',
+      })
+    : confirmAuthCode,
   createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseDeadline,
@@ -1508,7 +1513,11 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
-  refreshToken,
+  refreshToken: process.env.IS_LOCAL
+    ? () => ({
+        token: 'A-different-DogCow',
+      })
+    : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
