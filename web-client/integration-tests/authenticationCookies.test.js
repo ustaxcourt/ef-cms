@@ -31,9 +31,9 @@ describe('checks the /auth endpoints to verify the cookies are set and cleared c
   });
 
   it('after hitting DELETE@/auth/login, the refresh endpoint should no longer return a new token', async () => {
-    // await axios.delete('http://localhost:4000/auth/login', {
-    //   withCredentials: true,
-    // });
+    await axios.delete('http://localhost:4000/auth/login', {
+      withCredentials: true,
+    });
 
     await expect(
       axios.post('http://localhost:4000/auth/refresh', null, {
