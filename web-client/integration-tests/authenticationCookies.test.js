@@ -18,24 +18,22 @@ describe('checks the /auth endpoints to verify the cookies are set and cleared c
 
   it('should be able to hit the refresh endpoint get a new token', async () => {
     const response = await axios.post(
-      'http://localhost:4000/auth/login',
-      {
-        code: 'abc',
-      },
+      'http://localhost:4000/auth/refresh',
+      null,
       {
         withCredentials: true,
       },
     );
 
     expect(response.data).toEqual({
-      token: 'DogCow',
+      token: 'A-different-DogCow',
     });
   });
 
   it('after hitting DELETE@/auth/login, the refresh endpoint should no longer return a new token', async () => {
-    await axios.delete('http://localhost:4000/auth/login', {
-      withCredentials: true,
-    });
+    // await axios.delete('http://localhost:4000/auth/login', {
+    //   withCredentials: true,
+    // });
 
     await expect(
       axios.post('http://localhost:4000/auth/refresh', null, {

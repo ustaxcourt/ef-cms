@@ -11,7 +11,7 @@ const { parseCookieString } = require('../utilities/cookieFormatting');
 exports.refreshAuthTokenLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     if (!event.headers.cookie) {
-      throw new Error(JSON.stringify({ error: 'Cookie header is missing' }));
+      throw new Error('Cookie header is missing');
     }
 
     const { refreshToken } = parseCookieString(event.headers.cookie);
