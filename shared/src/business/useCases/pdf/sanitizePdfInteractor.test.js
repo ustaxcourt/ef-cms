@@ -7,7 +7,7 @@ const { sanitizePdfInteractor } = require('./sanitizePdfInteractor');
 describe('sanitizePdfInteractor', () => {
   const saveMock = jest.fn();
 
-  const getFieldsMock = jest.fn().mockReturnValue([]);
+  const getFieldsMock = jest.fn();
 
   beforeEach(() => {
     applicationContext.getPdfLib = jest.fn().mockResolvedValue({
@@ -28,7 +28,8 @@ describe('sanitizePdfInteractor', () => {
 
     applicationContext.getPersistenceGateway().deleteDocumentFromS3 = jest.fn();
 
-    applicationContext.getUseCaseHelpers().setPdfField = jest.fn();
+    applicationContext.getUseCaseHelpers().setPdfFields = jest.fn();
+    getFieldsMock.mockReturnValue([]);
   });
 
   it('sanitizes a PDF containing form fields and saves it to S3', async () => {
@@ -48,7 +49,22 @@ describe('sanitizePdfInteractor', () => {
     ).toBe(mockKey);
   });
 
-  it.skip('does not attempt to save a PDF that has no form fields', async () => {
+  it('calls setPdfFields when PDF has form fields', async () => {
+    const fields = ['textField', 'checkbox'];
+    getFieldsMock.mockReturnValueOnce(fields);
+
+    await expect(
+      sanitizePdfInteractor(applicationContext, {
+        key: 'abc',
+      }),
+    ).resolves.not.toBeDefined();
+
+    expect(
+      applicationContext.getUseCaseHelpers().setPdfFields,
+    ).toHaveBeenCalledWith(fields);
+  });
+
+  it('does not attempt to save a PDF that has no form fields', async () => {
     const mockKey = 'a6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
     await expect(
       sanitizePdfInteractor(applicationContext, {

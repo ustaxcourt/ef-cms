@@ -1,10 +1,10 @@
 /**
- * setPdfField helper function
+ * setPdfFields helper function
  *
  * @param {array} fields array of pdf form fields
  */
 
-exports.setPdfField = fields => {
+exports.setPdfFields = fields => {
   fields.forEach(field => {
     const fieldType = field.constructor.name;
     if (fieldType === 'PDFTextField') {
@@ -35,12 +35,11 @@ exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
 
   const pdfDoc = await PDFDocument.load(pdfData, { ignoreEncryption: true });
   const form = pdfDoc.getForm();
-  const fieldCount = form.getFields().length;
   const fields = form.getFields();
 
-  applicationContext.getUseCaseHelpers().setPdfField(fields);
+  applicationContext.getUseCaseHelpers().setPdfFields(fields);
 
-  if (fieldCount > 0) {
+  if (fields.length > 0) {
     form.flatten();
     const pdfBytes = await pdfDoc.save();
 
