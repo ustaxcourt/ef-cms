@@ -1,20 +1,4 @@
 /**
- * setPdfFields helper function
- *
- * @param {array} fields array of pdf form fields
- */
-
-exports.setPdfFields = fields => {
-  fields.forEach(field => {
-    const fieldType = field.constructor.name;
-    if (fieldType === 'PDFTextField') {
-      const text = field.getText();
-      field.setText(text);
-    }
-  });
-};
-
-/**
  * sanitizePdfInteractor
  *
  * @param {object} applicationContext the application context
@@ -37,9 +21,8 @@ exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
   const form = pdfDoc.getForm();
   const fields = form.getFields();
 
-  applicationContext.getUseCaseHelpers().setPdfFields(fields);
-
   if (fields.length > 0) {
+    applicationContext.getUseCaseHelpers().setPdfFormFields(fields);
     form.flatten();
     const pdfBytes = await pdfDoc.save();
 

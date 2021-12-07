@@ -2,10 +2,7 @@ const {
   applicationContext,
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
-const {
-  sanitizePdfInteractor,
-  setPdfFields,
-} = require('./sanitizePdfInteractor');
+const { sanitizePdfInteractor } = require('./sanitizePdfInteractor');
 
 describe('sanitizePdfInteractor', () => {
   const saveMock = jest.fn();
@@ -31,7 +28,7 @@ describe('sanitizePdfInteractor', () => {
 
     applicationContext.getPersistenceGateway().deleteDocumentFromS3 = jest.fn();
 
-    applicationContext.getUseCaseHelpers().setPdfFields = jest.fn();
+    applicationContext.getUseCaseHelpers().setPdfFormFields = jest.fn();
     getFieldsMock.mockReturnValue([]);
   });
 
@@ -52,7 +49,7 @@ describe('sanitizePdfInteractor', () => {
     ).toBe(mockKey);
   });
 
-  it('calls setPdfFields when PDF has form fields', async () => {
+  it('calls setPdfFormFields when PDF has form fields', async () => {
     const fields = ['textField', 'checkbox'];
     getFieldsMock.mockReturnValueOnce(fields);
 
@@ -63,7 +60,7 @@ describe('sanitizePdfInteractor', () => {
     ).resolves.not.toBeDefined();
 
     expect(
-      applicationContext.getUseCaseHelpers().setPdfFields,
+      applicationContext.getUseCaseHelpers().setPdfFormFields,
     ).toHaveBeenCalledWith(fields);
   });
 
@@ -78,47 +75,5 @@ describe('sanitizePdfInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).not.toHaveBeenCalled();
-  });
-});
-
-describe('setFields function', () => {
-  const getTextMock = jest.fn();
-  const setTextMock = jest.fn();
-  let name = 'PDFButton';
-  let fields;
-
-  beforeEach(() => {
-    fields = [
-      {
-        constructor: { name },
-        getText: getTextMock.mockReturnValue(''),
-        setText: setTextMock,
-      },
-      {
-        constructor: { name },
-        getText: getTextMock.mockReturnValue(''),
-        setText: setTextMock,
-      },
-    ];
-  });
-
-  it('should call getText and setText functions if field type name is PDFTextField', () => {
-    const loremText = 'Lorem Ipsum';
-    getTextMock.mockReturnValueOnce(loremText);
-    fields[0].constructor.name = 'PDFTextField';
-
-    setPdfFields(fields);
-
-    expect(getTextMock).toHaveBeenCalledTimes(1);
-    expect(setTextMock).toHaveBeenCalledWith(loremText);
-  });
-
-  it('should not call getText and setText functions if field type name is not PDFTextField', () => {
-    fields[0].constructor.name = 'PDFCheckbox';
-
-    setPdfFields(fields);
-
-    expect(getTextMock).not.toHaveBeenCalled();
-    expect(setTextMock).not.toHaveBeenCalled();
   });
 });
