@@ -26,9 +26,6 @@ describe('sanitizePdfInteractor', () => {
       }),
     });
 
-    applicationContext.getPersistenceGateway().deleteDocumentFromS3 = jest.fn();
-
-    applicationContext.getUseCaseHelpers().setPdfFormFields = jest.fn();
     getFieldsMock.mockReturnValue([]);
   });
 
