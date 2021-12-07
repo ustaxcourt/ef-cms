@@ -4,6 +4,7 @@ import { contactPrimaryFromState } from '../helpers';
 export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
   cerebralTest,
   fakeFile,
+  eventCode,
 ) => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
@@ -58,7 +59,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'EVID',
+      value: eventCode,
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
@@ -79,6 +80,6 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
 
     cerebralTest.docketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
-      .find(doc => doc.eventCode === 'EVID').docketEntryId;
+      .find(doc => doc.eventCode === eventCode).docketEntryId;
   });
 };

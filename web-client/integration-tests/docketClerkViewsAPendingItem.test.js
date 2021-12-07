@@ -150,7 +150,11 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     ).toEqual('documentView');
   });
 
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, fakeFile);
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
+    cerebralTest,
+    fakeFile,
+    'EVID',
+  );
 
   it('docket clerk views pending report items', async () => {
     await refreshElasticsearchIndex();
@@ -182,5 +186,16 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       caseReceivedAtFormatted,
     );
     expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
+  });
+
+  it('docket clerk views pending motion to proceed remotely', async () => {
+    // upload MOTR paper filing
+    docketClerkAddsPaperFiledPendingDocketEntryAndServes(
+      cerebralTest,
+      fakeFile,
+      'MOTR',
+    );
+    // view pending report
+    // verify MOTR is present
   });
 });
