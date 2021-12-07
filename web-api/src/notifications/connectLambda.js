@@ -12,7 +12,7 @@ exports.connectLambda = event =>
     async ({ applicationContext }) => {
       const endpoint = event.requestContext.domainName;
 
-      const results = await applicationContext
+      await applicationContext
         .getUseCases()
         .onConnectInteractor(applicationContext, {
           connectionId: event.requestContext.connectionId,
@@ -24,8 +24,6 @@ exports.connectLambda = event =>
           connection: event.requestContext.connectionId,
         },
       });
-
-      return results;
     },
     { bypassMaintenanceCheck: true },
   );

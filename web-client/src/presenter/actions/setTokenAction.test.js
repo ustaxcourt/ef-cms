@@ -56,7 +56,8 @@ describe('setTokenAction,', () => {
     );
   });
 
-  it('should call applicationContext.getUseCases().setItemInteractor with key token and the value of props.token', async () => {
+  it('should save the token into localStorage if running locally', async () => {
+    process.env.IS_LOCAL = 'true';
     await runAction(setTokenAction, {
       modules: {
         presenter,
@@ -67,12 +68,8 @@ describe('setTokenAction,', () => {
       },
       state: {},
     });
-
     expect(
-      applicationContext.getUseCases().setItemInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      key: 'token',
-      value: mockToken,
-    });
+      applicationContext.getUseCases().setItemInteractor,
+    ).toHaveBeenCalled();
   });
 });

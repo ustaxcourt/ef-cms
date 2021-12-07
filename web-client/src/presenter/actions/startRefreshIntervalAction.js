@@ -6,31 +6,36 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.workItem
  */
-export const startRefreshIntervalAction = ({
+export const startRefreshIntervalAction = async ({
   applicationContext,
   get,
   store,
 }) => {
   const oldInterval = get(state.refreshTokenInterval);
-  clearInterval(oldInterval);
-  const refreshToken = get(state.refreshToken);
-  const time = applicationContext.getConstants().REFRESH_INTERVAL;
-  const interval = setInterval(async () => {
+
+  const refreshTokenRequest = async () => {
     const response = await applicationContext
       .getUseCases()
-      .refreshTokenInteractor(applicationContext, {
-        refreshToken,
-      });
+      .refreshTokenInteractor(applicationContext);
 
     store.set(state.token, response.token);
     applicationContext.setCurrentUserToken(response.token);
+    if (process.env.IS_LOCAL) {
+      await applicationContext
+        .getUseCases()
+        .setItemInteractor(applicationContext, {
+          key: 'token',
+          value: response.token,
+        });
+    }
+  };
 
-    await applicationContext
-      .getUseCases()
-      .setItemInteractor(applicationContext, {
-        key: 'token',
-        value: response.token,
-      });
-  }, time);
+  clearInterval(oldInterval);
+  const time = applicationContext.getConstants().REFRESH_INTERVAL;
+  const getNewIdToken = async () => {
+    await refreshTokenRequest();
+  };
+  const interval = setInterval(getNewIdToken, time);
+  await getNewIdToken();
   store.set(state.refreshTokenInterval, interval);
 };
