@@ -3,9 +3,7 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('./EntityConstants');
-const {
-  getTextByCount,
-} = require('../../../../web-client/integration-tests/helpers');
+const { getTextByCount } = require('../utilities/getTextByCount');
 const { Practitioner } = require('./Practitioner');
 
 describe('Practitioner', () => {
