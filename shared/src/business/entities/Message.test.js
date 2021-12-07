@@ -1,8 +1,6 @@
-const {
-  getTextByCount,
-} = require('../../../../web-client/integration-tests/helpers');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
+const { getTextByCount } = require('../utilities/getTextByCount');
 const { Message } = require('./Message');
 
 describe('Message', () => {
