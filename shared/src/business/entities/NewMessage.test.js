@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-  over1000Characters,
-} = require('../test/createTestApplicationContext');
+const { applicationContext } = require('../test/createTestApplicationContext');
+const { getTextByCount } = require('../utilities/getTextByCount');
 const { Message } = require('./Message');
 const { NewMessage } = require('./NewMessage');
 const { PETITIONS_SECTION } = require('./EntityConstants');
@@ -44,7 +42,7 @@ describe('NewMessage', () => {
     it('displays a message when the message is over 500 characters long', () => {
       const message = new NewMessage(
         {
-          message: over1000Characters,
+          message: getTextByCount(1001),
           subject: 'hey!',
           to: 'bob',
           toSection: PETITIONS_SECTION,

@@ -6,13 +6,8 @@ const {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../EntityConstants');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { Petitioner } = require('./Petitioner');
-
-const getTextByCount = count => {
-  const baseText =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate efficitur ante, at placerat.';
-  return new Array(1000).fill(baseText).join('').slice(0, count);
-};
 
 describe('Petitioner', () => {
   const mockValidPetitioner = {

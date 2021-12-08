@@ -2,10 +2,8 @@ const {
   calculateISODate,
   createISODateString,
 } = require('../../utilities/DateHandler');
-const {
-  over1000Characters,
-} = require('../../test/createTestApplicationContext');
 const { DocketEntryFactory } = require('./DocketEntryFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { OBJECTIONS_OPTIONS_MAP } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
@@ -61,7 +59,7 @@ describe('DocketEntryFactory', () => {
   });
 
   it('should be invalid when additionalInfo is over 500 characters long', () => {
-    rawEntity.additionalInfo = over1000Characters;
+    rawEntity.additionalInfo = getTextByCount(1001);
 
     expect(errors().additionalInfo).toEqual(
       VALIDATION_ERROR_MESSAGES.additionalInfo[0].message,
@@ -69,7 +67,7 @@ describe('DocketEntryFactory', () => {
   });
 
   it('should be invalid when additionalInfo2 is over 500 characters long', () => {
-    rawEntity.additionalInfo2 = over1000Characters;
+    rawEntity.additionalInfo2 = getTextByCount(1001);
 
     expect(errors().additionalInfo2).toEqual(
       VALIDATION_ERROR_MESSAGES.additionalInfo2[0].message,
