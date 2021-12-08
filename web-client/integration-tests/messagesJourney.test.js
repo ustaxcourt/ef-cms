@@ -8,7 +8,6 @@ import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRem
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
-import { getTextByCount } from '../../shared/src/business/utilities/getTextByCount';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -136,7 +135,7 @@ describe('messages journey', () => {
     const currentDocketEntries = cerebralTest.getState(
       'caseDetail.docketEntries',
     );
-    const longDocumentTitle = getTextByCount(255);
+    const longDocumentTitle = applicationContext.getTextByCount(255);
 
     const docketEntryWithLongTitle = {
       addToCoversheet: false,

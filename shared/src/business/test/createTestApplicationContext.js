@@ -179,6 +179,7 @@ const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getCropBox } = require('../../../src/business/utilities/getCropBox');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
+const { getTextByCount } = require('../utilities/getTextByCount');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
@@ -620,6 +621,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getSearchClient: emptyAppContextProxy,
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
+    getTextByCount: jest.fn(x => getTextByCount(x)),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,

@@ -1,5 +1,5 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { getTextByCount } from '../../../shared/src/business/utilities/getTextByCount';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -38,7 +38,7 @@ export const docketClerkEditsHearingNote = (cerebralTest, updatedNote) => {
       note: 'Add a note',
     });
 
-    const textWithCountOverLimit = getTextByCount(201);
+    const textWithCountOverLimit = applicationContext.getTextByCount(201);
 
     await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'note',
