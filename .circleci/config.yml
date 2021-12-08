@@ -63,6 +63,7 @@ jobs:
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
             NO_SCANNER=true \
             SKIP_VIRUS_SCAN=true \
+            IS_LOCAL=true \
             AWS_ACCESS_KEY_ID=S3RVER \
             AWS_SECRET_ACCESS_KEY=S3RVER \
             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
