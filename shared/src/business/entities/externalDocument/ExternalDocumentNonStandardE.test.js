@@ -1,10 +1,8 @@
 const {
-  over3000Characters,
-} = require('../../test/createTestApplicationContext');
-const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 
 describe('ExternalDocumentNonStandardE', () => {
   describe('validation', () => {
@@ -35,7 +33,7 @@ describe('ExternalDocumentNonStandardE', () => {
     it('should be invalid when documentTitle is over 3000 characters', () => {
       const extDoc = ExternalDocumentFactory({
         category: 'Motion',
-        documentTitle: over3000Characters,
+        documentTitle: getTextByCount(3001),
         documentType:
           'Motion to Change Place of Submission of Declaratory Judgment Case',
         scenario: 'Nonstandard E',
