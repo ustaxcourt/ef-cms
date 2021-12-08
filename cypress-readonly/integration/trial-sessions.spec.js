@@ -30,7 +30,7 @@ describe('Trial Sessions UI Smoketests', () => {
         url: '/trial-sessions',
       }).as('getOpenTrialSessions');
 
-      cy.visit('/trial-sessions');
+      cy.get('a').contains('Trial Sessions').click();
 
       cy.wait('@getOpenTrialSessions').then(isValidRequest);
     });
