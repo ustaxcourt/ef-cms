@@ -41,6 +41,9 @@ describe('gotoTrialSessionWorkingCopySequence', () => {
     applicationContext
       .getUseCases()
       .getTrialSessionWorkingCopyInteractor.mockReturnValue(mockWorkingCopy);
+
+    //set token to take 'isLoggedIn' path
+    cerebralTest.setState('token', 'a');
   });
 
   it('should set up state for a user associated with the trial session', async () => {

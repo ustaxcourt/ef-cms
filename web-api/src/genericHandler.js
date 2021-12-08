@@ -32,13 +32,17 @@ exports.dataSecurityFilter = (data, { applicationContext }) => {
 };
 
 const checkMaintenanceMode = async ({ applicationContext }) => {
-  const maintenanceMode = await applicationContext
+  const maintenanceRecord = await applicationContext
     .getPersistenceGateway()
     .getMaintenanceMode({ applicationContext });
+
+  const maintenanceMode = !!(maintenanceRecord && maintenanceRecord.current);
 
   if (maintenanceMode) {
     throw new Error('Maintenance mode is enabled');
   }
+
+  return maintenanceMode;
 };
 
 exports.checkMaintenanceMode = checkMaintenanceMode;
