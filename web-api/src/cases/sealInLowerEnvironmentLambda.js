@@ -10,7 +10,7 @@ exports.sealInLowerEnvironmentLambda = async event => {
   const user = { role: 'docketclerk' };
   const applicationContext = createApplicationContext(user);
 
-  if (!applicationContext.isCurrentColorActive()) {
+  if (!applicationContext.isCurrentColorActive(applicationContext)) {
     applicationContext.logger.warn('This is not the currently deployed color');
     return;
   }

@@ -917,6 +917,9 @@ const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
+  sealInLowerEnvironmentInteractor,
+} = require('../../shared/src/business/useCases/sealInLowerEnvironmentInteractor');
+const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
@@ -1973,6 +1976,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveSignedDocumentInteractor,
         sealCaseContactAddressInteractor,
         sealCaseInteractor,
+        sealInLowerEnvironmentInteractor,
         sendMaintenanceNotificationsInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,

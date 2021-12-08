@@ -1,4 +1,7 @@
 const client = require('../../dynamodbClientService');
+const {
+  applicationContext,
+} = require('../../../business/test/createTestApplicationContext');
 const { isCurrentColorActive } = require('./isCurrentColorActive');
 
 describe('isCurrentColorActive', () => {
@@ -18,13 +21,13 @@ describe('isCurrentColorActive', () => {
 
   it('checks where the current color in the deploy table matches the current color of the environment', async () => {
     process.env.CURRENT_COLOR = 'blue';
-    const val = await isCurrentColorActive();
+    const val = await isCurrentColorActive(applicationContext);
 
     expect(val).toEqual(true);
   });
 
   it('looks in the deploy table to figure out what the currently deployed color is', async () => {
-    await isCurrentColorActive();
+    await isCurrentColorActive(applicationContext);
 
     expect(client.getDeployTableName).toBeCalled();
   });
