@@ -4,8 +4,8 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { fakeFile, loginAs, setupTest } from './helpers';
-import { getTextByCount } from '../../shared/src/business/utilities/getTextByCount';
 
 const cerebralTest = setupTest();
 
@@ -123,7 +123,7 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.secondaryName',
-      value: getTextByCount(500),
+      value: applicationContext.getTextByCount(500),
     });
 
     await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
