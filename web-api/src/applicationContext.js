@@ -875,6 +875,9 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
+  sanitizePdfInteractor,
+} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
+const {
   saveCalendarNoteInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor');
 const {
@@ -961,6 +964,9 @@ const {
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
+const {
+  setPdfFormFields,
+} = require('../../shared/src/business/useCaseHelper/pdf/setPdfFormFields');
 const {
   setPriorityOnAllWorkItems,
 } = require('../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems');
@@ -1799,6 +1805,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        setPdfFormFields,
         updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
@@ -1940,6 +1947,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
+        sanitizePdfInteractor,
         saveCalendarNoteInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,

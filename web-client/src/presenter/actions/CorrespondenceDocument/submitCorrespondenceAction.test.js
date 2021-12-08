@@ -44,6 +44,8 @@ describe('submitCorrespondenceAction', () => {
       applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).toBeCalled();
     expect(applicationContext.getUseCases().validatePdfInteractor).toBeCalled();
+    expect(applicationContext.getUseCases().sanitizePdfInteractor).toBeCalled();
+
     expect(
       applicationContext.getUseCases().fileCorrespondenceDocumentInteractor,
     ).toBeCalled();

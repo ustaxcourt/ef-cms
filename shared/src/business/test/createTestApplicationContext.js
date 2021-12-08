@@ -164,6 +164,9 @@ const {
   updateUserRecords,
 } = require('../../persistence/dynamo/users/updateUserRecords');
 const {
+  uploadDocumentAndMakeSafeInteractor,
+} = require('../useCases/uploadDocumentAndMakeSafeInteractor');
+const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
@@ -181,6 +184,7 @@ const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
 const { serveCaseDocument } = require('../utilities/serveCaseDocument');
 const { setItem } = require('../../persistence/localStorage/setItem');
+const { setPdfFormFields } = require('../useCaseHelper/pdf/setPdfFormFields');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 
@@ -367,6 +371,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     post: jest.fn(),
   };
 
+  const mockGetUseCases = appContextProxy({
+    uploadDocumentAndMakeSafeInteractor: jest
+      .fn()
+      .mockImplementation(uploadDocumentAndMakeSafeInteractor),
+  });
+
   const mockGetUseCaseHelpers = appContextProxy({
     appendPaperServiceAddressPageToPdf: jest
       .fn()
@@ -380,6 +390,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
+    setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
     updateCaseAndAssociations: jest
       .fn()
       .mockImplementation(updateCaseAndAssociations),
@@ -435,6 +446,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
+    deleteDocumentFromS3: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteKeyCount: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
@@ -613,7 +625,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
-    getUseCases: emptyAppContextProxy,
+    getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
     isFeatureEnabled: jest.fn(),
     logger: {
