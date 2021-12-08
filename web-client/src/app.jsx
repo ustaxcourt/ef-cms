@@ -111,6 +111,7 @@ import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
 import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACognitoLogin';
+import { wasLoginUsingTokenInUrl } from './utilities/wasLoginUsingTokenInUrl';
 import { withAppContextDecorator } from './withAppContext';
 
 import App from 'cerebral';
@@ -174,6 +175,7 @@ const app = {
 
     if (
       !wasAppLoadedFromACognitoLogin(window.location.href) &&
+      !wasLoginUsingTokenInUrl(window.location.href) && // this scenario is from smoketests
       !process.env.IS_LOCAL
     ) {
       try {
