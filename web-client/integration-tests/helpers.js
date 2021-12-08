@@ -892,21 +892,6 @@ export const getPetitionWorkItemForCase = caseDetail => {
   return petitionDocument.workItem;
 };
 
-export const getTextByCount = count => {
-  const baseText =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate efficitur ante, at placerat.';
-  const baseCount = baseText.length;
-
-  let resultText = baseText;
-  if (count > baseCount) {
-    for (let i = 1; i < Math.ceil(count / baseCount); i++) {
-      resultText += baseText;
-    }
-  }
-
-  return resultText.slice(0, count);
-};
-
 export const embedWithLegalIpsumText = (phrase = '') => {
   return `While this license do not apply to, the licenses granted by such Contributor under Sections 2.1(b) and 2.2(b) are revoked effective as of the provisions set forth in the case of each Contributor, changes to the Recipient. The term of this Agreement, and b) allow the Commercial Contributor in writing by the Licensor accepting any such claim at its own expense. For example, a Contributor might include the Contribution, nor to (ii) Contributions of other Contributors.
 
