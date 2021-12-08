@@ -173,6 +173,28 @@ const app = {
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.constants = applicationContext.getConstants();
 
+    if (
+      !wasAppLoadedFromACognitoLogin(window.location.href) &&
+      !wasLoginUsingTokenInUrl(window.location.href) && // this scenario is from smoketests
+      !process.env.IS_LOCAL
+    ) {
+      try {
+        const response = await applicationContext
+          .getUseCases()
+          .refreshTokenInteractor(applicationContext);
+        presenter.state.token = response.token;
+        applicationContext.setCurrentUserToken(response.token);
+      } catch (err) {
+        window.location.href = presenter.state.cognitoLoginUrl;
+      }
+
+      const user = await applicationContext
+        .getUseCases()
+        .getUserInteractor(applicationContext);
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
+    }
+
     if (presenter.state.token) {
       try {
         const maintenanceMode = await applicationContext
@@ -197,28 +219,6 @@ const app = {
       presenter.state.featureFlags = {
         [pdfFlagKey]: isFlagOn,
       };
-    }
-
-    if (
-      !wasAppLoadedFromACognitoLogin(window.location.href) &&
-      !wasLoginUsingTokenInUrl(window.location.href) && // this scenario is from smoketests
-      !process.env.IS_LOCAL
-    ) {
-      try {
-        const response = await applicationContext
-          .getUseCases()
-          .refreshTokenInteractor(applicationContext);
-        presenter.state.token = response.token;
-        applicationContext.setCurrentUserToken(response.token);
-      } catch (err) {
-        window.location.href = presenter.state.cognitoLoginUrl;
-      }
-
-      const user = await applicationContext
-        .getUseCases()
-        .getUserInteractor(applicationContext);
-      presenter.state.user = user;
-      applicationContext.setCurrentUser(user);
     }
 
     const userPermissions = applicationContext.getCurrentUserPermissions();
