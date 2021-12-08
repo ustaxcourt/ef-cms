@@ -1,10 +1,8 @@
 const {
   ExternalDocumentNonStandardC,
 } = require('./ExternalDocumentNonStandardC');
-const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 
 const { VALIDATION_ERROR_MESSAGES } = ExternalDocumentNonStandardC;
 

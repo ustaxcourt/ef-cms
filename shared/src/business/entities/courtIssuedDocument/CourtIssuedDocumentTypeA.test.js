@@ -2,10 +2,8 @@ const {
   GENERIC_ORDER_DOCUMENT_TYPE,
   VALIDATION_ERROR_MESSAGES,
 } = require('./CourtIssuedDocumentConstants');
-const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 
 describe('CourtIssuedDocumentTypeA', () => {
   describe('constructor', () => {

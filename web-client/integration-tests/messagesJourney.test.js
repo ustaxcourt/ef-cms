@@ -8,8 +8,8 @@ import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRem
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
+import { getTextByCount } from '../../shared/src/business/utilities/getTextByCount';
 import {
-  getTextByCount,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,

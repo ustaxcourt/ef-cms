@@ -1,10 +1,8 @@
 const {
-  getTextByCount,
-} = require('../../../../web-client/integration-tests/helpers');
-const {
   validateCalendarNoteInteractor,
 } = require('./validateCalendarNoteInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getTextByCount } = require('../utilities/getTextByCount');
 
 describe('validateCalendarNoteInteractor', () => {
   it('returns the expected errors object on a note that is over the valid length', () => {

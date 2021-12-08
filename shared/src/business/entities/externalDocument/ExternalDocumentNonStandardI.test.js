@@ -1,10 +1,8 @@
 const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
-const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 
 describe('ExternalDocumentNonStandardI', () => {
   describe('validation', () => {

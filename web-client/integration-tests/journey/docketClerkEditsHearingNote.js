@@ -1,5 +1,5 @@
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../../src/presenter/computeds/formattedCaseDetail';
-import { getTextByCount } from '../helpers';
+import { getTextByCount } from '../../../shared/src/business/utilities/getTextByCount';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 

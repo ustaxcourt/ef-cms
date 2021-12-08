@@ -2,10 +2,8 @@ const {
   calculateISODate,
   createISODateString,
 } = require('../../utilities/DateHandler');
-const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeD', () => {
