@@ -123,7 +123,7 @@ describe('Petitions clerk creates Estate case with long additionalName', () => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'contactPrimary.secondaryName',
-      value: applicationContext.getTextByCount(500),
+      value: applicationContext.getUtilities().getTextByCount(500),
     });
 
     await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {

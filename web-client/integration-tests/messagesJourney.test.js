@@ -135,8 +135,9 @@ describe('messages journey', () => {
     const currentDocketEntries = cerebralTest.getState(
       'caseDetail.docketEntries',
     );
-    const longDocumentTitle = applicationContext.getTextByCount(255);
-
+    const longDocumentTitle = applicationContext
+      .getUtilities()
+      .getTextByCount(250);
     const docketEntryWithLongTitle = {
       addToCoversheet: false,
       createdAt: '2021-04-19T19:22:08.389Z',

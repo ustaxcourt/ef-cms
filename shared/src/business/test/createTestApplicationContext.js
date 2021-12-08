@@ -332,6 +332,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getStampBoxCoordinates: jest
       .fn()
       .mockImplementation(getStampBoxCoordinates),
+    getTextByCount: jest.fn().mockImplementation(getTextByCount),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
@@ -621,7 +622,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getSearchClient: emptyAppContextProxy,
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
-    getTextByCount: jest.fn(x => getTextByCount(x)),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
