@@ -164,7 +164,7 @@ describe('advancedDocumentSearchHelper', () => {
     ]);
   });
 
-  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is opinion', () => {
+  it('returns capitalized document type verbiage when both the form and searchResults are empty and the search tab is opinion', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -175,21 +175,18 @@ describe('advancedDocumentSearchHelper', () => {
           ADVANCED_SEARCH_TABS:
             applicationContext.getConstants().ADVANCED_SEARCH_TABS,
         },
-        isPublic: true,
       },
     });
 
     expect(result).toMatchObject({
       documentTypeVerbiage: 'Opinion Type',
-      isPublic: true,
       manyResults: manyResultsOverride,
       showDateRangePicker: false,
       showManyResultsMessage: false,
-      showSealedIcon: false,
     });
   });
 
-  it('returns capitalized document type verbiage and isPublic when both the form and searchResults are empty and the search tab is order', () => {
+  it('returns capitalized document type verbiage when both the form and searchResults are empty and the search tab is order', () => {
     const result = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
@@ -200,17 +197,14 @@ describe('advancedDocumentSearchHelper', () => {
           ADVANCED_SEARCH_TABS:
             applicationContext.getConstants().ADVANCED_SEARCH_TABS,
         },
-        isPublic: true,
       },
     });
 
     expect(result).toMatchObject({
       documentTypeVerbiage: 'Order',
-      isPublic: true,
       manyResults: manyResultsOverride,
       showDateRangePicker: false,
       showManyResultsMessage: false,
-      showSealedIcon: true,
     });
   });
 
@@ -230,35 +224,6 @@ describe('advancedDocumentSearchHelper', () => {
       showNoMatches: true,
       showSearchResults: false,
     });
-  });
-
-  it('returns isPublic false if state.isPublic is not defined', () => {
-    const result = runCompute(advancedDocumentSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab:
-          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
-        searchResults: { opinion: [], order: [] },
-      },
-    });
-
-    expect(result.isPublic).toBeFalsy();
-  });
-
-  it('returns isPublic true if state.isPublic is true', () => {
-    const result = runCompute(advancedDocumentSearchHelper, {
-      state: {
-        ...getBaseState(globalUser),
-        advancedSearchForm: { currentPage: 1 },
-        advancedSearchTab:
-          applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
-        isPublic: true,
-        searchResults: { opinion: [], order: [] },
-      },
-    });
-
-    expect(result).toBeTruthy();
   });
 
   it('returns showNoMatches false, showSearchResults true, and the resultsCount when searchResults are not empty', () => {
@@ -485,13 +450,13 @@ describe('advancedDocumentSearchHelper', () => {
     ]);
   });
 
-  it('does not show sealed case icon for public opinion search', () => {
-    const result = runCompute(advancedDocumentSearchHelper, {
+  it('does not show sealed icon for opinion search', () => {
+    const { searchResults } = runCompute(advancedDocumentSearchHelper, {
       state: {
         ...getBaseState(globalUser),
+        advancedSearchForm: { currentPage: 1 },
         advancedSearchTab:
           applicationContext.getConstants().ADVANCED_SEARCH_TABS.OPINION,
-        isPublic: true,
         searchResults: {
           opinion: [
             {
@@ -501,7 +466,8 @@ describe('advancedDocumentSearchHelper', () => {
               documentTitle: 'Opinion',
               documentType: 'Memorandum Opinion',
               filingDate: '2019-03-01T05:00:00.000Z',
-              isSealed: true,
+              hasSealedDocuments: true,
+              isSealed: false,
               judge: 'Judge Buch',
             },
           ],
@@ -509,10 +475,11 @@ describe('advancedDocumentSearchHelper', () => {
       },
     });
 
-    expect(result).toMatchObject({
-      searchResultsCount: 1,
-      showSealedIcon: false,
-    });
+    expect(searchResults).toMatchObject([
+      {
+        showSealedIcon: false,
+      },
+    ]);
   });
 
   describe('formatDocumentSearchResultRecord', () => {

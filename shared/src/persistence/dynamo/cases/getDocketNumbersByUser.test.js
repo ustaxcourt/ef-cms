@@ -12,7 +12,7 @@ describe('getDocketNumbersByUser', () => {
   };
 
   beforeEach(() => {
-    client.query = jest.fn().mockReturnValueOnce([
+    client.queryFull = jest.fn().mockReturnValueOnce([
       {
         pk: 'user|455de2eb-77b2-4815-aa2b-99475b2f68bb',
         sk: 'case|123-20',
