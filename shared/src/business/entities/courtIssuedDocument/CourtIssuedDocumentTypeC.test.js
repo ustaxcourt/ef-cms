@@ -1,7 +1,5 @@
-const {
-  over1000Characters,
-} = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeC', () => {
@@ -44,7 +42,7 @@ describe('CourtIssuedDocumentTypeC', () => {
     it('should be invalid when docketNumbers field is over 500 characters', () => {
       const documentInstance = CourtIssuedDocumentFactory({
         attachments: false,
-        docketNumbers: over1000Characters,
+        docketNumbers: getTextByCount(1001),
         documentTitle:
           'Order that the letter "L" is added to Docket Number [Anything]',
         documentType: 'Order that the letter "L" is added to Docket Number',
