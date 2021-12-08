@@ -18,7 +18,6 @@ exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
   });
 
   if (!connection) {
-    // it must have expired
     return;
   }
 
