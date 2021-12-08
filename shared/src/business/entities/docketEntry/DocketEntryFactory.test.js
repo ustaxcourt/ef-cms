@@ -2,10 +2,8 @@ const {
   calculateISODate,
   createISODateString,
 } = require('../../utilities/DateHandler');
-const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
 const { DocketEntryFactory } = require('./DocketEntryFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { OBJECTIONS_OPTIONS_MAP } = require('../EntityConstants');
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;

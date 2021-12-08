@@ -1,7 +1,5 @@
-const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
 const { CalendarNote } = require('./CalendarNote');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 
 const { VALIDATION_ERROR_MESSAGES } = CalendarNote;
 

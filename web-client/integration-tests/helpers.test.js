@@ -1,4 +1,5 @@
-import { embedWithLegalIpsumText, getTextByCount, gotoRoute } from './helpers';
+import { embedWithLegalIpsumText, gotoRoute } from './helpers';
+import { getTextByCount } from '../../shared/src/business/utilities/getTextByCount';
 
 describe('helpers', () => {
   describe('gotoRoute', () => {

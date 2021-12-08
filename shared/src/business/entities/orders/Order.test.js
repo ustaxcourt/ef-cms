@@ -1,6 +1,4 @@
-const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { Order } = require('./Order');
 
 describe('Order', () => {

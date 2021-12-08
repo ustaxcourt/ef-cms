@@ -4,7 +4,8 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { fakeFile, getTextByCount, loginAs, setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
+import { getTextByCount } from '../../shared/src/business/utilities/getTextByCount';
 
 const cerebralTest = setupTest();
 

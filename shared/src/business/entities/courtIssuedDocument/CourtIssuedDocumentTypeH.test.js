@@ -1,8 +1,6 @@
-const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
 const { calculateISODate } = require('../../utilities/DateHandler');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeH', () => {
