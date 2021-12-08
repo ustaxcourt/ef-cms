@@ -13,6 +13,7 @@ exports.isCurrentColorActive = async applicationContext => {
       sk: 'current-color',
     },
     TableName: client.getDeployTableName({ applicationContext }),
+    applicationContext,
   });
 
   return process.env.CURRENT_COLOR === currentColor;
