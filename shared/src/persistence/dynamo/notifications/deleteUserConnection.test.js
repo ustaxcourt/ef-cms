@@ -58,6 +58,7 @@ describe('deleteUserConnection', () => {
   });
 
   it('if no connection is found given the connectionId, nothing else happens', async () => {
+    // the connection must have expired via ttl
     applicationContext.getDocumentClient().get.mockReturnValueOnce({
       promise: () => Promise.resolve({}),
     });
@@ -84,6 +85,7 @@ describe('deleteUserConnection', () => {
           },
         }),
     });
+    // the user connection must have expired via ttl
     applicationContext.getDocumentClient().get.mockReturnValueOnce({
       promise: () => Promise.resolve({}),
     });
