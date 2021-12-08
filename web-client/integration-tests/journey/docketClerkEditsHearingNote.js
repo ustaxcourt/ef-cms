@@ -38,7 +38,9 @@ export const docketClerkEditsHearingNote = (cerebralTest, updatedNote) => {
       note: 'Add a note',
     });
 
-    const textWithCountOverLimit = applicationContext.getTextByCount(201);
+    const textWithCountOverLimit = applicationContext
+      .getUtilities()
+      .getTextByCount(201);
 
     await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'note',
