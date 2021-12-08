@@ -1,20 +1,32 @@
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
+import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from '../src/presenter/computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { associatedUserSearchesForServedOrder } from './journey/associatedUserSearchesForServedOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  updateOrderForm,
+  uploadPetition,
+} from './helpers';
+import { petitionsClerkAddsPractitionerToPrimaryContact } from './journey/petitionsClerkAddsPractitionerToPrimaryContact';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
+import { runCompute } from 'cerebral/test';
 import { unassociatedUserSearchesForServedOrderInSealedCase } from './journey/unassociatedUserSearchesForServedOrderInSealedCase';
 import { unassociatedUserSearchesForServedOrderInUnsealedCase } from './journey/unassociatedUserSearchesForServedOrderInUnsealedCase';
-
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('external users perform an advanced search for orders', () => {
+  const cerebralTest = setupTest();
+  cerebralTest.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -34,6 +46,7 @@ describe('external users perform an advanced search for orders', () => {
   petitionsClerkViewsCaseDetail(cerebralTest);
   petitionsClerkAddsPractitionersToCase(cerebralTest, true);
   petitionsClerkAddsRespondentsToCase(cerebralTest);
+  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
@@ -72,36 +85,149 @@ describe('external users perform an advanced search for orders', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
-
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
-  associatedUserSearchesForServedOrder(
-    cerebralTest,
-    {
-      draftOrderIndex: 0,
-      keyword: 'Jiminy Cricket',
-    },
-    true,
-  );
+  petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
 
   loginAs(cerebralTest, 'privatePractitioner1@example.com');
+  it('search for order in sealed case as the second practitioner associated to the petitioner', async () => {
+    await refreshElasticsearchIndex();
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const advancedDocumentSearchHelper = withAppContextDecorator(
+      advancedDocumentSearchHelperComputed,
+    );
+    const searchHelper = runCompute(advancedDocumentSearchHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(searchHelper.searchResults[0].showSealedIcon).toBe(true);
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+        }),
+      ]),
+    );
+  });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  it('removes second private practitioner associated to the petitioner from case', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('gotoEditPetitionerCounselSequence', {
+      barNumber: 'PT5432',
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerCounsel',
+    );
+
+    await cerebralTest.runSequence('openRemovePetitionerCounselModalSequence');
+
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'RemovePetitionerCounselModal',
+    );
+
+    await cerebralTest.runSequence('removePetitionerCounselFromCaseSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner1@example.com');
+  it('search for order in sealed case as an unassociated practitioner', async () => {
+    await refreshElasticsearchIndex();
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual([]);
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  associatedUserSearchesForServedOrder(cerebralTest, {
+    draftOrderIndex: 0,
+    keyword: 'Jiminy Cricket',
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
   });
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
-  associatedUserSearchesForServedOrder(
-    cerebralTest,
-    {
-      draftOrderIndex: 0,
-      keyword: 'Jiminy Cricket',
-    },
-    true,
-  );
+  associatedUserSearchesForServedOrder(cerebralTest, {
+    draftOrderIndex: 0,
+    keyword: 'Jiminy Cricket',
+  });
 
   loginAs(cerebralTest, 'irsPractitioner2@example.com');
   unassociatedUserSearchesForServedOrderInSealedCase(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner2@example.com');
+  it('search for sealed order in unsealed case as an unassociated practitioner', async () => {
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.docketNumber = '999-15';
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual([]);
+  });
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  it('search for sealed order in unsealed case as an associated practitioner', async () => {
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.docketNumber = '999-15';
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const advancedDocumentSearchHelper = withAppContextDecorator(
+      advancedDocumentSearchHelperComputed,
+    );
+    const searchHelper = runCompute(advancedDocumentSearchHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(searchHelper.searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+          showSealedIcon: true,
+        }),
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+          showSealedIcon: true,
+        }),
+      ]),
+    );
   });
 });

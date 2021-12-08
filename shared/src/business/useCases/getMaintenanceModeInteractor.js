@@ -5,7 +5,8 @@
  * @returns {boolean} the value of maintenance mode
  */
 exports.getMaintenanceModeInteractor = async applicationContext => {
-  return await applicationContext
+  const result = await applicationContext
     .getPersistenceGateway()
     .getMaintenanceMode({ applicationContext });
+  return !!(result && result.current);
 };
