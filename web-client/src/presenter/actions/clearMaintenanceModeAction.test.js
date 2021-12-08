@@ -26,10 +26,5 @@ describe('clearMaintenanceModeAction', () => {
       },
       state: {},
     });
-
-    expect(
-      applicationContext.getUseCases().removeItemInteractor.mock.calls[0][1]
-        .key,
-    ).toBe('maintenanceMode');
   });
 });

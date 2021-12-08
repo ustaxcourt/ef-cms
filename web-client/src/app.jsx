@@ -122,6 +122,16 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
+    // if /log-in page, delete local storage?
+    if (window.location.href.includes('/log-in?code')) {
+      await applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, { key: 'token' });
+      await applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, { key: 'user' });
+    }
+
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
@@ -140,11 +150,6 @@ const app = {
       presenter.state.user = user;
       applicationContext.setCurrentUser(user);
     }
-
-    const maintenanceMode = await applicationContext
-      .getUseCases()
-      .getItemInteractor(applicationContext, { key: 'maintenanceMode' });
-    presenter.state.maintenanceMode = maintenanceMode;
 
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
@@ -165,8 +170,33 @@ const app = {
     }
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
-
     presenter.state.constants = applicationContext.getConstants();
+
+    if (presenter.state.token) {
+      try {
+        const maintenanceMode = await applicationContext
+          .getUseCases()
+          .getMaintenanceModeInteractor(applicationContext);
+        presenter.state.maintenanceMode = maintenanceMode;
+      } catch (err) {
+        window.location.href = presenter.state.cognitoLoginUrl;
+      }
+    }
+
+    if (presenter.state.token && !presenter.state.maintenanceMode) {
+      const pdfFlagKey =
+        applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
+          .PDFJS_EXPRESS_VIEWER.key;
+      let isFlagOn = false;
+      isFlagOn = await applicationContext
+        .getUseCases()
+        .getFeatureFlagValueInteractor(applicationContext, {
+          featureFlag: pdfFlagKey,
+        });
+      presenter.state.featureFlags = {
+        [pdfFlagKey]: isFlagOn,
+      };
+    }
 
     if (
       !wasAppLoadedFromACognitoLogin(window.location.href) &&

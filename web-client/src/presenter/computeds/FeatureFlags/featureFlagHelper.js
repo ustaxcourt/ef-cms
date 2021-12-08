@@ -11,6 +11,9 @@ export const featureFlagHelper = (get, applicationContext) => {
   const isInternalOpinionSearchEnabled = get(
     state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH.key],
   );
+  const isPdfJsEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key],
+  );
 
   let isOrderSearchEnabledForRole = false;
   if (role && isUserInternal) {
@@ -24,5 +27,6 @@ export const featureFlagHelper = (get, applicationContext) => {
   return {
     isInternalOpinionSearchEnabled,
     isOrderSearchEnabledForRole,
+    isPdfJsEnabled,
   };
 };
