@@ -151,6 +151,15 @@ In this study, Flexion UX Designers performed usability testing for creating a c
 
 [Order Search Recommendations July 2021](./OrderSearchRecommendationsJuly2021.pdf)
 
+## Sealing/Unsealing Research
+
+### Sealing/Unsealing Cases and Documents (November 2021)
+[UX Sealing/Unsealing Research Plan October 2021](https://docs.google.com/document/d/1Kx33vIlerGeTJr7X7RvVeiSDvcMtVa8SCaC5U3NAOXk/edit?usp=sharing)
+
+[UX Sealing/Unsealing Research Findings November 2021](https://drive.google.com/file/d/1Sa9a7FnZo-ARqqI9MsfmQKpJEweFmVvc/view?usp=sharing)
+
+[User Interview Mural Board](https://app.mural.co/invitation/mural/flexion6734/1634754569414?sender=u9a89dc65e6273d6559349431&key=3c0af023-c471-44a1-8372-64e7e2b4db44)
+
 
 # UI Design System
 
