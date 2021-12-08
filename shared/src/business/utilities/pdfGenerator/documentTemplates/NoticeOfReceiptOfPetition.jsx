@@ -54,18 +54,19 @@ export const NoticeOfReceiptOfPetition = ({
       <div className="info-box margin-bottom-0">
         <div className="info-box-header">Electronic Access to Your Case:</div>
         <div className="info-box-content">
-          The Court encourages registration for DAWSON, the Court&apos;s
-          electronic filing and case management system, so that you can
-          electronically file and view documents in your case. To register for
-          DAWSON, email{' '}
+          The Court encourages registration for DAWSON, the Court’s electronic
+          filing and case management system, so that you can electronically file
+          and view documents in your case. For more information about electronic
+          service, email{' '}
           <strong>
             <a href="mailto:dawson.support@ustaxcourt.gov">
               dawson.support@ustaxcourt.gov
             </a>
           </strong>
-          . If you do not register for eFiling, you must send the opposing party
-          a copy of any document you file with the Court. To obtain further
-          information about Tax Court proceedings, visit{' '}
+          , and a letter with eAccess instructions will be mailed to the address
+          of record. If you do not register for eFiling, you must send the
+          opposing party a copy of any document you file with the Court. To
+          obtain further information about Tax Court proceedings, visit{' '}
           <strong>
             <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
           </strong>{' '}
@@ -78,16 +79,16 @@ export const NoticeOfReceiptOfPetition = ({
         <div className="info-box-content">
           You must notify the Clerk of the Court if you change your address. See
           Rule 22(b)(4). If you filed your petition in paper, see Tax Court Form
-          10, Notice of Change of Address, under “Forms” on the Tax Court’s
-          Website at{' '}
+          10, Notice of Change of Address, under &quot;Forms&quot; on the Tax
+          Court’s Website at{' '}
           <strong>
             <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>
           </strong>
           . If you filed your petition electronically, you may update your
-          address under the “Case Information” tab in your case online. Failure
-          to notify the Clerk of the Court of a change of your address can mean
-          you do not receive notices and documents essential to your case and
-          can lead to dismissal of your case.
+          address under the &quot;Case Information&quot; tab in your case
+          online. Failure to notify the Clerk of the Court of a change of your
+          address can mean you do not receive notices and documents essential to
+          your case and can lead to dismissal of your case.
         </div>
       </div>
 
