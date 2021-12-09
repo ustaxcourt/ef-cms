@@ -5,7 +5,7 @@
  * @returns {boolean} true if the application was loaded due to a login via cognito
  */
 const wasLoginUsingTokenInUrl = href => {
-  return href.includes('?token');
+  return href.includes('log-in?token');
 };
 
 export { wasLoginUsingTokenInUrl };
