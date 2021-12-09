@@ -26,18 +26,18 @@ exports.sendNotificationOfSealing = async (
 
   for (let retryCount = 0; retryCount <= maxRetries; retryCount++) {
     try {
-      const res = await applicationContext
+      const response = await applicationContext
         .getNotificationService()
         .publish(params)
         .promise();
       applicationContext.logger.info('sent notification of sealing', {
-        MessageId: res.MessageId,
         docketEntryId,
         docketNumber,
+        response,
       });
       return;
     } catch (err) {
-      applicationContext.logger.warn('error attempting to send notification', {
+      applicationContext.logger.error('error attempting to send notification', {
         err,
         retryCount,
       });
