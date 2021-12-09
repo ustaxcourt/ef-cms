@@ -8,7 +8,11 @@ describe('isCurrentColorActive', () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
-    client.query = jest.fn().mockReturnValue([{ value: 'blue' }]);
+    client.get = jest.fn().mockReturnValue({
+      current: 'blue',
+      pk: 'current-color',
+      sk: 'current-color',
+    });
     client.getDeployTableName = jest
       .fn()
       .mockReturnValue([{ value: 'efcms-local-deploy' }]);
