@@ -1730,9 +1730,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         return notificationServiceCache;
       }
 
-      if (environment.stage == 'local') {
+      if (environment.stage === 'local') {
         notificationServiceCache = {
-          publish: () => {},
+          publish: () => ({
+            promise: () => {},
+          }),
         };
       } else {
         notificationServiceCache = new AWS.SNS({});
