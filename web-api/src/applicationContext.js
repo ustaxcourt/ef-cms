@@ -974,6 +974,9 @@ const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
+  setPdfFormFields,
+} = require('../../shared/src/business/useCaseHelper/pdf/setPdfFormFields');
+const {
   setPriorityOnAllWorkItems,
 } = require('../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems');
 const {
@@ -1830,6 +1833,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        setPdfFormFields,
         updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
