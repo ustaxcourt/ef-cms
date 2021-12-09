@@ -54,7 +54,7 @@ describe('retrySendNotificationToConnections', () => {
   it('catches exception if connection is no longer available and calls client.delete', async () => {
     await applicationContext
       .getNotificationGateway()
-      .sendNotificationToConnection.mockRejectedValue(notificationError);
+      .sendNotificationToConnection.mockRejectedValueOnce(notificationError);
 
     await retrySendNotificationToConnections({
       applicationContext,
@@ -70,7 +70,7 @@ describe('retrySendNotificationToConnections', () => {
   it('does not call client.delete if deleteGoneConnections is false', async () => {
     await applicationContext
       .getNotificationGateway()
-      .sendNotificationToConnection.mockRejectedValue(notificationError);
+      .sendNotificationToConnection.mockRejectedValueOnce(notificationError);
 
     await retrySendNotificationToConnections({
       applicationContext,
@@ -88,7 +88,7 @@ describe('retrySendNotificationToConnections', () => {
     notificationError.statusCode = 400;
     await applicationContext
       .getNotificationGateway()
-      .sendNotificationToConnection.mockRejectedValue(notificationError);
+      .sendNotificationToConnection.mockRejectedValueOnce(notificationError);
 
     await expect(
       retrySendNotificationToConnections({
