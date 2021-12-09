@@ -17,6 +17,12 @@ exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
     applicationContext,
   });
 
+  if (!connection) {
+    return;
+  }
+
+  const toDelete = [connection];
+
   const userConnection = await client.get({
     Key: {
       pk: `user|${connection.userId}`,
@@ -25,8 +31,12 @@ exports.deleteUserConnection = async ({ applicationContext, connectionId }) => {
     applicationContext,
   });
 
+  if (userConnection) {
+    toDelete.push(userConnection);
+  }
+
   await client.batchDelete({
     applicationContext,
-    items: [userConnection, connection],
+    items: toDelete,
   });
 };
