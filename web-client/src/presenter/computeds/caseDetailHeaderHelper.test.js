@@ -467,7 +467,7 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showBlockedTag).toBeTruthy();
     });
 
-    it('should be true when blocked is false, automaticBlocked is true, and case status is NOT calendared', () => {
+    it('should be true when blocked is false, automaticBlocked is true, highPriority is false and case status is NOT calendared', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -476,6 +476,7 @@ describe('caseDetailHeaderHelper', () => {
             automaticBlocked: true,
             automaticBlockedDate: '2019-04-19T17:29:13.120Z',
             automaticBlockedReason: 'Pending Item',
+            highPriority: false,
             status: CASE_STATUS_TYPES.new,
           },
         },
@@ -484,7 +485,7 @@ describe('caseDetailHeaderHelper', () => {
       expect(result.showBlockedTag).toBeTruthy();
     });
 
-    it('should be false when blocked is false, automaticBlocked is true, and case status is calendared', () => {
+    it('should be false when blocked is false, automaticBlocked is true, highPriority is true and case status is NOT calendared', () => {
       const result = runCompute(caseDetailHeaderHelper, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -493,6 +494,25 @@ describe('caseDetailHeaderHelper', () => {
             automaticBlocked: true,
             automaticBlockedDate: '2019-04-19T17:29:13.120Z',
             automaticBlockedReason: 'Pending Item',
+            highPriority: true,
+            status: CASE_STATUS_TYPES.new,
+          },
+        },
+      });
+
+      expect(result.showBlockedTag).toBeFalsy();
+    });
+
+    it('should be false when blocked is false, automaticBlocked is true, highPriority is false and case status is calendared', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...MOCK_CASE,
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
+            automaticBlockedReason: 'Pending Item',
+            highPriority: false,
             status: CASE_STATUS_TYPES.calendared,
           },
         },
