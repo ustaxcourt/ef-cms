@@ -37,7 +37,7 @@ fi
 
 set -eo pipefail
 
-DYNAMSOFT_URL="https://dynamsoft-lib-${ENVIRONMENT}.${EFCMS_DOMAIN}"
+DYNAMSOFT_URL="https://dynamsoft-lib.${EFCMS_DOMAIN}"
 
 if [[ -z "${IS_DYNAMSOFT_ENABLED}" ]]
 then
