@@ -37,7 +37,7 @@ else
   echo "dynamodb lock table already exists"
 fi
 
-DYNAMSOFT_URL="https://dynamsoft-lib-${ENVIRONMENT}.${EFCMS_DOMAIN}"
+DYNAMSOFT_URL="https://dynamsoft-lib.${EFCMS_DOMAIN}"
 
 if [[ -z "${IS_DYNAMSOFT_ENABLED}" ]]
 then

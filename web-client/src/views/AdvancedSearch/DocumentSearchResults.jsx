@@ -10,12 +10,14 @@ export const DocumentSearchResults = connect(
   {
     MAX_SEARCH_RESULTS: state.constants.MAX_SEARCH_RESULTS,
     advancedDocumentSearchHelper: state.advancedDocumentSearchHelper,
+    isPublic: state.isPublic,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence: sequences.showMoreResultsSequence,
   },
   function DocumentSearchResults({
     advancedDocumentSearchHelper,
+    isPublic,
     MAX_SEARCH_RESULTS,
     openCaseDocumentDownloadUrlSequence,
     showMoreResultsSequence,
@@ -69,15 +71,14 @@ export const DocumentSearchResults = connect(
                         {idx + 1}
                       </td>
                       <td aria-hidden="true" className="small-column">
-                        {advancedDocumentSearchHelper.showSealedIcon &&
-                          (result.isSealed || result.hasSealedDocuments) && (
-                            <Icon
-                              aria-label="sealed"
-                              className="iconSealed"
-                              icon={['fa', 'lock']}
-                              size="1x"
-                            />
-                          )}
+                        {result.showSealedIcon && (
+                          <Icon
+                            aria-label="sealed"
+                            className="iconSealed"
+                            icon={['fa', 'lock']}
+                            size="1x"
+                          />
+                        )}
                       </td>
                       <td>{result.formattedFiledDate}</td>
                       <td>
@@ -88,7 +89,7 @@ export const DocumentSearchResults = connect(
                             openCaseDocumentDownloadUrlSequence({
                               docketEntryId: result.docketEntryId,
                               docketNumber: result.docketNumber,
-                              isPublic: advancedDocumentSearchHelper.isPublic,
+                              isPublic,
                               useSameTab: false,
                             });
                           }}
