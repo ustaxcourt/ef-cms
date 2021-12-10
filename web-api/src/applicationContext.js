@@ -917,8 +917,8 @@ const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
-  sealInLowerEnvironmentInteractor,
-} = require('../../shared/src/business/useCases/sealInLowerEnvironmentInteractor');
+  sealInLowerEnvironment,
+} = require('../../shared/src/business/useCaseHelper/sealInLowerEnvironment');
 const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
@@ -1829,6 +1829,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCounselFromRemovedPetitioner,
         removeCoversheet,
         saveFileAndGenerateUrl,
+        sealInLowerEnvironment,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
@@ -1982,7 +1983,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveSignedDocumentInteractor,
         sealCaseContactAddressInteractor,
         sealCaseInteractor,
-        sealInLowerEnvironmentInteractor,
         sendMaintenanceNotificationsInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
