@@ -20,14 +20,6 @@ export const startRefreshIntervalAction = async ({
 
     store.set(state.token, response.token);
     applicationContext.setCurrentUserToken(response.token);
-    if (process.env.IS_LOCAL) {
-      await applicationContext
-        .getUseCases()
-        .setItemInteractor(applicationContext, {
-          key: 'token',
-          value: response.token,
-        });
-    }
   };
 
   clearInterval(oldInterval);
