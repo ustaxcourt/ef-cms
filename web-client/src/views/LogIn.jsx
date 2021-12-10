@@ -9,10 +9,10 @@ const Button = getView('Button');
 export const LogIn = connect(
   {
     form: state.form,
-    submitLoginSequence: sequences.submitLoginSequence,
+    submitLocalLoginSequence: sequences.submitLocalLoginSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function LogIn({ form, submitLoginSequence, updateFormValueSequence }) {
+  function LogIn({ form, submitLocalLoginSequence, updateFormValueSequence }) {
     return (
       <section className="usa-section grid-container">
         <h1 tabIndex="-1">Log in</h1>
@@ -22,7 +22,7 @@ export const LogIn = connect(
           id="log-in"
           onSubmit={event => {
             event.preventDefault();
-            submitLoginSequence();
+            submitLocalLoginSequence();
           }}
         >
           <div className="blue-container margin-bottom-5">
