@@ -35,3 +35,4 @@ Overall, we want to merge `ustc/staging` to `flexion/staging` and `flexion/stagi
    1. Create a new branch off of `flexion/staging` (e.g. `to-court-migration`).
    2. Create a PR to merge the new branch (e.g. `to-court-migration`) into `ustc/migration`, so that new batch work (e.g. batch 11) is on `ustc/migration` and can be tested with prod like data.
    3. Click the "Update branch" to make the new branch (e.g. `to-court-migration`) up-to-date with `ustc/migration`.
+   4. Merge the PR after approvals and the checks pass.
