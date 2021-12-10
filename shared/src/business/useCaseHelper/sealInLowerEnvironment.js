@@ -1,5 +1,5 @@
 /**
- * sealInLowerEnvironmentInteractor
+ * sealInLowerEnvironment
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -7,7 +7,7 @@
  * @param {string} providers.docketNumber the unique identifier of a case
  * @returns {Promise<object>} the updated data
  */
-exports.sealInLowerEnvironmentInteractor = async (
+exports.sealInLowerEnvironment = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

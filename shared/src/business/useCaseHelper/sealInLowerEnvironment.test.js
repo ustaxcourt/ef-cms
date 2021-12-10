@@ -1,11 +1,9 @@
-const {
-  sealInLowerEnvironmentInteractor,
-} = require('./sealInLowerEnvironmentInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { ROLES } = require('../entities/EntityConstants');
+const { sealInLowerEnvironment } = require('./sealInLowerEnvironment');
 
-describe('sealInLowerEnvironmentInteractor', () => {
+describe('sealInLowerEnvironment', () => {
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -19,7 +17,7 @@ describe('sealInLowerEnvironmentInteractor', () => {
   });
 
   it('should seal the case with the docketNumber provided and return the updated case', async () => {
-    const result = await sealInLowerEnvironmentInteractor(applicationContext, {
+    const result = await sealInLowerEnvironment(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
     expect(applicationContext.getUseCases().sealCaseInteractor).toBeCalled();
@@ -27,7 +25,7 @@ describe('sealInLowerEnvironmentInteractor', () => {
   });
 
   it('should only log a warning if we do not have a docketNumber', async () => {
-    await sealInLowerEnvironmentInteractor(applicationContext, {});
+    await sealInLowerEnvironment(applicationContext, {});
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
     ).not.toBeCalled();

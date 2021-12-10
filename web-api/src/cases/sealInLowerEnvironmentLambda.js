@@ -18,8 +18,8 @@ exports.sealInLowerEnvironmentLambda = async event => {
   return await Promise.all(
     event.Records.map(record =>
       applicationContext
-        .getUseCases()
-        .sealInLowerEnvironmentInteractor(applicationContext, {
+        .getUseCaseHelpers()
+        .sealInLowerEnvironment(applicationContext, {
           ...JSON.parse(record.Sns.Message),
         }),
     ),
