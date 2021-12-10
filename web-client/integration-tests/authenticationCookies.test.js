@@ -5,13 +5,11 @@ describe('checks the /auth endpoints to verify the cookies are set and cleared c
 
   it('should get back a token in the header when hitting the login endpoint', async () => {
     const response = await axios.post('http://localhost:4000/auth/login', {
-      code: 'abc',
+      code: 'petitionsclerk@example.com',
     });
     cookie = response.headers['set-cookie'];
     expect(cookie).toBeDefined();
-    expect(response.data).toEqual({
-      token: 'DogCow',
-    });
+    expect(response.data.token).toBeDefined();
   });
 
   it('should be able to hit the refresh endpoint get a new token', async () => {
@@ -25,9 +23,7 @@ describe('checks the /auth endpoints to verify the cookies are set and cleared c
       },
     );
 
-    expect(response.data).toEqual({
-      token: 'A-different-DogCow',
-    });
+    expect(response.data.token).toBeDefined();
   });
 
   it('after hitting DELETE@/auth/login, the refresh endpoint should no longer return a new token', async () => {
