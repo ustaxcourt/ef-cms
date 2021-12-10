@@ -107,6 +107,7 @@ import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
+import { isOnMockLogin } from './utilities/isOnMockLogin';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
@@ -145,8 +146,8 @@ const app = {
 
     if (
       !wasAppLoadedFromACognitoLogin(window.location.href) &&
-      !wasLoginUsingTokenInUrl(window.location.href) && // this scenario is from smoketests
-      !process.env.IS_LOCAL
+      !wasLoginUsingTokenInUrl(window.location.href) &&
+      !isOnMockLogin(window.location.href)
     ) {
       try {
         const response = await applicationContext

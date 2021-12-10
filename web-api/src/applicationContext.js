@@ -1431,10 +1431,19 @@ const gatewayMethods = {
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
   confirmAuthCode: process.env.IS_LOCAL
-    ? () => ({
-        refreshToken: 'Moof',
-        token: 'DogCow',
-      })
+    ? (applicationContext, { code }) => {
+        const jwt = require('jsonwebtoken');
+        const { userMap } = require('../../shared/src/test/mockUserTokenMap');
+        const user = {
+          ...userMap[code],
+          sub: userMap[code].userId,
+        };
+        const token = jwt.sign(user, 'secret');
+        return {
+          refreshToken: token,
+          token,
+        };
+      }
     : confirmAuthCode,
   createNewPetitionerUser,
   createNewPractitionerUser,
@@ -1514,8 +1523,8 @@ const gatewayMethods = {
   isEmailAvailable,
   isFileExists,
   refreshToken: process.env.IS_LOCAL
-    ? () => ({
-        token: 'A-different-DogCow',
+    ? (applicationContext, { refreshToken: aRefreshToken }) => ({
+        token: aRefreshToken,
       })
     : refreshToken,
   removeIrsPractitionerOnCase,

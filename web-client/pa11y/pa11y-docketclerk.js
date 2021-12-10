@@ -1,5 +1,5 @@
 module.exports = [
-  'http://localhost:1234/mock-login?token=docketclerk&path=/',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/',
   {
     actions: [
       'wait for td.message-select-control>label to be visible',
@@ -7,9 +7,9 @@ module.exports = [
       'wait for .action-section to be visible',
     ],
     notes: 'checks a11y of section queue tab panel',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/document-qc/section/inbox&info=section-queue-tab',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/document-qc/section/inbox&info=section-queue-tab',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/101-19',
   {
     actions: [
       'wait for element .usa-radio__label[for=payment-status-paid] to be visible',
@@ -18,7 +18,7 @@ module.exports = [
     ],
     notes:
       'checks a11y of form when petition fee payment status paid is selected',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/edit-details&info=paid',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/101-19/edit-details&info=paid',
   },
   {
     actions: [
@@ -28,7 +28,7 @@ module.exports = [
     ],
     notes:
       'checks a11y of form when petition fee payment status unpaid is selected',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/edit-details&info=unpaid',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/101-19/edit-details&info=unpaid',
   },
   {
     actions: [
@@ -38,7 +38,7 @@ module.exports = [
     ],
     notes:
       'checks a11y of form when petition fee payment status waived is selected',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-19/edit-details&info=waived',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/101-19/edit-details&info=waived',
   },
   {
     actions: [
@@ -47,10 +47,10 @@ module.exports = [
       'wait for input#other-filing-party to be visible',
     ],
     notes: 'checks a11y of edit docket entry add other filing party',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-paper-filing',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/reports/pending-report',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/add-paper-filing',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/pending-report',
   {
     actions: [
       'wait for element .case-inventory-report-modal to be visible',
@@ -64,7 +64,7 @@ module.exports = [
       'wait for element table.case-inventory to be visible',
     ],
     notes: 'checks a11y of case inventory report builder',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/reports/case-inventory-report',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/case-inventory-report',
   },
   {
     actions: [
@@ -73,7 +73,7 @@ module.exports = [
       'wait for element #service-date-date to be visible',
     ],
     notes: 'reveal all secondary drop-downs and inputs ',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/add-paper-filing&info=show-cos-inputs',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/add-paper-filing&info=show-cos-inputs',
   },
   {
     actions: [
@@ -86,7 +86,7 @@ module.exports = [
       'wait for .modal-dialog to be visible',
     ],
     notes: 'checks a11y of case context edit dialog',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19&info=case-context-edit',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/102-19&info=case-context-edit',
   },
   {
     actions: [
@@ -101,7 +101,7 @@ module.exports = [
     ],
     notes:
       'checks a11y of case information tab, parties secondary tab, participants and counsel tertiary tab',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/999-15&info=case-information-tab-parties-participants-and-counsel',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/999-15&info=case-information-tab-parties-participants-and-counsel',
   },
   {
     actions: [
@@ -116,9 +116,9 @@ module.exports = [
     ],
     notes:
       'checks a11y of case information tab, parties secondary tab, parties and counsel tertiary tab',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/999-15&info=case-information-tab-parties-petitioner-and-counsel',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/999-15&info=case-information-tab-parties-petitioner-and-counsel',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/110-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/110-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry',
   {
     actions: [
       'wait for #judge to be visible',
@@ -130,7 +130,7 @@ module.exports = [
       'wait for .confirm-initiate-service-modal to be visible',
     ],
     notes: 'checks a11y of confirm-initiate-service-modal dialog',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/107-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry&info=initiate-service-modal',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/107-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry&info=initiate-service-modal',
   },
   {
     actions: [
@@ -147,7 +147,7 @@ module.exports = [
       'wait for table.search-results to be visible',
     ],
     notes: 'checks a11y of advanced order search',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=order-search-result',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/search&info=order-search-result',
   },
   {
     actions: [
@@ -164,7 +164,7 @@ module.exports = [
       'wait for table.search-results to be visible',
     ],
     notes: 'checks a11y of advanced opinion search',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/search&info=opinion-search-result',
   },
   {
     actions: [
@@ -181,7 +181,7 @@ module.exports = [
       'wait for svg.iconSealed to be visible',
     ],
     notes: 'checks a11y of advanced order search of a sealed case',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=sealed-case-order-search-result',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/search&info=sealed-case-order-search-result',
   },
   {
     actions: [
@@ -199,9 +199,9 @@ module.exports = [
     ],
 
     notes: 'checks a11y of opinion search',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/search&info=opinion-search-result-sunglasses',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/search&info=opinion-search-result-sunglasses',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/print-preview/110-19/',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/print-preview/110-19/',
   {
     actions: [
       'wait for #deadlineStart-date-start to be visible',
@@ -213,9 +213,9 @@ module.exports = [
       'wait for table.deadlines to be visible',
     ],
     notes: 'checks a11y of case deadline report',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/reports/case-deadlines',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/case-deadlines',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416',
   {
     actions: [
       'wait for #remove-petitioner-btn to be visible',
@@ -223,22 +223,22 @@ module.exports = [
       'wait for #remove-petitioner-modal to be visible',
     ],
     notes: 'checks a11y of remove petitioner confirm modal',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416&info=remove-petitioner-modal',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/101-20/edit-petitioner-information/7805d1ab-18d0-43ec-bafb-654e83405416&info=remove-petitioner-modal',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/102-19?openModal=PaperServiceConfirmModal',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/111-19?openModal=UnconsolidateCasesModal',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/104-20/upload-court-issued',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/104-20/edit-upload-court-issued/b1aa4aa2-c214-424c-8870-d0049c5744d8',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/document-view?docketEntryId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/103-19/document-view?docketEntryId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
-  'http://localhost:1234/mock-login?token=docketclerk&path=/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/102-19?openModal=PaperServiceConfirmModal',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/111-19?openModal=UnconsolidateCasesModal',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/104-20/upload-court-issued',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/104-20/edit-upload-court-issued/b1aa4aa2-c214-424c-8870-d0049c5744d8',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/105-20/document-view?docketEntryId=af9e2d43-1255-4e3d-80d0-63f0aedfab5a',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/document-view?docketEntryId=f1aa4aa2-c214-424c-8870-d0049c5744d7&info=document-view-serve-button',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/messages/104-19/message-detail/2d1191d3-4597-454a-a2b2-84e267ccf01e',
   {
     actions: [
       'wait for #use-same-address-above-label to be visible',
       'click element #use-same-address-above-label',
     ],
     notes: 'checks the add petitioner to case page',
-    url: 'http://localhost:1234/mock-login?token=docketclerk&path=/case-detail/105-20/add-petitioner-to-case',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/105-20/add-petitioner-to-case',
   },
-  'http://localhost:1234/mock-login?token=docketclerk&path=/maintenance',
+  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/maintenance',
 ];

@@ -12,7 +12,7 @@ exports.getUserToken = async username => {
 
 exports.login = token => {
   const username = token.split('@')[0];
-  cy.visit(`/mock-login?token=${username}`);
+  cy.visit(`/log-in?code=${username}`);
 
   cy.get('.progress-indicator').should('not.exist');
 };
