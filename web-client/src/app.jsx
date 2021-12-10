@@ -100,6 +100,7 @@ import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faThumbtack } from '@fortawesome/free-solid-svg-icons/faThumbtack';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faTrash } from '@fortawesome/free-solid-svg-icons/faTrash';
+import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
@@ -119,6 +120,16 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
+    // if /log-in page, delete local storage?
+    if (window.location.href.includes('/log-in?code')) {
+      await applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, { key: 'token' });
+      await applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, { key: 'user' });
+    }
+
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
@@ -141,11 +152,6 @@ const app = {
       presenter.state.permissions = userPermissions;
     }
 
-    const maintenanceMode = await applicationContext
-      .getUseCases()
-      .getItemInteractor(applicationContext, { key: 'maintenanceMode' });
-    presenter.state.maintenanceMode = maintenanceMode;
-
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
       if (isFunction(value)) {
@@ -153,6 +159,9 @@ const app = {
       }
       return value;
     });
+
+    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+    presenter.state.constants = applicationContext.getConstants();
 
     const token =
       (await applicationContext
@@ -162,9 +171,31 @@ const app = {
     presenter.state.token = token;
     applicationContext.setCurrentUserToken(token);
 
-    presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
+    if (token) {
+      try {
+        const maintenanceMode = await applicationContext
+          .getUseCases()
+          .getMaintenanceModeInteractor(applicationContext);
+        presenter.state.maintenanceMode = maintenanceMode;
+      } catch (err) {
+        window.location.href = presenter.state.cognitoLoginUrl;
+      }
+    }
 
-    presenter.state.constants = applicationContext.getConstants();
+    if (token && !presenter.state.maintenanceMode) {
+      const pdfFlagKey =
+        applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
+          .PDFJS_EXPRESS_VIEWER.key;
+      let isFlagOn = false;
+      isFlagOn = await applicationContext
+        .getUseCases()
+        .getFeatureFlagValueInteractor(applicationContext, {
+          featureFlag: pdfFlagKey,
+        });
+      presenter.state.featureFlags = {
+        [pdfFlagKey]: isFlagOn,
+      };
+    }
 
     config.autoAddCss = false;
     library.add(
@@ -249,6 +280,7 @@ const app = {
       faTimesCircle,
       faTimesCircleRegular,
       faTrash,
+      faUnlock,
       faUser,
       faUserCheck,
       faUserFriends,

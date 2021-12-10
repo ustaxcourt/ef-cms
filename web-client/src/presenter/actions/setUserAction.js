@@ -13,6 +13,8 @@ import { state } from 'cerebral';
 export const setUserAction = async ({ applicationContext, props, store }) => {
   store.set(state.user, props.user);
   applicationContext.setCurrentUser(props.user);
+  const userPermissions = applicationContext.getCurrentUserPermissions();
+  store.set(state.permissions, userPermissions);
   await applicationContext.getUseCases().setItemInteractor(applicationContext, {
     key: 'user',
     value: props.user,

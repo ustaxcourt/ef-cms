@@ -1,3 +1,4 @@
+import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
@@ -8,6 +9,7 @@ import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkS
 import {
   loginAs,
   setupTest as setupTestClient,
+  updateOrderForm,
   uploadPetition,
 } from '../integration-tests/helpers';
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
@@ -115,4 +117,27 @@ describe('Unauthed user searches for an order by keyword and does not see sealed
 
   unauthedUserNavigatesToPublicSite(cerebralTest);
   unauthedUserSearchesForSealedCaseOrderByKeyword(cerebralTest, testClient);
+});
+
+describe('Unauthed user searches for an order by docket number and does not see orders that are sealed', () => {
+  afterAll(() => {
+    testClient.closeSocket();
+  });
+
+  unauthedUserNavigatesToPublicSite(cerebralTest);
+  it('search for sealed order by docket number', async () => {
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.docketNumber = '999-15';
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitPublicOrderAdvancedSearchSequence');
+
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual([]);
+  });
 });

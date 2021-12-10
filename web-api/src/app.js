@@ -424,6 +424,7 @@ const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
 const { swaggerJsonLambda } = require('./swagger/swaggerJsonLambda');
 const { swaggerLambda } = require('./swagger/swaggerLambda');
 const { unprioritizeCaseLambda } = require('./cases/unprioritizeCaseLambda');
+const { unsealCaseLambda } = require('./cases/unsealCaseLambda');
 const { updateCaseContextLambda } = require('./cases/updateCaseContextLambda');
 const { updateCaseDetailsLambda } = require('./cases/updateCaseDetailsLambda');
 const { updateContactLambda } = require('./cases/updateContactLambda');
@@ -660,6 +661,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(updateQcCompleteForTrialLambda),
   );
   app.put('/case-meta/:docketNumber/seal', lambdaWrapper(sealCaseLambda));
+  app.put('/case-meta/:docketNumber/unseal', lambdaWrapper(unsealCaseLambda));
   app.put(
     '/case-meta/:docketNumber/seal-address/:contactId',
     lambdaWrapper(sealCaseContactAddressLambda),
