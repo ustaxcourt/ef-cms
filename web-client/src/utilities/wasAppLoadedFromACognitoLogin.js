@@ -6,7 +6,7 @@
  * @returns {boolean} true if the application was loaded due to a login via cognito
  */
 const wasAppLoadedFromACognitoLogin = href => {
-  return href.includes('log-in?code');
+  return href.includes('?code');
 };
 
 export { wasAppLoadedFromACognitoLogin };

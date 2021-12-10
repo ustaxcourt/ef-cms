@@ -123,16 +123,6 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
-    // if /log-in page, delete local storage?
-    if (window.location.href.includes('/log-in?code')) {
-      await applicationContext
-        .getUseCases()
-        .removeItemInteractor(applicationContext, { key: 'token' });
-      await applicationContext
-        .getUseCases()
-        .removeItemInteractor(applicationContext, { key: 'user' });
-    }
-
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
@@ -142,16 +132,6 @@ const app = {
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
 
-    if (process.env.IS_LOCAL) {
-      const user =
-        (await applicationContext
-          .getUseCases()
-          .getItemInteractor(applicationContext, { key: 'user' })) ||
-        presenter.state.user;
-      presenter.state.user = user;
-      applicationContext.setCurrentUser(user);
-    }
-
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
       if (isFunction(value)) {
@@ -159,16 +139,6 @@ const app = {
       }
       return value;
     });
-
-    if (process.env.IS_LOCAL) {
-      const token =
-        (await applicationContext
-          .getUseCases()
-          .getItemInteractor(applicationContext, { key: 'token' })) ||
-        presenter.state.token;
-      presenter.state.token = token;
-      applicationContext.setCurrentUserToken(token);
-    }
 
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.constants = applicationContext.getConstants();
