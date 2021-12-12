@@ -24,6 +24,7 @@ export const caseInformationHelper = (get, applicationContext) => {
 
   const showAddCounsel = canEditCounsel;
   const showSealCaseButton = permissions.SEAL_CASE && !caseDetail.isSealed;
+  const showUnsealCaseButton = permissions.UNSEAL_CASE && caseDetail.isSealed;
   const showingAdditionalPetitioners =
     get(state.showingAdditionalPetitioners) || false;
   const toggleAdditionalPetitionersDisplay = showingAdditionalPetitioners
@@ -54,6 +55,7 @@ export const caseInformationHelper = (get, applicationContext) => {
     showHearingsTable,
     showSealAddressLink,
     showSealCaseButton,
+    showUnsealCaseButton,
     showViewCounselButton,
     toggleAdditionalPetitionersDisplay,
   };

@@ -86,7 +86,6 @@ describeif(FEATURE_canDisplayStandaloneRemote)(
         },
         partyType: PARTY_TYPES.petitionerSpouse,
       });
-      console.log('new case docket#', caseDetail.docketNumber);
       expect(caseDetail.docketNumber).toBeDefined();
       cerebralTest.docketNumber = caseDetail.docketNumber;
     });

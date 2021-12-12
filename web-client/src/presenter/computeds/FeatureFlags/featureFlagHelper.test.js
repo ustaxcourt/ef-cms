@@ -185,4 +185,50 @@ describe('featureFlagHelper', () => {
       });
     });
   });
+
+  describe('isPdfJsEnabled', () => {
+    it('should be true when the pdfjs-express-viewer-enabled feature is enabled', () => {
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
+
+      const result = runCompute(featureFlagHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key]: true,
+          },
+          user: mockExternalUser,
+        },
+      });
+
+      expect(result).toMatchObject({
+        isPdfJsEnabled: true,
+      });
+    });
+
+    it('should be false when the pdfjs-express-viewer-enabled feature is disabled', () => {
+      const featureFlagHelper = withAppContextDecorator(
+        featureFlagHelperComputed,
+        {
+          ...applicationContext,
+        },
+      );
+
+      const result = runCompute(featureFlagHelper, {
+        state: {
+          featureFlags: {
+            [ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key]: false,
+          },
+          user: mockExternalUser,
+        },
+      });
+
+      expect(result).toMatchObject({
+        isPdfJsEnabled: false,
+      });
+    });
+  });
 });

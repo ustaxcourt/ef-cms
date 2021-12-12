@@ -35,7 +35,9 @@ const back = () => {
 };
 
 const gotoMaintenancePage = app => {
-  return app.getSequence('gotoMaintenanceSequence')();
+  return app.getSequence('navigateToPathSequence')({
+    path: '/maintenance',
+  });
 };
 const gotoLoginPage = app => {
   const path = app.getState('cognitoLoginUrl');
@@ -49,14 +51,19 @@ const goto404 = app => {
 const accessRedirects = { goto404, gotoLoginPage, gotoMaintenancePage };
 
 const ifHasAccess = (
-  { app, permissionToCheck, redirect = accessRedirects },
+  { app, permissionToCheck, redirect = accessRedirects, skipMaintenanceCheck },
   cb,
 ) => {
   return function () {
-    if (!app.getState('user')) {
+    if (!app.getState('token')) {
       return redirect.gotoLoginPage(app);
     } else if (app.getState('maintenanceMode')) {
-      return redirect.gotoMaintenancePage(app);
+      if (!skipMaintenanceCheck) {
+        return redirect.gotoMaintenancePage(app);
+      } else {
+        app.getSequence('clearAlertSequence')();
+        return cb.apply(null, arguments);
+      }
     } else {
       if (
         permissionToCheck &&
@@ -1220,7 +1227,7 @@ const router = {
       const { path, token } = queryStringDecoder();
       if (token) {
         setPageTitle('Mock login');
-        return app.getSequence('submitLoginSequence')({
+        return app.getSequence('submitLocalLoginSequence')({
           path,
           token: `${token}@example.com`,
         });
@@ -1247,7 +1254,7 @@ const router = {
 
     registerRoute(
       '/maintenance',
-      ifHasAccess({ app }, () => {
+      ifHasAccess({ app, skipMaintenanceCheck: true }, () => {
         setPageTitle('Maintenance');
         return app.getSequence('gotoMaintenanceSequence')();
       }),

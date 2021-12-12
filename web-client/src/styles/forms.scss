@@ -490,13 +490,17 @@ label.ustc-upload {
         border: none;
       }
 
-      .select-react-element__input input {
+      .select-react-element__input-container input {
         border: none;
         margin-top: auto;
         margin-bottom: auto;
         box-shadow: none;
       }
     }
+  }
+
+  .select-react-element__placeholder {
+    color: #767676;
   }
 
   .select-react-element__control--menu-is-open {

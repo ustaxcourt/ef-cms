@@ -1,10 +1,8 @@
+const { clearS3Buckets } = require('./clearS3Buckets');
+const { deleteCloudWatchLogs } = require('./deleteCloudWatchLogs');
 const { deleteCustomDomains } = require('./deleteCustomDomains');
-const { deleteS3Buckets } = require('./deleteS3Buckets');
-const { deleteStacks } = require('./deleteStacks');
 const { exec } = require('child_process');
 const { readdirSync } = require('fs');
-
-const environmentName = process.argv[2] || 'exp1';
 
 if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
   console.error(
@@ -12,6 +10,8 @@ if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
   );
   process.exit(1);
 }
+
+const environmentName = process.argv[2] || 'exp1';
 
 const environmentEast = {
   accessKeyId: process.env.AWS_ACCESS_KEY_ID,
@@ -47,73 +47,27 @@ const addMissingIndexFiles = () => {
 
 const teardownEnvironment = async () => {
   addMissingIndexFiles();
-  // todo remove these method calls once the envs that use these resources are dealt with
+
   try {
-    await Promise.all([
-      deleteCustomDomains({ environment: environmentEast }),
-      deleteCustomDomains({ environment: environmentWest }),
-    ]);
+    await deleteCustomDomains({ environment: environmentEast });
+    await deleteCustomDomains({ environment: environmentWest });
   } catch (e) {
     console.error('Error while deleting custom domains: ', e);
   }
 
-  // todo remove these method calls once the envs that use these resources are dealt with
   try {
-    await Promise.all([
-      deleteStacks({ environment: environmentEast }),
-      deleteStacks({ environment: environmentWest }),
-    ]);
+    await clearS3Buckets({ environment: environmentEast });
+    await clearS3Buckets({ environment: environmentWest });
   } catch (e) {
-    console.error('Error while deleting stacks: ', e);
+    console.error('Error while clearing s3 bucket: ', e);
   }
 
-  // todo remove these method calls once the envs that use these resources are dealt with
   try {
-    await Promise.all([
-      deleteS3Buckets({ environment: environmentEast }),
-      deleteS3Buckets({ environment: environmentWest }),
-    ]);
+    await deleteCloudWatchLogs({ environment: environmentEast });
+    await deleteCloudWatchLogs({ environment: environmentWest });
   } catch (e) {
-    console.error('Error while deleting s3 bucket: ', e);
+    console.error('Error while deleting cloudwatch logs: ', e);
   }
-
-  const webClientTerraformDestroy = exec(
-    `cd web-client/terraform/main && ../bin/environment-destroy.sh ${environmentName}`,
-  );
-
-  webClientTerraformDestroy.stdout.on('data', function (data) {
-    console.log('Web Client Terraform stdout: ', data.toString());
-  });
-
-  webClientTerraformDestroy.stderr.on('data', function (data) {
-    console.log('Web Client Terraform stderr: ', data.toString());
-  });
-
-  webClientTerraformDestroy.on('exit', function (code) {
-    console.log(
-      'Web Client Terraform child process exited with code ',
-      code.toString(),
-    );
-  });
-
-  const webApiTerraformDestroy = exec(
-    `cd web-api/terraform/main && ../bin/environment-destroy.sh ${environmentName}`,
-  );
-
-  webApiTerraformDestroy.stdout.on('data', function (data) {
-    console.log('Web API Terraform stdout: ', data.toString());
-  });
-
-  webApiTerraformDestroy.stderr.on('data', function (data) {
-    console.log('Web API Terraform stderr: ', data.toString());
-  });
-
-  webApiTerraformDestroy.on('exit', function (code) {
-    console.log(
-      'Web Client API child process exited with code ',
-      code.toString(),
-    );
-  });
 };
 
 teardownEnvironment();
