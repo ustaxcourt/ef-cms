@@ -312,6 +312,7 @@ resource "aws_acm_certificate_validation" "validate_api_gateway_cert" {
   validation_record_fqdns = [for record in aws_route53_record.api_route53_record : record.fqdn]
   count                   = var.validate
 }
+
 resource "aws_route53_record" "api_route53_record" {
   for_each = {
     for dvo in aws_acm_certificate.api_gateway_cert.domain_validation_options : dvo.domain_name => {

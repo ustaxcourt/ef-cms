@@ -69,6 +69,9 @@ const ALLOWLIST_FEATURE_FLAGS = {
       'Order search has been temporarily disabled. Please try again later.',
     key: 'internal-order-search-enabled',
   },
+  PDFJS_EXPRESS_VIEWER: {
+    key: 'pdfjs-express-viewer-enabled',
+  },
 };
 
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
