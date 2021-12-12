@@ -965,6 +965,9 @@ const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
+  setPdfFormFields,
+} = require('../../shared/src/business/useCaseHelper/pdf/setPdfFormFields');
+const {
   setPriorityOnAllWorkItems,
 } = require('../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems');
 const {
@@ -1018,6 +1021,9 @@ const {
 const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
+const {
+  unsealCaseInteractor,
+} = require('../../shared/src/business/useCases/unsealCaseInteractor');
 const {
   updateAssociatedJudgeOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
@@ -1802,6 +1808,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        setPdfFormFields,
         updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
@@ -1966,6 +1973,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
+        unsealCaseInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseDetailsInteractor,

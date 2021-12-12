@@ -16,6 +16,7 @@ export const PDFPreviewButton = connect(
   },
   function PDFPreviewButton({
     file,
+    id,
     openPdfPreviewModalSequence,
     pdfPreviewModalHelper,
     shouldAbbreviateTitle = true,
@@ -43,6 +44,7 @@ export const PDFPreviewButton = connect(
             className="pdf-preview-btn padding-0"
             icon={['fas', 'file-pdf']}
             iconColor="blue"
+            id={id}
             shouldWrapText={shouldWrapText}
             title={fullTitle}
             onClick={() => {

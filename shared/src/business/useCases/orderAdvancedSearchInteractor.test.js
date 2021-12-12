@@ -55,53 +55,6 @@ describe('orderAdvancedSearchInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('omits results from sealed cases when the current user is not an internal user', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.privatePractitioner,
-    });
-
-    await orderAdvancedSearchInteractor(applicationContext, {
-      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-      keyword: 'candy',
-      startDate: '01/01/2001',
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].omitSealed,
-    ).toBe(true);
-  });
-
-  it('returns results with an authorized user role (petitionsclerk)', async () => {
-    const result = await orderAdvancedSearchInteractor(applicationContext, {
-      dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-      keyword: 'candy',
-      startDate: '01/01/2001',
-    });
-
-    expect(result).toMatchObject([
-      {
-        caseCaption: 'Samson Workman, Petitioner',
-        docketNumber: '103-19',
-        documentTitle: 'Order for More Candy',
-        eventCode: 'ODD',
-        signedJudgeName: 'Guy Fieri',
-      },
-      {
-        caseCaption: 'Samson Workman, Petitioner',
-        docketNumber: '103-19',
-        documentTitle: 'Order for KitKats',
-        eventCode: 'ODD',
-        signedJudgeName: 'Guy Fieri',
-      },
-    ]);
-
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].omitSealed,
-    ).toBe(false);
-  });
-
   it('logs raw search information and results size', async () => {
     const result = await orderAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
@@ -153,17 +106,6 @@ describe('orderAdvancedSearchInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       documentEventCodes: ORDER_EVENT_CODES,
-    });
-  });
-
-  it('should set isOpinionSearch as false', async () => {
-    await orderAdvancedSearchInteractor(applicationContext, {});
-
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0],
-    ).toMatchObject({
-      isOpinionSearch: false,
     });
   });
 });

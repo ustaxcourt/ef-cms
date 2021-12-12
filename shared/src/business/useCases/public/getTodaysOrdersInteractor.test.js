@@ -88,16 +88,6 @@ describe('getTodaysOrdersInteractor', () => {
     ).toBe((mockCurrentPage - 1) * TODAYS_ORDERS_PAGE_SIZE);
   });
 
-  it('should set isOpinionSearch as false', async () => {
-    await getTodaysOrdersInteractor(applicationContext, {});
-
-    expect(
-      applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0],
-    ).toMatchObject({
-      isOpinionSearch: false,
-    });
-  });
   it('should filter out order documents belonging to sealed cases', async () => {
     await getTodaysOrdersInteractor(applicationContext, {});
 
