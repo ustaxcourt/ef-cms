@@ -8,14 +8,11 @@ describe('isCurrentColorActive', () => {
   const OLD_ENV = process.env;
 
   beforeEach(() => {
-    client.get = jest.fn().mockReturnValue({
+    client.getFromDeployTable = jest.fn().mockReturnValue({
       current: 'blue',
       pk: 'current-color',
       sk: 'current-color',
     });
-    client.getDeployTableName = jest
-      .fn()
-      .mockReturnValue([{ value: 'efcms-local-deploy' }]);
     process.env = { ...OLD_ENV }; // make a copy
   });
 
@@ -27,12 +24,12 @@ describe('isCurrentColorActive', () => {
     process.env.CURRENT_COLOR = 'blue';
     const val = await isCurrentColorActive(applicationContext);
 
+    expect(client.getFromDeployTable.mock.calls[0][0]).toMatchObject({
+      Key: {
+        pk: 'current-color',
+        sk: 'current-color',
+      },
+    });
     expect(val).toEqual(true);
-  });
-
-  it('looks in the deploy table to figure out what the currently deployed color is', async () => {
-    await isCurrentColorActive(applicationContext);
-
-    expect(client.getDeployTableName).toBeCalled();
   });
 });
