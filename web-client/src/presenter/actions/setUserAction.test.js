@@ -11,7 +11,6 @@ describe('setUserAction', () => {
 
   afterEach(() => {
     delete process.env.USTC_ENV;
-    delete process.env.IS_LOCAL;
     delete global.window;
   });
 
@@ -32,30 +31,5 @@ describe('setUserAction', () => {
     expect(applicationContext.setCurrentUser.mock.calls[0][0]).toMatchObject(
       user,
     );
-  });
-
-  it('stores the user onto local storage when running local', async () => {
-    process.env.IS_LOCAL = 'true';
-    const user = {
-      userId: 'petitioner',
-    };
-    await runAction(setUserAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        user,
-      },
-      state: {},
-    });
-    expect(
-      applicationContext.getUseCases().setItemInteractor.mock.calls.length,
-    ).toEqual(1);
-    expect(
-      applicationContext.getUseCases().setItemInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      key: 'user',
-      value: user,
-    });
   });
 });

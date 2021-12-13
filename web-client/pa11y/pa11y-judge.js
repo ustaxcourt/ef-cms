@@ -1,7 +1,7 @@
 module.exports = [
-  'http://localhost:1234/mock-login?token=judgeColvin&path=/',
-  'http://localhost:1234/mock-login?token=judgeColvin&path=/search',
-  'http://localhost:1234/mock-login?token=judgeColvin&path=/search/no-matches',
+  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/',
+  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/search',
+  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/search/no-matches',
   {
     actions: [
       'wait for #advanced-search-button to be visible',
@@ -9,8 +9,7 @@ module.exports = [
       'wait for .search-results to be visible',
     ],
     notes: 'checks a11y of advanced search results table',
-    url:
-      'http://localhost:1234/mock-login?token=judgeColvin&path=/search?petitionerName=cairo',
+    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/search?petitionerName=cairo',
   },
   {
     actions: [
@@ -19,13 +18,12 @@ module.exports = [
       'wait for #practitioner-name to be visible',
     ],
     notes: 'checks a11y of advanced search practitioner tab',
-    url:
-      'http://localhost:1234/mock-login?token=judgeColvin&path=/search&info=practitioner-tab',
+    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/search&info=practitioner-tab',
   },
-  'http://localhost:1234/mock-login?token=judgeColvin&path=/trial-sessions',
-  'http://localhost:1234/mock-login?token=judgeColvin&path=/trial-sessions',
-  'http://localhost:1234/mock-login?token=judgeColvin&path=/trial-session-detail/959c4338-0fac-42eb-b0eb-d53b8d0195cc&info=calendared-case',
-  'http://localhost:1234/mock-login?token=judgeColvin&path=/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/trial-sessions',
+  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/trial-sessions',
+  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/trial-session-detail/959c4338-0fac-42eb-b0eb-d53b8d0195cc&info=calendared-case',
+  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/trial-session-working-copy/959c4338-0fac-42eb-b0eb-d53b8d0195cc',
   {
     actions: [
       'wait for #tab-notes to be visible',
@@ -34,8 +32,7 @@ module.exports = [
       'click element #add-procedural-note-button',
     ],
     notes: 'checks a11y of add/edit procedural note modal',
-    url:
-      'http://localhost:1234/mock-login?token=judgeColvin&path=/case-detail/101-19&info=add-edit-procedural-note-modal',
+    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/case-detail/101-19&info=add-edit-procedural-note-modal',
   },
   {
     actions: [
@@ -45,7 +42,6 @@ module.exports = [
       'click element #delete-procedural-note-button',
     ],
     notes: 'checks a11y of delete procedural note modal',
-    url:
-      'http://localhost:1234/mock-login?token=judgeColvin&path=/case-detail/112-19&info=delete-procedural-note-modal',
+    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/case-detail/112-19&info=delete-procedural-note-modal',
   },
 ];
