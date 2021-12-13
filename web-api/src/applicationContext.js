@@ -1619,7 +1619,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
-      sendNotificationOfSealing,
+      sendNotificationOfSealing:
+        process.env.PROD_ENV_ACCOUNT_ID === process.env.AWS_ACCOUNT_ID
+          ? sendNotificationOfSealing
+          : () => {},
     }),
     getDocumentClient,
     getDocumentGenerators: () => ({
