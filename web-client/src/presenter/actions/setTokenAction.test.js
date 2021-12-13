@@ -55,21 +55,4 @@ describe('setTokenAction,', () => {
       mockToken,
     );
   });
-
-  it('should save the token into localStorage if running locally', async () => {
-    process.env.IS_LOCAL = 'true';
-    await runAction(setTokenAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        refreshToken: mockRefreshToken,
-        token: mockToken,
-      },
-      state: {},
-    });
-    expect(
-      applicationContext.getUseCases().setItemInteractor,
-    ).toHaveBeenCalled();
-  });
 });
