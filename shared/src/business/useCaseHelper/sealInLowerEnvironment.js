@@ -2,32 +2,41 @@
  * sealInLowerEnvironment
  *
  * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the unique identifier of a docket entry on a case
- * @param {string} providers.docketNumber the unique identifier of a case
- * @returns {Promise<object>} the updated data
+ * @param {array} records an array of docketNumbers and/or docketEntryIds to seal
+ * @returns {Promise<array>} the array of responses from the interactor
  */
-exports.sealInLowerEnvironment = async (
-  applicationContext,
-  { docketEntryId, docketNumber },
-) => {
-  if (docketEntryId && docketNumber) {
-    // TODO: once we can seal document: https://github.com/flexion/ef-cms/issues/4252
-    // return await applicationContext
-    //   .getUseCases()
-    //   .sealDocumentInteractor(applicationContext, {
-    //     docketEntryId,
-    //     docketNumber,
-    //   });
-  } else if (docketNumber) {
-    return await applicationContext
-      .getUseCases()
-      .sealCaseInteractor(applicationContext, {
-        docketNumber,
-      });
+exports.sealInLowerEnvironment = async (applicationContext, records) => {
+  const isCurrentColorActive = await applicationContext.isCurrentColorActive(
+    applicationContext,
+  );
+
+  if (!isCurrentColorActive) {
+    return records.map(() => {});
   }
 
-  applicationContext.logger.warn(
-    'Did not receive a valid docketEntryId or docketNumber to seal',
+  return Promise.all(
+    records.map(record => {
+      const { docketEntryId, docketNumber } = record;
+      if (docketEntryId && docketNumber) {
+        // TODO: once we can seal document: https://github.com/flexion/ef-cms/issues/4252
+        // return await applicationContext
+        //   .getUseCases()
+        //   .sealDocumentInteractor(applicationContext, {
+        //     docketEntryId,
+        //     docketNumber,
+        //   });
+      } else if (docketNumber) {
+        return applicationContext
+          .getUseCases()
+          .sealCaseInteractor(applicationContext, {
+            docketNumber,
+          });
+      }
+
+      applicationContext.logger.warn(
+        'Did not receive a valid docketEntryId or docketNumber to seal',
+        { record },
+      );
+    }),
   );
 };
