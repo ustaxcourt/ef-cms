@@ -20,7 +20,7 @@ Overall, we want to merge `ustc/staging` to `flexion/staging` and `flexion/stagi
 3. Prepare Batch PR.
 
    1. Merge `flexion/staging` to the batch branch (the one currently in a draft state, e.g. batch 10).
-      If the draft PR (e.g. batch 10 PR) is still out of date with `ustc/staging`, start over at step 1.1.
+      If the draft PR (e.g. batch 10 PR) is still out of date with `ustc/staging`, start this process over at step 1.1.
    2. Mark the draft batch PR (e.g. batch 10 PR) as "Ready For Review" (i.e. convert from draft PR to open PR).
 
 4. Sync Flexion `staging` and Flexion `develop`.
