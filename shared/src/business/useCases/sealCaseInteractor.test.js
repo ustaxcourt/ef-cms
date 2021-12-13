@@ -8,9 +8,6 @@ describe('sealCaseInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    applicationContext.getNotificationGateway().sendNotificationOfSealing =
-      jest.fn();
   });
 
   it('should throw an error if the user is unauthorized to seal a case', async () => {
