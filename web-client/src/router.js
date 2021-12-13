@@ -1012,7 +1012,10 @@ const router = {
     registerRoute('/log-in...', () => {
       const { code, path, token } = queryStringDecoder();
       if (code) {
-        return app.getSequence('loginWithCodeSequence')({ code, path });
+        return app.getSequence('loginWithCodeSequence')({
+          code,
+          path,
+        });
       } else {
         return app.getSequence('loginWithTokenSequence')({ path, token });
       }
@@ -1224,22 +1227,8 @@ const router = {
     );
 
     registerRoute('/mock-login...', () => {
-      const { path, token } = queryStringDecoder();
-      if (token) {
-        setPageTitle('Mock login');
-        return app.getSequence('submitLocalLoginSequence')({
-          path,
-          token: `${token}@example.com`,
-        });
-      }
-
-      if (process.env.COGNITO) {
-        setPageTitle('Dashboard');
-        return app.getSequence('gotoDashboardSequence')();
-      } else {
-        setPageTitle('Mock login');
-        return app.getSequence('gotoLoginSequence')();
-      }
+      setPageTitle('Mock login');
+      return app.getSequence('gotoLoginSequence')();
     });
 
     registerRoute('/privacy', () => {

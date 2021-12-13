@@ -3,12 +3,10 @@ const {
   createISODateString,
 } = require('../../utilities/DateHandler');
 const {
-  over3000Characters,
-} = require('../../test/createTestApplicationContext');
-const {
   VALIDATION_ERROR_MESSAGES,
 } = require('./ExternalDocumentInformationFactory');
 const { ExternalDocumentFactory } = require('./ExternalDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 
 describe('ExternalDocumentNonStandardD', () => {
   describe('validation', () => {
@@ -71,7 +69,7 @@ describe('ExternalDocumentNonStandardD', () => {
       const serviceDate = createISODateString();
       const extDoc = ExternalDocumentFactory({
         category: 'Supporting Document',
-        documentTitle: over3000Characters,
+        documentTitle: getTextByCount(3001),
         documentType: 'Certificate of Service',
         previousDocument: { documentType: 'Petition' },
         scenario: 'Nonstandard D',

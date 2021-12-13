@@ -1,4 +1,3 @@
-const querystring = require('querystring');
 const { get } = require('./requests');
 
 /**
@@ -13,10 +12,9 @@ exports.opinionPublicSearchInteractor = (
   applicationContext,
   { searchParams },
 ) => {
-  const queryString = querystring.stringify(searchParams);
-
   return get({
     applicationContext,
-    endpoint: `/public-api/opinion-search?${queryString}`,
+    endpoint: '/public-api/opinion-search',
+    params: searchParams,
   });
 };

@@ -29,24 +29,4 @@ describe('setUserPermissionsAction', () => {
 
     expect(Object.keys(result.state.permissions).length).toBeGreaterThan(0);
   });
-
-  it('does not set state.permissions if permissions can not be computed', async () => {
-    applicationContext.getCurrentUserPermissions.mockReturnValue(undefined);
-
-    presenter.providers.applicationContext.getCurrentUserPermissions = () => {
-      return undefined;
-    };
-
-    const result = await runAction(setUserPermissionsAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        permissions: {},
-        user: mockUser,
-      },
-    });
-
-    expect(Object.keys(result.state.permissions).length).toEqual(0);
-  });
 });

@@ -39,7 +39,9 @@ describe('archiveCorrespondenceDocumentAction', () => {
   it('should return the error path when an error occurred removing the correspondence document', async () => {
     applicationContext
       .getUseCases()
-      .archiveCorrespondenceDocumentInteractor.mockRejectedValue(new Error());
+      .archiveCorrespondenceDocumentInteractor.mockRejectedValueOnce(
+        new Error(),
+      );
 
     await runAction(archiveCorrespondenceDocumentAction, {
       modules: {
