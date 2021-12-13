@@ -102,15 +102,9 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
-                disabled={!featureFlagHelper.isInternalOpinionSearchEnabled}
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
-                title={
-                  'Opinion' +
-                  (featureFlagHelper.isInternalOpinionSearchEnabled
-                    ? ''
-                    : ' (Coming Soon)')
-                }
+                title={'Opinion'}
               >
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
