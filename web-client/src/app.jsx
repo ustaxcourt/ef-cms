@@ -107,10 +107,14 @@ import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
 
 import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
+import { isOnMockLogin } from './utilities/isOnMockLogin';
 import { presenter } from './presenter/presenter';
 import { socketProvider } from './providers/socket';
 import { socketRouter } from './providers/socketRouter';
+import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACognitoLogin';
+import { wasLoginUsingTokenInUrl } from './utilities/wasLoginUsingTokenInUrl';
 import { withAppContextDecorator } from './withAppContext';
+
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -120,16 +124,6 @@ import ReactDOM from 'react-dom';
  */
 const app = {
   initialize: async (applicationContext, debugTools) => {
-    // if /log-in page, delete local storage?
-    if (window.location.href.includes('/log-in?code')) {
-      await applicationContext
-        .getUseCases()
-        .removeItemInteractor(applicationContext, { key: 'token' });
-      await applicationContext
-        .getUseCases()
-        .removeItemInteractor(applicationContext, { key: 'user' });
-    }
-
     const scannerSourceName = await applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'scannerSourceName' });
@@ -138,19 +132,6 @@ const app = {
       .getItemInteractor(applicationContext, { key: 'scanMode' });
     presenter.state.scanner.scannerSourceName = scannerSourceName;
     presenter.state.scanner.scanMode = scanMode;
-
-    const user =
-      (await applicationContext
-        .getUseCases()
-        .getItemInteractor(applicationContext, { key: 'user' })) ||
-      presenter.state.user;
-    presenter.state.user = user;
-    applicationContext.setCurrentUser(user);
-
-    const userPermissions = applicationContext.getCurrentUserPermissions();
-    if (userPermissions) {
-      presenter.state.permissions = userPermissions;
-    }
 
     // decorate all computed functions so they receive applicationContext as second argument ('get' is first)
     presenter.state = mapValues(presenter.state, value => {
@@ -163,15 +144,29 @@ const app = {
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.constants = applicationContext.getConstants();
 
-    const token =
-      (await applicationContext
-        .getUseCases()
-        .getItemInteractor(applicationContext, { key: 'token' })) ||
-      presenter.state.token;
-    presenter.state.token = token;
-    applicationContext.setCurrentUserToken(token);
+    if (
+      !wasAppLoadedFromACognitoLogin(window.location.href) &&
+      !wasLoginUsingTokenInUrl(window.location.href) &&
+      !isOnMockLogin(window.location.href)
+    ) {
+      try {
+        const response = await applicationContext
+          .getUseCases()
+          .refreshTokenInteractor(applicationContext);
+        presenter.state.token = response.token;
+        applicationContext.setCurrentUserToken(response.token);
+      } catch (err) {
+        window.location.href = presenter.state.cognitoLoginUrl;
+      }
 
-    if (token) {
+      const user = await applicationContext
+        .getUseCases()
+        .getUserInteractor(applicationContext);
+      presenter.state.user = user;
+      applicationContext.setCurrentUser(user);
+    }
+
+    if (presenter.state.token) {
       try {
         const maintenanceMode = await applicationContext
           .getUseCases()
@@ -182,7 +177,7 @@ const app = {
       }
     }
 
-    if (token && !presenter.state.maintenanceMode) {
+    if (presenter.state.token && !presenter.state.maintenanceMode) {
       const pdfFlagKey =
         applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
           .PDFJS_EXPRESS_VIEWER.key;
@@ -195,6 +190,11 @@ const app = {
       presenter.state.featureFlags = {
         [pdfFlagKey]: isFlagOn,
       };
+    }
+
+    const userPermissions = applicationContext.getCurrentUserPermissions();
+    if (userPermissions) {
+      presenter.state.permissions = userPermissions;
     }
 
     config.autoAddCss = false;
@@ -319,7 +319,6 @@ const app = {
         )}
 
         <AppComponent />
-
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       window.document.querySelector('#app'),

@@ -50,13 +50,14 @@ describe('gotoStartCaseWizardSequence', () => {
 
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
-    expect(cerebralTest.getState()).toMatchObject({
+    const endState = cerebralTest.getState();
+    expect(endState).toMatchObject({
       currentPage: 'StartCaseWizard',
       form: {
         contactPrimary: {},
-        wizardStep: undefined,
       },
-      wizardStep: undefined,
     });
+    expect(endState.form.wizardStep).toBeUndefined();
+    expect(endState.wizardStep).toBeUndefined();
   });
 });

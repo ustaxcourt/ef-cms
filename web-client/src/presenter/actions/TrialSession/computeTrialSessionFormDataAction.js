@@ -80,7 +80,6 @@ export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
     minutes: form.startTimeMinutes,
   });
   store.set(state.form.startTime, startTime);
-
   if (props.key === 'judgeId') {
     store.set(state.form.judgeId, props.value.userId);
     store.set(state.form.judge, props.value);

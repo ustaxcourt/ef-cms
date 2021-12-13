@@ -216,6 +216,7 @@ resource "aws_api_gateway_deployment" "api_deployment" {
 
   triggers = {
     redeployment = sha1(jsonencode([
+      // API
       aws_api_gateway_method.api_method_get,
       aws_api_gateway_method.api_method_post,
       aws_api_gateway_method.api_method_put,
@@ -228,7 +229,32 @@ resource "aws_api_gateway_deployment" "api_deployment" {
       aws_api_gateway_integration.api_integration_put,
       aws_api_gateway_integration.api_integration_delete,
       aws_api_gateway_integration.api_integration_options,
-      aws_api_gateway_authorizer.custom_authorizer
+      // ASYNC
+      aws_api_gateway_method.api_async_method_post,
+      aws_api_gateway_method.api_async_method_put,
+      aws_api_gateway_method.api_async_method_get,
+      aws_api_gateway_method.api_async_method_options,
+      aws_api_gateway_integration.api_async_integration_post,
+      aws_api_gateway_integration.api_async_integration_put,
+      aws_api_gateway_integration.api_async_integration_get,
+      aws_api_gateway_integration.api_async_integration_options,
+      aws_api_gateway_method_response.async_method_response_post,
+      aws_api_gateway_method_response.async_method_response_put,
+      aws_api_gateway_method_response.async_method_response_get,
+      aws_api_gateway_integration_response.async_response_post,
+      aws_api_gateway_integration_response.async_response_put,
+      aws_api_gateway_integration_response.async_response_get,
+      // AUTH
+      aws_api_gateway_method.api_auth_method_delete,
+      aws_api_gateway_method.api_auth_method_options,
+      aws_api_gateway_method.api_auth_method_get,
+      aws_api_gateway_method.api_auth_method_post,
+      aws_api_gateway_integration.api_auth_integration_get,
+      aws_api_gateway_integration.api_auth_integration_post,
+      aws_api_gateway_integration.api_auth_integration_options,
+      aws_api_gateway_integration.api_auth_integration_delete,
+      // AUTHORIZER
+      aws_api_gateway_authorizer.custom_authorizer,
     ]))
   }
 
