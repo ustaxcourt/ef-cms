@@ -21,7 +21,7 @@ ITEM=$(cat <<-END
         "S": "pdfjs-express-viewer-enabled"
     },
     "current": {
-        "BOOL": true
+        "BOOL": false
     }
 }
 END
