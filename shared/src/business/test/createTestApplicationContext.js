@@ -534,6 +534,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     postMessage: jest.fn(),
   };
 
+  const mockGetNotificationService = {
+    publish: jest.fn().mockReturnValue({
+      promise: () => Promise.resolve('ok'),
+    }),
+  };
+
   const applicationContext = {
     ...sharedAppContext,
     barNumberGenerator: {
@@ -615,7 +621,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
-    getNotificationService: jest.fn(),
+    getNotificationService: jest
+      .fn()
+      .mockReturnValue(mockGetNotificationService),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
