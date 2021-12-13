@@ -10,18 +10,11 @@ exports.sealInLowerEnvironmentLambda = async event => {
   const user = { role: 'docketclerk' };
   const applicationContext = createApplicationContext(user);
 
-  if (!applicationContext.isCurrentColorActive(applicationContext)) {
-    applicationContext.logger.warn('This is not the currently deployed color');
-    return;
-  }
+  const records = event.Records.map(record => ({
+    ...JSON.parse(record.Sns.Message),
+  }));
 
-  return await Promise.all(
-    event.Records.map(record =>
-      applicationContext
-        .getUseCaseHelpers()
-        .sealInLowerEnvironment(applicationContext, {
-          ...JSON.parse(record.Sns.Message),
-        }),
-    ),
-  );
+  return await applicationContext
+    .getUseCaseHelpers()
+    .sealInLowerEnvironment(applicationContext, records);
 };

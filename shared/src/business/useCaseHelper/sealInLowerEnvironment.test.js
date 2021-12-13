@@ -10,25 +10,39 @@ describe('sealInLowerEnvironment', () => {
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     applicationContext.getNotificationGateway().sendNotificationOfSealing =
       jest.fn();
+    applicationContext.isCurrentColorActive = jest.fn().mockReturnValue(true);
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
-      userId: 'docketClerk',
     });
   });
 
   it('should seal the case with the docketNumber provided and return the updated case', async () => {
-    const result = await sealInLowerEnvironment(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
+    const result = await sealInLowerEnvironment(applicationContext, [
+      {
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+    ]);
     expect(applicationContext.getUseCases().sealCaseInteractor).toBeCalled();
-    expect(result.sealedDate).toBeTruthy();
+    expect(result[0].sealedDate).toBeTruthy();
   });
 
   it('should only log a warning if we do not have a docketNumber', async () => {
-    await sealInLowerEnvironment(applicationContext, {});
+    await sealInLowerEnvironment(applicationContext, [{}]);
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
     ).not.toBeCalled();
     expect(applicationContext.logger.warn).toBeCalled();
+  });
+
+  it('should not execute if the current color is not active', async () => {
+    applicationContext.isCurrentColorActive = jest.fn().mockReturnValue(false);
+    await sealInLowerEnvironment(applicationContext, [
+      {
+        docketNumber: '123-21',
+      },
+    ]);
+    expect(
+      applicationContext.getUseCases().sealCaseInteractor,
+    ).not.toBeCalled();
   });
 });
