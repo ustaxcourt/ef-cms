@@ -81,12 +81,7 @@ export const PublicSearch = connect(
               />
               <DocumentSearchResults />
             </Tab>
-            <Tab
-              disabled
-              id="tab-opinion"
-              tabName="opinion"
-              title="Opinion (Coming Soon)"
-            >
+            <Tab id="tab-opinion" tabName="opinion" title="Opinion">
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOpinionAdvancedSearchSequence
