@@ -1,9 +1,9 @@
 module.exports = [
-  'http://localhost:1234/mock-login?token=privatePractitioner&path=/',
-  'http://localhost:1234/mock-login?token=privatePractitioner&path=/user/contact/edit',
-  'http://localhost:1234/mock-login?token=privatePractitioner&path=/case-detail/105-19',
-  'http://localhost:1234/mock-login?token=privatePractitioner&path=/file-a-petition/step-1',
-  'http://localhost:1234/mock-login?token=privatePractitioner&path=/case-detail/102-19/request-access',
+  'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/',
+  'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/user/contact/edit',
+  'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/case-detail/105-19',
+  'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/file-a-petition/step-1',
+  'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/case-detail/102-19/request-access',
   {
     actions: [
       'wait for element #react-select-2-input to be visible',
@@ -20,11 +20,11 @@ module.exports = [
       'wait for element .supporting-document-certificate-of-service-date to be visible',
     ],
     notes: ['request access with supporting document'],
-    url: 'http://localhost:1234/mock-login?token=privatePractitioner&path=/case-detail/102-19/request-access&info=supporting-document',
+    url: 'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/case-detail/102-19/request-access&info=supporting-document',
   },
-  'http://localhost:1234/mock-login?token=privatePractitioner&path=/search/no-matches',
-  'http://localhost:1234/mock-login?token=privatePractitioner&path=/my-account',
-  'http://localhost:1234/mock-login?token=privatePractitioner&path=/change-login-and-service-email',
+  'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/search/no-matches',
+  'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/my-account',
+  'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/change-login-and-service-email',
   {
     actions: [
       'wait for #tab-closed to be visible',
@@ -32,6 +32,6 @@ module.exports = [
       'wait for element #tabContent-closed to be visible',
     ],
     notes: 'check the a11y of the Closed Cases tab',
-    url: 'http://localhost:1234/mock-login?token=privatePractitioner&path=/',
+    url: 'http://localhost:1234/log-in?code=privatePractitioner@example.com&path=/',
   },
 ];

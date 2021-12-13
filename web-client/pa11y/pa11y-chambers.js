@@ -1,3 +1,3 @@
 module.exports = [
-  'http://localhost:1234/mock-login?token=colvinsChambers&path=/',
+  'http://localhost:1234/log-in?code==colvinsChambers@example.com&path=/',
 ];

@@ -9,18 +9,22 @@ const { parseCookieString } = require('../utilities/cookieFormatting');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.refreshAuthTokenLambda = event =>
-  genericHandler(event, async ({ applicationContext }) => {
-    if (!event.headers.cookie) {
-      throw new Error('Cookie header is missing');
-    }
+  genericHandler(
+    event,
+    async ({ applicationContext }) => {
+      if (!event.headers.cookie) {
+        throw new Error('Cookie header is missing');
+      }
 
-    const { refreshToken } = parseCookieString(event.headers.cookie);
-    const { token } = await applicationContext
-      .getUseCases()
-      .refreshAuthTokenInteractor(applicationContext, {
-        refreshToken,
-      });
-    return {
-      token,
-    };
-  });
+      const { refreshToken } = parseCookieString(event.headers.cookie);
+      const { token } = await applicationContext
+        .getUseCases()
+        .refreshAuthTokenInteractor(applicationContext, {
+          refreshToken,
+        });
+      return {
+        token,
+      };
+    },
+    { bypassMaintenanceCheck: true },
+  );
