@@ -9,7 +9,7 @@ exports.handler = async context => {
   //  and generate snapshots for each day
 
   // generate a snapshot of the indices from EXPIRATION days ago
-  const backupIndexName = getIndexNameForDaysAgo(EXPIRATION);
+  const backupIndexName = exports.getIndexNameForDaysAgo(EXPIRATION);
   const { sResponseBody, sStatusCode } = await snapshotForIndexName(
     backupIndexName,
   );
@@ -17,7 +17,7 @@ exports.handler = async context => {
   // TODO: determine all indices older than (expiration + 1) and delete them all (if snapshots exist)
 
   // delete the indices from (EXPIRATION + 1) days ago if a snapshot exists
-  const deleteIndexName = getIndexNameForDaysAgo(EXPIRATION + 1);
+  const deleteIndexName = exports.getIndexNameForDaysAgo(EXPIRATION + 1);
   const { dResponseBody, dStatusCode } = await deleteIndices(deleteIndexName);
 
   const responses = {
@@ -44,12 +44,12 @@ exports.handler = async context => {
  *
  * @returns {string} Elasticsearch indexName
  */
-function getIndexNameForDaysAgo(expiration) {
+exports.getIndexNameForDaysAgo = function (expiration) {
   const expirationDay = DateTime.local().plus({ days: -expiration });
 
   // the indexName is the date formatted as cwl-YYYY.MM.DD
   return 'cwl-' + expirationDay.toFormat('yyyy.MM.dd');
-}
+};
 
 /**
  * Ask Elasticsearch to generate a snapshot for the provided indexName
