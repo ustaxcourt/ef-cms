@@ -21201,7 +21201,7 @@
   },
   {
     "sk": "pdfjs-express-viewer-enabled",
-    "current": true,
+    "current": false,
     "pk": "pdfjs-express-viewer-enabled"
   },
   {
