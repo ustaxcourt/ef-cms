@@ -12,7 +12,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 ## Infrastructure as Code Libraries
 
 `Terraform`: check for updates on the Terraform site. The Terraform version can be changed with a global find/replace.
-  * If there is a new version of Terraform, update all version references in the project and then deploy from your machine to an experimental environment to verify everything is working. 
+  * If there is a new version of Terraform, update all version references in the project and push to to an experimental environment to allow CircleCI to verify everything is working. 
   * Be sure to deploy the migration infrastructure and run a migration as well.
   * Once verification is complete, you will need to rebuild the docker images that use Terraform and push them to ECS.
 
