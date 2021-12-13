@@ -59,7 +59,7 @@ describe('ExternalDocumentNonStandardB', () => {
   });
 
   describe('title generation', () => {
-    it('should generate valid title', () => {
+    it('should generate a valid title when freeText is defined', () => {
       const extDoc = ExternalDocumentFactory({
         category: 'Application',
         documentTitle: 'Application to Take Deposition of [Name]',
@@ -70,6 +70,17 @@ describe('ExternalDocumentNonStandardB', () => {
       expect(extDoc.getDocumentTitle()).toEqual(
         'Application to Take Deposition of Petition',
       );
+    });
+
+    it('should return the original document title when freeText is undefined', () => {
+      const extDoc = ExternalDocumentFactory({
+        category: 'Application',
+        documentTitle: 'Application to Take Deposition of [Name]',
+        documentType: 'Application to Take Deposition',
+        freeText: undefined,
+        scenario: 'Nonstandard B',
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(extDoc.documentTitle);
     });
   });
 });
