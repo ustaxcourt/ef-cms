@@ -136,8 +136,8 @@ module.exports = [
     actions: [
       'wait for #tab-order to be visible',
       'click element #tab-order',
-      'wait for #order-search to be visible',
-      'set field #order-search to dismissal',
+      'wait for #keyword-search to be visible',
+      'set field #keyword-search to dismissal',
       'wait for #order-date-range to be visible',
       'set field #order-date-range to customDates',
       'check field #order-date-range',
@@ -153,8 +153,8 @@ module.exports = [
     actions: [
       'wait for #tab-opinion to be visible',
       'click element #tab-opinion',
-      'wait for #opinion-search to be visible',
-      'set field #opinion-search to opinion',
+      'wait for #keyword-search to be visible',
+      'set field #keyword-search to opinion',
       'wait for #order-date-range to be visible',
       'set field #order-date-range to customDates',
       'check field #order-date-range',
@@ -170,8 +170,8 @@ module.exports = [
     actions: [
       'wait for #tab-order to be visible',
       'click element #tab-order',
-      'wait for #order-search to be visible',
-      'set field #order-search to meow',
+      'wait for #keyword-search to be visible',
+      'set field #keyword-search to meow',
       'wait for #order-date-range to be visible',
       'set field #order-date-range to customDates',
       'check field #order-date-range',
@@ -187,8 +187,8 @@ module.exports = [
     actions: [
       'wait for #tab-order to be visible',
       'click element #tab-opinion',
-      'wait for #opinion-search to be visible',
-      'set field #opinion-search to sunglasses',
+      'wait for #keyword-search to be visible',
+      'set field #keyword-search to sunglasses',
       'wait for #order-date-range to be visible',
       'set field #order-date-range to customDates',
       'check field #order-date-range',

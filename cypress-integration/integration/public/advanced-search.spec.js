@@ -4,7 +4,6 @@ const {
   enterDocumentDocketNumber,
   enterDocumentKeywordForOpinionSearch,
   enterPetitionerName,
-  enterStartDateForOpinionSearch,
   navigateTo: navigateToDashboard,
   noSearchResultsContainer,
   searchForCaseByDocketNumber,
@@ -37,13 +36,11 @@ describe('Advanced search', () => {
     });
   });
 
-  // Temporarily disabled for story 7387
-  describe.skip('opinion', () => {
+  describe('opinion', () => {
     it('should display results when a keyword and docketNumberWithSuffix is provided', () => {
       navigateToDashboard();
       clickOnSearchTab('opinion');
       enterDocumentKeywordForOpinionSearch('opinion');
-      enterStartDateForOpinionSearch('08/03/1995');
       enterDocumentDocketNumber('124-20L');
       searchForDocuments();
       expect(searchResultsTable()).to.exist;
