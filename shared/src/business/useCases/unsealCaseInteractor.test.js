@@ -11,6 +11,10 @@ describe('unsealCaseInteractor', () => {
   });
 
   it('should throw an error if the user is unauthorized to unseal a case', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.petitionsClerk,
+    });
+
     await expect(
       unsealCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
