@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { Icon } from '../../ustc-ui/Icon/Icon';
+import { PdfViewer } from '../../ustc-ui/PdfPreview/PdfViewer';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -165,7 +166,7 @@ export const DocumentViewerDocument = connect(
               </Button>
             </div>
             {!process.env.CI && (
-              <iframe
+              <PdfViewer
                 src={iframeSrc}
                 title={documentViewerHelper.description}
               />

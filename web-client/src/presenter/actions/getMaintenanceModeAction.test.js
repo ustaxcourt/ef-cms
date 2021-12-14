@@ -62,19 +62,4 @@ describe('getMaintenanceModeAction', () => {
 
     expect(pathMaintenanceOffStub).toHaveBeenCalled();
   });
-
-  it('should not retrieve maintenanceMode from persistence when it is already defined in state', async () => {
-    await runAction(getMaintenanceModeAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        maintenanceMode: true,
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().getMaintenanceModeInteractor,
-    ).not.toHaveBeenCalled();
-  });
 });

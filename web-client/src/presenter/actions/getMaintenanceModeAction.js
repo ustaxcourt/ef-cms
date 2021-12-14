@@ -17,20 +17,11 @@ export const getMaintenanceModeAction = async ({
 }) => {
   let maintenanceMode = get(state.maintenanceMode);
 
-  if (maintenanceMode === null) {
-    maintenanceMode = await applicationContext
-      .getUseCases()
-      .getMaintenanceModeInteractor(applicationContext);
+  maintenanceMode = await applicationContext
+    .getUseCases()
+    .getMaintenanceModeInteractor(applicationContext);
 
-    store.set(state.maintenanceMode, maintenanceMode);
-
-    await applicationContext
-      .getUseCases()
-      .setItemInteractor(applicationContext, {
-        key: 'maintenanceMode',
-        value: maintenanceMode,
-      });
-  }
+  store.set(state.maintenanceMode, maintenanceMode);
 
   return maintenanceMode ? path.maintenanceOn() : path.maintenanceOff();
 };
