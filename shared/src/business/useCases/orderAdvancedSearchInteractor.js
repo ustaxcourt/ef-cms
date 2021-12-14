@@ -48,11 +48,6 @@ exports.orderAdvancedSearchInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let omitSealed = false;
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE)) {
-    omitSealed = true;
-  }
-
   const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     dateRange,
@@ -72,8 +67,7 @@ exports.orderAdvancedSearchInteractor = async (
     .advancedDocumentSearch({
       applicationContext,
       documentEventCodes: ORDER_EVENT_CODES,
-      isOpinionSearch: false,
-      omitSealed,
+      omitSealed: false,
       ...rawSearch,
     });
 

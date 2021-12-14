@@ -51,6 +51,9 @@ describe('gotoEditCourtIssuedDocketEntrySequence', () => {
         { name: 'Bob Barker', role: ROLES.judge },
         { name: 'Bob Ross', role: ROLES.petitionsClerk },
       ]);
+
+    //set token to take 'isLoggedIn' path
+    cerebralTest.setState('token', 'a');
   });
 
   it('should set up state for editing court issued docket entry', async () => {

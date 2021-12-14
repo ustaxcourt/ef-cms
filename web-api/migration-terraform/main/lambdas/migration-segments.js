@@ -2,6 +2,9 @@ const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
+  migrateItems: migration0003,
+} = require('./migrations/0003-case-has-sealed-documents');
+const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
@@ -29,6 +32,11 @@ const migrateRecords = async ({
   // eslint-disable-next-line no-unused-vars
   ranMigrations = {},
 }) => {
+  if (!ranMigrations['0003-case-has-sealed-documents.js']) {
+    applicationContext.logger.debug('about to run migration 0003');
+    items = await migration0003(items, documentClient);
+  }
+
   applicationContext.logger.debug('about to run validation migration');
   items = await validationMigration(items);
 
@@ -130,7 +138,7 @@ exports.handler = async event => {
   );
 
   const ranMigrations = {
-    // example: ...(await hasMigrationRan('9999-example-migration.js')),
+    ...(await hasMigrationRan('0003-case-has-sealed-documents.js')),
   };
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
