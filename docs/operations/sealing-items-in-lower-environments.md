@@ -8,6 +8,10 @@ Sealed cases in production remain unsealed in Lower Environments that have Produ
 
 ![chart](./sealing-items-in-lower-environments.png)
 
+Two new environment variables are introduced that inform Terraform whether to create the SNS Topic, the Lambdas that subscribe to the SNS Topic, or none of the above.
+
+If you don't need to worry about sealing cases in lower environments, simply do not specify any of the environment variables in CircleCI. Terraform will not create the SNS Topic nor the Lambdas. However, if you would like to create the resources in order to seal cases in lower environments, in CircleCI, be sure to specify the `PROD_ENV_ACCOUNT_ID` with the AWS Account ID where the Production environment lives. Additionally specify the `LOWER_ENV_ACCOUNT_ID` with the AWS Account ID where lower environments live. These two cannot be the same.
+
 ### In Production
 
 The `sealCaseInteractor` makes a call to a new dispatcher that has been made available in the codebase. This dispatcher, `sendNotificationOfSealing`, only runs if the current environment is production. If the environment is not production, it does nothing.
