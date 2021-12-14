@@ -102,9 +102,15 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
+                disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
-                title={'Opinion'}
+                title={
+                  'Opinion' +
+                  (featureFlagHelper.isOpinionSearchEnabledForRole
+                    ? ''
+                    : ' (Coming Soon)')
+                }
               >
                 <SearchBoilerplateText
                   formTypeText="an opinion"
@@ -161,7 +167,15 @@ export const AdvancedSearch = connect(
                     ? ''
                     : ' (Coming Soon)'}
                 </option>
-                <option value={searchTabs.OPINION}>Opinion</option>
+                <option
+                  disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
+                  value={searchTabs.OPINION}
+                >
+                  Opinion
+                  {featureFlagHelper.isOpinionSearchEnabledForRole
+                    ? ''
+                    : ' (Coming Soon)'}
+                </option>
                 <option value={searchTabs.PRACTITIONER}>Practitioner</option>
               </select>
             </div>

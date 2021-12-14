@@ -331,12 +331,12 @@ export const setWhitelistIps = ips => {
   });
 };
 
-export const setOpinionSearchEnabled = isEnabled => {
+export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
       current: isEnabled,
-      pk: 'internal-opinion-search-enabled',
-      sk: 'internal-opinion-search-enabled',
+      pk: `${keyPrefix}-opinion-search-enabled`,
+      sk: `${keyPrefix}-opinion-search-enabled`,
     },
     applicationContext,
   });
