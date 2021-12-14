@@ -106,6 +106,10 @@ export const AdvancedSearch = connect(
                 tabName={searchTabs.OPINION}
                 title={'Opinion'}
               >
+                <SearchBoilerplateText
+                  formTypeText="an opinion"
+                  isOpinion="true"
+                />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
                     submitOpinionAdvancedSearchSequence
@@ -188,6 +192,10 @@ export const AdvancedSearch = connect(
             )}
             {advancedSearchTab === searchTabs.OPINION && (
               <>
+                <SearchBoilerplateText
+                  formTypeText="an opinion"
+                  isOpinion="true"
+                />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
                     submitOpinionAdvancedSearchSequence
