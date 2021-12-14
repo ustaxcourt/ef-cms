@@ -314,6 +314,13 @@ module "api-west-green" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
+
+  # lambda to seal cases in lower environment (only deployed to lower environments)
+  seal_in_lower_object           = ""
+  seal_in_lower_object_hash      = ""
+  create_seal_in_lower           = 0
+  lower_env_account_id           = var.lower_env_account_id
+  prod_env_account_id            = var.prod_env_account_id
 }
 
 module "api-west-blue" {
@@ -361,4 +368,11 @@ module "api-west-blue" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
+
+  # lambda to seal cases in lower environment (only deployed to lower environments)
+  seal_in_lower_object           = ""
+  seal_in_lower_object_hash      = ""
+  create_seal_in_lower           = 0
+  lower_env_account_id           = var.lower_env_account_id
+  prod_env_account_id            = var.prod_env_account_id
 }
