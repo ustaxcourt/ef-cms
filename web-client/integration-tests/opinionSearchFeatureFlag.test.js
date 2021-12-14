@@ -17,7 +17,8 @@ describe('Opinion search feature flags', () => {
 
   afterAll(async () => {
     cerebralTest.closeSocket();
-    await setOpinionSearchEnabled(true);
+    await setOpinionSearchEnabled(true, 'internal');
+    await setOpinionSearchEnabled(true, 'external');
   });
 
   describe('internal', () => {
@@ -27,7 +28,7 @@ describe('Opinion search feature flags', () => {
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
       cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
-      await setOpinionSearchEnabled(false);
+      await setOpinionSearchEnabled(false, 'internal');
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
@@ -52,21 +53,21 @@ describe('Opinion search feature flags', () => {
         ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH.disabledMessage,
       );
 
-      const { isInternalOpinionSearchEnabled } =
+      const { isOpinionSearchEnabledForRole } =
         getFeatureFlagHelper(cerebralTest);
 
-      expect(isInternalOpinionSearchEnabled).toEqual(false);
+      expect(isOpinionSearchEnabledForRole).toEqual(false);
     });
   });
 
   describe('external', () => {
-    loginAs(cerebralTest, 'petitioner1@example.com');
+    loginAs(cerebralTest, 'privatePractitioner1@example.com');
 
     it('should display warning message when feature is disabled', async () => {
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
       cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
-      await setOpinionSearchEnabled(false);
+      await setOpinionSearchEnabled(false, 'external');
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
@@ -91,10 +92,10 @@ describe('Opinion search feature flags', () => {
         ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH.disabledMessage,
       );
 
-      const { isExternalOpinionSearchEnabled } =
+      const { isOpinionSearchEnabledForRole } =
         getFeatureFlagHelper(cerebralTest);
 
-      expect(isExternalOpinionSearchEnabled).toEqual(false);
+      expect(isOpinionSearchEnabledForRole).toEqual(false);
     });
   });
 });
