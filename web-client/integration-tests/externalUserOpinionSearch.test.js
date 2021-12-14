@@ -26,20 +26,11 @@ describe('verify opinion search works for external users', () => {
     it('should return an opinion from a sealed case', async () => {
       // Private/IRS practitioner accesses Opinion Search, searches for Opinion in sealed case, Opinion is returned in results list.
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-      // cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
-
-      // get access for an opinion data on a sealed case
-      // await cerebralTest.runSequence(
-      //   'updateAdvancedOpinionSearchFormValueSequence',
-      //   {
-      //     key: 'keyword',
-      //     value: 'sunglasses',
-      //   },
-      // );
+      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
       await updateOpinionForm(cerebralTest, {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
-        keyword: 'opinion',
+        keyword: 'sunglasses',
         opinionTypes: {
           [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
           [ADVANCED_SEARCH_OPINION_TYPES.Bench]: true,
@@ -52,11 +43,19 @@ describe('verify opinion search works for external users', () => {
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-      console.log('state', cerebralTest.getState('searchResults'));
       const stateOfAdvancedSearch = cerebralTest.getState(
         `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
       );
-      expect(stateOfAdvancedSearch).toEqual([]);
+
+      expect(stateOfAdvancedSearch).toEqual(
+        expect.arrayContaining([
+          expect.objectContaining({
+            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            documentTitle:
+              'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+          }),
+        ]),
+      );
     });
   });
 });
