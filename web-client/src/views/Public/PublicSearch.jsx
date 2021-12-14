@@ -82,6 +82,10 @@ export const PublicSearch = connect(
               <DocumentSearchResults />
             </Tab>
             <Tab id="tab-opinion" tabName="opinion" title="Opinion">
+              <SearchBoilerplateText
+                formTypeText="an opinion"
+                isOpinion="true"
+              />
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOpinionAdvancedSearchSequence
