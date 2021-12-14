@@ -1,4 +1,6 @@
 version: 2.1
+orbs:
+  git-shallow-clone: guitarrapc/git-shallow-clone@2.4.0
 commands:
   checkout-and-cache-source-code:
     steps:
@@ -96,7 +98,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
+      # - checkout-and-cache-source-code
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -144,8 +147,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
-      - npm-install
+      - git-shallow-clone/checkout
+      # - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
@@ -189,7 +192,8 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      # - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -234,7 +238,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -283,7 +287,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -332,7 +336,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
