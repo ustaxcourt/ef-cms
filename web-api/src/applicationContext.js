@@ -754,6 +754,9 @@ const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
+  isCurrentColorActive,
+} = require('../../shared/src/persistence/dynamo/helpers/isCurrentColorActive');
+const {
   isEmailAvailable,
 } = require('../../shared/src/persistence/cognito/isEmailAvailable');
 const {
@@ -914,6 +917,9 @@ const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
+  sealInLowerEnvironment,
+} = require('../../shared/src/business/useCaseHelper/sealInLowerEnvironment');
+const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
@@ -925,6 +931,9 @@ const {
 const {
   sendMaintenanceNotificationsInteractor,
 } = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
+const {
+  sendNotificationOfSealing,
+} = require('../../shared/src/dispatchers/sns/sendNotificationOfSealing');
 const {
   sendNotificationToConnection,
 } = require('../../shared/src/notifications/sendNotificationToConnection');
@@ -964,6 +973,9 @@ const {
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
+const {
+  setPdfFormFields,
+} = require('../../shared/src/business/useCaseHelper/pdf/setPdfFormFields');
 const {
   setPriorityOnAllWorkItems,
 } = require('../../shared/src/persistence/dynamo/workitems/setPriorityOnAllWorkItems');
@@ -1018,6 +1030,9 @@ const {
 const {
   unprioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/unprioritizeCaseInteractor');
+const {
+  unsealCaseInteractor,
+} = require('../../shared/src/business/useCases/unsealCaseInteractor');
 const {
   updateAssociatedJudgeOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
@@ -1308,6 +1323,7 @@ let s3Cache;
 let sesCache;
 let sqsCache;
 let searchClientCache;
+let notificationServiceCache;
 
 const entitiesByName = {
   Case,
@@ -1606,6 +1622,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
+      sendNotificationOfSealing:
+        process.env.PROD_ENV_ACCOUNT_ID === process.env.AWS_ACCOUNT_ID
+          ? sendNotificationOfSealing
+          : () => {},
     }),
     getDocumentClient,
     getDocumentGenerators: () => ({
@@ -1714,6 +1734,23 @@ module.exports = (appContextUser, logger = createLogger()) => {
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
+    getNotificationService: () => {
+      if (notificationServiceCache) {
+        return notificationServiceCache;
+      }
+
+      if (environment.stage === 'local') {
+        notificationServiceCache = {
+          publish: () => ({
+            promise: () => {},
+          }),
+        };
+      } else {
+        notificationServiceCache = new AWS.SNS({});
+      }
+
+      return notificationServiceCache;
+    },
     getPdfJs: () => {
       const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
@@ -1798,10 +1835,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCounselFromRemovedPetitioner,
         removeCoversheet,
         saveFileAndGenerateUrl,
+        sealInLowerEnvironment,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        setPdfFormFields,
         updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
         updateCaseAutomaticBlock,
@@ -1966,6 +2005,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         submitPendingCaseAssociationRequestInteractor,
         unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
+        unsealCaseInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseDetailsInteractor,
@@ -2027,6 +2067,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       };
     },
     isAuthorized,
+    isCurrentColorActive,
     logger: {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),

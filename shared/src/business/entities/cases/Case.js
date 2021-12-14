@@ -304,6 +304,10 @@ const assignDocketEntries = ({
   } else {
     obj.docketEntries = [];
   }
+
+  obj.hasSealedDocuments = obj.docketEntries.some(
+    docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+  );
 };
 
 const assignHearings = ({ applicationContext, obj, rawCase }) => {
@@ -522,6 +526,7 @@ Case.VALIDATION_RULES = {
     ...FILING_TYPES[ROLES.privatePractitioner],
   ).optional(),
   hasPendingItems: joi.boolean().optional(),
+  hasSealedDocuments: joi.boolean().required(),
   hasVerifiedIrsNotice: joi
     .boolean()
     .optional()
@@ -1565,6 +1570,7 @@ const isAssociatedUser = function ({ caseRaw, user }) {
   const isIrsPractitioner =
     caseRaw.irsPractitioners &&
     caseRaw.irsPractitioners.find(r => r.userId === user.userId);
+
   const isPrivatePractitioner =
     caseRaw.privatePractitioners &&
     caseRaw.privatePractitioners.find(p => p.userId === user.userId);
@@ -2160,6 +2166,18 @@ Case.prototype.setAsSealed = function () {
   this.isSealed = true;
   return this;
 };
+
+/**
+ * sets isSealed to false and sealedDate to undefined on a case
+ *
+ * @returns {Case} this case entity
+ */
+Case.prototype.setAsUnsealed = function () {
+  this.isSealed = false;
+  this.sealedDate = undefined;
+  return this;
+};
+
 /**
  * generates the case confirmation pdf file name
  *
@@ -2294,16 +2312,8 @@ Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
   );
 };
 
-const isSealedCase = rawCase => {
-  const isSealed =
-    rawCase.isSealed ||
-    !!rawCase.sealedDate ||
-    (Array.isArray(rawCase.docketEntries) &&
-      rawCase.docketEntries.some(
-        docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-      ));
-  return isSealed;
-};
+const isSealedCase = rawCase =>
+  rawCase.isSealed || !!rawCase.sealedDate || rawCase.hasSealedDocuments;
 
 const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));

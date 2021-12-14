@@ -15,6 +15,8 @@ describe('gotoTrialSessionDetailSequence', () => {
       gotoTrialSessionDetailSequence,
     };
     cerebralTest = CerebralTest(presenter);
+    //set token to take 'isLoggedIn' path
+    cerebralTest.setState('token', 'a');
   });
 
   it('should set up state for an uncalendared session with eligible cases and case order', async () => {

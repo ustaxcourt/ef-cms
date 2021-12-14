@@ -7,11 +7,9 @@ const client = require('../../dynamodbClientService');
  * @param {object} providers.applicationContext the application context
  * @param {boolean} providers.maintenanceMode true to turn maintenance mode on, false otherwise
  */
-exports.updateMaintenanceMode = async ({
-  applicationContext,
-  maintenanceMode,
-}) => {
-  await client.updateToDeployTable({
+
+exports.updateMaintenanceMode = ({ applicationContext, maintenanceMode }) =>
+  client.updateToDeployTable({
     ExpressionAttributeNames: {
       '#current': 'current',
     },
@@ -25,4 +23,3 @@ exports.updateMaintenanceMode = async ({
     UpdateExpression: 'SET #current = :maintenanceMode',
     applicationContext,
   });
-};
