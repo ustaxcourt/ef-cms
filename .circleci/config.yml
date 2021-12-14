@@ -114,7 +114,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             URL=http://localhost:1234 ./wait-until.sh
@@ -163,7 +162,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
@@ -209,7 +207,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
@@ -255,7 +252,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -305,7 +301,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -355,7 +350,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
