@@ -35,9 +35,15 @@ describe('Private practitioner', () => {
       goToEditContactInformation();
     });
 
-    it('can update and save their address', () => {
-      updateAddress1();
-      saveContactInformation();
-    });
+    it(
+      'can update and save their address',
+      {
+        defaultCommandTimeout: 90000,
+      },
+      () => {
+        updateAddress1();
+        saveContactInformation();
+      },
+    );
   });
 });
