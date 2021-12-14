@@ -81,6 +81,7 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const showBlockedTag =
     caseDetail.blocked ||
     (caseDetail.automaticBlocked &&
+      !caseDetail.highPriority &&
       caseDetail.status !== STATUS_TYPES.calendared);
 
   return {
