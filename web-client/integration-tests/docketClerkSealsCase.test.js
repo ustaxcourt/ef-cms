@@ -1,5 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { associatedUserAdvancedSearchForSealedCase } from './journey/associatedUserAdvancedSearchForSealedCase';
+import { associatedUserAdvancedSearchForCase } from './journey/associatedUserAdvancedSearchForCase';
 import { associatedUserViewsCaseDetailForSealedCase } from './journey/associatedUserViewsCaseDetailForSealedCase';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -41,7 +41,6 @@ describe('Docket Clerk seals a case', () => {
       },
       partyType: PARTY_TYPES.petitionerSpouse,
     });
-    console.log('new case docket#', caseDetail.docketNumber);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
@@ -65,7 +64,7 @@ describe('Docket Clerk seals a case', () => {
 
   //verify that an internal user can still find this case via advanced search by name
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  associatedUserAdvancedSearchForSealedCase(cerebralTest);
+  associatedUserAdvancedSearchForCase(cerebralTest);
 
   //associated users
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -73,11 +72,11 @@ describe('Docket Clerk seals a case', () => {
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
   associatedUserViewsCaseDetailForSealedCase(cerebralTest);
-  associatedUserAdvancedSearchForSealedCase(cerebralTest);
+  associatedUserAdvancedSearchForCase(cerebralTest);
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   associatedUserViewsCaseDetailForSealedCase(cerebralTest);
-  associatedUserAdvancedSearchForSealedCase(cerebralTest);
+  associatedUserAdvancedSearchForCase(cerebralTest);
 
   //unassociated users
   loginAs(cerebralTest, 'privatePractitioner3@example.com');

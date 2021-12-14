@@ -124,9 +124,9 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:4000/api/swagger
             sleep 10
-            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
-            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1536
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1536
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1536
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -147,7 +147,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -187,7 +187,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:5000/ 404
             sleep 10
-            npm run test:pa11y:public --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public --node-flags --max-old-space-size=1536
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -208,7 +208,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -248,7 +248,7 @@ jobs:
             ./wait-until-services.sh
             ./wait-until.sh http://localhost:5000/ 404
             sleep 10
-            npm run test:pa11y:public-search --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -399,7 +399,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: xlarge
     steps:
       - restore_cache:
           name: Source - Restoring Cache
@@ -523,6 +523,7 @@ jobs:
              -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" \
              -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" \
              -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" \
+             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
              -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" \
              -e "ZONE_NAME=${ZONE_NAME}" \
              --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
@@ -548,6 +549,7 @@ jobs:
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
              -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
+             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
              -e "SESSION_TIMEOUT=${SESSION_TIMEOUT}" \
              -e "SESSION_MODAL_TIMEOUT=${SESSION_MODAL_TIMEOUT}" \
@@ -564,6 +566,7 @@ jobs:
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
              -e "ENV=${ENV}" \
              -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" \
              --rm efcms /bin/sh -c "./web-client/deploy-public.sh"

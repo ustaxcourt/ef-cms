@@ -31,6 +31,9 @@ describe('gotoMessagesSequence', () => {
     applicationContext
       .getUseCases()
       .getInboxMessagesForUserInteractor.mockReturnValue(mockMessages);
+
+    //set token to take 'isLoggedIn' path
+    cerebralTest.setState('token', 'a');
   });
 
   it('should change the page to MyAccount and close the opened menu', async () => {
