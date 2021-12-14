@@ -331,6 +331,8 @@ export const setWhitelistIps = ips => {
   });
 };
 
+export const describeif = condition => (condition ? describe : describe.skip);
+
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
