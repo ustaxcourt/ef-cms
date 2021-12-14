@@ -24,7 +24,7 @@ export const unauthedUserSearchesForOpinionByKeyword = cerebralTest => {
     cerebralTest.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
-        opinionType: 'Memorandum Opinion',
+        opinionTypes: ['Memorandum Opinion'],
         startDate: '01/01/2001',
       },
     });
@@ -40,7 +40,7 @@ export const unauthedUserSearchesForOpinionByKeyword = cerebralTest => {
     cerebralTest.setState('advancedSearchForm', {
       opinionSearch: {
         keyword: 'opinion',
-        opinionType: 'T.C. Opinion',
+        opinionTypes: ['T.C. Opinion'],
         startDate: '01/01/2001',
       },
     });
