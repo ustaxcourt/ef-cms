@@ -754,6 +754,9 @@ const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
+  isCurrentColorActive,
+} = require('../../shared/src/persistence/dynamo/helpers/isCurrentColorActive');
+const {
   isEmailAvailable,
 } = require('../../shared/src/persistence/cognito/isEmailAvailable');
 const {
@@ -914,6 +917,9 @@ const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
+  sealInLowerEnvironment,
+} = require('../../shared/src/business/useCaseHelper/sealInLowerEnvironment');
+const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
@@ -925,6 +931,9 @@ const {
 const {
   sendMaintenanceNotificationsInteractor,
 } = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
+const {
+  sendNotificationOfSealing,
+} = require('../../shared/src/dispatchers/sns/sendNotificationOfSealing');
 const {
   sendNotificationToConnection,
 } = require('../../shared/src/notifications/sendNotificationToConnection');
@@ -1314,6 +1323,7 @@ let s3Cache;
 let sesCache;
 let sqsCache;
 let searchClientCache;
+let notificationServiceCache;
 
 const entitiesByName = {
   Case,
@@ -1612,6 +1622,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
+      sendNotificationOfSealing:
+        process.env.PROD_ENV_ACCOUNT_ID === process.env.AWS_ACCOUNT_ID
+          ? sendNotificationOfSealing
+          : () => {},
     }),
     getDocumentClient,
     getDocumentGenerators: () => ({
@@ -1720,6 +1734,23 @@ module.exports = (appContextUser, logger = createLogger()) => {
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
+    getNotificationService: () => {
+      if (notificationServiceCache) {
+        return notificationServiceCache;
+      }
+
+      if (environment.stage === 'local') {
+        notificationServiceCache = {
+          publish: () => ({
+            promise: () => {},
+          }),
+        };
+      } else {
+        notificationServiceCache = new AWS.SNS({});
+      }
+
+      return notificationServiceCache;
+    },
     getPdfJs: () => {
       const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
@@ -1804,6 +1835,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCounselFromRemovedPetitioner,
         removeCoversheet,
         saveFileAndGenerateUrl,
+        sealInLowerEnvironment,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
@@ -2035,6 +2067,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       };
     },
     isAuthorized,
+    isCurrentColorActive,
     logger: {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),
