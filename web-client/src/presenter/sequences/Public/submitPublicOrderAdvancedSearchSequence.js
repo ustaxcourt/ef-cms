@@ -10,6 +10,7 @@ import { submitPublicOrderAdvancedSearchAction } from '../../actions/Public/subm
 import { validateOrderAdvancedSearchAction } from '../../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
 export const submitPublicOrderAdvancedSearchSequence = [
+  // TODO - check if search enabled?
   clearSearchTermAction,
   validateOrderAdvancedSearchAction,
   {
