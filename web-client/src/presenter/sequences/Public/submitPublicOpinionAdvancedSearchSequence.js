@@ -10,6 +10,7 @@ import { submitPublicOpinionAdvancedSearchAction } from '../../actions/Public/su
 import { validateOpinionAdvancedSearchAction } from '../../actions/AdvancedSearch/validateOpinionAdvancedSearchAction';
 
 export const submitPublicOpinionAdvancedSearchSequence = [
+  // TODO - check if search enabled?
   clearSearchTermAction,
   validateOpinionAdvancedSearchAction,
   {

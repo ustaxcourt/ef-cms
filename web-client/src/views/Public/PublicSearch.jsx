@@ -82,10 +82,15 @@ export const PublicSearch = connect(
               <DocumentSearchResults />
             </Tab>
             <Tab
-              disabled
+              disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
               id="tab-opinion"
               tabName="opinion"
-              title="Opinion (Coming Soon)"
+              title={
+                'Opinion' +
+                (featureFlagHelper.isOpinionSearchEnabledForRole
+                  ? ''
+                  : ' (Coming Soon)')
+              }
             >
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
