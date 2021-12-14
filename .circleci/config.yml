@@ -591,21 +591,19 @@ jobs:
       - run:
           name: Deploy Migration Cron Lambda
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-                -e "CI=${CI}" \
-                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-                -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-                -e "SOURCE_TABLE=${SOURCE_TABLE}" \
-                -e "ZONE_NAME=${ZONE_NAME}" \
-                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-                -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
-                -e "CIRCLE_MACHINE_USER_TOKEN=${CIRCLE_MACHINE_USER_TOKEN}" \
-                -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
-                --rm efcms /bin/sh -c "npm run deploy:migration-cron -- ${ENV}"
-            fi
+            docker run \
+              -e "CI=${CI}" \
+              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
+              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
+              -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
+              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+              -e "SOURCE_TABLE=${SOURCE_TABLE}" \
+              -e "ZONE_NAME=${ZONE_NAME}" \
+              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
+              -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
+              -e "CIRCLE_MACHINE_USER_TOKEN=${CIRCLE_MACHINE_USER_TOKEN}" \
+              -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
+              --rm efcms /bin/sh -c "npm run deploy:migration-cron -- ${ENV}"
       - run:
           name: Setup Migration Infrastructure
           command: |

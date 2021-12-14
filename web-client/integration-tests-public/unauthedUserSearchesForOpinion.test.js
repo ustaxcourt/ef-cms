@@ -5,8 +5,7 @@ import { unauthedUserSearchesForOpinionByKeyword } from './journey/unauthedUserS
 
 const cerebralTest = setupTest();
 
-// To be enabled once public has permission to search for opinions
-describe.skip('Unauthed user searches for an opinion by keyword', () => {
+describe('Unauthed user searches for an opinion by keyword', () => {
   unauthedUserNavigatesToPublicSite(cerebralTest);
   unauthedUserInvalidSearchForOpinion(cerebralTest);
   unauthedUserSearchesForOpinionByKeyword(cerebralTest);

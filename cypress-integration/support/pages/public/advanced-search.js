@@ -16,11 +16,7 @@ exports.enterPetitionerName = name => {
 };
 
 exports.enterDocumentKeywordForOpinionSearch = keyword => {
-  cy.get('input#opinion-search').type(keyword);
-};
-
-exports.enterStartDateForOpinionSearch = date => {
-  cy.get('input#startDate-date-start').type(date);
+  cy.get('input#keyword-search').type(keyword);
 };
 
 exports.enterDocumentDocketNumber = docketNumber => {
