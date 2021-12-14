@@ -148,7 +148,7 @@ jobs:
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
-      # - npm-install
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
