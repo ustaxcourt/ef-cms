@@ -72,7 +72,7 @@ describe('updateTrialSessionAction', () => {
   it('goes to error path if error', async () => {
     applicationContext
       .getUseCases()
-      .updateTrialSessionInteractor.mockRejectedValue(new Error('bad'));
+      .updateTrialSessionInteractor.mockRejectedValueOnce(new Error('bad'));
 
     await runAction(updateTrialSessionAction, {
       modules: {

@@ -1,4 +1,28 @@
 version: 2.1
+commands:
+  checkout-and-cache-source-code:
+    steps:
+      - restore_cache:
+          name: Source - Restoring Cache
+          keys:
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
+            - source-{{ .Environment.CACHE_VERSION }}-
+      - checkout
+      - save_cache:
+          name: Source - Saving Cache
+          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
+          paths:
+            - '.git'
+  npm-install:
+    steps:
+      - run:
+          name: NPM Install
+          command: |
+            npm set progress=false
+            npm ci
+            npm rebuild
+
 jobs:
   build-client-integration:
     docker:
@@ -18,49 +42,35 @@ jobs:
     resource_class: large
     parallelism: 8
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create web-client Artifacts Directory
           command: mkdir /tmp/web-client/
       - run:
           name: Web Client - Integration Test
           command: |
+            CI=true \
             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
-             QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
-             DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
-             S3_ENDPOINT=http://localhost:9000 \
-             SKIP_CACHE_INVALIDATION=true \
-             AWS_ACCESS_KEY_ID=S3RVER \
-             AWS_SECRET_ACCESS_KEY=S3RVER \
-             npm run start:api:ci > /tmp/web-client/server-output.txt &
-            ./wait-until.sh http://localhost:4000/api/swagger
+            QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
+            DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
+            S3_ENDPOINT=http://localhost:9000 \
+            SKIP_CACHE_INVALIDATION=true \
+            AWS_ACCESS_KEY_ID=S3RVER \
+            AWS_SECRET_ACCESS_KEY=S3RVER \
+            npm run start:api:ci > /tmp/web-client/server-output.txt &
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
-            CI=true NO_SCANNER=true \
-             SKIP_VIRUS_SCAN=true \
-             AWS_ACCESS_KEY_ID=S3RVER \
-             AWS_SECRET_ACCESS_KEY=S3RVER \
-             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
-             QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
-             DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
-             S3_ENDPOINT=http://localhost:9000 \
-             npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
+            NO_SCANNER=true \
+            SKIP_VIRUS_SCAN=true \
+            IS_LOCAL=true \
+            AWS_ACCESS_KEY_ID=S3RVER \
+            AWS_SECRET_ACCESS_KEY=S3RVER \
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+            QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
+            DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
+            S3_ENDPOINT=http://localhost:9000 \
+            npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
@@ -86,30 +96,15 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
       - run:
           name: Pa11y
           environment:
+            CI: true
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
             QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
@@ -121,12 +116,13 @@ jobs:
           command: |
             npm run build:all
             npx --no-install run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
-            ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
+            URL=http://localhost:1234 ./wait-until.sh
             sleep 10
-            npm run test:pa11y:1 --node-flags --max-old-space-size=1536
-            npm run test:pa11y:2 --node-flags --max-old-space-size=1536
-            npm run test:pa11y:3 --node-flags --max-old-space-size=1536
+            npm run test:pa11y:1 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:2 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -149,30 +145,15 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
       - run:
           name: Pa11y
           environment:
+            CI: true
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
             QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
@@ -185,7 +166,7 @@ jobs:
             npm run build:all
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:5000/ 404
+            URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
             sleep 10
             npm run test:pa11y:public --node-flags --max-old-space-size=1536
       - store_artifacts:
@@ -210,30 +191,15 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
           command: mkdir /tmp/pa11y
       - run:
           name: Pa11y
           environment:
+            CI: true
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
             QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
@@ -246,7 +212,7 @@ jobs:
             npm run build:all
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:5000/ 404
+            URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
             sleep 10
             npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
       - store_artifacts:
@@ -271,30 +237,15 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
       - run:
           name: Cypress
           environment:
+            CI: true
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
             QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
@@ -309,9 +260,9 @@ jobs:
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-            npx --no-install run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+            npx --no-install run-p start:api:ci start:client:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
             sleep 5
             npm run cypress:integration
       - store_artifacts:
@@ -336,30 +287,15 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
       - run:
           name: Cypress
           environment:
+            CI: true
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
             QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
@@ -376,7 +312,7 @@ jobs:
             fi
             npx --no-install run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
             sleep 5
             npm run cypress:smoketests:local
       - store_artifacts:
@@ -401,30 +337,15 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: deps-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - checkout-and-cache-source-code
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
       - run:
           name: Cypress
           environment:
+            CI: true
             SKIP_CACHE_INVALIDATION: true
             TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
             QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
@@ -441,7 +362,7 @@ jobs:
             fi
             npx --no-install run-p start:api:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
-            ./wait-until.sh http://localhost:4000/api/swagger
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
             sleep 5
             npm run cypress:integration:public
       - store_artifacts:
@@ -476,6 +397,7 @@ jobs:
               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
               -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
               -e "ZONE_NAME=${ZONE_NAME}" \
+              -e "CI=${CI}" \
               -e "ENV=${ENV}" \
               --rm efcms /bin/sh -c "./setup-for-blue-green-migration.sh"
       - run:
@@ -489,6 +411,7 @@ jobs:
           name: 'Deploy - Web API - Terraform'
           command: |
             docker run \
+             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "CIRCLE_BRANCH=${CIRCLE_BRANCH}" \
@@ -513,6 +436,7 @@ jobs:
           name: 'Deploy - Web Client - Terraform'
           command: |
             docker run \
+             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
@@ -529,6 +453,7 @@ jobs:
           name: Setup Elasticsearch Index Settings
           command: |
             docker run \
+             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
@@ -572,6 +497,7 @@ jobs:
           name: 'Deploy - Web API - Cognito Customize'
           command: |
             docker run \
+             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-ui.sh ${ENV}"
@@ -580,6 +506,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               docker run \
+               -e "CI=${CI}" \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "CURRENT_COLOR=${CURRENT_COLOR}" \
@@ -594,6 +521,7 @@ jobs:
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
               docker run \
+               -e "CI=${CI}" \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "CURRENT_COLOR=${CURRENT_COLOR}" \
@@ -607,6 +535,7 @@ jobs:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
             docker run \
+             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
@@ -617,6 +546,7 @@ jobs:
           name: 'Deploy - Verify Private S3 Buckets'
           command: |
             docker run \
+             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
@@ -625,6 +555,7 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             docker run \
+             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
@@ -652,11 +583,16 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            docker build -t efcms -f Dockerfile .
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
+              docker build -t efcms -f Dockerfile .
+            fi
       - run:
           name: Deploy Migration Cron Lambda
           command: |
             docker run \
+              -e "CI=${CI}" \
               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
               -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
@@ -673,6 +609,7 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               docker run \
+               -e "CI=${CI}" \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
@@ -690,6 +627,7 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               docker run \
+               -e "CI=${CI}" \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -702,6 +640,7 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               docker run \
+               -e "CI=${CI}" \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
@@ -719,6 +658,7 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               docker run \
+               -e "CI=${CI}" \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -730,6 +670,7 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               docker run \
+                -e "CI=${CI}" \
                 -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                 -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
                 -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -741,6 +682,7 @@ jobs:
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
               docker run \
+                -e "CI=${CI}" \
                 -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                 -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
                 -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -752,11 +694,12 @@ jobs:
           name: Enable Check Reindex Status Cron
           command: |
             docker run \
+               -e "CI=${CI}" \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./enable-reindex-cron.sh "
+               --rm efcms /bin/sh -c "./enable-reindex-cron.sh"
 
   disable-reindex-cron:
     machine:
@@ -772,11 +715,14 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
+            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
       - run:
           name: Disable Check Reindex Status Cron
           command: |
             docker run \
+               -e "CI=${CI}" \
                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
                -e "ENV=${ENV}" \
@@ -791,12 +737,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -827,12 +768,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -873,12 +809,7 @@ jobs:
     resource_class: large
     steps:
       - checkout
-      - run:
-          name: NPM - Install
-          command: |
-            npm set progress=false
-            npm ci
-            npm rebuild
+      - npm-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress

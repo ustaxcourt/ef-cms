@@ -131,7 +131,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENVIRONMENT}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"blue"}}'
     ```
 
-13. Setup the environment's internal order search flag:
+13. Setup all database configuration flags:
     ```bash
     ./scripts/setup-all-env-configuration.sh <ENVIRONMENT>
     ```

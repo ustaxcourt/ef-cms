@@ -179,7 +179,6 @@ export const AppComponent = connect(
   {
     currentPage: state.currentPage,
     showModal: state.modal.showModal,
-    token: state.token,
     userContactEditInProgress: state.userContactEditProgress.inProgress,
     zipInProgress: state.batchDownloads.zipInProgress,
   },

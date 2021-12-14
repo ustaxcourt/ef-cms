@@ -1,4 +1,3 @@
-const querystring = require('querystring');
 const { get } = require('../requests');
 
 /**
@@ -10,10 +9,11 @@ const { get } = require('../requests');
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getPractitionersByNameInteractor = (applicationContext, { name }) => {
-  const queryString = querystring.stringify({ name });
-
   return get({
     applicationContext,
-    endpoint: `/practitioners?${queryString}`,
+    endpoint: '/practitioners',
+    params: {
+      name,
+    },
   });
 };
