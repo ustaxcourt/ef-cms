@@ -11,9 +11,9 @@
 MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)
 
 # disabling aws pager https://github.com/aws/aws-cli/pull/4702#issue-344978525
-AWS_PAGER=""
+export AWS_PAGER=""
 # disable pager to newer cli version
-PAGER=""
+export PAGER=""
 
 # exit on any failure
 set -eo pipefail

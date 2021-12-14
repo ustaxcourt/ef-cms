@@ -10,6 +10,9 @@ exports.goToEditContactInformation = () => {
 };
 
 exports.updateAddress1 = () => {
+  cy.get('.progress-indicator').should('not.exist');
+  cy.get('h1').contains('Edit Contact Information').should('exist');
+
   cy.get('input[id=contact\\.address1]')
     .clear()
     .type(faker.address.streetAddress());
