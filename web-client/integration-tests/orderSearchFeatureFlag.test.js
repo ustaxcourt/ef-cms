@@ -5,20 +5,20 @@ import {
 import {
   getFeatureFlagHelper,
   loginAs,
-  setOpinionSearchEnabled,
+  setOrderSearchEnabled,
   setupTest,
-} from '../integration-tests/helpers';
+} from './helpers';
 const cerebralTest = setupTest();
 
-describe('Opinion search feature flags', () => {
+describe('Order search feature flags', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
 
   afterAll(async () => {
     cerebralTest.closeSocket();
-    await setOpinionSearchEnabled(true, 'internal');
-    await setOpinionSearchEnabled(true, 'external');
+    await setOrderSearchEnabled(true, 'internal');
+    await setOrderSearchEnabled(true, 'external');
   });
 
   describe('internal', () => {
@@ -26,18 +26,18 @@ describe('Opinion search feature flags', () => {
 
     it('should display a warning message when the feature is disabled', async () => {
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
+      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
-      await setOpinionSearchEnabled(false, 'internal');
+      await setOrderSearchEnabled(false, 'internal');
 
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+      await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
       const stateOfAdvancedSearch = cerebralTest.getState('advancedSearchTab');
       const stateOfAlertWarning = cerebralTest.getState('alertWarning');
 
       expect(stateOfAdvancedSearch).toEqual(ADVANCED_SEARCH_TABS.CASE);
       expect(stateOfAlertWarning.message).toEqual(
-        ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH.disabledMessage,
+        ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.disabledMessage,
       );
     });
 
@@ -50,13 +50,13 @@ describe('Opinion search feature flags', () => {
 
       expect(stateOfAdvancedSearch).toEqual(ADVANCED_SEARCH_TABS.CASE);
       expect(stateOfAlertWarning.message).toEqual(
-        ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH.disabledMessage,
+        ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.disabledMessage,
       );
 
-      const { isOpinionSearchEnabledForRole } =
+      const { isOrderSearchEnabledForRole } =
         getFeatureFlagHelper(cerebralTest);
 
-      expect(isOpinionSearchEnabledForRole).toEqual(false);
+      expect(isOrderSearchEnabledForRole).toEqual(false);
     });
   });
 
@@ -65,18 +65,18 @@ describe('Opinion search feature flags', () => {
 
     it('should display a warning message when the feature is disabled', async () => {
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
+      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
-      await setOpinionSearchEnabled(false, 'external');
+      await setOrderSearchEnabled(false, 'external');
 
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+      await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
       const stateOfAdvancedSearch = cerebralTest.getState('advancedSearchTab');
       const stateOfAlertWarning = cerebralTest.getState('alertWarning');
 
       expect(stateOfAdvancedSearch).toEqual(ADVANCED_SEARCH_TABS.CASE);
       expect(stateOfAlertWarning.message).toEqual(
-        ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH.disabledMessage,
+        ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.disabledMessage,
       );
     });
 
@@ -89,13 +89,13 @@ describe('Opinion search feature flags', () => {
 
       expect(stateOfAdvancedSearch).toEqual(ADVANCED_SEARCH_TABS.CASE);
       expect(stateOfAlertWarning.message).toEqual(
-        ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH.disabledMessage,
+        ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.disabledMessage,
       );
 
-      const { isOpinionSearchEnabledForRole } =
+      const { isOrderSearchEnabledForRole } =
         getFeatureFlagHelper(cerebralTest);
 
-      expect(isOpinionSearchEnabledForRole).toEqual(false);
+      expect(isOrderSearchEnabledForRole).toEqual(false);
     });
   });
 });

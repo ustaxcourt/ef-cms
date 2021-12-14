@@ -342,6 +342,17 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   });
 };
 
+export const setOrderSearchEnabled = (isEnabled, keyPrefix) => {
+  return client.put({
+    Item: {
+      current: isEnabled,
+      pk: `${keyPrefix}-order-search-enabled`,
+      sk: `${keyPrefix}-order-search-enabled`,
+    },
+    applicationContext,
+  });
+};
+
 export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'inbox',
