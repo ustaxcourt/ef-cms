@@ -29,15 +29,11 @@ describe('verify opinion search works for external users', () => {
       cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
       await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
         keyword: 'sunglasses',
         opinionTypes: {
-          [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
-          [ADVANCED_SEARCH_OPINION_TYPES.Bench]: true,
-          [ADVANCED_SEARCH_OPINION_TYPES.Summary]: true,
           [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true,
         },
-        startDate: '08/03/1995',
       });
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
