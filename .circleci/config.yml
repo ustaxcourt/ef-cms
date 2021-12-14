@@ -583,9 +583,11 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            docker build -t efcms -f Dockerfile .
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
+              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
+              docker build -t efcms -f Dockerfile .
+            fi
       - run:
           name: Deploy Migration Cron Lambda
           command: |
