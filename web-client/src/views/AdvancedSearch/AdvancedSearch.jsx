@@ -102,12 +102,12 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
-                disabled={!featureFlagHelper.isInternalOpinionSearchEnabled}
+                disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
                 title={
                   'Opinion' +
-                  (featureFlagHelper.isInternalOpinionSearchEnabled
+                  (featureFlagHelper.isOpinionSearchEnabledForRole
                     ? ''
                     : ' (Coming Soon)')
                 }
@@ -164,11 +164,11 @@ export const AdvancedSearch = connect(
                     : ' (Coming Soon)'}
                 </option>
                 <option
-                  disabled={!featureFlagHelper.isInternalOpinionSearchEnabled}
+                  disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
                   value={searchTabs.OPINION}
                 >
                   Opinion
-                  {featureFlagHelper.isInternalOpinionSearchEnabled
+                  {featureFlagHelper.isOpinionSearchEnabledForRole
                     ? ''
                     : ' (Coming Soon)'}
                 </option>
