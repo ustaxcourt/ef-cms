@@ -157,15 +157,7 @@ export const AdvancedSearch = connect(
                     ? ''
                     : ' (Coming Soon)'}
                 </option>
-                <option
-                  disabled={!featureFlagHelper.isInternalOpinionSearchEnabled}
-                  value={searchTabs.OPINION}
-                >
-                  Opinion
-                  {featureFlagHelper.isInternalOpinionSearchEnabled
-                    ? ''
-                    : ' (Coming Soon)'}
-                </option>
+                <option value={searchTabs.OPINION}>Opinion</option>
                 <option value={searchTabs.PRACTITIONER}>Practitioner</option>
               </select>
             </div>
