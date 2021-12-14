@@ -99,7 +99,6 @@ jobs:
     resource_class: xlarge
     steps:
       - git-shallow-clone/checkout
-      # - checkout-and-cache-source-code
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -192,7 +191,6 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      # - checkout-and-cache-source-code
       - git-shallow-clone/checkout
       - npm-install
       - run:
