@@ -10,7 +10,7 @@ import {
 } from '../integration-tests/helpers';
 const cerebralTest = setupTest();
 
-describe('verify opinion search is disabled when feature flag is turned off', () => {
+describe('Opinion search feature flags', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -20,10 +20,10 @@ describe('verify opinion search is disabled when feature flag is turned off', ()
     await setOpinionSearchEnabled(true);
   });
 
-  describe('docket clerk performs opinion search', () => {
+  describe('internal', () => {
     loginAs(cerebralTest, 'docketclerk1@example.com');
 
-    it('turns feature flag off to verify alert shows up', async () => {
+    it('should display warning message when feature is disabled', async () => {
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
       cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
@@ -40,7 +40,7 @@ describe('verify opinion search is disabled when feature flag is turned off', ()
       );
     });
 
-    it('alert should still be visible after a page reroute', async () => {
+    it('should preserve warning message when user reroutes back to opinion search', async () => {
       await cerebralTest.runSequence('gotoDashboardSequence');
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
 
@@ -56,6 +56,45 @@ describe('verify opinion search is disabled when feature flag is turned off', ()
         getFeatureFlagHelper(cerebralTest);
 
       expect(isInternalOpinionSearchEnabled).toEqual(false);
+    });
+  });
+
+  describe('external', () => {
+    loginAs(cerebralTest, 'petitioner1@example.com');
+
+    it('should display warning message when feature is disabled', async () => {
+      await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
+
+      await setOpinionSearchEnabled(false);
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+
+      const stateOfAdvancedSearch = cerebralTest.getState('advancedSearchTab');
+      const stateOfAlertWarning = cerebralTest.getState('alertWarning');
+
+      expect(stateOfAdvancedSearch).toEqual(ADVANCED_SEARCH_TABS.CASE);
+      expect(stateOfAlertWarning.message).toEqual(
+        ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH.disabledMessage,
+      );
+    });
+
+    it('should preserve warning message when user reroutes back to opinion search', async () => {
+      await cerebralTest.runSequence('gotoDashboardSequence');
+      await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+
+      const stateOfAdvancedSearch = cerebralTest.getState('advancedSearchTab');
+      const stateOfAlertWarning = cerebralTest.getState('alertWarning');
+
+      expect(stateOfAdvancedSearch).toEqual(ADVANCED_SEARCH_TABS.CASE);
+      expect(stateOfAlertWarning.message).toEqual(
+        ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH.disabledMessage,
+      );
+
+      const { isExternalOpinionSearchEnabled } =
+        getFeatureFlagHelper(cerebralTest);
+
+      expect(isExternalOpinionSearchEnabled).toEqual(false);
     });
   });
 });
