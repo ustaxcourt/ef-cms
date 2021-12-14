@@ -182,6 +182,7 @@ const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
+const { sealCaseInteractor } = require('../useCases/sealCaseInteractor');
 const { serveCaseDocument } = require('../utilities/serveCaseDocument');
 const { setItem } = require('../../persistence/localStorage/setItem');
 const { setPdfFormFields } = require('../useCaseHelper/pdf/setPdfFormFields');
@@ -372,6 +373,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCases = appContextProxy({
+    sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),
@@ -532,6 +534,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     postMessage: jest.fn(),
   };
 
+  const mockGetNotificationService = {
+    publish: jest.fn().mockReturnValue({
+      promise: () => Promise.resolve('ok'),
+    }),
+  };
+
   const applicationContext = {
     ...sharedAppContext,
     barNumberGenerator: {
@@ -590,6 +598,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
+      sendNotificationOfSealing: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
@@ -612,6 +621,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
+    getNotificationService: jest
+      .fn()
+      .mockReturnValue(mockGetNotificationService),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,

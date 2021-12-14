@@ -507,6 +507,8 @@ jobs:
              -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
              -e "BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}" \
              -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
+             -e "PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}" \
+             -e "LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           no_output_timeout: 20m
