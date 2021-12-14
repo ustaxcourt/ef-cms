@@ -15,7 +15,7 @@ import { validateOrderAdvancedSearchAction } from '../../actions/AdvancedSearch/
 
 export const submitPublicOrderAdvancedSearchSequence = [
   getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH,
+    getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
   ),
   {
     no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
