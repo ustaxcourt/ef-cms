@@ -11,7 +11,7 @@ export const JudgeSelect = connect(
   function JudgeSelect({ formValue, judges }) {
     return (
       <>
-        <label className="usa-label" htmlFor="order-date-range">
+        <label className="usa-label" htmlFor="date-range">
           Judge
         </label>
         <BindedSelect
