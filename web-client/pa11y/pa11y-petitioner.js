@@ -1,9 +1,9 @@
 module.exports = [
-  'http://localhost:1234/mock-login?token=petitioner&path=/',
-  'http://localhost:1234/mock-login?token=petitioner&path=/before-starting-a-case',
-  'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-1',
-  'http://localhost:1234/mock-login?token=petitioner&path=/my-account',
-  'http://localhost:1234/mock-login?token=petitioner&path=/change-login-and-service-email',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/before-starting-a-case',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-1',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/my-account',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/change-login-and-service-email',
   {
     actions: [
       'wait for element label#hasIrsNotice-0 to be visible',
@@ -11,7 +11,7 @@ module.exports = [
       'wait for .case-type-select to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for Yes notice',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-2&info=reveal-hidden-elements-yes-notice',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-2&info=reveal-hidden-elements-yes-notice',
   },
   {
     actions: [
@@ -20,7 +20,7 @@ module.exports = [
       'wait for .case-type-select to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for No notice',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-2&info=reveal-hidden-elements-no-notice',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-2&info=reveal-hidden-elements-no-notice',
   },
   {
     actions: [
@@ -29,7 +29,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Petitioner',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner',
   },
   {
     actions: [
@@ -41,7 +41,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-deceased-spouse',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-deceased-spouse',
   },
   {
     actions: [
@@ -61,7 +61,7 @@ module.exports = [
       'expose hidden elements on start-a-case for party type Petitioner & Deceased Spouse with international addresses',
       "Use 'set field' and then 'check field' to trigger the onChange event on the select",
     ],
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-deceased-spouse-international',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-deceased-spouse-international',
   },
   {
     actions: [
@@ -73,7 +73,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Petitioner & Spouse',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-spouse',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-petitioner-and-spouse',
   },
   {
     actions: [
@@ -84,7 +84,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Corporation',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-corporation',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-corporation',
   },
   {
     actions: [
@@ -96,7 +96,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Partnership (Tax Matters)',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-tax-matters',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-tax-matters',
   },
   {
     actions: [
@@ -108,7 +108,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Partnership (Other Than Tax Matters)',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-other',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-other',
   },
   {
     actions: [
@@ -120,7 +120,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Partnership (BBA)',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-bba',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-partnership-bba',
   },
   {
     actions: [
@@ -134,7 +134,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Estate With Executor',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-estate-with-executor',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-estate-with-executor',
   },
   {
     actions: [
@@ -148,7 +148,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Estate Without Executor',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-estate-without-executor',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-estate-without-executor',
   },
   {
     actions: [
@@ -161,7 +161,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Trust',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-trust',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-trust',
   },
   {
     actions: [
@@ -174,7 +174,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Conservator',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-conservator',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-conservator',
   },
   {
     actions: [
@@ -187,7 +187,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Guardian',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-guardian',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-guardian',
   },
   {
     actions: [
@@ -200,7 +200,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Custodian',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-custodian',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-custodian',
   },
   {
     actions: [
@@ -213,7 +213,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Minor',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-minor',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-minor',
   },
   {
     actions: [
@@ -227,7 +227,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Legally Incompetent Person',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-incompetent-person',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-incompetent-person',
   },
   {
     actions: [
@@ -238,7 +238,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Donor',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-donor',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-donor',
   },
   {
     actions: [
@@ -249,7 +249,7 @@ module.exports = [
       'wait for element .contact-group to be visible',
     ],
     notes: 'expose hidden elements on start-a-case for party type Transferee',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-transferee',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-transferee',
   },
   {
     actions: [
@@ -261,7 +261,7 @@ module.exports = [
     ],
     notes:
       'expose hidden elements on start-a-case for party type Surviving Spouse',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-surviving-spouse',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-3&info=reveal-hidden-elements-surviving-spouse',
   },
   {
     actions: [
@@ -274,11 +274,11 @@ module.exports = [
       'wait for #preferred-trial-city to be visible',
     ],
     notes: 'expose all hidden elements on start-a-case',
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/file-a-petition-pa11y/step-4&info=reveal-hidden-elements',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/file-a-petition-pa11y/step-4&info=reveal-hidden-elements',
   },
-  'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19',
-  'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document',
-  'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document/review',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document/review',
   {
     actions: [
       'wait for element #react-select-2-input to be visible',
@@ -289,7 +289,7 @@ module.exports = [
     notes: [
       'Check accessibility of elements after choosing a Nonstandard H document',
     ],
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document&info=doctype-selection-1',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-1',
   },
   {
     actions: [
@@ -309,7 +309,7 @@ module.exports = [
       'wait for element #secondary-document to be visible',
     ],
     notes: ['File a document, step 2'],
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/file-a-document&info=doctype-selection-2',
   },
   {
     actions: [
@@ -321,7 +321,7 @@ module.exports = [
     notes: [
       'Check accessibility of view filing fee payment options with filed cases',
     ],
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=',
   },
   {
     actions: [
@@ -329,8 +329,8 @@ module.exports = [
       'click element #pay_filing_fee',
     ],
     notes: ['Check accessibility of Pay filing fee button'],
-    url: 'http://localhost:1234/mock-login?token=petitioner&path=',
+    url: 'http://localhost:1234/log-in?code=petitioner@example.com&path=',
   },
-  'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/primary/edit',
-  'http://localhost:1234/mock-login?token=petitioner&path=/case-detail/101-19/contacts/secondary/edit',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/contacts/primary/edit',
+  'http://localhost:1234/log-in?code=petitioner@example.com&path=/case-detail/101-19/contacts/secondary/edit',
 ];

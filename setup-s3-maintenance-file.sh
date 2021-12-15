@@ -1,19 +1,17 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Sets up the s3 lambda bucket with blue and green files for maintenance-notify code
 
 # Usage
-#   ./setup-s3-maintenance-file.sh dev
+#   ./setup-s3-maintenance-file.sh
 
-# Arguments
-#   - $1 - the environment to check
+./check-env-variables.sh \
+  "ENV" \
+  "EFCMS_DOMAIN" \
+  "AWS_ACCOUNT_ID" \
+  "AWS_ACCESS_KEY_ID" \
+  "AWS_SECRET_ACCESS_KEY"
 
-[ -z "$1" ] && echo "The environment to check must be provided as the \$1 argument." && exit 1
-[ -z "${AWS_ACCESS_KEY_ID}" ] && echo "You must have AWS_ACCESS_KEY_ID set in your environment" && exit 1
-[ -z "${AWS_SECRET_ACCESS_KEY}" ] && echo "You must have AWS_SECRET_ACCESS_KEY set in your environment" && exit 1
-[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
-
-ENV=$1
 BUCKET_NAME_EAST="${EFCMS_DOMAIN}.efcms.${ENV}.us-east-1.lambdas"
 BUCKET_NAME_WEST="${EFCMS_DOMAIN}.efcms.${ENV}.us-west-1.lambdas"
 

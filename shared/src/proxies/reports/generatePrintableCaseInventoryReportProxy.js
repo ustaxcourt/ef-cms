@@ -1,4 +1,3 @@
-const querystring = require('querystring');
 const { get } = require('../requests');
 
 /**
@@ -14,10 +13,9 @@ exports.generatePrintableCaseInventoryReportInteractor = (
   applicationContext,
   { associatedJudge, status },
 ) => {
-  const queryString = querystring.stringify({ associatedJudge, status });
-
   return get({
     applicationContext,
-    endpoint: `/reports/printable-case-inventory-report?${queryString}`,
+    endpoint: '/reports/printable-case-inventory-report',
+    params: { associatedJudge, status },
   });
 };

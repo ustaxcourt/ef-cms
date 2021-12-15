@@ -20,7 +20,7 @@ describe('loadPDFForPreviewInteractor', () => {
   it('should throw an error when getDocument returns an error', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getDocument.mockRejectedValue(
+      .getDocument.mockRejectedValueOnce(
         new Error('some internal exception message that will not be seen'),
       );
 

@@ -31,7 +31,11 @@ describe('Docket clerk verifies high priority case is not blocked', () => {
   petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, fakeFile);
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
+    cerebralTest,
+    fakeFile,
+    'EVID',
+  );
 
   it('verify that the high-priority case is not automaticBlocked', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

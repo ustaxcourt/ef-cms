@@ -20,9 +20,9 @@ import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsCle
 import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
 import { petitionsClerkViewsATrialSessionsEligibleCases } from './journey/petitionsClerkViewsATrialSessionsEligibleCases';
 
-const cerebralTest = setupTest();
-
 describe('Blocking a Case', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(50000);
   });
