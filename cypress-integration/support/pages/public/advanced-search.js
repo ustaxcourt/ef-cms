@@ -23,6 +23,12 @@ exports.enterDocumentDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
 };
 
+exports.unselectOpinionTypes = opinionTypes => {
+  opinionTypes.forEach(opinionType => {
+    cy.get('label').contains(opinionType).click();
+  });
+};
+
 exports.searchForCaseByPetitionerInformation = () => {
   cy.get('button#advanced-search-button').click();
 };
@@ -37,6 +43,10 @@ exports.noSearchResultsContainer = () => {
 
 exports.searchResultsTable = () => {
   return cy.get('table.search-results');
+};
+
+exports.firstSearchResultJudgeField = () => {
+  return cy.contains('td', 'Foley');
 };
 
 exports.docketRecordTable = () => {
