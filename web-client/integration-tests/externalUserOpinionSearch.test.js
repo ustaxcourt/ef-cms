@@ -8,18 +8,70 @@ import {
   setOpinionSearchEnabled,
   setupTest,
   updateOpinionForm,
+  uploadPetition,
 } from '../integration-tests/helpers';
+import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 const cerebralTest = setupTest();
 
 describe('verify opinion search works for external users', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
+  // case 1 - sealed case
+  // log in as associated private practitioner and search for opinion
+  // log in as associated irs practitioner and search for opinion
+
+  // case 2 - not-sealed case
+  // log in as associated private practitioner and search for opinion
+  // log in as associated irs practitioner and search for opinion
+
+  // case 3 - sealed case
+  // log in as non-associated private practitioner and search for opinion
+  // log in as non-associated irs practitioner and search for opinion
+
+  // case 4 - not-sealed case
+  // log in as non-associated private practitioner and search for opinion
+  // log in as non-associated irs practitioner and search for opinion
 
   afterAll(async () => {
     cerebralTest.closeSocket();
     await setOpinionSearchEnabled(true);
   });
+
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('Create test case 1', async () => {
+    // log in as petitioner and create a case
+    const caseDetail = await uploadPetition(cerebralTest, {});
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    // log in as petitions clerk (or docket clerk?), add practitioners and serve petition
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkAddsPractitionersToCase(cerebralTest);
+    petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+    // log in as docket clerk
+    loginAs(cerebralTest, 'docketclerk@example.com');
+  });
+
+  it('Create test case 2', async () => {
+    // log in as petitioner and create a case
+    const caseDetail = await uploadPetition(cerebralTest, {});
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+
+    // log in as petitions clerk (or docket clerk?), add practitioners and serve petition
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkAddsPractitionersToCase(cerebralTest);
+    petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+    // log in as docket clerk
+    loginAs(cerebralTest, 'docketclerk@example.com');
+  });
+
+  // add opinion, serve opinion
+  // seal case 1
 
   describe('private practitioner performs opinion search', () => {
     loginAs(cerebralTest, 'privatePractitioner@example.com');
@@ -238,5 +290,31 @@ describe('verify opinion search works for external users', () => {
         expect(stateOfAdvancedSearch).toEqual([]);
       });
     });
+
+    // describe('unsealed and associated', () => {
+    //   loginAs(cerebralTest, 'petitioner@example.com');
+    //   it('Create test case', async () => {
+    //     const caseDetail = await uploadPetition(cerebralTest, {
+    //       contactSecondary: {
+    //         address1: '734 Cowley Parkway',
+    //         city: 'Amazing',
+    //         countryType: COUNTRY_TYPES.DOMESTIC,
+    //         name: 'Jimothy Schultz',
+    //         phone: '+1 (884) 358-9729',
+    //         postalCode: '77546',
+    //         state: 'AZ',
+    //       },
+    //       partyType: PARTY_TYPES.petitionerSpouse,
+    //     });
+    //     expect(caseDetail.docketNumber).toBeDefined();
+    //     cerebralTest.docketNumber = caseDetail.docketNumber;
+    //   });
+    //
+    //   loginAs(cerebralTest, 'petitionsclerk@example.com');
+    //
+    //   it('should return record', async () => {
+    //     await addPracti;
+    //   });
+    // });
   });
 });
