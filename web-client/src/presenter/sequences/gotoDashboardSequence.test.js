@@ -33,11 +33,12 @@ describe('gotoDashboardSequence', () => {
     applicationContext
       .getUseCases()
       .getClosedCasesInteractor.mockReturnValue(closedCases);
+
+    //set token to take 'isLoggedIn' path
+    cerebralTest.setState('token', 'a');
   });
 
   it('should set up state for petitioner going to dashboard', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(user);
-
     await cerebralTest.runSequence('gotoDashboardSequence');
 
     expect(cerebralTest.getState()).toMatchObject({
@@ -48,8 +49,6 @@ describe('gotoDashboardSequence', () => {
   });
 
   it('should start a websocket connection', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(user);
-
     await cerebralTest.runSequence('gotoDashboardSequence');
 
     expect(startSocketMock).toHaveBeenCalled();

@@ -34,7 +34,6 @@ exports.getTodaysOrdersInteractor = async (
       documentEventCodes: ORDER_EVENT_CODES,
       endDate: currentDateEnd,
       from,
-      isOpinionSearch: false,
       omitSealed: true,
       overrideResultSize: TODAYS_ORDERS_PAGE_SIZE,
       sortOrder: todaysOrdersSort,

@@ -5,6 +5,7 @@
  * @param {object} providers the providers object
  * @param {string} providers.key the key of the document to sanitize
  */
+
 exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
@@ -18,9 +19,10 @@ exports.sanitizePdfInteractor = async (applicationContext, { key }) => {
 
   const pdfDoc = await PDFDocument.load(pdfData, { ignoreEncryption: true });
   const form = pdfDoc.getForm();
-  const fieldCount = form.getFields().length;
+  const fields = form.getFields();
 
-  if (fieldCount > 0) {
+  if (fields.length > 0) {
+    applicationContext.getUseCaseHelpers().setPdfFormFields(fields);
     form.flatten();
     const pdfBytes = await pdfDoc.save();
 
