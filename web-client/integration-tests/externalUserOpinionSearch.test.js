@@ -43,7 +43,7 @@ describe('verify opinion search works for external users', () => {
         `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
       );
 
-      expect(stateOfAdvancedSearch).toEqual(
+      expect(stateOfAdvancedSearch).toMatchObject(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
@@ -77,7 +77,7 @@ describe('verify opinion search works for external users', () => {
         `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
       );
 
-      expect(stateOfAdvancedSearch).not.toEqual(
+      expect(stateOfAdvancedSearch).not.toMatchObject(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
@@ -119,7 +119,7 @@ describe('verify opinion search works for external users', () => {
         'results',
         cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
       );
-      expect(stateOfAdvancedSearch).toEqual(
+      expect(stateOfAdvancedSearch).toMatchObject(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
@@ -134,5 +134,8 @@ describe('verify opinion search works for external users', () => {
         ]),
       );
     });
+
+    // Private/IRS practitioner accesses Opinion Search, searches using combination of keyword/phrase and filters. Results list is returned.
+    it('should return results with keyword/phrase and filters', async () => {});
   });
 });
