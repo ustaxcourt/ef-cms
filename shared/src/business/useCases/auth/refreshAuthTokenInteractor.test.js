@@ -22,4 +22,12 @@ describe('refreshAuthTokenInteractor', () => {
       token: 'abc',
     });
   });
+
+  it('throws an exception if not refresh token is passed in', async () => {
+    await expect(
+      refreshAuthTokenInteractor(applicationContext, {
+        refreshToken: undefined,
+      }),
+    ).rejects.toThrow('refreshToken is required');
+  });
 });
