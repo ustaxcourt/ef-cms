@@ -144,11 +144,12 @@ const app = {
     presenter.state.cognitoLoginUrl = applicationContext.getCognitoLoginUrl();
     presenter.state.constants = applicationContext.getConstants();
 
-    if (
+    const shouldRefreshToken =
       !wasAppLoadedFromACognitoLogin(window.location.href) &&
       !wasLoginUsingTokenInUrl(window.location.href) &&
-      !isOnMockLogin(window.location.href)
-    ) {
+      !isOnMockLogin(window.location.href);
+
+    if (shouldRefreshToken) {
       try {
         const response = await applicationContext
           .getUseCases()
@@ -305,6 +306,10 @@ const app = {
     presenter.providers.socket = { start, stop };
 
     const cerebralApp = App(presenter, debugTools);
+
+    if (shouldRefreshToken) {
+      await cerebralApp.getSequence('startRefreshIntervalSequence')();
+    }
 
     initializeSocketProvider(cerebralApp, applicationContext);
     router.initialize(cerebralApp, route);
