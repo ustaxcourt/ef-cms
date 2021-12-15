@@ -23,6 +23,7 @@ describe('verify opinion search works for external users', () => {
 
   describe('private practitioner performs opinion search', () => {
     loginAs(cerebralTest, 'privatePractitioner@example.com');
+
     it('should return an opinion from a sealed case', async () => {
       // Private/IRS practitioner accesses Opinion Search, searches for Opinion in sealed case, Opinion is returned in results list.
       await cerebralTest.runSequence('gotoAdvancedSearchSequence');
@@ -171,6 +172,59 @@ describe('verify opinion search works for external users', () => {
         await updateOpinionForm(cerebralTest, {
           dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
           docketNumber: '200-20',
+          keyword: 'sunglasses',
+        });
+
+        await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+        expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+        const stateOfAdvancedSearch = cerebralTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+        );
+
+        expect(stateOfAdvancedSearch).toEqual([]);
+      });
+
+      it('should return results with keyword/phrase and filters for Petitioner/case name', async () => {
+        await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+        cerebralTest.setState(
+          'advancedSearchTab',
+          ADVANCED_SEARCH_TABS.OPINION,
+        );
+
+        await updateOpinionForm(cerebralTest, {
+          caseTitleOrPetitioner: 'Astra Santiago',
+          dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+          keyword: 'sunglasses',
+        });
+
+        await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+        expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+        const stateOfAdvancedSearch = cerebralTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+        );
+
+        expect(stateOfAdvancedSearch).toMatchObject(
+          expect.arrayContaining([
+            expect.objectContaining({
+              docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+              documentTitle:
+                'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
+            }),
+          ]),
+        );
+      });
+
+      it('should NOT return results with keyword/phrase and filters for docket record', async () => {
+        await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+        cerebralTest.setState(
+          'advancedSearchTab',
+          ADVANCED_SEARCH_TABS.OPINION,
+        );
+
+        await updateOpinionForm(cerebralTest, {
+          caseTitleOrPetitioner: 'Anything',
           keyword: 'sunglasses',
         });
 
