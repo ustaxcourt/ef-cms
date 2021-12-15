@@ -10,6 +10,7 @@ const {
   searchForCaseByDocketNumber,
   searchForCaseByPetitionerInformation,
   searchForDocuments,
+  searchForOrderByJudge,
   searchResultsTable,
 } = require('../../support/pages/public/advanced-search');
 
@@ -45,6 +46,16 @@ describe('Advanced search', () => {
       enterDocumentKeywordForOpinionSearch('opinion');
       enterStartDateForOpinionSearch('08/03/1995');
       enterDocumentDocketNumber('124-20L');
+      searchForDocuments();
+      expect(searchResultsTable()).to.exist;
+    });
+  });
+
+  describe('order', () => {
+    it('should be able to search for an order by legacy judge', () => {
+      navigateToDashboard();
+      clickOnSearchTab('order');
+      searchForOrderByJudge('Fieri');
       searchForDocuments();
       expect(searchResultsTable()).to.exist;
     });
