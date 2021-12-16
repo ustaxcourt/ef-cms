@@ -53,11 +53,24 @@ describe('Advanced search', () => {
 
   describe('order', () => {
     it('should be able to search for an order by legacy judge', () => {
+      const judgeNameColumnIndex = 5;
+      const wantedLegacyJudge = 'Fieri';
+
       navigateToDashboard();
       clickOnSearchTab('order');
-      searchForOrderByJudge('Fieri');
+      searchForOrderByJudge(wantedLegacyJudge);
       searchForDocuments();
+
       expect(searchResultsTable()).to.exist;
+
+      //assert that every judge in the search result list is the wanted legacy judge
+      cy.get('tr.search-result').each(element => {
+        cy.wrap(element).within(() => {
+          cy.get('td')
+            .eq(judgeNameColumnIndex)
+            .should('have.text', wantedLegacyJudge);
+        });
+      });
     });
   });
 });
