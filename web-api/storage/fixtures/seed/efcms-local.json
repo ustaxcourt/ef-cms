@@ -18523,7 +18523,7 @@
     "addToCoversheet": false,
     "draftOrderState": null,
     "index": 4,
-    "isFileAttached": false,
+    "isFileAttached": true,
     "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MOP",
     "processingStatus": "complete",
