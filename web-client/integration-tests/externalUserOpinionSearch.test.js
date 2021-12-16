@@ -117,15 +117,36 @@ describe('verify opinion search works for external users', () => {
         `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
       );
 
-      console.log(
-        '*****RESULTS*****',
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      );
       expect(stateOfAdvancedSearch).toMatchObject(
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: cerebralTest.docketEntryId,
-            documentTitle: cerebralTest.documentTitle,
+          }),
+        ]),
+      );
+    });
+
+    loginAs(cerebralTest, 'privatePractitioner@example.com');
+    it('as a privatePractitioner', async () => {
+      await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
+
+      await updateOpinionForm(cerebralTest, {
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+        docketNumber: cerebralTest.docketNumber,
+      });
+
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+      expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+      const stateOfAdvancedSearch = cerebralTest.getState(
+        `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+      );
+
+      expect(stateOfAdvancedSearch).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            docketEntryId: cerebralTest.docketEntryId,
           }),
         ]),
       );
