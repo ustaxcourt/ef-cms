@@ -144,6 +144,15 @@ exports.advancedDocumentSearch = async ({
 
   docketEntryQueryParams.push(caseQueryParams);
 
+  if (isOpinionSearch) {
+    docketEntryMustNot = [
+      ...docketEntryMustNot,
+      {
+        term: { 'isSealed.BOOL': true },
+      },
+    ];
+  }
+
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     if (isOpinionSearch) {
