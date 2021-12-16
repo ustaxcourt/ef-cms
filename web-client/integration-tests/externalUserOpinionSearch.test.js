@@ -13,6 +13,7 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 import { docketClerkCreatesAnOpinion } from './journey/docketClerkCreatesAnOpinion';
 // import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 // import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkAddsOpiniontoDocketyEntry } from './journey/docketClerkAddsOpinionToDocketEntry';
 import {
   fakeFile,
   loginAs,
@@ -82,6 +83,8 @@ describe('verify opinion search works for external users', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOpinion(cerebralTest, fakeFile);
+
+  docketClerkAddsOpiniontoDocketyEntry(cerebralTest, 0);
   // HOW TO CREATE A SEALED CASE
 
   // log in as chambers user
