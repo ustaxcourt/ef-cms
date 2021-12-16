@@ -370,12 +370,19 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-      - git-shallow-clone/checkout
+      - git-shall
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run: |
+          node -v
+      - run: |
+          nvm install v14.17.3
+          node -v
+          nvm alias default v14.17.3
       - run:
-          name: Install node@v14.17.3
+          name: Install dependencies
           command: |
-            nvm install v14.17.3
-            nvm alias default v14.17.3
             npm ci
       - run:
           name: Setup Env
