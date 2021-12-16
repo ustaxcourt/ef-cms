@@ -162,6 +162,7 @@ const caseDecorator = (
   }
 
   obj.petitioners = [];
+  obj.testing = rawObject.testing;
 
   if (
     !filtered ||
@@ -559,6 +560,7 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Last date that the petitioner is allowed to file before.'),
+
   irsPractitioners: joi
     .array()
     .items(IrsPractitioner.VALIDATION_RULES)
@@ -725,6 +727,7 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
+  testing: joi.string().required(),
   trialDate: joi
     .alternatives()
     .conditional('trialSessionId', {
