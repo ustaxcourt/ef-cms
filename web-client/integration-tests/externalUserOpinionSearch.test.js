@@ -9,10 +9,12 @@ import { applicationContextForClient as applicationContext } from '../../shared/
 // import { chambersUserAppliesSignatureToDraftDocument } from './journey/chambersUserAppliesSignatureToDraftDocument';
 // import { chambersUserSavesSignatureForDraftDocument } from './journey/chambersUserSavesSignatureForDraftDocument';
 // import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
-import { docketClerkAddsOSTDocketEntryFromOrder } from './journey/docketClerkAddsOSTDocketEntryFromOrder';
-import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
-import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+// import { docketClerkAddsOSTDocketEntryFromOrder } from './journey/docketClerkAddsOSTDocketEntryFromOrder';
+import { docketClerkCreatesAnOpinion } from './journey/docketClerkCreatesAnOpinion';
+// import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
+// import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import {
+  fakeFile,
   loginAs,
   // refreshElasticsearchIndex,
   setOpinionSearchEnabled,
@@ -20,8 +22,8 @@ import {
   // updateOpinionForm,
   uploadPetition,
 } from '../integration-tests/helpers';
-// import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
-// import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
+import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
 const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -74,10 +76,12 @@ describe('verify opinion search works for external users', () => {
   });
 
   // log in as petitions clerk (or docket clerk?), add practitioners and serve petition
-  // loginAs(cerebralTest, 'petitionsclerk@example.com');
-  // petitionsClerkAddsPractitionersToCase(cerebralTest);
-  // petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest);
+  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOpinion(cerebralTest, fakeFile);
   // HOW TO CREATE A SEALED CASE
 
   // log in as chambers user
@@ -90,10 +94,10 @@ describe('verify opinion search works for external users', () => {
 
   // // log in as docket clerk
   // // seal case
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkAddsOSTDocketEntryFromOrder(cerebralTest, 0);
-  docketClerkServesDocument(cerebralTest, 0);
-  docketClerkSealsCase(cerebralTest);
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkAddsOSTDocketEntryFromOrder(cerebralTest, 0);
+  // docketClerkServesDocument(cerebralTest, 0);
+  // docketClerkSealsCase(cerebralTest);
 
   // let docketNumberTwo;
   // it('Create Case 2', async () => {
