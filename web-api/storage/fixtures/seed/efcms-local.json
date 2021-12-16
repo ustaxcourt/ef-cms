@@ -18496,15 +18496,9 @@
     "docketNumber": "129-20"
   },
   {
-    "isSealed": true,
-    "isLegacySealed": true,
-    "isLegacy": true,
+    "isSealed": false,
     "date": null,
-    "servedParties":[
-      {
-        "name": "Test Petitioner",
-        "email": "petitioner@example.com"
-      }
+    "servedParties": [
     ],
     "attachments": false,
     "isStricken": false,
@@ -18521,6 +18515,7 @@
     "scenario": "Type B",
     "entityName": "DocketEntry",
     "docketEntryId": "4e3e97b1-5b5a-492f-8553-21e2a020211e",
+    "documentIdBeforeSignature": "7a6175c1-c9ce-4325-8ac3-7dcc2c7434fe",
     "sk": "docket-entry|4e3e97b1-5b5a-492f-8553-21e2a020211e",
     "judge": "Buch",
     "documentTitle": "Memorandum Opinion Judge Buch opinion without a file attached",
@@ -18528,7 +18523,7 @@
     "addToCoversheet": false,
     "draftOrderState": null,
     "index": 4,
-    "isFileAttached": true,
+    "isFileAttached": false,
     "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MOP",
     "processingStatus": "complete",
