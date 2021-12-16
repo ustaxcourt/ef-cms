@@ -1,6 +1,6 @@
 import {
   // ADVANCED_SEARCH_OPINION_TYPES,
-  ADVANCED_SEARCH_TABS,
+  // ADVANCED_SEARCH_TABS,
   // BENCH_OPINION_EVENT_CODE,
   DATE_RANGE_SEARCH_OPTIONS,
 } from '../../shared/src/business/entities/EntityConstants';
@@ -21,13 +21,14 @@ import {
   // refreshElasticsearchIndex,
   setOpinionSearchEnabled,
   setupTest,
-  updateOpinionForm,
+  // updateOpinionForm,
   // updateOpinionForm,
   uploadPetition,
 } from '../integration-tests/helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
+import { userSearchesForOpinion } from './journey/userSearchesForOpinion';
 
 const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -99,58 +100,17 @@ describe('verify opinion search works for external users', () => {
     // log in as associated private practitioner and search for opinion
     // log in as associated irs practitioner and search for opinion
 
+    const params = {
+      dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+      docketNumber: cerebralTest.docketNumber,
+    };
+
     //login as an irs practitioner and confirm association
     loginAs(cerebralTest, 'irsPractitioner@example.com');
-    it('as an irsPractitioner', async () => {
-      await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
-
-      await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
-        docketNumber: cerebralTest.docketNumber,
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-      expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-      const stateOfAdvancedSearch = cerebralTest.getState(
-        `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
-      );
-
-      expect(stateOfAdvancedSearch).toMatchObject(
-        expect.arrayContaining([
-          expect.objectContaining({
-            docketEntryId: cerebralTest.docketEntryId,
-          }),
-        ]),
-      );
-    });
+    userSearchesForOpinion(cerebralTest, params);
 
     loginAs(cerebralTest, 'privatePractitioner@example.com');
-    it('as a privatePractitioner', async () => {
-      await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
-
-      await updateOpinionForm(cerebralTest, {
-        dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
-        docketNumber: cerebralTest.docketNumber,
-      });
-
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-      expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-      const stateOfAdvancedSearch = cerebralTest.getState(
-        `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
-      );
-
-      expect(stateOfAdvancedSearch).toMatchObject(
-        expect.arrayContaining([
-          expect.objectContaining({
-            docketEntryId: cerebralTest.docketEntryId,
-          }),
-        ]),
-      );
-    });
+    userSearchesForOpinion(cerebralTest, params);
   });
 
   // log in as petitions clerk (or docket clerk?), add practitioners and serve petition
