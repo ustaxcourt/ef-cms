@@ -14,6 +14,7 @@ import { docketClerkCreatesAnOpinion } from './journey/docketClerkCreatesAnOpini
 // import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 // import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import { docketClerkAddsOpiniontoDocketyEntry } from './journey/docketClerkAddsOpinionToDocketEntry';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import {
   fakeFile,
   loginAs,
@@ -87,6 +88,22 @@ describe('verify opinion search works for external users', () => {
   docketClerkCreatesAnOpinion(cerebralTest, fakeFile);
 
   docketClerkAddsOpiniontoDocketyEntry(cerebralTest, 0);
+
+  docketClerkServesDocument(cerebralTest, 0);
+
+  //serve the opinion
+
+  describe('IRS and private practitioners for association', () => {
+    // case 2 - not-sealed case
+    // log in as associated private practitioner and search for opinion
+    // log in as associated irs practitioner and search for opinion
+
+    //login as an irs practitioner and confirm association
+    loginAs(cerebralTest, 'irsPractitioner@example.com');
+    it('as an irsPractitioner', () => {
+      //
+    });
+  });
 
   // log in as petitions clerk (or docket clerk?), add practitioners and serve petition
   // loginAs(cerebralTest, 'petitionsclerk@example.com');
