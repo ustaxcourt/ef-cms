@@ -14,8 +14,6 @@ describe('Unauthed user searches for an opinion by keyword', () => {
 
 describe('Unauthed user searches for a legacy sealed opinion by keyword', () => {
   cerebralTest.docketNumber = '129-20';
-
   unauthedUserNavigatesToPublicSite(cerebralTest);
-
   unauthedUserSearchesForOpinionByDocketNumber(cerebralTest);
 });
