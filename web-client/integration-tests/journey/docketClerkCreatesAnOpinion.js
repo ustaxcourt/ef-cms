@@ -1,11 +1,10 @@
-import { docketClerkAddsOpiniontoDocketyEntry } from './docketClerkAddsOpinionToDocketEntry';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkCreatesAnOpinion = (cerebralTest, fakeFile) => {
   return it('Docket Clerk creates an opinion', async () => {
-    // prereq. already logged in as docket clerk
+    cerebralTest.draftOrders = [];
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -27,6 +26,27 @@ export const docketClerkCreatesAnOpinion = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('uploadCourtIssuedDocumentSequence');
 
+    const caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    const caseDraftDocuments = caseDetailFormatted.draftDocuments;
+    const newDraftOrder = caseDraftDocuments.reduce((prev, current) =>
+      prev.createdAt > current.createdAt ? prev : current,
+    );
+
+    expect(cerebralTest.getState('draftDocumentViewerDocketEntryId')).toBe(
+      newDraftOrder.docketEntryId,
+    );
+
+    expect(newDraftOrder).toBeTruthy();
+    cerebralTest.draftOrders.push(newDraftOrder);
+
+    cerebralTest.docketEntryId = newDraftOrder.docketEntryId;
+
     // 2. add docket entry
     // t.c. opinion
     // select judge
@@ -47,6 +67,6 @@ export const docketClerkCreatesAnOpinion = (cerebralTest, fakeFile) => {
 
     // expect(newDraftOrder).toBeTruthy();
     // cerebralTest.draftOrders.push(newDraftOrder);
-    docketClerkAddsOpiniontoDocketyEntry(cerebralTest);
+    // docketClerkAddsOpiniontoDocketyEntry(cerebralTest);
   });
 };
