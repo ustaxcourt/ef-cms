@@ -1,27 +1,27 @@
-import {
-  ADVANCED_SEARCH_OPINION_TYPES,
-  ADVANCED_SEARCH_TABS,
-  BENCH_OPINION_EVENT_CODE,
-  DATE_RANGE_SEARCH_OPTIONS,
-} from '../../shared/src/business/entities/EntityConstants';
+// import {
+//   ADVANCED_SEARCH_OPINION_TYPES,
+//   ADVANCED_SEARCH_TABS,
+//   BENCH_OPINION_EVENT_CODE,
+//   DATE_RANGE_SEARCH_OPTIONS,
+// } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+// import { chambersUserAddsOrderToCase } from './journey/chambersUserAddsOrderToCase';
+// import { chambersUserAppliesSignatureToDraftDocument } from './journey/chambersUserAppliesSignatureToDraftDocument';
+// import { chambersUserSavesSignatureForDraftDocument } from './journey/chambersUserSavesSignatureForDraftDocument';
+// import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
+import { docketClerkAddsOSTDocketEntryFromOrder } from './journey/docketClerkAddsOSTDocketEntryFromOrder';
+import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
 import {
   loginAs,
-  refreshElasticsearchIndex,
+  // refreshElasticsearchIndex,
   setOpinionSearchEnabled,
   setupTest,
-  updateOpinionForm,
+  // updateOpinionForm,
   uploadPetition,
 } from '../integration-tests/helpers';
-import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
-import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
-import { chambersUserAddsOrderToCase } from './journey/chambersUserAddsOrderToCase';
-import { chambersUserViewsSignDraftDocument } from './journey/chambersUserViewsSignDraftDocument';
-import { chambersUserAppliesSignatureToDraftDocument } from './journey/chambersUserAppliesSignatureToDraftDocument';
-import { chambersUserSavesSignatureForDraftDocument } from './journey/chambersUserSavesSignatureForDraftDocument';
-import { docketClerkAddsOSTDocketEntryFromOrder } from './journey/docketClerkAddsOSTDocketEntryFromOrder';
-import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
-import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+// import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
+// import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
 const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -52,8 +52,8 @@ describe('verify opinion search works for external users', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  let docketNumberOne;
-  it('petitioner creates case number 1', async () => {
+  let docketNumberForUnsealedCase;
+  it('petitioner creates an unsealed', async () => {
     // log in as petitioner and create a case
     const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
@@ -69,104 +69,107 @@ describe('verify opinion search works for external users', () => {
     });
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    docketNumberOne = caseDetail.docketNumber;
+    docketNumberForUnsealedCase = caseDetail.docketNumber;
+    console.log('docketNumberForUnsealedCase', docketNumberForUnsealedCase);
   });
 
   // log in as petitions clerk (or docket clerk?), add practitioners and serve petition
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(cerebralTest);
-  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkAddsPractitionersToCase(cerebralTest);
+  // petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
+  // HOW TO CREATE A SEALED CASE
 
   // log in as chambers user
   // add bench opinion and sign
-  loginAs(cerebralTest, 'buchsChambers@example.com');
-  chambersUserAddsOrderToCase(cerebralTest);
-  chambersUserViewsSignDraftDocument(cerebralTest);
-  chambersUserAppliesSignatureToDraftDocument(cerebralTest, 'Ronald L. Buch');
-  chambersUserSavesSignatureForDraftDocument(cerebralTest);
+  // loginAs(cerebralTest, 'buchsChambers@example.com');
+  // chambersUserAddsOrderToCase(cerebralTest);
+  // chambersUserViewsSignDraftDocument(cerebralTest);
+  // chambersUserAppliesSignatureToDraftDocument(cerebralTest, 'Ronald L. Buch');
+  // chambersUserSavesSignatureForDraftDocument(cerebralTest);
 
-  // log in as docket clerk
-  // seal case
+  // // log in as docket clerk
+  // // seal case
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkAddsOSTDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
   docketClerkSealsCase(cerebralTest);
 
-  let docketNumberTwo;
-  it('Create Case 2', async () => {
-    // log in as petitioner and create a case
-    const caseDetail = await uploadPetition(cerebralTest, {
-      contactSecondary: {
-        address1: '734 Cowley Parkway',
-        city: 'Amazing',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Jimothy Schultz',
-        phone: '+1 (884) 358-9729',
-        postalCode: '77546',
-        state: 'AZ',
-      },
-      partyType: PARTY_TYPES.petitionerSpouse,
-    });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-    docketNumberTwo = caseDetail.docketNumber;
-  });
+  // let docketNumberTwo;
+  // it('Create Case 2', async () => {
+  //   // log in as petitioner and create a case
+  //   const caseDetail = await uploadPetition(cerebralTest, {
+  //     contactSecondary: {
+  //       address1: '734 Cowley Parkway',
+  //       city: 'Amazing',
+  //       countryType: COUNTRY_TYPES.DOMESTIC,
+  //       name: 'Jimothy Schultz',
+  //       phone: '+1 (884) 358-9729',
+  //       postalCode: '77546',
+  //       state: 'AZ',
+  //     },
+  //     partyType: PARTY_TYPES.petitionerSpouse,
+  //   });
+  //   expect(caseDetail.docketNumber).toBeDefined();
+  //   cerebralTest.docketNumber = caseDetail.docketNumber;
+  //   docketNumberTwo = caseDetail.docketNumber;
+  // });
 
   // log in as petitions clerk (or docket clerk?), add practitioners and serve petition
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkAddsPractitionersToCase(cerebralTest);
-  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkAddsPractitionersToCase(cerebralTest);
+  // petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
   // log in as chambers user
   // add bench opinion and sign
-  loginAs(cerebralTest, 'buchsChambers@example.com');
-  chambersUserAddsOrderToCase(cerebralTest);
-  chambersUserViewsSignDraftDocument(cerebralTest);
-  chambersUserAppliesSignatureToDraftDocument(cerebralTest, 'Ronald L. Buch');
-  chambersUserSavesSignatureForDraftDocument(cerebralTest);
+  // loginAs(cerebralTest, 'buchsChambers@example.com');
+  // chambersUserAddsOrderToCase(cerebralTest);
+  // chambersUserViewsSignDraftDocument(cerebralTest);
+  // chambersUserAppliesSignatureToDraftDocument(cerebralTest, 'Ronald L. Buch');
+  // chambersUserSavesSignatureForDraftDocument(cerebralTest);
 
   // log in as docket clerk
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkAddsOSTDocketEntryFromOrder(cerebralTest, 0);
-  docketClerkServesDocument(cerebralTest, 0);
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkAddsOSTDocketEntryFromOrder(cerebralTest, 0);
+  // docketClerkServesDocument(cerebralTest, 0);
 
-  describe('Advanced search for Bench opinions', () => {
-    loginAs(cerebralTest, 'privatePractitioner@example.com');
-    it('go to advanced opinion search tab', async () => {
-      await refreshElasticsearchIndex();
+  // describe('Advanced search for Bench opinions', () => {
+  //   loginAs(cerebralTest, 'privatePractitioner@example.com');
+  //   it('go to advanced opinion search tab', async () => {
+  //     await refreshElasticsearchIndex();
 
-      await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-      cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
-    });
+  //     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+  //     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
+  //   });
 
-    it('search for bench opinions, expect to see the two that were just created', async () => {
-      await updateOpinionForm(cerebralTest, {});
+  //   it('search for bench opinions, expect to see the two that were just created', async () => {
+  //     await updateOpinionForm(cerebralTest, {});
 
-      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+  //     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
-      console.log(
-        '*****OPINIONS*****',
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      );
-      expect(cerebralTest.getState('validationErrors')).toEqual({});
-      expect(
-        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
-      ).toMatchObject(
-        expect.arrayContaining([
-          expect.objectContaining({
-            docketNumber: docketNumberOne,
-            eventCode: BENCH_OPINION_EVENT_CODE,
-            signedJudgeName: 'Ronald L. Buch',
-          }),
-          expect.objectContaining({
-            docketNumber: docketNumberTwo,
-            eventCode: BENCH_OPINION_EVENT_CODE,
-            signedJudgeName: 'Ronald L. Buch',
-          }),
-        ]),
-      );
-    });
-  });
+  //     console.log(
+  //       '*****OPINIONS*****',
+  //       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+  //     );
+  //     expect(cerebralTest.getState('validationErrors')).toEqual({});
+  //     expect(
+  //       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+  //     ).toMatchObject(
+  //       expect.arrayContaining([
+  //         expect.objectContaining({
+  //           docketNumber: docketNumberOne,
+  //           eventCode: BENCH_OPINION_EVENT_CODE,
+  //           signedJudgeName: 'Ronald L. Buch',
+  //         }),
+  //         expect.objectContaining({
+  //           docketNumber: docketNumberTwo,
+  //           eventCode: BENCH_OPINION_EVENT_CODE,
+  //           signedJudgeName: 'Ronald L. Buch',
+  //         }),
+  //       ]),
+  //     );
+  //   });
+  // });
 
   // describe('private practitioner performs opinion search', () => {
   //   loginAs(cerebralTest, 'privatePractitioner@example.com');
