@@ -276,7 +276,7 @@ export const OpinionSearchForm = connect(
                         <label
                           className="margin-top-0 usa-checkbox__label"
                           htmlFor={`opinionTypes.${eventCode}`}
-                          id={`opinionTypes.${eventCode}`}
+                          id={`label-opinionTypes.${eventCode}`}
                         >
                           {label}
                         </label>

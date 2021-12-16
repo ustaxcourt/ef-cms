@@ -1,3 +1,7 @@
+const {
+  ADVANCED_SEARCH_OPINION_TYPES,
+} = require('../../../../shared/src/business/entities/EntityConstants');
+
 exports.navigateTo = () => {
   cy.visit('/');
 };
@@ -23,7 +27,11 @@ exports.enterDocumentDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
 };
 
-exports.unselectOpinionTypes = opinionTypes => {
+exports.unselectOpinionTypesExceptBench = () => {
+  let opinionTypes = Object.keys(ADVANCED_SEARCH_OPINION_TYPES).filter(
+    type => type !== 'Bench',
+  );
+
   opinionTypes.forEach(opinionType => {
     cy.get('label').contains(opinionType).click();
   });

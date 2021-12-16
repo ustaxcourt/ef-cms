@@ -11,7 +11,7 @@ const {
   searchForCaseByPetitionerInformation,
   searchForDocuments,
   searchResultsTable,
-  unselectOpinionTypes,
+  unselectOpinionTypesExceptBench,
 } = require('../../support/pages/public/advanced-search');
 
 describe('Advanced search', () => {
@@ -52,7 +52,8 @@ describe('Advanced search', () => {
       navigateToDashboard();
       clickOnSearchTab('opinion');
       enterDocumentDocketNumber('107-19');
-      unselectOpinionTypes(['T.C.', 'Memorandum', 'Summary']);
+
+      unselectOpinionTypesExceptBench();
       searchForDocuments();
 
       expect(searchResultsTable()).to.exist;
