@@ -1,32 +1,12 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { runCompute } from 'cerebral/test';
 import { updateForm } from '../helpers';
-import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsOpiniontoDocketyEntry = (
   cerebralTest,
   draftOrderIndex,
 ) => {
   return it(`Docket Clerk adds a docket entry from the given order ${draftOrderIndex}`, async () => {
-    const caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: cerebralTest.getState(),
-      },
-    );
-
-    const docketEntryId = cerebralTest.draftOrders
-      ? cerebralTest.draftOrders[draftOrderIndex].docketEntryId
-      : cerebralTest.docketEntryId;
-
-    const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.docketEntryId === docketEntryId,
-    );
-
-    expect(draftOrderDocument).toBeTruthy();
-
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
+      docketEntryId: cerebralTest.docketEntryId,
       docketNumber: cerebralTest.docketNumber,
     });
 
@@ -35,6 +15,7 @@ export const docketClerkAddsOpiniontoDocketyEntry = (
       documentType: 'T.C. Opinion',
       eventCode: 'TCOP',
       freeText: 'Some opinion content',
+      judge: 'Judge Ashford',
       scenario: 'Type B',
     };
 
