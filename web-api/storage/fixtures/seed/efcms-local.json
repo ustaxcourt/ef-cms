@@ -18496,7 +18496,9 @@
     "docketNumber": "129-20"
   },
   {
-    "isSealed": false,
+    "isSealed": true,
+    "isLegacySealed": true,
+    "isLegacy": true,
     "date": null,
     "servedParties": [
     ],
