@@ -67,7 +67,7 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
             .promise()
             .catch(e => {
               if (e.message.includes('The conditional request failed')) {
-                console.log(
+                applicationContext.logger.info(
                   `The item of ${item.pk} ${item.sk} alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.`,
                 );
               } else {
@@ -135,10 +135,9 @@ exports.handler = async event => {
   applicationContext.logger.info(
     `about to process ${segment} of ${totalSegments}`,
   );
-
   const ranMigrations = {};
   for (let { key } of migrationsToRun) {
-    ranMigrations[key] = await hasMigrationRan(key);
+    Object.assign(ranMigrations, await hasMigrationRan(key));
   }
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
