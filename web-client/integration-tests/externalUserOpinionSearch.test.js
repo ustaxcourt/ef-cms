@@ -24,6 +24,7 @@ import {
   uploadPetition,
 } from '../integration-tests/helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
+import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 
 const cerebralTest = setupTest();
@@ -80,11 +81,17 @@ describe('verify opinion search works for external users', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkAddsPractitionersToCase(cerebralTest);
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  petitionsClerkAddsRespondentsToCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOpinion(cerebralTest, fakeFile);
 
   docketClerkAddsOpiniontoDocketyEntry(cerebralTest, 0);
+
+  // log in as petitions clerk (or docket clerk?), add practitioners and serve petition
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkAddsPractitionersToCase(cerebralTest);
+
   // HOW TO CREATE A SEALED CASE
 
   // log in as chambers user
