@@ -32,5 +32,9 @@ export const docketClerkAddsOpiniontoDocketyEntry = (
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
       'Your entry has been added to docket record.',
     );
+
+    await cerebralTest.runSequence(
+      'serveCourtIssuedDocumentFromDocketEntrySequence',
+    );
   });
 };

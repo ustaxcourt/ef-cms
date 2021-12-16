@@ -57,7 +57,7 @@ describe('verify opinion search works for external users', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   let docketNumberForUnsealedCase;
-  it('petitioner creates an unsealed', async () => {
+  it('petitioner creates an unsealed case', async () => {
     // log in as petitioner and create a case
     const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
