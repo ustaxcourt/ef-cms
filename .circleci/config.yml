@@ -370,7 +370,7 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-      - git-shall
+      - git-shallow-clone/checkout
       - run: |
           echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
           echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
