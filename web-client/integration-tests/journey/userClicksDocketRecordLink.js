@@ -1,6 +1,3 @@
-// import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
-// import { updateOpinionForm } from '../helpers';
-
 export const userClicksDocketRecordLink = (
   cerebralTest,
   shouldUserSeeDocketEntries,
