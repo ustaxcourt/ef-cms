@@ -48,7 +48,7 @@ export const UploadCourtIssuedDocument = connect(
           <div className="grid-container padding-x-0">
             <div className="grid-row grid-gap">
               <div className="grid-col-12">
-                <h2 className="heading-1">Upload PDF!!!</h2>
+                <h2 className="heading-1">Upload PDF</h2>
               </div>
             </div>
 
