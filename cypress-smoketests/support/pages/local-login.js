@@ -10,10 +10,8 @@ exports.getUserToken = async username => {
   };
 };
 
-exports.login = token => {
-  const username = token.split('@')[0];
-  cy.visit(`/mock-login?token=${username}`);
-
+exports.login = email => {
+  cy.visit(`/log-in?code=${email}`);
   cy.get('.progress-indicator').should('not.exist');
 };
 

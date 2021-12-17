@@ -1,9 +1,11 @@
+import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
   cerebralTest,
   fakeFile,
+  eventCode,
 ) => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
@@ -58,12 +60,17 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
-      value: 'EVID',
+      value: eventCode,
     });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'pending',
       value: true,
+    });
+
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'objections',
+      value: OBJECTIONS_OPTIONS_MAP.NO,
     });
 
     await cerebralTest.runSequence('submitPaperFilingSequence');
@@ -79,6 +86,6 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
 
     cerebralTest.docketEntryId = cerebralTest
       .getState('caseDetail.docketEntries')
-      .find(doc => doc.eventCode === 'EVID').docketEntryId;
+      .find(doc => doc.eventCode === eventCode).docketEntryId;
   });
 };

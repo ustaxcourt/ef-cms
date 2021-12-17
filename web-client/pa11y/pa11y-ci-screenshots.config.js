@@ -22,7 +22,6 @@ const userUrls = [
 
 const initialUrls = [
   'http://localhost:1234/',
-  'http://localhost:1234/mock-login',
   'http://localhost:1234/request-for-page-that-doesnt-exist',
   'http://localhost:1234/idle-logout',
 ];

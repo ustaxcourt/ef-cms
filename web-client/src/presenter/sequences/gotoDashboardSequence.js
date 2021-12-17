@@ -23,6 +23,7 @@ import { setMessagesAction } from '../actions/setMessagesAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setUserAction } from '../actions/setUserAction';
+import { setUserPermissionsAction } from '../actions/setUserPermissionsAction';
 import { startWebSocketConnectionAction } from '../actions/WebSocketConnection/startWebSocketConnectionAction';
 import { takePathForRoles } from './takePathForRoles';
 
@@ -37,6 +38,7 @@ const goToDashboard = [
   closeMobileMenuAction,
   getUserAction,
   setUserAction,
+  setUserPermissionsAction,
   clearSelectedWorkItemsAction,
   clearErrorAlertsAction,
   getMaintenanceModeAction,

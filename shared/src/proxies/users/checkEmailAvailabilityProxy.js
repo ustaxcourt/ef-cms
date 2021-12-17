@@ -1,4 +1,3 @@
-const querystring = require('querystring');
 const { get } = require('../requests');
 
 /**
@@ -10,12 +9,11 @@ const { get } = require('../requests');
  * @returns {Promise<*>} the promise of the api call
  */
 exports.checkEmailAvailabilityInteractor = (applicationContext, { email }) => {
-  const queryString = querystring.stringify({
-    email,
-  });
-
   return get({
     applicationContext,
-    endpoint: `/users/email-availability?${queryString}`,
+    endpoint: '/users/email-availability',
+    params: {
+      email,
+    },
   });
 };

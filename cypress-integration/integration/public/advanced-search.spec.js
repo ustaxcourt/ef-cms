@@ -4,7 +4,7 @@ const {
   enterDocumentDocketNumber,
   enterDocumentKeywordForOpinionSearch,
   enterPetitionerName,
-  enterStartDateForOpinionSearch,
+  firstSearchResultJudgeField,
   navigateTo: navigateToDashboard,
   noSearchResultsContainer,
   searchForCaseByDocketNumber,
@@ -12,6 +12,7 @@ const {
   searchForDocuments,
   searchForOrderByJudge,
   searchResultsTable,
+  unselectOpinionTypesExceptBench,
 } = require('../../support/pages/public/advanced-search');
 
 describe('Advanced search', () => {
@@ -38,16 +39,26 @@ describe('Advanced search', () => {
     });
   });
 
-  // Temporarily disabled for story 7387
-  describe.skip('opinion', () => {
+  describe('opinion', () => {
     it('should display results when a keyword and docketNumberWithSuffix is provided', () => {
       navigateToDashboard();
       clickOnSearchTab('opinion');
       enterDocumentKeywordForOpinionSearch('opinion');
-      enterStartDateForOpinionSearch('08/03/1995');
       enterDocumentDocketNumber('124-20L');
       searchForDocuments();
       expect(searchResultsTable()).to.exist;
+    });
+
+    it('should display results with a judge name', () => {
+      navigateToDashboard();
+      clickOnSearchTab('opinion');
+      enterDocumentDocketNumber('107-19');
+
+      unselectOpinionTypesExceptBench();
+      searchForDocuments();
+
+      expect(searchResultsTable()).to.exist;
+      expect(firstSearchResultJudgeField()).to.exist;
     });
   });
 
