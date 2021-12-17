@@ -5,8 +5,9 @@ import React from 'react';
 export const SearchBoilerplateText = connect(
   {
     formTypeText: props.formTypeText,
+    isOpinion: props.isOpinion,
   },
-  function SearchBoilerplateText({ formTypeText }) {
+  function SearchBoilerplateText({ formTypeText, isOpinion = false }) {
     return (
       <>
         <p className="margin-top-0">
@@ -19,10 +20,12 @@ export const SearchBoilerplateText = connect(
             If you aren’t affiliated with a case, you will only see limited
             information about that case.
           </li>
-          <li>
-            Sealed cases and affiliated documents will not display in search
-            results.
-          </li>
+          {!isOpinion && (
+            <li>
+              Sealed cases and affiliated documents will not display in search
+              results.
+            </li>
+          )}
         </ul>
       </>
     );
