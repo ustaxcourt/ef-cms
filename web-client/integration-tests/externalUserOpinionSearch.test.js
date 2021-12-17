@@ -19,7 +19,7 @@ import {
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
-import { userSearchesForOpinion } from './journey/userSearchesForOpinion';
+import { userSearchesForOpinionByDocketNumber } from './journey/userSearchesForOpinionByDocketNumber';
 
 const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
@@ -35,8 +35,7 @@ describe('verify opinion search works for external users', () => {
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  it('petitioner creates an unsealed case', async () => {
-    // log in as petitioner and create a case
+  it('petitioner creates a case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
       contactSecondary: {
         address1: '734 Cowley Parkway',
@@ -66,26 +65,21 @@ describe('verify opinion search works for external users', () => {
   docketClerkServesDocument(cerebralTest, 0);
 
   describe('IRS and private practitioners search for opinion in sealed and non-sealed cases by docket number', () => {
-    const params = {
-      dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
-      docketNumber: cerebralTest.docketNumber,
-    };
-
     // associated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
-    userSearchesForOpinion(cerebralTest, params);
+    userSearchesForOpinionByDocketNumber(cerebralTest);
 
     // associated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
-    userSearchesForOpinion(cerebralTest, params);
+    userSearchesForOpinionByDocketNumber(cerebralTest);
 
     // unassociated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner2@example.com');
-    userSearchesForOpinion(cerebralTest, params);
+    userSearchesForOpinionByDocketNumber(cerebralTest);
 
     // unassociated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner2@example.com');
-    userSearchesForOpinion(cerebralTest, params);
+    userSearchesForOpinionByDocketNumber(cerebralTest);
 
     // seal the case
     loginAs(cerebralTest, 'docketclerk@example.com');
@@ -93,19 +87,19 @@ describe('verify opinion search works for external users', () => {
 
     // associated irs practitioner - sealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
-    userSearchesForOpinion(cerebralTest, params);
+    userSearchesForOpinionByDocketNumber(cerebralTest);
 
     // associated private practitioner - sealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
-    userSearchesForOpinion(cerebralTest, params);
+    userSearchesForOpinionByDocketNumber(cerebralTest);
 
     // unassociated irs practitioner - sealed case
     loginAs(cerebralTest, 'irsPractitioner2@example.com');
-    userSearchesForOpinion(cerebralTest, params);
+    userSearchesForOpinionByDocketNumber(cerebralTest);
 
     // unassociated private practitioner - sealed case
     loginAs(cerebralTest, 'privatePractitioner2@example.com');
-    userSearchesForOpinion(cerebralTest, params);
+    userSearchesForOpinionByDocketNumber(cerebralTest);
   });
 
   describe('private practitioner performs opinion search', () => {
