@@ -559,7 +559,6 @@ Case.VALIDATION_RULES = {
     .optional()
     .allow(null)
     .description('Last date that the petitioner is allowed to file before.'),
-
   irsPractitioners: joi
     .array()
     .items(IrsPractitioner.VALIDATION_RULES)
