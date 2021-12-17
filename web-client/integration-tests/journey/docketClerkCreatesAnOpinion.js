@@ -46,27 +46,5 @@ export const docketClerkCreatesAnOpinion = (cerebralTest, fakeFile) => {
     cerebralTest.draftOrders.push(newDraftOrder);
 
     cerebralTest.docketEntryId = newDraftOrder.docketEntryId;
-
-    // 2. add docket entry
-    // t.c. opinion
-    // select judge
-    // save and serve
-    // const caseDetailFormatted = runCompute(
-    //   withAppContextDecorator(formattedCaseDetail),
-    //   {
-    //     state: cerebralTest.getState(),
-    //   },
-    // );
-
-    // const caseDraftDocuments = caseDetailFormatted.draftDocuments;
-    // const newDraftOrder = caseDraftDocuments.reduce((prev, current) =>
-    //   prev.createdAt > current.createdAt ? prev : current,
-    // );
-
-    // console.log('********ID', newDraftOrder);
-
-    // expect(newDraftOrder).toBeTruthy();
-    // cerebralTest.draftOrders.push(newDraftOrder);
-    // docketClerkAddsOpiniontoDocketyEntry(cerebralTest);
   });
 };
