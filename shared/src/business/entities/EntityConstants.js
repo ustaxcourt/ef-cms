@@ -40,6 +40,11 @@ const PARTY_VIEW_TABS = {
 };
 
 const ALLOWLIST_FEATURE_FLAGS = {
+  EXTERNAL_OPINION_SEARCH: {
+    disabledMessage:
+      'Opinion search has been temporarily disabled. Please try again later.',
+    key: 'external-opinion-search-enabled',
+  },
   EXTERNAL_ORDER_SEARCH: {
     disabledMessage:
       'Order search has been temporarily disabled. Please try again later.',

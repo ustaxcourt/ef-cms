@@ -10,6 +10,9 @@ exports.refreshAuthTokenInteractor = async (
   applicationContext,
   { refreshToken },
 ) => {
+  if (!refreshToken) {
+    throw new Error('refreshToken is required');
+  }
   const { token } = await applicationContext
     .getPersistenceGateway()
     .refreshToken(applicationContext, { refreshToken });
