@@ -23,6 +23,8 @@ import { userClicksDocketRecordLink } from './journey/userClicksDocketRecordLink
 import { userSearchesForOpinionByDocketNumber } from './journey/userSearchesForOpinionByDocketNumber';
 
 const cerebralTest = setupTest();
+const searchParams = {};
+const expectedObjectContents = {};
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('verify opinion search works for external users', () => {
@@ -66,24 +68,44 @@ describe('verify opinion search works for external users', () => {
   docketClerkServesDocument(cerebralTest, 0);
 
   describe('IRS and private practitioners search for opinion in sealed and non-sealed cases by docket number', () => {
+    it('sets searchParams and expectedObjectContents', async () => {
+      searchParams.docketNumber = cerebralTest.docketNumber;
+      expectedObjectContents.docketNumber = cerebralTest.docketNumber;
+    });
     // associated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
-    userSearchesForOpinionByDocketNumber(cerebralTest);
+    userSearchesForOpinionByDocketNumber(
+      cerebralTest,
+      searchParams,
+      expectedObjectContents,
+    );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // associated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
-    userSearchesForOpinionByDocketNumber(cerebralTest);
+    userSearchesForOpinionByDocketNumber(
+      cerebralTest,
+      searchParams,
+      expectedObjectContents,
+    );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner2@example.com');
-    userSearchesForOpinionByDocketNumber(cerebralTest);
+    userSearchesForOpinionByDocketNumber(
+      cerebralTest,
+      searchParams,
+      expectedObjectContents,
+    );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner2@example.com');
-    userSearchesForOpinionByDocketNumber(cerebralTest);
+    userSearchesForOpinionByDocketNumber(
+      cerebralTest,
+      searchParams,
+      expectedObjectContents,
+    );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // seal the case
@@ -92,23 +114,44 @@ describe('verify opinion search works for external users', () => {
 
     // associated irs practitioner - sealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
-    userSearchesForOpinionByDocketNumber(cerebralTest);
+    userSearchesForOpinionByDocketNumber(
+      cerebralTest,
+      searchParams,
+      expectedObjectContents,
+    );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // associated private practitioner - sealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
-    userSearchesForOpinionByDocketNumber(cerebralTest);
+    userSearchesForOpinionByDocketNumber(
+      cerebralTest,
+      searchParams,
+      expectedObjectContents,
+    );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated irs practitioner - sealed case
     loginAs(cerebralTest, 'irsPractitioner2@example.com');
-    userSearchesForOpinionByDocketNumber(cerebralTest);
+    userSearchesForOpinionByDocketNumber(
+      cerebralTest,
+      searchParams,
+      expectedObjectContents,
+    );
     userClicksDocketRecordLink(cerebralTest, false);
 
     // unassociated private practitioner - sealed case
     loginAs(cerebralTest, 'privatePractitioner2@example.com');
-    userSearchesForOpinionByDocketNumber(cerebralTest);
+    userSearchesForOpinionByDocketNumber(
+      cerebralTest,
+      searchParams,
+      expectedObjectContents,
+    );
     userClicksDocketRecordLink(cerebralTest, false);
+
+    it('unsets searchParams and expectedObjectContents', async () => {
+      delete searchParams.docketNumber;
+      delete expectedObjectContents.docketNumber;
+    });
   });
 
   describe('private practitioner performs opinion search', () => {
