@@ -68,6 +68,12 @@ describe('verify opinion search works for external users', () => {
     // associated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
+    console.log('*****Cerebral Test*****', cerebralTest);
+
+    // it('');
+    // await cerebralTest.runSequence('gotoCaseDetailSequence', {
+    //   docketNumber: originalDocketNumber,
+    // });
 
     // associated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
