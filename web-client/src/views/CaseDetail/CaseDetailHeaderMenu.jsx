@@ -211,7 +211,7 @@ export const CaseDetailHeaderMenu = connect(
         {caseDetailHeaderHelper.showAddCorrespondenceButton && (
           <li
             className="usa-nav__submenu-item row-button"
-            id="menu-button-upload-pdf"
+            id="correspondence-button"
             onClick={() => {
               navigateToPathSequence({
                 path: `/case-detail/${caseDetail.docketNumber}/upload-correspondence`,
