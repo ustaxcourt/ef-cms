@@ -1,12 +1,14 @@
 import { ADVANCED_SEARCH_TABS } from '../../../shared/src/business/entities/EntityConstants';
 import { updateOpinionForm } from '../helpers';
 
-export const userSearchesForOpinion = (cerebralTest, params) => {
+export const userSearchesForOpinionByDocketNumber = cerebralTest => {
   return it('should return a list of opinions', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
-    await updateOpinionForm(cerebralTest, params);
+    await updateOpinionForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
 
     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
