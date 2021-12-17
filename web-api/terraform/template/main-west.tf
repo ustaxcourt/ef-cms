@@ -234,7 +234,7 @@ resource "aws_route53_record" "api_route53_main_west_regional_record" {
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_west.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.api_custom_main_west.regional_zone_id
-    evaluate_target_health = false
+    evaluate_target_health = true
   }
 
   latency_routing_policy {
@@ -253,7 +253,7 @@ resource "aws_route53_record" "public_api_route53_main_west_regional_record" {
   alias {
     name                   = aws_api_gateway_domain_name.public_api_custom_main_west.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.public_api_custom_main_west.regional_zone_id
-    evaluate_target_health = false
+    evaluate_target_health = true
   }
 
   latency_routing_policy {
@@ -314,6 +314,13 @@ module "api-west-green" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
+
+  # lambda to seal cases in lower environment (only deployed to lower environments)
+  seal_in_lower_object           = ""
+  seal_in_lower_object_hash      = ""
+  create_seal_in_lower           = 0
+  lower_env_account_id           = var.lower_env_account_id
+  prod_env_account_id            = var.prod_env_account_id
 }
 
 module "api-west-blue" {
@@ -361,4 +368,11 @@ module "api-west-blue" {
   triggers_object                = ""
   triggers_object_hash           = ""
   create_triggers                = 0
+
+  # lambda to seal cases in lower environment (only deployed to lower environments)
+  seal_in_lower_object           = ""
+  seal_in_lower_object_hash      = ""
+  create_seal_in_lower           = 0
+  lower_env_account_id           = var.lower_env_account_id
+  prod_env_account_id            = var.prod_env_account_id
 }

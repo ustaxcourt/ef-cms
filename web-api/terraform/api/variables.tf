@@ -138,3 +138,23 @@ variable "triggers_object" {
 variable "triggers_object_hash" {
   type = string
 }
+
+variable "create_seal_in_lower" {
+  type = number
+}
+
+variable "seal_in_lower_object" {
+  type = any
+}
+
+variable "seal_in_lower_object_hash" {
+  type = string
+}
+
+variable "prod_env_account_id" {
+  type = string
+}
+
+variable "lower_env_account_id" {
+  type = string
+}
