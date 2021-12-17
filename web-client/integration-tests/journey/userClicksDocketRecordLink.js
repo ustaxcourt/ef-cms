@@ -15,9 +15,6 @@ export const userClicksDocketRecordLink = (
       'caseDetail.docketEntries',
     );
 
-    // get the state of the case detail to see if docket entries
-    //    - empty array = flag is false
-    //    - !empty = flag is true
     if (shouldUserSeeDocketEntries) {
       expect(docketEntries.length).toBeGreaterThan(0);
     } else {
