@@ -162,7 +162,6 @@ const caseDecorator = (
   }
 
   obj.petitioners = [];
-  obj.testing = rawObject.testing;
 
   if (
     !filtered ||
@@ -727,7 +726,6 @@ Case.VALIDATION_RULES = {
     .optional()
     .meta({ tags: ['Restricted'] })
     .description('Status of the case.'),
-  testing: joi.string().required(),
   trialDate: joi
     .alternatives()
     .conditional('trialSessionId', {
