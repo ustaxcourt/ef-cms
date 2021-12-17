@@ -19,6 +19,7 @@ import {
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
+import { userClicksDocketRecordLink } from './journey/userClicksDocketRecordLink';
 import { userSearchesForOpinionByDocketNumber } from './journey/userSearchesForOpinionByDocketNumber';
 
 const cerebralTest = setupTest();
@@ -68,24 +69,22 @@ describe('verify opinion search works for external users', () => {
     // associated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
-    console.log('*****Cerebral Test*****', cerebralTest);
-
-    // it('');
-    // await cerebralTest.runSequence('gotoCaseDetailSequence', {
-    //   docketNumber: originalDocketNumber,
-    // });
+    userClicksDocketRecordLink(cerebralTest, true);
 
     // associated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
+    userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner2@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
+    userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner2@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
+    userClicksDocketRecordLink(cerebralTest, true);
 
     // seal the case
     loginAs(cerebralTest, 'docketclerk@example.com');
@@ -94,18 +93,22 @@ describe('verify opinion search works for external users', () => {
     // associated irs practitioner - sealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
+    userClicksDocketRecordLink(cerebralTest, true);
 
     // associated private practitioner - sealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
+    userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated irs practitioner - sealed case
     loginAs(cerebralTest, 'irsPractitioner2@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
+    userClicksDocketRecordLink(cerebralTest, false);
 
     // unassociated private practitioner - sealed case
     loginAs(cerebralTest, 'privatePractitioner2@example.com');
     userSearchesForOpinionByDocketNumber(cerebralTest);
+    userClicksDocketRecordLink(cerebralTest, false);
   });
 
   describe('private practitioner performs opinion search', () => {
