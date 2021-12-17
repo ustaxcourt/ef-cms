@@ -78,6 +78,8 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `SESSION_TIMEOUT` | Time in ms to wait displaying the idle timeout modal (optional, default: `3300000` / 55 mins) |
   | `CLIENT_STAGE` | The `process.env.STAGE` for the React application |
   | `BOUNCED_EMAIL_RECIPIENT` | An email to which email bounced should be sent (defaults to noreply@`EFCMS_DOMAIN`) |
+  | `PROD_ENV_ACCOUNT_ID` | The account ID of the AWS account with Production Data |
+  | `LOWER_ENV_ACCOUNT_ID` | The account ID of the AWS account where copies of Production Data might live |
 
 - Run a build in CircleCI.
   - The build may fail the first time, as provisioning new security certificates can take some time (and cause a timeout). See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to common problems.
