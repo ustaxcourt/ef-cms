@@ -31,4 +31,18 @@ describe('sealCaseInteractor', () => {
     });
     expect(result.sealedDate).toBeTruthy();
   });
+
+  it('should send a notification that a case has been sealed', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
+      userId: 'docketClerk',
+    });
+
+    await sealCaseInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+    expect(
+      applicationContext.getDispatchers().sendNotificationOfSealing,
+    ).toBeCalled();
+  });
 });

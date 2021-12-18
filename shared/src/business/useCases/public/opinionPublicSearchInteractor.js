@@ -19,7 +19,7 @@ const { omit } = require('lodash');
  * @param {string} providers.endDate ending date for date range
  * @param {string} providers.judge judge name to filter by
  * @param {string} providers.keyword keyword to search for
- * @param {string} providers.opinionType opinion type to filter by
+ * @param {string} providers.opinionTypes opinion types to filter by
  * @param {string} providers.startDate start date for date range
  * @returns {object} the opinion search results
  */
@@ -32,7 +32,7 @@ exports.opinionPublicSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    opinionType,
+    opinionTypes,
     startDate,
   },
 ) => {
@@ -43,7 +43,7 @@ exports.opinionPublicSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    opinionType,
+    opinionTypes,
     startDate,
   });
 
