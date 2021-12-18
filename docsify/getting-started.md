@@ -100,3 +100,5 @@ It's time to get your feet wet with Dawson.  Don't worry, I'll walk you through 
 7. Review the petition information to make sure it's correct and press the `Review Petition` button
 8. Review on the confirmation page and click `Serve to IRS` (don't worry, it won't really serve anything to the IRS)
 9. Congrats 🥳, you filed your first petition as a petitioner and reviewed / served it as a petitionsclerk
+
+This is just one of many user flows we have in our system.  The reason we started you off with a petition is because a petitioner filing their petition is the start of the life cycle of a Case.

@@ -15,7 +15,7 @@ Because of this, you will need to make sure you node and npm installed locked to
 
 ### Java 11+ 
 
-You will need Java installed in order to run **[elasticsearch](https://www.elastic.co/)** and **[dynamodb](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)** locally on your machine.
+You will need Java installed in order to run **[elasticsearch](https://www.elastic.co/)** and **[dynamodb](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)** locally on your machine.  Grabbing the latest version of Java JDK should work fine.
 
 ### Jq
 
@@ -52,61 +52,35 @@ All of the applications dependencies are managed via our `package.json` and `pac
 `npm install`
 
 
+### 🏃 Starting the Services
+
+Once you've installed the dependencies, you should be able to run the npm scripts to start up the api, private UI, and public UI.  We recommend you have three separate terminals opened and run each of the following commands in a separate terminal:
+
+- `npm run start:client` (starts the private UI)
+- `npm run start:public` (starts the public UI)
+- `npm run start:api` (starts the private API and public API)
+
+Once you've started your services locally, you should be able to access them here:
+
+- [http://localhost:1234](http://localhost:1234) (private UI)
+- [http://localhost:5678](http://localhost:1234) (public UI)
 
 
+## How to Login Locally
 
+Now that you have your application fully running, we recommend you to try and login with some of the mock user accounts we have setup locally.  All of these users are defined in the [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json) file, and also in our [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) file which contains all of our dynamodb seed data.
 
+Open a browser to [http://localhost:1234](http://localhost:1234) and enter one of the following mock user emails.
 
-##### Setup
+?> There is no password required for logins during local development
 
-- Install the JDK from https://www.oracle.com/java/technologies/javase-jdk13-downloads.html
-For ClamAV, macOS users can do the following:
-*(Note: The following steps are unnecessary as clamav is disabled.)*
-- ~~`brew install clamav`~~
-- ~~`cp /usr/local/etc/clamav/freshclam.conf.sample /usr/local/etc/clamav/freshclam.conf`~~
-- ~~`sed -ie 's/^Example/#Example/g' /usr/local/etc/clamav/freshclam.conf` (comments out `Example` in the `freshclam.conf` file)~~
-- Installing `jq`
-  - `brew install jq` for macOS users or visit https://stedolan.github.io/jq/download/
-
-Both the front-end (`/web-client`) and API (`/web-api`) share code that exists in `/shared`. Before you can run either, you need to run `npm install` inside the top-level directory.
-
-- `npm i`
-
-###### Terminal A
-
-- `npm run start:api`
-
-Other start commands:
-
-- Run `cd web-client && npm run start:client:no-scanner` to start the UI without Dynamsoft (or if you don't have a scanner)
-- Run `npm run start:public` to start the UI for the public access portion of the site
-
-###### Terminal B
-
-- `npm run start:client`
-
-#### Login and test users
-
-There are two login mechanisms available — the legacy mock login system, and a new one that emulates AWS Cognito.
-
-##### Mock login
-
-You can log in using the following accounts.
-
-###### External Users
+**TODO: Prune down this list or make these match the same format we use for deployed lower environments.**
 
 ```txt
 petitioner@example.com
 privatePractitioner@example.com
-privatePractitioner1 - privatePractitioner4@example.com
 irsPractitioner@example.com
-irsPractitioner1 - irsPractitioner4@example.com
 irsSuperuser@example.com
-```
-
-###### Internal Users
-
-```txt
 adc@example.com
 admissionsclerk@example.com
 clerkofcourt@example.com
@@ -130,4 +104,7 @@ judge.colvin@example.com
 colvinsChambers@example.com
 ```
 
-No password is required.
+
+## ➕ Adding New Local Mock Users
+
+TODO: write about which files need to be modified to allow people to login with new user accounts
