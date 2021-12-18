@@ -35,6 +35,13 @@ export const gotoAdvancedSearchSequence =
           no: [setAlertWarningAction],
           yes: [],
         },
+        getFeatureFlagValueFactoryAction(
+          getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH,
+        ),
+        {
+          no: [setAlertWarningAction],
+          yes: [],
+        },
       ],
       yes: [
         getFeatureFlagValueFactoryAction(

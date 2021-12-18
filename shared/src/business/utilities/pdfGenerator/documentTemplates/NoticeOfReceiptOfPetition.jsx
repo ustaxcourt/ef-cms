@@ -109,11 +109,11 @@ export const NoticeOfReceiptOfPetition = ({
         </div>
       </div>
 
-      <p className="float-right width-third">
+      <div className="court-stamp">
         Stephanie A. Servoss
         <br />
         Clerk of the Court
-      </p>
+      </div>
 
       <div id="address-label-cover-sheet">
         <AddressLabel
