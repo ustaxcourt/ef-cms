@@ -6,9 +6,7 @@ const {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } = require('../EntityConstants');
-const {
-  getTextByCount,
-} = require('../../../../../web-client/integration-tests/helpers');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { Petitioner } = require('./Petitioner');
 
 describe('Petitioner', () => {

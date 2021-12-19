@@ -79,7 +79,7 @@ describe('getDocumentContentsForDocketEntryInteractor', () => {
   it('should throw an error when the document contents cannot be found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getDocument.mockRejectedValue(
+      .getDocument.mockRejectedValueOnce(
         new Error(
           `Document contents ${mockDocumentContentsId} could not be found in the S3 bucket.`,
         ),

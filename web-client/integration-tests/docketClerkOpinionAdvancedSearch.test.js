@@ -161,6 +161,20 @@ describe('Docket clerk opinion advanced search', () => {
         cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
       ).toEqual([]);
     });
+
+    it('when searching for a sealed opinion', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await updateOpinionForm(cerebralTest, {
+        docketNumber: '129-20',
+      });
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
   });
 
   describe('should return results', () => {

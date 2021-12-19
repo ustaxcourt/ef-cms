@@ -24,4 +24,11 @@ export const gotoPublicSearchSequence = [
     no: [],
     yes: [],
   },
+  getFeatureFlagValueFactoryAction(
+    getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH,
+  ),
+  {
+    no: [],
+    yes: [],
+  },
 ];

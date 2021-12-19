@@ -5,6 +5,7 @@ const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 const webpack = require('webpack');
 
 module.exports = {
+  devtool: false,
   module: {
     rules: [
       {
@@ -48,6 +49,7 @@ module.exports = {
       COGNITO_TOKEN_URL: null,
       ENV: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
+      IS_LOCAL: null,
       NO_SCANNER: null,
       PDF_EXPRESS_LICENSE_KEY: null,
       PUBLIC_SITE_URL: null,

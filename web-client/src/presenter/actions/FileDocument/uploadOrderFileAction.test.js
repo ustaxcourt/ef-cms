@@ -19,7 +19,7 @@ describe('uploadOrderFileAction', () => {
   it('should call path.error when an error occurs while uploading the order document', async () => {
     await applicationContext
       .getUseCases()
-      .uploadOrderDocumentInteractor.mockRejectedValue(new Error());
+      .uploadOrderDocumentInteractor.mockRejectedValueOnce(new Error());
 
     await runAction(uploadOrderFileAction, {
       modules: {

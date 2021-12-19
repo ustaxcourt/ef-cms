@@ -1,4 +1,4 @@
-import { authenticateCodeAction } from '../actions/authenticateCodeAction';
+import { authenticateUserAction } from '../actions/authenticateUserAction';
 import { decodeTokenAction } from '../actions/decodeTokenAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
 import { getUserAction } from '../actions/getUserAction';
@@ -17,7 +17,7 @@ import { startRefreshIntervalAction } from '../actions/startRefreshIntervalActio
  *
  */
 export const loginWithCodeSequence = [
-  authenticateCodeAction,
+  authenticateUserAction,
   decodeTokenAction,
   setTokenAction,
   startRefreshIntervalAction,
