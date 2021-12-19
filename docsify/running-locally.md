@@ -1,13 +1,25 @@
+# Running Dawson Locally
+
 So by now, hopefully now you've logged in to a deployed Dawson environment and played around uploading a petition as the *petitioner1@example.com* user and maybe even served that petition as the *petitionsclerk2@example.com* user.  Now it's time to figure out how you can run this application locally so that you can start contributing to the project.
 
 ## Prerequisites
+
+### Git
+
+Download and install [git](https://git-scm.com/downloads).  We use GitHub as our source control.
+
+After installing git, be sure to clone the project locally:
+
+
+`git clone git@github.com:flexion/ef-cms.git`
 
 
 ### Node v14.16.0
 
 All of our application code is built using Javascript: 
-    - Our frontend is written React, Cerebral, and bundled using webpack.
-    - Our backend APIs are written using express and a serverless wrapper.
+
+- Our frontend is written React, Cerebral, and bundled using webpack.
+- Our backend APIs are written using express and a serverless wrapper.
 
 Because of this, you will need to make sure you node and npm installed locked to the following versions:
     - Node v14.16.0
@@ -17,7 +29,7 @@ Because of this, you will need to make sure you node and npm installed locked to
 
 You will need Java installed in order to run **[elasticsearch](https://www.elastic.co/)** and **[dynamodb](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)** locally on your machine.  Grabbing the latest version of Java JDK should work fine.
 
-### Jq
+### JQ
 
 JQ is a tool used for parsing JSON in the command line.  We use JQ a lot in our various deployment scripts.
 
@@ -105,6 +117,4 @@ colvinsChambers@example.com
 ```
 
 
-## ➕ Adding New Local Mock Users
-
-TODO: write about which files need to be modified to allow people to login with new user accounts
+### 
