@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-  over1000Characters,
-} = require('../test/createTestApplicationContext');
+const { applicationContext } = require('../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
+const { getTextByCount } = require('../utilities/getTextByCount');
 const { Message } = require('./Message');
 
 describe('Message', () => {
@@ -323,7 +321,7 @@ describe('Message', () => {
           from: 'gg',
           fromSection: PETITIONS_SECTION,
           fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          message: over1000Characters,
+          message: getTextByCount(1001),
           subject: 'hey!',
           to: 'bob',
           toSection: PETITIONS_SECTION,

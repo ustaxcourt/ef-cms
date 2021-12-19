@@ -96,7 +96,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
   it('should throw an error when getDocumentDownloadUrlInteractor fails', async () => {
     applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor.mockRejectedValue(new Error());
+      .getDocumentDownloadUrlInteractor.mockRejectedValueOnce(new Error());
 
     await expect(
       runAction(openCaseDocumentDownloadUrlAction, {
@@ -119,7 +119,7 @@ describe('openCaseDocumentDownloadUrlAction', () => {
 
     applicationContext
       .getUseCases()
-      .getDocumentDownloadUrlInteractor.mockRejectedValue(new Error());
+      .getDocumentDownloadUrlInteractor.mockRejectedValueOnce(new Error());
 
     await expect(
       runAction(openCaseDocumentDownloadUrlAction, {

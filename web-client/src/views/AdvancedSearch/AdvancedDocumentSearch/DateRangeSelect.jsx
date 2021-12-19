@@ -17,12 +17,12 @@ export const DateRangeSelect = connect(
   }) {
     return (
       <>
-        <label className="usa-label" htmlFor="order-date-range">
+        <label className="usa-label" htmlFor="date-range">
           Date range
         </label>
         <select
           className="usa-select"
-          id="order-date-range"
+          id="date-range"
           name="dateRange"
           value={searchValue}
           onChange={e => {
