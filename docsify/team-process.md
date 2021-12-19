@@ -1,6 +1,6 @@
 # Team Process
 
-Now... before you rush off to write some for loops, let's talk about our team process and what is expected from our fellow teammates.  This part of the documentation should help members get on the same page when it comes to the soft-skills required to work as a well oiled agile machine.
+Now that you've logged in and played around with our Dawson system a big on a deployed environment, let's talk about our team process and what is expected from our fellow teammates.  This part of the documentation should help members get on the same page when it comes to the soft-skills required to work as a well oiled agile machine.
 
 ## 🤝🏿 Working Agreement
 

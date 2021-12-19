@@ -43,18 +43,22 @@ The AWS cli is again used for a majority of our deployment scripts.  You can fol
 
 We recommend you install a tool called [tfenv](https://github.com/tfutils/tfenv) which can be used to easily switch your terraform version.  
 
-`brew install tfenv`
+```bash
+brew install tfenv
+tfenv install 1.1.0
+tfenv use 1.1.0
+```
 
-`tfenv install 1.1.0`
-
-`tfenv use 1.1.0`
-
-!> It is critical you have the right version of terraform set before you try to deploy to AWS from your laptop
+!> Before running terraform on your workspace, double check you are on the correct version.
 
 
 ## Getting Running
 
 All of the scripts needed to run this project should be outlined in our [package.json](https://github.com/ustaxcourt/ef-cms/blob/staging/package.json#L162).  I'd recommend at least reading through some of these scripts because you will be using a lot of them as you advanced through learning this application.  But, so not to overwhelm you, let's just talk about the most important.
+
+### Checkout Develop
+
+You'd want to make sure you are on the `flexion/develop` branch before you install the npm dependencies or try to start the services.
 
 
 ### Install the NPM Depedencies
@@ -75,8 +79,11 @@ Once you've installed the dependencies, you should be able to run the npm script
 Once you've started your services locally, you should be able to access them here:
 
 - [http://localhost:1234](http://localhost:1234) (private UI)
-- [http://localhost:5678](http://localhost:1234) (public UI)
+- [http://localhost:5678](http://localhost:5678) (public UI)
 
+If everything is working fine, you should see the private UI hosted on [http://localhost:1234](http://localhost:1234).  Use one of the mock logins documented below to login.
+
+![Mock Login Page](./images/mock-login.png)
 
 ## How to Login Locally
 
@@ -86,7 +93,6 @@ Open a browser to [http://localhost:1234](http://localhost:1234) and enter one o
 
 ?> There is no password required for logins during local development
 
-**TODO: Prune down this list or make these match the same format we use for deployed lower environments.**
 
 ```txt
 petitioner@example.com
@@ -116,5 +122,8 @@ judge.colvin@example.com
 colvinsChambers@example.com
 ```
 
-
 ### 
+
+## Trouble Shooting
+
+Hopefully everything will work fine, but If you have issues logging in, double check your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 api.  Also verify you are on the correct branch.  It's recommended to be on the `flexion/develop` since.
