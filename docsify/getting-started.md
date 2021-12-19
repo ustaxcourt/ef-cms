@@ -1,19 +1,36 @@
 ## Getting Started with Dawson
 
-To truly understand the Dawson system, it's important to understand the users of the system.  This part of the guide will show you how to login to dawson, the various urls we have with our system, the various user roles we have, and how you could login to one of our running environments using some mock users we create.
+Hopefully you've read through the [What is Dawson](/what-is-dawson) section of this documentation because a lot of the terminology defined there will help you better understand how to navigate the Dawson application.  But, if you're the type of person who would rather just poke around on a live environment, this part of the documentation is for you.  We'll guide you on how to login to dawson, the various urls we have with our system, the various user roles we have, and how you could login to one of our running environments using some mock users we create.
 
+## Dawson's User Interfaces
 
-## Two Main Web Applications
-
-There are two main applications that we deploy for the Dawson system which try to address the needs of authenticated and unauthenticated users.
+There are two separate UIs that we deploy for the Dawson system; both of which try to address the needs of authenticated and unauthenticated users.
 
 ### 👪 Public UI
 
-Our **public** web application contains features accessible to the general public, such as *searching for a case*, *searching orders*, *searching opinions*, and *viewing the public docket entries of a case*.  This application does not require any form of authentication to be able to do searches.  The public UI also drives support for the **terminal user** which are users physically inside the Tax Court building needing to search our public records.
+Our **public** web application contains features accessible to the general public, such as *searching for a case*, *searching orders*, *searching opinions*, and *viewing the public docket entries of a case*.  This application does not require any form of authentication to be able to do searches.
+
+The public UI contains some logic for **terminal users**, which are users who are physically sitting inside the Tax Court building needing access to search our public records.
+
+Below is a screenshot of the public UI.  Note that some of the features allow public users to search for cases, search for orders, search for opinions, view the documents, and view the case's docket record:
+
+![Public UI](./images/public-ui.png)
 
 ### 🔒 Private UI
 
-The majority of our application code and features exist in a private user interface which requires authentication.  The private application contains features specific to the internal operations of the tax court building.  This is the application the Petitions Clerks will login to review and serve petitions, Docket Clerks will create and serve docket entries, and Judges can sign docket entries and message other internal members of the system.  User authentication is handled using [AWS Cognito](https://aws.amazon.com/cognito/); therefore, all the logins are managed in this third party Cognito system.
+The majority of our application code and features exist in a private user interface which requires authentication.
+
+The private application contains features specific to the **internal users** of the tax court building.  Some of these operations include a Petitions Clerk will reviewing and serve petitions, a Docket Clerk creating and serve docket entries, Judges can signing documents, an Admissions Clerk adding new Private Practitioner users and associating them with a case, etc.  
+
+The private UI is also where **external** users will interact with their Case.  For example, a Petitioner may login to upload a petition, or a Private Practitioner may login to upload their first Entry of Appearance document to become associated with a Case.
+
+Our authentication is managed via AWS Cognito.  The screenshot below is an example of what a user will see when trying to access with private UI while being unauthentication:
+
+![Dawson Cognito Login UI](./images/cognito.png)
+
+After logging into Dawson as a petitioner, you'll be redirected to our private application where you can view your petitioner dashboard:
+
+![Petitioner Dashboard](./images/petitioner-dashboard.png)
 
 ## Logging into Dawson
 
@@ -41,7 +58,7 @@ And the **Flexion** environments:
 
 The Dawson system is built using a role based authentication system.  Each user in Dawson has different permissions to various features in the application.  For example, only a petitionsclerk has the ability to serve a petition, whereas a docketclerk has the ability to upload a docket entry.  Here is a list of the current roles we have in our system:
 
-?> Check out our [User Roles](/roles) documentation page to learn more about each of the various user roles in the Dawson system.
+?> Check out our [User Roles](/what-is-dawson?id=users) documentation page to learn more about each of the various user roles in the Dawson system.
 
 - adc
 - admin
