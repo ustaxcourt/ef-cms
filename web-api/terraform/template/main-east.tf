@@ -382,7 +382,7 @@ resource "aws_route53_record" "api_route53_main_east_regional_record" {
   alias {
     name                   = aws_api_gateway_domain_name.api_custom_main_east.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.api_custom_main_east.regional_zone_id
-    evaluate_target_health = false
+    evaluate_target_health = true
   }
 
   latency_routing_policy {
@@ -399,7 +399,7 @@ resource "aws_route53_record" "public_api_route53_main_east_regional_record" {
   alias {
     name                   = aws_api_gateway_domain_name.public_api_custom_main_east.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.public_api_custom_main_east.regional_zone_id
-    evaluate_target_health = false
+    evaluate_target_health = true
   }
 
   latency_routing_policy {
