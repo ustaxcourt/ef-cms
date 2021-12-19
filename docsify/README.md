@@ -1,11 +1,14 @@
-# Electronic Filing / Case Management System (DAWSON)
-
-🎉 Welcome to the Dawson Documentation! 🎉
+# The Dawson Documentation
 
 The goal for this documentation is to consolidate all of the various forms of documentation we have for this project into a single easy to navigate website built using the open source tool [docsify](https://docsify.js.org/).
 
-
 You can learn how to customize the theme for these docs [here](https://jhildenbiddle.github.io/docsify-themeable/#/customization?id=sidebar)
+
+To contribute to this documentation, you can run `npm run docs` which will preview the documentation at [http://localhost:3000](http://localhost:3000) and live reload as you change the .md files.  Change the `docsify/*.md` files as needed.
+
+!> This documentation is currently a work in progress, so read at your own risk ☠️
+
+?> Anyone on the team is welcome to contribute to this documentation ✏️
 
 ## Where to Start?
 
