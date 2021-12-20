@@ -20,11 +20,9 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { userClicksDocketRecordLink } from './journey/userClicksDocketRecordLink';
-import { userSearchesForOpinionByDocketNumber } from './journey/userSearchesForOpinionByDocketNumber';
+import { userPerformsAdvancedOpinionSearch } from './journey/userPerformsAdvancedOpinionSearch';
 
 const cerebralTest = setupTest();
-const searchParams = {};
-const expectedObjectContents = {};
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
 describe('verify opinion search works for external users', () => {
@@ -68,43 +66,43 @@ describe('verify opinion search works for external users', () => {
   docketClerkServesDocument(cerebralTest, 0);
 
   describe('IRS and private practitioners search for opinion in sealed and non-sealed cases by docket number', () => {
-    it('sets searchParams and expectedObjectContents', async () => {
-      searchParams.docketNumber = cerebralTest.docketNumber;
-      expectedObjectContents.docketNumber = cerebralTest.docketNumber;
+    const getSearchParams = () => ({ docketNumber: cerebralTest.docketNumber });
+    const getExpectedObjectContents = () => ({
+      docketNumber: cerebralTest.docketNumber,
     });
     // associated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
-    userSearchesForOpinionByDocketNumber(
+    userPerformsAdvancedOpinionSearch(
       cerebralTest,
-      searchParams,
-      expectedObjectContents,
+      getSearchParams,
+      getExpectedObjectContents,
     );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // associated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
-    userSearchesForOpinionByDocketNumber(
+    userPerformsAdvancedOpinionSearch(
       cerebralTest,
-      searchParams,
-      expectedObjectContents,
+      getSearchParams,
+      getExpectedObjectContents,
     );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated irs practitioner - unsealed case
     loginAs(cerebralTest, 'irsPractitioner2@example.com');
-    userSearchesForOpinionByDocketNumber(
+    userPerformsAdvancedOpinionSearch(
       cerebralTest,
-      searchParams,
-      expectedObjectContents,
+      getSearchParams,
+      getExpectedObjectContents,
     );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated private practitioner - unsealed case
     loginAs(cerebralTest, 'privatePractitioner2@example.com');
-    userSearchesForOpinionByDocketNumber(
+    userPerformsAdvancedOpinionSearch(
       cerebralTest,
-      searchParams,
-      expectedObjectContents,
+      getSearchParams,
+      getExpectedObjectContents,
     );
     userClicksDocketRecordLink(cerebralTest, true);
 
@@ -114,44 +112,39 @@ describe('verify opinion search works for external users', () => {
 
     // associated irs practitioner - sealed case
     loginAs(cerebralTest, 'irsPractitioner@example.com');
-    userSearchesForOpinionByDocketNumber(
+    userPerformsAdvancedOpinionSearch(
       cerebralTest,
-      searchParams,
-      expectedObjectContents,
+      getSearchParams,
+      getExpectedObjectContents,
     );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // associated private practitioner - sealed case
     loginAs(cerebralTest, 'privatePractitioner@example.com');
-    userSearchesForOpinionByDocketNumber(
+    userPerformsAdvancedOpinionSearch(
       cerebralTest,
-      searchParams,
-      expectedObjectContents,
+      getSearchParams,
+      getExpectedObjectContents,
     );
     userClicksDocketRecordLink(cerebralTest, true);
 
     // unassociated irs practitioner - sealed case
     loginAs(cerebralTest, 'irsPractitioner2@example.com');
-    userSearchesForOpinionByDocketNumber(
+    userPerformsAdvancedOpinionSearch(
       cerebralTest,
-      searchParams,
-      expectedObjectContents,
+      getSearchParams,
+      getExpectedObjectContents,
     );
     userClicksDocketRecordLink(cerebralTest, false);
 
     // unassociated private practitioner - sealed case
     loginAs(cerebralTest, 'privatePractitioner2@example.com');
-    userSearchesForOpinionByDocketNumber(
+    userPerformsAdvancedOpinionSearch(
       cerebralTest,
-      searchParams,
-      expectedObjectContents,
+      getSearchParams,
+      getExpectedObjectContents,
     );
     userClicksDocketRecordLink(cerebralTest, false);
-
-    it('unsets searchParams and expectedObjectContents', async () => {
-      delete searchParams.docketNumber;
-      delete expectedObjectContents.docketNumber;
-    });
   });
 
   describe('private practitioner performs opinion search', () => {
@@ -264,112 +257,85 @@ describe('verify opinion search works for external users', () => {
 
     describe('keywords/phrases AND filters for docket record and Petitioner/case name', () => {
       // Private/IRS practitioner accesses Opinion Search, searches using combination of keyword/phrase and filters. Results list is returned.
-      it('should return results with keyword/phrase and filters for docket record', async () => {
-        await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-        cerebralTest.setState(
-          'advancedSearchTab',
-          ADVANCED_SEARCH_TABS.OPINION,
-        );
-
-        await updateOpinionForm(cerebralTest, {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
-          docketNumber: '105-20',
-          keyword: 'sunglasses',
-        });
-
-        await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-        expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-        const stateOfAdvancedSearch = cerebralTest.getState(
-          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
-        );
-
-        expect(stateOfAdvancedSearch).toMatchObject(
-          expect.arrayContaining([
-            expect.objectContaining({
-              docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-              documentTitle:
-                'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
-            }),
-          ]),
-        );
+      // Search by docket number and keyword where matches exist
+      let getSearchParams = () => ({
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+        docketNumber: '105-20',
+        keyword: 'sunglasses',
       });
-
-      it('should NOT return results with keyword/phrase and filters for docket record', async () => {
-        await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-        cerebralTest.setState(
-          'advancedSearchTab',
-          ADVANCED_SEARCH_TABS.OPINION,
-        );
-
-        await updateOpinionForm(cerebralTest, {
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
-          docketNumber: '200-20',
-          keyword: 'sunglasses',
-        });
-
-        await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-        expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-        const stateOfAdvancedSearch = cerebralTest.getState(
-          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
-        );
-
-        expect(stateOfAdvancedSearch).toEqual([]);
+      let getExpectedObjectContents = () => ({
+        docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+        documentTitle:
+          'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
       });
+      userPerformsAdvancedOpinionSearch(
+        cerebralTest,
+        getSearchParams,
+        getExpectedObjectContents,
+      );
 
-      it('should return results with keyword/phrase and filters for Petitioner/case name', async () => {
-        await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-        cerebralTest.setState(
-          'advancedSearchTab',
-          ADVANCED_SEARCH_TABS.OPINION,
-        );
+      // // Search by docket number and keyword where no matches exist
+      // it('should NOT return results with keyword/phrase and filters for docket record', async () => {
+      //   await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+      //   cerebralTest.setState(
+      //     'advancedSearchTab',
+      //     ADVANCED_SEARCH_TABS.OPINION,
+      //   );
+      //
+      //   await updateOpinionForm(cerebralTest, {
+      //     dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+      //     docketNumber: '200-20',
+      //     keyword: 'sunglasses',
+      //   });
+      //
+      //   await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+      //   expect(cerebralTest.getState('validationErrors')).toEqual({});
+      //
+      //   const stateOfAdvancedSearch = cerebralTest.getState(
+      //     `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+      //   );
+      //
+      //   expect(stateOfAdvancedSearch).toEqual([]);
+      // });
 
-        await updateOpinionForm(cerebralTest, {
-          caseTitleOrPetitioner: 'Astra Santiago',
-          dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
-          keyword: 'sunglasses',
-        });
-
-        await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-        expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-        const stateOfAdvancedSearch = cerebralTest.getState(
-          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
-        );
-
-        expect(stateOfAdvancedSearch).toMatchObject(
-          expect.arrayContaining([
-            expect.objectContaining({
-              docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
-              documentTitle:
-                'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
-            }),
-          ]),
-        );
+      // Search by petitioner/case name and keyword where results exist
+      getSearchParams = () => ({
+        caseTitleOrPetitioner: 'Astra Santiago',
+        dateRange: DATE_RANGE_SEARCH_OPTIONS.ALL_DATES,
+        keyword: 'sunglasses',
       });
-
-      it('should NOT return results with keyword/phrase and filters for docket record', async () => {
-        await cerebralTest.runSequence('gotoAdvancedSearchSequence');
-        cerebralTest.setState(
-          'advancedSearchTab',
-          ADVANCED_SEARCH_TABS.OPINION,
-        );
-
-        await updateOpinionForm(cerebralTest, {
-          caseTitleOrPetitioner: 'Anything',
-          keyword: 'sunglasses',
-        });
-
-        await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
-        expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-        const stateOfAdvancedSearch = cerebralTest.getState(
-          `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
-        );
-
-        expect(stateOfAdvancedSearch).toEqual([]);
+      getExpectedObjectContents = () => ({
+        docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+        documentTitle:
+          'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
       });
+      userPerformsAdvancedOpinionSearch(
+        cerebralTest,
+        getSearchParams,
+        getExpectedObjectContents,
+      );
+      //
+      // it('should NOT return results with keyword/phrase and filters for docket record', async () => {
+      //   await cerebralTest.runSequence('gotoAdvancedSearchSequence');
+      //   cerebralTest.setState(
+      //     'advancedSearchTab',
+      //     ADVANCED_SEARCH_TABS.OPINION,
+      //   );
+      //
+      //   await updateOpinionForm(cerebralTest, {
+      //     caseTitleOrPetitioner: 'Anything',
+      //     keyword: 'sunglasses',
+      //   });
+      //
+      //   await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+      //   expect(cerebralTest.getState('validationErrors')).toEqual({});
+      //
+      //   const stateOfAdvancedSearch = cerebralTest.getState(
+      //     `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
+      //   );
+      //
+      //   expect(stateOfAdvancedSearch).toEqual([]);
+      // });
     });
   });
 });
