@@ -4,14 +4,9 @@ import { updateOpinionForm } from '../helpers';
 export const userPerformsAdvancedOpinionSearch = (
   cerebralTest,
   getSearchParams,
-  getExpectedObjectContents,
+  expectedObjectContentsMatcher,
 ) => {
-  return it('should return a list of opinions', async () => {
-    console.log('*****getSearchParams returns*****', getSearchParams());
-    console.log(
-      '*****getExpectedObjectContents returns*****',
-      getExpectedObjectContents(),
-    );
+  return it('should return the expected list of opinions', async () => {
     await cerebralTest.runSequence('gotoAdvancedSearchSequence');
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.OPINION);
 
@@ -20,14 +15,10 @@ export const userPerformsAdvancedOpinionSearch = (
     await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    const stateOfAdvancedSearch = cerebralTest.getState(
-      `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
-    );
+    const stateOfAdvancedSearch = cerebralTest.getState('searchResults');
 
-    expect(stateOfAdvancedSearch).toMatchObject(
-      expect.arrayContaining([
-        expect.objectContaining(getExpectedObjectContents()),
-      ]),
+    expect(JSON.stringify(stateOfAdvancedSearch)).toMatch(
+      expectedObjectContentsMatcher(),
     );
   });
 };
