@@ -331,12 +331,25 @@ export const setWhitelistIps = ips => {
   });
 };
 
-export const setOpinionSearchEnabled = isEnabled => {
+export const describeif = condition => (condition ? describe : describe.skip);
+
+export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
       current: isEnabled,
-      pk: 'internal-opinion-search-enabled',
-      sk: 'internal-opinion-search-enabled',
+      pk: `${keyPrefix}-opinion-search-enabled`,
+      sk: `${keyPrefix}-opinion-search-enabled`,
+    },
+    applicationContext,
+  });
+};
+
+export const setOrderSearchEnabled = (isEnabled, keyPrefix) => {
+  return client.put({
+    Item: {
+      current: isEnabled,
+      pk: `${keyPrefix}-order-search-enabled`,
+      sk: `${keyPrefix}-order-search-enabled`,
     },
     applicationContext,
   });
@@ -890,21 +903,6 @@ export const getPetitionDocumentForCase = caseDetail => {
 export const getPetitionWorkItemForCase = caseDetail => {
   const petitionDocument = getPetitionDocumentForCase(caseDetail);
   return petitionDocument.workItem;
-};
-
-export const getTextByCount = count => {
-  const baseText =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate efficitur ante, at placerat.';
-  const baseCount = baseText.length;
-
-  let resultText = baseText;
-  if (count > baseCount) {
-    for (let i = 1; i < Math.ceil(count / baseCount); i++) {
-      resultText += baseText;
-    }
-  }
-
-  return resultText.slice(0, count);
 };
 
 export const embedWithLegalIpsumText = (phrase = '') => {

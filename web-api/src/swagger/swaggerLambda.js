@@ -1,4 +1,4 @@
-const { headers } = require('../middleware/apiGatewayHelper');
+const { headerOverride } = require('../lambdaWrapper');
 
 /**
  * render the swagger html page
@@ -25,7 +25,7 @@ exports.swaggerLambda = () => {
   return {
     body,
     headers: {
-      ...headers,
+      ...headerOverride,
       'Content-Type': 'text/html',
       'X-Frame-Options': 'DENY',
       'X-XSS-Protection': '1; mode=block',

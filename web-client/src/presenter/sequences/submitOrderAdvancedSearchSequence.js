@@ -3,6 +3,7 @@ import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchR
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { getConstants } from '../../getConstants';
 import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
+import { isInternalUserAction } from '../actions/isInternalUserAction';
 import { setAdvancedSearchResultsAction } from '../actions/AdvancedSearch/setAdvancedSearchResultsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
@@ -13,27 +14,48 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { submitOrderAdvancedSearchAction } from '../actions/AdvancedSearch/submitOrderAdvancedSearchAction';
 import { validateOrderAdvancedSearchAction } from '../actions/AdvancedSearch/validateOrderAdvancedSearchAction';
 
-export const submitOrderAdvancedSearchSequence = showProgressSequenceDecorator([
-  getFeatureFlagValueFactoryAction(
-    getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
-  ),
+const orderSearchDisabled = [
+  setAlertWarningAction,
+  setDefaultAdvancedSearchTabAction,
+];
+
+const orderSearchEnabled = [
+  clearSearchTermAction,
+  validateOrderAdvancedSearchAction,
   {
-    no: [setAlertWarningAction, setDefaultAdvancedSearchTabAction],
-    yes: [
-      clearSearchTermAction,
-      validateOrderAdvancedSearchAction,
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      clearSearchResultsAction,
+      startShowValidationAction,
+    ],
+    success: [
+      clearAlertsAction,
+      submitOrderAdvancedSearchAction,
+      setAdvancedSearchResultsAction,
+    ],
+  },
+];
+
+export const submitOrderAdvancedSearchSequence = showProgressSequenceDecorator([
+  isInternalUserAction,
+  {
+    no: [
+      getFeatureFlagValueFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
+      ),
       {
-        error: [
-          setAlertErrorAction,
-          setValidationErrorsAction,
-          clearSearchResultsAction,
-          startShowValidationAction,
-        ],
-        success: [
-          clearAlertsAction,
-          submitOrderAdvancedSearchAction,
-          setAdvancedSearchResultsAction,
-        ],
+        no: orderSearchDisabled,
+        yes: orderSearchEnabled,
+      },
+    ],
+    yes: [
+      getFeatureFlagValueFactoryAction(
+        getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
+      ),
+      {
+        no: orderSearchDisabled,
+        yes: orderSearchEnabled,
       },
     ],
   },

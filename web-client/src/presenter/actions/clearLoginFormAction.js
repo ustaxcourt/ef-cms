@@ -9,6 +9,6 @@ import { state } from 'cerebral';
  */
 export const clearLoginFormAction = ({ store }) => {
   store.set(state.form, {
-    name: '',
+    email: '',
   });
 };

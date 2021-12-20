@@ -1,6 +1,6 @@
 module.exports = [
-  'http://localhost:1234/mock-login?token=admissionsclerk&path=/users/create-practitioner',
-  'http://localhost:1234/mock-login?token=admissionsclerk&path=/users/edit-practitioner/PT1234',
+  'http://localhost:1234/log-in?code=admissionsclerk@example.com&path=/users/create-practitioner',
+  'http://localhost:1234/log-in?code=admissionsclerk@example.com&path=/users/edit-practitioner/PT1234',
   {
     actions: [
       'wait for #updatedEmail to be visible',
@@ -10,7 +10,7 @@ module.exports = [
       'wait for #matching-email-modal to be visible',
     ],
     notes: 'checks a11y of matching email confirm modal',
-    url: 'http://localhost:1234/mock-login?token=admissionsclerk&path=/case-detail/124-20/edit-petitioner-information/d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f&info=matching-email-modal',
+    url: 'http://localhost:1234/log-in?code=admissionsclerk@example.com&path=/case-detail/124-20/edit-petitioner-information/d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f&info=matching-email-modal',
   },
   {
     actions: [
@@ -21,6 +21,6 @@ module.exports = [
       'wait for #no-matching-email-modal to be visible',
     ],
     notes: 'checks a11y of no matching email confirm modal',
-    url: 'http://localhost:1234/mock-login?token=admissionsclerk&path=/case-detail/104-20/edit-petitioner-information/f7272c25-99e1-4448-960e-e2a6b86e7d17&info=no-matching-email-modal',
+    url: 'http://localhost:1234/log-in?code=admissionsclerk@example.com&path=/case-detail/104-20/edit-petitioner-information/f7272c25-99e1-4448-960e-e2a6b86e7d17&info=no-matching-email-modal',
   },
 ];

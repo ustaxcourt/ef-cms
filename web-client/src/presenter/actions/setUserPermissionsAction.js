@@ -9,7 +9,5 @@ import { state } from 'cerebral';
  */
 export const setUserPermissionsAction = ({ applicationContext, store }) => {
   const userPermissions = applicationContext.getCurrentUserPermissions();
-  if (userPermissions) {
-    store.set(state.permissions, userPermissions);
-  }
+  store.set(state.permissions, userPermissions);
 };

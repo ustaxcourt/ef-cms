@@ -2,15 +2,14 @@ import { docketClerkVerifiesQCItemNotInSectionInbox } from './journey/docketCler
 import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
-import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
-
 import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
-
-const cerebralTest = setupTest();
+import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
 
 describe('admissions clerk adds an email to a petitioner who already exists in the system and has a separate efile petition', () => {
   const OLD_EMAIL = 'petitioner2@example.com';
   const NEW_EMAIL = 'petitioner5@example.com';
+
+  const cerebralTest = setupTest();
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -30,7 +29,6 @@ describe('admissions clerk adds an email to a petitioner who already exists in t
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
-  // petition clerk adds representation
   petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
   loginAs(cerebralTest, OLD_EMAIL);

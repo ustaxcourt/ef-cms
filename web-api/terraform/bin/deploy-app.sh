@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ENVIRONMENT=$1
 
@@ -27,15 +27,12 @@ echo "  - ENVIRONMENT=${ENVIRONMENT}"
 echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
+echo "  - LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}"
 echo "  - MIGRATE_FLAG=${MIGRATE_FLAG}"
+echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
 
-tf_version=$(terraform --version)
-
-if [[ ${tf_version} != *"1.0.9"* ]]; then
-  echo "Please set your terraform version to 1.0.9 before deploying."
-  exit 1
-fi
+../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
@@ -109,6 +106,8 @@ export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
 export TF_VAR_green_elasticsearch_domain=$GREEN_ELASTICSEARCH_DOMAIN
 export TF_VAR_green_table_name=$GREEN_TABLE_NAME
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
+export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID
+export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_zone_name=$ZONE_NAME
 

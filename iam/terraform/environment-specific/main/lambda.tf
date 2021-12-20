@@ -169,6 +169,11 @@ resource "aws_iam_role_policy" "lambda_policy" {
                 "arn:aws:execute-api:us-west-1:${data.aws_caller_identity.current.account_id}:*"
             ],
             "Effect": "Allow"
+        },
+        {
+            "Action": "SNS:Publish",
+            "Resource": "arn:aws:sns:us-east-1:${data.aws_caller_identity.current.account_id}:seal_notifier",
+            "Effect": "Allow"
         }
     ]
 }

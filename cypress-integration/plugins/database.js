@@ -61,6 +61,21 @@ const clearDatabase = async () => {
   }
 };
 
+module.exports.getEmailVerificationToken = async ({ userId }) => {
+  return await documentClient
+    .get({
+      Key: {
+        pk: `user|${userId}`,
+        sk: `user|${userId}`,
+      },
+      TableName: 'efcms-local',
+    })
+    .promise()
+    .then(result => {
+      return result.Item.pendingEmailVerificationToken;
+    });
+};
+
 module.exports.reseedDatabase = async () => {
   await clearDatabase();
   await seedLocalDatabase();

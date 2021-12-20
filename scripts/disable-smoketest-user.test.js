@@ -13,7 +13,7 @@ describe('disableSmoketestUser', () => {
   it('should exit with an error code when anything fails', async () => {
     const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
 
-    disableUser.mockRejectedValue(new Error('oh no!'));
+    disableUser.mockRejectedValueOnce(new Error('oh no!'));
 
     await disableSmoketestUser();
     expect(mockExit).toHaveBeenCalledWith(1);

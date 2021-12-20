@@ -70,7 +70,7 @@ describe('retrySendNotificationToConnections', () => {
   it('does not call client.delete if deleteGoneConnections is false', async () => {
     await applicationContext
       .getNotificationGateway()
-      .sendNotificationToConnection.mockRejectedValue(notificationError);
+      .sendNotificationToConnection.mockRejectedValueOnce(notificationError);
 
     await retrySendNotificationToConnections({
       applicationContext,

@@ -1,7 +1,5 @@
-const {
-  over1000Characters,
-} = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeB', () => {
@@ -46,7 +44,7 @@ describe('CourtIssuedDocumentTypeB', () => {
         attachments: false,
         documentTitle: 'Order that case is assigned to [Judge Name] [Anything]',
         documentType: 'Order that case is assigned',
-        freeText: over1000Characters,
+        freeText: getTextByCount(1001),
         judge: 'Judge Colvin',
         scenario: 'Type B',
       });

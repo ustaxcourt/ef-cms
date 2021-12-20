@@ -1,4 +1,3 @@
-const querystring = require('querystring');
 const { get } = require('./requests');
 
 /**
@@ -13,10 +12,9 @@ exports.orderPublicSearchInteractor = (
   applicationContext,
   { searchParams },
 ) => {
-  const queryString = querystring.stringify(searchParams);
-
   return get({
     applicationContext,
-    endpoint: `/public-api/order-search?${queryString}`,
+    endpoint: '/public-api/order-search',
+    params: searchParams,
   });
 };

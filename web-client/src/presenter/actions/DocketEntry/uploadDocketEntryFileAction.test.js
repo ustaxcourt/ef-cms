@@ -30,7 +30,7 @@ describe('uploadDocketEntryFileAction', () => {
   it('should return the error path when an error is thrown when attempting to upload the document file', async () => {
     applicationContext
       .getUseCases()
-      .uploadDocumentInteractor.mockRejectedValue(new Error('whoopsie!'));
+      .uploadDocumentInteractor.mockRejectedValueOnce(new Error('whoopsie!'));
 
     await runAction(uploadDocketEntryFileAction, {
       modules: { presenter },

@@ -20,7 +20,7 @@ describe('unsealCaseAction', () => {
   it('should call path.error when there is an error unsealing the case', async () => {
     await applicationContext
       .getUseCases()
-      .unsealCaseInteractor.mockRejectedValue(new Error());
+      .unsealCaseInteractor.mockRejectedValueOnce(new Error());
 
     await runAction(unsealCaseAction, {
       modules: {

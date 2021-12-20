@@ -17,6 +17,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
         advancedSearchForm: {
           opinionSearch: {
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -45,6 +46,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
           opinionSearch: {
             docketNumber: '105-20L',
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -90,6 +92,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
           opinionSearch: {
             docketNumber: '105-20L',
             keyword: 'a',
+            opinionTypes: {},
           },
         },
       },
@@ -99,5 +102,30 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
       message: 'Please wait 1 minute before trying your search again.',
       title: "You've reached your search limit",
     });
+  });
+
+  it('should filter out opinion types that are not selected for search', async () => {
+    await runAction(submitPublicOpinionAdvancedSearchAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        advancedSearchForm: {
+          opinionSearch: {
+            opinionTypes: {
+              Avocado: false,
+              Banana: false,
+              Cucumber: true,
+            },
+          },
+        },
+        form: {},
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().opinionPublicSearchInteractor.mock
+        .calls[0][1].searchParams.opinionTypes,
+    ).toEqual(['Cucumber']);
   });
 });

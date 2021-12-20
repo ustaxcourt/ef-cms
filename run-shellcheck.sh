@@ -5,7 +5,6 @@
 # Usage
 #   ./run-shellcheck.sh
 
-# Requirements
-#   - shellcheck must be installed on your machine
+( ! command -v shellcheck > /dev/null ) && echo "shellcheck was not found on your path. Please install shellcheck." && exit 1
 
 find . -type f -name '*.sh' ! -path '*node_modules*' -exec shellcheck {} \;
