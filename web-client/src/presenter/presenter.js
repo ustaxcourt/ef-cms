@@ -25,6 +25,7 @@ import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequen
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
+import { broadcastLogoutSequence } from './sequences/broadcastLogoutSequence';
 import { broadcastStayLoggedInSequence } from './sequences/broadcastStayLoggedInSequence';
 import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
@@ -329,6 +330,7 @@ import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
+import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
@@ -512,6 +514,7 @@ export const presenter = {
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
     broadcastIdleStatusActiveSequence,
+    broadcastLogoutSequence,
     broadcastStayLoggedInSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
@@ -814,6 +817,7 @@ export const presenter = {
     showViewPetitionerCounselModalSequence,
     signOutSequence,
     skipSigningOrderSequence,
+    startRefreshIntervalSequence,
     startScanSequence,
     strikeDocketEntrySequence,
     submitAddConsolidatedCaseSequence,

@@ -37,7 +37,7 @@ describe('closeTrialSessionAction', () => {
   it('goes to error path if error', async () => {
     applicationContext.getUseCases().closeTrialSessionInteractor = jest
       .fn()
-      .mockRejectedValue(new Error('bad'));
+      .mockRejectedValueOnce(new Error('bad'));
 
     await runAction(closeTrialSessionAction, {
       modules: {

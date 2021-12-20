@@ -46,13 +46,13 @@ exports.searchByPractitionerbarNumber = barNumber => {
 };
 
 exports.searchOrderByKeyword = keyword => {
-  cy.get('input#order-search').type(keyword);
+  cy.get('input#keyword-search').type(keyword);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
 
 exports.searchOpinionByKeyword = keyword => {
-  cy.get('input#order-search').type(keyword);
+  cy.get('input#keyword-search').type(keyword);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };

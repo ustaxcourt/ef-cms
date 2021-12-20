@@ -12,25 +12,18 @@ export const startRefreshIntervalAction = ({
   store,
 }) => {
   const oldInterval = get(state.refreshTokenInterval);
-  clearInterval(oldInterval);
-  const refreshToken = get(state.refreshToken);
-  const time = applicationContext.getConstants().REFRESH_INTERVAL;
-  const interval = setInterval(async () => {
+
+  const refreshTokenRequest = async () => {
     const response = await applicationContext
       .getUseCases()
-      .refreshTokenInteractor(applicationContext, {
-        refreshToken,
-      });
+      .refreshTokenInteractor(applicationContext);
 
     store.set(state.token, response.token);
     applicationContext.setCurrentUserToken(response.token);
+  };
 
-    await applicationContext
-      .getUseCases()
-      .setItemInteractor(applicationContext, {
-        key: 'token',
-        value: response.token,
-      });
-  }, time);
+  clearInterval(oldInterval);
+  const time = applicationContext.getConstants().REFRESH_INTERVAL;
+  const interval = setInterval(refreshTokenRequest, time);
   store.set(state.refreshTokenInterval, interval);
 };

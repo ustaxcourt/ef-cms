@@ -556,8 +556,15 @@ ol {
 }
 
 #document-notice-of-receipt {
+  .court-stamp {
+    position: absolute;
+    bottom: 0in;
+    right: 0.5in;
+  }
+
   .info-box-content {
-    line-height: 17px;
+    font-size: 12px;
+    line-height: 15px;
   }
 }
 

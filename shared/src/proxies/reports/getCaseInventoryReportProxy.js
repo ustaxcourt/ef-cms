@@ -1,4 +1,3 @@
-const querystring = require('querystring');
 const { get } = require('../requests');
 
 /**
@@ -17,15 +16,15 @@ exports.getCaseInventoryReportInteractor = (
 ) => {
   const { CASE_INVENTORY_PAGE_SIZE } = applicationContext.getConstants();
   const from = (page - 1) * CASE_INVENTORY_PAGE_SIZE;
-  const queryString = querystring.stringify({
-    associatedJudge,
-    from,
-    pageSize: CASE_INVENTORY_PAGE_SIZE,
-    status,
-  });
 
   return get({
     applicationContext,
-    endpoint: `/reports/case-inventory-report?${queryString}`,
+    endpoint: '/reports/case-inventory-report',
+    params: {
+      associatedJudge,
+      from,
+      pageSize: CASE_INVENTORY_PAGE_SIZE,
+      status,
+    },
   });
 };

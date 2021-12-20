@@ -59,10 +59,8 @@ describe('computeTrialSessionFormDataAction', () => {
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
     });
-    expect(result.state.form).toMatchObject({
-      term: undefined,
-      termYear: undefined,
-    });
+    expect(result.state.form.term).toBeUndefined();
+    expect(result.state.form.termYear).toBeUndefined();
 
     form.month = '13';
     form.year = '2019';
@@ -70,19 +68,17 @@ describe('computeTrialSessionFormDataAction', () => {
       state: { form },
     });
     expect(result.state.form).toMatchObject({
-      term: undefined,
       termYear: '2019',
     });
+    expect(result.state.form.term).toBeUndefined();
 
     form.month = '5';
     form.year = '';
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
     });
-    expect(result.state.form).toMatchObject({
-      term: undefined,
-      termYear: undefined,
-    });
+    expect(result.state.form.term).toBeUndefined();
+    expect(result.state.form.termYear).toBeUndefined();
   });
 
   it('should store an afternoon (pm) startTime in 24hr format', async () => {

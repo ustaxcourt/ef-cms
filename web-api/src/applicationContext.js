@@ -67,6 +67,9 @@ const {
   associateUserWithCasePending,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
 const {
+  authenticateUserInteractor,
+} = require('../../shared/src/business/useCases/auth/authenticateUserInteractor');
+const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
 const {
@@ -140,6 +143,9 @@ const {
 const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
+const {
+  confirmAuthCode,
+} = require('../../shared/src/persistence/cognito/confirmAuthCode');
 const {
   Correspondence,
 } = require('../../shared/src/business/entities/Correspondence');
@@ -754,6 +760,9 @@ const {
   isAuthorized,
 } = require('../../shared/src/authorization/authorizationClientService');
 const {
+  isCurrentColorActive,
+} = require('../../shared/src/persistence/dynamo/helpers/isCurrentColorActive');
+const {
   isEmailAvailable,
 } = require('../../shared/src/persistence/cognito/isEmailAvailable');
 const {
@@ -835,6 +844,12 @@ const {
   receiptOfFiling,
 } = require('../../shared/src/business/utilities/documentGenerators/receiptOfFiling');
 const {
+  refreshAuthTokenInteractor,
+} = require('../../shared/src/business/useCases/auth/refreshAuthTokenInteractor');
+const {
+  refreshToken,
+} = require('../../shared/src/persistence/cognito/refreshToken');
+const {
   removeCaseFromHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/removeCaseFromHearing');
 const {
@@ -914,6 +929,9 @@ const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
+  sealInLowerEnvironment,
+} = require('../../shared/src/business/useCaseHelper/sealInLowerEnvironment');
+const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
@@ -925,6 +943,9 @@ const {
 const {
   sendMaintenanceNotificationsInteractor,
 } = require('../../shared/src/business/useCases/maintenance/sendMaintenanceNotificationsInteractor');
+const {
+  sendNotificationOfSealing,
+} = require('../../shared/src/dispatchers/sns/sendNotificationOfSealing');
 const {
   sendNotificationToConnection,
 } = require('../../shared/src/notifications/sendNotificationToConnection');
@@ -1314,6 +1335,7 @@ let s3Cache;
 let sesCache;
 let sqsCache;
 let searchClientCache;
+let notificationServiceCache;
 
 const entitiesByName = {
   Case,
@@ -1421,6 +1443,21 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
+  confirmAuthCode: process.env.IS_LOCAL
+    ? (applicationContext, { code }) => {
+        const jwt = require('jsonwebtoken');
+        const { userMap } = require('../../shared/src/test/mockUserTokenMap');
+        const user = {
+          ...userMap[code],
+          sub: userMap[code].userId,
+        };
+        const token = jwt.sign(user, 'secret');
+        return {
+          refreshToken: token,
+          token,
+        };
+      }
+    : confirmAuthCode,
   createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseDeadline,
@@ -1498,6 +1535,11 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
+  refreshToken: process.env.IS_LOCAL
+    ? (applicationContext, { refreshToken: aRefreshToken }) => ({
+        token: aRefreshToken,
+      })
+    : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
@@ -1612,6 +1654,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getCurrentUser,
     getDispatchers: () => ({
       sendBulkTemplatedEmail,
+      sendNotificationOfSealing:
+        process.env.PROD_ENV_ACCOUNT_ID === process.env.AWS_ACCOUNT_ID
+          ? sendNotificationOfSealing
+          : () => {},
     }),
     getDocumentClient,
     getDocumentGenerators: () => ({
@@ -1720,6 +1766,23 @@ module.exports = (appContextUser, logger = createLogger()) => {
       sendNotificationToConnection,
       sendNotificationToUser,
     }),
+    getNotificationService: () => {
+      if (notificationServiceCache) {
+        return notificationServiceCache;
+      }
+
+      if (environment.stage === 'local') {
+        notificationServiceCache = {
+          publish: () => ({
+            promise: () => {},
+          }),
+        };
+      } else {
+        notificationServiceCache = new AWS.SNS({});
+      }
+
+      return notificationServiceCache;
+    },
     getPdfJs: () => {
       const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
@@ -1804,6 +1867,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCounselFromRemovedPetitioner,
         removeCoversheet,
         saveFileAndGenerateUrl,
+        sealInLowerEnvironment,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
@@ -1833,6 +1897,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
         associatePrivatePractitionerWithCaseInteractor,
+        authenticateUserInteractor,
         batchDownloadTrialSessionInteractor,
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,
@@ -1942,6 +2007,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         orderPublicSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
+        refreshAuthTokenInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,
@@ -2035,6 +2101,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       };
     },
     isAuthorized,
+    isCurrentColorActive,
     logger: {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),

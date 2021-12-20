@@ -1,17 +1,44 @@
 /* eslint-disable max-lines */
-const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
 const cors = require('cors');
+const createApplicationContext = require('./applicationContext');
 const express = require('express');
 const logger = require('./logger');
+const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const { set } = require('lodash');
-
-const createApplicationContext = require('./applicationContext');
 const applicationContext = createApplicationContext();
 
 const app = express();
 
-app.use(cors());
+const allowAccessOriginFunction = (origin, callback) => {
+  //Origin header wasn't provided
+  if (!origin || origin === '') {
+    callback(null, '*');
+    return;
+  }
+
+  //if the backend is running locally or if an official deployed frontend called the backend, parrot out the Origin
+  //this is required for the browser to support receiving and sending cookies
+  if (process.env.IS_LOCAL || origin.includes(process.env.EFCMS_DOMAIN)) {
+    callback(null, origin);
+    return;
+  }
+
+  //some unknown frontend called us
+  callback(null, '*');
+};
+
+const defaultCorsOptions = {
+  origin: allowAccessOriginFunction,
+};
+
+const authCorsOptions = {
+  ...defaultCorsOptions,
+  credentials: true,
+};
+
+app.use('/auth', cors(authCorsOptions));
+app.use(cors(defaultCorsOptions));
 app.use(express.json({ limit: '1200kb' }));
 app.use(express.urlencoded({ extended: true }));
 app.use((req, res, next) => {
@@ -23,10 +50,10 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(awsServerlessExpressMiddleware.eventContext());
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
-    set(req, 'apiGateway.event.requestContext.identity.sourceIp', 'localhost');
+    const currentInvoke = getCurrentInvoke();
+    set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
   }
   next();
 });
@@ -390,10 +417,12 @@ const { addCoversheetLambda } = require('./documents/addCoversheetLambda');
 const { addPaperFilingLambda } = require('./documents/addPaperFilingLambda');
 const { advancedQueryLimiter } = require('./middleware/advancedQueryLimiter');
 const { assignWorkItemsLambda } = require('./workitems/assignWorkItemsLambda');
+const { authenticateUserLambda } = require('./auth/authenticateUserLambda');
 const { completeMessageLambda } = require('./messages/completeMessageLambda');
 const { createCaseLambda } = require('./cases/createCaseLambda');
 const { createMessageLambda } = require('./messages/createMessageLambda');
 const { createUserLambda } = require('./users/createUserLambda');
+const { deleteAuthCookieLambda } = require('./auth/deleteAuthCookieLambda');
 const { deleteCaseNoteLambda } = require('./caseNote/deleteCaseNoteLambda');
 const { editPaperFilingLambda } = require('./documents/editPaperFilingLambda');
 const { forwardMessageLambda } = require('./messages/forwardMessageLambda');
@@ -414,6 +443,7 @@ const { getUsersInSectionLambda } = require('./users/getUsersInSectionLambda');
 const { getWorkItemLambda } = require('./workitems/getWorkItemLambda');
 const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
+const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
@@ -1083,5 +1113,14 @@ app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
  * feature-flag
  */
 app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+
+/**
+ * Authentication/Authorization
+ */
+app
+  .route('/auth/login')
+  .post(lambdaWrapper(authenticateUserLambda))
+  .delete(lambdaWrapper(deleteAuthCookieLambda));
+app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
 
 exports.app = app;
