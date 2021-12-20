@@ -3,7 +3,6 @@
 ## JavaScript Libraries
 
 `npm update`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
-  * NOTE: Do NOT update @vendia/serverless-express to >= 4.0.0, it currently has a bug in the way it calculates the content length of a request leading to malformed body objects in requests.
 
 `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
 
@@ -13,7 +12,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 ## Infrastructure as Code Libraries
 
 `Terraform`: check for updates on the Terraform site. The Terraform version can be changed with a global find/replace.
-  * If there is a new version of Terraform, update all version references in the project and then deploy from your machine to an experimental environment to verify everything is working. 
+  * If there is a new version of Terraform, update all version references in the project and push to to an experimental environment to allow CircleCI to verify everything is working. 
   * Be sure to deploy the migration infrastructure and run a migration as well.
   * Once verification is complete, you will need to rebuild the docker images that use Terraform and push them to ECS.
 
