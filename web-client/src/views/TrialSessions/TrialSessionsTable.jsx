@@ -90,6 +90,7 @@ export const TrialSessionsTable = connect(
               <th>Date</th>
               <th className="icon-column" />
               <th>Location</th>
+              <th>Proceeding Type</th>
               <th>Type</th>
               <th>Judge</th>
               {trialSessionsHelper.showNoticeIssued && <th>Notice issued</th>}
@@ -100,7 +101,7 @@ export const TrialSessionsTable = connect(
             <React.Fragment key={trialDate.startOfWeekSortable}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan={5 + trialSessionsHelper.additionalColumnsShown}>
+                  <td colSpan={6 + trialSessionsHelper.additionalColumnsShown}>
                     <h4 className="margin-bottom-0">
                       {trialDate.dateFormatted}
                     </h4>
@@ -132,6 +133,7 @@ export const TrialSessionsTable = connect(
                         {item.trialLocation}
                       </a>
                     </td>
+                    <td>{item.proceedingType}</td>
                     <td>{item.sessionType}</td>
                     <td>{item.judge && item.judge.name}</td>
                     {trialSessionsHelper.showNoticeIssued && (
