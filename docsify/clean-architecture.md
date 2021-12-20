@@ -27,7 +27,28 @@ Since our project is written in Javascript, it makes more sense to replace the w
 
 At this point you may ask how does the interactor invoke code from the persistence layer if it isn't allowed to directly import that code? The answer is using dependency inversion.  Basically, instead of requiring the dependency using `import` or `require`, the module is passed into your code externally.  
 
-One approach to achieve dependency inversion is to use `dependency injection`.  In our Dawson system, we implement dependency injection by defining something called an [applicationContext](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/src/applicationContext.js).  The applicationContext contains interface methods to allow our `application business rules` layer to invoke methods from an outer layer such as `frameworks & drivers` without needing to depend on them.
+One way to achieve dependency inversion is to use the approach of `dependency injection` which is the approach to pass in the dependencies directly into the signature of the method you are calling.
+
+Here is a sipmle example:
+
+```javascript
+// NOT USING DI
+// this file depends on the ./database.js file / module
+const database = require('./database');
+function getAllUsers = () => {
+    database.query('SELECT * FROM users');
+}
+
+// USING DI
+// this file depends on an object that has a method called query, that's it
+function getAllUsers = (database) => {
+    database.query('SELECT * FROM users');
+}
+```
+
+What this does it decouple your getAllUsers method from the database module and allows for easier testing when it comes to needing to mock out that database object passed in as an argument.
+
+In our Dawson system, we implement dependency injection by defining something called an [applicationContext](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/src/applicationContext.js).  The applicationContext contains interface methods to allow our `application business rules` layer to invoke methods from an outer layer such as `frameworks & drivers` without needing to depend on them.
 
 Take this interactor for an example:
 
@@ -40,7 +61,7 @@ exports.getItemInteractor = async (applicationContext, { key }) => {
 };
 ```
 
-This code doesn't depend on the persistence layer's getItem method, instead, it depends on an getItem interface which the actual implementation of the interface is determined externally to this code.  
+This code doesn't depend on the persistence layer's `getItem` method, instead, it depends on an getItem interface which the actual implementation of the interface is determined externally to this code.  
 
 ### Understand a Concrete Example
 
