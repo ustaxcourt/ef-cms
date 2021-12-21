@@ -7,7 +7,7 @@
 * [Story Lifecycle](story-life-cycle.md)
 * [PR Workflows](pr-workflow.md)
 * [Running Locally](running-locally.md)
-* [🆘 Clean Architecture](clean-architecture.md)
+* [Clean Architecture](clean-architecture.md)
 * [🆘 Frontend](frontend.md)
 * [🆘 Backend](backend.md)
 * [🆘 System Architecture](system-architecture.md)
