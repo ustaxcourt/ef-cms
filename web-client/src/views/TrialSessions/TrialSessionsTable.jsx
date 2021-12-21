@@ -23,12 +23,13 @@ export const TrialSessionsTable = connect(
       <React.Fragment>
         {console.log('*****formattedTrialSessions: ', formattedTrialSessions)}
         <div className="grid-row margin-bottom-3">
-          <div className="tablet:grid-col-7">
-            <div className="grid-row grid-gap">
-              <div className="col tablet:grid-col-2 padding-top-05">
-                <h3 id="filterHeading">Filter by</h3>
-              </div>
-              <div className="col">
+          <div className="grid-row grid-col-9">
+            <div className="grid-col-1 padding-top-05 margin-right-3">
+              <h3 id="filterHeading">Filter by</h3>
+            </div>
+
+            <div className="grid-row grid-col-10 grid-gap padding-left-2">
+              <div className="grid-col-3">
                 <BindedSelect
                   aria-label="location"
                   bind="screenMetadata.trialSessionFilters.trialLocation"
@@ -39,7 +40,7 @@ export const TrialSessionsTable = connect(
                   <TrialCityOptions procedureType="AllPlusStandalone" />
                 </BindedSelect>
               </div>
-              <div className="col">
+              <div className="grid-col-3">
                 <BindedSelect
                   aria-label="proceeding"
                   bind="screenMetadata.trialSessionFilters.proceedingType"
@@ -54,14 +55,14 @@ export const TrialSessionsTable = connect(
                   ))}
                 </BindedSelect>
               </div>
-              <div className="col">
+              <div className="grid-col-3">
                 <BindedSelect
                   aria-label="session"
                   bind="screenMetadata.trialSessionFilters.sessionType"
                   id="sessionFilter"
                   name="sessionType"
                 >
-                  <option value="">-Session type-</option>
+                  <option value="">-Session Type-</option>
                   {Object.values(trialSessionTypes).map(sessionType => (
                     <option key={sessionType} value={sessionType}>
                       {sessionType}
@@ -69,7 +70,7 @@ export const TrialSessionsTable = connect(
                   ))}
                 </BindedSelect>
               </div>
-              <div className="col">
+              <div className="grid-col-3">
                 <BindedSelect
                   aria-label="judge"
                   bind="screenMetadata.trialSessionFilters.judge.userId"
