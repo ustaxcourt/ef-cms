@@ -2,6 +2,8 @@
 
 Hopefully you've read through the [What is Dawson](/what-is-dawson) section of this documentation because a lot of the terminology defined there will help you better understand how to navigate the Dawson application.  But, if you're the type of person who would rather just poke around on a live environment, this part of the documentation is for you.  We'll guide you on how to login to dawson, the various urls we have with our system, the various user roles we have, and how you could login to one of our running environments using some mock users we create.
 
+?> You can find the [Running Locally Guide](/running-locally) if you'd like to get Dawson running on your machine to start development.
+
 ## Dawson's User Interfaces
 
 There are two separate UIs that we deploy for the Dawson system; both of which try to address the needs of authenticated and unauthenticated users.
@@ -84,7 +86,7 @@ The Dawson system is built using a role based authentication system.  Each user 
 
 After deploying a brand new Dawson environment, an admin will manually run the [setup-test-users.js](https://github.com/ustaxcourt/ef-cms/blob/staging/shared/admin-tools/user/setup-test-users.js) script to create these mock users in our deployed environments so that members of our team can login and interact with the system to test the various roles.  This script will generate the following test users will allow you to login.
 
-!> **Ask your team lead for the passwords.**
+!> **Ask a teammate for the passwords.**
 
 ?> the **1** in the emails is an example; you can use adc2@example.com, or adc10@example.com, etc...
 

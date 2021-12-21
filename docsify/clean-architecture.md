@@ -28,7 +28,7 @@ Since our project is written in Javascript, it makes more sense to replace the w
 
 At this point you may ask how does the interactor invoke code from the persistence layer if it isn't allowed to directly import that code? The answer is using dependency inversion.  Basically, instead of requiring the dependency using `import` or `require`, the module is passed into your code externally.  
 
-One way to achieve dependency inversion is to use the approach of `dependency injection` which is the approach to pass in the dependencies directly into the signature of the method you are calling.
+One way to achieve dependency inversion is to use the approach of dependency injection which is the approach to pass in the dependencies directly into the signature of the method you are calling.
 
 Here is a sipmle example:
 
@@ -70,7 +70,7 @@ All this abstract talk about layers and dependencies can get confusing, so let's
 
 Imagine you want to write a CLI program that reads names from the users terminal and inserts those names into a database.  You're application would be spit up into 4 main layers.  
 
-- Your `framework & drivers` layer would have code that reads and write to a SQL database.
+- Your `framework & drivers` layer would have code that reads and write to a SQL database. It would also contain the code that reads and writes to the CLI.
 - Your `interface adapters` layer might have code that takes results from your `application business rules` and format them in a way that is more user friendly, such as formatting an object into a pretty CLI table.
 - Your `application business rules` layer might have logic for accepting a list of names, creating an entity defined in your `enterprise business rules`, validate the entity, and invoke a `framework & driver` module to store them into the database.
 - Your `enterprise business rules` layer might contain an entity called Person which takes in a name and will validate the name is proper case, has no special characters, and doesn't contain the name Rick Astley.  These validation rules basically define the rules of your business data.
@@ -93,11 +93,12 @@ The Dawson project has different implmentations of applicationContext, so be sur
 
 There are a lot of methods on the applicationContext, but the most common ones you'll probably run into include:
 
-- `applicationContext.getPersistenceGateway` - anything that hits our database
+- `applicationContext.getPersistenceGateway` - anything that hits our databases, elasticsearch, sqs, or third party services
 - `applicationContext.getUseCases` - all of the business interactors
 - `applicationContext.getUseCaseHelpers` - shared pieces of logic that many interactors might need to use
 - `applicationContext.getUtilities` - various helpers functions used for dates, timestamps, etc
 
+To make things less confusing, we try to keep some of the methods on the different applicationContext files in sync.  For example, if there is a method on the web-api applicationContext called getLogger, then it should be available on the web-client applicationContext.
 
 ## Pros and Cons of Clean Architecture
 
