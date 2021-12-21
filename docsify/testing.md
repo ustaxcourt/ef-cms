@@ -8,6 +8,4 @@
 
 ## Testing Matrix
 
-?> A comprehensive test matrix is located here: [https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA](https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA)
-
-This contains user workflows of DAWSON with steps written out on how to do so. When complex features and major refactorings have happened in the past, we used this as a way to thoroughly validate impacted flows.
+At one point in this project, our team agree to do a quarterly manual test against our system.  We have a [Testing Matrix Google Sheet](https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA) which outlines a variety of different scenarios and the expected outcomes.  I'd recommend trying to at least read through some of this test matrix since it will give you good insight into a lot of the business rules our system need to uphold.
