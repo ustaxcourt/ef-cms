@@ -52,8 +52,7 @@ exports.searchOrderByKeyword = keyword => {
 };
 
 exports.searchOpinionByKeyword = keyword => {
-  cy.get('input#keyword-search').clear();
-  cy.get('input#keyword-search').type(keyword);
+  cy.get('input#keyword-search').clear().type(keyword);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
