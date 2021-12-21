@@ -149,6 +149,7 @@ export const menuHelper = get => {
 
 This computed is accessible by doing `get(state.menuHelper)` in our actions and react components.  Using this approach keeps our react components clean of logic.  Instead of having `===` nested all throughout our React components, we instead have that logic computed inside these types of files which also allows us to easily test this logic via a unit test.
 
+!> Don't use a Cerebral computed value in another computed or set state within a computed. More context is detailed here: https://cerebraljs.com/docs/advanced/index.html
 
 #### React Components
 
@@ -178,3 +179,4 @@ export const Header = connect(
 Notice this header is wrapped in the connect function which allows us to get access to the state.menuHelper computed.  We can also gain access to the sequences or any other providers we setup manually in cerebral.  We also have access to the typically react props.  Like mentioned before, we try to keep our react components logicless which means we use booleans from the computeds to determine when something should display.
 
 !> if you are using `===` inside a React component, you should refactor to instead put it in a computed
+
