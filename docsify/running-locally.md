@@ -4,6 +4,8 @@ So by now, hopefully now you've logged in to a deployed Dawson environment and p
 
 ## Prerequisites
 
+!> We try to update versions of our softrware as often as we can, so double check with the team to verify these docs are accurate.
+
 ### Git
 
 Download and install [git](https://git-scm.com/downloads).  We use GitHub as our source control.

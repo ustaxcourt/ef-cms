@@ -10,7 +10,7 @@ We have talked about writing some form of working agreement so team members have
 
 For Flexioneers, remember to read and apply the flexion fundamentals to your daily work.  Doing so will help you write higher quality software, and it should help you grow as a person in general.
 
-[https://flexion.us/flexion-fundamentals/](https://flexion.us/flexion-fundamentals/)
+[https://flexion.us/flexion-fundamentals/](http://fundamentals.flexion.us/)
 
 ### Pair / Mob Programming
 
@@ -58,4 +58,4 @@ TODO
 
 ### Environment Shuffle
 
-TODO
+Every week our team rotates a schedule for who is responsible for the environment shuffle.  This process is to merge changes in from the court into our Flexion fork, and also create batch PRs if the batch is ready.  Please view the [Environment Shuffle](pr-workflow?id=environment-shuffle) part of the documentation for more information.
