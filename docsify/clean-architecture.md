@@ -3,6 +3,7 @@
 
 This part of the tutorial is to speak about the clean architecture approach we took on this project.  Understanding clean architecture if important to understand why the code is structured today.
 
+?> Please read more at [https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html) if you need more details.
 
 ## What is Clean Architecture?
 
@@ -71,7 +72,7 @@ Imagine you want to write a CLI program that reads names from the users terminal
 
 - Your `framework & drivers` layer would have code that reads and write to a SQL database.
 - Your `interface adapters` layer might have code that takes results from your `application business rules` and format them in a way that is more user friendly, such as formatting an object into a pretty CLI table.
-- Your `application business rules` layer might have logic for accepting an array of strings, creating an entity defined in your `enterprise business rules`, validate the entity, and invoke a `framework & driver` module to store them into the database.
+- Your `application business rules` layer might have logic for accepting a list of names, creating an entity defined in your `enterprise business rules`, validate the entity, and invoke a `framework & driver` module to store them into the database.
 - Your `enterprise business rules` layer might contain an entity called Person which takes in a name and will validate the name is proper case, has no special characters, and doesn't contain the name Rick Astley.  These validation rules basically define the rules of your business data.
 
 So, using that info, we could maybe build something like this:
