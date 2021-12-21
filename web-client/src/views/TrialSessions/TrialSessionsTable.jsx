@@ -9,11 +9,13 @@ export const TrialSessionsTable = connect(
   {
     formattedTrialSessions:
       state.formattedTrialSessions.filteredTrialSessions[props.filter],
+    proceedingTypes: state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     trialSessionTypes: state.constants.TRIAL_SESSION_TYPES,
     trialSessionsHelper: state.trialSessionsHelper,
   },
   function TrialSessionsTable({
     formattedTrialSessions,
+    proceedingTypes,
     trialSessionsHelper,
     trialSessionTypes,
   }) {
@@ -23,10 +25,36 @@ export const TrialSessionsTable = connect(
         <div className="grid-row margin-bottom-3">
           <div className="tablet:grid-col-7">
             <div className="grid-row grid-gap">
-              <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
+              <div className="col tablet:grid-col-2 padding-top-05">
                 <h3 id="filterHeading">Filter by</h3>
               </div>
-              <div className="grid-col-3">
+              <div className="col">
+                <BindedSelect
+                  aria-label="location"
+                  bind="screenMetadata.trialSessionFilters.trialLocation"
+                  id="locationFilter"
+                  name="trialLocation"
+                >
+                  <option value="">-Location-</option>
+                  <TrialCityOptions procedureType="AllPlusStandalone" />
+                </BindedSelect>
+              </div>
+              <div className="col">
+                <BindedSelect
+                  aria-label="proceeding"
+                  bind="screenMetadata.trialSessionFilters.proceedingType"
+                  id="proceedingFilter"
+                  name="proceedingType"
+                >
+                  <option value="">-Proceeding Type-</option>
+                  {Object.values(proceedingTypes).map(proceedingType => (
+                    <option key={proceedingType} value={proceedingType}>
+                      {proceedingType}
+                    </option>
+                  ))}
+                </BindedSelect>
+              </div>
+              <div className="col">
                 <BindedSelect
                   aria-label="session"
                   bind="screenMetadata.trialSessionFilters.sessionType"
@@ -41,18 +69,7 @@ export const TrialSessionsTable = connect(
                   ))}
                 </BindedSelect>
               </div>
-              <div className="grid-col-3">
-                <BindedSelect
-                  aria-label="location"
-                  bind="screenMetadata.trialSessionFilters.trialLocation"
-                  id="locationFilter"
-                  name="trialLocation"
-                >
-                  <option value="">-Location-</option>
-                  <TrialCityOptions procedureType="AllPlusStandalone" />
-                </BindedSelect>
-              </div>
-              <div className="grid-col-3">
+              <div className="col">
                 <BindedSelect
                   aria-label="judge"
                   bind="screenMetadata.trialSessionFilters.judge.userId"
@@ -80,7 +97,7 @@ export const TrialSessionsTable = connect(
           </div>
         </div>
         <table
-          aria-describedby="filterHeading sessionFilter locationFilter judgeFilter"
+          aria-describedby="filterHeading locationFilter proceedingFilter sessionFilter judgeFilter"
           aria-label={`${props.filter} trial sessions`}
           className="usa-table ustc-table trial-sessions subsection"
           id={`${props.filter}-sessions`}
@@ -91,7 +108,7 @@ export const TrialSessionsTable = connect(
               <th className="icon-column" />
               <th>Location</th>
               <th>Proceeding Type</th>
-              <th>Type</th>
+              <th>Session Type</th>
               <th>Judge</th>
               {trialSessionsHelper.showNoticeIssued && <th>Notice issued</th>}
               {trialSessionsHelper.showSessionStatus && <th>Session Status</th>}
