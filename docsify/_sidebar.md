@@ -15,5 +15,5 @@
 * [🆘Testing](testing.md)
 * [🆘 Migrations](migrations.md)
 * [🆘 Terraform](terraform.md)
-* [🆘 Kibana](kibana.md)
+* [Kibana](kibana.md)
 * [🆘 AWS](aws.md)
