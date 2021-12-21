@@ -8,7 +8,7 @@
 * [PR Workflows](pr-workflow.md)
 * [Running Locally](running-locally.md)
 * [Clean Architecture](clean-architecture.md)
-* [🆘 Frontend](frontend.md)
+* [Frontend](frontend.md)
 * [🆘 Backend](backend.md)
 * [🆘 System Architecture](system-architecture.md)
 * [CI / CD](ci-cd.md)
