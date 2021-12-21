@@ -104,7 +104,7 @@ To make things less confusing, we try to keep some of the methods on the differe
 
 ### Pros
 
-Clean architecture decouples your code.  For example, instead of your business logic depending directly on methods that interact with MySQL, your code only cares about interacting with an interface.  This allows you to swap out implementation details without needing to refactoring a lot of code.  It also allows us to easily write unit tests over code since most of everything depends on an interface.  Since everything is setup on the applicationContext, it's very easy to provide a mock applicationContext that returns different implmemntations to test how you need.
+Clean architecture decouples your code.  For example, instead of your business logic depending directly on methods that interact with MySQL, your code only cares about interacting with an interface.  This allows you to swap out implementation details without needing to refactoring a lot of code.  It also allows us to easily write unit tests over code since most of everything depends on an interface.  Since everything is setup on the applicationContext, it's very easy to provide a mock applicationContext that returns different implementations to test how you need.
 
 ### Cons
 
