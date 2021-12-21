@@ -21,7 +21,6 @@ export const TrialSessionsTable = connect(
   }) {
     return (
       <React.Fragment>
-        {console.log('*****formattedTrialSessions: ', formattedTrialSessions)}
         <div className="grid-row margin-bottom-3">
           <div className="grid-row grid-col-9">
             <div className="grid-col-1 padding-top-05 margin-right-3">
