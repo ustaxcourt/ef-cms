@@ -17,3 +17,8 @@
 * [🆘 Terraform](terraform.md)
 * [Kibana](kibana.md)
 * [🆘 AWS](aws.md)
+* [Additional Resources](additional-resources/README.md)
+* [Operations](operations/README.md)
+* [Environments](environments/README.md)
+* [Flows](flows/README.md)
+* [Architecture](architecture/README.md)
