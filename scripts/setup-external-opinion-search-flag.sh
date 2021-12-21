@@ -19,7 +19,7 @@ ITEM=$(cat <<-END
         "S": "external-opinion-search-enabled"
     },
     "current": {
-        "BOOL":true
+        "BOOL":false
     }
 }
 END
