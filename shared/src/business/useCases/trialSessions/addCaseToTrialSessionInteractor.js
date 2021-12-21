@@ -40,7 +40,6 @@ exports.addCaseToTrialSessionInteractor = async (
       docketNumber,
     });
 
-  console.error('***Case Details: ', caseDetails);
   const caseEntity = new Case(caseDetails, { applicationContext });
 
   const trialSessionEntity = new TrialSession(trialSession, {

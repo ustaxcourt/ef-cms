@@ -177,15 +177,11 @@ const caseDecorator = (
   const params = { applicationContext, filtered, obj, rawCase: rawObject };
 
   // assignContacts needs to come first before assignDocketEntries
-  try {
-    assignContacts(params);
-    assignDocketEntries(params);
-    assignHearings(params);
-    assignPractitioners(params);
-    assignFieldsForAllUsers(params);
-  } catch (e) {
-    console.error(e);
-  }
+  assignContacts(params);
+  assignDocketEntries(params);
+  assignHearings(params);
+  assignPractitioners(params);
+  assignFieldsForAllUsers(params);
 };
 
 const assignFieldsForInternalUsers = ({ applicationContext, obj, rawCase }) => {
