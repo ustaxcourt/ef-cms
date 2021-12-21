@@ -11,8 +11,11 @@ import {
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const { TRIAL_SESSION_PROCEEDING_TYPES, USER_ROLES: ROLES } =
-  applicationContext.getConstants();
+const {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_TYPES,
+  USER_ROLES: ROLES,
+} = applicationContext.getConstants();
 
 const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
@@ -58,6 +61,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         judge: { name: '1', userId: '1' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.regular,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
         term: 'Fall',
@@ -68,6 +72,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         judge: { name: '2', userId: '2' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        sessionType: TRIAL_SESSION_TYPES.small,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
         term: 'Winter',
@@ -79,6 +84,7 @@ describe('formattedTrialSessions', () => {
         judge: { name: '3', userId: '3' },
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.regular,
         startDate: '2019-11-27T15:00:00.000Z',
         swingSession: true,
         term: 'Winter',
@@ -87,7 +93,8 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         judge: { name: '4', userId: '4' },
-        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.hybrid,
         startDate: '2019-11-27T15:00:00.000Z',
         swingSession: true,
         term: 'Summer',
@@ -97,6 +104,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         judge: { name: '5', userId: '5' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        sessionType: TRIAL_SESSION_TYPES.hybrid,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: false,
         term: 'Spring',
@@ -107,6 +115,7 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         judge: { name: '6', userId: '6' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.regular,
         startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
         term: 'Spring',
@@ -160,7 +169,7 @@ describe('formattedTrialSessions', () => {
     );
   });
 
-  it('filter trial sessions', () => {
+  it('should filter trial sessions by judge', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
@@ -172,13 +181,14 @@ describe('formattedTrialSessions', () => {
     expect(result.formattedSessions.length).toBe(1);
   });
 
-  it('filter trial sessions by inPerson proceedingType', () => {
+  it('should double filter trial sessions', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
         screenMetadata: {
           trialSessionFilters: {
             proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+            sessionType: TRIAL_SESSION_TYPES.regular,
           },
         },
         trialSessions: TRIAL_SESSIONS_LIST,
@@ -285,6 +295,7 @@ describe('formattedTrialSessions', () => {
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
         proceedingType: 'In Person',
         sessionStatus: 'New',
+        sessionType: TRIAL_SESSION_TYPES.regular,
         startDate: '2019-11-27T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
@@ -300,6 +311,7 @@ describe('formattedTrialSessions', () => {
         judge: { name: '2', userId: '2' },
         proceedingType: 'Remote',
         sessionStatus: 'New',
+        sessionType: TRIAL_SESSION_TYPES.small,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
