@@ -185,7 +185,10 @@ describe('formattedTrialSessions', () => {
         user: testJudgeUser,
       },
     });
-    expect(result.formattedSessions.length).toBe(1);
+    const flattenedSessions = result.formattedSessions.flatMap(
+      week => week.sessions,
+    );
+    expect(flattenedSessions.length).toBe(3);
   });
 
   it('returns all trial sessions if judge userId trial session filter is an empty string', () => {
