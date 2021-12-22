@@ -10,7 +10,7 @@ This part of the tutorial is to speak about the clean architecture approach we t
 The Dawson's code base was designed to follow a design principal defined in a book called 
 [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).  Reading the book isn't necessary to understand this design since a lot of the examples in that book are dated, way too verbose, and highly focused on enterprise Java but don't let my opinions stop you from reading it.
 
-The overall idea of the design pattern is to separate your application into various layers and each layer much following one simple rule:
+The overall idea of the design pattern is to separate your application into various layers and each layer must following one simple rule:
 
 > a layer can only depend **inward** on it's **direct inner** child layer
 
