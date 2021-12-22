@@ -1,9 +1,12 @@
 # Frontend
 
+The frontend user interfaces are major parts of our Dawson system.  They are implemented using React, we use USWDS for the styling, Cerebral for our state management, and terraform to get it all deployed to AWS.  Since every React application is built and structure differently, this part of the docs is written to help give an overview of our frontend structure and insight into some design decisions.
 
 ## Project Structure
 
-The overall structure of the web-client directory is as follows:
+We tend to keep all our source files related to the bundled application in a `src` directory.  Unit tests live directly next to the components they are testing. Integration and pa11y tests live outside of the src directory.  A majority of the code you write for the UI will live in the `web-client/src/presenter` directory which contains all of our cerebral sequences and actions. 
+
+The overall structure of the web-client directory is as follows with a short description of each directory:
 
 ```
 .
@@ -45,6 +48,25 @@ The overall structure of the web-client directory is as follows:
     └── ui // module for creating the UI related resources
 ```
 
+These are the main directories and files.  Note that there are probably some missing, but this is probably a good place to get started with understanding how things are setup.
+
+## UI Npm Scripts
+
+There are a lot of scripts related to running, bundling, and testing the frontend.  Although you may not necessarly need to run some of these since our CI/CD pipeline does it for us, here are the most important ones to know about:
+
+- `npm run start:client` - starts the client application
+- `npm run start:public` - starts the public client application
+- `npm run start:client:no-scanner` - starts the client application with the mock scanner the scanner
+- `npm run test:client` - runs the client application unit tests
+- `npm run test:client:public` - runs the public client application unit tests
+- `npm run test:pa11y` - runs the pa11y tests for the private 
+- `npm run test:pa11y:public` - runs the pa11y tests for the public UI
+- `npm run build:client` - builds the client application
+- `npm run build:client:public` - builds the public client application
+- `npm run lint:css` - lints the CSS
+- `npm run lint:ui` - lints the UI
+
+Some of this scripts, such as pa11y, require the API to also be running since it requires live data to be displayed in the UI to verify accessibility.
 
 ## USWDS
 
