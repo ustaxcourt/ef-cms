@@ -9,6 +9,7 @@ import { state } from 'cerebral';
  */
 export const clearExistingDocumentAction = ({ get, store }) => {
   store.set(state.screenMetadata.documentReset, true);
+  store.set(state.currentViewMetadata.documentUploadMode, 'scan');
   store.set(state.documentToEdit.docketEntryId, get(state.form.docketEntryId));
   store.unset(state.form.primaryDocumentFile);
 };
