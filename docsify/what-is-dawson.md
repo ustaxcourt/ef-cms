@@ -14,10 +14,14 @@ This part of the documentation is meant to give a beginner a complete overview o
 
 #### Petitioner
 
+The taxpayer bringing a case before the Tax Court.
+
 #### Practitioner
 
+The Tax Court is the only court that allows an individual who is not an attorney to represent a party in a case; therefore, the representation on both sides of a case are referred to as practitioners.  A private practitioner is the person representing the petitioner in the case. A practitioner representing the respondent is an IRS attorney.
 #### Respondent
 
+A defendant in a lawsuit. In our case, always the IRS.
 ### Internal Users
 
 #### Petitions Clerk

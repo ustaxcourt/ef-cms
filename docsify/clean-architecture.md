@@ -10,7 +10,7 @@ This part of the tutorial is to speak about the clean architecture approach we t
 The Dawson's code base was designed to follow a design principal defined in a book called 
 [Clean Architecture](https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html).  Reading the book isn't necessary to understand this design since a lot of the examples in that book are dated, way too verbose, and highly focused on enterprise Java but don't let my opinions stop you from reading it.
 
-The overall idea of the design pattern is to separate your application into various layers and each layer much following one simple rule:
+The overall idea of the design pattern is to separate your application into various layers and each layer must following one simple rule:
 
 > a layer can only depend **inward** on it's **direct inner** child layer
 
@@ -104,7 +104,7 @@ To make things less confusing, we try to keep some of the methods on the differe
 
 ### Pros
 
-Clean architecture decouples your code.  For example, instead of your business logic depending directly on methods that interact with MySQL, your code only cares about interacting with an interface.  This allows you to swap out implementation details without needing to refactoring a lot of code.  It also allows us to easily write unit tests over code since most of everything depends on an interface.  Since everything is setup on the applicationContext, it's very easy to provide a mock applicationContext that returns different implmemntations to test how you need.
+Clean architecture decouples your code.  For example, instead of your business logic depending directly on methods that interact with MySQL, your code only cares about interacting with an interface.  This allows you to swap out implementation details without needing to refactoring a lot of code.  It also allows us to easily write unit tests over code since most of everything depends on an interface.  Since everything is setup on the applicationContext, it's very easy to provide a mock applicationContext that returns different implementations to test how you need.
 
 ### Cons
 
