@@ -121,3 +121,15 @@ Each type of infrastructure has a different specific syntax for importing items 
 Sometimes you may want to remove items from the Terraform code but not remove them from AWS. For those circumstances, you’ll want to remove it from Terraform’s state file and from the code.
 
 To remove items from Terraform’s state file, run `terraform state rm` - see the [Terraform documentation](https://www.terraform.io/cli/commands/state/rm).
+
+## DAWSON's Terraform
+
+There is two sets of Terraform files.  One for the backend and frontend each.
+
+### Backend
+
+Located in `/web-api/terraform/`.
+
+### Frontend
+
+Located in `/web-client/terraform/`.
