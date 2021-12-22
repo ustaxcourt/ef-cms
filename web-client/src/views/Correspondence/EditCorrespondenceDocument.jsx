@@ -96,9 +96,7 @@ export const EditCorrespondenceDocument = connect(
                   <ScanBatchPreviewer
                     documentType="primaryDocumentFile"
                     title="Add PDF"
-                    validateSequence={
-                      validateUploadCorrespondenceDocumentSequence
-                    }
+                    validateSequence="validateUploadCorrespondenceDocumentSequence"
                   />
                 )) || (
                   <>
