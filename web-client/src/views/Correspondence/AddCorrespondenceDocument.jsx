@@ -9,7 +9,7 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const UploadCorrespondenceDocument = connect(
+export const AddCorrespondenceDocument = connect(
   {
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
@@ -22,7 +22,7 @@ export const UploadCorrespondenceDocument = connect(
       sequences.validateUploadCorrespondenceDocumentSequence,
     validationErrors: state.validationErrors,
   },
-  function UploadCorrespondenceDocument({
+  function AddCorrespondenceDocument({
     form,
     formCancelToggleCancelSequence,
     showModal,

@@ -16,7 +16,7 @@ const gotoUploadCorrespondenceDocument =
     clearScreenMetadataAction,
     getCaseAction,
     setCaseAction,
-    setCurrentPageAction('UploadCorrespondenceDocument'),
+    setCurrentPageAction('AddCorrespondenceDocument'),
   ]);
 
 export const gotoUploadCorrespondenceDocumentSequence = [
