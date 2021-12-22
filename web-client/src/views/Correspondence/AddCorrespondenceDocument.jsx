@@ -84,6 +84,7 @@ export const AddCorrespondenceDocument = connect(
                 <ScanBatchPreviewer
                   documentType="primaryDocumentFile"
                   title="Add Document"
+                  validateSequence="validateUploadCorrespondenceDocumentSequence"
                 />
               </div>
             </div>
