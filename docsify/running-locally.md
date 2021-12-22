@@ -126,6 +126,6 @@ colvinsChambers@example.com
 
 ### 
 
-## Trouble Shooting
+## Troubleshooting
 
 Hopefully everything will work fine, but If you have issues logging in, double check your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 api.  Also verify you are on the correct branch.  It's recommended to be on the `flexion/develop` since.
