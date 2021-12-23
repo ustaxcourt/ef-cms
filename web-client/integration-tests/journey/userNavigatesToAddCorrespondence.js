@@ -3,6 +3,6 @@ export const userNavigatesToAddCorrespondence = (cerebralTest, user) =>
     await cerebralTest.runSequence('gotoUploadCorrespondenceDocumentSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual(
-      'UploadCorrespondenceDocument',
+      'AddCorrespondenceDocument',
     );
   });

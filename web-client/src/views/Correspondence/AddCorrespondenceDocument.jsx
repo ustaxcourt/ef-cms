@@ -3,16 +3,14 @@ import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { StateDrivenFileInput } from '../FileDocument/StateDrivenFileInput';
+import { ScanBatchPreviewer } from '../ScanBatchPreviewer';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
-export const UploadCorrespondenceDocument = connect(
+export const AddCorrespondenceDocument = connect(
   {
-    constants: state.constants,
     fileDocumentHelper: state.fileDocumentHelper,
     form: state.form,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
@@ -24,9 +22,7 @@ export const UploadCorrespondenceDocument = connect(
       sequences.validateUploadCorrespondenceDocumentSequence,
     validationErrors: state.validationErrors,
   },
-  function UploadCorrespondenceDocument({
-    constants,
-    fileDocumentHelper,
+  function AddCorrespondenceDocument({
     form,
     formCancelToggleCancelSequence,
     showModal,
@@ -85,45 +81,13 @@ export const UploadCorrespondenceDocument = connect(
               </div>
 
               <div className="grid-col-7">
-                <div className="scanner-area-header">
-                  <div className="grid-container padding-x-0">
-                    <div className="grid-row grid-gap">
-                      <div className="grid-col-6">
-                        <h3 className="margin-bottom-0 margin-left-105">
-                          Add Document
-                        </h3>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-
-                <div className="document-select-container">
-                  <FormGroup errorText={validationErrors?.primaryDocumentFile}>
-                    <label
-                      className={classNames(
-                        'usa-label ustc-upload with-hint',
-                        fileDocumentHelper.showPrimaryDocumentValid &&
-                          'validated',
-                      )}
-                      htmlFor="primary-document-file"
-                      id="primary-document-label"
-                    >
-                      Upload your file{' '}
-                    </label>
-                    <span className="usa-hint">
-                      File must be in PDF format (.pdf). Max file size{' '}
-                      {constants.MAX_FILE_SIZE_MB}MB.
-                    </span>
-
-                    <StateDrivenFileInput
-                      aria-describedby="primary-document-label"
-                      id="primary-document-file"
-                      name="primaryDocumentFile"
-                      updateFormValueSequence="updateFormValueSequence"
-                      validationSequence="validateUploadCorrespondenceDocumentSequence"
-                    />
-                  </FormGroup>
-                </div>
+                <ScanBatchPreviewer
+                  documentType="primaryDocumentFile"
+                  title="Add Document"
+                  validateSequence={
+                    validateUploadCorrespondenceDocumentSequence
+                  }
+                />
               </div>
             </div>
 
