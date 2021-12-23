@@ -18,6 +18,7 @@ export const removeScannedPdfAction = ({ applicationContext, get, store }) => {
 
   store.unset(state.form[documentSelectedForScan]);
   store.unset(state.form[`${documentSelectedForScan}Size`]);
+  store.unset(state.form.primaryDocumentFile);
   store.set(state.scanner.currentPageIndex, 0);
   store.set(state.scanner.selectedBatchIndex, 0);
 
