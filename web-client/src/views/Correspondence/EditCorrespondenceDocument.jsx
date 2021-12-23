@@ -95,7 +95,7 @@ export const EditCorrespondenceDocument = connect(
                 {(screenMetadata.documentReset && (
                   <ScanBatchPreviewer
                     documentType="primaryDocumentFile"
-                    title="Add PDF"
+                    title="Add Document"
                     validateSequence="validateUploadCorrespondenceDocumentSequence"
                   />
                 )) || (
