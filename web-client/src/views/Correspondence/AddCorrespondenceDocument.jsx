@@ -83,7 +83,6 @@ export const AddCorrespondenceDocument = connect(
               <div className="grid-col-7">
                 <ScanBatchPreviewer
                   documentType="primaryDocumentFile"
-                  isCorrespondence={true}
                   title="Add Document"
                   validateSequence={
                     validateUploadCorrespondenceDocumentSequence
