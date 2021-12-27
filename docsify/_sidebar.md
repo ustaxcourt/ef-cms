@@ -12,7 +12,7 @@
 * [🆘 Backend](backend.md)
 * [🆘 System Architecture](system-architecture.md)
 * [CI / CD](ci-cd.md)
-* [🆘 Testing](testing.md)
+* [Testing](testing.md)
 * [🆘 Migrations](migrations.md)
 * [Terraform](terraform.md)
 * [Kibana](kibana.md)
