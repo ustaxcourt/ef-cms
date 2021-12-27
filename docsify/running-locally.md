@@ -124,7 +124,17 @@ judge.colvin@example.com
 colvinsChambers@example.com
 ```
 
-### 
+## Running via Docker
+
+If needed, you can also try to run the entire project from a single docker container.
+Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it.  No one currently uses this approach when developing on this project since it often is more slower and error prone compared to running Dawson locally.
+
+```sh
+./docker-run.sh
+```
+
+Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. With fewer resources, the software is likely to fail to run with errors that don’t make it obvious what the problem is.
+
 
 ## Troubleshooting
 
