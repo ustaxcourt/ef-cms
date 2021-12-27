@@ -14,7 +14,7 @@
 * [CI / CD](ci-cd.md)
 * [🆘 Testing](testing.md)
 * [🆘 Migrations](migrations.md)
-* [🆘 Terraform](terraform.md)
+* [Terraform](terraform.md)
 * [Kibana](kibana.md)
 * [🆘 AWS](aws.md)
 * [Additional Resources](additional-resources/README.md)
