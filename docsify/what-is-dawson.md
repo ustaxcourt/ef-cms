@@ -1,4 +1,4 @@
-# What is Dawson
+# What is Dawson?
 
 This part of the documentation is meant to give a beginner a complete overview of what dawson is, screen shots of the user interfaces, maybe videos giving a walkthrough of the system, it's purpose, etc.  Who it was built for, etc.  Maybe define some important terms such as **petitioner** or **petition**.
 
@@ -6,9 +6,9 @@ This part of the documentation is meant to give a beginner a complete overview o
 
 **The [United States Tax Court](https://ustaxcourt.gov/)** is an independent Federal court that provides a forum for settling disputes between taxpayers and the Internal Revenue Service. There are approximately 200 employees at the Court and they handle approximately 60,000 petitions each year. About 60% of these petitions are filed from people without lawyers.
 
-**DAWSON (Docket Access Within a Secure Online Network)** is the U.S. Tax Court's open source electronic filing and case management system, available in this repository. It was [named after a beloved Judge](https://www.ustaxcourt.gov/dawson.html) that kept meticulous records.
+**[DAWSON](https://dawson.ustaxcourt.gov/) (Docket Access Within a Secure Online Network)** is the U.S. Tax Court's open source electronic filing and case management system, available in this repository. It was [named after a beloved Judge](https://www.ustaxcourt.gov/dawson.html) that kept meticulous records.
 
-**Flexion** is the competitively awarded contractor that has been working on DAWSON since 2018. **18F** is a federal digital service team serving as advisors to the U.S. Tx Court and have paired with the U.S. Tax Court since the inception of DAWSON.
+**[Flexion](https://flexion.us/)** is the competitively awarded contractor that has been working on DAWSON since 2018. **18F** is a federal digital service team serving as advisors to the U.S. Tx Court and have paired with the U.S. Tax Court since the inception of DAWSON.
 
 
 ## Video Walkthroughs
