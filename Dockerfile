@@ -17,8 +17,8 @@ RUN rm awscliv2.zip
 
 RUN pip install --upgrade pip
 
-RUN wget -q -O terraform_1.1.0_linux_amd64.zip https://releases.hashicorp.com/terraform/1.1.0/terraform_1.1.0_linux_amd64.zip && \
-  unzip -o terraform_1.1.0_linux_amd64.zip terraform && \
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.1.2/terraform_1.1.2_linux_amd64.zip && \
+  unzip -o terraform.zip terraform && \
   cp terraform /usr/local/bin/ && \
   CI=true npm install cypress
 
