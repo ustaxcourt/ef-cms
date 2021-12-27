@@ -40,6 +40,14 @@ Knowing these rules, you can manipulate the state file if needed to add or remov
 
 Since state files need to be saved across Terraform runs, they need to be stored somewhere accessible - like an S3 bucket. You can read more about how state files are stored in the [Terraform documentation for the S3 backend](https://www.terraform.io/docs/backends/types/s3.html).
 
+The Dawson project stores terraform state in the following S3 bucket: [ustc-case-mgmt.flexion.us.terraform.deploys](https://s3.console.aws.amazon.com/s3/buckets/ustc-case-mgmt.flexion.us.terraform.deploys?region=us-east-1&tab=objects).  Each environment has a separate `.tfstate` file.  For example, our dev environment has the following state files:
+
+- `documents-dev.tfstate` (infrastructure related to the API / Backend)
+- `migrations-cron-dev.tfstate` (infrastructure related to the migration cron script)
+- `migrations-dev.tfstate` (infrastructure related to the migrations)
+- `permissions-dev.tfstate` (infrastructure related to environment-specific permissions)
+- `ui-dev.tfstate` (infrastructure related to the UI)
+
 ### State Locking
 
 As you may imagine, two people modifying things at the same time can lead to unpredictable results. Terraform handles this by using DynamoDB to lock the state file while you are modifying it.
@@ -124,12 +132,11 @@ To remove items from Terraform’s state file, run `terraform state rm` - see th
 
 ## DAWSON's Terraform
 
-There is two sets of Terraform files.  One for the backend and frontend each.
+We try to split our infrastructure up into smaller terraform deployments.  The following directories are were we use terraform:
 
-### Backend
-
-Located in `/web-api/terraform/`.
-
-### Frontend
-
-Located in `/web-client/terraform/`.
+- `/web-api/terraform/` (Terraform for the API, Dynamo, Backend, etc)
+- `/web-client/terraform/` (For the UI, CloudFront, etc)
+- `/iam/terraform/environment-specific` (For environment-specific IAM roles) 
+- `/iam/terraform/account-specific` (For account-specific IAM roles) 
+- `/web-api/migration-terraform` (For the migration setup)
+- `/web-api/migration-cron-terraform` (For the migration cron setup)
