@@ -128,19 +128,64 @@ describe('admissions clerk practitioner journey', () => {
 
 ## Smoke Tests
 
+Testing all our functionality locally is a good way to catch bugs, but often when we deploy all our code to AWS, stuff is misconfigured which causes things to break.  Due to this reason, we have a variety of smoketests written in cypress to make sure a user can at least click through the UI and run a couple of key pieces of functionality.
+
+The scripts we use for running smoke tests include the following:
+
+- `npm run cypress:smoketests`
+- `npm run cypress:readonly:public`
+- `npm run cypress:readonly:public`
+
+### Cypress Information
+
+Cypress is a great tool for writing and running e2e tests against web interfaces.  The cypress cli runner also provides a useful `open` command which will load a chromium instance locally which developers can use to watch the smoketests click through the UI and rewind history.  You can try runnign the smoketests against a deployed environment or locally using the following commands:
+
+- `npm run cypress:integration:open`
+- `npm run cypress:readonly:open`
+- `npm run cypress:readonly:public:open`
+- `npm run cypress:smoketests:open:local`
+
+
+
 ## Testing Matrix
 
 At one point in this project, our team agree to do a quarterly manual test against our system.  We have a [Testing Matrix Google Sheet](https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA) which outlines a variety of different scenarios and the expected outcomes.  I'd recommend trying to at least read through some of this test matrix since it will give you good insight into a lot of the business rules our system need to uphold.
 
 ## Load testing
 
-See [ustaxcourt/ef-cms-load-tests](https://github.com/ustaxcourt/ef-cms-load-tests) for Maven load tests.
+!> We instead use Artillery to do loadtesting. Check out the `Performance Testing` section below for more information.
 
-#### Testing / Coverage Tips (TODO: REVIEW COPIED FROM DOCS)
+In the past we found that large traffic to order and opinion search was causing our elasticsearch cluster to become overwhelmed and unstable.  In order to verify our application can handle the load of various requests, a load testing runner was setup using [Gatling](https://gatling.io/).  This load testing tool is written in Groovy which is why we keep it separate from our main repo.  
 
-- Run all tests with `npm run test`
-- The web client, API, and shared code can be tested with `npm run test:client`, `npm run test:api`, and `npm run test:shared`, respectively
-- Tip: When working through a single test, you can run a single test with `jest /path/to/test/file.js` (you may need to `npm -i -g jest`). Additionally, you can use `--watch` and `--coverage` flags to to continually run the specified test on save and provide a coverage report. For example: `jest /path/to/test/file.js --watch --coverage`
+See [ustaxcourt/ef-cms-load-tests](https://github.com/ustaxcourt/ef-cms-load-tests) for Gatling load tests.
+
+## Performance Testing
+
+Similar to the load testing mentioned above, we run performance testing against Dawson using [Artillery](https://www.artillery.io/).  This tool is based on javascript and is setup using .yml files which is easier to read and understand than the Java based [gatling](https://gatling.io/) tool. 
+
+To run the performance tests, you can run one of the following:
+
+- `npm run test:performance` (runs the ./artillery/private-app.yml file)
+- `npm run test:performance:order` (runs the ./artillery/private-advanced-order.yml file)
+
+
+
+## Testing / Coverage Tips
+
+You can put the following command into your .bashrc file to have code coverage display when running unit tests individually:
+
+```bash
+npx() {
+    if [[ $@ == "jest"* ]]; then
+        coverage_file=$(echo "$@" | sed -e "s/jest[[:space:]]*//" -e "s/.test//")
+        command npx jest "$@" --coverage --collectCoverageFrom "$coverage_file"
+    else
+        command npx "$@"
+    fi
+}
+```
+
+This will print coverage whenever you do `npx jest <PATH_TO_TEST_FILE>` which is really useful for development.
 
 Example coverage output:
 ```
