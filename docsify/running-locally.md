@@ -1,10 +1,10 @@
 # Running Dawson Locally
 
-So by now, hopefully now you've logged in to a deployed Dawson environment and played around uploading a petition as the *petitioner1@example.com* user and maybe even served that petition as the *petitionsclerk2@example.com* user.  Now it's time to figure out how you can run this application locally so that you can start contributing to the project.
+So by now, hopefully you've logged in to a deployed Dawson environment, played around uploading a petition as the *petitioner1@example.com* user, and maybe even served that petition as the *petitionsclerk2@example.com* user.  Now it's time to figure out how you can run this application locally so that you can start contributing to the project.
 
 ## Prerequisites
 
-!> We try to update versions of our softrware as often as we can, so double check with the team to verify these docs are accurate.
+!> We try to update versions of our software as often as we can, so double check with the team to verify these docs are accurate.
 
 ### Git
 
@@ -33,13 +33,13 @@ You will need Java installed in order to run **[elasticsearch](https://www.elast
 
 ### JQ
 
-JQ is a tool used for parsing JSON in the command line.  We use JQ a lot in our various deployment scripts.
+JQ is a tool used for parsing JSON in the command line.  We use JQ a lot in various deployment scripts.
 
 `brew install jq`
 
 ### AWS CLI
 
-The AWS cli is again used for a majority of our deployment scripts.  You can follow this [tutorial](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to get the aws cli v2 installed on your laptop.
+The AWS CLI is again used for a majority of our deployment scripts.  You can follow this [tutorial](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to get the AWS CLI v2 installed on your laptop.
 
 ### Terraform
 
@@ -56,7 +56,7 @@ tfenv use 1.1.0
 
 ## Getting Running
 
-All of the scripts needed to run this project should be outlined in our [package.json](https://github.com/ustaxcourt/ef-cms/blob/staging/package.json#L162).  I'd recommend at least reading through some of these scripts because you will be using a lot of them as you advanced through learning this application.  But, so not to overwhelm you, let's just talk about the most important.
+All of the scripts needed to run this project should be outlined in our [package.json](https://github.com/ustaxcourt/ef-cms/blob/staging/package.json#L162).  I'd recommend at least reading through some of these scripts because you will be using a lot of them as you advanced through learning this application.  But, so as not to overwhelm you, let's just talk about the most important ones.
 
 ### Checkout Develop
 
@@ -72,7 +72,7 @@ All of the applications dependencies are managed via our `package.json` and `pac
 
 ### 🏃 Starting the Services
 
-Once you've installed the dependencies, you should be able to run the npm scripts to start up the api, private UI, and public UI.  We recommend you have three separate terminals opened and run each of the following commands in a separate terminal:
+Once you've installed the dependencies, you should be able to run the npm scripts to start up the API, private UI, and public UI.  We recommend you have three separate terminals open and run each of the following commands in a separate terminal:
 
 - `npm run start:client` (starts the private UI)
 - `npm run start:public` (starts the public UI)
@@ -89,7 +89,7 @@ If everything is working fine, you should see the private UI hosted on [http://l
 
 ## How to Login Locally
 
-Now that you have your application fully running, we recommend you to try and login with some of the mock user accounts we have setup locally.  All of these users are defined in the [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json) file, and also in our [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) file which contains all of our dynamodb seed data.
+Now that you have your application running locally, we recommend that you try to login with some of the mock user accounts we have set up locally.  All of these users are defined in the [users.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/users.json) file, and also in our [efcms-local.json](https://github.com/ustaxcourt/ef-cms/blob/staging/web-api/storage/fixtures/seed/efcms-local.json) file which contains all of our dynamodb seed data.
 
 Open a browser to [http://localhost:1234](http://localhost:1234) and enter one of the following mock user emails.
 
@@ -127,7 +127,7 @@ colvinsChambers@example.com
 ## Running via Docker
 
 If needed, you can also try to run the entire project from a single docker container.
-Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it.  No one currently uses this approach when developing on this project since it often is more slower and error prone compared to running Dawson locally.
+Once [you have Docker installed](https://docs.docker.com/install/), the following command will spin up a Docker container with the UI, API, local S3, local Dynamo, etc. all running inside it.  No one currently uses this approach when developing on this project since it is often slower and more error prone compared to running Dawson locally.
 
 ```sh
 ./docker-run.sh
@@ -138,4 +138,4 @@ Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. Wit
 
 ## Troubleshooting
 
-Hopefully everything will work fine, but If you have issues logging in, double check your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 api.  Also verify you are on the correct branch.  It's recommended to be on the `flexion/develop` since.
+Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `flexion/develop` is recommended.
