@@ -1,21 +1,35 @@
-# PR Workflow
+# PR (Pull Request) Workflow
 
-Let's say you've been assigned to work on a bug or story... where do you branch from and where do you create a PR to merge into?  Due to our current process of maintaining two separate forks of Dawson, knowing which fork to branch from when working on bugs and stories can get confusing real fast.  This part of the documentation is to help clarify the exact process a developer should follow if assigned to an issue.
+Let's say you've been assigned to work on a bug or story... where do you branch from and where do you create a PR to merge into?  Our current process of maintaining Dawson involves needing to deal with two separate forks of the repository.  Knowing where to branch off of when working on bugs and stories can get confusing.  This part of the documentation is to help clarify the exact process a developer should follow if assigned to an issue.
 
-## Bug PR Workflow
+## Branches of Interest
 
-> When working on fixing a bug, developer should branch off of `court/staging` and create a PR to `court/test`
+Since we mentioned we worked off of two forks of the repo, it will be useful to understand the main branches we typically develop off of on this project.  A majority of us (Flexion) will work off of the flexion fork, but we often need to get work merged into the Court's repo.  Take note of the following branches:
 
-The `court/staging` branch is kept up to date with the latest version of master and is considered the *source of truth*.  Developers working on bugs should create a branch off of the `court/staging` branch.  Once they think they've found a solid fix, they should deploy their fixes to a Flexion experimental environment (`origin/experimental1`) to verify their fixes work on a deployed AWS environment.
+### Flexion Fork Branches
+- `origin/develop` (for **passive** branch development)
+- `origin/staging` (for **active** branch development)
+- `origin/experimental1` (for deploying to a test environment)
+- `origin/experimental2` (for deploying to a test environment)
+- `origin/experimental3` (for deploying to a test environment)
+- `origin/experimental4` (for deploying to a test environment)
+- `origin/experimental5` (for deploying to a test environment)
 
+We will discuss what **passive** and **active** means lower in this documentation, but for the most part you will work off of develop or staging when dealing with refactoring or story work, and occionasily push your change to an experimental branch to verify your changes if major devops or AWS work was required.
 
-A PR should be create to merge your bug branch into `court/test`.  The court's tech lead will review the bug fix PR and merge it to get it deployed to the court's `test` branch.  The `test` branch has a production like copy of the data to allow for accurate verification of the bug fix.  The court will test the environment before marking the bug issue as `done`.  The tax court will later merge their `court/test` branch into `court/staging` and later get that deployed to `production`.
+Multiple times during a sprint we will need to interact with the US Tax Court fork.  Take note of the following branches:
+
+### US Tax Court Fork Branches
+- `upstream/migration` (a staging environment for the PO to verify story work)
+- `upstream/test` (kept up to date with `prod`, but a staging environment for PO to verify bug fixes)
+- `upstream/staging` (kept up to date with `prod`, but also a staging environment for the upcoming deploy)
+- `upstream/prod` (the current version which is running on production)
+
+If you are at Flexion, you will never need to touch `upstream/prod`.
+
+?> The court often commits code to their staging branch which requires us to back merge changes into our Flexion fork.  See the [Environment Shuffle](/pr-workflow.md?id=environment-shuffle) section below for more information.
 
 ## Story PR Workflow
-
-> The **active** batch should be branched off of `flexion/staging` and a PR should be created to `court/staging` when the batch is done/
-
-> The **passive** batch should be branched off of `flexion/develop`.  The passive batch will **NOT** go in a PR to the court fork.
 
 To understand how to work on non bug features, we need to talk about a Dawson specific concept of **batches of work**.  Over time, our process has landed on batching groups of stories together so that they are all deployed to the court as one deliverable.  The main driving factor for this approach is that the Tax Court does **NOT** want unfinished stories deployed to production.  Because of this, we will take 2 or 3 stories, attach a specific batch label to those stories, and try to get them all deployed in a single PR to the Tax Court.
 
@@ -29,11 +43,30 @@ The **passive** batch is always being branched off the `flexion/develop` branch.
 
 As you finish up your **active batch** stories, you will need to get them deployed to the `court/migration` environment so that the product owner and Tax Court can verify your features against production like data.  This environment should only contain the latest changes of our **active batch**.  When the Court has tested your story, they will mark the story as `done` and you can either help other developers out with more **active batch** stories, of grab a **passive branch** story if no additional eyes are needed.
 
+
+
+> The **active** batch should be branched off of `flexion/staging` and a PR should be created to `court/staging` when the batch is done.
+
+> The **passive** batch should be branched off of `flexion/develop`.  The passive batch will **NOT** go in a PR to the court fork.
+
 ## Refactoring PR Workflow
- 
-> Refactoring work should always be off of `flexion/develop`. Refactoring work will **NOT** go in a PR to the court fork; it flows along with normal batch work.
 
 As mentioned in the previous part of documentation, we have a refactoring backlog found in trello.  Remember, 20% of our time should be spent refactoring our system, pipeline, and code.  These refactoring tasks are not really associated with batches, so we often just branch the work off of `flexion/develop` so that the refactoring work has a longer time in our system to help catch potential bugs, and the work won't slow down the progress of an **active** batch if the refactoring causes bugs.
+
+ 
+> Refactoring work should always be off of `flexion/develop`. Refactoring work will **NOT** go in a separate PR to the court fork; it flows along with normal batch work.
+
+## Bug PR Workflow
+
+
+The `court/staging` branch is kept up to date with the latest version of `prod` and is considered the *source of truth*.  Developers working on bugs should create a branch off of the `court/staging` branch.  Once they think they've found a solid fix, developers can additionally deploy their bug fix to a Flexion experimental environment (`origin/experimental1`) as sometimes bugs are related to migration scripts or AWS resources.
+
+
+When the fix is ready for the court, a pull request should be created to merge your bug branch into `court/test`.  The court's tech lead will review the bug fix PR and merge it to get it deployed to the court's `test` branch.  The `test` branch has a production like copy of the data to allow for accurate verification of the bug fix.  The court will test the environment before marking the bug issue as `done`.
+
+The tax court will later merge their `court/test` branch into `court/staging`, and shortly after deploy it to `production`
+
+> When working on fixing a bug, developer should branch off of `court/staging` and create a PR to `court/test`
 
 ## Environment Shuffle
 
@@ -44,6 +77,8 @@ Once everything in the batch is fully done and ready for a **formal code review*
 When the Tax Court verifies the pull request, they will merge the PR, get it deployed to their staging environment, and do any final testing on production like data.  If everything seems ok, the Tax Court will make a PR from `court/staging` to `court/prod`, merge, and get a production deployment started.
 
 ### Exact Steps to Follow
+
+The following steps are a more in depth description of the process describe above.
 
 1. Back-merge USTC `staging` into Flexion `staging`.
 
