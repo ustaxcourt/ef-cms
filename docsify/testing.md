@@ -200,13 +200,58 @@ All files |        0 |        0 |        0 |        0 |                   |
 - Funcs: % of functions executed in the code
 - Uncovered Line #s: lines not covered by tests
 
+## Pa11y Tests
+
+We care about accessbility on Dawson; therefore, we use [Pa11y](https://pa11y.org/) to run a variety of accessbility checks against our site.  More specifically, we use [pa11y-ci](https://www.npmjs.com/package/pa11y-ci) which handles spinning up a local instance of pa11y and running the checks against the site. 
+
+If you have your UI and API running locally, you can use the following command to run the pa11y tests:
+
+- `npm run test:pa11y`
+- `npm run test:pa11y:public`
+
+
+### How Pa11y Works
+
+Pa11y is setup using .json files that define what url it should hit and what actions it should invoke.  For example, we have a file called `web-client/pa11y/pa11y-judge.js` which contains the following:
+
+```javascript
+[
+  'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/',
+  {
+    actions: [
+      'wait for #advanced-search-button to be visible',
+      'click element #advanced-search-button',
+      'wait for .search-results to be visible',
+    ],
+    notes: 'checks a11y of advanced search results table',
+    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/search?petitionerName=cairo',
+  }
+  //.... more pa11y tests
+]
+```
+
+The pa11y test is made up of an array of either urls or objects.  The url will have `?code=EMAIL` which will login as that user and navigate to `&path=URL`.  We can also provide a list of `actions` which pa11y will follow when the page loads.  We often use the `actions` list for clicking on buttons to have modals show and verify them again pa11y.
+
+### An issue with Pa11y in CI/CD
+
+One thing you'll notice is that our application have many pa11y tests split up into smaller scripts
+
+- `npm run test:pa11y:1`
+- `npm run test:pa11y:2`
+- `npm run test:pa11y:3`
+- `npm run test:pa11y:4`
+
+The main reason for this is because we notice that pa11y seems to eat up memory our CI/CD pipeline and cause the docker containers to throw out of memory exceptions.  Currently, our best fix was to split up these test suites into smaller suites.
+
 ### Accessibility HTML_CodeSniffer Bookmarklet
 
 The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
 
 https://squizlabs.github.io/HTML_CodeSniffer/
 
-#### Testing Everything via Docker (TODO: REVIEW FOR CORRECTNESS)
+## Testing Everything via Docker
+
+!> developer don't develop with docker locally, so this might not work as expected
 
 If needed, you can run all the tests locally by running the following:
 
