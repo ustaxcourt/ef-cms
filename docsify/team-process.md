@@ -1,6 +1,6 @@
 # Team Process
 
-Now that you've logged in and played around with our Dawson system a big on a deployed environment, let's talk about our team process and what is expected from our fellow teammates.  This part of the documentation should help members get on the same page when it comes to the soft-skills required to work as a well oiled agile machine.
+Now that you've logged in and played around with our Dawson system a bit on a deployed environment, let's talk about our team process and what is expected from our fellow teammates.  This part of the documentation should help members get on the same page when it comes to the soft-skills required to work as a well-oiled agile machine.
 
 ## 🤝🏿 Working Agreement
 
@@ -14,13 +14,13 @@ For Flexioneers, remember to read and apply the flexion fundamentals to your dai
 
 ### Pair / Mob Programming
 
-A majority of stories and bug we work on should be tackled using pair or mob programming.  The reason we utilize this type of programming is because it produces higher quality software, helps developer find defects in a shorter feedback loop, increases creativity, and strengthens knowledge sharing.  Remember, **cooperation** and **communication** are keys to *success*. 
+A majority of stories and bug we work on should be tackled using pair or mob programming.  The reason we utilize this type of programming is because it produces higher quality software, helps developers find defects in a shorter feedback loop, increases creativity, and strengthens knowledge sharing.  Remember, **cooperation** and **communication** are keys to *success*. 
 
 > Two minds are better than one.
 
 ### Quality over Speed
 
-It has been made clear many times from the Court that producing high quality software (low defects, easy to manage and understand) is far more important than quickly delivering features.  All code should be covered with all forms of testing (unit, integration, smoke testing), we should be spending 20% of our sprints refactoring code, documentation has been written, and stories should not be considered done until meeting our Definition of Done criteria.
+It has been made clear many times by the Court that producing high quality software (low defects, easy to manage and understand) is far more important than quickly delivering features.  All code should be covered with all forms of testing (unit, integration, smoke testing), we should be spending 20% of our sprints refactoring code, documentation should always be written or updated, and stories should not be considered done until after meeting our Definition of Done criteria.
 
 > 20% of our time should be spent refactoring
 
@@ -30,7 +30,7 @@ We strive to be keep our project as Agile as possible.  This means that every sp
 
 ### Daily Standup
 
-Since we strive to work in pairs and mobs, our stand ups focus more on group goals.  Every morning we meet to talk about our goals for our current sprint and also talk about our story goals for the day.  We also setup **parking lot** items to give an opportunity to discuss anything important topics that the entire team should.  We will also give small demos of story / bug progress to the tax court.
+Since we strive to work in pairs and mobs, our stand ups focus more on group goals.  Every morning we meet to talk about our goals for our current sprint and also talk about our story goals for the day.  We setup **parking lot** items to give an opportunity to discuss any important topics that the entire team should be aware of.  We will often give small demos of story / bug progress to the Tax Court.
 
 ### Sprint Planning 
 
@@ -50,11 +50,15 @@ TODO
 
 ## Tech Rotations
 
-TODO
+Each week we rotate a few of the routine process and maintenance chores between team members. This is tracked using a schedule posted to the USTC out of office calendar.
+
+### Environment Shuffle
+
+This process is to merge changes from the Court into our Flexion fork, and also to create batch PRs if the batch is ready.  Please view the [Environment Shuffle](pr-workflow?id=environment-shuffle) part of the documentation for more information.
 
 ### Dependency Updates
 
-Similar to [Environment Shuffle](team-process?id=environment-shuffle), we rotate every week on who is responsible for updating dependencies. As an open-source project, we rely on external libraries and these also get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. As of 12/21/21, we are basing these changes off of the `flexion/develop` branch. 
+Similar to [Environment Shuffle](team-process?id=environment-shuffle), every week we rotate responsibility for updating dependencies. As an open-source project, we rely on external libraries which get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. As of 12/21/21, we are basing these changes off of the `flexion/develop` branch. 
 
 > After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
   > * If terraform needs to be updated, deploy locally to an exp environment first. 
@@ -76,7 +80,3 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
   * Once verification is complete, you will need to rebuild the docker images that use Terraform and push them to ECS.
 
 `Docker`: Update docker base image version if applicable.
-
-### Environment Shuffle
-
-Every week our team rotates a schedule for who is responsible for the environment shuffle.  This process is to merge changes in from the court into our Flexion fork, and also create batch PRs if the batch is ready.  Please view the [Environment Shuffle](pr-workflow?id=environment-shuffle) part of the documentation for more information.
