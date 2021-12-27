@@ -4,7 +4,7 @@
 * [🆘 What is Dawson](what-is-dawson.md)
 * [Getting Started](getting-started.md)
 * [Team Process](team-process.md)
-* [Story Lifecycle](story-life-cycle.md)
+* [🆘 Story Lifecycle](story-life-cycle.md)
 * [PR Workflows](pr-workflow.md)
 * [Running Locally](running-locally.md)
 * [Clean Architecture](clean-architecture.md)
