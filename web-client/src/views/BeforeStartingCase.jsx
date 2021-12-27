@@ -74,7 +74,7 @@ export const BeforeStartingCase = connect(
                   title="Confirm your identity"
                 >
                   <p>
-                    You’ll be asked to upload your Statement of Taypayer
+                    You’ll be asked to upload your Statement of Taxpayer
                     Identification Number (STIN)* form in Step 1 of creating a
                     case. This document is sent to the IRS to help them identify
                     you, but it’s never stored as public record.
