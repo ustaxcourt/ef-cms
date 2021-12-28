@@ -1,10 +1,10 @@
 # Testing
 
-This part of the documentation is to explain the various types of automated testing we do in Dawson and how to potentially run them.
+This part of the documentation will explain the various types of automated tests we write in Dawson, and how to run them.
 
 ## Unit Testing
 
-Unit testing is our first line of defense to verify our application meets the business requirements defined by the court.  All of our code is unit tested using [Jest](https://facebook.github.io/jest/), and we strive to **keep code coverage >= 95% when possible**.
+Unit testing is our first line of defense to verify our application meets the business requirements defined by the Court.  All of our code is unit tested using [Jest](https://facebook.github.io/jest/), and we strive to **keep code coverage >= 95% when possible**.
 
 If you want to run the unit tests, you can do so with one of the following commands:
 
@@ -12,15 +12,17 @@ If you want to run the unit tests, you can do so with one of the following comma
 - `npm run test:shared`
 - `npm run test:api`
 
+These run all unit tests in the `client`, `shared`, and `api` directories, respectively.
+
 Often you just want to run a single test file.  You can do that using the following command:
 
 `npx jest <PATH_TO_TEST_FILE>`
 
-?> if the implementation is considered an **humble object** -- code that has no branching and very simple passthrough logic -- we often igore it from testing.
+?> if the implementation is considered an **humble object** -- code that has no branching and very simple passthrough logic -- we often ignore it from testing.
 
 ### Overview of Jest
 
-For every function and module, we write a unit test with a matching *.test.js extension.  For example, if we have a `getClientId.js` file, we'll have a `getClientId.test.js` file in the same directory which verifies the public interface of that module or function.
+For every function and module, we write a unit test file with a matching *.test.js extension.  For example, if we have a `getClientId.js` file, we'll have a `getClientId.test.js` file in the same directory which verifies the public interface of that module or function.
 
 Jest tests are setup by declaring `describe` and `it` blocks.  The `describe` block is a group of related tests.  The `it` block is a single test.  The `it` block can have multiple assertions.  For example, we might have a test that verifies that the `getClientId` function returns a string.  We might also have a test that verifies that the `getClientId` function returns a string with a length of 32 characters.  We can have multiple `it` blocks in a `describe` block.
 
@@ -39,11 +41,11 @@ describe('getClientId', () => {
 });
 ```
 
-Each it statement should be a small test with a single assertion (if possible).  The reason we keep tests small is so we can verify when specific parts of the function are broken instead of having the entire test suite fail when something goes wrong.
+Each `it` statement should be a small test with a single assertion (if possible).  The reason we keep tests small is so that we can verify when specific parts of a function are broken instead of having the entire test suite fail when something goes wrong.
 
 ### Mocking
 
-Most of our code in Dawson is passed in an applicationContext which is where we have our third party dependencies setup via dependency inversion.  It's pretty easy to mock dependencies on the applicationContext because we can just defined a new function using `jest.fn()` which will create a jest mock we can use to verify that the function was called.  For example:
+Most of our code in Dawson is passed in an applicationContext which is where we have our third party dependencies setup via dependency inversion.  It's pretty easy to mock dependencies on the applicationContext because we can just define a new function using `jest.fn()` which will create a jest mock that we can use to verify that the function was called.  For example:
 
 ```javascript
 const { getClientId } = require('./getClientId');
@@ -58,7 +60,7 @@ it('should invoke fetch', () => {
 })
 ```
 
-Unfortunately, we often need to mock out depedencies that do not live on the applicationContext.  For example, if we pretend the `getClientId` method required another function from a DateHandler module, we might need to mock it out using `jest.mock` function, like so:
+Unfortunately, we often need to mock out dependencies that do not live on the applicationContext.  For example, if we pretend the `getClientId` method requires another function from a DateHandler module, we might need to mock it out using `jest.mock` function, like so:
 
 ```javascript
 // mock out ONLY the 'createISODateString' function while allowing original implementations
@@ -85,14 +87,14 @@ describe('getClientId', () => {
 });
 ```
 
-The example above is specifically used when we want to use a majority of the original implementation of the module, but maybe just mock out a few functions on the module.  
+The example above is used specifically when we want to use a majority of the original implementation of the module, but maybe just mock out a few functions on the module.  
 
 !> jest.mock is a bit confusing - a good rule of thumb is to write your implementation in such a way that won't require you to jest.mock a lot of things.
 
 
 ## Integration Testing
 
-Since we know unit tests are not perfect and will miss potential bugs, we incorporate a lot of integration tests against Dawson to verify our code.  Our integration tests will test at the presenter level (i.e. we test the cerebral sequences which will hit our API, Dynamo, and Elasticsearch).  We try to avoid testing at the React level due to additional complexity, brittleness, and slowness.
+Since we know unit tests are not perfect and will miss potential bugs, we incorporate a lot of integration tests against Dawson to verify our code.  Our integration tests test at the presenter level (i.e. we test the Cerebral sequences which will hit our API, Dynamo, and Elasticsearch).  We try to avoid testing at the React level due to additional complexity, brittleness, and slowness.
 
 You can run the all of the integration tests locally with the following command, but they will take **a long time**.
 
@@ -106,9 +108,9 @@ Often the best way to write and run integration tests is by using the following 
 
 !> Your API must be running in order to run the integration tests.
 
-### How Integration Tests are Setup
+### How Integration Tests are Set Up
 
-The integration tests are located in `web-client/integration-tests`.  We tried to take a declarative approach to writing these tests.  Each test file is made up of smaller helper test files that are found in `web-client/integration-tests/journey`, where each journey file is a small step in the larger integration test scenario.
+The integration tests are located in `web-client/integration-tests`.  We tried to take a declarative approach in writing these tests.  Each test file is made up of smaller helper test files that are found in `web-client/integration-tests/journey`, where each journey file is a small step in the larger integration test scenario.
 
 For example, the `web-client/integration-tests/admissionsClerkPractitionerJourney.test.js` test invokes multiple journey functions like so to create a petition, serve the petition, and add a practitioner to the case:
 
@@ -123,14 +125,14 @@ describe('admissions clerk practitioner journey', () => {
 });
 ```
 
-?> Try to keep the journey functions small pieces of reusuable functionality that other tests could use in the future if needed. 
+?> Try to keep the journey functions small and reusable by other tests in the future if needed. 
 
 
 ## Smoke Tests
 
-Testing all our functionality locally is a good way to catch bugs, but often when we deploy all our code to AWS, stuff is misconfigured which causes things to break.  Due to this reason, we have a variety of smoketests written in cypress to make sure a user can at least click through the UI and run a couple of key pieces of functionality.
+Testing all our functionality locally is a good way to catch bugs, but often when we deploy all our code to AWS, stuff is misconfigured which causes things to break.  For this reason, we have a variety of smoketests written in Cypress to make sure a user can at least click through the UI and run a couple of key pieces of functionality.
 
-The scripts we use for running smoke tests include the following:
+The scripts we use for running smoketests include the following:
 
 - `npm run cypress:smoketests`
 - `npm run cypress:readonly:public`
@@ -138,7 +140,7 @@ The scripts we use for running smoke tests include the following:
 
 ### Cypress Information
 
-Cypress is a great tool for writing and running e2e tests against web interfaces.  The cypress cli runner also provides a useful `open` command which will load a chromium instance locally which developers can use to watch the smoketests click through the UI and rewind history.  You can try runnign the smoketests against a deployed environment or locally using the following commands:
+Cypress is a great tool for writing and running end-to-end tests against web interfaces.  The Cypress CLI runner also provides a useful `open` command which will load a chromium instance locally which developers can use to watch the smoketests click through the UI and rewind history.  You can try running the smoketests against a deployed environment or locally using the following commands:
 
 - `npm run cypress:integration:open`
 - `npm run cypress:readonly:open`
@@ -149,19 +151,19 @@ Cypress is a great tool for writing and running e2e tests against web interfaces
 
 ## Testing Matrix
 
-At one point in this project, our team agree to do a quarterly manual test against our system.  We have a [Testing Matrix Google Sheet](https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA) which outlines a variety of different scenarios and the expected outcomes.  I'd recommend trying to at least read through some of this test matrix since it will give you good insight into a lot of the business rules our system need to uphold.
+At one point in this project, our team agreed to comprehensively manually test our system on a quarterly basis.  We have a [Testing Matrix Google Sheet](https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA) which outlines a variety of different scenarios and the expected outcomes.  I'd recommend trying to at least read through *some* of this test matrix since it will give you good insight into many of the business rules our system needs to abide by.
 
-## Load testing
+## Load Testing
 
-!> We instead use Artillery to do loadtesting. Check out the `Performance Testing` section below for more information.
+!> We instead use Artillery to do load testing. Check out the `Performance Testing` section below for more information.
 
-In the past we found that large traffic to order and opinion search was causing our elasticsearch cluster to become overwhelmed and unstable.  In order to verify our application can handle the load of various requests, a load testing runner was setup using [Gatling](https://gatling.io/).  This load testing tool is written in Groovy which is why we keep it separate from our main repo.  
+In the past, we found that large amounts of traffic to order and opinion search was causing our Elasticsearch cluster to become overwhelmed and unstable.  In order to verify that our application can handle the load of various requests, a load testing runner was setup using [Gatling](https://gatling.io/).  This load testing tool is written in Groovy which is why we keep it separate from our main repo.  
 
 See [ustaxcourt/ef-cms-load-tests](https://github.com/ustaxcourt/ef-cms-load-tests) for Gatling load tests.
 
 ## Performance Testing
 
-Similar to the load testing mentioned above, we run performance testing against Dawson using [Artillery](https://www.artillery.io/).  This tool is based on javascript and is setup using .yml files which is easier to read and understand than the Java based [gatling](https://gatling.io/) tool. 
+Similar to the load testing mentioned above, we run performance testing against Dawson using [Artillery](https://www.artillery.io/).  This tool is based on Javascript, is set up using .yml files, and is easier to read and understand than the Java based [gatling](https://gatling.io/) tool. 
 
 To run the performance tests, you can run one of the following:
 
@@ -185,7 +187,7 @@ npx() {
 }
 ```
 
-This will print coverage whenever you do `npx jest <PATH_TO_TEST_FILE>` which is really useful for development.
+This will print coverage whenever you run `npx jest <PATH_TO_TEST_FILE>`, which is really useful for development.
 
 Example coverage output:
 ```
@@ -202,9 +204,9 @@ All files |        0 |        0 |        0 |        0 |                   |
 
 ## Pa11y Tests
 
-We care about accessbility on Dawson; therefore, we use [Pa11y](https://pa11y.org/) to run a variety of accessbility checks against our site.  More specifically, we use [pa11y-ci](https://www.npmjs.com/package/pa11y-ci) which handles spinning up a local instance of pa11y and running the checks against the site. 
+We care about accessability on Dawson; therefore, we use [Pa11y](https://pa11y.org/) to run a variety of accessability checks against our site.  More specifically, we use [pa11y-ci](https://www.npmjs.com/package/pa11y-ci) which handles spinning up a local instance of Pa11y and running the checks against the site. 
 
-If you have your UI and API running locally, you can use the following command to run the pa11y tests:
+If you have your UI and API running locally, you can use the following command to run the Pa11y tests:
 
 - `npm run test:pa11y`
 - `npm run test:pa11y:public`
@@ -212,7 +214,7 @@ If you have your UI and API running locally, you can use the following command t
 
 ### How Pa11y Works
 
-Pa11y is setup using .json files that define what url it should hit and what actions it should invoke.  For example, we have a file called `web-client/pa11y/pa11y-judge.js` which contains the following:
+Pa11y is set up using .json files that define which URL it should hit and what actions it should invoke.  For example, we have a file called `web-client/pa11y/pa11y-judge.js` which contains the following:
 
 ```javascript
 [
@@ -230,7 +232,7 @@ Pa11y is setup using .json files that define what url it should hit and what act
 ]
 ```
 
-The pa11y test is made up of an array of either urls or objects.  The url will have `?code=EMAIL` which will login as that user and navigate to `&path=URL`.  We can also provide a list of `actions` which pa11y will follow when the page loads.  We often use the `actions` list for clicking on buttons to have modals show and verify them again pa11y.
+The Pa11y test is made up of an array of either URLs or objects.  The url will have `?code=EMAIL` which will log in as that user and navigate to `&path=URL`.  We can also provide a list of `actions` which Pa11y will follow when the page loads.  We often use the `actions` list for clicking on buttons to have modals show and verify them again Pa11y.
 
 ### An issue with Pa11y in CI/CD
 
@@ -241,17 +243,17 @@ One thing you'll notice is that our application have many pa11y tests split up i
 - `npm run test:pa11y:3`
 - `npm run test:pa11y:4`
 
-The main reason for this is because we notice that pa11y seems to eat up memory our CI/CD pipeline and cause the docker containers to throw out of memory exceptions.  Currently, our best fix was to split up these test suites into smaller suites.
+The main reason for this is that we've noticed that Pa11y seems to eat up memory in our CI/CD pipeline and cause the Docker containers to throw `out of memory` exceptions.  Currently, our best fix involves splitting up these test suites into smaller suites.
 
 ### Accessibility HTML_CodeSniffer Bookmarklet
 
-The following bookmarklet is useful for running pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
+The following bookmarklet is useful for running Pa11y directly on the page you are viewing.  The following link should have instruction on how to setup and use:
 
 https://squizlabs.github.io/HTML_CodeSniffer/
 
 ## Testing Everything via Docker
 
-!> developer don't develop with docker locally, so this might not work as expected
+!> developers don't develop with docker locally, so this might not work as expected
 
 If needed, you can run all the tests locally by running the following:
 

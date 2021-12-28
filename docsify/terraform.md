@@ -1,6 +1,6 @@
 # Terraform
 
-Terraform is a tool which represents your infrastructure (AWS services) as code. You can think of it as a little robot that uses the AWS console for you in a repeatable, automatic way. 🤖
+Terraform is a tool which represents infrastructure (AWS services) as code. You can think of it as a little robot that uses the AWS console for you in a repeatable, automatic manner. 🤖
 
 It supports many cloud services, including AWS, through providers. You can read more about providers and see a list of supported clouds in the [Terraform documentation for providers](https://www.terraform.io/docs/providers/index.html).
 
@@ -14,7 +14,7 @@ It supports many cloud services, including AWS, through providers. You can read 
 
 Terraform is a **declarative programming language**. You don’t describe how to create, update, or destroy infrastructure - instead, you program how things should exist, and Terraform figures out how to make it happen.
 
-When Terraform is comparing your infrastructure, it needs to be able to map the things you’ve described in your code to the infrastructure that exists in AWS. Some of these are obvious - things that have well-known names - but some of them have no known identifiers. Terraform keeps track of the mapping from your code to infrastructure in a **state file**. A state file is a JSON file.
+When Terraform is preparing your infrastructure, it needs to be able to map the things you’ve described in your code to the infrastructure that exists in AWS. Some of these are obvious - things that have well-known names - but some of them have no known identifiers. Terraform keeps track of the mapping from your code to infrastructure in a JSON **state file**.
 
 To determine what needs to be created, updated, or removed, Terraform examines:
 
@@ -66,7 +66,7 @@ Terraform has three main stages - `init`, `plan`, and `apply`.
 
 ## Passing Variables to Terraform
 
-Terraform allows input variables, set when running `terraform plan` or `terraform apply`, to be used to control infrastructure. We use input variables for things like domain names and environment names.
+Terraform allows input variables, set when running `terraform plan` or `terraform apply`, to be used to control infrastructure. We use input variables for things like domain and environment names.
 
 Input variables are declared in any Terraform file, but are typically declared in `variables.tf`. Input variables can be set in a few ways - most commonly through the command line or environment variables. See the [Terraform documentation on input variables](https://www.terraform.io/docs/configuration/variables.html) for more information.
 
@@ -132,7 +132,7 @@ To remove items from Terraform’s state file, run `terraform state rm` - see th
 
 ## DAWSON's Terraform
 
-We try to split our infrastructure up into smaller terraform deployments.  The following directories are were we use terraform:
+We try to split our infrastructure up into smaller Terraform deployments.  The following directories are where we use Terraform:
 
 - `/web-api/terraform/` (Terraform for the API, Dynamo, Backend, etc)
 - `/web-client/terraform/` (For the UI, CloudFront, etc)
