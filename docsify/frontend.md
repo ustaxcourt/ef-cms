@@ -50,6 +50,12 @@ The overall structure of the web-client directory is as follows with a short des
 
 These are the main directories and files.  Note that there are probably some missing, but this is probably a good place to get started with understanding how things are setup.
 
+### Proxies
+
+Whenever the UI needs to call an interactor which lives on the backend, we invoke something called a proxy. These proxy files live in the shared directory.  What is the shared directory for?  It's a place that we can place all our code which may be used by other parts of the application.  The idea is that we can easily write a different application, such as a CLI, and reuse code in the shared directory as needed to achieve the same functionality.
+
+For example, we have a file called `shared/src/proxies/users/getUserProxy.js`.  Proxies just doing http requests to the backend api which is where there real implementation of the interactor lives.
+
 ## UI Npm Scripts
 
 There are a lot of scripts related to running, bundling, and testing the frontend.  Although you may not necessarly need to run some of these since our CI/CD pipeline does it for us, here are the most important ones to know about:
@@ -103,7 +109,7 @@ There are a lot of state management libraries out there for React, but we decide
 
 The main benefit to **cerebral** is it allows us to be decoupled from React.  If our UIs are architected correctly, we should be able to switch from React to Vue or Angular with very little effort.  Keep as much logic and state as possible out of our React components; let Cerebral manage it.
 
-#### Sequences
+### Sequences
 Cerebral sequences are the main mechanisms for running logic in our UI.  A sequence is just an array of **actions**.  Sequences have support of parallel executions and branching logic.
 
 Sequences are invoked whenever someone interacts with the UI.  For example, when a user navigates to a certain page, such as `/case-detail/101-21`, our riot router will get notified of the route change and invoke a `gotoCaseDetailSequence`.  A good way to think of a sequence is it is basically a more complex promise chain.
@@ -126,7 +132,7 @@ export const signOutSequence = [
 
 This sequence basically shows a spinner, stops any web socket connections, deletes auth cookies, clears some state, and navigates the user to cognito.  The beautify of this declarative approach is that it is very easy to get a high level overview of what is going on when a sequence executes.  You really don't need to know the internals of how these actions work to understand the sequence.
 
-#### Actions
+### Actions
 
 Actions are the building blocks of the sequences.  Each action is a function which can run async code if needed to talk to API endpoints, and they will update the cerebral store.  Here is a small example action we use in our application for setting the case detail on the store.  This action is typically invoked in a sequence directly after a previous action that might be used to fetch the case detail from the API and pass it along in props. A cerebral action is basically the .then() of a promise change
 
@@ -144,11 +150,11 @@ export const setCaseAction = ({ props, store, get, applicationContext }) => {
 
 The `props` passed in to the action is actually a merged object of all the return values of previous actions.  For example, in the `signOutSequence` listed above, each action has the ability to return an object, and that object will be merged into the results of any other actions in the sequence.  The action also has access to the `store` argument which is what you use if you want save things onto the cerebral store.  If you want to get things from state, you can use the `get` argument
 
-#### State
+### State
 
 Our project tries to keep all state in our application store.  The main reason we do this is to achieve as much decoupling from React as possible.  The more state and logic you allow to live in your React components, the harder it is to switch from React in the future.  This approach also allows us to be able to inspect the state at anytime to verify certain things are correct when dealing with writing tests.  If we didn't do this, we'd have to bring in more react specific testing libraries, such as react-testing-library or enzyme which are not as straight forward when it comes to writing tests.  Testing react components directly is also slower since they often require a DOM (JSDOM) implementation to verify they are doing what they are supposed to.
 
-#### Computeds
+### Computeds
 
 Sometimes we want to compute state using a combination of other state variables. We often will use a computeds to setup various booleans that a UI might need to know when it should hide or show things.  For example, take a look at this menuHelper.js file:
 
@@ -173,7 +179,7 @@ This computed is accessible by doing `get(state.menuHelper)` in our actions and 
 
 !> Don't use a Cerebral computed value in another computed or set state within a computed. More context is detailed here: https://cerebraljs.com/docs/advanced/index.html
 
-#### React Components
+### React Components
 
 Our React components still need to connect to cerebral in some type of way.  The current way we connect react components to cerebral is by using the `connection` function provided by cerebral.  Take this pruned down example of our Header.jsx component:
 
