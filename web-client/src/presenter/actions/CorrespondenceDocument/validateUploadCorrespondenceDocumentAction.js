@@ -20,7 +20,7 @@ export const validateUploadCorrespondenceDocumentAction = ({ get, path }) => {
   }
 
   if (!primaryDocumentFile) {
-    errors.primaryDocumentFile = 'Upload a document';
+    errors.primaryDocumentFile = 'Upload a or scan document';
   }
 
   if (isEmpty(errors)) {
