@@ -6,4 +6,4 @@
 
 
 [GitHub](https://github.com/flexion/ef-cms/)
-[Get Started](/?id=the-dawson-documentation)
+[Get Started](/what-is-dawson)

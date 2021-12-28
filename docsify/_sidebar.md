@@ -1,7 +1,7 @@
 <!-- docs/_sidebar.md -->
 
 * [Overview](/)
-* [🆘 What is Dawson](what-is-dawson.md)
+* [🆘 What is Dawson?](what-is-dawson.md)
 * [Getting Started](getting-started.md)
 * [Team Process](team-process.md)
 * [🆘 Story Lifecycle](story-life-cycle.md)
