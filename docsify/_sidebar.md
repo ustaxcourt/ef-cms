@@ -19,6 +19,6 @@
 * [🆘 AWS](aws.md)
 * [Additional Resources](additional-resources/README.md)
 * [Operations](operations/README.md)
-* [Environments](environments/README.md)
+* [Environment Setup / Teardown](environments.md)
 * [Flows](flows/README.md)
 * [Architecture](architecture/README.md)
