@@ -49,6 +49,7 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
+import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
@@ -82,6 +83,7 @@ const allUseCases = {
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
+  getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
   getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
