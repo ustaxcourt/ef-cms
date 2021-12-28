@@ -17,7 +17,7 @@ This part of the documentation is meant to give a beginner a complete overview o
 
 ## Users
 
-hello! from the other side
+hello! from the other side.
 
 ### External Users
 
