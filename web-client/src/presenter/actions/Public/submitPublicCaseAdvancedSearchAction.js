@@ -13,12 +13,6 @@ export const submitPublicCaseAdvancedSearchAction = async ({
   get,
 }) => {
   const form = get(state.advancedSearchForm.caseSearchByName);
-
-  await applicationContext.getUseCases().setItemInteractor(applicationContext, {
-    key: 'hello',
-    value: form,
-  });
-
   const searchResults = await applicationContext
     .getUseCases()
     .casePublicSearchInteractor(applicationContext, {
