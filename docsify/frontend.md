@@ -1,6 +1,6 @@
 # Frontend
 
-The frontend user interfaces are major parts of our Dawson system.  They are implemented using React, we use USWDS for the styling, Cerebral for our state management, and terraform to get it all deployed to AWS.  Since every React application is built and structure differently, this part of the docs is written to help give an overview of our frontend structure and insight into some design decisions.
+The frontend user interfaces are major parts of our Dawson system.  They are implemented using React, using USWDS for styling, Cerebral for state management, and Terraform to get it all deployed to AWS.  Since every React application is built and structured differently, this part of the documentation is written to help give an overview of our frontend structure and insight into some design decisions.
 
 ## Project Structure
 
@@ -62,7 +62,7 @@ There are a lot of scripts related to running, bundling, and testing the fronten
 
 - `npm run start:client` - starts the client application
 - `npm run start:public` - starts the public client application
-- `npm run start:client:no-scanner` - starts the client application with the mock scanner the scanner
+- `npm run start:client:no-scanner` - starts the client application with a mock scanner
 - `npm run test:client` - runs the client application unit tests
 - `npm run test:client:public` - runs the public client application unit tests
 - `npm run test:pa11y` - runs the pa11y tests for the private 
@@ -76,13 +76,13 @@ Some of this scripts, such as pa11y, require the API to also be running since it
 
 ## USWDS
 
-Our project uses the [U.S. Web Design System (USWDS)](https://designsystem.digital.gov/). This library is similar to bootstrap, but it is a standard library that helps government sites all stay uniform in style.  It has various utilities css classes that help with the styling of the site, such as a grid system, components, typography, and color.
+Our project uses the [U.S. Web Design System (USWDS)](https://designsystem.digital.gov/). This library is similar to bootstrap, but it is a standard library that helps government sites all stay uniform in style.  It has various css utility classes that help with the styling of the site, such as a grid system, components, typography, and color.
 
-At this point, a majority of these USWDS components have been wrapped in our own react components located at [./web-client/src/ustc-ui](https://github.com/ustaxcourt/ef-cms/tree/staging/web-client/src/ustc-ui).
+At this point, a majority of these USWDS components have been wrapped in our own React components located in [./web-client/src/ustc-ui](https://github.com/ustaxcourt/ef-cms/tree/staging/web-client/src/ustc-ui).
 
 ## React
 
-Both of our UIs are written using React.  We use functional react components with [react hooks](https://reactjs.org/docs/hooks-intro.html) instead of class components.  The main guideline we follow when making React components is to keep all logic out of the react component; therefore, if you see anything other than a simple conditional render in our react components, it's probably going against our main principles.  We try to keep all UI logic inside our presenter layer (Cerebral) which allows us to easily test our logic using unit tests and integration tests.
+Both of our UIs are written using React.  We use functional React components with [React hooks](https://reactjs.org/docs/hooks-intro.html) instead of class components.  The main guideline we follow when making React components is to keep all logic out of the react component; therefore, if you see anything other than a simple conditional render in our react components, it should probably be refactored.  We try to keep all UI logic inside our presenter layer (Cerebral) which allows us to easily test our logic using unit and integration tests.
 
 ## SCSS Setup
 
@@ -105,14 +105,14 @@ Although we use USWDS for a lot of our UI styling, we do need custom styles.  We
 
 ## Cerebral
 
-There are a lot of state management libraries out there for React, but we decided to use one called [CerebralJs](https://cerebraljs.com/docs/introduction/) which follows a declarative for our UI logic.  The overview of cerebral is that our React components bind to Cerebral's state to determine what and when it should show certain components, and React invokes cerebral **sequences** when a user interacts with the UI or changes routes.
+There are many state management libraries out there for React, but we decided to use one called [CerebralJs](https://cerebraljs.com/docs/introduction/) which follows a declarative pattern for our UI logic.  Broadly speaking, our React components bind to Cerebral's state to determine when and in which way it should show certain components, and React invokes Cerebral **sequences** when a user interacts with the UI or changes routes.
 
-The main benefit to **cerebral** is it allows us to be decoupled from React.  If our UIs are architected correctly, we should be able to switch from React to Vue or Angular with very little effort.  Keep as much logic and state as possible out of our React components; let Cerebral manage it.
+The main benefit to **Cerebral** is it allows us to be decoupled from React.  If our UIs are architected correctly, we should be able to switch from React to Vue or Angular with very little effort.  Keep as much logic and state as possible out of our React components; let Cerebral manage it.
 
-### Sequences
-Cerebral sequences are the main mechanisms for running logic in our UI.  A sequence is just an array of **actions**.  Sequences have support of parallel executions and branching logic.
+#### Sequences
+Cerebral sequences are the main mechanisms for running logic in our UI.  A sequence is just an array of **actions**.  Sequences support parallel executions and branching logic.
 
-Sequences are invoked whenever someone interacts with the UI.  For example, when a user navigates to a certain page, such as `/case-detail/101-21`, our riot router will get notified of the route change and invoke a `gotoCaseDetailSequence`.  A good way to think of a sequence is it is basically a more complex promise chain.
+Sequences are invoked whenever someone interacts with the UI.  For example, when a user navigates to a certain page, such as `/case-detail/101-21`, riot router will get notified of the route change and invoke a `gotoCaseDetailSequence`.  A good way to think of a sequence is it is basically a more complex promise chain.
 
 Here is an example of a signOutSequence in our application:
 
@@ -134,7 +134,7 @@ This sequence basically shows a spinner, stops any web socket connections, delet
 
 ### Actions
 
-Actions are the building blocks of the sequences.  Each action is a function which can run async code if needed to talk to API endpoints, and they will update the cerebral store.  Here is a small example action we use in our application for setting the case detail on the store.  This action is typically invoked in a sequence directly after a previous action that might be used to fetch the case detail from the API and pass it along in props. A cerebral action is basically the .then() of a promise change
+Actions are the building blocks of the sequences.  Each action is a function which can run async code if needed to talk to API endpoints, and they will update the Cerebral store.  Here is a small example action we use in our application for setting the case detail on the store.  This action is typically invoked in a sequence directly after a previous action that might be used to fetch the case detail from the API and pass it along in props. A cerebral action is basically the .then() of a promise chain.
 
 ```javascript
 import { state } from 'cerebral';
@@ -148,15 +148,15 @@ export const setCaseAction = ({ props, store, get, applicationContext }) => {
 };
 ```
 
-The `props` passed in to the action is actually a merged object of all the return values of previous actions.  For example, in the `signOutSequence` listed above, each action has the ability to return an object, and that object will be merged into the results of any other actions in the sequence.  The action also has access to the `store` argument which is what you use if you want save things onto the cerebral store.  If you want to get things from state, you can use the `get` argument
+The `props` passed in to the action is actually a merged object of all the return values of previous actions.  For example, in the `signOutSequence` listed above, each action has the ability to return an object, and that object will be merged into the results of any other actions in the sequence.  The action also has access to the `store` argument which is what you use if you want save things onto the Cerebral store.  If you want to get things from state, you can use the `get` argument.
 
 ### State
 
-Our project tries to keep all state in our application store.  The main reason we do this is to achieve as much decoupling from React as possible.  The more state and logic you allow to live in your React components, the harder it is to switch from React in the future.  This approach also allows us to be able to inspect the state at anytime to verify certain things are correct when dealing with writing tests.  If we didn't do this, we'd have to bring in more react specific testing libraries, such as react-testing-library or enzyme which are not as straight forward when it comes to writing tests.  Testing react components directly is also slower since they often require a DOM (JSDOM) implementation to verify they are doing what they are supposed to.
+Our project tries to keep all state in our application store.  The main reason we do this is to decouple from React as much as possible.  The more state and logic you allow to live in your React components, the harder it is to switch away from React in the future.  This approach also allows us to be able to inspect the state at anytime to verify certain things are correct when writing tests.  If we didn't do this, we'd have to bring in more React-specific testing libraries, such as react-testing-library or enzyme which are not as straight forward when it comes to writing tests.  Testing React components directly is also slower since they often require a DOM (JSDOM) implementation to verify that they are doing what they are supposed to.
 
 ### Computeds
 
-Sometimes we want to compute state using a combination of other state variables. We often will use a computeds to setup various booleans that a UI might need to know when it should hide or show things.  For example, take a look at this menuHelper.js file:
+Sometimes we want to compute state using a combination of other state variables. We often will use a computed to setup various booleans that a UI might need to calculate when it should hide or show things.  For example, take a look at this menuHelper.js file:
 
 ```javascript
 import { state } from 'cerebral';
@@ -175,13 +175,13 @@ export const menuHelper = get => {
 };
 ```
 
-This computed is accessible by doing `get(state.menuHelper)` in our actions and react components.  Using this approach keeps our react components clean of logic.  Instead of having `===` nested all throughout our React components, we instead have that logic computed inside these types of files which also allows us to easily test this logic via a unit test.
+This computed is accessible by calling `get(state.menuHelper)` in our actions and React components.  Using this approach keeps our React components devoid of logic.  Instead of having `===` nested throughout our React components, we have that logic computed inside files which also allows us to easily test this logic via a unit test.
 
 !> Don't use a Cerebral computed value in another computed or set state within a computed. More context is detailed here: https://cerebraljs.com/docs/advanced/index.html
 
 ### React Components
 
-Our React components still need to connect to cerebral in some type of way.  The current way we connect react components to cerebral is by using the `connection` function provided by cerebral.  Take this pruned down example of our Header.jsx component:
+Our React components still need to connect to Cerebral in some way.  Currently, we connect React components to Cerebral is by using the `connection` function provided by Cerebral.  Take this pruned down example of our Header.jsx component:
 
 ```
 export const Header = connect(
@@ -204,7 +204,6 @@ export const Header = connect(
 );
 ```
 
-Notice this header is wrapped in the connect function which allows us to get access to the state.menuHelper computed.  We can also gain access to the sequences or any other providers we setup manually in cerebral.  We also have access to the typically react props.  Like mentioned before, we try to keep our react components logicless which means we use booleans from the computeds to determine when something should display.
+Notice this header is wrapped in the connect function which allows us access to the state.menuHelper computed.  We can also gain access to the sequences or any other providers we have set up manually in Cerebral, in addition to the typical React props.  As mentioned earlier, we try to keep our React components logicless which means we use booleans from the computeds to determine when something should display.
 
 !> if you are using `===` inside a React component, you should refactor to instead put it in a computed
-
