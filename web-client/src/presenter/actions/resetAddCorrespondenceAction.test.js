@@ -2,15 +2,22 @@ import { resetAddCorrespondenceAction } from './resetAddCorrespondenceAction';
 import { runAction } from 'cerebral/test';
 
 describe('resetAddCorrespondenceAction', () => {
-  it('sets currentViewMetadata.documentUploadMode to "scan"', async () => {
-    const { state } = await runAction(resetAddCorrespondenceAction, {
+  it('sets default properties on state for the Add Correspondence File page', async () => {
+    const result = await runAction(resetAddCorrespondenceAction, {
       state: {
         currentViewMetadata: {
-          documentUploadMode: 'teleport',
+          documentSelectedForScan: 'affidavit',
+          documentUploadMode:
+            'looking at it really hard and trying not to forget whats on the page',
         },
       },
     });
 
-    expect(state.currentViewMetadata.documentUploadMode).toBe('scan');
+    expect(result.state).toMatchObject({
+      currentViewMetadata: {
+        documentSelectedForScan: 'primaryDocumentFile',
+        documentUploadMode: 'scan',
+      },
+    });
   });
 });
