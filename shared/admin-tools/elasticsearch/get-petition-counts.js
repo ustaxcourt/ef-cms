@@ -2,6 +2,7 @@ const {
   computeDate,
   dateStringsCompared,
 } = require('../../src/business/utilities/DateHandler');
+const { DateTime } = require('luxon');
 const { getClient } = require('../../../web-api/elasticsearch/client');
 
 const environmentName = process.argv[2] || 'exp1';
@@ -98,10 +99,7 @@ const getPetitions = async ({ gte, lte }) => {
   return results.hits.hits;
 };
 
-const getCounts = async ({ isPaper, month, showCases = false }) => {
-  const gte = computeDate({ day: 1, month, year: 2021 });
-  const lte = computeDate({ day: 1, month: month + 1, year: 2021 });
-
+const getCounts = async ({ gte, isPaper, lte, showCases = false }) => {
   if (isPaper) {
     const petitions = await getPetitions({ gte, lte });
     const paperPetitions = petitions.filter(
@@ -134,13 +132,30 @@ const getCounts = async ({ isPaper, month, showCases = false }) => {
 (async () => {
   const results = {};
 
-  for (let month = 1; month <= 12; month++) {
-    const isElectronic = await getCounts({ isPaper: false, month });
-    const isPaper = await getCounts({ isPaper: true, month });
+  const start = DateTime.fromISO('2021-01-01');
+
+  for (let month = 0; month < 12; month++) {
+    const [gte, lte] = [
+      start.plus({ months: month }),
+      start.plus({ months: month + 1 }),
+    ];
+    const isElectronic = await getCounts({
+      gte: gte.toISO(),
+      isPaper: false,
+      lte: lte.toISO(),
+    });
+    const isPaper = await getCounts({ gte, isPaper: true, lte });
     results[month] = {
       isElectronic,
       isPaper,
     };
-    console.log([isElectronic, isPaper, isElectronic + isPaper].join('\t'));
+    console.log(
+      [
+        gte.toLocaleString(),
+        isElectronic,
+        isPaper,
+        isElectronic + isPaper,
+      ].join(','),
+    );
   }
 })();
