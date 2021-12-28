@@ -62,6 +62,8 @@ import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/get
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
+import { setItem } from '../../shared/src/persistence/localStorage/setItem';
+import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
@@ -89,6 +91,7 @@ const allUseCases = {
   getTodaysOrdersInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
+  setItemInteractor,
   validateCaseAdvancedSearchInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
@@ -156,6 +159,11 @@ const applicationContextPublic = {
       console.timeEnd(key);
     },
   }),
+  getPersistenceGateway: () => {
+    return {
+      setItem,
+    };
+  },
   getPublicSiteUrl,
   getUseCases: () => allUseCases,
   getUtilities: () => {
