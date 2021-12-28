@@ -89,6 +89,20 @@ const appPublic = {
       route,
     };
 
+    applicationContext
+      .getUseCases()
+      .getCurrentVersionInteractor(applicationContext)
+      .then(version => {
+        setInterval(async () => {
+          const currentVersion = await applicationContext
+            .getUseCases()
+            .getCurrentVersionInteractor(applicationContext);
+          if (currentVersion !== version) {
+            location.reload();
+          }
+        }, 10000);
+      });
+
     const cerebralApp = App(presenter, debugTools);
 
     router.initialize(cerebralApp);
