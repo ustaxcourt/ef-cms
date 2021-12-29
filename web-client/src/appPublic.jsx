@@ -98,8 +98,6 @@ const appPublic = {
       presenter.state.advancedSearchForm = advancedSearchForm;
     }
 
-    console.log('***presenterAST', presenter.state.advancedSearchTab);
-
     presenter.providers.router = {
       back,
       createObjectURL,

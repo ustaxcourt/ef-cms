@@ -6,6 +6,7 @@
 
 ./web-client/build-dist-public.sh $ENV $DEPLOYING_COLOR
 
+
 echo $CIRCLE_SHA1 > dist-public/version.txt
 
 # public app
