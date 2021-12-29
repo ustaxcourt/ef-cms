@@ -1,6 +1,6 @@
 # What is Dawson?
 
-This part of the documentation is meant to give a beginner a complete overview of what dawson is, screen shots of the user interfaces, maybe videos giving a walkthrough of the system, it's purpose, etc.  Who it was built for, etc.  Maybe define some important terms such as **petitioner** or **petition**.
+This part of the documentation is meant to give a beginner a complete overview of what Dawson is; it's purpose, who it was built for, screen shots of the user interfaces, maybe videos giving a walkthrough of the system, etc.  I will also define some important terms such as **petitioner** and **petition**.
 
 ## Overview
 
