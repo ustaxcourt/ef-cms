@@ -4,6 +4,18 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('persistPublicAppStateAction', () => {
+  const advancedSearchFormValue = {
+    caseSearchByDocketNumber: {},
+    caseSearchByName: { countryType: 'domestic' },
+    currentPage: 1,
+    opinionSearch: {
+      opinionTypes: { MOP: true, OST: true, SOP: true, TCOP: true },
+    },
+    orderSearch: { keyword: 'test' },
+    practitionerSearchByBarNumber: {},
+    practitionerSearchByName: {},
+    searchMode: 'byName',
+  };
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
@@ -14,18 +26,7 @@ describe('persistPublicAppStateAction', () => {
         presenter,
       },
       state: {
-        advancedSearchForm: {
-          caseSearchByDocketNumber: {},
-          caseSearchByName: { countryType: 'domestic' },
-          currentPage: 1,
-          opinionSearch: {
-            opinionTypes: { MOP: true, OST: true, SOP: true, TCOP: true },
-          },
-          orderSearch: { keyword: 'test' },
-          practitionerSearchByBarNumber: {},
-          practitionerSearchByName: {},
-          searchMode: 'byName',
-        },
+        advancedSearchForm: advancedSearchFormValue,
         advancedSearchTab: 'order',
       },
     });
@@ -40,18 +41,7 @@ describe('persistPublicAppStateAction', () => {
       applicationContext.getUseCases().setItemInteractor,
     ).toHaveBeenNthCalledWith(2, expect.anything(), {
       key: 'advancedSearchForm',
-      value: {
-        caseSearchByDocketNumber: {},
-        caseSearchByName: { countryType: 'domestic' },
-        currentPage: 1,
-        opinionSearch: {
-          opinionTypes: { MOP: true, OST: true, SOP: true, TCOP: true },
-        },
-        orderSearch: { keyword: 'test' },
-        practitionerSearchByBarNumber: {},
-        practitionerSearchByName: {},
-        searchMode: 'byName',
-      },
+      value: advancedSearchFormValue,
     });
   });
 });
