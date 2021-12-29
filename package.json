@@ -198,7 +198,7 @@
     "destroy:migration-cron": "cd web-api/migration-cron-terraform/main && ../bin/destroy-app.sh",
     "destroy:client": "cd web-client/terraform/main && ../bin/destroy-app.sh",
     "destroy:api": "cd web-api/terraform/main && ../bin/destroy-app.sh",
-    "docs": "npx docsify-cli serve ./docsify",
+    "docs": "npx docsify-cli serve ./docs",
     "dynamo:admin": "AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "dynamo:export": "AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop node web-api/dynamo-export.js > ./web-api/storage/fixtures/efcms.json",
     "dynamo:import": "pushd ./web-api && node ./create-dynamo-tables.js && node ./seed-dynamo.js ./storage/fixtures/efcms.json && popd",
