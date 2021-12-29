@@ -337,6 +337,7 @@ jobs:
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
+            CHECK_DEPLOY_DATE_INTERVAL: 5000
           command: |
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then

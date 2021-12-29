@@ -19,6 +19,10 @@ exports.enterPetitionerName = name => {
   cy.get('input#petitioner-name').type(name);
 };
 
+exports.getPetitionerNameInput = () => {
+  return cy.get('input#petitioner-name');
+};
+
 exports.enterCaseTitleOrPetitionerName = name => {
   cy.get('input#title-or-name').type(name);
 };
