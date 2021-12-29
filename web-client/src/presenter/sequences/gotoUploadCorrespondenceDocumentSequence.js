@@ -1,4 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
+import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
@@ -13,6 +14,7 @@ const gotoUploadCorrespondenceDocument =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
     stopShowValidationAction,
+    clearScansAction,
     clearFormAction,
     clearScreenMetadataAction,
     getCaseAction,
