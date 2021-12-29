@@ -7,7 +7,7 @@
 ./web-client/build-dist-public.sh $ENV $DEPLOYING_COLOR
 
 
-echo $CIRCLE_SHA1 > dist-public/version.txt
+date > dist-public/deployed-date.txt 
 
 # public app
 aws s3 sync dist-public s3://${DEPLOYING_COLOR}.${EFCMS_DOMAIN} --delete
