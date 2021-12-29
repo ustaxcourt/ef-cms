@@ -1,10 +1,11 @@
 import { state } from 'cerebral';
 
 /**
+ * Stores the advancedSearchTab and advancedSearchForm in local storage
  *
- * @param {object} providers.applicationContext the application context
- * @param {Function} providers.get the cerebral get function
- * @returns {Function} returns a callback function that persists advancedSearchTab and advancedSearchForm to state
+ * @param {object} applicationContext the application context
+ * @param {object} get the cerebral get object
+ * @returns {Promise<void>} returns promises of storing items in local storage
  */
 export const persistPublicAppStateAction = async ({
   applicationContext,

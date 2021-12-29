@@ -1,6 +1,5 @@
 /**
- *
- * @returns {Function} returns a callback function invokes the reload function
+ * Reloads the page
  */
 export const reloadPageAction = () => {
   location.reload();
