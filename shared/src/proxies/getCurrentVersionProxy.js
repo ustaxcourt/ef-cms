@@ -7,7 +7,7 @@
 exports.getCurrentVersionInteractor = applicationContext => {
   return applicationContext
     .getHttpClient()
-    .get('/version.txt')
+    .get('/deployed-date.txt')
     .then(response => {
       return response.data;
     });
