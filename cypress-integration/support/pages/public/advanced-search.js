@@ -60,3 +60,7 @@ exports.firstSearchResultJudgeField = () => {
 exports.docketRecordTable = () => {
   return cy.get('table#docket-record-table');
 };
+
+exports.searchForOrderByJudge = judge => {
+  return cy.get('#order-judge').select(judge);
+};
