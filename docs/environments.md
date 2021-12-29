@@ -1,13 +1,17 @@
-# Initial environment setup
+# Environments
+
+## Setup
+
+### Initial environment setup
 
 This document covers the initial setup needed to get EF-CMS continuous integration and deployment configured to a destination hosted in AWS.
 
-## 1. Register for service accounts.
+### 1. Register for service accounts.
 
 - [Amazon Web Services](https://portal.aws.amazon.com/gp/aws/developer/registration/) — hosting.
 - [CircleCI](https://circleci.com/signup/) — test running and code deployment.
 
-## 2. Configure your local developer machine.
+### 2. Configure your local developer machine.
 
 - Install the [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-install.html) and [configure it to use your admin AWS account credentials](https://docs.aws.amazon.com/cli/latest/userguide/cli-chap-configure.html).
   - This will be used to provision a limited-permission automated deployment account.
@@ -23,7 +27,7 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
   export EFCMS_DOMAIN="example.com"
   ```
 
-## 3. Configure the AWS account for hosting EF-CMS.
+### 3. Configure the AWS account for hosting EF-CMS.
 
 - Create account-level AWS resources, including a IAM policy called `circle_ci_policy` which defines the permissions needed by our automated deployment scripts:
   - From the `iam/terraform/account-specific/main` folder, run `../bin/deploy-app.sh`:
@@ -47,7 +51,7 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
   - Upload the library `.tar.gz` to a folder called Dynamsoft in the S3 bucket named `${EFCMS_DOMAIN}-software`. Note its ARN for CircleCI setup later.
   - Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile-CI` config, tag it as `latest`, and push it to the repo in ECR.
 
-## 4. Configure CircleCI to test and release code to this environment.
+### 4. Configure CircleCI to test and release code to this environment.
 
 A prerequisite for a successful build within CircleCI is [access to CircleCI’s 2 X-large instances](https://circleci.com/pricing/#comparison-table). The memory footprint of the underlying services are too large for smaller instances — attempting a build with smaller instances will result in a cascading series of test failures, because Elasticsearch can’t operate within the memory constraints. At present, CircleCI requires contacting their sales staff to get access to 2 X-large instances.
 
@@ -82,9 +86,9 @@ A prerequisite for a successful build within CircleCI is [access to CircleCI’s
   | `LOWER_ENV_ACCOUNT_ID` | The account ID of the AWS account where copies of Production Data might live |
 
 - Run a build in CircleCI.
-  - The build may fail the first time, as provisioning new security certificates can take some time (and cause a timeout). See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to common problems.
+  - The build may fail the first time, as provisioning new security certificates can take some time (and cause a timeout). See [the troubleshooting guide](/additional-resources/troubleshooting) for solutions to common problems.
 
-## Setting up a new environment
+### Setting up a new environment
 
 EF-CMS currently has both the concept of a deployment at a domain as well as a named environment (stg, mig, prod, test). This section refers to the latter.
 
@@ -169,4 +173,58 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     ENV=exp5 FILE_NAME=./scripts/data-import/judge/judge_users.csv ./scripts/data-import/judge/bulk-import-judge-users.sh
     ```
 
-See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to problems that may arise during this deploy process.
+See [the troubleshooting guide](/additional-resources/troubleshooting) for solutions to problems that may arise during this deploy process.
+
+## Releases
+
+### Continuous release process with CircleCI
+
+Once CircleCI is configured, any merge to an environment’s branch will automatically kick off a deployment to that environment.
+
+**There is a manual release step**, however, documented below.
+
+### Manual deployment steps
+
+When CircleCI runs due to code being merged, automated tests run first, and if they are successful, automated deploy begins. **This presents a race condition.**
+
+Before the automated deploy phase happens, any account-specific or environment-specific changes to the AWS IAM permissions for the CI deployer and roles needed for deploying lambdas needs to happen, or else the build may fail.
+
+These commands are run manually as an administrator, since they provision AWS account-level resources which the automated deployment user does not have permission to change.
+
+- **For the first deploy that happens in an AWS account, and for any subsequent changes to these resources,** the account-specific Terraform command needs to be run manually, from the branch being deployed:
+
+  ```bash
+  (cd iam/terraform/account-specific/main && ../bin/deploy-app.sh)
+  ```
+
+- **For the first deploy that happens in an environment (stg, prod, test), and for any subsequent changes to these resources,** the environment-specific Terraform command needs to be run manually, from the branch being deployed, with the name of the environment for that branch:
+
+  ```bash
+  # This command is for the stg environment specifically:
+  (cd iam/terraform/environment-specific/main && ../bin/deploy-app.sh stg)
+  ```
+
+- See [Terraform tips & tricks](../terraform.md) for debugging and background information on Terraform.
+
+### What to do if you aren’t fast enough
+
+As mentioned above, this is a race condition. In order to run these commands, the code must be merged, which kicks off the automated tests and deployment. However, these commands must be run before the automated deployment starts.
+
+If the build fails due to lambdas being unable to assume IAM roles, or the deployer encounters a permission denied error, these manual steps may not have completed in time. Re-run the CircleCI build from failed once the manual deployment steps are complete.
+
+If the build fails for other reasons, be sure to check the [troubleshooting document](/additional-resources/troubleshooting).
+
+
+## Teardown
+
+Sometimes you'll find the need to remove an environment to start from a fresh state.  To remove an environment, configure your local machine the same as you would during the [setup](/environments?id=setup) section.
+
+```bash
+npm run destroy:env <ENV>
+npm run destroy:api -- <ENV>
+npm run destroy:client -- <ENV>
+npm run destroy:migration -- <ENV>
+npm run destroy:migration-cron -- <ENV>
+```
+
+See [the troubleshooting guide](/additional-resources/troubleshooting) for solutions to problems that may arise during the teardown process.

@@ -1,24 +1,24 @@
-# Terraform tips & tricks
+# Terraform
 
-Terraform is a tool which represents your infrastructure (AWS services) as code. You can think of it as a little robot that uses the AWS console for you in a repeatable, automatic way. 🤖
+Terraform is a tool which represents infrastructure (AWS services) as code. You can think of it as a little robot that uses the AWS console for you in a repeatable, automatic manner. 🤖
 
 It supports many cloud services, including AWS, through providers. You can read more about providers and see a list of supported clouds in the [Terraform documentation for providers](https://www.terraform.io/docs/providers/index.html).
 
-- For your little Terraform robot to work correctly, it needs to be run from a particular directory — from a folder which has a `main.tf`.
+- For your little Terraform robot to work correctly, it needs to be run from a particular directory - from a folder which has a `main.tf`.
 
-- Terraform is very specific about version numbers. It will automatically update versions forward, but will not run against files which have been managed by a newer version. So, if one person updates Terraform, everyone has to update Terraform. You may want to use [tfswitch](https://warrensbox.github.io/terraform-switcher/) to manage switching between installed Terraform versions. See [fixing version errors](#Fixing-version-errors) below for additional help.
+- Terraform is very specific about version numbers. It will automatically update versions forward, but will not run against files which have been managed by a newer version. So, if one person updates Terraform, everyone has to update Terraform. You may want to use [tfenv](https://github.com/tfutils/tfenv) to manage switching between installed Terraform versions. See [fixing version errors](#Fixing-version-errors) below for additional help.
 
-- It also needs access to a state file — more on that below!
+- It also needs access to a state file - more on that below!
 
-## Understanding Terraform state files
+## Terraform State Files
 
-Terraform is a **declarative programming language**. You don’t describe how to create, update, or destroy infrastructure — instead, you program how things should exist, and Terraform figures out how to make it happen.
+Terraform is a **declarative programming language**. You don’t describe how to create, update, or destroy infrastructure - instead, you program how things should exist, and Terraform figures out how to make it happen.
 
-When Terraform is comparing your infrastructure, it needs to be able to map the things you’ve described in your code to the infrastructure that exists in AWS. Some of these are obvious — things that have well-known names — but some of them have no known identifiers. Terraform keeps track of the mapping from your code to infrastructure in a **state file**. A state file is a JSON file.
+When Terraform is preparing your infrastructure, it needs to be able to map the things you’ve described in your code to the infrastructure that exists in AWS. Some of these are obvious - things that have well-known names - but some of them have no known identifiers. Terraform keeps track of the mapping from your code to infrastructure in a JSON **state file**.
 
 To determine what needs to be created, updated, or removed, Terraform examines:
 
-- The code in all `*.tf` files in the current directory. This indicates the end-state — what you’re trying to do.
+- The code in all `*.tf` files in the current directory. This indicates the end-state - what you’re trying to do.
 
 - The state file from previous Terraform runs. This lets Terraform know where to look for your infrastructure.
 
@@ -36,31 +36,39 @@ When comparing your code and infrastructure, Terraform follows these rules:
 
 Knowing these rules, you can manipulate the state file if needed to add or remove items without creating or destroying them. See [Adding infrastructure without creating it](#Adding-infrastructure-without-creating-it) and [Removing infrastructure without destroying it](#Removing-infrastructure-without-destroying-it) below.
 
-### State backend
+### State Backend
 
-Since state files need to be saved across Terraform runs, they need to be stored somewhere accessible — like an S3 bucket. You can read more about how state files are stored in the [Terraform documentation for the S3 backend](https://www.terraform.io/docs/backends/types/s3.html).
+Since state files need to be saved across Terraform runs, they need to be stored somewhere accessible - like an S3 bucket. You can read more about how state files are stored in the [Terraform documentation for the S3 backend](https://www.terraform.io/docs/backends/types/s3.html).
 
-### State locking
+The Dawson project stores terraform state in the following S3 bucket: [ustc-case-mgmt.flexion.us.terraform.deploys](https://s3.console.aws.amazon.com/s3/buckets/ustc-case-mgmt.flexion.us.terraform.deploys?region=us-east-1&tab=objects).  Each environment has a separate `.tfstate` file.  For example, our dev environment has the following state files:
+
+- `documents-dev.tfstate` (infrastructure related to the API / Backend)
+- `migrations-cron-dev.tfstate` (infrastructure related to the migration cron script)
+- `migrations-dev.tfstate` (infrastructure related to the migrations)
+- `permissions-dev.tfstate` (infrastructure related to environment-specific permissions)
+- `ui-dev.tfstate` (infrastructure related to the UI)
+
+### State Locking
 
 As you may imagine, two people modifying things at the same time can lead to unpredictable results. Terraform handles this by using DynamoDB to lock the state file while you are modifying it.
 
-Under normal circumstances, you won’t notice this happening. However, if you cancel a Terraform run, the lock won’t be released — and you’ll need to [Manually unlock the state file](#Manually-unlock-the-state-file).
+Under normal circumstances, you won’t notice this happening. However, if you cancel a Terraform run, the lock won’t be released - and you’ll need to [manually unlock the state file](#Manually-unlock-the-state-file).
 
-## Stages of a Terraform run
+## Stages of a Terraform Run
 
-Terraform has three main stages — `init`, `plan`, and `apply`.
+Terraform has three main stages - `init`, `plan`, and `apply`.
 
-| Stage | Description |
-|-------|-------------|
-| `init` | Installs providers and configures state files to point to the appropriate backend.
-| `plan` | Compares the infrastructure code, state files, and current infrastructure to figure out what additions, modifications, and deletions are needed — without making any changes.
-| `apply` | Modifies infrastructure, either by first automatically calculating a plan, or by using the plan passed to it from `terraform plan`.
+| Stage    | Description                                                                                                                                                                   |
+|----------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `init`   | Installs providers and configures state files to point to the appropriate backend.                                                                                            |
+| `plan`   | Compares the infrastructure code, state files, and current infrastructure to figure out what additions, modifications, and deletions are needed - without making any changes. |
+| `apply`  | Modifies infrastructure, either by first automatically calculating a plan, or by using the plan passed to it from `terraform plan`.                                           |
 
-## Passing variables to Terraform
+## Passing Variables to Terraform
 
-Terraform allows input variables, set when running `terraform plan` or `terraform apply`, to be used to control infrastructure. We use input variables for things like domain names and environment names.
+Terraform allows input variables, set when running `terraform plan` or `terraform apply`, to be used to control infrastructure. We use input variables for things like domain and environment names.
 
-Input variables are declared in any Terraform file, but are typically declared in `variables.tf`. Input variables can be set in a few ways — most commonly through the command line or environment variables. See the [Terraform documentation on input variables](https://www.terraform.io/docs/configuration/variables.html) for more information.
+Input variables are declared in any Terraform file, but are typically declared in `variables.tf`. Input variables can be set in a few ways - most commonly through the command line or environment variables. See the [Terraform documentation on input variables](https://www.terraform.io/docs/configuration/variables.html) for more information.
 
 - To set variables from the command line, pass them as command line arguments:
 
@@ -78,21 +86,21 @@ Input variables are declared in any Terraform file, but are typically declared i
 
 ## Getting yourself out of sticky situations
 
-Generally, it’s good practice to check the Terraform plan when you’re not feeling confident — it’ll help calm your fears or justify them!
+Generally, it’s good practice to check the Terraform plan when you’re not feeling confident - it’ll help calm your fears or justify them!
 
 Here are a few debugging tricks to help with commonly encountered situations.
 
-### Manually unlock the state file
+### Manually Unlock the State File
 
-Cancelling a Terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes — verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
+Cancelling a Terraform run before it completes often results in a locked state file. First, double-check that no other person or process is currently applying changes - verify that the state file is _wrongfully_ locked, not _intentionally_ locked.
 
-Then, use `terraform force-unlock` — see the [Terraform documentation](https://www.terraform.io/docs/commands/force-unlock.html).
+Then, use `terraform force-unlock` - see the [Terraform documentation](https://www.terraform.io/cli/commands/force-unlock).
 
-### Fixing version errors
+### Fixing Version Errors
 
 As mentioned, Terraform requires versions to exactly match across Terraform runs. It will silently upgrade state files to the current version but fail to run if the state file has a newer version than the current version of Terraform.
 
-Use a tool like [tfswitch](https://warrensbox.github.io/terraform-switcher/) to help you manage Terraform versions and avoid this problem in the future.
+Use a tool like [tfenv](https://github.com/tfutils/tfenv) to help you manage Terraform versions and avoid this problem in the future.
 
 If a state file is off by a patch version (the third digit of the version number), you _most likely_ will be able to downgrade it if absolutely needed.
 
@@ -114,10 +122,21 @@ Downgrading state file versions is not supported, and requires manually editing 
 
 If a AWS infrastructure piece exists already before adding it to Terraform, you’ll need to `import` it to Terraform’s state file so Terraform doesn’t try to create it.
 
-Each type of infrastructure has a different specific syntax for importing items — but all of them use `terraform import`. See the general [Terraform import documentation](https://www.terraform.io/docs/import/usage.html) and then look at the Terraform documentation for the specific kind of infrastructure you’re trying to import for the specific syntax for that item.
+Each type of infrastructure has a different specific syntax for importing items - but all of them use `terraform import`. See the general [Terraform import documentation](https://www.terraform.io/cli/import/usage) and then look at the Terraform documentation for the specific kind of infrastructure you’re trying to import for the specific syntax for that item.
 
 ### Removing infrastructure without destroying it
 
 Sometimes you may want to remove items from the Terraform code but not remove them from AWS. For those circumstances, you’ll want to remove it from Terraform’s state file and from the code.
 
-To remove items from Terraform’s state file, run `terraform state rm` — see the [Terraform documentation](https://www.terraform.io/docs/commands/state/rm.html).
+To remove items from Terraform’s state file, run `terraform state rm` - see the [Terraform documentation](https://www.terraform.io/cli/commands/state/rm).
+
+## DAWSON's Terraform
+
+We try to split our infrastructure up into smaller Terraform deployments.  The following directories are where we use Terraform:
+
+- `/web-api/terraform/` (Terraform for the API, Dynamo, Backend, etc)
+- `/web-client/terraform/` (For the UI, CloudFront, etc)
+- `/iam/terraform/environment-specific` (For environment-specific IAM roles) 
+- `/iam/terraform/account-specific` (For account-specific IAM roles) 
+- `/web-api/migration-terraform` (For the migration setup)
+- `/web-api/migration-cron-terraform` (For the migration cron setup)
