@@ -8,4 +8,8 @@ import { state } from 'cerebral';
  */
 export const resetAddCorrespondenceAction = ({ store }) => {
   store.set(state.currentViewMetadata.documentUploadMode, 'scan');
+  store.set(
+    state.currentViewMetadata.documentSelectedForScan,
+    'primaryDocumentFile',
+  );
 };
