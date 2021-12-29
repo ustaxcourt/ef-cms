@@ -331,12 +331,25 @@ export const setWhitelistIps = ips => {
   });
 };
 
-export const setOpinionSearchEnabled = isEnabled => {
+export const describeif = condition => (condition ? describe : describe.skip);
+
+export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
       current: isEnabled,
-      pk: 'internal-opinion-search-enabled',
-      sk: 'internal-opinion-search-enabled',
+      pk: `${keyPrefix}-opinion-search-enabled`,
+      sk: `${keyPrefix}-opinion-search-enabled`,
+    },
+    applicationContext,
+  });
+};
+
+export const setOrderSearchEnabled = (isEnabled, keyPrefix) => {
+  return client.put({
+    Item: {
+      current: isEnabled,
+      pk: `${keyPrefix}-order-search-enabled`,
+      sk: `${keyPrefix}-order-search-enabled`,
     },
     applicationContext,
   });

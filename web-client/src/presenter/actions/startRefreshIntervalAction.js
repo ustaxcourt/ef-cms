@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store used for setting state.workItem
  */
-export const startRefreshIntervalAction = async ({
+export const startRefreshIntervalAction = ({
   applicationContext,
   get,
   store,
@@ -24,10 +24,6 @@ export const startRefreshIntervalAction = async ({
 
   clearInterval(oldInterval);
   const time = applicationContext.getConstants().REFRESH_INTERVAL;
-  const getNewIdToken = async () => {
-    await refreshTokenRequest();
-  };
-  const interval = setInterval(getNewIdToken, time);
-  await getNewIdToken();
+  const interval = setInterval(refreshTokenRequest, time);
   store.set(state.refreshTokenInterval, interval);
 };
