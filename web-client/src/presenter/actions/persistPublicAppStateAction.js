@@ -13,7 +13,7 @@ export const persistPublicAppStateAction = async ({
 }) => {
   await applicationContext.getUseCases().setItemInteractor(applicationContext, {
     key: 'advancedSearchTab',
-    value: get(state.advancedSearchTab) || 'case',
+    value: get(state.advancedSearchTab),
   });
   await applicationContext.getUseCases().setItemInteractor(applicationContext, {
     key: 'advancedSearchForm',
