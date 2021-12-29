@@ -80,13 +80,26 @@ const appPublic = {
 
     presenter.state.constants = applicationContext.getConstants();
 
-    presenter.state.advancedSearchTab = applicationContext
+    // create conditional for checking initial value of localstorage for both form info and tab location
+
+    const advancedSearchTab = applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
-    presenter.state.advancedSearchForm = applicationContext
+
+    if (advancedSearchTab) {
+      presenter.state.advancedSearchTab = advancedSearchTab;
+    }
+
+    const advancedSearchForm = applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'advancedSearchForm' });
+
+    if (advancedSearchForm) {
+      presenter.state.advancedSearchForm = advancedSearchForm;
+    }
+
     console.log('***presenterAST', presenter.state.advancedSearchTab);
+
     presenter.providers.router = {
       back,
       createObjectURL,
