@@ -23,12 +23,24 @@ exports.enterCaseTitleOrPetitionerName = name => {
   cy.get('input#title-or-name').type(name);
 };
 
+exports.getCaseTitleOrPetitionerNameInput = () => {
+  return cy.get('input#title-or-name');
+};
+
 exports.enterDocumentKeywordForAdvancedSearch = keyword => {
   cy.get('input#keyword-search').type(keyword);
 };
 
+exports.getKeywordInput = () => {
+  return cy.get('input#keyword-search');
+};
+
 exports.enterDocumentDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
+};
+
+exports.getDocketNumberInput = () => {
+  return cy.get('input#docket-number');
 };
 
 exports.unselectOpinionTypesExceptBench = () => {
