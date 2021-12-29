@@ -276,6 +276,7 @@ export const OpinionSearchForm = connect(
                         <label
                           className="margin-top-0 usa-checkbox__label"
                           htmlFor={`opinionTypes.${eventCode}`}
+                          id={`label-opinionTypes.${eventCode}`}
                         >
                           {label}
                         </label>
@@ -302,6 +303,7 @@ export const OpinionSearchForm = connect(
             <Button
               link
               className="padding-0 margin-top-2 text-center"
+              id="clear-search"
               onClick={e => {
                 e.preventDefault();
                 clearAdvancedSearchFormSequence({
