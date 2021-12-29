@@ -11,8 +11,6 @@ export const defaultAdvancedSearchFormAction = ({
   get,
   store,
 }) => {
-  console.log('***aST ', get(state.advancedSearchTab));
-  console.log('***asF ', get(state.advancedSearchForm));
   const { ADVANCED_SEARCH_OPINION_TYPES, COUNTRY_TYPES } =
     applicationContext.getConstants();
   const advancedSearchForm = get(state.advancedSearchForm);
