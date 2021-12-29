@@ -80,8 +80,6 @@ const appPublic = {
 
     presenter.state.constants = applicationContext.getConstants();
 
-    // create conditional for checking initial value of localstorage for both form info and tab location
-
     const advancedSearchTab = applicationContext
       .getUseCases()
       .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
