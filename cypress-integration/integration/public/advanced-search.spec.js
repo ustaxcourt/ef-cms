@@ -2,7 +2,7 @@ const {
   clickOnSearchTab,
   docketRecordTable,
   enterDocumentDocketNumber,
-  enterDocumentKeywordForOpinionSearch,
+  enterDocumentKeywordForAdvancedSearch,
   enterPetitionerName,
   firstSearchResultJudgeField,
   navigateTo: navigateToDashboard,
@@ -43,7 +43,7 @@ describe('Advanced search', () => {
     it('should display results when a keyword and docketNumberWithSuffix is provided', () => {
       navigateToDashboard();
       clickOnSearchTab('opinion');
-      enterDocumentKeywordForOpinionSearch('opinion');
+      enterDocumentKeywordForAdvancedSearch('opinion');
       enterDocumentDocketNumber('124-20L');
       searchForDocuments();
       expect(searchResultsTable()).to.exist;

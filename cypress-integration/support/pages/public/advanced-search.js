@@ -19,7 +19,11 @@ exports.enterPetitionerName = name => {
   cy.get('input#petitioner-name').type(name);
 };
 
-exports.enterDocumentKeywordForOpinionSearch = keyword => {
+exports.enterCaseTitleOrPetitionerName = name => {
+  cy.get('input#title-or-name').type(name);
+};
+
+exports.enterDocumentKeywordForAdvancedSearch = keyword => {
   cy.get('input#keyword-search').type(keyword);
 };
 
