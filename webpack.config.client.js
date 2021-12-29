@@ -39,6 +39,7 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({
       API_URL: null,
+      CHECK_DEPLOY_DATE_INTERVAL: null,
       CI: null,
       CIRCLE_SHA1: null,
       COGNITO: null,

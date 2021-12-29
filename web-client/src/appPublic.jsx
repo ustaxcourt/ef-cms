@@ -117,7 +117,7 @@ const appPublic = {
           if (currentVersion !== version) {
             await cerebralApp.getSequence('persistFormsOnReloadSequence')();
           }
-        }, 10000);
+        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 60000);
       });
 
     router.initialize(cerebralApp);
