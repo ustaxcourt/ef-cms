@@ -54,6 +54,8 @@ import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDo
 import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
+import { getItem } from '../../shared/src/persistence/localStorage/getItem';
+import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
@@ -87,6 +89,7 @@ const allUseCases = {
   getDocumentDownloadUrlInteractor,
   getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
+  getItemInteractor,
   getMaintenanceModePublicInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
@@ -163,6 +166,7 @@ const applicationContextPublic = {
   }),
   getPersistenceGateway: () => {
     return {
+      getItem,
       setItem,
     };
   },
