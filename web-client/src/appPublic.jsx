@@ -32,7 +32,6 @@ import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
-
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
@@ -81,6 +80,13 @@ const appPublic = {
 
     presenter.state.constants = applicationContext.getConstants();
 
+    presenter.state.advancedSearchTab = applicationContext
+      .getUseCases()
+      .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
+    presenter.state.advancedSearchForm = applicationContext
+      .getUseCases()
+      .getItemInteractor(applicationContext, { key: 'advancedSearchForm' });
+    console.log('***presenterAST', presenter.state.advancedSearchTab);
     presenter.providers.router = {
       back,
       createObjectURL,
@@ -88,6 +94,8 @@ const appPublic = {
       revokeObjectURL,
       route,
     };
+
+    const cerebralApp = App(presenter, debugTools);
 
     applicationContext
       .getUseCases()
@@ -98,12 +106,10 @@ const appPublic = {
             .getUseCases()
             .getCurrentVersionInteractor(applicationContext);
           if (currentVersion !== version) {
-            location.reload();
+            await cerebralApp.getSequence('persistFormsOnReloadSequence')();
           }
         }, 10000);
       });
-
-    const cerebralApp = App(presenter, debugTools);
 
     router.initialize(cerebralApp);
 
