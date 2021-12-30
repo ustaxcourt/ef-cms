@@ -15,4 +15,12 @@ export const persistPublicAppStateAction = ({ applicationContext, get }) => {
     key: 'advancedSearchForm',
     value: get(state.advancedSearchForm),
   });
+  // we return a promise that is resolved after a short amount of time to allow
+  // local storage to finish processing our event before the page reloads.
+  return new Promise(resolve => {
+    setTimeout(() => {
+      window.location.reload();
+      resolve();
+    }, 500);
+  });
 };
