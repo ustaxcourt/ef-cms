@@ -175,7 +175,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: medium
+    resource_class: large
     steps:
       - git-shallow-clone/checkout
       - npm-install
