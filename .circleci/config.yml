@@ -349,7 +349,7 @@ jobs:
             sleep 5
             npm run cypress:integration:public
       - store_artifacts:
-          path: /root/project/cypress/videos/
+          path: /root/project/cypress/videos/public
       - store_artifacts:
           path: /tmp/cypress
 

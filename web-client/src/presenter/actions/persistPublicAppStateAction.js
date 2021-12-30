@@ -5,17 +5,13 @@ import { state } from 'cerebral';
  *
  * @param {object} applicationContext the application context
  * @param {object} get the cerebral get object
- * @returns {Promise<void>} returns promises of storing items in local storage
  */
-export const persistPublicAppStateAction = async ({
-  applicationContext,
-  get,
-}) => {
-  await applicationContext.getUseCases().setItemInteractor(applicationContext, {
+export const persistPublicAppStateAction = ({ applicationContext, get }) => {
+  applicationContext.getUseCases().setItemInteractor(applicationContext, {
     key: 'advancedSearchTab',
     value: get(state.advancedSearchTab),
   });
-  await applicationContext.getUseCases().setItemInteractor(applicationContext, {
+  applicationContext.getUseCases().setItemInteractor(applicationContext, {
     key: 'advancedSearchForm',
     value: get(state.advancedSearchForm),
   });
