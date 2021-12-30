@@ -216,7 +216,9 @@ const helpers = {
 };
 
 export const baseState = {
-  advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchForm: {},
+  advancedSearchTab: 'case',
+  // form for advanced search screen, TODO: replace with state.form
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
@@ -224,8 +226,10 @@ export const baseState = {
     docketNumber: null,
     documentTitle: null,
   },
-  assigneeId: null, // used for assigning workItems in assignSelectedWorkItemsAction
-  batchDownloads: {}, // batch download of PDFs
+  assigneeId: null,
+  // used for assigning workItems in assignSelectedWorkItemsAction
+  batchDownloads: {},
+  // batch download of PDFs
   caseDeadlineReport: {},
   caseDetail: {},
   closedCases: [],
