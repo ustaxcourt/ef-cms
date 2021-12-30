@@ -27,7 +27,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: medium+
     parallelism: 8
     steps:
       - git-shallow-clone/checkout
@@ -82,7 +82,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -130,7 +130,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -175,7 +175,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -220,7 +220,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -269,7 +269,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -318,7 +318,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -735,7 +735,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -766,7 +766,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -807,13 +807,10 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
       - npm-install
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
       - run:
           name: Setup Env
           command: |
