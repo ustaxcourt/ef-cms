@@ -128,20 +128,17 @@ const appPublic = {
             await cerebralApp.getSequence('persistFormsOnReloadSequence')();
           }
         }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 60000);
-      })
-      .then(() => {
-        router.initialize(cerebralApp);
-
-        ReactDOM.render(
-          <Container app={cerebralApp}>
-            <AppComponentPublic />
-            {process.env.CI && (
-              <div id="ci-environment">CI Test Environment</div>
-            )}
-          </Container>,
-          window.document.querySelector('#app-public'),
-        );
       });
+
+    router.initialize(cerebralApp);
+
+    ReactDOM.render(
+      <Container app={cerebralApp}>
+        <AppComponentPublic />
+        {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
+      </Container>,
+      window.document.querySelector('#app-public'),
+    );
   },
 };
 
