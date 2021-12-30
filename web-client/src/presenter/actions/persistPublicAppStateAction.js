@@ -21,6 +21,6 @@ export const persistPublicAppStateAction = ({ applicationContext, get }) => {
     setTimeout(() => {
       window.location.reload();
       resolve();
-    }, 500);
+    }, 3000);
   });
 };
