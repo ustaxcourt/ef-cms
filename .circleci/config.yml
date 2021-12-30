@@ -581,9 +581,7 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker build -t efcms -f Dockerfile .
-            fi
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Deploy Migration Cron Lambda
           command: |
