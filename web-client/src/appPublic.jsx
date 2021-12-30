@@ -86,6 +86,11 @@ const appPublic = {
 
     if (advancedSearchTab) {
       presenter.state.advancedSearchTab = advancedSearchTab;
+      applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, {
+          key: 'advancedSearchTab',
+        });
     }
 
     const advancedSearchForm = applicationContext
@@ -94,6 +99,11 @@ const appPublic = {
 
     if (advancedSearchForm) {
       presenter.state.advancedSearchForm = advancedSearchForm;
+      applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, {
+          key: 'advancedSearchForm',
+        });
     }
 
     presenter.providers.router = {
