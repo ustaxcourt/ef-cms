@@ -10,6 +10,18 @@ const {
 } = require('../../support/pages/public/advanced-search');
 
 describe('Public user experiences seamless reload after deployment', function () {
+  it('should reload the page after deploy', () => {
+    cy.visit('/');
+    cy.window().then(w => (w.beforeReload = true));
+    cy.window().should('have.prop', 'beforeReload');
+
+    cy.task('modifyDeployedDateTextFile', Date.now().toString());
+
+    cy.window({
+      timeout: 10000,
+    }).should('not.have.prop', 'beforeReload');
+  });
+
   it('should navigate to case tab and keep form details after deploy', () => {
     cy.visit('/');
     cy.get('button#tab-case').click();
