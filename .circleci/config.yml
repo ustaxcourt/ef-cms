@@ -82,7 +82,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -130,7 +130,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -175,7 +175,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -220,7 +220,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -269,7 +269,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -318,7 +318,7 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium
     steps:
       - git-shallow-clone/checkout
       - npm-install
