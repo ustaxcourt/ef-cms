@@ -162,7 +162,7 @@ resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
   count               = var.enable_health_checks
 
   dimensions = {
-    HealthCheckId = aws_route53_health_check.public_ui_health_check.id
+    HealthCheckId = aws_route53_health_check.public_ui_health_check[0].id
   }
 
   alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
@@ -192,7 +192,7 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
   period              = "60"
   count               = var.enable_health_checks
   dimensions = {
-    HealthCheckId = aws_route53_health_check.ui_health_check.id
+    HealthCheckId = aws_route53_health_check.ui_health_check[0].id
   }
 
   alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
@@ -223,7 +223,7 @@ resource "aws_cloudwatch_metric_alarm" "status_health_check" {
   period              = "60"
 
   dimensions = {
-    HealthCheckId = aws_route53_health_check.status_health_check.id
+    HealthCheckId = aws_route53_health_check.status_health_check[0].id
   }
 
   alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
