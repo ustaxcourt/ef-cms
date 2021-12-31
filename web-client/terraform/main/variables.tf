@@ -47,7 +47,7 @@ variable "statuspage_dns_record" {
   default = ""
 }
 
-variable "health_check_request_interval" {
+variable "enable_health_checks" {
   type = string
-  default = "30"
+  default = "1"
 }

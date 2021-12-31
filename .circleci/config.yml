@@ -437,7 +437,7 @@ jobs:
              -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" \
              -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" \
              -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
-             -e "HEALTH_CHECK_REQUEST_INTERVAL=${HEALTH_CHECK_REQUEST_INTERVAL}" \
+             -e "ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}" \
              -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" \
              -e "ZONE_NAME=${ZONE_NAME}" \
              --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
