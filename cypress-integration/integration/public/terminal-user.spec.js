@@ -4,7 +4,7 @@ const {
 } = require('../../support/pages/public/advanced-search');
 
 describe('Advanced search', () => {
-  afterAll(() => {
+  after(() => {
     cy.task('setAllowedTerminalIpAddresses', []);
   });
 
