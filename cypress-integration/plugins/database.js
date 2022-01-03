@@ -79,7 +79,7 @@ module.exports.getEmailVerificationToken = async ({ userId }) => {
 module.exports.setAllowedTerminalIpAddresses = async ipAddresses => {
   return await documentClient
     .put({
-      Key: {
+      Item: {
         ips: ipAddresses,
         pk: 'allowed-terminal-ips',
         sk: 'allowed-terminal-ips',
