@@ -1,17 +1,13 @@
 const {
-  docketRecordTable,
   navigateTo: navigateToDashboard,
-  searchForCaseByDocketNumber,
+  publicHeader,
 } = require('../../support/pages/public/advanced-search');
 
 describe('Advanced search', () => {
-  it('should display terminal user header when ip is allowlisted', () => {
-    // add 'localhost' to the allowlist of ips for pk, sk allowed-terminal-ips
+  it('should display terminal user header when ip is on allowlist', () => {
     cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
       navigateToDashboard();
-      searchForCaseByDocketNumber('103-20');
-      expect(docketRecordTable()).to.exist;
+      publicHeader().should('contain', 'US Tax Court Terminal');
     });
-    // on the case search page, verify the header includes 'US Tax Court Terminal'
   });
 });

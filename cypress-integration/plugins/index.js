@@ -13,8 +13,8 @@ module.exports = (on, config) => {
     seed() {
       return reseedDatabase();
     },
-    setAllowedTerminalIpAddresses({ ipAddresses }) {
-      return setAllowedTerminalIpAddresses({ ipAddresses });
+    setAllowedTerminalIpAddresses(ipAddresses) {
+      return setAllowedTerminalIpAddresses(ipAddresses);
     },
   });
 };
