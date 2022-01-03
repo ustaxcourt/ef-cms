@@ -159,9 +159,10 @@ resource "aws_cloudwatch_metric_alarm" "public_ui_health_check" {
   threshold           = "1"
   evaluation_periods  = "2"
   period              = "60"
+  count               = var.enable_health_checks
 
   dimensions = {
-    HealthCheckId = aws_route53_health_check.public_ui_health_check.id
+    HealthCheckId = aws_route53_health_check.public_ui_health_check[0].id
   }
 
   alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
@@ -173,6 +174,7 @@ resource "aws_route53_health_check" "public_ui_health_check" {
   fqdn              = var.dns_domain
   port              = 443
   type              = "HTTPS"
+  count             = var.enable_health_checks
   resource_path     = "/"
   failure_threshold = "3"
   request_interval  = "30"
@@ -188,9 +190,9 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
   threshold           = "1"
   evaluation_periods  = "2"
   period              = "60"
-
+  count               = var.enable_health_checks
   dimensions = {
-    HealthCheckId = aws_route53_health_check.ui_health_check.id
+    HealthCheckId = aws_route53_health_check.ui_health_check[0].id
   }
 
   alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
@@ -201,6 +203,7 @@ resource "aws_cloudwatch_metric_alarm" "ui_health_check" {
 resource "aws_route53_health_check" "ui_health_check" {
   fqdn              = "app.${var.dns_domain}"
   port              = 443
+  count             = var.enable_health_checks
   type              = "HTTPS"
   resource_path     = "/"
   failure_threshold = "3"
@@ -214,12 +217,13 @@ resource "aws_cloudwatch_metric_alarm" "status_health_check" {
   metric_name         = "HealthCheckStatus"
   comparison_operator = "LessThanThreshold"
   statistic           = "Minimum"
+  count               = var.enable_health_checks
   threshold           = "1"
   evaluation_periods  = "2"
   period              = "60"
 
   dimensions = {
-    HealthCheckId = aws_route53_health_check.status_health_check.id
+    HealthCheckId = aws_route53_health_check.status_health_check[0].id
   }
 
   alarm_actions             = [data.aws_sns_topic.system_health_alarms.arn]
@@ -234,6 +238,7 @@ resource "aws_route53_health_check" "status_health_check" {
   resource_path      = "/public-api/health"
   failure_threshold  = "3"
   request_interval   = "30"
+  count              = var.enable_health_checks
   invert_healthcheck = true
   search_string      = "false"                                 # Search for any JSON property returning "false"
   regions            = ["us-east-1", "us-west-1", "us-west-2"] # Minimum of three regions required
