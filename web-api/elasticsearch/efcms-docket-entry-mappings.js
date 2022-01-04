@@ -101,5 +101,8 @@ module.exports = {
     'sk.S': {
       type: 'keyword',
     },
+    'status.S': {
+      type: 'keyword',
+    },
   },
 };
