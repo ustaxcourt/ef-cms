@@ -22,7 +22,7 @@ PublicUser.prototype.init = function init(rawUser) {
 const userDecorator = (obj, rawObj) => {
   obj.name = rawObj.name;
   obj.role = rawObj.role;
-  if (obj.role === ROLES.judge) {
+  if (obj.role === ROLES.judge || obj.role === ROLES.legacyJudge) {
     obj.judgeFullName = rawObj.judgeFullName;
     obj.judgeTitle = rawObj.judgeTitle;
   }
