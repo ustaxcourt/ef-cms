@@ -64,3 +64,7 @@ exports.docketRecordTable = () => {
 exports.searchForOrderByJudge = judge => {
   return cy.get('#order-judge').select(judge);
 };
+
+exports.publicHeader = () => {
+  return cy.get('h1.header-welcome-public');
+};
