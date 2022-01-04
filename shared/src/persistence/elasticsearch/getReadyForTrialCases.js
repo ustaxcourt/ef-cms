@@ -2,6 +2,7 @@ const {
   CASE_STATUS_TYPES,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
+const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
 /**
  * getReadyForTrialCases
@@ -17,13 +18,53 @@ exports.getReadyForTrialCases = async ({ applicationContext }) => {
       body: {
         _source: ['docketNumber'],
         query: {
-          term: {
-            'status.S': CASE_STATUS_TYPES.generalDocket,
+          bool: {
+            filter: [
+              {
+                term: {
+                  'entityName.S': 'DocketEntry',
+                },
+              },
+              {
+                exists: {
+                  field: 'servedAt',
+                },
+              },
+            ],
+            must: [
+              {
+                term: {
+                  'documentType.S': 'Answer',
+                },
+              },
+              {
+                range: {
+                  'servedAt.S': {
+                    lte: 'now-44d/d',
+                  },
+                },
+              },
+              {
+                simple_query_string: {
+                  default_operator: 'and',
+                  fields: ['status.S'],
+                  flags: simpleQueryFlags,
+                  query: CASE_STATUS_TYPES.generalDocket,
+                },
+              },
+            ],
+            must_not: [
+              {
+                term: {
+                  'isStricken.BOOL': true,
+                },
+              },
+            ],
           },
         },
         size: 5000,
       },
-      index: 'efcms-case',
+      index: 'efcms-docket-entry',
     },
   });
 
