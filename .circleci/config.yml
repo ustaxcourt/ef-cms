@@ -48,6 +48,10 @@ jobs:
             AWS_SECRET_ACCESS_KEY=S3RVER \
             npm run start:api:ci > /tmp/web-client/server-output.txt &
             URL=http://localhost:4000/api/swagger ./wait-until.sh
+            URL=http://localhost:9200 ./wait-until.sh
+            URL=http://localhost:9000/ ./wait-until.sh
+            URL=http://localhost:8000/shell ./wait-until.sh
+            sleep 20 # figure out why we need to sleep here since we wait above ^
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
             NO_SCANNER=true \
             SKIP_VIRUS_SCAN=true \
@@ -103,8 +107,10 @@ jobs:
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npx --no-install run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
-            URL=http://localhost:4000/api/swagger ./wait-until.sh
             URL=http://localhost:1234 ./wait-until.sh
+            URL=http://localhost:4000/api/swagger ./wait-until.sh
+            URL=http://localhost:8000/shell ./wait-until.sh
+            URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
             sleep 10
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
@@ -152,7 +158,7 @@ jobs:
           command: |
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
-            URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
+            URL=http://localhost:5000/ ./wait-until.sh
             sleep 10
             npm run test:pa11y:public --node-flags --max-old-space-size=1536
       - store_artifacts:
@@ -197,7 +203,7 @@ jobs:
           command: |
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
-            URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
+            URL=http://localhost:5000/ ./wait-until.sh
             sleep 10
             npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
       - store_artifacts:
