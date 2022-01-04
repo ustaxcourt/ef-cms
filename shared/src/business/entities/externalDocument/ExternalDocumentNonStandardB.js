@@ -25,7 +25,10 @@ ExternalDocumentNonStandardB.prototype.init = function init(rawProps) {
 };
 
 ExternalDocumentNonStandardB.prototype.getDocumentTitle = function () {
-  return replaceBracketed(this.documentTitle, this.freeText);
+  if (this.freeText) {
+    return replaceBracketed(this.documentTitle, this.freeText);
+  }
+  return this.documentTitle;
 };
 
 ExternalDocumentNonStandardB.VALIDATION_ERROR_MESSAGES = {
