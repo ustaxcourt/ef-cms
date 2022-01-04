@@ -1,5 +1,7 @@
 # Library Maintenance
 
+## Caveats
+`Cypress`: Do not upgrade past 8.5.0 as anything above that version will cause the "Failed to connect to bus" [error](https://trello.com/c/iuq0gJ6P/1008-ci-error-failed-to-connect-to-the-bus). 
 ## JavaScript Libraries
 
 `npm update`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
@@ -18,5 +20,6 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 `Docker`: Update docker base image version if applicable.
 
-### After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
-  * If terraform needs to be updated, deploy locally to an exp environment first. 
+## Validating Updates
+ After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
+  * If terraform needs to be updated, deploy from your machine to an experimental environment first.
