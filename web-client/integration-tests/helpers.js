@@ -320,17 +320,6 @@ export const getUserRecordById = userId => {
   });
 };
 
-export const setWhitelistIps = ips => {
-  return client.put({
-    Item: {
-      ips,
-      pk: 'allowed-terminal-ips',
-      sk: 'allowed-terminal-ips',
-    },
-    applicationContext,
-  });
-};
-
 export const describeif = condition => (condition ? describe : describe.skip);
 
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {

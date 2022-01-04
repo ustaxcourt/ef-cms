@@ -1,6 +1,8 @@
 const {
   navigateTo: navigateToDashboard,
+  petitionHyperlink,
   publicHeader,
+  searchForCaseByDocketNumber,
 } = require('../../support/pages/public/advanced-search');
 
 describe('Advanced search', () => {
@@ -12,6 +14,9 @@ describe('Advanced search', () => {
     cy.task('setAllowedTerminalIpAddresses', ['localhost']).then(() => {
       navigateToDashboard();
       publicHeader().should('contain', 'US Tax Court Terminal');
+
+      searchForCaseByDocketNumber('104-20');
+      petitionHyperlink().should('exist');
     });
   });
 });
