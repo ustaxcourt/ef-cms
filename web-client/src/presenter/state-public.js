@@ -27,6 +27,7 @@ const helpers = {
 export const state = {
   ...helpers,
   advancedSearchForm: {},
+  advancedSearchTab: 'case',
   commonUI: {
     showBetaBar: true,
     showMobileMenu: false,
