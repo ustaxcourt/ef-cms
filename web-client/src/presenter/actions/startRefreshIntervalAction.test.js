@@ -33,7 +33,7 @@ describe('startRefreshIntervalAction', () => {
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().setItemInteractor,
-    ).toHaveBeenCalled();
+    ).not.toHaveBeenCalled();
     expect(result.state.refreshTokenInterval).toEqual('new-interval');
   });
 });

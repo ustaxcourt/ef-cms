@@ -4,7 +4,6 @@ import { state } from 'cerebral';
 
 export const advancedDocumentSearchHelper = (get, applicationContext) => {
   let paginatedResults = {};
-  const isPublic = get(state.isPublic);
   const { role } = get(state.user);
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
@@ -24,7 +23,6 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   const showDateRangePicker =
     dateRangeType === DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES;
 
-  let showSealedIcon = true;
   let documentTypeVerbiage = capitalize(advancedSearchTab);
 
   let formattedJudges = get(state.legacyAndCurrentJudges);
@@ -35,7 +33,6 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   });
 
   if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {
-    showSealedIcon = false;
     documentTypeVerbiage = `${documentTypeVerbiage} Type`;
   }
 
@@ -64,11 +61,9 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
     documentTypeVerbiage,
     formattedJudges,
     isInternalUser,
-    isPublic,
     manyResults: MAX_SEARCH_RESULTS,
     showDateRangePicker,
     showManyResultsMessage,
-    showSealedIcon,
   };
 };
 
@@ -78,6 +73,7 @@ export const formatDocumentSearchResultRecord = (
   { applicationContext },
 ) => {
   const {
+    ADVANCED_SEARCH_TABS,
     BENCH_OPINION_EVENT_CODE,
     OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
     ORDER_EVENT_CODES,
@@ -89,10 +85,13 @@ export const formatDocumentSearchResultRecord = (
 
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
+  result.showSealedIcon =
+    (result.isSealed || result.hasSealedDocuments) &&
+    advancedSearchTab === ADVANCED_SEARCH_TABS.ORDER;
+
   result.numberOfPagesFormatted = result.numberOfPages ?? 'n/a';
 
-  const searchTabs = applicationContext.getConstants().ADVANCED_SEARCH_TABS;
-  if (advancedSearchTab === searchTabs.OPINION) {
+  if (advancedSearchTab === ADVANCED_SEARCH_TABS.OPINION) {
     result.documentTitle = result.documentType;
   }
 

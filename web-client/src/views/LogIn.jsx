@@ -9,10 +9,10 @@ const Button = getView('Button');
 export const LogIn = connect(
   {
     form: state.form,
-    submitLoginSequence: sequences.submitLoginSequence,
+    loginWithCodeSequence: sequences.loginWithCodeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function LogIn({ form, submitLoginSequence, updateFormValueSequence }) {
+  function LogIn({ form, loginWithCodeSequence, updateFormValueSequence }) {
     return (
       <section className="usa-section grid-container">
         <h1 tabIndex="-1">Log in</h1>
@@ -22,21 +22,23 @@ export const LogIn = connect(
           id="log-in"
           onSubmit={event => {
             event.preventDefault();
-            submitLoginSequence();
+            loginWithCodeSequence({
+              code: form.email,
+            });
           }}
         >
           <div className="blue-container margin-bottom-5">
             <div className="usa-form-group margin-bottom-0">
-              <label className="usa-label" htmlFor="name">
-                Name
+              <label className="usa-label" htmlFor="email">
+                Email
               </label>
               <input
                 autoCapitalize="none"
                 className="usa-input"
-                id="name"
-                name="name"
-                type="text"
-                value={form.name}
+                id="email"
+                name="email"
+                type="email"
+                value={form.email}
                 onChange={e => {
                   updateFormValueSequence({
                     key: e.target.name,

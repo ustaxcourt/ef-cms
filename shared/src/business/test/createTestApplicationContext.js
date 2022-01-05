@@ -179,11 +179,14 @@ const { getConstants } = require('../../../../web-client/src/getConstants');
 const { getCropBox } = require('../../../src/business/utilities/getCropBox');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
+const { getTextByCount } = require('../utilities/getTextByCount');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
+const { sealCaseInteractor } = require('../useCases/sealCaseInteractor');
 const { serveCaseDocument } = require('../utilities/serveCaseDocument');
 const { setItem } = require('../../persistence/localStorage/setItem');
+const { setPdfFormFields } = require('../useCaseHelper/pdf/setPdfFormFields');
 const { updateCase } = require('../../persistence/dynamo/cases/updateCase');
 const { User } = require('../entities/User');
 
@@ -331,6 +334,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getStampBoxCoordinates: jest
       .fn()
       .mockImplementation(getStampBoxCoordinates),
+    getTextByCount: jest.fn().mockImplementation(getTextByCount),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
@@ -371,6 +375,7 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCases = appContextProxy({
+    sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),
@@ -389,6 +394,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
+    setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
     updateCaseAndAssociations: jest
       .fn()
       .mockImplementation(updateCaseAndAssociations),
@@ -444,6 +450,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     createCaseTrialSortMappingRecords: jest.fn(),
     createElasticsearchReindexRecord: jest.fn(),
     deleteCaseTrialSortMappingRecords: jest.fn(),
+    deleteDocumentFromS3: jest.fn(),
     deleteElasticsearchReindexRecord: jest.fn(),
     deleteKeyCount: jest.fn(),
     deleteRecord: jest.fn().mockImplementation(deleteRecord),
@@ -529,6 +536,12 @@ const createTestApplicationContext = ({ user } = {}) => {
     postMessage: jest.fn(),
   };
 
+  const mockGetNotificationService = {
+    publish: jest.fn().mockReturnValue({
+      promise: () => Promise.resolve('ok'),
+    }),
+  };
+
   const applicationContext = {
     ...sharedAppContext,
     barNumberGenerator: {
@@ -587,6 +600,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     },
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
+      sendNotificationOfSealing: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
@@ -609,6 +623,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getNodeSass: jest.fn().mockReturnValue(require('sass')),
     getNotificationClient: jest.fn(),
     getNotificationGateway: emptyAppContextProxy,
+    getNotificationService: jest
+      .fn()
+      .mockReturnValue(mockGetNotificationService),
     getPdfJs: jest.fn().mockReturnValue(mockGetPdfJsReturnValue),
     getPdfLib: jest.fn().mockReturnValue(require('pdf-lib')),
     getPersistenceGateway: mockGetPersistenceGateway,
@@ -655,19 +672,12 @@ Object.entries(applicationContext).forEach(([key, value]) => {
   }
 });
 
-const over1000Characters =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Etiam volutpat turpis in turpis tincidunt sagittis. Pellentesque fringilla fringilla fermentum. Suspendisse porta semper diam sit amet lobortis. Nam commodo turpis velit, id vestibulum quam porttitor a. Nulla metus eros, interdum eu blandit non, scelerisque at tellus. Ut pretium pretium magna non feugiat. Pellentesque vestibulum tempor leo finibus lobortis. Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Vestibulum blandit, urna eu porta eleifend, tortor ante aliquet arcu, non venenatis purus enim in ex. In sed accumsan nibh. In pulvinar id dui id aliquam. Vestibulum ante felis, porta id accumsan sed, hendrerit non arcu. Sed suscipit elit at metus pulvinar, iaculis vulputate justo volutpat. Pellentesque a dolor pharetra risus ornare semper eu at massa. Integer ut rutrum lacus, posuere dignissim massa. Etiam molestie at tortor mollis semper. Donec pulvinar mauris ac commodo malesuada. In quis tellus euismod, tempor quam et, dapibus lacus. Donec gravida tempor nunc, a maximus lectus fermentum vitae. Nullam hendrerit, nisi at fermentum scelerisque, massa nibh varius purus, at dapibus lorem massa id enim. Maecenas aliquet arcu mi, ut volutpat eros consectetur ac. Quisque dolor eros, posuere commodo vehicula sed, auctor ac nulla. Etiam sit amet massa justo. Nunc ullamcorper porta lorem quis maximus. Donec congue vel est eget accumsan. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. Aenean non suscipit tortor.';
-const over3000Characters =
-  'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec sem quis, interdum condimentum ligula. Quisque interdum, tortor efficitur fringilla pharetra, elit risus blandit lacus, sit amet finibus felis lacus in felis. Curabitur at nisl velit. Vestibulum pellentesque tincidunt neque, vel maximus nisl porttitor nec. Nulla et sagittis lorem, in accumsan mi. Sed ultricies magna eu diam finibus, sed blandit sem ultrices. Nullam consequat malesuada vestibulum. Quisque dictum mattis vulputate. Sed ut facilisis nisi. Vestibulum in nunc nulla. Aenean ut dui iaculis, euismod nisl sit amet, porta ex. Quisque ultricies dui tellus, in maximus enim aliquet quis. Praesent id tincidunt ipsum. Sed non vulputate mauris. Praesent dignissim metus in nunc egestas, id tincidunt elit fringilla. In tincidunt, massa ut blandit condimentum, diam neque vulputate lacus, at condimentum tellus felis at nisl. Curabitur purus diam, cursus vel feugiat Lorem ipsum dolor sit amet, consectetur adipiscing elit. Aliquam sapien diam, pellentesque nec se';
-
 module.exports = {
   applicationContext,
   applicationContextForClient,
   createTestApplicationContext,
   fakeData,
   getFakeFile,
-  over1000Characters,
-  over3000Characters,
   testInvalidPdfDoc,
   testPdfDoc,
 };

@@ -13,6 +13,7 @@ const {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
+const { cloneDeep } = require('lodash');
 const { User } = require('../../entities/User');
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {
@@ -89,6 +90,14 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
   });
 
   it('should return cases that are set for this session even if uncalendared', async () => {
+    const mockEligibleCaseWithPractitioners = cloneDeep(
+      MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+    );
+    delete mockEligibleCaseWithPractitioners.hasSealedDocuments;
+
+    const mockEligibleCase = cloneDeep(MOCK_ELIGIBLE_CASE);
+    delete mockEligibleCase.hasSealedDocuments;
+
     mockTrial = {
       ...MOCK_TRIAL,
       caseOrder: [
@@ -116,8 +125,8 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
 
     expect(error).toBeUndefined();
     expect(result).toMatchObject([
-      MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-      MOCK_ELIGIBLE_CASE,
+      mockEligibleCaseWithPractitioners,
+      mockEligibleCase,
     ]);
   });
 });

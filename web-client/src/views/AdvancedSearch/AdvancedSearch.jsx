@@ -64,7 +64,6 @@ export const AdvancedSearch = connect(
             <Tabs
               bind="advancedSearchTab"
               className="classic-horizontal-header3 tab-border"
-              defaultActiveTab={searchTabs.CASE}
               headingLevel="2"
               onSelect={() => {
                 advancedSearchTabChangeSequence();
@@ -102,16 +101,20 @@ export const AdvancedSearch = connect(
                 <DocumentSearchResults />
               </Tab>
               <Tab
-                disabled={!featureFlagHelper.isInternalOpinionSearchEnabled}
+                disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
                 id="tab-opinion"
                 tabName={searchTabs.OPINION}
                 title={
                   'Opinion' +
-                  (featureFlagHelper.isInternalOpinionSearchEnabled
+                  (featureFlagHelper.isOpinionSearchEnabledForRole
                     ? ''
                     : ' (Coming Soon)')
                 }
               >
+                <SearchBoilerplateText
+                  formTypeText="an opinion"
+                  isOpinion="true"
+                />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
                     submitOpinionAdvancedSearchSequence
@@ -164,11 +167,11 @@ export const AdvancedSearch = connect(
                     : ' (Coming Soon)'}
                 </option>
                 <option
-                  disabled={!featureFlagHelper.isInternalOpinionSearchEnabled}
+                  disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
                   value={searchTabs.OPINION}
                 >
                   Opinion
-                  {featureFlagHelper.isInternalOpinionSearchEnabled
+                  {featureFlagHelper.isOpinionSearchEnabledForRole
                     ? ''
                     : ' (Coming Soon)'}
                 </option>
@@ -202,6 +205,10 @@ export const AdvancedSearch = connect(
             )}
             {advancedSearchTab === searchTabs.OPINION && (
               <>
+                <SearchBoilerplateText
+                  formTypeText="an opinion"
+                  isOpinion="true"
+                />
                 <OpinionSearchForm
                   submitAdvancedSearchSequence={
                     submitOpinionAdvancedSearchSequence

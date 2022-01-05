@@ -5,15 +5,16 @@ export const featureFlagHelper = (get, applicationContext) => {
   const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
 
   const isUserInternal = applicationContext.getUtilities().isInternalUser(role);
-  const isInternalOrderSearchEnabled = get(
-    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key],
-  );
-  const isInternalOpinionSearchEnabled = get(
-    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH.key],
+
+  const isPdfJsEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key],
   );
 
   let isOrderSearchEnabledForRole = false;
   if (role && isUserInternal) {
+    const isInternalOrderSearchEnabled = get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH.key],
+    );
     isOrderSearchEnabledForRole = isInternalOrderSearchEnabled;
   } else {
     isOrderSearchEnabledForRole = get(
@@ -21,8 +22,21 @@ export const featureFlagHelper = (get, applicationContext) => {
     );
   }
 
+  let isOpinionSearchEnabledForRole = false;
+  if (role && isUserInternal) {
+    const isInternalOpinionSearchEnabled = get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH.key],
+    );
+    isOpinionSearchEnabledForRole = isInternalOpinionSearchEnabled;
+  } else {
+    isOpinionSearchEnabledForRole = get(
+      state.featureFlags[ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH.key],
+    );
+  }
+
   return {
-    isInternalOpinionSearchEnabled,
+    isOpinionSearchEnabledForRole,
     isOrderSearchEnabledForRole,
+    isPdfJsEnabled,
   };
 };

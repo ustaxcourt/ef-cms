@@ -40,4 +40,3 @@ if [ -z ${CI} ]; then
     echo "Continuing..."
   fi
 fi
-

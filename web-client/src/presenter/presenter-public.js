@@ -26,7 +26,9 @@ import { navigateToPublicSiteSequence } from './sequences/Public/navigateToPubli
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { openAppMaintenanceModalSequence } from './sequences/openAppMaintenanceModalSequence';
 import { openCaseDocumentDownloadUrlSequence } from './sequences/openCaseDocumentDownloadUrlSequence';
+import { persistFormsOnReloadSequence } from './sequences/persistFormsOnReloadSequence';
 import { setCurrentPageErrorSequence } from './sequences/setCurrentPageErrorSequence';
+import { setupConfigSequence } from './sequences/setupConfigSequence';
 import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDecorator';
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
@@ -97,6 +99,8 @@ export const presenter = {
     notFoundErrorSequence,
     openAppMaintenanceModalSequence,
     openCaseDocumentDownloadUrlSequence,
+    persistFormsOnReloadSequence,
+    setupConfigSequence,
     showMoreResultsSequence,
     sortTodaysOrdersSequence,
     submitPublicCaseAdvancedSearchSequence,

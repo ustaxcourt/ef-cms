@@ -8,7 +8,9 @@ const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 
 describe('getFeatureFlagValueInteractor', () => {
   it('should retrieve the value of the feature flag from persistence when the feature flag is included in the allowlist', async () => {
-    const mockFeatureFlagValue = true;
+    const mockFeatureFlagValue = {
+      current: true,
+    };
     applicationContext
       .getPersistenceGateway()
       .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
@@ -20,7 +22,23 @@ describe('getFeatureFlagValueInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getFeatureFlagValue,
     ).toHaveBeenCalled();
-    expect(result).toBe(mockFeatureFlagValue);
+    expect(result).toBe(true);
+  });
+
+  it('should return false if the persistence method returns undefined', async () => {
+    const mockFeatureFlagValue = undefined;
+    applicationContext
+      .getPersistenceGateway()
+      .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
+
+    const result = await getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH.key,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getFeatureFlagValue,
+    ).toHaveBeenCalled();
+    expect(result).toBe(false);
   });
 
   it('should throw an unauthorized error when the feature flag is not included in the allowlist', async () => {

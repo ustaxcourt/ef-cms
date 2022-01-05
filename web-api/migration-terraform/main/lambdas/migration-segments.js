@@ -2,22 +2,10 @@ const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
-  migrateItems: bugMigration0039,
-} = require('./migrations/bug-0039-notice-of-trial-date');
-const {
-  migrateItems: migration0001,
-} = require('./migrations/0001-update-websockets-gsi1pk');
-const {
-  migrateItems: migration0002,
-} = require('./migrations/0002-session-scope');
-const {
-  migrateItems: migration0040,
-} = require('./migrations/bug-0040-case-received-at');
-const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
-
+const { migrationsToRun } = require('./migrationsToRun');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 const applicationContext = createApplicationContext({});
 const dynamodb = new AWS.DynamoDB({
@@ -41,24 +29,11 @@ const migrateRecords = async ({
   // eslint-disable-next-line no-unused-vars
   ranMigrations = {},
 }) => {
-  if (!ranMigrations['0001-update-websockets-gsi1pk.js']) {
-    applicationContext.logger.debug('about to run migration 0001');
-    items = migration0001(items);
-  }
-
-  if (!ranMigrations['0002-session-scope.js']) {
-    applicationContext.logger.debug('about to run migration 0002');
-    items = migration0002(items);
-  }
-
-  if (!ranMigrations['bug-0040-case-received-at.js']) {
-    applicationContext.logger.debug('about to run migration 0040');
-    items = await migration0040(items, documentClient);
-  }
-
-  if (!ranMigrations['bug-0039-notice-of-trial-date.js']) {
-    applicationContext.logger.debug('about to run bug migration 0039');
-    items = await bugMigration0039(items, documentClient);
+  for (let { key, script } of migrationsToRun) {
+    if (!ranMigrations[key]) {
+      applicationContext.logger.debug(`about to run migration ${key}`);
+      items = await script(items, documentClient);
+    }
   }
 
   applicationContext.logger.debug('about to run validation migration');
@@ -92,7 +67,7 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
             .promise()
             .catch(e => {
               if (e.message.includes('The conditional request failed')) {
-                console.log(
+                applicationContext.logger.info(
                   `The item of ${item.pk} ${item.sk} alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.`,
                 );
               } else {
@@ -160,13 +135,10 @@ exports.handler = async event => {
   applicationContext.logger.info(
     `about to process ${segment} of ${totalSegments}`,
   );
-
-  const ranMigrations = {
-    ...(await hasMigrationRan('0001-update-websockets-gsi1pk.js')),
-    ...(await hasMigrationRan('0002-session-scope.js')),
-    ...(await hasMigrationRan('bug-0039-notice-of-trial-date.js')),
-    ...(await hasMigrationRan('bug-0040-case-received-at.js')),
-  };
+  const ranMigrations = {};
+  for (let { key } of migrationsToRun) {
+    Object.assign(ranMigrations, await hasMigrationRan(key));
+  }
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
   applicationContext.logger.info(`finishing ${segment} of ${totalSegments}`);

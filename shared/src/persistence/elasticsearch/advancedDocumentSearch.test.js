@@ -27,6 +27,7 @@ describe('advancedDocumentSearch', () => {
       'documentType',
       'eventCode',
       'filingDate',
+      'hasSealedDocuments',
       'irsPractitioners',
       'isFileAttached',
       'isSealed',
@@ -81,7 +82,6 @@ describe('advancedDocumentSearch', () => {
     let query = {
       bool: {
         filter: [],
-        must_not: [],
       },
     };
 
@@ -199,7 +199,6 @@ describe('advancedDocumentSearch', () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
-      isOpinionSearch: false,
       judge: 'Judge Guy Fieri',
     });
 
@@ -235,25 +234,38 @@ describe('advancedDocumentSearch', () => {
     ];
     expectation[0].has_parent.query.bool.must_not = [
       { term: { 'isSealed.BOOL': true } },
+      { term: { 'hasSealedDocuments.BOOL': true } },
     ];
 
-    expect(search.mock.calls[0][0].searchParameters.body.query.bool).toEqual({
-      filter: expect.arrayContaining([
-        {
-          term: {
-            'eventCode.S': 'SOP',
-          },
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+    ).toEqual([
+      {
+        term: {
+          'entityName.S': 'DocketEntry',
         },
-      ]),
-      must: expectation,
-      must_not: [
-        {
-          term: {
-            'isStricken.BOOL': true,
-          },
+      },
+      {
+        exists: {
+          field: 'servedAt',
         },
-      ],
-    });
+      },
+      {
+        terms: {
+          'eventCode.S': ['O', 'OOD'],
+        },
+      },
+      {
+        term: {
+          'isFileAttached.BOOL': true,
+        },
+      },
+      {
+        term: {
+          'eventCode.S': 'SOP',
+        },
+      },
+    ]);
   });
 
   it('does a search by multiple opinion types when multiple opinion document types are provided', async () => {
@@ -297,14 +309,24 @@ describe('advancedDocumentSearch', () => {
     const expectation = [
       getCaseMappingQueryParams(), // match all parents
     ];
-    expectation[0].has_parent.query.bool.must_not = [
+    expectation[0].has_parent.query.bool.must = [
       { term: { 'isSealed.BOOL': true } },
+      { term: { 'hasSealedDocuments.BOOL': true } },
     ];
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool,
-    ).toMatchObject({
-      must: expectation,
-    });
+      search.mock.calls[0][0].searchParameters.body.query.bool.must_not,
+    ).toEqual([
+      {
+        term: {
+          'isStricken.BOOL': true,
+        },
+      },
+      {
+        term: {
+          'isSealed.BOOL': true,
+        },
+      },
+    ]);
   });
 
   it('does a search for a judge when searching for opinions', async () => {
@@ -345,12 +367,27 @@ describe('advancedDocumentSearch', () => {
     });
   });
 
+  it('omits docket entries with isSealed:true when doing an opinion search', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: [BENCH_OPINION_EVENT_CODE],
+      isOpinionSearch: true,
+      judge: 'Judge Guy Fieri',
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must_not,
+    ).toEqual([
+      { term: { 'isStricken.BOOL': true } },
+      { term: { 'isSealed.BOOL': true } },
+    ]);
+  });
+
   it('does a search for docket number of a case', async () => {
     await advancedDocumentSearch({
       applicationContext,
       docketNumber: '101-20',
       documentEventCodes: orderEventCodes,
-      isOpinionSearch: false,
     });
 
     expect(
@@ -559,7 +596,6 @@ describe('advancedDocumentSearch', () => {
       await advancedDocumentSearch({
         applicationContext,
         documentEventCodes: opinionEventCodes,
-        isOpinionSearch: false,
         judge: 'Legacy Guy Fieri',
       });
 

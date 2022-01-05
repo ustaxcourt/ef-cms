@@ -331,12 +331,25 @@ export const setWhitelistIps = ips => {
   });
 };
 
-export const setOpinionSearchEnabled = isEnabled => {
+export const describeif = condition => (condition ? describe : describe.skip);
+
+export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
       current: isEnabled,
-      pk: 'internal-opinion-search-enabled',
-      sk: 'internal-opinion-search-enabled',
+      pk: `${keyPrefix}-opinion-search-enabled`,
+      sk: `${keyPrefix}-opinion-search-enabled`,
+    },
+    applicationContext,
+  });
+};
+
+export const setOrderSearchEnabled = (isEnabled, keyPrefix) => {
+  return client.put({
+    Item: {
+      current: isEnabled,
+      pk: `${keyPrefix}-order-search-enabled`,
+      sk: `${keyPrefix}-order-search-enabled`,
     },
     applicationContext,
   });
@@ -656,7 +669,7 @@ export const loginAs = (cerebralTest, user) =>
       value: user,
     });
 
-    await cerebralTest.runSequence('submitLoginSequence', {
+    await cerebralTest.runSequence('submitLocalLoginSequence', {
       path: '/',
     });
 
@@ -892,21 +905,6 @@ export const getPetitionWorkItemForCase = caseDetail => {
   return petitionDocument.workItem;
 };
 
-export const getTextByCount = count => {
-  const baseText =
-    'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc vulputate efficitur ante, at placerat.';
-  const baseCount = baseText.length;
-
-  let resultText = baseText;
-  if (count > baseCount) {
-    for (let i = 1; i < Math.ceil(count / baseCount); i++) {
-      resultText += baseText;
-    }
-  }
-
-  return resultText.slice(0, count);
-};
-
 export const embedWithLegalIpsumText = (phrase = '') => {
   return `While this license do not apply to, the licenses granted by such Contributor under Sections 2.1(b) and 2.2(b) are revoked effective as of the provisions set forth in the case of each Contributor, changes to the Recipient. The term of this Agreement, and b) allow the Commercial Contributor in writing by the Licensor accepting any such claim at its own expense. For example, a Contributor might include the Contribution, nor to (ii) Contributions of other Contributors.
 
@@ -933,5 +931,17 @@ export const updateOpinionForm = async (cerebralTest, formValues) => {
     cerebralTest,
     formValues,
     'updateAdvancedOpinionSearchFormValueSequence',
+  );
+};
+
+export const updateOrderForm = async (cerebralTest, formValues) => {
+  await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+    formType: 'orderSearch',
+  });
+
+  await updateForm(
+    cerebralTest,
+    formValues,
+    'updateAdvancedOrderSearchFormValueSequence',
   );
 };

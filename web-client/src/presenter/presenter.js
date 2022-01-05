@@ -25,6 +25,7 @@ import { batchDownloadReadySequence } from './sequences/batchDownloadReadySequen
 import { batchDownloadTrialSessionSequence } from './sequences/batchDownloadTrialSessionSequence';
 import { blockCaseFromTrialSequence } from './sequences/blockCaseFromTrialSequence';
 import { broadcastIdleStatusActiveSequence } from './sequences/broadcastIdleStatusActiveSequence';
+import { broadcastLogoutSequence } from './sequences/broadcastLogoutSequence';
 import { broadcastStayLoggedInSequence } from './sequences/broadcastStayLoggedInSequence';
 import { calculatePenaltiesForAddSequence } from './sequences/calculatePenaltiesForAddSequence';
 import { calculatePenaltiesSequence } from './sequences/calculatePenaltiesSequence';
@@ -320,6 +321,7 @@ import { setTrialSessionCalendarSequence } from './sequences/setTrialSessionCale
 import { setViewerCorrespondenceToDisplaySequence } from './sequences/setViewerCorrespondenceToDisplaySequence';
 import { setViewerDocumentToDisplaySequence } from './sequences/setViewerDocumentToDisplaySequence';
 import { setViewerDraftDocumentToDisplaySequence } from './sequences/setViewerDraftDocumentToDisplaySequence';
+import { setupConfigSequence } from './sequences/setupConfigSequence';
 import { showCalculatePenaltiesModalSequence } from './sequences/showCalculatePenaltiesModalSequence';
 import { showDocketRecordDetailModalSequence } from './sequences/showDocketRecordDetailModalSequence';
 import { showMoreClosedCasesSequence } from './sequences/showMoreClosedCasesSequence';
@@ -328,6 +330,7 @@ import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { showViewPetitionerCounselModalSequence } from './sequences/showViewPetitionerCounselModalSequence';
 import { signOutSequence } from './sequences/signOutSequence';
 import { skipSigningOrderSequence } from './sequences/skipSigningOrderSequence';
+import { startRefreshIntervalSequence } from './sequences/startRefreshIntervalSequence';
 import { startScanSequence } from './sequences/startScanSequence';
 import { state } from './state';
 import { strikeDocketEntrySequence } from './sequences/strikeDocketEntrySequence';
@@ -356,7 +359,7 @@ import { submitEditPetitionerSequence } from './sequences/submitEditPetitionerSe
 import { submitEditRespondentCounselSequence } from './sequences/submitEditRespondentCounselSequence';
 import { submitExternalDocumentSequence } from './sequences/submitExternalDocumentSequence';
 import { submitFilePetitionSequence } from './sequences/submitFilePetitionSequence';
-import { submitLoginSequence } from './sequences/submitLoginSequence';
+import { submitLocalLoginSequence } from './sequences/submitLocalLoginSequence';
 import { submitOpinionAdvancedSearchSequence } from './sequences/submitOpinionAdvancedSearchSequence';
 import { submitOrderAdvancedSearchSequence } from './sequences/submitOrderAdvancedSearchSequence';
 import { submitPaperFilingSequence } from './sequences/submitPaperFilingSequence';
@@ -511,6 +514,7 @@ export const presenter = {
     batchDownloadTrialSessionSequence,
     blockCaseFromTrialSequence,
     broadcastIdleStatusActiveSequence,
+    broadcastLogoutSequence,
     broadcastStayLoggedInSequence,
     calculatePenaltiesForAddSequence,
     calculatePenaltiesSequence,
@@ -804,6 +808,7 @@ export const presenter = {
     setViewerCorrespondenceToDisplaySequence,
     setViewerDocumentToDisplaySequence,
     setViewerDraftDocumentToDisplaySequence,
+    setupConfigSequence,
     showCalculatePenaltiesModalSequence,
     showDocketRecordDetailModalSequence,
     showMoreClosedCasesSequence,
@@ -812,6 +817,7 @@ export const presenter = {
     showViewPetitionerCounselModalSequence,
     signOutSequence,
     skipSigningOrderSequence,
+    startRefreshIntervalSequence,
     startScanSequence,
     strikeDocketEntrySequence,
     submitAddConsolidatedCaseSequence,
@@ -839,7 +845,7 @@ export const presenter = {
     submitEditRespondentCounselSequence,
     submitExternalDocumentSequence,
     submitFilePetitionSequence,
-    submitLoginSequence,
+    submitLocalLoginSequence,
     submitOpinionAdvancedSearchSequence,
     submitOrderAdvancedSearchSequence,
     submitPaperFilingSequence,
