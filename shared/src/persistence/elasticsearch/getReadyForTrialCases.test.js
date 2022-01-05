@@ -42,11 +42,26 @@ describe('getReadyForTrialCases', () => {
             },
           },
           {
-            simple_query_string: {
-              default_operator: 'and',
-              fields: ['status.S'],
-              flags: 'OR|AND|ESCAPE|PHRASE',
-              query: CASE_STATUS_TYPES.generalDocket,
+            has_parent: {
+              inner_hits: {
+                _source: {
+                  includes: ['caseCaption', 'docketNumber', 'status'],
+                },
+                name: 'case-mappings',
+              },
+              parent_type: 'case',
+              query: {
+                bool: {
+                  must: [
+                    {
+                      term: {
+                        'status.S': CASE_STATUS_TYPES.generalDocket,
+                      },
+                    },
+                  ],
+                },
+              },
+              score: true,
             },
           },
         ],

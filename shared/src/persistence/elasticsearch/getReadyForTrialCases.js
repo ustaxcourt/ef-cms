@@ -2,7 +2,6 @@ const {
   CASE_STATUS_TYPES,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
-const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
 /**
  * getReadyForTrialCases
@@ -42,11 +41,26 @@ exports.getReadyForTrialCases = async ({ applicationContext }) => {
                 },
               },
               {
-                simple_query_string: {
-                  default_operator: 'and',
-                  fields: ['status.S'],
-                  flags: simpleQueryFlags,
-                  query: CASE_STATUS_TYPES.generalDocket,
+                has_parent: {
+                  inner_hits: {
+                    _source: {
+                      includes: ['caseCaption', 'docketNumber', 'status'],
+                    },
+                    name: 'case-mappings',
+                  },
+                  parent_type: 'case',
+                  query: {
+                    bool: {
+                      must: [
+                        {
+                          term: {
+                            'status.S': CASE_STATUS_TYPES.generalDocket,
+                          },
+                        },
+                      ],
+                    },
+                  },
+                  score: true,
                 },
               },
             ],
