@@ -1118,21 +1118,6 @@ app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
 app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
 
 /**
- * Lambda CRONs
- */
-app.get(
-  '/run-check-ready-for-trial',
-  (req, res, next) => {
-    // TODO: is this secure enough for when deployed people can't hit this endpoint?
-    if (!process.env.IS_LOCAL) {
-      res.status(401).send('unauthorized');
-    }
-    next();
-  },
-  lambdaWrapper(checkForReadyForTrialCasesLambda),
-);
-
-/**
  * Authentication/Authorization
  */
 app
@@ -1140,5 +1125,14 @@ app
   .post(lambdaWrapper(authenticateUserLambda))
   .delete(lambdaWrapper(deleteAuthCookieLambda));
 app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
+
+// This endpoint is used for testing purpose only which exposes the
+// CRON lambda which runs nightly to update cases to be ready for trial.
+if (process.env.IS_LOCAL) {
+  app.get(
+    '/run-check-ready-for-trial',
+    lambdaWrapper(checkForReadyForTrialCasesLambda),
+  );
+}
 
 exports.app = app;
