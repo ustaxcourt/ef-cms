@@ -12,6 +12,9 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
+    'createdAt.S': {
+      type: 'date',
+    },
     'docketEntryId.S': {
       type: 'keyword',
     },
