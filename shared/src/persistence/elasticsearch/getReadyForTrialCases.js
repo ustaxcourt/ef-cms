@@ -25,11 +25,6 @@ exports.getReadyForTrialCases = async ({ applicationContext }) => {
                   'entityName.S': 'DocketEntry',
                 },
               },
-              {
-                exists: {
-                  field: 'servedAt',
-                },
-              },
             ],
             must: [
               {
@@ -39,7 +34,7 @@ exports.getReadyForTrialCases = async ({ applicationContext }) => {
               },
               {
                 range: {
-                  'servedAt.S': {
+                  'createdAt.S': {
                     // Getting one extra day just so we don't miss any.
                     // Case.prototype.checkForReadyForTrial will continue to do the math as it always has.
                     lte: 'now-44d/d',
