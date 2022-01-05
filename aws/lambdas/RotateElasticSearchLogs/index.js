@@ -1,62 +1,108 @@
-const crypto = require('crypto');
-const https = require('https');
 const { DateTime } = require('luxon');
+const { defaultProvider } = require('@aws-sdk/credential-provider-node');
+const { HttpRequest } = require('@aws-sdk/protocol-http');
+const { NodeHttpHandler } = require('@aws-sdk/node-http-handler');
+const { Sha256 } = require('@aws-crypto/sha256-browser');
+const { SignatureV4 } = require('@aws-sdk/signature-v4');
 
 const EXPIRATION = 90; // days
 
 exports.handler = async context => {
-  // TODO: determine all indices older than the expiration that have no finished or pending snapshot
-  //  and generate snapshots for each day
+  const responses = { createSnapshot: [], deleteIndices: [] };
+  let anyError = false;
 
-  // generate a snapshot of the indices from EXPIRATION days ago
-  const backupIndexName = exports.getIndexNameForDaysAgo(EXPIRATION);
-  const { sResponseBody, sStatusCode } = await snapshotForIndexName(
-    backupIndexName,
-  );
+  // determine the indexName for all indices older than the expiration
+  const expiredIndices = await exports.getExpiredIndices(EXPIRATION);
 
-  // TODO: determine all indices older than (expiration + 1) and delete them all (if snapshots exist)
+  for (const ei of expiredIndices) {
+    // check if we've already generated a snapshot for this indexName
+    const snapshotExists = await exports.snapshotExists(ei);
 
-  // delete the indices from (EXPIRATION + 1) days ago if a snapshot exists
-  const deleteIndexName = exports.getIndexNameForDaysAgo(EXPIRATION + 1);
-  const { dResponseBody, dStatusCode } = await deleteIndices(deleteIndexName);
+    if (snapshotExists) {
+      // snapshot exists, ok to delete indices
+      const { responseBody, statusCode } = await exports.deleteIndices(ei);
+      responses.deleteIndices.push({
+        indexName: ei,
+        responseBody,
+        statusCode,
+      });
+      if (statusCode >= 300) {
+        anyError = true;
+      }
+    } else {
+      // snapshot does not exist, let's create one
+      const { responseBody, statusCode } = await exports.snapshotForIndexName(
+        ei,
+      );
+      responses.createSnapshot.push({
+        indexName: ei,
+        responseBody,
+        statusCode,
+      });
+      if (statusCode >= 300) {
+        anyError = true;
+      }
+    }
+  }
 
-  const responses = {
-    createSnapshot: {
-      indexName: backupIndexName,
-      responseBody: JSON.parse(sResponseBody),
-      statusCode: sStatusCode,
-    },
-    deleteIndices: {
-      indexName: deleteIndexName,
-      responseBody: JSON.parse(dResponseBody),
-      statusCode: dStatusCode,
-    },
-  };
-  if (sStatusCode >= 300 || dStatusCode >= 300) {
-    context.fail(JSON.stringify(responses));
+  if (anyError) {
+    return context.fail(JSON.stringify(responses));
   } else {
-    context.success(JSON.stringify(responses));
+    return context.success(JSON.stringify(responses));
   }
 };
 
 /**
  * Determines the Elasticsearch indexName for the date of log expiration
  *
- * @returns {string} Elasticsearch indexName
+ * @param {Number} expiration number of days
+ * @returns {String} Elasticsearch index name
  */
-exports.getIndexNameForDaysAgo = function (expiration) {
+exports.getIndexNameForDaysAgo = expiration => {
   const expirationDay = DateTime.local().plus({ days: -expiration });
 
   // the indexName is the date formatted as cwl-YYYY.MM.DD
-  return 'cwl-' + expirationDay.toFormat('yyyy.MM.dd');
+  return `cwl-${expirationDay.toFormat('yyyy.MM.dd')}`;
 };
 
 /**
- * Ask Elasticsearch to generate a snapshot for the provided indexName
+ * Determines the indexName for all indices older than the date of expiration
  *
+ * @param {Number} expiration number of days
+ * @returns {Promise<Array<String>>} array of Elasticsearch index names
+ */
+exports.getExpiredIndices = async expiration => {
+  const res = await exports.req('GET', '/_cat/indices', null);
+  const allIndices = Array.from(
+    res.responseBody.matchAll(/cwl[^\s]+/g),
+    m => m[0],
+  ).sort();
+
+  const expirationDay = exports.getIndexNameForDaysAgo(expiration);
+
+  // the following assumes the index format will not change in the future
+  return allIndices.filter(i => {
+    return i <= expirationDay; // alphabetic comparison is sufficient
+  });
+};
+
+/**
+ * Asks Elasticsearch to generate a snapshot for the provided indexName
+ *
+ * @param {String} indexName Elasticsearch index name
  * @returns {Promise<Object>} information about the response
  */
-async function snapshotForIndexName(indexName) {
+exports.snapshotForIndexName = async indexName => {
+  const snapshotAlreadyExists = await exports.snapshotExists(indexName);
+  if (snapshotAlreadyExists) {
+    return new Promise(resolve => {
+      resolve({
+        responseBody: { message: `Snapshot already exists for ${indexName}` },
+        statusCode: 412,
+      });
+    });
+  }
+
   const payload = {
     ignore_unavailable: true,
     include_global_state: true,
@@ -67,78 +113,85 @@ async function snapshotForIndexName(indexName) {
     },
   };
 
-  return await req('PUT', '/_snapshot/archived-logs/' + indexName, payload);
-}
+  return exports.req('PUT', `/_snapshot/archived-logs/${indexName}`, payload);
+};
 
 /**
  * Determines if a snapshot exists for the provided indexName
  *
- * @returns {Promise<boolean>} snapshot exists?
+ * @param {String} indexName Elasticsearch index name
+ * @returns {Promise<Boolean>} snapshot exists?
  */
-// eslint-disable-next-line require-await
-async function snapshotExists(indexName) {
+exports.snapshotExists = async indexName => {
+  const snapshots = await exports.req(
+    'GET',
+    `/_snapshot/archived-logs/${indexName}`,
+    null,
+  );
   return new Promise(resolve => {
-    req('GET', '/_snapshot/archived-logs/' + indexName, null).then(response => {
-      let exists = false;
-      const result = JSON.parse(response.responseBody);
-      if ('snapshots' in result) {
-        const completedSnapshots = result.snapshots.filter(snapshot => {
-          return (
-            snapshot.snapshot === indexName && snapshot.state === 'SUCCESS'
-          );
-        });
-        if (completedSnapshots.length) {
-          exists = true;
-        }
+    let exists = false;
+    const result = snapshots.responseBody;
+    if ('snapshots' in result) {
+      const completedSnapshots = result.snapshots.filter(snapshot => {
+        return snapshot.snapshot === indexName && snapshot.state === 'SUCCESS';
+      });
+      if (completedSnapshots.length) {
+        exists = true;
       }
-      resolve(exists);
-    });
+    }
+    resolve(exists);
   });
-}
+};
 
 /**
- * Ask Elasticsearch to delete entries with the provided indexName
+ * Asks Elasticsearch to delete entries with the provided indexName
  *
+ * @param {String} indexName Elasticsearch index name
  * @returns {Promise<Object>} information about the response
  */
-async function deleteIndices(indexName) {
-  const shouldDelete = await snapshotExists(indexName);
+exports.deleteIndices = async indexName => {
+  const shouldDelete = await exports.snapshotExists(indexName);
   if (!shouldDelete) {
     return new Promise(resolve => {
       resolve({
-        responseBody: 'Snapshot does not exist for ' + indexName,
+        responseBody: { message: `Snapshot does not exist for ${indexName}` },
         statusCode: 404,
       });
     });
   }
 
-  return await req('DELETE', '/' + indexName, null);
-}
+  return exports.req('DELETE', `/${indexName}`, null);
+};
 
 /**
- * Sends a request to Elasticsearch
+ * Sends a request to the Elasticsearch API
  *
+ * @param {String} verb request method
+ * @param {String} path request path
+ * @param {Object} body request payload
  * @returns {Promise<Object>} information about the response
  */
-// eslint-disable-next-line require-await
-async function req(verb, path, body) {
-  return new Promise(resolve => {
-    const requestParams = buildRequest(
-      process.env.es_endpoint,
-      verb,
-      path,
-      body,
-    );
+exports.req = async (verb, path, body) => {
+  const signedRequest = await buildSignedRequest(
+    process.env.es_endpoint,
+    verb,
+    path,
+    body,
+  );
 
-    const request = https.request(requestParams, response => {
-      let responseBody = '';
-      response.on('data', chunk => (responseBody += chunk));
-
-      response.on('end', () => {
+  const client = new NodeHttpHandler();
+  const { response } = await client.handle(signedRequest);
+  let responseBody = '';
+  return new Promise(
+    resolve => {
+      response.body.on('data', chunk => {
+        responseBody += chunk;
+      });
+      response.body.on('end', () => {
         const { statusCode } = response;
 
         const requestInfo = {
-          endpoint: process.env.es_endpoint,
+          domain: process.env.es_endpoint,
           path,
           payload: body,
           type: verb,
@@ -151,112 +204,55 @@ async function req(verb, path, body) {
         } else {
           console.log(`Success: ${JSON.stringify(responseBody)}`);
         }
+        try {
+          responseBody = JSON.parse(responseBody);
+        } catch (e) {
+          // do nothing
+        }
         resolve({
-          responseBody: JSON.parse(responseBody),
+          responseBody,
           statusCode,
         });
       });
-    });
-
-    request.end(requestParams.body);
-  });
-}
+    },
+    error => {
+      console.log(`Error: ${error}`);
+    },
+  );
+};
 
 /**
- * Builds request parameters for a bulk upload to Elasticsearch.
+ * Builds Elasticsearch API request parameters
  *
- * @returns {Object} The request parameters.
+ * @param {String} domain Elasticsearch endpoint
+ * @param {String} verb request method
+ * @param {String} path request path
+ * @param {Object} body request payload
+ * @returns {Object} The request parameters
  */
-function buildRequest(endpoint, verb, path, body) {
-  let endpointParts = endpoint.match(
+function buildSignedRequest(domain, verb, path, body) {
+  const domainParts = domain.match(
     /^([^.]+)\.?([^.]*)\.?([^.]*)\.amazonaws\.com$/,
   );
-  let region = endpointParts[2];
-  let service = endpointParts[3];
-  let datetime = DateTime.local()
-    .toISO()
-    .replace(/[:-]|\.\d{3}/g, '');
-  let date = DateTime.local().toFormat('yyyyMMdd');
-  let kDate = hmac('AWS4' + process.env.AWS_SECRET_ACCESS_KEY, date);
-  let kRegion = hmac(kDate, region);
-  let kService = hmac(kRegion, service);
-  let kSigning = hmac(kService, 'aws4_request');
+  const region = domainParts[2];
 
-  let request = {
-    body,
+  const request = new HttpRequest({
+    body: body ? JSON.stringify(body) : null,
     headers: {
-      'Content-Length': Buffer.byteLength(body),
       'Content-Type': 'application/json',
-      Host: endpoint,
-      'X-Amz-Date': datetime,
-      'X-Amz-Security-Token': process.env.AWS_SESSION_TOKEN,
+      Host: domain,
     },
-    host: endpoint,
+    hostname: domain,
     method: verb,
     path,
-  };
+  });
 
-  let canonicalHeaders = Object.keys(request.headers)
-    .sort(function (a, b) {
-      return a.toLowerCase() < b.toLowerCase() ? -1 : 1;
-    })
-    .map(function (k) {
-      return k.toLowerCase() + ':' + request.headers[k];
-    })
-    .join('\n');
+  const signer = new SignatureV4({
+    credentials: defaultProvider(),
+    region,
+    service: 'es',
+    sha256: Sha256,
+  });
 
-  let signedHeaders = Object.keys(request.headers)
-    .map(function (k) {
-      return k.toLowerCase();
-    })
-    .sort()
-    .join(';');
-
-  let canonicalString = [
-    request.method,
-    request.path,
-    '',
-    canonicalHeaders,
-    '',
-    signedHeaders,
-    hash(request.body, 'hex'),
-  ].join('\n');
-
-  let credentialString = [date, region, service, 'aws4_request'].join('/');
-
-  let stringToSign = [
-    'AWS4-HMAC-SHA256',
-    datetime,
-    credentialString,
-    hash(canonicalString, 'hex'),
-  ].join('\n');
-
-  request.headers.Authorization = [
-    'AWS4-HMAC-SHA256 Credential=' +
-      process.env.AWS_ACCESS_KEY_ID +
-      '/' +
-      credentialString,
-    'SignedHeaders=' + signedHeaders,
-    'Signature=' + hmac(kSigning, stringToSign, 'hex'),
-  ].join(', ');
-
-  return request;
-}
-
-/**
- * Creates a SHA256 HMAC digest of a string.
- *
- * @returns {string} The calculated digest
- */
-function hmac(key, str, encoding) {
-  return crypto.createHmac('sha256', key).update(str, 'utf8').digest(encoding);
-}
-
-/**
- * Creates a SHA256 hash of a string.
- *
- * @returns {string} The calculated hash
- */
-function hash(str, encoding) {
-  return crypto.createHash('sha256').update(str, 'utf8').digest(encoding);
+  return signer.sign(request);
 }
