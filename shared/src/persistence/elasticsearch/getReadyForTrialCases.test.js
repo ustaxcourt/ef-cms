@@ -27,11 +27,6 @@ describe('getReadyForTrialCases', () => {
               'entityName.S': 'DocketEntry',
             },
           },
-          {
-            exists: {
-              field: 'servedAt',
-            },
-          },
         ],
         must: [
           {
@@ -41,7 +36,7 @@ describe('getReadyForTrialCases', () => {
           },
           {
             range: {
-              'servedAt.S': {
+              'createdAt.S': {
                 lte: 'now-44d/d',
               },
             },
