@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 ENVIRONMENT=$1
 
@@ -6,11 +6,7 @@ ENVIRONMENT=$1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
-tf_version=$(terraform --version)
-if [[ ${tf_version} != *"1.0.9"* ]]; then
-  echo "Please set your terraform version to 1.0.9 before deploying."
-  exit 1
-fi
+../../../../scripts/verify-terraform-version.sh
 
 # Each $ENV will have its own terraform deploy bucket (i.e. "exp1.ustc-case-mgmt.flexion.us")
 BUCKET="${ZONE_NAME}.terraform.deploys"

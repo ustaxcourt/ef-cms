@@ -76,7 +76,7 @@ describe('generateCaseInventoryReportPdf', () => {
   it('should catch, log, and rethrow an error thrown by the generator', async () => {
     applicationContext
       .getDocumentGenerators()
-      .caseInventoryReport.mockRejectedValue(new Error('bad!'));
+      .caseInventoryReport.mockRejectedValueOnce(new Error('bad!'));
 
     await expect(
       generateCaseInventoryReportPdf({

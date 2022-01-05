@@ -8,6 +8,7 @@ import { SearchBoilerplateText } from './SearchBoilerplateText';
 import { SearchResults } from '../AdvancedSearch/SearchResults';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
+import { WarningNotification } from '../WarningNotification';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -40,6 +41,7 @@ export const PublicSearch = connect(
         <section className="usa-section grid-container advanced-search">
           <ErrorNotification />
           <SuccessNotification />
+          <WarningNotification />
 
           <Tabs
             bind="advancedSearchTab"
@@ -82,11 +84,20 @@ export const PublicSearch = connect(
               <DocumentSearchResults />
             </Tab>
             <Tab
-              disabled
+              disabled={!featureFlagHelper.isOpinionSearchEnabledForRole}
               id="tab-opinion"
               tabName="opinion"
-              title="Opinion (Coming Soon)"
+              title={
+                'Opinion' +
+                (featureFlagHelper.isOpinionSearchEnabledForRole
+                  ? ''
+                  : ' (Coming Soon)')
+              }
             >
+              <SearchBoilerplateText
+                formTypeText="an opinion"
+                isOpinion="true"
+              />
               <OpinionSearchForm
                 submitAdvancedSearchSequence={
                   submitPublicOpinionAdvancedSearchSequence

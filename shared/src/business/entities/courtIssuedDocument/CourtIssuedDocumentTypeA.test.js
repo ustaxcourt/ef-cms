@@ -2,10 +2,8 @@ const {
   GENERIC_ORDER_DOCUMENT_TYPE,
   VALIDATION_ERROR_MESSAGES,
 } = require('./CourtIssuedDocumentConstants');
-const {
-  over1000Characters,
-} = require('../../test/createTestApplicationContext');
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { getTextByCount } = require('../../utilities/getTextByCount');
 
 describe('CourtIssuedDocumentTypeA', () => {
   describe('constructor', () => {
@@ -118,7 +116,7 @@ describe('CourtIssuedDocumentTypeA', () => {
         attachments: false,
         documentTitle: '[Anything]',
         documentType: 'Order',
-        freeText: over1000Characters,
+        freeText: getTextByCount(1001),
         scenario: 'Type A',
         serviceStamp: 'Served',
       });

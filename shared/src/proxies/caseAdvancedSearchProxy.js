@@ -1,4 +1,3 @@
-const querystring = require('querystring');
 const { get } = require('./requests');
 
 /**
@@ -13,10 +12,9 @@ exports.caseAdvancedSearchInteractor = (
   applicationContext,
   { searchParams },
 ) => {
-  const queryString = querystring.stringify(searchParams);
-
   return get({
     applicationContext,
-    endpoint: `/cases/search?${queryString}`,
+    endpoint: '/cases/search',
+    params: searchParams,
   });
 };

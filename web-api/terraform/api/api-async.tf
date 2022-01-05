@@ -7,7 +7,7 @@ resource "aws_lambda_function" "api_async_lambda" {
   s3_key           = "api_${var.current_color}.js.zip"
   source_code_hash = var.api_object_hash
   timeout          = "900"
-  memory_size      = "5000"
+  memory_size      = "7000"
 
   layers = [
     aws_lambda_layer_version.puppeteer_layer.arn
@@ -85,16 +85,36 @@ resource "aws_api_gateway_integration" "api_async_integration_post" {
   type                    = "AWS"
   uri                     = aws_lambda_function.api_async_lambda.invoke_arn
 
-  request_templates = {
+request_templates = {
     "application/json" = <<EOF
 {
-"body" : $input.json('$'),
-"path" : "$context.path",
-"httpMethod" : "$context.httpMethod",
-"headers" : {
-  "Authorization": "$input.params('Authorization')",
-  "Content-Type": "$input.params('Content-Type')"
-}
+  "body" : $input.json('$'),
+  "path" : "$context.path",
+  "httpMethod" : "$context.httpMethod",
+  "headers" : {
+    "Authorization": "$input.params('Authorization')",
+    "content-type": "$input.params('Content-Type')"
+  },
+  "requestContext" : {
+    "account-id" : "$context.identity.accountId",
+    "api-id" : "$context.apiId",
+    "api-key" : "$context.identity.apiKey",
+    "authorizer-principal-id" : "$context.authorizer.principalId",
+    "caller" : "$context.identity.caller",
+    "cognito-authentication-provider" : "$context.identity.cognitoAuthenticationProvider",
+    "cognito-authentication-type" : "$context.identity.cognitoAuthenticationType",
+    "cognito-identity-id" : "$context.identity.cognitoIdentityId",
+    "cognito-identity-pool-id" : "$context.identity.cognitoIdentityPoolId",
+    "http-method" : "$context.httpMethod",
+    "stage" : "$context.stage",
+    "source-ip" : "$context.identity.sourceIp",
+    "user" : "$context.identity.user",
+    "user-agent" : "$context.identity.userAgent",
+    "user-arn" : "$context.identity.userArn",
+    "request-id" : "$context.requestId",
+    "resource-id" : "$context.resourceId",
+    "resource-path" : "$context.resourcePath"
+  }
 }
 EOF
   }
@@ -118,16 +138,36 @@ resource "aws_api_gateway_integration" "api_async_integration_put" {
   type                    = "AWS"
   uri                     = aws_lambda_function.api_async_lambda.invoke_arn
 
-  request_templates = {
+request_templates = {
     "application/json" = <<EOF
 {
-"body" : $input.json('$'),
-"path" : "$context.path",
-"httpMethod" : "$context.httpMethod",
-"headers" : {
-  "Authorization": "$input.params('Authorization')",
-  "Content-Type": "$input.params('Content-Type')"
-}
+  "body" : $input.json('$'),
+  "path" : "$context.path",
+  "httpMethod" : "$context.httpMethod",
+  "headers" : {
+    "Authorization": "$input.params('Authorization')",
+    "content-type": "$input.params('Content-Type')"
+  },
+  "requestContext" : {
+    "account-id" : "$context.identity.accountId",
+    "api-id" : "$context.apiId",
+    "api-key" : "$context.identity.apiKey",
+    "authorizer-principal-id" : "$context.authorizer.principalId",
+    "caller" : "$context.identity.caller",
+    "cognito-authentication-provider" : "$context.identity.cognitoAuthenticationProvider",
+    "cognito-authentication-type" : "$context.identity.cognitoAuthenticationType",
+    "cognito-identity-id" : "$context.identity.cognitoIdentityId",
+    "cognito-identity-pool-id" : "$context.identity.cognitoIdentityPoolId",
+    "http-method" : "$context.httpMethod",
+    "stage" : "$context.stage",
+    "source-ip" : "$context.identity.sourceIp",
+    "user" : "$context.identity.user",
+    "user-agent" : "$context.identity.userAgent",
+    "user-arn" : "$context.identity.userArn",
+    "request-id" : "$context.requestId",
+    "resource-id" : "$context.resourceId",
+    "resource-path" : "$context.resourcePath"
+  }
 }
 EOF
   }
@@ -154,12 +194,33 @@ resource "aws_api_gateway_integration" "api_async_integration_get" {
   request_templates = {
     "application/json" = <<EOF
 {
-"path" : "$context.path",
-"httpMethod" : "$context.httpMethod",
-"headers" : {
-  "Authorization": "$input.params('Authorization')",
-  "Content-Type": "$input.params('Content-Type')"
-}
+  "body" : $input.json('$'),
+  "path" : "$context.path",
+  "httpMethod" : "$context.httpMethod",
+  "headers" : {
+    "Authorization": "$input.params('Authorization')",
+    "content-type": "$input.params('Content-Type')"
+  },
+  "requestContext" : {
+    "account-id" : "$context.identity.accountId",
+    "api-id" : "$context.apiId",
+    "api-key" : "$context.identity.apiKey",
+    "authorizer-principal-id" : "$context.authorizer.principalId",
+    "caller" : "$context.identity.caller",
+    "cognito-authentication-provider" : "$context.identity.cognitoAuthenticationProvider",
+    "cognito-authentication-type" : "$context.identity.cognitoAuthenticationType",
+    "cognito-identity-id" : "$context.identity.cognitoIdentityId",
+    "cognito-identity-pool-id" : "$context.identity.cognitoIdentityPoolId",
+    "http-method" : "$context.httpMethod",
+    "stage" : "$context.stage",
+    "source-ip" : "$context.identity.sourceIp",
+    "user" : "$context.identity.user",
+    "user-agent" : "$context.identity.userAgent",
+    "user-arn" : "$context.identity.userArn",
+    "request-id" : "$context.requestId",
+    "resource-id" : "$context.resourceId",
+    "resource-path" : "$context.resourcePath"
+  }
 }
 EOF
   }

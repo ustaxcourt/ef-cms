@@ -13,7 +13,7 @@ describe('clearLoginFormAction', () => {
     });
 
     expect(result.state.form).toMatchObject({
-      name: '',
+      email: '',
     });
   });
 });
