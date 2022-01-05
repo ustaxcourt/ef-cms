@@ -5,6 +5,11 @@
   "license": "CC0-1.0",
   "repository": "https://github.com/ustaxcourt/ef-cms",
   "dependencies": {
+    "@aws-crypto/sha256-browser": "^2.0.1",
+    "@aws-sdk/credential-provider-node": "^3.45.0",
+    "@aws-sdk/node-http-handler": "^3.40.0",
+    "@aws-sdk/protocol-http": "^3.40.0",
+    "@aws-sdk/signature-v4": "^3.40.0",
     "@babel/cli": "^7.16.0",
     "@babel/core": "^7.16.0",
     "@babel/eslint-parser": "^7.16.3",
