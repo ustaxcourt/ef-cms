@@ -19,10 +19,10 @@ export const KeywordSearchField = connect(
           <span className="text-semibold">Search by keyword and phrase</span>
         </p>
         <input
-          aria-describedby="search-orders-header search-description"
-          aria-label="order-search"
+          aria-describedby="search-keywords-header search-description"
+          aria-label="keyword-search"
           className="usa-input maxw-tablet-lg"
-          id="order-search"
+          id="keyword-search"
           name="keyword"
           type="text"
           value={searchValue || ''}

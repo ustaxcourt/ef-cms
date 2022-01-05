@@ -67,6 +67,9 @@ const {
   associateUserWithCasePending,
 } = require('../../shared/src/persistence/dynamo/cases/associateUserWithCasePending');
 const {
+  authenticateUserInteractor,
+} = require('../../shared/src/business/useCases/auth/authenticateUserInteractor');
+const {
   batchDownloadTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/batchDownloadTrialSessionInteractor');
 const {
@@ -140,6 +143,9 @@ const {
 const {
   completeWorkItemInteractor,
 } = require('../../shared/src/business/useCases/workitems/completeWorkItemInteractor');
+const {
+  confirmAuthCode,
+} = require('../../shared/src/persistence/cognito/confirmAuthCode');
 const {
   Correspondence,
 } = require('../../shared/src/business/entities/Correspondence');
@@ -838,6 +844,12 @@ const {
   receiptOfFiling,
 } = require('../../shared/src/business/utilities/documentGenerators/receiptOfFiling');
 const {
+  refreshAuthTokenInteractor,
+} = require('../../shared/src/business/useCases/auth/refreshAuthTokenInteractor');
+const {
+  refreshToken,
+} = require('../../shared/src/persistence/cognito/refreshToken');
+const {
   removeCaseFromHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/removeCaseFromHearing');
 const {
@@ -1431,6 +1443,21 @@ const gatewayMethods = {
   advancedDocumentSearch,
   caseAdvancedSearch,
   casePublicSearch: casePublicSearchPersistence,
+  confirmAuthCode: process.env.IS_LOCAL
+    ? (applicationContext, { code }) => {
+        const jwt = require('jsonwebtoken');
+        const { userMap } = require('../../shared/src/test/mockUserTokenMap');
+        const user = {
+          ...userMap[code],
+          sub: userMap[code].userId,
+        };
+        const token = jwt.sign(user, 'secret');
+        return {
+          refreshToken: token,
+          token,
+        };
+      }
+    : confirmAuthCode,
   createNewPetitionerUser,
   createNewPractitionerUser,
   deleteCaseDeadline,
@@ -1508,6 +1535,11 @@ const gatewayMethods = {
   getWorkItemsByWorkItemId,
   isEmailAvailable,
   isFileExists,
+  refreshToken: process.env.IS_LOCAL
+    ? (applicationContext, { refreshToken: aRefreshToken }) => ({
+        token: aRefreshToken,
+      })
+    : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   updateCaseCorrespondence,
@@ -1865,6 +1897,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         assignWorkItemsInteractor,
         associateIrsPractitionerWithCaseInteractor,
         associatePrivatePractitionerWithCaseInteractor,
+        authenticateUserInteractor,
         batchDownloadTrialSessionInteractor,
         blockCaseFromTrialInteractor,
         caseAdvancedSearchInteractor,
@@ -1974,6 +2007,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         orderPublicSearchInteractor,
         prioritizeCaseInteractor,
         processStreamRecordsInteractor,
+        refreshAuthTokenInteractor,
         removeCaseFromTrialInteractor,
         removeCasePendingItemInteractor,
         removeConsolidatedCasesInteractor,

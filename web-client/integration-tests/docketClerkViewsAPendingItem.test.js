@@ -14,13 +14,16 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/prese
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
-);
-
-const cerebralTest = setupTest();
-
 describe('a docket clerk uploads a pending item and sees that it is pending', () => {
+  let caseDetail;
+  let pendingItemsCount;
+
+  const formattedCaseDetail = withAppContextDecorator(
+    formattedCaseDetailComputed,
+  );
+
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
     global.window.pdfjsObj = {
@@ -35,9 +38,6 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  let caseDetail;
-  let pendingItemsCount;
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case', async () => {
@@ -150,7 +150,11 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     ).toEqual('documentView');
   });
 
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, fakeFile);
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
+    cerebralTest,
+    fakeFile,
+    'EVID',
+  );
 
   it('docket clerk views pending report items', async () => {
     await refreshElasticsearchIndex();
@@ -182,5 +186,28 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       caseReceivedAtFormatted,
     );
     expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
+  });
+
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
+    cerebralTest,
+    fakeFile,
+    'MOTR',
+  );
+
+  it('docket clerk views pending motion to proceed remotely', async () => {
+    await refreshElasticsearchIndex();
+
+    await cerebralTest.runSequence('gotoPendingReportSequence');
+
+    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
+      judge: 'Chief Judge',
+    });
+
+    const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    const pendingMOTRItem = pendingItems.find(
+      item => item.docketEntryId === cerebralTest.docketEntryId,
+    );
+
+    expect(pendingMOTRItem).toBeDefined();
   });
 });

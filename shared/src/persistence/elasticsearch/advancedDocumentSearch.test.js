@@ -367,6 +367,22 @@ describe('advancedDocumentSearch', () => {
     });
   });
 
+  it('omits docket entries with isSealed:true when doing an opinion search', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: [BENCH_OPINION_EVENT_CODE],
+      isOpinionSearch: true,
+      judge: 'Judge Guy Fieri',
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must_not,
+    ).toEqual([
+      { term: { 'isStricken.BOOL': true } },
+      { term: { 'isSealed.BOOL': true } },
+    ]);
+  });
+
   it('does a search for docket number of a case', async () => {
     await advancedDocumentSearch({
       applicationContext,

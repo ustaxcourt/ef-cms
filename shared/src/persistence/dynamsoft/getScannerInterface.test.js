@@ -2,13 +2,9 @@ const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
 const { getScannerInterface } = require('./getScannerInterface');
-const { JSDOM } = require('jsdom');
 const { SCAN_MODES } = require('../../business/entities/EntityConstants');
 
 describe('getScannerInterface', () => {
-  const jsdom = new JSDOM('');
-  global.window = jsdom.window;
-
   window['EnumDWT_ImageType'] = { IT_PNG: 1 };
   window['EnumDWT_PixelType'] = { TWPT_RGB: 1 };
   window['EnumDWT_CapSupportedSizes'] = { TWSS_A4: 1 };
