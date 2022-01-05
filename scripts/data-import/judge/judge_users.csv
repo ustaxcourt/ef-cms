@@ -81,3 +81,5 @@ Wiles,Judge,Wiles,legacy.judge.wiles@example.com,legacyJudge,legacyJudgesChamber
 Williams,Judge,Williams,legacy.judge.williams@example.com,legacyJudge,legacyJudgesChambers
 Wolfe,Special Trial Judge,Wolfe,legacy.judge.wolfe@example.com,legacyJudge,legacyJudgesChambers
 Wright,Judge,Wright,legacy.judge.wright@example.com,legacyJudge,legacyJudgesChambers
+Choi,Special Trial Judge,Eunkyong Choi,stjudge.choi@dawson.ustaxcourt.gov,judge,choisChambers
+Landy,Special Trial Judge,Adam B. Landy,stjudge.landy@dawson.ustaxcourt.gov,judge,landysChambers

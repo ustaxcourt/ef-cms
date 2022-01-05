@@ -188,6 +188,33 @@ resource "aws_cloudfront_distribution" "public_distribution" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
+  ordered_cache_behavior {
+    path_pattern     = "/deployed-date.txt"
+    allowed_methods  = ["GET", "HEAD", "OPTIONS"]
+    cached_methods   = ["GET", "HEAD", "OPTIONS"]
+    target_origin_id = "group-${var.current_color}.${var.dns_domain}"
+
+    lambda_function_association {
+      event_type   = "origin-response"
+      lambda_arn   = var.header_security_arn
+      include_body = false
+    }
+
+    forwarded_values {
+      query_string = false
+
+      cookies {
+        forward = "none"
+      }
+    }
+
+    min_ttl                = 0
+    default_ttl            = 180
+    max_ttl                = 180
+    compress               = true
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
   lifecycle {
     ignore_changes = [aliases]
   }

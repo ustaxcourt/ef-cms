@@ -35,6 +35,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       ],
       docketNumber: '123-45',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      hasSealedDocuments: false,
       irsPractitioners: [],
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
@@ -166,6 +167,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({
         ...caseDetail,
         docketEntries: sealedDocketEntries,
+        hasSealedDocuments: true,
         privatePractitioners: [],
       });
 

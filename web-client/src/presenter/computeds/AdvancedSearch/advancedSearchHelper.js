@@ -30,7 +30,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } =
     applicationContext.getConstants();
 
-  const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
+  const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
 

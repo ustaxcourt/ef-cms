@@ -35,7 +35,7 @@ describe('createAndEnableSmoketestUser', () => {
   it('should exit with an error code when anything fails', async () => {
     const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
 
-    createDawsonUser.mockRejectedValue(new Error('oh no!'));
+    createDawsonUser.mockRejectedValueOnce(new Error('oh no!'));
 
     await createAndEnableSmoketestUser();
     expect(mockExit).toHaveBeenCalledWith(1);

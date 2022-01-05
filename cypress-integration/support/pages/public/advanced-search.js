@@ -1,3 +1,7 @@
+const {
+  ADVANCED_SEARCH_OPINION_TYPES,
+} = require('../../../../shared/src/business/entities/EntityConstants');
+
 exports.navigateTo = () => {
   cy.visit('/');
 };
@@ -15,16 +19,42 @@ exports.enterPetitionerName = name => {
   cy.get('input#petitioner-name').type(name);
 };
 
-exports.enterDocumentKeywordForOpinionSearch = keyword => {
-  cy.get('input#opinion-search').type(keyword);
+exports.getPetitionerNameInput = () => {
+  return cy.get('input#petitioner-name');
 };
 
-exports.enterStartDateForOpinionSearch = date => {
-  cy.get('input#startDate-date-start').type(date);
+exports.enterCaseTitleOrPetitionerName = name => {
+  cy.get('input#title-or-name').type(name);
+};
+
+exports.getCaseTitleOrPetitionerNameInput = () => {
+  return cy.get('input#title-or-name');
+};
+
+exports.enterDocumentKeywordForAdvancedSearch = keyword => {
+  cy.get('input#keyword-search').type(keyword);
+};
+
+exports.getKeywordInput = () => {
+  return cy.get('input#keyword-search');
 };
 
 exports.enterDocumentDocketNumber = docketNumber => {
   cy.get('input#docket-number').type(docketNumber);
+};
+
+exports.getDocketNumberInput = () => {
+  return cy.get('input#docket-number');
+};
+
+exports.unselectOpinionTypesExceptBench = () => {
+  let opinionTypes = Object.keys(ADVANCED_SEARCH_OPINION_TYPES).filter(
+    type => type !== 'Bench',
+  );
+
+  opinionTypes.forEach(opinionType => {
+    cy.get('label').contains(opinionType).click();
+  });
 };
 
 exports.searchForCaseByPetitionerInformation = () => {
@@ -43,6 +73,14 @@ exports.searchResultsTable = () => {
   return cy.get('table.search-results');
 };
 
+exports.firstSearchResultJudgeField = () => {
+  return cy.contains('td', 'Foley');
+};
+
 exports.docketRecordTable = () => {
   return cy.get('table#docket-record-table');
+};
+
+exports.searchForOrderByJudge = judge => {
+  return cy.get('#order-judge').select(judge);
 };

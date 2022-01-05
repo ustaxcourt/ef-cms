@@ -259,7 +259,7 @@ export const ScanBatchPreviewer = connect(
       );
     };
 
-    const renderIframePreview = () => {
+    const renderPdfPreview = () => {
       return (
         <>
           {showModal === 'ConfirmDeletePDFModal' && (
@@ -504,7 +504,7 @@ export const ScanBatchPreviewer = connect(
           {scanBatchPreviewerHelper.uploadMode === 'upload' && renderUpload()}
 
           {scanBatchPreviewerHelper.uploadMode === 'preview' &&
-            renderIframePreview()}
+            renderPdfPreview()}
         </div>
 
         {scanBatchPreviewerHelper.uploadMode === 'scan' &&

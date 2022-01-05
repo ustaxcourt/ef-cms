@@ -1,5 +1,4 @@
 const axios = require('axios');
-const parse = require('csv-parse');
 const {
   gatherRecords,
   getCsvOptions,
@@ -9,6 +8,7 @@ const {
   getToken,
   readCsvFile,
 } = require('../../../web-api/importHelpers');
+const { parse } = require('csv-parse');
 
 const CSV_HEADERS = [
   'name',

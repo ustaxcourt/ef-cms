@@ -46,6 +46,10 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.receivedAt = rawCase.receivedAt;
   this._score = rawCase['_score'];
 
+  rawCase.hasSealedDocuments = (rawCase.docketEntries || []).some(
+    docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
+  );
+
   this.isSealed = isSealedCase(rawCase);
 
   const currentUser = applicationContext.getCurrentUser();

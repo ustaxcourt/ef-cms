@@ -1,14 +1,5 @@
 import { state } from 'cerebral';
 
-export const clearMaintenanceModeAction = async ({
-  applicationContext,
-  store,
-}) => {
+export const clearMaintenanceModeAction = ({ store }) => {
   store.unset(state.maintenanceMode);
-
-  await applicationContext
-    .getUseCases()
-    .removeItemInteractor(applicationContext, {
-      key: 'maintenanceMode',
-    });
 };

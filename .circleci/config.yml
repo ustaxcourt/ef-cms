@@ -1,19 +1,7 @@
 version: 2.1
+orbs:
+  git-shallow-clone: guitarrapc/git-shallow-clone@2.4.0
 commands:
-  checkout-and-cache-source-code:
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
   npm-install:
     steps:
       - run:
@@ -39,10 +27,10 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: medium+
     parallelism: 8
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create web-client Artifacts Directory
@@ -60,9 +48,14 @@ jobs:
             AWS_SECRET_ACCESS_KEY=S3RVER \
             npm run start:api:ci > /tmp/web-client/server-output.txt &
             URL=http://localhost:4000/api/swagger ./wait-until.sh
+            URL=http://localhost:9200 ./wait-until.sh
+            URL=http://localhost:9000/ ./wait-until.sh
+            URL=http://localhost:8000/shell ./wait-until.sh
+            sleep 20 # figure out why we need to sleep here since we wait above ^
             TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
             NO_SCANNER=true \
             SKIP_VIRUS_SCAN=true \
+            IS_LOCAL=true \
             AWS_ACCESS_KEY_ID=S3RVER \
             AWS_SECRET_ACCESS_KEY=S3RVER \
             TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
@@ -93,9 +86,9 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -113,14 +106,16 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
-            ./wait-until-services.sh
+            URL=http://localhost:1234 ./wait-until.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
+            URL=http://localhost:8000/shell ./wait-until.sh
+            URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
             sleep 10
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
+            npm run test:pa11y:4 --node-flags --max-old-space-size=1024
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -141,9 +136,9 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: medium+
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -161,12 +156,11 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
-            URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
+            URL=http://localhost:5000/ ./wait-until.sh
             sleep 10
-            npm run test:pa11y:public --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public --node-flags --max-old-space-size=1536
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -187,9 +181,9 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: medium+
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -207,12 +201,11 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
-            URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
+            URL=http://localhost:5000/ ./wait-until.sh
             sleep 10
-            npm run test:pa11y:public-search --node-flags --max-old-space-size=1024
+            npm run test:pa11y:public-search --node-flags --max-old-space-size=1536
       - store_artifacts:
           path: /root/project/web-client/pa11y/pa11y-screenshots
       - store_artifacts:
@@ -233,9 +226,9 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -253,12 +246,11 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
             fi
-            npx --no-install run-p start:api:ci start:client:ci > /tmp/cypress/cypress-output.txt &
+            npx --no-install run-p start:api:ci start:client:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             sleep 5
@@ -283,9 +275,9 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: xlarge
+    resource_class: medium+
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -303,7 +295,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -333,9 +324,9 @@ jobs:
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
-    resource_class: large
+    resource_class: medium+
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -352,8 +343,8 @@ jobs:
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
+            CHECK_DEPLOY_DATE_INTERVAL: 5000
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -364,7 +355,7 @@ jobs:
             sleep 5
             npm run cypress:integration:public
       - store_artifacts:
-          path: /root/project/cypress/videos/
+          path: /root/project/cypress-integration/videos/public
       - store_artifacts:
           path: /tmp/cypress
 
@@ -372,11 +363,18 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-      - checkout
+      - git-shallow-clone/checkout
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run: |
+          nvm install v14.17.3
+          node -v
+          nvm alias default v14.17.3
       - run:
           name: Setup Env
           command: |
-            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
@@ -428,6 +426,8 @@ jobs:
              -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
              -e "BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}" \
              -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
+             -e "PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}" \
+             -e "LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}" \
              --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
       - run:
           no_output_timeout: 20m
@@ -443,6 +443,8 @@ jobs:
              -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" \
              -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" \
              -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" \
+             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
+             -e "ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}" \
              -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" \
              -e "ZONE_NAME=${ZONE_NAME}" \
              --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
@@ -460,7 +462,6 @@ jobs:
           name: 'Deploy - Web Client - S3'
           command: |
             docker run \
-             -e "CI=${CI}" \
              -e "ENV=${ENV}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
@@ -470,6 +471,7 @@ jobs:
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
              -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
+             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
              -e "SESSION_TIMEOUT=${SESSION_TIMEOUT}" \
              -e "SESSION_MODAL_TIMEOUT=${SESSION_MODAL_TIMEOUT}" \
@@ -478,7 +480,6 @@ jobs:
           name: 'Deploy - Public Web Client - S3'
           command: |
             docker run \
-             -e "CI=${CI}" \
              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
              -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
@@ -487,6 +488,7 @@ jobs:
              -e "CURRENT_COLOR=${CURRENT_COLOR}" \
              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
+             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
              -e "ENV=${ENV}" \
              -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" \
              --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
@@ -567,11 +569,18 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-      - checkout
+      - git-shallow-clone/checkout
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run: |
+          nvm install v14.17.3
+          node -v
+          nvm alias default v14.17.3
       - run:
           name: Setup Env
           command: |
-            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
@@ -580,8 +589,6 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
       - run:
           name: Deploy Migration Cron Lambda
@@ -700,18 +707,23 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-      - checkout
+      - git-shallow-clone/checkout
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run: |
+          nvm install v14.17.3
+          node -v
+          nvm alias default v14.17.3
       - run:
           name: Setup Env
           command: |
-            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
-            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
       - run:
           name: Disable Check Reindex Status Cron
@@ -729,9 +741,9 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium+
     steps:
-      - checkout
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -739,7 +751,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
@@ -760,9 +772,9 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium+
     steps:
-      - checkout
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -770,7 +782,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
@@ -801,17 +813,14 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large
+    resource_class: medium+
     steps:
-      - checkout
+      - git-shallow-clone/checkout
       - npm-install
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
       - run:
           name: Setup Env
           command: |
-            cat ./env-for-circle/$CIRCLE_BRANCH.sh >> $BASH_ENV
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV

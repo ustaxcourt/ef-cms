@@ -161,6 +161,20 @@ describe('Docket clerk opinion advanced search', () => {
         cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
       ).toEqual([]);
     });
+
+    it('when searching for a sealed opinion', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await updateOpinionForm(cerebralTest, {
+        docketNumber: '129-20',
+      });
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
   });
 
   describe('should return results', () => {
@@ -312,6 +326,7 @@ describe('Docket clerk opinion advanced search', () => {
           entityName: 'InternalDocumentSearchResult',
           eventCode: 'SOP',
           filingDate: '2021-10-25T18:57:31.742Z',
+          hasSealedDocuments: false,
           isFileAttached: true,
           isSealed: false,
           isStricken: false,

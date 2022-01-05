@@ -27,9 +27,6 @@ const {
   DocketRecord,
 } = require('../pdfGenerator/documentTemplates/DocketRecord.jsx');
 const {
-  Feature_8652_NoticeOfReceiptOfPetition,
-} = require('../pdfGenerator/documentTemplates/Feature_8652_NoticeOfReceiptOfPetition.jsx');
-const {
   GettingReadyForTrialChecklist,
 } = require('../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist.jsx');
 const {
@@ -96,7 +93,6 @@ const components = {
   DateServedFooter,
   DocketRecord,
   DocumentService,
-  Feature_8652_NoticeOfReceiptOfPetition,
   GettingReadyForTrialChecklist,
   NoticeOfDocketChange,
   NoticeOfReceiptOfPetition,

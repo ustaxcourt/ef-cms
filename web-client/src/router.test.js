@@ -25,6 +25,8 @@ describe('router', () => {
           return { ROLE_PERMISSIONS };
         case 'user':
           return getUserMock();
+        case 'token':
+          return getUserMock();
         case 'permissions':
           return getPermissionsMock();
         case 'maintenanceMode':

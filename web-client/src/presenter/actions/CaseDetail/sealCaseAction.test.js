@@ -20,7 +20,7 @@ describe('sealCaseAction', () => {
   it('should call path.error when there is an error sealing the case', async () => {
     await applicationContext
       .getUseCases()
-      .sealCaseInteractor.mockRejectedValue(new Error());
+      .sealCaseInteractor.mockRejectedValueOnce(new Error());
 
     await runAction(sealCaseAction, {
       modules: {
