@@ -1,15 +1,34 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { getClosedCasesInteractor } = require('./getClosedCasesInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
+
 jest.mock('../entities/UserCase');
 const { UserCase } = require('../entities/UserCase');
 
 describe('getClosedCasesInteractor', () => {
   let mockFoundCasesList;
+  const recentClosedDate = applicationContext
+    .getUtilities()
+    .createISODateString();
+  const pastClosedDate = applicationContext
+    .getUtilities()
+    .calculateISODate({ dateString: recentClosedDate, howMuch: -1 });
 
   beforeEach(() => {
-    mockFoundCasesList = [MOCK_CASE];
+    mockFoundCasesList = [
+      {
+        ...MOCK_CASE,
+        closedDate: pastClosedDate,
+        status: CASE_STATUS_TYPES.closed,
+      },
+      {
+        ...MOCK_CASE,
+        closedDate: recentClosedDate,
+        status: CASE_STATUS_TYPES.closed,
+      },
+    ];
 
     applicationContext
       .getPersistenceGateway()
@@ -58,15 +77,20 @@ describe('getClosedCasesInteractor', () => {
     expect(UserCase.validateRawCollection).toBeCalled();
   });
 
-  it('should return a list of closed cases', async () => {
+  it('should return a list of closed cases sorted by closedDate descending', async () => {
     MOCK_CASE.status = 'Closed';
     const result = await getClosedCasesInteractor(applicationContext);
 
     expect(result).toMatchObject([
       {
         caseCaption: MOCK_CASE.caseCaption,
+        closedDate: recentClosedDate,
         docketNumber: MOCK_CASE.docketNumber,
         docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
+      },
+      {
+        closedDate: pastClosedDate,
+        docketNumber: MOCK_CASE.docketNumber,
       },
     ]);
   });
