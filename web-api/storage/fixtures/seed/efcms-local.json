@@ -5496,13 +5496,13 @@
     "attachments": true,
     "isStricken": false,
     "documentType": "Answer",
-    "filingDate": "2021-11-21T15:26:23.531Z",
+    "filingDate": "2021-11-20T15:26:23.531Z",
     "isMinuteEntry": false,
     "pending": false,
     "isDraft": false,
-    "receivedAt": "2021-11-21T05:00:00.000Z",
+    "receivedAt": "2021-11-20T05:00:00.000Z",
     "isOnDocketRecord": true,
-    "createdAt": "2021-11-21T15:26:23.531Z",
+    "createdAt": "2021-11-20T15:26:23.531Z",
     "numberOfPages": 2,
     "scenario": "Standard",
     "entityName": "DocketEntry",
@@ -5526,7 +5526,7 @@
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|320-21",
-    "servedAt": "2021-11-21T15:26:23.535Z",
+    "servedAt": "2021-11-20T15:26:23.535Z",
     "docketNumber": "320-21"
   },
   {
@@ -5685,7 +5685,7 @@
     "workItemId": "0be1067a-f8cd-42cc-a1ab-5f93701fb49e",
     "assigneeId": null,
     "sentBy": "Test Petitioner",
-    "createdAt": "2021-11-21T15:26:23.534Z",
+    "createdAt": "2021-11-20T15:26:23.534Z",
     "highPriority": false,
     "assigneeName": null,
     "entityName": "WorkItem",
@@ -5693,19 +5693,19 @@
     "docketNumberWithSuffix": "320-21S",
     "docketEntry": {
       "eventCode": "A",
-      "createdAt": "2021-11-21T15:26:23.531Z",
+      "createdAt": "2021-11-20T15:26:23.531Z",
       "documentType": "Answer",
       "filedBy": "Petr. Rand al'Thor",
       "docketEntryId": "276f47f4-bd04-478d-b1f6-792964cfb94d",
       "documentTitle": "Answer",
       "isFileAttached": true,
-      "receivedAt": "2021-11-21T05:00:00.000Z",
+      "receivedAt": "2021-11-20T05:00:00.000Z",
       "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
     },
     "pk": "case|320-21",
     "docketNumber": "320-21",
     "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-11-21T15:26:23.534Z"
+    "updatedAt": "2021-11-20T15:26:23.534Z"
   },
   {
     "associatedJudge": "Chief Judge",

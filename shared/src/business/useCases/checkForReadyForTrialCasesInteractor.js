@@ -12,8 +12,6 @@ exports.checkForReadyForTrialCasesInteractor = async applicationContext => {
     .getPersistenceGateway()
     .getReadyForTrialCases({ applicationContext });
 
-  console.log('caseCatalog', caseCatalog);
-
   const updateForTrial = async entity => {
     // assuming we want these done serially; if first fails, promise is rejected and error thrown
     const caseEntity = entity.validate();
@@ -49,7 +47,6 @@ exports.checkForReadyForTrialCasesInteractor = async applicationContext => {
 
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
-
         if (
           caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
         ) {
