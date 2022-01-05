@@ -96,6 +96,9 @@ const {
   checkEmailAvailabilityLambda,
 } = require('./users/checkEmailAvailabilityLambda');
 const {
+  checkForReadyForTrialCasesLambda,
+} = require('./cases/checkForReadyForTrialCasesLambda');
+const {
   closeTrialSessionLambda,
 } = require('./trialSessions/closeTrialSessionLambda');
 const {
@@ -1113,6 +1116,21 @@ app.get('/maintenance-mode', lambdaWrapper(getMaintenanceModeLambda));
  * feature-flag
  */
 app.get('/feature-flag/:featureFlag', lambdaWrapper(getFeatureFlagValueLambda));
+
+/**
+ * Lambda CRONs
+ */
+app.get(
+  '/run-check-ready-for-trial',
+  (req, res, next) => {
+    // TODO: is this secure enough for when deployed people can't hit this endpoint?
+    if (!process.env.IS_LOCAL) {
+      res.status(401).send('unauthorized');
+    }
+    next();
+  },
+  lambdaWrapper(checkForReadyForTrialCasesLambda),
+);
 
 /**
  * Authentication/Authorization
