@@ -9,10 +9,10 @@ exports.processPractitionerMappingEntries = async ({
 
   const indexCaseEntryForPractitionerMapping =
     async practitionerMappingRecord => {
+      const practitionerMappingData =
+        practitionerMappingRecord.dynamodb.NewImage ||
+        practitionerMappingRecord.dynamodb.OldImage;
       try {
-        const practitionerMappingData =
-          practitionerMappingRecord.dynamodb.NewImage ||
-          practitionerMappingRecord.dynamodb.OldImage;
         const caseRecords = [];
 
         const caseMetadataWithCounsel = await applicationContext
@@ -66,6 +66,7 @@ exports.processPractitionerMappingEntries = async ({
       } catch (err) {
         applicationContext.logger.error(
           'the practitioner mapping record belongs to a non existing case',
+          practitionerMappingData.pk,
         );
       }
     };
