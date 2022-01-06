@@ -15,7 +15,6 @@ commands:
           key: v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
-            - ~/.cache/Cypress
 
 jobs:
   build-client-integration:
