@@ -25,7 +25,6 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
     const caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
-    console.log('JOB::docket number = ', caseDetail.docketNumber);
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
