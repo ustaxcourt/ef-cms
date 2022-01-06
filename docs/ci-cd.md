@@ -109,7 +109,7 @@ jobs:
 
 ## Docker
 
-We use Docker on our project to build some of the images we need in the CI/CD pipeline.  A majority of the Circle jobs must be run in a docker container, which means we needed to specify which image Circle should use.  We build the [Dockerfile-CI](https://github.com/ustaxcourt/ef-cms/blob/staging/Dockerfile-CI) and publish it to our AWS ecr repository whenever we need to update some of the dependencies.  The script [docker-to-erc.sh](https://github.com/ustaxcourt/ef-cms/blob/staging/docker-to-ecr.sh) can be use to build and publish the latest version of our CI image.
+We use Docker on our project to build some of the images we need in the CI/CD pipeline.  A majority of the Circle jobs must be run in a docker container, which means we needed to specify which image Circle should use.  We build the [Dockerfile](https://github.com/ustaxcourt/ef-cms/blob/staging/Dockerfile) and publish it to our AWS ecr repository whenever we need to update some of the dependencies.  The script [docker-to-erc.sh](https://github.com/ustaxcourt/ef-cms/blob/staging/docker-to-ecr.sh) can be use to build and publish the latest version of our CI image.
 
 We also use a separate image called [Dockerfile](https://github.com/ustaxcourt/ef-cms/blob/staging/Dockerfile) for Circle deploy jobs since we don't care about Cypress when doing deploys.  This image is built and run using the machine executor in Circle, so you don't have to worry about manually building and deploying this image.
 

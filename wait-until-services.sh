@@ -8,3 +8,5 @@
 ( ! command -v curl > /dev/null ) && echo "curl was not found on your path. Please install curl." && exit 1
 
 URL=http://localhost:4000/ ./wait-until.sh
+URL=http://localhost:9200/ ./wait-until.sh
+URL=http://localhost:8000/shell ./wait-until.sh
