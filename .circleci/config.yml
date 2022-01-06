@@ -8,12 +8,10 @@ commands:
       - run:
           name: setup checksums
           command: |
-            CK_P=$(cksum package.json | cut -d ' ' -f 1)
-            CK_PL=$(cksum package-lock.json | cut -d ' ' -f 1)
-            echo "export CHECKSUM=${CK_P}_${CK_PL}" > $BASH_ENV
+            echo 'export PACKAGE_LOCK_CHECKSUM="v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}"' >> $BASH_ENV
       - restore_cache:
           keys:
-            - { { .Environment.CHECKSUM } }
+            - { { .Environment.PACKAGE_LOCK_CHECKSUM } }
       - run:
           name: Install node dependencies
           command: |
@@ -21,7 +19,7 @@ commands:
               npm ci
             fi
       - save_cache:
-          key: { { .Environment.CHECKSUM } }
+          key: { { .Environment.PACKAGE_LOCK_CHECKSUM } }
           paths:
             - node_modules
 
