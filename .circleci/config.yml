@@ -5,14 +5,19 @@ orbs:
 commands:
   npm-install:
     steps:
+      - run:
+          name: setup checksums
+          command: |
+            echo 'export PACKAGE_LOCK_CHECKSUM="v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}"' >> $BASH_ENV
+
       - restore_cache:
           keys:
-            - v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - $PACKAGE_LOCK_CHECKSUM
       - run:
           name: Install node dependencies
           command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
       - save_cache:
-          key: v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: $PACKAGE_LOCK_CHECKSUM
           paths:
             - node_modules
             - ~/.cache/Cypress
