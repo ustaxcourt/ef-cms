@@ -15,12 +15,14 @@ commands:
             - $PACKAGE_LOCK_CHECKSUM
       - run:
           name: Install node dependencies
-          command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
+          command: |
+            if [ ! -d node_modules ]; then
+              npm ci
+            fi
       - save_cache:
           key: $PACKAGE_LOCK_CHECKSUM
           paths:
             - node_modules
-            - ~/.cache/Cypress
 
 jobs:
   build-client-integration:
