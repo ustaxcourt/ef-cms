@@ -1,7 +1,7 @@
 version: 2.1
 orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.4.0
-  cypress: cypress-io/cypress@1.29.0
+  # cypress: cypress-io/cypress@1.29.0
 
 commands:
   npm-install:
@@ -16,6 +16,7 @@ commands:
           key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
           paths:
             - node_modules
+            - /root/.cache/Cypress
 
 jobs:
   build-client-integration:
@@ -741,7 +742,38 @@ jobs:
                -e "ENV=${ENV}" \
                --rm efcms /bin/sh -c "./disable-reindex-cron.sh"
 
-  # smoketests:
+  smoketests:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Create Cypress Artifacts Directory
+          command: mkdir /tmp/cypress
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: 'Disable Maintenance Mode'
+          command: npm run maintenance:disengage $ENV
+      - run:
+          name: 'Cypress Smoke Tests'
+          command: npm run cypress:smoketests
+      - run:
+          name: 'Pa11y Smoke Tests'
+          command: npm run test:pa11y:smoketests
+      - store_artifacts:
+          path: /root/project/cypress-smoketests/videos/
+
+  # cypress/run:
   #   docker:
   #     - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
   #       aws_auth:
@@ -752,37 +784,14 @@ jobs:
   #     - git-shallow-clone/checkout
   #     - npm-install
   #     - run:
-  #         name: Create Cypress Artifacts Directory
-  #         command: mkdir /tmp/cypress
-  #     - run:
   #         name: Setup Env
   #         command: |
   #           cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
   #           source $BASH_ENV
   #           echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-  #     - run:
-  #         name: 'Disable Maintenance Mode'
-  #         command: npm run maintenance:disengage $ENV
-  #     - run:
-  #         name: 'Cypress Smoke Tests'
-  #         command: npm run cypress:smoketests
-  #     - run:
-  #         name: 'Pa11y Smoke Tests'
-  #         command: npm run test:pa11y:smoketests
-  #     - store_artifacts:
-  #         path: /root/project/cypress-smoketests/videos/
-
-  cypress/run:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - command: npm run cypress:smoketests
+  #     - command: npm run cypress:smoketests
+  #     - executor: cypress/base-14
+  #     - cache-key: 'v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}'
 
   smoketests-readonly:
     docker:
@@ -926,7 +935,7 @@ workflows:
       # - disable-reindex-cron:
       #     requires:
       #       - wait-for-reindex
-      - cypress/run:
+      - smoketests:
           # requires:
           #   - disable-reindex-cron
           filters:
