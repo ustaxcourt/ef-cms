@@ -15,7 +15,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}b
+          key: v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
             - ~/.cache/Cypress
