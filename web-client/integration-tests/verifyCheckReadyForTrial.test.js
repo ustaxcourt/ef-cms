@@ -95,11 +95,11 @@ describe('Invoke checkForReadyForTrialCasesLambda via http request', () => {
   });
 
   it('invoke the lambda', async () => {
-    axios.get('http://localhost:4000/run-check-ready-for-trial');
+    await refreshElasticsearchIndex();
+    await axios.get('http://localhost:4000/run-check-ready-for-trial');
   });
 
   it('docket clerk verifies that case status is `General Docket - At Issue (Ready for Trial)`', async () => {
-    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
