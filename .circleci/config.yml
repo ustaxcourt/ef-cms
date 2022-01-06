@@ -7,18 +7,18 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v3-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+            - v4-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: '[ ! -d ~/.npm ] && [ ! -d ~/root/.cache/Cypress ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
       - save_cache:
-          key: v3-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+          key: v4-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
           paths:
             - ~/.npm
             - ~/root/.cache/Cypress
 
 jobs:
-  build-client-integration:
+  build-client-integration
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
