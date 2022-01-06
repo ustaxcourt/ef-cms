@@ -1426,6 +1426,7 @@ Case.prototype.checkForReadyForTrial = function () {
     this.status === CASE_STATUS_TYPES.generalDocket;
 
   if (isCaseGeneralDocketNotAtIssue) {
+    console.log('JOB::got the right status!');
     this.docketEntries.forEach(docketEntry => {
       const isAnswerDocument = includes(
         ANSWER_DOCUMENT_CODES,
@@ -1440,6 +1441,10 @@ Case.prototype.checkForReadyForTrial = function () {
       const requiredTimeElapsedSinceFiling =
         daysElapsedSinceDocumentWasFiled > ANSWER_CUTOFF_AMOUNT_IN_DAYS;
 
+      console.log(
+        'JOB::requiredTimeElapsedSinceFiling = ',
+        requiredTimeElapsedSinceFiling,
+      );
       if (isAnswerDocument && requiredTimeElapsedSinceFiling) {
         this.status = CASE_STATUS_TYPES.generalDocketReadyForTrial;
       }
