@@ -750,26 +750,28 @@ jobs:
     steps:
       - git-shallow-clone/checkout
       - npm-install
-      - run:
-          name: Create Cypress Artifacts Directory
-          command: mkdir /tmp/cypress
-      - run:
-          name: Setup Env
-          command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
-            source $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: 'Disable Maintenance Mode'
-          command: npm run maintenance:disengage $ENV
-      - run:
-          name: 'Cypress Smoke Tests'
+      - cypress/run:
           command: npm run cypress:smoketests
-      - run:
-          name: 'Pa11y Smoke Tests'
-          command: npm run test:pa11y:smoketests
-      - store_artifacts:
-          path: /root/project/cypress-smoketests/videos/
+      # - run:
+      #     name: Create Cypress Artifacts Directory
+      #     command: mkdir /tmp/cypress
+      # - run:
+      #     name: Setup Env
+      #     command: |
+      #       cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+      #       source $BASH_ENV
+      #       echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+      # - run:
+      #     name: 'Disable Maintenance Mode'
+      #     command: npm run maintenance:disengage $ENV
+      # - run:
+      #     name: 'Cypress Smoke Tests'
+      #     command: npm run cypress:smoketests
+      # - run:
+      #     name: 'Pa11y Smoke Tests'
+      #     command: npm run test:pa11y:smoketests
+      # - store_artifacts:
+      #     path: /root/project/cypress-smoketests/videos/
 
   smoketests-readonly:
     docker:
