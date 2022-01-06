@@ -3,11 +3,12 @@ orbs:
   git-shallow-clone: guitarrapc/git-shallow-clone@2.4.0
 
 commands:
-  npm-install:
+  npm-and-cypress-install:
     steps:
       - restore_cache:
           keys:
-            - v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }} # 01
+            - v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v8-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
@@ -18,7 +19,25 @@ commands:
           key: v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
+      - save_cache:
+          key: v8-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          paths:
             - ~/.cache/Cypress
+  npm-install:
+    steps:
+      - restore_cache:
+          keys:
+            - v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+      - run:
+          name: Install node dependencies
+          command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
+      - run:
+          name: Reset package-lock
+          command: 'git checkout -- package-lock.json'
+      - save_cache:
+          key: v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          paths:
+            - node_modules
 
 jobs:
   build-client-integration:
@@ -753,7 +772,7 @@ jobs:
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - npm-install
+      - npm-and-cypress-install
       # - run:
       #     name: Create Cypress Artifacts Directory
       #     command: mkdir /tmp/cypress
@@ -804,7 +823,7 @@ jobs:
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - npm-install
+      - npm-and-cypress-install
       # - run:
       #     name: Create Cypress Artifacts Directory
       #     command: mkdir /tmp/cypress
