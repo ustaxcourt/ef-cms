@@ -12,8 +12,7 @@ commands:
           name: Install node dependencies
           command: '[ ! -d node_modules ] && [ ! -d ~/.cache/Cypress ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
       - save_cache:
-          keys:
-            - v8-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+          key: v8-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
           paths:
             - node_modules
             - ~/.cache/Cypress
