@@ -11,7 +11,7 @@ commands:
             echo 'export PACKAGE_LOCK_CHECKSUM="v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}"' >> $BASH_ENV
       - restore_cache:
           keys:
-            - { { .Environment.PACKAGE_LOCK_CHECKSUM } }
+            - v1-{{ .Environment.PACKAGE_LOCK_CHECKSUM }}
       - run:
           name: Install node dependencies
           command: |
@@ -19,7 +19,7 @@ commands:
               npm ci
             fi
       - save_cache:
-          key: { { .Environment.PACKAGE_LOCK_CHECKSUM } }
+          key: v1-{{ .Environment.PACKAGE_LOCK_CHECKSUM }}
           paths:
             - node_modules
 
