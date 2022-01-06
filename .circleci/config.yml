@@ -18,7 +18,7 @@ commands:
             - ~/root/.cache/Cypress
 
 jobs:
-  build-client-integration
+  build-client-integration:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
         aws_auth:
