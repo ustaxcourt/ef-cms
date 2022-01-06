@@ -966,24 +966,24 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - switch-colors:
-          requires:
-            - smoketests-readonly
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - master
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - dawson
-                - migration
+      # - switch-colors:
+      #     requires:
+      #       - smoketests-readonly
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - master
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - dawson
+      #           - migration
   build-and-deploy-with-context:
     jobs:
       - build-client-integration:
