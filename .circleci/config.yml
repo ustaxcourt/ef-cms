@@ -11,7 +11,6 @@ commands:
             CK_P=$(cksum package.json | cut -d ' ' -f 1)
             CK_PL=$(cksum package-lock.json | cut -d ' ' -f 1)
             echo "export CHECKSUM=${CK_P}_${CK_PL}" > $BASH_ENV
-
       - restore_cache:
           keys:
             - { { .Environment.CHECKSUM } }
