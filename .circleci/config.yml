@@ -11,11 +11,10 @@ commands:
           name: Install node dependencies
           command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
       - save_cache:
-          key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
+          key: v2-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
           paths:
             - node_modules
-            - .cache/Cypress
-
+            - /root/.cache/Cypress
 jobs:
   build-client-integration:
     docker:
