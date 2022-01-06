@@ -7,10 +7,9 @@ commands:
       - restore_cache:
           keys:
             - v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
-            - v1-npm-
       - run:
           name: Install node dependencies
-          command: '[ ! -d node_modules ] && npm ci --cache .npm || echo package.json and package-lock.json unchanged. Using cache.'
+          command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json unchanged. Using cache.'
       - save_cache:
           key: v1-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
           paths:
