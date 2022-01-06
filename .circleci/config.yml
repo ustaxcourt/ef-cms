@@ -10,7 +10,7 @@ commands:
             - v3-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
-          command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
+          command: '[ ! -d ~/.npm ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
       - save_cache:
           key: v3-npm-{{ checksum "package.json" }}-{{checksum "package-lock.json" }}
           paths:
