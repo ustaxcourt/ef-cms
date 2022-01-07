@@ -60,6 +60,7 @@ describe('advancedSearchHelper', () => {
     const result = runCompute(advancedSearchHelper, {
       state: {
         advancedSearchForm: {},
+        advancedSearchTab: 'case',
       },
     });
     expect(result).toEqual({
@@ -75,6 +76,7 @@ describe('advancedSearchHelper', () => {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: {},
+        advancedSearchTab: 'case',
       },
     });
     expect(result).toEqual({
@@ -87,6 +89,7 @@ describe('advancedSearchHelper', () => {
 
   it('returns showPractitionerSearch false when user is an external user', () => {
     globalUser = {
+      advancedSearchTab: 'case',
       role: USER_ROLES.privatePractitioner,
       userId: 'practitioner',
     };
@@ -95,6 +98,7 @@ describe('advancedSearchHelper', () => {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: {},
+        advancedSearchTab: 'case',
       },
     });
     expect(result).toMatchObject({
@@ -112,6 +116,7 @@ describe('advancedSearchHelper', () => {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: {},
+        advancedSearchTab: 'case',
       },
     });
     expect(result).toMatchObject({
@@ -128,6 +133,8 @@ describe('advancedSearchHelper', () => {
             countryType: COUNTRY_TYPES.DOMESTIC,
           },
         },
+
+        advancedSearchTab: 'case',
       },
     });
     expect(result).toMatchObject({
@@ -145,6 +152,7 @@ describe('advancedSearchHelper', () => {
             countryType: COUNTRY_TYPES.INTERNATIONAL,
           },
         },
+        advancedSearchTab: 'case',
       },
     });
     expect(result).toMatchObject({
@@ -158,6 +166,7 @@ describe('advancedSearchHelper', () => {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: 'case',
         searchResults: { case: [] },
       },
     });
@@ -173,6 +182,7 @@ describe('advancedSearchHelper', () => {
       state: {
         ...getBaseState(globalUser),
         advancedSearchForm: { currentPage: 1 },
+        advancedSearchTab: 'case',
         searchResults: {
           case: [
             {

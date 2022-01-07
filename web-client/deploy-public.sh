@@ -6,6 +6,9 @@
 
 ./web-client/build-dist-public.sh $ENV $DEPLOYING_COLOR
 
+
+date > dist-public/deployed-date.txt 
+
 # public app
 aws s3 sync dist-public s3://${DEPLOYING_COLOR}.${EFCMS_DOMAIN} --delete
 aws s3 cp s3://${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html s3://${DEPLOYING_COLOR}.${EFCMS_DOMAIN}/index.html --metadata-directive REPLACE --content-type text/html --cache-control max-age=0
