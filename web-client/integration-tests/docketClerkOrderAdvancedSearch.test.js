@@ -141,6 +141,7 @@ describe('Docket clerk advanced order search', () => {
     });
 
     expect(cerebralTest.getState('advancedSearchForm.orderSearch')).toEqual({
+      dateRange: 'allDates',
       keyword: '',
     });
   });
