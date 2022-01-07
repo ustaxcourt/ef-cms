@@ -11,7 +11,7 @@
 ## Flexion Environments
 | develop | staging |
 | ------- | ------ |
-| [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop) | [![CircleCI](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/ustaxcourt/ef-cms/tree/staging) |
+| [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/develop.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/develop) | [![CircleCI](https://circleci.com/gh/flexion/ef-cms/tree/staging.svg?style=svg)](https://circleci.com/gh/flexion/ef-cms/tree/staging) |
 
 ## Documentation
 
