@@ -1,19 +1,7 @@
 version: 2.1
+orbs:
+  git-shallow-clone: guitarrapc/git-shallow-clone@2.4.0
 commands:
-  checkout-and-cache-source-code:
-    steps:
-      - restore_cache:
-          name: Source - Restoring Cache
-          keys:
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-            - source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-
-            - source-{{ .Environment.CACHE_VERSION }}-
-      - checkout
-      - save_cache:
-          name: Source - Saving Cache
-          key: source-{{ .Environment.CACHE_VERSION }}-{{ .Branch }}-{{ .Revision }}
-          paths:
-            - '.git'
   npm-install:
     steps:
       - run:
@@ -42,7 +30,7 @@ jobs:
     resource_class: large
     parallelism: 8
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create web-client Artifacts Directory
@@ -96,7 +84,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -114,7 +102,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:client:ci >> /tmp/pa11y/pa11y-server.txt &
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             URL=http://localhost:1234 ./wait-until.sh
@@ -145,7 +132,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -163,7 +150,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
@@ -191,7 +177,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Pa11y Artifacts Directory
@@ -209,7 +195,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
             ./wait-until-services.sh
             URL=http://localhost:5000/ CHECK_CODE=404 ./wait-until.sh
@@ -237,7 +222,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -255,7 +240,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -287,7 +271,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -305,7 +289,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -337,7 +320,7 @@ jobs:
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
     resource_class: xlarge
     steps:
-      - checkout-and-cache-source-code
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -354,8 +337,8 @@ jobs:
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
+            CHECK_DEPLOY_DATE_INTERVAL: 5000
           command: |
-            npm run build:all &&
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -366,7 +349,7 @@ jobs:
             sleep 5
             npm run cypress:integration:public
       - store_artifacts:
-          path: /root/project/cypress/videos/
+          path: /root/project/cypress-integration/videos/public
       - store_artifacts:
           path: /tmp/cypress
 
@@ -374,7 +357,14 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-      - checkout
+      - git-shallow-clone/checkout
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run: |
+          nvm install v14.17.3
+          node -v
+          nvm alias default v14.17.3
       - run:
           name: Setup Env
           command: |
@@ -572,7 +562,14 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-      - checkout
+      - git-shallow-clone/checkout
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run: |
+          nvm install v14.17.3
+          node -v
+          nvm alias default v14.17.3
       - run:
           name: Setup Env
           command: |
@@ -585,11 +582,7 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-              cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-              docker build -t efcms -f Dockerfile .
-            fi
+            docker build -t efcms -f Dockerfile .
       - run:
           name: Deploy Migration Cron Lambda
           command: |
@@ -707,7 +700,14 @@ jobs:
     machine:
       docker_layer_caching: true
     steps:
-      - checkout
+      - git-shallow-clone/checkout
+      - run: |
+          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
+          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
+      - run: |
+          nvm install v14.17.3
+          node -v
+          nvm alias default v14.17.3
       - run:
           name: Setup Env
           command: |
@@ -717,8 +717,6 @@ jobs:
       - run:
           name: Build Docker Image
           command: |
-            cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
             docker build -t efcms -f Dockerfile .
       - run:
           name: Disable Check Reindex Status Cron
@@ -738,7 +736,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: large
     steps:
-      - checkout
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -769,7 +767,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: large
     steps:
-      - checkout
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory
@@ -810,7 +808,7 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     resource_class: large
     steps:
-      - checkout
+      - git-shallow-clone/checkout
       - npm-install
       - run:
           name: Create Cypress Artifacts Directory

@@ -57,6 +57,7 @@ describe('Docket clerk opinion advanced search', () => {
     });
 
     expect(cerebralTest.getState('advancedSearchForm.opinionSearch')).toEqual({
+      dateRange: 'allDates',
       keyword: '',
       opinionTypes: {
         [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
