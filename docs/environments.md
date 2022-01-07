@@ -49,7 +49,7 @@ This document covers the initial setup needed to get EF-CMS continuous integrati
 
 - Configure the Dynamsoft TWAIN library, which is used to enable scanning from EF-CMS:
   - Upload the library `.tar.gz` to a folder called Dynamsoft in the S3 bucket named `${EFCMS_DOMAIN}-software`. Note its ARN for CircleCI setup later.
-  - Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile-CI` config, tag it as `latest`, and push it to the repo in ECR.
+  - Deploy Docker images to Amazon ECR with `./docker-to-ecr.sh`. This will build an image per the `Dockerfile` config, tag it as `latest`, and push it to the repo in ECR.
 
 ### 4. Configure CircleCI to test and release code to this environment.
 

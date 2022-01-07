@@ -13,8 +13,8 @@
   "ENV" \
   "DYNAMODB_TABLE_NAME" \
   "ELASTICSEARCH_ENDPOINT" \
-  "FILE_NAME" \
   "REGION" \
+  "FILE_NAME" \
   "USTC_ADMIN_USER" \
   "DEPLOYING_COLOR"
 
@@ -22,9 +22,14 @@
 ( ! command -v node > /dev/null ) && echo "node was not found on your path. Please install node." && exit 1
 ( ! command -v aws > /dev/null ) && echo "aws was not found on your path. Please install aws." && exit 1
 
+echo "clearing elasticsearch"
 ./web-api/clear-elasticsearch-index.sh $ENV $ELASTICSEARCH_ENDPOINT
+echo "setting up elasticsearch"
 ./web-api/setup-elasticsearch-index.sh $ENV
 
+echo "clearing dynamo"
 node ./web-api/clear-dynamodb-table.js $DYNAMODB_TABLE_NAME
+echo "setting up test users"
 node shared/admin-tools/user/setup-test-users.js
+echo "importing judge users"
 ./scripts/data-import/judge/bulk-import-judge-users.sh

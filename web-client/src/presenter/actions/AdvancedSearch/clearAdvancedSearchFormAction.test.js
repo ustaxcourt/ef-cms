@@ -91,7 +91,7 @@ describe('clearAdvancedSearchFormAction', () => {
     });
 
     expect(result.state.advancedSearchForm).toEqual({
-      orderSearch: { keyword: '' },
+      orderSearch: { dateRange: 'allDates', keyword: '' },
     });
   });
 
@@ -108,6 +108,7 @@ describe('clearAdvancedSearchFormAction', () => {
 
     expect(result.state.advancedSearchForm).toEqual({
       opinionSearch: {
+        dateRange: 'allDates',
         keyword: '',
         opinionTypes: {
           [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
