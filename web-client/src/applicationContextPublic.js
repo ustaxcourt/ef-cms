@@ -49,10 +49,13 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
+import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
+import { getItem } from '../../shared/src/persistence/localStorage/getItem';
+import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
@@ -62,6 +65,10 @@ import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/get
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
+import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
+import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
+import { setItem } from '../../shared/src/persistence/localStorage/setItem';
+import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
@@ -80,15 +87,19 @@ const allUseCases = {
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
+  getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
   getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
+  getItemInteractor,
   getMaintenanceModePublicInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
+  removeItemInteractor,
+  setItemInteractor,
   validateCaseAdvancedSearchInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
@@ -156,6 +167,13 @@ const applicationContextPublic = {
       console.timeEnd(key);
     },
   }),
+  getPersistenceGateway: () => {
+    return {
+      getItem,
+      removeItem,
+      setItem,
+    };
+  },
   getPublicSiteUrl,
   getUseCases: () => allUseCases,
   getUtilities: () => {

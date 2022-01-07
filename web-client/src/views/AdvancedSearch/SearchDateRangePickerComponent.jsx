@@ -37,6 +37,12 @@ export const SearchDateRangePickerComponent = connect(
       const startHiddenInput = window.document.querySelector(
         'input[name="startDate-date-start"]',
       );
+
+      if (advancedSearchForm[formType].startDate && startInput) {
+        startInput.value = advancedSearchForm[formType].startDate;
+        startHiddenInput.value = advancedSearchForm[formType].startDate;
+      }
+
       if (!advancedSearchForm[formType].startDate && startInput) {
         startInput.value = '';
         startHiddenInput.value = '';
@@ -55,6 +61,12 @@ export const SearchDateRangePickerComponent = connect(
       const endHiddenInput = window.document.querySelector(
         'input[name="endDate-date-end"]',
       );
+
+      if (advancedSearchForm[formType].endDate && endInput) {
+        endInput.value = advancedSearchForm[formType].endDate;
+        endHiddenInput.value = advancedSearchForm[formType].endDate;
+      }
+
       if (!advancedSearchForm[formType].endDate && endInput) {
         endInput.value = '';
         endHiddenInput.value = '';
