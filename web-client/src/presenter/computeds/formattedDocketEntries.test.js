@@ -398,6 +398,52 @@ describe('formattedDocketEntries', () => {
     });
   });
 
+  describe('formattedDocumentDescriptionWithoutLink', () => {
+    it('should set to the documentDisplay if addToCoversheet to true', () => {
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                addToCoversheet: true,
+                additionalInfoDisplay: 'for Bob',
+                documentTitle: 'Change of Address',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        formattedDocumentDescriptionWithoutLink: 'Change of Address',
+      });
+    });
+
+    it('should not add the additionalInfoDisplay if addToCoversheet is false', () => {
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                addToCoversheet: false,
+                additionalInfoDisplay: 'for Bob',
+                documentTitle: 'Change of Address',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        formattedDocumentDescriptionWithoutLink: 'Change of Address for Bob',
+      });
+    });
+  });
+
   describe('qcNeeded', () => {
     it('should set qcNeeded to true when work item is not read', () => {
       const result = runCompute(formattedDocketEntries, {

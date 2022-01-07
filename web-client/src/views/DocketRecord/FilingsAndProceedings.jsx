@@ -128,10 +128,8 @@ export const FilingsAndProceedings = connect(
         <span
           className={classNames(entry.isStricken && 'stricken-docket-record')}
         >
-          {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
           {entry.showDocumentDescriptionWithoutLink &&
-            !entry.addToCoversheet &&
-            ` ${entry.additionalInfoDisplay}`}
+            entry.formattedDocumentDescriptionWithoutLink}
         </span>
 
         <span> {entry.signatory}</span>
