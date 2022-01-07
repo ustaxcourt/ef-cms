@@ -390,17 +390,15 @@ jobs:
           path: /tmp/cypress
 
   deploy:
-    machine:
-      docker_layer_caching: true
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: large # medium+ makes the webpack build very slow
     steps:
       - git-shallow-clone/checkout
-      - run: |
-          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-      - run: |
-          nvm install v14.17.3
-          node -v
-          nvm alias default v14.17.3
+      - npm-install
       - run:
           name: Setup Env
           command: |
@@ -412,20 +410,10 @@ jobs:
           name: Build Docker Image
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-            cd web-api/runtimes/clamav && ./build.sh && cd ../../..
-            docker build -t efcms -f Dockerfile .
       - run:
           name: Setup Blue Green Migration If Needed
           command: |
-            docker run \
-              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-              -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-              -e "ZONE_NAME=${ZONE_NAME}" \
-              -e "CI=${CI}" \
-              -e "ENV=${ENV}" \
-              --rm efcms /bin/sh -c "./setup-for-blue-green-migration.sh"
+            ./setup-for-blue-green-migration.sh
       - run:
           name: Setup Migrate Flag
           command: echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
@@ -436,112 +424,33 @@ jobs:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
-            docker run \
-             -e "CI=${CI}" \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             -e "CIRCLE_BRANCH=${CIRCLE_BRANCH}" \
-             -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
-             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
-             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-             -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-             -e "EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}" \
-             -e "ES_INSTANCE_COUNT=${ES_INSTANCE_COUNT}" \
-             -e "ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}" \
-             -e "IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}" \
-             -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
-             -e "ZONE_NAME=${ZONE_NAME}" \
-             -e "DISABLE_EMAILS=${DISABLE_EMAILS}" \
-             -e "ES_VOLUME_SIZE=${ES_VOLUME_SIZE}" \
-             -e "BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}" \
-             -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
-             -e "PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}" \
-             -e "LOWER_ENV_ACCOUNT_ID=${LOWER_ENV_ACCOUNT_ID}" \
-             --rm efcms /bin/sh -c "cd web-api/terraform/main && ../bin/deploy-app.sh ${ENV}"
+            cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web Client - Terraform'
           command: |
-            docker run \
-             -e "CI=${CI}" \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
-             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-             -e "DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}" \
-             -e "DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}" \
-             -e "DYNAMSOFT_URL=${DYNAMSOFT_URL}" \
-             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
-             -e "ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}" \
-             -e "IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}" \
-             -e "ZONE_NAME=${ZONE_NAME}" \
-             --rm efcms /bin/sh -c "cd web-client/terraform/main && ../bin/deploy-app.sh $ENV"
+            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
       - run:
           name: Setup Elasticsearch Index Settings
           command: |
-            docker run \
-             -e "CI=${CI}" \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-             -e "ZONE_NAME=${ZONE_NAME}" \
-             --rm efcms /bin/sh -c "./web-api/setup-elasticsearch-index.sh ${ENV}"
+            ./web-api/setup-elasticsearch-index.sh $ENV
       - run:
           name: 'Deploy - Web Client - S3'
           command: |
-            docker run \
-             -e "ENV=${ENV}" \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
-             -e "CLIENT_STAGE=${CLIENT_STAGE}" \
-             -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
-             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
-             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-             -e "DYNAMSOFT_URL_OVERRIDE=${DYNAMSOFT_URL_OVERRIDE}" \
-             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
-             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-             -e "SESSION_TIMEOUT=${SESSION_TIMEOUT}" \
-             -e "SESSION_MODAL_TIMEOUT=${SESSION_MODAL_TIMEOUT}" \
-             --rm efcms /bin/sh -c "./web-client/deploy-ui.sh"
+            ./web-client/deploy-ui.sh
       - run:
           name: 'Deploy - Public Web Client - S3'
           command: |
-            docker run \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             -e "CIRCLE_SHA1=${CIRCLE_SHA1}" \
-             -e "CLIENT_STAGE=${CLIENT_STAGE}" \
-             -e "COGNITO_SUFFIX=${COGNITO_SUFFIX}" \
-             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
-             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-             -e "PDF_EXPRESS_LICENSE_KEY=${PDF_EXPRESS_LICENSE_KEY}" \
-             -e "ENV=${ENV}" \
-             -e "STATUSPAGE_DNS_RECORD=${STATUSPAGE_DNS_RECORD}" \
-             --rm efcms /bin/sh -c "./web-client/deploy-public.sh"
+            ./web-client/deploy-public.sh
       - run:
           name: 'Deploy - Web API - Cognito Customize'
           command: |
-            docker run \
-             -e "CI=${CI}" \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             --rm efcms /bin/sh -c "cd web-api && ./setup-cognito-ui.sh ${ENV}"
+            cd web-api && ./setup-cognito-ui.sh $ENV
       - run:
           name: 'Deploy - Web API - Smoke Tests - us-east-1'
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run \
-               -e "CI=${CI}" \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "CURRENT_COLOR=${CURRENT_COLOR}" \
-               -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
-               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-               --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-east-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}"
+              cd web-api && node smoke-tests.js $ENV us-east-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}
             else
               echo "skipping…"
             fi
@@ -549,46 +458,22 @@ jobs:
           name: 'Deploy - Web API - Smoke Tests - us-west-1'
           command: |
             if [ "${CIRCLE_BRANCH}" == "develop" ] || [ "${CIRCLE_BRANCH}" == "experimental1" ] || [ "${CIRCLE_BRANCH}" == "experimental2" ] || [ "${CIRCLE_BRANCH}" == "experimental3" ] || [ "${CIRCLE_BRANCH}" == "experimental4" ] || [ "${CIRCLE_BRANCH}" == "experimental5" ] || [ "${CIRCLE_BRANCH}" == "staging" ] || [ "${CIRCLE_BRANCH}" == "irs" ]; then
-              docker run \
-               -e "CI=${CI}" \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "CURRENT_COLOR=${CURRENT_COLOR}" \
-               -e "DEFAULT_ACCOUNT_PASS=${DEFAULT_ACCOUNT_PASS}" \
-               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-               --rm efcms /bin/sh -c "cd web-api && node smoke-tests.js ${ENV} us-west-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}"
+              cd web-api && node smoke-tests.js $ENV us-west-1 ${DEPLOYING_COLOR} ${DEFAULT_ACCOUNT_PASS}
             else
               echo "skipping…"
             fi
       - run:
           name: 'Deploy - Authorizer Smoke Tests'
           command: |
-            docker run \
-             -e "CI=${CI}" \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-             -e "CURRENT_COLOR=${CURRENT_COLOR}" \
-             -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-             --rm efcms /bin/sh -c "npm run verify-authorizers -- ${ENV}"
+            npm run verify-authorizers -- $ENV
       - run:
           name: 'Deploy - Verify Private S3 Buckets'
           command: |
-            docker run \
-             -e "CI=${CI}" \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-             --rm efcms /bin/sh -c "npm run verify-private-s3-buckets -- ${ENV}"
+            npm run verify-private-s3-buckets -- $ENV
       - run:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
-            docker run \
-             -e "CI=${CI}" \
-             -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-             -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-             -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-             --rm efcms /bin/sh -c "npm run verify-private-elasticsearch -- ${ENV}"
+            npm run verify-private-elasticsearch -- $ENV
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
       - run:
@@ -596,17 +481,15 @@ jobs:
           command: npm run pending-color-switch
 
   migrate:
-    machine:
-      docker_layer_caching: true
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - run: |
-          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-      - run: |
-          nvm install v14.17.3
-          node -v
-          nvm alias default v14.17.3
+      - npm-install
       - run:
           name: Setup Env
           command: |
@@ -617,134 +500,61 @@ jobs:
             echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
-          name: Build Docker Image
-          command: |
-            docker build -t efcms -f Dockerfile .
-      - run:
           name: Deploy Migration Cron Lambda
           command: |
-            docker run \
-              -e "CI=${CI}" \
-              -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-              -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-              -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-              -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-              -e "SOURCE_TABLE=${SOURCE_TABLE}" \
-              -e "ZONE_NAME=${ZONE_NAME}" \
-              -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-              -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
-              -e "CIRCLE_MACHINE_USER_TOKEN=${CIRCLE_MACHINE_USER_TOKEN}" \
-              -e "MIGRATE_FLAG=${MIGRATE_FLAG}" \
-              --rm efcms /bin/sh -c "npm run deploy:migration-cron -- ${ENV}"
+            npm run deploy:migration-cron -- $ENV
       - run:
           name: Setup Migration Infrastructure
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-               -e "CI=${CI}" \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-               -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-               -e "SOURCE_TABLE=${SOURCE_TABLE}" \
-               -e "ZONE_NAME=${ZONE_NAME}" \
-               -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
-               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-               -e "CIRCLE_WORKFLOW_ID=${CIRCLE_WORKFLOW_ID}" \
-               -e "CIRCLE_MACHINE_USER_TOKEN=${CIRCLE_MACHINE_USER_TOKEN}" \
-               --rm efcms /bin/sh -c "npm run deploy:migration -- ${ENV}"
+              npm run deploy:migration -- $ENV
             fi
       - run:
           name: Disable Destination Table Stream
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-               -e "CI=${CI}" \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-               -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./web-api/disable-deploying-dynamo-stream-trigger.sh"
+              ./web-api/disable-deploying-dynamo-stream-trigger.sh
             fi
       - run:
           name: Run Migration
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-               -e "CI=${CI}" \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-               -e "DESTINATION_TABLE=${DESTINATION_TABLE}" \
-               -e "EFCMS_DOMAIN=${EFCMS_DOMAIN}" \
-               -e "SOURCE_TABLE=${SOURCE_TABLE}" \
-               -e "STREAM_ARN=${STREAM_ARN}" \
-               -e "ZONE_NAME=${ZONE_NAME}" \
-               -e "DOCUMENTS_BUCKET_NAME=${DOCUMENTS_BUCKET_NAME}" \
-               --rm efcms /bin/sh -c "npm run start:migration -- ${ENV}"
+              npm run start:migration -- $ENV
             fi
       - run:
           name: Wait for SQS Queue to Empty
           no_output_timeout: 5h
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-               -e "CI=${CI}" \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./wait-for-migration-to-finish.sh"
+              ./wait-for-migration-to-finish.sh
             fi
       - run:
           name: Track successful migrations
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-                -e "CI=${CI}" \
-                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                -e "ENV=${ENV}" \
-                --rm efcms /bin/sh -c "node ./web-api/track-successful-migrations.js"
+              node ./web-api/track-successful-migrations.js
             fi
       - run:
           name: Enable Destination Table Stream
           command: |
             if [ "$MIGRATE_FLAG" == "true" ]; then
-              docker run \
-                -e "CI=${CI}" \
-                -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-                -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-                -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-                -e "DEPLOYING_COLOR=${DEPLOYING_COLOR}" \
-                -e "ENV=${ENV}" \
-                --rm efcms /bin/sh -c "./web-api/enable-deploying-dynamo-stream-trigger.sh"
+              ./web-api/enable-deploying-dynamo-stream-trigger.sh
             fi
       - run:
           name: Enable Check Reindex Status Cron
           command: |
-            docker run \
-               -e "CI=${CI}" \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_ACCOUNT_ID=${AWS_ACCOUNT_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./enable-reindex-cron.sh"
+            ./enable-reindex-cron.sh
 
   disable-reindex-cron:
-    machine:
-      docker_layer_caching: true
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:latest
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - run: |
-          echo 'export NVM_DIR="/opt/circleci/.nvm"' >> $BASH_ENV
-          echo ' [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"' >> $BASH_ENV
-      - run: |
-          nvm install v14.17.3
-          node -v
-          nvm alias default v14.17.3
+      - npm-install
       - run:
           name: Setup Env
           command: |
@@ -752,18 +562,9 @@ jobs:
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
-          name: Build Docker Image
-          command: |
-            docker build -t efcms -f Dockerfile .
-      - run:
           name: Disable Check Reindex Status Cron
           command: |
-            docker run \
-               -e "CI=${CI}" \
-               -e "AWS_ACCESS_KEY_ID=${AWS_ACCESS_KEY_ID}" \
-               -e "AWS_SECRET_ACCESS_KEY=${AWS_SECRET_ACCESS_KEY}" \
-               -e "ENV=${ENV}" \
-               --rm efcms /bin/sh -c "./disable-reindex-cron.sh"
+            ./disable-reindex-cron.sh
 
   smoketests:
     docker:

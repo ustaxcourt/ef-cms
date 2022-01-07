@@ -52,6 +52,7 @@ describe('Create and serve a case to search for', () => {
     fillInCreateCaseFromPaperForm(testData);
     goToReviewCase(testData);
     serveCaseToIrs();
+    cy.waitForElasticsearch();
   });
 });
 
