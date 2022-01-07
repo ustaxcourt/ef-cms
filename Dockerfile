@@ -10,28 +10,18 @@ RUN apt-get install -y -t stretch-backports openjdk-11-jdk=11.0.6+10-1~bpo9+1 -V
 RUN apt-get install -yq less=487-0.1+b1 python python-dev python-pip jq=1.5+dfsg-2+b1
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.4.8.zip" -o "awscliv2.zip"
-RUN unzip awscliv2.zip
-RUN ./aws/install
-RUN rm awscliv2.zip
+RUN apt-get install -y zip
+
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.4.7.zip" -o "awscliv2.zip" && \
+  unzip awscliv2.zip && \
+  ./aws/install && \
+  rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
 
 RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.1.2/terraform_1.1.2_linux_amd64.zip && \
   unzip -o terraform.zip terraform && \
-  cp terraform /usr/local/bin/ && \
-  CI=true npm install cypress
-
-COPY package.json /home/app/package.json
-COPY package-lock.json /home/app/package-lock.json
-RUN npm set progress=false && \
-  npm config set puppeteer_skip_chromium_download true && \
-  npm ci
-
-COPY . /home/app
-
-RUN mkdir -p /home/app/web-client/cypress-integration/screenshots && \
-  mkdir -p /home/app/web-client/cypress-integration/videos && \
-  mkdir -p /home/app/web-client/cypress-smoketests/videos
+  rm terraform.zip && \
+  cp terraform /usr/local/bin/
 
 CMD echo "🔥"
