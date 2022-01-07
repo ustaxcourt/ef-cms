@@ -159,7 +159,11 @@ export const getFormattedDocketEntry = ({
 
   formattedResult.formattedDocumentDescriptionWithoutLink =
     formattedResult.descriptionDisplay;
-  if (!entry.addToCoversheet) {
+  if (
+    formattedResult.showDocumentDescriptionWithoutLink &&
+    !entry.addToCoversheet &&
+    entry.additionalInfoDisplay
+  ) {
     formattedResult.formattedDocumentDescriptionWithoutLink += ` ${entry.additionalInfoDisplay}`;
   }
 
