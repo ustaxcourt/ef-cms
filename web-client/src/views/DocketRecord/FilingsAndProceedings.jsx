@@ -131,7 +131,7 @@ export const FilingsAndProceedings = connect(
           {entry.showDocumentDescriptionWithoutLink && entry.descriptionDisplay}
           {entry.showDocumentDescriptionWithoutLink &&
             !entry.addToCoversheet &&
-            entry.additionalInfoDisplay}
+            ` ${entry.additionalInfoDisplay}`}
         </span>
 
         <span> {entry.signatory}</span>
