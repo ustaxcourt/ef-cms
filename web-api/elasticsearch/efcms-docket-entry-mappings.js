@@ -12,6 +12,9 @@ module.exports = {
     'caseCaption.S': {
       type: 'text',
     },
+    'createdAt.S': {
+      type: 'date',
+    },
     'docketEntryId.S': {
       type: 'keyword',
     },
@@ -99,6 +102,9 @@ module.exports = {
       type: 'text',
     },
     'sk.S': {
+      type: 'keyword',
+    },
+    'status.S': {
       type: 'keyword',
     },
   },

@@ -47,7 +47,6 @@ exports.checkForReadyForTrialCasesInteractor = async applicationContext => {
 
       if (caseEntity.status === CASE_STATUS_TYPES.generalDocket) {
         caseEntity.checkForReadyForTrial();
-
         if (
           caseEntity.status === CASE_STATUS_TYPES.generalDocketReadyForTrial
         ) {
