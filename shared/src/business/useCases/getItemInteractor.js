@@ -6,8 +6,8 @@
  * @param {string} providers.key the key to retrieve
  * @returns {object} the item
  */
-exports.getItemInteractor = async (applicationContext, { key }) => {
-  return await applicationContext.getPersistenceGateway().getItem({
+exports.getItemInteractor = (applicationContext, { key }) => {
+  return applicationContext.getPersistenceGateway().getItem({
     applicationContext,
     key,
   });

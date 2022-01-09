@@ -11,8 +11,11 @@ import {
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const { SESSION_STATUS_GROUPS, USER_ROLES: ROLES } =
-  applicationContext.getConstants();
+const {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_TYPES,
+  USER_ROLES: ROLES,
+} = applicationContext.getConstants();
 
 const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
@@ -57,15 +60,22 @@ describe('formattedTrialSessions', () => {
       {
         caseOrder: [],
         judge: { name: '1', userId: '1' },
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.regular,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
+        term: 'Fall',
+        termYear: '2019',
         trialLocation: 'Hartford, Connecticut',
       },
       {
         caseOrder: [],
         judge: { name: '2', userId: '2' },
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        sessionType: TRIAL_SESSION_TYPES.small,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: true,
+        term: 'Winter',
         trialClerk: { name: '10', userId: '10' },
         trialLocation: 'Knoxville, TN',
       },
@@ -73,29 +83,42 @@ describe('formattedTrialSessions', () => {
         caseOrder: [],
         judge: { name: '3', userId: '3' },
         noticeIssuedDate: '2019-07-25T15:00:00.000Z',
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.regular,
         startDate: '2019-11-27T15:00:00.000Z',
         swingSession: true,
+        term: 'Winter',
         trialLocation: 'Jacksonville, FL',
       },
       {
         caseOrder: [],
         judge: { name: '4', userId: '4' },
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.hybrid,
         startDate: '2019-11-27T15:00:00.000Z',
         swingSession: true,
+        term: 'Summer',
         trialLocation: 'Memphis, TN',
       },
       {
         caseOrder: [],
         judge: { name: '5', userId: '5' },
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        sessionType: TRIAL_SESSION_TYPES.hybrid,
         startDate: '2019-11-25T15:00:00.000Z',
         swingSession: false,
+        term: 'Spring',
+        termYear: '2019',
         trialLocation: 'Anchorage, AK',
       },
       {
         caseOrder: [],
         judge: { name: '6', userId: '6' },
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.regular,
         startDate: `${nextYear}-02-17T15:00:00.000Z`,
         swingSession: false,
+        term: 'Spring',
         trialLocation: 'Jacksonville, FL',
       },
     ];
@@ -146,7 +169,7 @@ describe('formattedTrialSessions', () => {
     );
   });
 
-  it('filter trial sessions', () => {
+  it('should filter trial sessions by judge', () => {
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
@@ -156,6 +179,26 @@ describe('formattedTrialSessions', () => {
       },
     });
     expect(result.formattedSessions.length).toBe(1);
+  });
+
+  it('should double filter trial sessions', () => {
+    const result = runCompute(formattedTrialSessions, {
+      state: {
+        ...baseState,
+        screenMetadata: {
+          trialSessionFilters: {
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+            sessionType: TRIAL_SESSION_TYPES.regular,
+          },
+        },
+        trialSessions: TRIAL_SESSIONS_LIST,
+        user: testJudgeUser,
+      },
+    });
+    const flattenedSessions = result.formattedSessions.flatMap(
+      week => week.sessions,
+    );
+    expect(flattenedSessions.length).toBe(3);
   });
 
   it('returns all trial sessions if judge userId trial session filter is an empty string', () => {
@@ -191,25 +234,6 @@ describe('formattedTrialSessions', () => {
   });
 
   it('shows swing session option only if matching term and term year is found', () => {
-    const trialSessions = [
-      {
-        caseOrder: [],
-        judge: { name: '1', userId: '1' },
-        startDate: '2019-11-25T15:00:00.000Z',
-        term: 'Fall',
-        termYear: '2019',
-        trialLocation: 'Denver, CO',
-      },
-      {
-        caseOrder: [],
-        judge: { name: '2', userId: '2' },
-        startDate: '2019-04-25T15:00:00.000Z',
-        term: 'Spring',
-        termYear: '2019',
-        trialLocation: 'Jacksonville, FL',
-      },
-    ];
-
     let form = {
       term: 'Winter',
       termYear: '2019',
@@ -218,7 +242,7 @@ describe('formattedTrialSessions', () => {
       state: {
         ...baseState,
         form,
-        trialSessions,
+        trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
       },
     });
@@ -230,7 +254,7 @@ describe('formattedTrialSessions', () => {
       state: {
         ...baseState,
         form,
-        trialSessions,
+        trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
       },
     });
@@ -242,7 +266,7 @@ describe('formattedTrialSessions', () => {
       state: {
         ...baseState,
         form,
-        trialSessions,
+        trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
       },
     });
@@ -251,95 +275,50 @@ describe('formattedTrialSessions', () => {
   });
 
   it('returns sessionsByTerm with only sessions in that term if form.term is set', () => {
-    const trialSessions = [
-      {
-        caseOrder: [],
-        judge: { name: '1', userId: '1' },
-        startDate: '2019-11-25T15:00:00.000Z',
-        term: 'Winter',
-        trialLocation: 'Denver, CO',
-      },
-      {
-        caseOrder: [],
-        judge: { name: '2', userId: '2' },
-        startDate: '2019-11-25T15:00:00.000Z',
-        term: 'Spring',
-        trialLocation: 'Jacksonville, FL',
-      },
-      {
-        caseOrder: [],
-        judge: { name: '2', userId: '2' },
-        startDate: '2019-11-25T15:00:00.000Z',
-        term: 'Summer',
-        trialLocation: 'Jacksonville, FL',
-      },
-      {
-        caseOrder: [],
-        judge: { name: '3', userId: '3' },
-        startDate: '2019-11-25T15:00:00.000Z',
-        term: 'Fall',
-        trialLocation: 'Houston, TX',
-      },
-      {
-        caseOrder: [],
-        judge: { name: '4', userId: '4' },
-        startDate: '2019-11-25T15:00:00.000Z',
-        term: 'Winter',
-        trialLocation: 'Birmingham, Alabama',
-      },
-      {
-        caseOrder: [],
-        judge: { name: '5', userId: '5' },
-        startDate: '2019-11-25T15:00:00.000Z',
-        term: 'Winter',
-        trialLocation: 'Seattle, WA',
-      },
-    ];
     const result = runCompute(formattedTrialSessions, {
       state: {
         ...baseState,
         form: {
           term: 'Winter',
         },
-        trialSessions,
+        trialSessions: TRIAL_SESSIONS_LIST,
         user: testJudgeUser,
       },
     });
+
     expect(result.sessionsByTerm).toEqual([
       {
         caseOrder: [],
-        formattedStartDate: '11/25/19',
-        judge: { name: '4', userId: '4' },
-        sessionStatus: SESSION_STATUS_GROUPS.new,
-        startDate: '2019-11-25T15:00:00.000Z',
+        formattedNoticeIssuedDate: '07/25/2019',
+        formattedStartDate: '11/27/19',
+        judge: { name: '3', userId: '3' },
+        noticeIssuedDate: '2019-07-25T15:00:00.000Z',
+        proceedingType: 'In Person',
+        sessionStatus: 'New',
+        sessionType: TRIAL_SESSION_TYPES.regular,
+        startDate: '2019-11-27T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
+        swingSession: true,
         term: 'Winter',
-        trialLocation: 'Birmingham, Alabama',
+        trialLocation: 'Jacksonville, FL',
         userIsAssignedToSession: false,
       },
       {
         caseOrder: [],
+        formattedNoticeIssuedDate: undefined,
         formattedStartDate: '11/25/19',
-        judge: { name: '1', userId: '1' },
-        sessionStatus: SESSION_STATUS_GROUPS.new,
+        judge: { name: '2', userId: '2' },
+        proceedingType: 'Remote',
+        sessionStatus: 'New',
+        sessionType: TRIAL_SESSION_TYPES.small,
         startDate: '2019-11-25T15:00:00.000Z',
         startOfWeek: 'November 25, 2019',
         startOfWeekSortable: '20191125',
+        swingSession: true,
         term: 'Winter',
-        trialLocation: 'Denver, CO',
-        userIsAssignedToSession: true,
-      },
-      {
-        caseOrder: [],
-        formattedStartDate: '11/25/19',
-        judge: { name: '5', userId: '5' },
-        sessionStatus: SESSION_STATUS_GROUPS.new,
-        startDate: '2019-11-25T15:00:00.000Z',
-        startOfWeek: 'November 25, 2019',
-        startOfWeekSortable: '20191125',
-        term: 'Winter',
-        trialLocation: 'Seattle, WA',
+        trialClerk: { name: '10', userId: '10' },
+        trialLocation: 'Knoxville, TN',
         userIsAssignedToSession: false,
       },
     ]);
