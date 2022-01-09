@@ -217,6 +217,7 @@ const helpers = {
 
 export const baseState = {
   advancedSearchForm: {}, // form for advanced search screen, TODO: replace with state.form
+  advancedSearchTab: 'case',
   allJudges: [],
   archiveDraftDocument: {
     docketEntryId: null,
