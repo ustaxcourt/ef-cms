@@ -3,7 +3,7 @@
 ## Caveats
 `Cypress`: Do not upgrade past 8.5.0 as anything above that version will cause the "Failed to connect to bus" [error](https://trello.com/c/iuq0gJ6P/1008-ci-error-failed-to-connect-to-the-bus). 
 
-`@babel/register`: I've locked it down to 7.16.5 because 7.16.7 was causing failures.
+`@babel/register`: I locked it down to 7.16.5 because 7.16.7 was causing failures.
 
 ## JavaScript Libraries
 
