@@ -128,4 +128,30 @@ describe('processPractitionerMappingEntries', () => {
 
     expect(applicationContext.logger.error).toHaveBeenCalled();
   });
+
+  it('should filter out any undefined index records due to potential exceptions', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseMetadataWithCounsel.mockRejectedValueOnce();
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseMetadataWithCounsel.mockReturnValueOnce(mockCaseRecord);
+
+    applicationContext
+      .getPersistenceGateway()
+      .bulkIndexRecords.mockReturnValueOnce({
+        failedRecords: [],
+      });
+
+    await processPractitionerMappingEntries({
+      applicationContext,
+      practitionerMappingRecords: mockPractitionerMappingEntries,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+        .calls[0][0].records.length,
+    ).toEqual(2);
+  });
 });
