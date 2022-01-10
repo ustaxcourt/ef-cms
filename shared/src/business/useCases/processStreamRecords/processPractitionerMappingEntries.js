@@ -79,7 +79,7 @@ exports.processPractitionerMappingEntries = async ({
     .getPersistenceGateway()
     .bulkIndexRecords({
       applicationContext,
-      records: flattenDeep(indexRecords),
+      records: flattenDeep(indexRecords.filter(Boolean)),
     });
 
   if (failedRecords.length > 0) {
