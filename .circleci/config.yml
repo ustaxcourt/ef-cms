@@ -7,22 +7,36 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v9-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v8-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v9-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
-          command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
+          command: |
+            if [ ! -d node_modules ]; then
+              npm ci
+            else
+              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.             
+            fi
+      - run:
+          name: Install Cypress dependency
+          command: |
+            if [ ! -d ~/.cache/Cypress ]; then
+              echo Installing Cypress
+              ./project/node_modules/.bin/cypress install
+            else
+              echo Found cached Cypress version. Using cached Cypress folder.             
+            fi
       - run:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v8-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v9-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v8-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v9-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
@@ -259,7 +273,7 @@ jobs:
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - npm-install
+      - npm-and-cypress-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -276,10 +290,6 @@ jobs:
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
-            if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
-              ./node_modules/.bin/cypress install
-            fi
             npx --no-install run-p start:api:ci start:client:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
@@ -308,7 +318,7 @@ jobs:
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - npm-install
+      - npm-and-cypress-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -357,7 +367,7 @@ jobs:
     resource_class: medium+
     steps:
       - git-shallow-clone/checkout
-      - npm-install
+      - npm-and-cypress-install
       - run:
           name: Create Cypress Artifacts Directory
           command: mkdir /tmp/cypress
@@ -789,6 +799,7 @@ workflows:
                 - experimental5
                 - dawson
                 - migration
+
   build-and-deploy-with-context:
     jobs:
       - build-client-integration:
