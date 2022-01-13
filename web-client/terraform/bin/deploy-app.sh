@@ -2,10 +2,32 @@
 
 ENVIRONMENT=$1
 
+content=$(aws secretsmanager get-secret-value --secret-id "exp2_deploy" --query "SecretString" --output text)
+echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
+set -o allexport
+source .env
+set +o allexport
+
+[ -z "${DYNAMSOFT_PRODUCT_KEYS}" ] && echo "You must have DYNAMSOFT_PRODUCT_KEYS set in your environment" && exit 1
+[ -z "${DYNAMSOFT_S3_ZIP_PATH}" ] && echo "You must have DYNAMSOFT_S3_ZIP_PATH set in your environment" && exit 1
+[ -z "${DYNAMSOFT_URL}" ] && echo "You must have DYNAMSOFT_URL set in your environment" && exit 1
+[ -z "${DYNAMSOFT_URL}" ] && echo "You must have DYNAMSOFT_URL set in your environment" && exit 1
+[ -z "${ENABLE_HEALTH_CHECKS}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
 [ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
+[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
+[ -z "${IS_DYNAMSOFT_ENABLED}" ] && echo "You must have IS_DYNAMSOFT_ENABLED set in your environment" && exit 1
+[ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
 echo "Running terraform with the following environment configs:"
+echo "  - DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}"
+echo "  - DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}"
+echo "  - DYNAMSOFT_URL=${DYNAMSOFT_URL}"
+echo "  - DYNAMSOFT_URL=${DYNAMSOFT_URL}"
+echo "  - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
+echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
+echo "  - IS_DYNAMSOFT_ENABLED=${IS_DYNAMSOFT_ENABLED}"
+echo "  - ZONE_NAME=${ZONE_NAME}"
 
 ../../../scripts/verify-terraform-version.sh
 
