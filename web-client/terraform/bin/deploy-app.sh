@@ -11,7 +11,6 @@ set +o allexport
 [ -z "${DYNAMSOFT_PRODUCT_KEYS}" ] && echo "You must have DYNAMSOFT_PRODUCT_KEYS set in your environment" && exit 1
 [ -z "${DYNAMSOFT_S3_ZIP_PATH}" ] && echo "You must have DYNAMSOFT_S3_ZIP_PATH set in your environment" && exit 1
 [ -z "${DYNAMSOFT_URL}" ] && echo "You must have DYNAMSOFT_URL set in your environment" && exit 1
-[ -z "${DYNAMSOFT_URL}" ] && echo "You must have DYNAMSOFT_URL set in your environment" && exit 1
 [ -z "${ENABLE_HEALTH_CHECKS}" ] && echo "You must have ENABLE_HEALTH_CHECKS set in your environment" && exit 1
 [ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
@@ -21,7 +20,6 @@ set +o allexport
 echo "Running terraform with the following environment configs:"
 echo "  - DYNAMSOFT_PRODUCT_KEYS=${DYNAMSOFT_PRODUCT_KEYS}"
 echo "  - DYNAMSOFT_S3_ZIP_PATH=${DYNAMSOFT_S3_ZIP_PATH}"
-echo "  - DYNAMSOFT_URL=${DYNAMSOFT_URL}"
 echo "  - DYNAMSOFT_URL=${DYNAMSOFT_URL}"
 echo "  - ENABLE_HEALTH_CHECKS=${ENABLE_HEALTH_CHECKS}"
 echo "  - ENVIRONMENT=${ENVIRONMENT}"
