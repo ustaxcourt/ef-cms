@@ -2,7 +2,16 @@
 
 ENVIRONMENT=$1
 
-[ -z "${CIRCLE_BRANCH}" ] && echo "You must have CIRCLE_BRANCH set in your environment" && exit 1
+export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENVIRONMENT})
+export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENVIRONMENT})
+
+content=$(aws secretsmanager get-secret-value --secret-id "exp2_deploy" --query "SecretString" --output text)
+echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
+set -o allexport
+source .env
+set +o allexport
+
+#[ -z "${CIRCLE_BRANCH}" ] && echo "You must have CIRCLE_BRANCH set in your environment" && exit 1
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
@@ -60,6 +69,12 @@ npm run build:assets
 set -eo pipefail
 # build the cognito authorizer, api, and api-public with web pack
 npm run build:lambda:api
+
+if [ -z "${CIRCLE_BRANCH}" ]; then
+  pushd ../../runtimes/puppeteer/
+  sh build-local.sh
+  popd
+fi
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
