@@ -157,6 +157,16 @@ export const getFormattedDocketEntry = ({
   formattedResult.showDocumentDescriptionWithoutLink =
     !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
+  formattedResult.formattedDocumentDescriptionWithoutLink =
+    formattedResult.descriptionDisplay;
+  if (
+    formattedResult.showDocumentDescriptionWithoutLink &&
+    !entry.addToCoversheet &&
+    entry.additionalInfoDisplay
+  ) {
+    formattedResult.formattedDocumentDescriptionWithoutLink += ` ${entry.additionalInfoDisplay}`;
+  }
+
   formattedResult.editDocketEntryMetaLink = `/case-detail/${docketNumber}/docket-entry/${formattedResult.index}/edit-meta`;
 
   return formattedResult;
