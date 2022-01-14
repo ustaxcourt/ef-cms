@@ -158,7 +158,12 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "s3:*",
         "cloudformation:*",
         "cloudwatch:*",
-        "lambda:*"
+        "lambda:*",
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:GetResourcePolicy",
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:GetRandomPassword",
+        "secretsmanager:ListSecretVersionIds"
       ],
       "Resource": "*"
     },
