@@ -45,7 +45,7 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
+export REGION=us-east-1
 
 rm -rf .terraform
 
