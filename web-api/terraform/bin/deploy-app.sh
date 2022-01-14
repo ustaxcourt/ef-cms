@@ -5,7 +5,8 @@ ENVIRONMENT=$1
 export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENVIRONMENT})
 export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENVIRONMENT})
 
-content=$(aws secretsmanager get-secret-value --secret-id "exp2_deploy" --query "SecretString" --output text)
+REGION=us-east-1
+content=$(aws secretsmanager get-secret-value --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
 echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
 set -o allexport
 source .env
@@ -45,21 +46,17 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
 
 rm -rf .terraform
 
 echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
-[ -z "${REGION}" ] && echo "REGION variable not set before bucket create" && exit 1
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
-[ -z "${REGION}" ] && echo "REGION variable not set after bucket create" && exit 1
 echo "checking for the dynamodb lock table..."
 aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
 result=$?
 if [ ${result} -ne 0 ]; then
   echo "dynamodb lock does not exist, creating"
-  [ -z "${REGION}" ] && echo "REGION variable not set before table lock" && exit 1
   sh ../bin/create-dynamodb.sh "${LOCK_TABLE}" "${REGION}"
 else
   echo "dynamodb lock table already exists"
@@ -128,7 +125,6 @@ export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_zone_name=$ZONE_NAME
 
-[ -z "${REGION}" ] && echo "REGION variable not set before terraform init" && exit 1
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -out execution-plan
 terraform apply -auto-approve execution-plan
