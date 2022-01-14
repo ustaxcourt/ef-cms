@@ -67,7 +67,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
+      - image: elastic/elasticsearch:7.10.2
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -126,7 +126,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
+      - image: elastic/elasticsearch:7.10.2
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -176,7 +176,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
+      - image: elastic/elasticsearch:7.10.2
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -221,7 +221,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
+      - image: elastic/elasticsearch:7.10.2
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -266,7 +266,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
+      - image: elastic/elasticsearch:7.10.2
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -311,7 +311,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
+      - image: elastic/elasticsearch:7.10.2
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
@@ -360,7 +360,7 @@ jobs:
         environment:
           discovery.type: single-node
           JAVA_OPTS: '-Xms512m -Xmx512m'
-      - image: elastic/elasticsearch:7.8.1
+      - image: elastic/elasticsearch:7.10.2
         environment:
           discovery.type: single-node
           ES_JAVA_OPTS: '-Xms512m -Xmx512m'
