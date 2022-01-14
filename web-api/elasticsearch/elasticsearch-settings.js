@@ -7,7 +7,7 @@ considerations:
   then search for "deja" to see if the order is returned.
 */
 module.exports = {
-  ELASTICSEARCH_API_VERSION: '7.4', // when this changes, ensure elasticsearch.tf files are also updated
+  ELASTICSEARCH_API_VERSION: '7.10', // when this changes, ensure elasticsearch.tf files are also updated
   settings: {
     index: {
       analysis: {
