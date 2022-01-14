@@ -5,11 +5,14 @@ ENVIRONMENT=$1
 export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENVIRONMENT})
 export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENVIRONMENT})
 
+set -o allexport
 REGION=us-east-1
 content=$(aws secretsmanager get-secret-value --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
 echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
-set -o allexport
 source .env
+BUCKET="${ZONE_NAME}.terraform.deploys"
+KEY="documents-${ENVIRONMENT}.tfstate"
+LOCK_TABLE=efcms-terraform-lock
 set +o allexport
 
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
@@ -42,10 +45,6 @@ echo "  - PROD_ENV_ACCOUNT_ID=${PROD_ENV_ACCOUNT_ID}"
 echo "  - ZONE_NAME=${ZONE_NAME}"
 
 ../../../scripts/verify-terraform-version.sh
-
-BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="documents-${ENVIRONMENT}.tfstate"
-LOCK_TABLE=efcms-terraform-lock
 
 rm -rf .terraform
 
