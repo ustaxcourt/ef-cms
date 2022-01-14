@@ -5,8 +5,8 @@ ENVIRONMENT=$1
 export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENVIRONMENT})
 export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENVIRONMENT})
 
-AWS_DEFAULT_REGION=us-east-1
-content=$(aws secretsmanager get-secret-value --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
+REGION=us-east-1
+content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
 echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
 set -o allexport
 source .env
@@ -46,7 +46,6 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="documents-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
 
 rm -rf .terraform
 
