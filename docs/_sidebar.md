@@ -13,7 +13,7 @@
 * [🆘 System Architecture](system-architecture.md)
 * [CI / CD](ci-cd.md)
 * [Testing](testing.md)
-* [🆘 Migrations](migrations.md)
+* [Migrations](migrations.md)
 * [Terraform](terraform.md)
 * [Kibana](kibana.md)
 * [🆘 AWS](aws.md)
