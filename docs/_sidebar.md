@@ -16,7 +16,7 @@
 * [Migrations](migrations.md)
 * [Terraform](terraform.md)
 * [Kibana](kibana.md)
-* [🆘 AWS](aws.md)
+* [AWS](aws.md)
 * [Additional Resources](additional-resources/README.md)
 * [Operations](operations/README.md)
 * [Environment Setup / Teardown](environments.md)
