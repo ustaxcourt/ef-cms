@@ -109,13 +109,35 @@ Route53 also allows us to setup routes which will route to other aws services ba
 
 ## CloudFront
 
+CloudFront is a CDN.  It is a service which takes your static web assets, such as images and html files, and hosts it across the global on various nodes.  This allows for much quicker access times of files since no matter where you are in the world, the files are hosted at a location close to your location.  It also provides built in caching capabilities to speed up load times.
+
+In Dawson, all of our UIs are hosted in CloudFront.  When we deploy our application, we first upload our compiled React and web files to an s3 bucket.  Our CloudFront distribution is setup with an origin which points to this s3 bucket, so that when someone tries to access a file, CloudFront with either return a cached version of the file or fetch directly from the origin.
+
 ## CloudWatch
+
+CloudWatch is a service which allows the aggrigation and metrics of logs from various other AWS services we use.  By default, when you deploy a lambda function, it creates something called a log group and multiple log streams as new requests hit your lambda function.  These streams will contain all the logs your lambda generates which you can search through at a later time.
+
+In Dawson, we forward most of our CloudWatch directly to our logging / kibana AWS OpenSearch (elasticsearch) cluster.  Kibana provides a much more user friendly interface to search through logs.  It also allows you to drill down into specific logs by date, user, etc.  Kibana is provided by default when you create a cluster in AWS.
 
 ## S3
 
+S3 is a service which allows users to store and retrieve files from something called an AWS bucket.  This bucket can potentially hold as much information as you want and AWS does all the scaling behind the scenes for you.  
+
+In Dawson, we store a majority of our PDFs inside of S3 buckets.  We also scrape the text from the PDFs and store that inside our S3 buckets as well.  We later use that scraped content to index it into elasticsearch to allow users to perform order and opinion searches over the contents of the PDFs.
+
 ## SQS
+
+SQS is a service which allows you to send and receive messages into a queue.  A queue is a data structure which accepts messages and pushes them to the end of a list.  When other lambda servers read from the queue, they will get the first message added to the queue so they can process it.
+
+IN Dawson, we use SQS for a variety of things.  Our migration process uses a SQS queue for keeping track of which dynamodb segment events we need to process.  We also utilize a SQS queue for when we need to run any type of long running process of do some type of fan out logic to process many events in parallel.
 
 ## SNS
 
+SNS is a service which allows you to setup topics.  Topics are a way to broadcast a message and have many other subscribers receive that same message.  It is different from SQS in that it is a one to many relationship instead of one to one.
+
+In Dawson, we use SNS to notify lower environments when a case is sealed in production to prevent anyone, including our developers, from seeing that sealed case.
+
 ## EC2
+
+EC2 is a service which allows you to host a virtual machine.  We use EC2 to host dynamsoft which is a front end library used for scanning documents.  The only reason we host dynamsoft on an EC2 instance is due to how the license works for dynamsoft.  They require the license to be hosted only one machine, so having it hosted on S3 violates that license.
 
