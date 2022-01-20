@@ -15,6 +15,7 @@
 * [Testing](testing.md)
 * [Migrations](migrations.md)
 * [Terraform](terraform.md)
+* [Deploying](deploying.md)
 * [Kibana](kibana.md)
 * [AWS](aws.md)
 * [Additional Resources](additional-resources/README.md)

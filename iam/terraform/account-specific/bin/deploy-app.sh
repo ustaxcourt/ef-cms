@@ -1,5 +1,12 @@
 #!/bin/bash -e
 
+REGION=us-east-1
+content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "account_deploy" --query "SecretString" --output text)
+echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
+set -o allexport
+source .env
+set +o allexport
+
 if [ -z "$ZONE_NAME" ]; then
   echo "Please export the ZONE_NAME variable in your shell"
   exit 1
