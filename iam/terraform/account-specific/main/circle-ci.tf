@@ -259,7 +259,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "secretsmanager:ListSecretVersionIds"
       ],
       "Resource": [
-        "arn:aws:secretsmanager:us-east-1:${data.aws_caller_identity.current.account_id}:secret:*_deploy"
+        "arn:aws:secretsmanager:*:*:secret:*_deploy*"
       ]
     },
     {
