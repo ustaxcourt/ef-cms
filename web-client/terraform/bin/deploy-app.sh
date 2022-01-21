@@ -2,6 +2,7 @@
 
 ENVIRONMENT=$1
 
+# Getting the environment-specific deployment settings and injecting them into the shell environment
 REGION=us-east-1
 content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
 echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
