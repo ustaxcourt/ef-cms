@@ -40,12 +40,12 @@ export ELASTICSEARCH_ENDPOINT=$(aws es describe-elasticsearch-domain \
 export FILE_NAME=./scripts/data-import/judge/judge_users.csv
 
 echo "clearing elasticsearch"
-# ./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
+./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
 echo "setting up elasticsearch"
-# ./web-api/setup-elasticsearch-index.sh "${ENV}"
+./web-api/setup-elasticsearch-index.sh "${ENV}"
 
 echo "clearing dynamo"
-# node ./web-api/clear-dynamodb-table.js "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
+node ./web-api/clear-dynamodb-table.js "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
 echo "setting up test users"
 node shared/admin-tools/user/setup-test-users.js
 echo "importing judge users"
