@@ -158,12 +158,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "s3:*",
         "cloudformation:*",
         "cloudwatch:*",
-        "lambda:*",
-        "secretsmanager:GetSecretValue",
-        "secretsmanager:GetResourcePolicy",
-        "secretsmanager:DescribeSecret",
-        "secretsmanager:GetRandomPassword",
-        "secretsmanager:ListSecretVersionIds"
+        "lambda:*"
       ],
       "Resource": "*"
     },
@@ -251,6 +246,20 @@ resource "aws_iam_policy" "circle_ci_policy" {
       ],
       "Resource": [
         "*"
+      ]
+    },
+    {
+      "Sid": "SecretsManager",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:GetResourcePolicy",
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:GetRandomPassword",
+        "secretsmanager:ListSecretVersionIds"
+      ],
+      "Resource": [
+        "arn:aws:secretsmanager:us-east-1:${data.aws_caller_identity.current.account_id}:secret:*_deploy"
       ]
     },
     {
