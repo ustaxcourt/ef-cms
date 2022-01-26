@@ -7,11 +7,15 @@ export const SealDocketEntryModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.sealDocketEntrySequence,
-    form: state.form,
-    //todo: add this
-    formattedCaseDetail: state.formattedCaseDetail,
+    modal: state.modal,
+    updateModalValueSequence: sequences.updateModalValueSequence,
   },
-  function SealDocketEntryModal({ cancelSequence, confirmSequence, form }) {
+  function SealDocketEntryModal({
+    cancelSequence,
+    confirmSequence,
+    modal,
+    updateModalValueSequence,
+  }) {
     return (
       <ModalDialog
         cancelLabel="Cancel"
@@ -22,45 +26,55 @@ export const SealDocketEntryModal = connect(
       >
         <fieldset
           className="usa-fieldset margin-bottom-2"
-          id="docket-entry-sealed-parties-radios"
+          id="docket-entry-sealed-to-radios"
         >
-          <legend htmlFor="docket-entry-sealed-parties-radios">
+          <legend htmlFor="docket-entry-sealed-to-radios">
             Who do you want to seal this to?
           </legend>
           <div className="usa-radio">
             <input
-              aria-describedby="docket-entry-sealed-parties-radios"
-              checked={form.sealedParties === 'public'}
+              aria-describedby="docket-entry-sealed-to-radios"
+              checked={modal.docketEntrySealedTo === 'Public'}
               className="usa-radio__input"
-              id="docketEntrySealedParties-public"
-              name="docketEntrySealedParties"
+              id="docketEntrySealedTo-public"
+              name="docketEntrySealedTo"
               type="radio"
               value="Public"
-              onChange={() => null} //todo: add onChange
+              onChange={e => {
+                updateModalValueSequence({
+                  key: e.target.name,
+                  value: 'Public',
+                });
+              }}
             />
             <label
               className="usa-radio__label"
-              htmlFor="docketEntrySealedParties-public"
-              id="docket-entry-sealed-parties-public"
+              htmlFor="docketEntrySealedTo-public"
+              id="docket-entry-sealed-to-public"
             >
               Seal to the public
             </label>
           </div>
           <div className="usa-radio">
             <input
-              aria-describedby="docket-entry-sealed-parties-radios"
-              checked={form.sealedParties === 'all'}
+              aria-describedby="docket-entry-sealed-to-radios"
+              checked={modal.docketEntrySealedTo === 'External'}
               className="usa-radio__input"
-              id="docketEntrySealedParties-all"
-              name="docketEntrySealedParties"
+              id="docketEntrySealedTo-external"
+              name="docketEntrySealedTo"
               type="radio"
-              value="All" // todo: this is a weird name
-              onChange={() => null} //todo: add onChange
+              value="External" // TODO: make this a constant
+              onChange={e => {
+                updateModalValueSequence({
+                  key: e.target.name,
+                  value: 'External',
+                });
+              }}
             />
             <label
               className="usa-radio__label"
-              htmlFor="docketEntrySealedParties-public"
-              id="docket-entry-sealed-parties-all"
+              htmlFor="docketEntrySealedTo-external"
+              id="docket-entry-sealed-to-external"
             >
               Seal to the public and parties of this case
             </label>

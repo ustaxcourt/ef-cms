@@ -14,14 +14,15 @@ export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
     formattedDocketEntries: state.formattedDocketEntries,
-    openCleanModalSequence: sequences.openCleanModalSequence,
+    openSealDocketEntryModalSequence:
+      sequences.openSealDocketEntryModalSequence,
     showModal: state.modal.showModal,
   },
 
   function DocketRecord({
     docketRecordHelper,
     formattedDocketEntries,
-    openCleanModalSequence,
+    openSealDocketEntryModalSequence,
     showModal,
   }) {
     const getIcon = entry => {
@@ -165,7 +166,7 @@ export const DocketRecord = connect(
                             link
                             icon="lock"
                             onClick={() => {
-                              openCleanModalSequence({
+                              openSealDocketEntryModalSequence({
                                 showModal: 'SealDocketEntryModal',
                               });
                             }}
