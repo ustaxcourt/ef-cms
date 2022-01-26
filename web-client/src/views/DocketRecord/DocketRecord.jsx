@@ -154,6 +154,9 @@ export const DocketRecord = connect(
                             Edit
                           </Button>
                         )}
+                        <Button link icon="lock">
+                          Seal
+                        </Button>
                       </td>
                     )}
                   </tr>
