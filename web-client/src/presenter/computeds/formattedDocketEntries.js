@@ -71,7 +71,7 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
     applicationContext.getConstants().OPINION_EVENT_CODES_WITH_BENCH_OPINION;
 
   const docketEntryIsOpinion = allOpinionEventCodes.includes(entry.eventCode);
-  // todo: add test
+
   // todo: ask - does it need to be served?
   return !docketEntryIsOpinion;
 };
