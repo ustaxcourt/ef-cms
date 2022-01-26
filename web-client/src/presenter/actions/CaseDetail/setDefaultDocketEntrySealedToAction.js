@@ -6,6 +6,6 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const setDefaultDockeEntrySealedToAction = ({ store }) => {
+export const setDefaultDocketEntrySealedToAction = ({ store }) => {
   store.set(state.modal.docketEntrySealedTo, 'Public');
 };
