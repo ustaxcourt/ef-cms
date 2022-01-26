@@ -6,7 +6,7 @@ import React from 'react';
 export const SealDocketEntryModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.sealCaseSequence,
+    confirmSequence: sequences.sealDocketEntrySequence, //todo: add this
     formattedCaseDetail: state.formattedCaseDetail,
   },
   function SealDocketEntryModal({ cancelSequence, confirmSequence }) {
