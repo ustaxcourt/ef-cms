@@ -6,7 +6,8 @@ export const docketRecordHelper = get => {
     get(state.caseDetail.canAllowPrintableDocketRecord) === true;
 
   return {
-    showEditDocketRecordEntry: permissions.EDIT_DOCKET_ENTRY,
+    showEditOrSealDocketRecordEntry:
+      permissions.EDIT_DOCKET_ENTRY || permissions.SEAL_DOCKET_ENTRY,
     showPrintableDocketRecord,
   };
 };

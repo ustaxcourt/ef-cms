@@ -14,7 +14,7 @@ describe('docket record helper', () => {
         },
       },
     });
-    expect(result.showEditDocketRecordEntry).toBe(true);
+    expect(result.showEditOrSealDocketRecordEntry).toBe(true);
   });
 
   it('should not show links for editing docket entries if user does not have EDIT_DOCKET_ENTRY permission', () => {
@@ -29,7 +29,7 @@ describe('docket record helper', () => {
         },
       },
     });
-    expect(result.showEditDocketRecordEntry).toBe(false);
+    expect(result.showEditOrSealDocketRecordEntry).toBe(false);
   });
 
   it('should show printable docket record button if canAllowPrintableDocketRecord is true', () => {

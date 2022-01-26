@@ -66,6 +66,11 @@ export const getShowEditDocketRecordEntry = ({
   );
 };
 
+export const showSealDocketRecordEntry = {
+  // todo: is it an opinion?
+  // does it need to be served?
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
