@@ -5,10 +5,7 @@ import {
   petitionerUser,
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
-import {
-  formattedDocketEntries as formattedDocketEntriesComputed,
-  getShowSealDocketRecordEntry,
-} from './formattedDocketEntries';
+import { formattedDocketEntries as formattedDocketEntriesComputed } from './formattedDocketEntries';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -27,10 +24,8 @@ export const mockDocketEntry = {
 
 describe('formattedDocketEntries', () => {
   let globalUser;
-  const {
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
+    applicationContext.getConstants();
 
   const formattedDocketEntries = withAppContextDecorator(
     formattedDocketEntriesComputed,
@@ -48,34 +43,6 @@ describe('formattedDocketEntries', () => {
       permissions: getUserPermissions(user),
     };
   };
-
-  describe('getShowSealDocketRecordEntry', () => {
-    it('should return true when the entry is NOT an opinion', () => {
-      const mockNotOpinionEntry = {
-        eventCode: 'NOT OPINION',
-      };
-
-      const result = getShowSealDocketRecordEntry({
-        applicationContext,
-        entry: mockNotOpinionEntry,
-      });
-
-      expect(result).toBe(true);
-    });
-
-    it('should return false when the entry is an opinion', () => {
-      const mockOpinionEntry = {
-        eventCode: OPINION_EVENT_CODES_WITH_BENCH_OPINION[0],
-      };
-
-      const result = getShowSealDocketRecordEntry({
-        applicationContext,
-        entry: mockOpinionEntry,
-      });
-
-      expect(result).toBe(false);
-    });
-  });
 
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedDocketEntries, {
