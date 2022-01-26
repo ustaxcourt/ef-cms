@@ -66,9 +66,14 @@ export const getShowEditDocketRecordEntry = ({
   );
 };
 
-export const showSealDocketRecordEntry = {
+export const getShowSealDocketRecordEntry = ({
+  applicationContext,
+  entry,
+  userPermissions,
+}) => {
   // todo: is it an opinion?
   // does it need to be served?
+  return true;
 };
 
 export const getFormattedDocketEntry = ({
@@ -154,6 +159,12 @@ export const getFormattedDocketEntry = ({
   }
 
   formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
+    applicationContext,
+    entry,
+    userPermissions: permissions,
+  });
+
+  formattedResult.showSealDocketRecordEntry = getShowSealDocketRecordEntry({
     applicationContext,
     entry,
     userPermissions: permissions,
