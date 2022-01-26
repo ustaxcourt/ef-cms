@@ -3,8 +3,10 @@ import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
+
 import React from 'react';
 import classNames from 'classnames';
 
@@ -12,12 +14,14 @@ export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
     formattedDocketEntries: state.formattedDocketEntries,
+    openCleanModalSequence: sequences.openCleanModalSequence,
     showModal: state.modal.showModal,
   },
 
   function DocketRecord({
     docketRecordHelper,
     formattedDocketEntries,
+    openCleanModalSequence,
     showModal,
   }) {
     const getIcon = entry => {
@@ -157,7 +161,15 @@ export const DocketRecord = connect(
                           </Button>
                         )}
                         {entry.showSealDocketRecordEntry && (
-                          <Button link icon="lock">
+                          <Button
+                            link
+                            icon="lock"
+                            onClick={() => {
+                              openCleanModalSequence({
+                                showModal: 'SealDocketEntryModal',
+                              });
+                            }}
+                          >
                             Seal
                           </Button>
                         )}
@@ -170,6 +182,7 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
+        {showModal == 'SealDocketEntryModal' && <SealDocketEntryModal />}
       </>
     );
   },
