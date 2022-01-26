@@ -85,7 +85,9 @@ export const DocketRecord = connect(
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
-              {docketRecordHelper.showEditDocketRecordEntry && <th>&nbsp;</th>}
+              {docketRecordHelper.showEditOrSealDocketRecordEntry && (
+                <th>&nbsp;</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -143,7 +145,7 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Parties</span>
                       {entry.showServed && entry.servedPartiesCode}
                     </td>
-                    {docketRecordHelper.showEditDocketRecordEntry && (
+                    {docketRecordHelper.showEditOrSealDocketRecordEntry && (
                       <td>
                         {entry.showEditDocketRecordEntry && (
                           <Button
@@ -154,9 +156,11 @@ export const DocketRecord = connect(
                             Edit
                           </Button>
                         )}
-                        <Button link icon="lock">
-                          Seal
-                        </Button>
+                        {entry.showSealDocketRecordEntry && (
+                          <Button link icon="lock">
+                            Seal
+                          </Button>
+                        )}
                       </td>
                     )}
                   </tr>
