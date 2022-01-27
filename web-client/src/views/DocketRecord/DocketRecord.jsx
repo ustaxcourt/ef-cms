@@ -24,67 +24,6 @@ export const DocketRecord = connect(
     openSealDocketEntryModalSequence,
     showModal,
   }) {
-    const getIcon = entry => {
-      let icons = [];
-      if (entry.sealedTo) {
-        icons.push(
-          <FontAwesomeIcon
-            className="sealed-docket-entry"
-            icon="lock"
-            title={entry.sealedToTooltip}
-          />,
-        );
-      }
-      if (entry.isLegacySealed) {
-        icons.push(
-          <FontAwesomeIcon
-            className="sealed-address"
-            icon={['fas', 'lock']}
-            title="is legacy sealed"
-          />,
-        );
-        return icons;
-      }
-
-      // we only care to show the lock icon for external users,
-      // so we check if hideIcons is true AFTER we renter the lock icon
-      if (entry.hideIcons) return [];
-
-      if (entry.isPaper) {
-        icons.push(
-          <FontAwesomeIcon icon={['fas', 'file-alt']} title="is paper" />,
-        );
-        return icons;
-      }
-
-      if (entry.isInProgress) {
-        icons.push(
-          <FontAwesomeIcon icon={['fas', 'thumbtack']} title="in progress" />,
-        );
-        return icons;
-      }
-
-      if (entry.qcNeeded) {
-        icons.push(
-          <FontAwesomeIcon icon={['fa', 'star']} title="is untouched" />,
-        );
-        return icons;
-      }
-
-      if (entry.showLoadingIcon) {
-        icons.push(
-          <FontAwesomeIcon
-            className="fa-spin spinner"
-            icon="spinner"
-            title="is loading"
-          />,
-        );
-        return icons;
-      }
-
-      return icons;
-    };
-
     return (
       <>
         <DocketRecordHeader />
@@ -143,7 +82,9 @@ export const DocketRecord = connect(
                       {entry.eventCode}
                     </td>
                     <td aria-hidden="true" className="filing-type-icon">
-                      {getIcon(entry)}
+                      {entry.iconsToDisplay.map(iconInfo => (
+                        <FontAwesomeIcon key={iconInfo.icon} {...iconInfo} />
+                      ))}
                     </td>
                     <td>
                       <FilingsAndProceedings

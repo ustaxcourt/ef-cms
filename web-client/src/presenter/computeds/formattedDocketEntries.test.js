@@ -1,3 +1,4 @@
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -444,5 +445,51 @@ describe('formattedDocketEntries', () => {
         qcNeeded: false,
       });
     });
+  });
+
+  describe('sealedTo', () => {
+    it('should set the tooltip correctly if sealedTo is public', () => {
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].sealedToTooltip,
+      ).toEqual('Sealed to public');
+    });
+
+    it('should set the tooltip correctly if sealedTo is external', () => {
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].sealedToTooltip,
+      ).toEqual('Sealed to the public and parties of this case');
+    });
+  });
+
+  describe('setupIconsToDisplay', () => {
+    // TODO: implement this test
   });
 });
