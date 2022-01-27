@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -526,6 +527,102 @@ describe('formattedDocketEntries', () => {
           className: 'sealed-in-blackstone',
           icon: ['fas', 'lock'],
           title: 'is legacy sealed',
+        },
+      ]);
+    });
+
+    it('should only return the legacy sealed icon if the user is external and has paper', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          isInProgress: true,
+          isLegacySealed: true,
+          isPaper: true,
+          qcNeeded: true,
+          showLoadingIcon: true,
+        },
+        isExternalUser: true,
+      });
+
+      expect(result).toEqual([
+        {
+          className: 'sealed-in-blackstone',
+          icon: ['fas', 'lock'],
+          title: 'is legacy sealed',
+        },
+      ]);
+    });
+
+    it('should return only the paper icon if isPaper is true', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          isPaper: true,
+          qcNeeded: true,
+          showLoadingIcon: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          icon: ['fas', 'file-alt'],
+          title: 'is paper',
+        },
+      ]);
+    });
+
+    it('should only return the isInProgress icon if isInProgress is true', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          isInProgress: true,
+          isPaper: false,
+          qcNeeded: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          icon: ['fas', 'thumbtack'],
+          title: 'in progress',
+        },
+      ]);
+    });
+
+    it('should only return the qcNeeded icon if qcNeeded is true', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          qcNeeded: true,
+          showLoadingIcon: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          icon: ['fa', 'star'],
+          title: 'is untouched',
+        },
+      ]);
+    });
+
+    it('should only return the showLoadingIcon icon if showLoadingIcon is true', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          showLoadingIcon: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          className: 'fa-spin spinner',
+          icon: ['fa-spin', 'spinner'],
+          title: 'is loading',
         },
       ]);
     });
