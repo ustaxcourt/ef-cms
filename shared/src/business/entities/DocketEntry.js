@@ -124,6 +124,7 @@ DocketEntry.prototype.init = function init(
   this.mailingDate = rawDocketEntry.mailingDate;
   this.numberOfPages = rawDocketEntry.numberOfPages;
   this.objections = rawDocketEntry.objections;
+  this.sealedTo = rawDocketEntry.sealedTo;
   this.filers = rawDocketEntry.filers || [];
   this.ordinalValue = rawDocketEntry.ordinalValue;
   this.otherFilingParty = rawDocketEntry.otherFilingParty;
@@ -388,11 +389,10 @@ DocketEntry.prototype.strikeEntry = function ({
  * Seal this docket entry
  *
  * @param {object} obj param
- * @param {string} obj.name user name
- * @param {string} obj.userId user id
+ * @param {string} obj.sealedTo the type of user to seal this docket entry from
  */
 DocketEntry.prototype.sealEntry = function ({ sealedTo }) {
-  // TODO: implement this
+  this.sealedTo = sealedTo;
 };
 
 /**

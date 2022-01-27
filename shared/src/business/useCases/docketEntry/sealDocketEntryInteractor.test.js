@@ -1,5 +1,8 @@
+import {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+  ROLES,
+} from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
-import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { sealDocketEntryInteractor } from './sealDocketEntryInteractor';
 
@@ -47,6 +50,31 @@ describe('sealDocketEntryInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateDocketEntry.mock
         .calls[0][0],
-    ).toMatchObject({});
+    ).toMatchObject({
+      docketEntryId: answerDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+  });
+
+  it('should mark the docket entry as sealed and save', async () => {
+    const answerDocketEntryId = 'e6b81f4d-1e47-423a-8caf-6d2fdc3d3859';
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    const sealedDocketEntry = await sealDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: answerDocketEntryId,
+        docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+    );
+    expect(sealedDocketEntry).toBeDefined();
+    expect(sealedDocketEntry.sealedTo).toEqual(
+      DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    );
   });
 });

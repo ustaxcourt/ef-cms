@@ -48,18 +48,14 @@ exports.sealDocketEntryInteractor = async (
     throw new NotFoundError('Docket entry not found');
   }
 
-  // mark docket entry as sealed
   docketEntryEntity.sealEntry({ sealedTo: docketEntrySealedTo });
 
-  caseEntity.updateDocketEntry(docketEntryEntity);
+  await applicationContext.getPersistenceGateway().updateDocketEntry({
+    applicationContext,
+    docketEntryId,
+    docketNumber,
+    document: docketEntryEntity.validate().toRawObject(),
+  });
 
-  // save the docket entry
-  // await applicationContext.getPersistenceGateway().updateDocketEntry({
-  //   applicationContext,
-  //   docketEntryId,
-  //   docketNumber,
-  //   document: docketEntryEntity.validate().toRawObject(),
-  // });
-
-  // return caseEntity.toRawObject();
+  return docketEntryEntity.toRawObject();
 };
