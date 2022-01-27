@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-
 import React from 'react';
 import classNames from 'classnames';
 
@@ -25,46 +24,6 @@ export const DocketRecord = connect(
     openSealDocketEntryModalSequence,
     showModal,
   }) {
-    const getIcon = entry => {
-      if (entry.isLegacySealed) {
-        return (
-          <FontAwesomeIcon
-            className="sealed-address"
-            icon={['fas', 'lock']}
-            title="is legacy sealed"
-          />
-        );
-      }
-
-      // we only care to show the lock icon for external users,
-      // so we check if hideIcons is true AFTER we renter the lock icon
-      if (entry.hideIcons) return;
-
-      if (entry.isPaper) {
-        return <FontAwesomeIcon icon={['fas', 'file-alt']} title="is paper" />;
-      }
-
-      if (entry.isInProgress) {
-        return (
-          <FontAwesomeIcon icon={['fas', 'thumbtack']} title="in progress" />
-        );
-      }
-
-      if (entry.qcNeeded) {
-        return <FontAwesomeIcon icon={['fa', 'star']} title="is untouched" />;
-      }
-
-      if (entry.showLoadingIcon) {
-        return (
-          <FontAwesomeIcon
-            className="fa-spin spinner"
-            icon="spinner"
-            title="is loading"
-          />
-        );
-      }
-    };
-
     return (
       <>
         <DocketRecordHeader />
@@ -123,7 +82,9 @@ export const DocketRecord = connect(
                       {entry.eventCode}
                     </td>
                     <td aria-hidden="true" className="filing-type-icon">
-                      {getIcon(entry)}
+                      {entry.iconsToDisplay.map(iconInfo => (
+                        <FontAwesomeIcon key={iconInfo.icon} {...iconInfo} />
+                      ))}
                     </td>
                     <td>
                       <FilingsAndProceedings

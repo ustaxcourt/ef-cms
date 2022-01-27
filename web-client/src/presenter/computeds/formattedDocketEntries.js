@@ -1,5 +1,51 @@
 import { state } from 'cerebral';
 
+export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
+  let iconsToDisplay = [];
+
+  if (formattedResult.isLegacySealed) {
+    iconsToDisplay.push({
+      className: 'sealed-in-blackstone',
+      icon: ['fas', 'lock'],
+      title: 'is legacy sealed',
+    });
+    return iconsToDisplay;
+  } else if (formattedResult.sealedTo) {
+    iconsToDisplay.push({
+      className: 'sealed-docket-entry',
+      icon: 'lock',
+      title: formattedResult.sealedToTooltip,
+    });
+  }
+
+  if (isExternalUser) {
+    iconsToDisplay = [];
+  } else if (formattedResult.isPaper) {
+    iconsToDisplay.push({
+      icon: ['fas', 'file-alt'],
+      title: 'is paper',
+    });
+  } else if (formattedResult.isInProgress) {
+    iconsToDisplay.push({
+      icon: ['fas', 'thumbtack'],
+      title: 'in progress',
+    });
+  } else if (formattedResult.qcNeeded) {
+    iconsToDisplay.push({
+      icon: ['fa', 'star'],
+      title: 'is untouched',
+    });
+  } else if (formattedResult.showLoadingIcon) {
+    iconsToDisplay.push({
+      className: 'fa-spin spinner',
+      icon: ['fa-spin', 'spinner'],
+      title: 'is loading',
+    });
+  }
+
+  return iconsToDisplay;
+};
+
 export const getShowDocumentViewerLink = ({
   hasDocument,
   isCourtIssuedDocument,
@@ -84,6 +130,7 @@ export const getFormattedDocketEntry = ({
   userAssociatedWithCase,
 }) => {
   const {
+    DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
@@ -100,9 +147,7 @@ export const getFormattedDocketEntry = ({
 
   let showDocumentLinks = false;
 
-  if (isExternalUser) {
-    formattedResult.hideIcons = true;
-  } else {
+  if (!isExternalUser) {
     formattedResult.showLoadingIcon =
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
@@ -112,6 +157,13 @@ export const getFormattedDocketEntry = ({
     !formattedResult.isInProgress &&
     !formattedResult.qcWorkItemsUntouched &&
     entry.isPaper;
+
+  if (entry.sealedTo) {
+    formattedResult.sealedToTooltip =
+      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+        ? 'Sealed to public'
+        : 'Sealed to the public and parties of this case';
+  }
 
   if (entry.documentTitle) {
     formattedResult.descriptionDisplay = applicationContext
@@ -173,6 +225,11 @@ export const getFormattedDocketEntry = ({
     !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
   formattedResult.editDocketEntryMetaLink = `/case-detail/${docketNumber}/docket-entry/${formattedResult.index}/edit-meta`;
+
+  formattedResult.iconsToDisplay = setupIconsToDisplay({
+    formattedResult,
+    isExternalUser,
+  });
 
   return formattedResult;
 };
