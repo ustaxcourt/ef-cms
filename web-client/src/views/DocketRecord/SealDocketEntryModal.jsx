@@ -5,6 +5,7 @@ import React from 'react';
 
 export const SealDocketEntryModal = connect(
   {
+    DOCKET_ENTRY_SEALED_TO_TYPES: state.constants.DOCKET_ENTRY_SEALED_TO_TYPES,
     cancelSequence: sequences.dismissModalSequence,
     confirmSequence: sequences.sealDocketEntrySequence,
     modal: state.modal,
@@ -13,6 +14,7 @@ export const SealDocketEntryModal = connect(
   function SealDocketEntryModal({
     cancelSequence,
     confirmSequence,
+    DOCKET_ENTRY_SEALED_TO_TYPES,
     modal,
     updateModalValueSequence,
   }) {
@@ -39,11 +41,11 @@ export const SealDocketEntryModal = connect(
               id="docketEntrySealedTo-public"
               name="docketEntrySealedTo"
               type="radio"
-              value="Public"
+              value={DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC}
               onChange={e => {
                 updateModalValueSequence({
                   key: e.target.name,
-                  value: 'Public',
+                  value: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
                 });
               }}
             />
@@ -63,11 +65,11 @@ export const SealDocketEntryModal = connect(
               id="docketEntrySealedTo-external"
               name="docketEntrySealedTo"
               type="radio"
-              value="External" // TODO: make this a constant
+              value={DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL}
               onChange={e => {
                 updateModalValueSequence({
                   key: e.target.name,
-                  value: 'External',
+                  value: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
                 });
               }}
             />
