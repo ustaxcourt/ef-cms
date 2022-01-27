@@ -18,7 +18,10 @@ exports.sealDocketEntryInteractor = async (
   applicationContext,
   { docketEntryId, docketEntrySealedTo, docketNumber },
 ) => {
-  // check permissions
+  if (!docketEntrySealedTo) {
+    throw new Error('Docket entry sealed to is required');
+  }
+
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission = isAuthorized(
@@ -30,7 +33,6 @@ exports.sealDocketEntryInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // get the case
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
