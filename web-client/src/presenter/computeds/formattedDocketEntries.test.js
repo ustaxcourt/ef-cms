@@ -6,7 +6,10 @@ import {
   petitionerUser,
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
-import { formattedDocketEntries as formattedDocketEntriesComputed } from './formattedDocketEntries';
+import {
+  formattedDocketEntries as formattedDocketEntriesComputed,
+  setupIconsToDisplay,
+} from './formattedDocketEntries';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -490,6 +493,41 @@ describe('formattedDocketEntries', () => {
   });
 
   describe('setupIconsToDisplay', () => {
-    // TODO: implement this test
+    it('should return a lock icon with formatted tooltip text when the docket entry has been sealed', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+          sealedToTooltip: 'anything',
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          className: 'sealed-docket-entry',
+          icon: 'lock',
+          title: expect.anything(),
+        },
+      ]);
+    });
+
+    it('should return a lock icon with formatted tooltip text when the docket entry was sealed in blackstone', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          isLegacySealed: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          className: 'sealed-in-blackstone',
+          icon: ['fas', 'lock'],
+          title: 'is legacy sealed',
+        },
+      ]);
+    });
   });
 });
