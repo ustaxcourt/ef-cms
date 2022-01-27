@@ -71,7 +71,7 @@
     "eslint-plugin-spellcheck": "^0.0.19",
     "esm": "^3.2.25",
     "express": "^4.17.2",
-    "faker": "^5.5.3",
+    "faker": "^6.6.6",
     "file-loader": "^6.2.0",
     "form-data": "^4.0.0",
     "honeybadger-js": "^2.3.0",
