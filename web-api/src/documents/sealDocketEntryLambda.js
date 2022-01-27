@@ -1,7 +1,7 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * used for sealing docket records
+ * used for sealing docket entries
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
