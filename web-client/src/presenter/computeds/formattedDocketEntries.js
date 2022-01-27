@@ -72,7 +72,6 @@ export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
 
   const docketEntryIsOpinion = allOpinionEventCodes.includes(entry.eventCode);
 
-  // todo: ask - does it need to be served?
   return !docketEntryIsOpinion;
 };
 
