@@ -3,21 +3,19 @@ import { state } from 'cerebral';
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay = [];
 
-  if (formattedResult.sealedTo) {
+  if (formattedResult.isLegacySealed) {
+    iconsToDisplay.push({
+      className: 'sealed-in-blackstone',
+      icon: ['fas', 'lock'],
+      title: 'is legacy sealed',
+    });
+    return iconsToDisplay;
+  } else if (formattedResult.sealedTo) {
     iconsToDisplay.push({
       className: 'sealed-docket-entry',
       icon: 'lock',
       title: formattedResult.sealedToTooltip,
     });
-  }
-
-  if (formattedResult.isLegacySealed) {
-    iconsToDisplay.push({
-      className: 'sealed-address',
-      icon: ['fas', 'lock'],
-      title: 'is legacy sealed',
-    });
-    return;
   }
 
   if (isExternalUser) {
