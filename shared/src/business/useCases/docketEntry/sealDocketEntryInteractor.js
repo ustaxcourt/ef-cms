@@ -50,6 +50,9 @@ exports.sealDocketEntryInteractor = async (
 
   docketEntryEntity.sealEntry({ sealedTo: docketEntrySealedTo });
 
+  console.log('docketEntrySealedTo', docketEntrySealedTo);
+  console.log('sealedTo', docketEntryEntity.sealedTo);
+
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
     docketEntryId,
