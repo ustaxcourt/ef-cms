@@ -3,8 +3,10 @@ import { DocketRecordHeader } from './DocketRecordHeader';
 import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
+
 import React from 'react';
 import classNames from 'classnames';
 
@@ -12,12 +14,15 @@ export const DocketRecord = connect(
   {
     docketRecordHelper: state.docketRecordHelper,
     formattedDocketEntries: state.formattedDocketEntries,
+    openSealDocketEntryModalSequence:
+      sequences.openSealDocketEntryModalSequence,
     showModal: state.modal.showModal,
   },
 
   function DocketRecord({
     docketRecordHelper,
     formattedDocketEntries,
+    openSealDocketEntryModalSequence,
     showModal,
   }) {
     const getIcon = entry => {
@@ -85,7 +90,9 @@ export const DocketRecord = connect(
               <th>Action</th>
               <th>Served</th>
               <th className="center-column">Parties</th>
-              {docketRecordHelper.showEditDocketRecordEntry && <th>&nbsp;</th>}
+              {docketRecordHelper.showEditOrSealDocketRecordEntry && (
+                <th>&nbsp;</th>
+              )}
             </tr>
           </thead>
           <tbody>
@@ -143,7 +150,7 @@ export const DocketRecord = connect(
                       <span className="responsive-label">Parties</span>
                       {entry.showServed && entry.servedPartiesCode}
                     </td>
-                    {docketRecordHelper.showEditDocketRecordEntry && (
+                    {docketRecordHelper.showEditOrSealDocketRecordEntry && (
                       <td>
                         {entry.showEditDocketRecordEntry && (
                           <Button
@@ -152,6 +159,19 @@ export const DocketRecord = connect(
                             icon="edit"
                           >
                             Edit
+                          </Button>
+                        )}
+                        {entry.showSealDocketRecordEntry && (
+                          <Button
+                            link
+                            icon="lock"
+                            onClick={() => {
+                              openSealDocketEntryModalSequence({
+                                showModal: 'SealDocketEntryModal',
+                              });
+                            }}
+                          >
+                            Seal
                           </Button>
                         )}
                       </td>
@@ -163,6 +183,7 @@ export const DocketRecord = connect(
           </tbody>
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
+        {showModal == 'SealDocketEntryModal' && <SealDocketEntryModal />}
       </>
     );
   },

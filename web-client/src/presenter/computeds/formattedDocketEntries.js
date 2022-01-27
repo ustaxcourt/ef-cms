@@ -66,6 +66,15 @@ export const getShowEditDocketRecordEntry = ({
   );
 };
 
+export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
+  const allOpinionEventCodes =
+    applicationContext.getConstants().OPINION_EVENT_CODES_WITH_BENCH_OPINION;
+
+  const docketEntryIsOpinion = allOpinionEventCodes.includes(entry.eventCode);
+
+  return !docketEntryIsOpinion;
+};
+
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -149,6 +158,12 @@ export const getFormattedDocketEntry = ({
   }
 
   formattedResult.showEditDocketRecordEntry = getShowEditDocketRecordEntry({
+    applicationContext,
+    entry,
+    userPermissions: permissions,
+  });
+
+  formattedResult.showSealDocketRecordEntry = getShowSealDocketRecordEntry({
     applicationContext,
     entry,
     userPermissions: permissions,
