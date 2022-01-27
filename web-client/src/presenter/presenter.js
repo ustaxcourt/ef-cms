@@ -287,6 +287,7 @@ import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLater
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealAddressSequence } from './sequences/sealAddressSequence';
 import { sealCaseSequence } from './sequences/sealCaseSequence';
+import { sealDocketEntrySequence } from './sequences/sealDocketEntrySequence';
 import { selectAssigneeSequence } from './sequences/selectAssigneeSequence';
 import { selectDateRangeFromCalendarSequence } from './sequences/selectDateRangeFromCalendarSequence';
 import { selectDocumentForPreviewSequence } from './sequences/selectDocumentForPreviewSequence';
@@ -776,6 +777,7 @@ export const presenter = {
     scannerStartupSequence,
     sealAddressSequence,
     sealCaseSequence,
+    sealDocketEntrySequence,
     selectAssigneeSequence,
     selectDateRangeFromCalendarSequence,
     selectDocumentForPreviewSequence,
