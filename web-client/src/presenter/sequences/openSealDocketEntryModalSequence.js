@@ -1,10 +1,10 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setDefaultDocketEntrySealedToAction } from '../actions/CaseDetail/setDefaultDocketEntrySealedToAction';
+import { setDefaultSealDocketEntryModalStateAction } from '../actions/CaseDetail/setDefaultSealDocketEntryModalStateAction';
 import { setShowModalAction } from '../actions/setShowModalAction';
 
 export const openSealDocketEntryModalSequence = [
   // TODO: Can openCleanModalSequence be made into a decorator?
   clearModalStateAction,
-  setDefaultDocketEntrySealedToAction,
+  setDefaultSealDocketEntryModalStateAction,
   setShowModalAction,
 ];

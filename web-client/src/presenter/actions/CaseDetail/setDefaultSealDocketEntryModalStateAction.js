@@ -1,13 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * Defaults state.modal.docketEntrySealedTo to DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+ * sets the state.modal to have the default values needed for sealing a docket entry in the modal.
  *
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const setDefaultDocketEntrySealedToAction = ({
+export const setDefaultSealDocketEntryModalStateAction = ({
   applicationContext,
+  props,
   store,
 }) => {
   const { DOCKET_ENTRY_SEALED_TO_TYPES } = applicationContext.getConstants();
@@ -16,4 +17,6 @@ export const setDefaultDocketEntrySealedToAction = ({
     state.modal.docketEntrySealedTo,
     DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
   );
+
+  store.set(state.modal.docketEntryId, props.docketEntryId);
 };

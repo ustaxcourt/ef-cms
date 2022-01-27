@@ -12,7 +12,6 @@ export const submitSealDocketEntryAction = async ({
   applicationContext,
   get,
 }) => {
-  // TODO: add docketEntryId to modal
   const { docketEntryId, docketEntrySealedTo } = get(state.modal);
   const { docketNumber } = get(state.caseDetail);
 
