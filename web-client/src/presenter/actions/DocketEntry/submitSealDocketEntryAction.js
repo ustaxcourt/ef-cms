@@ -11,15 +11,23 @@ import { state } from 'cerebral';
 export const submitSealDocketEntryAction = async ({
   applicationContext,
   get,
+  store,
 }) => {
   const { docketEntryId, docketEntrySealedTo } = get(state.modal);
-  const { docketNumber } = get(state.caseDetail);
+  const { docketEntries, docketNumber } = get(state.caseDetail);
 
-  await applicationContext
+  const updatedDocketEntry = await applicationContext
     .getUseCases()
     .sealDocketEntryInteractor(applicationContext, {
       docketEntryId,
       docketEntrySealedTo,
       docketNumber,
     });
+
+  const indexToUpdate = docketEntries.indexOf(
+    entry => entry.docketEntryId === docketEntryId,
+  );
+  docketEntries[indexToUpdate] = updatedDocketEntry;
+
+  store.set(state.caseDetail.docketEntries, docketEntries);
 };

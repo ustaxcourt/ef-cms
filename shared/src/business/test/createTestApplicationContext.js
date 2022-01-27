@@ -143,6 +143,9 @@ const {
   saveWorkItem,
 } = require('../../persistence/dynamo/workitems/saveWorkItem');
 const {
+  sealDocketEntryInteractor,
+} = require('../useCases/docketEntry/sealDocketEntryInteractor');
+const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
 const {
@@ -376,6 +379,9 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetUseCases = appContextProxy({
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
+    sealDocketEntryInteractor: jest
+      .fn()
+      .mockImplementation(sealDocketEntryInteractor),
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),
