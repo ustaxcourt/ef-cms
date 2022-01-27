@@ -34,26 +34,6 @@ describe('getFormattedDocketEntry', () => {
     servedAt: '2019-02-28T21:14:39.488Z',
   };
 
-  describe('hideIcons', () => {
-    it('should be true if isExternalUser is true', () => {
-      const result = getFormattedDocketEntry({
-        ...baseParams,
-        isExternalUser: true,
-      });
-
-      expect(result.hideIcons).toBeTruthy();
-    });
-
-    it('should be false if isExternalUser is false', () => {
-      const result = getFormattedDocketEntry({
-        ...baseParams,
-        isExternalUser: false,
-      });
-
-      expect(result.hideIcons).toBeFalsy();
-    });
-  });
-
   describe('showLoadingIcon', () => {
     it('should be true if isExternalUser is false, permissions.UPDATE_CASE is false, and entry.processingStatus is not complete', () => {
       const result = getFormattedDocketEntry({
