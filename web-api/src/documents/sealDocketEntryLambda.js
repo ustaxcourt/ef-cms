@@ -12,10 +12,13 @@ exports.sealDocketEntryLambda = event =>
       pathParameters: { docketEntryId, docketNumber },
     } = event;
 
+    const { docketEntrySealedTo } = JSON.parse(event.body);
+
     return await applicationContext
       .getUseCases()
       .sealDocketEntryInteractor(applicationContext, {
         docketEntryId,
+        docketEntrySealedTo,
         docketNumber,
       });
   });
