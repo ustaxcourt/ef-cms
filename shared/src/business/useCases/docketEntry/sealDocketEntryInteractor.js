@@ -10,9 +10,9 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id to strike
+ * @param {string} providers.docketEntryId the docket entry id to seal
  * @param {string} providers.docketNumber the docket number of the case
- * @returns {object} the updated case after the docket entry is stricken
+ * @returns {object} the updated docket entry after it has been sealed
  */
 exports.sealDocketEntryInteractor = async (
   applicationContext,
@@ -51,9 +51,6 @@ exports.sealDocketEntryInteractor = async (
   }
 
   docketEntryEntity.sealEntry({ sealedTo: docketEntrySealedTo });
-
-  console.log('docketEntrySealedTo', docketEntrySealedTo);
-  console.log('sealedTo', docketEntryEntity.sealedTo);
 
   await applicationContext.getPersistenceGateway().updateDocketEntry({
     applicationContext,
