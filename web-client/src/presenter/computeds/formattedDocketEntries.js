@@ -147,9 +147,7 @@ export const getFormattedDocketEntry = ({
 
   let showDocumentLinks = false;
 
-  if (isExternalUser) {
-    formattedResult.hideIcons = true;
-  } else {
+  if (!isExternalUser) {
     formattedResult.showLoadingIcon =
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
