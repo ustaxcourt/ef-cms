@@ -167,6 +167,7 @@ export const DocketRecord = connect(
                             icon="lock"
                             onClick={() => {
                               openSealDocketEntryModalSequence({
+                                docketEntryId: entry.docketEntryId,
                                 showModal: 'SealDocketEntryModal',
                               });
                             }}
