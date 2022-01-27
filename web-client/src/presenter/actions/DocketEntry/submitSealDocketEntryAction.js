@@ -24,7 +24,7 @@ export const submitSealDocketEntryAction = async ({
       docketNumber,
     });
 
-  const indexToUpdate = docketEntries.indexOf(
+  const indexToUpdate = docketEntries.findIndex(
     entry => entry.docketEntryId === docketEntryId,
   );
   docketEntries[indexToUpdate] = updatedDocketEntry;

@@ -66,12 +66,13 @@ describe('submitSealDocketEntryAction', () => {
         },
       },
     });
-    console.log(result.state.caseDetail.docketEntries);
 
-    expect(
+    const updatedDocketEntryInState =
       result.state.caseDetail.docketEntries.find(
-        entry => entry.dockEntryId === mockDocketEntryId,
-      ),
-    ).toMatchObject({});
+        entry => entry.docketEntryId === mockDocketEntryId,
+      );
+    expect(updatedDocketEntryInState.sealedTo).toBe(
+      DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    );
   });
 });

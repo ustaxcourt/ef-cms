@@ -84,6 +84,7 @@ export const getFormattedDocketEntry = ({
   userAssociatedWithCase,
 }) => {
   const {
+    DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
@@ -112,6 +113,13 @@ export const getFormattedDocketEntry = ({
     !formattedResult.isInProgress &&
     !formattedResult.qcWorkItemsUntouched &&
     entry.isPaper;
+
+  if (entry.sealedTo) {
+    formattedResult.sealedToTooltip =
+      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+        ? 'Sealed to public'
+        : 'Sealed to the public and parties of this case';
+  }
 
   if (entry.documentTitle) {
     formattedResult.descriptionDisplay = applicationContext

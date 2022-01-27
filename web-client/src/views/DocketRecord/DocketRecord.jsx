@@ -6,7 +6,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
-
 import React from 'react';
 import classNames from 'classnames';
 
@@ -26,43 +25,64 @@ export const DocketRecord = connect(
     showModal,
   }) {
     const getIcon = entry => {
+      let icons = [];
+      if (entry.sealedTo) {
+        icons.push(
+          <FontAwesomeIcon
+            className="sealed-docket-entry"
+            icon="lock"
+            title={entry.sealedToTooltip}
+          />,
+        );
+      }
       if (entry.isLegacySealed) {
-        return (
+        icons.push(
           <FontAwesomeIcon
             className="sealed-address"
             icon={['fas', 'lock']}
             title="is legacy sealed"
-          />
+          />,
         );
+        return icons;
       }
 
       // we only care to show the lock icon for external users,
       // so we check if hideIcons is true AFTER we renter the lock icon
-      if (entry.hideIcons) return;
+      if (entry.hideIcons) return [];
 
       if (entry.isPaper) {
-        return <FontAwesomeIcon icon={['fas', 'file-alt']} title="is paper" />;
+        icons.push(
+          <FontAwesomeIcon icon={['fas', 'file-alt']} title="is paper" />,
+        );
+        return icons;
       }
 
       if (entry.isInProgress) {
-        return (
-          <FontAwesomeIcon icon={['fas', 'thumbtack']} title="in progress" />
+        icons.push(
+          <FontAwesomeIcon icon={['fas', 'thumbtack']} title="in progress" />,
         );
+        return icons;
       }
 
       if (entry.qcNeeded) {
-        return <FontAwesomeIcon icon={['fa', 'star']} title="is untouched" />;
+        icons.push(
+          <FontAwesomeIcon icon={['fa', 'star']} title="is untouched" />,
+        );
+        return icons;
       }
 
       if (entry.showLoadingIcon) {
-        return (
+        icons.push(
           <FontAwesomeIcon
             className="fa-spin spinner"
             icon="spinner"
             title="is loading"
-          />
+          />,
         );
+        return icons;
       }
+
+      return icons;
     };
 
     return (
