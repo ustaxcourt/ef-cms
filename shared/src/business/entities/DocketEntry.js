@@ -385,6 +385,17 @@ DocketEntry.prototype.strikeEntry = function ({
 };
 
 /**
+ * Seal this docket entry
+ *
+ * @param {object} obj param
+ * @param {string} obj.name user name
+ * @param {string} obj.userId user id
+ */
+DocketEntry.prototype.sealEntry = function ({ sealedTo }) {
+  // TODO: implement this
+};
+
+/**
  * Determines if the docket entry has been served
  *
  * @returns {Boolean} true if the docket entry has been served, false otherwise

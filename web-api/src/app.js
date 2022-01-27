@@ -451,6 +451,7 @@ const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
+const { sealDocketEntryLambda } = require('./documents/sealDocketEntryLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
 const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
 const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
@@ -647,6 +648,11 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     '/case-documents/:docketNumber/:docketEntryId/strike',
     lambdaWrapper(strikeDocketEntryLambda),
   );
+  app.put(
+    '/case-documents/:docketNumber/:docketEntryId/seal',
+    lambdaWrapper(sealDocketEntryLambda),
+  );
+
   // DELETE
   app.delete(
     '/case-documents/:docketNumber/correspondence/:correspondenceId',
