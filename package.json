@@ -10,7 +10,7 @@
     "@babel/eslint-parser": "^7.16.5",
     "@babel/preset-env": "^7.16.11",
     "@babel/preset-react": "^7.16.7",
-    "@babel/register": "^7.16.9",
+    "@babel/register": "^7.16.5",
     "@cerebral/react": "4.2.1",
     "@fortawesome/fontawesome-svg-core": "^1.2.36",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
