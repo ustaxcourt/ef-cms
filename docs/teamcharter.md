@@ -22,7 +22,7 @@ Team DAWSSON Members:
 * Rosie Highsmith, Software Engineer
 * Sui Wong, User Experience Design and Research
 * Tenille Lenard, Court Product Specialist
-* Timothy Shumway - Software Engineer
+* Timothy Shumway, Software Engineer
 * Tom Elliott, Software Engineer
 
 Core Team Values:
