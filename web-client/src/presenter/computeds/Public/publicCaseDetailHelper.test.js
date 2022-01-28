@@ -223,23 +223,25 @@ describe('publicCaseDetailHelper', () => {
       ]);
     });
 
-    it.only('should not show a link for sealed docket entries requested by a public user', () => {
+    it('should not show a link for sealed docket entries requested by a public user', () => {
       state.caseDetail.docketEntries = [
         {
           ...baseDocketEntry,
-          docketEntryId: '596223c1-527b-46b4-98b0-1b10455e9495',
-          documentTitle: 'Petition',
-          documentType: 'Petition',
-          eventCode: 'P',
-          index: 1,
-          isLegacyServed: true,
+          docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
+          documentType: 'Order of Dismissal and Decision',
+          eventCode: 'ODD',
+          index: 0,
           isSealed: true,
+          servedAt: '2019-12-30T21:00:00.000Z',
         },
       ];
 
       const result = runCompute(publicCaseDetailHelper, { state });
 
-      expect(result.showLinkToDocument).toBe(false);
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
+      ).toBe(false);
     });
 
     it('should show a link for documents requested by a terminal user', () => {
