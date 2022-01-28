@@ -30,6 +30,7 @@ const formatDocketEntryOnDocketRecord = (
     !record.isStricken &&
     !record.isTranscript &&
     !record.isStipDecision &&
+    !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
 
   const canDisplayDocumentLink = isTerminalUser
