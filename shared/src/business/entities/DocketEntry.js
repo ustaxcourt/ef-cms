@@ -393,6 +393,7 @@ DocketEntry.prototype.strikeEntry = function ({
  */
 DocketEntry.prototype.sealEntry = function ({ sealedTo }) {
   this.sealedTo = sealedTo;
+  this.isSealed = true;
 };
 
 /**
