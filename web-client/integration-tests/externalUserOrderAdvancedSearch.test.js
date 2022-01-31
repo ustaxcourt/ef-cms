@@ -195,29 +195,19 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
-    const advancedDocumentSearchHelper = withAppContextDecorator(
-      advancedDocumentSearchHelperComputed,
-    );
-
-    const searchHelper = runCompute(advancedDocumentSearchHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    console.log('searchHelper.searchResults', searchHelper.searchResults);
-
-    expect(searchHelper.searchResults).toEqual(
+    expect(
+      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+    ).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
           documentTitle: 'Sealed Order',
           isCaseSealed: false,
           isDocketEntrySealed: true,
-          showSealedIcon: true,
         }),
         expect.objectContaining({
           documentTitle: "This is a legacy judge's order 4",
           isCaseSealed: false,
           isDocketEntrySealed: false,
-          showSealedIcon: false,
         }),
       ]),
     );
