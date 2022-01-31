@@ -8,7 +8,6 @@ export const advancedDocumentSearchHelper = (get, applicationContext) => {
   const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
 
-  console.log('helper searchResults', searchResults);
   const {
     ADVANCED_SEARCH_TABS,
     DATE_RANGE_SEARCH_OPTIONS,
