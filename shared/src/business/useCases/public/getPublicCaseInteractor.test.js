@@ -20,6 +20,9 @@ const mockCase = {
 const sealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
 sealedDocketEntries[0].isLegacySealed = true;
 
+const normalSealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
+normalSealedDocketEntries[0].isSealed = true;
+
 const sealedContactPrimary = cloneDeep({
   ...mockCaseContactPrimary,
   isSealed: true,
@@ -45,6 +48,10 @@ const mockCases = {
     irsPractitioners: [],
     partyType: PARTY_TYPES.petitioner,
     petitioners: [sealedContactPrimary],
+  },
+  '190-92': {
+    ...cloneDeep(mockCase),
+    docketEntries: normalSealedDocketEntries,
   },
 };
 
@@ -145,5 +152,17 @@ describe('getPublicCaseInteractor', () => {
       docketNumber,
     });
     expect(getContactPrimary(result).address1).toBeUndefined();
+  });
+
+  it.only('should return the case to the public user if the case is unsealed but has a sealed document', async () => {
+    const docketNumber = '190-92';
+
+    await expect(
+      getPublicCaseInteractor(applicationContext, {
+        docketNumber,
+      }),
+    ).resolves.toMatchObject({
+      docketNumber,
+    });
   });
 });
