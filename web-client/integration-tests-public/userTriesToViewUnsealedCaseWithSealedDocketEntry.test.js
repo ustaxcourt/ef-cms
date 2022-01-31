@@ -2,6 +2,7 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextPublic } from '../src/applicationContextPublic';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsDocketEntry } from '../integration-tests/journey/docketClerkSealsDocketEntry';
@@ -11,10 +12,12 @@ import {
   setupTest as privateSetupTest,
   uploadPetition,
 } from '../integration-tests/helpers';
+import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from '../src/presenter/computeds/Public/publicCaseDetailHelper';
 import { setupTest as publicSetupTest } from './helpers';
+import { runCompute } from 'cerebral/test';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
-import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Unauthed user views todays orders', () => {
   const privateTestClient = privateSetupTest();
@@ -49,7 +52,6 @@ describe('Unauthed user views todays orders', () => {
     privateTestClient.docketNumber = caseDetail.docketNumber;
   });
 
-  // login as a docket clerk
   loginAs(privateTestClient, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(privateTestClient, {
     documentTitle: 'Order to do something',
@@ -57,26 +59,36 @@ describe('Unauthed user views todays orders', () => {
     expectedDocumentType: 'Order',
   });
   docketClerkViewsDraftOrder(privateTestClient, 0);
-  // old transcript that should be available to the user
-  // upload a docket entry
-  // add docket entry to docket record
   docketClerkAddsTranscriptDocketEntryFromOrder(privateTestClient, 0, {
     day: '01',
     month: '01',
     year: '2019',
   });
 
-  // seal a docket entry to the public
   docketClerkSealsDocketEntry(privateTestClient, 0);
 
-  // view to public UI
   unauthedUserNavigatesToPublicSite(publicTestClient);
 
-  // search for the case
   unauthedUserSearchesByDocketNumber(publicTestClient, privateTestClient);
 
-  // verify case shows up
-  // DO LESS
-  unauthedUserViewsCaseDetail(publicTestClient);
-  // verify no link is displayed for the sealed docket entry
+  it('verify sealed docket entry is not hyperlinked', async () => {
+    await publicTestClient.runSequence('gotoPublicCaseDetailSequence', {
+      docketNumber: publicTestClient.docketNumber,
+    });
+
+    const publicCaseDetailHelper = withAppContextDecorator(
+      publicCaseDetailHelperComputed,
+      applicationContextPublic,
+    );
+
+    const helper = runCompute(publicCaseDetailHelper, {
+      state: publicTestClient.getState(),
+    });
+
+    const sealedDocketEntry = helper.formattedDocketEntriesOnDocketRecord.find(
+      entry =>
+        entry.docketEntryId === privateTestClient.draftOrders[0].docketEntryId,
+    );
+    expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
+  });
 });
