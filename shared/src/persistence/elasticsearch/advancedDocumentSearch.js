@@ -120,6 +120,9 @@ exports.advancedDocumentSearch = async ({
       {
         term: { 'isSealed.BOOL': true },
       },
+      {
+        term: { 'sealedTo.S': 'External' },
+      },
     ];
     caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
   }
