@@ -256,7 +256,6 @@ describe('getCaseInteractor', () => {
             createdAt: applicationContext.getUtilities().createISODateString(),
             docketEntries: sealedDocketEntries,
             docketNumber: '101-18',
-            hasSealedDocuments: true,
             irsPractitioners: [
               {
                 barNumber: 'BN1234',

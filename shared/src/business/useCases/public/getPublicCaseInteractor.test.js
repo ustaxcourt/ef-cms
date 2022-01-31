@@ -11,7 +11,6 @@ const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
 
 const mockCase = {
   docketNumber: '123-45',
-  hasSealedDocuments: false,
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
   petitioners: [mockCaseContactPrimary],
@@ -40,7 +39,6 @@ const mockCases = {
     ...cloneDeep(mockCase),
     docketEntries: sealedDocketEntries,
     docketNumber: '120-20',
-    hasSealedDocuments: true,
   },
   '123-45': cloneDeep(mockCase),
   '188-88': {
