@@ -52,6 +52,7 @@ const mockCases = {
   '190-92': {
     ...cloneDeep(mockCase),
     docketEntries: normalSealedDocketEntries,
+    docketNumber: '190-92',
   },
 };
 
