@@ -1,5 +1,8 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from '../src/presenter/computeds/AdvancedSearch/advancedDocumentSearchHelper';
+import {
+  advancedDocumentSearchHelper,
+  advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
+} from '../src/presenter/computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { associatedUserSearchesForServedOrder } from './journey/associatedUserSearchesForServedOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -99,9 +102,6 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
-    const advancedDocumentSearchHelper = withAppContextDecorator(
-      advancedDocumentSearchHelperComputed,
-    );
     const searchHelper = runCompute(advancedDocumentSearchHelper, {
       state: cerebralTest.getState(),
     });
@@ -195,9 +195,26 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
-    expect(
-      cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
-    ).toEqual([]);
+    const searchHelper = runCompute(advancedDocumentSearchHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(searchHelper.searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          documentTitle: 'Sealed Order',
+          isCaseSealed: false,
+          isDocketEntrySealed: true,
+          showSealedIcon: true,
+        }),
+        expect.objectContaining({
+          documentTitle: "This is a legacy judge's order 4",
+          isCaseSealed: false,
+          isDocketEntrySealed: false,
+          showSealedIcon: false,
+        }),
+      ]),
+    );
   });
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');

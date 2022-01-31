@@ -136,9 +136,10 @@ describe('getPublicCaseInteractor', () => {
       docketNumber,
     });
 
+    console.log('result', result);
     expect(result).toMatchObject({
       docketNumber,
-      isSealed: true,
+      isSealed: false,
     });
   });
 
@@ -155,7 +156,7 @@ describe('getPublicCaseInteractor', () => {
     expect(getContactPrimary(result).address1).toBeUndefined();
   });
 
-  it.only('should return the case to the public user if the case is unsealed but has a sealed document', async () => {
+  it('should return the case to the public user if the case is unsealed but has a sealed document', async () => {
     const docketNumber = '190-92';
 
     await expect(
