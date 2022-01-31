@@ -1,24 +1,31 @@
-import { refreshElasticsearchIndex } from '../helpers';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import { getFormattedDocketEntriesForTest } from '../helpers';
 
-export const docketClerkSealsDocketEntry = cerebralTest => {
+export const docketClerkSealsDocketEntry = (cerebralTest, draftOrderIndex) => {
   return it('Docket clerk seals a docket entry', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
 
-    // need to pass in the docketEntryId to pass to modal, can get from draftOrderIndex
-    await cerebralTest.runSequence('openSealDocketEntryModalSequence');
+    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
+
+    await cerebralTest.runSequence('openSealDocketEntryModalSequence', {
+      docketEntryId,
+    });
+
     await cerebralTest.runSequence('sealDocketEntrySequence');
 
-    // const { formattedDocketEntriesOnDocketRecord } =
-    //   await getFormattedDocketEntriesForTest(cerebralTest);
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-    // const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
-    //   docketEntry => docketEntry.isSealed,
-    // );
+    const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
+      docketEntry => docketEntry.docketEntryId === docketEntryId,
+    );
 
-    // expect(cerebralTest.getState('caseDetail.docketEntries')).not.toBeDefined();
-
-    await refreshElasticsearchIndex();
+    expect(sealedDocketEntry.isSealed).toBe(true);
+    expect(sealedDocketEntry.sealedTo).toBe(
+      DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+    );
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
   });
 };
