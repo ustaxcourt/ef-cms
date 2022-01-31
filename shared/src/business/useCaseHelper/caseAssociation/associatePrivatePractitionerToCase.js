@@ -28,6 +28,9 @@ exports.associatePrivatePractitionerToCase = async ({
       docketNumber,
     });
 
+  const isPrivatePractitionerAssociated = caseToUpdate.privatePractitioners?.includes(
+    practitioner => practitioner.userId === user.userId);
+
   const isAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
