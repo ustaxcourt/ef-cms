@@ -21,16 +21,6 @@ exports.associatePrivatePractitionerToCase = async ({
   serviceIndicator,
   user,
 }) => {
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
-
-  const isPrivatePractitionerAssociated = caseToUpdate.privatePractitioners?.includes(
-    practitioner => practitioner.userId === user.userId);
-
   const isAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
@@ -38,6 +28,18 @@ exports.associatePrivatePractitionerToCase = async ({
       docketNumber,
       userId: user.userId,
     });
+
+  const caseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const isPrivatePractitionerOnCase =
+    caseToUpdate.privatePractitioners?.includes(
+      practitioner => practitioner.userId === user.userId,
+    );
 
   if (!isAssociated) {
     const userCaseEntity = new UserCase(caseToUpdate);
@@ -48,7 +50,9 @@ exports.associatePrivatePractitionerToCase = async ({
       userCase: userCaseEntity.validate().toRawObject(),
       userId: user.userId,
     });
+  }
 
+  if (!isPrivatePractitionerOnCase) {
     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
     const { petitioners } = caseEntity;
@@ -74,4 +78,8 @@ exports.associatePrivatePractitionerToCase = async ({
 
     return caseEntity.toRawObject();
   }
+
+  throw new Error(
+    'The Private Practitioner is already associated with the case.',
+  );
 };
