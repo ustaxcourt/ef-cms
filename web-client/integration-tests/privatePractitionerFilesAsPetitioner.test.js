@@ -1,29 +1,14 @@
-import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { admissionsClerkAddsNewPractitioner } from './journey/admissionsClerkAddsNewPractitioner';
-import { admissionsClerkAddsPractitionerEmail } from './journey/admissionsClerkAddsPractitionerEmail';
-import { admissionsClerkEditsPractitionerInfo } from './journey/admissionsClerkEditsPractitionerInfo';
-import { admissionsClerkMigratesPractitionerWithoutEmail } from './journey/admissionsClerkMigratesPractitionerWithoutEmail';
-import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/admissionsClerkSearchesForPractitionerByBarNumber';
-import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
-import { admissionsClerkVerifiesPractitionerServiceIndicator } from './journey/admissionsClerkVerifiesPractitionerServiceIndicator';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { admissionsClerkEditsPetitionerEmail } from './journey/admissionsClerkEditsPetitionerEmail';
+// import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { fakeFile } from '../integration-tests-public/helpers';
-import {
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-  uploadPetition,
-} from './helpers';
+import { loginAs, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
-import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
-import { admissionsClerkEditsPetitionerEmail } from "./journey/admissionsClerkEditsPetitionerEmail";
 
 const cerebralTest = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+  // const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -50,5 +35,3 @@ describe('admissions clerk practitioner journey', () => {
 
   petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 });
-
-
