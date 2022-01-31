@@ -46,7 +46,6 @@ describe('Unauthed user views todays orders', () => {
     });
     expect(caseDetail.docketNumber).toBeDefined();
     privateTestClient.docketNumber = caseDetail.docketNumber;
-    privateTestClient.docketNumber = caseDetail.docketNumber;
   });
 
   // login as a docket clerk
@@ -73,7 +72,7 @@ describe('Unauthed user views todays orders', () => {
   unauthedUserNavigatesToPublicSite(publicTestClient);
 
   // search for the case
-  // unauthedUserSearchesByDocketNumber(privateTestClient, publicTestClient);
+  unauthedUserSearchesByDocketNumber(publicTestClient, privateTestClient);
 
   // verify case shows up
   // verify no link is displayed for the sealed docket entry
