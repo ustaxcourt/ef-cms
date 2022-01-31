@@ -21,6 +21,13 @@ exports.associatePrivatePractitionerToCase = async ({
   serviceIndicator,
   user,
 }) => {
+  const caseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
   const isAssociated = await applicationContext
     .getPersistenceGateway()
     .verifyCaseForUser({
@@ -30,13 +37,6 @@ exports.associatePrivatePractitionerToCase = async ({
     });
 
   if (!isAssociated) {
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-
     const userCaseEntity = new UserCase(caseToUpdate);
 
     await applicationContext.getPersistenceGateway().associateUserWithCase({
