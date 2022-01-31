@@ -124,7 +124,6 @@ describe('caseFilter', () => {
           },
         ],
         docketNumber: '120-20',
-        hasSealedDocuments: true,
         petitioners: [],
       },
     ];

@@ -327,7 +327,6 @@ describe('Docket clerk opinion advanced search', () => {
           entityName: 'InternalDocumentSearchResult',
           eventCode: 'SOP',
           filingDate: '2021-10-25T18:57:31.742Z',
-          hasSealedDocuments: false,
           isFileAttached: true,
           isSealed: false,
           isStricken: false,
