@@ -14,6 +14,7 @@ import {
 import { setupTest as publicSetupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
+import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
 
 describe('Unauthed user views todays orders', () => {
   const privateTestClient = privateSetupTest();
@@ -75,5 +76,7 @@ describe('Unauthed user views todays orders', () => {
   unauthedUserSearchesByDocketNumber(publicTestClient, privateTestClient);
 
   // verify case shows up
+  // DO LESS
+  unauthedUserViewsCaseDetail(publicTestClient);
   // verify no link is displayed for the sealed docket entry
 });
