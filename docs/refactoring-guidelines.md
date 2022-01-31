@@ -19,5 +19,5 @@ Items deferred for a later point due to having to get a product out the door or 
  - Experiments not related to tech debt should go in the product backlog as spikes and be prioritized by the product owner. 
  - When in doubt, consult with the team and product owner.
 
-Notes:
- - Consider edit -  "We've identified code, design, or system architecture written in the past that could be reworked" as well as "in the past"
+?> To Do:\
+?> Consider edit -  "We've identified code, design, or system architecture written in the past that could be reworked" as well as "in the past"
