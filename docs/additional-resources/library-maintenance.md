@@ -5,6 +5,8 @@
 
 `@babel/register`: I locked it down to 7.16.5 because 7.16.7 was causing failures.
 
+`faker`: The last stable version is actually 5.5.3 which we already have.
+
 ## JavaScript Libraries
 
 `npm update`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
