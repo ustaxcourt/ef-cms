@@ -4,19 +4,23 @@ import {
 } from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
+import { docketClerkSealsDocketEntry } from '../integration-tests/journey/docketClerkSealsDocketEntry';
 import { docketClerkViewsDraftOrder } from '../integration-tests/journey/docketClerkViewsDraftOrder';
 import {
   loginAs,
   setupTest as privateSetupTest,
   uploadPetition,
 } from '../integration-tests/helpers';
-// import { setupTest as publicSetupTest } from './helpers';
-// const publicTestClient = publicSetupTest();
-const privateTestClient = privateSetupTest();
-
-privateTestClient.draftOrders = [];
+import { setupTest as publicSetupTest } from './helpers';
+import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
+import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 
 describe('Unauthed user views todays orders', () => {
+  const privateTestClient = privateSetupTest();
+  const publicTestClient = publicSetupTest();
+
+  privateTestClient.draftOrders = [];
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -54,17 +58,23 @@ describe('Unauthed user views todays orders', () => {
   });
   docketClerkViewsDraftOrder(privateTestClient, 0);
   // old transcript that should be available to the user
+  // upload a docket entry
+  // add docket entry to docket record
   docketClerkAddsTranscriptDocketEntryFromOrder(privateTestClient, 0, {
     day: '01',
     month: '01',
     year: '2019',
   });
 
-  // upload a docket entry
-  // add docket entry to docket record
   // seal a docket entry to the public
+  docketClerkSealsDocketEntry(privateTestClient, 0);
+
   // view to public UI
+  unauthedUserNavigatesToPublicSite(publicTestClient);
+
   // search for the case
+  // unauthedUserSearchesByDocketNumber(privateTestClient, publicTestClient);
+
   // verify case shows up
   // verify no link is displayed for the sealed docket entry
 });
