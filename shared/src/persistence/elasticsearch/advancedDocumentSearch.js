@@ -32,10 +32,10 @@ exports.advancedDocumentSearch = async ({
     'documentType',
     'eventCode',
     'filingDate',
-    'hasSealedDocuments',
     'irsPractitioners',
     'isFileAttached',
     'isSealed',
+    'sealedTo',
     'isStricken',
     'judge',
     'numberOfPages',
@@ -90,9 +90,6 @@ exports.advancedDocumentSearch = async ({
 
   if (omitSealed) {
     const caseMust = [
-      {
-        term: { 'hasSealedDocuments.BOOL': false },
-      },
       {
         bool: {
           minimum_should_match: 1,
