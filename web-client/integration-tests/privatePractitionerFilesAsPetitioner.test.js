@@ -30,8 +30,8 @@ describe('admissions clerk practitioner journey', () => {
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   admissionsClerkEditsPetitionerEmail(
     cerebralTest,
-    'privatePractioner1@example.com',
+    'privatePractitioner@example.com',
   );
-
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 });
