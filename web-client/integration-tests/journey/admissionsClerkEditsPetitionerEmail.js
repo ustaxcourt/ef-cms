@@ -1,22 +1,26 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../shared/src/business/entities/EntityConstants';
 import {
   contactPrimaryFromState,
+  contactSecondaryFromState,
   refreshElasticsearchIndex,
 } from '../helpers';
 
 export const admissionsClerkEditsPetitionerEmail = (
   cerebralTest,
   emailToAdd,
+  editSecondary = false,
 ) => {
   return it('admissions clerk adds petitioner email with existing cognito account to case', async () => {
     await refreshElasticsearchIndex();
 
-    let contactPrimary = contactPrimaryFromState(cerebralTest);
+    let contact = editSecondary
+      ? contactSecondaryFromState(cerebralTest)
+      : contactPrimaryFromState(cerebralTest);
 
     await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
-        contactId: contactPrimary.contactId,
+        contactId: contact.contactId,
         docketNumber: cerebralTest.docketNumber,
       },
     );
@@ -55,10 +59,12 @@ export const admissionsClerkEditsPetitionerEmail = (
     expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-    contactPrimary = contactPrimaryFromState(cerebralTest);
+    contact = editSecondary
+      ? contactSecondaryFromState(cerebralTest)
+      : contactPrimaryFromState(cerebralTest);
 
-    expect(contactPrimary.email).toEqual(emailToAdd);
-    expect(contactPrimary.serviceIndicator).toEqual(
+    expect(contact.email).toEqual(emailToAdd);
+    expect(contact.serviceIndicator).toEqual(
       SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     );
 

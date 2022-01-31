@@ -3,6 +3,7 @@ import {
   contactPrimaryFromState,
   fakeFile,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
@@ -52,6 +53,7 @@ describe('Petitioner Service Indicator Journey', () => {
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
   it('Admissions Clerk updates petitioner email address', async () => {
+    await refreshElasticsearchIndex();
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
