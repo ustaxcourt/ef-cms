@@ -41,6 +41,12 @@ exports.associatePrivatePractitionerToCase = async ({
       practitioner => practitioner.userId === user.userId,
     );
 
+  if (isPrivatePractitionerOnCase) {
+    throw new Error(
+      'The Private Practitioner is already associated with the case.',
+    );
+  }
+
   if (!isAssociated) {
     const userCaseEntity = new UserCase(caseToUpdate);
 
@@ -52,34 +58,28 @@ exports.associatePrivatePractitionerToCase = async ({
     });
   }
 
-  if (!isPrivatePractitionerOnCase) {
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-    const { petitioners } = caseEntity;
+  const { petitioners } = caseEntity;
 
-    petitioners.map(petitioner => {
-      if (representing.includes(petitioner.contactId)) {
-        petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
-      }
-    });
+  petitioners.map(petitioner => {
+    if (representing.includes(petitioner.contactId)) {
+      petitioner.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_NONE;
+    }
+  });
 
-    caseEntity.attachPrivatePractitioner(
-      new PrivatePractitioner({
-        ...user,
-        representing,
-        serviceIndicator,
-      }),
-    );
-
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity,
-    });
-
-    return caseEntity.toRawObject();
-  }
-
-  throw new Error(
-    'The Private Practitioner is already associated with the case.',
+  caseEntity.attachPrivatePractitioner(
+    new PrivatePractitioner({
+      ...user,
+      representing,
+      serviceIndicator,
+    }),
   );
+
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: caseEntity,
+  });
+
+  return caseEntity.toRawObject();
 };
