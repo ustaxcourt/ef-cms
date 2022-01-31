@@ -1,8 +1,5 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import {
-  advancedDocumentSearchHelper,
-  advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
-} from '../src/presenter/computeds/AdvancedSearch/advancedDocumentSearchHelper';
+import { advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed } from '../src/presenter/computeds/AdvancedSearch/advancedDocumentSearchHelper';
 import { associatedUserSearchesForServedOrder } from './journey/associatedUserSearchesForServedOrder';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
@@ -102,6 +99,9 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
+    const advancedDocumentSearchHelper = withAppContextDecorator(
+      advancedDocumentSearchHelperComputed,
+    );
     const searchHelper = runCompute(advancedDocumentSearchHelper, {
       state: cerebralTest.getState(),
     });
@@ -195,9 +195,15 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
+    const advancedDocumentSearchHelper = withAppContextDecorator(
+      advancedDocumentSearchHelperComputed,
+    );
+
     const searchHelper = runCompute(advancedDocumentSearchHelper, {
       state: cerebralTest.getState(),
     });
+
+    console.log('searchHelper.searchResults', searchHelper.searchResults);
 
     expect(searchHelper.searchResults).toEqual(
       expect.arrayContaining([
