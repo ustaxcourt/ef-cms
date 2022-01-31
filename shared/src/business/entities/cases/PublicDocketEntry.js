@@ -72,7 +72,7 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   isLegacyServed: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isLegacyServed,
   isMinuteEntry: joi.boolean().optional(),
   isPaper: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isPaper,
-  isSealed: joi.boolean().invalid(true).required(), // value of true is forbidden
+  isSealed: joi.boolean().required(),
   isStricken: joi
     .boolean()
     .optional()
