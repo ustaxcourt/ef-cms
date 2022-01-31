@@ -7,6 +7,7 @@ import { admissionsClerkSearchesForPractitionerByBarNumber } from './journey/adm
 import { admissionsClerkSearchesForPractitionersByName } from './journey/admissionsClerkSearchesForPractitionersByName';
 import { admissionsClerkVerifiesPractitionerServiceIndicator } from './journey/admissionsClerkVerifiesPractitionerServiceIndicator';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { fakeFile } from '../integration-tests-public/helpers';
 import {
   loginAs,
   refreshElasticsearchIndex,
@@ -14,14 +15,14 @@ import {
   uploadPetition,
 } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
+import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
 const cerebralTest = setupTest();
 
 describe('admissions clerk practitioner journey', () => {
-  const { COUNTRY_TYPES, PARTY_TYPES } =
-    applicationContext.getConstants();
+  const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -37,31 +38,68 @@ describe('admissions clerk practitioner journey', () => {
   //3. Admissions clerk assigns the private practitioner to the petitioner on the case.
   //4. Assert that the private practitioner to the petitioner on the case.
 
-  loginAs(cerebralTest, 'admissionsclerk@example.com');
-  admissionsClerkAddsNewPractitioner(cerebralTest);
-  admissionsClerkSearchesForPractitionersByName(cerebralTest);
-  admissionsClerkSearchesForPractitionerByBarNumber(cerebralTest);
-
-  loginAs(cerebralTest, 'petitioner@example.com');
-  it('Create test case', async () => {
-    const caseDetail = await uploadPetition(cerebralTest, {
-      contactSecondary: {
-        address1: '734 Cowley Parkway',
-        city: 'Amazing',
-        countryType: COUNTRY_TYPES.DOMESTIC,
-        name: 'Jimothy Schultz',
-        phone: '+1 (884) 358-9729',
-        postalCode: '77546',
-        state: 'AZ',
-      },
-      partyType: PARTY_TYPES.petitionerSpouse,
-    });
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-  });
-
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkViewsCaseDetail(cerebralTest);
-  petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, true);
+
   petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 });
+
+const admissionsClerkEditsPetitionerEmail = async cerebralTest => {
+  return it('admissions clerk adds petitioner email with existing cognito account to case', async () => {
+    loginAs(cerebralTest, 'admissionsclerk@example.com');
+    await refreshElasticsearchIndex();
+
+    let contactPrimary = contactPrimaryFromState(cerebralTest);
+
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactPrimary.contactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
+
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
+    expect(cerebralTest.getState('form.updatedEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.confirmEmail')).toBeUndefined();
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.updatedEmail',
+      value: EMAIL_TO_ADD,
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.confirmEmail',
+      value: EMAIL_TO_ADD,
+    });
+
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'MatchingEmailFoundModal',
+    );
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
+
+    await cerebralTest.runSequence(
+      'submitUpdatePetitionerInformationFromModalSequence',
+    );
+
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+
+    contactPrimary = contactPrimaryFromState(cerebralTest);
+
+    expect(contactPrimary.email).toEqual(EMAIL_TO_ADD);
+    expect(contactPrimary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+
+    await refreshElasticsearchIndex();
+  });
+};
