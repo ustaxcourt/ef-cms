@@ -18,9 +18,6 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
     });
   }
 
-  console.log('formattedResult.sealedTo', formattedResult.sealedTo);
-  console.log('isExternalUser', isExternalUser);
-
   if (isExternalUser) {
     return iconsToDisplay;
   } else if (formattedResult.isPaper) {

@@ -1,12 +1,15 @@
 import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
-const formatDocketEntryOnDocketRecord = (
+export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   { entry, isTerminalUser },
 ) => {
-  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
-    applicationContext.getConstants();
+  const {
+    DOCKET_ENTRY_SEALED_TO_TYPES,
+    DOCUMENT_PROCESSING_STATUS_OPTIONS,
+    EVENT_CODES_VISIBLE_TO_PUBLIC,
+  } = applicationContext.getConstants();
   const record = cloneDeep(entry);
   let filingsAndProceedingsWithAdditionalInfo = '';
   if (record.documentTitle && record.additionalInfo) {
@@ -42,6 +45,13 @@ const formatDocketEntryOnDocketRecord = (
     canDisplayDocumentLink &&
     record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
+  if (entry.isSealed) {
+    record.sealedToTooltip =
+      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
+        ? 'Sealed to public'
+        : 'Sealed to the public and parties of this case';
+  }
+
   return {
     action: record.action,
     createdAtFormatted: record.createdAtFormatted,
@@ -54,9 +64,11 @@ const formatDocketEntryOnDocketRecord = (
     hasDocument: !record.isMinuteEntry,
     index: record.index,
     isPaper: record.isPaper,
+    isSealed: record.isSealed,
     isStricken: record.isStricken,
     numberOfPages: record.numberOfPages || 0,
     openInSameTab: !isTerminalUser,
+    sealedToTooltip: record.sealedToTooltip,
     servedAtFormatted: record.servedAtFormatted,
     servedPartiesCode: record.servedPartiesCode,
     showDocumentDescriptionWithoutLink,
