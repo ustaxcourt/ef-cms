@@ -20,12 +20,6 @@ describe('Bug 9323', () => {
   });
 
   describe('privatePractitioner files as a petitioner', () => {
-    //Order of operations
-    //1. Petitions clerk creates a petition with no e-mail for the petitioner
-    //2. Admissions clerk associates the private practitioner with the petitioner via private practitioner's e-mail
-    //3. Admissions clerk assigns the private practitioner to the petitioner on the case.
-    //4. Assert that the private practitioner to the petitioner on the case.
-
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, true);
 
@@ -42,12 +36,6 @@ describe('Bug 9323', () => {
     const privatePractitionerEmail = 'privatePractitioner@example.com';
     const petitionsClerkEmail = 'petitionsclerk@example.com';
 
-    //Order of operations
-    //1. Practitioner files petition
-    //2. Admissions clerk associates the private practitioner with the petitioner via private practitioner's e-mail
-    //3. Any clerk removes privatePractitioner from the case
-    //4. Assert that the private practitioner remains the petitioner on the case
-
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerCreatesNewCase(cerebralTest, fakeFile);
 
@@ -63,4 +51,6 @@ describe('Bug 9323', () => {
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerViewsDashboard(cerebralTest);
   });
+
+  // TODO - Write inverse test of the one directly above
 });
