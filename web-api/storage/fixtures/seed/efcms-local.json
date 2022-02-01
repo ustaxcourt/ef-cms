@@ -43,7 +43,6 @@
     "irsPractitioners": [],
     "hasVerifiedIrsNotice": true,
     "status": "General Docket - Not at Issue",
-    "hasSealedDocuments": false,
     "associatedJudge": "Chief Judge",
     "procedureType": "Regular",
     "sealedDate": "2020-04-29T15:53:09.650Z",
@@ -218,9 +217,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "abba69d5-a96a-423c-937f-b4d1c5442bf4",
     "pk": "case|105-20",
@@ -255,9 +252,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "servedAt": "2020-04-29T15:51:29.168Z",
     "pk": "case|105-20",
@@ -325,9 +320,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -582,8 +575,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|101-20",
     "docketNumber": "101-20",
-    "status": "Calendared",
-    "hasSealedDocuments": false
+    "status": "Calendared"
   },
   {
     "isStricken": false,
@@ -606,9 +598,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
@@ -630,9 +620,7 @@
     "createdAt": "2020-01-02T16:05:45.979Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Bill Burr",
     "docketEntryId": "cb323daf-c541-4645-bb44-232255d03d40",
@@ -769,8 +757,7 @@
     "pk": "case|310-21",
     "docketNumber": "310-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "servedParties": [
@@ -840,9 +827,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -893,9 +878,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -1451,8 +1434,7 @@
     "pk": "case|312-21",
     "docketNumber": "312-21",
     "statistics": [],
-    "status": "Closed",
-    "hasSealedDocuments": false
+    "status": "Closed"
   },
   {
     "servedParties": [
@@ -1523,9 +1505,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -1576,9 +1556,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -1800,8 +1778,7 @@
     "pk": "case|120-20",
     "docketNumber": "120-20",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": true
+    "statistics": []
   },
   {
     "servedParties": [
@@ -1861,9 +1838,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
     "pk": "case|120-20",
@@ -1894,9 +1869,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|120-20",
     "docketNumber": "120-20"
@@ -2245,8 +2218,7 @@
     "pk": "case|301-21",
     "docketNumber": "301-21",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -2271,9 +2243,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -2301,9 +2271,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -2426,8 +2394,7 @@
     "pk": "case|303-21",
     "docketNumber": "303-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "servedParties": [
@@ -2521,9 +2488,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -2551,9 +2516,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -2649,8 +2612,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|104-20",
     "docketNumber": "104-20",
-    "status": "Closed",
-    "hasSealedDocuments": false
+    "status": "Closed"
   },
   {
     "servedParties": [
@@ -2717,9 +2679,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
@@ -2755,9 +2715,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
     "pk": "case|104-20",
@@ -2790,9 +2748,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
     "pk": "case|104-20",
@@ -2918,7 +2874,6 @@
     "pk": "case|317-21",
     "docketNumber": "317-21",
     "statistics": [],
-    "hasSealedDocuments": false,
     "status": "Closed"
   },
   {
@@ -3014,9 +2969,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -3043,9 +2996,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -3759,8 +3710,7 @@
     "pk": "case|122-20",
     "docketNumber": "122-20",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "servedParties": [
@@ -3808,9 +3758,7 @@
     "processingStatus": "complete",
     "createdAt": "2020-09-25T19:27:00.208Z",
     "numberOfPages": 2,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "953057bb-72d2-412d-8352-fb68c6b0fe2b",
@@ -3843,9 +3791,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -3951,8 +3897,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|103-20",
     "docketNumber": "103-20",
-    "status": "Calendared",
-    "hasSealedDocuments": false
+    "status": "Calendared"
   },
   {
     "isStricken": false,
@@ -4024,9 +3969,7 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "NOEI",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
     "servedAt": "2020-09-21T20:55:12.840Z",
@@ -4064,9 +4007,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "certificateOfServiceDate": null,
     "servedAt": "2020-01-23T21:45:34.521Z",
     "pk": "case|103-20",
@@ -4156,9 +4097,7 @@
     "createdAt": "2020-01-23T21:44:54.043Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Reuben Blair",
     "docketEntryId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
@@ -4189,9 +4128,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
@@ -4377,7 +4314,6 @@
     "pk": "case|316-21",
     "docketNumber": "316-21",
     "statistics": [],
-    "hasSealedDocuments": false,
     "status": "Closed"
   },
   {
@@ -4449,9 +4385,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -4502,9 +4436,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -5049,7 +4981,6 @@
     "pk": "case|999-15",
     "docketNumber": "999-15",
     "statistics": [],
-    "hasSealedDocuments": true,
     "status": "Calendared"
   },
   {
@@ -5224,9 +5155,7 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
@@ -5324,8 +5253,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|113-19",
     "docketNumber": "113-19",
-    "status": "Submitted",
-    "hasSealedDocuments": false
+    "status": "Submitted"
   },
   {
     "isStricken": false,
@@ -5342,9 +5270,7 @@
     "createdAt": "2019-12-11T16:02:31.176Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Letti Toretto",
     "docketEntryId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183",
@@ -5371,9 +5297,7 @@
     "createdAt": "2019-12-11T16:02:31.174Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Letti Toretto",
     "docketEntryId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
@@ -5483,7 +5407,6 @@
         "yearOrPeriod": "Year"
       }
     ],
-    "hasSealedDocuments": false,
     "hasVerifiedIrsNotice": true,
     "status": "General Docket - Not at Issue"
   },
@@ -5521,9 +5444,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "A",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "B",
     "certificateOfServiceDate": null,
     "pk": "case|320-21",
@@ -5560,9 +5481,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-08T15:19:17.214Z",
@@ -5598,9 +5517,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "servedPartiesCode": "R",
     "pk": "case|320-21",
     "servedAt": "2021-11-05T15:19:17.229Z",
@@ -6504,8 +6421,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|108-19",
     "docketNumber": "108-19",
-    "status": "Calendared",
-    "hasSealedDocuments": false
+    "status": "Calendared"
   },
   {
     "isStricken": false,
@@ -8993,8 +8909,7 @@
     "pk": "case|315-21",
     "docketNumber": "315-21",
     "statistics": [],
-    "status": "Closed",
-    "hasSealedDocuments": false
+    "status": "Closed"
   },
   {
     "servedParties": [
@@ -9065,9 +8980,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -9118,9 +9031,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -9326,8 +9237,7 @@
     "pk": "case|314-21",
     "docketNumber": "314-21",
     "statistics": [],
-    "status": "Closed",
-    "hasSealedDocuments": false
+    "status": "Closed"
   },
   {
     "isStricken": false,
@@ -9376,9 +9286,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -9451,9 +9359,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -9730,8 +9636,7 @@
     "pk": "case|104-19",
     "businessType": "Corporation",
     "docketNumber": "104-19",
-    "status": "New",
-    "hasSealedDocuments": false
+    "status": "New"
   },
   {
     "servedParties": [
@@ -10156,8 +10061,7 @@
     "pk": "case|1338-20",
     "docketNumber": "1338-20",
     "status": "General Docket - At Issue (Ready for Trial)",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "associatedJudge": "Chief Judge",
@@ -10208,8 +10112,7 @@
     "pk": "case|105-19",
     "petitionPaymentWaivedDate": "2019-03-27T21:53:00.297Z",
     "docketNumber": "105-19",
-    "status": "New",
-    "hasSealedDocuments": false
+    "status": "New"
   },
   {
     "isStricken": false,
@@ -10298,9 +10201,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "28cae029-bae2-4eef-ac54-878fbbab65e3"
-    ],
+    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -10423,8 +10324,7 @@
     "petitionPaymentWaivedDate": null,
     "statistics": [],
     "hasVerifiedIrsNotice": false,
-    "status": "General Docket - Not at Issue",
-    "hasSealedDocuments": false
+    "status": "General Docket - Not at Issue"
   },
   {
     "date": null,
@@ -10502,9 +10402,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.316Z",
@@ -10541,9 +10439,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.327Z",
@@ -10580,9 +10476,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "9909b20a-c495-4438-a78c-8cf51afbbed3"
-    ],
+    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.325Z",
@@ -10723,8 +10617,7 @@
     "pk": "case|311-21",
     "docketNumber": "311-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "servedParties": [
@@ -10794,9 +10687,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -10847,9 +10738,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -11045,7 +10934,6 @@
     "pk": "case|319-21",
     "docketNumber": "319-21",
     "statistics": [],
-    "hasSealedDocuments": false,
     "status": "Closed"
   },
   {
@@ -11117,9 +11005,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -11170,9 +11056,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -11395,8 +11279,7 @@
     "initialCaption": "Brett Osborne, Petitioner",
     "pk": "case|109-19",
     "docketNumber": "109-19",
-    "status": "New",
-    "hasSealedDocuments": false
+    "status": "New"
   },
   {
     "isStricken": false,
@@ -12126,8 +12009,7 @@
     "pk": "case|126-20",
     "docketNumber": "126-20",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -12151,9 +12033,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
-    ],
+    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -12173,9 +12053,7 @@
     "createdAt": "2020-10-16T15:19:38.088Z",
     "processingStatus": "complete",
     "numberOfPages": 2,
-    "filers": [
-      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
-    ],
+    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "8439ca33-ac7a-4ae6-a228-7581e2114341",
@@ -12312,8 +12190,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|111-19",
     "docketNumber": "111-19",
-    "status": "Submitted",
-    "hasSealedDocuments": false
+    "status": "Submitted"
   },
   {
     "servedParties": [
@@ -12365,9 +12242,7 @@
     "createdAt": "2019-12-11T15:25:09.286Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Guy Fieri",
     "docketEntryId": "59ccf18f-5bac-48b0-a8e0-9c9e1d995b62",
@@ -12394,9 +12269,7 @@
     "createdAt": "2019-12-11T15:25:09.285Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Guy Fieri",
     "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -12452,8 +12325,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|103-19",
     "docketNumber": "103-19",
-    "status": "New",
-    "hasSealedDocuments": false
+    "status": "New"
   },
   {
     "numberOfPages": 1,
@@ -12584,9 +12456,7 @@
     "eventCode": "SIAB",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": [
-      "23d9342c-577d-4cc4-a44d-aae2dca9a436"
-    ],
+    "filers": ["23d9342c-577d-4cc4-a44d-aae2dca9a436"],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "pk": "case|103-19",
@@ -12807,8 +12677,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|107-19",
     "docketNumber": "107-19",
-    "status": "General Docket - At Issue (Ready for Trial)",
-    "hasSealedDocuments": false
+    "status": "General Docket - At Issue (Ready for Trial)"
   },
   {
     "isStricken": false,
@@ -13004,9 +12873,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -13104,8 +12971,7 @@
     "pk": "case|305-21",
     "docketNumber": "305-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "servedParties": [
@@ -13175,9 +13041,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -13229,9 +13093,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -13336,8 +13198,7 @@
     "pk": "case|304-21",
     "docketNumber": "304-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "servedParties": [
@@ -13431,9 +13292,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -13461,9 +13320,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -13783,8 +13640,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|104-18",
     "docketNumber": "104-18",
-    "status": "General Docket - Not at Issue",
-    "hasSealedDocuments": false
+    "status": "General Docket - Not at Issue"
   },
   {
     "servedParties": [
@@ -13851,9 +13707,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-18",
@@ -13889,9 +13743,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -13924,9 +13776,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -14088,8 +13938,7 @@
     "pk": "case|307-21",
     "docketNumber": "307-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "servedParties": [
@@ -14183,9 +14032,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -14212,9 +14059,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -14310,7 +14155,6 @@
     "pk": "case|318-21",
     "docketNumber": "318-21",
     "statistics": [],
-    "hasSealedDocuments": false,
     "status": "Closed"
   },
   {
@@ -14406,9 +14250,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -14435,9 +14277,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -15178,8 +15018,7 @@
     "pk": "case|302-21",
     "docketNumber": "302-21",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -15228,9 +15067,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -15303,9 +15140,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -15357,9 +15192,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -15387,9 +15220,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -15689,8 +15520,7 @@
     "pk": "case|128-20",
     "docketNumber": "128-20",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -15714,9 +15544,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -15766,9 +15594,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -15907,8 +15733,7 @@
     "pk": "case|150-12",
     "docketNumber": "150-12",
     "status": "General Docket - At Issue (Ready for Trial)",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -16085,8 +15910,7 @@
     "petitionPaymentWaivedDate": null,
     "statistics": [],
     "hasVerifiedIrsNotice": false,
-    "status": "General Docket - Not at Issue",
-    "hasSealedDocuments": false
+    "status": "General Docket - Not at Issue"
   },
   {
     "servedParties": [
@@ -16119,9 +15943,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.976Z",
@@ -16158,9 +15980,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.967Z",
@@ -16244,9 +16064,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
-    ],
+    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.979Z",
@@ -16382,8 +16200,7 @@
       }
     ],
     "docketNumber": "110-19",
-    "status": "New",
-    "hasSealedDocuments": false
+    "status": "New"
   },
   {
     "isStricken": false,
@@ -16515,9 +16332,7 @@
       "countryType": "domestic"
     },
     "name": "Ronald Buch Jr.",
-    "representing": [
-      "6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"
-    ],
+    "representing": ["6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"],
     "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
     "firmName": "Firmly Grasped, LLP",
     "pk": "case|110-19",
@@ -16579,8 +16394,7 @@
     "pk": "case|127-20",
     "docketNumber": "127-20",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -16627,9 +16441,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -16656,9 +16468,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -16765,8 +16575,7 @@
     "petitionPaymentWaivedDate": null,
     "statistics": [],
     "hasVerifiedIrsNotice": false,
-    "status": "General Docket - Not at Issue",
-    "hasSealedDocuments": false
+    "status": "General Docket - Not at Issue"
   },
   {
     "servedParties": [
@@ -16799,9 +16608,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.912Z",
@@ -16838,9 +16645,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.921Z",
@@ -16972,9 +16777,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
-    ],
+    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.924Z",
@@ -17134,8 +16937,7 @@
     "petitionPaymentWaivedDate": "2020-08-07T04:00:00.000Z",
     "status": "New",
     "statistics": [],
-    "hasVerifiedIrsNotice": false,
-    "hasSealedDocuments": false
+    "hasVerifiedIrsNotice": false
   },
   {
     "isPaper": true,
@@ -17159,9 +16961,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "pk": "case|121-20",
     "docketNumber": "121-20"
@@ -17203,9 +17003,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "APW",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
@@ -17249,9 +17047,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "1566ea80-1d95-42bc-b006-7fc55c698dea"
-    ],
+    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
     "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
@@ -17356,8 +17152,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|104-17",
     "docketNumber": "104-17",
-    "status": "General Docket - Not at Issue",
-    "hasSealedDocuments": false
+    "status": "General Docket - Not at Issue"
   },
   {
     "servedParties": [
@@ -17424,9 +17219,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-17",
@@ -17462,9 +17255,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MISC",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -17497,9 +17288,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": [
-      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
-    ],
+    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -17627,8 +17416,7 @@
     "pk": "case|123-20",
     "docketNumber": "123-20",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -17652,9 +17440,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -17697,9 +17483,7 @@
     "processingStatus": "complete",
     "createdAt": "2020-09-30T20:22:10.388Z",
     "numberOfPages": 2,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "7a9ae90c-348c-467a-8720-c3d1c195d76b",
@@ -18032,8 +17816,7 @@
     "pk": "case|117-20",
     "docketNumber": "117-20",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": true
+    "statistics": []
   },
   {
     "isSealed": true,
@@ -18059,9 +17842,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
     "pk": "case|117-20",
@@ -18089,9 +17870,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|117-20",
     "docketNumber": "117-20"
@@ -18216,8 +17995,7 @@
     "docketNumber": "124-20",
     "status": "General Docket - Not at Issue",
     "statistics": [],
-    "hasVerifiedIrsNotice": false,
-    "hasSealedDocuments": false
+    "hasVerifiedIrsNotice": false
   },
   {
     "servedParties": [
@@ -18249,9 +18027,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
-    ],
+    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.222Z",
@@ -18367,9 +18143,7 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
-    ],
+    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.162Z",
@@ -18483,8 +18257,7 @@
     "pk": "case|151-12",
     "docketNumber": "151-12",
     "status": "General Docket - At Issue (Ready for Trial)",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -18732,8 +18505,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|102-20",
     "docketNumber": "102-20",
-    "status": "New",
-    "hasSealedDocuments": false
+    "status": "New"
   },
   {
     "servedParties": [
@@ -18795,9 +18567,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
@@ -18819,9 +18589,7 @@
     "createdAt": "2020-01-21T16:41:39.481Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Eve Brewer",
     "docketEntryId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
@@ -18855,9 +18623,7 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -18989,8 +18755,7 @@
     "docketNumber": "129-20",
     "status": "General Docket - Not at Issue",
     "statistics": [],
-    "hasVerifiedIrsNotice": false,
-    "hasSealedDocuments": true
+    "hasVerifiedIrsNotice": false
   },
   {
     "isSealed": true,
@@ -19036,8 +18801,7 @@
     "isLegacySealed": true,
     "isLegacy": true,
     "date": null,
-    "servedParties": [
-    ],
+    "servedParties": [],
     "attachments": false,
     "isStricken": false,
     "isPendingService": false,
@@ -19103,9 +18867,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": [
-      "05b98fff-e4ca-4114-b8ec-7218effc982e"
-    ],
+    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.130Z",
@@ -19141,9 +18903,7 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": [
-      "05b98fff-e4ca-4114-b8ec-7218effc982e"
-    ],
+    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.081Z",
@@ -21353,8 +21113,7 @@
     "pk": "case|69312-87",
     "docketNumber": "69312-87",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": true
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -21577,8 +21336,7 @@
     "pk": "case|308-21",
     "docketNumber": "308-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "servedParties": [
@@ -21672,9 +21430,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -21701,9 +21457,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -21808,8 +21562,7 @@
     "pk": "case|152-12",
     "docketNumber": "152-12",
     "status": "General Docket - At Issue (Ready for Trial)",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -22038,8 +21791,7 @@
     "pk": "case|306-21",
     "docketNumber": "306-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -22064,9 +21816,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -22162,9 +21912,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -22254,8 +22002,7 @@
       }
     ],
     "docketNumber": "101-19",
-    "status": "New",
-    "hasSealedDocuments": false
+    "status": "New"
   },
   {
     "servedParties": [
@@ -22622,8 +22369,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|112-19",
     "docketNumber": "112-19",
-    "status": "Submitted",
-    "hasSealedDocuments": false
+    "status": "Submitted"
   },
   {
     "isStricken": false,
@@ -22640,9 +22386,7 @@
     "createdAt": "2019-12-11T15:25:55.008Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brian Earl Spilner",
     "docketEntryId": "1c56d0fc-b01b-4bc7-830f-0c25b4e6b803",
@@ -22669,9 +22413,7 @@
     "createdAt": "2019-12-11T15:25:55.007Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brian Earl Spilner",
     "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
@@ -22923,8 +22665,7 @@
     ],
     "docketNumber": "102-19",
     "status": "New",
-    "hasVerifiedIrsNotice": true,
-    "hasSealedDocuments": false
+    "hasVerifiedIrsNotice": true
   },
   {
     "isStricken": false,
@@ -23085,8 +22826,7 @@
     "pk": "case|125-20",
     "docketNumber": "125-20",
     "status": "New",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -23110,9 +22850,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -23155,9 +22893,7 @@
     "processingStatus": "complete",
     "createdAt": "2020-10-13T20:23:17.560Z",
     "numberOfPages": 2,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
@@ -23324,8 +23060,7 @@
     "pk": "case|309-21",
     "docketNumber": "309-21",
     "status": "Closed",
-    "statistics": [],
-    "hasSealedDocuments": false
+    "statistics": []
   },
   {
     "isStricken": false,
@@ -23350,9 +23085,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -23424,9 +23157,7 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -23537,8 +23268,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|106-19",
     "docketNumber": "106-19",
-    "status": "New",
-    "hasSealedDocuments": false
+    "status": "New"
   },
   {
     "servedParties": [
@@ -23659,9 +23389,7 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": [
-      "7805d1ab-18d0-43ec-bafb-654e83405416"
-    ],
+    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
