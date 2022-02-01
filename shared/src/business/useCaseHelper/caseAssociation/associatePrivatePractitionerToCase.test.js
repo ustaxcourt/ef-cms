@@ -142,6 +142,30 @@ describe('associatePrivatePractitionerToCase', () => {
     ).not.toHaveBeenCalled();
   });
 
+  it('BUG 9323: should add case|privatePractitioner record if user is already associated (probably a petitioner) but not a practitioner on case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        privatePractitioners: [],
+      });
+
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockResolvedValueOnce(true);
+
+    await associatePrivatePractitionerToCase({
+      applicationContext,
+      docketNumber: caseRecord.docketNumber,
+      representing: [],
+      user: practitionerUser,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should add mapping for a practitioner', async () => {
     applicationContext
       .getPersistenceGateway()
