@@ -259,11 +259,11 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     ...Object.values(DOCUMENT_RELATIONSHIPS),
   ).optional(),
   scenario: JoiValidationConstants.STRING.valid(...SCENARIOS).optional(),
-  sealedTo: JoiValidationConstants.STRING.valid(
-    ...Object.values(DOCKET_ENTRY_SEALED_TO_TYPES),
-  )
-    .optional()
-    .description("If sealed, the type of users who it's sealed from."),
+  sealedTo: JoiValidationConstants.STRING.when('isSealed', {
+    is: true,
+    otherwise: joi.optional().allow(null),
+    then: joi.valid(...Object.values(DOCKET_ENTRY_SEALED_TO_TYPES)).required(),
+  }).description("If sealed, the type of users who it's sealed from."),
   secondaryDocument: joi // TODO: limit keys
     .object()
     .keys({
