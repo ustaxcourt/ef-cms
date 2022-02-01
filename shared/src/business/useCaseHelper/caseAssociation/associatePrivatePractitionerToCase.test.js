@@ -118,20 +118,18 @@ describe('associatePrivatePractitionerToCase', () => {
   });
 
   it('should not add case|privatePractitioner record if user is already practitioner on case', async () => {
-    const freshDocketNumber = '1234-56';
-
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValueOnce({
         ...caseRecord,
-        docketNumber: freshDocketNumber,
+
         privatePractitioners: [practitionerUser],
       });
 
     await expect(
       associatePrivatePractitionerToCase({
         applicationContext,
-        docketNumber: freshDocketNumber,
+        docketNumber: caseRecord.docketNumber,
         representing: [],
         user: practitionerUser,
       }),
