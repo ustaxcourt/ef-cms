@@ -119,6 +119,9 @@ const {
   getFormattedPartiesNameAndTitle,
 } = require('../utilities/getFormattedPartiesNameAndTitle');
 const {
+  getSealedDocketEntryTooltip,
+} = require('../../../src/business/utilities/getSealedDocketEntryTooltip');
+const {
   getStampBoxCoordinates,
 } = require('../../../src/business/utilities/getStampBoxCoordinates');
 const {
@@ -333,6 +336,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPractitionersRepresenting: jest
       .fn()
       .mockImplementation(getPractitionersRepresenting),
+    getSealedDocketEntryTooltip: jest
+      .fn()
+      .mockImplementation(getSealedDocketEntryTooltip),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     getStampBoxCoordinates: jest
       .fn()
