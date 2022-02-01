@@ -384,9 +384,11 @@ describe('PublicCase', () => {
     });
 
     it('should show all contact and practitioner information if user has IRS Practitioner role', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.irsPractitioner,
-      });
+      //TODO: FIX THIS too- this mock is also not doing anything
+
+      // applicationContext.getCurrentUser.mockReturnValueOnce({
+      //   role: ROLES.irsPractitioner,
+      // });
 
       const rawContactPrimary = {
         address1: '907 West Rocky Cowley Parkway',
