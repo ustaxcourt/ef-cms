@@ -12,6 +12,7 @@ import {
   setupTest as privateSetupTest,
   uploadPetition,
 } from '../integration-tests/helpers';
+import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 
 describe('Unauthed user views todays orders', () => {
   const testClient = privateSetupTest();
@@ -61,13 +62,31 @@ describe('Unauthed user views todays orders', () => {
   docketClerkSealsDocketEntry(testClient, 0);
 
   loginAs(testClient, 'privatePractitioner@example.com');
-  it('verify sealed docket entry is not hyperlinked and a sealed icon displays', async () => {
+  it('verify sealed docket entry is not hyperlinked and a sealed icon displays for an unassociated practitioner', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(testClient);
     const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === testClient.draftOrders[0].docketEntryId,
     );
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
+    expect(sealedDocketEntry.isSealed).toBe(true);
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
+  });
+
+  loginAs(testClient, 'petitionsclerk@example.com');
+
+  petitionsClerkAddsPractitionersToCase(testClient, true);
+
+  loginAs(testClient, 'privatePractitioner@example.com');
+
+  it('verify sealed docket entry is hyperlinked for an associated practitioner', async () => {
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(testClient);
+    const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.docketEntryId === testClient.draftOrders[0].docketEntryId,
+    );
+    expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(false);
+    expect(sealedDocketEntry.showLinkToDocument).toBe(true);
     expect(sealedDocketEntry.isSealed).toBe(true);
     expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
   });
