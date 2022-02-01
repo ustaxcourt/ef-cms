@@ -162,8 +162,11 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toHaveBeenCalled();
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.privatePractitioners,
+    ).toEqual(
+      expect.arrayContaining([expect.objectContaining(practitionerUser)]),
+    );
   });
 
   it('should add mapping for a practitioner', async () => {
