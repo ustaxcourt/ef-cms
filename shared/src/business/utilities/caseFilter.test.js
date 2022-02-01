@@ -124,7 +124,6 @@ describe('caseFilter', () => {
           },
         ],
         docketNumber: '120-20',
-        hasSealedDocuments: true,
         petitioners: [],
       },
     ];
@@ -132,14 +131,18 @@ describe('caseFilter', () => {
     it('should remove sealed cases from a set of advanced search results', () => {
       const result = caseSearchFilter(caseSearchResults, {
         role: ROLES.irsPractitioner,
-        userId: 'some other respondent',
+        userId: '0e69052d-b59d-496e-ba2a-39af3a9535dc',
       });
 
-      expect(result.length).toEqual(1);
-      expect(result[0]).toMatchObject({
-        docketNumber: '101-20',
-        sealedDate: undefined,
-      });
+      expect(result).toMatchObject([
+        {
+          docketNumber: '101-20',
+          sealedDate: undefined,
+        },
+        {
+          docketNumber: '120-20',
+        },
+      ]);
     });
 
     it('should format sealed addresses in search results if user does not have permission to see sealed contact addresses', () => {
@@ -179,13 +182,13 @@ describe('caseFilter', () => {
         userId: 'authPractitioner',
       });
 
-      expect(result.length).toEqual(3);
+      expect(result.length).toEqual(4);
 
       result = caseSearchFilter(caseSearchResults, {
         userId: 'authRespondent',
       });
 
-      expect(result.length).toEqual(3);
+      expect(result.length).toEqual(4);
     });
   });
 });

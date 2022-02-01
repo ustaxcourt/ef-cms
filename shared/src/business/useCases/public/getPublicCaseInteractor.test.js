@@ -11,7 +11,6 @@ const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
 
 const mockCase = {
   docketNumber: '123-45',
-  hasSealedDocuments: false,
   irsPractitioners: [],
   partyType: PARTY_TYPES.petitioner,
   petitioners: [mockCaseContactPrimary],
@@ -19,6 +18,9 @@ const mockCase = {
 
 const sealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
 sealedDocketEntries[0].isLegacySealed = true;
+
+const normalSealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
+normalSealedDocketEntries[0].isSealed = true;
 
 const sealedContactPrimary = cloneDeep({
   ...mockCaseContactPrimary,
@@ -37,7 +39,6 @@ const mockCases = {
     ...cloneDeep(mockCase),
     docketEntries: sealedDocketEntries,
     docketNumber: '120-20',
-    hasSealedDocuments: true,
   },
   '123-45': cloneDeep(mockCase),
   '188-88': {
@@ -45,6 +46,11 @@ const mockCases = {
     irsPractitioners: [],
     partyType: PARTY_TYPES.petitioner,
     petitioners: [sealedContactPrimary],
+  },
+  '190-92': {
+    ...cloneDeep(mockCase),
+    docketEntries: normalSealedDocketEntries,
+    docketNumber: '190-92',
   },
 };
 
@@ -128,9 +134,10 @@ describe('getPublicCaseInteractor', () => {
       docketNumber,
     });
 
+    console.log('result', result);
     expect(result).toMatchObject({
       docketNumber,
-      isSealed: true,
+      isSealed: false,
     });
   });
 
@@ -145,5 +152,17 @@ describe('getPublicCaseInteractor', () => {
       docketNumber,
     });
     expect(getContactPrimary(result).address1).toBeUndefined();
+  });
+
+  it('should return the case to the public user if the case is unsealed but has a sealed document', async () => {
+    const docketNumber = '190-92';
+
+    await expect(
+      getPublicCaseInteractor(applicationContext, {
+        docketNumber,
+      }),
+    ).resolves.toMatchObject({
+      docketNumber,
+    });
   });
 });

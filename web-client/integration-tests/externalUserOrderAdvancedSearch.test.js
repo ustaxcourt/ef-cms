@@ -195,7 +195,20 @@ describe('external users perform an advanced search for orders', () => {
 
     expect(
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
-    ).toEqual([]);
+    ).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          documentTitle: 'Sealed Order',
+          isCaseSealed: false,
+          isDocketEntrySealed: true,
+        }),
+        expect.objectContaining({
+          documentTitle: "This is a legacy judge's order 4",
+          isCaseSealed: false,
+          isDocketEntrySealed: false,
+        }),
+      ]),
+    );
   });
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
