@@ -1,4 +1,5 @@
 import { admissionsClerkEditsPetitionerEmail } from './journey/admissionsClerkEditsPetitionerEmail';
+import { docketClerkAddsPetitionerToCase } from './journey/docketClerkAddsPetitionerToCase';
 import { docketClerkRemovesPetitionerFromCase } from './journey/docketClerkRemovesPetitionerFromCase';
 import { fakeFile } from '../integration-tests-public/helpers';
 import { loginAs, setupTest } from './helpers';
@@ -20,6 +21,10 @@ describe('Bug 9323', () => {
     cerebralTest.closeSocket();
   });
 
+  const privatePractitionerEmail = 'privatePractitioner@example.com';
+  const petitionsClerkEmail = 'petitionsclerk@example.com';
+  const docketClerkEmail = 'docketclerk@example.com';
+
   describe('privatePractitioner files as a petitioner', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, true);
@@ -34,9 +39,6 @@ describe('Bug 9323', () => {
   });
 
   describe('BUG-9323 privatePractitioner remains on case as petitioner after practitioner removal', () => {
-    const privatePractitionerEmail = 'privatePractitioner@example.com';
-    const petitionsClerkEmail = 'petitionsclerk@example.com';
-
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerCreatesNewCase(cerebralTest, fakeFile);
 
@@ -54,9 +56,7 @@ describe('Bug 9323', () => {
   });
 
   describe('BUG-9323 privatePractitioner representing both petitioners remains on case as practitioner after petitioner removal', () => {
-    const privatePractitionerEmail = 'privatePractitioner@example.com';
-    const petitionsClerkEmail = 'petitionsclerk@example.com';
-
+    // scenario 1
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerCreatesNewCase(cerebralTest, fakeFile);
 
@@ -74,23 +74,25 @@ describe('Bug 9323', () => {
   });
 
   describe('BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
-    const privatePractitionerEmail = 'privatePractitioner@example.com';
-    const petitionsClerkEmail = 'petitionsclerk@example.com';
+    // scenario 2a
+    loginAs(cerebralTest, petitionsClerkEmail);
+    petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+
+    loginAs(cerebralTest, docketClerkEmail);
+    docketClerkAddsPetitionerToCase(cerebralTest, docketClerkEmail);
 
     loginAs(cerebralTest, petitionsClerkEmail);
-    petitionsClerkCreatesNewCase(cerebralTest, fakeFile); //test needs petition to have two petitioners which happens here
-
-    loginAs(cerebralTest, petitionsClerkEmail);
-    petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+    petitionsClerkAddsPractitionersToCase(cerebralTest, true);
 
     loginAs(cerebralTest, 'admissionsclerk@example.com');
     admissionsClerkEditsPetitionerEmail(cerebralTest, privatePractitionerEmail);
 
     loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkRemovesPetitionerFromCase(cerebralTest);
+    docketClerkRemovesPetitionerFromCase(cerebralTest, true);
 
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerViewsDashboard(cerebralTest);
+    // TODO: check that practitioner is still _practitioner_ on case
   });
 });
 
