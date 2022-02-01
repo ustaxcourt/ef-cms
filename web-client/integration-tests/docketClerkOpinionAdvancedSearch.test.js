@@ -57,6 +57,7 @@ describe('Docket clerk opinion advanced search', () => {
     });
 
     expect(cerebralTest.getState('advancedSearchForm.opinionSearch')).toEqual({
+      dateRange: 'allDates',
       keyword: '',
       opinionTypes: {
         [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
@@ -157,6 +158,20 @@ describe('Docket clerk opinion advanced search', () => {
 
       await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
 
+      expect(
+        cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
+      ).toEqual([]);
+    });
+
+    it('when searching for a sealed opinion', async () => {
+      await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
+        formType: 'opinionSearch',
+      });
+
+      await updateOpinionForm(cerebralTest, {
+        docketNumber: '129-20',
+      });
+      await cerebralTest.runSequence('submitOpinionAdvancedSearchSequence');
       expect(
         cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.OPINION}`),
       ).toEqual([]);

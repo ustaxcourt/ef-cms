@@ -1,4 +1,4 @@
-FROM cypress/base:14.16.0
+FROM cypress/base:14.17.3
 
 CMD echo "Building CI Image"
 
@@ -11,7 +11,7 @@ RUN apt-get -o Acquire::Check-Valid-Until=false update
 RUN apt-get install -y -t stretch-backports openjdk-11-jdk=11.0.6+10-1~bpo9+1 -V
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.0.54.zip" -o "awscliv2.zip"
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.3.6.zip" -o "awscliv2.zip"
 RUN unzip awscliv2.zip
 RUN ./aws/install
 RUN rm awscliv2.zip

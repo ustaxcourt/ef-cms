@@ -5,6 +5,7 @@ const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
 const webpack = require('webpack');
 
 module.exports = {
+  devtool: false,
   module: {
     rules: [
       {
@@ -38,6 +39,7 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({
       API_URL: null,
+      CHECK_DEPLOY_DATE_INTERVAL: null,
       CI: null,
       CIRCLE_SHA1: null,
       COGNITO: null,
@@ -48,6 +50,7 @@ module.exports = {
       COGNITO_TOKEN_URL: null,
       ENV: null,
       FILE_UPLOAD_MODAL_TIMEOUT: null,
+      IS_LOCAL: null,
       NO_SCANNER: null,
       PDF_EXPRESS_LICENSE_KEY: null,
       PUBLIC_SITE_URL: null,
@@ -70,6 +73,8 @@ module.exports = {
         { from: 'node_modules/pdf-lib/dist', to: '.' },
         { from: 'web-client/src/favicons', to: '.' },
         { from: 'web-client/src/site.webmanifest', to: '.' },
+        { from: 'web-client/src/deployed-date.txt', to: '.' },
+
         {
           from: './node_modules/@pdftron/pdfjs-express-viewer/public',
           to: './pdfjsexpress',

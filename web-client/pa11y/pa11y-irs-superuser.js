@@ -7,8 +7,7 @@ module.exports = [
       'wait for #case-title to be visible',
     ],
     notes: 'checks a11y of login and docket search',
-    url:
-      'http://localhost:1234/mock-login?token=irsSuperuser&path=/&info=docket-search',
+    url: 'http://localhost:1234/log-in?code=irsSuperuser@example.com&path=/&info=docket-search',
   },
   {
     actions: [
@@ -20,8 +19,7 @@ module.exports = [
       'wait for table.search-results to be visible',
     ],
     notes: 'checks a11y of advanced docket search and table',
-    url:
-      'http://localhost:1234/mock-login?token=irsSuperuser&path=/&info=advanced-search-by-name',
+    url: 'http://localhost:1234/log-in?code=irsSuperuser@example.com&path=/&info=advanced-search-by-name',
   },
   {
     actions: [
@@ -33,7 +31,6 @@ module.exports = [
       'wait for #case-title to be visible',
     ],
     notes: 'checks a11y of case detail page for IRS superuser',
-    url:
-      'http://localhost:1234/mock-login?token=irsSuperuser&path=/&info=advanced-search',
+    url: 'http://localhost:1234/log-in?code=irsSuperuser@example.com&path=/&info=advanced-search',
   },
 ];

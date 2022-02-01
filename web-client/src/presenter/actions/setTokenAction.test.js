@@ -55,24 +55,4 @@ describe('setTokenAction,', () => {
       mockToken,
     );
   });
-
-  it('should call applicationContext.getUseCases().setItemInteractor with key token and the value of props.token', async () => {
-    await runAction(setTokenAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        refreshToken: mockRefreshToken,
-        token: mockToken,
-      },
-      state: {},
-    });
-
-    expect(
-      applicationContext.getUseCases().setItemInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      key: 'token',
-      value: mockToken,
-    });
-  });
 });

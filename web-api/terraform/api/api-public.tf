@@ -223,7 +223,7 @@ resource "aws_route53_record" "api_public_route53_regional_record" {
   alias {
     name                   = aws_api_gateway_domain_name.api_public_custom.regional_domain_name
     zone_id                = aws_api_gateway_domain_name.api_public_custom.regional_zone_id
-    evaluate_target_health = false
+    evaluate_target_health = true
   }
 
   latency_routing_policy {

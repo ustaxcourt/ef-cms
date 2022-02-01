@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e
 
-( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
-[ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
-
+./check-env-variables.sh "ENV"
 
 # disabling aws pager https://github.com/aws/aws-cli/pull/4702#issue-344978525
 AWS_PAGER=""

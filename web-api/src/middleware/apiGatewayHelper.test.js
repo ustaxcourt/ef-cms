@@ -14,16 +14,16 @@ const {
 } = require('../../../shared/src/business/entities/EntityConstants');
 
 const EXPECTED_HEADERS = {
-  'Access-Control-Allow-Origin': '*',
-  'Access-Control-Expose-Headers': "['X-Terminal-User']",
+  'Access-Control-Expose-Headers': 'X-Terminal-User',
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
+  Vary: 'Authorization',
   'X-Content-Type-Options': 'nosniff',
 };
 
 // Suppress console output in test runner (RAE SAID THIS WOULD BE COOL)
-console.error = () => null;
+console.error = jest.fn().mockImplementation(() => null);
 console.info = () => null;
 
 describe('handle', () => {
@@ -39,6 +39,66 @@ describe('handle', () => {
       isBase64Encoded: true,
       statusCode: 200,
     });
+  });
+
+  it('response should have the same return values (with header overides) that fun returns if body, statusCode, and headers are present', async () => {
+    const response = await handle({}, () => ({
+      body: 'hi',
+      headers: {},
+      statusCode: 200,
+    }));
+    expect(response).toEqual({
+      body: JSON.stringify('hi'),
+      headers: {
+        'Access-Control-Expose-Headers': 'X-Terminal-User',
+        'Cache-Control':
+          'max-age=0, private, no-cache, no-store, must-revalidate',
+        'Content-Type': 'application/json',
+        Pragma: 'no-cache',
+        Vary: 'Authorization',
+        'X-Content-Type-Options': 'nosniff',
+      },
+      statusCode: 200,
+    });
+  });
+
+  it('should skip logging an error if skipLogging is true', async () => {
+    await handle({}, () => {
+      const e = new Error();
+      e.skipLogging = true;
+      throw e;
+    });
+    expect(console.error).not.toHaveBeenCalled();
+  });
+
+  it('should log an error if skipLogging is false and CI is false', async () => {
+    process.env.CI = 'true';
+    await handle({}, () => {
+      const e = new Error();
+      e.skipLogging = false;
+      throw e;
+    });
+    expect(console.error).not.toHaveBeenCalled();
+  });
+
+  it('should log an error if skipLogging is false and CI is false', async () => {
+    process.env.CI = 'true';
+    await handle({}, () => {
+      const e = new Error();
+      e.skipLogging = true;
+      throw e;
+    });
+    expect(console.error).not.toHaveBeenCalled();
+  });
+
+  it('should log an error if skipLogging is false and CI is false', async () => {
+    delete process.env.CI;
+    await handle({}, () => {
+      const e = new Error();
+      e.skipLogging = false;
+      throw e;
+    });
+    expect(console.error).toHaveBeenCalled();
   });
 
   it('should filter data based on the fields query string option', async () => {

@@ -1,18 +1,18 @@
-const awsServerlessExpressMiddleware = require('@vendia/serverless-express/middleware');
-const bodyParser = require('body-parser');
 const cors = require('cors');
 const createApplicationContext = require('./applicationContext');
 const express = require('express');
 const logger = require('./logger');
+const { json, urlencoded } = require('body-parser');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const app = express();
+const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { set } = require('lodash');
 
 const applicationContext = createApplicationContext();
 
 app.use(cors());
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
+app.use(json());
+app.use(urlencoded({ extended: true }));
 app.use((req, res, next) => {
   if (process.env.NODE_ENV !== 'production') {
     // we added this to suppress error `Missing x-apigateway-event or x-apigateway-context header(s)` locally
@@ -22,13 +22,13 @@ app.use((req, res, next) => {
   }
   return next();
 });
-app.use(awsServerlessExpressMiddleware.eventContext());
 app.use(async (req, res, next) => {
   // This code is here so that we have a way to mock out the terminal user
   // via using dynamo locally.  This is only ran locally and on CI/CD which is
   // why we also lazy require some of these packages.  See story 8955 for more info.
   if (process.env.NODE_ENV !== 'production') {
-    set(req, 'apiGateway.event.requestContext.identity.sourceIp', 'localhost');
+    const currentInvoke = getCurrentInvoke();
+    set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
     const {
       get,
     } = require('../../shared/src/persistence/dynamodbClientService.js');
@@ -43,8 +43,8 @@ app.use(async (req, res, next) => {
 
     if (ips.includes('localhost')) {
       set(
-        req,
-        'apiGateway.event.requestContext.authorizer.isTerminalUser',
+        currentInvoke,
+        'event.requestContext.authorizer.isTerminalUser',
         'true',
       );
     }
@@ -80,10 +80,9 @@ const { getPublicJudgesLambda } = require('./public-api/getPublicJudgesLambda');
 const { todaysOpinionsLambda } = require('./public-api/todaysOpinionsLambda');
 const { todaysOrdersLambda } = require('./public-api/todaysOrdersLambda');
 
-// Temporarily disabled for story 7387
-// const {
-//   opinionPublicSearchLambda,
-// } = require('./public-api/opinionPublicSearchLambda');
+const {
+  opinionPublicSearchLambda,
+} = require('./public-api/opinionPublicSearchLambda');
 const {
   orderPublicSearchLambda,
 } = require('./public-api/orderPublicSearchLambda');
@@ -113,19 +112,18 @@ app.get(
   lambdaWrapper(orderPublicSearchLambda),
 );
 
-// Temporarily disabled for story 7387
-// app.get(
-//   '/public-api/opinion-search',
-//   ipLimiter({
-//     applicationContext,
-//     key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
-//   }),
-//   advancedQueryLimiter({
-//     applicationContext,
-//     key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
-//   }),
-//   lambdaWrapper(opinionPublicSearchLambda),
-// );
+app.get(
+  '/public-api/opinion-search',
+  ipLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_IP_LIMITER_KEY,
+  }),
+  advancedQueryLimiter({
+    applicationContext,
+    key: applicationContext.getConstants().ADVANCED_DOCUMENT_LIMITER_KEY,
+  }),
+  lambdaWrapper(opinionPublicSearchLambda),
+);
 
 app.get('/public-api/judges', lambdaWrapper(getPublicJudgesLambda));
 
@@ -152,7 +150,6 @@ app.get('/public-api/health', lambdaWrapper(getHealthCheckLambda));
 
 app.get(
   '/public-api/maintenance-mode',
-  cors({ exposedHeaders: ['X-Terminal-User'] }),
   lambdaWrapper(getMaintenanceModeLambda),
 );
 

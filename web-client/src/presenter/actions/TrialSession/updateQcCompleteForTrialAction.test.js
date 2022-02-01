@@ -41,7 +41,9 @@ describe('updateQcCompleteForTrialAction', () => {
   it('goes to error path if the use case throws an error', async () => {
     applicationContext
       .getUseCases()
-      .updateQcCompleteForTrialInteractor.mockRejectedValue(new Error('bad'));
+      .updateQcCompleteForTrialInteractor.mockRejectedValueOnce(
+        new Error('bad'),
+      );
     await runAction(updateQcCompleteForTrialAction, {
       modules: {
         presenter,
