@@ -46,7 +46,10 @@ const getSealedCase = ({
       .validate()
       .toRawObject();
   } else {
+    console.log('caseRecord.sealedTo', caseRecord.sealedTo);
     caseRecord = caseSealedFormatter(caseRecord);
+    console.log('caseRecord.sealedTo', caseRecord.sealedTo);
+
     return new PublicCase(caseRecord, {
       applicationContext,
     })
@@ -141,7 +144,9 @@ exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
   });
 
   let caseDetailRaw;
+  console.log('caseRecord.isSealed', caseRecord.isSealed);
   caseRecord.isSealed = isSealedCase(caseRecord);
+  console.log('caseRecord.isSealed', caseRecord.isSealed);
   if (isSealedCase(caseRecord)) {
     caseDetailRaw = await getSealedCase({
       applicationContext,
