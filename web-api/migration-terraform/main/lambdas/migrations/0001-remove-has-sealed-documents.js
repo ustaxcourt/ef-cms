@@ -2,7 +2,7 @@ const isCaseRecord = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('case|');
 };
 
-const migrateItems = async items => {
+const migrateItems = items => {
   const itemsAfter = [];
 
   for (const item of items) {

@@ -87,8 +87,6 @@ describe('external users perform an advanced search for orders', () => {
   docketClerkSealsCase(cerebralTest);
   petitionsClerkAddsPractitionerToPrimaryContact(cerebralTest, 'PT5432');
 
-  // case is sealed, no docket entries are sealed, prac is associated with case => show icon and return result
-  // case is sealed, no docket entries are sealed, prac NOT associated with case => no results for that case
   loginAs(cerebralTest, 'privatePractitioner1@example.com');
   it('search for order in sealed case as the second practitioner associated to the petitioner', async () => {
     await refreshElasticsearchIndex();
