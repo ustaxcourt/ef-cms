@@ -19,7 +19,6 @@ describe('advancedDocumentSearch', () => {
   const SOURCE = {
     includes: [
       'caseCaption',
-      'petitioners',
       'docketEntryId',
       'docketNumber',
       'docketNumberWithSuffix',
@@ -33,8 +32,10 @@ describe('advancedDocumentSearch', () => {
       'isStricken',
       'judge',
       'numberOfPages',
+      'petitioners',
       'privatePractitioners',
       'sealedDate',
+      'sealedTo',
       'signedJudgeName',
     ],
   };
@@ -297,7 +298,7 @@ describe('advancedDocumentSearch', () => {
     );
   });
 
-  it('should not include sealed documents in the search results', async () => {
+  it('should only include sealed docket entries in the search results when they are sealed to the public', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
@@ -321,6 +322,11 @@ describe('advancedDocumentSearch', () => {
       {
         term: {
           'isSealed.BOOL': true,
+        },
+      },
+      {
+        term: {
+          'sealedTo.S': 'External',
         },
       },
     ]);
