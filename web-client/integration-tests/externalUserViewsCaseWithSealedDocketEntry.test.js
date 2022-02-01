@@ -90,4 +90,17 @@ describe('Unauthed user views todays orders', () => {
     expect(sealedDocketEntry.isSealed).toBe(true);
     expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
   });
+
+  loginAs(testClient, 'docketclerk@example.com');
+  it('verify sealed docket entry is hyperlinked', async () => {
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(testClient);
+    const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.docketEntryId === testClient.draftOrders[0].docketEntryId,
+    );
+    expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(false);
+    expect(sealedDocketEntry.showDocumentViewerLink).toBe(true);
+    expect(sealedDocketEntry.isSealed).toBe(true);
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
+  });
 });
