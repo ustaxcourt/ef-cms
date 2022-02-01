@@ -626,5 +626,24 @@ describe('formattedDocketEntries', () => {
         },
       ]);
     });
+
+    it('should display the lock icon for a privatePractitioner if the entry is sealed', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+        },
+        isExternalUser: true,
+        isInProgress: true,
+        qcNeeded: true,
+      });
+
+      expect(result).toEqual([
+        {
+          className: 'sealed-docket-entry',
+          icon: 'lock',
+        },
+      ]);
+    });
   });
 });
