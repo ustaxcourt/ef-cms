@@ -48,7 +48,7 @@ describe('Bug 9323', () => {
     //3. Any clerk removes privatePractitioner from the case
     //4. Assert that the private practitioner remains the petitioner on the case
 
-    loginAs(privatePractitionerEmail);
+    loginAs(cerebralTest, privatePractitionerEmail);
     practitionerCreatesNewCase(cerebralTest, fakeFile);
 
     loginAs(cerebralTest, petitionsClerkEmail);
@@ -60,7 +60,7 @@ describe('Bug 9323', () => {
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkRemovesPractitionerFromCase(cerebralTest);
 
-    loginAs(privatePractitionerEmail);
+    loginAs(cerebralTest, privatePractitionerEmail);
     practitionerViewsDashboard(cerebralTest);
   });
 });
