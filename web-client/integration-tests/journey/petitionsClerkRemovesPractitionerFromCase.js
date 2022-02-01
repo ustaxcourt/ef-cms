@@ -1,8 +1,8 @@
 export const petitionsClerkRemovesPractitionerFromCase = cerebralTest => {
   return it('Petitions clerk removes a practitioner from a case', async () => {
-    expect(
-      cerebralTest.getState('caseDetail.privatePractitioners').length,
-    ).toEqual(2);
+    const initialPractitionerCount = cerebralTest.getState(
+      'caseDetail.privatePractitioners',
+    ).length;
 
     const barNumber = cerebralTest.getState(
       'caseDetail.privatePractitioners.0.barNumber',
@@ -30,6 +30,6 @@ export const petitionsClerkRemovesPractitionerFromCase = cerebralTest => {
 
     expect(
       cerebralTest.getState('caseDetail.privatePractitioners').length,
-    ).toEqual(1);
+    ).toEqual(initialPractitionerCount - 1);
   });
 };
