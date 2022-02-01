@@ -1,7 +1,6 @@
 const joi = require('joi');
 const {
   COURT_ISSUED_EVENT_CODES,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   ORDER_TYPES,
   PARTY_TYPES,
@@ -45,7 +44,6 @@ PublicCase.prototype.init = function init(rawCase, { applicationContext }) {
   this.isPaper = rawCase.isPaper;
   this.partyType = rawCase.partyType;
   this.receivedAt = rawCase.receivedAt;
-  this.sealedTo = rawCase.sealedTo;
   this._score = rawCase['_score'];
 
   this.isSealed = isSealedCase(rawCase);
@@ -105,11 +103,6 @@ const publicCaseSchema = {
     .description('Party type of the case petitioner.'),
   petitioners: joi.array().items(PublicContact.VALIDATION_RULES).required(),
   receivedAt: JoiValidationConstants.ISO_DATE.optional(),
-  sealedTo: JoiValidationConstants.STRING.valid(
-    ...Object.values(DOCKET_ENTRY_SEALED_TO_TYPES),
-  )
-    .optional()
-    .description("If sealed, the type of users who it's sealed from."),
 };
 
 const sealedCaseSchemaRestricted = {
