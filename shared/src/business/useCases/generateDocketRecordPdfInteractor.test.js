@@ -8,7 +8,6 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('./generateDocketRecordPdfInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { cloneDeep } = require('lodash');
 const { MOCK_PRACTITIONER, MOCK_USERS } = require('../../test/mockUsers');
 
 describe('generateDocketRecordPdfInteractor', () => {
@@ -154,9 +153,6 @@ describe('generateDocketRecordPdfInteractor', () => {
   });
 
   it('throws an Unauthorized error for an unassociated user attempting to view a sealed case', async () => {
-    const sealedDocketEntries = cloneDeep(caseDetail.docketEntries);
-    sealedDocketEntries[0].isSealed = true;
-
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'], //privatePractitioner
     );

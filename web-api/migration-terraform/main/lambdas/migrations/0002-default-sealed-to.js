@@ -6,7 +6,7 @@ const isDocketEntry = item => {
   return item.pk.startsWith('case|') && item.sk.startsWith('docket-entry|');
 };
 
-const migrateItems = async items => {
+const migrateItems = items => {
   const itemsAfter = [];
 
   for (const item of items) {
