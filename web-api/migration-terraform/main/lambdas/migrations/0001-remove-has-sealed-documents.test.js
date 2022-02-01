@@ -1,4 +1,4 @@
-const { migrateItems } = require('./0003-case-has-sealed-documents');
+const { migrateItems } = require('./0001-remove-has-sealed-documents');
 const { MOCK_CASE } = require('../../../../../shared/src/test/mockCase');
 
 describe('migrateItems', () => {
@@ -8,17 +8,9 @@ describe('migrateItems', () => {
   beforeEach(() => {
     mockCaseItem = {
       ...MOCK_CASE,
-      hasSealedDocuments: undefined,
+      hasSealedDocuments: true,
       pk: `case|${MOCK_CASE.docketNumber}`,
       sk: `case|${MOCK_CASE.docketNumber}`,
-    };
-
-    documentClient = {
-      query: jest.fn().mockImplementation(() => ({
-        promise: () => ({
-          Items: [mockCaseItem],
-        }),
-      })),
     };
   });
 
@@ -45,15 +37,13 @@ describe('migrateItems', () => {
         sk: 'docket-entry|83b77e98-4cf6-4fb4-b8c0-f5f90fd68f3c',
       },
     ]);
-
-    expect(documentClient.query).not.toHaveBeenCalled();
   });
 
-  it('should compute and set hasSealedDocuments field when the record is a case entity', async () => {
+  it('should remove the hasSealedDocuments property when the record is a case entity', async () => {
     const items = [mockCaseItem];
 
     const results = await migrateItems(items, documentClient);
 
-    expect(results[0].hasSealedDocuments).toBeDefined();
+    expect(results[0].hasSealedDocuments).toBeUndefined();
   });
 });
