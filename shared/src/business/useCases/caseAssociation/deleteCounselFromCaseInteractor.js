@@ -56,11 +56,15 @@ exports.deleteCounselFromCaseInteractor = async (
 
   aggregatePartiesForService(caseEntity);
 
-  await applicationContext.getPersistenceGateway().deleteUserFromCase({
-    applicationContext,
-    docketNumber,
-    userId,
-  });
+  if (
+    !caseEntity.petitioners.includes(petitioner => petitioner.userId === userId)
+  ) {
+    await applicationContext.getPersistenceGateway().deleteUserFromCase({
+      applicationContext,
+      docketNumber,
+      userId,
+    });
+  }
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
