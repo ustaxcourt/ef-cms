@@ -53,18 +53,32 @@ describe('Bug 9323', () => {
     practitionerViewsDashboard(cerebralTest);
   });
 
-  describe('BUG-9323 privatePractitioner remains on case as practitioner after petitioner removal', () => {
+  describe('BUG-9323 privatePractitioner representing both petitioners remains on case as practitioner after petitioner removal', () => {
     const privatePractitionerEmail = 'privatePractitioner@example.com';
     const petitionsClerkEmail = 'petitionsclerk@example.com';
 
     loginAs(cerebralTest, privatePractitionerEmail);
-    practitionerCreatesNewCase(cerebralTest, fakeFile); //test needs petition to have two petitioners which happens here
+    practitionerCreatesNewCase(cerebralTest, fakeFile);
 
-    //1. represents both petitioners and they are one of those petitioners, doesn't matter which gets deleted = stays associated, stays privatepractioner associated
-    //2a. represents only themself and not the other petitioner, other petitioner deleted = stays associated, stays privatepractioner associated
-    //2b. represents only themself and not the other petitioner, themself petitioner deleted = not associated, not privatepractioner associated
-    //3a. they represent only the other petitioner that isn't themself, other petitioner deleted = stays associated, not privatepractioner associated
-    //3b. they represent only the other petitioner that isn't themself, themself petitioner deleted = stays associated, stays privatepractioner associated
+    loginAs(cerebralTest, petitionsClerkEmail);
+    petitionsClerkServesElectronicCaseToIrs(cerebralTest);
+
+    loginAs(cerebralTest, 'admissionsclerk@example.com');
+    admissionsClerkEditsPetitionerEmail(cerebralTest, privatePractitionerEmail);
+
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkRemovesPetitionerFromCase(cerebralTest);
+
+    loginAs(cerebralTest, privatePractitionerEmail);
+    practitionerViewsDashboard(cerebralTest);
+  });
+
+  describe('BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
+    const privatePractitionerEmail = 'privatePractitioner@example.com';
+    const petitionsClerkEmail = 'petitionsclerk@example.com';
+
+    loginAs(cerebralTest, petitionsClerkEmail);
+    petitionsClerkCreatesNewCase(cerebralTest, fakeFile); //test needs petition to have two petitioners which happens here
 
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkServesElectronicCaseToIrs(cerebralTest);
@@ -79,3 +93,9 @@ describe('Bug 9323', () => {
     practitionerViewsDashboard(cerebralTest);
   });
 });
+
+//XXXXX 1. represents both petitioners and they are one of those petitioners, doesn't matter which gets deleted = stays associated, stays privatepractioner associated
+//2a. represents only themself and not the other petitioner, other petitioner deleted = stays associated, stays privatepractioner associated
+//2b. represents only themself and not the other petitioner, themself petitioner deleted = not associated, not privatepractioner associated
+//3a. they represent only the other petitioner that isn't themself, other petitioner deleted = stays associated, not privatepractioner associated
+//3b. they represent only the other petitioner that isn't themself, themself petitioner deleted = stays associated, stays privatepractioner associated
