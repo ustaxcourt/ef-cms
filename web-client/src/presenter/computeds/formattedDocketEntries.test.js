@@ -452,7 +452,7 @@ describe('formattedDocketEntries', () => {
   });
 
   describe('sealedTo', () => {
-    it('should set the tooltip correctly if sealedTo is public', () => {
+    it('should set the tooltip correctly when the docket entry is sealed', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -460,7 +460,9 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...mockDocketEntry,
+                isSealed: true,
                 sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+                sealedToTooltip: undefined,
               },
             ],
           },
@@ -469,27 +471,7 @@ describe('formattedDocketEntries', () => {
 
       expect(
         result.formattedDocketEntriesOnDocketRecord[0].sealedToTooltip,
-      ).toEqual('Sealed to public');
-    });
-
-    it('should set the tooltip correctly if sealedTo is external', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...mockDocketEntry,
-                sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
-              },
-            ],
-          },
-        },
-      });
-
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].sealedToTooltip,
-      ).toEqual('Sealed to the public and parties of this case');
+      ).toBeDefined();
     });
   });
 

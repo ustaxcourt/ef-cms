@@ -130,7 +130,6 @@ export const getFormattedDocketEntry = ({
   userAssociatedWithCase,
 }) => {
   const {
-    DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
@@ -158,7 +157,7 @@ export const getFormattedDocketEntry = ({
     !formattedResult.qcWorkItemsUntouched &&
     entry.isPaper;
 
-  if (entry.sealedTo) {
+  if (entry.isSealed) {
     formattedResult.sealedToTooltip = applicationContext
       .getUtilities()
       .getSealedDocketEntryTooltip(applicationContext, entry);
