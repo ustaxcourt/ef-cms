@@ -5,11 +5,8 @@ export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   { entry, isTerminalUser },
 ) => {
-  const {
-    DOCKET_ENTRY_SEALED_TO_TYPES,
-    DOCUMENT_PROCESSING_STATUS_OPTIONS,
-    EVENT_CODES_VISIBLE_TO_PUBLIC,
-  } = applicationContext.getConstants();
+  const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
+    applicationContext.getConstants();
   const record = cloneDeep(entry);
   let filingsAndProceedingsWithAdditionalInfo = '';
   if (record.documentTitle && record.additionalInfo) {
@@ -45,11 +42,10 @@ export const formatDocketEntryOnDocketRecord = (
     canDisplayDocumentLink &&
     record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
-  if (entry.isSealed) {
-    record.sealedToTooltip =
-      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
-        ? 'Sealed to public'
-        : 'Sealed to the public and parties of this case';
+  if (record.isSealed) {
+    record.isSealedTooltip = applicationContext
+      .getUtilities()
+      .getSealedDocketEntryTooltip(applicationContext, record);
   }
 
   return {

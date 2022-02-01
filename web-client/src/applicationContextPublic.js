@@ -62,6 +62,7 @@ import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/mai
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
+import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
@@ -187,6 +188,7 @@ const applicationContextPublic = {
       getContactPrimary,
       getContactSecondary,
       getJudgeLastName,
+      getSealedDocketEntryTooltip,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       sortDocketEntries,
