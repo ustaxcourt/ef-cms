@@ -43,7 +43,7 @@ export const formatDocketEntryOnDocketRecord = (
     record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
   if (record.isSealed) {
-    record.isSealedTooltip = applicationContext
+    record.sealedToTooltip = applicationContext
       .getUtilities()
       .getSealedDocketEntryTooltip(applicationContext, record);
   }
