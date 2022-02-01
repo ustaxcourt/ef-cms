@@ -36,10 +36,9 @@ exports.associatePrivatePractitionerToCase = async ({
       docketNumber,
     });
 
-  const isPrivatePractitionerOnCase =
-    caseToUpdate.privatePractitioners?.includes(
-      practitioner => practitioner.userId === user.userId,
-    );
+  const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
+    practitioner => practitioner.userId === user.userId,
+  );
 
   if (isPrivatePractitionerOnCase) {
     throw new Error(

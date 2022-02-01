@@ -20,7 +20,6 @@ const { MOCK_USERS } = require('../../../test/mockUsers');
 
 describe('associatePrivatePractitionerToCase', () => {
   let caseRecord;
-
   const practitionerUser = {
     barNumber: 'BN1234',
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
@@ -116,6 +115,30 @@ describe('associatePrivatePractitionerToCase', () => {
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toHaveBeenCalled();
+  });
+
+  it('should not add case|privatePractitioner record if user is already practitioner on case', async () => {
+    const freshDocketNumber = '1234-56';
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        docketNumber: freshDocketNumber,
+        privatePractitioners: [practitionerUser],
+      });
+
+    await expect(
+      associatePrivatePractitionerToCase({
+        applicationContext,
+        docketNumber: freshDocketNumber,
+        representing: [],
+        user: practitionerUser,
+      }),
+    ).rejects.toThrow(
+      'The Private Practitioner is already associated with the case.',
+    );
+
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
     ).not.toHaveBeenCalled();
