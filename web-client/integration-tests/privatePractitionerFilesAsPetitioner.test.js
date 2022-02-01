@@ -7,7 +7,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 
 const cerebralTest = setupTest();
 
-describe('admissions clerk practitioner journey', () => {
+describe('privatePractitioner files as a petitioner', () => {
   // const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
   beforeAll(() => {
@@ -23,6 +23,33 @@ describe('admissions clerk practitioner journey', () => {
   //2. Admissions clerk associates the private practitioner with the petitioner via private practitioner's e-mail
   //3. Admissions clerk assigns the private practitioner to the petitioner on the case.
   //4. Assert that the private practitioner to the petitioner on the case.
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, true);
+
+  loginAs(cerebralTest, 'admissionsclerk@example.com');
+  admissionsClerkEditsPetitionerEmail(
+    cerebralTest,
+    'privatePractitioner@example.com',
+  );
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(cerebralTest, true);
+});
+
+describe('BUG-9323 privatePractitioner remains on case as petitioner after removal', () => {
+  beforeAll(() => {
+    jest.setTimeout(30000);
+  });
+
+  afterAll(() => {
+    cerebralTest.closeSocket();
+  });
+
+  //Order of operations
+  //1. Practitioner files petition
+  //2. Admissions clerk associates the private practitioner with the petitioner via private practitioner's e-mail
+  //3. Any clerk removes privatePractitioner from the case
+  //4. Assert that the private practitioner remains the petitioner on the case
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, true);
