@@ -24,7 +24,6 @@ exports.advancedDocumentSearch = async ({
 }) => {
   const sourceFields = [
     'caseCaption',
-    'petitioners',
     'docketEntryId',
     'docketNumber',
     'docketNumberWithSuffix',
@@ -35,12 +34,13 @@ exports.advancedDocumentSearch = async ({
     'irsPractitioners',
     'isFileAttached',
     'isSealed',
-    'sealedTo',
     'isStricken',
     'judge',
     'numberOfPages',
+    'petitioners',
     'privatePractitioners',
     'sealedDate',
+    'sealedTo',
     'signedJudgeName',
   ];
 
