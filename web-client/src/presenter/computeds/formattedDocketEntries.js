@@ -159,10 +159,9 @@ export const getFormattedDocketEntry = ({
     entry.isPaper;
 
   if (entry.sealedTo) {
-    formattedResult.sealedToTooltip =
-      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
-        ? 'Sealed to public'
-        : 'Sealed to the public and parties of this case';
+    formattedResult.sealedToTooltip = applicationContext
+      .getUtilities()
+      .getSealedDocketEntryTooltip(applicationContext, entry);
   }
 
   if (entry.documentTitle) {

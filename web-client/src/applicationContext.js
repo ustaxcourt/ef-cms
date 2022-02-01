@@ -197,6 +197,7 @@ import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/docu
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
+import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
@@ -708,6 +709,7 @@ const applicationContext = {
       getPetitionDocketEntry,
       getPetitionerById,
       getPractitionersRepresenting,
+      getSealedDocketEntryTooltip,
       getServedPartiesCode,
       getStampBoxCoordinates,
       getTrialSessionStatus,
