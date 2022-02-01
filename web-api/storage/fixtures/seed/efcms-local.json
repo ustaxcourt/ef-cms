@@ -598,7 +598,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "0048b9e5-15e8-4315-8b9c-8a2e181205e4",
     "pk": "case|101-20",
@@ -620,7 +622,9 @@
     "createdAt": "2020-01-02T16:05:45.979Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Bill Burr",
     "docketEntryId": "cb323daf-c541-4645-bb44-232255d03d40",
@@ -827,7 +831,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -878,7 +884,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|310-21",
     "docketNumber": "310-21"
   },
@@ -1505,7 +1513,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -1556,7 +1566,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|312-21",
     "docketNumber": "312-21"
   },
@@ -1838,7 +1850,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "3bef545a-b185-4101-9822-c1722856ef62",
     "pk": "case|120-20",
@@ -1857,6 +1871,7 @@
     "isOnDocketRecord": true,
     "createdAt": "2020-06-25T20:58:55.414Z",
     "numberOfPages": 2,
+    "sealedTo": "Public",
     "entityName": "DocketEntry",
     "filedBy": "Petr. Sean Connery",
     "docketEntryId": "d1d5ea49-bbe5-4a63-bdff-20de1fed05d7",
@@ -1869,7 +1884,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|120-20",
     "docketNumber": "120-20"
@@ -2243,7 +2260,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -2271,7 +2290,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|301-21",
     "docketNumber": "301-21"
@@ -2488,7 +2509,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -2516,7 +2539,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|303-21",
     "docketNumber": "303-21"
@@ -2679,7 +2704,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-20",
@@ -2715,7 +2742,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.671Z",
     "pk": "case|104-20",
@@ -2748,7 +2777,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "servedAt": "2020-04-14T19:59:46.672Z",
     "pk": "case|104-20",
@@ -2969,7 +3000,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -2996,7 +3029,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|317-21",
     "docketNumber": "317-21"
   },
@@ -3129,6 +3164,370 @@
     "docketNumber": "317-21",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "isSealed": false,
+    "procedureType": "Small",
+    "isPaper": false,
+    "automaticBlocked": false,
+    "qcCompleteForTrial": {},
+    "irsNoticeDate": null,
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2022-01-05T15:09:29.302Z",
+    "caseType": "Deficiency",
+    "orderDesignatingPlaceOfTrial": false,
+    "createdAt": "2021-11-05T15:09:29.301Z",
+    "noticeOfAttachments": false,
+    "entityName": "Case",
+    "caseCaption": "Rand al'Thor, Petitioner",
+    "sk": "case|320-21",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "320-21S",
+    "orderForRatification": false,
+    "petitioners": [
+      {
+        "isAddressSealed": false,
+        "city": "Two Rivers",
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "address1": "1 Shepherd Way",
+        "postalCode": "54241",
+        "contactType": "petitioner",
+        "sealedAndUnavailable": false,
+        "countryType": "domestic",
+        "serviceIndicator": "Electronic",
+        "phone": "324-156-4456",
+        "entityName": "Petitioner",
+        "name": "Rand al'Thor",
+        "state": "WI",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "initialDocketNumberSuffix": "S",
+    "docketNumberSuffix": "S",
+    "sortableDocketNumber": 22000102,
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Milwaukee, Wisconsin",
+    "initialCaption": "Rand al'Thor, Petitioner",
+    "hasPendingItems": false,
+    "petitionPaymentDate": null,
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|320-21",
+    "docketNumber": "320-21",
+    "petitionPaymentWaivedDate": null,
+    "statistics": [
+      {
+        "lastDateOfPeriod": null,
+        "irsDeficiencyAmount": "1500.00",
+        "irsTotalPenalties": "150.00",
+        "statisticId": "38128813-53b7-4c53-acc2-33eb31ebc0ef",
+        "year": "2019",
+        "entityName": "Statistic",
+        "yearOrPeriod": "Year"
+      }
+    ],
+    "hasVerifiedIrsNotice": true,
+    "status": "General Docket - Not at Issue"
+  },
+  {
+    "servedParties": [
+      {
+        "name": "Rand al'Thor",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "attachments": true,
+    "isStricken": false,
+    "documentType": "Answer",
+    "filingDate": "2021-11-20T15:26:23.531Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2021-11-20T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2021-11-20T15:26:23.531Z",
+    "numberOfPages": 2,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Rand al'Thor",
+    "docketEntryId": "276f47f4-bd04-478d-b1f6-792964cfb94d",
+    "sk": "docket-entry|276f47f4-bd04-478d-b1f6-792964cfb94d",
+    "certificateOfService": false,
+    "documentTitle": "Answer",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "hasSupportingDocuments": false,
+    "draftOrderState": null,
+    "index": 4,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "A",
+    "processingStatus": "complete",
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "servedPartiesCode": "B",
+    "certificateOfServiceDate": null,
+    "pk": "case|320-21",
+    "servedAt": "2021-11-20T15:26:23.535Z",
+    "docketNumber": "320-21"
+  },
+  {
+    "servedParties": [
+      {
+        "name": "IRS",
+        "role": "irsSuperuser"
+      }
+    ],
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2021-11-05T15:09:29.301Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2021-11-05T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2021-11-05T15:09:29.303Z",
+    "numberOfPages": 4,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Rand al'Thor",
+    "docketEntryId": "874fe86d-5741-490f-87b9-6dc326b2df37",
+    "sk": "docket-entry|874fe86d-5741-490f-87b9-6dc326b2df37",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "addToCoversheet": false,
+    "draftOrderState": null,
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "servedPartiesCode": "R",
+    "pk": "case|320-21",
+    "servedAt": "2021-11-08T15:19:17.214Z",
+    "docketNumber": "320-21"
+  },
+  {
+    "servedParties": [
+      {
+        "name": "IRS",
+        "role": "irsSuperuser"
+      }
+    ],
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2021-11-05T15:09:29.301Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2021-11-05T05:00:00.000Z",
+    "isOnDocketRecord": false,
+    "createdAt": "2021-11-05T15:09:29.305Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Rand al'Thor",
+    "docketEntryId": "a51abcd4-3352-43e7-8775-810c3fed6833",
+    "sk": "docket-entry|a51abcd4-3352-43e7-8775-810c3fed6833",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": [],
+    "addToCoversheet": false,
+    "draftOrderState": null,
+    "index": 0,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "servedPartiesCode": "R",
+    "pk": "case|320-21",
+    "servedAt": "2021-11-05T15:19:17.229Z",
+    "docketNumber": "320-21"
+  },
+  {
+    "date": null,
+    "servedParties": [
+      {
+        "name": "Rand al'Thor",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "serviceStamp": "Served",
+    "attachments": false,
+    "isStricken": false,
+    "isPendingService": false,
+    "documentType": "Order",
+    "filingDate": "2021-11-09T15:22:52.467Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2021-11-09T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2021-11-09T15:22:37.215Z",
+    "documentContentsId": "3bd2c74f-8e49-4c2d-be13-05c64b737117",
+    "signedJudgeName": "Maurice B. Foley",
+    "numberOfPages": 1,
+    "scenario": "Type A",
+    "entityName": "DocketEntry",
+    "docketEntryId": "aedcc36e-a3dd-4e0c-959f-02360076007a",
+    "documentIdBeforeSignature": "1a7d89c8-605f-40a9-a494-d94934a6f8a1",
+    "sk": "docket-entry|aedcc36e-a3dd-4e0c-959f-02360076007a",
+    "documentTitle": "Order to Respond",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "draftOrderState": null,
+    "index": 3,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "O",
+    "processingStatus": "complete",
+    "filers": [],
+    "freeText": "Order to Respond",
+    "servedPartiesCode": "B",
+    "signedAt": "2021-11-09T15:22:37.215Z",
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"Order to Respond\",\"date\":null,\"generatedDocumentTitle\":\"Order to Respond\",\"serviceStamp\":\"Served\",\"docketEntryId\":\"aedcc36e-a3dd-4e0c-959f-02360076007a\",\"docketNumber\":\"320-21\"}",
+    "pk": "case|320-21",
+    "servedAt": "2021-11-09T15:22:52.469Z",
+    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "320-21"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2021-11-05T15:09:29.301Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2021-11-05T05:00:00.000Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "createdAt": "2021-11-05T15:09:29.305Z",
+    "processingStatus": "complete",
+    "filers": [],
+    "entityName": "DocketEntry",
+    "docketEntryId": "f2f21f29-a094-4e39-a800-de2c80a08811",
+    "sk": "docket-entry|f2f21f29-a094-4e39-a800-de2c80a08811",
+    "pk": "case|320-21",
+    "documentTitle": "Request for Place of Trial at Milwaukee, Wisconsin",
+    "docketNumber": "320-21",
+    "addToCoversheet": false
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - Not at Issue",
+    "gsi1pk": "work-item|0be1067a-f8cd-42cc-a1ab-5f93701fb49e",
+    "caseTitle": "Rand al'Thor",
+    "section": "docket",
+    "workItemId": "0be1067a-f8cd-42cc-a1ab-5f93701fb49e",
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2021-11-20T15:26:23.534Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|0be1067a-f8cd-42cc-a1ab-5f93701fb49e",
+    "docketNumberWithSuffix": "320-21S",
+    "docketEntry": {
+      "eventCode": "A",
+      "createdAt": "2021-11-20T15:26:23.531Z",
+      "documentType": "Answer",
+      "filedBy": "Petr. Rand al'Thor",
+      "docketEntryId": "276f47f4-bd04-478d-b1f6-792964cfb94d",
+      "documentTitle": "Answer",
+      "isFileAttached": true,
+      "receivedAt": "2021-11-20T05:00:00.000Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|320-21",
+    "docketNumber": "320-21",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2021-11-20T15:26:23.534Z"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - Not at Issue",
+    "gsi1pk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "section": "docket",
+    "workItemId": "4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2021-11-09T15:22:52.474Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "docketNumberWithSuffix": "320-21S",
+    "updatedAt": "2021-11-09T15:22:52.474Z",
+    "completedAt": "2021-11-09T15:22:52.475Z",
+    "completedMessage": "completed",
+    "caseTitle": "Rand al'Thor",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "hideFromPendingMessages": true,
+    "docketEntry": {
+      "eventCode": "O",
+      "createdAt": "2021-11-09T15:22:37.215Z",
+      "documentType": "Order",
+      "docketEntryId": "aedcc36e-a3dd-4e0c-959f-02360076007a",
+      "servedAt": "2021-11-09T15:22:52.469Z",
+      "documentTitle": "Order to Respond",
+      "isFileAttached": true,
+      "receivedAt": "2021-11-09T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|320-21",
+    "docketNumber": "320-21",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - Not at Issue",
+    "caseIsInProgress": true,
+    "gsi1pk": "work-item|64f31afa-7aff-4243-b795-d7e79a057692",
+    "section": "petitions",
+    "workItemId": "64f31afa-7aff-4243-b795-d7e79a057692",
+    "sentBy": "Test Petitioner",
+    "createdAt": "2021-11-05T15:09:29.304Z",
+    "highPriority": false,
+    "assigneeName": "Test Petitionsclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|64f31afa-7aff-4243-b795-d7e79a057692",
+    "docketNumberWithSuffix": "320-21S",
+    "updatedAt": "2021-11-05T15:09:29.304Z",
+    "completedAt": "2021-11-08T15:19:17.250Z",
+    "completedMessage": "Served to IRS",
+    "caseTitle": "Rand al'Thor",
+    "isInitializeCase": true,
+    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketEntry": {
+      "eventCode": "P",
+      "createdAt": "2021-11-05T15:09:29.303Z",
+      "documentType": "Petition",
+      "filedBy": "Petr. Rand al'Thor",
+      "docketEntryId": "874fe86d-5741-490f-87b9-6dc326b2df37",
+      "servedAt": "2021-11-08T15:19:17.214Z",
+      "documentTitle": "Petition",
+      "isFileAttached": true,
+      "receivedAt": "2021-11-08T05:00:00.000Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|320-21",
+    "docketNumber": "320-21",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Petitionsclerk"
   },
   {
     "sk": "user|c0daa0a7-a66b-4eae-949b-9ae0f8a32e46",
@@ -3758,7 +4157,9 @@
     "processingStatus": "complete",
     "createdAt": "2020-09-25T19:27:00.208Z",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "953057bb-72d2-412d-8352-fb68c6b0fe2b",
@@ -3791,7 +4192,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|122-20",
     "docketNumber": "122-20"
@@ -3969,7 +4372,9 @@
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "NOEI",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "pk": "case|103-20",
     "servedAt": "2020-09-21T20:55:12.840Z",
@@ -4007,7 +4412,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "ADMR",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "certificateOfServiceDate": null,
     "servedAt": "2020-01-23T21:45:34.521Z",
     "pk": "case|103-20",
@@ -4097,7 +4504,9 @@
     "createdAt": "2020-01-23T21:44:54.043Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Reuben Blair",
     "docketEntryId": "ac62f25a-49f9-46a5-aed7-d6b955a2dc34",
@@ -4128,7 +4537,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "f6f9ce81-8b65-433c-8c7b-f0ffa7a74068",
     "pk": "case|103-20",
@@ -4243,11 +4654,6 @@
     "sk": "internal-opinion-search-enabled",
     "current": true,
     "pk": "internal-opinion-search-enabled"
-  },
-  {
-    "sk": "external-opinion-search-enabled",
-    "current": true,
-    "pk": "external-opinion-search-enabled"
   },
   {
     "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
@@ -4385,7 +4791,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -4436,7 +4844,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|316-21",
     "docketNumber": "316-21"
   },
@@ -5075,7 +5485,6 @@
       }
     ],
     "isSealed": true,
-    "sealedTo": "Public",
     "serviceStamp": "Entered and Served",
     "attachments": false,
     "isStricken": false,
@@ -5091,6 +5500,7 @@
     "createdAt": "2021-12-02T16:18:22.832Z",
     "documentContentsId": "94e4a677-b702-4a34-b963-b20bcdd44c59",
     "signedJudgeName": "Maurice B. Foley",
+    "sealedTo": "Public",
     "numberOfPages": 1,
     "scenario": "Type A",
     "entityName": "DocketEntry",
@@ -5155,7 +5565,9 @@
     },
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "name": "Test Private Practitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|999-15",
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
     "email": "privatePractitioner@example.com"
@@ -5270,7 +5682,9 @@
     "createdAt": "2019-12-11T16:02:31.176Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Letti Toretto",
     "docketEntryId": "3cf1f474-1dcd-47aa-8455-8f9a93d80183",
@@ -5297,7 +5711,9 @@
     "createdAt": "2019-12-11T16:02:31.174Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Letti Toretto",
     "docketEntryId": "6d83425c-8ef3-4c66-b776-6c7957c53f4d",
@@ -5343,366 +5759,8 @@
     "docketNumber": "113-19"
   },
   {
-    "associatedJudge": "Chief Judge",
-    "isSealed": false,
-    "procedureType": "Small",
-    "isPaper": false,
-    "automaticBlocked": false,
-    "qcCompleteForTrial": {},
-    "irsNoticeDate": null,
-    "orderForFilingFee": true,
-    "petitionPaymentStatus": "Not paid",
-    "partyType": "Petitioner",
-    "receivedAt": "2022-01-05T15:09:29.302Z",
-    "caseType": "Deficiency",
-    "orderDesignatingPlaceOfTrial": false,
-    "createdAt": "2021-11-05T15:09:29.301Z",
-    "noticeOfAttachments": false,
-    "entityName": "Case",
-    "caseCaption": "Rand al'Thor, Petitioner",
-    "sk": "case|320-21",
-    "orderForOds": false,
-    "filingType": "Myself",
-    "docketNumberWithSuffix": "320-21S",
-    "orderForRatification": false,
-    "petitioners": [
-      {
-        "isAddressSealed": false,
-        "city": "Two Rivers",
-        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-        "address1": "1 Shepherd Way",
-        "postalCode": "54241",
-        "contactType": "petitioner",
-        "sealedAndUnavailable": false,
-        "countryType": "domestic",
-        "serviceIndicator": "Electronic",
-        "phone": "324-156-4456",
-        "entityName": "Petitioner",
-        "name": "Rand al'Thor",
-        "state": "WI",
-        "email": "petitioner@example.com"
-      }
-    ],
-    "initialDocketNumberSuffix": "S",
-    "docketNumberSuffix": "S",
-    "sortableDocketNumber": 22000102,
-    "orderForAmendedPetition": false,
-    "orderToShowCause": false,
-    "preferredTrialCity": "Milwaukee, Wisconsin",
-    "initialCaption": "Rand al'Thor, Petitioner",
-    "hasPendingItems": false,
-    "petitionPaymentDate": null,
-    "orderForAmendedPetitionAndFilingFee": false,
-    "pk": "case|320-21",
-    "docketNumber": "320-21",
-    "petitionPaymentWaivedDate": null,
-    "statistics": [
-      {
-        "lastDateOfPeriod": null,
-        "irsDeficiencyAmount": "1500.00",
-        "irsTotalPenalties": "150.00",
-        "statisticId": "38128813-53b7-4c53-acc2-33eb31ebc0ef",
-        "year": "2019",
-        "entityName": "Statistic",
-        "yearOrPeriod": "Year"
-      }
-    ],
-    "hasVerifiedIrsNotice": true,
-    "status": "General Docket - Not at Issue"
-  },
-  {
-    "servedParties": [
-      {
-        "name": "Rand al'Thor",
-        "email": "petitioner@example.com"
-      }
-    ],
-    "attachments": true,
-    "isStricken": false,
-    "documentType": "Answer",
-    "filingDate": "2021-11-20T15:26:23.531Z",
-    "isMinuteEntry": false,
-    "pending": false,
-    "isDraft": false,
-    "receivedAt": "2021-11-20T05:00:00.000Z",
-    "isOnDocketRecord": true,
-    "createdAt": "2021-11-20T15:26:23.531Z",
-    "numberOfPages": 2,
-    "scenario": "Standard",
-    "entityName": "DocketEntry",
-    "filedBy": "Petr. Rand al'Thor",
-    "docketEntryId": "276f47f4-bd04-478d-b1f6-792964cfb94d",
-    "sk": "docket-entry|276f47f4-bd04-478d-b1f6-792964cfb94d",
-    "certificateOfService": false,
-    "documentTitle": "Answer",
-    "relationship": "primaryDocument",
-    "addToCoversheet": false,
-    "hasSupportingDocuments": false,
-    "draftOrderState": null,
-    "index": 4,
-    "isFileAttached": true,
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "A",
-    "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "servedPartiesCode": "B",
-    "certificateOfServiceDate": null,
-    "pk": "case|320-21",
-    "servedAt": "2021-11-20T15:26:23.535Z",
-    "docketNumber": "320-21"
-  },
-  {
-    "servedParties": [
-      {
-        "name": "IRS",
-        "role": "irsSuperuser"
-      }
-    ],
-    "isStricken": false,
-    "documentType": "Petition",
-    "filingDate": "2021-11-05T15:09:29.301Z",
-    "isMinuteEntry": false,
-    "pending": false,
-    "isDraft": false,
-    "receivedAt": "2021-11-05T05:00:00.000Z",
-    "isOnDocketRecord": true,
-    "createdAt": "2021-11-05T15:09:29.303Z",
-    "numberOfPages": 4,
-    "entityName": "DocketEntry",
-    "filedBy": "Petr. Rand al'Thor",
-    "docketEntryId": "874fe86d-5741-490f-87b9-6dc326b2df37",
-    "sk": "docket-entry|874fe86d-5741-490f-87b9-6dc326b2df37",
-    "documentTitle": "Petition",
-    "privatePractitioners": [],
-    "addToCoversheet": false,
-    "draftOrderState": null,
-    "index": 1,
-    "isFileAttached": true,
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "P",
-    "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "servedPartiesCode": "R",
-    "pk": "case|320-21",
-    "servedAt": "2021-11-08T15:19:17.214Z",
-    "docketNumber": "320-21"
-  },
-  {
-    "servedParties": [
-      {
-        "name": "IRS",
-        "role": "irsSuperuser"
-      }
-    ],
-    "isStricken": false,
-    "documentType": "Statement of Taxpayer Identification",
-    "filingDate": "2021-11-05T15:09:29.301Z",
-    "isMinuteEntry": false,
-    "pending": false,
-    "isDraft": false,
-    "receivedAt": "2021-11-05T05:00:00.000Z",
-    "isOnDocketRecord": false,
-    "createdAt": "2021-11-05T15:09:29.305Z",
-    "numberOfPages": 2,
-    "entityName": "DocketEntry",
-    "filedBy": "Petr. Rand al'Thor",
-    "docketEntryId": "a51abcd4-3352-43e7-8775-810c3fed6833",
-    "sk": "docket-entry|a51abcd4-3352-43e7-8775-810c3fed6833",
-    "documentTitle": "Statement of Taxpayer Identification",
-    "privatePractitioners": [],
-    "addToCoversheet": false,
-    "draftOrderState": null,
-    "index": 0,
-    "isFileAttached": true,
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "STIN",
-    "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
-    "servedPartiesCode": "R",
-    "pk": "case|320-21",
-    "servedAt": "2021-11-05T15:19:17.229Z",
-    "docketNumber": "320-21"
-  },
-  {
-    "date": null,
-    "servedParties": [
-      {
-        "name": "Rand al'Thor",
-        "email": "petitioner@example.com"
-      }
-    ],
-    "serviceStamp": "Served",
-    "attachments": false,
-    "isStricken": false,
-    "isPendingService": false,
-    "documentType": "Order",
-    "filingDate": "2021-11-09T15:22:52.467Z",
-    "isMinuteEntry": false,
-    "pending": false,
-    "isDraft": false,
-    "receivedAt": "2021-11-09T05:00:00.000Z",
-    "isOnDocketRecord": true,
-    "createdAt": "2021-11-09T15:22:37.215Z",
-    "documentContentsId": "3bd2c74f-8e49-4c2d-be13-05c64b737117",
-    "signedJudgeName": "Maurice B. Foley",
-    "numberOfPages": 1,
-    "scenario": "Type A",
-    "entityName": "DocketEntry",
-    "docketEntryId": "aedcc36e-a3dd-4e0c-959f-02360076007a",
-    "documentIdBeforeSignature": "1a7d89c8-605f-40a9-a494-d94934a6f8a1",
-    "sk": "docket-entry|aedcc36e-a3dd-4e0c-959f-02360076007a",
-    "documentTitle": "Order to Respond",
-    "relationship": "primaryDocument",
-    "addToCoversheet": false,
-    "draftOrderState": null,
-    "index": 3,
-    "isFileAttached": true,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "O",
-    "processingStatus": "complete",
-    "filers": [],
-    "freeText": "Order to Respond",
-    "servedPartiesCode": "B",
-    "signedAt": "2021-11-09T15:22:37.215Z",
-    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"Order to Respond\",\"date\":null,\"generatedDocumentTitle\":\"Order to Respond\",\"serviceStamp\":\"Served\",\"docketEntryId\":\"aedcc36e-a3dd-4e0c-959f-02360076007a\",\"docketNumber\":\"320-21\"}",
-    "pk": "case|320-21",
-    "servedAt": "2021-11-09T15:22:52.469Z",
-    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "320-21"
-  },
-  {
-    "isStricken": false,
-    "documentType": "Request for Place of Trial",
-    "filingDate": "2021-11-05T15:09:29.301Z",
-    "isMinuteEntry": true,
-    "pending": false,
-    "isDraft": false,
-    "index": 2,
-    "isFileAttached": false,
-    "receivedAt": "2021-11-05T05:00:00.000Z",
-    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "isOnDocketRecord": true,
-    "eventCode": "RQT",
-    "createdAt": "2021-11-05T15:09:29.305Z",
-    "processingStatus": "complete",
-    "filers": [],
-    "entityName": "DocketEntry",
-    "docketEntryId": "f2f21f29-a094-4e39-a800-de2c80a08811",
-    "sk": "docket-entry|f2f21f29-a094-4e39-a800-de2c80a08811",
-    "pk": "case|320-21",
-    "documentTitle": "Request for Place of Trial at Milwaukee, Wisconsin",
-    "docketNumber": "320-21",
-    "addToCoversheet": false
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "caseStatus": "General Docket - Not at Issue",
-    "gsi1pk": "work-item|0be1067a-f8cd-42cc-a1ab-5f93701fb49e",
-    "caseTitle": "Rand al'Thor",
-    "section": "docket",
-    "workItemId": "0be1067a-f8cd-42cc-a1ab-5f93701fb49e",
-    "assigneeId": null,
-    "sentBy": "Test Petitioner",
-    "createdAt": "2021-11-20T15:26:23.534Z",
-    "highPriority": false,
-    "assigneeName": null,
-    "entityName": "WorkItem",
-    "sk": "work-item|0be1067a-f8cd-42cc-a1ab-5f93701fb49e",
-    "docketNumberWithSuffix": "320-21S",
-    "docketEntry": {
-      "eventCode": "A",
-      "createdAt": "2021-11-20T15:26:23.531Z",
-      "documentType": "Answer",
-      "filedBy": "Petr. Rand al'Thor",
-      "docketEntryId": "276f47f4-bd04-478d-b1f6-792964cfb94d",
-      "documentTitle": "Answer",
-      "isFileAttached": true,
-      "receivedAt": "2021-11-20T05:00:00.000Z",
-      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-    },
-    "pk": "case|320-21",
-    "docketNumber": "320-21",
-    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "updatedAt": "2021-11-20T15:26:23.534Z"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "caseStatus": "General Docket - Not at Issue",
-    "gsi1pk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
-    "section": "docket",
-    "workItemId": "4500eb06-b5db-4749-96c1-9c96b3ac592d",
-    "sentBy": "Test Docketclerk",
-    "createdAt": "2021-11-09T15:22:52.474Z",
-    "highPriority": false,
-    "assigneeName": "Test Docketclerk",
-    "entityName": "WorkItem",
-    "sk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
-    "docketNumberWithSuffix": "320-21S",
-    "updatedAt": "2021-11-09T15:22:52.474Z",
-    "completedAt": "2021-11-09T15:22:52.475Z",
-    "completedMessage": "completed",
-    "caseTitle": "Rand al'Thor",
-    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "sentBySection": "docket",
-    "hideFromPendingMessages": true,
-    "docketEntry": {
-      "eventCode": "O",
-      "createdAt": "2021-11-09T15:22:37.215Z",
-      "documentType": "Order",
-      "docketEntryId": "aedcc36e-a3dd-4e0c-959f-02360076007a",
-      "servedAt": "2021-11-09T15:22:52.469Z",
-      "documentTitle": "Order to Respond",
-      "isFileAttached": true,
-      "receivedAt": "2021-11-09T05:00:00.000Z",
-      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-    },
-    "pk": "case|320-21",
-    "docketNumber": "320-21",
-    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedBy": "Test Docketclerk"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "caseStatus": "General Docket - Not at Issue",
-    "caseIsInProgress": true,
-    "gsi1pk": "work-item|64f31afa-7aff-4243-b795-d7e79a057692",
-    "section": "petitions",
-    "workItemId": "64f31afa-7aff-4243-b795-d7e79a057692",
-    "sentBy": "Test Petitioner",
-    "createdAt": "2021-11-05T15:09:29.304Z",
-    "highPriority": false,
-    "assigneeName": "Test Petitionsclerk",
-    "entityName": "WorkItem",
-    "sk": "work-item|64f31afa-7aff-4243-b795-d7e79a057692",
-    "docketNumberWithSuffix": "320-21S",
-    "updatedAt": "2021-11-05T15:09:29.304Z",
-    "completedAt": "2021-11-08T15:19:17.250Z",
-    "completedMessage": "Served to IRS",
-    "caseTitle": "Rand al'Thor",
-    "isInitializeCase": true,
-    "assigneeId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedByUserId": "3805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketEntry": {
-      "eventCode": "P",
-      "createdAt": "2021-11-05T15:09:29.303Z",
-      "documentType": "Petition",
-      "filedBy": "Petr. Rand al'Thor",
-      "docketEntryId": "874fe86d-5741-490f-87b9-6dc326b2df37",
-      "servedAt": "2021-11-08T15:19:17.214Z",
-      "documentTitle": "Petition",
-      "isFileAttached": true,
-      "receivedAt": "2021-11-08T05:00:00.000Z",
-      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
-    },
-    "pk": "case|320-21",
-    "docketNumber": "320-21",
-    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedBy": "Test Petitionsclerk"
-  },
-  {
     "sk": "docketNumberCounter-2022",
-    "id": -1,
+    "id": 0,
     "pk": "docketNumberCounter-2022"
   },
   {
@@ -8365,6 +8423,44 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - Not at Issue",
+    "gsi1pk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "section": "docket",
+    "workItemId": "4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2021-11-09T15:22:52.474Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2021-11-09T15:22:52.475Z",
+    "docketNumberWithSuffix": "320-21S",
+    "updatedAt": "2021-11-09T15:22:52.474Z",
+    "completedAt": "2021-11-09T15:22:52.475Z",
+    "completedMessage": "completed",
+    "caseTitle": "Rand al'Thor",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "ttl": 1642032000,
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "hideFromPendingMessages": true,
+    "docketEntry": {
+      "eventCode": "O",
+      "createdAt": "2021-11-09T15:22:37.215Z",
+      "documentType": "Order",
+      "docketEntryId": "aedcc36e-a3dd-4e0c-959f-02360076007a",
+      "servedAt": "2021-11-09T15:22:52.469Z",
+      "documentTitle": "Order to Respond",
+      "isFileAttached": true,
+      "receivedAt": "2021-11-09T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "section-outbox|docket",
+    "docketNumber": "320-21",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Chief Judge",
     "caseStatus": "Closed",
     "gsi1pk": "work-item|99da1552-ddba-4ed0-a5d1-5aa8b706686f",
     "section": "docket",
@@ -8799,39 +8895,100 @@
   },
   {
     "associatedJudge": "Chief Judge",
-    "caseStatus": "General Docket - Not at Issue",
-    "gsi1pk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "caseStatus": "Closed",
+    "gsi1pk": "work-item|dbcb915a-5ed1-45c4-9d6d-b66679a55029",
     "section": "docket",
-    "workItemId": "4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "workItemId": "dbcb915a-5ed1-45c4-9d6d-b66679a55029",
     "sentBy": "Test Docketclerk",
-    "createdAt": "2021-11-09T15:22:52.474Z",
+    "createdAt": "2022-02-01T17:21:07.511Z",
     "highPriority": false,
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
-    "sk": "2021-11-09T15:22:52.475Z",
-    "docketNumberWithSuffix": "320-21S",
-    "updatedAt": "2021-11-09T15:22:52.474Z",
-    "completedAt": "2021-11-09T15:22:52.475Z",
+    "sk": "2022-02-01T17:21:07.638Z",
+    "docketNumberWithSuffix": "100-22W",
+    "updatedAt": "2022-02-01T17:21:07.511Z",
+    "completedAt": "2022-02-01T17:21:07.638Z",
     "completedMessage": "completed",
-    "caseTitle": "Rand al'Thor",
+    "caseTitle": "Brett Osborne",
     "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "ttl": 1642032000,
+    "ttl": 1644364800,
     "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBySection": "docket",
     "hideFromPendingMessages": true,
     "docketEntry": {
-      "eventCode": "O",
-      "createdAt": "2021-11-09T15:22:37.215Z",
-      "documentType": "Order",
-      "docketEntryId": "aedcc36e-a3dd-4e0c-959f-02360076007a",
-      "servedAt": "2021-11-09T15:22:52.469Z",
-      "documentTitle": "Order to Respond",
+      "servedParties": [
+        {
+          "name": "Brett Osborne",
+          "email": "petitioner@example.com"
+        }
+      ],
+      "serviceStamp": "Served",
+      "attachments": false,
+      "isStricken": false,
+      "documentType": "Order of Dismissal for Lack of Jurisdiction",
+      "filingDate": "2022-02-01T17:21:07.511Z",
+      "isMinuteEntry": false,
+      "pending": false,
+      "isDraft": false,
+      "workItem": {
+        "associatedJudge": "Chief Judge",
+        "inProgress": true,
+        "caseStatus": "New",
+        "caseTitle": "Brett Osborne",
+        "section": "docket",
+        "workItemId": "dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+        "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Docketclerk",
+        "sentBySection": "docket",
+        "createdAt": "2022-02-01T17:21:07.511Z",
+        "highPriority": false,
+        "assigneeName": "Test Docketclerk",
+        "entityName": "WorkItem",
+        "hideFromPendingMessages": true,
+        "docketNumberWithSuffix": "100-22W",
+        "docketEntry": {
+          "eventCode": "ODJ",
+          "createdAt": "2022-02-01T17:21:07.439Z",
+          "documentType": "Order of Dismissal for Lack of Jurisdiction",
+          "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+          "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+          "isFileAttached": true,
+          "receivedAt": "2022-02-01T05:00:00.000Z",
+          "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "docketNumber": "100-22",
+        "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "updatedAt": "2022-02-01T17:21:07.511Z"
+      },
+      "receivedAt": "2022-02-01T05:00:00.000Z",
+      "isOnDocketRecord": true,
+      "signedJudgeName": "Maurice B. Foley",
+      "createdAt": "2022-02-01T17:21:07.439Z",
+      "documentContentsId": "97248a8b-d393-446a-9907-d7743b5cc56c",
+      "numberOfPages": 2,
+      "entityName": "DocketEntry",
+      "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+      "documentIdBeforeSignature": "4158c5f3-9573-4663-ba10-64c9b2e46cfc",
+      "judge": "Carluzzo",
+      "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+      "relationship": "primaryDocument",
+      "addToCoversheet": false,
+      "draftOrderState": null,
       "isFileAttached": true,
-      "receivedAt": "2021-11-09T05:00:00.000Z",
-      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+      "eventCode": "ODJ",
+      "processingStatus": "complete",
+      "filers": [],
+      "freeText": "abcdef",
+      "servedPartiesCode": "B",
+      "signedAt": "2022-02-01T17:21:07.439Z",
+      "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
+      "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+      "servedAt": "2022-02-01T17:21:07.581Z",
+      "docketNumber": "100-22"
     },
     "pk": "section-outbox|docket",
-    "docketNumber": "320-21",
+    "docketNumber": "100-22",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
   },
@@ -8852,6 +9009,16 @@
     "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
     "ttl": 1638548263,
     "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+  },
+  {
+    "role": "docketclerk",
+    "entityName": "User",
+    "name": "Test Docketclerk",
+    "sk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "section": "docket",
+    "pk": "user|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "email": "docketclerk@example.com"
   },
   {
     "associatedJudge": "Chief Judge",
@@ -8980,7 +9147,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -9031,7 +9200,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|315-21",
     "docketNumber": "315-21"
   },
@@ -9286,7 +9457,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -9359,7 +9532,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|314-21",
     "docketNumber": "314-21"
   },
@@ -10201,7 +10376,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["28cae029-bae2-4eef-ac54-878fbbab65e3"],
+    "representing": [
+      "28cae029-bae2-4eef-ac54-878fbbab65e3"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -10402,7 +10579,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.316Z",
@@ -10439,7 +10618,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.327Z",
@@ -10476,7 +10657,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["9909b20a-c495-4438-a78c-8cf51afbbed3"],
+    "filers": [
+      "9909b20a-c495-4438-a78c-8cf51afbbed3"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-11",
     "servedAt": "2021-10-29T13:41:09.325Z",
@@ -10687,7 +10870,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -10738,7 +10923,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|311-21",
     "docketNumber": "311-21"
   },
@@ -11005,7 +11192,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -11056,7 +11245,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|319-21",
     "docketNumber": "319-21"
   },
@@ -12033,7 +12224,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
+    "filers": [
+      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
+    ],
     "partySecondary": false,
     "pk": "case|126-20",
     "docketNumber": "126-20"
@@ -12053,7 +12246,9 @@
     "createdAt": "2020-10-16T15:19:38.088Z",
     "processingStatus": "complete",
     "numberOfPages": 2,
-    "filers": ["8d6d7ebb-6863-41c8-acc4-b014935efafb"],
+    "filers": [
+      "8d6d7ebb-6863-41c8-acc4-b014935efafb"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "8439ca33-ac7a-4ae6-a228-7581e2114341",
@@ -12242,7 +12437,9 @@
     "createdAt": "2019-12-11T15:25:09.286Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Guy Fieri",
     "docketEntryId": "59ccf18f-5bac-48b0-a8e0-9c9e1d995b62",
@@ -12269,7 +12466,9 @@
     "createdAt": "2019-12-11T15:25:09.285Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Guy Fieri",
     "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
@@ -12456,7 +12655,9 @@
     "eventCode": "SIAB",
     "processingStatus": "pending",
     "lodged": false,
-    "filers": ["23d9342c-577d-4cc4-a44d-aae2dca9a436"],
+    "filers": [
+      "23d9342c-577d-4cc4-a44d-aae2dca9a436"
+    ],
     "certificateOfServiceDate": null,
     "editState": "{\"lodged\":false,\"practitioner\":[],\"dateReceivedMonth\":\"10\",\"dateReceivedDay\":\"10\",\"dateReceivedYear\":\"2001\",\"eventCode\":\"SIAB\",\"category\":\"Simultaneous Brief\",\"documentTitle\":\"Simultaneous Answering Brief\",\"documentType\":\"Simultaneous Answering Brief\",\"scenario\":\"Standard\",\"additionalInfo\":\"abc\",\"additionalInfo2\":\"123\",\"partyPrimary\":true,\"partyIrsPractitioner\":true,\"attachments\":true,\"searchError\":false,\"serviceDate\":null,\"certificateOfServiceDate\":null,\"dateReceived\":\"2001-10-10\",\"isFileAttached\":false,\"isPaper\":true,\"docketNumber\":\"103-19\",\"createdAt\":\"2019-08-14T20:35:52.858Z\",\"receivedAt\":\"2001-10-10\"}",
     "pk": "case|103-19",
@@ -12811,6 +13012,55 @@
     "status": "served"
   },
   {
+    "date": null,
+    "servedParties": [
+      {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irsPractitioner@example.com"
+      }
+    ],
+    "attachments": false,
+    "isStricken": false,
+    "isPendingService": false,
+    "documentType": "Order of Service of Transcript (Bench Opinion)",
+    "filingDate": "2021-12-15T21:25:25.320Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2021-12-15T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2021-12-15T21:25:12.138Z",
+    "signedJudgeName": "Maurice B. Foley",
+    "numberOfPages": 1,
+    "scenario": "Type A",
+    "entityName": "DocketEntry",
+    "docketEntryId": "972d4f01-0149-4791-9d0f-23ef6cf8bcf8",
+    "documentIdBeforeSignature": "5c201e01-8753-4e2a-a74c-3dd7920e903c",
+    "sk": "docket-entry|972d4f01-0149-4791-9d0f-23ef6cf8bcf8",
+    "documentTitle": "Order of Service of Transcript (Bench Opinion) bench description",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "draftOrderState": null,
+    "index": 4,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "OST",
+    "processingStatus": "complete",
+    "filers": [],
+    "freeText": "bench description",
+    "servedPartiesCode": "B",
+    "signedAt": "2021-12-15T21:25:12.139Z",
+    "editState": "{\"eventCode\":\"OST\",\"documentType\":\"Order of Service of Transcript (Bench Opinion)\",\"documentTitle\":\"Order of Service of Transcript (Bench Opinion) [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order of Service of Transcript (Bench Opinion) bench description\",\"searchText\":\"bench\",\"freeText\":\"bench description\",\"docketEntryId\":\"972d4f01-0149-4791-9d0f-23ef6cf8bcf8\",\"docketNumber\":\"107-19\"}",
+    "pk": "case|107-19",
+    "servedAt": "2021-12-15T21:25:25.320Z",
+    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "107-19"
+  },
+  {
     "servedParties": [
       {
         "name": "Test Private Practitioner",
@@ -12873,7 +13123,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "9805d1ab-18d0-43ec-bafb-654e83405416",
@@ -12894,6 +13146,43 @@
     "sk": "privatePractitioner|9805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "case|107-19",
     "email": "privatePractitioner@example.com"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - At Issue (Ready for Trial)",
+    "gsi1pk": "work-item|39b3ac72-0173-4851-829b-e0878def646c",
+    "section": "docket",
+    "workItemId": "39b3ac72-0173-4851-829b-e0878def646c",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2021-12-15T21:25:25.325Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|39b3ac72-0173-4851-829b-e0878def646c",
+    "docketNumberWithSuffix": "107-19L",
+    "updatedAt": "2021-12-15T21:25:25.325Z",
+    "completedAt": "2021-12-15T21:25:25.326Z",
+    "completedMessage": "completed",
+    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "hideFromPendingMessages": true,
+    "docketEntry": {
+      "eventCode": "OST",
+      "createdAt": "2021-12-15T21:25:12.138Z",
+      "documentType": "Order of Service of Transcript (Bench Opinion)",
+      "docketEntryId": "972d4f01-0149-4791-9d0f-23ef6cf8bcf8",
+      "servedAt": "2021-12-15T21:25:25.320Z",
+      "documentTitle": "Order of Service of Transcript (Bench Opinion) bench description",
+      "isFileAttached": true,
+      "receivedAt": "2021-12-15T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|107-19",
+    "docketNumber": "107-19",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "sk": "ip-limiter-document-search-ip-limiter|localhost",
@@ -13041,7 +13330,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -13093,7 +13384,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|305-21",
     "docketNumber": "305-21"
@@ -13292,7 +13585,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -13320,7 +13615,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|304-21",
     "docketNumber": "304-21"
@@ -13438,43 +13735,6 @@
     "sk": "docketNumberCounter-2021",
     "id": 219,
     "pk": "docketNumberCounter-2021"
-  },
-  {
-    "associatedJudge": "Chief Judge",
-    "caseStatus": "General Docket - At Issue (Ready for Trial)",
-    "gsi1pk": "work-item|39b3ac72-0173-4851-829b-e0878def646c",
-    "section": "docket",
-    "workItemId": "39b3ac72-0173-4851-829b-e0878def646c",
-    "sentBy": "Test Docketclerk",
-    "createdAt": "2021-12-15T21:25:25.325Z",
-    "highPriority": false,
-    "assigneeName": "Test Docketclerk",
-    "entityName": "WorkItem",
-    "sk": "work-item|39b3ac72-0173-4851-829b-e0878def646c",
-    "docketNumberWithSuffix": "107-19L",
-    "updatedAt": "2021-12-15T21:25:25.325Z",
-    "completedAt": "2021-12-15T21:25:25.326Z",
-    "completedMessage": "completed",
-    "caseTitle": "Tatum Craig, Wayne Obrien, Partnership Representative",
-    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "sentBySection": "docket",
-    "hideFromPendingMessages": true,
-    "docketEntry": {
-      "eventCode": "OST",
-      "createdAt": "2021-12-15T21:25:12.138Z",
-      "documentType": "Order of Service of Transcript (Bench Opinion)",
-      "docketEntryId": "972d4f01-0149-4791-9d0f-23ef6cf8bcf8",
-      "servedAt": "2021-12-15T21:25:25.320Z",
-      "documentTitle": "Order of Service of Transcript (Bench Opinion) bench description",
-      "isFileAttached": true,
-      "receivedAt": "2021-12-15T05:00:00.000Z",
-      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
-    },
-    "pk": "case|107-19",
-    "docketNumber": "107-19",
-    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "completedBy": "Test Docketclerk"
   },
   {
     "caseOrder": [],
@@ -13707,7 +13967,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-18",
@@ -13743,7 +14005,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -13776,7 +14040,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-18",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -13855,6 +14121,322 @@
     "pk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "originalBarState": "NV",
     "email": "irsPractitioner3@example.com"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "isSealed": false,
+    "procedureType": "Regular",
+    "isPaper": false,
+    "automaticBlocked": false,
+    "qcCompleteForTrial": {},
+    "orderForFilingFee": true,
+    "petitionPaymentStatus": "Not paid",
+    "partyType": "Petitioner",
+    "receivedAt": "2022-02-01T17:21:05.483Z",
+    "caseType": "Whistleblower",
+    "orderDesignatingPlaceOfTrial": false,
+    "createdAt": "2022-02-01T17:21:05.483Z",
+    "highPriority": false,
+    "noticeOfAttachments": false,
+    "blocked": false,
+    "entityName": "Case",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "sk": "case|100-22",
+    "orderForOds": false,
+    "filingType": "Myself",
+    "docketNumberWithSuffix": "100-22W",
+    "orderForRatification": false,
+    "petitioners": [
+      {
+        "isAddressSealed": false,
+        "address3": "Architecto assumenda",
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "address2": "Suscipit animi solu",
+        "city": "Aspernatur nostrum s",
+        "address1": "68 Fabien Freeway",
+        "postalCode": "89499",
+        "contactType": "primary",
+        "sealedAndUnavailable": false,
+        "countryType": "domestic",
+        "serviceIndicator": "Electronic",
+        "phone": "+1 (537) 235-6147",
+        "name": "Brett Osborne",
+        "state": "AK",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "initialDocketNumberSuffix": "W",
+    "docketNumberSuffix": "W",
+    "sortableDocketNumber": 22000100,
+    "orderForAmendedPetition": false,
+    "orderToShowCause": false,
+    "preferredTrialCity": "Birmingham, Alabama",
+    "initialCaption": "Brett Osborne, Petitioner",
+    "hasPendingItems": false,
+    "closedDate": "2022-02-01T17:21:07.674Z",
+    "orderForAmendedPetitionAndFilingFee": false,
+    "pk": "case|100-22",
+    "docketNumber": "100-22",
+    "statistics": [],
+    "status": "Closed"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Request for Place of Trial",
+    "filingDate": "2022-02-01T17:21:05.483Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isDraft": false,
+    "index": 2,
+    "isFileAttached": false,
+    "receivedAt": "2022-02-01T05:00:00.000Z",
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "isOnDocketRecord": true,
+    "eventCode": "RQT",
+    "createdAt": "2022-02-01T17:21:05.486Z",
+    "processingStatus": "complete",
+    "filers": [],
+    "entityName": "DocketEntry",
+    "docketEntryId": "06115c26-ecd8-425a-b58b-4d25649f1d96",
+    "sk": "docket-entry|06115c26-ecd8-425a-b58b-4d25649f1d96",
+    "pk": "case|100-22",
+    "documentTitle": "Request for Place of Trial at Birmingham, Alabama",
+    "docketNumber": "100-22",
+    "addToCoversheet": false
+  },
+  {
+    "servedParties": [
+      {
+        "name": "Brett Osborne",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "serviceStamp": "Served",
+    "attachments": false,
+    "isStricken": false,
+    "isPendingService": false,
+    "documentType": "Order of Dismissal for Lack of Jurisdiction",
+    "filingDate": "2022-02-01T17:21:07.661Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2022-02-01T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2022-02-01T17:21:07.439Z",
+    "documentContentsId": "97248a8b-d393-446a-9907-d7743b5cc56c",
+    "signedJudgeName": "Maurice B. Foley",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "documentIdBeforeSignature": "4158c5f3-9573-4663-ba10-64c9b2e46cfc",
+    "sk": "docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "judge": "Carluzzo",
+    "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "draftOrderState": null,
+    "index": 3,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "ODJ",
+    "processingStatus": "complete",
+    "filers": [],
+    "freeText": "abcdef",
+    "servedPartiesCode": "B",
+    "signedAt": "2022-02-01T17:21:07.439Z",
+    "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
+    "pk": "case|100-22",
+    "servedAt": "2022-02-01T17:21:07.581Z",
+    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "100-22"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Petition",
+    "filingDate": "2022-02-01T17:21:05.483Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2022-02-01T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2022-02-01T17:21:05.484Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "56a73eea-3404-492c-ad24-c05df05f9c91",
+    "sk": "docket-entry|56a73eea-3404-492c-ad24-c05df05f9c91",
+    "documentTitle": "Petition",
+    "privatePractitioners": [],
+    "addToCoversheet": false,
+    "index": 1,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "P",
+    "processingStatus": "complete",
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "pk": "case|100-22",
+    "docketNumber": "100-22"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Statement of Taxpayer Identification",
+    "filingDate": "2022-02-01T17:21:05.483Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2022-02-01T05:00:00.000Z",
+    "isOnDocketRecord": false,
+    "createdAt": "2022-02-01T17:21:05.487Z",
+    "numberOfPages": 2,
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Brett Osborne",
+    "docketEntryId": "fa54226d-b9df-44e2-8920-f113ad09ab14",
+    "sk": "docket-entry|fa54226d-b9df-44e2-8920-f113ad09ab14",
+    "documentTitle": "Statement of Taxpayer Identification",
+    "privatePractitioners": [],
+    "addToCoversheet": false,
+    "index": 0,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "STIN",
+    "processingStatus": "complete",
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "pk": "case|100-22",
+    "docketNumber": "100-22"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "Closed",
+    "gsi1pk": "work-item|dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+    "section": "docket",
+    "workItemId": "dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2022-02-01T17:21:07.511Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "work-item|dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+    "docketNumberWithSuffix": "100-22W",
+    "updatedAt": "2022-02-01T17:21:07.511Z",
+    "completedAt": "2022-02-01T17:21:07.638Z",
+    "completedMessage": "completed",
+    "caseTitle": "Brett Osborne",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "hideFromPendingMessages": true,
+    "docketEntry": {
+      "servedParties": [
+        {
+          "name": "Brett Osborne",
+          "email": "petitioner@example.com"
+        }
+      ],
+      "serviceStamp": "Served",
+      "attachments": false,
+      "isStricken": false,
+      "documentType": "Order of Dismissal for Lack of Jurisdiction",
+      "filingDate": "2022-02-01T17:21:07.511Z",
+      "isMinuteEntry": false,
+      "pending": false,
+      "isDraft": false,
+      "workItem": {
+        "associatedJudge": "Chief Judge",
+        "inProgress": true,
+        "caseStatus": "New",
+        "caseTitle": "Brett Osborne",
+        "section": "docket",
+        "workItemId": "dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+        "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Docketclerk",
+        "sentBySection": "docket",
+        "createdAt": "2022-02-01T17:21:07.511Z",
+        "highPriority": false,
+        "assigneeName": "Test Docketclerk",
+        "entityName": "WorkItem",
+        "hideFromPendingMessages": true,
+        "docketNumberWithSuffix": "100-22W",
+        "docketEntry": {
+          "eventCode": "ODJ",
+          "createdAt": "2022-02-01T17:21:07.439Z",
+          "documentType": "Order of Dismissal for Lack of Jurisdiction",
+          "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+          "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+          "isFileAttached": true,
+          "receivedAt": "2022-02-01T05:00:00.000Z",
+          "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "docketNumber": "100-22",
+        "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "updatedAt": "2022-02-01T17:21:07.511Z"
+      },
+      "receivedAt": "2022-02-01T05:00:00.000Z",
+      "isOnDocketRecord": true,
+      "signedJudgeName": "Maurice B. Foley",
+      "createdAt": "2022-02-01T17:21:07.439Z",
+      "documentContentsId": "97248a8b-d393-446a-9907-d7743b5cc56c",
+      "numberOfPages": 2,
+      "entityName": "DocketEntry",
+      "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+      "documentIdBeforeSignature": "4158c5f3-9573-4663-ba10-64c9b2e46cfc",
+      "judge": "Carluzzo",
+      "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+      "relationship": "primaryDocument",
+      "addToCoversheet": false,
+      "draftOrderState": null,
+      "isFileAttached": true,
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+      "eventCode": "ODJ",
+      "processingStatus": "complete",
+      "filers": [],
+      "freeText": "abcdef",
+      "servedPartiesCode": "B",
+      "signedAt": "2022-02-01T17:21:07.439Z",
+      "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
+      "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+      "servedAt": "2022-02-01T17:21:07.581Z",
+      "docketNumber": "100-22"
+    },
+    "pk": "case|100-22",
+    "docketNumber": "100-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "Closed",
+    "gsi1pk": "work-item|e3545692-492d-40a7-b597-9a45505cc514",
+    "caseTitle": "Brett Osborne",
+    "section": "petitions",
+    "workItemId": "e3545692-492d-40a7-b597-9a45505cc514",
+    "isInitializeCase": true,
+    "assigneeId": null,
+    "sentBy": "Test Petitioner",
+    "createdAt": "2022-02-01T17:21:05.486Z",
+    "highPriority": false,
+    "assigneeName": null,
+    "entityName": "WorkItem",
+    "sk": "work-item|e3545692-492d-40a7-b597-9a45505cc514",
+    "docketNumberWithSuffix": "100-22W",
+    "docketEntry": {
+      "eventCode": "P",
+      "createdAt": "2022-02-01T17:21:05.484Z",
+      "documentType": "Petition",
+      "filedBy": "Petr. Brett Osborne",
+      "docketEntryId": "56a73eea-3404-492c-ad24-c05df05f9c91",
+      "documentTitle": "Petition",
+      "isFileAttached": true,
+      "receivedAt": "2022-02-01T05:00:00.000Z",
+      "userId": "7805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "case|100-22",
+    "docketNumber": "100-22",
+    "sentByUserId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "updatedAt": "2022-02-01T17:21:05.486Z"
   },
   {
     "sk": "case|110-19",
@@ -14032,7 +14614,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -14059,7 +14643,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|307-21",
     "docketNumber": "307-21"
   },
@@ -14250,7 +14836,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -14277,7 +14865,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|318-21",
     "docketNumber": "318-21"
   },
@@ -14422,6 +15012,11 @@
     "trialSessionId": "208a959f-9526-4db5-b262-e58c476a4604"
   },
   {
+    "sk": "external-opinion-search-enabled",
+    "current": true,
+    "pk": "external-opinion-search-enabled"
+  },
+  {
     "sk": "user|726c38b1-1432-49b3-9383-77a998c0ba4f",
     "pk": "irsPractitioner|JAQUELYN LANE"
   },
@@ -14436,6 +15031,19 @@
   {
     "sk": "user|5805d1ab-18d0-43ec-bafb-654e83405416",
     "pk": "irsPractitioner|TEST IRS PRACTITIONER"
+  },
+  {
+    "createdAt": "2022-02-01T17:21:05.483Z",
+    "docketNumberSuffix": "W",
+    "closedDate": "2022-02-01T17:21:07.674Z",
+    "entityName": "UserCase",
+    "caseCaption": "Brett Osborne, Petitioner",
+    "gsi1pk": "user-case|100-22",
+    "sk": "case|100-22",
+    "docketNumberWithSuffix": "100-22W",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "100-22",
+    "status": "Closed"
   },
   {
     "createdAt": "2019-03-01T21:40:46.415Z",
@@ -14469,18 +15077,6 @@
     "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
     "docketNumber": "102-20",
     "status": "New"
-  },
-  {
-    "createdAt": "2021-11-05T15:09:29.301Z",
-    "docketNumberSuffix": "S",
-    "entityName": "UserCase",
-    "caseCaption": "Rand al'Thor, Petitioner",
-    "gsi1pk": "user-case|320-21",
-    "sk": "case|320-21",
-    "docketNumberWithSuffix": "320-21S",
-    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "320-21",
-    "status": "General Docket - Not at Issue"
   },
   {
     "createdAt": "2019-03-01T22:53:50.097Z",
@@ -14952,6 +15548,18 @@
     "status": "Closed"
   },
   {
+    "createdAt": "2021-11-05T15:09:29.301Z",
+    "docketNumberSuffix": "S",
+    "entityName": "UserCase",
+    "caseCaption": "Rand al'Thor, Petitioner",
+    "gsi1pk": "user-case|320-21",
+    "sk": "case|320-21",
+    "docketNumberWithSuffix": "320-21S",
+    "pk": "user|7805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "320-21",
+    "status": "General Docket - Not at Issue"
+  },
+  {
     "role": "petitioner",
     "address2": "Hanover, MI 49241",
     "phone": "517-563-1536",
@@ -15067,7 +15675,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -15140,7 +15750,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -15192,7 +15804,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -15220,7 +15834,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|302-21",
     "docketNumber": "302-21"
@@ -15544,7 +16160,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -15594,7 +16212,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|128-20",
     "docketNumber": "128-20"
@@ -15943,7 +16563,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.976Z",
@@ -15980,7 +16602,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.967Z",
@@ -16064,7 +16688,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["6206bb45-fa32-4391-8ec3-e48b0359dcf2"],
+    "filers": [
+      "6206bb45-fa32-4391-8ec3-e48b0359dcf2"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|313-21",
     "servedAt": "2021-10-25T18:56:39.979Z",
@@ -16332,7 +16958,9 @@
       "countryType": "domestic"
     },
     "name": "Ronald Buch Jr.",
-    "representing": ["6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"],
+    "representing": [
+      "6ddeb6c3-9666-4f6b-94fb-dbc625a0ffb6"
+    ],
     "sk": "privatePractitioner|af298b91-fb95-4b87-be16-8ad0fade5eb4",
     "firmName": "Firmly Grasped, LLP",
     "pk": "case|110-19",
@@ -16441,7 +17069,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -16468,7 +17098,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|127-20",
     "docketNumber": "127-20"
@@ -16608,7 +17240,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.912Z",
@@ -16645,60 +17279,13 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.921Z",
     "docketNumber": "101-16"
-  },
-  {
-    "date": null,
-    "servedParties": [
-      {
-        "name": "Test Private Practitioner",
-        "email": "privatePractitioner@example.com"
-      },
-      {
-        "name": "Test IRS Practitioner",
-        "email": "irsPractitioner@example.com"
-      }
-    ],
-    "attachments": false,
-    "isStricken": false,
-    "isPendingService": false,
-    "documentType": "Order of Service of Transcript (Bench Opinion)",
-    "filingDate": "2021-12-15T21:25:25.320Z",
-    "isMinuteEntry": false,
-    "pending": false,
-    "isDraft": false,
-    "receivedAt": "2021-12-15T05:00:00.000Z",
-    "isOnDocketRecord": true,
-    "createdAt": "2021-12-15T21:25:12.138Z",
-    "signedJudgeName": "Maurice B. Foley",
-    "numberOfPages": 1,
-    "scenario": "Type A",
-    "entityName": "DocketEntry",
-    "docketEntryId": "972d4f01-0149-4791-9d0f-23ef6cf8bcf8",
-    "documentIdBeforeSignature": "5c201e01-8753-4e2a-a74c-3dd7920e903c",
-    "sk": "docket-entry|972d4f01-0149-4791-9d0f-23ef6cf8bcf8",
-    "documentTitle": "Order of Service of Transcript (Bench Opinion) bench description",
-    "relationship": "primaryDocument",
-    "addToCoversheet": false,
-    "draftOrderState": null,
-    "index": 4,
-    "isFileAttached": true,
-    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "eventCode": "OST",
-    "processingStatus": "complete",
-    "filers": [],
-    "freeText": "bench description",
-    "servedPartiesCode": "B",
-    "signedAt": "2021-12-15T21:25:12.139Z",
-    "editState": "{\"eventCode\":\"OST\",\"documentType\":\"Order of Service of Transcript (Bench Opinion)\",\"documentTitle\":\"Order of Service of Transcript (Bench Opinion) [Anything]\",\"scenario\":\"Type A\",\"attachments\":false,\"date\":null,\"generatedDocumentTitle\":\"Order of Service of Transcript (Bench Opinion) bench description\",\"searchText\":\"bench\",\"freeText\":\"bench description\",\"docketEntryId\":\"972d4f01-0149-4791-9d0f-23ef6cf8bcf8\",\"docketNumber\":\"107-19\"}",
-    "pk": "case|107-19",
-    "servedAt": "2021-12-15T21:25:25.320Z",
-    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "107-19"
   },
   {
     "date": null,
@@ -16777,7 +17364,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["3b124785-74b3-4f90-bcd8-12f35f6e4b2a"],
+    "filers": [
+      "3b124785-74b3-4f90-bcd8-12f35f6e4b2a"
+    ],
     "servedPartiesCode": "R",
     "pk": "case|101-16",
     "servedAt": "2021-10-29T13:06:24.924Z",
@@ -16961,7 +17550,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "pk": "case|121-20",
     "docketNumber": "121-20"
@@ -17003,7 +17594,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "APW",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "documentId": "fb125bc1-27aa-4224-b52a-46346f6d167b",
     "pk": "case|121-20",
@@ -17047,7 +17640,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["1566ea80-1d95-42bc-b006-7fc55c698dea"],
+    "filers": [
+      "1566ea80-1d95-42bc-b006-7fc55c698dea"
+    ],
     "partySecondary": false,
     "documentId": "fd468817-a88e-4c13-b32b-abb7afc04ea4",
     "pk": "case|121-20",
@@ -17219,7 +17814,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "documentId": "562b0a52-7960-4674-acb7-22b65cd1cf2b",
     "pk": "case|104-17",
@@ -17255,7 +17852,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "MISC",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.671Z",
@@ -17288,7 +17887,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "complete",
-    "filers": ["f7272c25-99e1-4448-960e-e2a6b86e7d17"],
+    "filers": [
+      "f7272c25-99e1-4448-960e-e2a6b86e7d17"
+    ],
     "partySecondary": false,
     "pk": "case|104-17",
     "servedAt": "2020-04-14T19:59:46.672Z",
@@ -17337,6 +17938,104 @@
     "docketNumber": "104-17",
     "sentByUserId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Petitionsclerk1"
+  },
+  {
+    "associatedJudge": "Chief Judge",
+    "caseStatus": "Closed",
+    "gsi1pk": "work-item|dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+    "section": "docket",
+    "workItemId": "dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2022-02-01T17:21:07.511Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2022-02-01T17:21:07.638Z",
+    "docketNumberWithSuffix": "100-22W",
+    "updatedAt": "2022-02-01T17:21:07.511Z",
+    "completedAt": "2022-02-01T17:21:07.638Z",
+    "completedMessage": "completed",
+    "caseTitle": "Brett Osborne",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "hideFromPendingMessages": true,
+    "docketEntry": {
+      "servedParties": [
+        {
+          "name": "Brett Osborne",
+          "email": "petitioner@example.com"
+        }
+      ],
+      "serviceStamp": "Served",
+      "attachments": false,
+      "isStricken": false,
+      "documentType": "Order of Dismissal for Lack of Jurisdiction",
+      "filingDate": "2022-02-01T17:21:07.511Z",
+      "isMinuteEntry": false,
+      "pending": false,
+      "isDraft": false,
+      "workItem": {
+        "associatedJudge": "Chief Judge",
+        "inProgress": true,
+        "caseStatus": "New",
+        "caseTitle": "Brett Osborne",
+        "section": "docket",
+        "workItemId": "dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+        "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Docketclerk",
+        "sentBySection": "docket",
+        "createdAt": "2022-02-01T17:21:07.511Z",
+        "highPriority": false,
+        "assigneeName": "Test Docketclerk",
+        "entityName": "WorkItem",
+        "hideFromPendingMessages": true,
+        "docketNumberWithSuffix": "100-22W",
+        "docketEntry": {
+          "eventCode": "ODJ",
+          "createdAt": "2022-02-01T17:21:07.439Z",
+          "documentType": "Order of Dismissal for Lack of Jurisdiction",
+          "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+          "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+          "isFileAttached": true,
+          "receivedAt": "2022-02-01T05:00:00.000Z",
+          "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "docketNumber": "100-22",
+        "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "updatedAt": "2022-02-01T17:21:07.511Z"
+      },
+      "receivedAt": "2022-02-01T05:00:00.000Z",
+      "isOnDocketRecord": true,
+      "signedJudgeName": "Maurice B. Foley",
+      "createdAt": "2022-02-01T17:21:07.439Z",
+      "documentContentsId": "97248a8b-d393-446a-9907-d7743b5cc56c",
+      "numberOfPages": 2,
+      "entityName": "DocketEntry",
+      "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+      "documentIdBeforeSignature": "4158c5f3-9573-4663-ba10-64c9b2e46cfc",
+      "judge": "Carluzzo",
+      "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+      "relationship": "primaryDocument",
+      "addToCoversheet": false,
+      "draftOrderState": null,
+      "isFileAttached": true,
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+      "eventCode": "ODJ",
+      "processingStatus": "complete",
+      "filers": [],
+      "freeText": "abcdef",
+      "servedPartiesCode": "B",
+      "signedAt": "2022-02-01T17:21:07.439Z",
+      "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
+      "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+      "servedAt": "2022-02-01T17:21:07.581Z",
+      "docketNumber": "100-22"
+    },
+    "pk": "section-outbox|docket|2022-02",
+    "docketNumber": "100-22",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
   },
   {
     "sk": "case|101-20",
@@ -17440,7 +18139,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|123-20",
     "docketNumber": "123-20"
@@ -17483,7 +18184,9 @@
     "processingStatus": "complete",
     "createdAt": "2020-09-30T20:22:10.388Z",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "7a9ae90c-348c-467a-8720-c3d1c195d76b",
@@ -17842,7 +18545,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "5fe616a2-3839-49ec-a4be-1560b73193af",
     "pk": "case|117-20",
@@ -17870,7 +18575,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|117-20",
     "docketNumber": "117-20"
@@ -18027,7 +18734,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
+    "filers": [
+      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
+    ],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.222Z",
@@ -18143,7 +18852,9 @@
     "userId": "4805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"],
+    "filers": [
+      "d2fadb14-b0bb-4019-b6b1-cb51cb1cb92f"
+    ],
     "partySecondary": false,
     "pk": "case|124-20",
     "servedAt": "2020-09-30T20:24:15.162Z",
@@ -18567,7 +19278,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "documentId": "3afdcbdd-2ee9-41dd-83ff-8b0ffb7d7d6a",
     "pk": "case|102-20",
@@ -18589,7 +19302,9 @@
     "createdAt": "2020-01-21T16:41:39.481Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Eve Brewer",
     "docketEntryId": "d854a954-7332-4e92-93bd-dc28c9fea0a5",
@@ -18623,7 +19338,9 @@
   },
   {
     "role": "privatePractitioner",
-    "representing": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "representing": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "section": "privatePractitioner",
     "representingPrimary": true,
     "userId": "ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -18797,13 +19514,12 @@
     "docketNumber": "129-20"
   },
   {
-    "isSealed": true,
-    "isLegacySealed": true,
-    "isLegacy": true,
     "date": null,
+    "isSealed": true,
     "servedParties": [],
     "attachments": false,
     "isStricken": false,
+    "isLegacySealed": true,
     "isPendingService": false,
     "documentType": "Memorandum Opinion",
     "filingDate": "2021-10-29T13:42:43.036Z",
@@ -18814,6 +19530,7 @@
     "isOnDocketRecord": true,
     "createdAt": "2021-10-29T13:42:27.351Z",
     "numberOfPages": 1,
+    "sealedTo": "Public",
     "scenario": "Type B",
     "entityName": "DocketEntry",
     "docketEntryId": "4e3e97b1-5b5a-492f-8553-21e2a020211e",
@@ -18824,6 +19541,7 @@
     "relationship": "primaryDocument",
     "addToCoversheet": false,
     "draftOrderState": null,
+    "isLegacy": true,
     "index": 4,
     "isFileAttached": true,
     "userId": "2805d1ab-18d0-43ec-bafb-654e83405416",
@@ -18867,7 +19585,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "RQT",
     "processingStatus": "pending",
-    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
+    "filers": [
+      "05b98fff-e4ca-4114-b8ec-7218effc982e"
+    ],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.130Z",
@@ -18903,7 +19623,9 @@
     "userId": "3805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "pending",
-    "filers": ["05b98fff-e4ca-4114-b8ec-7218effc982e"],
+    "filers": [
+      "05b98fff-e4ca-4114-b8ec-7218effc982e"
+    ],
     "partySecondary": false,
     "pk": "case|129-20",
     "servedAt": "2020-11-30T22:58:08.081Z",
@@ -20578,6 +21300,43 @@
   },
   {
     "associatedJudge": "Chief Judge",
+    "caseStatus": "General Docket - Not at Issue",
+    "gsi1pk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "section": "docket",
+    "workItemId": "4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "sentBy": "Test Docketclerk",
+    "createdAt": "2021-11-09T15:22:52.474Z",
+    "highPriority": false,
+    "assigneeName": "Test Docketclerk",
+    "entityName": "WorkItem",
+    "sk": "2021-11-09T15:22:52.475Z",
+    "docketNumberWithSuffix": "320-21S",
+    "updatedAt": "2021-11-09T15:22:52.474Z",
+    "completedAt": "2021-11-09T15:22:52.475Z",
+    "completedMessage": "completed",
+    "caseTitle": "Rand al'Thor",
+    "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "sentBySection": "docket",
+    "hideFromPendingMessages": true,
+    "docketEntry": {
+      "eventCode": "O",
+      "createdAt": "2021-11-09T15:22:37.215Z",
+      "documentType": "Order",
+      "docketEntryId": "aedcc36e-a3dd-4e0c-959f-02360076007a",
+      "servedAt": "2021-11-09T15:22:52.469Z",
+      "documentTitle": "Order to Respond",
+      "isFileAttached": true,
+      "receivedAt": "2021-11-09T05:00:00.000Z",
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+    },
+    "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "320-21",
+    "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "completedBy": "Test Docketclerk"
+  },
+  {
+    "associatedJudge": "Chief Judge",
     "caseStatus": "Closed",
     "gsi1pk": "work-item|99da1552-ddba-4ed0-a5d1-5aa8b706686f",
     "section": "docket",
@@ -21007,38 +21766,99 @@
   },
   {
     "associatedJudge": "Chief Judge",
-    "caseStatus": "General Docket - Not at Issue",
-    "gsi1pk": "work-item|4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "caseStatus": "Closed",
+    "gsi1pk": "work-item|dbcb915a-5ed1-45c4-9d6d-b66679a55029",
     "section": "docket",
-    "workItemId": "4500eb06-b5db-4749-96c1-9c96b3ac592d",
+    "workItemId": "dbcb915a-5ed1-45c4-9d6d-b66679a55029",
     "sentBy": "Test Docketclerk",
-    "createdAt": "2021-11-09T15:22:52.474Z",
+    "createdAt": "2022-02-01T17:21:07.511Z",
     "highPriority": false,
     "assigneeName": "Test Docketclerk",
     "entityName": "WorkItem",
-    "sk": "2021-11-09T15:22:52.475Z",
-    "docketNumberWithSuffix": "320-21S",
-    "updatedAt": "2021-11-09T15:22:52.474Z",
-    "completedAt": "2021-11-09T15:22:52.475Z",
+    "sk": "2022-02-01T17:21:07.638Z",
+    "docketNumberWithSuffix": "100-22W",
+    "updatedAt": "2022-02-01T17:21:07.511Z",
+    "completedAt": "2022-02-01T17:21:07.638Z",
     "completedMessage": "completed",
-    "caseTitle": "Rand al'Thor",
+    "caseTitle": "Brett Osborne",
     "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "sentBySection": "docket",
     "hideFromPendingMessages": true,
     "docketEntry": {
-      "eventCode": "O",
-      "createdAt": "2021-11-09T15:22:37.215Z",
-      "documentType": "Order",
-      "docketEntryId": "aedcc36e-a3dd-4e0c-959f-02360076007a",
-      "servedAt": "2021-11-09T15:22:52.469Z",
-      "documentTitle": "Order to Respond",
+      "servedParties": [
+        {
+          "name": "Brett Osborne",
+          "email": "petitioner@example.com"
+        }
+      ],
+      "serviceStamp": "Served",
+      "attachments": false,
+      "isStricken": false,
+      "documentType": "Order of Dismissal for Lack of Jurisdiction",
+      "filingDate": "2022-02-01T17:21:07.511Z",
+      "isMinuteEntry": false,
+      "pending": false,
+      "isDraft": false,
+      "workItem": {
+        "associatedJudge": "Chief Judge",
+        "inProgress": true,
+        "caseStatus": "New",
+        "caseTitle": "Brett Osborne",
+        "section": "docket",
+        "workItemId": "dbcb915a-5ed1-45c4-9d6d-b66679a55029",
+        "assigneeId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "sentBy": "Test Docketclerk",
+        "sentBySection": "docket",
+        "createdAt": "2022-02-01T17:21:07.511Z",
+        "highPriority": false,
+        "assigneeName": "Test Docketclerk",
+        "entityName": "WorkItem",
+        "hideFromPendingMessages": true,
+        "docketNumberWithSuffix": "100-22W",
+        "docketEntry": {
+          "eventCode": "ODJ",
+          "createdAt": "2022-02-01T17:21:07.439Z",
+          "documentType": "Order of Dismissal for Lack of Jurisdiction",
+          "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+          "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+          "isFileAttached": true,
+          "receivedAt": "2022-02-01T05:00:00.000Z",
+          "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+        },
+        "docketNumber": "100-22",
+        "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+        "updatedAt": "2022-02-01T17:21:07.511Z"
+      },
+      "receivedAt": "2022-02-01T05:00:00.000Z",
+      "isOnDocketRecord": true,
+      "signedJudgeName": "Maurice B. Foley",
+      "createdAt": "2022-02-01T17:21:07.439Z",
+      "documentContentsId": "97248a8b-d393-446a-9907-d7743b5cc56c",
+      "numberOfPages": 2,
+      "entityName": "DocketEntry",
+      "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+      "documentIdBeforeSignature": "4158c5f3-9573-4663-ba10-64c9b2e46cfc",
+      "judge": "Carluzzo",
+      "documentTitle": "Order of Dismissal for Lack of Jurisdiction",
+      "relationship": "primaryDocument",
+      "addToCoversheet": false,
+      "draftOrderState": null,
       "isFileAttached": true,
-      "receivedAt": "2021-11-09T05:00:00.000Z",
-      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416"
+      "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+      "eventCode": "ODJ",
+      "processingStatus": "complete",
+      "filers": [],
+      "freeText": "abcdef",
+      "servedPartiesCode": "B",
+      "signedAt": "2022-02-01T17:21:07.439Z",
+      "editState": "{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"richText\":\"<p>Testing</p>\",\"serviceStamp\":\"Served\",\"draftOrderState\":{\"attachments\":false,\"docketEntryId\":\"25100ec6-eeeb-4e88-872f-c99fad1fe6c7\",\"docketNumber\":\"100-22\",\"documentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"documentType\":\"Order of Dismissal for Lack of Jurisdiction\",\"eventCode\":\"ODJ\",\"freeText\":\"abcdef\",\"generatedDocumentTitle\":\"Order of Dismissal for Lack of Jurisdiction\",\"judge\":\"Carluzzo\",\"serviceStamp\":\"Served\"},\"documentContentsId\":\"97248a8b-d393-446a-9907-d7743b5cc56c\"}",
+      "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+      "servedAt": "2022-02-01T17:21:07.581Z",
+      "docketNumber": "100-22"
     },
     "pk": "user-outbox|1805d1ab-18d0-43ec-bafb-654e83405416",
-    "docketNumber": "320-21",
+    "docketNumber": "100-22",
     "sentByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
     "completedBy": "Test Docketclerk"
   },
@@ -21151,6 +21971,7 @@
     "receivedAt": "2021-02-16T16:29:48.980Z",
     "isOnDocketRecord": true,
     "createdAt": "2018-11-21T20:49:28.192Z",
+    "sealedTo": "Public",
     "entityName": "DocketEntry",
     "filedBy": "Test Petitioner",
     "docketEntryId": "b868a8d3-6990-4b6b-9ccd-b04b22f075a0",
@@ -21430,7 +22251,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -21457,7 +22280,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|308-21",
     "docketNumber": "308-21"
   },
@@ -21816,7 +22641,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -21912,7 +22739,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|306-21",
     "docketNumber": "306-21"
   },
@@ -22386,7 +23215,9 @@
     "createdAt": "2019-12-11T15:25:55.008Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brian Earl Spilner",
     "docketEntryId": "1c56d0fc-b01b-4bc7-830f-0c25b4e6b803",
@@ -22413,7 +23244,9 @@
     "createdAt": "2019-12-11T15:25:55.007Z",
     "processingStatus": "complete",
     "numberOfPages": 1,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brian Earl Spilner",
     "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
@@ -22850,7 +23683,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "partySecondary": false,
     "pk": "case|125-20",
     "docketNumber": "125-20"
@@ -22893,7 +23728,9 @@
     "processingStatus": "complete",
     "createdAt": "2020-10-13T20:23:17.560Z",
     "numberOfPages": 2,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "entityName": "DocketEntry",
     "filedBy": "Petr. Brett Osborne",
     "docketEntryId": "c8e28a9f-03b6-44b3-9ad8-67e9de8af308",
@@ -23085,7 +23922,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "STIN",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -23157,7 +23996,9 @@
     "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
     "eventCode": "P",
     "processingStatus": "complete",
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|309-21",
     "docketNumber": "309-21"
   },
@@ -23389,7 +24230,9 @@
     "eventCode": "PSDE",
     "processingStatus": "complete",
     "lodged": false,
-    "filers": ["7805d1ab-18d0-43ec-bafb-654e83405416"],
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
     "pk": "case|106-19",
     "servedAt": "2019-07-12T17:11:26.955Z",
     "docketNumber": "106-19"
