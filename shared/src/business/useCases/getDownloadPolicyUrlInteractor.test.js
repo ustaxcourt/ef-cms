@@ -391,7 +391,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .verifyCaseForUser.mockReturnValue(true);
     });
 
-    it('throws an error for a privatePractitioner who is associated with the case and is viewing a isSealed document', async () => {
+    it('should not throw an error for a privatePractitioner who is associated with the case and is viewing a isSealed document', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
@@ -401,12 +401,12 @@ describe('getDownloadPolicyUrlInteractor', () => {
         servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
-      await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
-      ).rejects.toThrow('Unauthorized to view document at this time');
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: baseDocketEntry.docketEntryId,
+      });
+
+      expect(url).toEqual('localhost');
     });
 
     it('returns the expected policy url for a privatePractitioner who is associated with the case and viewing a served Stipulated Decision', async () => {
