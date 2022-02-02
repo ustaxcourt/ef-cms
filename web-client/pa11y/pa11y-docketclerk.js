@@ -240,5 +240,14 @@ module.exports = [
     notes: 'checks the add petitioner to case page',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/105-20/add-petitioner-to-case',
   },
+  {
+    actions: [
+      // wait for the seal button to exist
+      // click the seal button
+      // wait for the seal modal to be visible
+    ],
+    notes: 'checks the seal modal opens on a docket entry',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/105-20',
+  },
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/maintenance',
 ];
