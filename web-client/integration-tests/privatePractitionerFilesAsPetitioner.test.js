@@ -8,6 +8,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { petitionsClerkRemovesPractitionerFromCase } from './journey/petitionsClerkRemovesPractitionerFromCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
+import { practitionerVerifiesCasePractitionerAssociation } from './journey/practitionerVerifiesCasePractitionerAssociation';
 import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
 import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
 
@@ -26,7 +27,7 @@ describe('Bug 9323', () => {
   const petitionsClerkEmail = 'petitionsclerk@example.com';
   const docketClerkEmail = 'docketclerk@example.com';
 
-  describe('privatePractitioner files as a petitioner', () => {
+  describe('-1 privatePractitioner files as a petitioner', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, true);
 
@@ -39,7 +40,7 @@ describe('Bug 9323', () => {
     petitionsClerkAddsPractitionersToCase(cerebralTest, true);
   });
 
-  describe('BUG-9323 privatePractitioner remains on case as petitioner after practitioner removal', () => {
+  describe('0 BUG-9323 privatePractitioner remains on case as petitioner after practitioner removal', () => {
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerCreatesNewCase(cerebralTest, fakeFile);
 
@@ -56,7 +57,7 @@ describe('Bug 9323', () => {
     practitionerViewsDashboard(cerebralTest);
   });
 
-  describe('BUG-9323 privatePractitioner representing both petitioners remains on case as practitioner after petitioner removal', () => {
+  describe('1 BUG-9323 privatePractitioner representing both petitioners remains on case as practitioner after petitioner removal', () => {
     // scenario 1
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerCreatesNewCase(cerebralTest, fakeFile);
@@ -71,10 +72,12 @@ describe('Bug 9323', () => {
     docketClerkRemovesPetitionerFromCase(cerebralTest);
 
     loginAs(cerebralTest, privatePractitionerEmail);
+
+    //fails now (because userCase record removed, casePractitioner record remains aka THE BUG) and pass later
     practitionerViewsDashboard(cerebralTest);
   });
 
-  describe('BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
+  describe('2a BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
     // scenario 2a
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
@@ -92,23 +95,15 @@ describe('Bug 9323', () => {
     docketClerkRemovesPetitionerFromCase(cerebralTest, true);
 
     loginAs(cerebralTest, privatePractitionerEmail);
+    //should pass now and pass later
     practitionerViewsDashboard(cerebralTest);
     practitionerViewsCaseDetail(cerebralTest, false);
 
-    it('Check practitioner can still practice law stuff on this case', () => {
-      const privatePractitioners = cerebralTest.getState(
-        'caseDetail.privatePractitioners',
-      );
-
-      const currentUser = cerebralTest.getState('user');
-
-      expect(privatePractitioners).toContainEqual(
-        expect.objectContaining({ userId: currentUser.userId }),
-      );
-    });
+    //should pass now and pass later
+    practitionerVerifiesCasePractitionerAssociation(cerebralTest, true);
   });
 
-  describe('BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
+  describe('2b BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
     // scenario 2b
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
@@ -127,6 +122,7 @@ describe('Bug 9323', () => {
 
     loginAs(cerebralTest, privatePractitionerEmail);
 
+    //pass now and pass later
     it('Verify case no longer appears on dashboard', async () => {
       await refreshElasticsearchIndex();
       await cerebralTest.runSequence('gotoDashboardSequence');
@@ -140,19 +136,11 @@ describe('Bug 9323', () => {
       );
     });
 
-    it('Verify that practitioner cannot practice law stuff on the case anymore', () => {
-      const privatePractitioners = cerebralTest.getState(
-        'caseDetail.privatePractitioners',
-      );
-      const currentUser = cerebralTest.getState('user');
-
-      expect(privatePractitioners).not.toContainEqual(
-        expect.objectContaining({ userId: currentUser.userId }),
-      );
-    });
+    //pass now and pass later
+    practitionerVerifiesCasePractitionerAssociation(cerebralTest, false);
   });
 
-  describe('BUG-9323 privatePractitioner representing only the other petitioner remains on case only as petitioner', () => {
+  describe('3a BUG-9323 privatePractitioner representing only the other petitioner remains on case only as petitioner', () => {
     // scenario 3a
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
@@ -177,21 +165,15 @@ describe('Bug 9323', () => {
     docketClerkRemovesPetitionerFromCase(cerebralTest, false);
 
     loginAs(cerebralTest, privatePractitionerEmail);
+
+    //fail now and pass later
     practitionerViewsDashboard(cerebralTest);
 
-    it('Verify that practitioner cannot practice law stuff on the case anymore', () => {
-      const privatePractitioners = cerebralTest.getState(
-        'caseDetail.privatePractitioners',
-      );
-      const currentUser = cerebralTest.getState('user');
-
-      expect(privatePractitioners).not.toContainEqual(
-        expect.objectContaining({ userId: currentUser.userId }),
-      );
-    });
+    // pass now and pass later
+    practitionerVerifiesCasePractitionerAssociation(cerebralTest, false);
   });
 
-  describe('BUG-9323 privatePractitioner representing only the other petitioner remains on case only as practitioner', () => {
+  describe('3b BUG-9323 privatePractitioner representing only the other petitioner remains on case only as practitioner', () => {
     //they represent only the other petitioner that isn't themself, themself petitioner deleted = stays associated, stays privatepractioner associated
     // scenario 3b
     loginAs(cerebralTest, petitionsClerkEmail);
@@ -221,17 +203,7 @@ describe('Bug 9323', () => {
     practitionerViewsDashboard(cerebralTest);
 
     //should pass now, pass later
-    it('Verify practitioner can still practice law stuff on this case', () => {
-      const privatePractitioners = cerebralTest.getState(
-        'caseDetail.privatePractitioners',
-      );
-
-      const currentUser = cerebralTest.getState('user');
-
-      expect(privatePractitioners).toContainEqual(
-        expect.objectContaining({ userId: currentUser.userId }),
-      );
-    });
+    practitionerVerifiesCasePractitionerAssociation(cerebralTest, true);
   });
 });
 
