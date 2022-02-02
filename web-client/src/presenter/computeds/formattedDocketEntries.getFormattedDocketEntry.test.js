@@ -449,7 +449,7 @@ describe('getFormattedDocketEntry', () => {
 
     it('should be true when the user is external and NOT associated with the case and the docket entry is sealed', () => {
       const mockSealedDocketEntry = {
-        documentTitle: 'Sealed to public order',
+        documentTitle: 'Sealed to the public order',
         eventCode: 'O',
         isFileAttached: true,
         isSealed: true,
@@ -470,7 +470,7 @@ describe('getFormattedDocketEntry', () => {
 
     it('should be false when the user is external and associated with the case and the docket entry is sealed', () => {
       const mockSealedDocketEntry = {
-        documentTitle: 'Sealed to public order',
+        documentTitle: 'Sealed to the public order',
         eventCode: 'O',
         isFileAttached: true,
         isSealed: true,
