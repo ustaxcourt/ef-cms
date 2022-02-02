@@ -69,6 +69,7 @@ describe('Unauthed user views todays orders', () => {
     const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       entry => entry.docketEntryId === testClient.draftOrders[0].docketEntryId,
     );
+
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
     expect(sealedDocketEntry.isSealed).toBe(true);
     expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');

@@ -14,6 +14,7 @@ import {
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
+import { mockDocketEntry } from './formattedDocketEntries.test';
 
 const getDateISO = () =>
   applicationContext.getUtilities().createISODateString();
