@@ -144,6 +144,29 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
+    it('throw unauthorized error if user is not associated with the case and the document is sealed', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser.mockReturnValue(false);
+
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        createdAt: '2018-01-21T20:49:28.192Z',
+        date: '2200-01-21T20:49:28.192Z',
+        documentTitle: 'Order of [anything] on [date]',
+        documentType: 'Order',
+        eventCode: 'O',
+        isSealed: true,
+      };
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time');
+    });
+
     it('returns the expected policy url for a petitioner who is associated with the case and viewing an available document', async () => {
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,

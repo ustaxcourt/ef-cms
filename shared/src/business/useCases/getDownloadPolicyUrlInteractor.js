@@ -77,6 +77,8 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (docketEntryEntity.isLegacySealed) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
+  } else if (docketEntryEntity.isSealed) {
+    throw new UnauthorizedError('Unauthorized to view document at this time.');
   }
 };
 
@@ -176,7 +178,8 @@ exports.getDownloadPolicyUrlInteractor = async (
       const unAuthorizedToViewNonCourtIssued =
         selectedIsStin ||
         !userAssociatedWithCase ||
-        docketEntryEntity.isLegacySealed;
+        docketEntryEntity.isLegacySealed ||
+        docketEntryEntity.isSealed;
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
