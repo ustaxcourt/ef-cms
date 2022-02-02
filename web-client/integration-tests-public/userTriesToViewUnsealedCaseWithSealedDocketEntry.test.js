@@ -71,7 +71,7 @@ describe('Unauthed user views todays orders', () => {
 
   unauthedUserSearchesByDocketNumber(publicTestClient, privateTestClient);
 
-  it('verify sealed docket entry is not hyperlinked', async () => {
+  it('verify sealed docket entry is not hyperlinked and a sealed icon displays', async () => {
     await publicTestClient.runSequence('gotoPublicCaseDetailSequence', {
       docketNumber: publicTestClient.docketNumber,
     });
@@ -89,6 +89,9 @@ describe('Unauthed user views todays orders', () => {
       entry =>
         entry.docketEntryId === privateTestClient.draftOrders[0].docketEntryId,
     );
+
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
+    expect(sealedDocketEntry.isSealed).toBe(true);
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
   });
 });

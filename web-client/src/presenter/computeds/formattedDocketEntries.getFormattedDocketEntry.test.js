@@ -1,3 +1,4 @@
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getFormattedDocketEntry } from './formattedDocketEntries';
@@ -444,6 +445,48 @@ describe('getFormattedDocketEntry', () => {
       });
 
       expect(result.showDocumentDescriptionWithoutLink).toBeFalsy();
+    });
+
+    it('should be true when the user is external and NOT associated with the case and the docket entry is sealed', () => {
+      const mockSealedDocketEntry = {
+        documentTitle: 'Sealed to public order',
+        eventCode: 'O',
+        isFileAttached: true,
+        isSealed: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+        servedAt: '2019-03-01T21:00:00.000Z',
+      };
+
+      const result = getFormattedDocketEntry({
+        ...baseParams,
+        entry: mockSealedDocketEntry,
+        isExternalUser: true,
+        userAssociatedWithCase: false,
+      });
+
+      expect(result.showDocumentDescriptionWithoutLink).toBe(true);
+    });
+
+    it('should be false when the user is external and associated with the case and the docket entry is sealed', () => {
+      const mockSealedDocketEntry = {
+        documentTitle: 'Sealed to public order',
+        eventCode: 'O',
+        isFileAttached: true,
+        isSealed: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+        servedAt: '2019-03-01T21:00:00.000Z',
+      };
+
+      const result = getFormattedDocketEntry({
+        ...baseParams,
+        entry: mockSealedDocketEntry,
+        isExternalUser: true,
+        userAssociatedWithCase: true,
+      });
+
+      expect(result.showDocumentDescriptionWithoutLink).toBe(false);
     });
   });
 

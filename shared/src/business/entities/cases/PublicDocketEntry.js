@@ -1,12 +1,15 @@
 const joi = require('joi');
 const {
+  ALL_EVENT_CODES,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+} = require('../EntityConstants');
+const {
   DOCKET_ENTRY_VALIDATION_RULE_KEYS,
 } = require('../EntityValidationConstants');
 const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
-const { ALL_EVENT_CODES } = require('../EntityConstants');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
@@ -42,6 +45,7 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.objections = rawDocketEntry.objections;
   this.processingStatus = rawDocketEntry.processingStatus;
   this.receivedAt = rawDocketEntry.receivedAt;
+  this.sealedTo = rawDocketEntry.sealedTo;
   this.servedAt = rawDocketEntry.servedAt;
   this.servedPartiesCode = rawDocketEntry.servedPartiesCode;
 };
@@ -82,6 +86,11 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   objections: DOCKET_ENTRY_VALIDATION_RULE_KEYS.objections,
   processingStatus: JoiValidationConstants.STRING.optional(),
   receivedAt: JoiValidationConstants.ISO_DATE.max('now').required(),
+  sealedTo: JoiValidationConstants.STRING.when('isSealed', {
+    is: true,
+    otherwise: joi.optional().allow(null),
+    then: joi.valid(...Object.values(DOCKET_ENTRY_SEALED_TO_TYPES)).required(),
+  }).description("If sealed, the type of users who it's sealed from."),
   servedAt: JoiValidationConstants.ISO_DATE.max('now').optional(),
   servedPartiesCode: DOCKET_ENTRY_VALIDATION_RULE_KEYS.servedPartiesCode,
 });
