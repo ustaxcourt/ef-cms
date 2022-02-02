@@ -126,6 +126,27 @@ describe('caseFilter', () => {
         docketNumber: '120-20',
         petitioners: [],
       },
+      // {
+      //   isCaseSealed: false,
+      //   isDocketEntrySealed: false,
+      //   isSealed: undefined,
+      //   caseCaption: 'Hanan Al Hroub, Petitioner',
+      //   docketNumberWithSuffix: '104-17R',
+      //   irsPractitioners: [],
+      //   petitioners: [ [Object] ],
+      //   privatePractitioners: [],
+      //   docketNumber: '104-17',
+      //   eventCode: 'ODD',
+      //   signedJudgeName: 'Maurice B. Foley',
+      //   isStricken: false,
+      //   numberOfPages: 1,
+      //   documentType: 'Order of Dismissal and Decision',
+      //   filingDate: '2020-04-14T03:01:50.746Z',
+      //   docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+      //   documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
+      //   isFileAttached: true,
+      //   _score: null
+      // }
     ];
 
     it('should remove sealed cases from a set of advanced search results', () => {
@@ -186,6 +207,14 @@ describe('caseFilter', () => {
 
       result = caseSearchFilter(caseSearchResults, {
         userId: 'authRespondent',
+      });
+
+      expect(result.length).toEqual(4);
+    });
+
+    it.only('should filter out sealed documents in search results when the user is not associated with the case', () => {
+      const result = caseSearchFilter(caseSearchResults, {
+        userId: 'unassociatedPractitioner',
       });
 
       expect(result.length).toEqual(4);
