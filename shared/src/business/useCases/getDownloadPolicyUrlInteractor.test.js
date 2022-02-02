@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   calculateISODate,
   createISODateString,
