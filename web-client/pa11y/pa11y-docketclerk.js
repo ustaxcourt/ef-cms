@@ -242,9 +242,9 @@ module.exports = [
   },
   {
     actions: [
-      // wait for the seal button to exist
-      // click the seal button
-      // wait for the seal modal to be visible
+      'wait for table.case-detail to be visible',
+      'click element button[data-test="seal-docket-entry-button-1"]',
+      'wait for .modal-dialog to be visible',
     ],
     notes: 'checks the seal modal opens on a docket entry',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/105-20',
