@@ -28,7 +28,6 @@ export const mockDocketEntry = {
 };
 
 describe('formattedDocketEntries', () => {
-  let globalUser;
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
@@ -48,6 +47,8 @@ describe('formattedDocketEntries', () => {
       permissions: getUserPermissions(user),
     };
   };
+
+  let globalUser;
 
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedDocketEntries, {
@@ -452,7 +453,7 @@ describe('formattedDocketEntries', () => {
   });
 
   describe('sealedTo', () => {
-    it('should set the tooltip correctly if sealedTo is public', () => {
+    it('should set the tooltip correctly when the docket entry is sealed', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           ...getBaseState(docketClerkUser),
@@ -460,7 +461,9 @@ describe('formattedDocketEntries', () => {
             docketEntries: [
               {
                 ...mockDocketEntry,
+                isSealed: true,
                 sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+                sealedToTooltip: undefined,
               },
             ],
           },
@@ -469,27 +472,7 @@ describe('formattedDocketEntries', () => {
 
       expect(
         result.formattedDocketEntriesOnDocketRecord[0].sealedToTooltip,
-      ).toEqual('Sealed to public');
-    });
-
-    it('should set the tooltip correctly if sealedTo is external', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(docketClerkUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...mockDocketEntry,
-                sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
-              },
-            ],
-          },
-        },
-      });
-
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].sealedToTooltip,
-      ).toEqual('Sealed to the public and parties of this case');
+      ).toBeDefined();
     });
   });
 
@@ -623,6 +606,25 @@ describe('formattedDocketEntries', () => {
           className: 'fa-spin spinner',
           icon: ['fa-spin', 'spinner'],
           title: 'is loading',
+        },
+      ]);
+    });
+
+    it('should display the lock icon for a privatePractitioner if the entry is sealed', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+        },
+        isExternalUser: true,
+        isInProgress: true,
+        qcNeeded: true,
+      });
+
+      expect(result).toEqual([
+        {
+          className: 'sealed-docket-entry',
+          icon: 'lock',
         },
       ]);
     });

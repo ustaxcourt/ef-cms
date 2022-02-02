@@ -26,6 +26,7 @@ describe('PublicDocketEntry', () => {
       objections: 'Yes',
       processingStatus: 'testing',
       receivedAt: 'testing',
+      sealedTo: 'Public',
       servedAt: '2019-03-01T21:40:46.415Z',
       servedParties: [
         {
@@ -59,6 +60,7 @@ describe('PublicDocketEntry', () => {
       objections: 'Yes',
       processingStatus: 'testing',
       receivedAt: 'testing',
+      sealedTo: 'Public',
       servedAt: '2019-03-01T21:40:46.415Z',
       servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
     });

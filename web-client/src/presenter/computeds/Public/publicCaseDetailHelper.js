@@ -1,7 +1,7 @@
 import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
-const formatDocketEntryOnDocketRecord = (
+export const formatDocketEntryOnDocketRecord = (
   applicationContext,
   { entry, isTerminalUser },
 ) => {
@@ -42,6 +42,12 @@ const formatDocketEntryOnDocketRecord = (
     canDisplayDocumentLink &&
     record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 
+  if (record.isSealed) {
+    record.sealedToTooltip = applicationContext
+      .getUtilities()
+      .getSealedDocketEntryTooltip(applicationContext, record);
+  }
+
   return {
     action: record.action,
     createdAtFormatted: record.createdAtFormatted,
@@ -54,9 +60,11 @@ const formatDocketEntryOnDocketRecord = (
     hasDocument: !record.isMinuteEntry,
     index: record.index,
     isPaper: record.isPaper,
+    isSealed: record.isSealed,
     isStricken: record.isStricken,
     numberOfPages: record.numberOfPages || 0,
     openInSameTab: !isTerminalUser,
+    sealedToTooltip: record.sealedToTooltip,
     servedAtFormatted: record.servedAtFormatted,
     servedPartiesCode: record.servedPartiesCode,
     showDocumentDescriptionWithoutLink,

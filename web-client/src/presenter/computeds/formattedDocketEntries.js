@@ -19,7 +19,7 @@ export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   }
 
   if (isExternalUser) {
-    iconsToDisplay = [];
+    return iconsToDisplay;
   } else if (formattedResult.isPaper) {
     iconsToDisplay.push({
       icon: ['fas', 'file-alt'],
@@ -53,6 +53,7 @@ export const getShowDocumentViewerLink = ({
   isHiddenToPublic,
   isInitialDocument,
   isLegacySealed,
+  isSealed,
   isServed,
   isStipDecision,
   isStricken,
@@ -66,6 +67,12 @@ export const getShowDocumentViewerLink = ({
   if (isExternalUser) {
     if (isStricken) return false;
     if (isLegacySealed) return false;
+    if (isSealed) {
+      if (userHasAccessToCase) return true;
+      else {
+        return false;
+      }
+    }
     if (userHasNoAccessToDocument) return false;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
@@ -130,7 +137,6 @@ export const getFormattedDocketEntry = ({
   userAssociatedWithCase,
 }) => {
   const {
-    DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
@@ -158,11 +164,10 @@ export const getFormattedDocketEntry = ({
     !formattedResult.qcWorkItemsUntouched &&
     entry.isPaper;
 
-  if (entry.sealedTo) {
-    formattedResult.sealedToTooltip =
-      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC
-        ? 'Sealed to public'
-        : 'Sealed to the public and parties of this case';
+  if (entry.isSealed) {
+    formattedResult.sealedToTooltip = applicationContext
+      .getUtilities()
+      .getSealedDocketEntryTooltip(applicationContext, entry);
   }
 
   if (entry.documentTitle) {
@@ -189,6 +194,7 @@ export const getFormattedDocketEntry = ({
     isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode),
     isInitialDocument,
     isLegacySealed: entry.isLegacySealed,
+    isSealed: entry.isSealed,
     isServed: applicationContext.getUtilities().isServed(entry),
     isStipDecision: entry.isStipDecision,
     isStricken: entry.isStricken,
@@ -244,11 +250,11 @@ export const formattedDocketEntries = (get, applicationContext) => {
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
 
-  let docketRecordSort;
   const caseDetail = get(state.caseDetail);
 
   const { docketNumber } = caseDetail;
 
+  let docketRecordSort;
   if (docketNumber) {
     docketRecordSort = get(
       state.sessionMetadata.docketRecordSort[docketNumber],
