@@ -75,6 +75,44 @@ describe('caseFilter', () => {
   });
 
   describe('caseSearchFilter', () => {
+    const unsealedDocketEntryId = '1f1aa3f7-e2e3-43e6-885d-4ce341588c79';
+    const documentSearchResults = [
+      {
+        caseCaption: 'Hanan Al Hroub, Petitioner',
+        docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+        docketNumber: '104-17',
+        docketNumberWithSuffix: '104-17R',
+        documentTitle:
+          'Sealed Order of Dismissal and Decision Entered, Judge Buch',
+        documentType: 'Order of Dismissal and Decision',
+        eventCode: 'ODD',
+        filingDate: '2020-04-14T03:01:50.746Z',
+        irsPractitioners: [],
+        isCaseSealed: false,
+        isDocketEntrySealed: true,
+        isStricken: false,
+        privatePractitioners: [],
+        signedJudgeName: 'Maurice B. Foley',
+      },
+      {
+        caseCaption: 'Hanan Al Hroub, Petitioner',
+        docketEntryId: unsealedDocketEntryId,
+        docketNumber: '104-17',
+        docketNumberWithSuffix: '104-17R',
+        documentTitle:
+          'Unsealed Order of Dismissal and Decision Entered, Judge Buch',
+        documentType: 'Order of Dismissal and Decision',
+        eventCode: 'ODD',
+        filingDate: '2020-04-14T03:01:50.746Z',
+        irsPractitioners: [],
+        isCaseSealed: false,
+        isDocketEntrySealed: false,
+        isStricken: false,
+        privatePractitioners: [],
+        signedJudgeName: 'Maurice B. Foley',
+      },
+    ];
+
     const caseSearchResults = [
       {
         baz: 'quux',
@@ -126,27 +164,6 @@ describe('caseFilter', () => {
         docketNumber: '120-20',
         petitioners: [],
       },
-      // {
-      //   isCaseSealed: false,
-      //   isDocketEntrySealed: false,
-      //   isSealed: undefined,
-      //   caseCaption: 'Hanan Al Hroub, Petitioner',
-      //   docketNumberWithSuffix: '104-17R',
-      //   irsPractitioners: [],
-      //   petitioners: [ [Object] ],
-      //   privatePractitioners: [],
-      //   docketNumber: '104-17',
-      //   eventCode: 'ODD',
-      //   signedJudgeName: 'Maurice B. Foley',
-      //   isStricken: false,
-      //   numberOfPages: 1,
-      //   documentType: 'Order of Dismissal and Decision',
-      //   filingDate: '2020-04-14T03:01:50.746Z',
-      //   docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-      //   documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
-      //   isFileAttached: true,
-      //   _score: null
-      // }
     ];
 
     it('should remove sealed cases from a set of advanced search results', () => {
@@ -212,12 +229,13 @@ describe('caseFilter', () => {
       expect(result.length).toEqual(4);
     });
 
-    it.only('should filter out sealed documents in search results when the user is not associated with the case', () => {
-      const result = caseSearchFilter(caseSearchResults, {
+    it('should filter out sealed documents in search results when the user is not associated with the case', () => {
+      const result = caseSearchFilter(documentSearchResults, {
         userId: 'unassociatedPractitioner',
       });
 
-      expect(result.length).toEqual(4);
+      expect(result.length).toEqual(1);
+      expect(result[0].docketEntryId).toEqual(unsealedDocketEntryId);
     });
   });
 });
