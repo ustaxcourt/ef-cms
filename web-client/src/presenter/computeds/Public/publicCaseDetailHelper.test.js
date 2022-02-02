@@ -65,7 +65,7 @@ describe('publicCaseDetailHelper', () => {
         isTerminalUser: false,
       });
 
-      expect(result.sealedToTooltip).toBe('Sealed to public');
+      expect(result.sealedToTooltip).toBe('Sealed to the public');
     });
 
     it('should NOT compute sealedToTooltip value when the entry is NOT sealed', () => {

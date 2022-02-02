@@ -92,6 +92,6 @@ describe('Unauthed user views todays orders', () => {
 
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
     expect(sealedDocketEntry.isSealed).toBe(true);
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
   });
 });
