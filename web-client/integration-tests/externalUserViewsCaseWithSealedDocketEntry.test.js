@@ -2,10 +2,11 @@ import {
   COUNTRY_TYPES,
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
-import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsDocketEntry } from '../integration-tests/journey/docketClerkSealsDocketEntry';
-import { docketClerkViewsDraftOrder } from '../integration-tests/journey/docketClerkViewsDraftOrder';
+import { docketClerkServesDocument } from './journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import {
   getFormattedDocketEntriesForTest,
   loginAs,
@@ -13,6 +14,7 @@ import {
   uploadPetition,
 } from '../integration-tests/helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
+import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 describe('Unauthed user views todays orders', () => {
   const testClient = privateSetupTest();
@@ -52,17 +54,16 @@ describe('Unauthed user views todays orders', () => {
     eventCode: 'O',
     expectedDocumentType: 'Order',
   });
-  docketClerkViewsDraftOrder(testClient, 0);
-  docketClerkAddsTranscriptDocketEntryFromOrder(testClient, 0, {
-    day: '01',
-    month: '01',
-    year: '2019',
-  });
-
+  docketClerkSignsOrder(testClient, 0);
+  docketClerkAddsDocketEntryFromOrder(testClient, 0);
+  docketClerkServesDocument(testClient, 0);
   docketClerkSealsDocketEntry(testClient, 0);
 
+  loginAs(testClient, 'petitionsclerk@example.com');
+  petitionsClerkServesElectronicCaseToIrs(testClient);
+
   loginAs(testClient, 'privatePractitioner@example.com');
-  it('verify sealed docket entry is not hyperlinked and a sealed icon displays for an unassociated practitioner', async () => {
+  it('verify sealed and served docket entry is not hyperlinked and a sealed icon displays for an unassociated practitioner', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(testClient);
     const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
