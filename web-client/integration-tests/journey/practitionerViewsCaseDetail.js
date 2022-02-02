@@ -1,7 +1,4 @@
-export const practitionerViewsCaseDetail = (
-  cerebralTest,
-  isAssociated = true,
-) => {
+export const practitionerViewsCaseDetail = cerebralTest => {
   return it('Practitioner views case detail', async () => {
     cerebralTest.setState('caseDetail', {});
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -9,10 +6,5 @@ export const practitionerViewsCaseDetail = (
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
-    if (isAssociated) {
-      expect(cerebralTest.getState('caseDetail.privatePractitioners')).toEqual(
-        [],
-      );
-    }
   });
 };

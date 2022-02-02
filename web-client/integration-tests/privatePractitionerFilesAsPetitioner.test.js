@@ -2,7 +2,7 @@ import { admissionsClerkEditsPetitionerEmail } from './journey/admissionsClerkEd
 import { docketClerkAddsPetitionerToCase } from './journey/docketClerkAddsPetitionerToCase';
 import { docketClerkRemovesPetitionerFromCase } from './journey/docketClerkRemovesPetitionerFromCase';
 import { fakeFile } from '../integration-tests-public/helpers';
-import { loginAs, setupTest } from './helpers';
+import { loginAs, refreshElasticsearchIndex, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkRemovesPractitionerFromCase } from './journey/petitionsClerkRemovesPractitionerFromCase';
@@ -95,8 +95,7 @@ describe('Bug 9323', () => {
     practitionerViewsDashboard(cerebralTest);
     practitionerViewsCaseDetail(cerebralTest, false);
 
-    it('Check practitioner can still practice law stuff on this case', async () => {
-      console.log('privatePractitioners*** ', privatePractitioners);
+    it('Check practitioner can still practice law stuff on this case', () => {
       const privatePractitioners = cerebralTest.getState(
         'caseDetail.privatePractitioners',
       );
@@ -124,21 +123,30 @@ describe('Bug 9323', () => {
     admissionsClerkEditsPetitionerEmail(cerebralTest, privatePractitionerEmail);
 
     loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkRemovesPetitionerFromCase(cerebralTest, true);
+    docketClerkRemovesPetitionerFromCase(cerebralTest, false);
 
     loginAs(cerebralTest, privatePractitionerEmail);
-    practitionerViewsDashboard(cerebralTest);
-    practitionerViewsCaseDetail(cerebralTest, false);
 
-    it('Check practitioner can still practice law stuff on this case', async () => {
-      console.log('privatePractitioners*** ', privatePractitioners);
+    it('Verify case no longer appears on dashboard', async () => {
+      await refreshElasticsearchIndex();
+      await cerebralTest.runSequence('gotoDashboardSequence');
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'DashboardPractitioner',
+      );
+
+      const allOpenCases = cerebralTest.getState('openCases');
+      expect(allOpenCases).not.toContainEqual(
+        expect.objectContaining({ docketNumber: cerebralTest.docketNumber }),
+      );
+    });
+
+    it('Verify that practitioner cannot practice law stuff on the case anymore', () => {
       const privatePractitioners = cerebralTest.getState(
         'caseDetail.privatePractitioners',
       );
-
       const currentUser = cerebralTest.getState('user');
 
-      expect(privatePractitioners).toContainEqual(
+      expect(privatePractitioners).not.toContainEqual(
         expect.objectContaining({ userId: currentUser.userId }),
       );
     });
