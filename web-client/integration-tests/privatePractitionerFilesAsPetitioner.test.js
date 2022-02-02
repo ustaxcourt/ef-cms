@@ -8,6 +8,7 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 import { petitionsClerkRemovesPractitionerFromCase } from './journey/petitionsClerkRemovesPractitionerFromCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
+import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
 import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
 
 const cerebralTest = setupTest();
@@ -92,12 +93,61 @@ describe('Bug 9323', () => {
 
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerViewsDashboard(cerebralTest);
-    // TODO: check that practitioner is still _practitioner_ on case
+    practitionerViewsCaseDetail(cerebralTest, false);
+
+    it('Check practitioner can still practice law stuff on this case', async () => {
+      console.log('privatePractitioners*** ', privatePractitioners);
+      const privatePractitioners = cerebralTest.getState(
+        'caseDetail.privatePractitioners',
+      );
+
+      const currentUser = cerebralTest.getState('user');
+
+      expect(privatePractitioners).toContainEqual(
+        expect.objectContaining({ userId: currentUser.userId }),
+      );
+    });
+  });
+
+  describe('BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
+    // scenario 2b
+    loginAs(cerebralTest, petitionsClerkEmail);
+    petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+
+    loginAs(cerebralTest, docketClerkEmail);
+    docketClerkAddsPetitionerToCase(cerebralTest, docketClerkEmail);
+
+    loginAs(cerebralTest, petitionsClerkEmail);
+    petitionsClerkAddsPractitionersToCase(cerebralTest, true);
+
+    loginAs(cerebralTest, 'admissionsclerk@example.com');
+    admissionsClerkEditsPetitionerEmail(cerebralTest, privatePractitionerEmail);
+
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkRemovesPetitionerFromCase(cerebralTest, true);
+
+    loginAs(cerebralTest, privatePractitionerEmail);
+    practitionerViewsDashboard(cerebralTest);
+    practitionerViewsCaseDetail(cerebralTest, false);
+
+    it('Check practitioner can still practice law stuff on this case', async () => {
+      console.log('privatePractitioners*** ', privatePractitioners);
+      const privatePractitioners = cerebralTest.getState(
+        'caseDetail.privatePractitioners',
+      );
+
+      const currentUser = cerebralTest.getState('user');
+
+      expect(privatePractitioners).toContainEqual(
+        expect.objectContaining({ userId: currentUser.userId }),
+      );
+    });
   });
 });
 
 //XXXXX 1. represents both petitioners and they are one of those petitioners, doesn't matter which gets deleted = stays associated, stays privatepractioner associated
-//2a. represents only themself and not the other petitioner, other petitioner deleted = stays associated, stays privatepractioner associated
+//         - Is the second petitioner also respresented by the practitioner who filed the case
+//XXXXX 2a. represents only themself and not the other petitioner, other petitioner deleted = stays associated, stays privatepractioner associated
 //2b. represents only themself and not the other petitioner, themself petitioner deleted = not associated, not privatepractioner associated
 //3a. they represent only the other petitioner that isn't themself, other petitioner deleted = stays associated, not privatepractioner associated
 //3b. they represent only the other petitioner that isn't themself, themself petitioner deleted = stays associated, stays privatepractioner associated
