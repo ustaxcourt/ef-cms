@@ -53,6 +53,7 @@ export const getShowDocumentViewerLink = ({
   isHiddenToPublic,
   isInitialDocument,
   isLegacySealed,
+  isSealed,
   isServed,
   isStipDecision,
   isStricken,
@@ -66,6 +67,7 @@ export const getShowDocumentViewerLink = ({
   if (isExternalUser) {
     if (isStricken) return false;
     if (isLegacySealed) return false;
+    if (isSealed) return false;
     if (userHasNoAccessToDocument) return false;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
@@ -187,6 +189,7 @@ export const getFormattedDocketEntry = ({
     isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode),
     isInitialDocument,
     isLegacySealed: entry.isLegacySealed,
+    isSealed: entry.isSealed,
     isServed: applicationContext.getUtilities().isServed(entry),
     isStipDecision: entry.isStipDecision,
     isStricken: entry.isStricken,
@@ -242,11 +245,11 @@ export const formattedDocketEntries = (get, applicationContext) => {
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
 
-  let docketRecordSort;
   const caseDetail = get(state.caseDetail);
 
   const { docketNumber } = caseDetail;
 
+  let docketRecordSort;
   if (docketNumber) {
     docketRecordSort = get(
       state.sessionMetadata.docketRecordSort[docketNumber],
