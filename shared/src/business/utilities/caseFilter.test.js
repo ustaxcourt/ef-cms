@@ -91,7 +91,7 @@ describe('caseFilter', () => {
         isCaseSealed: false,
         isDocketEntrySealed: true,
         isStricken: false,
-        privatePractitioners: [],
+        privatePractitioners: [{ userId: 'associatedPractitioner' }],
         signedJudgeName: 'Maurice B. Foley',
       },
       {
@@ -236,6 +236,14 @@ describe('caseFilter', () => {
 
       expect(result.length).toEqual(1);
       expect(result[0].docketEntryId).toEqual(unsealedDocketEntryId);
+    });
+
+    it('should NOT filter out sealed documents in search results when the user is associated with the case', () => {
+      const result = caseSearchFilter(documentSearchResults, {
+        userId: 'associatedPractitioner',
+      });
+
+      expect(result.length).toEqual(2);
     });
   });
 });

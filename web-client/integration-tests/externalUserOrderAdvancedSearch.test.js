@@ -60,6 +60,7 @@ describe('external users perform an advanced search for orders', () => {
   docketClerkServesDocument(cerebralTest, 0);
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
+
   associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
