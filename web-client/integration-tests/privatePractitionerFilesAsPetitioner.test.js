@@ -151,6 +151,45 @@ describe('Bug 9323', () => {
       );
     });
   });
+
+  describe('BUG-9323 privatePractitioner representing only the other petitioner remains on case only as petitioner', () => {
+    // scenario 3a
+    loginAs(cerebralTest, petitionsClerkEmail);
+    petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
+
+    loginAs(cerebralTest, docketClerkEmail);
+    docketClerkAddsPetitionerToCase(cerebralTest, docketClerkEmail);
+
+    // privatePractitioner is added to case representing primary petitioner
+    loginAs(cerebralTest, petitionsClerkEmail);
+    petitionsClerkAddsPractitionersToCase(cerebralTest, true);
+
+    // privatePractitioner becomes secondary petitioner
+    loginAs(cerebralTest, 'admissionsclerk@example.com');
+    admissionsClerkEditsPetitionerEmail(
+      cerebralTest,
+      privatePractitionerEmail,
+      true,
+    );
+
+    // remove the primary petitioner from case, secondary petitioner (who is the privatePractitioner) remains
+    loginAs(cerebralTest, 'docketclerk@example.com');
+    docketClerkRemovesPetitionerFromCase(cerebralTest, false);
+
+    loginAs(cerebralTest, privatePractitionerEmail);
+    practitionerViewsDashboard(cerebralTest);
+
+    it('Verify that practitioner cannot practice law stuff on the case anymore', () => {
+      const privatePractitioners = cerebralTest.getState(
+        'caseDetail.privatePractitioners',
+      );
+      const currentUser = cerebralTest.getState('user');
+
+      expect(privatePractitioners).not.toContainEqual(
+        expect.objectContaining({ userId: currentUser.userId }),
+      );
+    });
+  });
 });
 
 //XXXXX 1. represents both petitioners and they are one of those petitioners, doesn't matter which gets deleted = stays associated, stays privatepractioner associated
@@ -159,3 +198,4 @@ describe('Bug 9323', () => {
 //2b. represents only themself and not the other petitioner, themself petitioner deleted = not associated, not privatepractioner associated
 //3a. they represent only the other petitioner that isn't themself, other petitioner deleted = stays associated, not privatepractioner associated
 //3b. they represent only the other petitioner that isn't themself, themself petitioner deleted = stays associated, stays privatepractioner associated
+// TODO:  Should we reconsider checking to see whether practitioner remains on petitioner array on caseDetail instead of just checking the dashboard
