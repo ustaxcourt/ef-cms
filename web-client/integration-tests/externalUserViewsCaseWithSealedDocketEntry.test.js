@@ -16,7 +16,7 @@ import {
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
-describe('Unauthed user views todays orders', () => {
+describe('External user views case with sealed docket entry', () => {
   const testClient = privateSetupTest();
 
   testClient.draftOrders = [];

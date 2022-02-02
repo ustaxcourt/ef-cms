@@ -67,7 +67,12 @@ export const getShowDocumentViewerLink = ({
   if (isExternalUser) {
     if (isStricken) return false;
     if (isLegacySealed) return false;
-    if (isSealed) return false;
+    if (isSealed) {
+      if (userHasAccessToCase) return true;
+      else {
+        return false;
+      }
+    }
     if (userHasNoAccessToDocument) return false;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
