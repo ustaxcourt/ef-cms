@@ -162,30 +162,17 @@ exports.getDownloadPolicyUrlInteractor = async (
 
       const documentIsAvailable =
         documentMeetsAgeRequirements(docketEntryEntity);
-
-      const selectedIsStin =
-        docketEntryEntity.documentType ===
-        INITIAL_DOCUMENT_TYPES.stin.documentType;
-
       if (!documentIsAvailable) {
         throw new UnauthorizedError(
           'Unauthorized to view document at this time.',
         );
       }
 
+      const selectedIsStin =
+        docketEntryEntity.documentType ===
+        INITIAL_DOCUMENT_TYPES.stin.documentType;
       const unAuthorizedToViewNonCourtIssued =
-        selectedIsStin ||
-        (!userAssociatedWithCase && docketEntryEntity.isSealed);
-
-      console.log(
-        'unAuthorizedToViewNonCourtIssued',
-        unAuthorizedToViewNonCourtIssued,
-      );
-      console.log({
-        isSealed: docketEntryEntity.isSealed,
-        selectedIsStin,
-        userAssociatedWithCase,
-      });
+        selectedIsStin || !userAssociatedWithCase;
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
