@@ -452,6 +452,7 @@ describe('getFormattedDocketEntry', () => {
         documentTitle: 'Sealed to public order',
         eventCode: 'O',
         isSealed: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         servedAt: '2019-03-01T21:00:00.000Z',
       };
@@ -459,8 +460,8 @@ describe('getFormattedDocketEntry', () => {
       const result = getFormattedDocketEntry({
         ...baseParams,
         entry: mockSealedDocketEntry,
-        isAssociatedWithCase: false,
         isExternalUser: true,
+        userAssociatedWithCase: false,
       });
 
       expect(result.showDocumentDescriptionWithoutLink).toBe(true);

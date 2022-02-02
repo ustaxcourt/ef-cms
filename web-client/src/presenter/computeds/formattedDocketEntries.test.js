@@ -14,7 +14,6 @@ import {
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
-import { mockDocketEntry } from './formattedDocketEntries.test';
 
 const getDateISO = () =>
   applicationContext.getUtilities().createISODateString();
@@ -29,7 +28,6 @@ export const mockDocketEntry = {
 };
 
 describe('formattedDocketEntries', () => {
-  let globalUser;
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
@@ -49,6 +47,8 @@ describe('formattedDocketEntries', () => {
       permissions: getUserPermissions(user),
     };
   };
+
+  let globalUser;
 
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedDocketEntries, {
