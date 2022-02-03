@@ -36,15 +36,20 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const petitionerThatRepresentsThemselves =
-    caseEntity.privatePractitioners.find(
+  const isSelfRepresentingPrivatePractitioner =
+    caseEntity.privatePractitioners.some(
       privatePractitioner => privatePractitioner.userId === petitionerContactId,
     );
 
   const privatePractitionerRepresentsOtherPetitionerOnCase =
-    petitionerThatRepresentsThemselves.representing.some(
-      userId => userId !== petitionerContactId,
-    );
+    caseDetail.privatePractitioners.find(privatePractitioner => {
+      privatePractitioner.representing.some(userId => {
+        userId !== petitionerContactId;
+    });
+
+  petitionerThatRepresentsThemselves?.representing.some(
+    userId => userId !== petitionerContactId,
+  );
 
   if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -58,14 +63,14 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     );
   }
 
-  if (!petitionerThatRepresentsThemselves) {
+  if (!isSelfRepresentingPrivatePractitioner) {
     caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .removeCounselFromRemovedPetitioner({
-        applicationContext,
-        caseEntity,
-        petitionerContactId,
-      });
+    .getUseCaseHelpers()
+    .removeCounselFromRemovedPetitioner({
+      applicationContext,
+      caseEntity,
+      petitionerContactId,
+    });
   } else if (!privatePractitionerRepresentsOtherPetitionerOnCase) {
     caseEntity = await applicationContext
       .getUseCaseHelpers()
@@ -76,13 +81,15 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
       });
   }
 
-  caseEntity.removePetitioner(petitionerContactId);
+  if (!privatePractitionerRepresentsOtherPetitionerOnCase) {
+    caseEntity.removePetitioner(petitionerContactId);
 
-  await applicationContext.getPersistenceGateway().deleteUserFromCase({
-    applicationContext,
-    docketNumber,
-    userId: petitionerContactId,
-  });
+    await applicationContext.getPersistenceGateway().deleteUserFromCase({
+      applicationContext,
+      docketNumber,
+      userId: petitionerContactId,
+    });
+  }
 
   caseEntity.caseCaption = caseCaption;
 
