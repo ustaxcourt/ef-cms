@@ -36,10 +36,43 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const isSelfRepresentingPrivatePractitioner =
+  caseEntity.removePetitioner(petitionerContactId);
+
+  const deletedPetitionerIsAlsoPractitionerOnCase =
     caseEntity.privatePractitioners.some(
       privatePractitioner => privatePractitioner.userId === petitionerContactId,
     );
+
+  if (!deletedPetitionerIsAlsoPractitionerOnCase) {
+    //no
+    await applicationContext.getPersistenceGateway().deleteUserFromCase({
+      applicationContext,
+      docketNumber,
+      userId: petitionerContactId,
+    });
+  } else {
+    //yes
+    const practitionerInQuestion = caseEntity.privatePractitioners.find(
+      privatePractitioner => privatePractitioner.userId === petitionerContactId,
+    );
+    const doesPetitionerRepresentThemselves =
+      practitionerInQuestion.representing.some(
+        petitionerId => petitionerId === petitionerContactId,
+      );
+
+    if (!doesPetitionerRepresentThemselves) {
+      //no
+      //do nothing actually
+    } else {
+      //yes
+      // const doesPetitionerRepresentOtherPetitioner =
+      //   practitionerInQuestion.representing.some(
+      //     petitionerId => petitionerId !== petitionerContactId,
+      //   );
+    }
+  }
+
+  //Old stuff below
 
   const privatePractitionerRepresentsOtherPetitionerOnCase =
     caseEntity.privatePractitioners.find(privatePractitioner => {
@@ -60,7 +93,7 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     );
   }
 
-  if (!isSelfRepresentingPrivatePractitioner) {
+  if (!deletedPetitionerIsAlsoPractitionerOnCase) {
     caseEntity = await applicationContext
       .getUseCaseHelpers()
       .removeCounselFromRemovedPetitioner({
@@ -79,8 +112,6 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
   }
 
   if (!privatePractitionerRepresentsOtherPetitionerOnCase) {
-    caseEntity.removePetitioner(petitionerContactId);
-
     await applicationContext.getPersistenceGateway().deleteUserFromCase({
       applicationContext,
       docketNumber,
