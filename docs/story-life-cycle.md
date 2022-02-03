@@ -18,6 +18,7 @@ Our stories start with the users of Dawson.  As new features are released, our U
 
 As users interact with our application sometimes they encounter bugs.  As bugs are reported, they are turned into a Github issue, groomed by the team, and prioritized by the product owner for developers to start fixing.  There are three levels of bug severity which we place onto bug Github issues via labels:
 
+- Critical Severity
 - High Severity
 - Medium Severity
 - Low Severity
