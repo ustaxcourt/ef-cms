@@ -36,6 +36,18 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
+    throw new Error(
+      `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
+    );
+  }
+
+  if (caseEntity.petitioners.length <= 1) {
+    throw new Error(
+      `Cannot remove petitioner ${petitionerContactId} from case with docketNumber ${caseToUpdate.docketNumber}`,
+    );
+  }
+
   caseEntity.removePetitioner(petitionerContactId);
 
   const deletedPetitionerIsAlsoPractitionerOnCase =
@@ -50,6 +62,34 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
       docketNumber,
       userId: petitionerContactId,
     });
+
+    const isPetitionerRepresented = caseEntity.privatePractitioners.forEach(
+      practitioner => practitioner.representing.includes(petitionerContactId),
+    );
+
+    if (!isPetitionerRepresented) {
+      // do nothing
+    } else {
+      const practitioners =
+        caseEntity.getPractitionersRepresenting(petitionerContactId);
+
+      practitioners.forEach(async practitioner => {
+        const petitionerIsRepresented =
+          practitioner.representing.includes(petitionerContactId);
+
+        if (!petitionerIsRepresented) {
+          caseEntity.removePrivatePractitioner(practitioner);
+
+          await applicationContext.getPersistenceGateway().deleteUserFromCase({
+            applicationContext,
+            docketNumber: caseEntity.docketNumber,
+            userId: practitioner.userId,
+          });
+        } else {
+          caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
+        }
+      });
+    }
   } else {
     //yes
     const practitionerInQuestion = caseEntity.privatePractitioners.find(
@@ -84,51 +124,6 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
   }
 
   //Old stuff below
-
-  const privatePractitionerRepresentsOtherPetitionerOnCase =
-    caseEntity.privatePractitioners.find(privatePractitioner => {
-      privatePractitioner.representing.some(
-        userId => userId !== petitionerContactId,
-      );
-    });
-
-  if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
-    throw new Error(
-      `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
-    );
-  }
-
-  if (caseEntity.petitioners.length <= 1) {
-    throw new Error(
-      `Cannot remove petitioner ${petitionerContactId} from case with docketNumber ${caseToUpdate.docketNumber}`,
-    );
-  }
-
-  if (!deletedPetitionerIsAlsoPractitionerOnCase) {
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .removeCounselFromRemovedPetitioner({
-        applicationContext,
-        caseEntity,
-        petitionerContactId,
-      });
-  } else if (!privatePractitionerRepresentsOtherPetitionerOnCase) {
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .removeCounselFromRemovedPetitioner({
-        applicationContext,
-        caseEntity,
-        petitionerContactId,
-      });
-  }
-
-  if (!privatePractitionerRepresentsOtherPetitionerOnCase) {
-    await applicationContext.getPersistenceGateway().deleteUserFromCase({
-      applicationContext,
-      docketNumber,
-      userId: petitionerContactId,
-    });
-  }
 
   caseEntity.caseCaption = caseCaption;
 
