@@ -36,6 +36,16 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
+  const petitionerThatRepresentsThemselves =
+    caseEntity.privatePractitioners.find(
+      privatePractitioner => privatePractitioner.userId === petitionerContactId,
+    );
+
+  const privatePractitionerRepresentsOtherPetitionerOnCase =
+    petitionerThatRepresentsThemselves.representing.some(
+      userId => userId !== petitionerContactId,
+    );
+
   if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
     throw new Error(
       `Case with docketNumber ${caseToUpdate.docketNumber} has not been served`,
@@ -48,13 +58,23 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     );
   }
 
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .removeCounselFromRemovedPetitioner({
-      applicationContext,
-      caseEntity,
-      petitionerContactId,
-    });
+  if (!petitionerThatRepresentsThemselves) {
+    caseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .removeCounselFromRemovedPetitioner({
+        applicationContext,
+        caseEntity,
+        petitionerContactId,
+      });
+  } else if (!privatePractitionerRepresentsOtherPetitionerOnCase) {
+    caseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .removeCounselFromRemovedPetitioner({
+        applicationContext,
+        caseEntity,
+        petitionerContactId,
+      });
+  }
 
   caseEntity.removePetitioner(petitionerContactId);
 
