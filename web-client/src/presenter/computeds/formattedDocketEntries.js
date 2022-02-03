@@ -3,14 +3,7 @@ import { state } from 'cerebral';
 export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
   let iconsToDisplay = [];
 
-  if (formattedResult.isLegacySealed) {
-    iconsToDisplay.push({
-      className: 'sealed-in-blackstone',
-      icon: ['fas', 'lock'],
-      title: 'is legacy sealed',
-    });
-    return iconsToDisplay;
-  } else if (formattedResult.sealedTo) {
+  if (formattedResult.sealedTo) {
     iconsToDisplay.push({
       className: 'sealed-docket-entry',
       icon: 'lock',
