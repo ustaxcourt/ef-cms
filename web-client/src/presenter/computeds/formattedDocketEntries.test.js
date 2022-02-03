@@ -90,6 +90,71 @@ describe('formattedDocketEntries', () => {
     ).toEqual('123');
   });
 
+  it('should set the correct text and tooltip for the seal button when the docket entry is not sealed', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isSealed: false,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      sealButtonText: 'Seal',
+      sealButtonTooltip: 'Seal to the public',
+    });
+  });
+
+  it('should set the correct text and tooltip for the seal button when the docket entry is sealed to public', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isSealed: true,
+              sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      sealButtonText: 'Unseal',
+      sealButtonTooltip: 'Unseal to the public',
+    });
+  });
+
+  it('should set the correct text and tooltip for the seal button when the docket entry is sealed to external', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isSealed: true,
+              sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      sealButtonText: 'Unseal',
+      sealButtonTooltip: 'Unseal to the public and parties of this case',
+    });
+  });
+
   it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
     const result = runCompute(formattedDocketEntries, {
       state: {
@@ -606,25 +671,6 @@ describe('formattedDocketEntries', () => {
           className: 'fa-spin spinner',
           icon: ['fa-spin', 'spinner'],
           title: 'is loading',
-        },
-      ]);
-    });
-
-    it('should display the lock icon for a privatePractitioner if the entry is sealed', () => {
-      const result = setupIconsToDisplay({
-        formattedResult: {
-          ...mockDocketEntry,
-          sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
-        },
-        isExternalUser: true,
-        isInProgress: true,
-        qcNeeded: true,
-      });
-
-      expect(result).toEqual([
-        {
-          className: 'sealed-docket-entry',
-          icon: 'lock',
         },
       ]);
     });

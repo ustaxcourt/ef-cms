@@ -75,6 +75,44 @@ describe('caseFilter', () => {
   });
 
   describe('caseSearchFilter', () => {
+    const unsealedDocketEntryId = '1f1aa3f7-e2e3-43e6-885d-4ce341588c79';
+    const documentSearchResults = [
+      {
+        caseCaption: 'Hanan Al Hroub, Petitioner',
+        docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+        docketNumber: '104-17',
+        docketNumberWithSuffix: '104-17R',
+        documentTitle:
+          'Sealed Order of Dismissal and Decision Entered, Judge Buch',
+        documentType: 'Order of Dismissal and Decision',
+        eventCode: 'ODD',
+        filingDate: '2020-04-14T03:01:50.746Z',
+        irsPractitioners: [],
+        isCaseSealed: false,
+        isDocketEntrySealed: true,
+        isStricken: false,
+        privatePractitioners: [{ userId: 'associatedPractitioner' }],
+        signedJudgeName: 'Maurice B. Foley',
+      },
+      {
+        caseCaption: 'Hanan Al Hroub, Petitioner',
+        docketEntryId: unsealedDocketEntryId,
+        docketNumber: '104-17',
+        docketNumberWithSuffix: '104-17R',
+        documentTitle:
+          'Unsealed Order of Dismissal and Decision Entered, Judge Buch',
+        documentType: 'Order of Dismissal and Decision',
+        eventCode: 'ODD',
+        filingDate: '2020-04-14T03:01:50.746Z',
+        irsPractitioners: [],
+        isCaseSealed: false,
+        isDocketEntrySealed: false,
+        isStricken: false,
+        privatePractitioners: [],
+        signedJudgeName: 'Maurice B. Foley',
+      },
+    ];
+
     const caseSearchResults = [
       {
         baz: 'quux',
@@ -189,6 +227,23 @@ describe('caseFilter', () => {
       });
 
       expect(result.length).toEqual(4);
+    });
+
+    it('should filter out sealed documents in search results when the user is not associated with the case', () => {
+      const result = caseSearchFilter(documentSearchResults, {
+        userId: 'unassociatedPractitioner',
+      });
+
+      expect(result.length).toEqual(1);
+      expect(result[0].docketEntryId).toEqual(unsealedDocketEntryId);
+    });
+
+    it('should NOT filter out sealed documents in search results when the user is associated with the case', () => {
+      const result = caseSearchFilter(documentSearchResults, {
+        userId: 'associatedPractitioner',
+      });
+
+      expect(result.length).toEqual(2);
     });
   });
 });
