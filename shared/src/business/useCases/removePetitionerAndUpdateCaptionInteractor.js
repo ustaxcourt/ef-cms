@@ -42,14 +42,11 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     );
 
   const privatePractitionerRepresentsOtherPetitionerOnCase =
-    caseDetail.privatePractitioners.find(privatePractitioner => {
-      privatePractitioner.representing.some(userId => {
-        userId !== petitionerContactId;
+    caseEntity.privatePractitioners.find(privatePractitioner => {
+      privatePractitioner.representing.some(
+        userId => userId !== petitionerContactId,
+      );
     });
-
-  petitionerThatRepresentsThemselves?.representing.some(
-    userId => userId !== petitionerContactId,
-  );
 
   if (caseToUpdate.status === CASE_STATUS_TYPES.new) {
     throw new Error(
@@ -65,12 +62,12 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
 
   if (!isSelfRepresentingPrivatePractitioner) {
     caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .removeCounselFromRemovedPetitioner({
-      applicationContext,
-      caseEntity,
-      petitionerContactId,
-    });
+      .getUseCaseHelpers()
+      .removeCounselFromRemovedPetitioner({
+        applicationContext,
+        caseEntity,
+        petitionerContactId,
+      });
   } else if (!privatePractitionerRepresentsOtherPetitionerOnCase) {
     caseEntity = await applicationContext
       .getUseCaseHelpers()
