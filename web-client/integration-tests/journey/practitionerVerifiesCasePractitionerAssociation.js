@@ -9,12 +9,14 @@ export const practitionerVerifiesCasePractitionerAssociation = (
 
     const currentUser = cerebralTest.getState('user');
 
-    casePractitionerAssociationExists
-      ? expect(privatePractitioners).toContainEqual(
-          expect.objectContaining({ userId: currentUser.userId }),
-        )
-      : expect(privatePractitioners).not.toContainEqual(
-          expect.objectContaining({ userId: currentUser.userId }),
-        );
+    if (casePractitionerAssociationExists) {
+      expect(privatePractitioners).toContainEqual(
+        expect.objectContaining({ userId: currentUser.userId }),
+      );
+    } else {
+      expect(privatePractitioners).not.toContainEqual(
+        expect.objectContaining({ userId: currentUser.userId }),
+      );
+    }
   });
 };
