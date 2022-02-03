@@ -137,6 +137,7 @@ export const getFormattedDocketEntry = ({
   userAssociatedWithCase,
 }) => {
   const {
+    DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
@@ -236,6 +237,13 @@ export const getFormattedDocketEntry = ({
     formattedResult,
     isExternalUser,
   });
+
+  formattedResult.sealButtonText = formattedResult.isSealed ? 'Unseal' : 'Seal';
+  formattedResult.sealButtonTooltip = formattedResult.isSealed
+    ? formattedResult.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
+      ? 'Unseal to the public and parties of this case'
+      : 'Unseal to the public'
+    : 'Seal to the public';
 
   return formattedResult;
 };

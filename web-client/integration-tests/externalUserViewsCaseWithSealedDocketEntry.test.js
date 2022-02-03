@@ -72,7 +72,7 @@ describe('External user views case with sealed docket entry', () => {
 
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
     expect(sealedDocketEntry.isSealed).toBe(true);
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
   });
 
   loginAs(testClient, 'petitionsclerk@example.com');
@@ -90,7 +90,7 @@ describe('External user views case with sealed docket entry', () => {
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(false);
     expect(sealedDocketEntry.showLinkToDocument).toBe(true);
     expect(sealedDocketEntry.isSealed).toBe(true);
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
   });
 
   loginAs(testClient, 'docketclerk@example.com');
@@ -103,6 +103,6 @@ describe('External user views case with sealed docket entry', () => {
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(false);
     expect(sealedDocketEntry.showDocumentViewerLink).toBe(true);
     expect(sealedDocketEntry.isSealed).toBe(true);
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
   });
 });
