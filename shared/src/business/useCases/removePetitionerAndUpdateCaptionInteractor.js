@@ -73,22 +73,28 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
       const practitioners =
         caseEntity.getPractitionersRepresenting(petitionerContactId);
 
-      practitioners.forEach(async practitioner => {
-        const petitionerIsRepresented =
-          practitioner.representing.includes(petitionerContactId);
+      const practitionerModificationPromises = practitioners.map(
+        async practitioner => {
+          const petitionerIsRepresented =
+            practitioner.representing.includes(petitionerContactId);
 
-        if (!petitionerIsRepresented) {
-          caseEntity.removePrivatePractitioner(practitioner);
+          if (!petitionerIsRepresented) {
+            caseEntity.removePrivatePractitioner(practitioner);
 
-          await applicationContext.getPersistenceGateway().deleteUserFromCase({
-            applicationContext,
-            docketNumber: caseEntity.docketNumber,
-            userId: practitioner.userId,
-          });
-        } else {
-          caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
-        }
-      });
+            await applicationContext
+              .getPersistenceGateway()
+              .deleteUserFromCase({
+                applicationContext,
+                docketNumber: caseEntity.docketNumber,
+                userId: practitioner.userId,
+              });
+          } else {
+            caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
+          }
+        },
+      );
+
+      await Promise.all(practitionerModificationPromises);
     }
   } else {
     //yes
