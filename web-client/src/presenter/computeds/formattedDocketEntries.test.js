@@ -321,36 +321,6 @@ describe('formattedDocketEntries', () => {
       });
     });
 
-    it('should not show the link to an associated external user when the document has isLegacySealed true', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(petitionerUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...docketEntries[0],
-                isLegacySealed: true,
-                isMinuteEntry: false,
-                isOnDocketRecord: true,
-                isStricken: false,
-                servedAt: '2020-01-23T21:44:54.034Z',
-              },
-            ],
-          },
-          screenMetadata: {
-            isAssociated: true,
-          },
-        },
-      });
-
-      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
-        isLegacySealed: true,
-        showDocumentDescriptionWithoutLink: true,
-        showDocumentViewerLink: false,
-        showLinkToDocument: false,
-      });
-    });
-
     it('should show the link to an associated external user when the document has isLegacyServed true and servedAt undefined', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
@@ -557,46 +527,6 @@ describe('formattedDocketEntries', () => {
           className: 'sealed-docket-entry',
           icon: 'lock',
           title: expect.anything(),
-        },
-      ]);
-    });
-
-    it('should return a lock icon with formatted tooltip text when the docket entry was sealed in blackstone', () => {
-      const result = setupIconsToDisplay({
-        formattedResult: {
-          ...mockDocketEntry,
-          isLegacySealed: true,
-        },
-        isExternalUser: false,
-      });
-
-      expect(result).toEqual([
-        {
-          className: 'sealed-in-blackstone',
-          icon: ['fas', 'lock'],
-          title: 'is legacy sealed',
-        },
-      ]);
-    });
-
-    it('should only return the legacy sealed icon if the user is external and has paper', () => {
-      const result = setupIconsToDisplay({
-        formattedResult: {
-          ...mockDocketEntry,
-          isInProgress: true,
-          isLegacySealed: true,
-          isPaper: true,
-          qcNeeded: true,
-          showLoadingIcon: true,
-        },
-        isExternalUser: true,
-      });
-
-      expect(result).toEqual([
-        {
-          className: 'sealed-in-blackstone',
-          icon: ['fas', 'lock'],
-          title: 'is legacy sealed',
         },
       ]);
     });
