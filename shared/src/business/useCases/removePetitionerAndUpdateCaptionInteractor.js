@@ -65,10 +65,21 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
       //do nothing actually
     } else {
       //yes
-      // const doesPetitionerRepresentOtherPetitioner =
-      //   practitionerInQuestion.representing.some(
-      //     petitionerId => petitionerId !== petitionerContactId,
-      //   );
+      const doesPetitionerRepresentOtherPetitioner =
+        practitionerInQuestion.representing.some(
+          petitionerId => petitionerId !== petitionerContactId,
+        );
+
+      if (!doesPetitionerRepresentOtherPetitioner) {
+        caseEntity.removePrivatePractitioner(practitionerInQuestion);
+        await applicationContext.getPersistenceGateway().deleteUserFromCase({
+          applicationContext,
+          docketNumber,
+          userId: petitionerContactId,
+        });
+      } else {
+        caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
+      }
     }
   }
 
