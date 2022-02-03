@@ -26,6 +26,6 @@ export const docketClerkSealsDocketEntry = (cerebralTest, draftOrderIndex) => {
     expect(sealedDocketEntry.sealedTo).toBe(
       DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
     );
-    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to public');
+    expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
   });
 };

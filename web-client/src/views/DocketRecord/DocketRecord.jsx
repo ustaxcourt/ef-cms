@@ -128,11 +128,7 @@ export const DocketRecord = connect(
                             className={entry.isSealed && 'red-warning'}
                             data-test={`seal-docket-entry-button-${arrayIndex}`}
                             icon="lock"
-                            tooltip={
-                              entry.isSealed
-                                ? 'Unseal to the public'
-                                : 'Seal to the public'
-                            }
+                            tooltip={entry.sealButtonTooltip}
                             onClick={() => {
                               openSealDocketEntryModalSequence({
                                 docketEntryId: entry.docketEntryId,
@@ -140,7 +136,7 @@ export const DocketRecord = connect(
                               });
                             }}
                           >
-                            {entry.isSealed ? 'Unseal' : 'Seal'}
+                            {entry.sealButtonText}
                           </Button>
                         )}
                       </td>
