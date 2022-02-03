@@ -63,33 +63,39 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
       userId: petitionerContactId,
     });
 
-    const isPetitionerRepresented = caseEntity.privatePractitioners.forEach(
+    const isPetitionerRepresented = caseEntity.privatePractitioners.some(
       practitioner => practitioner.representing.includes(petitionerContactId),
     );
+
+    console.log('isPetitionerRepresented ', isPetitionerRepresented);
 
     if (!isPetitionerRepresented) {
       // do nothing
     } else {
       const practitioners =
         caseEntity.getPractitionersRepresenting(petitionerContactId);
+      console.log('Practitioners ', practitioners);
 
       const practitionerModificationPromises = practitioners.map(
         async practitioner => {
-          const petitionerIsRepresented =
-            practitioner.representing.includes(petitionerContactId);
+          caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
 
-          if (!petitionerIsRepresented) {
+          if (practitioner.representing.length === 0) {
             caseEntity.removePrivatePractitioner(practitioner);
 
-            await applicationContext
-              .getPersistenceGateway()
-              .deleteUserFromCase({
-                applicationContext,
-                docketNumber: caseEntity.docketNumber,
-                userId: practitioner.userId,
-              });
-          } else {
-            caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
+            if (
+              caseEntity.petitioners.some(petitioner => {
+                petitioner.contactId !== practitioner.userId;
+              })
+            ) {
+              await applicationContext
+                .getPersistenceGateway()
+                .deleteUserFromCase({
+                  applicationContext,
+                  docketNumber: caseEntity.docketNumber,
+                  userId: practitioner.userId,
+                });
+            }
           }
         },
       );
