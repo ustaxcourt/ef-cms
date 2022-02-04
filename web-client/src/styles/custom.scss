@@ -581,7 +581,7 @@ select[disabled] {
 }
 
 .icon-column {
-  width: 40px;
+  width: 55px;
 }
 
 .mini-success {
@@ -603,7 +603,7 @@ select[disabled] {
     }
 
     /* little screens */
-    @media only screen and (max-width: $medium-screen - 1) {
+    @media only screen and (max-width: ($medium-screen - 1)) {
       margin-top: 20px;
     }
   }
@@ -792,7 +792,7 @@ textarea#case-caption {
 }
 
 /* little screens */
-@media only screen and (max-width: $medium-screen - 1px) {
+@media only screen and (max-width: ($medium-screen - 1px)) {
   .header-with-link-button {
     max-width: 80%;
   }
@@ -1627,7 +1627,7 @@ button.change-scanner-button {
   }
 
   /* little screens */
-  @media only screen and (max-width: $medium-screen - 1) {
+  @media only screen and (max-width: ($medium-screen - 1)) {
     input#petitioner-name,
     select {
       margin-bottom: 20px;
@@ -1703,6 +1703,15 @@ button.change-scanner-button {
   font-weight: $font-regular;
 }
 
+.ustc-table .filing-type-icon .sealed-docket-entry {
+  margin-right: 4px;
+}
+
+.sealed-docket-entry {
+  color: color($theme-color-secondary-dark);
+}
+
+.sealed-address,
 .sealed-in-blackstone {
   color: color($theme-color-secondary-dark);
 }
@@ -1717,10 +1726,6 @@ button.change-scanner-button {
   height: 945px;
   padding: 20px;
   border: 1px solid color($theme-color-base-lighter);
-}
-
-.sealed-address {
-  color: color($theme-color-secondary-dark);
 }
 
 .sealed-contact-icon {
@@ -1818,7 +1823,7 @@ button.change-scanner-button {
     margin-left: 0;
   }
 
-  @media only screen and (max-width: $large-screen - 1) {
+  @media only screen and (max-width: ($large-screen - 1)) {
     .usa-footer__secondary-section {
       .usa-footer__logo-heading {
         font-size: 16px;
@@ -1848,7 +1853,7 @@ button.change-scanner-button {
     }
   }
 
-  @media only screen and (max-width: $medium-screen - 1) {
+  @media only screen and (max-width: ($medium-screen - 1)) {
     .usa-footer__primary-container {
       padding: 0;
     }

@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -5,7 +7,10 @@ import {
   petitionerUser,
   petitionsClerkUser,
 } from '../../../../shared/src/test/mockUsers';
-import { formattedDocketEntries as formattedDocketEntriesComputed } from './formattedDocketEntries';
+import {
+  formattedDocketEntries as formattedDocketEntriesComputed,
+  setupIconsToDisplay,
+} from './formattedDocketEntries';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -23,7 +28,6 @@ export const mockDocketEntry = {
 };
 
 describe('formattedDocketEntries', () => {
-  let globalUser;
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS } =
     applicationContext.getConstants();
 
@@ -43,6 +47,8 @@ describe('formattedDocketEntries', () => {
       permissions: getUserPermissions(user),
     };
   };
+
+  let globalUser;
 
   it('does not error and returns expected empty values on empty caseDetail', () => {
     const result = runCompute(formattedDocketEntries, {
@@ -82,6 +88,71 @@ describe('formattedDocketEntries', () => {
     expect(
       result.formattedDocketEntriesOnDocketRecord[0].docketEntryId,
     ).toEqual('123');
+  });
+
+  it('should set the correct text and tooltip for the seal button when the docket entry is not sealed', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isSealed: false,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      sealButtonText: 'Seal',
+      sealButtonTooltip: 'Seal to the public',
+    });
+  });
+
+  it('should set the correct text and tooltip for the seal button when the docket entry is sealed to public', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isSealed: true,
+              sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      sealButtonText: 'Unseal',
+      sealButtonTooltip: 'Unseal to the public',
+    });
+  });
+
+  it('should set the correct text and tooltip for the seal button when the docket entry is sealed to external', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isSealed: true,
+              sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      sealButtonText: 'Unseal',
+      sealButtonTooltip: 'Unseal to the public and parties of this case',
+    });
   });
 
   it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
@@ -244,36 +315,6 @@ describe('formattedDocketEntries', () => {
 
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         isStricken: true,
-        showDocumentDescriptionWithoutLink: true,
-        showDocumentViewerLink: false,
-        showLinkToDocument: false,
-      });
-    });
-
-    it('should not show the link to an associated external user when the document has isLegacySealed true', () => {
-      const result = runCompute(formattedDocketEntries, {
-        state: {
-          ...getBaseState(petitionerUser),
-          caseDetail: {
-            docketEntries: [
-              {
-                ...docketEntries[0],
-                isLegacySealed: true,
-                isMinuteEntry: false,
-                isOnDocketRecord: true,
-                isStricken: false,
-                servedAt: '2020-01-23T21:44:54.034Z',
-              },
-            ],
-          },
-          screenMetadata: {
-            isAssociated: true,
-          },
-        },
-      });
-
-      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
-        isLegacySealed: true,
         showDocumentDescriptionWithoutLink: true,
         showDocumentViewerLink: false,
         showLinkToDocument: false,
@@ -443,6 +484,125 @@ describe('formattedDocketEntries', () => {
       expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
         qcNeeded: false,
       });
+    });
+  });
+
+  describe('sealedTo', () => {
+    it('should set the tooltip correctly when the docket entry is sealed', () => {
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...mockDocketEntry,
+                isSealed: true,
+                sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+                sealedToTooltip: undefined,
+              },
+            ],
+          },
+        },
+      });
+
+      expect(
+        result.formattedDocketEntriesOnDocketRecord[0].sealedToTooltip,
+      ).toBeDefined();
+    });
+  });
+
+  describe('setupIconsToDisplay', () => {
+    it('should return a lock icon with formatted tooltip text when the docket entry has been sealed', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+          sealedToTooltip: 'anything',
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          className: 'sealed-docket-entry',
+          icon: 'lock',
+          title: expect.anything(),
+        },
+      ]);
+    });
+
+    it('should return only the paper icon if isPaper is true', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          isPaper: true,
+          qcNeeded: true,
+          showLoadingIcon: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          icon: ['fas', 'file-alt'],
+          title: 'is paper',
+        },
+      ]);
+    });
+
+    it('should only return the isInProgress icon if isInProgress is true', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          isInProgress: true,
+          isPaper: false,
+          qcNeeded: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          icon: ['fas', 'thumbtack'],
+          title: 'in progress',
+        },
+      ]);
+    });
+
+    it('should only return the qcNeeded icon if qcNeeded is true', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          qcNeeded: true,
+          showLoadingIcon: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          icon: ['fa', 'star'],
+          title: 'is untouched',
+        },
+      ]);
+    });
+
+    it('should only return the showLoadingIcon icon if showLoadingIcon is true', () => {
+      const result = setupIconsToDisplay({
+        formattedResult: {
+          ...mockDocketEntry,
+          showLoadingIcon: true,
+        },
+        isExternalUser: false,
+      });
+
+      expect(result).toEqual([
+        {
+          className: 'fa-spin spinner',
+          icon: ['fa-spin', 'spinner'],
+          title: 'is loading',
+        },
+      ]);
     });
   });
 });

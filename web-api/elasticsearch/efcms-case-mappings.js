@@ -42,9 +42,6 @@ module.exports = {
     'hasPendingItems.BOOL': {
       type: 'boolean',
     },
-    'hasSealedDocuments.BOOL': {
-      type: 'boolean',
-    },
     'indexedTimestamp.N': {
       type: 'text',
     },
