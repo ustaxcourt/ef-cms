@@ -4,24 +4,26 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setCourtIssuedDocumentInitialDataAction } from './setCourtIssuedDocumentInitialDataAction';
 
-presenter.providers.applicationContext = applicationContext;
-
-const docketEntryIds = [
-  'ddfd978d-6be6-4877-b004-2b5735a41fee',
-  '11597d22-0874-4c5e-ac98-a843d1472baf',
-];
-
-MOCK_CASE.docketEntries.push({
-  docketEntryId: docketEntryIds[0],
-  eventCode: 'OF',
-});
-MOCK_CASE.docketEntries.push({
-  docketEntryId: docketEntryIds[1],
-  eventCode: 'O',
-  freeText: 'something',
-});
-
 describe('setCourtIssuedDocumentInitialDataAction', () => {
+  const docketEntryIds = [
+    'ddfd978d-6be6-4877-b004-2b5735a41fee',
+    '11597d22-0874-4c5e-ac98-a843d1472baf',
+  ];
+
+  beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
+    MOCK_CASE.docketEntries.push({
+      docketEntryId: docketEntryIds[0],
+      eventCode: 'OF',
+    });
+    MOCK_CASE.docketEntries.push({
+      docketEntryId: docketEntryIds[1],
+      eventCode: 'O',
+      freeText: 'something',
+    });
+  });
+
   it('should set correct values on state.form for the docketEntryId passed in via props', async () => {
     const result = await runAction(setCourtIssuedDocumentInitialDataAction, {
       modules: {
