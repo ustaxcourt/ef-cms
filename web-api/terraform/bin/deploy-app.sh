@@ -5,6 +5,8 @@ ENVIRONMENT=$1
 export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENVIRONMENT})
 export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENVIRONMENT})
 
+export DEPLOYING_COLOR="blue"
+
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 REGION=us-east-1
 content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
