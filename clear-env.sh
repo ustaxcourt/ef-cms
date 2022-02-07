@@ -5,6 +5,8 @@
 # Usage
 #   ./clear-env.sh
 
+. ./scripts/load-environment-from-secrets.sh
+
 ./check-env-variables.sh \
   "USTC_ADMIN_PASS" \
   "AWS_ACCESS_KEY_ID" \
