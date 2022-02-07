@@ -159,18 +159,22 @@ resource "aws_apigatewayv2_stage" "stage" {
 resource "aws_apigatewayv2_deployment" "websocket_deploy" {
   api_id = aws_apigatewayv2_api.websocket_api.id
 
-  depends_on = [
-    aws_apigatewayv2_route.connect,
-    aws_apigatewayv2_route.disconnect,
-    aws_apigatewayv2_route.default,
-  ]
-
   lifecycle {
     create_before_destroy = true
   }
 
   triggers = {
-    deployed_at = "Deployed at ${timestamp()}"
+    redeployment = sha1(jsonencode([
+      aws_apigatewayv2_integration.websockets_connect_integration,
+      aws_apigatewayv2_integration.websockets_disconnect_integration,
+      aws_apigatewayv2_integration.websockets_default_integration,
+
+      aws_apigatewayv2_route.connect,
+      aws_apigatewayv2_route.disconnect,
+      aws_apigatewayv2_route.default,
+
+      aws_apigatewayv2_authorizer.websocket_authorizer,
+    ]))
   }
 }
 
@@ -247,7 +251,7 @@ resource "aws_apigatewayv2_authorizer" "websocket_authorizer" {
   api_id                     = aws_apigatewayv2_api.websocket_api.id
   authorizer_type            = "REQUEST"
   authorizer_credentials_arn = "arn:aws:iam::${var.account_id}:role/api_gateway_invocation_role_${var.environment}"
-  authorizer_uri             = var.authorizer_uri
+  authorizer_uri             = var.websocket_authorizer_uri
   identity_sources           = ["route.request.querystring.token"]
   name                       = "websocket_authorizer_${var.environment}_${var.current_color}"
 }

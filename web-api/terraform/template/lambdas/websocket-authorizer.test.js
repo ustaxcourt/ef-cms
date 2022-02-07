@@ -5,7 +5,7 @@ jest.mock('../../../src/createLogger', () => {
 const { createLogger: actualCreateLogger } = jest.requireActual(
   '../../../src/createLogger',
 );
-const authorizer = require('./cognito-authorizer');
+const authorizer = require('./websocket-authorizer');
 const axios = require('axios');
 const fs = require('fs');
 const jwk = require('jsonwebtoken');
@@ -42,7 +42,7 @@ const setupHappyPath = verifyObject => {
   });
 };
 
-describe('cognito-authorizer', () => {
+describe('websocket-authorizer', () => {
   let event, context, transport;
 
   beforeEach(() => {
@@ -70,10 +70,12 @@ describe('cognito-authorizer', () => {
     });
 
     event = {
-      authorizationToken:
-        'Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
       methodArn:
         'arn:aws:execute-api:us-east-1:aws-account-id:api-gateway-id/stage/GET/path',
+      queryStringParameters: {
+        token:
+          'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImFkbWlzc2lvbnNjbGVya0BleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IEFkbWlzc2lvbnMgQ2xlcmsiLCJyb2xlIjoiYWRtaXNzaW9uc2NsZXJrIiwic2VjdGlvbiI6ImFkbWlzc2lvbnMiLCJ1c2VySWQiOiI5ZDdkNjNiNy1kN2E1LTQ5MDUtYmE4OS1lZjcxYmYzMDA1N2YiLCJjdXN0b206cm9sZSI6ImFkbWlzc2lvbnNjbGVyayIsInN1YiI6IjlkN2Q2M2I3LWQ3YTUtNDkwNS1iYTg5LWVmNzFiZjMwMDU3ZiIsImlhdCI6MTYwOTQ0NTUyNn0.kow3pAUloDseD3isrxgtKBpcKsjMktbRBzY41c1NRqA',
+      },
       type: 'TOKEN',
     };
 
@@ -88,7 +90,7 @@ describe('cognito-authorizer', () => {
   });
 
   it('returns unauthorized when token is missing', async () => {
-    event.authorizationToken = '';
+    event.queryStringParameters = null;
 
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
 
@@ -312,12 +314,14 @@ describe('cognito-authorizer', () => {
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
   });
 
-  it('should return a policy if the authorization token is provided', async () => {
+  it('should return a policy if the token is provided in the query string', async () => {
     setupHappyPath({ sub: 'test-sub' });
 
     event = {
-      authorizationToken: `Bearer ${TOKEN_VALUE}`,
       methodArn: 'a/b/c',
+      queryStringParameters: {
+        token: TOKEN_VALUE,
+      },
     };
     const policy = await handler(event, context);
     expect(policy).toBeDefined();

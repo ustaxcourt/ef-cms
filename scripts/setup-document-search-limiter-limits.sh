@@ -3,14 +3,12 @@
 # Sets the value for the request limit of the IP limiter
 
 # Usage
-#   ./setup-document-search-limiter-limits.sh dev
+#   ENV=dev ./setup-document-search-limiter-limits.sh
 
-# Arguments
-#   - $1 - the environment to set the flag
-
-[ -z "$1" ] && echo "The environment must be provided as the \$1 argument." && exit 1
-
-ENV=$1
+./check-env-variables.sh \
+  "ENV" \
+  "AWS_SECRET_ACCESS_KEY" \
+  "AWS_ACCESS_KEY_ID"
 
 ITEM=$(cat <<-END
 {
