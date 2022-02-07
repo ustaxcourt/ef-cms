@@ -3,14 +3,13 @@
 # Sets the document search limiter values in the deploy table
 
 # Usage
-#   ./setup-document-search-limiter.sh dev
+#  ENV=dev ./setup-document-search-limiter.sh
 
-# Arguments
-#   - $1 - the environment to setup
 
-[ -z "$1" ] && echo "The environment must be provided as the \$1 argument." && exit 1
-
-ENV=$1
+./check-env-variables.sh \
+  "ENV" \
+  "AWS_SECRET_ACCESS_KEY" \
+  "AWS_ACCESS_KEY_ID"
 
 ITEM=$(cat <<-END
 {

@@ -1,7 +1,7 @@
 const { createAuthorizer } = require('./createAuthorizer');
 
 const getToken = event => {
-  return event.authorizationToken.substring(7);
+  return event.queryStringParameters && event.queryStringParameters.token;
 };
 
 exports.handler = createAuthorizer(getToken);
