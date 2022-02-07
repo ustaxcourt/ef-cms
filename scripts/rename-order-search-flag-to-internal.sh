@@ -3,14 +3,12 @@
 # Rename order-search-enabled flag to internal-order-search-enabled
 
 # Usage
-#   ./rename-order-search-flag-to-internal.sh dev
+#   ENV=dev ./rename-order-search-flag-to-internal.sh
 
-# Arguments
-#   - $1 - the environment to set the flag
-
-[ -z "$1" ] && echo "The environment must be provided as the \$1 argument." && exit 1
-
-ENV=$1
+./check-env-variables.sh \
+  "ENV" \
+  "AWS_SECRET_ACCESS_KEY" \
+  "AWS_ACCESS_KEY_ID"
 
 CURRENT_INTERNAL_ORDER_SEARCH_VALUE=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"order-search-enabled"},"sk":{"S":"order-search-enabled"}}' | jq -r ".Item.current.BOOL")
 
