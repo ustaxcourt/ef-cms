@@ -2,6 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
+const {
+  removeCounselFromRemovedPetitioner,
+} = require('../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner');
 const { Case } = require('../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -72,35 +75,40 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     if (!isPetitionerRepresented) {
       // do nothing
     } else {
-      const practitioners =
-        caseEntity.getPractitionersRepresenting(petitionerContactId);
-      console.log('Practitioners ', practitioners);
+      removeCounselFromRemovedPetitioner({
+        applicationContext,
+        caseEntity,
+        petitionerContactId,
+      });
+      // const practitioners =
+      //   caseEntity.getPractitionersRepresenting(petitionerContactId);
+      // console.log('Practitioners ', practitioners);
 
-      const practitionerModificationPromises = practitioners.map(
-        async practitioner => {
-          caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
+      // const practitionerModificationPromises = practitioners.map(
+      //   async practitioner => {
+      //     caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
 
-          if (practitioner.representing.length === 0) {
-            caseEntity.removePrivatePractitioner(practitioner);
+      //     if (practitioner.representing.length === 0) {
+      //       caseEntity.removePrivatePractitioner(practitioner);
 
-            if (
-              caseEntity.petitioners.some(petitioner => {
-                petitioner.contactId !== practitioner.userId;
-              })
-            ) {
-              await applicationContext
-                .getPersistenceGateway()
-                .deleteUserFromCase({
-                  applicationContext,
-                  docketNumber: caseEntity.docketNumber,
-                  userId: practitioner.userId,
-                });
-            }
-          }
-        },
-      );
+      //       if (
+      //         caseEntity.petitioners.some(petitioner => {
+      //           petitioner.contactId !== practitioner.userId;
+      //         })
+      //       ) {
+      //         await applicationContext
+      //           .getPersistenceGateway()
+      //           .deleteUserFromCase({
+      //             applicationContext,
+      //             docketNumber: caseEntity.docketNumber,
+      //             userId: practitioner.userId,
+      //           });
+      //       }
+      //     }
+      //   },
+      // );
 
-      await Promise.all(practitionerModificationPromises);
+      // await Promise.all(practitionerModificationPromises);
     }
   } else {
     //yes
