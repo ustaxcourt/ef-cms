@@ -109,6 +109,15 @@ describe('Authorization client service', () => {
     ).toBeTruthy();
   });
 
+  it('should authorize a docketclerk to seal a docket entry', () => {
+    expect(
+      isAuthorized(
+        { role: ROLES.docketClerk, userId: 'docketclerk' },
+        ROLE_PERMISSIONS.SEAL_DOCKET_ENTRY,
+      ),
+    ).toBeTruthy();
+  });
+
   it('should evaluate owner when the owner param is provided', () => {
     expect(
       isAuthorized(

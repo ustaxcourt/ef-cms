@@ -76,6 +76,19 @@ module.exports.getEmailVerificationToken = async ({ userId }) => {
     });
 };
 
+module.exports.setAllowedTerminalIpAddresses = async ipAddresses => {
+  return await documentClient
+    .put({
+      Item: {
+        ips: ipAddresses,
+        pk: 'allowed-terminal-ips',
+        sk: 'allowed-terminal-ips',
+      },
+      TableName: 'efcms-local',
+    })
+    .promise();
+};
+
 module.exports.reseedDatabase = async () => {
   await clearDatabase();
   await seedLocalDatabase();
