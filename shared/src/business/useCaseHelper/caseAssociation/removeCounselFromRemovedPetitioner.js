@@ -32,45 +32,20 @@ exports.removeCounselFromRemovedPetitioner = async ({
 
   for (const practitioner of practitioners) {
     const practitionerIsAlsoAPetitionerOnCase = caseEntity.petitioners.some(
-      petitioner => petitioner.petitionerContactId === practitioner.userId,
+      petitioner => petitioner.contactId === practitioner.userId,
     );
-
-    const doesPetitionerRepresentThemselves = practitioner.representing.some(
-      petitionerId => petitionerId === petitionerContactId,
-    );
-
-    // const doesPractitionerRepresentOtherPetitioner =
-    //   practitioner.representing.some(
-    //     petitionerId => petitionerId !== petitionerContactId,
-    //   );
-
-    // fore practitioner
-    // do they represent somebody else?
-    // if they represent another petitioner on the case we don't remove them from the case
-    // else removeRepresentingFromPractitioners
-    // if that practitioner who represents someone else on the case is also a petitioner on the case
-    // then only remove them from the representing array do not delete the representing array
-    //
 
     if (practitioner.representing.length === 1) {
       caseEntity.removePrivatePractitioner(practitioner);
 
-      if (practitionerIsAlsoAPetitionerOnCase) {
-        if (doesPetitionerRepresentThemselves) {
-          await applicationContext.getPersistenceGateway().deleteUserFromCase({
-            applicationContext,
-            docketNumber: caseEntity.docketNumber,
-            userId: practitioner.userId,
-          });
-        }
+      // if practitioner is a self-representing petitioner, their user|case record has already been removed
+      if (!practitionerIsAlsoAPetitionerOnCase) {
+        await applicationContext.getPersistenceGateway().deleteUserFromCase({
+          applicationContext,
+          docketNumber: caseEntity.docketNumber,
+          userId: practitioner.userId,
+        });
       }
-      // if (!practitionerIsAlsoAPetitionerOnCase) {
-      //   await applicationContext.getPersistenceGateway().deleteUserFromCase({
-      //     applicationContext,
-      //     docketNumber: caseEntity.docketNumber,
-      //     userId: practitioner.userId,
-      //   });
-      // }
     } else {
       caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
     }

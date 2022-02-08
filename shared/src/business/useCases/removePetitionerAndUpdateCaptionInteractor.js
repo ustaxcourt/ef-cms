@@ -70,16 +70,15 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
       practitioner => practitioner.representing.includes(petitionerContactId),
     );
 
-    console.log('isPetitionerRepresented ', isPetitionerRepresented);
-
     if (!isPetitionerRepresented) {
       // do nothing
     } else {
-      removeCounselFromRemovedPetitioner({
+      caseEntity = await removeCounselFromRemovedPetitioner({
         applicationContext,
         caseEntity,
         petitionerContactId,
       });
+
       // const practitioners =
       //   caseEntity.getPractitionersRepresenting(petitionerContactId);
       // console.log('Practitioners ', practitioners);
@@ -112,35 +111,41 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     }
   } else {
     //yes
-    const practitionerInQuestion = caseEntity.privatePractitioners.find(
-      privatePractitioner => privatePractitioner.userId === petitionerContactId,
-    );
-    const doesPetitionerRepresentThemselves =
-      practitionerInQuestion.representing.some(
-        petitionerId => petitionerId === petitionerContactId,
-      );
+    // const practitionerInQuestion = caseEntity.privatePractitioners.find(
+    //   privatePractitioner => privatePractitioner.userId === petitionerContactId,
+    // );
+    // const doesPetitionerRepresentThemselves =
+    //   practitionerInQuestion.representing.some(
+    //     petitionerId => petitionerId === petitionerContactId,
+    //   );
 
-    if (!doesPetitionerRepresentThemselves) {
-      //no
-      //do nothing actually
-    } else {
-      //yes
-      const doesPetitionerRepresentOtherPetitioner =
-        practitionerInQuestion.representing.some(
-          petitionerId => petitionerId !== petitionerContactId,
-        );
+    // if (!doesPetitionerRepresentThemselves) {
+    //   //no
+    //   //do nothing actually
+    // } else {
+    //   //yes
+    //   const doesPetitionerRepresentOtherPetitioner =
+    //     practitionerInQuestion.representing.some(
+    //       petitionerId => petitionerId !== petitionerContactId,
+    //     );
 
-      if (!doesPetitionerRepresentOtherPetitioner) {
-        caseEntity.removePrivatePractitioner(practitionerInQuestion);
-        await applicationContext.getPersistenceGateway().deleteUserFromCase({
-          applicationContext,
-          docketNumber,
-          userId: petitionerContactId,
-        });
-      } else {
-        caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
-      }
-    }
+    //   if (!doesPetitionerRepresentOtherPetitioner) {
+    //     caseEntity.removePrivatePractitioner(practitionerInQuestion);
+    //     await applicationContext.getPersistenceGateway().deleteUserFromCase({
+    //       applicationContext,
+    //       docketNumber,
+    //       userId: petitionerContactId,
+    //     });
+    //   } else {
+    //     caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
+    //   }
+    // }
+
+    caseEntity = await removeCounselFromRemovedPetitioner({
+      applicationContext,
+      caseEntity,
+      petitionerContactId,
+    });
   }
 
   //Old stuff below
