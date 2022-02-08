@@ -60,6 +60,7 @@ describe('external users perform an advanced search for orders', () => {
   docketClerkServesDocument(cerebralTest, 0);
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
+
   associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
@@ -193,10 +194,26 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
+    // TODO: sealed order for unassociated practitoner should not be returned
     expect(
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
-    ).toEqual([]);
+    ).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          documentTitle: 'Sealed Order',
+          isCaseSealed: false,
+          isDocketEntrySealed: true,
+        }),
+      ]),
+    );
   });
+
+  // TODO
+  //         expect.objectContaining({
+  //   documentTitle: "This is a legacy judge's order 4",
+  //   isCaseSealed: false,
+  //   isDocketEntrySealed: false,
+  // }),
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
   it('search for sealed order in unsealed case as an associated practitioner', async () => {

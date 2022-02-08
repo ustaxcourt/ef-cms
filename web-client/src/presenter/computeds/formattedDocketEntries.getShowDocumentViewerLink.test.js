@@ -233,6 +233,30 @@ describe('getShowDocumentViewerLink', () => {
       output: false,
     },
     {
+      // User is external, with no access to case, docket entry is a sealed and served order, document link is not visible
+      inputs: {
+        hasDocument: true,
+        isCourtIssuedDocument: true,
+        isExternalUser: true,
+        isSealed: true,
+        isServed: true,
+        userHasAccessToCase: false,
+      },
+      output: false,
+    },
+    {
+      // User is external, with access to case, docket entry is a sealed and served order, document link is visible
+      inputs: {
+        hasDocument: true,
+        isCourtIssuedDocument: true,
+        isExternalUser: true,
+        isSealed: true,
+        isServed: true,
+        userHasAccessToCase: true,
+      },
+      output: true,
+    },
+    {
       // User is external, with access to case, document link is visible
       inputs: {
         hasDocument: true,

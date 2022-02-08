@@ -39,7 +39,7 @@ describe('lambdaWrapper', () => {
     })(req, res);
 
     expect(res.set).toHaveBeenCalledWith({
-      'Access-Control-Expose-Headers': "['X-Terminal-User']",
+      'Access-Control-Expose-Headers': 'X-Terminal-User',
       'Cache-Control':
         'max-age=0, private, no-cache, no-store, must-revalidate',
       'Content-Type': 'application/json',
@@ -143,7 +143,7 @@ describe('lambdaWrapper', () => {
     })(req, res);
 
     expect(res.set.mock.calls[0][0]).toEqual({
-      'Access-Control-Expose-Headers': "['X-Terminal-User']",
+      'Access-Control-Expose-Headers': 'X-Terminal-User',
       'Cache-Control':
         'max-age=0, private, no-cache, no-store, must-revalidate',
       'Content-Type': 'application/json',
