@@ -19,7 +19,6 @@ describe('advancedDocumentSearch', () => {
   const SOURCE = {
     includes: [
       'caseCaption',
-      'petitioners',
       'docketEntryId',
       'docketNumber',
       'docketNumberWithSuffix',
@@ -27,15 +26,16 @@ describe('advancedDocumentSearch', () => {
       'documentType',
       'eventCode',
       'filingDate',
-      'hasSealedDocuments',
       'irsPractitioners',
       'isFileAttached',
       'isSealed',
       'isStricken',
       'judge',
       'numberOfPages',
+      'petitioners',
       'privatePractitioners',
       'sealedDate',
+      'sealedTo',
       'signedJudgeName',
     ],
   };
@@ -234,7 +234,6 @@ describe('advancedDocumentSearch', () => {
     ];
     expectation[0].has_parent.query.bool.must_not = [
       { term: { 'isSealed.BOOL': true } },
-      { term: { 'hasSealedDocuments.BOOL': true } },
     ];
 
     expect(
@@ -299,7 +298,7 @@ describe('advancedDocumentSearch', () => {
     );
   });
 
-  it('should not include sealed documents in the search results', async () => {
+  it('should only include sealed docket entries in the search results when they are sealed to the public', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
@@ -311,7 +310,6 @@ describe('advancedDocumentSearch', () => {
     ];
     expectation[0].has_parent.query.bool.must = [
       { term: { 'isSealed.BOOL': true } },
-      { term: { 'hasSealedDocuments.BOOL': true } },
     ];
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool.must_not,
@@ -324,6 +322,11 @@ describe('advancedDocumentSearch', () => {
       {
         term: {
           'isSealed.BOOL': true,
+        },
+      },
+      {
+        term: {
+          'sealedTo.S': 'External',
         },
       },
     ]);

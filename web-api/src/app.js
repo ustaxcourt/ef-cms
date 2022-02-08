@@ -96,6 +96,9 @@ const {
   checkEmailAvailabilityLambda,
 } = require('./users/checkEmailAvailabilityLambda');
 const {
+  checkForReadyForTrialCasesLambda,
+} = require('./cases/checkForReadyForTrialCasesLambda');
+const {
   closeTrialSessionLambda,
 } = require('./trialSessions/closeTrialSessionLambda');
 const {
@@ -448,6 +451,7 @@ const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
 const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
+const { sealDocketEntryLambda } = require('./documents/sealDocketEntryLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
 const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
 const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
@@ -644,6 +648,11 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     '/case-documents/:docketNumber/:docketEntryId/strike',
     lambdaWrapper(strikeDocketEntryLambda),
   );
+  app.put(
+    '/case-documents/:docketNumber/:docketEntryId/seal',
+    lambdaWrapper(sealDocketEntryLambda),
+  );
+
   // DELETE
   app.delete(
     '/case-documents/:docketNumber/correspondence/:correspondenceId',
@@ -1122,5 +1131,14 @@ app
   .post(lambdaWrapper(authenticateUserLambda))
   .delete(lambdaWrapper(deleteAuthCookieLambda));
 app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
+
+// This endpoint is used for testing purpose only which exposes the
+// CRON lambda which runs nightly to update cases to be ready for trial.
+if (process.env.IS_LOCAL) {
+  app.get(
+    '/run-check-ready-for-trial',
+    lambdaWrapper(checkForReadyForTrialCasesLambda),
+  );
+}
 
 exports.app = app;
