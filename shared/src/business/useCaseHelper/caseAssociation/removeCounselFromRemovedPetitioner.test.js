@@ -77,7 +77,7 @@ describe('removeCounselFromRemovedPetitioner', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should remove the privatePractitioner from the case privatePractitioner if they are only representing the petitioner being removed', async () => {
+  it('should remove the privatePractitioner from the privatePractitioner array if they are only representing the petitioner being removed (and are not a petitioner themselves)', async () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -119,6 +119,50 @@ describe('removeCounselFromRemovedPetitioner', () => {
     expect(updatedCase.privatePractitioners.length).toEqual(1);
     expect(updatedCase.privatePractitioners[0].representing).toEqual([
       mockContactPrimaryId,
+    ]);
+  });
+
+  it('Bug 9323 - should remove the privatePractitioner from the case but not delete the user from the case (as a petitioner)', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        petitioners: [
+          MOCK_CASE.petitioners[0],
+          {
+            ...MOCK_CASE.petitioners[0],
+            contactId: mockSecondPractitionerUserId,
+            contactType: CONTACT_TYPES.secondary,
+          },
+        ],
+        privatePractitioners: [
+          {
+            ...MOCK_PRACTITIONER,
+            representing: [mockContactPrimaryId],
+            userId: mockSecondPractitionerUserId,
+          },
+          {
+            ...MOCK_PRACTITIONER,
+            representing: [mockContactSecondaryId],
+            userId: mockThirdPractitionerUserId,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    const updatedCase = await removeCounselFromRemovedPetitioner({
+      applicationContext,
+      caseEntity,
+      petitionerContactId: mockContactPrimaryId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().deleteUserFromCase,
+    ).not.toBeCalled();
+    expect(updatedCase.privatePractitioners.length).toEqual(1);
+    expect(updatedCase.privatePractitioners[0].representing).toEqual([
+      mockContactSecondaryId,
     ]);
   });
 });

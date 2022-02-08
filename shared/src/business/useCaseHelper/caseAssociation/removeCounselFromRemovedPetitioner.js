@@ -53,15 +53,3 @@ exports.removeCounselFromRemovedPetitioner = async ({
 
   return caseEntity.validate();
 };
-
-// if (practitioner.representing.length === 1) {
-//   caseEntity.removePrivatePractitioner(practitioner);
-
-//   await applicationContext.getPersistenceGateway().deleteUserFromCase({
-//     applicationContext,
-//     docketNumber: caseEntity.docketNumber,
-//     userId: practitioner.userId,
-//   });
-// } else {
-//   caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
-// }
