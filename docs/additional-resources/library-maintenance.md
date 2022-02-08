@@ -5,7 +5,7 @@
 
 `@babel/register`: I locked it down to 7.16.5 because 7.16.7 was causing failures.
 
-`faker`: The last stable version is actually 5.5.3 which we already have.
+`faker`: The last stable version is actually 5.5.3 which we already have. Locked down in package.json. Do not upgrade to the problematic version 6.6.6.
 
 ## JavaScript Libraries
 
