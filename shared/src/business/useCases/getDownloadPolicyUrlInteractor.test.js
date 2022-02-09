@@ -532,6 +532,25 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
+    it('returns the url if the user role is irsSuperuser and the order is sealed', async () => {
+      mockCase.docketEntries[0] = {
+        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        documentType: 'Order',
+        eventCode: 'O',
+        isFileAttached: true,
+        isSealed: true,
+        sealedTo: 'Public',
+        servedAt: '2019-03-01T21:40:46.415Z',
+      };
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+      });
+
+      expect(url).toEqual('localhost');
+    });
+
     it('throw an error if the user role is irsSuperuser and the petition document on the case is served but the requested document does not have a file attached', async () => {
       mockCase.docketEntries[0] = {
         docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
