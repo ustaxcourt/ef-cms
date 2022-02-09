@@ -59,96 +59,18 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     );
 
   if (!deletedPetitionerIsAlsoPractitionerOnCase) {
-    //no
     await applicationContext.getPersistenceGateway().deleteUserFromCase({
       applicationContext,
       docketNumber,
       userId: petitionerContactId,
     });
-
-    const isPetitionerRepresented = caseEntity.privatePractitioners.some(
-      practitioner => practitioner.representing.includes(petitionerContactId),
-    );
-
-    if (!isPetitionerRepresented) {
-      // do nothing
-    } else {
-      caseEntity = await removeCounselFromRemovedPetitioner({
-        applicationContext,
-        caseEntity,
-        petitionerContactId,
-      });
-
-      // const practitioners =
-      //   caseEntity.getPractitionersRepresenting(petitionerContactId);
-      // console.log('Practitioners ', practitioners);
-
-      // const practitionerModificationPromises = practitioners.map(
-      //   async practitioner => {
-      //     caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
-
-      //     if (practitioner.representing.length === 0) {
-      //       caseEntity.removePrivatePractitioner(practitioner);
-
-      //       if (
-      //         caseEntity.petitioners.some(petitioner => {
-      //           petitioner.contactId !== practitioner.userId;
-      //         })
-      //       ) {
-      //         await applicationContext
-      //           .getPersistenceGateway()
-      //           .deleteUserFromCase({
-      //             applicationContext,
-      //             docketNumber: caseEntity.docketNumber,
-      //             userId: practitioner.userId,
-      //           });
-      //       }
-      //     }
-      //   },
-      // );
-
-      // await Promise.all(practitionerModificationPromises);
-    }
-  } else {
-    //yes
-    // const practitionerInQuestion = caseEntity.privatePractitioners.find(
-    //   privatePractitioner => privatePractitioner.userId === petitionerContactId,
-    // );
-    // const doesPetitionerRepresentThemselves =
-    //   practitionerInQuestion.representing.some(
-    //     petitionerId => petitionerId === petitionerContactId,
-    //   );
-
-    // if (!doesPetitionerRepresentThemselves) {
-    //   //no
-    //   //do nothing actually
-    // } else {
-    //   //yes
-    //   const doesPetitionerRepresentOtherPetitioner =
-    //     practitionerInQuestion.representing.some(
-    //       petitionerId => petitionerId !== petitionerContactId,
-    //     );
-
-    //   if (!doesPetitionerRepresentOtherPetitioner) {
-    //     caseEntity.removePrivatePractitioner(practitionerInQuestion);
-    //     await applicationContext.getPersistenceGateway().deleteUserFromCase({
-    //       applicationContext,
-    //       docketNumber,
-    //       userId: petitionerContactId,
-    //     });
-    //   } else {
-    //     caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
-    //   }
-    // }
-
-    caseEntity = await removeCounselFromRemovedPetitioner({
-      applicationContext,
-      caseEntity,
-      petitionerContactId,
-    });
   }
 
-  //Old stuff below
+  caseEntity = await removeCounselFromRemovedPetitioner({
+    applicationContext,
+    caseEntity,
+    petitionerContactId,
+  });
 
   caseEntity.caseCaption = caseCaption;
 
