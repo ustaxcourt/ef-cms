@@ -1,10 +1,8 @@
 import { admissionsClerkEditsPetitionerEmail } from './journey/admissionsClerkEditsPetitionerEmail';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
   fakeFile,
   loginAs,
-  refreshElasticsearchIndex,
   setupTest,
 } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
@@ -13,8 +11,6 @@ import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNew
 const cerebralTest = setupTest();
 
 describe('admissions clerk adds petitioner with existing cognito account to case', () => {
-  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
-
   const EMAIL_TO_ADD = 'petitioner2@example.com';
 
   beforeAll(() => {

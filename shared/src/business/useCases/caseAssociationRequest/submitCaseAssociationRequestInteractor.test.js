@@ -36,7 +36,6 @@ describe('submitCaseAssociationRequest', () => {
     await expect(
       submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -70,12 +69,11 @@ describe('submitCaseAssociationRequest', () => {
 
     await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      representing: [mockContactId],
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      filers: [mockContactId],
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+      applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toBeCalled();
   });
 
@@ -103,7 +101,6 @@ describe('submitCaseAssociationRequest', () => {
     await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       filers: [mockContactId],
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
@@ -143,7 +140,6 @@ describe('submitCaseAssociationRequest', () => {
 
     await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
