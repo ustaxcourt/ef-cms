@@ -1,10 +1,10 @@
-const faker = require('faker');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
   updateDocketNumberSuffixOnWorkItems,
 } = require('./updateDocketNumberSuffixOnWorkItems');
+const { faker } = require('@faker-js/faker');
 
 describe('updateDocketNumberSuffixOnWorkItems', () => {
   const workItemsResults = [

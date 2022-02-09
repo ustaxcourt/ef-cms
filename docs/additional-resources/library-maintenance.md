@@ -3,9 +3,9 @@
 ## Caveats
 `Cypress`: Do not upgrade past 8.5.0 as anything above that version will cause the "Failed to connect to bus" [error](https://trello.com/c/iuq0gJ6P/1008-ci-error-failed-to-connect-to-the-bus). 
 
-`@babel/register`: I locked it down to 7.16.5 because 7.16.7 was causing failures.
+`@fortawesome/free-solid-svg-icons`: v6.0.0 caused a regression with faThumbtack so it is not importable. [Github issue](https://github.com/FortAwesome/Font-Awesome/pull/18665) Leaving both this package and `fortawesome/free-regular-svg-icons` at v5.15.4 until this is patched.
 
-`faker`: The last stable version is actually 5.5.3 which we already have. Locked down in package.json. Do not upgrade to the problematic version 6.6.6.
+`@fortawesome/fontawesome-svg-core`: upgrading from v1.2.36 to v1.3.0 causes icon sizing issues. Since it was released 2 days ago as of writing this, seems worth waiting for a patch, similar to the other @fortawesome packages.
 
 ## JavaScript Libraries
 
