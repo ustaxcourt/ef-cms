@@ -15,6 +15,7 @@ import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard
 const cerebralTest = setupTest();
 
 describe('Bug 9323', () => {
+  // This suite covers the changes made to address BUG 9323; removing checks around practitioner users becoming petitioners on a case
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -27,7 +28,7 @@ describe('Bug 9323', () => {
   const petitionsClerkEmail = 'petitionsclerk@example.com';
   const docketClerkEmail = 'docketclerk@example.com';
 
-  describe('-1 privatePractitioner files as a petitioner', () => {
+  describe('privatePractitioner files as a petitioner', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile, undefined, true);
 
@@ -40,7 +41,7 @@ describe('Bug 9323', () => {
     petitionsClerkAddsPractitionersToCase(cerebralTest, true);
   });
 
-  describe('0 BUG-9323 privatePractitioner remains on case as petitioner after practitioner removal', () => {
+  describe('BUG-9323 privatePractitioner remains on case as petitioner after practitioner removal', () => {
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerCreatesNewCase(cerebralTest, fakeFile);
 
@@ -57,8 +58,8 @@ describe('Bug 9323', () => {
     practitionerViewsDashboard(cerebralTest);
   });
 
-  describe('1 BUG-9323 privatePractitioner representing both petitioners remains on case as practitioner after petitioner removal', () => {
-    // scenario 1
+  describe('BUG-9323 privatePractitioner representing both petitioners remains on case as practitioner after petitioner removal', () => {
+    // Practitioner represents both petitioners and IS one of those petitioners, doesn't matter which gets deleted: Practitioner stays associated to case, Practitioner remains a privatePractioner on case
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerCreatesNewCase(cerebralTest, fakeFile);
 
@@ -73,12 +74,12 @@ describe('Bug 9323', () => {
 
     loginAs(cerebralTest, privatePractitionerEmail);
 
-    //fails now (because userCase record removed, casePractitioner record remains aka THE BUG) and pass later
+    //would have failed prior to refactor
     practitionerViewsDashboard(cerebralTest);
   });
 
-  describe('2a BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
-    // scenario 2a
+  describe('BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
+    // Practitioner is also a petitioner on case, represents only themselves and not the other petitioner, other petitioner is deleted; Practitioner stays associated to case, Practitioner remains a privatePractitioner on case
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
 
@@ -95,16 +96,14 @@ describe('Bug 9323', () => {
     docketClerkRemovesPetitionerFromCase(cerebralTest, true);
 
     loginAs(cerebralTest, privatePractitionerEmail);
-    //should pass now and pass later
     practitionerViewsDashboard(cerebralTest);
     practitionerViewsCaseDetail(cerebralTest, false);
 
-    //should pass now and pass later
     practitionerVerifiesCasePractitionerAssociation(cerebralTest, true);
   });
 
-  describe('2b BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
-    // scenario 2b
+  describe('BUG-9323 privatePractitioner representing only themselves remains on case as practitioner after second petitioner removal', () => {
+    // Practitioner is also a petitioner on case, represents only themselves and not the other petitioner, Practitioner is deleted as petitioner; Practitioner case association is removed, Practitioner is removed as privatePractitioner on case
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
 
@@ -121,8 +120,6 @@ describe('Bug 9323', () => {
     docketClerkRemovesPetitionerFromCase(cerebralTest, false);
 
     loginAs(cerebralTest, privatePractitionerEmail);
-
-    //pass now and pass later
     it('Verify case no longer appears on dashboard', async () => {
       await refreshElasticsearchIndex();
       await cerebralTest.runSequence('gotoDashboardSequence');
@@ -135,13 +132,11 @@ describe('Bug 9323', () => {
         expect.objectContaining({ docketNumber: cerebralTest.docketNumber }),
       );
     });
-
-    //pass now and pass later
     practitionerVerifiesCasePractitionerAssociation(cerebralTest, false);
   });
 
-  describe('3a BUG-9323 privatePractitioner representing only the other petitioner remains on case only as petitioner', () => {
-    // scenario 3a
+  describe('BUG-9323 privatePractitioner representing only the other petitioner remains on case only as petitioner', () => {
+    // Practitioner is also a petitioner on case, represents only themselves and not the other petitioner, other petitioner is deleted; Practitioner stays associated to case, Practitioner is removed as privatePractitioner on case
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
 
@@ -166,16 +161,13 @@ describe('Bug 9323', () => {
 
     loginAs(cerebralTest, privatePractitionerEmail);
 
-    //fail now and pass later
+    // would have failed prior to refactor
     practitionerViewsDashboard(cerebralTest);
-
-    // pass now and pass later
     practitionerVerifiesCasePractitionerAssociation(cerebralTest, false);
   });
 
-  describe('3b BUG-9323 privatePractitioner representing only the other petitioner remains on case only as practitioner', () => {
-    //they represent only the other petitioner that isn't themself, themself petitioner deleted = stays associated, stays privatepractioner associated
-    // scenario 3b
+  describe('BUG-9323 privatePractitioner representing only the other petitioner remains on case only as practitioner', () => {
+    // Practitioner is also a petitioner on case, represents only themselves and not the other petitioner, Practitioner is deleted as petitioner; Practitioner stays associated to case, Practitioner is removed as privatePractitioner on case
     loginAs(cerebralTest, petitionsClerkEmail);
     petitionsClerkCreatesNewCase(cerebralTest, fakeFile);
 
@@ -198,19 +190,9 @@ describe('Bug 9323', () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkRemovesPetitionerFromCase(cerebralTest, true);
 
-    // should fail now, pass later
+    // would have failed prior to refactor
     loginAs(cerebralTest, privatePractitionerEmail);
     practitionerViewsDashboard(cerebralTest);
-
-    //should pass now, pass later
     practitionerVerifiesCasePractitionerAssociation(cerebralTest, true);
   });
 });
-
-//XXXXX 1. represents both petitioners and they are one of those petitioners, doesn't matter which gets deleted = stays associated, stays privatepractioner associated
-//         - Is the second petitioner also respresented by the practitioner who filed the case
-//XXXXX 2a. represents only themself and not the other petitioner, other petitioner deleted = stays associated, stays privatepractioner associated
-//XXXXX2b. represents only themself and not the other petitioner, themself petitioner deleted = not associated, not privatepractioner associated
-//XXXXX3a. they represent only the other petitioner that isn't themself, other petitioner deleted = stays associated, not privatepractioner associated
-//XXXXX3b. they represent only the other petitioner that isn't themself, themself petitioner deleted = stays associated, stays privatepractioner associated
-// TODO:  Should we reconsider checking to see whether practitioner remains on petitioner array on caseDetail instead of just checking the dashboard

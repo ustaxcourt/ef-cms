@@ -33,8 +33,6 @@ exports.submitPendingCaseAssociationRequestInteractor = async (
     practitioner => practitioner.userId === user.userId,
   );
 
-  console.log('isPrivatePractitionerOnCase*** ', isPrivatePractitionerOnCase);
-
   if (isPrivatePractitionerOnCase) {
     throw new Error(
       `The Private Practitioner is already associated with case ${docketNumber}.`,

@@ -2,7 +2,7 @@ export const practitionerVerifiesCasePractitionerAssociation = (
   cerebralTest,
   casePractitionerAssociationExists = true,
 ) => {
-  return it('Check practitioner can still practice law stuff on this case', () => {
+  return it('Check whether practitioner still appears in privatePractitioner array on case', () => {
     const privatePractitioners = cerebralTest.getState(
       'caseDetail.privatePractitioners',
     );
