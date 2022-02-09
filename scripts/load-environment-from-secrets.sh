@@ -2,12 +2,12 @@
 
 ./check-env-variables.sh \
   "REGION" \
-  "ENVIRONMENT" \
+  "ENV" \
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
 REGION=us-east-1
-content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
+content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "${ENV}_deploy" --query "SecretString" --output text)
 echo $content
 echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
 set -o allexport
