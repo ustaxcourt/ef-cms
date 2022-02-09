@@ -17,8 +17,9 @@ export const setCourtIssuedDocumentInitialDataAction = ({
   props,
   store,
 }) => {
-  const caseDetail = get(state.caseDetail);
-  const docketEntry = (caseDetail.docketEntries || []).find(
+  const { docketEntries } = get(state.caseDetail);
+
+  const docketEntry = docketEntries.find(
     item => item.docketEntryId === props.docketEntryId,
   );
 
