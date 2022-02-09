@@ -25,7 +25,7 @@ export const formattedPendingItems = (get, applicationContext) => {
     formatPendingItem(item, { applicationContext }),
   );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
-  const judges = (get(state.judges) || [])
+  const judges = get(state.judges)
     .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
     .concat(CHIEF_JUDGE)
     .sort();

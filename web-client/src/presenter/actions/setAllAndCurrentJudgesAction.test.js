@@ -9,6 +9,7 @@ describe('setAllAndCurrentJudgesAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
+
   it('populates state.legacyAndCurrentJudges with all users.props whose role is "judge" or "legacyJudge"', async () => {
     const result = await runAction(setAllAndCurrentJudgesAction, {
       modules: { presenter },
