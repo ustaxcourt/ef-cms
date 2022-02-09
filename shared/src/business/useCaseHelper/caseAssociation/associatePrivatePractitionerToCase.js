@@ -42,7 +42,7 @@ exports.associatePrivatePractitionerToCase = async ({
 
   if (isPrivatePractitionerOnCase) {
     throw new Error(
-      'The Private Practitioner is already associated with the case.',
+      `The Private Practitioner is already associated with case ${docketNumber}.`,
     );
   }
 
