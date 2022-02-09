@@ -8,7 +8,7 @@ import {
 import { petitionsClerkServesElectronicCaseToIrs } from '../integration-tests/journey/petitionsClerkServesElectronicCaseToIrs';
 import { setupTest } from './helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';
-import faker from 'faker';
+const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 const testClient = setupTestClient();
