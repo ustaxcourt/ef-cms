@@ -7,7 +7,6 @@ const {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-  ROLES,
   TRANSCRIPT_EVENT_CODE,
   UNIQUE_OTHER_FILER_TYPE,
 } = require('../EntityConstants');
@@ -384,12 +383,6 @@ describe('PublicCase', () => {
     });
 
     it('should show all contact and practitioner information if user has IRS Practitioner role', () => {
-      //TODO: FIX THIS too- this mock is also not doing anything
-
-      // applicationContext.getCurrentUser.mockReturnValueOnce({
-      //   role: ROLES.irsPractitioner,
-      // });
-
       const rawContactPrimary = {
         address1: '907 West Rocky Cowley Parkway',
         address2: '104 West 120th Street',
@@ -498,10 +491,6 @@ describe('PublicCase', () => {
     });
 
     it('should not show practitioner and other filer information if user has IRS Practitioner role and the case is sealed', () => {
-      applicationContext.getCurrentUser.mockReturnValueOnce({
-        role: ROLES.irsPractitioner,
-      });
-
       const rawCase = {
         ...MOCK_CASE,
         irsPractitioners: [

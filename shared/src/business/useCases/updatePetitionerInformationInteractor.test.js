@@ -90,14 +90,12 @@ describe('updatePetitionerInformationInteractor', () => {
   it('should throw an error when the user making the request is a private practitioner not associated with the case', async () => {
     mockUser = { ...mockUser, role: ROLES.privatePractitioner };
 
-    // TODO: FIX THIS (This mock does nothing, why is this test written this way?)
-
-    // applicationContext
-    //   .getPersistenceGateway()
-    //   .getCaseByDocketNumber.mockReturnValueOnce({
-    //     ...mockCase,
-    //     privatePractitioners: [{ representing: [], userId: '7' }],
-    //   });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce({
+        ...mockCase,
+        privatePractitioners: [{ representing: [], userId: '7' }],
+      });
 
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
