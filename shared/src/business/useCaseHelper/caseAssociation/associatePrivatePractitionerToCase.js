@@ -55,6 +55,10 @@ exports.associatePrivatePractitionerToCase = async ({
       userCase: userCaseEntity.validate().toRawObject(),
       userId: user.userId,
     });
+  } else {
+    applicationContext.logger.info(
+      `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
+    );
   }
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });

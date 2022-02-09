@@ -134,7 +134,7 @@ describe('associatePrivatePractitionerToCase', () => {
         user: practitionerUser,
       }),
     ).rejects.toThrow(
-      'The Private Practitioner is already associated with the case.',
+      `The Private Practitioner is already associated with case ${caseRecord.docketNumber}.`,
     );
 
     expect(
@@ -142,7 +142,35 @@ describe('associatePrivatePractitionerToCase', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('BUG 9323: should add case|privatePractitioner record if user is already associated (probably a petitioner) but not a practitioner on case', async () => {
+  it('should add user mapping AND case|privatePractitioner association for a practitioner who is not already associated with the case', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockReturnValue(false);
+
+    await associatePrivatePractitionerToCase({
+      applicationContext,
+      docketNumber: caseRecord.docketNumber,
+      representing: [caseRecord.petitioners[0].contactId],
+      user: practitionerUser,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0].caseToUpdate.privatePractitioners,
+    ).toEqual(
+      expect.arrayContaining([expect.objectContaining(practitionerUser)]),
+    );
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalled();
+  });
+
+  it('BUG 9323: should add case|privatePractitioner record if user is already associated (probably as a petitioner) but not a practitioner on case', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValueOnce({
@@ -162,31 +190,20 @@ describe('associatePrivatePractitionerToCase', () => {
     });
 
     expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).not.toHaveBeenCalled();
+
+    expect(applicationContext.logger.info).toHaveBeenCalled();
+    expect(applicationContext.logger.info.mock.calls[0][0]).toEqual(
+      `BUG 9323: Private Practitioner with userId: ${practitionerUser.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
+    );
+
+    expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0].caseToUpdate.privatePractitioners,
     ).toEqual(
       expect.arrayContaining([expect.objectContaining(practitionerUser)]),
     );
-  });
-
-  it('should add mapping for a practitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .verifyCaseForUser.mockReturnValue(false);
-
-    await associatePrivatePractitionerToCase({
-      applicationContext,
-      docketNumber: caseRecord.docketNumber,
-      representing: [caseRecord.petitioners[0].contactId],
-      user: practitionerUser,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toHaveBeenCalled();
   });
 
   it('should set petitioners to receive no service if the practitioner is representing them', async () => {
