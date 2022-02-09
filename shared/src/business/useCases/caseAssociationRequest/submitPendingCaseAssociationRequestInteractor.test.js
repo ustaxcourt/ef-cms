@@ -34,15 +34,13 @@ describe('submitPendingCaseAssociationRequest', () => {
     await expect(
       submitPendingCaseAssociationRequestInteractor(applicationContext, {
         docketNumber: caseRecord.docketNumber,
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        userId: mockCurrentUser.userId,
       }),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should not add mapping if practitioner is already on case', async () => {
-    caseDetail.privatePractitioners = [
-      { userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb' },
-    ];
+    caseDetail.privatePractitioners = [{ userId: mockCurrentUser.userId }];
 
     const results = submitPendingCaseAssociationRequestInteractor(
       applicationContext,
@@ -68,7 +66,7 @@ describe('submitPendingCaseAssociationRequest', () => {
     await expect(
       submitPendingCaseAssociationRequestInteractor(applicationContext, {
         docketNumber: caseRecord.docketNumber,
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        userId: mockCurrentUser.userId,
       }),
     ).resolves.not.toThrow();
 
@@ -84,7 +82,7 @@ describe('submitPendingCaseAssociationRequest', () => {
 
     await submitPendingCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: mockCurrentUser.userId,
     });
 
     expect(

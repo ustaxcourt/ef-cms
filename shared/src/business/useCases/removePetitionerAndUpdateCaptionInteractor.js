@@ -2,9 +2,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../authorization/authorizationClientService');
-const {
-  removeCounselFromRemovedPetitioner,
-} = require('../useCaseHelper/caseAssociation/removeCounselFromRemovedPetitioner');
 const { Case } = require('../entities/cases/Case');
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UnauthorizedError } = require('../../errors/errors');
@@ -66,11 +63,13 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     });
   }
 
-  caseEntity = await removeCounselFromRemovedPetitioner({
-    applicationContext,
-    caseEntity,
-    petitionerContactId,
-  });
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .removeCounselFromRemovedPetitioner({
+      applicationContext,
+      caseEntity,
+      petitionerContactId,
+    });
 
   caseEntity.caseCaption = caseCaption;
 

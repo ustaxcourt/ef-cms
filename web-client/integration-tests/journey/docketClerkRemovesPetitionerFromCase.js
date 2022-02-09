@@ -7,7 +7,7 @@ import { getPetitionerById } from '../../../shared/src/business/entities/cases/C
 
 export const docketClerkRemovesPetitionerFromCase = (
   cerebralTest,
-  removesSecondaryPetitioner = false,
+  removeSecondaryPetitioner = false,
 ) => {
   return it('docket clerk removes petitioner', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -18,7 +18,7 @@ export const docketClerkRemovesPetitionerFromCase = (
       CASE_STATUS_TYPES.new,
     );
 
-    const contactId = removesSecondaryPetitioner
+    const contactId = removeSecondaryPetitioner
       ? contactSecondaryFromState(cerebralTest).contactId
       : contactPrimaryFromState(cerebralTest).contactId;
 
