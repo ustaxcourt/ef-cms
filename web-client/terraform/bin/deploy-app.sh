@@ -3,12 +3,9 @@
 ENVIRONMENT=$1
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
-REGION=us-east-1
-content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
-echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
-set -o allexport
-source .env
-set +o allexport
+pushd ../../../
+. ./scripts/load-environment-from-secrets.sh
+popd
 
 [ -z "${DYNAMSOFT_PRODUCT_KEYS}" ] && echo "You must have DYNAMSOFT_PRODUCT_KEYS set in your environment" && exit 1
 [ -z "${DYNAMSOFT_S3_ZIP_PATH}" ] && echo "You must have DYNAMSOFT_S3_ZIP_PATH set in your environment" && exit 1

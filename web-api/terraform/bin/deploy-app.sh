@@ -6,12 +6,9 @@ export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENVIRONMENT})
 export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENVIRONMENT})
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
-REGION=us-east-1
-content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "${ENVIRONMENT}_deploy" --query "SecretString" --output text)
-echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
-set -o allexport
-source .env
-set +o allexport
+pushd ../../../
+. ./scripts/load-environment-from-secrets.sh
+popd
 
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
