@@ -16,17 +16,11 @@ exports.submitPendingCaseAssociationRequestInteractor = async (
   applicationContext,
   { docketNumber },
 ) => {
-  const authorizedUser = applicationContext.getCurrentUser();
+  const user = applicationContext.getCurrentUser();
 
-  if (
-    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
-  ) {
+  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)) {
     throw new UnauthorizedError('Unauthorized');
   }
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const caseDetail = await applicationContext
     .getPersistenceGateway()
@@ -38,6 +32,8 @@ exports.submitPendingCaseAssociationRequestInteractor = async (
   const isPrivatePractitionerOnCase = caseDetail.privatePractitioners?.some(
     practitioner => practitioner.userId === user.userId,
   );
+
+  console.log('isPrivatePractitionerOnCase*** ', isPrivatePractitionerOnCase);
 
   if (isPrivatePractitionerOnCase) {
     throw new Error(
