@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import { CASE_STATUS_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
@@ -15,438 +16,54 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderHelperComputed,
-  {
-    ...applicationContext,
-    getCurrentUser: () => {
-      return globalUser;
-    },
-  },
-);
-
-let globalUser;
-
-const getBaseState = user => {
-  globalUser = user;
-  return {
-    permissions: getUserPermissions(user),
-  };
-};
-
 describe('caseDetailHeaderHelper', () => {
-  it('should set showExternalButtons false if user is an internal user', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: { docketEntries: [] },
+  let globalUser;
+
+  const getBaseState = user => {
+    globalUser = user;
+    return {
+      caseDetail: { docketEntries: [], petitioners: [] },
+      permissions: getUserPermissions(user),
+    };
+  };
+
+  const caseDetailHeaderHelper = withAppContextDecorator(
+    caseDetailHeaderHelperComputed,
+    {
+      ...applicationContext,
+      getCurrentUser: () => {
+        return globalUser;
       },
-    });
-    expect(result.showExternalButtons).toEqual(false);
-  });
+    },
+  );
 
-  it('should set showExternalButtons false if user is an external user and service is not allowed for the case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: {
-          docketEntries: [],
-          status: CASE_STATUS_TYPES.new,
-        },
-      },
-    });
-    expect(result.showExternalButtons).toEqual(false);
-  });
-
-  it('should set showExternalButtons true if user is an external user and service is allowed for the case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: {
-          docketEntries: [
-            { documentType: 'Petition', servedAt: '2019-03-01T21:40:46.415Z' },
-          ],
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-      },
-    });
-    expect(result.showExternalButtons).toEqual(true);
-  });
-
-  it('should set showFileFirstDocumentButton and showRequestAccessToCaseButton to false if user role is respondent and the respondent is associated with the case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(irsPractitionerUser),
-        caseDetail: {
-          docketEntries: [],
-          irsPractitioners: [{ userId: '789' }],
-        },
-        screenMetadata: {
-          isAssociated: true,
-        },
-      },
-    });
-    expect(result.showFileFirstDocumentButton).toEqual(false);
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
-  });
-
-  it('should set showFileFirstDocumentButton and showRequestAccessToCaseButton to false if user role is respondent and the respondent is not associated with the case but the case is sealed', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(irsPractitionerUser),
-        caseDetail: {
-          docketEntries: [],
-          hasIrsPractitioner: true,
-          isSealed: true,
-        },
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showFileFirstDocumentButton).toEqual(false);
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
-  });
-
-  it('should set showRequestAccessToCaseButton to true if user role is respondent and the respondent is not associated with the case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(irsPractitionerUser),
-        caseDetail: {
-          docketEntries: [],
-          hasIrsPractitioner: true,
-        },
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showFileFirstDocumentButton).toEqual(false);
-    expect(result.showRequestAccessToCaseButton).toEqual(true);
-  });
-
-  it('should set showFileFirstDocumentButton to true if user role is respondent and there is no respondent associated with the case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(irsPractitionerUser),
-        caseDetail: {
-          docketEntries: [],
-          hasIrsPractitioner: false,
-        },
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showFileFirstDocumentButton).toEqual(true);
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
-  });
-
-  it('should set showPendingAccessToCaseButton to true if user role is practitioner and case is not owned by user but has pending request', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(privatePractitionerUser),
-        caseDetail: { docketEntries: [] },
-        screenMetadata: {
-          isAssociated: false,
-          pendingAssociation: true,
-        },
-      },
-    });
-    expect(result.showPendingAccessToCaseButton).toEqual(true);
-  });
-
-  it('should set showRequestAccessToCaseButton to true if user role is practitioner and case is not owned by user', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(privatePractitionerUser),
-        caseDetail: { docketEntries: [] },
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showRequestAccessToCaseButton).toEqual(true);
-  });
-
-  it('should set showRequestAccessToCaseButton to false when the current page is FilePetitionSuccess', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(privatePractitionerUser),
-        caseDetail: { docketEntries: [] },
-        currentPage: 'FilePetitionSuccess',
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
-  });
-
-  it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is not owned by user and the case is sealed', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(privatePractitionerUser),
-        caseDetail: { docketEntries: [], isSealed: true },
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
-  });
-
-  it('should set showRequestAccessToCaseButton to false if user role is practitioner and case is owned by user', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(privatePractitionerUser),
-        caseDetail: {
-          docketEntries: [],
-          privatePractitioners: [{ userId: '123' }],
-        },
-        screenMetadata: {
-          isAssociated: true,
-        },
-      },
-    });
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
-  });
-
-  it('should set showRequestAccessToCaseButton to false if user role is petitioner and user is not associated with the case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [] },
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
-    expect(result.showRequestAccessToCaseButton).toEqual(false);
-  });
-
-  it('should show the consolidated case icon if the case is associated with a lead case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [],
-          leadDocketNumber: '101-20',
-        },
-      },
-    });
-
-    expect(result.showConsolidatedCaseIcon).toEqual(true);
-  });
-
-  it('should NOT show the consolidated case icon if the case is NOT associated with a lead case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [],
-          leadDocketNumber: '',
-        },
-      },
-    });
-
-    expect(result.showConsolidatedCaseIcon).toEqual(false);
-  });
-
-  it('should show the case detail header menu and add docket entry and create order buttons if current page is CaseDetailInternal and user role is docketclerk', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: { docketEntries: [] },
-        currentPage: 'CaseDetailInternal',
-      },
-    });
-    expect(result.showCaseDetailHeaderMenu).toEqual(true);
-    expect(result.showAddDocketEntryButton).toEqual(true);
-    expect(result.showCreateOrderButton).toEqual(true);
-  });
-
-  it('should show the Sealed Case banner if the case is sealed', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        caseDetail: { docketEntries: [], isSealed: true },
-        permissions: {},
-      },
-    });
-    expect(result.showSealedCaseBanner).toEqual(true);
-  });
-
-  it('should show file document button if user has FILE_EXTERNAL_DOCUMENT permission and the user is associated with the case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [] },
-        screenMetadata: { isAssociated: true },
-      },
-    });
-    expect(result.showFileDocumentButton).toEqual(true);
-  });
-
-  it('should not show file document button if user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: { docketEntries: [] },
-        screenMetadata: { isAssociated: true },
-      },
-    });
-    expect(result.showFileDocumentButton).toEqual(false);
-  });
-
-  it('should not show file document button if user has FILE_EXTERNAL_DOCUMENT permission but the user is not associated with the case', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [] },
-        screenMetadata: { isAssociated: false },
-      },
-    });
-    expect(result.showFileDocumentButton).toEqual(false);
-  });
-
-  it('should show the Upload PDF button in the action menu if the user is a court user', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: { docketEntries: [] },
-        screenMetadata: { isAssociated: false },
-      },
-    });
-
-    expect(result.showUploadCourtIssuedDocumentButton).toEqual(true);
-  });
-
-  it('should NOT show the Upload PDF button in the action menu if the user is not a court user', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [] },
-        screenMetadata: { isAssociated: false },
-      },
-    });
-
-    expect(result.showUploadCourtIssuedDocumentButton).toEqual(false);
-  });
-
-  it('should set showNewTabLink to true if user is an internal user', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: { docketEntries: [] },
-        currentPage: 'CaseDetailInternal',
-      },
-    });
-    expect(result.showNewTabLink).toBe(true);
-  });
-
-  it('should set showNewTabLink to false if user is an external user', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: { docketEntries: [] },
-        currentPage: 'CaseDetailInternal',
-      },
-    });
-    expect(result.showNewTabLink).toBe(false);
-  });
-
-  it('should set showCreateMessageButton to false when the user role is General', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(generalUser),
-        caseDetail: { docketEntries: [] },
-        currentPage: 'CaseDetailInternal',
-      },
-    });
-
-    expect(result.showCreateMessageButton).toBe(false);
-  });
-
-  it('should set showCreateMessageButton to true when the user role is NOT General', () => {
-    const result = runCompute(caseDetailHeaderHelper, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: { docketEntries: [] },
-        currentPage: 'CaseDetailInternal',
-      },
-    });
-
-    expect(result.showCreateMessageButton).toBe(true);
-  });
-
-  describe('showRepresented', () => {
-    it('is true when at least one party on the case is represented and the current user is an internal user', () => {
-      const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
-
+  describe('hidePublicCaseInformation', () => {
+    it('should be true when the user is an internal user', () => {
       const result = runCompute(caseDetailHeaderHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            docketEntries: [],
-            petitioners: [
-              {
-                ...getContactPrimary(MOCK_CASE),
-                contactId: representedUserId,
-              },
-            ],
-            privatePractitioners: [{ representing: [representedUserId] }],
-          },
-          currentPage: 'CaseDetailInternal',
-        },
+        state: getBaseState(docketClerkUser),
       });
 
-      expect(result.showRepresented).toBe(true);
+      expect(result.hidePublicCaseInformation).toEqual(true);
     });
+  });
 
-    it('is false when no petitioner on the case is represented and the current user is an internal user', () => {
+  describe('showAddCorrespondenceButton', () => {
+    it('should be true when the user has permission to create correspondences', () => {
       const result = runCompute(caseDetailHeaderHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            docketEntries: [],
-            petitioners: [
-              {
-                ...getContactPrimary(MOCK_CASE),
-                contactId: '4dcf51d8-c764-470d-a99c-6bf41a9f7b55',
-              },
-            ],
-            privatePractitioners: [
-              { representing: ['b02df1f5-f5ad-4bf2-9be1-105f818a2529'] },
-            ],
-          },
-          currentPage: 'CaseDetailInternal',
-        },
+        state: getBaseState(docketClerkUser),
       });
 
-      expect(result.showRepresented).toBe(false);
+      expect(result.showAddCorrespondenceButton).toEqual(true);
     });
+  });
 
-    it('is false when the logged in user is an external user', () => {
-      const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
-
+  describe('showAddDocketEntryButton', () => {
+    it('should be true when the user has permission to add docket entries', () => {
       const result = runCompute(caseDetailHeaderHelper, {
-        state: {
-          ...getBaseState(petitionerUser),
-          caseDetail: {
-            docketEntries: [],
-            petitioners: [
-              {
-                ...getContactPrimary(MOCK_CASE),
-                contactId: representedUserId,
-              },
-            ],
-            privatePractitioners: [{ representing: [representedUserId] }],
-          },
-          currentPage: 'CaseDetailInternal',
-        },
+        state: getBaseState(docketClerkUser),
       });
 
-      expect(result.showRepresented).toBe(false);
+      expect(result.showAddDocketEntryButton).toEqual(true);
     });
   });
 
@@ -456,10 +73,8 @@ describe('caseDetailHeaderHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...MOCK_CASE,
+            ...getBaseState(docketClerkUser).caseDetail,
             blocked: true,
-            blockedDate: '2019-04-19T17:29:13.120Z',
-            blockedReason: 'because',
           },
         },
       });
@@ -472,10 +87,9 @@ describe('caseDetailHeaderHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...MOCK_CASE,
+            ...getBaseState(docketClerkUser).caseDetail,
             automaticBlocked: true,
-            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
-            automaticBlockedReason: 'Pending Item',
+            blocked: false,
             status: CASE_STATUS_TYPES.new,
           },
         },
@@ -489,10 +103,9 @@ describe('caseDetailHeaderHelper', () => {
         state: {
           ...getBaseState(docketClerkUser),
           caseDetail: {
-            ...MOCK_CASE,
+            ...getBaseState(docketClerkUser).caseDetail,
             automaticBlocked: true,
-            automaticBlockedDate: '2019-04-19T17:29:13.120Z',
-            automaticBlockedReason: 'Pending Item',
+            blocked: false,
             status: CASE_STATUS_TYPES.calendared,
           },
         },
@@ -500,19 +113,506 @@ describe('caseDetailHeaderHelper', () => {
 
       expect(result.showBlockedTag).toBeFalsy();
     });
+  });
 
-    it('should not throw an exception when petitioners array is undefined', () => {
-      expect(() =>
-        runCompute(caseDetailHeaderHelper, {
+  describe('showCaseDetailHeaderMenu', () => {
+    it('be true when the user is an internal user', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(docketClerkUser),
+      });
+
+      expect(result.showCaseDetailHeaderMenu).toEqual(true);
+    });
+  });
+
+  describe('showConsolidatedCaseIcon', () => {
+    it('should show the consolidated case icon when the case is associated with a lead case', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...getBaseState(docketClerkUser).caseDetail,
+            leadDocketNumber: '101-20',
+          },
+        },
+      });
+
+      expect(result.showConsolidatedCaseIcon).toEqual(true);
+    });
+
+    it('should NOT show the consolidated case icon when the case is NOT associated with a lead case', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...getBaseState(docketClerkUser).caseDetail,
+            leadDocketNumber: '',
+          },
+        },
+      });
+
+      expect(result.showConsolidatedCaseIcon).toEqual(false);
+    });
+  });
+
+  describe('showCreateMessageButton', () => {
+    it('should be false when the user role is General', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(generalUser),
+      });
+
+      expect(result.showCreateMessageButton).toBe(false);
+    });
+
+    it('should be true when the user role is NOT General', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(petitionsClerkUser),
+      });
+
+      expect(result.showCreateMessageButton).toBe(true);
+    });
+  });
+
+  describe('showCreateOrderButton', () => {
+    it('should be true when the user has permission to create court issued documents', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(docketClerkUser),
+      });
+
+      expect(result.showCreateOrderButton).toEqual(true);
+    });
+  });
+
+  describe('showExternalButtons', () => {
+    it('should be false when the user is an internal user', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(petitionsClerkUser),
+      });
+
+      expect(result.showExternalButtons).toEqual(false);
+    });
+
+    it('should be false when the user is an external user and service is not allowed for the case', () => {
+      applicationContext
+        .getUtilities()
+        .canAllowDocumentServiceForCase.mockReturnValue(false);
+
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(petitionerUser),
+      });
+
+      expect(result.showExternalButtons).toEqual(false);
+    });
+
+    it('should be true when the user is an external user and service is allowed for the case', () => {
+      applicationContext
+        .getUtilities()
+        .canAllowDocumentServiceForCase.mockReturnValue(true);
+
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(petitionerUser),
+      });
+
+      expect(result.showExternalButtons).toEqual(true);
+    });
+  });
+
+  describe('showFileDocumentButton', () => {
+    it('should be true when the user has FILE_EXTERNAL_DOCUMENT permission and they are associated with the case', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(petitionerUser),
+          screenMetadata: { isAssociated: true },
+        },
+      });
+
+      expect(result.showFileDocumentButton).toEqual(true);
+    });
+
+    it('should be false when the user does not have FILE_EXTERNAL_DOCUMENT permission', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(docketClerkUser),
+      });
+
+      expect(result.showFileDocumentButton).toEqual(false);
+    });
+
+    it('should be false when the user has FILE_EXTERNAL_DOCUMENT permission but they are not associated with the case', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(petitionerUser),
+          screenMetadata: { isAssociated: false },
+        },
+      });
+
+      expect(result.showFileDocumentButton).toEqual(false);
+    });
+  });
+
+  describe('showFileFirstDocumentButton', () => {
+    it("should be false when the user's role is respondent and they are associated with the case", () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(irsPractitionerUser),
+          caseDetail: {
+            ...getBaseState(irsPractitionerUser).caseDetail,
+            irsPractitioners: [{ userId: '789' }],
+          },
+          screenMetadata: {
+            isAssociated: true,
+          },
+        },
+      });
+
+      expect(result.showFileFirstDocumentButton).toEqual(false);
+    });
+
+    it("should be false when the user's role is respondent, they are not associated with the case and the case is sealed", () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(irsPractitionerUser),
+          caseDetail: {
+            ...getBaseState(irsPractitionerUser).caseDetail,
+            hasIrsPractitioner: true,
+            isSealed: true,
+          },
+          screenMetadata: {
+            isAssociated: false,
+          },
+        },
+      });
+
+      expect(result.showFileFirstDocumentButton).toEqual(false);
+    });
+
+    it("should be false when the user's role is respondent, they are not associated with the case and the case is sealed", () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(irsPractitionerUser),
+          caseDetail: {
+            ...getBaseState(irsPractitionerUser).caseDetail,
+            hasIrsPractitioner: true,
+            isSealed: true,
+          },
+          screenMetadata: {
+            isAssociated: false,
+          },
+        },
+      });
+
+      expect(result.showFileFirstDocumentButton).toEqual(false);
+    });
+
+    it("should be false when the user's role is respondent and they are not associated with the case", () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(irsPractitionerUser),
+          caseDetail: {
+            ...getBaseState(irsPractitionerUser).caseDetail,
+            hasIrsPractitioner: true,
+          },
+          screenMetadata: {
+            isAssociated: false,
+          },
+        },
+      });
+
+      expect(result.showFileFirstDocumentButton).toEqual(false);
+    });
+
+    it("should be true when the user's role is respondent and there they are not associated with the case", () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(irsPractitionerUser),
+          caseDetail: {
+            ...getBaseState(irsPractitionerUser).caseDetail,
+            hasIrsPractitioner: false,
+          },
+          screenMetadata: {
+            isAssociated: false,
+          },
+        },
+      });
+
+      expect(result.showFileFirstDocumentButton).toEqual(true);
+    });
+  });
+
+  describe('showNewTabLink', () => {
+    it('should be true when the user is an internal user', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(docketClerkUser),
+      });
+
+      expect(result.showNewTabLink).toBe(true);
+    });
+
+    it('should be false when the user is an external user', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(petitionerUser),
+      });
+
+      expect(result.showNewTabLink).toBe(false);
+    });
+  });
+
+  describe('showPendingAccessToCaseButton', () => {
+    it('should be true when the user is a practitioner and the user is not yet associated with the case but has pending request', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(privatePractitionerUser),
+          screenMetadata: {
+            isAssociated: false,
+            pendingAssociation: true,
+          },
+        },
+      });
+
+      expect(result.showPendingAccessToCaseButton).toEqual(true);
+    });
+  });
+
+  describe('showRepresented', () => {
+    it('should be true when at least one party on the case is represented and the current user is an internal user', () => {
+      const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
+
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...getBaseState(petitionsClerkUser).caseDetail,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: representedUserId,
+              },
+            ],
+            privatePractitioners: [{ representing: [representedUserId] }],
+          },
+        },
+      });
+
+      expect(result.showRepresented).toBe(true);
+    });
+
+    it('should be false when no petitioner on the case is represented and the current user is an internal user', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            ...getBaseState(petitionsClerkUser).caseDetail,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: '4dcf51d8-c764-470d-a99c-6bf41a9f7b55',
+              },
+            ],
+            privatePractitioners: [
+              { representing: ['b02df1f5-f5ad-4bf2-9be1-105f818a2529'] },
+            ],
+          },
+        },
+      });
+
+      expect(result.showRepresented).toBe(false);
+    });
+
+    it('should be false when the logged in user is an external user', () => {
+      const representedUserId = '79c404b8-7ddc-4c48-974c-40b153c25f9e';
+
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            ...getBaseState(petitionerUser).caseDetail,
+            petitioners: [
+              {
+                ...getContactPrimary(MOCK_CASE),
+                contactId: representedUserId,
+              },
+            ],
+            privatePractitioners: [{ representing: [representedUserId] }],
+          },
+        },
+      });
+
+      expect(result.showRepresented).toBe(false);
+    });
+  });
+
+  describe('showRequestAccessToCaseButton', () => {
+    describe('when the user is an irs practitioner', () => {
+      it('should be false when they are associated with the case', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
           state: {
-            ...getBaseState(docketClerkUser),
+            ...getBaseState(irsPractitionerUser),
             caseDetail: {
-              ...MOCK_CASE,
-              petitioners: undefined,
+              ...getBaseState(irsPractitionerUser).caseDetail,
+              irsPractitioners: [{ userId: '789' }],
+            },
+            screenMetadata: {
+              isAssociated: true,
             },
           },
-        }),
-      ).not.toThrow();
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(false);
+      });
+
+      it('should be true when they are not associated with the case', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(irsPractitionerUser),
+            caseDetail: {
+              ...getBaseState(irsPractitionerUser).caseDetail,
+              hasIrsPractitioner: true,
+            },
+            screenMetadata: {
+              isAssociated: false,
+            },
+          },
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(true);
+      });
+
+      it('should be false when they are not associated with the case and the case is sealed', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(irsPractitionerUser),
+            caseDetail: {
+              ...getBaseState(irsPractitionerUser).caseDetail,
+              hasIrsPractitioner: true,
+              isSealed: true,
+            },
+            screenMetadata: {
+              isAssociated: false,
+            },
+          },
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(false);
+      });
+    });
+
+    describe('when the user is a private practitioner', () => {
+      it('should be true when they are not associated with the case', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(privatePractitionerUser),
+            screenMetadata: {
+              isAssociated: false,
+            },
+          },
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(true);
+      });
+
+      it('should be false they are associated with the case', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(privatePractitionerUser),
+            caseDetail: {
+              ...getBaseState(privatePractitionerUser).caseDetail,
+              privatePractitioners: [{ userId: '123' }],
+            },
+            screenMetadata: {
+              isAssociated: true,
+            },
+          },
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(false);
+      });
+
+      it('should be false when they are not associated with the case and the case is sealed', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(privatePractitionerUser),
+            caseDetail: {
+              ...getBaseState(privatePractitionerUser).caseDetail,
+              isSealed: true,
+            },
+            screenMetadata: {
+              isAssociated: false,
+            },
+          },
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(false);
+      });
+
+      it('should be false when they are on the Request Access Form page', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(privatePractitionerUser),
+            currentPage: 'RequestAccessWizard',
+          },
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(false);
+      });
+
+      it('should be false when the current page is FilePetitionSuccess', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(privatePractitionerUser),
+            currentPage: 'FilePetitionSuccess',
+          },
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(false);
+      });
+    });
+
+    describe('when the user is a petitioner', () => {
+      it('should be false when the user is a petitioner and they are not associated with the case', () => {
+        const result = runCompute(caseDetailHeaderHelper, {
+          state: {
+            ...getBaseState(petitionerUser),
+            screenMetadata: {
+              isAssociated: false,
+            },
+          },
+        });
+
+        expect(result.showRequestAccessToCaseButton).toEqual(false);
+      });
+    });
+  });
+
+  describe('showSealedCaseBanner', () => {
+    it('should be true when the case is sealed', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: {
+          caseDetail: {
+            ...getBaseState(privatePractitionerUser).caseDetail,
+            isSealed: true,
+          },
+          permissions: {},
+        },
+      });
+
+      expect(result.showSealedCaseBanner).toEqual(true);
+    });
+  });
+
+  describe('showUploadCourtIssuedDocumentButton', () => {
+    it('should be true when the user is a court user', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(docketClerkUser),
+      });
+
+      expect(result.showUploadCourtIssuedDocumentButton).toEqual(true);
+    });
+
+    it('should be false when the user is not a court user', () => {
+      const result = runCompute(caseDetailHeaderHelper, {
+        state: getBaseState(petitionerUser),
+      });
+
+      expect(result.showUploadCourtIssuedDocumentButton).toEqual(false);
     });
   });
 });
