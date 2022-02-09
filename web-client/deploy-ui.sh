@@ -1,4 +1,6 @@
-#!/bin/bash
+#!/bin/bash -e
+
+. ./scripts/load-environment-from-secrets.sh
 
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
