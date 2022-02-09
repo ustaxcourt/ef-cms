@@ -27,4 +27,6 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 ## Validating Updates
  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
+  * Perform a forced migration if a migration is not already required, in order to test that the upgrades dont break anything in the migration flow.
   * If terraform needs to be updated, deploy from your machine to an experimental environment first.
+
