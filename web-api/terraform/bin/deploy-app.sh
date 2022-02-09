@@ -1,9 +1,9 @@
 #!/bin/bash -e
 
-ENVIRONMENT=$1
+ENV=$1
 
-export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENVIRONMENT})
-export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENVIRONMENT})
+export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENV})
+export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENV})
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 pushd ../../../
@@ -15,7 +15,7 @@ popd
 [ -z "${DISABLE_EMAILS}" ] && echo "You must have DISABLE_EMAILS set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${EMAIL_DMARC_POLICY}" ] && echo "You must have EMAIL_DMARC_POLICY set in your environment" && exit 1
-[ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
+[ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
 [ -z "${ES_INSTANCE_TYPE}" ] && echo "You must have ES_INSTANCE_TYPE set in your environment" && exit 1
 [ -z "${ES_VOLUME_SIZE}" ] && echo "You must have ES_VOLUME_SIZE set in your environment" && exit 1
 [ -z "${IRS_SUPERUSER_EMAIL}" ] && echo "You must have IRS_SUPERUSER_EMAIL set in your environment" && exit 1
@@ -30,7 +30,7 @@ echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
 echo "  - DISABLE_EMAILS=${DISABLE_EMAILS}"
 echo "  - EFCMS_DOMAIN=${EFCMS_DOMAIN}"
 echo "  - EMAIL_DMARC_POLICY=${EMAIL_DMARC_POLICY}"
-echo "  - ENVIRONMENT=${ENVIRONMENT}"
+echo "  - ENV=${ENV}"
 echo "  - ES_INSTANCE_TYPE=${ES_INSTANCE_TYPE}"
 echo "  - ES_VOLUME_SIZE=${ES_VOLUME_SIZE}"
 echo "  - IRS_SUPERUSER_EMAIL=${IRS_SUPERUSER_EMAIL}"
@@ -42,12 +42,12 @@ echo "  - ZONE_NAME=${ZONE_NAME}"
 ../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
-KEY="documents-${ENVIRONMENT}.tfstate"
+KEY="documents-${ENV}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 
 rm -rf .terraform
 
-echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
+echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
 echo "checking for the dynamodb lock table..."
@@ -74,24 +74,24 @@ if [ -z "${CIRCLE_BRANCH}" ]; then
 fi
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
-  GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
-  BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
-  GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
-  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
+  BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
+  GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
+  BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENV)
+  GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENV)
+  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
-    GREEN_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENVIRONMENT)
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
+    BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
+    GREEN_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENV)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENV)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENV)
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENV)
   else
-    GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
-    BLUE_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENVIRONMENT)
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
+    GREEN_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENV)
+    BLUE_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENV)
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENV)
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENV)
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENV)
   fi
 fi
 
@@ -111,7 +111,7 @@ export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_disable_emails=$DISABLE_EMAILS
 export TF_VAR_dns_domain=$EFCMS_DOMAIN
 export TF_VAR_email_dmarc_policy=$EMAIL_DMARC_POLICY
-export TF_VAR_environment=$ENVIRONMENT
+export TF_VAR_environment=$ENV
 export TF_VAR_es_instance_count=$ES_INSTANCE_COUNT
 export TF_VAR_es_instance_type=$ES_INSTANCE_TYPE
 export TF_VAR_es_volume_size=$ES_VOLUME_SIZE
