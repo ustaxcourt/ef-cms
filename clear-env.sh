@@ -49,6 +49,6 @@ echo "setting up elasticsearch"
 echo "clearing dynamo"
 node ./web-api/clear-dynamodb-table.js "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
 echo "setting up test users"
-node shared/admin-tools/user/setup-test-users.js
+. ./shared/admin-tools/user/setup-test-users.sh ${ENV}
 echo "importing judge users"
 ./scripts/data-import/judge/bulk-import-judge-users.sh
