@@ -59,7 +59,7 @@ describe('formattedPendingItems', () => {
     expect(result.judges).toEqual(['A', 'B', CHIEF_JUDGE]);
   });
 
-  it('should returns a list of formatted pending items', () => {
+  it('should return a list of formatted pending items', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [],
