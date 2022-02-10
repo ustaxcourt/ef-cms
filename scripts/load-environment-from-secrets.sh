@@ -1,7 +1,6 @@
 #!/bin/bash -e
 
 ./check-env-variables.sh \
-  "REGION" \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
