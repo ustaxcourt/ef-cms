@@ -1,12 +1,12 @@
 #!/bin/bash -e
 
 # Getting the account-wide deployment settings and injecting them into the shell environment
-REGION=us-east-1
-content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "account_deploy" --query "SecretString" --output text)
-echo ${content} | jq -r 'to_entries|map("\(.key)=\"\(.value)\"")|.[]' > .env
-set -o allexport
-source .env
-set +o allexport
+TEMP_ENV=${ENV}
+export ENV=account
+pushd ../../../../
+. ./scripts/load-environment-from-secrets.sh
+popd
+export ENV=${TEMP_ENV}
 
 if [ -z "$ZONE_NAME" ]; then
   echo "Please export the ZONE_NAME variable in your shell"
