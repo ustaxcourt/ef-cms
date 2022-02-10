@@ -49,7 +49,7 @@ describe('formattedPendingItems', () => {
     },
   ];
 
-  it('returns formatted and sorted judges', () => {
+  it('should return formatted and sorted list of judges', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
@@ -59,9 +59,10 @@ describe('formattedPendingItems', () => {
     expect(result.judges).toEqual(['A', 'B', CHIEF_JUDGE]);
   });
 
-  it('returns the cases', () => {
+  it('should returns a list of formatted pending items', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
+        judges: [],
         pendingReports: {
           pendingItems: mockPendingItems,
         },
@@ -107,6 +108,7 @@ describe('formattedPendingItems', () => {
   it('appends screenMetadata.pendingItemsFilters.judge on the printUrl if one is present', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
+        judges: [],
         screenMetadata: { pendingItemsFilters: { judge: 'Judge Somebody' } },
       },
     });
@@ -117,6 +119,7 @@ describe('formattedPendingItems', () => {
   it('returns default printUrl if screenMetadata.pendingItemsFilters.judge is not set', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
+        judges: [],
         screenMetadata: { pendingItemsFilters: {} },
       },
     });
