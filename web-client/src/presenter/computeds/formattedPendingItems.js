@@ -4,9 +4,11 @@ import qs from 'qs';
 
 export const formatPendingItem = (item, { applicationContext }) => {
   const result = formatSearchResultRecord(item, { applicationContext });
+
   result.formattedFiledDate = applicationContext
     .getUtilities()
     .formatDateString(result.receivedAt, 'MMDDYY');
+
   result.associatedJudgeFormatted = applicationContext
     .getUtilities()
     .formatJudgeName(result.associatedJudge);
@@ -21,15 +23,15 @@ export const formatPendingItem = (item, { applicationContext }) => {
 export const formattedPendingItems = (get, applicationContext) => {
   const { CHIEF_JUDGE } = applicationContext.getConstants();
 
-  let items = (get(state.pendingReports.pendingItems) || []).map(item =>
-    formatPendingItem(item, { applicationContext }),
-  );
   const judgeFilter = get(state.screenMetadata.pendingItemsFilters.judge);
-  const judges = (get(state.judges) || [])
+  const judges = get(state.judges)
     .map(i => applicationContext.getUtilities().formatJudgeName(i.name))
     .concat(CHIEF_JUDGE)
     .sort();
 
+  let items = (get(state.pendingReports.pendingItems) || []).map(item =>
+    formatPendingItem(item, { applicationContext }),
+  );
   items = items.sort((a, b) =>
     applicationContext
       .getUtilities()
@@ -38,11 +40,9 @@ export const formattedPendingItems = (get, applicationContext) => {
 
   const queryString = qs.stringify({ judgeFilter });
 
-  const result = {
+  return {
     items,
     judges,
     printUrl: `/reports/pending-report/printable?${queryString}`,
   };
-
-  return result;
 };
