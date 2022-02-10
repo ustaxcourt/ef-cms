@@ -1,54 +1,67 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+  PARTY_TYPES,
+} = require('../../entities/EntityConstants');
 const { cloneDeep } = require('lodash');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { getPublicCaseInteractor } = require('./getPublicCaseInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { PARTY_TYPES } = require('../../entities/EntityConstants');
 
-const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
+describe('getPublicCaseInteractor', () => {
+  const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);
 
-const mockCase = {
-  docketNumber: '123-45',
-  hasSealedDocuments: false,
-  irsPractitioners: [],
-  partyType: PARTY_TYPES.petitioner,
-  petitioners: [mockCaseContactPrimary],
-};
-
-const sealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
-sealedDocketEntries[0].isLegacySealed = true;
-
-const sealedContactPrimary = cloneDeep({
-  ...mockCaseContactPrimary,
-  isSealed: true,
-});
-
-const mockCases = {
-  '102-20': {
-    docketNumber: '102-20',
+  const mockCase = {
+    docketNumber: '123-45',
     irsPractitioners: [],
     partyType: PARTY_TYPES.petitioner,
     petitioners: [mockCaseContactPrimary],
-    sealedDate: '2020-01-02T03:04:05.007Z',
-  },
-  '120-20': {
-    ...cloneDeep(mockCase),
-    docketEntries: sealedDocketEntries,
-    docketNumber: '120-20',
-    hasSealedDocuments: true,
-  },
-  '123-45': cloneDeep(mockCase),
-  '188-88': {
-    docketNumber: '188-88',
-    irsPractitioners: [],
-    partyType: PARTY_TYPES.petitioner,
-    petitioners: [sealedContactPrimary],
-  },
-};
+  };
 
-describe('getPublicCaseInteractor', () => {
+  const legacySealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
+  legacySealedDocketEntries[0].isLegacySealed = true;
+  legacySealedDocketEntries[0].isSealed = true;
+  legacySealedDocketEntries[0].sealedTo = DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC;
+
+  const nonLegacySealedDocketEntries = cloneDeep(MOCK_CASE.docketEntries);
+  nonLegacySealedDocketEntries[0].isSealed = true;
+  nonLegacySealedDocketEntries[0].sealedTo =
+    DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC;
+
+  const sealedContactPrimary = cloneDeep({
+    ...mockCaseContactPrimary,
+    isSealed: true,
+  });
+
+  const mockCases = {
+    '102-20': {
+      docketNumber: '102-20',
+      irsPractitioners: [],
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [mockCaseContactPrimary],
+      sealedDate: '2020-01-02T03:04:05.007Z',
+    },
+    '120-20': {
+      ...cloneDeep(mockCase),
+      docketEntries: legacySealedDocketEntries,
+      docketNumber: '120-20',
+    },
+    '123-45': cloneDeep(mockCase),
+    '188-88': {
+      docketNumber: '188-88',
+      irsPractitioners: [],
+      partyType: PARTY_TYPES.petitioner,
+      petitioners: [sealedContactPrimary],
+    },
+    '190-92': {
+      ...cloneDeep(mockCase),
+      docketEntries: nonLegacySealedDocketEntries,
+      docketNumber: '190-92',
+    },
+  };
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -130,7 +143,7 @@ describe('getPublicCaseInteractor', () => {
 
     expect(result).toMatchObject({
       docketNumber,
-      isSealed: true,
+      isSealed: false,
     });
   });
 
@@ -145,5 +158,17 @@ describe('getPublicCaseInteractor', () => {
       docketNumber,
     });
     expect(getContactPrimary(result).address1).toBeUndefined();
+  });
+
+  it('should return the case to the public user if the case is unsealed but has a sealed document', async () => {
+    const docketNumber = '190-92';
+
+    await expect(
+      getPublicCaseInteractor(applicationContext, {
+        docketNumber,
+      }),
+    ).resolves.toMatchObject({
+      docketNumber,
+    });
   });
 });
