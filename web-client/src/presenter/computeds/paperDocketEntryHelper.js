@@ -25,8 +25,7 @@ export const paperDocketEntryHelper = (get, applicationContext) => {
     documentUploadMode === 'preview';
 
   return {
+    canAllowDocumentServiceForCase,
     showAddDocumentWarning,
-    showSaveAndServeButton: canAllowDocumentServiceForCase,
-    showServiceWarning: !canAllowDocumentServiceForCase,
   };
 };

@@ -99,75 +99,24 @@ describe('paperDocketEntryHelper', () => {
     });
   });
 
-  describe('showSaveAndServeButton', () => {
-    it('should be true when the case can allow service', () => {
-      applicationContext
-        .getUtilities()
-        .canAllowDocumentServiceForCase.mockReturnValue(true);
-
-      const result = runCompute(paperDocketEntryHelper, {
-        state: {
-          caseDetail: {
-            correspondence: [],
-            docketEntries: [],
+  describe('canAllowDocumentServiceForCase', () => {
+    it('should make a call to a utility function to determine if documents can be served on the case', () => {
+      const { canAllowDocumentServiceForCase } = runCompute(
+        paperDocketEntryHelper,
+        {
+          state: {
+            caseDetail: {
+              correspondence: [],
+              docketEntries: [],
+            },
           },
         },
-      });
+      );
 
-      expect(result.showSaveAndServeButton).toBeTruthy();
-    });
-
-    it('should be false when the case can NOT allow service', () => {
-      applicationContext
-        .getUtilities()
-        .canAllowDocumentServiceForCase.mockReturnValue(false);
-
-      const result = runCompute(paperDocketEntryHelper, {
-        state: {
-          caseDetail: {
-            correspondence: [],
-            docketEntries: [],
-          },
-        },
-      });
-
-      expect(result.showSaveAndServeButton).toBeFalsy();
-    });
-  });
-
-  describe('showServiceWarning', () => {
-    it('should be false when the case can allow service', () => {
-      applicationContext
-        .getUtilities()
-        .canAllowDocumentServiceForCase.mockReturnValue(true);
-
-      const result = runCompute(paperDocketEntryHelper, {
-        state: {
-          caseDetail: {
-            correspondence: [],
-            docketEntries: [],
-          },
-        },
-      });
-
-      expect(result.showServiceWarning).toBeFalsy();
-    });
-
-    it('should be true when the case can NOT allow service', () => {
-      applicationContext
-        .getUtilities()
-        .canAllowDocumentServiceForCase.mockReturnValue(false);
-
-      const result = runCompute(paperDocketEntryHelper, {
-        state: {
-          caseDetail: {
-            correspondence: [],
-            docketEntries: [],
-          },
-        },
-      });
-
-      expect(result.showServiceWarning).toBeTruthy();
+      expect(canAllowDocumentServiceForCase).toBeDefined();
+      expect(
+        applicationContext.getUtilities().canAllowDocumentServiceForCase,
+      ).toHaveBeenCalled();
     });
   });
 });
