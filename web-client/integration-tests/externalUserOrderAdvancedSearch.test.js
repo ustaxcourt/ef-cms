@@ -266,17 +266,15 @@ describe('external users perform an advanced search for orders', () => {
       state: cerebralTest.getState(),
     });
 
-    expect(searchHelper.searchResults).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
-          docketNumber: cerebralTest.docketNumber,
-          showSealedIcon: true,
-        }),
-        expect.objectContaining({
-          docketNumber: cerebralTest.docketNumber,
-          showSealedIcon: true,
-        }),
-      ]),
+    //expect we don't find the sealed to external docket entry
+    const sealedToExternalDocketEntryId =
+      'ffb6c3d7-bfd5-4a19-8d23-6fd75a1e362c';
+
+    const foundDocketEntryId = searchHelper.searchResults.find(
+      docketEntry =>
+        docketEntry.docketEntryId === sealedToExternalDocketEntryId,
     );
+
+    expect(foundDocketEntryId).toBeUndefined();
   });
 });
