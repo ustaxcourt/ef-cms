@@ -259,18 +259,15 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
-    const advancedDocumentSearchHelper = withAppContextDecorator(
-      advancedDocumentSearchHelperComputed,
+    const orderSearchResultsFromState = cerebralTest.getState(
+      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
     );
-    const searchHelper = runCompute(advancedDocumentSearchHelper, {
-      state: cerebralTest.getState(),
-    });
 
     //expect we don't find the sealed to external docket entry
     const sealedToExternalDocketEntryId =
       'ffb6c3d7-bfd5-4a19-8d23-6fd75a1e362c';
 
-    const foundDocketEntryId = searchHelper.searchResults.find(
+    const foundDocketEntryId = orderSearchResultsFromState.find(
       docketEntry =>
         docketEntry.docketEntryId === sealedToExternalDocketEntryId,
     );
