@@ -1,4 +1,3 @@
-const faker = require('faker');
 const {
   blockCaseFromTrial,
   goToCaseOverview,
@@ -39,6 +38,7 @@ const {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } = require('../support/pages/reports');
+const { faker } = require('@faker-js/faker');
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 

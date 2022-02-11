@@ -3,7 +3,7 @@ import { practitionerDetailHelper } from '../../src/presenter/computeds/practiti
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
-import faker from 'faker';
+const { faker } = require('@faker-js/faker');
 
 export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
