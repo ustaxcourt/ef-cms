@@ -7,10 +7,11 @@ export const practitionerViewsDashboard = cerebralTest => {
     expect(cerebralTest.getState('currentPage')).toEqual(
       'DashboardPractitioner',
     );
+
     expect(cerebralTest.getState('openCases').length).toBeGreaterThan(0);
-    const latestDocketNumber = cerebralTest.getState(
-      'openCases.0.docketNumber',
+    const allOpenCases = cerebralTest.getState('openCases');
+    expect(allOpenCases).toContainEqual(
+      expect.objectContaining({ docketNumber: cerebralTest.docketNumber }),
     );
-    expect(cerebralTest.docketNumber).toEqual(latestDocketNumber);
   });
 };

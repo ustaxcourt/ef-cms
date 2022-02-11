@@ -2,10 +2,13 @@ import {
   CASE_STATUS_TYPES,
   PARTY_VIEW_TABS,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { contactPrimaryFromState } from '../helpers';
+import { contactPrimaryFromState, contactSecondaryFromState } from '../helpers';
 import { getPetitionerById } from '../../../shared/src/business/entities/cases/Case';
 
-export const docketClerkRemovesPetitionerFromCase = cerebralTest => {
+export const docketClerkRemovesPetitionerFromCase = (
+  cerebralTest,
+  removeSecondaryPetitioner = false,
+) => {
   return it('docket clerk removes petitioner', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -15,13 +18,14 @@ export const docketClerkRemovesPetitionerFromCase = cerebralTest => {
       CASE_STATUS_TYPES.new,
     );
 
-    const contactPrimaryContactId =
-      contactPrimaryFromState(cerebralTest).contactId;
+    const contactId = removeSecondaryPetitioner
+      ? contactSecondaryFromState(cerebralTest).contactId
+      : contactPrimaryFromState(cerebralTest).contactId;
 
     await cerebralTest.runSequence(
       'gotoEditPetitionerInformationInternalSequence',
       {
-        contactId: contactPrimaryContactId,
+        contactId,
         docketNumber: cerebralTest.docketNumber,
       },
     );
@@ -36,10 +40,7 @@ export const docketClerkRemovesPetitionerFromCase = cerebralTest => {
     await cerebralTest.runSequence('removePetitionerAndUpdateCaptionSequence');
 
     expect(
-      getPetitionerById(
-        cerebralTest.getState('caseDetail'),
-        contactPrimaryContactId,
-      ),
+      getPetitionerById(cerebralTest.getState('caseDetail'), contactId),
     ).toBeUndefined();
 
     expect(cerebralTest.getState('alertSuccess.message')).toBe(

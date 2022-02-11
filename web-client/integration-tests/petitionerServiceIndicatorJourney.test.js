@@ -1,4 +1,5 @@
 import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import { admissionsClerkEditsPetitionerEmail } from './journey/admissionsClerkEditsPetitionerEmail';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -51,47 +52,8 @@ describe('Petitioner Service Indicator Journey', () => {
   });
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
-  it('Admissions Clerk updates petitioner email address', async () => {
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-    });
 
-    const contactPrimary = contactPrimaryFromState(cerebralTest);
-
-    await cerebralTest.runSequence(
-      'gotoEditPetitionerInformationInternalSequence',
-      {
-        contactId: contactPrimary.contactId,
-        docketNumber: cerebralTest.docketNumber,
-      },
-    );
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contact.updatedEmail',
-      value: 'petitioner4@example.com',
-    });
-
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'contact.confirmEmail',
-      value: 'petitioner4@example.com',
-    });
-
-    await cerebralTest.runSequence('submitEditPetitionerSequence');
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    expect(cerebralTest.getState('modal.showModal')).toEqual(
-      'MatchingEmailFoundModal',
-    );
-
-    await cerebralTest.runSequence(
-      'submitUpdatePetitionerInformationFromModalSequence',
-    );
-
-    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(cerebralTest.getState('alertSuccess.message')).toEqual(
-      'Changes saved.',
-    );
-  });
+  admissionsClerkEditsPetitionerEmail(cerebralTest, 'petitioner4@example.com');
 
   // verify it is electronic
 
