@@ -216,7 +216,39 @@ describe('external users perform an advanced search for orders', () => {
   // }),
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
-  it('search for sealed order in unsealed case as an associated practitioner', async () => {
+  it('search for an order that has been sealed from the public in an unsealed case as an associated practitioner', async () => {
+    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+    cerebralTest.docketNumber = '999-15';
+
+    await updateOrderForm(cerebralTest, {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+    const advancedDocumentSearchHelper = withAppContextDecorator(
+      advancedDocumentSearchHelperComputed,
+    );
+    const searchHelper = runCompute(advancedDocumentSearchHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(searchHelper.searchResults).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+          showSealedIcon: true,
+        }),
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+          showSealedIcon: true,
+        }),
+      ]),
+    );
+  });
+
+  it('search for an order that has been sealed from all external users as an associated practitioner', async () => {
     cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
     cerebralTest.docketNumber = '999-15';
