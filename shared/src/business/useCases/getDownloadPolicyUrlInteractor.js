@@ -1,12 +1,13 @@
 const {
-  documentMeetsAgeRequirements,
-} = require('../utilities/getFormattedCaseDetail');
-const {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
+const {
+  documentMeetsAgeRequirements,
+} = require('../utilities/getFormattedCaseDetail');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -75,8 +76,21 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (docketEntryEntity.isStricken) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
-  } else if (docketEntryEntity.isSealed && !userAssociatedWithCase) {
-    throw new UnauthorizedError('Unauthorized to view document at this time.');
+  } else if (docketEntryEntity.isSealed) {
+    if (
+      docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC &&
+      !userAssociatedWithCase
+    ) {
+      throw new UnauthorizedError(
+        'Unauthorized to view document at this time.',
+      );
+    } else if (
+      docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
+    ) {
+      throw new UnauthorizedError(
+        'Unauthorized to view document at this time.',
+      );
+    }
   }
 };
 
@@ -162,6 +176,7 @@ exports.getDownloadPolicyUrlInteractor = async (
 
       const documentIsAvailable =
         documentMeetsAgeRequirements(docketEntryEntity);
+
       if (!documentIsAvailable) {
         throw new UnauthorizedError(
           'Unauthorized to view document at this time.',
