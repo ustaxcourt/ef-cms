@@ -191,10 +191,19 @@ exports.getDownloadPolicyUrlInteractor = async (
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
-      } else if (unAuthorizedToViewNonCourtIssued) {
-        throw new UnauthorizedError(
-          'Unauthorized to view document at this time.',
-        );
+      } else {
+        if (
+          docketEntryEntity.isSealed &&
+          docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
+        ) {
+          throw new UnauthorizedError(
+            'Unauthorized to view document at this time.',
+          );
+        } else if (unAuthorizedToViewNonCourtIssued) {
+          throw new UnauthorizedError(
+            'Unauthorized to view document at this time.',
+          );
+        }
       }
     }
   }
