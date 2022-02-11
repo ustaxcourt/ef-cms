@@ -198,7 +198,7 @@ Problem:
 Solution: 
 - This solution should only be used on non-prod environments. Clear the dynamo tables and recreate the users and judges.
     ```bash
-    node shared/admin-tools/user/setup-test-users.js
+    node shared/admin-tools/user/setup-test-users.sh
     ```
     ```bash
     ENV=exp5 FILE_NAME=judge_users.csv ./scripts/bulk-import-judge-users.sh
