@@ -179,6 +179,44 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
+    it('should NOT receive the policy url when the document being viewed is a document that has been sealed to all external users', async () => {
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        documentType: 'Order',
+        eventCode: 'O',
+        isOnDocketRecord: true,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+        servedAt: applicationContext.getUtilities().createISODateString(),
+      };
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time');
+    });
+
+    it('should NOT receive the policy url when the Non-Court issued document being viewed is sealed to all external users', async () => {
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        documentType: 'Answer',
+        eventCode: 'A',
+        isOnDocketRecord: true,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+        servedAt: applicationContext.getUtilities().createISODateString(),
+      };
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time');
+    });
+
     it('should return the policy url when the doucument requested is an available document', async () => {
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
@@ -546,6 +584,26 @@ describe('getDownloadPolicyUrlInteractor', () => {
         documentType: 'Petition',
         isFileAttached: true,
         servedAt: '2019-03-01T21:40:46.415Z',
+      };
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+      });
+
+      expect(url).toEqual('localhost');
+    });
+
+    it('should receive the policy url when the document being viewed is a document that has been sealed to all external users', async () => {
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        documentType: 'Order',
+        eventCode: 'O',
+        isOnDocketRecord: true,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+        servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
