@@ -31,21 +31,14 @@ exports.removeCounselFromRemovedPetitioner = async ({
     caseEntity.getPractitionersRepresenting(petitionerContactId);
 
   for (const practitioner of practitioners) {
-    const practitionerIsAlsoAPetitionerOnCase = caseEntity.petitioners.some(
-      petitioner => petitioner.contactId === practitioner.userId,
-    );
-
     if (practitioner.representing.length === 1) {
       caseEntity.removePrivatePractitioner(practitioner);
 
-      // if practitioner is a self-representing petitioner, their user|case record has already been removed
-      if (!practitionerIsAlsoAPetitionerOnCase) {
-        await applicationContext.getPersistenceGateway().deleteUserFromCase({
-          applicationContext,
-          docketNumber: caseEntity.docketNumber,
-          userId: practitioner.userId,
-        });
-      }
+      await applicationContext.getPersistenceGateway().deleteUserFromCase({
+        applicationContext,
+        docketNumber: caseEntity.docketNumber,
+        userId: practitioner.userId,
+      });
     } else {
       caseEntity.removeRepresentingFromPractitioners(petitionerContactId);
     }
