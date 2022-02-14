@@ -1,3 +1,4 @@
+/* eslint-disable complexity */
 const {
   DOCUMENT_SEARCH_SORT,
   MAX_SEARCH_CLIENT_RESULTS,
@@ -13,6 +14,7 @@ exports.advancedDocumentSearch = async ({
   documentEventCodes,
   endDate,
   from = 0,
+  isExternalUser,
   isOpinionSearch = false,
   judge,
   keyword,
@@ -21,7 +23,6 @@ exports.advancedDocumentSearch = async ({
   overrideResultSize,
   sortOrder: sortField,
   startDate,
-  userRole,
 }) => {
   const sourceFields = [
     'caseCaption',
@@ -127,7 +128,7 @@ exports.advancedDocumentSearch = async ({
     ];
     caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
   } else {
-    if (userRole === 'privatePractitioner') {
+    if (isExternalUser) {
       docketEntryMustNot = [
         ...docketEntryMustNot,
         // {
