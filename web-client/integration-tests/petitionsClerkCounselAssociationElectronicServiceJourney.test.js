@@ -14,7 +14,6 @@ import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsCler
 const cerebralTest = setupTest();
 const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
 
-import { admissionsClerkEditsPetitionerEmail } from './journey/admissionsClerkEditsPetitionerEmail';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -60,11 +59,67 @@ describe('Petitions Clerk Counsel Association Journey', () => {
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'admissionsclerk@example.com');
-  admissionsClerkEditsPetitionerEmail(
-    cerebralTest,
-    'petitioner2@example.com',
-    true,
-  );
+  it('admissions clerk adds secondary petitioner email with existing cognito account to case', async () => {
+    await refreshElasticsearchIndex();
+
+    let contactSecondary = contactSecondaryFromState(cerebralTest);
+
+    await cerebralTest.runSequence(
+      'gotoEditPetitionerInformationInternalSequence',
+      {
+        contactId: contactSecondary.contactId,
+        docketNumber: cerebralTest.docketNumber,
+      },
+    );
+
+    expect(contactSecondary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_PAPER,
+    );
+
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
+    expect(cerebralTest.getState('form.updatedEmail')).toBeUndefined();
+    expect(cerebralTest.getState('form.confirmEmail')).toBeUndefined();
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.updatedEmail',
+      value: 'petitioner2@example.com',
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'contact.confirmEmail',
+      value: 'petitioner2@example.com',
+    });
+
+    await cerebralTest.runSequence('submitEditPetitionerSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'MatchingEmailFoundModal',
+    );
+    expect(cerebralTest.getState('currentPage')).toEqual(
+      'EditPetitionerInformationInternal',
+    );
+
+    await cerebralTest.runSequence(
+      'submitUpdatePetitionerInformationFromModalSequence',
+    );
+
+    expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+
+    contactSecondary = contactSecondaryFromState(cerebralTest);
+
+    expect(contactSecondary.email).toEqual('petitioner2@example.com');
+    expect(contactSecondary.serviceIndicator).toEqual(
+      SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    );
+
+    await refreshElasticsearchIndex();
+  });
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
 
   it('Petitions clerk manually adds a privatePractitioner to case', async () => {

@@ -48,21 +48,6 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
     );
   }
 
-  caseEntity.removePetitioner(petitionerContactId);
-
-  const deletedPetitionerIsAlsoPractitionerOnCase =
-    caseEntity.privatePractitioners.some(
-      privatePractitioner => privatePractitioner.userId === petitionerContactId,
-    );
-
-  if (!deletedPetitionerIsAlsoPractitionerOnCase) {
-    await applicationContext.getPersistenceGateway().deleteUserFromCase({
-      applicationContext,
-      docketNumber,
-      userId: petitionerContactId,
-    });
-  }
-
   caseEntity = await applicationContext
     .getUseCaseHelpers()
     .removeCounselFromRemovedPetitioner({
@@ -70,6 +55,14 @@ exports.removePetitionerAndUpdateCaptionInteractor = async (
       caseEntity,
       petitionerContactId,
     });
+
+  caseEntity.removePetitioner(petitionerContactId);
+
+  await applicationContext.getPersistenceGateway().deleteUserFromCase({
+    applicationContext,
+    docketNumber,
+    userId: petitionerContactId,
+  });
 
   caseEntity.caseCaption = caseCaption;
 

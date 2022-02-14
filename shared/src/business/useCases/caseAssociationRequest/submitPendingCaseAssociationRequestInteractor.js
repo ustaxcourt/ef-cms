@@ -16,28 +16,25 @@ exports.submitPendingCaseAssociationRequestInteractor = async (
   applicationContext,
   { docketNumber },
 ) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSOCIATE_SELF_WITH_CASE)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const caseDetail = await applicationContext
+  const user = await applicationContext
     .getPersistenceGateway()
-    .getCaseByDocketNumber({
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  const isAssociated = await applicationContext
+    .getPersistenceGateway()
+    .verifyCaseForUser({
       applicationContext,
       docketNumber,
+      userId: user.userId,
     });
-
-  const isPrivatePractitionerOnCase = caseDetail.privatePractitioners?.some(
-    practitioner => practitioner.userId === user.userId,
-  );
-
-  if (isPrivatePractitionerOnCase) {
-    throw new Error(
-      `The Private Practitioner is already associated with case ${docketNumber}.`,
-    );
-  }
 
   const isAssociationPending = await applicationContext
     .getPersistenceGateway()
@@ -47,7 +44,7 @@ exports.submitPendingCaseAssociationRequestInteractor = async (
       userId: user.userId,
     });
 
-  if (!isPrivatePractitionerOnCase && !isAssociationPending) {
+  if (!isAssociated && !isAssociationPending) {
     await applicationContext
       .getPersistenceGateway()
       .associateUserWithCasePending({

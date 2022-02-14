@@ -17,7 +17,6 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let mockCase;
   let petitionerToRemove;
   const SECONDARY_CONTACT_ID = '56387318-0092-49a3-8cc1-921b0432bd16';
-  const PRIMARY_CONTACT_ID = '76d23e2c-80a4-4280-9b44-eefaadfd48dc';
   beforeEach(() => {
     petitionerToRemove = {
       address1: '2729 Chicken St',
@@ -100,22 +99,7 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     );
   });
 
-  it('should update the case caption', async () => {
-    const mockUpdatedCaption = 'An updated caption';
-
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: mockUpdatedCaption,
-      contactId: MOCK_CASE.petitioners[0].contactId,
-      docketNumber: mockCase.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-        .caseToUpdate.caseCaption,
-    ).toEqual(mockUpdatedCaption);
-  });
-
-  it('should remove the specified petitioner from the case petitioners array', async () => {
+  it('should remove the specified petitioner form the case petitioners array', async () => {
     await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
       caseCaption: MOCK_CASE.caseCaption,
       contactId: petitionerToRemove.contactId,
@@ -161,17 +145,31 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().deleteUserFromCase.mock
         .calls[0][0].userId,
-    ).toEqual(petitionerToRemove.contactId);
-
+    ).toEqual(mockPrivatePractitioner.userId);
     expect(
       applicationContext.getPersistenceGateway().deleteUserFromCase.mock
         .calls[1][0].userId,
-    ).toEqual(mockPrivatePractitioner.userId);
+    ).toEqual(petitionerToRemove.contactId);
 
     expect(caseToUpdate.privatePractitioners.length).toEqual(0);
   });
 
-  it('should remove practitioner from case when they represent the only removed petitioner', async () => {
+  it('should update the case caption', async () => {
+    const mockUpdatedCaption = 'An updated caption';
+
+    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
+      caseCaption: mockUpdatedCaption,
+      contactId: MOCK_CASE.petitioners[0].contactId,
+      docketNumber: mockCase.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.caseCaption,
+    ).toEqual(mockUpdatedCaption);
+  });
+
+  it('should remove the petitioner from the representing id of the privatePractitioner', async () => {
     const otherPetitioner = petitionerToRemove;
 
     mockCase.privatePractitioners = [
@@ -211,138 +209,5 @@ describe('removePetitionerAndUpdateCaptionInteractor', () => {
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.privatePractitioners[0].representing,
     ).toEqual([otherPetitioner.contactId]);
-  });
-
-  it("BUG-9323: should not remove practitioner's user from case when they represent only the removed petitioner, but are also themselves a petitioner", async () => {
-    const mockPrivatePractitioner = {
-      barNumber: 'b1234',
-      name: 'Test Practitioner',
-      representing: [petitionerToRemove.contactId],
-      role: ROLES.privatePractitioner,
-      userId: '5b7e10a2-f9df-4ee8-bbb0-c01a698fdd32',
-    };
-    mockCase = {
-      ...mockCase,
-      petitioners: [
-        petitionerToRemove,
-        {
-          ...MOCK_CASE.petitioners[0],
-          contactId: mockPrivatePractitioner.userId,
-        },
-      ],
-      privatePractitioners: [mockPrivatePractitioner],
-    };
-
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: mockCase.caseCaption,
-      contactId: petitionerToRemove.contactId,
-      docketNumber: mockCase.docketNumber,
-    });
-
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[0][0].userId,
-    ).toEqual(petitionerToRemove.contactId);
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).toHaveBeenCalledTimes(1);
-
-    expect(
-      getPetitionerById(caseToUpdate, petitionerToRemove.contactId),
-    ).toBeUndefined();
-
-    expect(caseToUpdate.privatePractitioners.length).toEqual(0);
-  });
-
-  it("BUG-9323: should remove petitioner's user from case ONCE when they are also a (self respresenting) practitioner on the case", async () => {
-    const mockPrivatePractitioner = {
-      barNumber: 'b1234',
-      name: 'Test Practitioner',
-      representing: [petitionerToRemove.contactId],
-      role: ROLES.privatePractitioner,
-      userId: petitionerToRemove.contactId,
-    };
-    mockCase = {
-      ...mockCase,
-      petitioners: [
-        petitionerToRemove,
-        {
-          ...MOCK_CASE.petitioners[0],
-          contactId: mockPrivatePractitioner.userId,
-        },
-      ],
-      privatePractitioners: [mockPrivatePractitioner],
-    };
-
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: mockCase.caseCaption,
-      contactId: petitionerToRemove.contactId,
-      docketNumber: mockCase.docketNumber,
-    });
-
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase.mock
-        .calls[0][0].userId,
-    ).toEqual(petitionerToRemove.contactId);
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).toHaveBeenCalledTimes(1);
-
-    expect(
-      getPetitionerById(caseToUpdate, petitionerToRemove.contactId),
-    ).toBeUndefined();
-
-    expect(caseToUpdate.privatePractitioners.length).toEqual(0);
-  });
-
-  it("BUG-9323: should NOT remove petitioner's user from case when they are also a practitioner on the case (not self-representing)", async () => {
-    const mockPrivatePractitioner = {
-      barNumber: 'b1234',
-      name: 'Test Practitioner',
-      representing: [PRIMARY_CONTACT_ID],
-      role: ROLES.privatePractitioner,
-      userId: petitionerToRemove.contactId,
-    };
-    mockCase = {
-      ...mockCase,
-      petitioners: [
-        petitionerToRemove,
-        {
-          ...MOCK_CASE.petitioners[0],
-          contactId: PRIMARY_CONTACT_ID,
-        },
-      ],
-      privatePractitioners: [mockPrivatePractitioner],
-    };
-
-    await removePetitionerAndUpdateCaptionInteractor(applicationContext, {
-      caseCaption: mockCase.caseCaption,
-      contactId: petitionerToRemove.contactId,
-      docketNumber: mockCase.docketNumber,
-    });
-
-    const { caseToUpdate } =
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
-        .calls[0][0];
-
-    expect(
-      applicationContext.getPersistenceGateway().deleteUserFromCase,
-    ).not.toHaveBeenCalled();
-
-    expect(
-      getPetitionerById(caseToUpdate, petitionerToRemove.contactId),
-    ).toBeUndefined();
-
-    expect(caseToUpdate.privatePractitioners.length).toEqual(1);
   });
 });
