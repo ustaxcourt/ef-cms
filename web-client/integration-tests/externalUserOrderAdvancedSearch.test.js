@@ -214,64 +214,67 @@ describe('external users perform an advanced search for orders', () => {
   //   isCaseSealed: false,
   //   isDocketEntrySealed: false,
   // }),
+  ['privatePractitioner@example.com', 'irsPractitioner@example.com'].forEach(
+    email => {
+      loginAs(cerebralTest, email);
+      it('search for an order that has been sealed from the public in an unsealed case as an associated practitioner', async () => {
+        cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
-  it('search for an order that has been sealed from the public in an unsealed case as an associated practitioner', async () => {
-    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+        cerebralTest.docketNumber = '999-15';
 
-    cerebralTest.docketNumber = '999-15';
-
-    await updateOrderForm(cerebralTest, {
-      docketNumber: cerebralTest.docketNumber,
-    });
-
-    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
-
-    const advancedDocumentSearchHelper = withAppContextDecorator(
-      advancedDocumentSearchHelperComputed,
-    );
-    const searchHelper = runCompute(advancedDocumentSearchHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    expect(searchHelper.searchResults).toEqual(
-      expect.arrayContaining([
-        expect.objectContaining({
+        await updateOrderForm(cerebralTest, {
           docketNumber: cerebralTest.docketNumber,
-          showSealedIcon: true,
-        }),
-        expect.objectContaining({
+        });
+
+        await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+        const advancedDocumentSearchHelper = withAppContextDecorator(
+          advancedDocumentSearchHelperComputed,
+        );
+        const searchHelper = runCompute(advancedDocumentSearchHelper, {
+          state: cerebralTest.getState(),
+        });
+
+        expect(searchHelper.searchResults).toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              docketNumber: cerebralTest.docketNumber,
+              showSealedIcon: true,
+            }),
+            expect.objectContaining({
+              docketNumber: cerebralTest.docketNumber,
+              showSealedIcon: true,
+            }),
+          ]),
+        );
+      });
+
+      it('search for an order that has been sealed from all external users as an associated practitioner', async () => {
+        cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+        cerebralTest.docketNumber = '999-15';
+
+        await updateOrderForm(cerebralTest, {
           docketNumber: cerebralTest.docketNumber,
-          showSealedIcon: true,
-        }),
-      ]),
-    );
-  });
+        });
 
-  it('search for an order that has been sealed from all external users as an associated practitioner', async () => {
-    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+        await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
-    cerebralTest.docketNumber = '999-15';
+        const orderSearchResultsFromState = cerebralTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+        );
 
-    await updateOrderForm(cerebralTest, {
-      docketNumber: cerebralTest.docketNumber,
-    });
+        //expect we don't find the sealed to external docket entry
+        const sealedToExternalDocketEntryId =
+          'ffb6c3d7-bfd5-4a19-8d23-6fd75a1e362c';
 
-    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+        const foundDocketEntryId = orderSearchResultsFromState.find(
+          docketEntry =>
+            docketEntry.docketEntryId === sealedToExternalDocketEntryId,
+        );
 
-    const orderSearchResultsFromState = cerebralTest.getState(
-      `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
-    );
-
-    //expect we don't find the sealed to external docket entry
-    const sealedToExternalDocketEntryId =
-      'ffb6c3d7-bfd5-4a19-8d23-6fd75a1e362c';
-
-    const foundDocketEntryId = orderSearchResultsFromState.find(
-      docketEntry =>
-        docketEntry.docketEntryId === sealedToExternalDocketEntryId,
-    );
-
-    expect(foundDocketEntryId).toBeUndefined();
-  });
+        expect(foundDocketEntryId).toBeUndefined();
+      });
+    },
+  );
 });
