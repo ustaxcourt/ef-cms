@@ -21,6 +21,7 @@ exports.advancedDocumentSearch = async ({
   overrideResultSize,
   sortOrder: sortField,
   startDate,
+  userRole,
 }) => {
   const sourceFields = [
     'caseCaption',
@@ -125,6 +126,18 @@ exports.advancedDocumentSearch = async ({
       },
     ];
     caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
+  } else {
+    if (userRole === 'privatePractitioner') {
+      docketEntryMustNot = [
+        ...docketEntryMustNot,
+        // {
+        //   term: { 'isSealed.BOOL': true },
+        // },
+        {
+          term: { 'sealedTo.S': 'External' },
+        },
+      ];
+    }
   }
 
   if (docketNumber) {
