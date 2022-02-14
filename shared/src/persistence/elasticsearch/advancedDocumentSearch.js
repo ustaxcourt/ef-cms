@@ -131,9 +131,6 @@ exports.advancedDocumentSearch = async ({
     if (isExternalUser) {
       docketEntryMustNot = [
         ...docketEntryMustNot,
-        // {
-        //   term: { 'isSealed.BOOL': true },
-        // },
         {
           term: { 'sealedTo.S': 'External' },
         },
