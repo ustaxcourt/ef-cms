@@ -17,6 +17,9 @@ const { isServed } = require('../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
 
+const UNAUTHORIZED_DOCUMENT_MESSAGE =
+  'Unauthorized to view document at this time.';
+
 const handleInternalUser = ({
   docketEntryEntity,
   isPetitionsClerk,
@@ -68,28 +71,24 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
   );
 
   if (!isServed(docketEntryEntity) && !isUnservable) {
-    throw new UnauthorizedError('Unauthorized to view document at this time.');
+    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (
     docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
     !userAssociatedWithCase
   ) {
-    throw new UnauthorizedError('Unauthorized to view document at this time.');
+    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (docketEntryEntity.isStricken) {
-    throw new UnauthorizedError('Unauthorized to view document at this time.');
+    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (docketEntryEntity.isSealed) {
     if (
       docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC &&
       !userAssociatedWithCase
     ) {
-      throw new UnauthorizedError(
-        'Unauthorized to view document at this time.',
-      );
+      throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
     } else if (
       docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
     ) {
-      throw new UnauthorizedError(
-        'Unauthorized to view document at this time.',
-      );
+      throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
     }
   }
 };
@@ -178,9 +177,7 @@ exports.getDownloadPolicyUrlInteractor = async (
         documentMeetsAgeRequirements(docketEntryEntity);
 
       if (!documentIsAvailable) {
-        throw new UnauthorizedError(
-          'Unauthorized to view document at this time.',
-        );
+        throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
       }
 
       const selectedIsStin =
@@ -196,13 +193,9 @@ exports.getDownloadPolicyUrlInteractor = async (
           docketEntryEntity.isSealed &&
           docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
         ) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
+          throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
         } else if (unAuthorizedToViewNonCourtIssued) {
-          throw new UnauthorizedError(
-            'Unauthorized to view document at this time.',
-          );
+          throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
         }
       }
     }

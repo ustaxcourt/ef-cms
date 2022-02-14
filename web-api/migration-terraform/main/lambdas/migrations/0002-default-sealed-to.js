@@ -11,7 +11,7 @@ const migrateItems = items => {
 
   for (const item of items) {
     if (isDocketEntry(item) && item.isLegacySealed) {
-      item.sealedTo = DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC;
+      item.sealedTo = DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL;
     }
 
     itemsAfter.push(item);
