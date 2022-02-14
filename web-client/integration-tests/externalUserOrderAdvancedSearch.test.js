@@ -208,16 +208,10 @@ describe('external users perform an advanced search for orders', () => {
     );
   });
 
-  // TODO
-  //         expect.objectContaining({
-  //   documentTitle: "This is a legacy judge's order 4",
-  //   isCaseSealed: false,
-  //   isDocketEntrySealed: false,
-  // }),
   ['privatePractitioner@example.com', 'irsPractitioner@example.com'].forEach(
     email => {
       loginAs(cerebralTest, email);
-      it('search for an order that has been sealed from the public in an unsealed case as an associated practitioner', async () => {
+      it(`search for an order that has been sealed from the public in an unsealed case as an associated ${email} user`, async () => {
         cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
         cerebralTest.docketNumber = '999-15';
@@ -249,7 +243,7 @@ describe('external users perform an advanced search for orders', () => {
         );
       });
 
-      it('search for an order that has been sealed from all external users as an associated practitioner', async () => {
+      it(`search for an order that has been sealed from all external users as an associated ${email} user`, async () => {
         cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
 
         cerebralTest.docketNumber = '999-15';
