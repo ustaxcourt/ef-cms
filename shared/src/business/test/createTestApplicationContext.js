@@ -155,6 +155,9 @@ const {
   setupPdfDocument,
 } = require('../../../src/business/utilities/setupPdfDocument');
 const {
+  unsealDocketEntryInteractor,
+} = require('../useCases/docketEntry/unsealDocketEntryInteractor');
+const {
   updateCaseAndAssociations,
 } = require('../useCaseHelper/caseAssociation/updateCaseAndAssociations');
 const {
@@ -388,6 +391,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     sealDocketEntryInteractor: jest
       .fn()
       .mockImplementation(sealDocketEntryInteractor),
+    unsealDocketEntryInteractor: jest
+      .fn()
+      .mockImplementation(unsealDocketEntryInteractor),
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),

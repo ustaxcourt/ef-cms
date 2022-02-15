@@ -62,43 +62,22 @@ describe('unsealDocketEntryInteractor', () => {
     });
   });
 
-  // it('should throw an error when an invalid option is provided for docketEntrySealedTo', async () => {
-  //   applicationContext.getCurrentUser.mockReturnValue({
-  //     role: ROLES.docketClerk,
-  //   });
-  //   applicationContext
-  //     .getPersistenceGateway()
-  //     .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-  //   await expect(
-  //     unsealDocketEntryInteractor(applicationContext, {
-  //       docketEntryId: answerDocketEntryId,
-  //       docketEntrySealedTo: 'invalid',
-  //       docketNumber: '101-20',
-  //     }),
-  //   ).rejects.toThrow(
-  //     'The DocketEntry entity was invalid. {"sealedTo":"\'sealedTo\' must be one of [External, Public]"}',
-  //   );
-  // });
-
-  // it('should mark the docket entry as sealed and save', async () => {
-  //   applicationContext.getCurrentUser.mockReturnValue({
-  //     role: ROLES.docketClerk,
-  //   });
-  //   applicationContext
-  //     .getPersistenceGateway()
-  //     .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-  //   const sealedDocketEntry = await unsealDocketEntryInteractor(
-  //     applicationContext,
-  //     {
-  //       docketEntryId: answerDocketEntryId,
-  //       docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
-  //       docketNumber: MOCK_CASE.docketNumber,
-  //     },
-  //   );
-  //   expect(sealedDocketEntry).toBeDefined();
-  //   expect(sealedDocketEntry.sealedTo).toEqual(
-  //     DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
-  //   );
-  // });
+  it('should mark the docket entry as unsealed and save', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: ROLES.docketClerk,
+    });
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    const unsealedDocketEntry = await unsealDocketEntryInteractor(
+      applicationContext,
+      {
+        docketEntryId: answerDocketEntryId,
+        docketNumber: MOCK_CASE.docketNumber,
+      },
+    );
+    expect(unsealedDocketEntry).toBeDefined();
+    expect(unsealedDocketEntry.isSealed).toEqual(false);
+    expect(unsealedDocketEntry.sealedTo).toEqual(undefined);
+  });
 });
