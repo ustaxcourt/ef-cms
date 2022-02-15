@@ -6,6 +6,7 @@ import { applicationContextPublic } from '../src/applicationContextPublic';
 import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsDocketEntry } from '../integration-tests/journey/docketClerkSealsDocketEntry';
+import { docketClerkUnsealsDocketEntry } from '../integration-tests/journey/docketClerkUnsealsDocketEntry';
 import { docketClerkViewsDraftOrder } from '../integration-tests/journey/docketClerkViewsDraftOrder';
 import {
   loginAs,
@@ -94,4 +95,6 @@ describe('Unauthed user views todays orders', () => {
     expect(sealedDocketEntry.isSealed).toBe(true);
     expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
   });
+
+  docketClerkUnsealsDocketEntry(privateTestClient, 0);
 });
