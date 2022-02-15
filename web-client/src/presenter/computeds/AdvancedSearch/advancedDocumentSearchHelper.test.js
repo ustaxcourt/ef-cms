@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { ADVANCED_SEARCH_TABS } from '../../../../../shared/src/business/entities/EntityConstants';
 import {
   advancedDocumentSearchHelper as advancedDocumentSearchHelperComputed,
   formatDocumentSearchResultRecord,
@@ -467,8 +466,8 @@ describe('advancedDocumentSearchHelper', () => {
               documentTitle: 'Opinion',
               documentType: 'Memorandum Opinion',
               filingDate: '2019-03-01T05:00:00.000Z',
-              isCaseSealed: true,
-              isDocketEntrySealed: false,
+              hasSealedDocuments: true,
+              isSealed: false,
               judge: 'Judge Buch',
             },
           ],
@@ -576,20 +575,6 @@ describe('advancedDocumentSearchHelper', () => {
       );
 
       expect(result.numberOfPagesFormatted).toEqual(0);
-    });
-
-    it('should show the seal icon if the case is sealed', () => {
-      const result = formatDocumentSearchResultRecord(
-        {
-          isCaseSealed: true,
-        },
-        ADVANCED_SEARCH_TABS.ORDER,
-        {
-          applicationContext,
-        },
-      );
-
-      expect(result.showSealedIcon).toBe(true);
     });
   });
 });

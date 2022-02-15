@@ -303,6 +303,30 @@ describe('PublicCase', () => {
     }).not.toThrow();
   });
 
+  it('should consider a public case to be sealed and not valid if there exists a sealed docket entry on the docket record', () => {
+    const entity = new PublicCase(
+      {
+        docketEntries: [{ isOnDocketRecord: true, isSealed: true }],
+        docketNumber: '17000-15',
+        petitioners: [{ contactType: CONTACT_TYPES.primary }],
+      },
+      { applicationContext },
+    );
+    expect(entity.isSealed).toBe(true);
+    expect(entity.docketEntries.length).toBe(1);
+
+    let error;
+    try {
+      entity.validate();
+    } catch (err) {
+      error = err;
+    }
+    expect(error.details).toMatchObject({
+      docketEntries: expect.anything(),
+      isSealed: expect.anything(),
+    });
+  });
+
   describe('irsPractitioner', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(

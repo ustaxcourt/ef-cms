@@ -8,14 +8,14 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('./generateDocketRecordPdfInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { cloneDeep } = require('lodash');
 const { MOCK_PRACTITIONER, MOCK_USERS } = require('../../test/mockUsers');
 
+const mockId = '12345';
+const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
+let caseDetail;
+
 describe('generateDocketRecordPdfInteractor', () => {
-  const mockId = '12345';
-  const mockPdfUrlAndID = { fileId: mockId, url: 'www.example.com' };
-
-  let caseDetail;
-
   beforeEach(() => {
     caseDetail = {
       caseCaption: 'Test Case Caption',
@@ -35,6 +35,7 @@ describe('generateDocketRecordPdfInteractor', () => {
       ],
       docketNumber: '123-45',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+      hasSealedDocuments: false,
       irsPractitioners: [],
       partyType: PARTY_TYPES.petitioner,
       petitioners: [
@@ -156,6 +157,8 @@ describe('generateDocketRecordPdfInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'], //privatePractitioner
     );
+    const sealedDocketEntries = cloneDeep(caseDetail.docketEntries);
+    sealedDocketEntries[0].isSealed = true;
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockReturnValue(false);
@@ -163,9 +166,9 @@ describe('generateDocketRecordPdfInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...caseDetail,
-        isSealed: true,
+        docketEntries: sealedDocketEntries,
+        hasSealedDocuments: true,
         privatePractitioners: [],
-        sealedDate: '2019-09-19T16:42:00.000Z',
       });
 
     await expect(

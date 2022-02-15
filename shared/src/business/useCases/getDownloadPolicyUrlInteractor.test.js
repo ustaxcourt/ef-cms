@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 const {
   calculateISODate,
   createISODateString,
@@ -85,29 +84,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized');
     });
 
-    it('throw unauthorized error if user is not associated with the case and the document is sealed', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(false);
-
-      mockCase.docketEntries[0] = {
-        ...baseDocketEntry,
-        createdAt: '2018-01-21T20:49:28.192Z',
-        date: '2200-01-21T20:49:28.192Z',
-        documentTitle: 'Order of [anything] on [date]',
-        documentType: 'Order',
-        eventCode: 'O',
-        isSealed: true,
-      };
-
-      await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
-      ).rejects.toThrow('Unauthorized to view document at this time');
-    });
-
     it('returns the expected policy url for a petitioner who is NOT associated with the case and viewing a court issued document', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
@@ -176,50 +152,6 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('returns the expected policy url for a petitioner who is associated with the case and viewing a sealed document', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(true);
-
-      mockCase.docketEntries[0] = {
-        ...baseDocketEntry,
-        createdAt: '2018-01-21T20:49:28.192Z',
-        date: '2200-01-21T20:49:28.192Z',
-        documentTitle: 'Order of [anything] on [date]',
-        documentType: 'Order',
-        eventCode: 'O',
-        isSealed: true,
-      };
-
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
-      expect(url).toEqual('localhost');
-    });
-
-    it('returns the expected policy url for a petitioner who is associated with the case and viewing a sealed Answer', async () => {
-      applicationContext
-        .getPersistenceGateway()
-        .verifyCaseForUser.mockReturnValue(true);
-
-      mockCase.docketEntries[0] = {
-        ...baseDocketEntry,
-        createdAt: '2018-01-21T20:49:28.192Z',
-        date: '2200-01-21T20:49:28.192Z',
-        documentTitle: 'Answer of [anything] on [date]',
-        documentType: 'Answer',
-        eventCode: 'A',
-        isSealed: true,
-      };
-
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
-      expect(url).toEqual('localhost');
-    });
-
     it('throws a not found error for a petitioner who is associated with the case and viewing a document that is not on the docket record', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
@@ -266,6 +198,24 @@ describe('getDownloadPolicyUrlInteractor', () => {
         documentType: 'Order that case is assigned',
         eventCode: 'O',
         servedAt: undefined,
+      };
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time');
+    });
+
+    it('throws an error for a petitioner who is associated with the case and is viewing a isLegacySealed document', async () => {
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        documentType: 'Order', // This is from courtIssuedEventCodes.json
+        eventCode: 'O',
+        isLegacySealed: true,
+        isOnDocketRecord: true,
+        servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
       await expect(
@@ -391,22 +341,22 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .verifyCaseForUser.mockReturnValue(true);
     });
 
-    it('should not throw an error for a privatePractitioner who is associated with the case and is viewing a isSealed document', async () => {
+    it('throws an error for a privatePractitioner who is associated with the case and is viewing a isLegacySealed document', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
         eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
+        isLegacySealed: true,
         isOnDocketRecord: true,
-        isSealed: true,
         servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
-      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
-        docketNumber: MOCK_CASE.docketNumber,
-        key: baseDocketEntry.docketEntryId,
-      });
-
-      expect(url).toEqual('localhost');
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
     it('returns the expected policy url for a privatePractitioner who is associated with the case and viewing a served Stipulated Decision', async () => {

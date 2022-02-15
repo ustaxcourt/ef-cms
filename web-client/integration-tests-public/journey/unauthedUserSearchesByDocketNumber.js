@@ -45,8 +45,10 @@ export const unauthedUserSearchesByDocketNumber = (cerebralTest, params) => {
     searchResults = cerebralTest.getState(
       `searchResults.${ADVANCED_SEARCH_TABS.CASE}`,
     );
-    expect(cerebralTest.currentRouteUrl).toContain(
-      `/case-detail/${params.docketNumber}`,
-    );
+    expect(
+      cerebralTest.currentRouteUrl.indexOf(
+        `/case-detail/${params.docketNumber}`,
+      ),
+    ).toEqual(0);
   });
 };

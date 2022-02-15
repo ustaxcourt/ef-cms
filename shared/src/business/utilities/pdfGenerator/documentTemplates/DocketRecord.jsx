@@ -220,7 +220,7 @@ export const DocketRecord = ({
                   </td>
                   <td>{entry.eventCode || ''}</td>
                   <td className="padding-top-1">
-                    {entry.isSealed && <div className="sealed-icon" />}
+                    {entry.isLegacySealed && <div className="sealed-icon" />}
                   </td>
                   <td className="filings-and-proceedings">
                     <RecordDescription entry={entry} />

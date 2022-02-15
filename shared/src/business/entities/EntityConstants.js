@@ -1098,11 +1098,6 @@ const DATE_RANGE_SEARCH_OPTIONS = {
   CUSTOM_DATES: 'customDates',
 };
 
-const DOCKET_ENTRY_SEALED_TO_TYPES = {
-  EXTERNAL: 'External', // only court employees can view it
-  PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry
-};
-
 module.exports = deepFreeze({
   ADC_SECTION,
   ADMISSIONS_SECTION,
@@ -1149,7 +1144,6 @@ module.exports = deepFreeze({
   DEFAULT_PRACTITIONER_BIRTH_YEAR,
   DEFAULT_PROCEDURE_TYPE,
   DEFAULT_PROCEEDING_TYPE,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,

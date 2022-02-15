@@ -54,10 +54,6 @@ exports.getPublicDownloadPolicyUrlInteractor = async (
     docketEntryEntity.eventCode,
   );
 
-  if (docketEntryEntity.isSealed) {
-    throw new UnauthorizedError('Docket entry has been sealed.');
-  }
-
   // opinion documents are public even in sealed cases
   if (isSealedCase(caseEntity) && !isOpinionDocument) {
     throw new UnauthorizedError(

@@ -32,14 +32,9 @@ exports.search = async ({ applicationContext, searchParameters }) => {
       }
 
       if (foundCase) {
-        const foundCaseUnmarshalled =
-          AWS.DynamoDB.Converter.unmarshall(foundCase);
         return {
-          isCaseSealed: !!foundCaseUnmarshalled.isSealed,
-          isDocketEntrySealed: !!sourceUnmarshalled.isSealed,
-          ...foundCaseUnmarshalled,
           ...sourceUnmarshalled,
-          isSealed: undefined,
+          ...AWS.DynamoDB.Converter.unmarshall(foundCase),
         };
       } else {
         return sourceUnmarshalled;

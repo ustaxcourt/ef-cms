@@ -19,7 +19,6 @@ const CASE_CONTACT_ATTRIBUTE_WHITELIST = [
   'inCareOf',
   'isAddressSealed',
   'name',
-  'sealedTo',
   'secondaryName',
   'serviceIndicator',
   'title',
@@ -70,18 +69,14 @@ const caseContactAddressSealedFormatter = (caseRaw, currentUser) => {
   return formattedCase;
 };
 
-const caseSearchFilter = (searchResults, currentUser) => {
-  return searchResults
-    .filter(
-      searchResult =>
-        !(
-          isSealedCase(searchResult) ||
-          searchResult.isCaseSealed ||
-          searchResult.isDocketEntrySealed
-        ) ||
-        isAssociatedUser({ caseRaw: searchResult, user: currentUser }) ||
-        isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE),
-    )
+const caseSearchFilter = (cases, currentUser) => {
+  const caseSearchFilterConditionals = caseRaw =>
+    !isSealedCase(caseRaw) ||
+    isAssociatedUser({ caseRaw, user: currentUser }) ||
+    isAuthorized(currentUser, ROLE_PERMISSIONS.VIEW_SEALED_CASE);
+
+  return cases
+    .filter(caseSearchFilterConditionals)
     .map(filteredCase =>
       caseContactAddressSealedFormatter(filteredCase, currentUser),
     );

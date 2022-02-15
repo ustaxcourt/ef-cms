@@ -929,9 +929,6 @@ const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
 const {
-  sealDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/docketEntry/sealDocketEntryInteractor');
-const {
   sealInLowerEnvironment,
 } = require('../../shared/src/business/useCaseHelper/sealInLowerEnvironment');
 const {
@@ -2026,7 +2023,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         saveSignedDocumentInteractor,
         sealCaseContactAddressInteractor,
         sealCaseInteractor,
-        sealDocketEntryInteractor,
         sendMaintenanceNotificationsInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,

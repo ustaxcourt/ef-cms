@@ -93,7 +93,10 @@ describe('getEligibleCasesForTrialSessionInteractor', () => {
     const mockEligibleCaseWithPractitioners = cloneDeep(
       MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
     );
+    delete mockEligibleCaseWithPractitioners.hasSealedDocuments;
+
     const mockEligibleCase = cloneDeep(MOCK_ELIGIBLE_CASE);
+    delete mockEligibleCase.hasSealedDocuments;
 
     mockTrial = {
       ...MOCK_TRIAL,
