@@ -231,10 +231,21 @@ describe('external users perform an advanced search for orders', () => {
         expect(searchHelper.searchResults).toEqual(
           expect.arrayContaining([
             expect.objectContaining({
+              docketEntryId: '67a204c3-7111-48f3-8ddd-3c2e60f4d1ae',
               docketNumber: cerebralTest.docketNumber,
               showSealedIcon: true,
             }),
+            // expect.objectContaining({
+            //   docketNumber: cerebralTest.docketNumber,
+            //   showSealedIcon: true,
+            // }),
+          ]),
+        );
+
+        expect(searchHelper.searchResults).not.toEqual(
+          expect.arrayContaining([
             expect.objectContaining({
+              docketEntryId: 'd1ecc2dd-e0ba-490b-9f41-425a1a45f5ac',
               docketNumber: cerebralTest.docketNumber,
               showSealedIcon: true,
             }),
