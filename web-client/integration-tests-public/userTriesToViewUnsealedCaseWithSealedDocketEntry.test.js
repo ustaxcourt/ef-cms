@@ -92,9 +92,40 @@ describe('Unauthed user views todays orders', () => {
     );
 
     expect(sealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(true);
+    expect(sealedDocketEntry.showLinkToDocument).toBe(false);
     expect(sealedDocketEntry.isSealed).toBe(true);
     expect(sealedDocketEntry.sealedToTooltip).toBe('Sealed to the public');
   });
 
   docketClerkUnsealsDocketEntry(privateTestClient, 0);
+
+  unauthedUserNavigatesToPublicSite(publicTestClient);
+  unauthedUserSearchesByDocketNumber(publicTestClient, privateTestClient);
+
+  it('verify unsealed docket entry is hyperlinked and a no sealed icon displays', async () => {
+    await publicTestClient.runSequence('gotoPublicCaseDetailSequence', {
+      docketNumber: publicTestClient.docketNumber,
+    });
+
+    const publicCaseDetailHelper = withAppContextDecorator(
+      publicCaseDetailHelperComputed,
+      applicationContextPublic,
+    );
+
+    const helper = runCompute(publicCaseDetailHelper, {
+      state: publicTestClient.getState(),
+    });
+
+    const unsealedDocketEntry =
+      helper.formattedDocketEntriesOnDocketRecord.find(
+        entry =>
+          entry.docketEntryId ===
+          privateTestClient.draftOrders[0].docketEntryId,
+      );
+
+    expect(unsealedDocketEntry.showDocumentDescriptionWithoutLink).toBe(false);
+    expect(unsealedDocketEntry.showLinkToDocument).toBe(true);
+    expect(unsealedDocketEntry.isSealed).toBe(false);
+    expect(unsealedDocketEntry.sealedToTooltip).toBeUndefined();
+  });
 });

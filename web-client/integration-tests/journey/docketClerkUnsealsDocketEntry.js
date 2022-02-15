@@ -20,12 +20,12 @@ export const docketClerkUnsealsDocketEntry = (
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const sealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
+    const unsealedDocketEntry = formattedDocketEntriesOnDocketRecord.find(
       docketEntry => docketEntry.docketEntryId === docketEntryId,
     );
 
-    expect(sealedDocketEntry.isSealed).toBe(false);
-    expect(sealedDocketEntry.sealedTo).toBeUndefined();
-    expect(sealedDocketEntry.sealedToTooltip).not.toBe('Sealed to the public');
+    expect(unsealedDocketEntry.isSealed).toBe(false);
+    expect(unsealedDocketEntry.sealedTo).toBeUndefined();
+    expect(unsealedDocketEntry.iconsToDisplay).toEqual([]);
   });
 };
