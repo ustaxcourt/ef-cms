@@ -71,6 +71,10 @@ describe('sealDocketEntryInteractor', () => {
     ).toMatchObject({
       docketEntryId: answerDocketEntryId,
       docketNumber: MOCK_CASE.docketNumber,
+      document: expect.objectContaining({
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+      }),
     });
   });
 
