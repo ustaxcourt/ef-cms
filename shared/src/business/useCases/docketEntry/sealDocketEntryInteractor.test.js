@@ -51,33 +51,6 @@ describe('sealDocketEntryInteractor', () => {
     ).rejects.toThrow('Docket entry not found');
   });
 
-  it('should mark the docket entry as sealed and save', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    await sealDocketEntryInteractor(applicationContext, {
-      docketEntryId: answerDocketEntryId,
-      docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry.mock
-        .calls[0][0],
-    ).toMatchObject({
-      docketEntryId: answerDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-      document: expect.objectContaining({
-        isSealed: true,
-        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
-      }),
-    });
-  });
-
   it('should throw an error when an invalid option is provided for docketEntrySealedTo', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.docketClerk,
@@ -113,6 +86,7 @@ describe('sealDocketEntryInteractor', () => {
       },
     );
     expect(sealedDocketEntry).toBeDefined();
+    expect(sealedDocketEntry.isSealed).toEqual(true);
     expect(sealedDocketEntry.sealedTo).toEqual(
       DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
     );

@@ -44,31 +44,6 @@ describe('unsealDocketEntryInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-    await unsealDocketEntryInteractor(applicationContext, {
-      docketEntryId: answerDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateDocketEntry.mock
-        .calls[0][0],
-    ).toMatchObject({
-      docketEntryId: answerDocketEntryId,
-      docketNumber: MOCK_CASE.docketNumber,
-      document: expect.objectContaining({
-        isSealed: false,
-      }),
-    });
-  });
-
-  it('should mark the docket entry as unsealed and save', async () => {
-    applicationContext.getCurrentUser.mockReturnValue({
-      role: ROLES.docketClerk,
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
     const unsealedDocketEntry = await unsealDocketEntryInteractor(
       applicationContext,
       {
