@@ -235,6 +235,7 @@ export const getFormattedDocketEntry = ({
   });
 
   formattedResult.sealButtonText = formattedResult.isSealed ? 'Unseal' : 'Seal';
+  formattedResult.sealIcon = formattedResult.isSealed ? 'unlock' : 'lock';
   formattedResult.sealButtonTooltip = formattedResult.isSealed
     ? formattedResult.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
       ? 'Unseal to the public and parties of this case'

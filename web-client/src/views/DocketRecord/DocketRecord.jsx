@@ -131,7 +131,7 @@ export const DocketRecord = connect(
                             link
                             className={entry.isSealed && 'red-warning'}
                             data-test={`seal-docket-entry-button-${arrayIndex}`}
-                            icon="lock"
+                            icon={entry.sealIcon}
                             tooltip={entry.sealButtonTooltip}
                             onClick={() => {
                               entry.isSealed
