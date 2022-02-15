@@ -5537,6 +5537,61 @@
     "date": null,
     "servedParties": [
       {
+        "name": "Test Petitioner",
+        "email": "petitioner@example.com"
+      },
+      {
+        "name": "Gordon Ramsay",
+        "email": "testUser@example.com"
+      }
+    ],
+    "isSealed": true,
+    "serviceStamp": "Entered and Served",
+    "attachments": false,
+    "isStricken": false,
+    "isLegacySealed": false,
+    "isPendingService": false,
+    "documentType": "Order",
+    "filingDate": "2021-12-02T16:18:37.511Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": false,
+    "receivedAt": "2021-12-02T05:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2021-12-02T16:18:22.832Z",
+    "documentContentsId": "94e4a677-b702-4a34-b963-b20bcdd44c59",
+    "signedJudgeName": "Maurice B. Foley",
+    "sealedTo": "Public",
+    "numberOfPages": 1,
+    "scenario": "Type A",
+    "entityName": "DocketEntry",
+    "docketEntryId": "755684EB-0FF0-416B-B0EC-2F2B3942686F",
+    "documentIdBeforeSignature": "e0f35bc9-d2d5-4cf5-9e47-8bf002179461",
+    "sk": "docket-entry|755684EB-0FF0-416B-B0EC-2F2B3942686F",
+    "documentTitle": "Sealed to Public Order",
+    "relationship": "primaryDocument",
+    "addToCoversheet": false,
+    "draftOrderState": null,
+    "isLegacy": true,
+    "index": 3,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "O",
+    "processingStatus": "complete",
+    "filers": [],
+    "freeText": "Sealed to Public Order",
+    "servedPartiesCode": "B",
+    "signedAt": "2021-12-02T16:18:22.832Z",
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"Sealed Order\",\"date\":null,\"generatedDocumentTitle\":\"Sealed to Public Order\",\"serviceStamp\":\"Entered and Served\",\"docketEntryId\":\"755684EB-0FF0-416B-B0EC-2F2B3942686F\",\"docketNumber\":\"999-15\"}",
+    "pk": "case|999-15",
+    "servedAt": "2021-12-02T16:18:37.511Z",
+    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "docketNumber": "999-15"
+  },
+  {
+    "date": null,
+    "servedParties": [
+      {
         "name": "Stacy Russold"
       }
     ],
