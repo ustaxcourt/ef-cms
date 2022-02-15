@@ -397,6 +397,16 @@ DocketEntry.prototype.sealEntry = function ({ sealedTo }) {
 };
 
 /**
+ * Unseal this docket entry
+ *
+ * @param {object} obj param
+ */
+DocketEntry.prototype.unsealEntry = function () {
+  delete this.sealedTo;
+  this.isSealed = false;
+};
+
+/**
  * Determines if the docket entry has been served
  *
  * @returns {Boolean} true if the docket entry has been served, false otherwise
