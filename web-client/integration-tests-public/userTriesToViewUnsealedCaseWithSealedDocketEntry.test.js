@@ -3,9 +3,11 @@ import {
   PARTY_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../src/applicationContextPublic';
-import { docketClerkAddsTranscriptDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsTranscriptDocketEntryFromOrder';
+import { docketClerkAddsOrderDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsOrderDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkSealsDocketEntry } from '../integration-tests/journey/docketClerkSealsDocketEntry';
+import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';
+import { docketClerkSignsOrder } from '../integration-tests/journey/docketClerkSignsOrder';
 import { docketClerkUnsealsDocketEntry } from '../integration-tests/journey/docketClerkUnsealsDocketEntry';
 import { docketClerkViewsDraftOrder } from '../integration-tests/journey/docketClerkViewsDraftOrder';
 import {
@@ -50,6 +52,7 @@ describe('Unauthed user views todays orders', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
+    console.log(caseDetail.docketNumber);
     privateTestClient.docketNumber = caseDetail.docketNumber;
   });
 
@@ -60,11 +63,13 @@ describe('Unauthed user views todays orders', () => {
     expectedDocumentType: 'Order',
   });
   docketClerkViewsDraftOrder(privateTestClient, 0);
-  docketClerkAddsTranscriptDocketEntryFromOrder(privateTestClient, 0, {
+  docketClerkSignsOrder(privateTestClient, 0);
+  docketClerkAddsOrderDocketEntryFromOrder(privateTestClient, 0, {
     day: '01',
     month: '01',
     year: '2019',
   });
+  docketClerkServesDocument(privateTestClient, 0);
 
   docketClerkSealsDocketEntry(privateTestClient, 0);
 
