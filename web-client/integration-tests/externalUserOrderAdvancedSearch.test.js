@@ -235,10 +235,11 @@ describe('external users perform an advanced search for orders', () => {
               docketNumber: cerebralTest.docketNumber,
               showSealedIcon: true,
             }),
-            // expect.objectContaining({
-            //   docketNumber: cerebralTest.docketNumber,
-            //   showSealedIcon: true,
-            // }),
+            expect.objectContaining({
+              docketEntryId: '755684EB-0FF0-416B-B0EC-2F2B3942686F',
+              docketNumber: cerebralTest.docketNumber,
+              showSealedIcon: true,
+            }),
           ]),
         );
 
@@ -247,7 +248,6 @@ describe('external users perform an advanced search for orders', () => {
             expect.objectContaining({
               docketEntryId: 'd1ecc2dd-e0ba-490b-9f41-425a1a45f5ac',
               docketNumber: cerebralTest.docketNumber,
-              showSealedIcon: true,
             }),
           ]),
         );
