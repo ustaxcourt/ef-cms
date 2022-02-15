@@ -52,7 +52,6 @@ describe('Unauthed user views todays orders', () => {
       partyType: PARTY_TYPES.petitionerSpouse,
     });
     expect(caseDetail.docketNumber).toBeDefined();
-    console.log(caseDetail.docketNumber);
     privateTestClient.docketNumber = caseDetail.docketNumber;
   });
 

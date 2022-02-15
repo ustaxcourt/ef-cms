@@ -26,6 +26,13 @@ export const docketClerkUnsealsDocketEntry = (
 
     expect(unsealedDocketEntry.isSealed).toBe(false);
     expect(unsealedDocketEntry.sealedTo).toBeUndefined();
-    expect(unsealedDocketEntry.iconsToDisplay).toEqual([]);
+    expect(unsealedDocketEntry.iconsToDisplay).toEqual(
+      expect.not.arrayContaining([
+        expect.objectContaining({
+          className: 'sealed-docket-entry',
+          icon: 'lock',
+        }),
+      ]),
+    );
   });
 };
