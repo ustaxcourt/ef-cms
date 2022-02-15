@@ -377,6 +377,33 @@ describe('formattedDocketEntries', () => {
       });
     });
 
+    it('should NOT show the link to an associated external user when the document is sealed to external users', () => {
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...docketEntries[0],
+                isSealed: true,
+                isStricken: false,
+                sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+              },
+            ],
+          },
+          screenMetadata: {
+            isAssociated: true,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        showDocumentDescriptionWithoutLink: true,
+        showDocumentViewerLink: false,
+        showLinkToDocument: false,
+      });
+    });
+
     it('should show the link to an internal user for a document with a stricken docket record', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {

@@ -162,6 +162,7 @@ describe('getCaseInteractor', () => {
     });
 
     expect(result.docketEntries[1]).toMatchObject({
+      docketEntryId: testCase.docketEntries[2].docketEntryId,
       documentType: 'Answer',
       eventCode: 'A',
     });
