@@ -5438,7 +5438,7 @@
     "filers": [],
     "freeText": "This is a legacy judge's order",
     "signedAt": "2020-09-30T20:25:25.088Z",
-    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"This is a legacy judge's order\",\"date\":null,\"generatedDocumentTitle\":\"This is a legacy judge's order\",\"serviceStamp\":\"Served\",\"docketEntryId\":\"67a204c3-7111-48f3-8ddd-3c2e60f4d1af\",\"docketNumber\":\"999-15\"}",
+    "editState": "{\"eventCode\":\"O\",\"documentType\":\"Order\",\"documentTitle\":\"[Anything]\",\"scenario\":\"Type A\",\"isOrder\":true,\"requiresSignature\":true,\"attachments\":false,\"freeText\":\"This is a legacy judge's order\",\"date\":null,\"generatedDocumentTitle\":\"This is a legacy judge's order\",\"serviceStamp\":\"Served\",\"docketEntryId\":\"67a204c3-7111-48f3-8ddd-3c2e60f4d1ae\",\"docketNumber\":\"999-15\"}",
     "pk": "case|999-15",
     "signedByUserId": "dadbad42-18d0-43ec-bafb-654e83405416",
     "servedAt": "2020-09-30T20:25:32.869Z",

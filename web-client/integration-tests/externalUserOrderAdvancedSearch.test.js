@@ -221,29 +221,25 @@ describe('external users perform an advanced search for orders', () => {
 
         await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
-        const advancedDocumentSearchHelper = withAppContextDecorator(
-          advancedDocumentSearchHelperComputed,
-        );
-        const searchHelper = runCompute(advancedDocumentSearchHelper, {
-          state: cerebralTest.getState(),
-        });
-
-        expect(searchHelper.searchResults).toEqual(
+        expect(
+          cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+        ).toMatchObject(
           expect.arrayContaining([
             expect.objectContaining({
               docketEntryId: '67a204c3-7111-48f3-8ddd-3c2e60f4d1ae',
               docketNumber: cerebralTest.docketNumber,
-              showSealedIcon: true,
             }),
             expect.objectContaining({
               docketEntryId: '755684EB-0FF0-416B-B0EC-2F2B3942686F',
               docketNumber: cerebralTest.docketNumber,
-              showSealedIcon: true,
+              isDocketEntrySealed: true,
             }),
           ]),
         );
 
-        expect(searchHelper.searchResults).not.toEqual(
+        expect(
+          cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+        ).not.toEqual(
           expect.arrayContaining([
             expect.objectContaining({
               docketEntryId: 'd1ecc2dd-e0ba-490b-9f41-425a1a45f5ac',
