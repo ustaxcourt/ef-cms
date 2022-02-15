@@ -360,6 +360,9 @@ const {
   unblockCaseFromTrialLambda,
 } = require('./cases/unblockCaseFromTrialLambda');
 const {
+  unsealDocketEntryLambda,
+} = require('./documents/unsealDocketEntryLambda');
+const {
   updateCaseDeadlineLambda,
 } = require('./caseDeadline/updateCaseDeadlineLambda');
 const {
@@ -651,6 +654,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.put(
     '/case-documents/:docketNumber/:docketEntryId/seal',
     lambdaWrapper(sealDocketEntryLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/:docketEntryId/unseal',
+    lambdaWrapper(unsealDocketEntryLambda),
   );
 
   // DELETE
