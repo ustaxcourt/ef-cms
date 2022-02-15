@@ -5513,7 +5513,7 @@
     "docketEntryId": "d1ecc2dd-e0ba-490b-9f41-425a1a45f5ac",
     "documentIdBeforeSignature": "e0f35bc9-d2d5-4cf5-9e47-8bf002179461",
     "sk": "docket-entry|d1ecc2dd-e0ba-490b-9f41-425a1a45f5ac",
-    "documentTitle": "Sealed Order",
+    "documentTitle": "Sealed To Non-Court Users Order",
     "relationship": "primaryDocument",
     "addToCoversheet": false,
     "draftOrderState": null,
