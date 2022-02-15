@@ -38,4 +38,10 @@ describe('External user views legacy sealed documents', () => {
 
   loginAs(cerebralTest, 'petitioner@example.com');
   associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
+
+  loginAs(cerebralTest, 'irsPractitioner@example.com');
+  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  associatedUserViewsCaseDetailForCaseWithLegacySealedDocument(cerebralTest);
 });

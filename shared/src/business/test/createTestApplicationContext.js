@@ -119,9 +119,6 @@ const {
   getFormattedPartiesNameAndTitle,
 } = require('../utilities/getFormattedPartiesNameAndTitle');
 const {
-  getSealedDocketEntryTooltip,
-} = require('../../../src/business/utilities/getSealedDocketEntryTooltip');
-const {
   getStampBoxCoordinates,
 } = require('../../../src/business/utilities/getStampBoxCoordinates');
 const {
@@ -145,9 +142,6 @@ const {
 const {
   saveWorkItem,
 } = require('../../persistence/dynamo/workitems/saveWorkItem');
-const {
-  sealDocketEntryInteractor,
-} = require('../useCases/docketEntry/sealDocketEntryInteractor');
 const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
@@ -336,9 +330,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getPractitionersRepresenting: jest
       .fn()
       .mockImplementation(getPractitionersRepresenting),
-    getSealedDocketEntryTooltip: jest
-      .fn()
-      .mockImplementation(getSealedDocketEntryTooltip),
     getServedPartiesCode: jest.fn().mockImplementation(getServedPartiesCode),
     getStampBoxCoordinates: jest
       .fn()
@@ -385,9 +376,6 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetUseCases = appContextProxy({
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
-    sealDocketEntryInteractor: jest
-      .fn()
-      .mockImplementation(sealDocketEntryInteractor),
     uploadDocumentAndMakeSafeInteractor: jest
       .fn()
       .mockImplementation(uploadDocumentAndMakeSafeInteractor),

@@ -26,7 +26,6 @@ describe('PublicDocketEntry', () => {
       objections: 'Yes',
       processingStatus: 'testing',
       receivedAt: 'testing',
-      sealedTo: 'Public',
       servedAt: '2019-03-01T21:40:46.415Z',
       servedParties: [
         {
@@ -60,9 +59,24 @@ describe('PublicDocketEntry', () => {
       objections: 'Yes',
       processingStatus: 'testing',
       receivedAt: 'testing',
-      sealedTo: 'Public',
       servedAt: '2019-03-01T21:40:46.415Z',
       servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
+    });
+  });
+
+  it('forbids validation of public docket entries which are sealed', () => {
+    const publicDocketEntry = new PublicDocketEntry({
+      docketNumber: '101-21',
+      documentType: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+      eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
+      filedBy: 'testing',
+      isPaper: true,
+      isSealed: true,
+      servedAt: '2019-03-01T21:40:46.415Z',
+    });
+
+    expect(publicDocketEntry.getValidationErrors()).toMatchObject({
+      isSealed: expect.anything(),
     });
   });
 

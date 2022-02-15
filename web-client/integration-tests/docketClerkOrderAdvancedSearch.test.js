@@ -308,8 +308,7 @@ describe('Docket clerk advanced order search', () => {
         expect.arrayContaining([
           expect.objectContaining({
             docketEntryId: cerebralTest.draftOrders[2].docketEntryId,
-            isCaseSealed: true,
-            isDocketEntrySealed: false,
+            isSealed: true,
           }),
         ]),
       );

@@ -13,16 +13,11 @@ const {
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { cloneDeep } = require('lodash');
 const { getOtherFilers } = require('../entities/cases/Case');
+const { docketEntries } = MOCK_CASE;
+const { cloneDeep } = require('lodash');
 
 describe('getCaseInteractor', () => {
-  const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
-  const docketClerkId = '44c4d382-1136-492f-b1f4-45e893c34771';
-  const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
-  const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
-  const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
-
   let testCase;
   let mockCaseContactPrimary;
 
@@ -30,6 +25,12 @@ describe('getCaseInteractor', () => {
     testCase = { ...MOCK_CASE };
     mockCaseContactPrimary = testCase.petitioners[0];
   });
+
+  const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
+  const docketClerkId = '44c4d382-1136-492f-b1f4-45e893c34771';
+  const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
+  const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
+  const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
 
   it('should format the given docket number, removing leading zeroes and suffix', async () => {
     applicationContext
@@ -243,6 +244,8 @@ describe('getCaseInteractor', () => {
 
   describe('sealed cases', () => {
     beforeAll(() => {
+      const sealedDocketEntries = cloneDeep(docketEntries);
+      sealedDocketEntries[0].isSealed = true;
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(
@@ -251,7 +254,9 @@ describe('getCaseInteractor', () => {
             caseCaption: 'a case caption',
             caseType: CASE_TYPES_MAP.other,
             createdAt: applicationContext.getUtilities().createISODateString(),
+            docketEntries: sealedDocketEntries,
             docketNumber: '101-18',
+            hasSealedDocuments: true,
             irsPractitioners: [
               {
                 barNumber: 'BN1234',
@@ -260,7 +265,6 @@ describe('getCaseInteractor', () => {
                 userId: irsPractitionerId,
               },
             ],
-            isSealed: true,
             preferredTrialCity: 'Washington, District of Columbia',
             privatePractitioners: [
               {
@@ -271,7 +275,6 @@ describe('getCaseInteractor', () => {
               },
             ],
             procedureType: 'Regular',
-            sealedDate: '2019-09-19T16:42:00.000Z',
           }),
         );
     });

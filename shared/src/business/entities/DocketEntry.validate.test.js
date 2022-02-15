@@ -5,7 +5,6 @@ const {
   mockSecondaryId,
 } = require('./DocketEntry.test');
 const {
-  DOCKET_ENTRY_SEALED_TO_TYPES,
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   INTERNAL_DOCUMENT_TYPES,
@@ -61,7 +60,6 @@ describe('validate', () => {
         isLegacy: true,
         isLegacySealed: true,
         isSealed: true,
-        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: 'cb42b552-c112-49f4-b7ef-2b0e20ca8e57',
         signedJudgeName: 'A Judge',
@@ -214,10 +212,10 @@ describe('validate', () => {
     },
   ];
 
-  validTests.forEach(item =>
-    it(`${item.description}`, () => {
+  validTests.forEach(validTest =>
+    it(`${validTest.description}`, () => {
       const docketEntry = new DocketEntry(
-        { ...A_VALID_DOCKET_ENTRY, ...item.docketEntry },
+        { ...A_VALID_DOCKET_ENTRY, ...validTest.docketEntry },
         {
           applicationContext,
           petitioners: MOCK_PETITIONERS,
@@ -363,32 +361,19 @@ describe('validate', () => {
         ...A_VALID_DOCKET_ENTRY,
         documentType: ORDER_TYPES[0].documentType,
         eventCode: TRANSCRIPT_EVENT_CODE,
-        servedAt: undefined,
-        servedParties: [{ name: 'Test Petitioner' }],
+        servedParties: 'Test Petitioner',
         signedAt: '2019-03-01T21:40:46.415Z',
         signedByUserId: mockUserId,
         signedJudgeName: 'Dredd',
       },
       expectValidationErrors: ['servedAt'],
     },
-    {
-      description:
-        'should fail validation when the docketEntry has been legacy sealed and sealedTo is undefined',
-      docketEntry: {
-        ...A_VALID_DOCKET_ENTRY,
-        isLegacy: true,
-        isLegacySealed: true,
-        isSealed: true,
-        sealedTo: undefined,
-      },
-      expectValidationErrors: ['sealedTo'],
-    },
   ];
 
-  invalidTests.forEach(item =>
-    it(`${item.description}`, () => {
+  invalidTests.forEach(invalidTest =>
+    it(`${invalidTest.description}`, () => {
       const docketEntry = new DocketEntry(
-        { ...A_VALID_DOCKET_ENTRY, ...item.docketEntry },
+        { ...A_VALID_DOCKET_ENTRY, ...invalidTest.docketEntry },
         {
           applicationContext,
           petitioners: MOCK_PETITIONERS,
@@ -396,9 +381,10 @@ describe('validate', () => {
       );
 
       expect(docketEntry.isValid()).toBeFalsy();
-      if (item.expectValidationErrors) {
+
+      if (invalidTests.expectValidationErrors) {
         expect(Object.keys(docketEntry.getFormattedValidationErrors())).toEqual(
-          item.expectValidationErrors,
+          invalidTests.expectValidationErrors,
         );
       }
     }),

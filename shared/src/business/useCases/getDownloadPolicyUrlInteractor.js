@@ -75,7 +75,7 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   } else if (docketEntryEntity.isStricken) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
-  } else if (docketEntryEntity.isSealed && !userAssociatedWithCase) {
+  } else if (docketEntryEntity.isLegacySealed) {
     throw new UnauthorizedError('Unauthorized to view document at this time.');
   }
 };
@@ -162,17 +162,21 @@ exports.getDownloadPolicyUrlInteractor = async (
 
       const documentIsAvailable =
         documentMeetsAgeRequirements(docketEntryEntity);
+
+      const selectedIsStin =
+        docketEntryEntity.documentType ===
+        INITIAL_DOCUMENT_TYPES.stin.documentType;
+
       if (!documentIsAvailable) {
         throw new UnauthorizedError(
           'Unauthorized to view document at this time.',
         );
       }
 
-      const selectedIsStin =
-        docketEntryEntity.documentType ===
-        INITIAL_DOCUMENT_TYPES.stin.documentType;
       const unAuthorizedToViewNonCourtIssued =
-        selectedIsStin || !userAssociatedWithCase;
+        selectedIsStin ||
+        !userAssociatedWithCase ||
+        docketEntryEntity.isLegacySealed;
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });

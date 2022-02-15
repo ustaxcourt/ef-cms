@@ -7,7 +7,6 @@ import {
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
   DATE_RANGE_SEARCH_OPTIONS,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EVENT_CODES_VISIBLE_TO_PUBLIC,
@@ -62,7 +61,6 @@ import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/mai
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
-import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
@@ -118,7 +116,6 @@ const frozenConstants = deepFreeze({
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
   DATE_RANGE_SEARCH_OPTIONS,
-  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ERROR_MAP_429,
@@ -188,7 +185,6 @@ const applicationContextPublic = {
       getContactPrimary,
       getContactSecondary,
       getJudgeLastName,
-      getSealedDocketEntryTooltip,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       sortDocketEntries,

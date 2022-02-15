@@ -19,6 +19,7 @@ exports.MOCK_CASE = {
   docketNumberWithSuffix: '101-18',
   entityName: 'Case',
   filingType: 'Myself',
+  hasSealedDocuments: false,
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: PARTY_TYPES.petitioner,
   petitioners: [
@@ -50,6 +51,7 @@ exports.MOCK_CASE_WITHOUT_PENDING = {
   docketNumber: '101-18',
   entityName: 'Case',
   filingType: 'Myself',
+  hasSealedDocuments: false,
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: PARTY_TYPES.petitioner,
   petitioners: [
@@ -78,6 +80,7 @@ exports.MOCK_CASE_WITHOUT_NOTICE = {
   docketNumber: '101-18',
   entityName: 'Case',
   filingType: 'Myself',
+  hasSealedDocuments: false,
   partyType: PARTY_TYPES.petitioner,
   petitioners: [
     {
@@ -106,6 +109,7 @@ exports.MOCK_CASE_WITH_SECONDARY_OTHERS = {
   docketNumber: '109-19',
   entityName: 'Case',
   filingType: 'Myself',
+  hasSealedDocuments: false,
   partyType: PARTY_TYPES.petitionerDeceasedSpouse,
   petitioners: [
     {
@@ -215,6 +219,7 @@ exports.MOCK_CASE_WITH_TRIAL_SESSION = {
   docketNumberWithSuffix: '101-18',
   entityName: 'Case',
   filingType: 'Myself',
+  hasSealedDocuments: false,
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: PARTY_TYPES.petitioner,
   petitioners: [
@@ -247,6 +252,7 @@ exports.MOCK_ELIGIBLE_CASE = {
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
   docketNumberSuffix: 'W',
+  hasSealedDocuments: false,
   highPriority: true,
   irsPractitioners: [],
   privatePractitioners: [],
@@ -257,6 +263,7 @@ exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
   caseType: CASE_TYPES_MAP.other,
   docketNumber: '321-21',
   docketNumberSuffix: 'W',
+  hasSealedDocuments: false,
   highPriority: true,
   irsPractitioners: [
     {

@@ -164,23 +164,6 @@ describe('DocketRecord', () => {
     expect(docketRecord.find('.stricken-docket-record').length).toEqual(2);
   });
 
-  it('displays a lock icon for docket entries that are sealed', () => {
-    entries[0].isSealed = true;
-
-    const wrapper = mount(
-      <DocketRecord
-        caseDetail={caseDetail}
-        countryTypes={COUNTRY_TYPES}
-        entries={entries}
-        options={options}
-      />,
-    );
-
-    const docketRecord = wrapper.find('#documents');
-
-    expect(docketRecord.find('.sealed-icon').length).toEqual(1);
-  });
-
   it('renders "None" when no private practitioner is given', () => {
     caseDetail.petitioners[0].counselDetails = [{ name: 'None' }]; // No private practitioners
 

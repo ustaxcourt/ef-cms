@@ -1,13 +1,6 @@
-/* eslint-disable max-lines */
-import {
-  DOCKET_ENTRY_SEALED_TO_TYPES,
-  SERVED_PARTIES_CODES,
-} from '../../../../../shared/src/business/entities/EntityConstants';
+import { SERVED_PARTIES_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
-import {
-  formatDocketEntryOnDocketRecord,
-  publicCaseDetailHelper as publicCaseDetailHelperComputed,
-} from './publicCaseDetailHelper';
+import { publicCaseDetailHelper as publicCaseDetailHelperComputed } from './publicCaseDetailHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 
@@ -46,62 +39,6 @@ describe('publicCaseDetailHelper', () => {
         docketNumber: '123-45',
       },
     };
-  });
-
-  describe('formatDocketEntryOnDocketRecord', () => {
-    it('should compute sealedToTooltip value when the entry is sealed', () => {
-      const mockSealedDocketEntry = {
-        description: 'Request for Place of Trial at Flavortown, TN',
-        documentType:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        isSealed: true,
-        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
-        sealedToTooltip: undefined,
-      };
-
-      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
-        entry: mockSealedDocketEntry,
-        isTerminalUser: false,
-      });
-
-      expect(result.sealedToTooltip).toBe('Sealed to the public');
-    });
-
-    it('should NOT compute sealedToTooltip value when the entry is NOT sealed', () => {
-      const mockDocketEntry = {
-        description: 'Request for Place of Trial at Flavortown, TN',
-        documentType:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        isSealed: false,
-        sealedToTooltip: undefined,
-      };
-
-      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
-        entry: mockDocketEntry,
-        isTerminalUser: false,
-      });
-
-      expect(result.sealedToTooltip).toBe(undefined);
-    });
-
-    it('should set the value of isSealed on the record', () => {
-      const mockDocketEntry = {
-        description: 'Request for Place of Trial at Flavortown, TN',
-        documentType:
-          INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
-        eventCode: INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.eventCode,
-        isSealed: false,
-      };
-
-      const result = formatDocketEntryOnDocketRecord(applicationContextPublic, {
-        entry: mockDocketEntry,
-        isTerminalUser: false,
-      });
-
-      expect(result.isSealed).toBe(mockDocketEntry.isSealed);
-    });
   });
 
   describe('printableDocketRecord', () => {
@@ -284,27 +221,6 @@ describe('publicCaseDetailHelper', () => {
           showLinkToDocument: false,
         },
       ]);
-    });
-
-    it('should not show a link for sealed docket entries requested by a public user', () => {
-      state.caseDetail.docketEntries = [
-        {
-          ...baseDocketEntry,
-          docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
-          documentTitle: 'Order of Dismissal and Decision Entered, Judge Buch',
-          documentType: 'Order of Dismissal and Decision',
-          eventCode: 'ODD',
-          index: 0,
-          isSealed: true,
-          servedAt: '2019-12-30T21:00:00.000Z',
-        },
-      ];
-
-      const result = runCompute(publicCaseDetailHelper, { state });
-
-      expect(
-        result.formattedDocketEntriesOnDocketRecord[0].showLinkToDocument,
-      ).toBe(false);
     });
 
     it('should show a link for documents requested by a terminal user', () => {

@@ -47,6 +47,9 @@ module.exports = {
     'filingDate.S': {
       type: 'date',
     },
+    'hasSealedDocuments.BOOL': {
+      type: 'boolean',
+    },
     'indexedTimestamp.N': {
       type: 'text',
     },
@@ -88,9 +91,6 @@ module.exports = {
     },
     'sealedDate.S': {
       type: 'date',
-    },
-    'sealedTo.S': {
-      type: 'keyword',
     },
     'servedAt.S': {
       type: 'date',

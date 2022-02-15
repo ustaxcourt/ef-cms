@@ -197,7 +197,6 @@ import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/docu
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
-import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
@@ -234,7 +233,6 @@ import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCa
 import { saveSignedDocumentInteractor } from '../../shared/src/proxies/documents/saveSignedDocumentProxy';
 import { sealCaseContactAddressInteractor } from '../../shared/src/proxies/sealCaseContactAddressProxy';
 import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
-import { sealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/sealDocketEntryProxy';
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
@@ -473,7 +471,6 @@ const allUseCases = {
   saveSignedDocumentInteractor,
   sealCaseContactAddressInteractor,
   sealCaseInteractor,
-  sealDocketEntryInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
@@ -709,7 +706,6 @@ const applicationContext = {
       getPetitionDocketEntry,
       getPetitionerById,
       getPractitionersRepresenting,
-      getSealedDocketEntryTooltip,
       getServedPartiesCode,
       getStampBoxCoordinates,
       getTrialSessionStatus,

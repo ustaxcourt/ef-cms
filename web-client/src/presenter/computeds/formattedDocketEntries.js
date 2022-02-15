@@ -1,44 +1,5 @@
 import { state } from 'cerebral';
 
-export const setupIconsToDisplay = ({ formattedResult, isExternalUser }) => {
-  let iconsToDisplay = [];
-
-  if (formattedResult.sealedTo) {
-    iconsToDisplay.push({
-      className: 'sealed-docket-entry',
-      icon: 'lock',
-      title: formattedResult.sealedToTooltip,
-    });
-  }
-
-  if (isExternalUser) {
-    return iconsToDisplay;
-  } else if (formattedResult.isPaper) {
-    iconsToDisplay.push({
-      icon: ['fas', 'file-alt'],
-      title: 'is paper',
-    });
-  } else if (formattedResult.isInProgress) {
-    iconsToDisplay.push({
-      icon: ['fas', 'thumbtack'],
-      title: 'in progress',
-    });
-  } else if (formattedResult.qcNeeded) {
-    iconsToDisplay.push({
-      icon: ['fa', 'star'],
-      title: 'is untouched',
-    });
-  } else if (formattedResult.showLoadingIcon) {
-    iconsToDisplay.push({
-      className: 'fa-spin spinner',
-      icon: ['fa-spin', 'spinner'],
-      title: 'is loading',
-    });
-  }
-
-  return iconsToDisplay;
-};
-
 export const getShowDocumentViewerLink = ({
   hasDocument,
   isCourtIssuedDocument,
@@ -46,7 +7,6 @@ export const getShowDocumentViewerLink = ({
   isHiddenToPublic,
   isInitialDocument,
   isLegacySealed,
-  isSealed,
   isServed,
   isStipDecision,
   isStricken,
@@ -60,12 +20,6 @@ export const getShowDocumentViewerLink = ({
   if (isExternalUser) {
     if (isStricken) return false;
     if (isLegacySealed) return false;
-    if (isSealed) {
-      if (userHasAccessToCase) return true;
-      else {
-        return false;
-      }
-    }
     if (userHasNoAccessToDocument) return false;
     if (isCourtIssuedDocument && !isStipDecision) {
       if (isUnservable) return true;
@@ -112,15 +66,6 @@ export const getShowEditDocketRecordEntry = ({
   );
 };
 
-export const getShowSealDocketRecordEntry = ({ applicationContext, entry }) => {
-  const allOpinionEventCodes =
-    applicationContext.getConstants().OPINION_EVENT_CODES_WITH_BENCH_OPINION;
-
-  const docketEntryIsOpinion = allOpinionEventCodes.includes(entry.eventCode);
-
-  return !docketEntryIsOpinion;
-};
-
 export const getFormattedDocketEntry = ({
   applicationContext,
   docketNumber,
@@ -130,7 +75,6 @@ export const getFormattedDocketEntry = ({
   userAssociatedWithCase,
 }) => {
   const {
-    DOCKET_ENTRY_SEALED_TO_TYPES,
     DOCUMENT_PROCESSING_STATUS_OPTIONS,
     EVENT_CODES_VISIBLE_TO_PUBLIC,
     INITIAL_DOCUMENT_TYPES,
@@ -147,7 +91,9 @@ export const getFormattedDocketEntry = ({
 
   let showDocumentLinks = false;
 
-  if (!isExternalUser) {
+  if (isExternalUser) {
+    formattedResult.hideIcons = true;
+  } else {
     formattedResult.showLoadingIcon =
       !permissions.UPDATE_CASE &&
       entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
@@ -157,12 +103,6 @@ export const getFormattedDocketEntry = ({
     !formattedResult.isInProgress &&
     !formattedResult.qcWorkItemsUntouched &&
     entry.isPaper;
-
-  if (entry.isSealed) {
-    formattedResult.sealedToTooltip = applicationContext
-      .getUtilities()
-      .getSealedDocketEntryTooltip(applicationContext, entry);
-  }
 
   if (entry.documentTitle) {
     formattedResult.descriptionDisplay = applicationContext
@@ -188,7 +128,6 @@ export const getFormattedDocketEntry = ({
     isHiddenToPublic: !EVENT_CODES_VISIBLE_TO_PUBLIC.includes(entry.eventCode),
     isInitialDocument,
     isLegacySealed: entry.isLegacySealed,
-    isSealed: entry.isSealed,
     isServed: applicationContext.getUtilities().isServed(entry),
     isStipDecision: entry.isStipDecision,
     isStricken: entry.isStricken,
@@ -215,28 +154,10 @@ export const getFormattedDocketEntry = ({
     userPermissions: permissions,
   });
 
-  formattedResult.showSealDocketRecordEntry = getShowSealDocketRecordEntry({
-    applicationContext,
-    entry,
-    userPermissions: permissions,
-  });
-
   formattedResult.showDocumentDescriptionWithoutLink =
     !showDocumentLinks && !formattedResult.showDocumentProcessing;
 
   formattedResult.editDocketEntryMetaLink = `/case-detail/${docketNumber}/docket-entry/${formattedResult.index}/edit-meta`;
-
-  formattedResult.iconsToDisplay = setupIconsToDisplay({
-    formattedResult,
-    isExternalUser,
-  });
-
-  formattedResult.sealButtonText = formattedResult.isSealed ? 'Unseal' : 'Seal';
-  formattedResult.sealButtonTooltip = formattedResult.isSealed
-    ? formattedResult.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
-      ? 'Unseal to the public and parties of this case'
-      : 'Unseal to the public'
-    : 'Seal to the public';
 
   return formattedResult;
 };
@@ -251,11 +172,11 @@ export const formattedDocketEntries = (get, applicationContext) => {
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
 
+  let docketRecordSort;
   const caseDetail = get(state.caseDetail);
 
   const { docketNumber } = caseDetail;
 
-  let docketRecordSort;
   if (docketNumber) {
     docketRecordSort = get(
       state.sessionMetadata.docketRecordSort[docketNumber],

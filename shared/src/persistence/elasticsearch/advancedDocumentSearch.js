@@ -24,6 +24,7 @@ exports.advancedDocumentSearch = async ({
 }) => {
   const sourceFields = [
     'caseCaption',
+    'petitioners',
     'docketEntryId',
     'docketNumber',
     'docketNumberWithSuffix',
@@ -31,16 +32,15 @@ exports.advancedDocumentSearch = async ({
     'documentType',
     'eventCode',
     'filingDate',
+    'hasSealedDocuments',
     'irsPractitioners',
     'isFileAttached',
     'isSealed',
     'isStricken',
     'judge',
     'numberOfPages',
-    'petitioners',
     'privatePractitioners',
     'sealedDate',
-    'sealedTo',
     'signedJudgeName',
   ];
 
@@ -91,6 +91,9 @@ exports.advancedDocumentSearch = async ({
   if (omitSealed) {
     const caseMust = [
       {
+        term: { 'hasSealedDocuments.BOOL': false },
+      },
+      {
         bool: {
           minimum_should_match: 1,
           should: [
@@ -119,9 +122,6 @@ exports.advancedDocumentSearch = async ({
       ...docketEntryMustNot,
       {
         term: { 'isSealed.BOOL': true },
-      },
-      {
-        term: { 'sealedTo.S': 'External' },
       },
     ];
     caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
