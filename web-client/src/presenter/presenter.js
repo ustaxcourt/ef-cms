@@ -257,6 +257,7 @@ import { openStrikeDocketEntryModalSequence } from './sequences/openStrikeDocket
 import { openTrialSessionPlanningModalSequence } from './sequences/openTrialSessionPlanningModalSequence';
 import { openUnblockFromTrialModalSequence } from './sequences/openUnblockFromTrialModalSequence';
 import { openUnprioritizeCaseModalSequence } from './sequences/openUnprioritizeCaseModalSequence';
+import { openUnsealDocketEntryModalSequence } from './sequences/openUnsealDocketEntryModalSequence';
 import { openUpdateCaseModalSequence } from './sequences/openUpdateCaseModalSequence';
 import { printTrialCalendarSequence } from './sequences/printTrialCalendarSequence';
 import { prioritizeCaseSequence } from './sequences/prioritizeCaseSequence';
@@ -388,6 +389,7 @@ import { unblockCaseFromTrialSequence } from './sequences/unblockCaseFromTrialSe
 import { unidentifiedUserErrorSequence } from './sequences/unidentifiedUserErrorSequence';
 import { unprioritizeCaseSequence } from './sequences/unprioritizeCaseSequence';
 import { unsealCaseSequence } from './sequences/unsealCaseSequence';
+import { unsealDocketEntrySequence } from './sequences/unsealDocketEntrySequence';
 import { updateAddDeficiencyFormValueSequence } from './sequences/updateAddDeficiencyFormValueSequence';
 import { updateAdvancedOpinionSearchFormValueSequence } from './sequences/updateAdvancedOpinionSearchFormValueSequence';
 import { updateAdvancedOrderSearchFormValueSequence } from './sequences/updateAdvancedOrderSearchFormValueSequence';
@@ -747,6 +749,7 @@ export const presenter = {
     openTrialSessionPlanningModalSequence,
     openUnblockFromTrialModalSequence,
     openUnprioritizeCaseModalSequence,
+    openUnsealDocketEntryModalSequence,
     openUpdateCaseModalSequence,
     printTrialCalendarSequence,
     prioritizeCaseSequence,
@@ -876,6 +879,7 @@ export const presenter = {
     unidentifiedUserErrorSequence,
     unprioritizeCaseSequence,
     unsealCaseSequence,
+    unsealDocketEntrySequence,
     updateAddDeficiencyFormValueSequence,
     updateAdvancedOpinionSearchFormValueSequence,
     updateAdvancedOrderSearchFormValueSequence,
