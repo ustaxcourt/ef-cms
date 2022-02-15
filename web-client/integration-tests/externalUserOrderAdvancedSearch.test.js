@@ -194,7 +194,6 @@ describe('external users perform an advanced search for orders', () => {
 
     await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
 
-    // TODO: sealed order for unassociated practitoner should not be returned
     expect(
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
     ).not.toEqual(
@@ -258,16 +257,13 @@ describe('external users perform an advanced search for orders', () => {
           `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
         );
 
-        //expect we don't find the sealed to external docket entry
         const sealedToExternalDocketEntryId =
           'ffb6c3d7-bfd5-4a19-8d23-6fd75a1e362c';
-
-        const foundDocketEntryId = orderSearchResultsFromState.find(
+        const sealedToExternalDocketEntry = orderSearchResultsFromState.find(
           docketEntry =>
             docketEntry.docketEntryId === sealedToExternalDocketEntryId,
         );
-
-        expect(foundDocketEntryId).toBeUndefined();
+        expect(sealedToExternalDocketEntry).toBeUndefined();
       });
     },
   );
