@@ -594,6 +594,25 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
+    it('returns the url if the user role is irsSuperuser and the order is sealed', async () => {
+      mockCase.docketEntries[0] = {
+        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        documentType: 'Order',
+        eventCode: 'O',
+        isFileAttached: true,
+        isSealed: true,
+        sealedTo: 'Public',
+        servedAt: '2019-03-01T21:40:46.415Z',
+      };
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+      });
+
+      expect(url).toEqual('localhost');
+    });
+
     it('should receive the policy url when the document being viewed is a document that has been sealed to all external users', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
