@@ -7,6 +7,43 @@ const {
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
+const getSealedQuery = ({ caseQueryParams, docketEntryMustNot }) => {
+  const caseMust = [
+    {
+      bool: {
+        minimum_should_match: 1,
+        should: [
+          {
+            bool: {
+              must: {
+                term: { 'isSealed.BOOL': false },
+              },
+            },
+          },
+          {
+            bool: {
+              must_not: {
+                exists: { field: 'isSealed' },
+              },
+            },
+          },
+        ],
+      },
+    },
+  ];
+
+  const caseQuery = { bool: { must: caseMust } };
+
+  docketEntryMustNot.push({
+    term: { 'isSealed.BOOL': true },
+  });
+  docketEntryMustNot.push({
+    term: { 'sealedTo.S': 'External' },
+  });
+
+  caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
+};
+
 exports.advancedDocumentSearch = async ({
   applicationContext,
   caseTitleOrPetitioner,
@@ -46,17 +83,6 @@ exports.advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const documentQueryFilter = [
-    { term: { 'entityName.S': 'DocketEntry' } },
-    {
-      exists: {
-        field: 'servedAt',
-      },
-    },
-    { terms: { 'eventCode.S': documentEventCodes } },
-    { term: { 'isFileAttached.BOOL': true } },
-  ];
-
   const docketEntryQueryParams = [];
   let docketEntryMustNot = [{ term: { 'isStricken.BOOL': true } }];
   const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
@@ -72,7 +98,7 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  const caseQueryParams = {
+  let caseQueryParams = {
     has_parent: {
       inner_hits: {
         _source: {
@@ -91,42 +117,7 @@ exports.advancedDocumentSearch = async ({
   };
 
   if (omitSealed) {
-    const caseMust = [
-      {
-        bool: {
-          minimum_should_match: 1,
-          should: [
-            {
-              bool: {
-                must: {
-                  term: { 'isSealed.BOOL': false },
-                },
-              },
-            },
-            {
-              bool: {
-                must_not: {
-                  exists: { field: 'isSealed' },
-                },
-              },
-            },
-          ],
-        },
-      },
-    ];
-
-    const caseQuery = { bool: { must: caseMust } };
-
-    docketEntryMustNot = [
-      ...docketEntryMustNot,
-      {
-        term: { 'isSealed.BOOL': true },
-      },
-      {
-        term: { 'sealedTo.S': 'External' },
-      },
-    ];
-    caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
+    getSealedQuery({ caseQueryParams, docketEntryMustNot });
   } else {
     if (isExternalUser) {
       docketEntryMustNot = [
@@ -201,6 +192,17 @@ exports.advancedDocumentSearch = async ({
       });
     }
   }
+
+  const documentQueryFilter = [
+    { term: { 'entityName.S': 'DocketEntry' } },
+    {
+      exists: {
+        field: 'servedAt',
+      },
+    },
+    { terms: { 'eventCode.S': documentEventCodes } },
+    { term: { 'isFileAttached.BOOL': true } },
+  ];
 
   if (opinionTypes && opinionTypes.length) {
     if (opinionTypes.length === 1) {
