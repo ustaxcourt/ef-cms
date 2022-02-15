@@ -4,6 +4,7 @@ import { DocketRecordOverlay } from './DocketRecordOverlay';
 import { FilingsAndProceedings } from '../DocketRecord/FilingsAndProceedings';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SealDocketEntryModal } from './SealDocketEntryModal';
+import { UnsealDocketEntryModal } from './UnsealDocketEntryModal';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -15,6 +16,8 @@ export const DocketRecord = connect(
     formattedDocketEntries: state.formattedDocketEntries,
     openSealDocketEntryModalSequence:
       sequences.openSealDocketEntryModalSequence,
+    openUnsealDocketEntryModalSequence:
+      sequences.openUnsealDocketEntryModalSequence,
     showModal: state.modal.showModal,
   },
 
@@ -22,6 +25,7 @@ export const DocketRecord = connect(
     docketRecordHelper,
     formattedDocketEntries,
     openSealDocketEntryModalSequence,
+    openUnsealDocketEntryModalSequence,
     showModal,
   }) {
     return (
@@ -130,10 +134,15 @@ export const DocketRecord = connect(
                             icon="lock"
                             tooltip={entry.sealButtonTooltip}
                             onClick={() => {
-                              openSealDocketEntryModalSequence({
-                                docketEntryId: entry.docketEntryId,
-                                showModal: 'SealDocketEntryModal',
-                              });
+                              entry.isSealed
+                                ? openUnsealDocketEntryModalSequence({
+                                    docketEntryId: entry.docketEntryId,
+                                    showModal: 'UnsealDocketEntryModal',
+                                  })
+                                : openSealDocketEntryModalSequence({
+                                    docketEntryId: entry.docketEntryId,
+                                    showModal: 'SealDocketEntryModal',
+                                  });
                             }}
                           >
                             {entry.sealButtonText}
@@ -149,6 +158,7 @@ export const DocketRecord = connect(
         </table>
         {showModal == 'DocketRecordOverlay' && <DocketRecordOverlay />}
         {showModal == 'SealDocketEntryModal' && <SealDocketEntryModal />}
+        {showModal == 'UnsealDocketEntryModal' && <UnsealDocketEntryModal />}
       </>
     );
   },
