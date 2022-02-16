@@ -2,6 +2,7 @@ exports.getSealedQuery = ({ caseQueryParams, docketEntryMustNot }) => {
   docketEntryMustNot.push({
     term: { 'isSealed.BOOL': true },
   });
+
   docketEntryMustNot.push({
     term: { 'sealedTo.S': 'External' },
   });
