@@ -523,12 +523,12 @@ describe('advancedDocumentSearch', () => {
     );
   });
 
-  it('should sort by filingDate when sortOrder is provided as DOCUMENT_SEARCH_SORT.FILING_DATE_ASC', async () => {
+  it('should sort by filingDate when sortField is provided as DOCUMENT_SEARCH_SORT.FILING_DATE_ASC', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
       endDate: '2020-02-21T04:59:59.999Z',
-      sortOrder: TODAYS_ORDERS_SORTS.FILING_DATE_ASC,
+      sortField: TODAYS_ORDERS_SORTS.FILING_DATE_ASC,
       startDate: '2020-02-20T05:00:00.000Z',
     });
 
@@ -537,12 +537,12 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('should sort by numberOfPages when sortOrder is provided as DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC', async () => {
+  it('should sort by numberOfPages when sortField is provided as DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
       endDate: '2020-02-21T04:59:59.999Z',
-      sortOrder: TODAYS_ORDERS_SORTS.NUMBER_OF_PAGES_ASC,
+      sortField: TODAYS_ORDERS_SORTS.NUMBER_OF_PAGES_ASC,
       startDate: '2020-02-20T05:00:00.000Z',
     });
 
@@ -551,7 +551,7 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('should use default sorting option (filing date, descending) when sortOrder is not passed in', async () => {
+  it('should use default sorting option (filing date, descending) when sortField is not passed in', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
