@@ -1,119 +1,19 @@
-/* eslint-disable complexity */
 const {
-  DOCUMENT_SEARCH_SORT,
+  getJudgeFilterForOpinionSearch,
+} = require('./advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch');
+const {
+  getJudgeFilterForOrderSearch,
+} = require('./advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch');
+const {
+  getSealedQuery,
+} = require('./advancedDocumentSearchHelpers/getSealedQuery');
+const {
+  getSortQuery,
+} = require('./advancedDocumentSearchHelpers/getSortQuery');
+const {
   MAX_SEARCH_CLIENT_RESULTS,
-  OPINION_JUDGE_FIELD,
-  ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
-
-const getSealedQuery = ({ caseQueryParams, docketEntryMustNot }) => {
-  docketEntryMustNot.push({
-    term: { 'isSealed.BOOL': true },
-  });
-  docketEntryMustNot.push({
-    term: { 'sealedTo.S': 'External' },
-  });
-
-  caseQueryParams.has_parent.query.bool.filter.push({
-    bool: {
-      must: [
-        {
-          bool: {
-            minimum_should_match: 1,
-            should: [
-              {
-                bool: {
-                  must: {
-                    term: { 'isSealed.BOOL': false },
-                  },
-                },
-              },
-              {
-                bool: {
-                  must_not: {
-                    exists: { field: 'isSealed' },
-                  },
-                },
-              },
-            ],
-          },
-        },
-      ],
-    },
-  });
-};
-
-const getSortQuery = sortField => {
-  let sort;
-  let sortOrder = 'desc';
-
-  if (
-    [
-      DOCUMENT_SEARCH_SORT.FILING_DATE_ASC,
-      DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC,
-    ].includes(sortField)
-  ) {
-    sortOrder = 'asc';
-  }
-
-  switch (sortField) {
-    case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC: // fall through
-    case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_DESC:
-      sort = [{ 'numberOfPages.N': sortOrder }];
-      break;
-    case DOCUMENT_SEARCH_SORT.FILING_DATE_ASC: // fall through
-    case DOCUMENT_SEARCH_SORT.FILING_DATE_DESC: // fall through
-    default:
-      sort = [{ 'filingDate.S': sortOrder }];
-      break;
-  }
-
-  return sort;
-};
-
-const getJudgeFilterForOpinionSearch = ({
-  docketEntryQueryParams,
-  judgeName,
-}) => {
-  docketEntryQueryParams.push({
-    bool: {
-      should: [
-        {
-          match: {
-            [`${OPINION_JUDGE_FIELD}.S`]: judgeName,
-          },
-        },
-        {
-          match: {
-            [`${ORDER_JUDGE_FIELD}.S`]: {
-              operator: 'and',
-              query: judgeName,
-            },
-          },
-        },
-      ],
-    },
-  });
-};
-
-const getJudgeFilterForOrderSearch = ({
-  docketEntryQueryParams,
-  judgeName,
-}) => {
-  docketEntryQueryParams.push({
-    bool: {
-      should: {
-        match: {
-          [`${ORDER_JUDGE_FIELD}.S`]: {
-            operator: 'and',
-            query: judgeName,
-          },
-        },
-      },
-    },
-  });
-};
 
 const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
