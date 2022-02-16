@@ -45,8 +45,6 @@ export const advancedSearchHelper = (get, applicationContext) => {
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
 
-  console.log('In Helper: ', CASE_SEARCH_PAGE_SIZE);
-
   if (searchResults) {
     const paginatedResults = paginationHelper(
       searchResults,
