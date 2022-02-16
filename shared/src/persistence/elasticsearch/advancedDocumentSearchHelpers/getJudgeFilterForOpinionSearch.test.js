@@ -8,93 +8,9 @@ const {
 const {
   getJudgeFilterForOpinionSearch,
 } = require('../getJudgeFilterForOpinionSearch');
-const { search } = require('../searchClient');
-jest.mock('./searchClient');
 
 describe('getJudgeFilterForOpinionSearch', () => {
-  const opinionEventCodes = ['MOP', 'TCOP'];
-
-  const SOURCE = {
-    includes: [
-      'caseCaption',
-      'docketEntryId',
-      'docketNumber',
-      'docketNumberWithSuffix',
-      'documentTitle',
-      'documentType',
-      'eventCode',
-      'filingDate',
-      'irsPractitioners',
-      'isFileAttached',
-      'isSealed',
-      'isStricken',
-      'judge',
-      'numberOfPages',
-      'petitioners',
-      'privatePractitioners',
-      'sealedDate',
-      'sealedTo',
-      'signedJudgeName',
-    ],
-  };
-
-  const opinionQueryParams = [
-    { term: { 'entityName.S': 'DocketEntry' } },
-    {
-      exists: {
-        field: 'servedAt',
-      },
-    },
-    {
-      terms: {
-        'eventCode.S': [opinionEventCodes[0], opinionEventCodes[1]],
-      },
-    },
-  ];
-
-  const getCaseMappingQueryParams = (caseTitleOrPetitioner, docketNumber) => {
-    let query = {
-      bool: {
-        filter: [],
-      },
-    };
-
-    if (caseTitleOrPetitioner) {
-      query.bool.must = {
-        simple_query_string: {
-          default_operator: 'and',
-          fields: ['caseCaption.S', 'petitioners.L.M.name.S'],
-          flags: 'OR|AND|ESCAPE|PHRASE',
-          query: caseTitleOrPetitioner,
-        },
-      };
-    }
-
-    if (docketNumber) {
-      query.bool.filter.push({
-        term: {
-          'docketNumber.S': docketNumber,
-        },
-      });
-    }
-
-    return {
-      has_parent: {
-        inner_hits: {
-          _source: SOURCE,
-          name: 'case-mappings',
-        },
-        parent_type: 'case',
-        query,
-        score: true,
-      },
-    };
-  };
-
-  beforeEach(() => {
-    search.mockReturnValue({ results: [], total: 0 });
-  });
-
+  // dpes a search for signedjudgename because bench opinions are technally orders
   it('does a search for a signed judge when searching for bench opinions', async () => {
     await getJudgeFilterForOpinionSearch({
       applicationContext,
