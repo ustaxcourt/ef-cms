@@ -1,4 +1,4 @@
-export const getSealedQuery = ({ caseQueryParams, docketEntryMustNot }) => {
+exports.getSealedQuery = ({ caseQueryParams, docketEntryMustNot }) => {
   docketEntryMustNot.push({
     term: { 'isSealed.BOOL': true },
   });

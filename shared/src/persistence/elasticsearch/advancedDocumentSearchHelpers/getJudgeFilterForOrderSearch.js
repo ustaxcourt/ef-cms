@@ -2,7 +2,7 @@ const {
   ORDER_JUDGE_FIELD,
 } = require('../../../business/entities/EntityConstants');
 
-export const getJudgeFilterForOrderSearch = ({
+exports.getJudgeFilterForOrderSearch = ({
   docketEntryQueryParams,
   judgeName,
 }) => {
