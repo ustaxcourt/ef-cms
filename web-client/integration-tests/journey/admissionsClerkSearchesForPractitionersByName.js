@@ -66,9 +66,23 @@ export const admissionsClerkSearchesForPractitionersByName = cerebralTest => {
         `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
       ).length,
     ).toBeGreaterThan(0);
+
+    const CASE_SEARCH_PAGE_SIZE_OVERRIDE = 1;
+    cerebralTest.setState(
+      'constants.CASE_SEARCH_PAGE_SIZE',
+      CASE_SEARCH_PAGE_SIZE_OVERRIDE,
+    );
+
+    console.log('Before call to advancedSearchHelper');
+
     let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
       state: cerebralTest.getState(),
     });
+
+    console.log(
+      'state**** ',
+      cerebralTest.getState('constants.CASE_SEARCH_PAGE_SIZE'),
+    );
 
     expect(helper.formattedSearchResults.length).toEqual(
       cerebralTest.getState('constants.CASE_SEARCH_PAGE_SIZE'),
