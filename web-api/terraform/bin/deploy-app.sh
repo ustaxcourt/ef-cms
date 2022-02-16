@@ -2,8 +2,8 @@
 
 ENV=$1
 
-export DEPLOYING_COLOR=(sh ./scripts/get-deploying-color.sh ${ENV})
-export MIGRATE_FLAG=(sh ./scripts/get-migrate-flag.sh ${ENV})
+export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh ${ENV})
+export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh ${ENV})
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 pushd ../../../
