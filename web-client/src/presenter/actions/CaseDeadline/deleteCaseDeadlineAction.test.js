@@ -1,3 +1,4 @@
+import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { deleteCaseDeadlineAction } from './deleteCaseDeadlineAction';
 import { presenter } from '../../presenter-mock';
@@ -21,38 +22,52 @@ describe('deleteCaseDeadlineAction', () => {
     };
   });
 
-  it('calls deleteCaseDeadlineInteractor', async () => {
-    await runAction(deleteCaseDeadlineAction, {
+  it('sets automatic blocked fields on state', async () => {
+    applicationContext
+      .getUseCases()
+      .deleteCaseDeadlineInteractor.mockReturnValue(MOCK_CASE);
+
+    const result = await runAction(deleteCaseDeadlineAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: { docketNumber: mockDocketNumber },
+        caseDetail: {
+          automaticBlocked: undefined,
+          automaticBlockedDate: undefined,
+          automaticBlockedReason: undefined,
+          docketNumber: mockDocketNumber,
+        },
         form: {
           caseDeadlineId: mockCaseDeadlineId,
         },
       },
     });
 
-    expect(
-      applicationContext.getUseCases().deleteCaseDeadlineInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().deleteCaseDeadlineInteractor.mock
-        .calls[0][1],
-    ).toMatchObject({
-      caseDeadlineId: mockCaseDeadlineId,
-      docketNumber: mockDocketNumber,
-    });
+    expect(result.state.caseDetail.automaticBlocked).toEqual(
+      MOCK_CASE.automaticBlocked,
+    );
+    expect(result.state.caseDetail.automaticBlockedDate).toEqual(
+      MOCK_CASE.automaticBlockedDate,
+    );
+    expect(result.state.caseDetail.automaticBlockedReason).toEqual(
+      MOCK_CASE.automaticBlockedReason,
+    );
   });
 
   it('calls the success path with alertSuccess.message', async () => {
+    applicationContext
+      .getUseCases()
+      .deleteCaseDeadlineInteractor.mockReturnValue(MOCK_CASE);
+
     await runAction(deleteCaseDeadlineAction, {
       modules: {
         presenter,
       },
       state: {
-        caseDetail: { docketNumber: mockDocketNumber },
+        caseDetail: {
+          docketNumber: mockDocketNumber,
+        },
         form: {
           caseDeadlineId: mockCaseDeadlineId,
         },
