@@ -1,4 +1,6 @@
-import { getJudgeFilterForOrderSearch } from './getJudgeFilterForOrderSearch';
+const {
+  getJudgeFilterForOrderSearch,
+} = require('./getJudgeFilterForOrderSearch');
 
 describe('getJudgeFilterForOrderSearch', () => {
   it('does a search for signed judge name', () => {

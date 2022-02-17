@@ -1,4 +1,6 @@
-import { ORDER_JUDGE_FIELD } from '../../../business/entities/EntityConstants';
+const {
+  ORDER_JUDGE_FIELD,
+} = require('../../../business/entities/EntityConstants');
 
 exports.getJudgeFilterForOrderSearch = ({
   docketEntryQueryParams,

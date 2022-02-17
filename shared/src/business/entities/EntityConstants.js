@@ -1099,7 +1099,7 @@ const DATE_RANGE_SEARCH_OPTIONS = {
 };
 
 const DOCKET_ENTRY_SEALED_TO_TYPES = {
-  EXTERNAL: 'External', // Do not allow practitioners, petiioners, and irs practitioners to view the documents even when associated
+  EXTERNAL: 'External', // Do not allow practitioners, petitioners, and irs practitioners to view the documents even when associated
   PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry if they are associated
 };
 

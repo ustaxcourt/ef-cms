@@ -1,7 +1,8 @@
-import {
+const {
   OPINION_JUDGE_FIELD,
   ORDER_JUDGE_FIELD,
-} from '../../../business/entities/EntityConstants';
+} = require('../../../business/entities/EntityConstants');
+
 exports.getJudgeFilterForOpinionSearch = ({
   docketEntryQueryParams,
   judgeName,
