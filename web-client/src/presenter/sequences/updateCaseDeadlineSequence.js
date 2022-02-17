@@ -5,7 +5,6 @@ import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
@@ -29,7 +28,6 @@ export const updateCaseDeadlineSequence = [
       clearScreenMetadataAction,
       clearModalAction,
       clearModalStateAction,
-      refreshCaseAction,
       getCaseDeadlinesForCaseAction,
     ]),
   },
