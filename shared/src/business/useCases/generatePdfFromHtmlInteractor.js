@@ -1,5 +1,3 @@
-const { headerFontFace } = require('./headerFontFace');
-
 /**
  * generatePdfFromHtmlInteractor
  *
@@ -27,6 +25,7 @@ exports.generatePdfFromHtmlInteractor = async (
 
   try {
     browser = await applicationContext.getChromiumBrowser();
+
     let page = await browser.newPage();
 
     await page.setContent(contentHtml);
@@ -59,7 +58,7 @@ exports.generatePdfFromHtmlInteractor = async (
       displayHeaderFooter,
       footerTemplate,
       format: 'Letter',
-      headerTemplate: `<style>${headerFontFace}</style>` + headerTemplate,
+      headerTemplate,
       margin: {
         bottom: '100px',
         top: '80px',
