@@ -1,9 +1,7 @@
-const {
-  getJudgeFilterForOpinionSearch,
-} = require('./getJudgeFilterForOpinionSearch');
+import { getJudgeFilterForOpinionSearch } from './getJudgeFilterForOpinionSearch';
 
 describe('getJudgeFilterForOpinionSearch', () => {
-  it('does a search for both judge and signed judge since bench opinions are technically orders', async () => {
+  it('does a search for both judge and signed judge since bench opinions are technically orders', () => {
     let mockDocketEntryQueryParams = [];
 
     getJudgeFilterForOpinionSearch({
