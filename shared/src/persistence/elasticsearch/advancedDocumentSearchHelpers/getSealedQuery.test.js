@@ -1,7 +1,7 @@
 import { getSealedQuery } from './getSealedQuery';
 
 describe('getSealedQuery', () => {
-  it('searches for a case that either must be isSealed: false OR isSealed field should not exist', async () => {
+  it('searches for a case that either must be isSealed: false OR isSealed field should not exist', () => {
     let mockCaseQueryParams = {
       has_parent: { query: { bool: { filter: [] } } },
     };

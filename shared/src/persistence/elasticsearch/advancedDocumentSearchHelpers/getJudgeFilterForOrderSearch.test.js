@@ -1,14 +1,12 @@
-const {
-  getJudgeFilterForOrderSearch,
-} = require('./getJudgeFilterForOrderSearch');
+import { getJudgeFilterForOrderSearch } from './getJudgeFilterForOrderSearch';
 
 describe('getJudgeFilterForOrderSearch', () => {
-  it('does a search for signed judge name', async () => {
+  it('does a search for signed judge name', () => {
     let mockDocketEntryQueryParams = [];
 
     getJudgeFilterForOrderSearch({
       docketEntryQueryParams: mockDocketEntryQueryParams,
-      judgeName: 'Judge Antonia Lofaso',
+      judgeName: 'Judge Alex Guarnaschelli',
     });
 
     expect(mockDocketEntryQueryParams).toEqual([
@@ -18,7 +16,7 @@ describe('getJudgeFilterForOrderSearch', () => {
             match: {
               'signedJudgeName.S': {
                 operator: 'and',
-                query: 'Judge Antonia Lofaso',
+                query: 'Judge Alex Guarnaschelli',
               },
             },
           },
