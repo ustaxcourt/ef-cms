@@ -17,10 +17,9 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
-const CASE_SEARCH_PAGE_SIZE_OVERRIDE = 1;
 const cerebralTest = setupTest({
   constantsOverrides: {
-    CASE_SEARCH_PAGE_SIZE: CASE_SEARCH_PAGE_SIZE_OVERRIDE,
+    CASE_SEARCH_PAGE_SIZE: 1,
   },
 });
 
