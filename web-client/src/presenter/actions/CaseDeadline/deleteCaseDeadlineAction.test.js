@@ -23,9 +23,18 @@ describe('deleteCaseDeadlineAction', () => {
   });
 
   it('sets automatic blocked fields on state', async () => {
+    const mockAutomaticBlocked = true;
+    const mockAutomaticBlockedDate = '2019-11-11';
+    const mockAutomaticBlockedReason = 'Because I said so';
+
     applicationContext
       .getUseCases()
-      .deleteCaseDeadlineInteractor.mockReturnValue(MOCK_CASE);
+      .deleteCaseDeadlineInteractor.mockReturnValue({
+        ...MOCK_CASE,
+        automaticBlocked: mockAutomaticBlocked,
+        automaticBlockedDate: mockAutomaticBlockedDate,
+        automaticBlockedReason: mockAutomaticBlockedReason,
+      });
 
     const result = await runAction(deleteCaseDeadlineAction, {
       modules: {
@@ -45,13 +54,13 @@ describe('deleteCaseDeadlineAction', () => {
     });
 
     expect(result.state.caseDetail.automaticBlocked).toEqual(
-      MOCK_CASE.automaticBlocked,
+      mockAutomaticBlocked,
     );
     expect(result.state.caseDetail.automaticBlockedDate).toEqual(
-      MOCK_CASE.automaticBlockedDate,
+      mockAutomaticBlockedDate,
     );
     expect(result.state.caseDetail.automaticBlockedReason).toEqual(
-      MOCK_CASE.automaticBlockedReason,
+      mockAutomaticBlockedReason,
     );
   });
 
