@@ -140,27 +140,9 @@ exports.advancedDocumentSearch = async ({
         field: 'servedAt',
       },
     },
-    { terms: { 'eventCode.S': documentEventCodes } },
+    { terms: { 'eventCode.S': opinionTypes || documentEventCodes } },
     { term: { 'isFileAttached.BOOL': true } },
   ];
-
-  // todo: is there a way to combine how we're using isOpinionSearch for judge vs. judgeName
-  // and opinionTypes to update the eventCode search
-  if (opinionTypes && opinionTypes.length) {
-    if (opinionTypes.length === 1) {
-      documentQueryFilter.push({
-        term: { 'eventCode.S': opinionTypes[0] },
-      });
-    } else {
-      documentQueryFilter.push({
-        bool: {
-          should: opinionTypes.map(opinionType => ({
-            term: { 'eventCode.S': opinionType },
-          })),
-        },
-      });
-    }
-  }
 
   if (endDate && startDate) {
     documentQueryFilter.push({
