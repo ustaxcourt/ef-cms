@@ -1,7 +1,7 @@
-const { getSealedQuery } = require('./getSealedQuery');
+import { getSealedQuery } from './getSealedQuery';
 
 describe('getSealedQuery', () => {
-  it.skip('searches for a case that either must be isSealed: false OR isSealed field should not exist', async () => {
+  it('searches for a case that either must be isSealed: false OR isSealed field should not exist', async () => {
     let mockCaseQueryParams = {
       has_parent: { query: { bool: { filter: [] } } },
     };
@@ -12,33 +12,35 @@ describe('getSealedQuery', () => {
       docketEntryMustNot: mockDocketEntryMustNot,
     });
 
-    expect(mockCaseQueryParams.has_parent.query.bool.filter).toMatchObject({
-      bool: {
-        must: [
-          {
-            bool: {
-              minimum_should_match: 1,
-              should: [
-                {
-                  bool: {
-                    must: {
-                      term: { 'isSealed.BOOL': false },
+    expect(mockCaseQueryParams.has_parent.query.bool.filter).toEqual([
+      {
+        bool: {
+          must: [
+            {
+              bool: {
+                minimum_should_match: 1,
+                should: [
+                  {
+                    bool: {
+                      must: {
+                        term: { 'isSealed.BOOL': false },
+                      },
                     },
                   },
-                },
-                {
-                  bool: {
-                    must_not: {
-                      exists: { field: 'isSealed' },
+                  {
+                    bool: {
+                      must_not: {
+                        exists: { field: 'isSealed' },
+                      },
                     },
                   },
-                },
-              ],
+                ],
+              },
             },
-          },
-        ],
+          ],
+        },
       },
-    });
+    ]);
   });
 
   it('searches for docket entries that are not sealed AND not sealed to "External"', async () => {
