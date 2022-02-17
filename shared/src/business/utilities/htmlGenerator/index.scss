@@ -283,7 +283,7 @@ ol {
 
 .standing-pretrial-card {
   padding: 0 8px 0 8px;
-  border: 3px solid #000000;
+  border: 3px solid #000;
   margin: 24px 0 12px 0;
 }
 
@@ -322,6 +322,7 @@ ol {
   border-bottom: 1px solid #ccc;
   background: #f0f0f0;
   font-weight: bold;
+
   p {
     margin: 0;
   }
@@ -371,6 +372,7 @@ ol {
   margin: 1.5cm 1cm 2cm 1cm;
   size: 8.5in 11in;
 }
+
 @page :first {
   margin-top: 0;
   margin-bottom: 2.5cm;
@@ -421,6 +423,7 @@ ol {
     li {
       padding-bottom: 20px;
       padding-left: 2em;
+
       ol {
         li {
           padding-bottom: 0;
@@ -512,6 +515,7 @@ ol {
     text-decoration: none;
   }
 }
+
 #document-cover-sheet {
   .case-information,
   #docket-number,
@@ -558,8 +562,8 @@ ol {
 #document-notice-of-receipt {
   .court-stamp {
     position: absolute;
-    bottom: 0in;
     right: 0.5in;
+    bottom: 0;
   }
 
   .info-box-content {
@@ -583,9 +587,10 @@ ol {
   p {
     line-height: 20px;
   }
+
   #order-signature {
-    line-height: 15px;
     font-size: 16px;
+    line-height: 15px;
   }
 }
 
@@ -626,13 +631,13 @@ ol {
 
   .address-label {
     position: absolute;
-    bottom: 0in;
+    bottom: 0;
     left: 0.5in;
   }
 }
 
 .notice-of-trial-title {
-  margin-bottom: 0px;
+  margin-bottom: 0;
 }
 
 #notice-of-trial-pdf .info-box {
@@ -640,7 +645,7 @@ ol {
 }
 
 #notice-body > p {
-  margin-top: 0px;
+  margin-top: 0;
 }
 
 /* stylelint-disable */
