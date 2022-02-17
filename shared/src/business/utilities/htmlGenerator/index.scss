@@ -583,6 +583,10 @@ ol {
   p {
     line-height: 20px;
   }
+  #order-signature {
+    line-height: 15px;
+    font-size: 16px;
+  }
 }
 
 .calendar-icon {
@@ -776,7 +780,6 @@ ol {
 /* stylelint-enable */
 
 .order-pdf {
-  font-size: 36px;
   font-family: 'Century Schoolbook Std', serif;
 
   h1,
