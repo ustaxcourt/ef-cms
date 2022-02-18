@@ -129,15 +129,17 @@ exports.advancedDocumentSearch = async ({
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     if (isOpinionSearch) {
-      getJudgeFilterForOpinionSearch({
-        documentMustQuery: documentMust,
+      const judgeFilter = getJudgeFilterForOpinionSearch({
         judgeName,
       });
+
+      documentMust.push(judgeFilter);
     } else {
-      getJudgeFilterForOrderSearch({
-        documentMustQuery: documentMust,
+      const judgeFilter = getJudgeFilterForOrderSearch({
         judgeName,
       });
+
+      documentMust.push(judgeFilter);
     }
   }
 
