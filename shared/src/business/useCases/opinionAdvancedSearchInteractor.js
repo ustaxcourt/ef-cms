@@ -10,7 +10,6 @@ const {
 } = require('../../authorization/authorizationClientService');
 const {
   MAX_SEARCH_RESULTS,
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
 } = require('../../business/entities/EntityConstants');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 const { omit } = require('lodash');
@@ -33,7 +32,6 @@ exports.opinionAdvancedSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    // todo: rename to selected/filterby opion types
     opinionTypes,
     startDate,
   },
