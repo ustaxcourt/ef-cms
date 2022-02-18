@@ -1,13 +1,12 @@
-exports.getSealedQuery = ({ caseQueryParams, documentMustNot }) => {
-  documentMustNot.push({
-    term: { 'isSealed.BOOL': true },
-  });
+exports.getSealedQuery = () => {
+  const sealedDocumentMustNotQuery = [
+    {
+      term: { 'isSealed.BOOL': true },
+    },
+    { term: { 'sealedTo.S': 'External' } },
+  ];
 
-  documentMustNot.push({
-    term: { 'sealedTo.S': 'External' },
-  });
-
-  caseQueryParams.has_parent.query.bool.filter.push({
+  const sealedCaseQuery = {
     bool: {
       must: [
         {
@@ -33,5 +32,7 @@ exports.getSealedQuery = ({ caseQueryParams, documentMustNot }) => {
         },
       ],
     },
-  });
+  };
+
+  return { sealedCaseQuery, sealedDocumentMustNotQuery };
 };
