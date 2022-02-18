@@ -69,7 +69,7 @@ export const NoticeOfChangeToRemoteProceeding = ({
           proceeding.
         </p>
 
-        <p className="text-underline">ACCESS REMOTE PROCEEDING</p>
+        <p className="text-underline text-bold">ACCESS REMOTE PROCEEDING</p>
         <p>Your Meeting ID and Passcode for the remote proceeding are:</p>
         <p className="text-center">
           <b>Meeting ID:</b> {trialInfo.meetingId}
@@ -79,7 +79,7 @@ export const NoticeOfChangeToRemoteProceeding = ({
         </p>
 
         <p>
-          Join online: Go to{' '}
+          <span className="text-italic text-bold">Join online</span>: Go to{' '}
           <a href="https://www.zoomgov.com" rel="noreferrer" target="_blank">
             www.zoomgov.com
           </a>{' '}
@@ -88,16 +88,47 @@ export const NoticeOfChangeToRemoteProceeding = ({
         </p>
 
         <p>
-          Join by telephone: Call {trialInfo.joinPhoneNumber}. Enter the Meeting
-          ID and Passcode above when prompted.
+          <span className="text-italic text-bold">Join by telephone</span>: Call{' '}
+          {trialInfo.joinPhoneNumber}. Enter the Meeting ID and Passcode above
+          when prompted.
+        </p>
+
+        <p className="text-underline text-bold">APPEARANCE PROCEDURE</p>
+
+        <p>
+          Only counsel of record, self-represented litigants, and witnesses may
+          participate in the remote proceeding unless otherwise permitted by the
+          Court.
         </p>
 
         <p>
-          There are specific requirements in the Standing Pretrial Order that is
-          served with this Notice. The parties should contact each other
-          promptly and cooperate fully so that the necessary steps can be taken
-          to comply with these requirements. Your failure to cooperate may also
-          result in dismissal of the case and entry of decision against you.
+          It is the responsibility of the person making a remote appearance to
+          access the remote proceeding no later than ten (10) minutes prior to
+          any scheduled hearing, and to check in with the Trial Participants may
+          be placed on “hold” until their case is called by the Court. When
+          their case is called, the parties shall state their names for the
+          record.
+        </p>
+
+        <p className="text-italic text-bold">
+          No recording of court proceedings may be made by any person or by any
+          means.
+        </p>
+
+        <p></p>
+        <p></p>
+
+        <p className="text-underline text-bold">FAILURE TO ATTEND</p>
+
+        <p>
+          If you fail to appear the Court may dismiss your case for the failure
+          to properly prosecute under Rule 149(a) of the Tax Court Rules of
+          Practice and Procedure.
+        </p>
+
+        <p className="text-italic text-bold">
+          The Standing Pretrial Order served in this case remains in full force
+          and effect.
         </p>
 
         <p className="float-right width-third">
