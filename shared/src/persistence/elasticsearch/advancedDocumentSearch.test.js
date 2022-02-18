@@ -264,8 +264,7 @@ describe('advancedDocumentSearch', () => {
   it('does a search by multiple opinion types when multiple opinion document types are provided', async () => {
     await advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: orderEventCodes,
-      opinionTypes: ['SOP', 'OST'],
+      documentEventCodes: ['SOP', 'OST'],
     });
 
     expect(
@@ -273,19 +272,8 @@ describe('advancedDocumentSearch', () => {
     ).toEqual(
       expect.arrayContaining([
         {
-          bool: {
-            should: [
-              {
-                term: {
-                  'eventCode.S': 'SOP',
-                },
-              },
-              {
-                term: {
-                  'eventCode.S': 'OST',
-                },
-              },
-            ],
+          terms: {
+            'eventCode.S': ['SOP', 'OST'],
           },
         },
       ]),
