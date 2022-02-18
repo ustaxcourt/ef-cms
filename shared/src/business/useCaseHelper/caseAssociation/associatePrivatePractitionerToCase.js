@@ -75,7 +75,7 @@ exports.associatePrivatePractitionerToCase = async ({
 
     return caseEntity.toRawObject();
   } else if (!isPrivatePractitionerOnCase) {
-    applicationContext.logger.warn(
+    applicationContext.logger.error(
       `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
     );
   }
