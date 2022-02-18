@@ -15,6 +15,12 @@ describe('generatePrintablePendingReportInteractor', () => {
 
   const mockFoundDocuments = [
     {
+      associatedJudge: 'Judge Foley',
+      docketNumber: '456-67',
+      documentTitle: 'Test Document Best',
+      receivedAt: '2020-03-04T12:00:00.000Z',
+    },
+    {
       associatedJudge: 'Judge Colvin',
       caseCaption: 'Test Caption, Petitioner',
       docketNumber: '123-45',
@@ -108,6 +114,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     const { pendingItems } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
         .data;
+
     expect(pendingItems).toMatchObject([
       {
         associatedJudge: 'Judge Colvin',
@@ -131,6 +138,17 @@ describe('generatePrintablePendingReportInteractor', () => {
         docketNumber: '345-67',
         documentTitle: 'Test Document Title',
         receivedAt: '2020-03-03T12:00:00.000Z',
+      },
+      {
+        associatedJudge: 'Judge Foley',
+        associatedJudgeFormatted: 'Foley',
+        caseTitle: '',
+        docketNumber: '456-67',
+        docketNumberWithSuffix: '456-67',
+        documentTitle: 'Test Document Best',
+        formattedFiledDate: '03/04/20',
+        formattedName: 'Test Document Best',
+        receivedAt: '2020-03-04T12:00:00.000Z',
       },
     ]);
   });
