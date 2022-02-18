@@ -161,10 +161,9 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search for a signed judge when searching for bench opinions', async () => {
+  it('does a search for a signed judge when searching for opinions', async () => {
     await advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: [BENCH_OPINION_EVENT_CODE],
       isOpinionSearch: true,
       judge: 'Judge Guy Fieri',
     });
@@ -195,7 +194,7 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('does a search for a signed judge when searching for orders, not opinions', async () => {
+  it('does a search for a signed judge when searching for orders', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: orderEventCodes,
@@ -219,65 +218,6 @@ describe('advancedDocumentSearch', () => {
         },
       },
     ]);
-  });
-
-  it('does a search by a single opinion type when an opinion document type is provided', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: ['SOP'],
-      omitSealed: true,
-    });
-
-    const expectation = [
-      getCaseMappingQueryParams(), // match all parents
-    ];
-    expectation[0].has_parent.query.bool.must_not = [
-      { term: { 'isSealed.BOOL': true } },
-    ];
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toEqual([
-      {
-        term: {
-          'entityName.S': 'DocketEntry',
-        },
-      },
-      {
-        exists: {
-          field: 'servedAt',
-        },
-      },
-      {
-        terms: {
-          'eventCode.S': ['SOP'],
-        },
-      },
-      {
-        term: {
-          'isFileAttached.BOOL': true,
-        },
-      },
-    ]);
-  });
-
-  it('does a search by multiple opinion types when multiple opinion document types are provided', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: ['SOP', 'OST'],
-    });
-
-    expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toEqual(
-      expect.arrayContaining([
-        {
-          terms: {
-            'eventCode.S': ['SOP', 'OST'],
-          },
-        },
-      ]),
-    );
   });
 
   it('should only include sealed docket entries in the search results when they are sealed to the public', async () => {
@@ -337,7 +277,7 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('omits docket entries with isSealed:true when doing an opinion search', async () => {
+  it('must not include sealed documents when doing an opinion search', async () => {
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: [BENCH_OPINION_EVENT_CODE],
@@ -504,34 +444,7 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
-  it('should sort by numberOfPages when sortField is provided as DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: opinionEventCodes,
-      endDate: '2020-02-21T04:59:59.999Z',
-      sortField: TODAYS_ORDERS_SORTS.NUMBER_OF_PAGES_ASC,
-      startDate: '2020-02-20T05:00:00.000Z',
-    });
-
-    expect(search.mock.calls[0][0].searchParameters.body.sort).toEqual([
-      { 'numberOfPages.N': 'asc' },
-    ]);
-  });
-
-  it('should use default sorting option (filing date, descending) when sortField is not passed in', async () => {
-    await advancedDocumentSearch({
-      applicationContext,
-      documentEventCodes: opinionEventCodes,
-      endDate: '2020-02-21T04:59:59.999Z',
-      startDate: '2020-02-20T05:00:00.000Z',
-    });
-
-    expect(search.mock.calls[0][0].searchParameters.body.sort).toEqual([
-      { 'filingDate.S': 'desc' },
-    ]);
-  });
-
-  it('should return the results and totalCount of results1', async () => {
+  it('should return the results and totalCount of results', async () => {
     applicationContextForClient.i;
     const result = await advancedDocumentSearch({
       applicationContext,
