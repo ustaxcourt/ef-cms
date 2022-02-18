@@ -51,8 +51,8 @@ export const DocumentSearchResults = connect(
               <thead>
                 <tr>
                   <th aria-hidden="true" className="small-column"></th>
-                  <th aria-hidden="true" className="small-column"></th>
                   <th>Date</th>
+                  <th aria-hidden="true" className="small-column"></th>
                   <th>{advancedDocumentSearchHelper.documentTypeVerbiage}</th>
                   <th>Case Title</th>
                   <th>Judge</th>
@@ -70,6 +70,7 @@ export const DocumentSearchResults = connect(
                       <td aria-hidden="true" className="small-column">
                         {idx + 1}
                       </td>
+                      <td>{result.formattedFiledDate}</td>
                       <td aria-hidden="true" className="small-column">
                         {result.showSealedIcon && (
                           <Icon
@@ -80,7 +81,6 @@ export const DocumentSearchResults = connect(
                           />
                         )}
                       </td>
-                      <td>{result.formattedFiledDate}</td>
                       <td>
                         <Button
                           link
