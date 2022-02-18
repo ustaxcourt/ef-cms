@@ -75,4 +75,29 @@ describe('getEligibleCasesForTrialSession', () => {
       ],
     });
   });
+
+  it('should return the eligible cases in a timely manner', async () => {
+    const CASES_TO_TEST = 105;
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementation(async () => {
+        await new Promise(resolve => setTimeout(resolve, 200));
+        return {
+          ...MOCK_CASE,
+          irsPractitioners: [{ userId: 'abc-123' }],
+          privatePractitioners: [{ userId: 'abc-123' }],
+        };
+      });
+
+    client.batchGet = jest.fn().mockReturnValue(
+      new Array(CASES_TO_TEST).fill({
+        ...MOCK_CASE,
+        pk: MOCK_CASE.docketNumber,
+      }),
+    );
+
+    await getEligibleCasesForTrialSession({
+      applicationContext,
+    });
+  }, 1000);
 });
