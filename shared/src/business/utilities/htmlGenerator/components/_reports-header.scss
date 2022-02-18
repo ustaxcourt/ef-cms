@@ -1,0 +1,31 @@
+#reports-header {
+  margin-bottom: 20px;
+  font-family: 'nimbus_roman', serif;
+  text-align: center;
+
+  .us-tax-court-seal {
+    width: 100px;
+    height: 100px;
+  }
+
+  h1 {
+    margin-bottom: 10px;
+    font-size: 30px;
+    font-weight: bold;
+  }
+
+  h2 {
+    margin-top: -10px;
+    margin-bottom: 10px;
+    font-size: 20px;
+    font-weight: normal;
+  }
+
+  h3 {
+    margin-top: 0;
+    font-family: 'nimbus_roman', serif;
+    font-size: 16px;
+    font-weight: normal;
+    text-decoration: none;
+  }
+}

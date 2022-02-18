@@ -3,8 +3,14 @@
 @import '_icons';
 @import '_images';
 @import '_utils';
+@import '_tables';
+
+@import './components/_primary-header';
+@import './components/_reports-header';
 
 @import './documents/_order';
+@import './documents/_address-label-coversheet';
+@import './documents/_case-inventory-report';
 
 // body {
 //   margin: 35px 50px;
