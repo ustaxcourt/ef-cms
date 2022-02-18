@@ -314,6 +314,29 @@ describe('advancedDocumentSearch', () => {
     ]);
   });
 
+  it('should not include docket entries in the search results when they are sealed to the "External" even when they are not sealed documents', async () => {
+    await advancedDocumentSearch({
+      applicationContext,
+      isExternalUser: true,
+      omitSealed: false,
+    });
+
+    expect(
+      search.mock.calls[0][0].searchParameters.body.query.bool.must_not,
+    ).toEqual([
+      {
+        term: {
+          'isStricken.BOOL': true,
+        },
+      },
+      {
+        term: {
+          'sealedTo.S': 'External',
+        },
+      },
+    ]);
+  });
+
   it('omits docket entries with isSealed:true when doing an opinion search', async () => {
     await advancedDocumentSearch({
       applicationContext,
