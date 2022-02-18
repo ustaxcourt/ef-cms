@@ -32,6 +32,7 @@ exports.opinionPublicSearchInteractor = async (
     endDate,
     judge,
     keyword,
+    // todo: rename to selected/filterby opion types
     opinionTypes,
     startDate,
   },
@@ -43,7 +44,6 @@ exports.opinionPublicSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    opinionTypes,
     startDate,
   });
 
@@ -53,9 +53,9 @@ exports.opinionPublicSearchInteractor = async (
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      ...rawSearch,
-      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+      documentEventCodes: opinionTypes,
       isOpinionSearch: true,
+      ...rawSearch,
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);

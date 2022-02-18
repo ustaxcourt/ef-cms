@@ -29,7 +29,6 @@ exports.advancedDocumentSearch = async ({
   judge,
   keyword,
   omitSealed,
-  opinionTypes,
   overrideResultSize,
   sortField,
   startDate,
@@ -140,7 +139,7 @@ exports.advancedDocumentSearch = async ({
         field: 'servedAt',
       },
     },
-    { terms: { 'eventCode.S': opinionTypes || documentEventCodes } },
+    { terms: { 'eventCode.S': documentEventCodes } },
     { term: { 'isFileAttached.BOOL': true } },
   ];
 

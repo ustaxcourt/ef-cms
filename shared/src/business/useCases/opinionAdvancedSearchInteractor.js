@@ -33,6 +33,7 @@ exports.opinionAdvancedSearchInteractor = async (
     endDate,
     judge,
     keyword,
+    // todo: rename to selected/filterby opion types
     opinionTypes,
     startDate,
   },
@@ -50,7 +51,6 @@ exports.opinionAdvancedSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    opinionTypes,
     startDate,
   });
 
@@ -60,7 +60,7 @@ exports.opinionAdvancedSearchInteractor = async (
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+      documentEventCodes: opinionTypes,
       isOpinionSearch: true,
       ...rawSearch,
     });
