@@ -408,7 +408,14 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
-  it('should generate and serve a Notice of Change to Remote Proceeding', async () => {
+  it.only('should generate and serve a Notice of Change to Remote Proceeding', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        hearings: [],
+      });
+
     const remoteTrialSession = {
       ...mockTrialsById[MOCK_TRIAL_ID_7],
       chambersPhoneNumber: '111111',
@@ -426,9 +433,8 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().updateTrialSession,
     ).toHaveBeenCalled();
     expect(
-      applicationContext
-        .getUseCases()
-        .generateNoticeOfChangeToRemoteProceedingInteractor(),
+      applicationContext.getUseCases()
+        .generateNoticeOfChangeToRemoteProceedingInteractor,
     ).toHaveBeenCalled();
   });
 });
