@@ -46,12 +46,12 @@ describe('migrateItems', () => {
     ]);
   });
 
-  it('should default sealedTo to "Public" if the docket entry was legacy sealed', async () => {
+  it('should default sealedTo to "External" if the docket entry was legacy sealed', async () => {
     const items = [mockDocketEntryItem];
 
     const results = await migrateItems(items, documentClient);
 
-    expect(results[0].sealedTo).toEqual(DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC);
+    expect(results[0].sealedTo).toEqual(DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL);
   });
 
   it('should not set sealedTo when the docket entry is not sealed', async () => {
