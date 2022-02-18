@@ -3,11 +3,8 @@ const {
   ORDER_JUDGE_FIELD,
 } = require('../../../business/entities/EntityConstants');
 
-exports.getJudgeFilterForOpinionSearch = ({
-  docketEntryQueryParams,
-  judgeName,
-}) => {
-  docketEntryQueryParams.push({
+exports.getJudgeFilterForOpinionSearch = ({ documentMustQuery, judgeName }) => {
+  documentMustQuery.push({
     bool: {
       should: [
         {
