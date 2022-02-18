@@ -19,7 +19,6 @@ export const NoticeOfChangeToRemoteProceeding = ({
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     trialLocation: '',
   },
-  //we are here
 }) => {
   return (
     <div id="notice-of-change-to-remote-proceeding-pdf">
