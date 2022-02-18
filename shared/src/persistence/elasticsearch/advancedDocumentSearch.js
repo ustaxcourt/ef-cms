@@ -88,10 +88,10 @@ exports.advancedDocumentSearch = async ({
 
   let documentMustNot = [{ term: { 'isStricken.BOOL': true } }];
   if (omitSealed) {
-    getSealedQuery({
-      caseQueryParams,
-      documentMustNotQuery: documentMustNot,
-    });
+    const { sealedCaseQuery, sealedDocumentMustNotQuery } = getSealedQuery();
+
+    caseQueryParams.has_parent.query.bool.filter.push(sealedCaseQuery);
+    documentMustNot = [...documentMustNot, ...sealedDocumentMustNotQuery];
   } else {
     if (isExternalUser) {
       documentMustNot.push({
