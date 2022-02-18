@@ -1,9 +1,9 @@
-exports.getSealedQuery = ({ caseQueryParams, documentMustNotQuery }) => {
-  documentMustNotQuery.push({
+exports.getSealedQuery = ({ caseQueryParams, documentMustNot }) => {
+  documentMustNot.push({
     term: { 'isSealed.BOOL': true },
   });
 
-  documentMustNotQuery.push({
+  documentMustNot.push({
     term: { 'sealedTo.S': 'External' },
   });
 

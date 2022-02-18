@@ -5,11 +5,11 @@ describe('getSealedQuery', () => {
     let mockCaseQueryParams = {
       has_parent: { query: { bool: { filter: [] } } },
     };
-    let mockDocketEntryMustNot = [];
+    let mockDocumentMustNot = [];
 
     getSealedQuery({
       caseQueryParams: mockCaseQueryParams,
-      docketEntryMustNot: mockDocketEntryMustNot,
+      documentMustNot: mockDocumentMustNot,
     });
 
     expect(mockCaseQueryParams.has_parent.query.bool.filter).toEqual([
@@ -47,14 +47,14 @@ describe('getSealedQuery', () => {
     let mockCaseQueryParams = {
       has_parent: { query: { bool: { filter: [] } } },
     };
-    let mockDocketEntryMustNot = [];
+    let mockDocumentMustNot = [];
 
     await getSealedQuery({
       caseQueryParams: mockCaseQueryParams,
-      docketEntryMustNot: mockDocketEntryMustNot,
+      documentMustNot: mockDocumentMustNot,
     });
 
-    expect(mockDocketEntryMustNot).toEqual([
+    expect(mockDocumentMustNot).toEqual([
       { term: { 'isSealed.BOOL': true } },
       { term: { 'sealedTo.S': 'External' } },
     ]);

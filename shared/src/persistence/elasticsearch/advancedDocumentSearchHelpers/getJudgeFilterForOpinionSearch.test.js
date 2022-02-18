@@ -4,14 +4,14 @@ const {
 
 describe('getJudgeFilterForOpinionSearch', () => {
   it('does a search for both judge and signed judge since bench opinions are technically orders', () => {
-    let mockDocketEntryQueryParams = [];
+    let mockDocumentMust = [];
 
     getJudgeFilterForOpinionSearch({
-      docketEntryQueryParams: mockDocketEntryQueryParams,
+      documentMust: mockDocumentMust,
       judgeName: 'Judge Antonia Lofaso',
     });
 
-    expect(mockDocketEntryQueryParams).toEqual([
+    expect(mockDocumentMust).toEqual([
       {
         bool: {
           should: [
