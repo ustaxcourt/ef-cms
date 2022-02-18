@@ -275,9 +275,6 @@ export const contactSecondaryFromState = cerebralTest => {
 };
 
 export const getCaseMessagesForCase = async cerebralTest => {
-  await cerebralTest.runSequence('gotoCaseDetailSequence', {
-    docketNumber: cerebralTest.docketNumber,
-  });
   return runCompute(formattedCaseMessages, {
     state: cerebralTest.getState(),
   });
