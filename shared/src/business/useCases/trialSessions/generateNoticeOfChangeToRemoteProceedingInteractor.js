@@ -4,11 +4,11 @@ const {
   FORMATS,
 } = require('../../utilities/DateHandler');
 const {
+  CASE_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
-
 /**
  * generateNoticeOfChangeToRemoteProceedingInteractor
  *
@@ -53,33 +53,36 @@ exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
   };
 
   // const openCasesDocketNumbers = //loop through each docket number in teh caseOrder array and save its docket number
-  //get each case by docket number
+  // for (const caseIndex of trialSession.caseOrder) {
+  //   if (caseIndex.status !== CASE_STATUS_TYPES.closed) {
+  //     const caseDetail = await applicationContext
+  //       .getPersistenceGateway()
+  //       .getCaseByDocketNumber({
+  //         applicationContext,
+  //         docketNumber: caseIndex.docketNumber,
+  //       });
+  //
+  //     const { docketNumberWithSuffix } = caseDetail;
+  //     const { caseCaptionExtension, caseTitle } =
+  //       getCaseCaptionMeta(caseDetail);
+  //
+  //     await applicationContext
+  //       .getDocumentGenerators()
+  //       .noticeOfChangeToRemoteProceeding({
+  //         applicationContext,
+  //         data: {
+  //           caseCaptionExtension,
+  //           caseTitle,
+  //           docketNumberWithSuffix,
+  //           trialInfo,
+  //         },
+  //       });
+  //   }
+  // }
   //get docket number with suffix and case caption for each case
   //call our document generator for each case
 
   // const filteredOpenCases = openUserCases.filter(
   //   ({ status }) => status !== CASE_STATUS_TYPES.closed,
   // );
-
-  // const caseDetail = await applicationContext
-  //   .getPersistenceGateway()
-  //   .getCaseByDocketNumber({
-  //     applicationContext,
-  //     docketNumber,
-  //   });
-
-  // const { docketNumberWithSuffix } = caseDetail;
-  // const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
-
-  return await applicationContext
-    .getDocumentGenerators()
-    .noticeOfChangeToRemoteProceeding({
-      applicationContext,
-      data: {
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-        trialInfo,
-      },
-    });
 };
