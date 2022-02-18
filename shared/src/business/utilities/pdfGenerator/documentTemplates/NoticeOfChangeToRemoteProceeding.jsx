@@ -10,28 +10,34 @@ export const NoticeOfChangeToRemoteProceeding = ({
   docketNumberWithSuffix,
   trialInfo = {
     chambersPhoneNumber: '111111',
+    formattedJudge: 'A judge',
+    formattedStartDate: '3000-03-01T00:00:00.000Z',
+    formattedStartTime: '',
     joinPhoneNumber: '222222',
     meetingId: '333333',
     password: '4444444',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    trialLocation: '',
   },
   //we are here
 }) => {
   return (
-    <div id="notice-of-trial-pdf">
+    <div id="notice-of-change-to-remote-proceeding-pdf">
       <PrimaryHeader />
       <DocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
       />
-      <h3 className="notice-of-trial-title">Notice Setting Case For Trial</h3>
+      <h3 className="notice-of-change-to-remote-proceeding">
+        Notice of Change to Remote Proceeding
+      </h3>
       <div>
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
           <div className="info-box-content">
             {trialInfo.trialLocation && <div>{trialInfo.trialLocation}</div>}
-            Remote Proceeding
+            <span className="text-bold">Remote Proceeding</span>
           </div>
         </div>
 
@@ -44,19 +50,23 @@ export const NoticeOfChangeToRemoteProceeding = ({
 
       <div id="notice-body">
         <p>
-          The parties are hereby notified that this case is set for trial at the
-          Trial Session beginning at {trialInfo.formattedStartTime} on{' '}
-          {trialInfo.formattedStartDate}. The calendar for that Session will be
-          called at that date and time, and the parties are directed to appear
-          before the Court at a proceeding to be held using Zoomgov and to be
-          prepared to try the case. Your failure to appear may result in
-          dismissal of the case and entry of decision against you.
+          This case was originally calendared for an in-person proceeding at
+          {trialInfo.trialLocation} on {trialInfo.formattedStartDate} at{' '}
+          {trialInfo.formattedStartTime}. The parties are no longer required to
+          appear in-person.{' '}
+          <span className="text-bold">
+            Instead, this proceeding will be conducted remotely.
+          </span>
         </p>
         <p>
-          The Court will set the time for each trial at the end of the calendar
-          call. In setting trial times the Court attempts to accommodate the
-          parties, but the final determination of trial times rests in the
-          Court’s discretion.
+          The parties are hereby notified that the{' '}
+          <span className="text-bold">remote proceeding</span> will begin at{' '}
+          {trialInfo.formattedStartTime} on {trialInfo.formattedStartDate}. The
+          calendar will be called at that date and time, and the parties are
+          directed to appear before the Court at a remote proceeding to be held
+          using Zoomgov and to be prepared to try the case. The parties shall
+          follow the instructions below for how to participate in the remote
+          proceeding.
         </p>
 
         <p className="text-underline">ACCESS REMOTE PROCEEDING</p>
