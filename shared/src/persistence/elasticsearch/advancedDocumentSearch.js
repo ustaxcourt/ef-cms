@@ -126,23 +126,6 @@ exports.advancedDocumentSearch = async ({
     ];
   }
 
-  if (judge) {
-    const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
-    if (isOpinionSearch) {
-      const judgeFilter = getJudgeFilterForOpinionSearch({
-        judgeName,
-      });
-
-      documentMust.push(judgeFilter);
-    } else {
-      const judgeFilter = getJudgeFilterForOrderSearch({
-        judgeName,
-      });
-
-      documentMust.push(judgeFilter);
-    }
-  }
-
   const documentFilter = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
@@ -150,9 +133,26 @@ exports.advancedDocumentSearch = async ({
         field: 'servedAt',
       },
     },
-    { terms: { 'eventCode.S': documentEventCodes } },
     { term: { 'isFileAttached.BOOL': true } },
+    { terms: { 'eventCode.S': documentEventCodes } },
   ];
+
+  if (judge) {
+    const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
+    if (isOpinionSearch) {
+      const judgeFilter = getJudgeFilterForOpinionSearch({
+        judgeName,
+      });
+
+      documentFilter.push(judgeFilter);
+    } else {
+      const judgeFilter = getJudgeFilterForOrderSearch({
+        judgeName,
+      });
+
+      documentFilter.push(judgeFilter);
+    }
+  }
 
   if (endDate && startDate) {
     documentFilter.push({

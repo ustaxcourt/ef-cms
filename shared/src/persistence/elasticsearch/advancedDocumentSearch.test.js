@@ -13,9 +13,6 @@ const { search } = require('./searchClient');
 jest.mock('./searchClient');
 
 describe('advancedDocumentSearch', () => {
-  const orderEventCodes = ['O', 'OOD'];
-  const opinionEventCodes = ['MOP', 'TCOP'];
-
   const SOURCE = {
     includes: [
       'caseCaption',
@@ -40,33 +37,17 @@ describe('advancedDocumentSearch', () => {
     ],
   };
 
-  const orderQueryParams = [
+  const orderEventCodes = ['O', 'OOD'];
+  const opinionEventCodes = ['MOP', 'TCOP'];
+
+  const documentFilter = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
         field: 'servedAt',
-      },
-    },
-    {
-      terms: {
-        'eventCode.S': [orderEventCodes[0], orderEventCodes[1]],
       },
     },
     { term: { 'isFileAttached.BOOL': true } },
-  ];
-
-  const opinionQueryParams = [
-    { term: { 'entityName.S': 'DocketEntry' } },
-    {
-      exists: {
-        field: 'servedAt',
-      },
-    },
-    {
-      terms: {
-        'eventCode.S': [opinionEventCodes[0], opinionEventCodes[1]],
-      },
-    },
   ];
 
   const getKeywordQueryParams = keyword => ({
@@ -129,7 +110,10 @@ describe('advancedDocumentSearch', () => {
 
     expect(
       search.mock.calls[0][0].searchParameters.body.query.bool.filter,
-    ).toEqual(orderQueryParams);
+    ).toMatchObject([
+      ...documentFilter,
+      { terms: { 'eventCode.S': orderEventCodes } },
+    ]);
   });
 
   it('does a search for case title or petitioner name', async () => {
@@ -169,29 +153,30 @@ describe('advancedDocumentSearch', () => {
     });
 
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must,
-    ).toEqual([
-      getCaseMappingQueryParams(null), // match all parents
-      {
-        bool: {
-          should: [
-            {
-              match: {
-                'judge.S': 'Guy Fieri',
-              },
-            },
-            {
-              match: {
-                'signedJudgeName.S': {
-                  operator: 'and',
-                  query: 'Guy Fieri',
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+    ).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          bool: {
+            should: [
+              {
+                match: {
+                  'judge.S': 'Guy Fieri',
                 },
               },
-            },
-          ],
-        },
-      },
-    ]);
+              {
+                match: {
+                  'signedJudgeName.S': {
+                    operator: 'and',
+                    query: 'Guy Fieri',
+                  },
+                },
+              },
+            ],
+          },
+        }),
+      ]),
+    );
   });
 
   it('does a search for a signed judge when searching for orders', async () => {
@@ -202,22 +187,23 @@ describe('advancedDocumentSearch', () => {
     });
 
     expect(
-      search.mock.calls[0][0].searchParameters.body.query.bool.must,
-    ).toEqual([
-      getCaseMappingQueryParams(null), // match all parents
-      {
-        bool: {
-          should: {
-            match: {
-              'signedJudgeName.S': {
-                operator: 'and',
-                query: 'Guy Fieri',
+      search.mock.calls[0][0].searchParameters.body.query.bool.filter,
+    ).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          bool: {
+            should: {
+              match: {
+                'signedJudgeName.S': {
+                  operator: 'and',
+                  query: 'Guy Fieri',
+                },
               },
             },
           },
-        },
-      },
-    ]);
+        }),
+      ]),
+    );
   });
 
   it('should only include sealed docket entries in the search results when they are sealed to the public', async () => {
@@ -294,6 +280,11 @@ describe('advancedDocumentSearch', () => {
   });
 
   it('does a search for docket number of a case', async () => {
+    const orderQueryParams = [
+      ...documentFilter,
+      { terms: { 'eventCode.S': orderEventCodes } },
+    ];
+
     await advancedDocumentSearch({
       applicationContext,
       docketNumber: '101-20',
@@ -321,6 +312,11 @@ describe('advancedDocumentSearch', () => {
   });
 
   it('does a date range search (start date only) for filing / received date', async () => {
+    const opinionQueryParams = [
+      ...documentFilter,
+      { terms: { 'eventCode.S': opinionEventCodes } },
+    ];
+
     await advancedDocumentSearch({
       applicationContext,
       documentEventCodes: opinionEventCodes,
@@ -468,9 +464,9 @@ describe('advancedDocumentSearch', () => {
       });
 
       expect(
-        search.mock.calls[0][0].searchParameters.body.query.bool.must[1].bool
+        search.mock.calls[0][0].searchParameters.body.query.bool.filter[4].bool
           .should[0].match,
-      ).toEqual({
+      ).toMatchObject({
         'judge.S': 'Guy Fieri',
       });
     });
