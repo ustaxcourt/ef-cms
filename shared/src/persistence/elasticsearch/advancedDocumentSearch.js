@@ -55,10 +55,10 @@ exports.advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const documentMustQuery = [];
+  const documentMust = [];
 
   if (keyword) {
-    documentMustQuery.push({
+    documentMust.push({
       simple_query_string: {
         default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
@@ -86,15 +86,15 @@ exports.advancedDocumentSearch = async ({
     },
   };
 
-  let documentMustNotQuery = [{ term: { 'isStricken.BOOL': true } }];
+  let documentMustNot = [{ term: { 'isStricken.BOOL': true } }];
   if (omitSealed) {
     getSealedQuery({
       caseQueryParams,
-      documentMustNotQuery,
+      documentMustNotQuery: documentMustNot,
     });
   } else {
     if (isExternalUser) {
-      documentMustNotQuery.push({
+      documentMustNot.push({
         term: { 'sealedTo.S': 'External' },
       });
     }
@@ -115,11 +115,11 @@ exports.advancedDocumentSearch = async ({
     };
   }
 
-  documentMustQuery.push(caseQueryParams);
+  documentMust.push(caseQueryParams);
 
   if (isOpinionSearch) {
-    documentMustNotQuery = [
-      ...documentMustNotQuery,
+    documentMustNot = [
+      ...documentMustNot,
       {
         term: { 'isSealed.BOOL': true },
       },
@@ -130,18 +130,18 @@ exports.advancedDocumentSearch = async ({
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     if (isOpinionSearch) {
       getJudgeFilterForOpinionSearch({
-        documentMustQuery,
+        documentMustQuery: documentMust,
         judgeName,
       });
     } else {
       getJudgeFilterForOrderSearch({
-        documentMustQuery,
+        documentMustQuery: documentMust,
         judgeName,
       });
     }
   }
 
-  const documentFilterQuery = [
+  const documentFilter = [
     { term: { 'entityName.S': 'DocketEntry' } },
     {
       exists: {
@@ -153,7 +153,7 @@ exports.advancedDocumentSearch = async ({
   ];
 
   if (endDate && startDate) {
-    documentFilterQuery.push({
+    documentFilter.push({
       range: {
         'filingDate.S': {
           gte: `${startDate}||/h`,
@@ -162,7 +162,7 @@ exports.advancedDocumentSearch = async ({
       },
     });
   } else if (startDate) {
-    documentFilterQuery.push({
+    documentFilter.push({
       range: {
         'filingDate.S': {
           gte: `${startDate}||/h`,
@@ -177,9 +177,9 @@ exports.advancedDocumentSearch = async ({
       from,
       query: {
         bool: {
-          filter: documentFilterQuery,
-          must: documentMustQuery,
-          must_not: documentMustNotQuery,
+          filter: documentFilter,
+          must: documentMust,
+          must_not: documentMustNot,
         },
       },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,

@@ -3,8 +3,8 @@ const {
   ORDER_JUDGE_FIELD,
 } = require('../../../business/entities/EntityConstants');
 
-exports.getJudgeFilterForOpinionSearch = ({ documentMustQuery, judgeName }) => {
-  documentMustQuery.push({
+exports.getJudgeFilterForOpinionSearch = ({ documentMust, judgeName }) => {
+  documentMust.push({
     bool: {
       should: [
         {

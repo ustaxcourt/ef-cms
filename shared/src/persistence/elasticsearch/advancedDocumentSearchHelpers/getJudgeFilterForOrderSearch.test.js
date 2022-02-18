@@ -4,14 +4,14 @@ const {
 
 describe('getJudgeFilterForOrderSearch', () => {
   it('does a search for signed judge name', () => {
-    let mockDocketEntryQueryParams = [];
+    let mockDocumentMust = [];
 
     getJudgeFilterForOrderSearch({
-      docketEntryQueryParams: mockDocketEntryQueryParams,
+      documentMust: mockDocumentMust,
       judgeName: 'Judge Alex Guarnaschelli',
     });
 
-    expect(mockDocketEntryQueryParams).toEqual([
+    expect(mockDocumentMust).toEqual([
       {
         bool: {
           should: {

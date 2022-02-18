@@ -2,8 +2,8 @@ const {
   ORDER_JUDGE_FIELD,
 } = require('../../../business/entities/EntityConstants');
 
-exports.getJudgeFilterForOrderSearch = ({ documentMustQuery, judgeName }) => {
-  documentMustQuery.push({
+exports.getJudgeFilterForOrderSearch = ({ documentMust, judgeName }) => {
+  documentMust.push({
     bool: {
       should: {
         match: {
