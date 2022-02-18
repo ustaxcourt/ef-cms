@@ -425,8 +425,10 @@ describe('updateTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
     ).toHaveBeenCalled();
-    // expect(
-    //   applicationContext.getUseCases().generateNoticeOfChangetoRemoteProceeding,
-    // ).toHaveBeenCalled();
+    expect(
+      applicationContext
+        .getUseCases()
+        .generateNoticeOfChangeToRemoteProceedingInteractor(),
+    ).toHaveBeenCalled();
   });
 });
