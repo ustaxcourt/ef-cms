@@ -1,4 +1,8 @@
 const {
+  CASE_STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -140,6 +144,16 @@ exports.updateTrialSessionInteractor = async (
       if (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
+        // const trialSessionHasChanged =
+        //   currentTrialSession.proceedingType ===
+        //     TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+        //   newTrialSessionEntity.proceedingType ===
+        //     TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+        //   caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+        if (trialSessionHasChanged) {
+          //do the norp geenration and docket entry adding stuff here
+        }
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
