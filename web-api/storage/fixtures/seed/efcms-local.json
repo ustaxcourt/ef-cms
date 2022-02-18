@@ -19997,6 +19997,49 @@
     "email": "privatePractitioner1@example.com"
   },
   {
+    "servedParties": [
+      {
+        "name": "Test Private Practitioner",
+        "email": "privatePractitioner1@example.com"
+      },
+      {
+        "name": "Test IRS Practitioner",
+        "email": "irsPractitioner@example.com"
+      }
+    ],
+    "isStricken": false,
+    "documentType": "Order",
+    "filingDate": "2020-01-21T16:41:39.474Z",
+    "isMinuteEntry": true,
+    "pending": false,
+    "isSealed": true,
+    "isLegacySealed": true,
+    "isLegacy": true,
+    "sealedTo": "External",
+    "isDraft": false,
+    "receivedAt": "2020-09-25T19:27:17.056Z",
+    "isOnDocketRecord": true,
+    "signedJudgeName": "Chief Judge",
+    "createdAt": "2020-09-25T19:27:17.056Z",
+    "entityName": "DocketEntry",
+    "filedBy": "Migrated",
+    "docketEntryId": "b289bc78-faf5-4ae3-a9f7-b6b398e1d36e",
+    "sk": "docket-entry|b289bc78-faf5-4ae3-a9f7-b6b398e1d36e",
+    "documentTitle": "Order",
+    "draftOrderState": null,
+    "index": 3,
+    "isFileAttached": true,
+    "userId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "O",
+    "processingStatus": "complete",
+    "filers": [],
+    "signedAt": "2020-07-06T17:06:04.552Z",
+    "signedByUserId": "7b69a8b5-bcc4-4449-8994-08fda8d342e7",
+    "pk": "case|102-20",
+    "servedAt": "2020-09-25T19:27:17.056Z",
+    "docketNumber": "102-20"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "caseStatus": "New",
     "caseIsInProgress": false,

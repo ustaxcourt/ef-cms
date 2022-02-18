@@ -29,4 +29,16 @@ describe('unsealEntry', () => {
 
     expect(docketEntry.isSealed).toBe(false);
   });
+
+  it('should set the isLegacySealed to false', () => {
+    const docketEntry = new DocketEntry(
+      { ...A_VALID_DOCKET_ENTRY, isLegacySealed: true },
+      {
+        applicationContext,
+      },
+    );
+    docketEntry.unsealEntry();
+
+    expect(docketEntry.isLegacySealed).toBe(false);
+  });
 });
