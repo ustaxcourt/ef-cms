@@ -404,6 +404,7 @@ DocketEntry.prototype.sealEntry = function ({ sealedTo }) {
 DocketEntry.prototype.unsealEntry = function () {
   delete this.sealedTo;
   this.isSealed = false;
+  this.isLegacySealed = false;
 };
 
 /**
