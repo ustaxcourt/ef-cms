@@ -47,6 +47,7 @@ export const getShowDocumentViewerLink = ({
   isInitialDocument,
   isLegacySealed,
   isSealed,
+  isSealedToExternal,
   isServed,
   isStipDecision,
   isStricken,
@@ -61,7 +62,7 @@ export const getShowDocumentViewerLink = ({
     if (isStricken) return false;
     if (isLegacySealed) return false;
     if (isSealed) {
-      if (userHasAccessToCase) return true;
+      if (userHasAccessToCase && !isSealedToExternal) return true;
       else {
         return false;
       }
@@ -189,6 +190,8 @@ export const getFormattedDocketEntry = ({
     isInitialDocument,
     isLegacySealed: entry.isLegacySealed,
     isSealed: entry.isSealed,
+    isSealedToExternal:
+      entry.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
     isServed: applicationContext.getUtilities().isServed(entry),
     isStipDecision: entry.isStipDecision,
     isStricken: entry.isStricken,
@@ -232,6 +235,7 @@ export const getFormattedDocketEntry = ({
   });
 
   formattedResult.sealButtonText = formattedResult.isSealed ? 'Unseal' : 'Seal';
+  formattedResult.sealIcon = formattedResult.isSealed ? 'unlock' : 'lock';
   formattedResult.sealButtonTooltip = formattedResult.isSealed
     ? formattedResult.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
       ? 'Unseal to the public and parties of this case'
