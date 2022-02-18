@@ -1,12 +1,9 @@
 const {
-  MAX_SEARCH_RESULTS,
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} = require('../../entities/EntityConstants');
-const {
   PublicDocumentSearchResult,
 } = require('../../entities/documents/PublicDocumentSearchResult');
 const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
 const { formatNow, FORMATS } = require('../../utilities/DateHandler');
+const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
 const { omit } = require('lodash');
 
 /**
@@ -32,7 +29,6 @@ exports.opinionPublicSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    // todo: rename to selected/filterby opion types
     opinionTypes,
     startDate,
   },
