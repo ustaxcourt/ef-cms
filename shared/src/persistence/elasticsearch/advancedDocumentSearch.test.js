@@ -224,9 +224,8 @@ describe('advancedDocumentSearch', () => {
   it('does a search by a single opinion type when an opinion document type is provided', async () => {
     await advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: orderEventCodes,
+      documentEventCodes: ['SOP'],
       omitSealed: true,
-      opinionTypes: ['SOP'],
     });
 
     const expectation = [
@@ -251,17 +250,12 @@ describe('advancedDocumentSearch', () => {
       },
       {
         terms: {
-          'eventCode.S': ['O', 'OOD'],
+          'eventCode.S': ['SOP'],
         },
       },
       {
         term: {
           'isFileAttached.BOOL': true,
-        },
-      },
-      {
-        term: {
-          'eventCode.S': 'SOP',
         },
       },
     ]);
