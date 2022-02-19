@@ -1,11 +1,19 @@
 const {
   getJudgeFilterForOpinionSearch,
 } = require('./getJudgeFilterForOpinionSearch');
+const {
+  OPINION_JUDGE_FIELD,
+  ORDER_JUDGE_FIELD,
+} = require('../../../business/entities/EntityConstants');
 
 describe('getJudgeFilterForOpinionSearch', () => {
   it('does a search for both judge and signed judge since bench opinions are technically orders', () => {
+    const expectedOrderJudgeFilter = `${ORDER_JUDGE_FIELD}.S`;
+    const expectedOpinionJudgeFilter = `${OPINION_JUDGE_FIELD}.S`;
+    const expectedJudgeName = 'Judge Antonia Lofaso';
+
     const result = getJudgeFilterForOpinionSearch({
-      judgeName: 'Judge Antonia Lofaso',
+      judgeName: expectedJudgeName,
     });
 
     expect(result).toEqual({
@@ -13,14 +21,14 @@ describe('getJudgeFilterForOpinionSearch', () => {
         should: [
           {
             match: {
-              'judge.S': 'Judge Antonia Lofaso',
+              [expectedOpinionJudgeFilter]: expectedJudgeName,
             },
           },
           {
             match: {
-              'signedJudgeName.S': {
+              [expectedOrderJudgeFilter]: {
                 operator: 'and',
-                query: 'Judge Antonia Lofaso',
+                query: expectedJudgeName,
               },
             },
           },
