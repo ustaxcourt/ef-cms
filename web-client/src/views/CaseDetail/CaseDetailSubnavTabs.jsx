@@ -48,7 +48,7 @@ export const CaseDetailSubnavTabs = connect(
                 id="tab-drafts"
                 tabName="drafts"
                 title="Drafts"
-                unreadMessages={caseDetailSubnavHelper.unreadMessages}
+                unreadMessages={caseDetailSubnavHelper.draftDocketEntryCount}
               />
             )}
             {caseDetailSubnavHelper.showCorrespondenceTab && (
