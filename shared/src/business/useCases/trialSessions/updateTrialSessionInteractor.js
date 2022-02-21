@@ -22,6 +22,7 @@ const generateNorpIfRequired = async ({
   caseEntity,
   currentTrialSession,
   newTrialSessionEntity,
+  user,
 }) => {
   const shouldIssueNoticeOfChangeToRemoteProceeding =
     currentTrialSession.proceedingType ===
@@ -56,7 +57,7 @@ const generateNorpIfRequired = async ({
     const noticeOfChangeToRemoteProceedingDocketEntry = new DocketEntry(
       {
         date: newTrialSessionEntity.startDate,
-        docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
+        docketEntryId: applicationContext.getUniqueId(),
         documentTitle:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
             .documentTitle,
@@ -84,9 +85,6 @@ const generateNorpIfRequired = async ({
       });
 
     caseEntity.addDocketEntry(noticeOfChangeToRemoteProceedingDocketEntry);
-
-    //add docket entry
-    // caseEntity.addDocketEntry();
 
     return caseEntity;
   }
@@ -229,6 +227,7 @@ exports.updateTrialSessionInteractor = async (
           caseEntity,
           currentTrialSession,
           newTrialSessionEntity,
+          user,
         });
 
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
