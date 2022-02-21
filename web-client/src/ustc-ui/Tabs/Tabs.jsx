@@ -90,9 +90,8 @@ const renderTabFactory = ({
             </div>
           )}
           {unreadCount !== '0' && (
-            <div className="icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center">
-              {unreadCount}
-            </div>
+            //icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center
+            <div className="icon-tab-unread-messages">{unreadCount}</div>
           )}
         </button>
       </li>
