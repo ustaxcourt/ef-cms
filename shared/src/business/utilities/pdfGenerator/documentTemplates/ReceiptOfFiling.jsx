@@ -52,7 +52,7 @@ export const ReceiptOfFiling = ({
     secondarySupportingDocuments && secondarySupportingDocuments.length;
 
   return (
-    <>
+    <div id="receipt-of-filing">
       <PrimaryHeader />
       <CompressedDocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
@@ -108,6 +108,6 @@ export const ReceiptOfFiling = ({
             )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };
