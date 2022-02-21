@@ -80,6 +80,7 @@ describe('updateTrialSessionInteractor', () => {
       },
       [MOCK_TRIAL_ID_7]: {
         ...MOCK_TRIAL_INPERSON,
+        caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
         isCalendared: true,
       },
     };
@@ -411,9 +412,10 @@ describe('updateTrialSessionInteractor', () => {
   it.only('should generate and serve a Notice of Change to Remote Proceeding', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
+      .getCaseByDocketNumber.mockReturnValueOnce({
         ...MOCK_CASE,
         hearings: [],
+        trialSessionId: MOCK_TRIAL_ID_7,
       });
 
     const remoteTrialSession = {
