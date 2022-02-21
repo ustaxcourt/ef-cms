@@ -4,6 +4,7 @@ const {
 const {
   ROLES,
   SESSION_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -409,7 +410,7 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
-  it.only('should generate and serve a Notice of Change to Remote Proceeding and the associated docket entry', async () => {
+  it('should generate and serve a Notice of Change to Remote Proceeding and the associated docket entry', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce({
@@ -431,11 +432,13 @@ describe('updateTrialSessionInteractor', () => {
       trialSession: remoteTrialSession,
     });
 
-    //fixme use entity constant for eventCode
     const norpDocketEntry = applicationContext
       .getUseCaseHelpers()
       .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        d => d.eventCode === 'NORP',
+        d =>
+          d.eventCode ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
+            .eventCode,
       );
 
     expect(

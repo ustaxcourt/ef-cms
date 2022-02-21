@@ -775,6 +775,9 @@ const {
   markMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo');
 const {
+  noticeOfChangeToRemoteProceeding,
+} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding');
+const {
   noticeOfDocketChange,
 } = require('../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange');
 const {
@@ -1672,6 +1675,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       changeOfAddress,
       coverSheet,
       docketRecord,
+      noticeOfChangeToRemoteProceeding,
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
       noticeOfTrialIssued,

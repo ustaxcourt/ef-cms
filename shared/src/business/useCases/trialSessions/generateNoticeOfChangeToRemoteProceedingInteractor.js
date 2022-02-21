@@ -51,7 +51,7 @@ exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
   const { docketNumberWithSuffix } = caseDetail;
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
 
-  await applicationContext
+  return await applicationContext
     .getDocumentGenerators()
     .noticeOfChangeToRemoteProceeding({
       applicationContext,
