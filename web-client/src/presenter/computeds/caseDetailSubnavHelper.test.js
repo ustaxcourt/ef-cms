@@ -24,6 +24,24 @@ const getBaseState = user => {
   };
 };
 
+const generateDocketEntries = (numberInDraft, numberNotInDraft) => {
+  const docketEntries = [];
+
+  for (let i = 0; i < numberInDraft; i++) {
+    docketEntries.push({
+      isDraft: true,
+    });
+  }
+
+  for (let i = 0; i < numberNotInDraft; i++) {
+    docketEntries.push({
+      isDraft: false,
+    });
+  }
+
+  return docketEntries;
+};
+
 describe('caseDetailSubnavHelper', () => {
   const petitionsClerkUser = {
     role: ROLES.petitionsClerk,
@@ -46,6 +64,9 @@ describe('caseDetailSubnavHelper', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          docketEntries: [],
+        },
       },
     });
     expect(result.showCaseInformationTab).toBeTruthy();
@@ -60,6 +81,9 @@ describe('caseDetailSubnavHelper', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
         ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [],
+        },
       },
     });
     expect(result.showTrackedItemsTab).toBeFalsy();
@@ -73,6 +97,9 @@ describe('caseDetailSubnavHelper', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
         ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [],
+        },
         screenMetadata: {
           isAssociated: true,
         },
@@ -85,6 +112,9 @@ describe('caseDetailSubnavHelper', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
         ...getBaseState(privatePractitionerUser),
+        caseDetail: {
+          docketEntries: [],
+        },
         screenMetadata: {
           isAssociated: false,
         },
@@ -97,6 +127,9 @@ describe('caseDetailSubnavHelper', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
         ...getBaseState(irsPractitionerUser),
+        caseDetail: {
+          docketEntries: [],
+        },
         screenMetadata: {
           isAssociated: false,
         },
@@ -109,6 +142,9 @@ describe('caseDetailSubnavHelper', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
         ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [],
+        },
         currentViewMetadata: {
           caseDetail: {
             caseInformationTab: 'overview',
@@ -124,6 +160,9 @@ describe('caseDetailSubnavHelper', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
         ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [],
+        },
         currentViewMetadata: {
           caseDetail: {
             caseInformationTab: 'petitioner',
@@ -141,6 +180,7 @@ describe('caseDetailSubnavHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
+            docketEntries: [],
             hasPendingItems: true,
           },
         },
@@ -154,6 +194,9 @@ describe('caseDetailSubnavHelper', () => {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDeadlines: [{ yes: true }],
+          caseDetail: {
+            docketEntries: [],
+          },
         },
       });
 
@@ -166,6 +209,7 @@ describe('caseDetailSubnavHelper', () => {
           ...getBaseState(petitionsClerkUser),
           caseDeadlines: undefined,
           caseDetail: {
+            docketEntries: [],
             hasPendingItems: false,
           },
         },
@@ -180,6 +224,7 @@ describe('caseDetailSubnavHelper', () => {
           ...getBaseState(petitionsClerkUser),
           caseDeadlines: [],
           caseDetail: {
+            docketEntries: [],
             hasPendingItems: false,
           },
         },
@@ -195,6 +240,7 @@ describe('caseDetailSubnavHelper', () => {
         state: {
           caseDetail: {
             caseNote: 'domo arigato',
+            docketEntries: [],
           },
         },
       });
@@ -205,6 +251,9 @@ describe('caseDetailSubnavHelper', () => {
     it('should be true when state.judgesNotes exists and is loaded', () => {
       const result = runCompute(caseDetailSubnavHelper, {
         state: {
+          caseDetail: {
+            docketEntries: [],
+          },
           judgesNote: {
             notes: 'misuta Robotto',
           },
@@ -216,7 +265,11 @@ describe('caseDetailSubnavHelper', () => {
 
     it('should be false when neither caseNotes nor judgesNotes exist', () => {
       const result = runCompute(caseDetailSubnavHelper, {
-        state: {},
+        state: {
+          caseDetail: {
+            docketEntries: [],
+          },
+        },
       });
 
       expect(result.showNotesIcon).toBeFalsy();
@@ -224,29 +277,14 @@ describe('caseDetailSubnavHelper', () => {
   });
 
   describe('draft tab', () => {
-    // create 3 objects
-    // 2 of the objects === drafts
-    // last, not draft
-    const numberOfDrafts = 2;
+    it('returns the number of draft items on the case', () => {
+      const numberOfDrafts = 2;
 
-    const docketEntries = [
-      {
-        isDraft: false,
-      },
-    ];
-
-    for (let i = 0; i < numberOfDrafts; i++) {
-      docketEntries.push({
-        isDraft: true,
-      });
-    }
-
-    it('should display the number of draft items if there are draft items', () => {
       const result = runCompute(caseDetailSubnavHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
           caseDetail: {
-            docketEntries,
+            docketEntries: generateDocketEntries(numberOfDrafts, 1),
           },
         },
       });
@@ -254,15 +292,19 @@ describe('caseDetailSubnavHelper', () => {
       expect(result.draftDocketEntryCount).toEqual(numberOfDrafts.toString());
     });
 
-    it.skip('should not display the number of draft items if there are no draft items', () => {
+    it('returns 0 draft items when there are 0 draft items on the case', () => {
+      const numberOfDrafts = 0;
+
       const result = runCompute(caseDetailSubnavHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          caseDeadlines: [{ yes: true }],
+          caseDetail: {
+            docketEntries: generateDocketEntries(numberOfDrafts, 26),
+          },
         },
       });
 
-      expect(result.showTrackedItemsNotification).toBeTruthy();
+      expect(result.draftDocketEntryCount).toEqual(numberOfDrafts.toString());
     });
   });
 });

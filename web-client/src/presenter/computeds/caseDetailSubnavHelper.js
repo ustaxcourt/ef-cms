@@ -43,9 +43,9 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
 
 const getDraftWorkItems = get => {
   const caseDetails = get(state.caseDetail);
-  console.log('%%%%caseDetails', caseDetails);
-  const caseDetailsWithDraftDocketEntries = caseDetails?.docketEntries?.filter(
+
+  const caseDetailsWithDraftDocketEntries = caseDetails.docketEntries.filter(
     docketEntry => docketEntry.isDraft,
   );
-  return caseDetailsWithDraftDocketEntries?.length.toString();
+  return caseDetailsWithDraftDocketEntries.length.toString();
 };
