@@ -21,7 +21,7 @@ export const NoticeOfDocketChange = ({
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3="Notice of Docket Change"
+        documentTitle="Notice of Docket Change"
       />
 
       <div className="card margin-top-80">

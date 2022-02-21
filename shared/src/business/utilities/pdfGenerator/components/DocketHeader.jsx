@@ -4,7 +4,7 @@ export const DocketHeader = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
-  h3,
+  documentTitle,
 }) => {
   return (
     <div id="docket-header">
@@ -18,7 +18,7 @@ export const DocketHeader = ({
         </div>
         <div id="docket-number">Docket No. {docketNumberWithSuffix}</div>
         <div className="clear"></div>
-        {h3 && <h3 className="document-title">{h3}</h3>}
+        {documentTitle && <h3 className="document-title">{documentTitle}</h3>}
       </div>
     </div>
   );
