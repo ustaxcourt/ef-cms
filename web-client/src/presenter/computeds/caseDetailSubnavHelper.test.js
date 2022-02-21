@@ -222,4 +222,65 @@ describe('caseDetailSubnavHelper', () => {
       expect(result.showNotesIcon).toBeFalsy();
     });
   });
+
+  describe('draft tab', () => {
+    it('should display the number of draft items if there are draft items', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          // caseDetail:
+          // docketEntries: [
+          //   {},
+          // ],
+        },
+      });
+
+      expect(result.showTrackedItemsNotification).toBeTruthy();
+    });
+
+    it('should not display the number of draft items if there are not any draft items', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDeadlines: [{ yes: true }],
+        },
+      });
+
+      expect(result.showTrackedItemsNotification).toBeTruthy();
+    });
+  });
+
+  describe('showNotesIcon', () => {
+    it('should be true when caseDetail.caseNote exists', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          caseDetail: {
+            caseNote: 'domo arigato',
+          },
+        },
+      });
+
+      expect(result.showNotesIcon).toBeTruthy();
+    });
+
+    it('should be true when state.judgesNotes exists and is loaded', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {
+          judgesNote: {
+            notes: 'misuta Robotto',
+          },
+        },
+      });
+
+      expect(result.showNotesIcon).toBeTruthy();
+    });
+
+    it('should be false when neither caseNotes nor judgesNotes exist', () => {
+      const result = runCompute(caseDetailSubnavHelper, {
+        state: {},
+      });
+
+      expect(result.showNotesIcon).toBeFalsy();
+    });
+  });
 });
