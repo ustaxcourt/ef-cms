@@ -14,6 +14,42 @@ const { get } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const generateNorpIfRequired = async ({
+  applicationContext,
+  caseEntity,
+  currentTrialSession,
+  newTrialSessionEntity,
+}) => {
+  const shouldIssueNoticeOfChangeToRemoteProceeding =
+    currentTrialSession.proceedingType ===
+      TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+    newTrialSessionEntity.proceedingType ===
+      TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+    caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+  console.log(
+    `Case number ${caseEntity.docketNumber} should be notified? ${shouldIssueNoticeOfChangeToRemoteProceeding}`,
+  );
+  if (shouldIssueNoticeOfChangeToRemoteProceeding) {
+    const trialSessionInformation = {
+      judgeName: newTrialSessionEntity.judge.name,
+      startDate: newTrialSessionEntity.startDate,
+      startTime: newTrialSessionEntity.startTime,
+    };
+
+    await applicationContext
+      .getUseCases()
+      .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
+        docketNumber: caseEntity.docketNumber,
+        trialSessionInformation,
+      });
+
+    //add docket entry
+
+    return caseEntity;
+  }
+};
+
 /**
  * updateTrialSessionInteractor
  *
@@ -131,7 +167,6 @@ exports.updateTrialSessionInteractor = async (
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     //update all the cases that are calendared with the new trial information
     const calendaredCases = currentTrialSession.caseOrder;
-    const notices = [];
 
     for (let calendaredCase of calendaredCases) {
       const caseToUpdate = await applicationContext
@@ -141,35 +176,18 @@ exports.updateTrialSessionInteractor = async (
           docketNumber: calendaredCase.docketNumber,
         });
 
-      const caseEntity = new Case(caseToUpdate, { applicationContext });
+      let caseEntity = new Case(caseToUpdate, { applicationContext });
       if (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
         console.log('Trial session to update is the one we want.');
-        const shouldIssueNoticeOfChangeToRemoteProceeding =
-          currentTrialSession.proceedingType ===
-            TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-          newTrialSessionEntity.proceedingType ===
-            TRIAL_SESSION_PROCEEDING_TYPES.remote &&
-          caseEntity.status !== CASE_STATUS_TYPES.closed;
 
-        console.log(
-          `Case number ${caseEntity.docketNumber} should be notified? ${shouldIssueNoticeOfChangeToRemoteProceeding}`,
-        );
-        if (shouldIssueNoticeOfChangeToRemoteProceeding) {
-          //do the norp geenration and docket entry adding stuff here
-          // should we just pass the whole trial session?
-          const notice = await applicationContext
-            .getUseCases()
-            .generateNoticeOfChangeToRemoteProceedingInteractor(
-              applicationContext,
-              {
-                docketNumber: caseEntity.docketNumber,
-                trialSessionId: trialSession.trialSessionId,
-              },
-            );
-          notices.push(notice);
-        }
+        caseEntity = await generateNorpIfRequired({
+          caseEntity,
+          currentTrialSession,
+          newTrialSessionEntity,
+        });
+
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

@@ -1,12 +1,12 @@
 const {
+  CASE_STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   createISODateString,
   formatDateString,
   FORMATS,
 } = require('../../utilities/DateHandler');
-const {
-  CASE_STATUS_TYPES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 /**
@@ -15,34 +15,27 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docketNumber for the case
- * @param {string} providers.trialSessionId the id for the trial session
+ * @param {string} providers.trialSessionInformation fix this the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
 exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
   applicationContext,
-  { docketNumber, trialSessionId },
+  { docketNumber, trialSessionInformation },
 ) => {
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
-
   const formattedStartDate = formatDateString(
-    trialSession.startDate,
+    trialSessionInformation.startDate,
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
   );
 
   const trialStartTimeIso = createISODateString(
-    trialSession.startTime,
+    trialSessionInformation.startTime,
     'HH:mm',
   );
   const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
 
   const judgeWithTitle = await getJudgeWithTitle({
     applicationContext,
-    judgeUserName: trialSession.judge.name,
+    judgeUserName: trialSessionInformation.judgeName,
   });
 
   const trialInfo = {
