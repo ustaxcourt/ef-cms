@@ -40,7 +40,7 @@ const renderTabFactory = ({
       showNotificationIcon,
       tabName,
       title,
-      unreadCount = '0',
+      unreadMessages = '0',
     } = child.props;
 
     const isActiveTab = tabName === activeKey;
@@ -89,9 +89,9 @@ const renderTabFactory = ({
               <div className="icon-tab-notification-exclamation">!</div>
             </div>
           )}
-          {unreadCount !== '0' && (
+          {unreadMessages !== '0' && (
             //icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center
-            <div className="icon-tab-unread-messages">{unreadCount}</div>
+            <div className="icon-tab-unread-messages">{unreadMessages}</div>
           )}
         </button>
       </li>
