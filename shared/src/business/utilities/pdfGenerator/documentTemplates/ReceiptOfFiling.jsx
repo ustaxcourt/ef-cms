@@ -58,7 +58,7 @@ export const ReceiptOfFiling = ({
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3="Receipt of Filing"
+        documentTitle="Receipt of Filing"
       />
       <div>
         <div className="float-left width-half" id="receipt-filed-by">
