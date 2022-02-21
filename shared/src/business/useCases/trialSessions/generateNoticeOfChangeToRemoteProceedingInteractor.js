@@ -1,8 +1,4 @@
 const {
-  CASE_STATUS_TYPES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
   createISODateString,
   formatDateString,
   FORMATS,
@@ -42,7 +38,7 @@ exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
     formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,
-    ...trialSession,
+    ...trialSessionInformation,
   };
 
   const caseDetail = await applicationContext
