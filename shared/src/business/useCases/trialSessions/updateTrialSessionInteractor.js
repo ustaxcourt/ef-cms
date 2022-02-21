@@ -48,14 +48,12 @@ const generateNorpIfRequired = async ({
       trialLocation: newTrialSessionEntity.trialLocation,
     };
 
-    const notice = await applicationContext
+    await applicationContext
       .getUseCases()
       .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
         docketNumber: caseEntity.docketNumber,
         trialSessionInformation,
       });
-
-    //fixme create  SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
 
     const noticeOfChangeToRemoteProceedingDocketEntry = new DocketEntry(
       {
@@ -89,15 +87,18 @@ const generateNorpIfRequired = async ({
 
     caseEntity.addDocketEntry(noticeOfChangeToRemoteProceedingDocketEntry);
     const servedParties = aggregatePartiesForService(caseEntity);
+
     noticeOfChangeToRemoteProceedingDocketEntry.setAsServed(servedParties.all);
-    // await serveNoticesForCase({
-    //   caseEntity,
-    //   noticeDocketEntryEntity: noticeOfChangeToRemoteProceedingDocketEntry,
-    //   noticeDocumentPdfData: notice,
-    //   servedParties,
-    //   standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
-    //   standingPretrialPdfData: standingPretrialFile,
-    // });
+
+    //todo in next PR - capture serviceInfo and return paperServicePdfUrl
+    await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntity,
+        docketEntryId:
+          noticeOfChangeToRemoteProceedingDocketEntry.docketEntryId,
+      });
 
     return caseEntity;
   }
@@ -218,7 +219,6 @@ exports.updateTrialSessionInteractor = async (
   }
 
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
-    //update all the cases that are calendared with the new trial information
     const calendaredCases = currentTrialSession.caseOrder;
 
     for (let calendaredCase of calendaredCases) {
@@ -235,6 +235,7 @@ exports.updateTrialSessionInteractor = async (
       ) {
         console.log('Trial session to update is the one we want.');
 
+        //todo add paper service url to output
         caseEntity = await generateNorpIfRequired({
           applicationContext,
           caseEntity,
