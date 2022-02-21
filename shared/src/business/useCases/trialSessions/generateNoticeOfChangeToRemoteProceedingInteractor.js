@@ -20,7 +20,7 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
  */
 exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
   applicationContext,
-  { trialSessionId },
+  { docketNumber, trialSessionId },
 ) => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
@@ -52,37 +52,25 @@ exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
     ...trialSession,
   };
 
-  // const openCasesDocketNumbers = //loop through each docket number in teh caseOrder array and save its docket number
-  // for (const caseIndex of trialSession.caseOrder) {
-  //   if (caseIndex.status !== CASE_STATUS_TYPES.closed) {
-  //     const caseDetail = await applicationContext
-  //       .getPersistenceGateway()
-  //       .getCaseByDocketNumber({
-  //         applicationContext,
-  //         docketNumber: caseIndex.docketNumber,
-  //       });
-  //
-  //     const { docketNumberWithSuffix } = caseDetail;
-  //     const { caseCaptionExtension, caseTitle } =
-  //       getCaseCaptionMeta(caseDetail);
-  //
-  //     await applicationContext
-  //       .getDocumentGenerators()
-  //       .noticeOfChangeToRemoteProceeding({
-  //         applicationContext,
-  //         data: {
-  //           caseCaptionExtension,
-  //           caseTitle,
-  //           docketNumberWithSuffix,
-  //           trialInfo,
-  //         },
-  //       });
-  //   }
-  // }
-  //get docket number with suffix and case caption for each case
-  //call our document generator for each case
+  const caseDetail = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
-  // const filteredOpenCases = openUserCases.filter(
-  //   ({ status }) => status !== CASE_STATUS_TYPES.closed,
-  // );
+  const { docketNumberWithSuffix } = caseDetail;
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseDetail);
+
+  await applicationContext
+    .getDocumentGenerators()
+    .noticeOfChangeToRemoteProceeding({
+      applicationContext,
+      data: {
+        caseCaptionExtension,
+        caseTitle,
+        docketNumberWithSuffix,
+        trialInfo,
+      },
+    });
 };

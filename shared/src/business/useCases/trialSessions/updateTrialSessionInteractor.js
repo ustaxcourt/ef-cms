@@ -131,6 +131,7 @@ exports.updateTrialSessionInteractor = async (
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     //update all the cases that are calendared with the new trial information
     const calendaredCases = currentTrialSession.caseOrder;
+    const notices = [];
 
     for (let calendaredCase of calendaredCases) {
       const caseToUpdate = await applicationContext
@@ -144,15 +145,30 @@ exports.updateTrialSessionInteractor = async (
       if (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
-        // const trialSessionHasChanged =
-        //   currentTrialSession.proceedingType ===
-        //     TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-        //   newTrialSessionEntity.proceedingType ===
-        //     TRIAL_SESSION_PROCEEDING_TYPES.remote &&
-        //   caseEntity.status !== CASE_STATUS_TYPES.closed;
+        console.log('Trial session to update is the one we want.');
+        const shouldIssueNoticeOfChangeToRemoteProceeding =
+          currentTrialSession.proceedingType ===
+            TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+          newTrialSessionEntity.proceedingType ===
+            TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+          caseEntity.status !== CASE_STATUS_TYPES.closed;
 
-        if (trialSessionHasChanged) {
+        console.log(
+          `Case number ${caseEntity.docketNumber} should be notified? ${shouldIssueNoticeOfChangeToRemoteProceeding}`,
+        );
+        if (shouldIssueNoticeOfChangeToRemoteProceeding) {
           //do the norp geenration and docket entry adding stuff here
+          // should we just pass the whole trial session?
+          const notice = await applicationContext
+            .getUseCases()
+            .generateNoticeOfChangeToRemoteProceedingInteractor(
+              applicationContext,
+              {
+                docketNumber: caseEntity.docketNumber,
+                trialSessionId: trialSession.trialSessionId,
+              },
+            );
+          notices.push(notice);
         }
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
@@ -160,6 +176,8 @@ exports.updateTrialSessionInteractor = async (
           applicationContext,
           caseToUpdate: caseEntity,
         });
+      } else {
+        console.log('Trial session to update is NOT the one we want.');
       }
 
       const matchingHearing = caseToUpdate.hearings.find(
