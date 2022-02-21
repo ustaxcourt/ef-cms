@@ -34,9 +34,6 @@ const generateNorpIfRequired = async ({
       TRIAL_SESSION_PROCEEDING_TYPES.remote &&
     caseEntity.status !== CASE_STATUS_TYPES.closed;
 
-  console.log(
-    `Case number ${caseEntity.docketNumber} should be notified? ${shouldIssueNoticeOfChangeToRemoteProceeding}`,
-  );
   if (shouldIssueNoticeOfChangeToRemoteProceeding) {
     const trialSessionInformation = {
       joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
@@ -48,17 +45,25 @@ const generateNorpIfRequired = async ({
       trialLocation: newTrialSessionEntity.trialLocation,
     };
 
-    await applicationContext
+    const notice = await applicationContext
       .getUseCases()
       .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
         docketNumber: caseEntity.docketNumber,
         trialSessionInformation,
       });
 
+    const docketEntryId = applicationContext.getUniqueId();
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: notice,
+      key: docketEntryId,
+    });
+
     const noticeOfChangeToRemoteProceedingDocketEntry = new DocketEntry(
       {
         date: newTrialSessionEntity.startDate,
-        docketEntryId: applicationContext.getUniqueId(),
+        docketEntryId,
         documentTitle:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
             .documentTitle,
@@ -96,11 +101,8 @@ const generateNorpIfRequired = async ({
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntity,
-        docketEntryId:
-          noticeOfChangeToRemoteProceedingDocketEntry.docketEntryId,
+        docketEntryId,
       });
-
-    return caseEntity;
   }
 };
 
@@ -229,14 +231,12 @@ exports.updateTrialSessionInteractor = async (
           docketNumber: calendaredCase.docketNumber,
         });
 
-      let caseEntity = new Case(caseToUpdate, { applicationContext });
+      const caseEntity = new Case(caseToUpdate, { applicationContext });
       if (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
-        console.log('Trial session to update is the one we want.');
-
         //todo add paper service url to output
-        caseEntity = await generateNorpIfRequired({
+        await generateNorpIfRequired({
           applicationContext,
           caseEntity,
           currentTrialSession,
@@ -250,8 +250,6 @@ exports.updateTrialSessionInteractor = async (
           applicationContext,
           caseToUpdate: caseEntity,
         });
-      } else {
-        console.log('Trial session to update is NOT the one we want.');
       }
 
       const matchingHearing = caseToUpdate.hearings.find(
