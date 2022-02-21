@@ -32,9 +32,13 @@ const generateNorpIfRequired = async ({
   );
   if (shouldIssueNoticeOfChangeToRemoteProceeding) {
     const trialSessionInformation = {
+      joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
       judgeName: newTrialSessionEntity.judge.name,
+      meetingId: newTrialSessionEntity.meetingId,
+      password: newTrialSessionEntity.password,
       startDate: newTrialSessionEntity.startDate,
       startTime: newTrialSessionEntity.startTime,
+      trialLocation: newTrialSessionEntity.trialLocation,
     };
 
     await applicationContext
@@ -45,6 +49,7 @@ const generateNorpIfRequired = async ({
       });
 
     //add docket entry
+    caseEntity.addDocketEntry();
 
     return caseEntity;
   }
@@ -183,6 +188,7 @@ exports.updateTrialSessionInteractor = async (
         console.log('Trial session to update is the one we want.');
 
         caseEntity = await generateNorpIfRequired({
+          applicationContext,
           caseEntity,
           currentTrialSession,
           newTrialSessionEntity,
