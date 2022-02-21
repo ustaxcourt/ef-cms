@@ -22,6 +22,16 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
   const showNotesIcon =
     get(state.caseDetail.caseNote) || get(state.judgesNote.notes);
 
+  // TODO clarify the correct location of this helper function
+  const getNANEWorkItemDrafts = () => {
+    const caseDetails = get(state.caseDetail);
+    const caseDetailsWithDraftDocketEntries = caseDetails.docketEntries.filter(
+      caseDetail => caseDetail.isDraft && caseDetail.freeText !== '',
+    );
+    return caseDetailsWithDraftDocketEntries.length.toString();
+  };
+  const unreadMessages = getNANEWorkItemDrafts();
+
   return {
     selectedCaseInformationTab,
     showCaseInformationTab:
@@ -35,5 +45,6 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
     showNotesTab: isInternalUser,
     showTrackedItemsNotification: hasPendingItems || !!caseDeadlines?.length,
     showTrackedItemsTab: isInternalUser,
+    unreadMessages,
   };
 };
