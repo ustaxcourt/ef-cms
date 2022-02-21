@@ -410,12 +410,13 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
-  it('should generate and serve a Notice of Change to Remote Proceeding and the associated docket entry', async () => {
+  it('should generate and serve a Notice of Change to Remote Proceeding when the trial session changes from inPerson to remote', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce({
+      .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
         hearings: [],
+        trialDate: '2019-03-01T21:42:29.073Z',
         trialSessionId: MOCK_TRIAL_ID_7,
       });
 
@@ -448,6 +449,17 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getUseCases()
         .generateNoticeOfChangeToRemoteProceedingInteractor,
     ).toHaveBeenCalled();
-    expect(norpDocketEntry).toBeDefined();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).toHaveBeenCalled();
+    expect(norpDocketEntry).toMatchObject({
+      eventCode:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
+          .eventCode,
+      servedAt: expect.anything(),
+    });
   });
 });
