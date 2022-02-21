@@ -49,7 +49,7 @@ export const NoticeOfChangeToRemoteProceeding = ({
 
       <div id="notice-body">
         <p>
-          This case was originally calendared for an in-person proceeding at
+          This case was originally calendared for an in-person proceeding at{' '}
           {trialInfo.trialLocation} on {trialInfo.formattedStartDate} at{' '}
           {trialInfo.formattedStartTime}. The parties are no longer required to
           appear in-person.{' '}
