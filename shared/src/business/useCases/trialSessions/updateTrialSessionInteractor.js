@@ -1,4 +1,6 @@
-const DocketEntry = require('../../entities/DocketEntry');
+const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
 const {
   CASE_STATUS_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
@@ -13,6 +15,7 @@ const {
   TrialSessionWorkingCopy,
 } = require('../../entities/trialSessions/TrialSessionWorkingCopy');
 const { Case } = require('../../entities/cases/Case');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { get } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -45,7 +48,7 @@ const generateNorpIfRequired = async ({
       trialLocation: newTrialSessionEntity.trialLocation,
     };
 
-    await applicationContext
+    const notice = await applicationContext
       .getUseCases()
       .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
         docketNumber: caseEntity.docketNumber,
@@ -85,6 +88,16 @@ const generateNorpIfRequired = async ({
       });
 
     caseEntity.addDocketEntry(noticeOfChangeToRemoteProceedingDocketEntry);
+    const servedParties = aggregatePartiesForService(caseEntity);
+    noticeOfChangeToRemoteProceedingDocketEntry.setAsServed(servedParties.all);
+    // await serveNoticesForCase({
+    //   caseEntity,
+    //   noticeDocketEntryEntity: noticeOfChangeToRemoteProceedingDocketEntry,
+    //   noticeDocumentPdfData: notice,
+    //   servedParties,
+    //   standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
+    //   standingPretrialPdfData: standingPretrialFile,
+    // });
 
     return caseEntity;
   }
