@@ -409,7 +409,7 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
-  it.only('should generate and serve a Notice of Change to Remote Proceeding', async () => {
+  it.only('should generate and serve a Notice of Change to Remote Proceeding and the associated docket entry', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValueOnce({
@@ -431,6 +431,13 @@ describe('updateTrialSessionInteractor', () => {
       trialSession: remoteTrialSession,
     });
 
+    //fixme use entity constant for eventCode
+    const norpDocketEntry = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        d => d.eventCode === 'NORP',
+      );
+
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
     ).toHaveBeenCalled();
@@ -438,5 +445,6 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getUseCases()
         .generateNoticeOfChangeToRemoteProceedingInteractor,
     ).toHaveBeenCalled();
+    expect(norpDocketEntry).toBeDefined();
   });
 });

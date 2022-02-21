@@ -1,5 +1,8 @@
+const DocketEntry = require('../../entities/DocketEntry');
 const {
   CASE_STATUS_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -48,8 +51,42 @@ const generateNorpIfRequired = async ({
         trialSessionInformation,
       });
 
+    //fixme create  SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
+
+    const noticeOfChangeToRemoteProceedingDocketEntry = new DocketEntry(
+      {
+        date: newTrialSessionEntity.startDate,
+        docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
+        documentTitle:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
+            .documentTitle,
+        documentType:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
+            .documentType,
+        eventCode:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
+            .eventCode,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
+        trialLocation: newTrialSessionEntity.trialLocation,
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
+
+    noticeOfChangeToRemoteProceedingDocketEntry.numberOfPages =
+      await applicationContext.getUseCaseHelpers().countPagesInDocument({
+        applicationContext,
+        docketEntryId:
+          noticeOfChangeToRemoteProceedingDocketEntry.docketEntryId,
+      });
+
+    caseEntity.addDocketEntry(noticeOfChangeToRemoteProceedingDocketEntry);
+
     //add docket entry
-    caseEntity.addDocketEntry();
+    // caseEntity.addDocketEntry();
 
     return caseEntity;
   }
