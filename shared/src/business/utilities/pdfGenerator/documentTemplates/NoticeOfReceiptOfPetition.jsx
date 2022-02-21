@@ -21,7 +21,7 @@ export const NoticeOfReceiptOfPetition = ({
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
-        h3="Notice of Receipt of Petition"
+        documentTitle="Notice of Receipt of Petition"
       />
       <div>
         The Court received and filed your petition on {receivedAtFormatted}, and
