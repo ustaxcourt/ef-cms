@@ -22,17 +22,10 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
   const showNotesIcon =
     get(state.caseDetail.caseNote) || get(state.judgesNote.notes);
 
-  // TODO clarify the correct location of this helper function
-  const getNANEWorkItemDrafts = () => {
-    const caseDetails = get(state.caseDetail);
-    const caseDetailsWithDraftDocketEntries = caseDetails.docketEntries.filter(
-      caseDetail => caseDetail.isDraft && caseDetail.freeText !== '',
-    );
-    return caseDetailsWithDraftDocketEntries.length.toString();
-  };
-  const unreadMessages = getNANEWorkItemDrafts();
+  const draftDocketEntryCount = getDraftWorkItems(get);
 
   return {
+    draftDocketEntryCount,
     selectedCaseInformationTab,
     showCaseInformationTab:
       isInternalUser ||
@@ -45,6 +38,14 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
     showNotesTab: isInternalUser,
     showTrackedItemsNotification: hasPendingItems || !!caseDeadlines?.length,
     showTrackedItemsTab: isInternalUser,
-    unreadMessages,
   };
+};
+
+const getDraftWorkItems = get => {
+  const caseDetails = get(state.caseDetail);
+  console.log('%%%%caseDetails', caseDetails);
+  const caseDetailsWithDraftDocketEntries = caseDetails?.docketEntries?.filter(
+    docketEntry => docketEntry.isDraft,
+  );
+  return caseDetailsWithDraftDocketEntries?.length.toString();
 };

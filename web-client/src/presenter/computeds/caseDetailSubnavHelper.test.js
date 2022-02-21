@@ -224,21 +224,37 @@ describe('caseDetailSubnavHelper', () => {
   });
 
   describe('draft tab', () => {
+    // create 3 objects
+    // 2 of the objects === drafts
+    // last, not draft
+    const numberOfDrafts = 2;
+
+    const docketEntries = [
+      {
+        isDraft: false,
+      },
+    ];
+
+    for (let i = 0; i < numberOfDrafts; i++) {
+      docketEntries.push({
+        isDraft: true,
+      });
+    }
+
     it('should display the number of draft items if there are draft items', () => {
       const result = runCompute(caseDetailSubnavHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
-          // caseDetail:
-          // docketEntries: [
-          //   {},
-          // ],
+          caseDetail: {
+            docketEntries,
+          },
         },
       });
 
-      expect(result.showTrackedItemsNotification).toBeTruthy();
+      expect(result.draftDocketEntryCount).toEqual(numberOfDrafts.toString());
     });
 
-    it('should not display the number of draft items if there are not any draft items', () => {
+    it.skip('should not display the number of draft items if there are no draft items', () => {
       const result = runCompute(caseDetailSubnavHelper, {
         state: {
           ...getBaseState(petitionsClerkUser),
@@ -247,40 +263,6 @@ describe('caseDetailSubnavHelper', () => {
       });
 
       expect(result.showTrackedItemsNotification).toBeTruthy();
-    });
-  });
-
-  describe('showNotesIcon', () => {
-    it('should be true when caseDetail.caseNote exists', () => {
-      const result = runCompute(caseDetailSubnavHelper, {
-        state: {
-          caseDetail: {
-            caseNote: 'domo arigato',
-          },
-        },
-      });
-
-      expect(result.showNotesIcon).toBeTruthy();
-    });
-
-    it('should be true when state.judgesNotes exists and is loaded', () => {
-      const result = runCompute(caseDetailSubnavHelper, {
-        state: {
-          judgesNote: {
-            notes: 'misuta Robotto',
-          },
-        },
-      });
-
-      expect(result.showNotesIcon).toBeTruthy();
-    });
-
-    it('should be false when neither caseNotes nor judgesNotes exist', () => {
-      const result = runCompute(caseDetailSubnavHelper, {
-        state: {},
-      });
-
-      expect(result.showNotesIcon).toBeFalsy();
     });
   });
 });
