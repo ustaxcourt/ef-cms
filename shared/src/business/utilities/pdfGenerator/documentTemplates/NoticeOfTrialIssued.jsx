@@ -15,8 +15,8 @@ export const NoticeOfTrialIssued = ({
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
+        documentTitle="Notice Setting Case For Trial"
       />
-      <h3 className="notice-of-trial-title">Notice Setting Case For Trial</h3>
       <div>
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>

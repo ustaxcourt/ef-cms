@@ -115,6 +115,7 @@ import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACogn
 import { wasLoginUsingTokenInUrl } from './utilities/wasLoginUsingTokenInUrl';
 import { withAppContextDecorator } from './withAppContext';
 
+import { NoticeOfTrialIssued } from '../../shared/src/business/utilities/pdfGenerator/documentTemplates/NoticeOfTrialIssued';
 import App from 'cerebral';
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -324,6 +325,7 @@ const app = {
         )}
 
         <AppComponent />
+
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       window.document.querySelector('#app'),
