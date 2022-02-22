@@ -83,6 +83,7 @@ exports.setNoticeOfChangeToRemoteProceeding = async (
 
   if (shouldIssueNoticeOfChangeToRemoteProceeding) {
     const trialSessionInformation = {
+      chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
       joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
       judgeName: newTrialSessionEntity.judge.name,
       meetingId: newTrialSessionEntity.meetingId,
