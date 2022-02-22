@@ -68,6 +68,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
     ).toMatchObject({
       docketNumber: mockOpenCase.docketNumber,
       trialSessionInformation: {
+        chambersPhoneNumber: '1111111',
         joinPhoneNumber: '0987654321',
         judgeName: 'Chief Judge',
         meetingId: '1234567890',

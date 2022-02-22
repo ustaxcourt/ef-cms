@@ -417,7 +417,6 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const getDocumentGeneratorsReturnMock = {
-    NoticeOfChangeToRemoteProceeding: jest.fn().mockImplementation(getFakeFile),
     addressLabelCoverSheet: jest.fn().mockImplementation(getFakeFile),
     caseInventoryReport: jest.fn().mockImplementation(getFakeFile),
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),

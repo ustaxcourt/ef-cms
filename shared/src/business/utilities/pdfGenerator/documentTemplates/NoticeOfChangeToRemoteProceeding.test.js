@@ -9,6 +9,7 @@ describe('NoticeOfChangeToRemoteProceeding', () => {
   const caseTitle = 'Test Petitioner';
   const docketNumberWithSuffix = '123-19S';
   const trialInfo = {
+    chambersPhoneNumber: '11111',
     formattedJudge: 'Judge Dredd',
     formattedStartDate: 'Monday, January 20, 2020',
     formattedStartTime: '10:00 am',

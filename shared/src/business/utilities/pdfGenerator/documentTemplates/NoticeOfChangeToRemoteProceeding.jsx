@@ -30,7 +30,10 @@ export const NoticeOfChangeToRemoteProceeding = ({
 
         <div className="info-box info-box-judge" id="judge-info">
           <div className="info-box-header">Judge</div>
-          <div className="info-box-content">{trialInfo.formattedJudge}</div>
+          <div className="info-box-content">
+            <div> {trialInfo.formattedJudge}</div>
+            <div> {trialInfo.chambersPhoneNumber}</div>
+          </div>
         </div>
         <div className="clear" />
       </div>
