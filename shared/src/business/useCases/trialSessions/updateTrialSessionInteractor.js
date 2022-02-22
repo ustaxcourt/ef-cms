@@ -146,7 +146,7 @@ exports.updateTrialSessionInteractor = async (
             caseEntity,
             currentTrialSession,
             newTrialSessionEntity,
-            userId: user.userId,
+            user,
           });
 
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
