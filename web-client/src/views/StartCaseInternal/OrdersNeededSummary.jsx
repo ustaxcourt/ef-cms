@@ -29,9 +29,6 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
                   <p className="heading-3 usa-alert__heading padding-top-0">
                     Orders/Notices Needed
                   </p>
-                  {caseInformation.noticeOfAttachments && (
-                    <div>Notice of Attachments in the Nature of Evidence</div>
-                  )}
                   {caseInformation.orderForAmendedPetition && (
                     <div>Order for Amended Petition</div>
                   )}
@@ -52,6 +49,14 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
                   )}
                   {caseInformation.orderToShowCause && (
                     <div>Order to Show Cause</div>
+                  )}
+                  {caseInformation.noticeOfAttachments && (
+                    <>
+                      <p className="heading-3 usa-alert__heading padding-top-0">
+                        Orders/Notices Automatically Created In Drafts
+                      </p>
+                      <div>Notice of Attachments in the Nature of Evidence</div>
+                    </>
                   )}
                 </div>
                 <div className="tablet:grid-col-2 usa-alert__action">
