@@ -45,6 +45,12 @@ const generateDocketEntries = (numberInDraft, numberNotInDraft) => {
   return docketEntries;
 };
 
+const computeState = state => {
+  return runCompute(caseDetailSubnavHelper, {
+    state,
+  });
+};
+
 describe('caseDetailSubnavHelper', () => {
   let state = {};
 
@@ -86,9 +92,7 @@ describe('caseDetailSubnavHelper', () => {
       ...getBaseState(petitionerUser),
     };
 
-    const result = runCompute(caseDetailSubnavHelper, {
-      state,
-    });
+    const result = computeState(state);
     expect(result.showTrackedItemsTab).toBeFalsy();
     expect(result.showDraftsTab).toBeFalsy();
     expect(result.showMessagesTab).toBeFalsy();
@@ -104,9 +108,8 @@ describe('caseDetailSubnavHelper', () => {
       },
     };
 
-    const result = runCompute(caseDetailSubnavHelper, {
-      state,
-    });
+    const result = computeState(state);
+
     expect(result.showCaseInformationTab).toBeTruthy();
   });
 
@@ -118,9 +121,7 @@ describe('caseDetailSubnavHelper', () => {
       },
     };
 
-    const result = runCompute(caseDetailSubnavHelper, {
-      state,
-    });
+    const result = computeState(state);
     expect(result.showCaseInformationTab).toBeFalsy();
   });
 
@@ -132,9 +133,7 @@ describe('caseDetailSubnavHelper', () => {
       },
     };
 
-    const result = runCompute(caseDetailSubnavHelper, {
-      state,
-    });
+    const result = computeState(state);
     expect(result.showCaseInformationTab).toBeTruthy();
   });
 
@@ -149,9 +148,8 @@ describe('caseDetailSubnavHelper', () => {
       },
     };
 
-    const result = runCompute(caseDetailSubnavHelper, {
-      state,
-    });
+    const result = computeState(state);
+
     expect(result.selectedCaseInformationTab).toBe('docketRecord');
   });
 
@@ -166,9 +164,8 @@ describe('caseDetailSubnavHelper', () => {
       },
     };
 
-    const result = runCompute(caseDetailSubnavHelper, {
-      state,
-    });
+    const result = computeState(state);
+
     expect(result.selectedCaseInformationTab).toBe('petitioner');
   });
 
@@ -176,9 +173,7 @@ describe('caseDetailSubnavHelper', () => {
     it('should be true when caseDetail.hasPendingItems is true', () => {
       state.caseDetail.hasPendingItems = true;
 
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.showTrackedItemsNotification).toBeTruthy();
     });
@@ -186,9 +181,7 @@ describe('caseDetailSubnavHelper', () => {
     it('should be true when caseDeadlines is an array with length greater than 0', () => {
       state.caseDeadlines = [{ yes: true }];
 
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.showTrackedItemsNotification).toBeTruthy();
     });
@@ -197,9 +190,7 @@ describe('caseDetailSubnavHelper', () => {
       state.caseDeadlines = undefined;
       state.caseDetail.hasPendingItems = false;
 
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.showTrackedItemsNotification).toBeFalsy();
     });
@@ -208,9 +199,7 @@ describe('caseDetailSubnavHelper', () => {
       state.caseDeadlines = [];
       state.caseDetail.hasPendingItems = false;
 
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.showTrackedItemsNotification).toBeFalsy();
     });
@@ -220,9 +209,7 @@ describe('caseDetailSubnavHelper', () => {
     it('should be true when caseDetail.caseNote exists', () => {
       state.caseDetail.caseNote = 'domo arigato';
 
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.showNotesIcon).toBeTruthy();
     });
@@ -235,17 +222,13 @@ describe('caseDetailSubnavHelper', () => {
         },
       };
 
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.showNotesIcon).toBeTruthy();
     });
 
     it('should be false when neither caseNotes nor judgesNotes exist', () => {
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.showNotesIcon).toBeFalsy();
     });
@@ -256,9 +239,7 @@ describe('caseDetailSubnavHelper', () => {
       const numberOfDrafts = 2;
       state.caseDetail.docketEntries = generateDocketEntries(numberOfDrafts, 1);
 
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.draftDocketEntryCount).toEqual(numberOfDrafts.toString());
     });
@@ -270,9 +251,7 @@ describe('caseDetailSubnavHelper', () => {
         26,
       );
 
-      const result = runCompute(caseDetailSubnavHelper, {
-        state,
-      });
+      const result = computeState(state);
 
       expect(result.draftDocketEntryCount).toEqual(numberOfDrafts.toString());
     });
