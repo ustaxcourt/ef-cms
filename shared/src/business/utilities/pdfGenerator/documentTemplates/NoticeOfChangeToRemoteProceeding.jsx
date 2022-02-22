@@ -1,5 +1,3 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../entities/EntityConstants.js';
-
 const React = require('react');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
@@ -8,17 +6,7 @@ export const NoticeOfChangeToRemoteProceeding = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
-  trialInfo = {
-    chambersPhoneNumber: '111111',
-    formattedJudge: 'A judge',
-    formattedStartDate: '3000-03-01T00:00:00.000Z',
-    formattedStartTime: '',
-    joinPhoneNumber: '222222',
-    meetingId: '333333',
-    password: '4444444',
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-    trialLocation: '',
-  },
+  trialInfo,
 }) => {
   return (
     <div id="notice-of-change-to-remote-proceeding-pdf">
