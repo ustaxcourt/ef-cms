@@ -11,7 +11,6 @@ const {
   updateTrialSessionInteractor,
 } = require('./updateTrialSessionInteractor');
 const { Case } = require('../../entities/cases/Case');
-const { cloneDeep } = require('lodash');
 const { faker } = require('@faker-js/faker');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
@@ -415,38 +414,40 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
-  //fixme
-  it.skip('should set a Notice of Change to Remote Proceeding for all open cases on the trial session', async () => {
-    const mockCase = cloneDeep(MOCK_CASE);
+  it('should setNoticeOfChangeToRemoteProceeding for each case on the trial session', async () => {
     const firstOpenCase = {
-      docketNumber: '999-99',
-      ...mockCase,
+      ...MOCK_CASE,
+      docketNumber: '888-88',
+      docketNumberWithSuffix: '888-88',
       hearings: [],
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: MOCK_TRIAL_ID_7,
     };
     const secondOpenCase = {
-      ...mockCase,
+      ...MOCK_CASE,
       docketNumber: '123-79',
+      docketNumberWithSuffix: '123-79',
       hearings: [],
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: MOCK_TRIAL_ID_7,
     };
     const closedCase = {
-      ...mockCase,
-      closedDate: '2020-01T21:42:29.073Z',
+      ...MOCK_CASE,
+      closedDate: '2020-03-01T21:42:29.073Z',
       docketNumber: '999-99',
+      docketNumberWithSuffix: '999-99',
       hearings: [],
       status: CASE_STATUS_TYPES.closed,
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: MOCK_TRIAL_ID_7,
     };
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(firstOpenCase)
+    const mock =
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
+    mock
+      .mockReturnValueOnce(firstOpenCase)
       .mockReturnValueOnce(secondOpenCase)
-      .mockReturnValueOnce(closedCase);
+      .mockReturnValue(closedCase);
 
     const remoteTrialSession = {
       ...mockTrialsById[MOCK_TRIAL_ID_7],
@@ -464,6 +465,6 @@ describe('updateTrialSessionInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers()
         .setNoticeOfChangeToRemoteProceeding,
-    ).toHaveBeenCalledTimes(2);
+    ).toHaveBeenCalledTimes(3);
   });
 });
