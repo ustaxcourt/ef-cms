@@ -20,6 +20,9 @@ let globalUser;
 const getBaseState = user => {
   globalUser = user;
   return {
+    caseDetail: {
+      docketEntries: [],
+    },
     permissions: getUserPermissions(user),
   };
 };
@@ -43,6 +46,8 @@ const generateDocketEntries = (numberInDraft, numberNotInDraft) => {
 };
 
 describe('caseDetailSubnavHelper', () => {
+  let state = {};
+
   const petitionsClerkUser = {
     role: ROLES.petitionsClerk,
     userId: '123',
@@ -60,14 +65,13 @@ describe('caseDetailSubnavHelper', () => {
     userId: '123',
   };
 
+  beforeEach(() => {
+    state = getBaseState(petitionsClerkUser);
+  });
+
   it('should show internal-only tabs if user is internal', () => {
     const result = runCompute(caseDetailSubnavHelper, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: {
-          docketEntries: [],
-        },
-      },
+      state,
     });
     expect(result.showCaseInformationTab).toBeTruthy();
     expect(result.showTrackedItemsTab).toBeTruthy();
@@ -81,9 +85,6 @@ describe('caseDetailSubnavHelper', () => {
     const result = runCompute(caseDetailSubnavHelper, {
       state: {
         ...getBaseState(petitionerUser),
-        caseDetail: {
-          docketEntries: [],
-        },
       },
     });
     expect(result.showTrackedItemsTab).toBeFalsy();
@@ -94,31 +95,28 @@ describe('caseDetailSubnavHelper', () => {
   });
 
   it('should show case information tab if user is external and associated with the case', () => {
+    state.screenMetadata = {
+      isAssociated: true,
+    };
+
+    state.permissions = getUserPermissions(petitionerUser);
+
     const result = runCompute(caseDetailSubnavHelper, {
-      state: {
-        ...getBaseState(petitionerUser),
-        caseDetail: {
-          docketEntries: [],
-        },
-        screenMetadata: {
-          isAssociated: true,
-        },
-      },
+      state,
     });
     expect(result.showCaseInformationTab).toBeTruthy();
   });
 
   it('should not show case information tab if user is external and not associated with the case', () => {
-    const result = runCompute(caseDetailSubnavHelper, {
-      state: {
-        ...getBaseState(privatePractitionerUser),
-        caseDetail: {
-          docketEntries: [],
-        },
-        screenMetadata: {
-          isAssociated: false,
-        },
+    state = {
+      ...getBaseState(privatePractitionerUser),
+      screenMetadata: {
+        isAssociated: false,
       },
+    };
+
+    const result = runCompute(caseDetailSubnavHelper, {
+      state,
     });
     expect(result.showCaseInformationTab).toBeFalsy();
   });
