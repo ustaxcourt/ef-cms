@@ -55,10 +55,15 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
 
                   {caseInformation.noticeOfAttachments && (
                     <>
-                      <p className="heading-3 usa-alert__heading padding-top-2">
+                      <p
+                        className="heading-3 usa-alert__heading padding-top-2"
+                        id="orders-notices-autocreate-header"
+                      >
                         Orders/Notices Automatically Created In Drafts
                       </p>
-                      <div>Notice of Attachments in the Nature of Evidence</div>
+                      <div id="notice-of-attachment-nature-of-evidence">
+                        Notice of Attachments in the Nature of Evidence
+                      </div>
                     </>
                   )}
                 </div>
