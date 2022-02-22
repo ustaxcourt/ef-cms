@@ -124,8 +124,12 @@ exports.updateTrialSessionInteractor = async (
       });
   }
 
+  let pdfUrl = null;
+
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     const calendaredCases = currentTrialSession.caseOrder;
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const newPdfDoc = await PDFDocument.create();
 
     for (let calendaredCase of calendaredCases) {
       const caseToUpdate = await applicationContext
@@ -143,8 +147,10 @@ exports.updateTrialSessionInteractor = async (
         await applicationContext
           .getUseCaseHelpers()
           .setNoticeOfChangeToRemoteProceeding(applicationContext, {
+            PDFDocument,
             caseEntity,
             currentTrialSession,
+            newPdfDoc,
             newTrialSessionEntity,
             user,
           });
@@ -169,6 +175,28 @@ exports.updateTrialSessionInteractor = async (
         });
       }
     }
+
+    let hasPaper = newPdfDoc.getPages().length;
+    let docketEntryId = null;
+    if (hasPaper) {
+      const paperServicePdfData = await newPdfDoc.save();
+      docketEntryId = applicationContext.getUniqueId();
+      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+        applicationContext,
+        document: paperServicePdfData,
+        key: docketEntryId,
+        useTempBucket: true,
+      });
+      hasPaper = true;
+
+      pdfUrl = (
+        await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
+          applicationContext,
+          key: docketEntryId,
+          useTempBucket: true,
+        })
+      ).url;
+    }
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
@@ -176,5 +204,8 @@ exports.updateTrialSessionInteractor = async (
     trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
   });
 
-  return newTrialSessionEntity.toRawObject();
+  return {
+    newTrialSession: newTrialSessionEntity.toRawObject(),
+    serviceInfo: pdfUrl,
+  };
 };

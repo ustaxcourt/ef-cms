@@ -9,6 +9,49 @@ const {
 } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 
+const serveNoticesForCase = async (
+  applicationContext,
+  {
+    caseEntity,
+    newPdfDoc,
+    noticeDocketEntryEntity,
+    noticeDocumentPdfData,
+    PDFDocument,
+    servedParties,
+  },
+) => {
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    docketEntryId: noticeDocketEntryEntity.docketEntryId,
+    servedParties,
+  });
+
+  if (servedParties.paper.length > 0) {
+    const combinedDocumentsPdf = await PDFDocument.create();
+    const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
+
+    let copiedPages = await combinedDocumentsPdf.copyPages(
+      noticeDocumentPdf,
+      noticeDocumentPdf.getPageIndices(),
+    );
+
+    copiedPages.forEach(page => {
+      combinedDocumentsPdf.addPage(page);
+    });
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf({
+        applicationContext,
+        caseEntity,
+        newPdfDoc,
+        noticeDoc: combinedDocumentsPdf,
+        servedParties,
+      });
+  }
+};
+
 /**
  * setNoticeOfChangeToRemoteProceeding
  *
@@ -22,7 +65,14 @@ const { DocketEntry } = require('../../entities/DocketEntry');
  */
 exports.setNoticeOfChangeToRemoteProceeding = async (
   applicationContext,
-  { caseEntity, currentTrialSession, newTrialSessionEntity, userId },
+  {
+    caseEntity,
+    currentTrialSession,
+    newPdfDoc,
+    newTrialSessionEntity,
+    PDFDocument,
+    userId,
+  },
 ) => {
   const shouldIssueNoticeOfChangeToRemoteProceeding =
     currentTrialSession.proceedingType ===
@@ -93,13 +143,14 @@ exports.setNoticeOfChangeToRemoteProceeding = async (
 
     noticeOfChangeToRemoteProceedingDocketEntry.setAsServed(servedParties.all);
 
-    //todo in next PR - capture serviceInfo and return paperServicePdfUrl
-    await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntity,
-        docketEntryId,
-      });
+    await serveNoticesForCase(applicationContext, {
+      PDFDocument,
+      caseEntity,
+      newPdfDoc,
+      noticeDocketEntryEntity: noticeOfChangeToRemoteProceedingDocketEntry,
+      noticeDocumentPdfData: notice,
+      servedParties,
+    });
+    //need to set up web sockets stuff maybe? seems to be done in setNoticesForCalendaredTrialSessionInteractor with the notification gateway calls
   }
 };
