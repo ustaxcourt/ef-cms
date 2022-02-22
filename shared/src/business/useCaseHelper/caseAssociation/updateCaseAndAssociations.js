@@ -534,6 +534,9 @@ exports.updateCaseAndAssociations = async ({
       docketNumber: caseToUpdate.docketNumber,
     });
 
+  // if (caseEntity.docketNumber === '999-99') {
+  //   console.log('Case Entity: ', caseEntity);
+  // }
   const validRawCaseEntity = caseEntity.validate().toRawObject();
 
   const validRawOldCaseEntity = new Case(oldCaseEntity, { applicationContext })

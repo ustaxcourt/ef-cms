@@ -2,9 +2,9 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   ROLES,
   SESSION_TYPES,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -81,7 +81,11 @@ describe('updateTrialSessionInteractor', () => {
       },
       [MOCK_TRIAL_ID_7]: {
         ...MOCK_TRIAL_INPERSON,
-        caseOrder: [{ docketNumber: MOCK_CASE.docketNumber }],
+        caseOrder: [
+          { docketNumber: '123-79' },
+          { docketNumber: '999-99' },
+          { docketNumber: '888-88' },
+        ],
         isCalendared: true,
       },
     };
@@ -410,15 +414,40 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
-  it('should generate and serve a Notice of Change to Remote Proceeding when the trial session changes from inPerson to remote', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        hearings: [],
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: MOCK_TRIAL_ID_7,
-      });
+  it.only('should set a Notice of Change to Remote Proceeding for all open cases on the trial session', async () => {
+    const firstOpenCase = {
+      ...MOCK_CASE,
+      docketNumber: '888-88',
+      docketNumberWithSuffix: '888-88',
+      hearings: [],
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+    const secondOpenCase = {
+      ...MOCK_CASE,
+      docketNumber: '123-79',
+      docketNumberWithSuffix: '123-79',
+      hearings: [],
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+    const closedCase = {
+      ...MOCK_CASE,
+      closedDate: '2020-03-01T21:42:29.073Z',
+      docketNumber: '999-99',
+      docketNumberWithSuffix: '999-99',
+      hearings: [],
+      status: CASE_STATUS_TYPES.closed,
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+
+    const mock =
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
+    mock
+      .mockReturnValueOnce(firstOpenCase)
+      .mockReturnValueOnce(secondOpenCase)
+      .mockReturnValue(closedCase);
 
     const remoteTrialSession = {
       ...mockTrialsById[MOCK_TRIAL_ID_7],
@@ -433,33 +462,9 @@ describe('updateTrialSessionInteractor', () => {
       trialSession: remoteTrialSession,
     });
 
-    const norpDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-        d =>
-          d.eventCode ===
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
-            .eventCode,
-      );
-
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeToRemoteProceedingInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    expect(norpDocketEntry).toMatchObject({
-      eventCode:
-        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
-          .eventCode,
-      servedAt: expect.anything(),
-    });
+      applicationContext.getUseCaseHelpers()
+        .setNoticeOfChangeToRemoteProceeding,
+    ).toHaveBeenCalledTimes(3);
   });
 });
