@@ -20,92 +20,6 @@ const { get } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-const generateNorpIfRequired = async ({
-  applicationContext,
-  caseEntity,
-  currentTrialSession,
-  newTrialSessionEntity,
-  user,
-}) => {
-  const shouldIssueNoticeOfChangeToRemoteProceeding =
-    currentTrialSession.proceedingType ===
-      TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-    newTrialSessionEntity.proceedingType ===
-      TRIAL_SESSION_PROCEEDING_TYPES.remote &&
-    caseEntity.status !== CASE_STATUS_TYPES.closed;
-
-  if (shouldIssueNoticeOfChangeToRemoteProceeding) {
-    const trialSessionInformation = {
-      joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
-      judgeName: newTrialSessionEntity.judge.name,
-      meetingId: newTrialSessionEntity.meetingId,
-      password: newTrialSessionEntity.password,
-      startDate: newTrialSessionEntity.startDate,
-      startTime: newTrialSessionEntity.startTime,
-      trialLocation: newTrialSessionEntity.trialLocation,
-    };
-
-    const notice = await applicationContext
-      .getUseCases()
-      .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
-        docketNumber: caseEntity.docketNumber,
-        trialSessionInformation,
-      });
-
-    const docketEntryId = applicationContext.getUniqueId();
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: notice,
-      key: docketEntryId,
-    });
-
-    const noticeOfChangeToRemoteProceedingDocketEntry = new DocketEntry(
-      {
-        date: newTrialSessionEntity.startDate,
-        docketEntryId,
-        documentTitle:
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
-            .documentTitle,
-        documentType:
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
-            .documentType,
-        eventCode:
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
-            .eventCode,
-        isFileAttached: true,
-        isOnDocketRecord: true,
-        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-        signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
-        trialLocation: newTrialSessionEntity.trialLocation,
-        userId: user.userId,
-      },
-      { applicationContext },
-    );
-
-    noticeOfChangeToRemoteProceedingDocketEntry.numberOfPages =
-      await applicationContext.getUseCaseHelpers().countPagesInDocument({
-        applicationContext,
-        docketEntryId:
-          noticeOfChangeToRemoteProceedingDocketEntry.docketEntryId,
-      });
-
-    caseEntity.addDocketEntry(noticeOfChangeToRemoteProceedingDocketEntry);
-    const servedParties = aggregatePartiesForService(caseEntity);
-
-    noticeOfChangeToRemoteProceedingDocketEntry.setAsServed(servedParties.all);
-
-    //todo in next PR - capture serviceInfo and return paperServicePdfUrl
-    await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntity,
-        docketEntryId,
-      });
-  }
-};
-
 /**
  * updateTrialSessionInteractor
  *
@@ -236,13 +150,14 @@ exports.updateTrialSessionInteractor = async (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
         //todo add paper service url to output
-        await generateNorpIfRequired({
-          applicationContext,
-          caseEntity,
-          currentTrialSession,
-          newTrialSessionEntity,
-          user,
-        });
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeToRemoteProceeding(applicationContext, {
+            caseEntity,
+            currentTrialSession,
+            newTrialSessionEntity,
+            user,
+          });
 
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
@@ -252,6 +167,7 @@ exports.updateTrialSessionInteractor = async (
         });
       }
 
+      console.log('Docket number: ', caseEntity.docketNumber);
       const matchingHearing = caseToUpdate.hearings.find(
         hearing =>
           hearing.trialSessionId == newTrialSessionEntity.trialSessionId,
