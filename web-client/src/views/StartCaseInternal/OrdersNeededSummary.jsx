@@ -26,9 +26,11 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
             <div className="grid-container padding-x-0">
               <div className="grid-row">
                 <div className="tablet:grid-col-10">
-                  <p className="heading-3 usa-alert__heading padding-top-0">
-                    Orders/Notices Needed
-                  </p>
+                  {ordersNoticesNeeded(caseInformation) && (
+                    <p className="heading-3 usa-alert__heading padding-top-0">
+                      Orders/Notices Needed
+                    </p>
+                  )}
                   {caseInformation.orderForAmendedPetition && (
                     <div>Order for Amended Petition</div>
                   )}
@@ -76,5 +78,25 @@ export const OrdersNeededSummary = ({ caseInformation }) => {
         </div>
       )}
     </>
+  );
+};
+
+const ordersNoticesNeeded = ({
+  orderDesignatingPlaceOfTrial,
+  orderForAmendedPetition,
+  orderForAmendedPetitionAndFilingFee,
+  orderForFilingFee,
+  orderForOds,
+  orderForRatification,
+  orderToShowCause,
+}) => {
+  return (
+    orderForAmendedPetition ||
+    orderForAmendedPetitionAndFilingFee ||
+    orderForFilingFee ||
+    orderForOds ||
+    orderForRatification ||
+    orderDesignatingPlaceOfTrial ||
+    orderToShowCause
   );
 };
