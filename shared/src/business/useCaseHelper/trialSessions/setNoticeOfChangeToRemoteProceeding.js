@@ -28,17 +28,7 @@ const serveNoticesForCase = async (
   });
 
   if (servedParties.paper.length > 0) {
-    const combinedDocumentsPdf = await PDFDocument.create();
     const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
-
-    let copiedPages = await combinedDocumentsPdf.copyPages(
-      noticeDocumentPdf,
-      noticeDocumentPdf.getPageIndices(),
-    );
-
-    copiedPages.forEach(page => {
-      combinedDocumentsPdf.addPage(page);
-    });
 
     await applicationContext
       .getUseCaseHelpers()
@@ -46,7 +36,7 @@ const serveNoticesForCase = async (
         applicationContext,
         caseEntity,
         newPdfDoc,
-        noticeDoc: combinedDocumentsPdf,
+        noticeDoc: noticeDocumentPdf,
         servedParties,
       });
   }

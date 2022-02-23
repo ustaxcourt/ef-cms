@@ -125,11 +125,11 @@ exports.updateTrialSessionInteractor = async (
   }
 
   let pdfUrl = null;
-
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     const calendaredCases = currentTrialSession.caseOrder;
     const { PDFDocument } = await applicationContext.getPdfLib();
-    const newPdfDoc = await PDFDocument.create();
+    const paperServicePdfsCombined = await PDFDocument.create();
+    let processedCases = 0;
 
     for (let calendaredCase of calendaredCases) {
       const caseToUpdate = await applicationContext
@@ -150,11 +150,24 @@ exports.updateTrialSessionInteractor = async (
             PDFDocument,
             caseEntity,
             currentTrialSession,
-            newPdfDoc,
+            newPdfDoc: paperServicePdfsCombined,
             newTrialSessionEntity,
             user,
           });
 
+        processedCases++;
+
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            message: {
+              action: 'notice_generation_update_progress',
+              processedCases,
+              totalCases: calendaredCases.length,
+            },
+            userId: user.userId,
+          });
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
@@ -176,27 +189,24 @@ exports.updateTrialSessionInteractor = async (
       }
     }
 
-    let hasPaper = newPdfDoc.getPages().length;
-    let docketEntryId = null;
-    if (hasPaper) {
-      const paperServicePdfData = await newPdfDoc.save();
-      docketEntryId = applicationContext.getUniqueId();
-      await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    const serviceInfo = await applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf({
         applicationContext,
-        document: paperServicePdfData,
-        key: docketEntryId,
-        useTempBucket: true,
+        document: paperServicePdfsCombined,
       });
-      hasPaper = true;
+    pdfUrl = serviceInfo.url;
 
-      pdfUrl = (
-        await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-          applicationContext,
-          key: docketEntryId,
-          useTempBucket: true,
-        })
-      ).url;
-    }
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'notice_generation_complete',
+        docketEntryId: serviceInfo.docketEntryId,
+        hasPaper: serviceInfo.hasPaper,
+        pdfUrl,
+      },
+      userId: user.userId,
+    });
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
