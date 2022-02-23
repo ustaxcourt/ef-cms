@@ -129,6 +129,7 @@ exports.updateTrialSessionInteractor = async (
     const calendaredCases = currentTrialSession.caseOrder;
     const { PDFDocument } = await applicationContext.getPdfLib();
     const paperServicePdfsCombined = await PDFDocument.create();
+    let processedCases = 0;
 
     for (let calendaredCase of calendaredCases) {
       const caseToUpdate = await applicationContext
@@ -154,6 +155,19 @@ exports.updateTrialSessionInteractor = async (
             user,
           });
 
+        processedCases++;
+
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            message: {
+              action: 'notice_generation_update_progress',
+              processedCases,
+              totalCases: calendaredCases.length,
+            },
+            userId: user.userId,
+          });
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
@@ -182,6 +196,17 @@ exports.updateTrialSessionInteractor = async (
         document: paperServicePdfsCombined,
       });
     pdfUrl = serviceInfo.url;
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'notice_generation_complete',
+        docketEntryId: serviceInfo.docketEntryId,
+        hasPaper: serviceInfo.hasPaper,
+        pdfUrl,
+      },
+      userId: user.userId,
+    });
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
