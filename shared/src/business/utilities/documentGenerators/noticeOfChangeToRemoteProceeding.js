@@ -23,6 +23,13 @@ const noticeOfChangeToRemoteProceeding = async ({
     },
   });
 
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: data.docketNumberWithSuffix,
+    },
+  });
+
   const footerHtml = reactTemplateGenerator({
     componentName: 'DateServedFooter',
     data: {
@@ -37,6 +44,8 @@ const noticeOfChangeToRemoteProceeding = async ({
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       footerHtml,
+      headerHtml,
+      overwriteHeader: true,
     });
 
   return pdf;
