@@ -2,14 +2,14 @@
   font-family: 'Century Schoolbook Std', serif;
 
   .order-court-header {
-    text-align: center;
     margin-bottom: 30px;
+    text-align: center;
 
     h1 {
+      margin-bottom: 0;
       font-family: 'old_english_fiveregular', serif;
       font-size: 26px;
       font-weight: bold;
-      margin-bottom: 0;
     }
 
     .court-address {
@@ -61,10 +61,10 @@
   }
 
   .document-title {
-    font-size: 16px;
-    text-decoration: underline;
     margin-top: 30px;
+    font-size: 16px;
     text-align: center;
+    text-decoration: underline;
   }
 
   #order-content {

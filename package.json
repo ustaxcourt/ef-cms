@@ -208,6 +208,8 @@
     "init:ui": "cd web-client/terraform/main && ../bin/deploy-init.sh",
     "lint:css:fix": "npm run lint:css -- --fix",
     "lint:css": "stylelint web-client/src/**/*.scss",
+    "lint:css:pdf": "stylelint shared/src/business/utilities/htmlGenerator/**/*.scss",
+    "lint:css:pdf:fix": "npm run lint:css:pdf -- --fix",
     "lint:file": "TIMING=1 eslint --",
     "lint:fix": "run-p lint:css:fix lint:js:fix",
     "lint:js:fix:plain": "npm run lint:js:fix -- --rule 'prettier/prettier: 0'",
