@@ -1,0 +1,23 @@
+#getting-ready-checklist {
+  p {
+    font-size: 14px;
+    line-height: 15px;
+  }
+
+  font-size: 16px;
+  line-height: 120%;
+
+  ol {
+    li {
+      padding-bottom: 20px;
+      padding-left: 2em;
+      ol {
+        li {
+          padding-bottom: 0;
+          padding-left: 1em;
+          margin-left: -2em;
+        }
+      }
+    }
+  }
+}
