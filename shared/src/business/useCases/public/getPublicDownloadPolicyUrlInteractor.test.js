@@ -2,6 +2,9 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   getPublicDownloadPolicyUrlInteractor,
 } = require('./getPublicDownloadPolicyUrlInteractor');
 const { cloneDeep } = require('lodash');
@@ -192,5 +195,32 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     ).rejects.toThrow(
       'Docket entry 8205c4bc-879f-4648-a3ba-9280384c4c00 does not have an attached file.',
     );
+  });
+
+  it('should throw an error if the user is a public user and the docket entry has been sealed', async () => {
+    mockCase.docketEntries.push(
+      new DocketEntry(
+        {
+          createdAt: '2018-01-21T20:49:28.192Z',
+          docketEntryId: '8205c4bc-879f-4648-a3ba-9280384c4c00',
+          docketNumber: '101-18',
+          documentTitle: 'Order for something',
+          documentType: 'Order',
+          eventCode: 'O',
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          isSealed: true,
+          sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+        },
+        { applicationContext },
+      ),
+    );
+
+    await expect(
+      getPublicDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: '123-20',
+        key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
+      }),
+    ).rejects.toThrow('Docket entry has been sealed.');
   });
 });

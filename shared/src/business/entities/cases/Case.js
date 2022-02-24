@@ -304,10 +304,6 @@ const assignDocketEntries = ({
   } else {
     obj.docketEntries = [];
   }
-
-  obj.hasSealedDocuments = obj.docketEntries.some(
-    docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-  );
 };
 
 const assignHearings = ({ applicationContext, obj, rawCase }) => {
@@ -526,7 +522,6 @@ Case.VALIDATION_RULES = {
     ...FILING_TYPES[ROLES.privatePractitioner],
   ).optional(),
   hasPendingItems: joi.boolean().optional(),
-  hasSealedDocuments: joi.boolean().required(),
   hasVerifiedIrsNotice: joi
     .boolean()
     .optional()
@@ -2312,8 +2307,7 @@ Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
   );
 };
 
-const isSealedCase = rawCase =>
-  rawCase.isSealed || !!rawCase.sealedDate || rawCase.hasSealedDocuments;
+const isSealedCase = rawCase => rawCase.isSealed || !!rawCase.sealedDate;
 
 const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));

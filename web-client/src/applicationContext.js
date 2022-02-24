@@ -197,6 +197,7 @@ import { getPdfFromUrlInteractor } from '../../shared/src/business/useCases/docu
 import { getPractitionerByBarNumberInteractor } from '../../shared/src/proxies/users/getPractitionerByBarNumberProxy';
 import { getPractitionersByNameInteractor } from '../../shared/src/proxies/practitioners/getPractitionersByNameProxy';
 import { getPrivatePractitionersBySearchKeyInteractor } from '../../shared/src/proxies/users/getPrivatePractitionersBySearchKeyProxy';
+import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
@@ -233,6 +234,7 @@ import { saveCaseNoteInteractor } from '../../shared/src/proxies/caseNote/saveCa
 import { saveSignedDocumentInteractor } from '../../shared/src/proxies/documents/saveSignedDocumentProxy';
 import { sealCaseContactAddressInteractor } from '../../shared/src/proxies/sealCaseContactAddressProxy';
 import { sealCaseInteractor } from '../../shared/src/proxies/sealCaseProxy';
+import { sealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/sealDocketEntryProxy';
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
@@ -252,6 +254,7 @@ import { tryCatchDecorator } from './tryCatchDecorator';
 import { unblockCaseFromTrialInteractor } from '../../shared/src/proxies/unblockCaseFromTrialProxy';
 import { unprioritizeCaseInteractor } from '../../shared/src/proxies/unprioritizeCaseProxy';
 import { unsealCaseInteractor } from '../../shared/src/proxies/unsealCaseProxy';
+import { unsealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEntry/unsealDocketEntryProxy';
 import { updateCaseContextInteractor } from '../../shared/src/proxies/updateCaseContextProxy';
 import { updateCaseDeadlineInteractor } from '../../shared/src/proxies/caseDeadline/updateCaseDeadlineProxy';
 import { updateCaseDetailsInteractor } from '../../shared/src/proxies/updateCaseDetailsProxy';
@@ -471,6 +474,7 @@ const allUseCases = {
   saveSignedDocumentInteractor,
   sealCaseContactAddressInteractor,
   sealCaseInteractor,
+  sealDocketEntryInteractor,
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
@@ -487,6 +491,7 @@ const allUseCases = {
   unblockCaseFromTrialInteractor,
   unprioritizeCaseInteractor,
   unsealCaseInteractor,
+  unsealDocketEntryInteractor,
   updateCaseContextInteractor,
   updateCaseDeadlineInteractor,
   updateCaseDetailsInteractor,
@@ -706,6 +711,7 @@ const applicationContext = {
       getPetitionDocketEntry,
       getPetitionerById,
       getPractitionersRepresenting,
+      getSealedDocketEntryTooltip,
       getServedPartiesCode,
       getStampBoxCoordinates,
       getTrialSessionStatus,
