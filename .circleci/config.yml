@@ -24,7 +24,7 @@ commands:
           command: |
             if [ ! -d ~/.cache/Cypress ]; then
               echo Installing Cypress
-              ./project/node_modules/.bin/cypress install
+              ./node_modules/.bin/cypress install
             else
               echo Found cached Cypress version. Using cached Cypress folder.             
             fi
