@@ -1,43 +1,107 @@
-const { setPdfFormFields } = require('./setPdfFormFields');
+const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const { savePaperServicePdf } = require('./savePaperServicePdf');
 
-describe('setFields function', () => {
-  const getTextMock = jest.fn();
-  const setTextMock = jest.fn();
-  let name = 'PDFButton';
-  let fields;
+const mockDocumentId = 'cf332ba3-df9e-42c6-b9bc-065da5bb7a36';
+const mockDocumentUrl = 'www.example.com';
+const mockDocument = {
+  getPages: jest.fn(),
+  save: jest.fn(),
+};
 
+describe('savePaperServicePdf', () => {
   beforeEach(() => {
-    fields = [
-      {
-        constructor: { name },
-        getText: getTextMock.mockReturnValue(''),
-        setText: setTextMock,
-      },
-      {
-        constructor: { name },
-        getText: getTextMock.mockReturnValue(''),
-        setText: setTextMock,
-      },
-    ];
+    applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDownloadPolicyUrl.mockReturnValue({ url: mockDocumentUrl });
+
+    mockDocument.getPages.mockReturnValue({ length: 1 });
+    mockDocument.save.mockReturnValue(mockDocument);
   });
 
-  it('should call getText and setText functions if field type name is PDFTextField', () => {
-    const loremText = 'Lorem Ipsum';
-    getTextMock.mockReturnValueOnce(loremText);
-    fields[0].constructor.name = 'PDFTextField';
+  it('should not return a url or docketEntryId when there is no paper service on the case', async () => {
+    mockDocument.getPages.mockReturnValue({ length: undefined });
 
-    setPdfFormFields(fields);
+    const serviceInfo = await savePaperServicePdf({
+      applicationContext,
+      document: mockDocument,
+    });
 
-    expect(getTextMock).toHaveBeenCalledTimes(1);
-    expect(setTextMock).toHaveBeenCalledWith(loremText);
+    expect(serviceInfo).toEqual({
+      docketEntryId: null,
+      hasPaper: undefined,
+      url: null,
+    });
   });
 
-  it('should not call getText and setText functions if field type name is not PDFTextField', () => {
-    fields[0].constructor.name = 'PDFCheckbox';
+  it('should return a url and docketEntryId, and hasPaper true when there is paper service on the case', async () => {
+    mockDocument.getPages.mockReturnValue({ length: 1 });
 
-    setPdfFormFields(fields);
+    const serviceInfo = await savePaperServicePdf({
+      applicationContext,
+      document: mockDocument,
+    });
 
-    expect(getTextMock).not.toHaveBeenCalled();
-    expect(setTextMock).not.toHaveBeenCalled();
+    expect(serviceInfo).toEqual({
+      docketEntryId: mockDocumentId,
+      hasPaper: true,
+      url: mockDocumentUrl,
+    });
+  });
+
+  it('should save the pdf to s3 when there is paper service on the case', async () => {
+    await savePaperServicePdf({
+      applicationContext,
+      document: mockDocument,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0],
+    ).toMatchObject({
+      document: mockDocument,
+      key: mockDocumentId,
+      useTempBucket: true,
+    });
+  });
+
+  it('should not save the pdf to s3 when there is no paper service on the case', async () => {
+    mockDocument.getPages.mockReturnValue({ length: undefined });
+
+    await savePaperServicePdf({
+      applicationContext,
+      document: mockDocument,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should get the pdf url when there is paper service on the case', async () => {
+    await savePaperServicePdf({
+      applicationContext,
+      document: mockDocument,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
+    ).toHaveBeenCalled();
+  });
+
+  it('should notget the pdf url when there is no paper service on the case', async () => {
+    mockDocument.getPages.mockReturnValue({ length: undefined });
+
+    await savePaperServicePdf({
+      applicationContext,
+      document: mockDocument,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
+    ).not.toHaveBeenCalled();
   });
 });
