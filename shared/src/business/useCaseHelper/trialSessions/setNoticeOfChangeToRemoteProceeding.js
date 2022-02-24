@@ -142,6 +142,5 @@ exports.setNoticeOfChangeToRemoteProceeding = async (
       noticeDocumentPdfData: notice,
       servedParties,
     });
-    //need to set up web sockets stuff maybe? seems to be done in setNoticesForCalendaredTrialSessionInteractor with the notification gateway calls
   }
 };
