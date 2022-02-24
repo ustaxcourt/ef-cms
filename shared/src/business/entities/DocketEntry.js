@@ -124,6 +124,7 @@ DocketEntry.prototype.init = function init(
   this.mailingDate = rawDocketEntry.mailingDate;
   this.numberOfPages = rawDocketEntry.numberOfPages;
   this.objections = rawDocketEntry.objections;
+  this.sealedTo = rawDocketEntry.sealedTo;
   this.filers = rawDocketEntry.filers || [];
   this.ordinalValue = rawDocketEntry.ordinalValue;
   this.otherFilingParty = rawDocketEntry.otherFilingParty;
@@ -382,6 +383,28 @@ DocketEntry.prototype.strikeEntry = function ({
       'Cannot strike a document that is not on the docket record.',
     );
   }
+};
+
+/**
+ * Seal this docket entry
+ *
+ * @param {object} obj param
+ * @param {string} obj.sealedTo the type of user to seal this docket entry from
+ */
+DocketEntry.prototype.sealEntry = function ({ sealedTo }) {
+  this.sealedTo = sealedTo;
+  this.isSealed = true;
+};
+
+/**
+ * Unseal this docket entry
+ *
+ * @param {object} obj param
+ */
+DocketEntry.prototype.unsealEntry = function () {
+  delete this.sealedTo;
+  this.isSealed = false;
+  this.isLegacySealed = false;
 };
 
 /**

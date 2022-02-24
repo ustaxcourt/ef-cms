@@ -18,7 +18,16 @@
 * Opinions from sealed cases appear in internal and public search results
 
 
+### Searching for sealed documents
+**Order Search**
+* Orders that have been sealed from the public appear in internal order search and in external order search for parties associated to the case
+* Orders that have been sealed from the public do not appear as a result in public order search
+
 ## Sealed Documents 
 * Documents that were sealed in Blackstone (LegacySealed) display on the Docket Record with a lock icon
-* LegacySealed documents are visible only to court users and are not hyperlinked for parties to the case
-* If a document is LegacySealed, the entire case is sealed (to change post-MVP)
+* LegacySealed documents are visible and hyperlinked to court users and parties to the case 
+* LegacySealed documents are not hyperlinked for the public or external users who are not parties on the case
+* Documents that were sealed in DAWSON display on the Docket Record with a lock icon
+* Documents that were sealed in DAWSON to the public are visible and hyperlinked to court users and parties to the case 
+* Documents that were sealed in DAWSON to the public are not hyperlinked for the public or external users who are not parties on the case
+

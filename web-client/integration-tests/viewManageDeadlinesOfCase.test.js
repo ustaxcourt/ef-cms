@@ -6,7 +6,11 @@ import { petitionsClerkViewCaseDeadline } from './journey/petitionsClerkViewCase
 import { petitionsClerkViewsCaseWithNoDeadlines } from './journey/petitionsClerkViewsCaseWithNoDeadlines';
 import { petitionsClerkViewsDeadlineReportForSingleCase } from './journey/petitionsClerkViewsDeadlineReportForSingleCase';
 
-const cerebralTest = setupTest();
+const cerebralTest = setupTest({
+  constantsOverrides: {
+    DEADLINE_REPORT_PAGE_SIZE: 1,
+  },
+});
 
 describe('View and manage the deadlines of a case', () => {
   const randomDay = `0${Math.floor(Math.random() * 9) + 1}`;

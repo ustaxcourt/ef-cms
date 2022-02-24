@@ -1,64 +1,64 @@
 import { docketRecordHelper } from './docketRecordHelper';
 import { runCompute } from 'cerebral/test';
 
-describe('docket record helper', () => {
-  it('should show links for editing docket entries if user does have EDIT_DOCKET_ENTRY permission', () => {
-    const result = runCompute(docketRecordHelper, {
-      state: {
-        caseDetail: {
-          canAllowPrintableDocketRecord: true,
+describe('docketRecordHelper', () => {
+  describe('showEditOrSealDocketRecordEntry', () => {
+    it('should be true when the user has EDIT_DOCKET_ENTRY permission', () => {
+      const result = runCompute(docketRecordHelper, {
+        state: {
+          permissions: {
+            EDIT_DOCKET_ENTRY: true,
+            SEAL_DOCKET_ENTRY: false,
+          },
         },
-        form: {},
-        permissions: {
-          EDIT_DOCKET_ENTRY: true,
-        },
-      },
+      });
+
+      expect(result.showEditOrSealDocketRecordEntry).toBe(true);
     });
-    expect(result.showEditDocketRecordEntry).toBe(true);
+
+    it('should be true when the user has SEAL_DOCKET_ENTRY permission', () => {
+      const result = runCompute(docketRecordHelper, {
+        state: {
+          permissions: {
+            EDIT_DOCKET_ENTRY: false,
+            SEAL_DOCKET_ENTRY: true,
+          },
+        },
+      });
+
+      expect(result.showEditOrSealDocketRecordEntry).toBe(true);
+    });
+
+    it('should be false when when the user does not have EDIT_DOCKET_ENTRY and SEAL_DOCKET_ENTRY permissions', () => {
+      const result = runCompute(docketRecordHelper, {
+        state: {
+          permissions: {
+            EDIT_DOCKET_ENTRY: false,
+            SEAL_DOCKET_ENTRY: false,
+          },
+        },
+      });
+
+      expect(result.showEditOrSealDocketRecordEntry).toBe(false);
+    });
   });
 
-  it('should not show links for editing docket entries if user does not have EDIT_DOCKET_ENTRY permission', () => {
-    const result = runCompute(docketRecordHelper, {
-      state: {
-        caseDetail: {
-          canAllowPrintableDocketRecord: true,
-        },
-        form: {},
-        permissions: {
-          EDIT_DOCKET_ENTRY: false,
-        },
-      },
-    });
-    expect(result.showEditDocketRecordEntry).toBe(false);
-  });
+  describe('showPrintableDocketRecord', () => {
+    it('should be set to the value of caseDetail.canAllowPrintableDocketRecord', () => {
+      const mockCanAllowPrintableDocketRecord = true;
 
-  it('should show printable docket record button if canAllowPrintableDocketRecord is true', () => {
-    const result = runCompute(docketRecordHelper, {
-      state: {
-        caseDetail: {
-          canAllowPrintableDocketRecord: true,
+      const result = runCompute(docketRecordHelper, {
+        state: {
+          caseDetail: {
+            canAllowPrintableDocketRecord: mockCanAllowPrintableDocketRecord,
+          },
+          permissions: {},
         },
-        form: {},
-        permissions: {
-          EDIT_DOCKET_ENTRY: true,
-        },
-      },
-    });
-    expect(result.showPrintableDocketRecord).toBe(true);
-  });
+      });
 
-  it('should not show printable docket record button if canAllowPrintableDocketRecord is false', () => {
-    const result = runCompute(docketRecordHelper, {
-      state: {
-        caseDetail: {
-          canAllowPrintableDocketRecord: false,
-        },
-        form: {},
-        permissions: {
-          EDIT_DOCKET_ENTRY: true,
-        },
-      },
+      expect(result.showPrintableDocketRecord).toBe(
+        mockCanAllowPrintableDocketRecord,
+      );
     });
-    expect(result.showPrintableDocketRecord).toBe(false);
   });
 });

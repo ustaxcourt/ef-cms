@@ -13,11 +13,17 @@ const {
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } = require('../../test/mockCase');
 const { applicationContext } = require('../test/createTestApplicationContext');
-const { getOtherFilers } = require('../entities/cases/Case');
-const { docketEntries } = MOCK_CASE;
 const { cloneDeep } = require('lodash');
+const { getOtherFilers } = require('../entities/cases/Case');
 
 describe('getCaseInteractor', () => {
+  const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
+  const docketClerkId = '44c4d382-1136-492f-b1f4-45e893c34771';
+  const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
+  const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
+  const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
+  const irsSuperuserId = '5a5c771d-ab63-4d78-a298-1de657dde621';
+
   let testCase;
   let mockCaseContactPrimary;
 
@@ -25,12 +31,6 @@ describe('getCaseInteractor', () => {
     testCase = { ...MOCK_CASE };
     mockCaseContactPrimary = testCase.petitioners[0];
   });
-
-  const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';
-  const docketClerkId = '44c4d382-1136-492f-b1f4-45e893c34771';
-  const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
-  const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
-  const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
 
   it('should format the given docket number, removing leading zeroes and suffix', async () => {
     applicationContext
@@ -124,6 +124,48 @@ describe('getCaseInteractor', () => {
     });
 
     expect(result.docketNumber).toEqual('101-00');
+  });
+
+  it('should return the case when the currentUser is an irs superuser even if the case has sealed documents', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'IRS Superuser',
+      role: ROLES.irsSuperuser,
+      userId: irsSuperuserId,
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue({
+        ...testCase,
+        docketEntries: [
+          testCase.docketEntries[0],
+          testCase.docketEntries[1],
+          {
+            ...testCase.docketEntries[2],
+            isOnDocketRecord: true,
+            isSealed: true,
+            sealedTo: 'Public',
+          },
+        ],
+        docketNumber: '101-00',
+        petitioners: [
+          {
+            ...mockCaseContactPrimary,
+            contactId: 'dc56e26e-f9fd-4165-8997-97676cc0523e',
+          },
+        ],
+        userId: '320fce0e-b050-4e04-8720-db25da3ca598',
+      });
+
+    const result = await getCaseInteractor(applicationContext, {
+      docketNumber: '00101-00',
+    });
+
+    expect(result.docketEntries[1]).toMatchObject({
+      docketEntryId: testCase.docketEntries[2].docketEntryId,
+      documentType: 'Answer',
+      eventCode: 'A',
+    });
   });
 
   it('should return the case when the currentUser is the contactPrimary on the case', async () => {
@@ -244,8 +286,6 @@ describe('getCaseInteractor', () => {
 
   describe('sealed cases', () => {
     beforeAll(() => {
-      const sealedDocketEntries = cloneDeep(docketEntries);
-      sealedDocketEntries[0].isSealed = true;
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(
@@ -254,9 +294,7 @@ describe('getCaseInteractor', () => {
             caseCaption: 'a case caption',
             caseType: CASE_TYPES_MAP.other,
             createdAt: applicationContext.getUtilities().createISODateString(),
-            docketEntries: sealedDocketEntries,
             docketNumber: '101-18',
-            hasSealedDocuments: true,
             irsPractitioners: [
               {
                 barNumber: 'BN1234',
@@ -265,6 +303,7 @@ describe('getCaseInteractor', () => {
                 userId: irsPractitionerId,
               },
             ],
+            isSealed: true,
             preferredTrialCity: 'Washington, District of Columbia',
             privatePractitioners: [
               {
@@ -275,6 +314,7 @@ describe('getCaseInteractor', () => {
               },
             ],
             procedureType: 'Regular',
+            sealedDate: '2019-09-19T16:42:00.000Z',
           }),
         );
     });
