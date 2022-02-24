@@ -28,5 +28,5 @@ exports.savePaperServicePdf = async ({ applicationContext, document }) => {
       });
   }
 
-  return { docketEntryId, hasPaper, url: pdfInfo.url };
+  return { docketEntryId, hasPaper, url: pdfInfo ? pdfInfo.url : null };
 };
