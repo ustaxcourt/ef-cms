@@ -30,6 +30,12 @@ describe('updateTrialSessionInteractor', () => {
     trialLocation: 'Birmingham, Alabama',
   };
 
+  const serviceInfo = {
+    docketEntryId: '',
+    hasPaper: false,
+    url: 'www.example.com',
+  };
+
   const MOCK_TRIAL_ID_1 = '8a3ed061-bdc6-44f0-baec-7e2c007c51bb';
   const MOCK_TRIAL_ID_2 = '84949ffd-9aed-4595-b6af-ff91ea01112b';
   const MOCK_TRIAL_ID_3 = '76cfdfee-795a-4056-a383-8622e5d527d1';
@@ -108,11 +114,9 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(trial => trial.trialSession);
 
-    applicationContext.getUseCaseHelpers().savePaperServicePdf.mockReturnValue({
-      docketEntryId: '',
-      hasPaper: false,
-      url: 'www.example.com',
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf.mockReturnValue(serviceInfo);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -473,9 +477,8 @@ describe('updateTrialSessionInteractor', () => {
         .setNoticeOfChangeToRemoteProceeding,
     ).toHaveBeenCalledTimes(3);
     expect(
-      applicationContext.getUseCaseHelpers()
-        .setNoticeOfChangeToRemoteProceeding,
-    ).toHaveBeenCalledTimes(3);
+      applicationContext.getUseCaseHelpers().savePaperServicePdf,
+    ).toHaveBeenCalledTimes(1);
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalled();
