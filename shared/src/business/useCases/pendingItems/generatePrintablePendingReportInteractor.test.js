@@ -15,6 +15,18 @@ describe('generatePrintablePendingReportInteractor', () => {
 
   const mockFoundDocuments = [
     {
+      associatedJudge: 'Judge Judgey',
+      docketNumber: '456-68',
+      documentTitle: 'Test Document Best',
+      receivedAt: '2022-02-04T12:00:00.000Z',
+    },
+    {
+      associatedJudge: 'Judge Judger',
+      docketNumber: '456-69',
+      documentTitle: 'Test Document Best',
+      receivedAt: '2021-03-04T12:00:00.000Z',
+    },
+    {
       associatedJudge: 'Judge Foley',
       docketNumber: '456-67',
       documentTitle: 'Test Document Best',
@@ -25,7 +37,14 @@ describe('generatePrintablePendingReportInteractor', () => {
       caseCaption: 'Test Caption, Petitioner',
       docketNumber: '123-45',
       documentTitle: 'Test Document Title',
-      receivedAt: '2020-01-01T12:00:00.000Z',
+      receivedAt: '1990-01-01T12:00:00.000Z',
+    },
+    {
+      associatedJudge: 'Judge Judgeson',
+      caseCaption: 'Test Caption, Petitioner',
+      docketNumber: '123-49',
+      documentTitle: 'Test Document Title',
+      receivedAt: '1999-01-01T12:00:00.000Z',
     },
     {
       associatedJudge: 'Judge Buch',
@@ -108,7 +127,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     expect(results).toEqual('https://example.com');
   });
 
-  it('should format the pending items', async () => {
+  it('should format and sort the pending items chronologically by the receivedAt ISODateString', async () => {
     await generatePrintablePendingReportInteractor(applicationContext, {});
 
     const { pendingItems } =
@@ -119,24 +138,44 @@ describe('generatePrintablePendingReportInteractor', () => {
       {
         associatedJudge: 'Judge Colvin',
         associatedJudgeFormatted: 'Colvin',
+        caseCaption: 'Test Caption, Petitioner',
         caseTitle: 'Test Caption',
+        docketNumber: '123-45',
         docketNumberWithSuffix: '123-45',
-        formattedFiledDate: '01/01/20',
+        documentTitle: 'Test Document Title',
+        formattedFiledDate: '01/01/90',
         formattedName: 'Test Document Title',
+        receivedAt: '1990-01-01T12:00:00.000Z',
+      },
+      {
+        associatedJudge: 'Judge Judgeson',
+        caseCaption: 'Test Caption, Petitioner',
+        docketNumber: '123-49',
+        documentTitle: 'Test Document Title',
+        receivedAt: '1999-01-01T12:00:00.000Z',
       },
       {
         associatedJudge: 'Judge Buch',
         associatedJudgeFormatted: 'Buch',
+        caseCaption: 'Test Caption Two, Petitioner(s)',
         caseTitle: 'Test Caption Two',
+        docketNumber: '234-56',
+        docketNumberSuffix: 'S',
         docketNumberWithSuffix: '234-56S',
+        documentType: 'Test Document Type',
         formattedFiledDate: '02/02/20',
         formattedName: 'Test Document Type',
+        receivedAt: '2020-02-02T12:00:00.000Z',
       },
       {
         associatedJudge: 'Judge Alvin',
+        associatedJudgeFormatted: 'Alvin',
         caseTitle: '',
         docketNumber: '345-67',
+        docketNumberWithSuffix: '345-67',
         documentTitle: 'Test Document Title',
+        formattedFiledDate: '03/03/20',
+        formattedName: 'Test Document Title',
         receivedAt: '2020-03-03T12:00:00.000Z',
       },
       {
@@ -149,6 +188,28 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '03/04/20',
         formattedName: 'Test Document Best',
         receivedAt: '2020-03-04T12:00:00.000Z',
+      },
+      {
+        associatedJudge: 'Judge Judger',
+        associatedJudgeFormatted: 'Judger',
+        caseTitle: '',
+        docketNumber: '456-69',
+        docketNumberWithSuffix: '456-69',
+        documentTitle: 'Test Document Best',
+        formattedFiledDate: '03/04/21',
+        formattedName: 'Test Document Best',
+        receivedAt: '2021-03-04T12:00:00.000Z',
+      },
+      {
+        associatedJudge: 'Judge Judgey',
+        associatedJudgeFormatted: 'Judgey',
+        caseTitle: '',
+        docketNumber: '456-68',
+        docketNumberWithSuffix: '456-68',
+        documentTitle: 'Test Document Best',
+        formattedFiledDate: '02/04/22',
+        formattedName: 'Test Document Best',
+        receivedAt: '2022-02-04T12:00:00.000Z',
       },
     ]);
   });
