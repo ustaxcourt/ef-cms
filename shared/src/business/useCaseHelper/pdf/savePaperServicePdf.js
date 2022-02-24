@@ -1,7 +1,9 @@
 /**
  * savePaperServicePdf helper function
  *
- * @param {array} fields array of pdf form fields
+ * @param {array} fields applicationContext the application context
+ * @param {array} document the document to be saved
+ * @returns {Object} the service information
  */
 
 exports.savePaperServicePdf = async ({ applicationContext, document }) => {

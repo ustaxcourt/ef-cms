@@ -15,8 +15,11 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
     name: 'Test Judge',
   };
 
+  const formattedPhoneNumber = '123-456-7890';
+
   const mockTrialSessionInformation = {
-    joinPhoneNumber: '3333',
+    chambersPhoneNumber: '1234567890',
+    joinPhoneNumber: '1234567890',
     judgeName: 'Test Judge',
     meetingId: '1111',
     password: '2222',
@@ -64,7 +67,7 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
       .getUsersInSection.mockReturnValue([TEST_JUDGE]);
   });
 
-  it('should generate a template with the case and trial information and call the pdf generator', async () => {
+  it('should generate a template with the case and formatted trial information and call the pdf generator', async () => {
     await generateNoticeOfChangeToRemoteProceedingInteractor(
       applicationContext,
       {
@@ -85,16 +88,14 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
         caseTitle: 'Test Case Caption',
         docketNumberWithSuffix: '123-45',
         trialInfo: {
+          chambersPhoneNumber: formattedPhoneNumber,
           formattedJudge: 'Judge Test Judge',
           formattedStartDate: 'Sunday, August 25, 2019',
           formattedStartTime: '10:00 am',
-          joinPhoneNumber: '3333',
-          judgeName: 'Test Judge',
+          joinPhoneNumber: formattedPhoneNumber,
           meetingId: '1111',
           password: '2222',
           proceedingType: 'Remote',
-          startDate: '2019-08-25T05:00:00.000Z',
-          startTime: '10:00',
           trialLocation: 'Boise, Idaho',
         },
       },

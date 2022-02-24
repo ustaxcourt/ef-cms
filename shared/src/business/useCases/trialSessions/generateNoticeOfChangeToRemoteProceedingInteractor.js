@@ -3,6 +3,7 @@ const {
   formatDateString,
   FORMATS,
 } = require('../../utilities/DateHandler');
+const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 /**
@@ -35,10 +36,14 @@ exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
   });
 
   const trialInfo = {
+    ...trialSessionInformation,
+    chambersPhoneNumber: formatPhoneNumber(
+      trialSessionInformation.chambersPhoneNumber,
+    ),
     formattedJudge: judgeWithTitle,
     formattedStartDate,
     formattedStartTime,
-    ...trialSessionInformation,
+    joinPhoneNumber: formatPhoneNumber(trialSessionInformation.joinPhoneNumber),
   };
 
   const caseDetail = await applicationContext
