@@ -107,6 +107,12 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(trial => trial.trialSession);
+
+    applicationContext.getUseCaseHelpers().savePaperServicePdf.mockReturnValue({
+      docketEntryId: '',
+      hasPaper: false,
+      url: 'www.example.com',
+    });
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -466,5 +472,12 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getUseCaseHelpers()
         .setNoticeOfChangeToRemoteProceeding,
     ).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .setNoticeOfChangeToRemoteProceeding,
+    ).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalled();
   });
 });
