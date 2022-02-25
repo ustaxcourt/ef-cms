@@ -29,6 +29,8 @@ else
   echo "dynamodb lock table already exists"
 fi
 
+npm run build:assets
+
 set -eo pipefail
 npm run build:lambda:migration
 
