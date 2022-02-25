@@ -96,17 +96,8 @@ jobs:
             URL=http://localhost:9000/ ./wait-until.sh
             URL=http://localhost:8000/shell ./wait-until.sh
             sleep 20 # figure out why we need to sleep here since we wait above ^
-            TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
-            NO_SCANNER=true \
-            SKIP_VIRUS_SCAN=true \
-            IS_LOCAL=true \
-            AWS_ACCESS_KEY_ID=S3RVER \
-            AWS_SECRET_ACCESS_KEY=S3RVER \
-            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
-            QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
-            DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
-            S3_ENDPOINT=http://localhost:9000 \
-            npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
+            export TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
+            npm run test:client:integration:ci
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
