@@ -40,7 +40,6 @@ describe('Trial Session Eligible Cases Journey', () => {
     maxCases: 3,
     preferredTrialCity: trialLocation,
     sessionType: 'Small',
-    // termYear: currentYearPlusFive,
     trialLocation,
     trialYear: currentYearPlusFive.toString(),
   };
@@ -49,6 +48,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   describe(`Create trial session with Small session type for '${trialLocation}'`, () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkCreatesATrialSession(cerebralTest, overrides);
+    cerebralTest.trialSessionId = cerebralTest.lastCreatedTrialSessionId;
   });
 
   describe('Create cases', () => {
@@ -160,27 +160,25 @@ describe('Trial Session Eligible Cases Journey', () => {
     });
   });
 
-  // describe(`Result: Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, () => {
-  //   loginAs(cerebralTest, 'petitionsclerk@example.com');
+  describe(`Result: Case #1, #2, and #3 should show as eligible for '${trialLocation}' session`, () => {
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
 
-  //   it(`Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, async () => {
-  //     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-  //       trialSessionId: cerebralTest.trialSessionId,
-  //     });
+    it(`Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, async () => {
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
+      });
 
-  //     expect(
-  //       cerebralTest.getState('trialSession.eligibleCases').length,
-  //     ).toEqual(4);
-  //     const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
-  //     expect(eligibleCases.length).toEqual(4);
-  //     // cases with index 3 and 4 should be first because they are CDP/Passport cases
-  //     expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[3]);
-  //     expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[4]);
-  //     expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[0]);
-  //     expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[1]);
-  //     expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
-  //   });
-  // });
+      expect(
+        cerebralTest.getState('trialSession.eligibleCases').length,
+      ).toEqual(3);
+      const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
+      expect(eligibleCases.length).toEqual(3);
+      expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[0]);
+      expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[1]);
+      expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[2]);
+      expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
+    });
+  });
 
   // describe(`Mark case #2 as high priority for '${trialLocation}' session`, () => {
   //   loginAs(cerebralTest, 'petitionsclerk@example.com');
