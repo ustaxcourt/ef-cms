@@ -24,7 +24,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 3. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
 
-    - Once verification is complete, you will need to rebuild the docker image and push it to ECR.
+    - Once verification is complete, you will need to increment the docker image version being used in `.circleci/config.yml` and publish a docker image tagged with the incremented version number to ECR.
 
 4. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
