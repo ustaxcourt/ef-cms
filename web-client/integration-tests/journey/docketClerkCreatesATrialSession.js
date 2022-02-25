@@ -134,5 +134,6 @@ export const docketClerkCreatesATrialSession = (
     expect(lastCreatedTrialSessionId).toBeDefined();
 
     cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
+    cerebralTest.trialSessionId = cerebralTest.lastCreatedTrialSessionId;
   });
 };
