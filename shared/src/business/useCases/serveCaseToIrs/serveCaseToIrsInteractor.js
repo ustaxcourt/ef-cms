@@ -118,7 +118,12 @@ const createPetitionWorkItems = async ({
 const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
-  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+  const {
+    docketNumberWithSuffix,
+    preferredTrialCity,
+    procedureType,
+    receivedAt,
+  } = caseEntity;
 
   let pdfData = await applicationContext
     .getDocumentGenerators()
@@ -138,10 +143,6 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
           .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
       },
     });
-
-  // fetch letter from s3
-
-  // append to pdf Data
 
   const contactSecondary = caseEntity.petitioners[1];
   if (contactSecondary) {
@@ -166,9 +167,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-  const clinicLetterKey = `${preferredTrialCity}-${caseEntity.procedureType}`;
-
-  console.log('----s3 key', clinicLetterKey);
+  const clinicLetterKey = `${preferredTrialCity}-${procedureType}`;
 
   const doesClinicLetterExist = await applicationContext
     .getPersistenceGateway()
@@ -178,8 +177,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     });
 
   if (doesClinicLetterExist) {
-    console.log('fetching clinical letter');
-    const letter = await applicationContext
+    const clincLetter = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
@@ -188,15 +186,13 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
         useTempBucket: false,
       });
 
-    console.log('combine pdfs');
     pdfData = await applicationContext.getUtilities().combineTwoPdfs({
       applicationContext,
       firstPdf: pdfData,
-      secondPdf: letter,
+      secondPdf: clincLetter,
     });
   }
 
-  console.log('save to s3');
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
     caseConfirmationPdfName,
