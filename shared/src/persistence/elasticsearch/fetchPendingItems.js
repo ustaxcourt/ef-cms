@@ -73,6 +73,13 @@ exports.fetchPendingItems = async ({
         },
       },
       size,
+      sort: [
+        {
+          'receivedAt.S': {
+            order: 'asc',
+          },
+        },
+      ],
     },
     index: 'efcms-docket-entry',
   };
