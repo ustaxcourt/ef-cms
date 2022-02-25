@@ -139,6 +139,10 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       },
     });
 
+  // fetch letter from s3
+
+  // append to pdf Data
+
   const contactSecondary = caseEntity.petitioners[1];
   if (contactSecondary) {
     const dataWithNoticeAttached = await generatePaperNoticeForContactSecondary(
@@ -162,10 +166,41 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
+  const clinicLetterKey = `${preferredTrialCity}-${caseEntity.procedureType}`;
+
+  console.log('----s3 key', clinicLetterKey);
+
+  const doesClinicLetterExist = await applicationContext
+    .getPersistenceGateway()
+    .isFileExists({
+      applicationContext,
+      key: clinicLetterKey,
+    });
+
+  if (doesClinicLetterExist) {
+    console.log('fetching clinical letter');
+    const letter = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: clinicLetterKey,
+        protocol: 'S3',
+        useTempBucket: false,
+      });
+
+    console.log('combine pdfs');
+    pdfData = await applicationContext.getUtilities().combineTwoPdfs({
+      applicationContext,
+      firstPdf: pdfData,
+      secondPdf: letter,
+    });
+  }
+
+  console.log('save to s3');
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
     caseConfirmationPdfName,
-    pdfData,
+    pdfData: Buffer.from(pdfData),
   });
 
   let urlToReturn;
