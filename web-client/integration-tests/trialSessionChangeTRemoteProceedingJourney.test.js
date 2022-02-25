@@ -2,12 +2,14 @@ import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../src/presenter/computeds/addToTrialSessionModalHelper';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
+import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { runCompute } from 'cerebral/test';
@@ -21,6 +23,9 @@ const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 const addToTrialSessionModalHelper = withAppContextDecorator(
   addToTrialSessionModalHelperComputed,
+);
+const formattedCaseDetail = withAppContextDecorator(
+  formattedCaseDetailComputed,
 );
 
 describe('Trial Session Eligible Cases Journey', () => {
@@ -254,9 +259,30 @@ describe('Trial Session Eligible Cases Journey', () => {
     expect(cerebralTest.getState('currentPage')).toBe('PrintPaperTrialNotices');
   });
 
-  //change trial session proceeding type to remote
-  //verify paper service page (number of pages based on number of paper cases)
   //verify docket entry, served, etc
+  it('Petitions clerk verifies NORP docket entries for open cases', async () => {
+    for (const docketNumber of createdDocketNumbers) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber,
+      });
+      const formattedCase = await runCompute(formattedCaseDetail, {
+        state: cerebralTest.getState(),
+      });
+      const docketEntry = await formattedCase.docketEntries.find(
+        d =>
+          d.eventcode ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
+            .eventCode,
+      );
+      console.log(docketEntry);
+      if (formattedCase.status !== CASE_STATUS_TYPES.closed) {
+        expect(docketEntry).toMatchObject({ servedAt: expect.anything() });
+      } else {
+        expect(docketEntry).toBeUndefined();
+      }
+    }
+  });
+
   //verify no docket entry, for closed case
 
   // describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
