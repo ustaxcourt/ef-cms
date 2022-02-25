@@ -32,16 +32,16 @@ export const RemoteProceedingForm = connect(
         </div>
 
         <div className="usa-form-group">
-          <label className="usa-label" htmlFor="password">
-            Password <span className="usa-hint">(optional)</span>
+          <label className="usa-label" htmlFor="passcode">
+            Passcode <span className="usa-hint">(optional)</span>
           </label>
           <input
             autoCapitalize="none"
             className="usa-input"
-            id="password"
-            name="password"
+            id="passcode"
+            name="passcode"
             type="text"
-            value={form.password || ''}
+            value={form.passcode || ''}
             onChange={e => {
               updateTrialSessionFormDataSequence({
                 key: e.target.name,

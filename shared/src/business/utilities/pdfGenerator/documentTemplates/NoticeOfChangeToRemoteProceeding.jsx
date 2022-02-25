@@ -67,7 +67,7 @@ export const NoticeOfChangeToRemoteProceeding = ({
           <b>Meeting ID:</b> {trialInfo.meetingId}
         </p>
         <p className="text-center">
-          <b>Passcode:</b> {trialInfo.password}
+          <b>Passcode:</b> {trialInfo.passcode}
         </p>
 
         <p>

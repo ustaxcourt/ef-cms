@@ -24,8 +24,8 @@ const RemoteProceedingInformation = ({ formattedTrialSessionDetails }) => {
         </div>
         <div className="grid-row grid-gap">
           <div className="grid-col-6">
-            <p className="label">Password</p>
-            <p>{formattedTrialSessionDetails.password || 'Not provided'}</p>
+            <p className="label">Passcode</p>
+            <p>{formattedTrialSessionDetails.passcode || 'Not provided'}</p>
           </div>
           <div className="grid-col-6">
             <p className="label">Chambers phone number</p>

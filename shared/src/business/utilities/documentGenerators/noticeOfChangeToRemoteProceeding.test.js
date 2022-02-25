@@ -55,7 +55,7 @@ describe('documentGenerators', () => {
             formattedStartTime: '12:00 am',
             joinPhoneNumber: '444-444-4444',
             meetingId: 'sdsd',
-            password: '123',
+            passcode: '123',
             trialLocation: 'Birmingham, Alabama',
           },
         },

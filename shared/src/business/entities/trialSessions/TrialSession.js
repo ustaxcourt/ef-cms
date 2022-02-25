@@ -56,7 +56,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.meetingId = rawSession.meetingId;
   this.notes = rawSession.notes;
   this.noticeIssuedDate = rawSession.noticeIssuedDate;
-  this.password = rawSession.password;
+  this.passcode = rawSession.passcode;
   this.postalCode = rawSession.postalCode;
   this.sessionScope =
     rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
@@ -134,7 +134,7 @@ TrialSession.PROPERTIES_REQUIRED_FOR_CALENDARING = {
     'chambersPhoneNumber',
     'joinPhoneNumber',
     'meetingId',
-    'password',
+    'passcode',
     'judge',
   ],
 };
@@ -186,7 +186,7 @@ TrialSession.validationRules = {
     meetingId: stringRequiredForRemoteProceedings,
     notes: JoiValidationConstants.STRING.max(400).optional(),
     noticeIssuedDate: JoiValidationConstants.ISO_DATE.optional(),
-    password: stringRequiredForRemoteProceedings,
+    passcode: stringRequiredForRemoteProceedings,
     postalCode: JoiValidationConstants.US_POSTAL_CODE.allow('').optional(),
     proceedingType: JoiValidationConstants.STRING.valid(
       ...Object.values(TRIAL_SESSION_PROCEEDING_TYPES),

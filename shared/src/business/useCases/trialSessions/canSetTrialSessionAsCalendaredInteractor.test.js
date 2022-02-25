@@ -86,7 +86,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
           joinPhoneNumber: '099987654321',
           judge: { name: 'Bootsy Collins' },
           meetingId: '4',
-          password: '42',
+          passcode: '42',
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         },
       },

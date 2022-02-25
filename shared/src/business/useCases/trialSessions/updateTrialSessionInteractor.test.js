@@ -339,7 +339,7 @@ describe('updateTrialSessionInteractor', () => {
       maxCases: 1,
       meetingId: '333333',
       notes: 'some notes',
-      password: '444444',
+      passcode: '444444',
       postalCode: '12345',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       sessionType: SESSION_TYPES.motionHearing,
@@ -464,7 +464,7 @@ describe('updateTrialSessionInteractor', () => {
       chambersPhoneNumber: '111111',
       joinPhoneNumber: '222222',
       meetingId: '333333',
-      password: '4444444',
+      passcode: '4444444',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     };
 
