@@ -1,7 +1,7 @@
 /**
  * savePaperServicePdf helper function
  *
- * @param {array} fields applicationContext the application context
+ * @param {array} applicationContext the application context
  * @param {array} document the document to be saved
  * @returns {Object} the service information
  */
