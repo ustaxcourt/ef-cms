@@ -9,8 +9,13 @@ import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } 
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
-import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
-import { loginAs, setupTest, uploadPetition, wait } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+  wait,
+} from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -23,9 +28,6 @@ const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
 const addToTrialSessionModalHelper = withAppContextDecorator(
   addToTrialSessionModalHelperComputed,
-);
-const formattedCaseDetail = withAppContextDecorator(
-  formattedCaseDetailComputed,
 );
 
 describe('Trial Session Eligible Cases Journey', () => {
@@ -62,7 +64,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         city: 'Et id aut est velit',
         countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Mona Schultz',
-        phone: '+1 (884) 358-9729',
+        phone: '1 (884) 358-9729',
         postalCode: '77546',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'CT',
@@ -93,7 +95,7 @@ describe('Trial Session Eligible Cases Journey', () => {
         city: 'Et id aut est velit',
         countryType: COUNTRY_TYPES.DOMESTIC,
         name: 'Mona Schultz',
-        phone: '+1 (884) 358-9729',
+        phone: '1 (884) 358-9729',
         postalCode: '77546',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         state: 'CT',
@@ -208,7 +210,6 @@ describe('Trial Session Eligible Cases Journey', () => {
   });
 
   describe('Calendar clerk marks all eligible cases as QCed', () => {
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
     markAllCasesAsQCed(cerebralTest, () => [
       createdDocketNumbers[0],
       createdDocketNumbers[1],
@@ -259,205 +260,39 @@ describe('Trial Session Eligible Cases Journey', () => {
     expect(cerebralTest.getState('currentPage')).toBe('PrintPaperTrialNotices');
   });
 
-  //verify docket entry, served, etc
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('Petitions clerk verifies NORP docket entries for open cases', async () => {
-    for (const docketNumber of createdDocketNumbers) {
+    await refreshElasticsearchIndex();
+
+    for (const docketNumberToSearch of createdDocketNumbers) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber,
+        docketNumber: docketNumberToSearch,
       });
-      const formattedCase = await runCompute(formattedCaseDetail, {
-        state: cerebralTest.getState(),
-      });
-      const docketEntry = await formattedCase.docketEntries.find(
-        d =>
-          d.eventcode ===
+
+      expect(cerebralTest.getState('currentPage')).toEqual(
+        'CaseDetailInternal',
+      );
+
+      const caseDetail = cerebralTest.getState('caseDetail');
+
+      const norpDocketEntry = caseDetail.docketEntries.find(
+        ({ eventCode }) =>
+          eventCode ===
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
             .eventCode,
       );
-      console.log(docketEntry);
-      if (formattedCase.status !== CASE_STATUS_TYPES.closed) {
-        expect(docketEntry).toMatchObject({ servedAt: expect.anything() });
+
+      if (caseDetail.status !== CASE_STATUS_TYPES.closed) {
+        expect(norpDocketEntry).toMatchObject({
+          servedParties: [
+            {
+              name: 'Mona Schultz',
+            },
+          ],
+        });
       } else {
-        expect(docketEntry).toBeUndefined();
+        expect(norpDocketEntry).toBeUndefined();
       }
     }
   });
-
-  //verify no docket entry, for closed case
-
-  // describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
-  //   loginAs(cerebralTest, 'petitionsclerk@example.com');
-
-  //   it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session`, async () => {
-  //     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-  //       trialSessionId: cerebralTest.trialSessionId,
-  //     });
-
-  //     expect(
-  //       cerebralTest.getState('trialSession.calendaredCases').length,
-  //     ).toEqual(3);
-  //     expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(true);
-  //     expect(
-  //       cerebralTest.getState('trialSession.calendaredCases.0.docketNumber'),
-  //     ).toEqual(createdDocketNumbers[3]);
-  //     expect(
-  //       cerebralTest.getState('trialSession.calendaredCases.1.docketNumber'),
-  //     ).toEqual(createdDocketNumbers[4]);
-  //     // this could be either case 0 or 1 depending on which was marked eligible first
-  //     expect(
-  //       cerebralTest.getState('trialSession.calendaredCases.2.docketNumber'),
-  //     ).toEqual(createdDocketNumbers[0]);
-  //   });
-
-  //   it(`Case #4, #5, and #1 are assigned to '${trialLocation}' session; Case #2 and #3 are not assigned`, async () => {
-  //     //Case #1 - assigned
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[0],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-  //     expect(cerebralTest.getState('caseDetail.trialLocation')).toEqual(
-  //       trialLocation,
-  //     );
-  //     expect(cerebralTest.getState('caseDetail.trialDate')).toEqual(
-  //       '2025-12-12T05:00:00.000Z',
-  //     );
-  //     expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
-  //       'Cohen',
-  //     );
-
-  //     //Case #2 - not assigned
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[1],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-  //     expect(cerebralTest.getState('caseDetail.trialLocation')).toBeUndefined();
-  //     expect(cerebralTest.getState('caseDetail.trialDate')).toBeUndefined();
-  //     expect(cerebralTest.getState('caseDetail.associatedJudge')).toEqual(
-  //       CHIEF_JUDGE,
-  //     );
-
-  //     //Case #3 - not assigned
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[2],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-
-  //     //Case #4 - assigned
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[3],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-
-  //     //Case #5 - assigned
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[4],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-  //   });
-
-  //   it(`verify case #1 can be manually removed from '${trialLocation}' session`, async () => {
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[0],
-  //     });
-
-  //     await cerebralTest.runSequence('removeCaseFromTrialSequence');
-
-  //     expect(cerebralTest.getState('validationErrors')).toEqual({
-  //       caseStatus: 'Enter a case status',
-  //       disposition: 'Enter a disposition',
-  //     });
-
-  //     await cerebralTest.runSequence(
-  //       'openRemoveFromTrialSessionModalSequence',
-  //       {
-  //         trialSessionId: cerebralTest.trialSessionId,
-  //       },
-  //     );
-
-  //     await cerebralTest.runSequence('updateModalValueSequence', {
-  //       key: 'disposition',
-  //       value: 'testing',
-  //     });
-
-  //     await cerebralTest.runSequence('removeCaseFromTrialSequence');
-
-  //     expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[0],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-
-  //     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-  //       trialSessionId: cerebralTest.trialSessionId,
-  //     });
-
-  //     expect(
-  //       cerebralTest.getState(
-  //         'trialSession.calendaredCases.2.removedFromTrial',
-  //       ),
-  //     ).toBeTruthy();
-  //   });
-
-  //   it(`verify case #1 can be manually added back to the '${trialLocation}' session`, async () => {
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[0],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-
-  //     await cerebralTest.runSequence('openAddToTrialModalSequence');
-  //     await cerebralTest.runSequence('addCaseToTrialSessionSequence');
-  //     await wait(1000);
-
-  //     expect(cerebralTest.getState('validationErrors')).toEqual({
-  //       trialSessionId: 'Select a Trial Session',
-  //     });
-
-  //     await cerebralTest.runSequence('openAddToTrialModalSequence');
-  //     cerebralTest.setState(
-  //       'modal.trialSessionId',
-  //       cerebralTest.trialSessionId,
-  //     );
-
-  //     await cerebralTest.runSequence('addCaseToTrialSessionSequence');
-  //     await wait(1000); // we need to wait for some reason
-
-  //     expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[0],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-
-  //     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-  //       trialSessionId: cerebralTest.trialSessionId,
-  //     });
-
-  //     expect(
-  //       cerebralTest.getState(
-  //         'trialSession.calendaredCases.2.removedFromTrial',
-  //       ),
-  //     ).toBeFalsy();
-
-  //     expect(
-  //       cerebralTest.getState('trialSession.calendaredCases.2.isManuallyAdded'),
-  //     ).toBeTruthy();
-  //   });
-  // });
 });
