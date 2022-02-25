@@ -126,6 +126,9 @@ const {
   closeTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor');
 const {
+  combineTwoPdfs,
+} = require('../../shared/src/business/utilities/documentGenerators/combineTwoPdfs');
+const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
   formattedTrialSessionDetails,
@@ -2082,6 +2085,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return {
         calculateDifferenceInDays,
         calculateISODate,
+        combineTwoPdfs,
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,
