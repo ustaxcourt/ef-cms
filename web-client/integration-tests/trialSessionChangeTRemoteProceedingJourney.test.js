@@ -2,6 +2,7 @@ import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../src/presenter/computeds/addToTrialSessionModalHelper';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
@@ -22,20 +23,7 @@ const addToTrialSessionModalHelper = withAppContextDecorator(
   addToTrialSessionModalHelperComputed,
 );
 
-//create an in person trial session
-// create 4 cases - two paper + open,  one electronic + open, one closed
-// update the open cases status to be ready for trial,
-//add them to trial session
-// complete QC and set calendar
-//change trial session proceeding type to remote
-//verify paper service page (number of pages based on number of paper cases)
-//verify docket entry, served, etc
-
 describe('Trial Session Eligible Cases Journey', () => {
-  // beforeAll(() => {
-  //   jest.setTimeout(30000);
-  // });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
@@ -55,25 +43,27 @@ describe('Trial Session Eligible Cases Journey', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, overrides);
 
-  let caseOverrides = {
-    ...overrides,
-    caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '734 Cowley Parkway',
-      address2: 'Cum aut velit volupt',
-      address3: 'Et sunt veritatis ei',
-      city: 'Et id aut est velit',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Mona Schultz',
-      phone: '+1 (884) 358-9729',
-      postalCode: '77546',
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      state: 'CT',
-    },
-    procedureType: 'Small',
-  };
+  let caseOverrides;
+
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case #1', async () => {
+    caseOverrides = {
+      ...overrides,
+      caseType: CASE_TYPES_MAP.deficiency,
+      contactPrimary: {
+        address1: '734 Cowley Parkway',
+        address2: 'Cum aut velit volupt',
+        address3: 'Et sunt veritatis ei',
+        city: 'Et id aut est velit',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Mona Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        state: 'CT',
+      },
+      procedureType: 'Small',
+    };
     const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
     createdDocketNumbers.push(caseDetail.docketNumber);
@@ -85,27 +75,27 @@ describe('Trial Session Eligible Cases Journey', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);
-
-  caseOverrides = {
-    ...overrides,
-    caseType: CASE_TYPES_MAP.deficiency,
-    contactPrimary: {
-      address1: '734 Cowley Parkway',
-      address2: 'Cum aut velit volupt',
-      address3: 'Et sunt veritatis ei',
-      city: 'Et id aut est velit',
-      countryType: COUNTRY_TYPES.DOMESTIC,
-      name: 'Mona Schultz',
-      phone: '+1 (884) 358-9729',
-      postalCode: '77546',
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-      state: 'CT',
-    },
-    procedureType: 'Small',
-  };
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case #2', async () => {
+    caseOverrides = {
+      ...overrides,
+      caseType: CASE_TYPES_MAP.deficiency,
+      contactPrimary: {
+        address1: '734 Cowley Parkway',
+        address2: 'Cum aut velit volupt',
+        address3: 'Et sunt veritatis ei',
+        city: 'Et id aut est velit',
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Mona Schultz',
+        phone: '+1 (884) 358-9729',
+        postalCode: '77546',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        state: 'CT',
+      },
+      procedureType: 'Small',
+    };
+
     const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
     createdDocketNumbers.push(caseDetail.docketNumber);
@@ -124,6 +114,11 @@ describe('Trial Session Eligible Cases Journey', () => {
     procedureType: 'Small',
   };
   loginAs(cerebralTest, 'petitioner@example.com');
+  caseOverrides = {
+    ...overrides,
+    caseType: CASE_TYPES_MAP.deficiency,
+    procedureType: 'Small',
+  };
   it('Create case #3', async () => {
     const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -137,15 +132,15 @@ describe('Trial Session Eligible Cases Journey', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);
 
-  caseOverrides = {
-    ...overrides,
-    caseType: CASE_TYPES_MAP.cdp,
-    closedDate: Date.now(),
-    procedureType: 'Small',
-    status: CASE_STATUS_TYPES.closed,
-  };
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case #4', async () => {
+    caseOverrides = {
+      ...overrides,
+      caseType: CASE_TYPES_MAP.cdp,
+      closedDate: Date.now(),
+      procedureType: 'Small',
+      status: CASE_STATUS_TYPES.closed,
+    };
     const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
     expect(caseDetail.docketNumber).toBeDefined();
     createdDocketNumbers.push(caseDetail.docketNumber);
@@ -221,6 +216,48 @@ describe('Trial Session Eligible Cases Journey', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
   });
+
+  it('Petitions clerk edits in person trial session to be remote', async () => {
+    await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'proceedingType',
+      value: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'meetingId',
+      value: '123456789',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'password',
+      value: '123456789',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'joinPhoneNumber',
+      value: '123456789',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'chambersPhoneNumber',
+      value: '123456789',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    expect(cerebralTest.getState('currentPage')).toBe('PrintPaperTrialNotices');
+  });
+
+  //change trial session proceeding type to remote
+  //verify paper service page (number of pages based on number of paper cases)
+  //verify docket entry, served, etc
+  //verify no docket entry, for closed case
 
   // describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
   //   loginAs(cerebralTest, 'petitionsclerk@example.com');
