@@ -69,7 +69,7 @@ describe('TrialSession entity', () => {
         'chambersPhoneNumber',
         'joinPhoneNumber',
         'meetingId',
-        'password',
+        'passcode',
         'judge',
       ]);
     });
@@ -85,7 +85,7 @@ describe('TrialSession entity', () => {
             userId: '711cee39-5747-4f6c-8f0d-89177bf2da36',
           },
           meetingId: '12345678',
-          password: '0987654321',
+          passcode: '0987654321',
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         },
         {

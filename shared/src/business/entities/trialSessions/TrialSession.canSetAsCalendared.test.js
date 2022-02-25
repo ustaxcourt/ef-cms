@@ -53,7 +53,7 @@ describe('TrialSession entity', () => {
           joinPhoneNumber: '222222',
           judge: { name: 'Judge Colvin' },
           meetingId: '333333',
-          password: '4444444',
+          passcode: '4444444',
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         },
         {
