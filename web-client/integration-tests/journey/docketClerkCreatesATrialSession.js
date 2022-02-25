@@ -50,7 +50,7 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'year',
-      value: '2025',
+      value: overrides.trialYear || '2025',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
