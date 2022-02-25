@@ -81,7 +81,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
         joinPhoneNumber: '0987654321',
         judgeName: 'Chief Judge',
         meetingId: '1234567890',
-        passcode: 'abcdefg',
+        password: 'abcdefg',
         startDate: '2025-12-01T00:00:00.000Z',
         startTime: undefined,
         trialLocation: 'Birmingham, Alabama',

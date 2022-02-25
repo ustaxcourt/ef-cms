@@ -39,7 +39,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
         joinPhoneNumber: '3333',
         judge: { name: 'Test Judge' },
         meetingId: '1111',
-        passcode: '2222',
+        password: '2222',
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         startDate: '2019-08-25T05:00:00.000Z',
         startTime: '10:00',
@@ -84,7 +84,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
         formattedTrialLocation: 'Boise, Idaho',
         joinPhoneNumber: '3333',
         meetingId: '1111',
-        passcode: '2222',
+        password: '2222',
       },
     });
   });
@@ -107,7 +107,7 @@ describe('generateStandingPretrialOrderInteractor', () => {
         joinPhoneNumber: '3333',
         judge: { name: 'Test Judge' },
         meetingId: '1111',
-        passcode: '2222',
+        password: '2222',
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
         startDate: '2019-08-25T05:00:00.000Z',
         startTime: '10:00',
