@@ -669,6 +669,24 @@ jobs:
       - run:
           name: 'Switch Colors'
           command: npm run switch-colors
+  cleanup:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+      - run:
+          name: Destroy Migration Infrastructure
+          command: |
+            npm run destroy:migration -- $ENV
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
@@ -718,13 +736,11 @@ workflows:
                 - irs
                 - staging
                 - test
-                - master
                 - experimental1
                 - experimental2
                 - experimental3
                 - experimental4
                 - experimental5
-                - dawson
                 - migration
       - migrate:
           requires:
@@ -791,13 +807,27 @@ workflows:
                 - irs
                 - staging
                 - test
-                - master
                 - experimental1
                 - experimental2
                 - experimental3
                 - experimental4
                 - experimental5
-                - dawson
+                - migration
+      - cleanup:
+          requires:
+            - switch-colors
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
                 - migration
 
   build-and-deploy-with-context:
@@ -847,3 +877,7 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - smoketests-readonly
+      - cleanup:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - switch-colors
