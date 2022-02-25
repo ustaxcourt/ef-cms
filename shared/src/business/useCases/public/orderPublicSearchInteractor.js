@@ -50,9 +50,9 @@ exports.orderPublicSearchInteractor = async (
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      ...rawSearch,
       documentEventCodes: ORDER_EVENT_CODES,
       omitSealed: true,
+      ...rawSearch,
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
