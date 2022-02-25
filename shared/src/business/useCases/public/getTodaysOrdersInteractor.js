@@ -36,7 +36,7 @@ exports.getTodaysOrdersInteractor = async (
       from,
       omitSealed: true,
       overrideResultSize: TODAYS_ORDERS_PAGE_SIZE,
-      sortOrder: todaysOrdersSort,
+      sortField: todaysOrdersSort,
       startDate: currentDateStart,
     });
 
