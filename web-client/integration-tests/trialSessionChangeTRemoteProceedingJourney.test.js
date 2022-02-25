@@ -6,8 +6,6 @@ import {
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
-import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
-import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition, wait } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
@@ -35,16 +33,16 @@ describe('Trial Session Eligible Cases Journey', () => {
     cerebralTest.closeSocket();
   });
 
-  const currentDate = Date.now().toISOString();
-  const trialLocation = `Madison, Wisconsin, ${currentDate}`;
-  const currentYearPlusFive = currentDate.getFullYear() + 5;
-
+  const trialLocation = `Madison, Wisconsin, ${Date.now()}`;
+  // eslint-disable-next-line @miovision/disallow-date/no-new-date
+  const currentYearPlusFive = new Date().getFullYear() + 5;
   const overrides = {
     maxCases: 3,
     preferredTrialCity: trialLocation,
     sessionType: 'Small',
+    // termYear: currentYearPlusFive,
     trialLocation,
-    trialYear: currentYearPlusFive,
+    trialYear: currentYearPlusFive.toString(),
   };
   const createdDocketNumbers = [];
 
@@ -145,7 +143,7 @@ describe('Trial Session Eligible Cases Journey', () => {
       const caseOverrides = {
         ...overrides,
         caseType: CASE_TYPES_MAP.cdp,
-        closedDate: currentDate,
+        closedDate: Date.now(),
         procedureType: 'Small',
         status: CASE_STATUS_TYPES.closed,
       };
