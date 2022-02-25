@@ -3,17 +3,24 @@ import {
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
+import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../src/presenter/computeds/addToTrialSessionModalHelper';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
-import { loginAs, setupTest, uploadPetition } from './helpers';
-// import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
+import { loginAs, setupTest, uploadPetition, wait } from './helpers';
+import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
-// import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
+import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 
 const cerebralTest = setupTest();
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
+
+const addToTrialSessionModalHelper = withAppContextDecorator(
+  addToTrialSessionModalHelperComputed,
+);
 
 //create an in person trial session
 // create 4 cases - two paper + open,  one electronic + open, one closed
@@ -37,7 +44,7 @@ describe('Trial Session Eligible Cases Journey', () => {
   // eslint-disable-next-line @miovision/disallow-date/no-new-date
   const currentYearPlusFive = new Date().getFullYear() + 5;
   const overrides = {
-    maxCases: 3,
+    maxCases: 4,
     preferredTrialCity: trialLocation,
     sessionType: 'Small',
     trialLocation,
@@ -148,111 +155,72 @@ describe('Trial Session Eligible Cases Journey', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  it(`Case #4, #5, #1, and #2 should show as eligible for '${trialLocation}' session`, async () => {
-    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: cerebralTest.trialSessionId,
-    });
+  it('Petitions clerk should add cases to trial session', async () => {
+    for (const docketNumber of createdDocketNumbers) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber,
+      });
 
-    expect(cerebralTest.getState('trialSession.eligibleCases').length).toEqual(
-      3,
-    );
-    const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
-    expect(eligibleCases.length).toEqual(3);
-    expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[0]);
-    expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[1]);
-    expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[2]);
-    expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
+      await cerebralTest.runSequence('openAddToTrialModalSequence');
+
+      let modalHelper = await runCompute(addToTrialSessionModalHelper, {
+        state: cerebralTest.getState(),
+      });
+
+      expect(modalHelper.showSessionNotSetAlert).toEqual(false);
+
+      await cerebralTest.runSequence('updateModalValueSequence', {
+        key: 'showAllLocations',
+        value: true,
+      });
+
+      modalHelper = await runCompute(addToTrialSessionModalHelper, {
+        state: cerebralTest.getState(),
+      });
+
+      expect(modalHelper.trialSessionStatesSorted[0]).toEqual('Remote');
+      expect(modalHelper.trialSessionStatesSorted[1]).toEqual('Alabama');
+
+      await cerebralTest.runSequence('updateModalValueSequence', {
+        key: 'trialSessionId',
+        value: cerebralTest.trialSessionId,
+      });
+
+      // Because the selected trial session is not yet calendared, we should show
+      // the alert in the UI stating so.
+      modalHelper = await runCompute(addToTrialSessionModalHelper, {
+        state: cerebralTest.getState(),
+      });
+
+      expect(modalHelper.showSessionNotSetAlert).toEqual(true);
+
+      await cerebralTest.runSequence('addCaseToTrialSessionSequence');
+      await wait(1000);
+
+      const trialSessionJudge = cerebralTest.getState('trialSessionJudge');
+      expect(trialSessionJudge).toMatchObject(
+        expect.objectContaining({
+          name: expect.anything(),
+          userId: expect.anything(),
+        }),
+      );
+    }
   });
 
-  // describe(`Mark case #2 as high priority for '${trialLocation}' session`, () => {
-  //   loginAs(cerebralTest, 'petitionsclerk@example.com');
+  describe('Calendar clerk marks all eligible cases as QCed', () => {
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    markAllCasesAsQCed(cerebralTest, () => [
+      createdDocketNumbers[0],
+      createdDocketNumbers[1],
+      createdDocketNumbers[2],
+      createdDocketNumbers[3],
+    ]);
+  });
 
-  //   it(`Case #2 should show as first case eligible for '${trialLocation}' session`, async () => {
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[1],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-  //     expect(cerebralTest.getState('caseDetail').highPriority).toBeFalsy();
-
-  //     await cerebralTest.runSequence('updateModalValueSequence', {
-  //       key: 'reason',
-  //       value: 'just because',
-  //     });
-
-  //     await cerebralTest.runSequence('prioritizeCaseSequence');
-  //     expect(cerebralTest.getState('caseDetail').highPriority).toBeTruthy();
-  //     expect(cerebralTest.getState('caseDetail').highPriorityReason).toEqual(
-  //       'just because',
-  //     );
-
-  //     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-  //       trialSessionId: cerebralTest.trialSessionId,
-  //     });
-
-  //     const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
-  //     expect(eligibleCases.length).toEqual(4);
-  //     // this case should be first because it's high priority
-  //     expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[1]);
-  //     // this case should be second because it's a CDP case
-  //     expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[3]);
-  //     // this case should be third because it's a Passport case
-  //     expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[4]);
-  //     expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[0]);
-  //     expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
-  //   });
-  // });
-
-  // describe(`Remove high priority from case #2 for '${trialLocation}' session`, () => {
-  //   loginAs(cerebralTest, 'petitionsclerk@example.com');
-
-  //   it(`Case #2 should show as last case eligible for '${trialLocation}' session`, async () => {
-  //     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-  //       docketNumber: createdDocketNumbers[1],
-  //     });
-  //     expect(cerebralTest.getState('caseDetail.status')).not.toEqual(
-  //       STATUS_TYPES.calendared,
-  //     );
-  //     expect(cerebralTest.getState('caseDetail').highPriority).toBeTruthy();
-
-  //     await cerebralTest.runSequence('unprioritizeCaseSequence');
-  //     expect(cerebralTest.getState('caseDetail').highPriority).toBeFalsy();
-  //     expect(
-  //       cerebralTest.getState('caseDetail').highPriorityReason,
-  //     ).toBeFalsy();
-
-  //     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-  //       trialSessionId: cerebralTest.trialSessionId,
-  //     });
-
-  //     const eligibleCases = cerebralTest.getState('trialSession.eligibleCases');
-  //     expect(eligibleCases.length).toEqual(4);
-  //     // this case should be first because it's a CDP case
-  //     expect(eligibleCases[0].docketNumber).toEqual(createdDocketNumbers[3]);
-  //     // this case should be second because it's a Passport case
-  //     expect(eligibleCases[1].docketNumber).toEqual(createdDocketNumbers[4]);
-  //     expect(eligibleCases[2].docketNumber).toEqual(createdDocketNumbers[0]);
-  //     expect(eligibleCases[3].docketNumber).toEqual(createdDocketNumbers[1]);
-  //     expect(cerebralTest.getState('trialSession.isCalendared')).toEqual(false);
-  //   });
-  // });
-
-  // describe('Calendar clerk marks all eligible cases as QCed', () => {
-  //   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  //   markAllCasesAsQCed(cerebralTest, () => [
-  //     createdDocketNumbers[0],
-  //     createdDocketNumbers[1],
-  //     createdDocketNumbers[3],
-  //     createdDocketNumbers[4],
-  //   ]);
-  // });
-
-  // describe(`Set calendar for '${trialLocation}' session`, () => {
-  //   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  //   petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
-  // });
+  describe(`Set calendar for '${trialLocation}' session`, () => {
+    loginAs(cerebralTest, 'petitionsclerk@example.com');
+    petitionsClerkSetsATrialSessionsSchedule(cerebralTest);
+  });
 
   // describe(`Result: Case #4, #5, and #1 are assigned to '${trialLocation}' session and their case statuses are updated to “Calendared for Trial”`, () => {
   //   loginAs(cerebralTest, 'petitionsclerk@example.com');
