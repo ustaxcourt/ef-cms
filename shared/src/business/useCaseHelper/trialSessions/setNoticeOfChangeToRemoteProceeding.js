@@ -77,7 +77,7 @@ exports.setNoticeOfChangeToRemoteProceeding = async (
       joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
       judgeName: newTrialSessionEntity.judge.name,
       meetingId: newTrialSessionEntity.meetingId,
-      passcode: newTrialSessionEntity.passcode,
+      password: newTrialSessionEntity.password,
       startDate: newTrialSessionEntity.startDate,
       startTime: newTrialSessionEntity.startTime,
       trialLocation: newTrialSessionEntity.trialLocation,

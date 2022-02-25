@@ -52,7 +52,7 @@ exports.createUserInteractor = async (applicationContext, { user }) => {
     .createOrUpdateUser({
       applicationContext,
       disableCognitoUser: user.role === ROLES.legacyJudge,
-      passcode: user.passcode,
+      password: user.password,
       user: userEntity.validate().toRawObject(),
     });
 

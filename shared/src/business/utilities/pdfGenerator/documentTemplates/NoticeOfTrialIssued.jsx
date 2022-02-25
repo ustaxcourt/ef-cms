@@ -56,7 +56,7 @@ export const NoticeOfTrialIssued = ({
           <b>Meeting ID:</b> {trialInfo.meetingId}
         </p>
         <p className="text-center">
-          <b>Passcode:</b> {trialInfo.passcode}
+          <b>Passcode:</b> {trialInfo.password}
         </p>
 
         <p>

@@ -55,7 +55,7 @@ exports.updateTrialSessionInteractor = async (
     maxCases: trialSession.maxCases,
     meetingId: trialSession.meetingId,
     notes: trialSession.notes,
-    passcode: trialSession.passcode,
+    password: trialSession.password,
     postalCode: trialSession.postalCode,
     proceedingType: trialSession.proceedingType,
     sessionType: trialSession.sessionType,

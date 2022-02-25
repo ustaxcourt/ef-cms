@@ -12,7 +12,7 @@ describe('NoticeOfTrialIssued', () => {
     formattedStartTime: '10:00 am',
     joinPhoneNumber: '11111',
     meetingId: '22222',
-    passcode: '33333',
+    password: '33333',
     trialLocation: 'Boise, Idaho',
   };
 
@@ -50,7 +50,7 @@ describe('NoticeOfTrialIssued', () => {
     const noticeBodyContent = wrapper.find('#notice-body').text();
 
     expect(noticeBodyContent).toContain(trialInfo.meetingId);
-    expect(noticeBodyContent).toContain(trialInfo.passcode);
+    expect(noticeBodyContent).toContain(trialInfo.password);
     expect(noticeBodyContent).toContain(trialInfo.joinPhoneNumber);
   });
 

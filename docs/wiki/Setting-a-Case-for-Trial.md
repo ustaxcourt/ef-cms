@@ -11,7 +11,7 @@
 Some fields are optional when creating a trial session but must be fulfilled to set the calendar:
 * Judge
 * Address, City, State, ZIP (for In Person Proceedings)
-* Meeting ID, Passcode, Join by number, Chambers phone number (for Remote proceedings)
+* Meeting ID, Password, Join by number, Chambers phone number (for Remote proceedings)
 
 
 #### Bulk Generation of Notices
