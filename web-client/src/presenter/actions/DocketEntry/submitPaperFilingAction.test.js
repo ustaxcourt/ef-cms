@@ -3,12 +3,12 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitPaperFilingAction } from './submitPaperFilingAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('submitPaperFilingAction', () => {
   let caseDetail;
 
   beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
     caseDetail = {
       docketEntries: [],
       docketNumber: '123-45',

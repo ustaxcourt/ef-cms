@@ -1,12 +1,13 @@
 const {
-  documentMeetsAgeRequirements,
-} = require('../utilities/getFormattedCaseDetail');
-const {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
+const {
+  documentMeetsAgeRequirements,
+} = require('../utilities/getFormattedCaseDetail');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -15,6 +16,9 @@ const { Case } = require('../entities/cases/Case');
 const { isServed } = require('../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
 const { User } = require('../entities/User');
+
+const UNAUTHORIZED_DOCUMENT_MESSAGE =
+  'Unauthorized to view document at this time.';
 
 const handleInternalUser = ({
   docketEntryEntity,
@@ -67,16 +71,25 @@ const handleCourtIssued = ({ docketEntryEntity, userAssociatedWithCase }) => {
   );
 
   if (!isServed(docketEntryEntity) && !isUnservable) {
-    throw new UnauthorizedError('Unauthorized to view document at this time.');
+    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (
     docketEntryEntity.eventCode === STIPULATED_DECISION_EVENT_CODE &&
     !userAssociatedWithCase
   ) {
-    throw new UnauthorizedError('Unauthorized to view document at this time.');
+    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
   } else if (docketEntryEntity.isStricken) {
-    throw new UnauthorizedError('Unauthorized to view document at this time.');
-  } else if (docketEntryEntity.isLegacySealed) {
-    throw new UnauthorizedError('Unauthorized to view document at this time.');
+    throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
+  } else if (docketEntryEntity.isSealed) {
+    if (
+      docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC &&
+      !userAssociatedWithCase
+    ) {
+      throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
+    } else if (
+      docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
+    ) {
+      throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
+    }
   }
 };
 
@@ -163,27 +176,27 @@ exports.getDownloadPolicyUrlInteractor = async (
       const documentIsAvailable =
         documentMeetsAgeRequirements(docketEntryEntity);
 
+      if (!documentIsAvailable) {
+        throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
+      }
+
       const selectedIsStin =
         docketEntryEntity.documentType ===
         INITIAL_DOCUMENT_TYPES.stin.documentType;
-
-      if (!documentIsAvailable) {
-        throw new UnauthorizedError(
-          'Unauthorized to view document at this time.',
-        );
-      }
-
       const unAuthorizedToViewNonCourtIssued =
-        selectedIsStin ||
-        !userAssociatedWithCase ||
-        docketEntryEntity.isLegacySealed;
+        selectedIsStin || !userAssociatedWithCase;
 
       if (docketEntryEntity.isCourtIssued()) {
         handleCourtIssued({ docketEntryEntity, userAssociatedWithCase });
-      } else if (unAuthorizedToViewNonCourtIssued) {
-        throw new UnauthorizedError(
-          'Unauthorized to view document at this time.',
-        );
+      } else {
+        if (
+          docketEntryEntity.isSealed &&
+          docketEntryEntity.sealedTo === DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL
+        ) {
+          throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
+        } else if (unAuthorizedToViewNonCourtIssued) {
+          throw new UnauthorizedError(UNAUTHORIZED_DOCUMENT_MESSAGE);
+        }
       }
     }
   }

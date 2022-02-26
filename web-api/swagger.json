@@ -2315,6 +2315,180 @@
         }
       }
     },
+    "/case-documents/{docketNumber}/{docketEntryId}/strike": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["documents"],
+        "summary": "strike a docket entry on the docket record",
+        "description": "Strike a docket entry on the docket record.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/case"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{docketNumber}/{docketEntryId}/seal": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["documents"],
+        "summary": "seals a docket entry on a case to the public",
+        "description": "Seals a docket entry on a case to the public.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/docketEntry"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{docketNumber}/{docketEntryId}/unseal": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "put": {
+        "tags": ["documents"],
+        "summary": "unseals a docket entry on a case",
+        "description": "Unseals a docket entry on a case.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/docketEntry"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/cases/{docketNumber}/irsPetitionPackage": {
       "parameters": [
         {
@@ -7678,6 +7852,120 @@
         }
       },
       "description": "a case deadline"
+    },
+    "docketEntry": {
+      "type": "object",
+      "description": "a docket entry",
+      "properties": {
+        "addToCoversheet": {
+          "type": "boolean",
+          "description": "if the docket entry was added to the coversheet"
+        },
+        "createdAt": {
+          "type": "string",
+          "description": "the date the docket entry was created"
+        },
+        "docketEntryId": {
+          "type": "string",
+          "description": "the docket entry id to identify the docket entry"
+        },
+        "docketNumber": {
+          "type": "string",
+          "description": "the docket number the docket entry belongs to"
+        },
+        "documentTitle": {
+          "type": "string",
+          "description": "the title of the docket entry"
+        },
+        "documentType": {
+          "type": "string",
+          "description": "the type of docket entry"
+        },
+        "draftOrderState": {
+          "type": "object",
+          "description": "keeps track of the text written inside the draft order"
+        },
+        "entityName": {
+          "type": "string",
+          "description": "the type of entity"
+        },
+        "eventCode": {
+          "type": "string",
+          "description": "the event code type of entity"
+        },
+        "filedBy": {
+          "type": "string",
+          "description": "who filed the docket entry"
+        },
+        "filingDate": {
+          "type": "string",
+          "description": "the date the docket entry was filed"
+        },
+        "index": {
+          "type": "number",
+          "description": "the position in the docket record"
+        },
+        "isDraft": {
+          "type": "boolean",
+          "description": "used to know if the docket entry is a draft"
+        },
+        "isFileAttached": {
+          "type": "boolean",
+          "description": "used to know if a file is attached to the docket entry"
+        },
+        "isMinuteEntry": {
+          "type": "boolean",
+          "description": "used to know if the docket entry is a minute entry"
+        },
+        "isOnDocketRecord": {
+          "type": "boolean",
+          "description": "used to know if the docket entry is on the docket record"
+        },
+        "isSealed": {
+          "type": "boolean",
+          "description": "used to know if the docket entry has been sealed"
+        },
+        "isStricken": {
+          "type": "boolean",
+          "description": "used to know if the docket entry has been stricken"
+        },
+        "pending": {
+          "type": "boolean",
+          "description": "used to know if the docket entry is pending"
+        },
+        "processingStatus": {
+          "type": "string",
+          "description": "keeps track of the processing state of the docket entry"
+        },
+        "receivedAt": {
+          "type": "string",
+          "description": "the date the docket entry was received"
+        },
+        "sealedTo": {
+          "type": "string",
+          "description": "who the docket entry is sealed to"
+        },
+        "servedAt": {
+          "type": "string",
+          "description": "when the docket entry was served"
+        },
+        "signedAt": {
+          "type": "string",
+          "description": "when the docket entry was signed"
+        },
+        "signedByUserId": {
+          "type": "string",
+          "description": "who signed the docket entry"
+        },
+        "signedJudgeName": {
+          "type": "string",
+          "description": "the name of the judge who signed the docket entry"
+        },
+        "userId": {
+          "type": "string",
+          "description": "the userId of who created the docket entry"
+        }
+      }
     }
   }
 }
