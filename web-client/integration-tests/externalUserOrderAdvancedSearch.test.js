@@ -60,6 +60,7 @@ describe('external users perform an advanced search for orders', () => {
   docketClerkServesDocument(cerebralTest, 0);
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
+
   associatedUserSearchesForServedOrder(cerebralTest, {
     draftOrderIndex: 0,
     keyword: 'Jiminy Cricket',
@@ -195,39 +196,82 @@ describe('external users perform an advanced search for orders', () => {
 
     expect(
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
-    ).toEqual([]);
-  });
-
-  loginAs(cerebralTest, 'privatePractitioner@example.com');
-  it('search for sealed order in unsealed case as an associated practitioner', async () => {
-    cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
-
-    cerebralTest.docketNumber = '999-15';
-
-    await updateOrderForm(cerebralTest, {
-      docketNumber: cerebralTest.docketNumber,
-    });
-
-    await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
-
-    const advancedDocumentSearchHelper = withAppContextDecorator(
-      advancedDocumentSearchHelperComputed,
-    );
-    const searchHelper = runCompute(advancedDocumentSearchHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    expect(searchHelper.searchResults).toEqual(
+    ).not.toEqual(
       expect.arrayContaining([
         expect.objectContaining({
-          docketNumber: cerebralTest.docketNumber,
-          showSealedIcon: true,
-        }),
-        expect.objectContaining({
-          docketNumber: cerebralTest.docketNumber,
-          showSealedIcon: true,
+          documentTitle: 'Sealed Order',
+          isCaseSealed: false,
+          isDocketEntrySealed: true,
         }),
       ]),
     );
   });
+
+  ['privatePractitioner@example.com', 'irsPractitioner@example.com'].forEach(
+    email => {
+      loginAs(cerebralTest, email);
+      it(`search for an order that has been sealed from the public in an unsealed case as an associated ${email} user`, async () => {
+        cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+        cerebralTest.docketNumber = '999-15';
+
+        await updateOrderForm(cerebralTest, {
+          docketNumber: cerebralTest.docketNumber,
+        });
+
+        await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+        expect(
+          cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+        ).toMatchObject(
+          expect.arrayContaining([
+            expect.objectContaining({
+              docketEntryId: '67a204c3-7111-48f3-8ddd-3c2e60f4d1ae',
+              docketNumber: cerebralTest.docketNumber,
+            }),
+            expect.objectContaining({
+              docketEntryId: '755684EB-0FF0-416B-B0EC-2F2B3942686F',
+              docketNumber: cerebralTest.docketNumber,
+              isDocketEntrySealed: true,
+            }),
+          ]),
+        );
+
+        expect(
+          cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
+        ).not.toEqual(
+          expect.arrayContaining([
+            expect.objectContaining({
+              docketEntryId: 'd1ecc2dd-e0ba-490b-9f41-425a1a45f5ac',
+              docketNumber: cerebralTest.docketNumber,
+            }),
+          ]),
+        );
+      });
+
+      it(`search for an order that has been sealed from all external users as an associated ${email} user`, async () => {
+        cerebralTest.setState('advancedSearchTab', ADVANCED_SEARCH_TABS.ORDER);
+
+        cerebralTest.docketNumber = '999-15';
+
+        await updateOrderForm(cerebralTest, {
+          docketNumber: cerebralTest.docketNumber,
+        });
+
+        await cerebralTest.runSequence('submitOrderAdvancedSearchSequence');
+
+        const orderSearchResultsFromState = cerebralTest.getState(
+          `searchResults.${ADVANCED_SEARCH_TABS.ORDER}`,
+        );
+
+        const sealedToExternalDocketEntryId =
+          'ffb6c3d7-bfd5-4a19-8d23-6fd75a1e362c';
+        const sealedToExternalDocketEntry = orderSearchResultsFromState.find(
+          docketEntry =>
+            docketEntry.docketEntryId === sealedToExternalDocketEntryId,
+        );
+        expect(sealedToExternalDocketEntry).toBeUndefined();
+      });
+    },
+  );
 });
