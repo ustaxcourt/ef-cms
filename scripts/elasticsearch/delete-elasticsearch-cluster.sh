@@ -13,6 +13,6 @@
 
 SOURCE_ELASTICSEARCH=$1
 
-was_cluster_deleted=$(aws es delete-elasticsearch-domain --domain "${SOURCE_ELASTICSEARCH}" --region us-east-1 | jq -r ".DomainStatus.Deleted" )
+was_cluster_deleted=$(aws es delete-elasticsearch-domain --domain "${SOURCE_ELASTICSEARCH}" --region us-east-1 | jq -r ".DomainStatus")
 
 echo "The cluster ${SOURCE_ELASTICSEARCH} was deleted: ${was_cluster_deleted}"
