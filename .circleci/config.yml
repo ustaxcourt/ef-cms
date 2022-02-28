@@ -690,6 +690,10 @@ jobs:
           name: Destroy Migration Infrastructure
           command: |
             npm run destroy:migration -- $ENV
+      - run:
+          name: Destroy Migration Cron Infrastructure
+          command: |
+            npm run destroy:migration-cron -- $ENV
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
