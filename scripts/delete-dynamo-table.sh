@@ -13,10 +13,16 @@
 
 SOURCE_TABLE=$1
 
-TABLE_STATUS=$(aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-east-1 | jq -r ".TableDescription.TableStatus")
+EAST_TABLE_STATUS=$(aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-east-1 | jq -r ".TableDescription.TableStatus")
+WEST_TABLE_STATUS=$(aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-west-1 | jq -r ".TableDescription.TableStatus")
 
-if [[ $TABLE_STATUS != "DELETING" ]] ; then
-  echo "The table ${SOURCE_TABLE} failed to delete."
+if [[ $EAST_TABLE_STATUS != "DELETING" ]] ; then
+  echo "The table ${SOURCE_TABLE} in us-east-1 failed to delete."
+  exit 1
+fi
+
+if [[ $WEST_TABLE_STATUS != "DELETING" ]] ; then
+  echo "The table ${SOURCE_TABLE} in us-west-1 failed to delete."
   exit 1
 fi
 
