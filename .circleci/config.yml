@@ -687,6 +687,7 @@ jobs:
             echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_ELASTICSEARCH=$(./scripts/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
       - run:
           name: Destroy Migration Infrastructure
           command: |
@@ -695,6 +696,10 @@ jobs:
           name: Destroy Migration Cron Infrastructure
           command: |
             npm run destroy:migration-cron -- $ENV
+      - run:
+          name: Delete Source ElasticSearch cluster
+          command: |
+            npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
