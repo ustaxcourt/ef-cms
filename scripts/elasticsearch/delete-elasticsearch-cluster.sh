@@ -8,14 +8,11 @@
 # Arguments
 #   - $1 - the cluster to delete
 
-# change all this!
-
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
-[ -z "$1" ] && echo "The env to check must be provided as the \$1 argument." && exit 1
+[ -z "$1" ] && echo "The domain to delete must be provided as the \$1 argument." && exit 1
 
-ENV=$1
+SOURCE_ELASTICSEARCH=$1
 
-SOURCE_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --key '{"pk":{"S":"source-table-version"},"sk":{"S":"source-table-version"}}' | jq -r ".Item.current.S")
-[ -z "$SOURCE_TABLE_VERSION" ] && echo "efcms-search-${ENV}" && exit
+was_cluster_deleted=$(aws es delete-domain --domain "${SOURCE_ELASTICSEARCH}" --region us-east-1 | jq -r ".DomainStatus.Deleted" )
 
-echo "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}"
+echo "The cluster ${SOURCE_ELASTICSEARCH} was deleted: ${was_cluster_deleted}"
