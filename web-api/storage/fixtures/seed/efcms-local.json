@@ -23666,6 +23666,46 @@
     "docketNumber": "106-19"
   },
   {
+    "servedParties": [
+      {
+        "name": "Denise Gould",
+        "email": "petitioner@example.com"
+      }
+    ],
+    "isPaper": true,
+    "isStricken": false,
+    "serviceDate": null,
+    "documentType": "Proposed Stipulated Decision",
+    "filingDate": "1990-10-09T04:00:00.000Z",
+    "isMinuteEntry": false,
+    "pending": true,
+    "isDraft": false,
+    "receivedAt": "1990-10-09T04:00:00.000Z",
+    "isOnDocketRecord": true,
+    "createdAt": "2019-07-12T17:11:26.955Z",
+    "numberOfPages": 1,
+    "scenario": "Standard",
+    "entityName": "DocketEntry",
+    "filedBy": "Petr. Denise Gould",
+    "docketEntryId": "7a923abd-fc41-407a-b76b-7f724fa5d480",
+    "sk": "docket-entry|7a923abd-fc41-407a-b76b-7f724fa5d480",
+    "documentTitle": "Proposed Stipulated Decision",
+    "relationship": "primaryDocument",
+    "draftOrderState": null,
+    "index": 4,
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "PSDE",
+    "processingStatus": "complete",
+    "lodged": false,
+    "filers": [
+      "7805d1ab-18d0-43ec-bafb-654e83405416"
+    ],
+    "pk": "case|106-19",
+    "servedAt": "2019-07-12T17:11:26.955Z",
+    "docketNumber": "106-19"
+  },
+  {
     "associatedJudge": "Chief Judge",
     "completedAt": "2019-07-12T17:11:27.244Z",
     "caseStatus": "New",
