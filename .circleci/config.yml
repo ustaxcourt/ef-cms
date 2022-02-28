@@ -669,7 +669,7 @@ jobs:
       - run:
           name: 'Switch Colors'
           command: npm run switch-colors
-  
+
   backup-source-dynamo-table:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
@@ -686,6 +686,7 @@ jobs:
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
+      - run:
           name: Backup Source DynamoDB table
           command: |
             npm run backup:dynamo-table --$SOURCE_TABLE
