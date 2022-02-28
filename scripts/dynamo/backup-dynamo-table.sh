@@ -15,11 +15,11 @@ TABLE_NAME=$1
 
 CURRENT_DATE_TIME_GMT=$(date -u +"%Y-%m-%d-%H:%M")
 
-BACKUP_STATUS=$(aws dynamodb create-backup --table-name "${TABLE_NAME}" --backup-name "${TABLE_NAME}-${CURRENT_DATE_TIME_GMT}" --region us-east-1 | jq -r ".BackupDetails.BackupStatus")
+BACKUP_ARN=$(aws dynamodb create-backup --table-name "${TABLE_NAME}" --backup-name "${TABLE_NAME}-${CURRENT_DATE_TIME_GMT}" --region us-east-1 | jq -r ".BackupDetails.BackupArn")
 
-# if [[ $TABLE_STATUS != "DELETING" ]] ; then
-#   echo "The table ${TABLE_NAME} failed to delete."
-#   exit 1
-# fi
+if [[ -z $BACKUP_ARN ]] ; then
+  echo "The backup for ${TABLE_NAME} was not successful."
+  exit 1
+fi
 
-echo "The table ${TABLE_NAME} backup status is: ${BACKUP_STATUS}"
+echo "The table ${TABLE_NAME} backup ARN is: ${BACKUP_ARN}"

@@ -738,7 +738,7 @@ build-and-deploy-with-context-defaults: &build-and-deploy-with-context-defaults
   filters:
     branches:
       only:
-        - experimental1 #todo: put this back to prod PLEASE
+        - prod
 
 workflows:
   version: 2
@@ -852,9 +852,16 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - cleanup:
+      - backup-source-dynamo-table:
           requires:
             - switch-colors
+          filters:
+            branches:
+              only:
+                - experimental1
+      - cleanup:
+          requires:
+            - backup-source-dynamo-table
           filters:
             branches:
               only:
@@ -916,11 +923,11 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - smoketests-readonly
-      - backup-source-dynamo-table:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - switch-colors
+      # - backup-source-dynamo-table:
+      #     <<: *build-and-deploy-with-context-defaults
+      #     requires:
+      #       - switch-colors
       - cleanup:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - backup-source-dynamo-table
+            - switch-colors
