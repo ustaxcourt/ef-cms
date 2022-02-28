@@ -13,7 +13,7 @@
 
 SOURCE_TABLE=$1
 
-TABLE_STATUS=$(aws es delete-table --table-name "${SOURCE_TABLE}" --region us-east-1 | jq -r ".TableDescription.TableStatus")
+TABLE_STATUS=$(aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-east-1 | jq -r ".TableDescription.TableStatus")
 
 if [[ $TABLE_STATUS != "DELETING" ]] ; then
   echo "The table ${SOURCE_TABLE} failed to delete."
