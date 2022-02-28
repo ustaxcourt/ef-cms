@@ -29,8 +29,10 @@ else
   echo "dynamodb lock table already exists"
 fi
 
+npm run build:assets
+
 set -eo pipefail
-npm run build:lambda:migration
+npm run build:lambda:migration-cron
 
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
