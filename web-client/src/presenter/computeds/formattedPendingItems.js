@@ -30,12 +30,6 @@ export const formattedPendingItems = (get, applicationContext) => {
     .concat(CHIEF_JUDGE)
     .sort();
 
-  items = items.sort((a, b) =>
-    applicationContext
-      .getUtilities()
-      .compareISODateStrings(a.receivedAt, b.receivedAt),
-  );
-
   const queryString = qs.stringify({ judgeFilter });
 
   const result = {
