@@ -861,7 +861,7 @@ workflows:
                 - experimental1
       - cleanup:
           requires:
-            - switch-colors
+            - backup-source-dynamo-table
           filters:
             branches:
               only:
@@ -930,4 +930,4 @@ workflows:
       - cleanup:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - backup-source-dynamo-table
+            - switch-colors
