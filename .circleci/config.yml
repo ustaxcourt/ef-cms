@@ -837,8 +837,8 @@ workflows:
       #           - experimental5
       #           - migration
       - switch-colors:
-          # requires:
-          #   - smoketests-readonly
+          requires:
+            - deploy
           filters:
             branches:
               only:
