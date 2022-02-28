@@ -1,3 +1,4 @@
+import { DateTime, Duration } from 'luxon';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
@@ -215,7 +216,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     it('refreshes elasticsearch', async () => {
       await refreshElasticsearchIndex();
     });
-    // const PAGE_SIZE = 100;
+    const PAGE_SIZE = 100;
 
     //TODO:
     // 1. Process of adding enough items to pending report to cause pagination
@@ -234,22 +235,35 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     loginAs(cerebralTest, 'irsPractitioner@example.com');
 
-    it('creates multiple pending items', async () => {
-      await viewCaseDetail({
-        cerebralTest,
-        docketNumber: caseDetail.docketNumber,
-      });
-      await uploadProposedStipulatedDecision(cerebralTest);
-      await viewCaseDetail({
-        cerebralTest,
-        docketNumber: caseDetail.docketNumber,
-      });
-      await uploadProposedStipulatedDecision(cerebralTest);
-      await viewCaseDetail({
-        cerebralTest,
-        docketNumber: caseDetail.docketNumber,
-      });
-      await uploadProposedStipulatedDecision(cerebralTest);
+    let uploadPendingItemPromises = [];
+    for (
+      let pendingItemIndex = 0;
+      pendingItemIndex < PAGE_SIZE;
+      pendingItemIndex++
+    ) {
+      const asyncUploadPendingItem = async () => {
+        const cerebralTestTemp = setupTest();
+        loginAs(cerebralTestTemp, 'irsPractitioner@example.com');
+        // it(`creates pending item ${pendingItemIndex + 1}`, async () => {
+        await viewCaseDetail({
+          cerebralTest,
+          docketNumber: caseDetail.docketNumber,
+        });
+        await uploadProposedStipulatedDecision(cerebralTestTemp, {
+          receivedAt: DateTime.now()
+            .minus(Duration.fromObject({ days: pendingItemIndex }))
+            .toISO(),
+        });
+        // });
+        cerebralTestTemp.closeSocket();
+      };
+
+      const asyncUploadPendingItemPromise = asyncUploadPendingItem();
+      uploadPendingItemPromises.push(asyncUploadPendingItemPromise);
+    }
+
+    it('wait for all creates pending item', async () => {
+      await Promise.all(uploadPendingItemPromises);
     });
 
     // 2. Look at pending report, and verify that items are sorted properly regardless of number of pages
@@ -260,6 +274,8 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     loginAs(cerebralTest, 'docketclerk@example.com');
 
     it('docketClerk checks pendingItems', async () => {
+      await refreshElasticsearchIndex();
+
       await cerebralTest.runSequence('gotoPendingReportSequence');
 
       await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
@@ -273,7 +289,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       );
 
       console.log('pendingItemsAfter*** ', pendingItems.length);
-      // console.log('pendingItems*** ', pendingItems);
+      console.log('pendingItems*** ', pendingItems);
 
       expect(pendingItem).toBeDefined();
 
