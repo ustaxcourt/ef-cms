@@ -13,7 +13,7 @@
 
 TABLE_NAME=$1
 
-CURRENT_DATE_TIME_GMT=$(date -u +"%Y-%m-%d-%H:%M")
+CURRENT_DATE_TIME_GMT=$(date -u +"%Y-%m-%d-%H-%M")
 
 BACKUP_ARN=$(aws dynamodb create-backup --table-name "${TABLE_NAME}" --backup-name "${TABLE_NAME}-${CURRENT_DATE_TIME_GMT}" --region us-east-1 | jq -r ".BackupDetails.BackupArn")
 
