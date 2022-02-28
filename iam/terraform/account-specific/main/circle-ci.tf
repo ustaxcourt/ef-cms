@@ -42,6 +42,7 @@ resource "aws_iam_policy" "circle_ci_policy" {
         "dynamodb:ListTables",
         "dynamodb:ListTagsOfResource",
         "dynamodb:TagResource",
+        "dynamodb:DeleteTable",
         "dynamodb:DescribeTimeToLive",
         "dynamodb:UpdateContinuousBackups",
         "dynamodb:ListStreams"
