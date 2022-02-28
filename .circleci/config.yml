@@ -685,11 +685,11 @@ jobs:
           command: |
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
-            echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
+            echo "export TABLE_NAME=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
           name: Backup Source DynamoDB table
           command: |
-            npm run backup:dynamo-table --$SOURCE_TABLE
+            npm run backup:dynamo-table -- $TABLE_NAME
 
   cleanup:
     docker:
@@ -759,28 +759,28 @@ workflows:
       #     <<: *build-and-deploy-defaults
       # - e2e-cypress-public:
       #     <<: *build-and-deploy-defaults
-      - deploy:
-        #     requires:
-        # - build-client-integration
-        # - e2e-pa11y
-        # - e2e-pa11y-public
-        # - e2e-pa11y-public-search
-        # - e2e-cypress
-        # - e2e-cypress-smoketests-local
-        # - e2e-cypress-public
-        filters:
-          branches:
-            only:
-              - develop
-              - irs
-              - staging
-              - test
-              - experimental1
-              - experimental2
-              - experimental3
-              - experimental4
-              - experimental5
-              - migration
+      # - deploy:
+      #     requires:
+      # - build-client-integration
+      # - e2e-pa11y
+      # - e2e-pa11y-public
+      # - e2e-pa11y-public-search
+      # - e2e-cypress
+      # - e2e-cypress-smoketests-local
+      # - e2e-cypress-public
+      # filters:
+      #   branches:
+      #     only:
+      #       - develop
+      #       - irs
+      #       - staging
+      #       - test
+      #       - experimental1
+      #       - experimental2
+      #       - experimental3
+      #       - experimental4
+      #       - experimental5
+      #       - migration
       # - migrate:
       #     requires:
       #       - deploy
@@ -837,8 +837,8 @@ workflows:
       #           - experimental5
       #           - migration
       - switch-colors:
-          requires:
-            - deploy
+          # requires:
+          #   - deploy
           filters:
             branches:
               only:
