@@ -52,11 +52,6 @@ let calendaredCases;
 let trialSession;
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
-  beforeAll(() => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-  });
   beforeEach(() => {
     const case0 = {
       // should get electronic service
@@ -92,6 +87,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
 
     applicationContext.getCurrentUser.mockImplementation(() => user);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(case0)
+      .mockReturnValueOnce(case0)
+      .mockReturnValueOnce(case1)
+      .mockReturnValueOnce(case1);
 
     applicationContext
       .getPersistenceGateway()
@@ -396,6 +398,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('Should set the status of the Notice of Trial as served for a single case if a docketNumber is set', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReset()
+      .mockReturnValueOnce(calendaredCases[1])
+      .mockReturnValueOnce(calendaredCases[1]);
+
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       docketNumber: '103-20',
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -509,6 +517,13 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   it('should append the PaperServiceAddressPage to the pdf when the case has a party with paper service', async () => {
     calendaredCases[0].petitioners[0].serviceIndicator =
       SERVICE_INDICATOR_TYPES.SI_PAPER;
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReset()
+      .mockReturnValueOnce(calendaredCases[0])
+      .mockReturnValueOnce(calendaredCases[0])
+      .mockReturnValueOnce(calendaredCases[1])
+      .mockReturnValueOnce(calendaredCases[1]);
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
