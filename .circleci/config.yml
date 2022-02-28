@@ -700,6 +700,10 @@ jobs:
           name: Delete Source ElasticSearch cluster
           command: |
             npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
+      - run:
+          name: Delete Source Dynamo table
+          command: |
+            npm run delete:dynamo-table -- $SOURCE_TABLE
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Deletes the source elasticsearch cluster for the environment
+# Deletes the specified elasticsearch cluster for the environment
 
 # Usage
 #   ./delete-elasticsearch-cluster.sh $SOURCE_ELASTICSEARCH
