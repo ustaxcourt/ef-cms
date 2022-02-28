@@ -13,13 +13,9 @@
 
 SOURCE_ELASTICSEARCH=$1
 
-was_cluster_deleted=$(aws es delete-elasticsearch-domain --domain "${SOURCE_ELASTICSEARCH}" --region us-east-1 | jq -r ".DomainStatus.Deleted")
+WAS_CLUSTER_DELETED=$(aws es delete-elasticsearch-domain --domain "${SOURCE_ELASTICSEARCH}" --region us-east-1 | jq -r ".DomainStatus.Deleted")
 
-# take this out! this is temporary
-was_cluster_deleted = false
-
-if was_cluster_deleted == false
-then
+if [[ $WAS_CLUSTER_DELETED == false ]] ; then
   echo "The cluster ${SOURCE_ELASTICSEARCH} failed to delete."
   exit 1
 fi
