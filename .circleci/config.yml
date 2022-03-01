@@ -685,11 +685,14 @@ jobs:
           command: |
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export TABLE_NAME=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
           name: Backup Source DynamoDB table
           command: |
-            npm run backup:dynamo-table -- $TABLE_NAME
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+               npm run backup:dynamo-table -- $TABLE_NAME
+             fi
 
   cleanup:
     docker:
