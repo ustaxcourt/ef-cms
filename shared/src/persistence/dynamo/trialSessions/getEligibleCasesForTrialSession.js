@@ -31,21 +31,21 @@ exports.getEligibleCasesForTrialSession = async ({
     })),
   });
 
-  const aggregatedResults = [];
+  const aggregatedResults = await Promise.all(
+    results.map(async result => {
+      const caseItems = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber: result.docketNumber,
+        });
 
-  for (let result of results) {
-    const caseItems = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: result.docketNumber,
-      });
-
-    aggregatedResults.push({
-      ...result,
-      ...caseItems,
-    });
-  }
+      return {
+        ...result,
+        ...caseItems,
+      };
+    }),
+  );
 
   const afterMapping = docketNumbers.map(docketNumber => ({
     ...aggregatedResults.find(r => docketNumber === r.docketNumber),

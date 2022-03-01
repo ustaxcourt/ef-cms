@@ -155,6 +155,47 @@ describe('formattedDocketEntries', () => {
     });
   });
 
+  it('should set the seal icon to an unlock icon when the docket entry is sealed', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isSealed: true,
+              sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      sealIcon: 'unlock',
+    });
+  });
+
+  it('should set the seal icon to an lock icon when the docket entry is unsealed', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              ...mockDocketEntry,
+              isSealed: false,
+            },
+          ],
+        },
+      },
+    });
+    expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+      sealIcon: 'lock',
+    });
+  });
+
   it('returns editDocketEntryMetaLinks with formatted docket entries', () => {
     const result = runCompute(formattedDocketEntries, {
       state: {
@@ -361,6 +402,33 @@ describe('formattedDocketEntries', () => {
                 isMinuteEntry: false,
                 isOnDocketRecord: true,
                 isStricken: false,
+              },
+            ],
+          },
+          screenMetadata: {
+            isAssociated: true,
+          },
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord[0]).toMatchObject({
+        showDocumentDescriptionWithoutLink: true,
+        showDocumentViewerLink: false,
+        showLinkToDocument: false,
+      });
+    });
+
+    it('should NOT show the link to an associated external user when the document is sealed to external users', () => {
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          ...getBaseState(petitionerUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...docketEntries[0],
+                isSealed: true,
+                isStricken: false,
+                sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
               },
             ],
           },
