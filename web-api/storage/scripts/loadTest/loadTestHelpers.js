@@ -1,5 +1,4 @@
 /* eslint-disable @miovision/disallow-date/no-new-date */
-const faker = require('faker');
 const {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -13,6 +12,7 @@ const {
 const {
   getFakeFile,
 } = require('../../../../shared/src/business/test/getFakeFile');
+const { faker } = require('@faker-js/faker');
 
 const createTrialSession = async ({ applicationContext }) => {
   let startDate = faker.date.future(1);
