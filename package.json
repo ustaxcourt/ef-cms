@@ -227,6 +227,7 @@
     "maintenance:disengage:local": ". ./setup-local-env.sh && node scripts/set-maintenance-mode-locally.js false",
     "maintenance:engage:local": ". ./setup-local-env.sh && node scripts/set-maintenance-mode-locally.js true",
     "migrate:local": "DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 S3_ENDPOINT=http://localhost:9000  AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SOURCE_TABLE=efcms-local DESTINATION_TABLE=efcms-local-1 node ./web-api/run-local-migration.js",
+    "migration:cleanup": "./scripts/update-deploy-table-after-migration.sh",
     "pending-color-switch": "./web-client/pending-color-switch.sh",
     "postinstall": "husky install",
     "preinstall": "npx npm-force-resolutions",
