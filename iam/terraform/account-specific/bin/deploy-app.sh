@@ -1,5 +1,13 @@
 #!/bin/bash -e
 
+# Getting the account-wide deployment settings and injecting them into the shell environment
+TEMP_ENV=${ENV}
+export ENV=account
+pushd ../../../../
+. ./scripts/load-environment-from-secrets.sh
+popd
+export ENV=${TEMP_ENV}
+
 if [ -z "$ZONE_NAME" ]; then
   echo "Please export the ZONE_NAME variable in your shell"
   exit 1

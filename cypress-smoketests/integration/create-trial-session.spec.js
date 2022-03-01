@@ -1,4 +1,3 @@
-const faker = require('faker');
 const {
   blockCaseFromTrial,
   goToCaseOverview,
@@ -39,6 +38,7 @@ const {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } = require('../support/pages/reports');
+const { faker } = require('@faker-js/faker');
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
@@ -207,6 +207,7 @@ describe('Petitions Clerk', () => {
       // enough time has elapsed since we blocked second case. look for it on blocked cases report
       // warning: if there are elasticsearch delays, this test might be brittle...
       // view blocked report
+      cy.waitForElasticsearch();
       viewBlockedCaseOnBlockedReport({
         ...testData,
         docketNumber: secondDocketNumber,

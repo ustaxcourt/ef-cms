@@ -7,3 +7,9 @@ Cypress.Commands.add('goToRoute', (...args) => {
     w.__cy_route(...args);
   });
 });
+
+Cypress.Commands.add('waitForElasticsearch', () => {
+  const ES_WAIT_TIME = 2000;
+  /* eslint-disable cypress/no-unnecessary-waiting */
+  return cy.wait(ES_WAIT_TIME);
+});

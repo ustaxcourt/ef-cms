@@ -3,14 +3,12 @@
 # creates the entry for maintenance mode flag in the dynamo deploy table
 
 # Usage
-#   ./setup-maintenance-mode-flag.sh dev
+#   ENV=dev ./setup-maintenance-mode-flag.sh
 
-# Arguments
-#   - $1 - the environment to set the flag
-
-[ -z "$1" ] && echo "The environment must be provided as the \$1 argument." && exit 1
-
-ENV=$1
+./check-env-variables.sh \
+  "ENV" \
+  "AWS_SECRET_ACCESS_KEY" \
+  "AWS_ACCESS_KEY_ID"
 
 ITEM=$(cat <<-END
 {

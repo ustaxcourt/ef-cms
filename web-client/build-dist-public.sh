@@ -1,11 +1,11 @@
 #!/bin/bash -e
 
-ENV=$1
-DEPLOYING_COLOR=$2
-
-[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
-[ -z "${ENV}" ] && echo 'You must pass ENV as argument $1' && exit 1
-[ -z "${DEPLOYING_COLOR}" ] && echo 'You must pass DEPLOYING_COLOR as argument $2' && exit 1
+./check-env-variables.sh \
+  "EFCMS_DOMAIN" \
+  "ENV" \
+  "DEPLOYING_COLOR" \
+  "AWS_SECRET_ACCESS_KEY" \
+  "AWS_ACCESS_KEY_ID"
 
 REGION="us-east-1"
 API_URL="https://public-api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
@@ -25,4 +25,5 @@ STAGE="${CLIENT_STAGE}" \
   API_URL="${API_URL}" \
   PDF_EXPRESS_LICENSE_KEY="${PDF_EXPRESS_LICENSE_KEY}" \
   PUBLIC_SITE_URL="${PUBLIC_SITE_URL}" \
+  CI="" \
   npm run build:public
