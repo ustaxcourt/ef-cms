@@ -70,17 +70,6 @@ describe('Document Search entity', () => {
     expect(validationErrors).toBeNull();
   });
 
-  it('should pass validation with multiple opinionTypes', () => {
-    const documentSearch = new DocumentSearch({
-      opinionTypes: ['OST', 'TCOP'],
-    });
-
-    const validationErrors = documentSearch.getFormattedValidationErrors();
-
-    expect(documentSearch.opinionTypes).toBeDefined();
-    expect(validationErrors).toBeNull();
-  });
-
   describe('date search validation', () => {
     it('should not validate end date date when no date range is provided', () => {
       const documentSearch = new DocumentSearch({

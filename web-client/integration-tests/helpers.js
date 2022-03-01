@@ -275,9 +275,6 @@ export const contactSecondaryFromState = cerebralTest => {
 };
 
 export const getCaseMessagesForCase = async cerebralTest => {
-  await cerebralTest.runSequence('gotoCaseDetailSequence', {
-    docketNumber: cerebralTest.docketNumber,
-  });
   return runCompute(formattedCaseMessages, {
     state: cerebralTest.getState(),
   });
@@ -665,7 +662,7 @@ export const loginAs = (cerebralTest, user) =>
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
-export const setupTest = ({ useCases = {} } = {}) => {
+export const setupTest = ({ useCases = {}, constantsOverrides = {} } = {}) => {
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
@@ -761,10 +758,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
     };
   };
 
-  const constantsOverrides = {
-    CASE_SEARCH_PAGE_SIZE: 1,
-    DEADLINE_REPORT_PAGE_SIZE: 1,
-  };
   const originalConstants = applicationContext.getConstants();
   presenter.providers.applicationContext.getConstants = () => {
     return {

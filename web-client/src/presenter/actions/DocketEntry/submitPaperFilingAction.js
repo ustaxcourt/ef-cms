@@ -60,12 +60,6 @@ export const submitPaperFilingAction = async ({
       .validatePdfInteractor(applicationContext, {
         key: docketEntryId,
       });
-
-    await applicationContext
-      .getUseCases()
-      .sanitizePdfInteractor(applicationContext, {
-        key: docketEntryId,
-      });
   }
 
   let caseDetail, paperServicePdfUrl;

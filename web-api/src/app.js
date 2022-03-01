@@ -17,14 +17,14 @@ const allowAccessOriginFunction = (origin, callback) => {
     return;
   }
 
-  //if the backend is running locally or if an official deployed frontend called the backend, parrot out the Origin
+  //if the backend is running locally or if an official deployed front-end called the backend, parrot out the Origin
   //this is required for the browser to support receiving and sending cookies
   if (process.env.IS_LOCAL || origin.includes(process.env.EFCMS_DOMAIN)) {
     callback(null, origin);
     return;
   }
 
-  //some unknown frontend called us
+  //some unknown front-end called us
   callback(null, '*');
 };
 
@@ -360,6 +360,9 @@ const {
   unblockCaseFromTrialLambda,
 } = require('./cases/unblockCaseFromTrialLambda');
 const {
+  unsealDocketEntryLambda,
+} = require('./documents/unsealDocketEntryLambda');
+const {
   updateCaseDeadlineLambda,
 } = require('./caseDeadline/updateCaseDeadlineLambda');
 const {
@@ -448,7 +451,6 @@ const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
-const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
 const { sealDocketEntryLambda } = require('./documents/sealDocketEntryLambda');
@@ -652,6 +654,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     '/case-documents/:docketNumber/:docketEntryId/seal',
     lambdaWrapper(sealDocketEntryLambda),
   );
+  app.put(
+    '/case-documents/:docketNumber/:docketEntryId/unseal',
+    lambdaWrapper(unsealDocketEntryLambda),
+  );
 
   // DELETE
   app.delete(
@@ -819,7 +825,6 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  */
 {
   app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
-  app.put('/documents/:key/sanitize', lambdaWrapper(sanitizePdfLambda));
   app.get(
     '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),

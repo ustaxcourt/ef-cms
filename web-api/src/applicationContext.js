@@ -896,9 +896,6 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
-  sanitizePdfInteractor,
-} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
-const {
   saveCalendarNoteInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor');
 const {
@@ -1060,6 +1057,9 @@ const {
 const {
   unsealCaseInteractor,
 } = require('../../shared/src/business/useCases/unsealCaseInteractor');
+const {
+  unsealDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/unsealDocketEntryInteractor');
 const {
   updateAssociatedJudgeOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
@@ -2035,7 +2035,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
-        sanitizePdfInteractor,
         saveCalendarNoteInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
@@ -2060,6 +2059,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
         unsealCaseInteractor,
+        unsealDocketEntryInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseDetailsInteractor,

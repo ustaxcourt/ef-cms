@@ -1104,8 +1104,8 @@ const DATE_RANGE_SEARCH_OPTIONS = {
 };
 
 const DOCKET_ENTRY_SEALED_TO_TYPES = {
-  EXTERNAL: 'External', // only court employees can view it
-  PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry
+  EXTERNAL: 'External', // Do not allow practitioners, petitioners, and irs practitioners to view the documents even when associated
+  PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry if they are associated
 };
 
 module.exports = deepFreeze({

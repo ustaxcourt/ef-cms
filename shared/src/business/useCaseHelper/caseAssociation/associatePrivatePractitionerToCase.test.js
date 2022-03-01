@@ -201,4 +201,59 @@ describe('associatePrivatePractitionerToCase', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
   });
+
+  it('BUG 9323: should create log if practitioner is already associated with case but does not appear in the privatePractitioners array', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockResolvedValueOnce(true);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        privatePractitioners: [],
+      });
+
+    await associatePrivatePractitionerToCase({
+      applicationContext,
+      docketNumber: caseRecord.docketNumber,
+      representing: [],
+      user: practitionerUser,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).not.toHaveBeenCalled();
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      `BUG 9323: Private Practitioner with userId: ${practitionerUser.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
+    );
+  });
+
+  it('BUG 9323: should create NO log if practitioner is already associated with case and DOES appear in the privatePractitioners array', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockResolvedValueOnce(true);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        privatePractitioners: [{ userId: practitionerUser.userId }],
+      });
+
+    await associatePrivatePractitionerToCase({
+      applicationContext,
+      docketNumber: caseRecord.docketNumber,
+      representing: [caseRecord.petitioners[0].contactId],
+      user: practitionerUser,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).not.toHaveBeenCalled();
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
+  });
 });

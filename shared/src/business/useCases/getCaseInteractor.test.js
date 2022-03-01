@@ -22,6 +22,7 @@ describe('getCaseInteractor', () => {
   const irsPractitionerId = '6cf19fba-18c6-467a-9ea6-7a14e42add2f';
   const practitionerId = '295c3640-7ff9-40bb-b2f1-8117bba084ea';
   const practitioner2Id = '42614976-4228-49aa-a4c3-597dae1c7220';
+  const irsSuperuserId = '5a5c771d-ab63-4d78-a298-1de657dde621';
 
   let testCase;
   let mockCaseContactPrimary;
@@ -123,6 +124,48 @@ describe('getCaseInteractor', () => {
     });
 
     expect(result.docketNumber).toEqual('101-00');
+  });
+
+  it('should return the case when the currentUser is an irs superuser even if the case has sealed documents', async () => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      name: 'IRS Superuser',
+      role: ROLES.irsSuperuser,
+      userId: irsSuperuserId,
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValue({
+        ...testCase,
+        docketEntries: [
+          testCase.docketEntries[0],
+          testCase.docketEntries[1],
+          {
+            ...testCase.docketEntries[2],
+            isOnDocketRecord: true,
+            isSealed: true,
+            sealedTo: 'Public',
+          },
+        ],
+        docketNumber: '101-00',
+        petitioners: [
+          {
+            ...mockCaseContactPrimary,
+            contactId: 'dc56e26e-f9fd-4165-8997-97676cc0523e',
+          },
+        ],
+        userId: '320fce0e-b050-4e04-8720-db25da3ca598',
+      });
+
+    const result = await getCaseInteractor(applicationContext, {
+      docketNumber: '00101-00',
+    });
+
+    expect(result.docketEntries[1]).toMatchObject({
+      docketEntryId: testCase.docketEntries[2].docketEntryId,
+      documentType: 'Answer',
+      eventCode: 'A',
+    });
   });
 
   it('should return the case when the currentUser is the contactPrimary on the case', async () => {
