@@ -716,25 +716,25 @@ jobs:
       - run:
           name: Destroy Migration Infrastructure
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
-              npm run destroy:migration -- $ENV
+            if [ $MIGRATE_FLAG == true ]; then
+            npm run destroy:migration -- $ENV
             fi
       - run:
           name: Destroy Migration Cron Infrastructure
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
+            if [ $MIGRATE_FLAG == true ]; then
               npm run destroy:migration-cron -- $ENV
             fi
       - run:
           name: Delete Source ElasticSearch cluster
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
+            if [ $MIGRATE_FLAG == true ]; then
               npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
             fi
       - run:
           name: Delete Source Dynamo table
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
+            if [ $MIGRATE_FLAG == true ]; then
               npm run delete:dynamo-table -- $SOURCE_TABLE
             fi
 
@@ -786,7 +786,7 @@ workflows:
               - irs
               - staging
               - test
-              - experimental1
+              # - experimental1
               - experimental2
               - experimental3
               - experimental4
@@ -848,8 +848,8 @@ workflows:
       #           - experimental5
       #           - migration
       - switch-colors:
-          requires:
-            - deploy
+          # requires:
+          #   - deploy
           filters:
             branches:
               only:
