@@ -737,6 +737,12 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run delete:dynamo-table -- $SOURCE_TABLE
             fi
+      - run:
+        name: Cleanup Deploy Table After Migration
+        command: |
+          if [ $MIGRATE_FLAG == true ]; then
+            npm run migration:cleanup -- $ENV
+          fi
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:

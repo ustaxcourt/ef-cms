@@ -32,7 +32,7 @@ EAST_TABLE_STATUS=$(aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --r
 aws dynamodb describe-table --table-name "${SOURCE_TABLE}" --region us-west-1
 CODE=$?
 
-while [[ "${CODE}" == "0" ]]
+while [[ ${CODE} == 0 ]]
 do  
   echo "${SOURCE_TABLE} in region us-east-1 is still being deleted. Waiting for 30 seconds then checking again."
   sleep 30
