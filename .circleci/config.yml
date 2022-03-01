@@ -691,8 +691,8 @@ jobs:
           name: Backup Source DynamoDB table
           command: |
             if [ $MIGRATE_FLAG == true ]; then
-               npm run backup:dynamo-table -- $TABLE_NAME
-             fi
+              npm run backup:dynamo-table -- $TABLE_NAME
+            fi
 
   cleanup:
     docker:
