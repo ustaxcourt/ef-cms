@@ -717,7 +717,7 @@ jobs:
           name: Destroy Migration Infrastructure
           command: |
             if [ $MIGRATE_FLAG == true ]; then
-            npm run destroy:migration -- $ENV
+              npm run destroy:migration -- $ENV
             fi
       - run:
           name: Destroy Migration Cron Infrastructure
