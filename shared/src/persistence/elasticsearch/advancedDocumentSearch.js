@@ -1,10 +1,21 @@
 const {
-  DOCUMENT_SEARCH_SORT,
+  getJudgeFilterForOpinionSearch,
+} = require('./advancedDocumentSearchHelpers/getJudgeFilterForOpinionSearch');
+const {
+  getJudgeFilterForOrderSearch,
+} = require('./advancedDocumentSearchHelpers/getJudgeFilterForOrderSearch');
+const {
+  getSealedQuery,
+} = require('./advancedDocumentSearchHelpers/getSealedQuery');
+const {
+  getSortQuery,
+} = require('./advancedDocumentSearchHelpers/getSortQuery');
+const {
   MAX_SEARCH_CLIENT_RESULTS,
-  OPINION_JUDGE_FIELD,
-  ORDER_JUDGE_FIELD,
 } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
+
+const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
 
 exports.advancedDocumentSearch = async ({
   applicationContext,
@@ -13,13 +24,13 @@ exports.advancedDocumentSearch = async ({
   documentEventCodes,
   endDate,
   from = 0,
+  isExternalUser,
   isOpinionSearch = false,
   judge,
   keyword,
   omitSealed,
-  opinionTypes,
   overrideResultSize,
-  sortOrder: sortField,
+  sortField,
   startDate,
 }) => {
   const sourceFields = [
@@ -44,23 +55,10 @@ exports.advancedDocumentSearch = async ({
     'signedJudgeName',
   ];
 
-  const documentQueryFilter = [
-    { term: { 'entityName.S': 'DocketEntry' } },
-    {
-      exists: {
-        field: 'servedAt',
-      },
-    },
-    { terms: { 'eventCode.S': documentEventCodes } },
-    { term: { 'isFileAttached.BOOL': true } },
-  ];
-
-  const docketEntryQueryParams = [];
-  let docketEntryMustNot = [{ term: { 'isStricken.BOOL': true } }];
-  const simpleQueryFlags = 'OR|AND|ESCAPE|PHRASE'; // OR|AND|NOT|PHRASE|ESCAPE|PRECEDENCE', // https://www.elastic.co/guide/en/elasticsearch/reference/current/query-dsl-simple-query-string-query.html#supported-flags
+  const documentMust = [];
 
   if (keyword) {
-    docketEntryQueryParams.push({
+    documentMust.push({
       simple_query_string: {
         default_operator: 'and',
         fields: ['documentContents.S', 'documentTitle.S'],
@@ -70,7 +68,7 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  const caseQueryParams = {
+  let caseQueryParams = {
     has_parent: {
       inner_hits: {
         _source: {
@@ -88,43 +86,18 @@ exports.advancedDocumentSearch = async ({
     },
   };
 
+  let documentMustNot = [{ term: { 'isStricken.BOOL': true } }];
   if (omitSealed) {
-    const caseMust = [
-      {
-        bool: {
-          minimum_should_match: 1,
-          should: [
-            {
-              bool: {
-                must: {
-                  term: { 'isSealed.BOOL': false },
-                },
-              },
-            },
-            {
-              bool: {
-                must_not: {
-                  exists: { field: 'isSealed' },
-                },
-              },
-            },
-          ],
-        },
-      },
-    ];
+    const { sealedCaseQuery, sealedDocumentMustNotQuery } = getSealedQuery();
 
-    const caseQuery = { bool: { must: caseMust } };
-
-    docketEntryMustNot = [
-      ...docketEntryMustNot,
-      {
-        term: { 'isSealed.BOOL': true },
-      },
-      {
+    caseQueryParams.has_parent.query.bool.filter.push(sealedCaseQuery);
+    documentMustNot = [...documentMustNot, ...sealedDocumentMustNotQuery];
+  } else {
+    if (isExternalUser) {
+      documentMustNot.push({
         term: { 'sealedTo.S': 'External' },
-      },
-    ];
-    caseQueryParams.has_parent.query.bool.filter.push(caseQuery);
+      });
+    }
   }
 
   if (docketNumber) {
@@ -142,73 +115,47 @@ exports.advancedDocumentSearch = async ({
     };
   }
 
-  docketEntryQueryParams.push(caseQueryParams);
+  documentMust.push(caseQueryParams);
 
   if (isOpinionSearch) {
-    docketEntryMustNot = [
-      ...docketEntryMustNot,
+    documentMustNot = [
+      ...documentMustNot,
       {
         term: { 'isSealed.BOOL': true },
       },
     ];
   }
 
+  const documentFilter = [
+    { term: { 'entityName.S': 'DocketEntry' } },
+    {
+      exists: {
+        field: 'servedAt',
+      },
+    },
+    { term: { 'isFileAttached.BOOL': true } },
+    { terms: { 'eventCode.S': documentEventCodes } },
+  ];
+
   if (judge) {
     const judgeName = judge.replace(/Chief\s|Legacy\s|Judge\s/g, '');
     if (isOpinionSearch) {
-      docketEntryQueryParams.push({
-        bool: {
-          should: [
-            {
-              match: {
-                [`${OPINION_JUDGE_FIELD}.S`]: judgeName,
-              },
-            },
-            {
-              match: {
-                [`${ORDER_JUDGE_FIELD}.S`]: {
-                  operator: 'and',
-                  query: judgeName,
-                },
-              },
-            },
-          ],
-        },
+      const judgeFilter = getJudgeFilterForOpinionSearch({
+        judgeName,
       });
-    } else {
-      docketEntryQueryParams.push({
-        bool: {
-          should: {
-            match: {
-              [`${ORDER_JUDGE_FIELD}.S`]: {
-                operator: 'and',
-                query: judgeName,
-              },
-            },
-          },
-        },
-      });
-    }
-  }
 
-  if (opinionTypes && opinionTypes.length) {
-    if (opinionTypes.length === 1) {
-      documentQueryFilter.push({
-        term: { 'eventCode.S': opinionTypes[0] },
-      });
+      documentFilter.push(judgeFilter);
     } else {
-      documentQueryFilter.push({
-        bool: {
-          should: opinionTypes.map(opinionType => ({
-            term: { 'eventCode.S': opinionType },
-          })),
-        },
+      const judgeFilter = getJudgeFilterForOrderSearch({
+        judgeName,
       });
+
+      documentFilter.push(judgeFilter);
     }
   }
 
   if (endDate && startDate) {
-    documentQueryFilter.push({
+    documentFilter.push({
       range: {
         'filingDate.S': {
           gte: `${startDate}||/h`,
@@ -217,7 +164,7 @@ exports.advancedDocumentSearch = async ({
       },
     });
   } else if (startDate) {
-    documentQueryFilter.push({
+    documentFilter.push({
       range: {
         'filingDate.S': {
           gte: `${startDate}||/h`,
@@ -226,43 +173,19 @@ exports.advancedDocumentSearch = async ({
     });
   }
 
-  let sort;
-  let sortOrder = 'desc';
-
-  if (
-    [
-      DOCUMENT_SEARCH_SORT.FILING_DATE_ASC,
-      DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC,
-    ].includes(sortField)
-  ) {
-    sortOrder = 'asc';
-  }
-
-  switch (sortField) {
-    case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_ASC: // fall through
-    case DOCUMENT_SEARCH_SORT.NUMBER_OF_PAGES_DESC:
-      sort = [{ 'numberOfPages.N': sortOrder }];
-      break;
-    case DOCUMENT_SEARCH_SORT.FILING_DATE_ASC: // fall through
-    case DOCUMENT_SEARCH_SORT.FILING_DATE_DESC: // fall through
-    default:
-      sort = [{ 'filingDate.S': sortOrder }];
-      break;
-  }
-
   const documentQuery = {
     body: {
       _source: sourceFields,
       from,
       query: {
         bool: {
-          filter: documentQueryFilter,
-          must: docketEntryQueryParams,
-          must_not: docketEntryMustNot,
+          filter: documentFilter,
+          must: documentMust,
+          must_not: documentMustNot,
         },
       },
       size: overrideResultSize || MAX_SEARCH_CLIENT_RESULTS,
-      sort,
+      sort: getSortQuery(sortField),
     },
     index: 'efcms-docket-entry',
   };

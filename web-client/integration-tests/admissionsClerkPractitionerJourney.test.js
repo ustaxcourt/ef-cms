@@ -17,7 +17,11 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 
-const cerebralTest = setupTest();
+const cerebralTest = setupTest({
+  constantsOverrides: {
+    CASE_SEARCH_PAGE_SIZE: 1,
+  },
+});
 
 describe('admissions clerk practitioner journey', () => {
   const { COUNTRY_TYPES, PARTY_TYPES, SERVICE_INDICATOR_TYPES } =
