@@ -4,7 +4,6 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { deleteCaseDeadlineAction } from '../actions/CaseDeadline//deleteCaseDeadlineAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
-import { refreshCaseAction } from '../actions/refreshCaseAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
 export const deleteCaseDeadlineSequence = showProgressSequenceDecorator([
@@ -16,6 +15,5 @@ export const deleteCaseDeadlineSequence = showProgressSequenceDecorator([
   clearFormAction,
   clearScreenMetadataAction,
   clearModalAction,
-  refreshCaseAction,
   getCaseDeadlinesForCaseAction,
 ]);

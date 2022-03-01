@@ -40,20 +40,26 @@ exports.generatePrintablePendingReportInteractor = async (
     ).foundDocuments;
   }
 
-  const formattedPendingItems = pendingDocuments.map(pendingItem => ({
-    ...pendingItem,
-    associatedJudgeFormatted: applicationContext
-      .getUtilities()
-      .formatJudgeName(pendingItem.associatedJudge),
-    caseTitle: applicationContext.getCaseTitle(pendingItem.caseCaption || ''),
-    docketNumberWithSuffix: `${pendingItem.docketNumber}${
-      pendingItem.docketNumberSuffix || ''
-    }`,
-    formattedFiledDate: applicationContext
-      .getUtilities()
-      .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
-    formattedName: pendingItem.documentTitle || pendingItem.documentType,
-  }));
+  const formattedPendingItems = pendingDocuments
+    .map(pendingItem => ({
+      ...pendingItem,
+      associatedJudgeFormatted: applicationContext
+        .getUtilities()
+        .formatJudgeName(pendingItem.associatedJudge),
+      caseTitle: applicationContext.getCaseTitle(pendingItem.caseCaption || ''),
+      docketNumberWithSuffix: `${pendingItem.docketNumber}${
+        pendingItem.docketNumberSuffix || ''
+      }`,
+      formattedFiledDate: applicationContext
+        .getUtilities()
+        .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
+      formattedName: pendingItem.documentTitle || pendingItem.documentType,
+    }))
+    .sort((a, b) =>
+      applicationContext
+        .getUtilities()
+        .compareISODateStrings(a.receivedAt, b.receivedAt),
+    );
 
   let reportTitle = 'All Judges';
 
