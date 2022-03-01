@@ -690,7 +690,7 @@ jobs:
       - run:
           name: Backup Source DynamoDB table
           command: |
-            if [ "$MIGRATE_FLAG" == "true" ]; then
+            if [ $MIGRATE_FLAG == true ]; then
                npm run backup:dynamo-table -- $TABLE_NAME
              fi
 
