@@ -713,19 +713,27 @@ jobs:
       - run:
           name: Destroy Migration Infrastructure
           command: |
-            npm run destroy:migration -- $ENV
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              npm run destroy:migration -- $ENV
+            fi
       - run:
           name: Destroy Migration Cron Infrastructure
           command: |
-            npm run destroy:migration-cron -- $ENV
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              npm run destroy:migration-cron -- $ENV
+            fi
       - run:
           name: Delete Source ElasticSearch cluster
           command: |
-            npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
+            fi
       - run:
           name: Delete Source Dynamo table
           command: |
-            npm run delete:dynamo-table -- $SOURCE_TABLE
+            if [ "$MIGRATE_FLAG" == "true" ]; then
+              npm run delete:dynamo-table -- $SOURCE_TABLE
+            fi
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
