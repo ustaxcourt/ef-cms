@@ -235,36 +235,23 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     loginAs(cerebralTest, 'irsPractitioner@example.com');
 
-    let uploadPendingItemPromises = [];
     for (
       let pendingItemIndex = 0;
       pendingItemIndex < PAGE_SIZE;
       pendingItemIndex++
     ) {
-      const asyncUploadPendingItem = async () => {
-        const cerebralTestTemp = setupTest();
-        loginAs(cerebralTestTemp, 'irsPractitioner@example.com');
-        // it(`creates pending item ${pendingItemIndex + 1}`, async () => {
+      it(`creates pending item ${pendingItemIndex + 1}`, async () => {
         await viewCaseDetail({
           cerebralTest,
           docketNumber: caseDetail.docketNumber,
         });
-        await uploadProposedStipulatedDecision(cerebralTestTemp, {
+        await uploadProposedStipulatedDecision(cerebralTest, {
           receivedAt: DateTime.now()
             .minus(Duration.fromObject({ days: pendingItemIndex }))
             .toISO(),
         });
-        // });
-        cerebralTestTemp.closeSocket();
-      };
-
-      const asyncUploadPendingItemPromise = asyncUploadPendingItem();
-      uploadPendingItemPromises.push(asyncUploadPendingItemPromise);
+      });
     }
-
-    it('wait for all creates pending item', async () => {
-      await Promise.all(uploadPendingItemPromises);
-    });
 
     // 2. Look at pending report, and verify that items are sorted properly regardless of number of pages
     //  - e.g. click on load more and the items continue to be sorted correctly
