@@ -225,8 +225,8 @@ describe('associatePrivatePractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toHaveBeenCalled();
 
-    expect(applicationContext.logger.warn).toHaveBeenCalled();
-    expect(applicationContext.logger.warn.mock.calls[0][0]).toEqual(
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
       `BUG 9323: Private Practitioner with userId: ${practitionerUser.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
     );
   });
@@ -254,6 +254,6 @@ describe('associatePrivatePractitionerToCase', () => {
       applicationContext.getPersistenceGateway().associateUserWithCase,
     ).not.toHaveBeenCalled();
 
-    expect(applicationContext.logger.warn).not.toHaveBeenCalled();
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 });
