@@ -7,7 +7,7 @@ describe('getClinicLetterKey', () => {
       trialLocation: 'Detroit, Michigan',
     });
 
-    expect(result).toMatch('Detroit-Michigan-Regular');
+    expect(result).toEqual('clinic-letter-detroit-michigan-regular');
   });
 
   it('should format clinic letter key correctly for locations with multiple spaces', () => {
@@ -16,6 +16,6 @@ describe('getClinicLetterKey', () => {
       trialLocation: 'Los Angeles, New York',
     });
 
-    expect(result).toMatch('Los-Angeles-New-York-Small');
+    expect(result).toEqual('clinic-letter-los-angeles-new-york-small');
   });
 });
