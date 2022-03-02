@@ -25,7 +25,6 @@ exports.generatePdfFromHtmlInteractor = async (
 
   try {
     browser = await applicationContext.getChromiumBrowser();
-
     let page = await browser.newPage();
 
     await page.setContent(contentHtml);

@@ -1,0 +1,26 @@
+#notice-of-docket-change {
+  .card {
+    border: 1px solid #ccc;
+    margin: 12px 0 12px 0;
+  }
+
+  .internal-card-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+  }
+
+  .card-header {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    background: #f0f0f0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .card-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+  }
+}

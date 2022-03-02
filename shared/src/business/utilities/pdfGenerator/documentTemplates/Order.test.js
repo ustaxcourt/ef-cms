@@ -35,7 +35,7 @@ describe('Order', () => {
   it('renders a document title', () => {
     const wrapper = mount(<Order options={options} orderTitle={orderTitle} />);
 
-    expect(wrapper.find('.case-information h3').text()).toEqual(orderTitle);
+    expect(wrapper.find('.order-docket-header h3').text()).toEqual(orderTitle);
   });
 
   it('renders the order content', () => {
