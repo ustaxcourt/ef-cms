@@ -29,11 +29,5 @@ exports.uploadDocumentAndMakeSafeInteractor = async (
       key: uploadedKey,
     });
 
-  await applicationContext
-    .getUseCases()
-    .sanitizePdfInteractor(applicationContext, {
-      key: uploadedKey,
-    });
-
   return uploadedKey;
 };

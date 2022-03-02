@@ -8,7 +8,11 @@ import {
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
 import { petitionsClerkViewsDeadlineReport } from './journey/petitionsClerkViewsDeadlineReport';
 
-const cerebralTest = setupTest();
+const cerebralTest = setupTest({
+  constantsOverrides: {
+    DEADLINE_REPORT_PAGE_SIZE: 1,
+  },
+});
 
 describe('Case deadline report journey', () => {
   const randomDay = `1${Math.floor(Math.random() * 9) + 1}`;

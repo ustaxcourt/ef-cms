@@ -109,7 +109,7 @@ describe('getTodaysOrdersInteractor', () => {
     ).toBe(TODAYS_ORDERS_PAGE_SIZE);
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
-        .calls[0][0].sortOrder,
+        .calls[0][0].sortField,
     ).toBe('filingDateDesc');
   });
 
