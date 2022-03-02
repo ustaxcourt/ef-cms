@@ -25,6 +25,7 @@ Some key steps, excluding automated tests, include:
 ### Post-successful Deploy
 - Switch the current color and deployed color.
 - If deploying the `prod` environment, backup the source's DynamoDB table.
+- Delete the source's API gateway mappings, both non-public and public.
 - Destroy the migration and migration-cron infrastructure.
 - Delete the source's ElasticSearch domain.
 - Delete the source's DynamoDB table in `east` and `west` regions.

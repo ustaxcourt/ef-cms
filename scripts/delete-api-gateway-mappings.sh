@@ -9,11 +9,12 @@
 #   ./delete-api-gateway-mappings.sh $EFCMS_DOMAIN $DEPLOYING_COLOR
 
 # Arguments
-#   - $1 - the EFCMS_DOMAIN api-gateway to delete
-#   - $2 - the color api-gateway to delete
+#   - $1 - the EFCMS_DOMAIN api-gateway mappings to delete
+#   - $2 - the color api-gateway mappings to delete
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
-[ -z "$1" ] && echo "The EFCMS_DOMAIN to delete must be provided as the \$1 argument." && exit 1
+[ -z "$1" ] && echo "The EFCMS_DOMAIN of the mapping to delete must be provided as the \$1 argument." && exit 1
+[ -z "$2" ] && echo "The DEPLOYING_COLOR of the mapping to delete must be provided as the \$2 argument." && exit 1
 
 EFCMS_DOMAIN=$1
 DEPLOYING_COLOR=$2 
