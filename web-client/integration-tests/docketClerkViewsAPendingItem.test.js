@@ -1,4 +1,3 @@
-import { DateTime } from 'luxon';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
@@ -8,10 +7,13 @@ import {
   setupTest,
   uploadPetition,
   uploadProposedStipulatedDecision,
-  verifySortedRecievedAtDate,
+  verifySortedRecievedAtDateOfPendingItems,
   viewCaseDetail,
 } from './helpers';
-import { formatDateString } from '../../shared/src/business/utilities/DateHandler';
+import {
+  formatDateString,
+  subtractISODates,
+} from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -103,13 +105,11 @@ describe('docket clerk uploads a pending item and sees that it is pending', () =
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('respondent uploads a proposed stipulated decision', async () => {
     const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    const firstPendingItemDate = pendingItems[0].receivedAt;
 
-    const getPendingItemsDates = pendingItems.map(item => item.receivedAt);
-
-    yearBeforeEarliestPendingItem = DateTime.fromISO(getPendingItemsDates[0])
-      .minus({ years: 1 })
-      .setZone('UTC')
-      .toISO();
+    yearBeforeEarliestPendingItem = subtractISODates(firstPendingItemDate, {
+      years: 1,
+    });
 
     await viewCaseDetail({
       cerebralTest,
@@ -233,16 +233,16 @@ describe('docket clerk uploads a pending item and sees that it is pending', () =
   });
 
   describe('docket clerk views pending report items which are sorted and exceed single page count', () => {
-    // 1. Process of adding enough items to pending report to cause pagination
-    // *** 100 pending items on docket number 101-21 have been created as seed data in integration-test-seed.json
-
-    // 2. Look at pending report, and verify that items are sorted properly regardless of number of pages
-    //  - e.g. click on load more and the items continue to be sorted correctly
     let pendingItems = [];
 
     loginAs(cerebralTest, 'docketclerk@example.com');
-    it('checks that pendingItems are sorted', async () => {
+    it('docket clerk checks that the pending item with the oldest recievedAt date shows up as the first result on first page', async () => {
       await refreshElasticsearchIndex();
+
+      await viewCaseDetail({
+        cerebralTest,
+        docketNumber: caseDetail.docketNumber,
+      });
 
       await cerebralTest.runSequence('gotoPendingReportSequence');
 
@@ -251,51 +251,21 @@ describe('docket clerk uploads a pending item and sees that it is pending', () =
       });
 
       pendingItems = cerebralTest.getState('pendingReports.pendingItems');
-      const sortedRecievedAtDates = verifySortedRecievedAtDate(pendingItems);
+      const firstPendingItemInPendingReportReceivedAtDate =
+        pendingItems[0].receivedAt;
+
+      expect(firstPendingItemInPendingReportReceivedAtDate).toEqual(
+        yearBeforeEarliestPendingItem,
+      );
+    });
+
+    it('docket clerk checks that pendingItems are sorted chronologically', async () => {
+      await cerebralTest.runSequence('loadMorePendingItemsSequence');
+      pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+      const sortedRecievedAtDates =
+        verifySortedRecievedAtDateOfPendingItems(pendingItems);
 
       expect(sortedRecievedAtDates).toEqual(true);
     });
-
-    // 3. An additional pendingItem is created. The current amount of pending items exceeds the page size limit of 100
-    //    meaning this item could potenitally fall in the second page if sorting in the query isn't working properly
-
-    loginAs(cerebralTest, 'irsPractitioner@example.com');
-    it('respondent uploads a proposed stipulated decision', async () => {
-      await viewCaseDetail({
-        cerebralTest,
-        docketNumber: caseDetail.docketNumber,
-      });
-
-      // The pending item is specifically created with a date in the far past to ensure that it should appear as the
-      // very first pendingItem in the pendingReport.
-      await uploadProposedStipulatedDecision(cerebralTest);
-    });
-  });
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  it('docket clerk checks that the newly created pending item shows up as the first result on first page', async () => {
-    await refreshElasticsearchIndex();
-
-    await viewCaseDetail({
-      cerebralTest,
-      docketNumber: caseDetail.docketNumber,
-    });
-
-    await cerebralTest.runSequence('gotoPendingReportSequence');
-
-    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
-      judge: 'Chief Judge',
-    });
-
-    // Do NOT load more here to explicitly ensure only the first page results are fetched
-
-    const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
-
-    const firstPendingItemInPendingReportReceivedAtDate =
-      pendingItems[0].receivedAt;
-
-    expect(firstPendingItemInPendingReportReceivedAtDate).toEqual(
-      yearBeforeEarliestPendingItem,
-    );
   });
 });

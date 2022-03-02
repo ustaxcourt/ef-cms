@@ -432,6 +432,16 @@ const validateDateAndCreateISO = date => {
   }
 };
 
+/**
+ * Subtracts a previous year from passed in ISO date
+ *
+ * @param {string} date the ISO date
+ * @returns {string} a formatted ISO date string if date object is valid
+ */
+const subtractISODates = (date, dateConfig) => {
+  return DateTime.fromISO(date).minus(dateConfig).setZone('UTC').toISO();
+};
+
 module.exports = {
   FORMATS,
   PATTERNS,
@@ -455,5 +465,6 @@ module.exports = {
   isValidDateString,
   prepareDateFromEST,
   prepareDateFromString,
+  subtractISODates,
   validateDateAndCreateISO,
 };
