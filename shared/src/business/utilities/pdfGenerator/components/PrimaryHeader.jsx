@@ -1,15 +1,12 @@
 const React = require('react');
 
-export const PrimaryHeader = ({ h2 }) => {
+export const PrimaryHeader = () => {
   return (
-    <>
-      <div className="court-header">
-        <div className="us-tax-court-seal"></div>
-        <h1>United States Tax Court</h1>
-        <div className="court-address">Washington, DC 20217</div>
-        {h2 && <h2>{h2}</h2>}
-        <div className="clear"></div>
-      </div>
-    </>
+    <div id="primary-header">
+      <div className="us-tax-court-seal"></div>
+      <h1>United States Tax Court</h1>
+      <div className="court-address">Washington, DC 20217</div>
+      <div className="clear"></div>
+    </div>
   );
 };

@@ -1,0 +1,57 @@
+#notice-of-trial-pdf {
+  .notice-of-trial-title {
+    margin-bottom: 0;
+  }
+
+  .info-box-content {
+    padding: 10px;
+  }
+
+  .info-box-judge {
+    width: 49%;
+    height: 160px;
+    float: right;
+  }
+
+  .info-box {
+    border: 1px solid #ccc;
+    margin: 15px 0 15px 0;
+  }
+
+  .info-box p {
+    line-height: 18px;
+  }
+
+  p {
+    font-size: 14px;
+    line-height: 15px;
+  }
+
+  #notice-body > p {
+    margin-top: 0;
+  }
+
+  .info-box-header {
+    padding: 8px;
+    border-bottom: 1px solid #ccc;
+    background: #f0f0f0;
+    font-weight: bold;
+
+    p {
+      margin: 0;
+    }
+  }
+
+  .info-box-trial {
+    width: 49%;
+    height: 160px;
+    margin-right: 1%;
+    float: left;
+  }
+
+  #docket-header {
+    .document-title {
+      margin-bottom: 0;
+    }
+  }
+}

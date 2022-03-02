@@ -10,7 +10,7 @@ export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle.toUpperCase()}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3={orderTitle}
+        orderTitle={orderTitle}
       />
       <div
         dangerouslySetInnerHTML={{ __html: orderContent }}
@@ -24,7 +24,7 @@ export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
             Clerk of the Court
           </p>
         </div>
-      )}
+      )}{' '}
     </div>
   );
 };
