@@ -93,12 +93,12 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     expect(currentPendingItemsCount).toEqual(pendingItemsCount);
 
-    console.log(
-      'preSize*** ',
-      cerebralTest.getState('pendingReports.pendingItems').length,
-    );
+    // console.log(
+    //   'preSize*** ',
+    //   cerebralTest.getState('pendingReports.pendingItems').length,
+    // );
 
-    console.log('caseDetailPRE*** ', caseDetail);
+    // console.log('caseDetailPRE*** ', caseDetail);
   });
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
@@ -130,13 +130,14 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       judge: 'Chief Judge',
     });
 
-    console.log(
-      'postSize*** ',
-      cerebralTest.getState('pendingReports.pendingItems').length,
-    );
+    // console.log(
+    //   'postSize*** ',
+    //   cerebralTest.getState('pendingReports.pendingItems').length,
+    // );
 
-    console.log('caseDetailPost*** ', caseDetail);
+    // console.log('caseDetailPost*** ', caseDetail);
 
+    // pending reports for all cases (per judge)
     const currentPendingItemsCount = (
       cerebralTest.getState('pendingReports.pendingItems') || []
     ).length;
@@ -179,8 +180,11 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       judge: 'Chief Judge',
     });
 
+    // await cerebralTest.runSequence('loadMorePendingItemsSequence');
+
     const caseReceivedAtDate = cerebralTest.getState('caseDetail.receivedAt');
     const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    console.log('pendingItems TOTAL ', pendingItems.length);
     const pendingItem = pendingItems.find(
       item => item.docketEntryId === cerebralTest.docketEntryId,
     );
@@ -208,7 +212,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     'MOTR',
   );
 
-  it('docket clerk views pending motion to proceed remotely', async () => {
+  it.skip('docket clerk views pending motion to proceed remotely', async () => {
     await refreshElasticsearchIndex();
 
     await cerebralTest.runSequence('gotoPendingReportSequence');
@@ -246,12 +250,9 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       });
 
       pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+      const sortedRecievedAtDates = verifySortedRecievedAtDate(pendingItems);
 
-      console.log(pendingItems);
-
-      expect(pendingItems).toStrictEqual(
-        pendingItems.sort((a, b) => a.receivedAt - b.receivedAt),
-      );
+      expect(sortedRecievedAtDates).toEqual(true);
     });
 
     // 3. After exceeding the number of items in one page, add one more item that should be displayed as the first item
@@ -260,3 +261,9 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     loginAs(cerebralTest, 'docketclerk@example.com');
   });
 });
+
+const verifySortedRecievedAtDate = pendingItems => {
+  return pendingItems.every((elm, i, arr) =>
+    i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
+  );
+};
