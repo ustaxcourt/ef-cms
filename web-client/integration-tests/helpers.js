@@ -561,11 +561,8 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadProposedStipulatedDecision = async (
-  cerebralTest,
-  configObject,
-) => {
-  const defaultForm = {
+export const uploadProposedStipulatedDecision = async cerebralTest => {
+  cerebralTest.setState('form', {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -581,11 +578,6 @@ export const uploadProposedStipulatedDecision = async (
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
-  };
-
-  cerebralTest.setState('form', {
-    ...defaultForm,
-    ...configObject,
   });
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };

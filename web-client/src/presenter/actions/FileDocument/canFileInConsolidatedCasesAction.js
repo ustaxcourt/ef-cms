@@ -13,6 +13,9 @@ export const canFileInConsolidatedCasesAction = ({ get, path }) => {
   const permissions = get(state.permissions);
   const hasPermission = permissions.FILE_IN_CONSOLIDATED;
   const leadDocketNumber = get(state.caseDetail.leadDocketNumber);
+  console.log('leadDocketNumber', leadDocketNumber);
+  console.log('permissions', permissions);
+  console.log('hasPermission', hasPermission);
 
   if (leadDocketNumber && hasPermission) {
     return path.yes();
