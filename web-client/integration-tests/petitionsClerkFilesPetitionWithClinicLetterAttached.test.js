@@ -1,6 +1,10 @@
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkCreatesNewCaseFromPaper';
 
+// import { PDFDocument } from 'pdf-lib';
+
+const http = require('http');
+
 const cerebralTest = setupTest();
 
 describe('Petitions Clerk creates a paper case which should have a clinic letter appended to the receipt', () => {
@@ -37,21 +41,20 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
 
     const pdfPreviewUrl = cerebralTest.getState('pdfPreviewUrl');
 
-    // await exec(`curl -o FILE.pdf ${pdfPreviewUrl}`);
-
-    console.log('pdfPreviewUrl', pdfPreviewUrl);
     const fs = require('fs');
-    const file = fs.readFileSync('FILE.pdf');
+    const file = fs.createWriteStream('file.pdf');
+    http.get(pdfPreviewUrl, function (response) {
+      response.pipe(file);
+    });
+    const opened = fs.readFile(file);
+    // const pdfDoc = await PDFDocument.;
+    console.log('pdf: ', opened);
 
-    const { PDFDocument } = await cerebralTest.applicationContext.getPdfLib();
-    // const pdfDoc = await PDFDocument.load(arrayBuffer);
-    const pdfDoc = await PDFDocument.load(file);
+    // pdfDoc.getPages().length;
 
-    const numberOfPages = pdfDoc.getPages().length;
+    // console.log(numberOfPages);
 
-    console.log(numberOfPages);
-
-    expect(numberOfPages).toEqual(2);
+    // expect(numberOfPages).toEqual(2);
 
     // await cerebralTest.runSequence('completePrintPaperPetitionReceiptSequence');
   });
