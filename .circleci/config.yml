@@ -670,6 +670,80 @@ jobs:
           name: 'Switch Colors'
           command: npm run switch-colors
 
+  backup-source-dynamo-table:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export TABLE_NAME=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Backup Source DynamoDB table
+          command: |
+            if [ $MIGRATE_FLAG == true ]; then
+               npm run backup:dynamo-table -- $TABLE_NAME
+             fi
+
+  cleanup:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_ELASTICSEARCH=$(./scripts/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Destroy Migration Infrastructure
+          command: |
+            if [ $MIGRATE_FLAG == true ]; then
+              npm run destroy:migration -- $ENV
+            fi
+      - run:
+          name: Destroy Migration Cron Infrastructure
+          command: |
+            if [ $MIGRATE_FLAG == true ]; then
+              npm run destroy:migration-cron -- $ENV
+            fi
+      - run:
+          name: Delete Source ElasticSearch cluster
+          command: |
+            if [ $MIGRATE_FLAG == true ]; then
+              npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
+            fi
+      - run:
+          name: Delete Source Dynamo table
+          command: |
+            if [ $MIGRATE_FLAG == true ]; then
+              npm run delete:dynamo-table -- $SOURCE_TABLE
+            fi
+      - run:
+          name: Cleanup Deploy Table After Migration
+          command: |
+            if [ $MIGRATE_FLAG == true ]; then
+              npm run migration:cleanup -- $ENV
+            fi
+
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
     branches:
@@ -688,45 +762,98 @@ workflows:
 
   build-and-deploy:
     jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y-public-search:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-defaults
+      # - build-client-integration:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y-public:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y-public-search:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-smoketests-local:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-public:
+      #     <<: *build-and-deploy-defaults
       - deploy:
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-pa11y-public-search
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - master
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - dawson
-                - migration
-      - migrate:
+        #     requires:
+        # - build-client-integration
+        # - e2e-pa11y
+        # - e2e-pa11y-public
+        # - e2e-pa11y-public-search
+        # - e2e-cypress
+        # - e2e-cypress-smoketests-local
+        # - e2e-cypress-public
+        filters:
+          branches:
+            only:
+              - develop
+              - irs
+              - staging
+              - test
+              - experimental1
+              - experimental2
+              - experimental3
+              - experimental4
+              - experimental5
+              - migration
+      # - migrate:
+      #     requires:
+      #       - deploy
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
+      # - wait-for-reindex:
+      #     type: approval
+      #     requires:
+      #       - migrate
+      # - disable-reindex-cron:
+      #     requires:
+      #       - wait-for-reindex
+      # - smoketests:
+      #     requires:
+      #       - disable-reindex-cron
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
+      # - smoketests-readonly:
+      #     requires:
+      #       - smoketests
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
+      - switch-colors:
           requires:
             - deploy
           filters:
@@ -742,16 +869,16 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - wait-for-reindex:
-          type: approval
+      - backup-source-dynamo-table:
           requires:
-            - migrate
-      - disable-reindex-cron:
+            - switch-colors
+          filters:
+            branches:
+              only:
+                - experimental1
+      - cleanup:
           requires:
-            - wait-for-reindex
-      - smoketests:
-          requires:
-            - disable-reindex-cron
+            - backup-source-dynamo-table
           filters:
             branches:
               only:
@@ -764,40 +891,6 @@ workflows:
                 - experimental3
                 - experimental4
                 - experimental5
-                - migration
-      - smoketests-readonly:
-          requires:
-            - smoketests
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
-      - switch-colors:
-          requires:
-            - smoketests-readonly
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - master
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - dawson
                 - migration
 
   build-and-deploy-with-context:
@@ -847,3 +940,11 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - smoketests-readonly
+      # - backup-source-dynamo-table:
+      #     <<: *build-and-deploy-with-context-defaults
+      #     requires:
+      #       - switch-colors
+      - cleanup:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - switch-colors
