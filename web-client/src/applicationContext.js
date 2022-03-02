@@ -170,6 +170,7 @@ import {
   getChambersSections,
   getChambersSectionsLabels,
 } from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
+import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
 import { getDocument } from '../../shared/src/persistence/s3/getDocument';
@@ -697,6 +698,7 @@ const applicationContext = {
       formattedTrialSessionDetails,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: Case.getCaseCaption,
+      getClinicLetterKey,
       getContactPrimary,
       getContactSecondary,
       getCropBox,

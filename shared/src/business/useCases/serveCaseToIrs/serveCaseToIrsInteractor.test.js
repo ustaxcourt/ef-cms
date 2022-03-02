@@ -283,7 +283,7 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
     ).toMatchObject({
-      key: 'Los Angeles, California-Regular',
+      key: 'Los-Angeles-California-Regular',
       protocol: 'S3',
       useTempBucket: false,
     });
