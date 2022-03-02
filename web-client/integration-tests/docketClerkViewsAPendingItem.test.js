@@ -1,3 +1,4 @@
+import { DateTime } from 'luxon';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
@@ -7,6 +8,7 @@ import {
   setupTest,
   uploadPetition,
   uploadProposedStipulatedDecision,
+  verifySortedRecievedAtDate,
   viewCaseDetail,
 } from './helpers';
 import { formatDateString } from '../../shared/src/business/utilities/DateHandler';
@@ -14,7 +16,7 @@ import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/prese
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('a docket clerk uploads a pending item and sees that it is pending', () => {
+describe('docket clerk uploads a pending item and sees that it is pending', () => {
   let caseDetail;
   let pendingItemsCount;
 
@@ -66,8 +68,6 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       cerebralTest.getState('pendingReports.pendingItems') || []
     ).length;
 
-    console.log('*** pendingItemsCount #1 *** ', pendingItemsCount);
-
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
   });
 
@@ -97,21 +97,27 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       cerebralTest.getState('pendingReports.pendingItems') || []
     ).length;
 
-    console.log(
-      '*** currentPendingItemsCount #1 *** ',
-      currentPendingItemsCount,
-    );
-
     expect(currentPendingItemsCount).toEqual(pendingItemsCount);
   });
-
+  let yearBeforeEarliestPendingItem = '';
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('respondent uploads a proposed stipulated decision', async () => {
+    const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+
+    const getPendingItemsDates = pendingItems.map(item => item.receivedAt);
+
+    yearBeforeEarliestPendingItem = DateTime.fromISO(getPendingItemsDates[0])
+      .minus({ years: 1 })
+      .setZone('UTC')
+      .toISO();
+
     await viewCaseDetail({
       cerebralTest,
       docketNumber: caseDetail.docketNumber,
     });
-    await uploadProposedStipulatedDecision(cerebralTest);
+    await uploadProposedStipulatedDecision(cerebralTest, {
+      receivedAt: yearBeforeEarliestPendingItem,
+    });
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -145,12 +151,6 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       'pendingReports.pendingItems[0].receivedAt',
     );
     expect(caseReceivedAtDate).not.toEqual(firstPendingItemReceivedAtDate);
-
-    console.log(
-      '*** currentPendingItemsCount #2 *** ',
-      currentPendingItemsCount,
-    );
-    console.log('*** pendingItemsCount #2 *** ', pendingItemsCount);
 
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
 
@@ -188,7 +188,6 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
     const caseReceivedAtDate = cerebralTest.getState('caseDetail.receivedAt');
     const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
-    console.log('pendingItems TOTAL ', pendingItems.length);
     const pendingItem = pendingItems.find(
       item => item.docketEntryId === cerebralTest.docketEntryId,
     );
@@ -269,9 +268,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
       // The pending item is specifically created with a date in the far past to ensure that it should appear as the
       // very first pendingItem in the pendingReport.
-      await uploadProposedStipulatedDecision(cerebralTest, {
-        receivedAt: '1980-01-01T05:00:00.000Z',
-      });
+      await uploadProposedStipulatedDecision(cerebralTest);
     });
   });
 
@@ -298,13 +295,7 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       pendingItems[0].receivedAt;
 
     expect(firstPendingItemInPendingReportReceivedAtDate).toEqual(
-      '1980-01-01T05:00:00.000Z',
+      yearBeforeEarliestPendingItem,
     );
   });
 });
-
-const verifySortedRecievedAtDate = pendingItems => {
-  return pendingItems.every((elm, i, arr) =>
-    i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
-  );
-};
