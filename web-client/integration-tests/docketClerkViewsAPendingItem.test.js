@@ -1,4 +1,3 @@
-import { DateTime, Duration } from 'luxon';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
@@ -93,6 +92,13 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     ).length;
 
     expect(currentPendingItemsCount).toEqual(pendingItemsCount);
+
+    console.log(
+      'preSize*** ',
+      cerebralTest.getState('pendingReports.pendingItems').length,
+    );
+
+    console.log('caseDetailPRE*** ', caseDetail);
   });
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
@@ -123,6 +129,13 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
       judge: 'Chief Judge',
     });
+
+    console.log(
+      'postSize*** ',
+      cerebralTest.getState('pendingReports.pendingItems').length,
+    );
+
+    console.log('caseDetailPost*** ', caseDetail);
 
     const currentPendingItemsCount = (
       cerebralTest.getState('pendingReports.pendingItems') || []
@@ -213,86 +226,37 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   });
 
   describe('docket clerk views pending report items which are sorted and exceed single page count', () => {
-    it('refreshes elasticsearch', async () => {
-      await refreshElasticsearchIndex();
-    });
-    const PAGE_SIZE = 100;
+    // const PAGE_SIZE = 100;
 
     //TODO:
     // 1. Process of adding enough items to pending report to cause pagination
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    it('docket clerk views pending motion to proceed remotely', async () => {
+    // *** 100 pending items on docket number 101-21 have been created as seed data in integration-test-seed.json
+
+    // 2. Look at pending report, and verify that items are sorted properly regardless of number of pages
+    //  - e.g. click on load more and the items continue to be sorted correctly
+    let pendingItems = [];
+
+    it('checks that pendingItems are sorted', async () => {
+      await refreshElasticsearchIndex();
+
       await cerebralTest.runSequence('gotoPendingReportSequence');
 
       await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
         judge: 'Chief Judge',
       });
 
-      const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+      pendingItems = cerebralTest.getState('pendingReports.pendingItems');
 
-      console.log('pendingItemsBefore*** ', pendingItems.length);
+      console.log(pendingItems);
+
+      expect(pendingItems).toStrictEqual(
+        pendingItems.sort((a, b) => a.receivedAt - b.receivedAt),
+      );
     });
 
-    loginAs(cerebralTest, 'irsPractitioner@example.com');
-
-    for (
-      let pendingItemIndex = 0;
-      pendingItemIndex < PAGE_SIZE;
-      pendingItemIndex++
-    ) {
-      it(`creates pending item ${pendingItemIndex + 1}`, async () => {
-        await viewCaseDetail({
-          cerebralTest,
-          docketNumber: caseDetail.docketNumber,
-        });
-        await uploadProposedStipulatedDecision(cerebralTest, {
-          receivedAt: DateTime.now()
-            .minus(Duration.fromObject({ days: pendingItemIndex }))
-            .toISO(),
-        });
-      });
-    }
-
-    // 2. Look at pending report, and verify that items are sorted properly regardless of number of pages
-    //  - e.g. click on load more and the items continue to be sorted correctly
     // 3. After exceeding the number of items in one page, add one more item that should be displayed as the first item
     //    on the first page if properly sorted.
 
     loginAs(cerebralTest, 'docketclerk@example.com');
-
-    it('docketClerk checks pendingItems', async () => {
-      await refreshElasticsearchIndex();
-
-      await cerebralTest.runSequence('gotoPendingReportSequence');
-
-      await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
-        judge: 'Chief Judge',
-      });
-
-      const caseReceivedAtDate = cerebralTest.getState('caseDetail.receivedAt');
-      const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
-      const pendingItem = pendingItems.find(
-        item => item.docketEntryId === cerebralTest.docketEntryId,
-      );
-
-      console.log('pendingItemsAfter*** ', pendingItems.length);
-      console.log('pendingItems*** ', pendingItems);
-
-      expect(pendingItem).toBeDefined();
-
-      const answerPendingReceivedAtFormatted = formatDateString(
-        pendingItem.receivedAt,
-        'MMDDYYYY',
-      );
-      const caseReceivedAtFormatted = formatDateString(
-        caseReceivedAtDate,
-        'MMDDYYYY',
-      );
-
-      expect(answerPendingReceivedAtFormatted).not.toEqual(
-        caseReceivedAtFormatted,
-      );
-      expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
-    });
   });
 });
