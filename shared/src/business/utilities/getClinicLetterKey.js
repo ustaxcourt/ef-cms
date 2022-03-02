@@ -10,7 +10,7 @@ exports.getClinicLetterKey = ({ procedureType, trialLocation }) => {
     .replace(',', '')
     .replace(/ /g, '-');
 
-  const clinicLetterKey = `${formattedPreferredTrialCity}-${procedureType}`;
+  const clinicLetterKey = `clinic-letter-${formattedPreferredTrialCity}-${procedureType}`;
 
-  return clinicLetterKey;
+  return clinicLetterKey.toLowerCase();
 };
