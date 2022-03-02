@@ -1,4 +1,8 @@
-import { embedWithLegalIpsumText, gotoRoute } from './helpers';
+import {
+  embedWithLegalIpsumText,
+  gotoRoute,
+  verifySortedRecievedAtDateOfPendingItems,
+} from './helpers';
 
 describe('helpers', () => {
   describe('gotoRoute', () => {
@@ -56,6 +60,36 @@ describe('helpers', () => {
       expect(text).toContain('While this license do not apply to');
       expect(text).toContain('podcasts about peanut butter');
       expect(text).toContain('related documents be drafted in English');
+    });
+  });
+
+  describe('verifySortedRecievedAtDateOfPendingItems', () => {
+    const sortedISODates = [
+      {
+        receivedAt: '1980-01-01T05:00:00.000Z',
+      },
+      {
+        receivedAt: '1989-01-01T05:00:00.000Z',
+      },
+      {
+        receivedAt: '1990-01-01T05:00:00.000Z',
+      },
+      {
+        receivedAt: '1998-01-01T05:00:00.000Z',
+      },
+    ];
+    it('should return true if ISO dates of pending items are sorted chronologically', () => {
+      const isSorted = verifySortedRecievedAtDateOfPendingItems(sortedISODates);
+      expect(isSorted).toEqual(true);
+    });
+    it('should return false if ISO dates of pending items are not sorted chronologically', () => {
+      sortedISODates.unshift({
+        receivedAt: '1999-01-01T05:00:00.000Z',
+      });
+      const unsortedISODates = sortedISODates;
+      const isSorted =
+        verifySortedRecievedAtDateOfPendingItems(unsortedISODates);
+      expect(isSorted).toEqual(false);
     });
   });
 });
