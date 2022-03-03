@@ -32,7 +32,7 @@ describe('savePaperServicePdf', () => {
 
     expect(serviceInfo).toEqual({
       docketEntryId: null,
-      hasPaper: undefined,
+      hasPaper: false,
       url: null,
     });
   });
@@ -92,7 +92,7 @@ describe('savePaperServicePdf', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should notget the pdf url when there is no paper service on the case', async () => {
+  it('should not get the pdf url when there is no paper service on the case', async () => {
     mockDocument.getPages.mockReturnValue({ length: undefined });
 
     await savePaperServicePdf({
