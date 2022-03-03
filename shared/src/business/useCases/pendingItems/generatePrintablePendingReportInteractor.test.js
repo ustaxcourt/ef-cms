@@ -127,7 +127,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     expect(results).toEqual('https://example.com');
   });
 
-  it('should format and sort the pending items chronologically by the receivedAt ISODateString', async () => {
+  it('should format the pending items', async () => {
     await generatePrintablePendingReportInteractor(applicationContext, {});
 
     const { pendingItems } =
@@ -135,6 +135,39 @@ describe('generatePrintablePendingReportInteractor', () => {
         .data;
 
     expect(pendingItems).toMatchObject([
+      {
+        associatedJudge: 'Judge Judgey',
+        associatedJudgeFormatted: 'Judgey',
+        caseTitle: '',
+        docketNumber: '456-68',
+        docketNumberWithSuffix: '456-68',
+        documentTitle: 'Test Document Best',
+        formattedFiledDate: '02/04/22',
+        formattedName: 'Test Document Best',
+        receivedAt: '2022-02-04T12:00:00.000Z',
+      },
+      {
+        associatedJudge: 'Judge Judger',
+        associatedJudgeFormatted: 'Judger',
+        caseTitle: '',
+        docketNumber: '456-69',
+        docketNumberWithSuffix: '456-69',
+        documentTitle: 'Test Document Best',
+        formattedFiledDate: '03/04/21',
+        formattedName: 'Test Document Best',
+        receivedAt: '2021-03-04T12:00:00.000Z',
+      },
+      {
+        associatedJudge: 'Judge Foley',
+        associatedJudgeFormatted: 'Foley',
+        caseTitle: '',
+        docketNumber: '456-67',
+        docketNumberWithSuffix: '456-67',
+        documentTitle: 'Test Document Best',
+        formattedFiledDate: '03/04/20',
+        formattedName: 'Test Document Best',
+        receivedAt: '2020-03-04T12:00:00.000Z',
+      },
       {
         associatedJudge: 'Judge Colvin',
         associatedJudgeFormatted: 'Colvin',
@@ -149,9 +182,14 @@ describe('generatePrintablePendingReportInteractor', () => {
       },
       {
         associatedJudge: 'Judge Judgeson',
+        associatedJudgeFormatted: 'Judgeson',
         caseCaption: 'Test Caption, Petitioner',
+        caseTitle: 'Test Caption',
         docketNumber: '123-49',
+        docketNumberWithSuffix: '123-49',
         documentTitle: 'Test Document Title',
+        formattedFiledDate: '01/01/99',
+        formattedName: 'Test Document Title',
         receivedAt: '1999-01-01T12:00:00.000Z',
       },
       {
@@ -177,39 +215,6 @@ describe('generatePrintablePendingReportInteractor', () => {
         formattedFiledDate: '03/03/20',
         formattedName: 'Test Document Title',
         receivedAt: '2020-03-03T12:00:00.000Z',
-      },
-      {
-        associatedJudge: 'Judge Foley',
-        associatedJudgeFormatted: 'Foley',
-        caseTitle: '',
-        docketNumber: '456-67',
-        docketNumberWithSuffix: '456-67',
-        documentTitle: 'Test Document Best',
-        formattedFiledDate: '03/04/20',
-        formattedName: 'Test Document Best',
-        receivedAt: '2020-03-04T12:00:00.000Z',
-      },
-      {
-        associatedJudge: 'Judge Judger',
-        associatedJudgeFormatted: 'Judger',
-        caseTitle: '',
-        docketNumber: '456-69',
-        docketNumberWithSuffix: '456-69',
-        documentTitle: 'Test Document Best',
-        formattedFiledDate: '03/04/21',
-        formattedName: 'Test Document Best',
-        receivedAt: '2021-03-04T12:00:00.000Z',
-      },
-      {
-        associatedJudge: 'Judge Judgey',
-        associatedJudgeFormatted: 'Judgey',
-        caseTitle: '',
-        docketNumber: '456-68',
-        docketNumberWithSuffix: '456-68',
-        documentTitle: 'Test Document Best',
-        formattedFiledDate: '02/04/22',
-        formattedName: 'Test Document Best',
-        receivedAt: '2022-02-04T12:00:00.000Z',
       },
     ]);
   });
