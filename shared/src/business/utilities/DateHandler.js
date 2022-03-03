@@ -433,7 +433,7 @@ const validateDateAndCreateISO = date => {
 };
 
 /**
- * Subtracts a previous year from passed in ISO date
+ * Subtracts a specified amount of time from passed in ISO date
  *
  * @param {string} date the ISO date
  * @param {object} dateConfig time
