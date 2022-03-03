@@ -1,5 +1,5 @@
 import { PDFDocument } from 'pdf-lib';
-const http = require('http');
+import http from 'http';
 
 export const docketClerkVerifiesPetitionReceiptLength = (
   cerebralTest,
