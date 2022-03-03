@@ -936,7 +936,7 @@ export const updateOrderForm = async (cerebralTest, formValues) => {
   );
 };
 
-export const verifySortedRecievedAtDateOfPendingItems = pendingItems => {
+export const verifySortedReceivedAtDateOfPendingItems = pendingItems => {
   return pendingItems.every((elm, i, arr) =>
     i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
   );
