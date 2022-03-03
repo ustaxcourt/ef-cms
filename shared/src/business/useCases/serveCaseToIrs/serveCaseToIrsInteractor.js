@@ -181,7 +181,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     });
 
   if (doesClinicLetterExist) {
-    const clincLetter = await applicationContext
+    const clinicLetter = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
@@ -193,7 +193,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     pdfData = await applicationContext.getUtilities().combineTwoPdfs({
       applicationContext,
       firstPdf: pdfData,
-      secondPdf: clincLetter,
+      secondPdf: clinicLetter,
     });
   }
 
