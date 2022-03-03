@@ -436,6 +436,7 @@ const validateDateAndCreateISO = date => {
  * Subtracts a previous year from passed in ISO date
  *
  * @param {string} date the ISO date
+ * @param {object} dateConfig time
  * @returns {string} a formatted ISO date string if date object is valid
  */
 const subtractISODates = (date, dateConfig) => {

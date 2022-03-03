@@ -941,3 +941,19 @@ export const verifySortedRecievedAtDateOfPendingItems = pendingItems => {
     i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
   );
 };
+
+export const docketClerkLoadsPendingReportOnChiefJudgeSelection = async ({
+  cerebralTest,
+  shouldLoadMore = false,
+}) => {
+  await refreshElasticsearchIndex();
+
+  await cerebralTest.runSequence('gotoPendingReportSequence');
+
+  await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
+    judge: 'Chief Judge',
+  });
+
+  shouldLoadMore &&
+    (await cerebralTest.runSequence('loadMorePendingItemsSequence'));
+};
