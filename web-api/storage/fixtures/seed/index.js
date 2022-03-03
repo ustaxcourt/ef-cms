@@ -1,4 +1,4 @@
 module.exports = [
   ...require('./efcms-local.json'),
-  ...require('./integration-test-seed.json'),
+  ...require('./caseWithOver100PendingItems.json'),
 ];
