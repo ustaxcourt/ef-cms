@@ -143,7 +143,6 @@ exports.updateTrialSessionInteractor = async (
       if (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
-        //todo add paper service url to output
         await applicationContext
           .getUseCaseHelpers()
           .setNoticeOfChangeToRemoteProceeding(applicationContext, {

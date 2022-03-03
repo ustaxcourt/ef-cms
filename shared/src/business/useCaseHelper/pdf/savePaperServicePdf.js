@@ -5,9 +5,8 @@
  * @param {array} document the document to be saved
  * @returns {Object} the service information
  */
-
 exports.savePaperServicePdf = async ({ applicationContext, document }) => {
-  let hasPaper = document.getPages().length;
+  let hasPaper = !!document.getPages().length;
   let docketEntryId = null;
   let pdfInfo = null;
   if (hasPaper) {
@@ -19,7 +18,6 @@ exports.savePaperServicePdf = async ({ applicationContext, document }) => {
       key: docketEntryId,
       useTempBucket: true,
     });
-    hasPaper = true;
 
     pdfInfo = await applicationContext
       .getPersistenceGateway()
