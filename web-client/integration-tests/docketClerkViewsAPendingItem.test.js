@@ -7,7 +7,7 @@ import {
   setupTest,
   uploadPetition,
   uploadProposedStipulatedDecision,
-  verifySortedRecievedAtDateOfPendingItems,
+  verifySortedReceivedAtDateOfPendingItems,
   viewCaseDetail,
 } from './helpers';
 import {
@@ -224,9 +224,9 @@ describe('docket clerk interacts with pending items', () => {
     });
 
     pendingItems = cerebralTest.getState('pendingReports.pendingItems');
-    const sortedRecievedAtDates =
-      verifySortedRecievedAtDateOfPendingItems(pendingItems);
+    const sortedReceivedAtDates =
+      verifySortedReceivedAtDateOfPendingItems(pendingItems);
 
-    expect(sortedRecievedAtDates).toEqual(true);
+    expect(sortedReceivedAtDates).toEqual(true);
   });
 });
