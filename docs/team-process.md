@@ -52,13 +52,9 @@ TODO
 
 Each week we rotate a few of the routine process and maintenance chores between team members. This is tracked using a schedule posted to the USTC out of office calendar.
 
-### Environment Shuffle
-
-This process is to merge changes from the Court into our Flexion fork, and also to create batch PRs if the batch is ready.  Please view the [Environment Shuffle](pr-workflow?id=environment-shuffle) part of the documentation for more information.
-
 ### Dependency Updates
 
-Similar to [Environment Shuffle](team-process?id=environment-shuffle), every week we rotate responsibility for updating dependencies. As an open-source project, we rely on external libraries which get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. As of 12/21/21, we are basing these changes off of the `flexion/develop` branch. 
+Every week we rotate responsibility for updating dependencies. As an open-source project, we rely on external libraries which get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. Follow the [PR workflow](./pr-workflow.md) like any other change. 
 
 > After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
   > * If terraform needs to be updated, deploy locally to an exp environment first. 
