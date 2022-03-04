@@ -275,9 +275,6 @@ export const contactSecondaryFromState = cerebralTest => {
 };
 
 export const getCaseMessagesForCase = async cerebralTest => {
-  await cerebralTest.runSequence('gotoCaseDetailSequence', {
-    docketNumber: cerebralTest.docketNumber,
-  });
   return runCompute(formattedCaseMessages, {
     state: cerebralTest.getState(),
   });
@@ -564,8 +561,11 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadProposedStipulatedDecision = async cerebralTest => {
-  cerebralTest.setState('form', {
+export const uploadProposedStipulatedDecision = async (
+  cerebralTest,
+  configObject,
+) => {
+  const defaultForm = {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -581,6 +581,11 @@ export const uploadProposedStipulatedDecision = async cerebralTest => {
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
+  };
+
+  cerebralTest.setState('form', {
+    ...defaultForm,
+    ...configObject,
   });
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
@@ -929,4 +934,26 @@ export const updateOrderForm = async (cerebralTest, formValues) => {
     formValues,
     'updateAdvancedOrderSearchFormValueSequence',
   );
+};
+
+export const verifySortedReceivedAtDateOfPendingItems = pendingItems => {
+  return pendingItems.every((elm, i, arr) =>
+    i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
+  );
+};
+
+export const docketClerkLoadsPendingReportOnChiefJudgeSelection = async ({
+  cerebralTest,
+  shouldLoadMore = false,
+}) => {
+  await refreshElasticsearchIndex();
+
+  await cerebralTest.runSequence('gotoPendingReportSequence');
+
+  await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
+    judge: 'Chief Judge',
+  });
+
+  shouldLoadMore &&
+    (await cerebralTest.runSequence('loadMorePendingItemsSequence'));
 };
