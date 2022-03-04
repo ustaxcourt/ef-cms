@@ -126,6 +126,9 @@ const {
   closeTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor');
 const {
+  combineTwoPdfs,
+} = require('../../shared/src/business/utilities/documentGenerators/combineTwoPdfs');
+const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
   formattedTrialSessionDetails,
@@ -889,9 +892,6 @@ const {
 const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
-const {
-  sanitizePdfInteractor,
-} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
 const {
   saveCalendarNoteInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor');
@@ -2022,7 +2022,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
-        sanitizePdfInteractor,
         saveCalendarNoteInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
@@ -2082,6 +2081,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return {
         calculateDifferenceInDays,
         calculateISODate,
+        combineTwoPdfs,
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,
