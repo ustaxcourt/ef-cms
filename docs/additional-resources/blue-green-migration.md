@@ -6,7 +6,7 @@ Every deployment, whether it's to production or a development environment, is a 
 
 Additionally, for deployments that require change in the data schema or broad stroke changes to the database in order for the application to function, we build an empty copy of the data stores (DynamoDB and Elasticsearch). Then we perform a migration of information from the old data store into the newly created one. This migration passes all of the data through a lambda to update and verify the data before saving it into a new data store.
 
-## Automated Migration Steps
+## Automated Migration Steps 
 ---
 
 <b>All of the automated migration steps are now handled by CircleCI, as defined in `config.yml`. </b>
@@ -37,13 +37,6 @@ Some key steps, excluding automated tests, include:
 The application kicks off a migration automatically if it detects migrations that need to be run in the codebase that haven't yet been run upon that environment. In order to force a migration, perform the following manual steps. You might do this if you were doing a package update that might impact the migration and wanted to test it fully.
 
 1. Remove a migration script item from the environment's `efcms-<ENV>-deploy` DynamoDB table that is expected to migrate, from the `migrationsToRun.js` file. For example, if `migrationsToRun.js` includes a script called `0001-test-script.js`, delete that item from the DynamoDB table.
-2. Kick off a CircleCI workflow, which will follow the steps [above](#automated-migration-steps to automatically determine that a migration is required.
-
-<!-- This is used most often to perform a complete re-index of information into Elasticsearch.
-
-1. Change the `destination-table-version` to the alternate of `alpha` or `beta` depending on whatever the `source-table-version` is in the `efcms-<ENV>-deploy` table. For instance, if the application is currently running on `alpha`, both the `source-table-version` and `destination-table-version` would be `alpha`. In this case, change the `destination-table-version` to `beta`.
-
-2. Change the value of the database record with the key of `migrate` to `true`. The system will automatically change this back to `false` after completing the migration.
--->
+2. Kick off a CircleCI workflow, which will follow the steps above for Automated Migration Steps.
 
 See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during the migration process.
