@@ -41,6 +41,9 @@ export TF_VAR_migrate_flag=$MIGRATE_FLAG
 export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_stream_arn=$STREAM_ARN
 
+mkdir -p ./lambdas/dist
+touch ./lambdas/dist/reindex-status.js
+
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -destroy -out execution-plan
 terraform destroy -auto-approve  
