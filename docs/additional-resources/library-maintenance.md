@@ -3,9 +3,9 @@
 ## Caveats
 - `cypress`: Do not upgrade past 8.5.0 as anything above that version will cause the "Failed to connect to bus" [error](https://trello.com/c/iuq0gJ6P/1008-ci-error-failed-to-connect-to-the-bus). 
 
-- `@fortawesome/free-solid-svg-icons`: v6.0.0 caused a regression with faThumbtack so it is not importable. [Github issue](https://github.com/FortAwesome/Font-Awesome/pull/18665) Leaving both this package and `fortawesome/free-regular-svg-icons` at v5.15.4 until this is patched.
+- `@fortawesome/free-solid-svg-icons`: v6.0.0 caused a regression with faThumbtack so it is not importable. [Github issue](https://github.com/FortAwesome/Font-Awesome/issues/18661) Leaving both this package and `fortawesome/free-regular-svg-icons` at v5.15.4 until this is patched.
 
-- `@fortawesome/fontawesome-svg-core`: upgrading from v1.2.36 to v1.3.0 causes icon sizing issues. Since it was released 2 days ago as of writing this, seems worth waiting for a patch, similar to the other @fortawesome packages.
+- `@fortawesome/fontawesome-svg-core`: upgrading from v1.2.36 to v1.3.0 causes icon sizing issues. Since it was released 2 days ago as of writing this, seems worth waiting for a patch, similar to the other @fortawesome packages (Update: Still causing issues as of 03/04).
 
 - `puppeteer-core` and `puppeteer`: locked to minor version ~13.2.0 since 13.3.0 was released a few hours ago and appears to be causing issues with various class exports.
 
