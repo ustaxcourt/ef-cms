@@ -1,14 +1,14 @@
 const { CognitoIdentityServiceProvider } = require('aws-sdk');
-const cognito = new CognitoIdentityServiceProvider({
-  region: 'us-east-1',
-});
 
-exports.deleteCognitoPool = async () => {
+exports.deleteCognitoPool = async ({ environment }) => {
+  const cognito = new CognitoIdentityServiceProvider({
+    region: environment.region,
+  });
   const { UserPools } = await cognito
     .listUserPools({ MaxResults: 60 })
     .promise();
   const poolIdsToDelete = UserPools.filter(pool =>
-    pool.Name.includes('stg'),
+    pool.Name.includes(environment.name),
   ).map(pool => pool.Id);
   for (let poolId of poolIdsToDelete) {
     const { UserPool } = await cognito
