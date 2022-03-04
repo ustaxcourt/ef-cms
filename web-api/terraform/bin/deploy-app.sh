@@ -6,9 +6,11 @@ export DEPLOYING_COLOR=$(../../../scripts/get-deploying-color.sh ${ENV})
 export MIGRATE_FLAG=$(../../../scripts/get-migrate-flag.sh ${ENV})
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
-pushd ../../../
-. ./scripts/load-environment-from-secrets.sh
-popd
+if [ -z ${SECRETS_LOADED} ]; then
+  pushd ../../../
+  . ./scripts/load-environment-from-secrets.sh
+  popd
+fi
 
 [ -z "${COGNITO_SUFFIX}" ] && echo "You must have COGNITO_SUFFIX set in your environment" && exit 1
 [ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
