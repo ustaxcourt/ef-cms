@@ -124,9 +124,12 @@ exports.updateTrialSessionInteractor = async (
       });
   }
 
+  let pdfUrl = null;
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
-    //update all the cases that are calendared with the new trial information
     const calendaredCases = currentTrialSession.caseOrder;
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const paperServicePdfsCombined = await PDFDocument.create();
+    let processedCases = 0;
 
     for (let calendaredCase of calendaredCases) {
       const caseToUpdate = await applicationContext
@@ -140,6 +143,30 @@ exports.updateTrialSessionInteractor = async (
       if (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeToRemoteProceeding(applicationContext, {
+            PDFDocument,
+            caseEntity,
+            currentTrialSession,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity,
+            user,
+          });
+
+        processedCases++;
+
+        await applicationContext
+          .getNotificationGateway()
+          .sendNotificationToUser({
+            applicationContext,
+            message: {
+              action: 'notice_generation_update_progress',
+              processedCases,
+              totalCases: calendaredCases.length,
+            },
+            userId: user.userId,
+          });
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
@@ -160,6 +187,25 @@ exports.updateTrialSessionInteractor = async (
         });
       }
     }
+
+    const serviceInfo = await applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf({
+        applicationContext,
+        document: paperServicePdfsCombined,
+      });
+    pdfUrl = serviceInfo.url;
+
+    await applicationContext.getNotificationGateway().sendNotificationToUser({
+      applicationContext,
+      message: {
+        action: 'notice_generation_complete',
+        docketEntryId: serviceInfo.docketEntryId,
+        hasPaper: serviceInfo.hasPaper,
+        pdfUrl,
+      },
+      userId: user.userId,
+    });
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
@@ -167,5 +213,8 @@ exports.updateTrialSessionInteractor = async (
     trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
   });
 
-  return newTrialSessionEntity.toRawObject();
+  return {
+    newTrialSession: newTrialSessionEntity.toRawObject(),
+    serviceInfo: pdfUrl,
+  };
 };

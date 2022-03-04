@@ -345,6 +345,9 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generateNoticeOfChangeToRemoteProceedingInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor');
+const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
 const {
@@ -775,6 +778,9 @@ const {
   markMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo');
 const {
+  noticeOfChangeToRemoteProceeding,
+} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding');
+const {
   noticeOfDocketChange,
 } = require('../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange');
 const {
@@ -908,6 +914,9 @@ const {
   saveFileAndGenerateUrl,
 } = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
 const {
+  savePaperServicePdf,
+} = require('../../shared/src/business/useCaseHelper/pdf/savePaperServicePdf');
+const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
@@ -985,6 +994,9 @@ const {
 const {
   setMessageAsReadInteractor,
 } = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+const {
+  setNoticeOfChangeToRemoteProceeding,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -1672,6 +1684,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       changeOfAddress,
       coverSheet,
       docketRecord,
+      noticeOfChangeToRemoteProceeding,
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
       noticeOfTrialIssued,
@@ -1873,11 +1886,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCounselFromRemovedPetitioner,
         removeCoversheet,
         saveFileAndGenerateUrl,
+        savePaperServicePdf,
         sealInLowerEnvironment,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        setNoticeOfChangeToRemoteProceeding,
         setPdfFormFields,
         updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
@@ -1939,6 +1954,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fileExternalDocumentInteractor,
         forwardMessageInteractor,
         generateDocketRecordPdfInteractor,
+        generateNoticeOfChangeToRemoteProceedingInteractor,
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
