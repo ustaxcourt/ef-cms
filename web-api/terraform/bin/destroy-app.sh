@@ -55,6 +55,6 @@ export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_WARN_OUTPUT_ERRORS=1
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -destroy -out execution-plan
 terraform destroy -auto-approve  

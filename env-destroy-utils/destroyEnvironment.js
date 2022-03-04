@@ -1,5 +1,6 @@
 const { clearS3Buckets } = require('./clearS3Buckets');
 const { deleteCloudWatchLogs } = require('./deleteCloudWatchLogs');
+const { deleteCognitoPool } = require('./deleteCognitoPool');
 const { deleteCustomDomains } = require('./deleteCustomDomains');
 const { exec } = require('child_process');
 const { readdirSync } = require('fs');
@@ -14,19 +15,15 @@ if (!process.env.AWS_ACCESS_KEY_ID || !process.env.AWS_SECRET_ACCESS_KEY) {
 const environmentName = process.argv[2] || 'exp1';
 
 const environmentEast = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   apiVersion: 'latest',
   name: environmentName,
   region: 'us-east-1',
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 };
 
 const environmentWest = {
-  accessKeyId: process.env.AWS_ACCESS_KEY_ID,
   apiVersion: 'latest',
   name: environmentName,
   region: 'us-west-1',
-  secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY,
 };
 
 const pathToTerraformTemplates = process.cwd() + '/web-api/terraform/template';
@@ -67,6 +64,12 @@ const teardownEnvironment = async () => {
     await deleteCloudWatchLogs({ environment: environmentWest });
   } catch (e) {
     console.error('Error while deleting cloudwatch logs: ', e);
+  }
+
+  try {
+    await deleteCognitoPool();
+  } catch (e) {
+    console.error('Error while deleting cognito pool: ', e);
   }
 };
 

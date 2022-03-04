@@ -8,10 +8,10 @@ To remove an environment, make sure your local development environment is config
 
 ```bash
 npm run destroy:env <ENV>
-npm run destroy:api -- <ENV>
-npm run destroy:client -- <ENV>
-npm run destroy:migration -- <ENV>
-npm run destroy:migration-cron -- <ENV>
+npm run destroy:client <ENV>
+npm run destroy:api <ENV>
+npm run destroy:migration <ENV>
+npm run destroy:migration-cron <ENV>
 ```
 
 See [the troubleshooting guide](../TROUBLESHOOTING.md) for solutions to problems that may arise during the teardown process.
