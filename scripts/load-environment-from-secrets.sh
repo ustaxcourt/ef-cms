@@ -5,7 +5,7 @@
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
-if [ $? = 0 ]; then
+if [ $? -eq 0 ]; then
   REGION=us-east-1
   content=$(aws secretsmanager get-secret-value --region ${REGION} --secret-id "${ENV}_deploy" --query "SecretString" --output text)
   echo $content
@@ -14,6 +14,5 @@ if [ $? = 0 ]; then
   source .env
   set +o allexport
 else
-  echo "Aborted"
+  echo "Aborted load-environment-from-secrets.sh"
 fi
-
