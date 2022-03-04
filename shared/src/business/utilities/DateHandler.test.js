@@ -521,4 +521,16 @@ describe('DateHandler', () => {
       expect(validDate).toEqual('2001-01-01T05:00:00.000Z');
     });
   });
+
+  describe('subtractISODates)', () => {
+    it('return an ISO string of the previous year', () => {
+      const isoDate = '1999-01-01T05:00:00.000Z';
+      const previousYearISO = '1997-01-01T05:00:00.000Z';
+      const result = DateHandler.subtractISODates(isoDate, {
+        year: 2,
+      });
+
+      expect(result).toEqual(previousYearISO);
+    });
+  });
 });
