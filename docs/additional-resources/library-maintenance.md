@@ -7,8 +7,6 @@
 
 - `@fortawesome/fontawesome-svg-core`: upgrading from v1.2.36 to v1.3.0 causes icon sizing issues. Since it was released 2 days ago as of writing this, seems worth waiting for a patch, similar to the other @fortawesome packages (Update: Still causing issues as of 03/04).
 
-- `puppeteer-core` and `puppeteer`: locked to minor version ~13.2.0 since 13.3.0 was released a few hours ago and appears to be causing issues with various class exports.
-
 - `puppeteer-core` within `web-api/runtimes/puppeteer`: locked to v13.0.1 because that's the highest version that `chrome-aws-lambda` [supports](https://github.com/alixaxel/chrome-aws-lambda/issues/254) at the moment
 
 ## Update Steps
