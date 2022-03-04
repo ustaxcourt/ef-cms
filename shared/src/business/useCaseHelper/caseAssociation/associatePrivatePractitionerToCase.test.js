@@ -202,7 +202,7 @@ describe('associatePrivatePractitionerToCase', () => {
     });
   });
 
-  it('BUG 9323: should create log if practitioner is already associated with case but does not appear in the privatePractitioners array', async () => {
+  it('should create log if practitioner is already associated with case but does not appear in the privatePractitioners array', async () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockResolvedValueOnce(true);
@@ -231,7 +231,7 @@ describe('associatePrivatePractitionerToCase', () => {
     );
   });
 
-  it('BUG 9323: should create NO log if practitioner is already associated with case and DOES appear in the privatePractitioners array', async () => {
+  it('should create NO log if practitioner is already associated with case and DOES appear in the privatePractitioners array', async () => {
     applicationContext
       .getPersistenceGateway()
       .verifyCaseForUser.mockResolvedValueOnce(true);
