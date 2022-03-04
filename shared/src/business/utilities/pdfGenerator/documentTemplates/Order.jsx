@@ -24,7 +24,7 @@ export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
             Clerk of the Court
           </p>
         </div>
-      )}{' '}
+      )}
     </div>
   );
 };
