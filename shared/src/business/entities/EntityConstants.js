@@ -479,6 +479,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Docket Change',
     eventCode: 'NODC',
   },
+  noticeOfChangeToRemoteProceeding: {
+    documentTitle: 'Notice of Change to Remote Proceeding',
+    documentType: 'Notice of Change to Remote Proceeding',
+    eventCode: 'NORP',
+  },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',

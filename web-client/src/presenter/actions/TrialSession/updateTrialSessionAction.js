@@ -44,7 +44,7 @@ export const updateTrialSessionAction = async ({
       await applicationContext
         .getUseCases()
         .setTrialSessionAsSwingSessionInteractor(applicationContext, {
-          swingSessionId: result.trialSessionId,
+          swingSessionId: result.newTrialSession.trialSessionId,
           trialSessionId: trialSession.swingSessionId,
         });
     }
@@ -57,10 +57,16 @@ export const updateTrialSessionAction = async ({
     });
   }
 
+  let pdfUrl;
+  if (result.serviceInfo) {
+    pdfUrl = result.serviceInfo;
+  }
+
   return path.success({
     alertSuccess: {
       message: 'Trial session updated.',
     },
-    trialSessionId: result.trialSessionId,
+    pdfUrl,
+    trialSessionId: result.newTrialSession.trialSessionId,
   });
 };

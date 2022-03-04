@@ -13,7 +13,7 @@
   "AWS_SECRET_ACCESS_KEY"
 
 BUCKET_NAME_EAST="${EFCMS_DOMAIN}.efcms.${ENV}.us-east-1.lambdas"
-DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh ${ENV})
-CURRENT_COLOR=$(./scripts/get-current-color.sh ${ENV})
+DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh ${ENV})
+CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh ${ENV})
 
 aws s3 cp s3://${BUCKET_NAME_EAST}/triggers_${DEPLOYING_COLOR}.js.zip s3://${BUCKET_NAME_EAST}/triggers_${CURRENT_COLOR}.js.zip
