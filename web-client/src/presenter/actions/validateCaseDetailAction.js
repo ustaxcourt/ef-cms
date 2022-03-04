@@ -60,7 +60,7 @@ export const validateCaseDetailAction = ({
 
   errors = aggregatePetitionerErrors({ errors });
 
-  store.set(state.validationErrors, errors || {});
+  store.set(state.validationErrors, errors);
 
   if (!errors) {
     return path.success({
