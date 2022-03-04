@@ -36,6 +36,7 @@ while [[ ${CODE} == 0 ]]
 do  
   echo "${SOURCE_TABLE} in region us-east-1 is still being deleted. Waiting for 30 seconds then checking again."
   sleep 30
+  aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-east-1 
   aws dynamodb describe-table --table-name "${SOURCE_TABLE}" --region us-east-1
   CODE=$?
 done
