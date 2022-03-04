@@ -15,10 +15,8 @@ export const NoticeOfChangeToRemoteProceeding = ({
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
+        documentTitle="Notice of Change to Remote Proceeding"
       />
-      <h3 className="notice-of-change-to-remote-proceeding">
-        Notice of Change to Remote Proceeding
-      </h3>
       <div>
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>

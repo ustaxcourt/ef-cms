@@ -324,6 +324,7 @@ const app = {
         )}
 
         <AppComponent />
+
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
       window.document.querySelector('#app'),

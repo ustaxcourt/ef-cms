@@ -4,7 +4,7 @@ const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 export const StandingPretrialOrder = ({ options, trialInfo }) => {
   return (
-    <>
+    <div id="standing-pretrial-order">
       <div className="standing-pretrial-order-regular-case">
         <PrimaryHeader />
         <DocketHeader
@@ -34,7 +34,9 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
           </p>
         </div>
 
-        <h3 className="text-bold margin-top-0">Standing Pretrial Order</h3>
+        <h3 className="text-center text-underline text-bold margin-top-0">
+          Standing Pretrial Order
+        </h3>
 
         <p className="text-bold">
           This Order sets out the Court’s standing procedures for the trial
@@ -466,6 +468,6 @@ export const StandingPretrialOrder = ({ options, trialInfo }) => {
         <br />
         <div style={{ pageBreakAfter: 'always' }}></div>
       </div>
-    </>
+    </div>
   );
 };

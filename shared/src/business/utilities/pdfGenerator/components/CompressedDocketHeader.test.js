@@ -27,7 +27,7 @@ describe('CompressedDocketHeader', () => {
     let h3 = wrapper.find('.case-information h3');
     expect(h3).toEqual({});
 
-    wrapper = shallow(<CompressedDocketHeader h3="Test H3" />);
+    wrapper = shallow(<CompressedDocketHeader documentTitle="Test H3" />);
     h3 = wrapper.find('.case-information h3');
     expect(h3.text()).toEqual('Test H3');
   });

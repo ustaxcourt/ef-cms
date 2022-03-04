@@ -10,6 +10,7 @@
 .terraform/
 .vscode
 **/*_.js
+shared/src/business/utilities/htmlGenerator/index.scss
 /policy.json
 artillery/private-app-report.json
 artillery/tokens.csv

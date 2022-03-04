@@ -46,10 +46,10 @@ describe('documentGenerators', () => {
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
-          caseTitle:
-            'Milton Schwartz, Deceased, Neil Schwartz, Fiduciary and Ada Schwartz, Deceased, Neil Schwartz, Fiduciary, Petitioners',
+          caseTitle: 'Jerad Mayer',
           docketNumberWithSuffix: '123-45S',
           trialInfo: {
+            chambersPhoneNumber: '1-721-740-9885 x4239',
             formattedJudge: 'Chief Special Trial Judge Carluzzo',
             formattedStartDate: '01/01/2001',
             formattedStartTime: '12:00 am',
