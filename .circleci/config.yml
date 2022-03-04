@@ -767,98 +767,43 @@ workflows:
 
   build-and-deploy:
     jobs:
-      # - build-client-integration:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public-search:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress-smoketests-local:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress-public:
-      #     <<: *build-and-deploy-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-defaults
       - deploy:
-        #     requires:
-        # - build-client-integration
-        # - e2e-pa11y
-        # - e2e-pa11y-public
-        # - e2e-pa11y-public-search
-        # - e2e-cypress
-        # - e2e-cypress-smoketests-local
-        # - e2e-cypress-public
-        filters:
-          branches:
-            only:
-              - develop
-              - irs
-              - staging
-              - test
-              - experimental1
-              - experimental2
-              - experimental3
-              - experimental4
-              - experimental5
-              - migration
-      # - migrate:
-      #     requires:
-      #       - deploy
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - wait-for-reindex:
-      #     type: approval
-      #     requires:
-      #       - migrate
-      # - disable-reindex-cron:
-      #     requires:
-      #       - wait-for-reindex
-      # - smoketests:
-      #     requires:
-      #       - disable-reindex-cron
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      # - smoketests-readonly:
-      #     requires:
-      #       - smoketests
-      #     filters:
-      #       branches:
-      #         only:
-      #           - develop
-      #           - irs
-      #           - staging
-      #           - test
-      #           - experimental1
-      #           - experimental2
-      #           - experimental3
-      #           - experimental4
-      #           - experimental5
-      #           - migration
-      - switch-colors:
+          requires:
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-pa11y-public-search
+            - e2e-cypress
+            - e2e-cypress-smoketests-local
+            - e2e-cypress-public
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - migrate:
           requires:
             - deploy
           filters:
@@ -874,16 +819,64 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - backup-source-dynamo-table:
+      - wait-for-reindex:
+          type: approval
           requires:
-            - switch-colors
+            - migrate
+      - disable-reindex-cron:
+          requires:
+            - wait-for-reindex
+      - smoketests:
+          requires:
+            - disable-reindex-cron
           filters:
             branches:
               only:
+                - develop
+                - irs
+                - staging
+                - test
                 - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - smoketests-readonly:
+          requires:
+            - smoketests
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
+      - switch-colors:
+          requires:
+            - smoketests-readonly
+          filters:
+            branches:
+              only:
+                - develop
+                - irs
+                - staging
+                - test
+                - experimental1
+                - experimental2
+                - experimental3
+                - experimental4
+                - experimental5
+                - migration
       - cleanup:
           requires:
-            - backup-source-dynamo-table
+            - switch-colors
           filters:
             branches:
               only:
@@ -945,11 +938,11 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - smoketests-readonly
-      # - backup-source-dynamo-table:
-      #     <<: *build-and-deploy-with-context-defaults
-      #     requires:
-      #       - switch-colors
-      - cleanup:
+      - backup-source-dynamo-table:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - switch-colors
+      - cleanup:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - backup-source-dynamo-table
