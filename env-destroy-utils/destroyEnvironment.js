@@ -67,7 +67,9 @@ const teardownEnvironment = async () => {
   }
 
   try {
-    await deleteCognitoPool();
+    await deleteCognitoPool({
+      environment: environmentEast,
+    });
   } catch (e) {
     console.error('Error while deleting cognito pool: ', e);
   }
