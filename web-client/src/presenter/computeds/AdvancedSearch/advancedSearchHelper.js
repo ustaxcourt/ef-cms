@@ -23,7 +23,7 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 
 export const advancedSearchHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const permissions = get(state.permissions) || {};
+  const permissions = get(state.permissions);
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
@@ -41,7 +41,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const result = {
     feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
     showFeedbackButton,
-    showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
+    showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
 
