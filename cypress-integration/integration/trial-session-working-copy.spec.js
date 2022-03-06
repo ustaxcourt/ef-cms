@@ -1,4 +1,3 @@
-const faker = require('faker');
 const {
   addCaseNote,
   changeCaseTrialStatus,
@@ -28,6 +27,7 @@ const {
   goToCaseOverview,
   manuallyAddCaseToNewTrialSession,
 } = require('../../cypress-smoketests/support/pages/case-detail');
+const { faker } = require('@faker-js/faker');
 
 faker.seed(faker.datatype.number());
 

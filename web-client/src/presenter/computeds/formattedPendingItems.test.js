@@ -27,10 +27,10 @@ describe('formattedPendingItems', () => {
       associatedJudge: CHIEF_JUDGE,
       caseStatus: STATUS_TYPES.new,
       createdAt: '2018-01-20',
-      docketEntryId: 'dd956ab1-5cde-4e78-bae0-ac7faee40426',
+      docketEntryId: 'dd956ab1-5cde-4e78-bae0-fff4aee40426',
       docketNumber: '101-19',
       docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
-      documentTitle: 'Affidavit of Bob in Support of Petition',
+      documentTitle: 'Affidavit of Sally in Support of Petition',
       documentType: 'Affidavit in Support',
       eventCode: 'AFF',
       receivedAt: '2018-01-20',
@@ -49,7 +49,7 @@ describe('formattedPendingItems', () => {
     },
   ];
 
-  it('returns formatted and sorted judges', () => {
+  it('should return formatted and sorted list of judges', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
         judges: [{ name: 'Judge A' }, { name: 'Judge B' }],
@@ -59,9 +59,10 @@ describe('formattedPendingItems', () => {
     expect(result.judges).toEqual(['A', 'B', CHIEF_JUDGE]);
   });
 
-  it('returns the cases', () => {
+  it('should return a list of formatted pending items', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
+        judges: [],
         pendingReports: {
           pendingItems: mockPendingItems,
         },
@@ -75,9 +76,19 @@ describe('formattedPendingItems', () => {
           associatedJudgeFormatted: CHIEF_JUDGE,
           caseStatus: STATUS_TYPES.new,
           documentLink:
-            '/case-detail/101-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-ac7faee40426',
+            '/case-detail/101-19/document-view?docketEntryId=33ddbf4f-90f8-417c-8967-57851b0b9069',
+          formattedFiledDate: '01/10/19',
+          formattedName: 'Administrative Record',
+          receivedAt: '2019-01-10',
+        },
+        {
+          associatedJudge: CHIEF_JUDGE,
+          associatedJudgeFormatted: CHIEF_JUDGE,
+          caseStatus: STATUS_TYPES.new,
+          documentLink:
+            '/case-detail/101-19/document-view?docketEntryId=dd956ab1-5cde-4e78-bae0-fff4aee40426',
           formattedFiledDate: '01/20/18',
-          formattedName: 'Affidavit of Bob in Support of Petition',
+          formattedName: 'Affidavit of Sally in Support of Petition',
           receivedAt: '2018-01-20',
         },
         {
@@ -90,16 +101,6 @@ describe('formattedPendingItems', () => {
           formattedName: 'Affidavit of Bob in Support of Petition',
           receivedAt: '2018-01-20',
         },
-        {
-          associatedJudge: CHIEF_JUDGE,
-          associatedJudgeFormatted: CHIEF_JUDGE,
-          caseStatus: STATUS_TYPES.new,
-          documentLink:
-            '/case-detail/101-19/document-view?docketEntryId=33ddbf4f-90f8-417c-8967-57851b0b9069',
-          formattedFiledDate: '01/10/19',
-          formattedName: 'Administrative Record',
-          receivedAt: '2019-01-10',
-        },
       ],
     });
   });
@@ -107,6 +108,7 @@ describe('formattedPendingItems', () => {
   it('appends screenMetadata.pendingItemsFilters.judge on the printUrl if one is present', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
+        judges: [],
         screenMetadata: { pendingItemsFilters: { judge: 'Judge Somebody' } },
       },
     });
@@ -117,6 +119,7 @@ describe('formattedPendingItems', () => {
   it('returns default printUrl if screenMetadata.pendingItemsFilters.judge is not set', () => {
     const result = runCompute(formattedPendingItems, {
       state: {
+        judges: [],
         screenMetadata: { pendingItemsFilters: {} },
       },
     });

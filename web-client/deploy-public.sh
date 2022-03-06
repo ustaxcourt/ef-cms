@@ -1,11 +1,16 @@
-#!/bin/bash
+#!/bin/bash -e
 
-[ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
-[ -z "${DEPLOYING_COLOR}" ] && echo "You must have DEPLOYING_COLOR set in your environment" && exit 1
-[ -z "${ENV}" ] && echo "You must have ENV set in your environment" && exit 1
+. ./scripts/load-environment-from-secrets.sh
 
-./web-client/build-dist-public.sh $ENV $DEPLOYING_COLOR
 
+./check-env-variables.sh \
+  "EFCMS_DOMAIN" \
+  "ENV" \
+  "DEPLOYING_COLOR" \
+  "AWS_SECRET_ACCESS_KEY" \
+  "AWS_ACCESS_KEY_ID"
+
+./web-client/build-dist-public.sh
 
 date > dist-public/deployed-date.txt 
 

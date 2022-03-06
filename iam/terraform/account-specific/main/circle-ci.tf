@@ -249,6 +249,20 @@ resource "aws_iam_policy" "circle_ci_policy" {
       ]
     },
     {
+      "Sid": "SecretsManager",
+      "Effect": "Allow",
+      "Action": [
+        "secretsmanager:GetSecretValue",
+        "secretsmanager:GetResourcePolicy",
+        "secretsmanager:DescribeSecret",
+        "secretsmanager:GetRandomPassword",
+        "secretsmanager:ListSecretVersionIds"
+      ],
+      "Resource": [
+        "arn:aws:secretsmanager:*:*:secret:*_deploy*"
+      ]
+    },
+    {
       "Action": [
         "iam:CreateRole",
         "iam:PutRolePolicy",

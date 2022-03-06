@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 
 exports.goToMyAccount = () => {
   cy.get('svg.account-menu-icon').parent().parent().click();

@@ -1,4 +1,3 @@
-const faker = require('faker');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -11,6 +10,7 @@ const {
   updateTrialSessionInteractor,
 } = require('./updateTrialSessionInteractor');
 const { Case } = require('../../entities/cases/Case');
+const { faker } = require('@faker-js/faker');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { User } = require('../../entities/User');
 

@@ -1,7 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 import axios from 'axios';
-import faker from 'faker';
+const { faker } = require('@faker-js/faker');
 
 const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 

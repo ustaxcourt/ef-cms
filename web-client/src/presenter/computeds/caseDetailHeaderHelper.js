@@ -1,8 +1,9 @@
 import { state } from 'cerebral';
 
 export const caseDetailHeaderHelper = (get, applicationContext) => {
-  const user = applicationContext.getCurrentUser();
   const { STATUS_TYPES, USER_ROLES } = applicationContext.getConstants();
+
+  const user = applicationContext.getCurrentUser();
   const isExternalUser = applicationContext
     .getUtilities()
     .isExternalUser(user.role);
@@ -13,40 +14,43 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
   const caseDetail = get(state.caseDetail);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const pendingAssociation = get(state.screenMetadata.pendingAssociation);
-  const caseHasRespondent = !!caseDetail.hasIrsPractitioner;
   const currentPage = get(state.currentPage);
-  const isRequestAccessForm = currentPage === 'RequestAccessWizard';
+
   const isCaseSealed = !!caseDetail.isSealed;
 
-  const caseHasRepresentedParty = (caseDetail.petitioners || []).some(
-    petitioner =>
-      applicationContext
-        .getUtilities()
-        .isUserIdRepresentedByPrivatePractitioner(
-          caseDetail,
-          petitioner.contactId,
-        ),
+  const caseHasRepresentedParty = caseDetail.petitioners.some(petitioner =>
+    applicationContext
+      .getUtilities()
+      .isUserIdRepresentedByPrivatePractitioner(
+        caseDetail,
+        petitioner.contactId,
+      ),
   );
-  const showRepresented = isInternalUser && caseHasRepresentedParty;
-
-  const isCurrentPageFilePetitionSuccess =
-    get(state.currentPage) === 'FilePetitionSuccess';
 
   let showRequestAccessToCaseButton = false;
   let showPendingAccessToCaseButton = false;
   let showFileFirstDocumentButton = false;
 
   if (isExternalUser && !userAssociatedWithCase) {
+    const pendingAssociation = get(state.screenMetadata.pendingAssociation);
+
+    const isCurrentPageFilePetitionSuccess =
+      currentPage === 'FilePetitionSuccess';
+    const isRequestAccessForm = currentPage === 'RequestAccessWizard';
+
     if (user.role === USER_ROLES.privatePractitioner) {
       showRequestAccessToCaseButton =
         !pendingAssociation &&
         !isRequestAccessForm &&
         !isCaseSealed &&
         !isCurrentPageFilePetitionSuccess;
+
       showPendingAccessToCaseButton = pendingAssociation;
     } else if (user.role === USER_ROLES.irsPractitioner) {
+      const caseHasRespondent = !!caseDetail.hasIrsPractitioner;
+
       showFileFirstDocumentButton = !caseHasRespondent && !isCaseSealed;
+
       showRequestAccessToCaseButton =
         caseHasRespondent &&
         !isRequestAccessForm &&
@@ -55,28 +59,9 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
     }
   }
 
-  const showConsolidatedCaseIcon = !!caseDetail.leadDocketNumber;
-
-  const showCreateOrderButton = permissions.COURT_ISSUED_DOCUMENT;
-
-  const showAddDocketEntryButton = permissions.DOCKET_ENTRY;
-
-  const showNewTabLink = applicationContext
-    .getUtilities()
-    .isInternalUser(user.role);
-
-  const showCaseDetailHeaderMenu = !isExternalUser;
-
-  const showFileDocumentButton =
-    permissions.FILE_EXTERNAL_DOCUMENT && userAssociatedWithCase;
-
-  const showAddCorrespondenceButton = permissions.CASE_CORRESPONDENCE;
-
   const canAllowDocumentServiceForCase = applicationContext
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
-
-  const showCreateMessageButton = user.role !== USER_ROLES.general;
 
   const showBlockedTag =
     caseDetail.blocked ||
@@ -85,19 +70,20 @@ export const caseDetailHeaderHelper = (get, applicationContext) => {
 
   return {
     hidePublicCaseInformation: !isExternalUser,
-    showAddCorrespondenceButton,
-    showAddDocketEntryButton,
+    showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
+    showAddDocketEntryButton: permissions.DOCKET_ENTRY,
     showBlockedTag,
-    showCaseDetailHeaderMenu,
-    showConsolidatedCaseIcon,
-    showCreateMessageButton,
-    showCreateOrderButton,
+    showCaseDetailHeaderMenu: !isExternalUser,
+    showConsolidatedCaseIcon: !!caseDetail.leadDocketNumber,
+    showCreateMessageButton: user.role !== USER_ROLES.general,
+    showCreateOrderButton: permissions.COURT_ISSUED_DOCUMENT,
     showExternalButtons: isExternalUser && canAllowDocumentServiceForCase,
-    showFileDocumentButton,
+    showFileDocumentButton:
+      permissions.FILE_EXTERNAL_DOCUMENT && userAssociatedWithCase,
     showFileFirstDocumentButton,
-    showNewTabLink,
+    showNewTabLink: isInternalUser,
     showPendingAccessToCaseButton,
-    showRepresented,
+    showRepresented: isInternalUser && caseHasRepresentedParty,
     showRequestAccessToCaseButton,
     showSealedCaseBanner: isCaseSealed,
     showUploadCourtIssuedDocumentButton: isInternalUser,
