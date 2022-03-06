@@ -9,7 +9,7 @@ import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkA
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAndChecksVerifiedEmailAddress';
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
-import faker from 'faker';
+const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 

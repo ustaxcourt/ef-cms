@@ -1,4 +1,4 @@
-const createApplicationContext = require('../applicationContext');
+const createSilentApplicationContext = require('../../../shared/src/business/test/createSilentApplicationContext');
 const {
   MOCK_CASE_WITH_TRIAL_SESSION,
 } = require('../../../shared/src/test/mockCase');
@@ -21,21 +21,6 @@ const REQUEST_EVENT = {
   queryStringParameters: {},
 };
 
-const createSilentAppContext = user => {
-  const applicationContext = createApplicationContext(user, {
-    debug: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-  });
-
-  applicationContext.environment.dynamoDbTableName = 'mocked';
-  applicationContext.getPersistenceGateway().getMaintenanceMode = jest
-    .fn()
-    .mockReturnValue(false);
-
-  return applicationContext;
-};
-
 describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANGE TESTS)', () => {
   let CI;
   // disable logging by mimicking CI for this test
@@ -50,7 +35,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
 
   it('returns 404 when the user is not authorized and the case is not found', async () => {
     const user = { role: 'roleWithNoPermissions' };
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
 
     // Case is retrieved before determining authorization
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
@@ -77,7 +62,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
 
   it('returns 200 when the user is not associated and the case is found', async () => {
     const user = { role: 'roleWithNoPermissions' };
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
 
     // Case is retrieved before determining authorization
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
@@ -110,7 +95,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
 
   it('returns 404 when the docket number isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({
@@ -136,7 +121,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
 
   it('returns 500 on an unexpected error', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({
@@ -162,7 +147,7 @@ describe('getCaseLambda (which fails if version increase is needed, DO NOT CHANG
     // Careful! Changing this test would mean that the v1 format is changing;
     // this would mean breaking changes for any user of the v1 API
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
 
     applicationContext.getDocumentClient = jest.fn().mockReturnValue({
       query: jest.fn().mockReturnValue({

@@ -9,7 +9,7 @@ import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAnd
 import { userSuccessfullyUpdatesEmailAddress } from './journey/userSuccessfullyUpdatesEmailAddress';
 import { userUpdatesEmailAddressToOneAlreadyInUse } from './journey/userUpdatesEmailAddressToOneAlreadyInUse';
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
-import faker from 'faker';
+const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 

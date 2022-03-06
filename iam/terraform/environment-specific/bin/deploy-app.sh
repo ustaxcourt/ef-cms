@@ -2,6 +2,12 @@
 
 ENVIRONMENT=$1
 
+# Getting the environment-specific deployment settings and injecting them into the shell environment
+export ENV=${ENVIRONMENT}
+pushd ../../../../
+. ./scripts/load-environment-from-secrets.sh
+popd
+
 [ -z "${ENVIRONMENT}" ] && echo "You must have ENVIRONMENT set in your environment" && exit 1
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1

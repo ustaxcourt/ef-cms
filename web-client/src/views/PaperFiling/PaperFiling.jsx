@@ -44,7 +44,7 @@ export const PaperFiling = connect(
 
           <div className="grid-row grid-gap">
             <div className="grid-col-7">
-              {paperDocketEntryHelper.showServiceWarning && (
+              {!paperDocketEntryHelper.canAllowDocumentServiceForCase && (
                 <WarningNotificationComponent
                   alertWarning={{
                     message:
@@ -79,7 +79,7 @@ export const PaperFiling = connect(
               <section className="usa-section DocumentDetail">
                 <PrimaryDocumentForm />
                 <div className="margin-top-5">
-                  {paperDocketEntryHelper.showSaveAndServeButton && (
+                  {paperDocketEntryHelper.canAllowDocumentServiceForCase && (
                     <Button
                       id="save-and-serve"
                       type="submit"

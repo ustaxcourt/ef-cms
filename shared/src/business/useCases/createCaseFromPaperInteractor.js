@@ -177,12 +177,11 @@ exports.createCaseFromPaperInteractor = async (
 
   if (requestForPlaceOfTrialFileId) {
     let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
-    if (caseToAdd.preferredTrialCity) {
-      documentTitle = replaceBracketed(
-        documentTitle,
-        caseToAdd.preferredTrialCity,
-      );
-    }
+
+    documentTitle = replaceBracketed(
+      documentTitle,
+      caseToAdd.preferredTrialCity,
+    );
 
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {
