@@ -128,11 +128,6 @@ const addDocketEntries = ({ caseEntity }) => {
       doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
   );
 
-  console.log(
-    'initialDocumentTypesListRequiringDocketEntry AFTER',
-    initialDocumentTypesListRequiringDocketEntry,
-  );
-
   for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
     const foundDocketEntry = caseEntity.docketEntries.find(
       caseDocument => caseDocument.documentType === documentType,
@@ -362,7 +357,6 @@ exports.serveCaseToIrsInteractor = async (
     });
 
   let caseEntity = new Case(caseToBatch, { applicationContext });
-  // console.log('caseEntity BEFORE', caseEntity);
 
   caseEntity.markAsSentToIRS();
 
@@ -388,12 +382,6 @@ exports.serveCaseToIrsInteractor = async (
     .updateCaseCaptionDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
-
-  // console.log('caseEntity AFTER', caseEntity);
-  // TODO
-  // 1. check if case, noticeOfAttachments is set to true
-  // 2. add a new docket entry with isDraft set to true
-  // ** check for use case helper for adding docket entries draft (submitCourtIssuedOrderSequence.js)
 
   await addDocketEntryForNANE({
     applicationContext,

@@ -1,4 +1,5 @@
 const {
+  addDocketEntryForNANE,
   addDocketEntryForPaymentStatus,
   serveCaseToIrsInteractor,
 } = require('./serveCaseToIrsInteractor');
@@ -500,5 +501,62 @@ describe('addDocketEntryForPaymentStatus', () => {
 
     expect(addedDocketRecord).toBeDefined();
     expect(addedDocketRecord.filingDate).toEqual('Today');
+  });
+});
+
+describe('addDocketEntryForNANE', () => {
+  let user;
+
+  beforeEach(() => {
+    user = applicationContext.getCurrentUser();
+  });
+
+  it('should not increase the docket entries and not upload a generated pdf if noticeOfAttachments is false', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        noticeOfAttachments: false,
+      },
+      { applicationContext },
+    );
+
+    const docketEntriesFromNewCaseCount = caseEntity.docketEntries.length;
+
+    await addDocketEntryForNANE({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    expect(caseEntity.docketEntries.length).toEqual(
+      docketEntriesFromNewCaseCount,
+    );
+
+    expect(applicationContext.getUtilities().uploadToS3).not.toHaveBeenCalled();
+  });
+
+  it('should increase the docket entries and upload a generated pdf if noticeOfAttachments is true', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        noticeOfAttachments: true,
+      },
+      { applicationContext },
+    );
+
+    const newDocketEntriesFromNewCaseCount =
+      caseEntity.docketEntries.length + 1;
+
+    await addDocketEntryForNANE({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    expect(caseEntity.docketEntries.length).toEqual(
+      newDocketEntriesFromNewCaseCount,
+    );
+
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 });

@@ -368,6 +368,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(DateHandler.prepareDateFromString),
     replaceBracketed: jest.fn().mockImplementation(replaceBracketed),
+
     serveCaseDocument: jest.fn().mockImplementation(serveCaseDocument),
     setServiceIndicatorsForCase: jest
       .fn()
