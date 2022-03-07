@@ -46,6 +46,11 @@ const MOCK_TRIAL = {
   termYear: '2025',
   trialLocation: 'Birmingham, Alabama',
 };
+const serviceInfo = {
+  docketEntryId: '',
+  hasPaper: false,
+  url: 'www.example.com',
+};
 
 let user;
 let calendaredCases;
@@ -147,6 +152,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     applicationContext
       .getUseCases()
       .generateStandingPretrialOrderInteractor.mockReturnValue(fakeData);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf.mockReturnValue(serviceInfo);
   });
 
   it('Should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
@@ -531,6 +540,19 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalled();
+  });
+
+  it('should save PaperServiceAddressPage to s3 when the case has a party with paper service', async () => {
+    calendaredCases[0].petitioners[0].serviceIndicator =
+      SERVICE_INDICATOR_TYPES.SI_PAPER;
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().savePaperServicePdf,
     ).toHaveBeenCalled();
   });
 });

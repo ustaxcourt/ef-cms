@@ -29,8 +29,10 @@ else
   echo "dynamodb lock table already exists"
 fi
 
+npm run build:assets
+
 set -eo pipefail
-npm run build:lambda:migration
+npm run build:lambda:migration-cron
 
 export TF_VAR_circle_machine_user_token=$CIRCLE_MACHINE_USER_TOKEN
 export TF_VAR_circle_workflow_id=$CIRCLE_WORKFLOW_ID
@@ -40,6 +42,9 @@ export TF_VAR_environment=$ENVIRONMENT
 export TF_VAR_migrate_flag=$MIGRATE_FLAG
 export TF_VAR_source_table=$SOURCE_TABLE
 export TF_VAR_stream_arn=$STREAM_ARN
+
+mkdir -p ./lambdas/dist
+touch ./lambdas/dist/reindex-status.js
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -destroy -out execution-plan

@@ -50,7 +50,7 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'year',
-      value: '2025',
+      value: overrides.trialYear || '2025',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
@@ -109,7 +109,9 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('form.term')).toEqual('Fall');
-    expect(cerebralTest.getState('form.termYear')).toEqual('2025');
+    expect(cerebralTest.getState('form.termYear')).toEqual(
+      overrides.trialYear || '2025',
+    );
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
@@ -132,5 +134,6 @@ export const docketClerkCreatesATrialSession = (
     expect(lastCreatedTrialSessionId).toBeDefined();
 
     cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
+    cerebralTest.trialSessionId = cerebralTest.lastCreatedTrialSessionId;
   });
 };

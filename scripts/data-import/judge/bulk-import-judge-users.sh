@@ -6,16 +6,23 @@
 #   FILE_NAME=./web-api/judge_users.csv ./scripts/bulk-import-judge-users.sh
 #
 
-./check-env-variables.sh \
-  "ENV" \
-  "USTC_ADMIN_PASS" \
-  "USTC_ADMIN_USER" \
-  "REGION" \
-  "FILE_NAME" \
-  "DEFAULT_ACCOUNT_PASS" \
-  "DEPLOYING_COLOR" \
-  "AWS_SECRET_ACCESS_KEY" \
-  "AWS_ACCESS_KEY_ID"
+# Getting the account-wide deployment settings and injecting them into the shell environment
+if [ -z ${SECRETS_LOADED} ]; then
+  . ./scripts/load-environment-from-secrets.sh
+fi
+
+if [ -z ${CI} ]; then
+  ./check-env-variables.sh \
+    "ENV" \
+    "USTC_ADMIN_PASS" \
+    "USTC_ADMIN_USER" \
+    "REGION" \
+    "FILE_NAME" \
+    "DEFAULT_ACCOUNT_PASS" \
+    "DEPLOYING_COLOR" \
+    "AWS_SECRET_ACCESS_KEY" \
+    "AWS_ACCESS_KEY_ID"
+fi
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
