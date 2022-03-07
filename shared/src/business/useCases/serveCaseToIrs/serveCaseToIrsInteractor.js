@@ -58,6 +58,44 @@ const addDocketEntryForPaymentStatus = ({
 };
 exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
 
+export const addDocketEntryForNANE = ({
+  applicationContext,
+  caseEntity,
+  user,
+}) => {
+  const documentTitle = 'Notice of Attachments in the Nature of Evidence';
+  if (caseEntity.noticeOfAttachments) {
+    caseEntity.addDocketEntry(
+      new DocketEntry(
+        {
+          documentTitle,
+          documentType: 'Notice', // use constants
+          // use constants
+          // filingDate: caseEntity.petitionPaymentDate,
+          // isFileAttached: false,
+          // isMinuteEntry: true,
+          // isOnDocketRecord: true,
+          // processingStatus: 'complete',
+          draftOrderState: {
+            docketNumber: caseEntity.docketNumber,
+            documentTitle,
+            documentType: 'Notice', // use constants
+            eventCode: 'NOT', // use constants
+            freeText: documentTitle,
+          },
+
+          // use constants
+          eventCode: 'NOT',
+
+          isDraft: true,
+          userId: user.userId,
+        },
+        { applicationContext },
+      ),
+    );
+  }
+};
+
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
@@ -68,6 +106,11 @@ const addDocketEntries = ({ caseEntity }) => {
     doc =>
       doc === INITIAL_DOCUMENT_TYPES.petition.documentType ||
       doc === INITIAL_DOCUMENT_TYPES.stin.documentType,
+  );
+
+  console.log(
+    'initialDocumentTypesListRequiringDocketEntry AFTER',
+    initialDocumentTypesListRequiringDocketEntry,
   );
 
   for (let documentType of initialDocumentTypesListRequiringDocketEntry) {
@@ -299,6 +342,7 @@ exports.serveCaseToIrsInteractor = async (
     });
 
   let caseEntity = new Case(caseToBatch, { applicationContext });
+  // console.log('caseEntity BEFORE', caseEntity);
 
   caseEntity.markAsSentToIRS();
 
@@ -324,6 +368,18 @@ exports.serveCaseToIrsInteractor = async (
     .updateCaseCaptionDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
+
+  // console.log('caseEntity AFTER', caseEntity);
+  // TODO
+  // 1. check if case, noticeOfAttachments is set to true
+  // 2. add a new docket entry with isDraft set to true
+  // ** check for use case helper for adding docket entries draft (submitCourtIssuedOrderSequence.js)
+
+  addDocketEntryForNANE({
+    applicationContext,
+    caseEntity,
+    user,
+  });
 
   await createPetitionWorkItems({
     applicationContext,
