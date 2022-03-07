@@ -312,27 +312,12 @@ describe('cognito-authorizer', () => {
     await expect(() => handler(event, context)).rejects.toThrow('Unauthorized');
   });
 
-  it('should return a policy if the authorization header if provided', async () => {
+  it('should return a policy if the authorization token is provided', async () => {
     setupHappyPath({ sub: 'test-sub' });
 
     event = {
-      headers: {
-        authorization: `Bearer ${TOKEN_VALUE}`,
-      },
+      authorizationToken: `Bearer ${TOKEN_VALUE}`,
       methodArn: 'a/b/c',
-    };
-    const policy = await handler(event, context);
-    expect(policy).toBeDefined();
-  });
-
-  it('should return a policy if the token is provided in the query string', async () => {
-    setupHappyPath({ sub: 'test-sub' });
-
-    event = {
-      methodArn: 'a/b/c',
-      queryStringParameters: {
-        token: TOKEN_VALUE,
-      },
     };
     const policy = await handler(event, context);
     expect(policy).toBeDefined();

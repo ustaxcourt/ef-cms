@@ -1,0 +1,7 @@
+[< Back](/)
+* [Email](/architecture/email.md)
+* [0001 Record Arc Decisions](/architecture/decisions/0001-record-architecture-decisions.md)
+* [0002 Using DynamoDb Decisions](/architecture/decisions/0002-use-dynamodb-as-the-primary-database.md)
+* [0003 Using Terraform Decisions](/architecture/decisions/0003-use-terraform-to-automate-infrastructure-provisioning.md)
+* [0004 Deploying Lambda using Terraform vs Serverless](/architecture/decisions/0004-deploy-lambda-code-using-terraform-instead-of-serverless.md)
+* [0005 Mono Lambda Decisions](/architecture/decisions/0005-use-one-lambda-with-an-integrated-router-instead-of-one-lambda-per-route.md)
