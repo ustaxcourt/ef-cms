@@ -2,6 +2,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
+  ORDER_TYPES,
   PAYMENT_STATUS,
 } = require('../../entities/EntityConstants');
 const {
@@ -58,42 +59,61 @@ const addDocketEntryForPaymentStatus = ({
 };
 exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
 
-export const addDocketEntryForNANE = ({
+export const addDocketEntryForNANE = async ({
   applicationContext,
   caseEntity,
   user,
 }) => {
-  const documentTitle = 'Notice of Attachments in the Nature of Evidence';
-  if (caseEntity.noticeOfAttachments) {
-    caseEntity.addDocketEntry(
-      new DocketEntry(
-        {
-          documentTitle,
-          documentType: 'Notice', // use constants
-          // use constants
-          // filingDate: caseEntity.petitionPaymentDate,
-          // isFileAttached: false,
-          // isMinuteEntry: true,
-          // isOnDocketRecord: true,
-          // processingStatus: 'complete',
-          draftOrderState: {
-            docketNumber: caseEntity.docketNumber,
-            documentTitle,
-            documentType: 'Notice', // use constants
-            eventCode: 'NOT', // use constants
-            freeText: documentTitle,
-          },
-
-          // use constants
-          eventCode: 'NOT',
-
-          isDraft: true,
-          userId: user.userId,
-        },
-        { applicationContext },
-      ),
-    );
+  if (!caseEntity.noticeOfAttachments) {
+    return;
   }
+
+  const documentTitle = 'Notice of Attachments in the Nature of Evidence';
+  const orderContent =
+    'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence.  Please be advised that these documents have not been received into evidence by the Court.  You may offer evidentiary materials to the Court at the time of trial.';
+
+  const noticeCode = ORDER_TYPES.find(order => order.eventCode === 'NOT');
+
+  const newDocketEntry = new DocketEntry(
+    {
+      documentTitle,
+      documentType: noticeCode.documentType,
+      draftOrderState: {
+        docketNumber: caseEntity.docketNumber,
+        documentTitle,
+        documentType: noticeCode.documentType,
+        eventCode: noticeCode.eventCode,
+        freeText: documentTitle,
+      },
+      eventCode: noticeCode.eventCode,
+      isDraft: true,
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
+
+  caseEntity.addDocketEntry(newDocketEntry);
+
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+  const { docketNumberWithSuffix } = caseEntity;
+
+  const pdfData = await applicationContext.getDocumentGenerators().order({
+    applicationContext,
+    data: {
+      caseCaptionExtension,
+      caseTitle,
+      docketNumberWithSuffix,
+      orderContent,
+      orderTitle: documentTitle,
+      // signatureText: '',
+    },
+  });
+
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    caseConfirmationPdfName: newDocketEntry.docketEntryId,
+    pdfData,
+  });
 };
 
 const addDocketEntries = ({ caseEntity }) => {
@@ -375,7 +395,7 @@ exports.serveCaseToIrsInteractor = async (
   // 2. add a new docket entry with isDraft set to true
   // ** check for use case helper for adding docket entries draft (submitCourtIssuedOrderSequence.js)
 
-  addDocketEntryForNANE({
+  await addDocketEntryForNANE({
     applicationContext,
     caseEntity,
     user,
