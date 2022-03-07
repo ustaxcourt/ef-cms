@@ -18,13 +18,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * serves a notice of trial session and standing pretrial document on electronic
  * recipients and generates paper notices for those that get paper service
  *
- * @param {object} deconstructed function arguments
+ * @param {object} deconstructed.applicationContext the applicationContext
  * @param {object} deconstructed.caseEntity the case entity
- * @param {object} deconstructed.noticeDocketEntryEntity the notice document entity
- * @param {Uint8Array} deconstructed.noticeDocumentPdfData the pdf data of the notice doc
- * @param {object} deconstructed.servedParties the parties to serve
- * @param {object} deconstructed.standingPretrialDocketEntryEntity the standing pretrial document entity
- * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data of the standing pretrial doc
+ * @param {object} deconstructed.newPdfDoc the pdf we are generating
+ * @param {Uint8Array} deconstructed.noticeDocketEntryEntity the docket entry entity
+ * @param {object} deconstructed.noticeDocumentPdfData the pdf data for the notice
+ * @param {object} deconstructed.PDFDocument pdf-lib object
+ * @param {object} deconstructed.servedParties the parties this document will be served to
+ * @param {object} deconstructed.standingPretrialDocketEntryEntity the entity for the standing pretrial docket entry
+ * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data for the standing pretrial
  */
 const serveNoticesForCase = async ({
   applicationContext,
