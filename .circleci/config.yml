@@ -442,15 +442,14 @@ jobs:
       - run:
           name: Test Users Setup
           command: |
-            ./shared/admin-tools/user/setup-test-users.sh $ENV
-            node shared/admin-tools/user/setup-admin.js
+            cd shared/admin-tools/user && ./setup-test-users.sh $ENV
       - run:
           name: Setup Judge Users File Var
           command: echo "export FILE_NAME=./scripts/data-import/judge/judge_users.csv" >> $BASH_ENV
       - run:
           name: Judge Users Setup
           command: |
-            ./scripts/data-import/judge/bulk-import-judge-users.sh
+            cd scripts/data-import/judge && ./bulk-import-judge-users.sh
       - run:
           name: 'Deploy - Web Client - S3'
           command: |
