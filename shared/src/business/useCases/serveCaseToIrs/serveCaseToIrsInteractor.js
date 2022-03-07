@@ -168,33 +168,35 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-  const clinicLetterKey = getClinicLetterKey({
-    procedureType,
-    trialLocation: preferredTrialCity,
-  });
-
-  const doesClinicLetterExist = await applicationContext
-    .getPersistenceGateway()
-    .isFileExists({
-      applicationContext,
-      key: clinicLetterKey,
+  if (preferredTrialCity) {
+    const clinicLetterKey = getClinicLetterKey({
+      procedureType,
+      trialLocation: preferredTrialCity,
     });
 
-  if (doesClinicLetterExist) {
-    const clinicLetter = await applicationContext
+    const doesClinicLetterExist = await applicationContext
       .getPersistenceGateway()
-      .getDocument({
+      .isFileExists({
         applicationContext,
         key: clinicLetterKey,
-        protocol: 'S3',
-        useTempBucket: false,
       });
 
-    pdfData = await applicationContext.getUtilities().combineTwoPdfs({
-      applicationContext,
-      firstPdf: pdfData,
-      secondPdf: clinicLetter,
-    });
+    if (doesClinicLetterExist) {
+      const clinicLetter = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: clinicLetterKey,
+          protocol: 'S3',
+          useTempBucket: false,
+        });
+
+      pdfData = await applicationContext.getUtilities().combineTwoPdfs({
+        applicationContext,
+        firstPdf: pdfData,
+        secondPdf: clinicLetter,
+      });
+    }
   }
 
   await applicationContext.getUtilities().uploadToS3({
