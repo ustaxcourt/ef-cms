@@ -74,7 +74,7 @@ describe('documentGenerators', () => {
 
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
-        writePdfFile('Standing_Pretrial_Notice', pdf);
+        writePdfFile('Standing_Pretrial_Order_For_Small_Case', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 

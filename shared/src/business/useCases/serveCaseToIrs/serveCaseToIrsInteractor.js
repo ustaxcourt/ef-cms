@@ -11,6 +11,7 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
@@ -118,7 +119,12 @@ const createPetitionWorkItems = async ({
 const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
-  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+  const {
+    docketNumberWithSuffix,
+    preferredTrialCity,
+    procedureType,
+    receivedAt,
+  } = caseEntity;
 
   let pdfData = await applicationContext
     .getDocumentGenerators()
@@ -162,10 +168,41 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
+  if (preferredTrialCity) {
+    const clinicLetterKey = getClinicLetterKey({
+      procedureType,
+      trialLocation: preferredTrialCity,
+    });
+
+    const doesClinicLetterExist = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: clinicLetterKey,
+      });
+
+    if (doesClinicLetterExist) {
+      const clinicLetter = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: clinicLetterKey,
+          protocol: 'S3',
+          useTempBucket: false,
+        });
+
+      pdfData = await applicationContext.getUtilities().combineTwoPdfs({
+        applicationContext,
+        firstPdf: pdfData,
+        secondPdf: clinicLetter,
+      });
+    }
+  }
+
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
     caseConfirmationPdfName,
-    pdfData,
+    pdfData: Buffer.from(pdfData),
   });
 
   let urlToReturn;

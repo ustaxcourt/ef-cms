@@ -360,35 +360,21 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     });
   }
 
-  let hasPaper = newPdfDoc.getPages().length;
-  let docketEntryId = null;
   let pdfUrl = null;
-  if (hasPaper) {
-    const paperServicePdfData = await newPdfDoc.save();
-    docketEntryId = applicationContext.getUniqueId();
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+  const serviceInfo = await applicationContext
+    .getUseCaseHelpers()
+    .savePaperServicePdf({
       applicationContext,
-      document: paperServicePdfData,
-      key: docketEntryId,
-      useTempBucket: true,
+      document: newPdfDoc,
     });
-    hasPaper = true;
-
-    pdfUrl = (
-      await applicationContext.getPersistenceGateway().getDownloadPolicyUrl({
-        applicationContext,
-        key: docketEntryId,
-        useTempBucket: true,
-      })
-    ).url;
-  }
+  pdfUrl = serviceInfo.url;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
       action: 'notice_generation_complete',
-      docketEntryId,
-      hasPaper,
+      docketEntryId: serviceInfo.docketEntryId,
+      hasPaper: serviceInfo.hasPaper,
       pdfUrl,
     },
     userId: user.userId,
