@@ -328,7 +328,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(1);
   });
 
-  it('should NOT append a clinic letter to the notice of receipt of petition if the clinic letter was not uploaded for the requested place of trial and petition is pro se', async () => {
+  it('should NOT append a clinic letter to the notice of receipt of petition if it does NOT exist and petition is pro se', async () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockReturnValueOnce(false);
@@ -368,7 +368,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(1);
   });
 
-  it('should NOT append a clinic letter to the notice of receipt of petition if petitioner is not pro se', async () => {
+  it('should NOT append a clinic letter to the notice of receipt of petition if it DOES exist BUT the petitioner is NOT pro se', async () => {
     mockCase = {
       ...MOCK_CASE,
       isPaper: false,
@@ -410,7 +410,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(1);
   });
 
-  it('should append a clinic letter to the notice of receipt of petition if secondary is pro se', async () => {
+  it('should append a clinic letter to the notice of receipt of petition if it does exist and secondary petitioner is pro se', async () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockReturnValueOnce(true);
