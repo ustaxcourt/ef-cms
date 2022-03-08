@@ -513,6 +513,38 @@ jobs:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
 
+  reindex:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+              source $BASH_ENV
+              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+            fi
+      - run:
+          name: Enable Check Reindex Status Cron
+          command: |
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              ./enable-reindex-cron.sh
+              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+            fi
+      - run:
+          name: Reindex
+          command: |
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              ./enable-reindex-cron.sh
+            fi
+
   migrate:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
@@ -826,9 +858,12 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - migrate:
+      - reindex:
           requires:
             - deploy
+      - migrate:
+          requires:
+            - reindex
           filters:
             branches:
               only:
@@ -940,10 +975,14 @@ workflows:
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
-      - migrate:
+      - reindex:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
+      - migrate:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - reindex
       - wait-for-reindex:
           <<: *build-and-deploy-with-context-defaults
           type: approval
