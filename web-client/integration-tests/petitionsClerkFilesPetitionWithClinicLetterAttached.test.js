@@ -14,6 +14,8 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
   });
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
+
+  // creating pro se petition with prefferredTrialCity and procedureType that DOES have a corresponding clinic letter
   petitionsClerkCreatesNewCaseFromPaper(
     cerebralTest,
     fakeFile,
