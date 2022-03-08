@@ -410,55 +410,6 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalledTimes(1);
   });
 
-  it('should append a clinic letter to the notice of receipt of petition if it does exist and secondary petitioner is pro se', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .isFileExists.mockReturnValueOnce(true);
-
-    mockCase = {
-      ...MOCK_CASE,
-      contactSecondary: {
-        ...getContactPrimary(MOCK_CASE),
-        contactId: '230c6634-4c3d-4cda-874c-d9a9387e00e2',
-        name: 'Test Petitioner Secondary',
-      },
-      isPaper: false,
-      partyType: PARTY_TYPES.petitionerSpouse,
-      preferredTrialCity: 'Los Angeles, California',
-      privatePractitioners: [
-        {
-          barNumber: '123456789',
-          name: 'Test Private Practitioner',
-          practitionerId: '123456789',
-          practitionerType: 'privatePractitioner',
-          representing: [getContactPrimary(MOCK_CASE).contactId],
-          role: 'privatePractitioner',
-          userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
-        },
-      ],
-      procedureType: 'Regular',
-      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-    };
-
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().isFileExists,
-    ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalled();
-
-    expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
-    ).toHaveBeenCalledTimes(1);
-  });
-
   it('should have the same contact id on contactPrimary before and after serving the case', async () => {
     mockCase = {
       ...MOCK_CASE,
