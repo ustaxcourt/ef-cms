@@ -105,7 +105,7 @@ const addDocketEntryForNANE = async ({
       docketNumberWithSuffix,
       orderContent,
       orderTitle: documentTitle,
-      // signatureText: '',
+      signatureText: applicationContext.getClerkOfCourNameForSigning(),
     },
   });
 
