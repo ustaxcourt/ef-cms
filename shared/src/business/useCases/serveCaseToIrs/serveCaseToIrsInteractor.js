@@ -59,7 +59,7 @@ const addDocketEntryForPaymentStatus = ({
 };
 exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
 
-export const addDocketEntryForNANE = async ({
+const addDocketEntryForNANE = async ({
   applicationContext,
   caseEntity,
   user,
@@ -115,6 +115,8 @@ export const addDocketEntryForNANE = async ({
     pdfData,
   });
 };
+
+exports.addDocketEntryForNANE = addDocketEntryForNANE;
 
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
