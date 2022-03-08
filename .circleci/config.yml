@@ -416,6 +416,10 @@ jobs:
           command: |
             ./setup-for-blue-green-migration.sh
       - run:
+          name: Setup Reindex If Needed
+          command: |
+            ./setup-for-reindex.sh
+      - run:
           name: Setup Migrate Flag
           command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
       - run:
