@@ -68,7 +68,7 @@ Every week we rotate responsibility for updating dependencies. As an open-source
 3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the resolutions block in `package.json` to specify version overrides. 
 If dependencies have no patch, replace it with an alternative, or wait for the library to be patched.
 
-    NOTE: If any npm packages are updated, update the node cache version in the circle config. 
+    NOTE: If any npm packages are updated, update the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
 
 3. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
 
