@@ -105,7 +105,7 @@ const addDocketEntryForNANE = async ({
       docketNumberWithSuffix,
       orderContent,
       orderTitle: documentTitle,
-      signatureText: applicationContext.getClerkOfCourNameForSigning(),
+      signatureText: applicationContext.getClerkOfCourtNameForSigning(),
     },
   });
 
@@ -114,6 +114,23 @@ const addDocketEntryForNANE = async ({
     caseConfirmationPdfName: newDocketEntry.docketEntryId,
     pdfData,
   });
+
+  const documentContentsId = applicationContext.getUniqueId();
+
+  const contentToStore = {
+    documentContents: orderContent,
+    richText: orderContent,
+  };
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    contentType: 'application/json',
+    document: Buffer.from(JSON.stringify(contentToStore)),
+    key: documentContentsId,
+    useTempBucket: false,
+  });
+
+  newDocketEntry.documentContentsId = documentContentsId;
 };
 
 exports.addDocketEntryForNANE = addDocketEntryForNANE;
