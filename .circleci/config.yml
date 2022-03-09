@@ -546,7 +546,7 @@ jobs:
           name: Reindex
           command: |
             if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
-              ./enable-reindex-cron.sh
+              node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
             fi
 
   migrate:
