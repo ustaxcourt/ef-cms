@@ -2,7 +2,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
-  ORDER_TYPES,
+  NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE,
   PAYMENT_STATUS,
 } = require('../../entities/EntityConstants');
 const {
@@ -68,25 +68,25 @@ const addDocketEntryForNANE = async ({
     return;
   }
 
-  const documentTitle = 'Notice of Attachments in the Nature of Evidence';
-  const orderContent =
-    'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence.  Please be advised that these documents have not been received into evidence by the Court.  You may offer evidentiary materials to the Court at the time of trial.';
+  // const documentTitle = 'Notice of Attachments in the Nature of Evidence';
+  // const orderContent =
+  //   'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence.  Please be advised that these documents have not been received into evidence by the Court.  You may offer evidentiary materials to the Court at the time of trial.';
 
-  const noticeCode = ORDER_TYPES.find(order => order.eventCode === 'NOT');
+  // const noticeCode = ORDER_TYPES.find(order => order.eventCode === 'NOT');
 
   const newDocketEntry = new DocketEntry(
     {
-      documentTitle,
-      documentType: noticeCode.documentType,
+      documentTitle: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
+      documentType: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
-        documentTitle,
-        documentType: noticeCode.documentType,
-        eventCode: noticeCode.eventCode,
-        freeText: documentTitle,
+        documentTitle: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
+        documentType: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.documentType,
+        eventCode: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.code,
+        freeText: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
       },
-      eventCode: noticeCode.eventCode,
-      freeText: documentTitle,
+      eventCode: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.code,
+      freeText: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
       isDraft: true,
       userId: user.userId,
     },
@@ -104,8 +104,9 @@ const addDocketEntryForNANE = async ({
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
-      orderContent,
-      orderTitle: documentTitle.toUpperCase(),
+      orderContent: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.content,
+      orderTitle:
+        NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title.toUpperCase(),
       signatureText: applicationContext.getClerkOfCourtNameForSigning(),
     },
   });
@@ -119,8 +120,8 @@ const addDocketEntryForNANE = async ({
   const documentContentsId = applicationContext.getUniqueId();
 
   const contentToStore = {
-    documentContents: orderContent,
-    richText: orderContent,
+    documentContents: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.content,
+    richText: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.content,
   };
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
