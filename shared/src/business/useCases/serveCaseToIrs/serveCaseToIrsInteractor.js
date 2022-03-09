@@ -86,6 +86,7 @@ const addDocketEntryForNANE = async ({
         freeText: documentTitle,
       },
       eventCode: noticeCode.eventCode,
+      freeText: documentTitle,
       isDraft: true,
       userId: user.userId,
     },
