@@ -104,7 +104,7 @@ const addDocketEntryForNANE = async ({
       caseTitle,
       docketNumberWithSuffix,
       orderContent,
-      orderTitle: documentTitle,
+      orderTitle: documentTitle.toUpperCase(),
       signatureText: applicationContext.getClerkOfCourtNameForSigning(),
     },
   });
