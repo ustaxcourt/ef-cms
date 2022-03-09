@@ -265,6 +265,15 @@ const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
 
+const NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE = {
+  code: 'NOT',
+  content:
+    'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence.  Please be advised that these documents have not been received into evidence by the Court.  You may offer evidentiary materials to the Court at the time of trial.',
+  documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
+    .documentType,
+  title: 'Notice of Attachments in the Nature of Evidence',
+};
+
 // _without returns a new array with values from arg1 sans values subsequent args
 const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
   EVENT_CODES_REQUIRING_SIGNATURE,
@@ -1182,6 +1191,7 @@ module.exports = deepFreeze({
   MAX_SEARCH_CLIENT_RESULTS: 200,
   MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MINUTE_ENTRIES_MAP,
+  NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
