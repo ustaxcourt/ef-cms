@@ -28,7 +28,10 @@ export const OrdersNeededSummary = ({ reviewSavedPetitionHelper }) => {
                 <div className="tablet:grid-col-10">
                   {reviewSavedPetitionHelper.ordersAndNoticesNeeded.length >
                     0 && (
-                    <p className="heading-4 padding-top-0">
+                    <p
+                      className="heading-4 padding-top-0"
+                      id="orders-notices-needed-header"
+                    >
                       Orders/Notices Needed
                     </p>
                   )}
@@ -44,7 +47,7 @@ export const OrdersNeededSummary = ({ reviewSavedPetitionHelper }) => {
                     0 && (
                     <p
                       className="heading-4 padding-top-2"
-                      id="orders-notices-autocreate-header"
+                      id="orders-notices-auto-created-in-draft"
                     >
                       Orders/Notices Automatically Created In Drafts
                     </p>
