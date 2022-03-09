@@ -76,10 +76,6 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 4. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
-#### Validating Updates
--  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
-    - Be sure the deploy runs a migration to verify the updates do not affect the migration workflow.
-
 #### Caveats
 - `cypress`: Do not upgrade past 8.5.0 as anything above that version will cause the "Failed to connect to bus" [error](https://trello.com/c/iuq0gJ6P/1008-ci-error-failed-to-connect-to-the-bus). 
 
@@ -90,3 +86,8 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 - `puppeteer-core` within `web-api/runtimes/puppeteer`: locked to v13.0.1 because that's the highest version that `chrome-aws-lambda` [supports](https://github.com/alixaxel/chrome-aws-lambda/issues/254) at the moment
 
 - `pdfjs-dist`: temporarily locked to 2.12.313 as v2.13.216 causes issues with pdf rendering in cypress tests
+
+#### Validating Updates
+-  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
+    - Be sure the deploy runs a migration to verify the updates do not affect the migration workflow.
+
