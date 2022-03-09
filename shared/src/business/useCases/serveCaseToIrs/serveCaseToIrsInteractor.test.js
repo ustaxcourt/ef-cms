@@ -557,9 +557,16 @@ describe('addDocketEntryForNANE', () => {
       newDocketEntriesFromNewCaseCount,
     );
 
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    const passedInNoticeTitle =
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
+        .orderTitle;
+    expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase()); //asserts that the passed in title was uppercase
+
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
+    // eslint-disable-next-line max-lines
   });
 });
