@@ -68,12 +68,6 @@ const addDocketEntryForNANE = async ({
     return;
   }
 
-  // const documentTitle = 'Notice of Attachments in the Nature of Evidence';
-  // const orderContent =
-  //   'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence.  Please be advised that these documents have not been received into evidence by the Court.  You may offer evidentiary materials to the Court at the time of trial.';
-
-  // const noticeCode = ORDER_TYPES.find(order => order.eventCode === 'NOT');
-
   const newDocketEntry = new DocketEntry(
     {
       documentTitle: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
