@@ -454,7 +454,7 @@ jobs:
       - run:
           name: Setup Judge Users File Var
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
               echo "export FILE_NAME=./scripts/data-import/judge/judge_users.csv" >> $BASH_ENV
             else
               echo "skipping…"
@@ -462,7 +462,7 @@ jobs:
       - run:
           name: Judge Users Setup
           command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
               ./scripts/data-import/judge/bulk-import-judge-users.sh
             else
               echo "skipping…"
