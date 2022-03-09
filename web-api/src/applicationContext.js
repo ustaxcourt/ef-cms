@@ -1590,7 +1590,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
-    getClerkOfCourNameForSigning: () => {
+    getClerkOfCourtNameForSigning: () => {
       return clerkOfCourtNameForSigning;
     },
     getCognito: () => {

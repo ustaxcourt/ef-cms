@@ -28,20 +28,22 @@ export const OrdersNeededSummary = ({ reviewSavedPetitionHelper }) => {
                 <div className="tablet:grid-col-10">
                   {reviewSavedPetitionHelper.ordersAndNoticesNeeded.length >
                     0 && (
-                    <p className="heading-3 usa-alert__heading padding-top-0">
+                    <p className="heading-4 padding-top-0">
                       Orders/Notices Needed
                     </p>
                   )}
                   {reviewSavedPetitionHelper.ordersAndNoticesNeeded.map(
                     order => (
-                      <div key={order}>{order}</div>
+                      <div className="margin-0 font-weight-normal" key={order}>
+                        {order}
+                      </div>
                     ),
                   )}
 
                   {reviewSavedPetitionHelper.ordersAndNoticesInDraft.length >
                     0 && (
                     <p
-                      className="heading-3 usa-alert__heading padding-top-2"
+                      className="heading-4 padding-top-2"
                       id="orders-notices-autocreate-header"
                     >
                       Orders/Notices Automatically Created In Drafts
@@ -50,7 +52,9 @@ export const OrdersNeededSummary = ({ reviewSavedPetitionHelper }) => {
 
                   {reviewSavedPetitionHelper.ordersAndNoticesInDraft.map(
                     order => (
-                      <div key={order}>{order}</div>
+                      <div className="margin-0 font-weight-normal" key={order}>
+                        {order}
+                      </div>
                     ),
                   )}
                 </div>

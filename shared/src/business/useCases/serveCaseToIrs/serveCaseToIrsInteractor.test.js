@@ -558,5 +558,8 @@ describe('addDocketEntryForNANE', () => {
     );
 
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
   });
 });
