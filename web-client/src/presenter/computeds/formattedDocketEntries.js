@@ -293,15 +293,13 @@ export const formattedDocketEntries = (get, applicationContext) => {
       applicationContext.getUtilities().isPending(docketEntry),
     );
 
-  result.formattedDraftDocuments = (result.draftDocuments || []).map(
-    draftDocument => {
-      return {
-        ...draftDocument,
-        descriptionDisplay: draftDocument.documentTitle,
-        showDocumentViewerLink: permissions.UPDATE_CASE,
-      };
-    },
-  );
+  result.formattedDraftDocuments = result.draftDocuments.map(draftDocument => {
+    return {
+      ...draftDocument,
+      descriptionDisplay: draftDocument.documentTitle,
+      showDocumentViewerLink: permissions.UPDATE_CASE,
+    };
+  });
 
   result.docketRecordSort = docketRecordSort;
   return result;
