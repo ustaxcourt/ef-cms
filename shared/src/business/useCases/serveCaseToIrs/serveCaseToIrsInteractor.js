@@ -168,7 +168,9 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
-  if (preferredTrialCity) {
+  const isProSe = caseEntity.privatePractitioners.length === 0;
+
+  if (preferredTrialCity && isProSe) {
     const clinicLetterKey = getClinicLetterKey({
       procedureType,
       trialLocation: preferredTrialCity,
