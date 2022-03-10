@@ -9,7 +9,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
 ) => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
-  return it('Docketclerk adds paper filed docket entry and serves', async () => {
+  return it('docket clerk adds paper filed docket entry and serves', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });

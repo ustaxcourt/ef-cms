@@ -11,7 +11,9 @@ export const PractitionerCaseList = ({
     <>
       <PrimaryHeader />
       <div id="case-list-header">
-        <h2 className="margin-bottom-0">{practitionerName}</h2>
+        <h2 className="margin-bottom-0 text-center text-normal">
+          {practitionerName}
+        </h2>
         <p className="margin-top-0 text-center text-size-small">{barNumber}</p>
       </div>
 

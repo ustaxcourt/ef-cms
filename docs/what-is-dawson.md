@@ -13,6 +13,16 @@ This part of the documentation is meant to give a beginner a complete overview o
 
 ## Video Walkthroughs
 
+If you're the type of person who enjoys watching video walkthroughs, we have a couple of useful links that show various use cases of our DAWSON system that can help get you up to speed on how DAWSON works.  Watching these videos in order will provide you a great overview.
+
+1. [Intro to DAWSON](https://www.zoomgov.com/rec/share/uZF_F4PtqFpIcq_WshDOY4JmNabgT6a80HQe8vALmR0BwUIquAzNxmxd52uKHPjB)
+2. [Advanced Search for Case/Order/Opinion/Practitioner](https://www.zoomgov.com/rec/share/u-5YdZ-zqjlLbYXXyVHOfukbHtXmaaa803cb-foIyR3CO1Scp83aBrHComXxlAxz)
+3. [Generate and Sign Orders](https://www.zoomgov.com/rec/play/tZcsJe6q_283TNbDtgSDUKNwW43rJ_isgSgdrvUInRu3AHEKO1H3MrEVZOYf9aFfwuCRVfk1FatdbHJ2)
+4. [Notes & Messaging](https://www.zoomgov.com/rec/share/6ZVTE6zT3zlJHq_P7R3fR4l9LJvUT6a8hCQcrPFemB3400xTd6zLSq6ruP2Bq6hG)
+5. [Reports](https://www.zoomgov.com/rec/share/78NnLqrxxFpJf5XkuEXfaKkHOZy6aaa8hnAbr_Jbnk8GLznaVOKqAiaoyrwEVhm-)
+6. [Calendaring & Trial Session Management](https://www.zoomgov.com/rec/share/uf0rD77urV5OHI3Br1_9fr8KDIPjX6a81CdI_vAPmkbZQk2DZuNAPKELv6ihPY2B)
+7. [Demo of Public-Facing Features](https://us02web.zoom.us/rec/play/EZTpkvLfDeXoLeW2YzhdTgpBcKoC10NumGESfgR2Aorw_E85V6vwwpCCmQOEzW9GI9M-0fvLZTxMPr_T.wWcxq5k6tZ3GI8OP)
+
 ## Screen Shots
 
 ## Users

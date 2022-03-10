@@ -44,12 +44,6 @@ export const submitCorrespondenceAction = async ({
       key: correspondenceId,
     });
 
-  await applicationContext
-    .getUseCases()
-    .sanitizePdfInteractor(applicationContext, {
-      key: correspondenceId,
-    });
-
   if (documentIdToEdit) {
     caseDetail = await applicationContext
       .getUseCases()

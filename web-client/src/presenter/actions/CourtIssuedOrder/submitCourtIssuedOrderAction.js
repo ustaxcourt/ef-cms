@@ -48,12 +48,6 @@ export const submitCourtIssuedOrderAction = async ({
       key: docketEntryId,
     });
 
-  await applicationContext
-    .getUseCases()
-    .sanitizePdfInteractor(applicationContext, {
-      key: docketEntryId,
-    });
-
   if (docketEntryIdToEdit) {
     caseDetail = await applicationContext
       .getUseCases()

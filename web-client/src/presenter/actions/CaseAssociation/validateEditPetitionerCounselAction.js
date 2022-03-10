@@ -20,10 +20,9 @@ export const validateEditPetitionerCounselAction = ({
     applicationContext.getConstants();
 
   const practitioner = get(state.form);
-
   const { privatePractitioners: oldPractitioners } = get(state.caseDetail);
 
-  let error = applicationContext
+  let validationErrors = applicationContext
     .getUseCases()
     .validateEditPetitionerCounselInteractor({
       practitioner,
@@ -40,22 +39,22 @@ export const validateEditPetitionerCounselAction = ({
     ].includes(oldPractitioner.serviceIndicator) &&
     practitioner.serviceIndicator === SERVICE_INDICATOR_TYPES.SI_ELECTRONIC
   ) {
-    error = {
-      ...error,
+    validationErrors = {
+      ...validationErrors,
       ...SERVICE_INDICATOR_ERROR,
     };
   }
 
-  store.set(state.validationErrors, error || {});
+  store.set(state.validationErrors, validationErrors);
 
-  if (isEmpty(error)) {
+  if (isEmpty(validationErrors)) {
     return path.success();
   } else {
     return path.error({
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors: error,
+      errors: validationErrors,
     });
   }
 };

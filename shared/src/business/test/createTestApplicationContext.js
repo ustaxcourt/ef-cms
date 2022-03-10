@@ -27,6 +27,9 @@ const {
   isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
 const {
+  combineTwoPdfs,
+} = require('../utilities/documentGenerators/combineTwoPdfs');
+const {
   compareCasesByDocketNumber,
 } = require('../utilities/getFormattedTrialSessionDetails');
 const {
@@ -264,6 +267,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(caseHasServedDocketEntries),
     caseHasServedPetition: jest.fn().mockImplementation(caseHasServedPetition),
     checkDate: jest.fn().mockImplementation(DateHandler.checkDate),
+    combineTwoPdfs: jest.fn().mockImplementation(combineTwoPdfs),
     compareCasesByDocketNumber: jest
       .fn()
       .mockImplementation(compareCasesByDocketNumber),
@@ -429,6 +433,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeToRemoteProceeding: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
     noticeOfTrialIssued: jest.fn().mockImplementation(getFakeFile),
@@ -488,6 +493,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChambersSectionsLabels: jest
       .fn()
       .mockImplementation(getChambersSectionsLabels),
+    getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest
       .fn()
       .mockImplementation(getDocumentQCInboxForSectionPersistence),
