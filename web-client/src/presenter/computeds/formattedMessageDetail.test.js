@@ -136,8 +136,8 @@ describe('formattedMessageDetail', () => {
         state: {
           caseDetail: mockCaseDetail,
           messageDetail: [
-            { createdAt: '2019-03-01T21:40:46.415Z' },
-            { createdAt: '2019-04-01T21:40:46.415Z' },
+            { attachments: [], createdAt: '2019-03-01T21:40:46.415Z' },
+            { attachments: [], createdAt: '2019-04-01T21:40:46.415Z' },
           ],
         },
       });
@@ -149,7 +149,9 @@ describe('formattedMessageDetail', () => {
       const result = runCompute(formattedMessageDetail, {
         state: {
           caseDetail: mockCaseDetail,
-          messageDetail: [{ createdAt: '2019-03-01T21:40:46.415Z' }],
+          messageDetail: [
+            { attachments: [], createdAt: '2019-03-01T21:40:46.415Z' },
+          ],
         },
       });
 
@@ -163,8 +165,8 @@ describe('formattedMessageDetail', () => {
           caseDetail: mockCaseDetail,
           isExpanded: true,
           messageDetail: [
-            { createdAt: '2019-03-01T21:40:46.415Z' },
-            { createdAt: '2019-04-01T21:40:46.415Z' },
+            { attachments: [], createdAt: '2019-03-01T21:40:46.415Z' },
+            { attachments: [], createdAt: '2019-04-01T21:40:46.415Z' },
           ],
         },
       });
@@ -178,8 +180,8 @@ describe('formattedMessageDetail', () => {
           caseDetail: mockCaseDetail,
           isExpanded: false,
           messageDetail: [
-            { createdAt: '2019-03-01T21:40:46.415Z' },
-            { createdAt: '2019-04-01T21:40:46.415Z' },
+            { attachments: [], createdAt: '2019-03-01T21:40:46.415Z' },
+            { attachments: [], createdAt: '2019-04-01T21:40:46.415Z' },
           ],
         },
       });
