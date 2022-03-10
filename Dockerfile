@@ -24,4 +24,6 @@ RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.1.6/terr
   rm terraform.zip && \
   cp terraform /usr/local/bin/
 
+RUN apt-get install -y graphicsmagick ghostscript
+
 CMD echo "🔥"
