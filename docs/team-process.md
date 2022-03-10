@@ -81,9 +81,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 - `@fortawesome/free-solid-svg-icons`: v6.0.0 caused a regression with faThumbtack so it is not importable. [Github issue](https://github.com/FortAwesome/Font-Awesome/issues/18661) Leaving both this package and `fortawesome/free-regular-svg-icons` at v5.15.4 until this is patched.
 
-- `@fortawesome/fontawesome-svg-core`: upgrading from v1.2.36 to v1.3.0 causes icon sizing issues. Since it was released 2 days ago as of writing this, seems worth waiting for a patch, similar to the other @fortawesome packages (Update: Still causing issues as of 03/04).
-
-- `puppeteer-core` within `web-api/runtimes/puppeteer`: locked to v13.0.1 because that's the highest version that `chrome-aws-lambda` [supports](https://github.com/alixaxel/chrome-aws-lambda/issues/254) at the moment
+- `@fortawesome/fontawesome-svg-core`: Temporarily set to only accept bugfix updates. Upgrading from v1.2.36 to v1.3.0 causes icon sizing issues. Since it was released 2 days ago as of writing this, seems worth waiting for a patch, similar to the other @fortawesome packages (Update: Still causing issues as of 03/04 [related GitHub issue](https://github.com/FortAwesome/Font-Awesome/issues/18663)).
 
 - `pdfjs-dist`: temporarily locked to 2.12.313 as v2.13.216 causes issues with pdf rendering in cypress tests
 
