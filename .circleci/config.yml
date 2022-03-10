@@ -106,6 +106,22 @@ jobs:
             - project/web-client
             - project/web-client/coverage-integration-*
 
+  verify-pdfs:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Web Client - Integration Test
+          command: |
+            npm run test:pdf-output
+            node image-compare-pdfs.js
+
   e2e-pa11y:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
@@ -804,6 +820,8 @@ workflows:
           <<: *build-and-deploy-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-defaults
+      - verify-pdfs:
+          <<: *build-and-deploy-defaults
       - deploy:
           requires:
             - build-client-integration
@@ -813,6 +831,7 @@ workflows:
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
+            - verify-pdfs
           filters:
             branches:
               only:
@@ -929,6 +948,8 @@ workflows:
       - e2e-cypress-smoketests-local:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
+          <<: *build-and-deploy-with-context-defaults
+      - verify-pdfs:
           <<: *build-and-deploy-with-context-defaults
       - deploy:
           <<: *build-and-deploy-with-context-defaults
