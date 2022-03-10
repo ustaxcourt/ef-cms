@@ -1,6 +1,6 @@
 #!/bin/bash
 
-MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh ${ENV})
+MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh ${ENV})
 if [[ "${MIGRATE_FLAG}" == "true" ]]; then
   exit 0
 fi
