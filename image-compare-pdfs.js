@@ -1,6 +1,5 @@
 const checksum = require('checksum');
 const path = require('path');
-
 const { fromPath } = require('pdf2pic');
 
 const outputPath = './shared/test-output/document-generation';
@@ -58,27 +57,32 @@ const expectedHashes = {
 };
 
 (async () => {
-  for (let pdf of pdfs) {
-    const storeOutputImage = fromPath(path.join(outputPath, pdf), {
-      density: 100,
-      format: 'png',
-      height: 1000,
-      saveFilename: pdf,
-      savePath: './shared/test-output',
-      width: 800,
-    });
-    await storeOutputImage(1);
+  try {
+    for (let pdf of pdfs) {
+      const storeOutputImage = fromPath(path.join(outputPath, pdf), {
+        density: 100,
+        format: 'png',
+        height: 1000,
+        saveFilename: pdf,
+        savePath: './shared/test-output',
+        width: 800,
+      });
+      await storeOutputImage(1);
 
-    const hash = await new Promise(resolve => {
-      checksum.file(`./shared/test-output/${pdf}.1.png`, (err, sum) =>
-        resolve(sum),
-      );
-    });
+      const hash = await new Promise(resolve => {
+        checksum.file(`./shared/test-output/${pdf}.1.png`, (err, sum) =>
+          resolve(sum),
+        );
+      });
 
-    console.log(`output hash for ${pdf}: `, hash);
+      console.log(`output hash for ${pdf}: `, hash);
 
-    if (hash !== expectedHashes[pdf]) {
-      throw new Error('Hash mismatch');
+      if (hash !== expectedHashes[pdf]) {
+        throw new Error('Hash mismatch');
+      }
     }
+  } catch (err) {
+    console.error(err);
+    process.exit(1);
   }
 })();
