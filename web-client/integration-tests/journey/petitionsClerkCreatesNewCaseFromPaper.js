@@ -254,7 +254,6 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
 
     expect(helper).toMatchObject({
       hasIrsNoticeFormatted: 'No',
-      hasOrders: true,
       petitionPaymentStatusFormatted: 'Waived 05/05/05',
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
