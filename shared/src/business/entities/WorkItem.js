@@ -57,7 +57,6 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   this.highPriority =
     rawWorkItem.highPriority ||
     rawWorkItem.caseStatus === CASE_STATUS_TYPES.calendared;
-  this.inProgress = rawWorkItem.inProgress;
   this.isInitializeCase = rawWorkItem.isInitializeCase;
   this.isRead = rawWorkItem.isRead;
   this.section = rawWorkItem.section;
@@ -118,7 +117,6 @@ WorkItem.prototype.setAsCompleted = function ({ message, user }) {
   this.completedBy = user.name;
   this.completedByUserId = user.userId;
   this.completedMessage = message;
-  delete this.inProgress;
   return this;
 };
 
