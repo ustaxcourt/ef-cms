@@ -147,6 +147,10 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       key: 'orderForRatification',
       value: true,
     },
+    {
+      key: 'noticeOfAttachments',
+      value: true,
+    },
   ];
 
   it('should default to parties tab when creating a new case', async () => {
@@ -254,6 +258,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
 
     expect(helper).toMatchObject({
       hasIrsNoticeFormatted: 'No',
+      noticeOfAttachments: true,
       petitionPaymentStatusFormatted: 'Waived 05/05/05',
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
