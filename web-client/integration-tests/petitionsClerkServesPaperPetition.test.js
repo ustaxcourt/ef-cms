@@ -9,6 +9,13 @@ import { petitionsClerkServesPetitionFromDocumentView } from './journey/petition
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
 
+// Creating a new case flow and serving petition(to verify NANE notice in draft)
+
+// 1. petitions clerk creates a new paper case with NANE notice checked
+// 2. petitions clerk serve the  case (petitionsClerkServesPetitionFromDocumentView)
+// 3. petitions clerk navigates to case detail page and verify new NANE draft order
+// 4.
+
 describe('Petitions Clerk Serves Paper Petition From Message Detail & Document View', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
