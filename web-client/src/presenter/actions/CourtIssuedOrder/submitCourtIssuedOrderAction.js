@@ -34,8 +34,6 @@ export const submitCourtIssuedOrderAction = async ({
     ...documentMetadata,
   };
 
-  console.log('documentMetadata', documentMetadata);
-
   await applicationContext
     .getUseCases()
     .getStatusOfVirusScanInteractor(applicationContext, {
