@@ -135,6 +135,7 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         href={`/case-detail/${form.docketNumber}/petition-qc?tab=caseInfo`}
                         icon="edit"
+                        id="case-information-edit-button"
                       >
                         Edit
                       </Button>
