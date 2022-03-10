@@ -4,6 +4,7 @@
   "reporterOptions": {
     "toConsole": true
   },
+  "video": false,
   "fixturesFolder": "cypress-readonly/fixtures",
   "integrationFolder": "cypress-readonly/integration",
   "pluginsFile": "cypress-readonly/plugins/index.js",

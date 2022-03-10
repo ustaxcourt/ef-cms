@@ -22,7 +22,7 @@ describe('Order', () => {
     const wrapper = mount(<Order options={options} />);
 
     expect(wrapper.find('#caption-title').text()).toEqual(
-      options.caseTitle.toUpperCase(),
+      `${options.caseTitle.toUpperCase()},`,
     );
     expect(wrapper.find('#caption-extension').text()).toEqual(
       options.caseCaptionExtension,
