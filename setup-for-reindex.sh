@@ -10,5 +10,6 @@ SOURCE_TABLE_VERSION=$(aws dynamodb get-item --region us-east-1 --table-name "ef
 aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${SOURCE_TABLE_VERSION}" --region us-east-1
 CODE=$?
 if [[ "${CODE}" != "0" ]]; then
+  echo "Setting reindex flag because efcms-search-${ENV}-${SOURCE_TABLE_VERSION} does not exist."
   export REINDEX_FLAG=true
 fi
