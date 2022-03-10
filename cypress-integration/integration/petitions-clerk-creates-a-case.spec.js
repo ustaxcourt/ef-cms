@@ -6,6 +6,9 @@ const {
 const {
   fillInCreateCaseFromPaperForm,
 } = require('../support/pages/create-paper-petition');
+const {
+  unchecksOrdersAndNoticesBoxesInCase,
+} = require('../support/pages/unchecks-orders-and-notices-boxes-in-case');
 
 describe('Create case and submit to IRS', function () {
   before(() => {
@@ -29,6 +32,18 @@ describe('Create case and submit to IRS', function () {
   it('should display Orders/Notices Automatically Created notification', () => {
     cy.get('#orders-notices-needed-header').should('exist');
     cy.get('#orders-notices-auto-created-in-draft').should('exist');
+  });
+
+  it('should uncheck the previously selected Notices/Orders needed in Case Info Tab', () => {
+    cy.get('#case-information-edit-button').click();
+    unchecksOrdersAndNoticesBoxesInCase();
+
+    cy.intercept('PUT', '**/cases/**').as('submitCase');
+    cy.get('#submit-case').click();
+    cy.wait('@submitCase').then(() => {
+      cy.get('#orders-notices-needed-header').should('exist');
+      cy.get('#orders-notices-auto-created-in-draft').should('not.exist');
+    });
   });
 
   it('should display a confirmation modal when the user clicks cancel on the review page', () => {
