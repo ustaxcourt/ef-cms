@@ -34,6 +34,11 @@ If you are at Flexion, you will never need to touch `court/prod`.
 
 Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8cf4-d0fa2da8a768) as you go through this workflow.
 
+### Terminology
+
+- PO = Product Owner.
+- PS = Product Specialist.
+
 ### Flexion Developer
 
 1. Branch from `court/staging` into a branch in the Flexion fork.  Name the branch off the work you are working on (a story, a bug, a devex/opex item, etc.).
@@ -42,12 +47,18 @@ Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8c
 2. Work on the work item.
    1. Feel free to push to the Flexion experimental branches as you go and do quick demos at stand-up.
    2. While work is ongoing, other work may be merged into `court/staging`.  Backmerge that into your branch (and any sub-branches) so you have the latest and greatest.
-3. At some point, you presume the work is done.
-   1. Either directly merge work to the `flexion/develop` branch or push to an experimental branch.
-   2. Open draft PR from branch to `court/test`.
-   3. Give the PO a link to the environment that has your deployed work for PO sign-off.
-4. Once verified by PO, un-draft the PR.
-   1. Ask for reviews.  Reviews can come from both Flexion and the Court.  In the end we'll need at least one Court approval to merge.
+3. At some point, you presume the work is done.  The work needs to be reviewed by the Court and a PR created and merged.  This can be accomplished in two ways.
+   - Verification occurs in a Flexion environment.
+     1. Directly merge work to the `flexion/develop` branch or push to an experimental branch.
+     2. Give the PO/PS a link to the environment that has your deployed work for PO/PS sign-off.
+     3. Once verified by PO/PS, create the PR from your branch to `court/test`.
+     4. Ask for PR reviews.  Reviews can come from both Flexion and the Court.
+     5. Merge the PR.
+   - Verification occurs in the `test` environment.
+     1. Create the PR from your branch to `court/test`.
+     2. Ask for PR reviews.  Reviews can come from both Flexion and the Court.
+     3. Merge the PR.
+     4. As mentioned under [Court Ops](#court-ops) below, tell the PO/PS that we're ready for review in the `test` environment.
 
 ### Court Developer
 
@@ -56,11 +67,10 @@ Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8c
 
 ### Court Ops
 
-1. Review PRs into `court/test`.
-   1. Eventually accepted and merged.
-2. Tests
-   1. PO or the Product Specialist (PS) verifies the work in `test` environment which has prod-like data.  This step can be skipped if the PO/PS is confident enough with their initial verification earlier.
+1. Review any PRs into `court/test` that you want.
+2. Tests after PRs are merged into `court/test`.
+   1. PO/PS verifies the work in the `test` environment which has prod-like data.  This step can be skipped if the PO/PS is confident enough with their initial verification earlier.
    2. Merge work into `court/irs` for IRS environment verification.  This step can be skipped if no testing with IRS is necessary.
-   3. If tests fail, fail forward by branching from `court/test` into a branch to fix the bug.  If Flexion is working on the fix, branch into the Flexion fork or remain in USTC repository if USTC is working on the fix.
+   3. If tests fail, fail forward by branching from `court/test` into a branch to fix the bug.  If Flexion is working on the fix, branch into the Flexion fork or remain in the USTC repository if USTC is working on the fix.
 3. Merge work to `court/staging` upon passing tests.
 4. Once deploy window opens, merge `court/staging` into `court/prod`.

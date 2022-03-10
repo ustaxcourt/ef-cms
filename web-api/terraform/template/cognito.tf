@@ -219,6 +219,13 @@ resource "aws_cognito_user_pool" "irs_pool" {
     temporary_password_validity_days = 7
   }
 
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "admin_only"
+      priority = 1
+    }
+  }
+
   lifecycle {
     prevent_destroy = true
   }
