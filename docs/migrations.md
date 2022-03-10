@@ -205,4 +205,4 @@ Once the reindex cron determines the elasticsearch clusters are matching in rega
 
 In rare cases a blue-green migration will fail due to entity validation or timing out.  Sometimes the data we fetch from the backend doesn't properly align with the entities we are trying to create and validate which will cause the migration flow to fail when being ran.  The way we have the migration setup is it will retry 10 times on a segment before failing the entire migration.  Any failed events will be put onto one of two dead letter queue called either `migration_segments_dl_queue_$ENV` or `migration_failure_queue_$ENV`.  Any records in these dead letter queues means something bad has happened and needs to be fixed.
 
-!> Our CI/CD pipeline is mostly fully automatted, but do not switch colors to the new environment if these dead letter queues contain any events.
+!> Our CI/CD pipeline is mostly fully automated, but do not switch colors to the new environment if these dead letter queues contain any events.

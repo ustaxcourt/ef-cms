@@ -174,6 +174,8 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
       judge: 'Chief Judge',
     });
 
+    await cerebralTest.runSequence('loadMorePendingItemsSequence');
+
     const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
     expect(
       pendingItems.find(

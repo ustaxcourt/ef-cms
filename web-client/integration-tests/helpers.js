@@ -274,10 +274,7 @@ export const contactSecondaryFromState = cerebralTest => {
   return cerebralTest.getState('caseDetail.petitioners.1');
 };
 
-export const getCaseMessagesForCase = async cerebralTest => {
-  await cerebralTest.runSequence('gotoCaseDetailSequence', {
-    docketNumber: cerebralTest.docketNumber,
-  });
+export const getCaseMessagesForCase = cerebralTest => {
   return runCompute(formattedCaseMessages, {
     state: cerebralTest.getState(),
   });
@@ -564,8 +561,11 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadProposedStipulatedDecision = async cerebralTest => {
-  cerebralTest.setState('form', {
+export const uploadProposedStipulatedDecision = async (
+  cerebralTest,
+  configObject,
+) => {
+  const defaultForm = {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -581,6 +581,11 @@ export const uploadProposedStipulatedDecision = async cerebralTest => {
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
+  };
+
+  cerebralTest.setState('form', {
+    ...defaultForm,
+    ...configObject,
   });
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
@@ -665,7 +670,7 @@ export const loginAs = (cerebralTest, user) =>
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
-export const setupTest = ({ useCases = {} } = {}) => {
+export const setupTest = ({ useCases = {}, constantsOverrides = {} } = {}) => {
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
@@ -761,10 +766,6 @@ export const setupTest = ({ useCases = {} } = {}) => {
     };
   };
 
-  const constantsOverrides = {
-    CASE_SEARCH_PAGE_SIZE: 1,
-    DEADLINE_REPORT_PAGE_SIZE: 1,
-  };
   const originalConstants = applicationContext.getConstants();
   presenter.providers.applicationContext.getConstants = () => {
     return {
@@ -933,4 +934,26 @@ export const updateOrderForm = async (cerebralTest, formValues) => {
     formValues,
     'updateAdvancedOrderSearchFormValueSequence',
   );
+};
+
+export const verifySortedReceivedAtDateOfPendingItems = pendingItems => {
+  return pendingItems.every((elm, i, arr) =>
+    i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
+  );
+};
+
+export const docketClerkLoadsPendingReportOnChiefJudgeSelection = async ({
+  cerebralTest,
+  shouldLoadMore = false,
+}) => {
+  await refreshElasticsearchIndex();
+
+  await cerebralTest.runSequence('gotoPendingReportSequence');
+
+  await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
+    judge: 'Chief Judge',
+  });
+
+  shouldLoadMore &&
+    (await cerebralTest.runSequence('loadMorePendingItemsSequence'));
 };

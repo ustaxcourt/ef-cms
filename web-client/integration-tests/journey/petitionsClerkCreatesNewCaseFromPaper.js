@@ -14,6 +14,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
   trialLocation = 'Birmingham, Alabama',
+  procedureType = 'Small',
 ) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
@@ -83,7 +84,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'procedureType',
-      value: 'Small',
+      value: procedureType,
     },
     {
       key: 'caseType',

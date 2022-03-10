@@ -1,4 +1,4 @@
-const createApplicationContext = require('../applicationContext');
+const createSilentApplicationContext = require('../../../shared/src/business/test/createSilentApplicationContext');
 const {
   getDocumentDownloadUrlLambda,
 } = require('./getDocumentDownloadUrlLambda');
@@ -10,21 +10,6 @@ const REQUEST_EVENT = {
   path: '',
   pathParameters: {},
   queryStringParameters: {},
-};
-
-const createSilentAppContext = user => {
-  const applicationContext = createApplicationContext(user, {
-    debug: jest.fn(),
-    error: jest.fn(),
-    info: jest.fn(),
-  });
-
-  applicationContext.environment.dynamoDbTableName = 'mocked';
-  applicationContext.getPersistenceGateway().getMaintenanceMode = jest
-    .fn()
-    .mockReturnValue(false);
-
-  return applicationContext;
 };
 
 describe('getDocumentDownloadUrlLambda', () => {
@@ -41,7 +26,7 @@ describe('getDocumentDownloadUrlLambda', () => {
 
   it('returns 403 when the user is not authorized', async () => {
     const user = { role: 'roleWithNoPermissions' };
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
 
     const response = await getDocumentDownloadUrlLambda(REQUEST_EVENT, {
       applicationContext,
@@ -54,7 +39,7 @@ describe('getDocumentDownloadUrlLambda', () => {
 
   it('returns 404 when the docket number isn’t found', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
     const request = Object.assign({}, REQUEST_EVENT, {
       pathParameters: {
         docketNumber: '1234-19',
@@ -96,7 +81,7 @@ describe('getDocumentDownloadUrlLambda', () => {
 
   it('returns 404 when the entity GUID isn’t found', async () => {
     const user = MOCK_USERS['2eee98ac-613f-46bc-afd5-2574d1b15664'];
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
     const request = Object.assign({}, REQUEST_EVENT, {
       pathParameters: {
         docketNumber: '123-30',
@@ -153,7 +138,7 @@ describe('getDocumentDownloadUrlLambda', () => {
 
   it('returns 500 on an unexpected error', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
     const request = Object.assign({}, REQUEST_EVENT, {
       pathParameters: {
         docketNumber: '123-30',
@@ -183,7 +168,7 @@ describe('getDocumentDownloadUrlLambda', () => {
 
   it('returns the document download URL in v1 format', async () => {
     const user = MOCK_USERS['b7d90c05-f6cd-442c-a168-202db587f16f'];
-    const applicationContext = createSilentAppContext(user);
+    const applicationContext = createSilentApplicationContext(user);
     const request = Object.assign({}, REQUEST_EVENT, {
       pathParameters: {
         docketNumber: '123-30',

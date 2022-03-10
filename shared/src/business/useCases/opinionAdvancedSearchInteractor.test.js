@@ -108,6 +108,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     await opinionAdvancedSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword,
+      opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       startDate: '01/01/2001',
     });
 
