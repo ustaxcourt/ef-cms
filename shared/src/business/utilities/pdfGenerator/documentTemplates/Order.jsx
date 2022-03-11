@@ -1,11 +1,11 @@
 const React = require('react');
 const { OrderDocketHeader } = require('../components/OrderDocketHeader.jsx');
-// const { OrderPrimaryHeader } = require('../components/OrderPrimaryHeader.jsx');
+const { OrderPrimaryHeader } = require('../components/OrderPrimaryHeader.jsx');
 
 export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
   return (
     <div className="order-pdf">
-      {/* <OrderPrimaryHeader /> */}
+      <OrderPrimaryHeader />
       <OrderDocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle.toUpperCase()}
