@@ -13,6 +13,7 @@ describe('setIsPrimaryTabAction', () => {
               correspondence: false,
               deadlines: false,
               docketRecord: false,
+              inProgress: false,
               notes: false,
             },
             primaryTab: 'docketRecord',
@@ -28,6 +29,7 @@ describe('setIsPrimaryTabAction', () => {
       correspondence: false,
       deadlines: false,
       docketRecord: true,
+      inProgress: false,
       notes: false,
     });
   });
