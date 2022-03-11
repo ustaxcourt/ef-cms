@@ -406,6 +406,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
   entityName: JoiValidationConstants.STRING.valid('WorkItem').required(),
   hideFromPendingMessages: joi.boolean().optional(),
   highPriority: joi.boolean().optional(),
+  inProgress: joi.boolean().optional(),
   isInitializeCase: joi.boolean().optional(),
   isRead: joi.boolean().optional(),
   section: JoiValidationConstants.STRING.required(),
