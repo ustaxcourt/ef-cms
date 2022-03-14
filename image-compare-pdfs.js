@@ -1,6 +1,8 @@
-const checksum = require('checksum');
+const fs = require('fs');
 const path = require('path');
+const pixelmatch = require('pixelmatch');
 const { fromPath } = require('pdf2pic');
+const { PNG } = require('pngjs');
 
 const outputPath = './shared/test-output/document-generation';
 
@@ -41,29 +43,43 @@ const pdfs = [
       });
       await storeOutputImage(1);
 
-      const actualHash = await new Promise(resolve => {
-        checksum.file(`./shared/test-output/${pdf}.1.png`, (err, sum) =>
-          resolve(sum),
-        );
-      });
+      const actualImage = PNG.sync.read(
+        fs.readFileSync(`./shared/test-output/${pdf}.1.png`),
+      );
+      const expectedImage = PNG.sync.read(
+        fs.readFileSync(`./shared/test-pdf-expected-images/${pdf}.1.png`),
+      );
+      const { height, width } = actualImage;
+      const diff = new PNG({ height, width });
 
-      const expectedHash = await new Promise(resolve => {
-        checksum.file(
-          `./shared/test-pdf-expected-images/${pdf}.1.png`,
-          (err, sum) => resolve(sum),
-        );
-      });
+      const pixelDifference = pixelmatch(
+        actualImage.data,
+        expectedImage.data,
+        diff.data,
+        width,
+        height,
+        { threshold: 0.2 },
+      );
 
-      if (actualHash !== expectedHash) {
+      const totalPixels = height * width;
+      const percentDifference = (pixelDifference / totalPixels) * 100;
+
+      fs.mkdirSync(`./shared/test-output/diff`, { recursive: true });
+      fs.writeFileSync(
+        `./shared/test-output/diff/${pdf}.1.png`,
+        PNG.sync.write(diff),
+      );
+
+      if (percentDifference > 1) {
+        console.error(
+          `${pdf} failed due to percentDifference of ${percentDifference}`,
+        );
         fail = true;
-        console.log(
-          `unexpected hash for ${pdf}: received: ${actualHash} expected ${expectedHash}`,
-        );
       }
     }
 
     if (fail) {
-      throw new Error('Hash mismatch');
+      throw new Error('PDF visualize testing failed');
     }
   } catch (err) {
     console.error(err);

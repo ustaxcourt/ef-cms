@@ -102,8 +102,6 @@
     "parse-full-name": "^1.2.6",
     "pdf-lib": "^1.17.1",
     "pdfjs-dist": "~2.12.313",
-    "pixelmatch": "^5.2.1",
-    "pngjs": "^6.0.0",
     "postcss": "^8.4.7",
     "postcss-loader": "^6.2.1",
     "prettier": "^2.5.1",
@@ -300,6 +298,8 @@
   },
   "devDependencies": {
     "checksum": "^1.0.0",
-    "pdf2pic": "^2.1.4"
+    "pdf2pic": "^2.1.4",
+    "pixelmatch": "^5.2.1",
+    "pngjs": "^6.0.0"
   }
 }
