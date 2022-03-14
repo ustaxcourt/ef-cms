@@ -3,11 +3,11 @@ import { applicationContextForClient as applicationContext } from '../../../../s
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const addToTrialSessionModalHelper = withAppContextDecorator(
-  addToTrialSessionModalHelperComputed,
-);
+describe('addToTrialSessionModalHelper', () => {
+  const addToTrialSessionModalHelper = withAppContextDecorator(
+    addToTrialSessionModalHelperComputed,
+  );
 
-describe('add to trial session modal helper', () => {
   const { TRIAL_SESSION_SCOPE_TYPES, US_STATES } =
     applicationContext.getConstants();
 
@@ -56,7 +56,9 @@ describe('add to trial session modal helper', () => {
   it('should not return trialSessionsFormatted or trialSessionsFormattedByState if modal state does not contain trialSessions', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
-        caseDetail: {},
+        caseDetail: {
+          hearings: [],
+        },
         form: {},
         modal: {},
       },
@@ -125,7 +127,7 @@ describe('add to trial session modal helper', () => {
   it('should filter out trial sessions that are closed', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
-        caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },
+        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
         form: {},
         modal: {
           showAllLocations: true,
@@ -173,7 +175,7 @@ describe('add to trial session modal helper', () => {
   it('should filter trialSessions by preferredTrialCity if state.modal.showAllLocations is false', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
-        caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },
+        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
         form: {},
         modal: {
           showAllLocations: false,
@@ -194,7 +196,7 @@ describe('add to trial session modal helper', () => {
   it('should format optionText for each trial session and group by state (or "Remote"), then sort by location and then by date when showAllLocations is true', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
-        caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },
+        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
         form: {},
         modal: {
           showAllLocations: true,
@@ -243,7 +245,7 @@ describe('add to trial session modal helper', () => {
   it('should sort states alphabetically, "Remote" at the top', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
-        caseDetail: { preferredTrialCity: 'Juneau, Alaska' },
+        caseDetail: { hearings: [], preferredTrialCity: 'Juneau, Alaska' },
         form: {},
         modal: {
           showAllLocations: true,
@@ -251,6 +253,7 @@ describe('add to trial session modal helper', () => {
         },
       },
     });
+
     expect(result.trialSessionStatesSorted).toEqual([
       'Remote',
       US_STATES.AL,
@@ -261,7 +264,7 @@ describe('add to trial session modal helper', () => {
   it('should format optionText for each trial session and sort by date when showAllLocations is false', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
-        caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },
+        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
         form: {},
         modal: {
           showAllLocations: false,
@@ -288,7 +291,7 @@ describe('add to trial session modal helper', () => {
   it('should show a "session not set" alert if the selected trial session has yet to be calendared', () => {
     const result = runCompute(addToTrialSessionModalHelper, {
       state: {
-        caseDetail: { preferredTrialCity: 'Birmingham, Alabama' },
+        caseDetail: { hearings: [], preferredTrialCity: 'Birmingham, Alabama' },
         form: {},
         modal: {
           showAllLocations: false,
