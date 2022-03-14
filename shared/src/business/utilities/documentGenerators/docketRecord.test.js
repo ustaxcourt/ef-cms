@@ -63,6 +63,7 @@ describe('documentGenerators', () => {
                   state: 'AL',
                 },
                 name: 'Test IRS Practitioner',
+                userId: 'abc',
               },
             ],
             partyType: PARTY_TYPES.petitioner,

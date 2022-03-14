@@ -1,7 +1,4 @@
-const {
-  addDocketEntryForPaymentStatus,
-  serveCaseToIrsInteractor,
-} = require('./serveCaseToIrsInteractor');
+/* eslint-disable max-lines */
 const {
   applicationContext,
   testPdfDoc,
@@ -14,16 +11,16 @@ const {
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
-  PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   docketClerkUser,
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
-const { Case, getContactPrimary } = require('../../entities/cases/Case');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
+const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
 
 describe('serveCaseToIrsInteractor', () => {
   const MOCK_WORK_ITEM = {
@@ -95,6 +92,10 @@ describe('serveCaseToIrsInteractor', () => {
         (_applicationContext, { caseEntity, docketEntryId }) =>
           caseEntity.docketEntries.find(d => d.docketEntryId === docketEntryId),
       );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockReturnValue(testPdfDoc);
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -248,6 +249,162 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().getAddressPhoneDiff,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should append a clinic letter to the notice of receipt of petition when one exists for the requested place of trial and petition is pro se', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockReturnValueOnce(true);
+
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: 'Los Angeles, California',
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
+    ).toMatchObject({
+      key: 'clinic-letter-los-angeles-california-regular',
+      protocol: 'S3',
+      useTempBucket: false,
+    });
+
+    expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should generate the receipt like normal even if a trial city is undefined', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: null,
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should NOT append a clinic letter to the notice of receipt of petition if it does NOT exist and petition is pro se', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockReturnValueOnce(false);
+
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: 'Billings, Montana',
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should NOT append a clinic letter to the notice of receipt of petition if it DOES exist BUT the petitioner is NOT pro se', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitioner,
+      preferredTrialCity: 'Los Angeles, California',
+      privatePractitioners: [
+        {
+          barNumber: '123456789',
+          name: 'Test Private Practitioner',
+          practitionerId: '123456789',
+          practitionerType: 'privatePractitioner',
+          representing: [getContactPrimary(MOCK_CASE).contactId],
+          role: 'privatePractitioner',
+          userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+        },
+      ],
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs,
+    ).not.toHaveBeenCalled();
+
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
     ).toHaveBeenCalledTimes(1);
@@ -444,61 +601,5 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
-  });
-});
-
-describe('addDocketEntryForPaymentStatus', () => {
-  let user;
-
-  beforeEach(() => {
-    user = applicationContext.getCurrentUser();
-  });
-
-  it('adds a docketRecord for a paid petition payment', async () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        petitionPaymentDate: 'Today',
-        petitionPaymentStatus: PAYMENT_STATUS.PAID,
-      },
-      { applicationContext },
-    );
-    await addDocketEntryForPaymentStatus({
-      applicationContext,
-      caseEntity,
-      user,
-    });
-
-    const addedDocketRecord = caseEntity.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'FEE',
-    );
-
-    expect(addedDocketRecord).toBeDefined();
-    expect(addedDocketRecord.filingDate).toEqual('Today');
-  });
-
-  it('adds a docketRecord for a waived petition payment', async () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        docketEntries: [],
-        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-        petitionPaymentWaivedDate: 'Today',
-        petitioners: undefined,
-      },
-      { applicationContext },
-    );
-    await addDocketEntryForPaymentStatus({
-      applicationContext,
-      caseEntity,
-      user,
-    });
-
-    const addedDocketRecord = caseEntity.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'FEEW',
-    );
-
-    expect(addedDocketRecord).toBeDefined();
-    expect(addedDocketRecord.filingDate).toEqual('Today');
   });
 });
