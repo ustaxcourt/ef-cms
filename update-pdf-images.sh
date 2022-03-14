@@ -7,4 +7,3 @@ echo "running npm ci... this may take a while"
 npm ci
 npm run test:pdf-output
 node image-compare-pdfs.js
-cp -r ./shared/test-output/*.png ./shared/test-pdf-expected-images

@@ -270,6 +270,9 @@ Since our system generates a lot of PDFs, we have a set of tests that verify the
 
 All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  In order to update these, you will need to run the following command:
 
+
 ```
-docker run -it -v `pwd`:/home/app/efcms 515554424717.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:magik sh -c "cd efcms && ./update-pdf-images.sh"
+docker build -t "ef-cms-us-east-1:pdf-compare" -f Dockerfile .
+docker run -it -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output ef-cms-us-east-1:pdf-compare sh -c "cd efcms && ./update-pdf-images.sh"
+cp -r shared/test-output/*.1.png shared/test-pdf-expected-images/
 ```
