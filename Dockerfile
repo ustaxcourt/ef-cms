@@ -24,4 +24,6 @@ RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.1.7/terr
   rm terraform.zip && \
   cp terraform /usr/local/bin/
 
+RUN apt-get install -y graphicsmagick=1.4+really1.3.35-1~deb10u1 ghostscript=9.27~dfsg-2+deb10u5
+
 CMD echo "🔥"

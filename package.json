@@ -297,5 +297,11 @@
     "node-fetch": "^2.6.1",
     "node-forge": "^1.2.1",
     "underscore": "^1.13.1"
+  },
+  "devDependencies": {
+    "checksum": "^1.0.0",
+    "pdf2pic": "^2.1.4",
+    "pixelmatch": "^5.2.1",
+    "pngjs": "^6.0.0"
   }
 }
