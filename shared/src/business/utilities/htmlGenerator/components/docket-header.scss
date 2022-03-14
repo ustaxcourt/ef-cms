@@ -1,0 +1,51 @@
+#docket-header {
+  .case-information #caption,
+  #case-caption {
+    width: 49%;
+    float: left;
+  }
+
+  .case-information #caption {
+    border-right: 1px dashed;
+    font-size: 14px;
+    line-height: 18px;
+
+    &.border-none {
+      border: none;
+    }
+
+    #caption-extension,
+    #caption-v,
+    #caption-respondent {
+      padding-left: 25%;
+      margin-top: 8px;
+    }
+
+    #caption-commissioner {
+      margin-top: 8px;
+    }
+  }
+
+  .case-information .space {
+    margin-left: 95px;
+  }
+
+  .case-information #docket-number {
+    width: 48%;
+    margin-top: 50px;
+    float: right;
+    font-size: 14px;
+    text-indent: 5px;
+
+    &.condensed {
+      margin-top: 0;
+    }
+  }
+
+  .document-title {
+    margin-top: 30px;
+    font-size: 16px;
+    text-align: center;
+    text-decoration: underline;
+  }
+}
