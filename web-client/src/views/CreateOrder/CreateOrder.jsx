@@ -94,6 +94,7 @@ export const CreateOrder = connect(
                 </Button>
                 <Button
                   link
+                  id="cancel-order"
                   onClick={() => {
                     formCancelToggleCancelSequence();
                   }}
