@@ -90,7 +90,6 @@ const renderTabFactory = ({
             </div>
           )}
           {draftCount !== '0' && (
-            //icon-unread-messages display-inline-block padding-top-2px text-bold text-ttop margin-left-2 margin-bottom-05 margin-right-neg-105 text-center
             <div className="icon-tab-unread-messages">
               <div className="icon-tab-unread-messages-count">{draftCount}</div>
             </div>

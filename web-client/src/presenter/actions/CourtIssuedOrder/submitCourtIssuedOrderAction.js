@@ -62,8 +62,6 @@ export const submitCourtIssuedOrderAction = async ({
       });
   }
 
-  console.log('caseDetail SUBMISSION', caseDetail);
-
   return {
     caseDetail,
     docketEntryId,
