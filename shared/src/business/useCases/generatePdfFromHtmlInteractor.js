@@ -46,6 +46,8 @@ exports.generatePdfFromHtmlInteractor = async (
       </html>
     `;
 
+    console.log('headerTemplate', headerTemplate);
+
     const footerTemplate = overwriteFooter
       ? `${footerHtml || ''}`
       : `

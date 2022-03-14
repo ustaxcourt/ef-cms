@@ -32,6 +32,7 @@ const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       docketNumber: data.docketNumberWithSuffix,
       headerHtml,
+      overwriteHeader: false,
     });
 
   return pdf;
