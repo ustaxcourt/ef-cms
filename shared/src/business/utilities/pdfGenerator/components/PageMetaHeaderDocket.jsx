@@ -6,8 +6,8 @@ export const PageMetaHeaderDocket = ({ docketNumber }) => {
       <div
         style={{
           float: 'left',
-          fontFamily: "'Century Schoolbook Std', serif",
           fontSize: '12px',
+          transform: 'scale(0.75)',
         }}
       >
         Docket No.: {docketNumber}
@@ -15,8 +15,8 @@ export const PageMetaHeaderDocket = ({ docketNumber }) => {
       <div
         style={{
           float: 'right',
-          fontFamily: "'Century Schoolbook Std', serif",
           fontSize: '12px',
+          transform: 'scale(0.75)',
         }}
       >
         Page <span className="pageNumber"></span> of{' '}
