@@ -1,5 +1,3 @@
-const { headerFontFace } = require('./headerFontFace');
-
 /**
  * generatePdfFromHtmlInteractor
  *
@@ -45,7 +43,6 @@ exports.generatePdfFromHtmlInteractor = async (
           <div style="font-size: 8px; width: 100%; margin: 0px 40px; margin-top: 25px;">
             ${headerContent}
           </div>
-      </html>
     `;
 
     const footerTemplate = overwriteFooter
@@ -59,7 +56,7 @@ exports.generatePdfFromHtmlInteractor = async (
       displayHeaderFooter,
       footerTemplate,
       format: 'Letter',
-      headerTemplate: `<style>${headerFontFace}</style>` + headerTemplate,
+      headerTemplate,
       margin: {
         bottom: '100px',
         top: '80px',
