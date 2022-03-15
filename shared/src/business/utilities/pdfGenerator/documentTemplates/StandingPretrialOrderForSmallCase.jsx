@@ -35,7 +35,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           </p>
         </div>
 
-        <h3 className="text-bold margin-top-0">
+        <h3 className="text-center text-underline text-bold margin-top-0">
           Standing Pretrial Order for Small Tax Cases
         </h3>
 
@@ -69,30 +69,34 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
 
         <ol className="inline-ol">
           <li>
-            <span className="bu">About the Court</span>. The U.S. Tax Court
-            hears disputes between taxpayers (petitioners) and the IRS
-            (respondent). The Court is independent of, and not affiliated with,
-            the IRS. Documents previously given to the IRS are not part of the
-            record in this case and may not be considered unless made part of
-            this case.
+            <span className="text-underline text-bold">About the Court</span>.
+            The U.S. Tax Court hears disputes between taxpayers (petitioners)
+            and the IRS (respondent). The Court is independent of, and not
+            affiliated with, the IRS. Documents previously given to the IRS are
+            not part of the record in this case and may not be considered unless
+            made part of this case.
           </li>
 
           <li>
-            <span className="bu">Contact Information</span>. The parties must
-            provide the Court with current contact information. If your phone
-            number, email, or mailing address changes, inform the Court right
-            away by filing a Notice of Change of Address form, available on the
-            Court’s website,{' '}
+            <span className="text-underline text-bold">
+              Contact Information
+            </span>
+            . The parties must provide the Court with current contact
+            information. If your phone number, email, or mailing address
+            changes, inform the Court right away by filing a Notice of Change of
+            Address form, available on the Court’s website,{' '}
             <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>.
           </li>
 
           <li>
-            <span className="bu">Electronic Filing (eFiling)</span>. The Court
-            encourages registration for DAWSON, the Court’s electronic filing
-            and case management system, so that you can electronically file and
-            view documents in your case. If you are not registered for eFiling,
-            you must send the opposing party a copy of any document you file
-            with the Court. To register for DAWSON, email{' '}
+            <span className="text-underline text-bold">
+              Electronic Filing (eFiling)
+            </span>
+            . The Court encourages registration for DAWSON, the Court’s
+            electronic filing and case management system, so that you can
+            electronically file and view documents in your case. If you are not
+            registered for eFiling, you must send the opposing party a copy of
+            any document you file with the Court. To register for DAWSON, email{' '}
             <a href="mailto:dawson.support@ustaxcourt.gov">
               dawson.support@ustaxcourt.gov
             </a>
@@ -102,9 +106,11 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           </li>
 
           <li>
-            <span className="bu">Communication Between the Parties</span>. The
-            parties must begin discussing settlement and/or preparation of a
-            stipulation of facts (facts on which the parties agree) as soon as
+            <span className="text-underline text-bold">
+              Communication Between the Parties
+            </span>
+            . The parties must begin discussing settlement and/or preparation of
+            a stipulation of facts (facts on which the parties agree) as soon as
             possible. All minor issues should be settled so that the Judge can
             focus on the issue(s) needing a decision. Some cases may be
             susceptible to partial or full settlement, and the Court expects the
@@ -116,25 +122,27 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           </li>
 
           <li>
-            <span className="bu">Language Barriers</span>. All Court proceedings
-            are conducted in English. All documents must be filed in English or
-            include a certified English translation. You should let the Judge
-            know as early as possible if you require help with English. It is
-            generally the responsibility of each petitioner to bring an
-            interpreter. If you give advance notice, the Court may have one
-            available.
+            <span className="text-underline text-bold">Language Barriers</span>.
+            All Court proceedings are conducted in English. All documents must
+            be filed in English or include a certified English translation. You
+            should let the Judge know as early as possible if you require help
+            with English. It is generally the responsibility of each petitioner
+            to bring an interpreter. If you give advance notice, the Court may
+            have one available.
           </li>
 
           <li>
-            <span className="bu">Readiness for Trial and Participation</span>.
-            If your case needs a trial, the parties must be ready for trial when
-            scheduled by the Judge. If you need special help with scheduling
-            your trial, call the Judge’s chambers (at the telephone number
-            listed below) as early as possible and before the first day of the
-            trial session. If you have not yet settled your case and you do not
-            participate in conference calls and pretrial conferences, or appear
-            at trial, the Judge may dismiss your case and enter a decision
-            against you.{' '}
+            <span className="text-underline text-bold">
+              Readiness for Trial and Participation
+            </span>
+            . If your case needs a trial, the parties must be ready for trial
+            when scheduled by the Judge. If you need special help with
+            scheduling your trial, call the Judge’s chambers (at the telephone
+            number listed below) as early as possible and before the first day
+            of the trial session. If you have not yet settled your case and you
+            do not participate in conference calls and pretrial conferences, or
+            appear at trial, the Judge may dismiss your case and enter a
+            decision against you.{' '}
             <span className="text-bold">
               The Judge may also dismiss your case and enter a decision against
               you if you do not follow this or other Court Orders.{' '}
@@ -142,15 +150,15 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           </li>
 
           <li>
-            <span className="bu">Relevant Deadlines</span>. The Court has
-            adopted the deadlines outlined below to facilitate the resolution of
-            cases and draws the parties’ attention to them.
+            <span className="text-underline text-bold">Relevant Deadlines</span>
+            . The Court has adopted the deadlines outlined below to facilitate
+            the resolution of cases and draws the parties’ attention to them.
           </li>
 
           <ol type="a">
             <li>
               <span className="text-bold">No later than </span>
-              <span className="bu">
+              <span className="text-underline text-bold">
                 60 days before the first day of the trial session
               </span>
               : If a party wants to ask the Judge to decide all or part of the
@@ -160,7 +168,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
 
             <li>
               <span className="text-bold">No later than </span>
-              <span className="bu">
+              <span className="text-underline text-bold">
                 45 days before the first day of the trial session
               </span>
               : The parties should file any motions related to discovery or
@@ -169,14 +177,17 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
 
             <li>
               <span className="text-bold">No later than </span>
-              <span className="bu">
+              <span className="text-underline text-bold">
                 31 days before the first day of the trial session
               </span>
               :{' '}
               <ol type="i">
                 <li>
                   <p>
-                    <span className="bu"> Motion for Continuance</span>
+                    <span className="text-underline text-bold">
+                      {' '}
+                      Motion for Continuance
+                    </span>
                     <span className="text-normal">
                       . The parties may file any Motions for Continuance
                       (postponement of trial), which the Judge will grant only
@@ -192,7 +203,10 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
                 </li>
                 <li>
                   <p>
-                    <span className="bu"> Motion to Proceed Remotely</span>
+                    <span className="text-underline text-bold">
+                      {' '}
+                      Motion to Proceed Remotely
+                    </span>
                     <span className="text-normal">
                       . If either party wants to proceed remotely (using
                       Zoomgov) instead of having an in-person trial, that party
@@ -208,7 +222,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
 
             <li>
               <span className="text-bold">No later than </span>
-              <span className="bu">
+              <span className="text-underline text-bold">
                 21 days before the first day of the trial session
               </span>
               : The parties should file one of the following: a Proposed
@@ -217,7 +231,10 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
               <ol type="i">
                 <li>
                   <p>
-                    <span className="bu"> Settlement</span>
+                    <span className="text-underline text-bold">
+                      {' '}
+                      Settlement
+                    </span>
                     <span className="text-normal">
                       . If a basis for settlement has been reached, the Proposed
                       Stipulated Decision must be electronically filed no later
@@ -239,7 +256,10 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
                 </li>
                 <li>
                   <p>
-                    <span className="bu"> Pretrial Memoranda</span>
+                    <span className="text-underline text-bold">
+                      {' '}
+                      Pretrial Memoranda
+                    </span>
                     <span className="text-normal">
                       . If a basis for settlement has not been reached and it
                       appears that a trial is necessary, each party should file
@@ -254,7 +274,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
                 </li>
                 <li>
                   <p>
-                    <span className="bu">
+                    <span className="text-underline text-bold">
                       {' '}
                       Motion to Dismiss for Lack of Prosecution
                     </span>
@@ -273,14 +293,14 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
 
             <li>
               <span className="text-bold">No later than </span>
-              <span className="bu">
+              <span className="text-underline text-bold">
                 14 days before the first day of the trial session
               </span>
               :{' '}
               <ol type="i">
                 <li>
                   <p>
-                    <span className="bu">
+                    <span className="text-underline text-bold">
                       {' '}
                       Stipulation of Facts and Exhibits
                     </span>
@@ -298,7 +318,10 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
                 </li>
                 <li>
                   <p>
-                    <span className="bu"> Proposed Trial Exhibits</span>
+                    <span className="text-underline text-bold">
+                      {' '}
+                      Proposed Trial Exhibits
+                    </span>
                     <span className="text-normal">
                       . All documents or materials (except impeachment documents
                       or materials) that a party expects to use at trial that
@@ -313,7 +336,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
 
             <li>
               <span className="text-bold">No later than </span>
-              <span className="bu">
+              <span className="text-underline text-bold">
                 7 days before the first day of the trial session
               </span>
               : The parties should file with the Court either a Supplemental
@@ -325,20 +348,25 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           </ol>
 
           <li>
-            <span className="bu"> Change in Case Status</span>. A Status Report
-            must be filed to inform the Court if the status of the case changes
-            at any time before the trial date and after a Pretrial Memorandum,
-            Motion to Dismiss for Lack of Prosecution, or Status Report is
-            filed. Alternatively, if the case has settled, a Proposed Stipulated
-            Decision may be filed.
+            <span className="text-underline text-bold">
+              {' '}
+              Change in Case Status
+            </span>
+            . A Status Report must be filed to inform the Court if the status of
+            the case changes at any time before the trial date and after a
+            Pretrial Memorandum, Motion to Dismiss for Lack of Prosecution, or
+            Status Report is filed. Alternatively, if the case has settled, a
+            Proposed Stipulated Decision may be filed.
           </li>
 
           <li>
-            <span className="bu">Remote Proceeding Access</span>. If a remote
-            proceeding is scheduled in your case, the parties must appear before
-            the Judge as instructed in the Notice Setting Case for Trial.
-            Information on how to use Zoomgov, including tips, can be found on
-            the Court’s website,{' '}
+            <span className="text-underline text-bold">
+              Remote Proceeding Access
+            </span>
+            . If a remote proceeding is scheduled in your case, the parties must
+            appear before the Judge as instructed in the Notice Setting Case for
+            Trial. Information on how to use Zoomgov, including tips, can be
+            found on the Court’s website,{' '}
             <a href="https://www.ustaxcourt.gov">www.ustaxcourt.gov</a>. A
             personal Zoom account is not required, and there is no cost to the
             parties. The parties are responsible for ensuring, to the best of
@@ -349,17 +377,18 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
           </li>
 
           <li>
-            <span className="bu">Time of Trial</span>. All parties <b>must</b>{' '}
-            be prepared for trial at any time during the trial session unless a
-            specific date and time has been previously set by the Court. After
-            Pretrial Memoranda are filed, the Court may schedule a specific date
-            and time for the trial. The parties may also jointly contact the
-            Judge’s chambers to request a specific date and time for the trial.
-            If practicable, the Court will attempt to accommodate the request,
-            keeping in mind other scheduling requirements and the anticipated
-            length of the session. The parties and any witnesses must be ready
-            to participate at the time the trial starts. Testimony given by you
-            or your witnesses during the trial is considered evidence.
+            <span className="text-underline text-bold">Time of Trial</span>. All
+            parties <b>must</b> be prepared for trial at any time during the
+            trial session unless a specific date and time has been previously
+            set by the Court. After Pretrial Memoranda are filed, the Court may
+            schedule a specific date and time for the trial. The parties may
+            also jointly contact the Judge’s chambers to request a specific date
+            and time for the trial. If practicable, the Court will attempt to
+            accommodate the request, keeping in mind other scheduling
+            requirements and the anticipated length of the session. The parties
+            and any witnesses must be ready to participate at the time the trial
+            starts. Testimony given by you or your witnesses during the trial is
+            considered evidence.
           </li>
         </ol>
         <div className="judge-signature">

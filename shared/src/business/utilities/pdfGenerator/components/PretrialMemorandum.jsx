@@ -3,13 +3,13 @@ import React from 'react';
 export const PretrialMemorandum = ({ trialInfo }) => {
   return (
     <div>
-      <p style={{ marginBottom: '30px', textAlign: 'right' }}>
+      <p style={{ marginBottom: '20px', textAlign: 'right' }}>
         Trial Calendar: {trialInfo.formattedTrialLocation}
         <br />
         <span>Date: {trialInfo.formattedStartDate}</span>
       </p>
 
-      <p className="text-center" style={{ marginBottom: '15px' }}>
+      <p className="text-center" style={{ marginBottom: '10px' }}>
         <span className="text-bold">PRETRIAL MEMORANDUM FOR </span>
         <span className="text-underline">(Petitioner/Respondent)</span>
         <br />
@@ -25,19 +25,17 @@ export const PretrialMemorandum = ({ trialInfo }) => {
         <div className="clear"></div>
       </div>
 
-      <p style={{ marginBottom: '20px' }}>
+      <p style={{ marginBottom: '10px' }}>
         <span className="text-bold text-underline">ATTORNEYS</span>:
       </p>
-      <div style={{ marginBottom: '33px' }}>
+      <div style={{ marginBottom: '23px' }}>
         <p
           className="margin-top-0"
           style={{ float: 'left', marginRight: '1%', width: '49%' }}
         >
           Petitioner: ___________________________________
           <br />
-          <br />
           Tel No.: _____________________________________
-          <br />
           <br />
           Email: ______________________________________
         </p>
@@ -47,9 +45,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
         >
           Respondent: __________________________________
           <br />
-          <br />
           Tel No.: _____________________________________
-          <br />
           <br />
           Email: ______________________________________
         </p>
@@ -77,7 +73,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
       <p>
         <strong className="text-underline">STATUS OF CASE</strong>:
       </p>
-      <p style={{ marginBottom: '40px' }}>
+      <p style={{ marginBottom: '30px' }}>
         <span>Probable Settlement________</span>
         <span style={{ marginLeft: '30px' }}>Probable Trial________</span>
         <span style={{ marginLeft: '30px' }}>Definite Trial________</span>
@@ -88,7 +84,7 @@ export const PretrialMemorandum = ({ trialInfo }) => {
         </strong>
         __________________________________________hour(s)
       </p>
-      <p style={{ marginBottom: '63px' }}>
+      <p style={{ marginBottom: '53px' }}>
         <strong className="text-underline">MOTIONS YOU EXPECT TO MAKE</strong>:
         <br />
         (Title and brief description)
