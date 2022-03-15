@@ -1,3 +1,5 @@
+const { headerFontFace } = require('./headerFontFace');
+
 /**
  * generatePdfFromHtmlInteractor
  *
@@ -57,7 +59,7 @@ exports.generatePdfFromHtmlInteractor = async (
       displayHeaderFooter,
       footerTemplate,
       format: 'Letter',
-      headerTemplate,
+      headerTemplate: `<style>${headerFontFace}</style>` + headerTemplate,
       margin: {
         bottom: '100px',
         top: '80px',
