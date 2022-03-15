@@ -58,8 +58,7 @@ export const ReviewSavedPetition = connect(
             </h1>
           </Focus>
 
-          {(reviewSavedPetitionHelper.ordersAndNoticesNeeded.length > 0 ||
-            reviewSavedPetitionHelper.ordersAndNoticesInDraft.length > 0) && (
+          {reviewSavedPetitionHelper.renderOrderSummary && (
             <OrdersNeededSummary
               reviewSavedPetitionHelper={reviewSavedPetitionHelper}
             />

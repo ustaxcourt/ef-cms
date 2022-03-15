@@ -26,8 +26,7 @@ export const OrdersNeededSummary = ({ reviewSavedPetitionHelper }) => {
             <div className="grid-container padding-x-0">
               <div className="grid-row">
                 <div className="tablet:grid-col-10">
-                  {reviewSavedPetitionHelper.ordersAndNoticesNeeded.length >
-                    0 && (
+                  {reviewSavedPetitionHelper.showOrdersAndNoticesNeededHeader && (
                     <p
                       className="heading-4 padding-top-0"
                       id="orders-notices-needed-header"
@@ -43,8 +42,7 @@ export const OrdersNeededSummary = ({ reviewSavedPetitionHelper }) => {
                     ),
                   )}
 
-                  {reviewSavedPetitionHelper.ordersAndNoticesInDraft.length >
-                    0 && (
+                  {reviewSavedPetitionHelper.showOrdersAndNoticesInDraftHeader && (
                     <p
                       className="heading-4 padding-top-2"
                       id="orders-notices-auto-created-in-draft"
