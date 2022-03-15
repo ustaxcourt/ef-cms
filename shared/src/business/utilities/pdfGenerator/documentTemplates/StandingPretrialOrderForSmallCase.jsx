@@ -10,7 +10,7 @@ export const StandingPretrialOrderForSmallCase = ({ options, trialInfo }) => {
         <OrderPrimaryHeader />
         <OrderDocketHeader
           caseCaptionExtension={options.caseCaptionExtension}
-          caseTitle={options.caseTitle}
+          caseTitle={options.caseTitle.toUpperCase()}
           docketNumberWithSuffix={options.docketNumberWithSuffix}
         />
 
