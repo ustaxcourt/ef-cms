@@ -268,7 +268,7 @@ const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
 const NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE = {
   code: 'NOT',
   content:
-    'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence.  Please be advised that these documents have not been received into evidence by the Court.  You may offer evidentiary materials to the Court at the time of trial.',
+    'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
   documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
     .documentType,
   title: 'Notice of Attachments in the Nature of Evidence',
