@@ -126,7 +126,7 @@ const {
   clerkOfCourtNameForSigning,
   getEnvironment,
   getUniqueId,
-} = require('../../shared/src/sharedAppContext.js');
+} = require('../../shared/src/sharedAppContext');
 const {
   closeTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor');
