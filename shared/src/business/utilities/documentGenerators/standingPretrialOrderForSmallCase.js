@@ -79,8 +79,8 @@ const standingPretrialOrderForSmallCase = async ({
 
   return await combineTwoPdfs({
     applicationContext,
-    firstPdf: pdfWithHeader,
-    secondPdf: pdfWithoutHeader,
+    firstPdf: new Uint8Array(pdfWithHeader),
+    secondPdf: new Uint8Array(pdfWithoutHeader),
   });
 };
 
