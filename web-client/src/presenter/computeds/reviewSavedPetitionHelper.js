@@ -120,6 +120,12 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     formatStatistic({ applicationContext, statistic }),
   );
 
+  const renderOrderSummary =
+    ordersAndNoticesNeeded.length > 0 || ordersAndNoticesInDraft.length > 0;
+
+  const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
+  const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
+
   return {
     applicationForWaiverOfFilingFeeFile,
     formattedStatistics,
@@ -132,8 +138,11 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     petitionPaymentStatusFormatted,
     preferredTrialCityFormatted,
     receivedAtFormatted,
+    renderOrderSummary,
     requestForPlaceOfTrialFile,
     shouldShowIrsNoticeDate,
+    showOrdersAndNoticesInDraftHeader,
+    showOrdersAndNoticesNeededHeader,
     showStatistics,
     stinFile,
   };
