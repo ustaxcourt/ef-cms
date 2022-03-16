@@ -65,10 +65,6 @@ const addDocketEntryForNANE = async ({
   caseEntity,
   user,
 }) => {
-  if (!caseEntity.noticeOfAttachments) {
-    return;
-  }
-
   const newDocketEntry = new DocketEntry(
     {
       documentTitle: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
@@ -437,11 +433,13 @@ exports.serveCaseToIrsInteractor = async (
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
-  await addDocketEntryForNANE({
-    applicationContext,
-    caseEntity,
-    user,
-  });
+  if (caseEntity.noticeOfAttachments) {
+    await addDocketEntryForNANE({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+  }
 
   await createPetitionWorkItems({
     applicationContext,
