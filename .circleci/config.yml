@@ -422,6 +422,10 @@ jobs:
       - run:
           name: Setup Migrate Flag
           command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            ./setup-for-reindex.sh
+      - run:
+          name: Setup Reindex Flag
+          command: echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
       - run:
           name: Setup Destination Table Var
           command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
@@ -530,6 +534,8 @@ jobs:
       - run:
           name: Setup Env
           command: |
+            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
               cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
               source $BASH_ENV
@@ -771,6 +777,7 @@ jobs:
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
       - run:
@@ -806,6 +813,13 @@ jobs:
           command: |
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
+            fi
+            fi
+      - run:
+          name: Cleanup Deploy Table After Reindex
+          command: |
+            if [ $REINDEX_FLAG == true ]; then
+              npm run reindex:cleanup -- $ENV
             fi
 
 build-and-deploy-defaults: &build-and-deploy-defaults
