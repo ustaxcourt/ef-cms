@@ -1011,7 +1011,10 @@ app.get(
   );
   app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
-  app.put('/async/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
+  app.put(
+    '/async/trial-sessions',
+    lambdaWrapper(updateTrialSessionLambda, { isAsync: true }),
+  );
   app.post(
     '/trial-sessions/:trialSessionId/set-hearing/:docketNumber',
     lambdaWrapper(setForHearingLambda),

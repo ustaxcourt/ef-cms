@@ -10,7 +10,7 @@ exports.headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-exports.lambdaWrapper = lambda => {
+exports.lambdaWrapper = (lambda, options = {}) => {
   return async (req, res) => {
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
@@ -32,7 +32,11 @@ exports.lambdaWrapper = lambda => {
       logger: req.locals.logger,
     });
 
-    res.status(response.statusCode);
+    if (options.isAsync) {
+      res.status(204);
+    } else {
+      res.status(response.statusCode);
+    }
 
     res.set({
       ...response.headers,
