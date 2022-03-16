@@ -184,13 +184,14 @@ const addDocketEntryForOrderForFilingFee = async ({
   caseEntity.addDocketEntry(newDocketEntry);
 
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+  const { docketNumberWithSuffix } = caseEntity;
 
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,
       caseTitle,
-      docketNumberWithSuffix: caseEntity,
+      docketNumberWithSuffix,
       orderContent: ORDER_FOR_FILING_FEE.content,
       orderTitle: ORDER_FOR_FILING_FEE.title.toUpperCase(), // should this be its own test? similar in NANE
       signatureText: applicationContext.getClerkOfCourtNameForSigning(),
