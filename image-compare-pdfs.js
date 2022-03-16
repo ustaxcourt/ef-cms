@@ -64,13 +64,15 @@ const pdfs = [
       const totalPixels = height * width;
       const percentDifference = (pixelDifference / totalPixels) * 100;
 
-      fs.mkdirSync(`./shared/test-output/diff`, { recursive: true });
+      console.log(`${pdf}: ${percentDifference}%`);
+
+      fs.mkdirSync('./shared/test-output/diff', { recursive: true });
       fs.writeFileSync(
         `./shared/test-output/diff/${pdf}.1.png`,
         PNG.sync.write(diff),
       );
 
-      if (percentDifference > 1) {
+      if (percentDifference > 0.1) {
         console.error(
           `${pdf} failed due to percentDifference of ${percentDifference}`,
         );
