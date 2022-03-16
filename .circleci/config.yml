@@ -902,7 +902,7 @@ workflows:
                 - migration
       - switch-colors:
           requires:
-            - deploy
+            - smoketests-readonly
           filters:
             branches:
               only:
