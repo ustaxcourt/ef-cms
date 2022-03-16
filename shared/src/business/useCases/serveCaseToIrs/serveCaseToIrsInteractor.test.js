@@ -614,7 +614,9 @@ describe('serveCaseToIrsInteractor', () => {
 describe('addDocketEntryForPaymentStatus', () => {
   let user;
 
-  beforeEach(() => {});
+  beforeEach(() => {
+    user = applicationContext.getCurrentUser();
+  });
 
   it('adds a docketRecord for a paid petition payment', async () => {
     const caseEntity = new Case(
