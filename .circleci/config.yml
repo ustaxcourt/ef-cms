@@ -820,18 +820,18 @@ workflows:
       #     <<: *build-and-deploy-defaults
       # - e2e-cypress-public:
       #     <<: *build-and-deploy-defaults
-      # - verify-pdfs:
-      #     <<: *build-and-deploy-defaults
+      - verify-pdfs:
+          <<: *build-and-deploy-defaults
       - deploy:
-          # requires:
-          #   - build-client-integration
-          #   - e2e-pa11y
-          #   - e2e-pa11y-public
-          #   - e2e-pa11y-public-search
-          #   - e2e-cypress
-          #   - e2e-cypress-smoketests-local
-          #   - e2e-cypress-public
-          #   - verify-pdfs
+          requires:
+            #   - build-client-integration
+            #   - e2e-pa11y
+            #   - e2e-pa11y-public
+            #   - e2e-pa11y-public-search
+            #   - e2e-cypress
+            #   - e2e-cypress-smoketests-local
+            #   - e2e-cypress-public
+            - verify-pdfs
           filters:
             branches:
               only:
