@@ -40,6 +40,7 @@ const order = async ({ applicationContext, data }) => {
     componentName: 'PageMetaHeaderDocket',
     data: {
       docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
     },
   });
 
