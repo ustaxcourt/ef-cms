@@ -180,28 +180,43 @@ const addDocketEntryForOrderForFilingFee = async ({
   );
 
   caseEntity.addDocketEntry(newDocketEntry);
-
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
-  const orderPdf = await applicationContext.getDocumentGenerators().order({
+  const pdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
       orderContent: ORDER_FOR_FILING_FEE.content,
-      orderTitle: ORDER_FOR_FILING_FEE.title.toUpperCase(), // should this be its own test? similar in NANE
+      orderTitle: ORDER_FOR_FILING_FEE.title.toUpperCase(),
       signatureText: applicationContext.getClerkOfCourtNameForSigning(),
     },
   });
 
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    caseConfirmationPdfName: newDocketEntry.docketEntryId,
+    pdfData,
+  });
+
+  const documentContentsId = applicationContext.getUniqueId();
+
+  const contentToStore = {
+    documentContents: ORDER_FOR_FILING_FEE.content,
+    richText: ORDER_FOR_FILING_FEE.content,
+  };
+
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
-    document: orderPdf,
-    key: newDocketEntry.docketEntryId,
+    contentType: 'application/json',
+    document: Buffer.from(JSON.stringify(contentToStore)),
+    key: documentContentsId,
     useTempBucket: false,
   });
+
+  newDocketEntry.documentContentsId = documentContentsId;
 };
 
 const createPetitionWorkItems = async ({
