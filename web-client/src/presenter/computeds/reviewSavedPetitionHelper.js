@@ -122,7 +122,6 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
 
   const renderOrderSummary =
     ordersAndNoticesNeeded.length > 0 || ordersAndNoticesInDraft.length > 0;
-
   const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
   const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
 
