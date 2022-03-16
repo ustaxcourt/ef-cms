@@ -534,6 +534,8 @@ jobs:
       - run:
           name: Setup Env
           command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
             echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
