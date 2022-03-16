@@ -31,8 +31,12 @@ describe('petitioner files document', () => {
   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
-  petitionerViewsCaseDetail(cerebralTest);
+  petitionerViewsCaseDetail(cerebralTest, {
+    documentCount: 3,
+  });
   petitionerFilesDocumentForCase(cerebralTest, fakeFile);
-  petitionerViewsCaseDetailAfterFilingDocument(cerebralTest);
+  petitionerViewsCaseDetailAfterFilingDocument(cerebralTest, {
+    documentCount: 7,
+  });
   petitionerFilesAmendedMotion(cerebralTest, fakeFile);
 });

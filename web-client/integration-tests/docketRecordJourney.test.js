@@ -92,6 +92,13 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
         showNotServed: false,
         showServed: true,
       },
+      {
+        createdAtFormatted: expect.anything(),
+        eventCode: 'FEE',
+        index: 5,
+        showNotServed: false,
+        showServed: false,
+      },
     ]);
 
     cerebralTest.docketNumber = null;
