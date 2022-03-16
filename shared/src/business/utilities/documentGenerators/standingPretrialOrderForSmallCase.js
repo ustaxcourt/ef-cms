@@ -38,6 +38,7 @@ const standingPretrialOrderForSmallCase = async ({
     componentName: 'PageMetaHeaderDocket',
     data: {
       docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
     },
   });
 
