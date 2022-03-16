@@ -185,6 +185,11 @@ const ORDER_TYPES = [
     eventCode: 'ODD',
   },
   {
+    documentTitle: 'Order for Filing Fee',
+    documentType: 'Order for Filing Fee',
+    eventCode: 'OF',
+  },
+  {
     documentTitle: 'Order to Show Cause',
     documentType: 'Order to Show Cause',
     eventCode: 'OSC',
@@ -272,6 +277,16 @@ const NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE = {
   documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
     .documentType,
   title: 'Notice of Attachments in the Nature of Evidence',
+};
+
+const ORDER_FOR_FILING_FEE = {
+  // uh yeah definitely replace [TODAY_PLUS_60], and also it probably shouldn't be in here?
+  content:
+    'The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case  related  forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
+  documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
+    .documentType,
+  eventCode: 'OF',
+  title: ORDER_TYPES.find(order => order.eventCode === 'OF').documentTitle,
 };
 
 // _without returns a new array with values from arg1 sans values subsequent args
@@ -1206,6 +1221,7 @@ module.exports = deepFreeze({
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   ORDER_EVENT_CODES,
+  ORDER_FOR_FILING_FEE,
   ORDER_TYPES,
   OTHER_FILER_TYPES,
   OTHER_TYPES,

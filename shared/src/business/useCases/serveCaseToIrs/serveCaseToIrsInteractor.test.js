@@ -1,6 +1,7 @@
 /* eslint-disable max-lines */
 const {
   addDocketEntryForNANE,
+  addDocketEntryForOrderForFilingFee,
   addDocketEntryForPaymentStatus,
   serveCaseToIrsInteractor,
 } = require('./serveCaseToIrsInteractor');
@@ -614,7 +615,9 @@ describe('serveCaseToIrsInteractor', () => {
 describe('addDocketEntryForPaymentStatus', () => {
   let user;
 
-  beforeEach(() => {});
+  beforeEach(() => {
+    user = applicationContext.getCurrentUser();
+  });
 
   it('adds a docketRecord for a paid petition payment', async () => {
     const caseEntity = new Case(
@@ -625,10 +628,10 @@ describe('addDocketEntryForPaymentStatus', () => {
       },
       { applicationContext },
     );
-    await addDocketEntryForPaymentStatus({
+    addDocketEntryForPaymentStatus({
       applicationContext,
       caseEntity,
-      user,
+      user: petitionsClerkUser,
     });
 
     const addedDocketRecord = caseEntity.docketEntries.find(
@@ -729,5 +732,40 @@ describe('addDocketEntryForNANE', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
     // eslint-disable-next-line max-lines
+  });
+});
+
+describe('addDocketEntryForOrderForFilingFee', () => {
+  let user;
+
+  beforeEach(() => {
+    user = applicationContext.getCurrentUser();
+  });
+  it('should increase the docket entries and upload a generated pdf', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+      },
+      { applicationContext },
+    );
+
+    const newDocketEntriesFromNewCaseCount =
+      caseEntity.docketEntries.length + 1;
+
+    await addDocketEntryForOrderForFilingFee({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    expect(caseEntity.docketEntries.length).toEqual(
+      newDocketEntriesFromNewCaseCount,
+    );
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
   });
 });
