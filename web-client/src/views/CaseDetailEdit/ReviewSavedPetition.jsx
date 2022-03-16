@@ -59,9 +59,7 @@ export const ReviewSavedPetition = connect(
           </Focus>
 
           {reviewSavedPetitionHelper.renderOrderSummary && (
-            <OrdersNeededSummary
-              reviewSavedPetitionHelper={reviewSavedPetitionHelper}
-            />
+            <OrdersNeededSummary />
           )}
 
           <div className="grid-container padding-x-0 create-case-review">
