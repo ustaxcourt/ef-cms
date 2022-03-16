@@ -2,6 +2,7 @@ const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
+  ORDER_FOR_FILING_FEE,
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
@@ -61,7 +62,6 @@ const addDocketEntryForPaymentStatus = ({
     );
   }
 };
-exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
 
 const addDocketEntryForNANE = async ({
   applicationContext,
@@ -132,8 +132,6 @@ const addDocketEntryForNANE = async ({
   newDocketEntry.documentContentsId = documentContentsId;
 };
 
-exports.addDocketEntryForNANE = addDocketEntryForNANE;
-
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
@@ -156,6 +154,55 @@ const addDocketEntries = ({ caseEntity }) => {
       caseEntity.updateDocketEntry(foundDocketEntry);
     }
   }
+};
+
+// perhaps this method could be made more generic and combined with the other addDocketX methods
+const addDocketEntryForOrderForFilingFee = async ({
+  applicationContext,
+  caseEntity,
+  user,
+}) => {
+  const newDocketEntry = new DocketEntry(
+    {
+      documentTitle: ORDER_FOR_FILING_FEE.title,
+      documentType: ORDER_FOR_FILING_FEE.documentType,
+      draftOrderState: {
+        docketNumber: caseEntity.docketNumber,
+        documentTitle: ORDER_FOR_FILING_FEE.title,
+        documentType: ORDER_FOR_FILING_FEE.documentType,
+        eventCode: ORDER_FOR_FILING_FEE.eventCode,
+        freeText: ORDER_FOR_FILING_FEE.title,
+      },
+      eventCode: ORDER_FOR_FILING_FEE.eventCode,
+      freeText: ORDER_FOR_FILING_FEE.title,
+      isDraft: true,
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
+
+  caseEntity.addDocketEntry(newDocketEntry);
+
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+
+  const orderPdf = await applicationContext.getDocumentGenerators().order({
+    applicationContext,
+    data: {
+      caseCaptionExtension,
+      caseTitle,
+      docketNumberWithSuffix: caseEntity,
+      orderContent: ORDER_FOR_FILING_FEE.content,
+      orderTitle: ORDER_FOR_FILING_FEE.title.toUpperCase(), // should this be its own test? similar in NANE
+      signatureText: applicationContext.getClerkOfCourtNameForSigning(),
+    },
+  });
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: orderPdf,
+    key: newDocketEntry.docketEntryId,
+    useTempBucket: false,
+  });
 };
 
 const createPetitionWorkItems = async ({
@@ -395,7 +442,7 @@ const generatePaperNoticeForContactSecondary = async ({
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-exports.serveCaseToIrsInteractor = async (
+const serveCaseToIrsInteractor = async (
   applicationContext,
   { docketNumber },
 ) => {
@@ -447,6 +494,15 @@ exports.serveCaseToIrsInteractor = async (
     });
   }
 
+  // should we change the rest to do this if check, rather than guards inside?
+  if (caseEntity.orderForFilingFee) {
+    await addDocketEntryForOrderForFilingFee({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+  }
+
   await createPetitionWorkItems({
     applicationContext,
     caseEntity,
@@ -469,4 +525,11 @@ exports.serveCaseToIrsInteractor = async (
   });
 
   return urlToReturn;
+};
+
+module.exports = {
+  addDocketEntryForNANE,
+  addDocketEntryForOrderForFilingFee,
+  addDocketEntryForPaymentStatus,
+  serveCaseToIrsInteractor,
 };
