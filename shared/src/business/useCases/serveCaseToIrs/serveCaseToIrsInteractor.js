@@ -2,8 +2,8 @@ const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
-  NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE,
   PAYMENT_STATUS,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -16,6 +16,9 @@ const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+const { noticeOfAttachmentsInNatureOfEvidence } =
+  SYSTEM_GENERATED_DOCUMENT_TYPES;
 
 const addDocketEntryForPaymentStatus = ({
   applicationContext,
@@ -70,17 +73,17 @@ const addDocketEntryForNANE = async ({
   }
   const newDocketEntry = new DocketEntry(
     {
-      documentTitle: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
-      documentType: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.documentType,
+      documentTitle: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
+      documentType: noticeOfAttachmentsInNatureOfEvidence.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
-        documentTitle: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
-        documentType: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.documentType,
-        eventCode: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.code,
-        freeText: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
+        documentTitle: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
+        documentType: noticeOfAttachmentsInNatureOfEvidence.documentType,
+        eventCode: noticeOfAttachmentsInNatureOfEvidence.eventCode,
+        freeText: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
       },
-      eventCode: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.code,
-      freeText: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
+      eventCode: noticeOfAttachmentsInNatureOfEvidence.eventCode,
+      freeText: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
       isDraft: true,
       userId: user.userId,
     },
@@ -98,9 +101,9 @@ const addDocketEntryForNANE = async ({
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
-      orderContent: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.content,
+      orderContent: noticeOfAttachmentsInNatureOfEvidence.content,
       orderTitle:
-        NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title.toUpperCase(),
+        noticeOfAttachmentsInNatureOfEvidence.documentTitle.toUpperCase(),
       signatureText: applicationContext.getClerkOfCourtNameForSigning(),
     },
   });
@@ -114,8 +117,8 @@ const addDocketEntryForNANE = async ({
   const documentContentsId = applicationContext.getUniqueId();
 
   const contentToStore = {
-    documentContents: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.content,
-    richText: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.content,
+    documentContents: noticeOfAttachmentsInNatureOfEvidence.content,
+    richText: noticeOfAttachmentsInNatureOfEvidence.content,
   };
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
