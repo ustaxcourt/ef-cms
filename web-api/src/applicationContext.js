@@ -1803,7 +1803,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
       } else {
         notificationServiceCache = new AWS.SNS({});
       }
-
       return notificationServiceCache;
     },
     getPdfJs: () => {
