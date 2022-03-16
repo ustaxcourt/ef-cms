@@ -816,7 +816,6 @@ jobs:
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
             fi
-            fi
       - run:
           name: Cleanup Deploy Table After Reindex
           command: |
