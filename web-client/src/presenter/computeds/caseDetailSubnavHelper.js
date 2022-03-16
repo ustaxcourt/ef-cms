@@ -47,5 +47,5 @@ const getDraftWorkItems = get => {
   const caseDetailsWithDraftDocketEntries = caseDetails.docketEntries.filter(
     docketEntry => docketEntry.isDraft,
   );
-  return caseDetailsWithDraftDocketEntries.length.toString();
+  return caseDetailsWithDraftDocketEntries.length;
 };
