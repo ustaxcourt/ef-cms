@@ -11,5 +11,5 @@ aws es describe-elasticsearch-domain --domain-name "efcms-search-${ENV}-${SOURCE
 CODE=$?
 if [[ "${CODE}" != "0" ]]; then
   echo "Setting reindex flag because efcms-search-${ENV}-${SOURCE_TABLE_VERSION} does not exist."
-  export REINDEX_FLAG=true
+  aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"reindex"},"sk":{"S":"reindex"},"current":{"BOOL":true}}'
 fi
