@@ -65,6 +65,9 @@ const addDocketEntryForNANE = async ({
   caseEntity,
   user,
 }) => {
+  if (!caseEntity.noticeOfAttachments) {
+    return;
+  }
   const newDocketEntry = new DocketEntry(
     {
       documentTitle: NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE.title,
