@@ -32,6 +32,7 @@ const renderTabFactory = ({
       children: tabChildren,
       className: childClassName,
       disabled,
+      draftCount = '0',
       icon,
       iconClass,
       iconColor,
@@ -40,7 +41,6 @@ const renderTabFactory = ({
       showNotificationIcon,
       tabName,
       title,
-      unreadMessages: draftCount = '0',
     } = child.props;
 
     const isActiveTab = tabName === activeKey;

@@ -45,10 +45,10 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showDraftsTab && (
               <Tab
+                draftCount={caseDetailSubnavHelper.draftDocketEntryCount}
                 id="tab-drafts"
                 tabName="drafts"
                 title="Drafts"
-                unreadMessages={caseDetailSubnavHelper.draftDocketEntryCount}
               />
             )}
             {caseDetailSubnavHelper.showCorrespondenceTab && (
