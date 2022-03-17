@@ -7,21 +7,55 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const reviewSavedPetitionHelper = withAppContextDecorator(
   reviewSavedPetitionHelperComputed,
 );
-const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
-  applicationContext.getConstants();
+const {
+  COUNTRY_TYPES,
+  DEFAULT_PROCEDURE_TYPE,
+  PARTY_TYPES,
+  PAYMENT_STATUS,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = applicationContext.getConstants();
+
+const { documentTitle } =
+  SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfAttachmentsInNatureOfEvidence;
+
+const findNoticeOfAttachments = formValues => {
+  return formValues.find(
+    formItem =>
+      formItem && formItem.key === 'noticeOfAttachments' && formItem.value,
+  );
+};
+
+const getExpectedOutputBasedOnOrderOrNoticeSelected = (
+  formValues,
+  expectedObject,
+) => {
+  const noticeOfAttachmentsSelected = findNoticeOfAttachments(formValues);
+
+  let draftItems = [];
+
+  if (noticeOfAttachmentsSelected) {
+    draftItems.push(documentTitle);
+  }
+
+  return {
+    ...expectedObject,
+    ordersAndNoticesInDraft: draftItems,
+  };
+};
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
   trialLocation = 'Birmingham, Alabama',
   procedureType = 'Small',
+  formOrdersAndNotices = {},
 ) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
     value: 'Shawn Johnson',
   };
 
-  const formValues = [
+  let formValues = [
     {
       key: 'receivedAtMonth',
       value: '01',
@@ -149,6 +183,13 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
   ];
 
+  formValues =
+    formOrdersAndNotices &&
+    formOrdersAndNotices.key &&
+    formOrdersAndNotices.value
+      ? [...formValues, formOrdersAndNotices]
+      : formValues;
+
   it('should default to parties tab when creating a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
@@ -252,12 +293,24 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       state: cerebralTest.getState(),
     });
 
-    expect(helper).toMatchObject({
+    let expectedObject = {
       hasIrsNoticeFormatted: 'No',
+      ordersAndNoticesInDraft: [],
+      ordersAndNoticesNeeded: [
+        'Order Designating Place of Trial',
+        'Order for Ratification of Petition',
+      ],
       petitionPaymentStatusFormatted: 'Waived 05/05/05',
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
-    });
+    };
+
+    expectedObject = getExpectedOutputBasedOnOrderOrNoticeSelected(
+      formValues,
+      expectedObject,
+    );
+
+    expect(helper).toMatchObject(expectedObject);
 
     expect(cerebralTest.getState('caseDetail')).toMatchObject({
       caseCaption: updatedCaseCaption,

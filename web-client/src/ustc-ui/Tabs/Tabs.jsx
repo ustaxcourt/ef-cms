@@ -32,7 +32,7 @@ const renderTabFactory = ({
       children: tabChildren,
       className: childClassName,
       disabled,
-      draftCount = '0',
+      draftCount = 0,
       icon,
       iconClass,
       iconColor,
@@ -89,7 +89,7 @@ const renderTabFactory = ({
               <div className="icon-tab-notification-exclamation">!</div>
             </div>
           )}
-          {draftCount !== '0' && (
+          {draftCount !== 0 && (
             <div className="icon-tab-unread-messages">
               <div className="icon-tab-unread-messages-count">{draftCount}</div>
             </div>

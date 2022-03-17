@@ -270,25 +270,6 @@ const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
 
-const NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE = {
-  code: 'NOT',
-  content:
-    'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
-  documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
-    .documentType,
-  title: 'Notice of Attachments in the Nature of Evidence',
-};
-
-const ORDER_FOR_FILING_FEE = {
-  // uh yeah definitely replace [TODAY_PLUS_60], and also it probably shouldn't be in here?
-  content:
-    'The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case  related  forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
-  documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
-    .documentType,
-  eventCode: 'OF',
-  title: ORDER_TYPES.find(order => order.eventCode === 'OF').documentTitle,
-};
-
 // _without returns a new array with values from arg1 sans values subsequent args
 const EVENT_CODES_REQUIRING_JUDGE_SIGNATURE = without(
   EVENT_CODES_REQUIRING_SIGNATURE,
@@ -498,6 +479,23 @@ const EVENT_CODES_VISIBLE_TO_PUBLIC = [
 ];
 
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
+  noticeOfAttachmentsInNatureOfEvidence: {
+    eventCode: 'NOT',
+    content:
+      'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
+      .documentType,
+    documentTitle: 'Notice of Attachments in the Nature of Evidence',
+  },
+  orderForFilingFee: {
+    // uh yeah definitely replace [TODAY_PLUS_60], and also it probably shouldn't be in here?
+    content:
+      'The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case  related  forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
+      .documentType,
+    eventCode: 'OF',
+    title: ORDER_TYPES.find(order => order.eventCode === 'OF').documentTitle,
+  },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
     documentType: 'Notice of Docket Change',
@@ -1211,7 +1209,6 @@ module.exports = deepFreeze({
   MAX_SEARCH_CLIENT_RESULTS: 200,
   MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MINUTE_ENTRIES_MAP,
-  NOTICE_OF_ATTACHMENTS_IN_NATURE_OF_EVIDENCE,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
@@ -1221,7 +1218,6 @@ module.exports = deepFreeze({
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   OPINION_EVENT_CODES_WITHOUT_BENCH_OPINION,
   ORDER_EVENT_CODES,
-  ORDER_FOR_FILING_FEE,
   ORDER_TYPES,
   OTHER_FILER_TYPES,
   OTHER_TYPES,
