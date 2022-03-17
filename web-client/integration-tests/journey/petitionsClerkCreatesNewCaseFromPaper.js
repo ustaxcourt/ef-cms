@@ -21,9 +21,7 @@ const { documentTitle } =
 const findNoticeOfAttachments = formValues => {
   return formValues.find(
     formItem =>
-      formItem &&
-      formItem.key === 'noticeOfAttachments' &&
-      formItem.value === true,
+      formItem && formItem.key === 'noticeOfAttachments' && formItem.value,
   );
 };
 
@@ -31,7 +29,7 @@ const getExpectedOutputBasedOnOrderOrNoticeSelected = (
   formValues,
   expectedObject,
 ) => {
-  let noticeOfAttachmentsSelected = findNoticeOfAttachments(formValues);
+  const noticeOfAttachmentsSelected = findNoticeOfAttachments(formValues);
 
   let draftItems = [];
 
@@ -189,7 +187,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     formOrdersAndNotices &&
     formOrdersAndNotices.key &&
     formOrdersAndNotices.value
-      ? [...formValues, ...formOrdersAndNotices]
+      ? [...formValues, formOrdersAndNotices]
       : formValues;
 
   it('should default to parties tab when creating a new case', async () => {
@@ -297,6 +295,11 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
 
     let expectedObject = {
       hasIrsNoticeFormatted: 'No',
+      ordersAndNoticesInDraft: [],
+      ordersAndNoticesNeeded: [
+        'Order Designating Place of Trial',
+        'Order for Ratification of Petition',
+      ],
       petitionPaymentStatusFormatted: 'Waived 05/05/05',
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
