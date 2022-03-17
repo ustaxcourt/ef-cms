@@ -49,7 +49,7 @@ export const updateTrialSessionAction = async ({
   }
 
   let pdfUrl;
-  if (result.serviceInfo) {
+  if (result && result.serviceInfo) {
     pdfUrl = result.serviceInfo;
   }
 

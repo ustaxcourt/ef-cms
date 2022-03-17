@@ -125,6 +125,7 @@ exports.updateTrialSessionInteractor = async (
   }
 
   let pdfUrl = null;
+  let serviceInfo = null;
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
     const calendaredCases = currentTrialSession.caseOrder;
     const { PDFDocument } = await applicationContext.getPdfLib();
@@ -188,25 +189,25 @@ exports.updateTrialSessionInteractor = async (
       }
     }
 
-    const serviceInfo = await applicationContext
+    serviceInfo = await applicationContext
       .getUseCaseHelpers()
       .savePaperServicePdf({
         applicationContext,
         document: paperServicePdfsCombined,
       });
     pdfUrl = serviceInfo.url;
-
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'notice_generation_complete',
-        docketEntryId: serviceInfo.docketEntryId,
-        hasPaper: serviceInfo.hasPaper,
-        pdfUrl,
-      },
-      userId: user.userId,
-    });
   }
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'notice_generation_complete',
+      docketEntryId: serviceInfo?.docketEntryId,
+      hasPaper: serviceInfo?.hasPaper,
+      pdfUrl,
+    },
+    userId: user.userId,
+  });
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
     newTrialSessionEntity.setAsSwingSession(trialSession.swingSessionId);
