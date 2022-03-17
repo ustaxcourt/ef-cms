@@ -208,6 +208,10 @@ exports.updateTrialSessionInteractor = async (
     });
   }
 
+  if (trialSession.swingSession && trialSession.swingSessionId) {
+    newTrialSessionEntity.setAsSwingSession(trialSession.swingSessionId);
+  }
+
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
     trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
