@@ -29,10 +29,10 @@ export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
       state: cerebralTest.getState(),
     });
 
-    const expectedUpdatedValue =
+    const receivedUpdatedValue =
       formatted[overrides.fieldToUpdate] || formatted.notes;
-    const receivedUpdatedValue = overrides.valueToUpdate || mockNote;
+    const expectedUpdatedValue = overrides.valueToUpdate || mockNote;
 
-    expect(expectedUpdatedValue).toEqual(receivedUpdatedValue);
+    expect(receivedUpdatedValue).toEqual(expectedUpdatedValue);
   });
 };

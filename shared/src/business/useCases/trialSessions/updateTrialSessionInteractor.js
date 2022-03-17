@@ -198,6 +198,15 @@ exports.updateTrialSessionInteractor = async (
     pdfUrl = serviceInfo.url;
   }
 
+  if (trialSession.swingSession && trialSession.swingSessionId) {
+    newTrialSessionEntity.setAsSwingSession(trialSession.swingSessionId);
+  }
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
+  });
+
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
@@ -207,15 +216,6 @@ exports.updateTrialSessionInteractor = async (
       pdfUrl,
     },
     userId: user.userId,
-  });
-
-  if (trialSession.swingSession && trialSession.swingSessionId) {
-    newTrialSessionEntity.setAsSwingSession(trialSession.swingSessionId);
-  }
-
-  await applicationContext.getPersistenceGateway().updateTrialSession({
-    applicationContext,
-    trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
   });
 
   return {
