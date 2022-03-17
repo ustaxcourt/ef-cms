@@ -117,7 +117,6 @@ export const DraftDocumentViewerDocument = connect(
                 <Button
                   link
                   icon="pencil-alt"
-                  id="remove-docket-entry"
                   onClick={() =>
                     openConfirmRemoveSignatureModalSequence({
                       docketEntryIdToEdit:

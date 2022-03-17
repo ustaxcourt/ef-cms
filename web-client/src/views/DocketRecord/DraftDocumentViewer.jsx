@@ -44,7 +44,6 @@ export const DraftDocumentViewer = connect(
                         viewerDraftDocumentIdToDisplay ===
                           draftDocument.docketEntryId && 'active',
                       )}
-                      id={`docket-entry-id${draftDocument.docketEntryId}`}
                       isActive={
                         viewerDraftDocumentIdToDisplay ===
                         draftDocument.docketEntryId
