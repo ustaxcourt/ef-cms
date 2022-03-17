@@ -756,7 +756,11 @@ jobs:
       - run:
           name: Delete Source API Gateway Mappings
           command: |
-            npm run delete:api-gateway-mappings -- $EFCMS_DOMAIN $DEPLOYING_COLOR
+            if [ "${CIRCLE_BRANCH}" == "prod" ]; then
+              npm run delete:api-gateway-mappings -- "${EFCMS_DOMAIN}" "${DEPLOYING_COLOR}"
+            else
+              echo "Skipping..."
+            fi
       - run:
           name: Destroy Migration Infrastructure
           command: |
