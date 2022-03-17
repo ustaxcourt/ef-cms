@@ -257,6 +257,17 @@ describe('Trial Session Eligible Cases Journey', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetail');
+
+    let waitTime = 0;
+    const maxWait = 10000; // wait for ~10s max
+    while (
+      cerebralTest.getState('progressIndicator.waitingForResponse') &&
+      waitTime < maxWait
+    ) {
+      waitTime += 500;
+      await wait(500);
+    }
     expect(cerebralTest.getState('currentPage')).toBe('PrintPaperTrialNotices');
   });
 
