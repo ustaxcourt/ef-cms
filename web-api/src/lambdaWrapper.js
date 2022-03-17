@@ -12,6 +12,8 @@ exports.headerOverride = {
 
 exports.lambdaWrapper = (lambda, options = {}) => {
   return async (req, res) => {
+    const shouldMimicApiGateway =
+      options.isAsync && process.env.NODE_ENV != 'production';
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
     let isTerminalUser =
@@ -26,25 +28,29 @@ exports.lambdaWrapper = (lambda, options = {}) => {
       queryStringParameters: req.query,
     };
 
+    if (shouldMimicApiGateway) {
+      res.status(204).send('');
+    }
+
     const response = await lambda({
       ...event,
       body: JSON.stringify(req.body),
       logger: req.locals.logger,
     });
 
-    if (options.isAsync) {
-      res.status(204);
-    } else {
+    if (!shouldMimicApiGateway) {
       res.status(response.statusCode);
+
+      res.set({
+        ...response.headers,
+        'X-Terminal-User': isTerminalUser,
+        ...exports.headerOverride,
+      });
     }
 
-    res.set({
-      ...response.headers,
-      'X-Terminal-User': isTerminalUser,
-      ...exports.headerOverride,
-    });
-
-    if (
+    if (shouldMimicApiGateway) {
+      // Do nothing
+    } else if (
       ['application/pdf', 'text/html'].includes(
         response.headers['Content-Type'],
       )
