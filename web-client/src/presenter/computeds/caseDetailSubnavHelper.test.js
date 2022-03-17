@@ -241,7 +241,7 @@ describe('caseDetailSubnavHelper', () => {
 
       const result = computeState(state);
 
-      expect(result.draftDocketEntryCount).toEqual(numberOfDrafts.toString());
+      expect(result.draftDocketEntryCount).toEqual(numberOfDrafts);
     });
 
     it('returns 0 draft items when there are 0 draft items on the case', () => {
@@ -253,7 +253,7 @@ describe('caseDetailSubnavHelper', () => {
 
       const result = computeState(state);
 
-      expect(result.draftDocketEntryCount).toEqual(numberOfDrafts.toString());
+      expect(result.draftDocketEntryCount).toEqual(numberOfDrafts);
     });
   });
 });
