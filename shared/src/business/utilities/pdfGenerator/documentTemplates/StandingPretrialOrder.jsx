@@ -1,15 +1,15 @@
 const React = require('react');
-import { DocketHeader } from '../components/DocketHeader';
-const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
+import { OrderDocketHeader } from '../components/OrderDocketHeader';
+import { OrderPrimaryHeader } from '../components/OrderPrimaryHeader';
 
 export const StandingPretrialOrder = ({ options, trialInfo }) => {
   return (
     <div id="standing-pretrial-order">
       <div className="standing-pretrial-order-regular-case">
-        <PrimaryHeader />
-        <DocketHeader
+        <OrderPrimaryHeader />
+        <OrderDocketHeader
           caseCaptionExtension={options.caseCaptionExtension}
-          caseTitle={options.caseTitle}
+          caseTitle={options.caseTitle.toUpperCase()}
           docketNumberWithSuffix={options.docketNumberWithSuffix}
         />
 
