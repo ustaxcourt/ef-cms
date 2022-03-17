@@ -56,7 +56,8 @@ export const OrdersNeededSummary = connect(
                         className="heading-4 padding-top-2"
                         id="orders-notices-auto-created-in-draft"
                       >
-                        Orders/Notices Automatically Created In Drafts
+                        Orders/Notices Automatically Created in Drafts After
+                        Service
                       </p>
                     )}
 
