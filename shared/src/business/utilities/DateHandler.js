@@ -1,9 +1,9 @@
 const { DATE_FULL, DateTime } = require('luxon');
 
 const FORMATS = {
-  DATE_FULL,
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
+  DATE_WITH_MONTH_IN_ENGLISH: 'MMMM d, yyyy',
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
@@ -182,6 +182,10 @@ const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
   let result = prepareDateFromString(dateString)
     .setZone(USTC_TZ)
     .toFormat(formatString);
+
+  console.log('formatString: ', formatString);
+
+  console.log('ustc tz full date?: ', result);
 
   const formatWithAMPM = [
     FORMATS.DATE_TIME,
@@ -460,7 +464,10 @@ const getDateInFuture = (startDate, numberOfDays) => {
     dateString: startDate,
     howMuch: numberOfDays,
   });
-  return formatDateString(laterDateTime, FORMATS.DATE_FULL);
+
+  console.log('laterDateTime', laterDateTime);
+
+  return formatDateString(laterDateTime, FORMATS.DATE_WITH_MONTH_IN_ENGLISH);
 };
 
 module.exports = {
