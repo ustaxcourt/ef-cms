@@ -32,9 +32,8 @@ export const updateTrialSessionAction = async ({
     ['year', 'month', 'day'],
   );
 
-  let result;
   try {
-    result = await applicationContext
+    await applicationContext
       .getUseCases()
       .updateTrialSessionInteractor(applicationContext, {
         trialSession: { ...trialSession, startDate },
@@ -48,16 +47,5 @@ export const updateTrialSessionAction = async ({
     });
   }
 
-  let pdfUrl;
-  if (result && result.serviceInfo) {
-    pdfUrl = result.serviceInfo;
-  }
-
-  return path.success({
-    alertSuccess: {
-      message: 'Trial session updated.',
-    },
-    pdfUrl,
-    trialSessionId: trialSession.trialSessionId,
-  });
+  return path.success();
 };
