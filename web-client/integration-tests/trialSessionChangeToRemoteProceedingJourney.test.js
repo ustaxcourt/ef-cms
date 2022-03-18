@@ -15,6 +15,7 @@ import {
   setupTest,
   uploadPetition,
   wait,
+  waitMaxTime,
 } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { runCompute } from 'cerebral/test';
@@ -257,17 +258,7 @@ describe('Trial Session Eligible Cases Journey', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetail');
-
-    let waitTime = 0;
-    const maxWait = 10000; // wait for ~10s max
-    while (
-      cerebralTest.getState('progressIndicator.waitingForResponse') &&
-      waitTime < maxWait
-    ) {
-      waitTime += 500;
-      await wait(500);
-    }
+    await waitMaxTime(cerebralTest);
     expect(cerebralTest.getState('currentPage')).toBe('PrintPaperTrialNotices');
   });
 
@@ -293,6 +284,7 @@ describe('Trial Session Eligible Cases Journey', () => {
             .eventCode,
       );
 
+      await waitMaxTime(cerebralTest);
       if (caseDetail.status !== CASE_STATUS_TYPES.closed) {
         expect(norpDocketEntry).toMatchObject({
           servedParties: [
