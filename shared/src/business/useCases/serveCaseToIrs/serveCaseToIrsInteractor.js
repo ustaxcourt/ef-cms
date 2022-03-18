@@ -24,9 +24,6 @@ const { remove } = require('lodash');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-const { noticeOfAttachmentsInNatureOfEvidence, orderForFilingFee } =
-  SYSTEM_GENERATED_DOCUMENT_TYPES;
-
 const addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
@@ -69,75 +66,6 @@ const addDocketEntryForPaymentStatus = ({
   }
 };
 
-const addDocketEntryForNANE = async ({
-  applicationContext,
-  caseEntity,
-  user,
-}) => {
-  if (!caseEntity.noticeOfAttachments) {
-    return;
-  }
-  const newDocketEntry = new DocketEntry(
-    {
-      documentTitle: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
-      documentType: noticeOfAttachmentsInNatureOfEvidence.documentType,
-      draftOrderState: {
-        docketNumber: caseEntity.docketNumber,
-        documentTitle: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
-        documentType: noticeOfAttachmentsInNatureOfEvidence.documentType,
-        eventCode: noticeOfAttachmentsInNatureOfEvidence.eventCode,
-        freeText: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
-      },
-      eventCode: noticeOfAttachmentsInNatureOfEvidence.eventCode,
-      freeText: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
-      isDraft: true,
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.addDocketEntry(newDocketEntry);
-
-  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
-  const { docketNumberWithSuffix } = caseEntity;
-
-  const pdfData = await applicationContext.getDocumentGenerators().order({
-    applicationContext,
-    data: {
-      caseCaptionExtension,
-      caseTitle,
-      docketNumberWithSuffix,
-      orderContent: noticeOfAttachmentsInNatureOfEvidence.content,
-      orderTitle:
-        noticeOfAttachmentsInNatureOfEvidence.documentTitle.toUpperCase(),
-      signatureText: applicationContext.getClerkOfCourtNameForSigning(),
-    },
-  });
-
-  await applicationContext.getUtilities().uploadToS3({
-    applicationContext,
-    caseConfirmationPdfName: newDocketEntry.docketEntryId,
-    pdfData,
-  });
-
-  const documentContentsId = applicationContext.getUniqueId();
-
-  const contentToStore = {
-    documentContents: noticeOfAttachmentsInNatureOfEvidence.content,
-    richText: noticeOfAttachmentsInNatureOfEvidence.content,
-  };
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    contentType: 'application/json',
-    document: Buffer.from(JSON.stringify(contentToStore)),
-    key: documentContentsId,
-    useTempBucket: false,
-  });
-
-  newDocketEntry.documentContentsId = documentContentsId;
-};
-
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
     INITIAL_DOCUMENT_TYPES_MAP,
@@ -162,26 +90,27 @@ const addDocketEntries = ({ caseEntity }) => {
   }
 };
 
-// perhaps this method could be made more generic and combined with the other addDocketX methods
 // todo: add test, esp around replaceBracketed
-const addDocketEntryForOrderForFilingFee = async ({
+const addDocketEntryForSystemGeneratedDocument = async ({
   applicationContext,
   caseEntity,
+  systemGeneratedDocument,
   user,
+  options = {},
 }) => {
   const newDocketEntry = new DocketEntry(
     {
-      documentTitle: orderForFilingFee.title,
-      documentType: orderForFilingFee.documentType,
+      documentTitle: systemGeneratedDocument.documentTitle,
+      documentType: systemGeneratedDocument.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
-        documentTitle: orderForFilingFee.title,
-        documentType: orderForFilingFee.documentType,
-        eventCode: orderForFilingFee.eventCode,
-        freeText: orderForFilingFee.title,
+        documentTitle: systemGeneratedDocument.documentTitle,
+        documentType: systemGeneratedDocument.documentType,
+        eventCode: systemGeneratedDocument.eventCode,
+        freeText: systemGeneratedDocument.documentTitle,
       },
-      eventCode: orderForFilingFee.eventCode,
-      freeText: orderForFilingFee.title,
+      eventCode: systemGeneratedDocument.eventCode,
+      freeText: systemGeneratedDocument.documentTitle,
       isDraft: true,
       userId: user.userId,
     },
@@ -192,17 +121,9 @@ const addDocketEntryForOrderForFilingFee = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
-  const todayPlus60 = getDateInFuture({
-    numberOfDays: 60,
-    startDate: formatNow(FORMATS.ISO),
-  });
-
-  const oldOrderForFilingFee = cloneDeep(orderForFilingFee);
-  oldOrderForFilingFee.content = replaceBracketed(
-    oldOrderForFilingFee.content,
-    todayPlus60,
-    todayPlus60, // since there are 2 instances of the date, replace a second time
-  );
+  const sysDoc = options.clonedSystemDocument
+    ? options.clonedSystemDocument
+    : systemGeneratedDocument;
 
   const pdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
@@ -210,8 +131,8 @@ const addDocketEntryForOrderForFilingFee = async ({
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
-      orderContent: oldOrderForFilingFee.content,
-      orderTitle: oldOrderForFilingFee.title.toUpperCase(),
+      orderContent: sysDoc.content,
+      orderTitle: sysDoc.documentTitle.toUpperCase(),
       signatureText: applicationContext.getClerkOfCourtNameForSigning(),
     },
   });
@@ -225,8 +146,8 @@ const addDocketEntryForOrderForFilingFee = async ({
   const documentContentsId = applicationContext.getUniqueId();
 
   const contentToStore = {
-    documentContents: oldOrderForFilingFee.content,
-    richText: oldOrderForFilingFee.content,
+    documentContents: sysDoc.content,
+    richText: sysDoc.content,
   };
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
@@ -522,18 +443,40 @@ const serveCaseToIrsInteractor = async (
     .validate();
 
   if (caseEntity.noticeOfAttachments) {
-    await addDocketEntryForNANE({
+    const { noticeOfAttachmentsInNatureOfEvidence } =
+      SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    await addDocketEntryForSystemGeneratedDocument({
       applicationContext,
       caseEntity,
+      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
       user,
     });
   }
 
-  // should we change the rest to do this if check, rather than guards inside?
   if (caseEntity.orderForFilingFee) {
-    await addDocketEntryForOrderForFilingFee({
+    const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const todayPlus60 = getDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    console.log('todayPlus60', todayPlus60);
+    const oldOrderForFilingFee = cloneDeep(orderForFilingFee);
+    oldOrderForFilingFee.content = replaceBracketed(
+      oldOrderForFilingFee.content,
+      todayPlus60,
+      todayPlus60, // since there are 2 instances of the date, replace a 2nd time
+    );
+
+    await addDocketEntryForSystemGeneratedDocument({
       applicationContext,
       caseEntity,
+      options: {
+        clonedSystemDocument: oldOrderForFilingFee,
+      },
+      systemGeneratedDocument: orderForFilingFee,
       user,
     });
   }
@@ -563,8 +506,7 @@ const serveCaseToIrsInteractor = async (
 };
 
 module.exports = {
-  addDocketEntryForNANE,
-  addDocketEntryForOrderForFilingFee,
   addDocketEntryForPaymentStatus,
+  addDocketEntryForSystemGeneratedDocument,
   serveCaseToIrsInteractor,
 };
