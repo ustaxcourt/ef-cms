@@ -588,17 +588,18 @@ describe('DateHandler', () => {
     // deal with the fact that federal holidays change year by year depending on what day they land
     // eg, christmas 2022 is Monday 12/26 vs christmas 20211 is Friday 12/24
     // reference https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/#url=2022
-    it.skip('should return a non-holiday weekday >60 days in the future from now if 60 days from now lands on a federal holiday', () => {
+    it('should return a non-holiday weekday >60 days in the future from now if 60 days from now lands on a federal holiday', () => {
       const numberOfDays = 60;
-      const mockStartDate = '2021-06-01';
-      const weekdaySixtyDaysFromStartDate = 'August 2, 2021';
+      const mockStartDate = '2022-10-27';
+      const weekdayNonHolidayAtLeastSixtyDaysFromStartDate =
+        'December 27, 2022';
 
       const result = DateHandler.getDateInFuture({
         numberOfDays,
         startDate: mockStartDate,
       });
 
-      expect(result).toEqual(weekdaySixtyDaysFromStartDate);
+      expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
     });
   });
 });

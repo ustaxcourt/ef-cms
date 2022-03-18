@@ -1,9 +1,9 @@
+const fedHolidays = require('@18f/us-federal-holidays');
 const { DateTime } = require('luxon');
 
 const FORMATS = {
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
-  DATE_WITH_MONTH_IN_ENGLISH: 'MMMM d, yyyy',
   DAY_OF_WEEK: 'c',
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
@@ -459,14 +459,30 @@ const getDateInFuture = ({ numberOfDays, startDate, units = 'days' }) => {
     [units]: numberOfDays,
   });
 
-  const dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
-  if (dayOfWeek === '6') {
-    laterDate = laterDate.plus({ [units]: 2 });
-  } else if (dayOfWeek === '7') {
-    laterDate = laterDate.plus({ [units]: 1 });
+  const options = {
+    // shiftSaturdayHolidays: true,
+    // shiftSundayHolidays: true,
+    // utc: false,
+  };
+
+  let isAHoliday = fedHolidays.isAHoliday(
+    laterDate.toFormat(FORMATS.MONTH_DAY_YEAR),
+    options,
+  );
+  let dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
+  let isAWeekend = dayOfWeek === '6' || dayOfWeek === '7';
+
+  while (isAHoliday || isAWeekend) {
+    laterDate = laterDate.plus({ days: 1 });
+    isAHoliday = fedHolidays.isAHoliday(
+      laterDate.toFormat(FORMATS.MONTH_DAY_YEAR),
+      options,
+    );
+    dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
+    isAWeekend = dayOfWeek === '6' || dayOfWeek === '7';
   }
 
-  return laterDate.toFormat(FORMATS.DATE_WITH_MONTH_IN_ENGLISH);
+  return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
 };
 
 module.exports = {
