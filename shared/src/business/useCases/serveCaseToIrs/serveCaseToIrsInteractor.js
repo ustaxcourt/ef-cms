@@ -2,7 +2,7 @@ const {
   formatNow,
   FORMATS,
   getDateInFuture,
-} = require('../../business/utilities/DateHandler');
+} = require('../../utilities/DateHandler');
 const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
@@ -191,7 +191,10 @@ const addDocketEntryForOrderForFilingFee = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
-  const todayPlus60 = getDateInFuture(formatNow(FORMATS.ISO), 60);
+  const todayPlus60 = getDateInFuture({
+    numberOfDays: 60,
+    startDate: formatNow(FORMATS.ISO),
+  });
 
   orderForFilingFee.content = replaceBracketed(
     orderForFilingFee.content,
