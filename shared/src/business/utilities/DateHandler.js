@@ -1,4 +1,4 @@
-const { DATE_FULL, DateTime } = require('luxon');
+const { DateTime } = require('luxon');
 
 const FORMATS = {
   DATE_TIME: 'MM/dd/yy hh:mm a',
@@ -88,10 +88,12 @@ const prepareDateFromString = (dateString, inputFormat) => {
     result = DateTime.fromFormat(dateString, inputFormat, {
       zone: USTC_TZ,
     }).setZone('utc');
+    console.log('result', result);
   } else {
     result = DateTime.fromISO(dateString, {
       zone: USTC_TZ,
     }).setZone('utc');
+    console.log('i should not be here', result);
   }
   result.toISOString = () => result.toISO();
   result.isSame = (a, b) => result.hasSame(a, b);
@@ -459,15 +461,10 @@ const subtractISODates = (date, dateConfig) => {
  */
 const getDateInFuture = (startDate, numberOfDays) => {
   console.log('startDate', startDate);
-  // return prepareDateFromString(startDate.plus({ days: numberOfDays }));
-  const laterDateTime = calculateISODate({
-    dateString: startDate,
-    howMuch: numberOfDays,
-  });
-
-  console.log('laterDateTime', laterDateTime);
-
-  return formatDateString(laterDateTime, FORMATS.DATE_WITH_MONTH_IN_ENGLISH);
+  return prepareDateFromString(
+    startDate,
+    FORMATS.DATE_WITH_MONTH_IN_ENGLISH,
+  ).plus({ ['days']: numberOfDays });
 };
 
 module.exports = {
