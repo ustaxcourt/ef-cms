@@ -1,4 +1,9 @@
 const {
+  formatNow,
+  FORMATS,
+  getDateInFuture,
+} = require('../../business/utilities/DateHandler');
+const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
@@ -15,6 +20,7 @@ const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const { noticeOfAttachmentsInNatureOfEvidence, orderForFilingFee } =
@@ -183,6 +189,13 @@ const addDocketEntryForOrderForFilingFee = async ({
   caseEntity.addDocketEntry(newDocketEntry);
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
+
+  const todayPlus60 = getDateInFuture(formatNow(FORMATS.ISO), 60);
+
+  orderForFilingFee.content = replaceBracketed(
+    orderForFilingFee.content,
+    todayPlus60,
+  );
 
   const pdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
