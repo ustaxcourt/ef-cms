@@ -848,6 +848,17 @@ export const wait = time => {
   });
 };
 
+export const waitMaxTime = async (cerebralTest, maxWait = 10000) => {
+  let waitTime = 0;
+  while (
+    cerebralTest.getState('progressIndicator.waitingForResponse') &&
+    waitTime < maxWait
+  ) {
+    waitTime += 500;
+    await wait(500);
+  }
+};
+
 export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
