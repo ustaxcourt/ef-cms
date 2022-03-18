@@ -90,77 +90,6 @@ const addDocketEntries = ({ caseEntity }) => {
   }
 };
 
-// todo: add test, esp around replaceBracketed
-const addDocketEntryForSystemGeneratedDocument = async ({
-  applicationContext,
-  caseEntity,
-  systemGeneratedDocument,
-  user,
-  options = {},
-}) => {
-  const newDocketEntry = new DocketEntry(
-    {
-      documentTitle: systemGeneratedDocument.documentTitle,
-      documentType: systemGeneratedDocument.documentType,
-      draftOrderState: {
-        docketNumber: caseEntity.docketNumber,
-        documentTitle: systemGeneratedDocument.documentTitle,
-        documentType: systemGeneratedDocument.documentType,
-        eventCode: systemGeneratedDocument.eventCode,
-        freeText: systemGeneratedDocument.documentTitle,
-      },
-      eventCode: systemGeneratedDocument.eventCode,
-      freeText: systemGeneratedDocument.documentTitle,
-      isDraft: true,
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
-
-  caseEntity.addDocketEntry(newDocketEntry);
-  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
-  const { docketNumberWithSuffix } = caseEntity;
-
-  const sysDoc = options.clonedSystemDocument
-    ? options.clonedSystemDocument
-    : systemGeneratedDocument;
-
-  const pdfData = await applicationContext.getDocumentGenerators().order({
-    applicationContext,
-    data: {
-      caseCaptionExtension,
-      caseTitle,
-      docketNumberWithSuffix,
-      orderContent: sysDoc.content,
-      orderTitle: sysDoc.documentTitle.toUpperCase(),
-      signatureText: applicationContext.getClerkOfCourtNameForSigning(),
-    },
-  });
-
-  await applicationContext.getUtilities().uploadToS3({
-    applicationContext,
-    caseConfirmationPdfName: newDocketEntry.docketEntryId,
-    pdfData,
-  });
-
-  const documentContentsId = applicationContext.getUniqueId();
-
-  const contentToStore = {
-    documentContents: sysDoc.content,
-    richText: sysDoc.content,
-  };
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    contentType: 'application/json',
-    document: Buffer.from(JSON.stringify(contentToStore)),
-    key: documentContentsId,
-    useTempBucket: false,
-  });
-
-  newDocketEntry.documentContentsId = documentContentsId;
-};
-
 const createPetitionWorkItems = async ({
   applicationContext,
   caseEntity,
@@ -446,12 +375,13 @@ const serveCaseToIrsInteractor = async (
     const { noticeOfAttachmentsInNatureOfEvidence } =
       SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    await addDocketEntryForSystemGeneratedDocument({
-      applicationContext,
-      caseEntity,
-      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
-      user,
-    });
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+      });
   }
 
   if (caseEntity.orderForFilingFee) {
@@ -470,15 +400,16 @@ const serveCaseToIrsInteractor = async (
       todayPlus60, // since there are 2 instances of the date, replace a 2nd time
     );
 
-    await addDocketEntryForSystemGeneratedDocument({
-      applicationContext,
-      caseEntity,
-      options: {
-        clonedSystemDocument: oldOrderForFilingFee,
-      },
-      systemGeneratedDocument: orderForFilingFee,
-      user,
-    });
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        options: {
+          clonedSystemDocument: oldOrderForFilingFee,
+        },
+        systemGeneratedDocument: orderForFilingFee,
+      });
   }
 
   await createPetitionWorkItems({
@@ -507,6 +438,5 @@ const serveCaseToIrsInteractor = async (
 
 module.exports = {
   addDocketEntryForPaymentStatus,
-  addDocketEntryForSystemGeneratedDocument,
   serveCaseToIrsInteractor,
 };
