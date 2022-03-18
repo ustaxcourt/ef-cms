@@ -15,6 +15,7 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
+const { cloneDeep } = require('lodash');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
@@ -162,6 +163,7 @@ const addDocketEntries = ({ caseEntity }) => {
 };
 
 // perhaps this method could be made more generic and combined with the other addDocketX methods
+// todo: add test, esp around replaceBracketed
 const addDocketEntryForOrderForFilingFee = async ({
   applicationContext,
   caseEntity,
@@ -195,9 +197,11 @@ const addDocketEntryForOrderForFilingFee = async ({
     startDate: formatNow(FORMATS.ISO),
   });
 
-  orderForFilingFee.content = replaceBracketed(
-    orderForFilingFee.content,
+  const oldOrderForFilingFee = cloneDeep(orderForFilingFee);
+  oldOrderForFilingFee.content = replaceBracketed(
+    oldOrderForFilingFee.content,
     todayPlus60,
+    todayPlus60, // since there are 2 instances of the date, replace a second time
   );
 
   const pdfData = await applicationContext.getDocumentGenerators().order({
@@ -206,8 +210,8 @@ const addDocketEntryForOrderForFilingFee = async ({
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
-      orderContent: orderForFilingFee.content,
-      orderTitle: orderForFilingFee.title.toUpperCase(),
+      orderContent: oldOrderForFilingFee.content,
+      orderTitle: oldOrderForFilingFee.title.toUpperCase(),
       signatureText: applicationContext.getClerkOfCourtNameForSigning(),
     },
   });
@@ -221,8 +225,8 @@ const addDocketEntryForOrderForFilingFee = async ({
   const documentContentsId = applicationContext.getUniqueId();
 
   const contentToStore = {
-    documentContents: orderForFilingFee.content,
-    richText: orderForFilingFee.content,
+    documentContents: oldOrderForFilingFee.content,
+    richText: oldOrderForFilingFee.content,
   };
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
