@@ -1,8 +1,7 @@
 /* eslint-disable max-lines */
 const {
-  addDocketEntryForNANE,
-  addDocketEntryForOrderForFilingFee,
   addDocketEntryForPaymentStatus,
+  addDocketEntryForSystemGeneratedDocument,
   serveCaseToIrsInteractor,
 } = require('./serveCaseToIrsInteractor');
 
@@ -20,6 +19,7 @@ const {
   PARTY_TYPES,
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   docketClerkUser,
@@ -610,6 +610,46 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
   });
+
+  it('should generate an order and upload it to s3 for noticeOfAttachments', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      noticeOfAttachments: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it.skip('should generate an order, upload it to s3, and get todayPlus60 for orderForFilingFee', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderForFilingFee: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+
+    // call off use case helper addDocketEntryForSystemGeneratedDocument and verify that the oldOrderForFilingFee is set to todayPlus60
+    // is structured as expected without brackets
+    // testing that cloneDeep actually updates the content inside due to "frozen" constant
+    // can you check that options.clonedSystemDocument does not contain bracketed values?
+    // expect(
+    //   await addDocketEntryForSystemGeneratedDocument().mock.calls[0][0].options,
+    // ).toMatchObject({
+    //   clonedSystemDocument: {
+    //     content: expect.not.stringContaining('['),
+    //   },
+    // });
+  });
 });
 
 describe('addDocketEntryForPaymentStatus', () => {
@@ -668,42 +708,20 @@ describe('addDocketEntryForPaymentStatus', () => {
   });
 });
 
-describe('addDocketEntryForNANE', () => {
+describe('addDocketEntryForSystemGeneratedDocument', () => {
   let user;
+
+  const { noticeOfAttachmentsInNatureOfEvidence, orderForFilingFee } =
+    SYSTEM_GENERATED_DOCUMENT_TYPES;
 
   beforeEach(() => {
     user = applicationContext.getCurrentUser();
   });
 
-  it('should not increase the docket entries and not upload a generated pdf if noticeOfAttachments is false', async () => {
+  it('should increase the docket entries and upload a generated pdf for noticeOfAttachments', async () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
-        noticeOfAttachments: false,
-      },
-      { applicationContext },
-    );
-
-    const docketEntriesFromNewCaseCount = caseEntity.docketEntries.length;
-
-    await addDocketEntryForNANE({
-      applicationContext,
-      caseEntity,
-      user,
-    });
-
-    expect(caseEntity.docketEntries.length).toEqual(
-      docketEntriesFromNewCaseCount,
-    );
-
-    expect(applicationContext.getUtilities().uploadToS3).not.toHaveBeenCalled();
-  });
-
-  it('should increase the docket entries and upload a generated pdf if noticeOfAttachments is true', async () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        noticeOfAttachments: true,
       },
       { applicationContext },
     );
@@ -711,9 +729,10 @@ describe('addDocketEntryForNANE', () => {
     const newDocketEntriesFromNewCaseCount =
       caseEntity.docketEntries.length + 1;
 
-    await addDocketEntryForNANE({
+    await addDocketEntryForSystemGeneratedDocument({
       applicationContext,
       caseEntity,
+      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
       user,
     });
 
@@ -733,15 +752,8 @@ describe('addDocketEntryForNANE', () => {
     ).toHaveBeenCalled();
     // eslint-disable-next-line max-lines
   });
-});
 
-describe('addDocketEntryForOrderForFilingFee', () => {
-  let user;
-
-  beforeEach(() => {
-    user = applicationContext.getCurrentUser();
-  });
-  it('should increase the docket entries and upload a generated pdf', async () => {
+  it('should increase the docket entries and upload a generated pdf for orderForFilingFee', async () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -752,9 +764,10 @@ describe('addDocketEntryForOrderForFilingFee', () => {
     const newDocketEntriesFromNewCaseCount =
       caseEntity.docketEntries.length + 1;
 
-    await addDocketEntryForOrderForFilingFee({
+    await addDocketEntryForSystemGeneratedDocument({
       applicationContext,
       caseEntity,
+      systemGeneratedDocument: orderForFilingFee,
       user,
     });
 
