@@ -9,4 +9,5 @@ import { state } from 'cerebral';
 export const setWaitingForResponseAction = ({ store }) => {
   store.increment(state.progressIndicator.waitingForResponseRequests);
   store.set(state.progressIndicator.waitingForResponse, true);
+  store.unset(state.progressIndicator.waitText);
 };
