@@ -3,9 +3,9 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkViewsNewTrialSession = (
-  cerebralTest,
-  checkCase,
-  calendarNote,
+  { calendarNote, cerebralTest, checkCase, expectedStatus } = {
+    expectedStatus: 'New',
+  },
 ) => {
   return it('Docket Clerk Views a new trial session', async () => {
     await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
@@ -19,7 +19,7 @@ export const docketClerkViewsNewTrialSession = (
       },
     );
 
-    expect(trialSessionFormatted.computedStatus).toEqual('New');
+    expect(trialSessionFormatted.computedStatus).toEqual(expectedStatus);
 
     if (checkCase) {
       const foundCase = trialSessionFormatted.caseOrder.find(
