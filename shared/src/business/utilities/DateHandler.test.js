@@ -1,5 +1,5 @@
+/* eslint-disable max-lines */
 const DateHandler = require('./DateHandler');
-const { createISODateString, formatDateString } = require('./DateHandler');
 const { FORMATS, PATTERNS } = DateHandler;
 
 describe('DateHandler', () => {
@@ -535,7 +535,7 @@ describe('DateHandler', () => {
     });
   });
 
-  describe.only('getDateInFuture)', () => {
+  describe('getDateInFuture)', () => {
     beforeEach(() => {
       jest
         .spyOn(DateHandler, 'createISODateString')
@@ -548,59 +548,57 @@ describe('DateHandler', () => {
 
     it('should return 60 days in the future from the provided date', () => {
       const numberOfDays = 60;
-      const mockStartDate = '2021-06-27';
-      const sixtyDaysFromStartDate = 'August 27, 2021';
-      // const startDateFormatted = DateHandler.formatDateString(
-      //   mockStartDate,
-      //   'yyyy-MM-dd',
-      // );
+      const mockStartDate = '2021-05-31';
+      const sixtyDaysFromStartDate = 'July 30, 2021';
 
-      // -4:00 UTC offset
-      // August 27
-
-      const result = DateHandler.getDateInFuture(mockStartDate, numberOfDays);
+      const result = DateHandler.getDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
 
       expect(result).toEqual(sixtyDaysFromStartDate);
     });
 
-    it.skip("should return 60 days in the future from now that if it's actually on a weekday that is not a federal holiday", () => {
-      const dateRetrievedFromStorage = '2001-01-01';
-      const startDate = DateHandler.formatDateString(
-        dateRetrievedFromStorage,
-        'yyyy-MM-dd',
-      ); // stored literally as ET
-
-      // actually look at this resulting date and make sure it's not a weekend or fed holiday
+    it('should return a weekday >60 days in the future from now if 60 days from now lands on a Saturday', () => {
       const numberOfDays = 60;
-      const result = DateHandler.getDateInFuture(startDate, numberOfDays);
+      const mockStartDate = '2021-06-01';
+      const weekdaySixtyDaysFromStartDate = 'August 2, 2021';
 
-      expect(result).toEqual('August 27, 2021');
+      const result = DateHandler.getDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(weekdaySixtyDaysFromStartDate);
     });
 
-    it.skip("should return 60 days in the future from now if it's a federal holidayblah", () => {
-      const dateRetrievedFromStorage = '2001-01-01';
-      const startDate = DateHandler.formatDateString(
-        dateRetrievedFromStorage,
-        'yyyy-MM-dd',
-      ); // stored literally as ET
-
+    it('should return a weekday >60 days in the future from now if 60 days from now lands on a Sunday', () => {
       const numberOfDays = 60;
-      const result = DateHandler.getDateInFuture(startDate, numberOfDays);
+      const mockStartDate = '2021-06-02';
+      const weekdaySixtyDaysFromStartDate = 'August 2, 2021';
 
-      expect(result).toEqual('idk');
+      const result = DateHandler.getDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(weekdaySixtyDaysFromStartDate);
     });
 
-    it.skip('should return 60 days in the future from now if weekend blah blah blah', () => {
-      const dateRetrievedFromStorage = '2001-01-01';
-      const startDate = DateHandler.formatDateString(
-        dateRetrievedFromStorage,
-        'yyyy-MM-dd',
-      ); // stored literally as ET
-
+    // deal with the fact that federal holidays change year by year depending on what day they land
+    // eg, christmas 2022 is Monday 12/26 vs christmas 20211 is Friday 12/24
+    // reference https://www.opm.gov/policy-data-oversight/pay-leave/federal-holidays/#url=2022
+    it.skip('should return a non-holiday weekday >60 days in the future from now if 60 days from now lands on a federal holiday', () => {
       const numberOfDays = 60;
-      const result = DateHandler.getDateInFuture(startDate, numberOfDays);
+      const mockStartDate = '2021-06-01';
+      const weekdaySixtyDaysFromStartDate = 'August 2, 2021';
 
-      expect(result).toEqual('idk');
+      const result = DateHandler.getDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(weekdaySixtyDaysFromStartDate);
     });
   });
 });

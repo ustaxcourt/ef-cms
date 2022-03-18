@@ -4,6 +4,7 @@ const FORMATS = {
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
   DATE_WITH_MONTH_IN_ENGLISH: 'MMMM d, yyyy',
+  DAY_OF_WEEK: 'c',
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
@@ -88,12 +89,10 @@ const prepareDateFromString = (dateString, inputFormat) => {
     result = DateTime.fromFormat(dateString, inputFormat, {
       zone: USTC_TZ,
     }).setZone('utc');
-    console.log('result', result);
   } else {
     result = DateTime.fromISO(dateString, {
       zone: USTC_TZ,
     }).setZone('utc');
-    console.log('i should not be here', result);
   }
   result.toISOString = () => result.toISO();
   result.isSame = (a, b) => result.hasSame(a, b);
@@ -184,10 +183,6 @@ const formatDateString = (dateString, formatArg = FORMATS.ISO) => {
   let result = prepareDateFromString(dateString)
     .setZone(USTC_TZ)
     .toFormat(formatString);
-
-  console.log('formatString: ', formatString);
-
-  console.log('ustc tz full date?: ', result);
 
   const formatWithAMPM = [
     FORMATS.DATE_TIME,
@@ -459,12 +454,19 @@ const subtractISODates = (date, dateConfig) => {
  * @param {number} numberOfDays number of days to add to startDate
  * @returns {string} a formatted DATE_FULL string if date object is valid
  */
-const getDateInFuture = (startDate, numberOfDays) => {
-  console.log('startDate', startDate);
-  return prepareDateFromString(
-    startDate,
-    FORMATS.DATE_WITH_MONTH_IN_ENGLISH,
-  ).plus({ ['days']: numberOfDays });
+const getDateInFuture = ({ numberOfDays, startDate, units = 'days' }) => {
+  let laterDate = prepareDateFromString(startDate).plus({
+    [units]: numberOfDays,
+  });
+
+  const dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
+  if (dayOfWeek === '6') {
+    laterDate = laterDate.plus({ [units]: 2 });
+  } else if (dayOfWeek === '7') {
+    laterDate = laterDate.plus({ [units]: 1 });
+  }
+
+  return laterDate.toFormat(FORMATS.DATE_WITH_MONTH_IN_ENGLISH);
 };
 
 module.exports = {
