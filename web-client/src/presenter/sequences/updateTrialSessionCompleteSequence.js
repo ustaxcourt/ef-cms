@@ -8,6 +8,7 @@ import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
+import { setPrintPaperDoneUrlAction } from '../actions/TrialSession/setPrintPaperDoneUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { shouldRefreshCaseAction } from '../actions/shouldRefreshCaseAction';
@@ -36,6 +37,7 @@ export const updateTrialSessionCompleteSequence = [
     ],
     paper: [
       setPdfPreviewUrlSequence,
+      setPrintPaperDoneUrlAction,
       setCurrentPageAction('PrintPaperTrialNotices'),
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,
