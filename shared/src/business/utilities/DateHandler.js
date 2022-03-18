@@ -446,40 +446,37 @@ const subtractISODates = (date, dateConfig) => {
 };
 
 /**
- * Returns today plus n numberOfDays
- * but if the return date results on a Saturday, Sunday, or federal holiday,
+ * Returns startDate plus n numberOfDays
+ * but if the return date results on a Saturday, Sunday, or Federal holiday,
  * it will be moved forward to the next business day
  *
  * @param {string} startDate the date to add days to
  * @param {number} numberOfDays number of days to add to startDate
- * @returns {string} a formatted DATE_FULL string if date object is valid
+ * @returns {string} a formatted MONTH_DAY_YEAR string if date object is valid
  */
 const getDateInFuture = ({ numberOfDays, startDate, units = 'days' }) => {
   let laterDate = prepareDateFromString(startDate).plus({
     [units]: numberOfDays,
   });
 
-  const options = {
-    // shiftSaturdayHolidays: true,
-    // shiftSundayHolidays: true,
-    // utc: false,
-  };
-
   let isAHoliday = fedHolidays.isAHoliday(
     laterDate.toFormat(FORMATS.MONTH_DAY_YEAR),
-    options,
   );
+
   let dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
-  let isAWeekend = dayOfWeek === '6' || dayOfWeek === '7';
+  const saturday = '6';
+  const sunday = '7';
+
+  let isAWeekend = dayOfWeek === saturday || dayOfWeek === sunday;
 
   while (isAHoliday || isAWeekend) {
     laterDate = laterDate.plus({ days: 1 });
+    dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
+    isAWeekend = dayOfWeek === saturday || dayOfWeek === sunday;
+
     isAHoliday = fedHolidays.isAHoliday(
       laterDate.toFormat(FORMATS.MONTH_DAY_YEAR),
-      options,
     );
-    dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
-    isAWeekend = dayOfWeek === '6' || dayOfWeek === '7';
   }
 
   return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
