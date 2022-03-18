@@ -2,10 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -31,11 +28,7 @@ export const updateTrialSessionSequence = [
       updateTrialSessionAction,
       {
         error: [setAlertErrorAction],
-        success: [
-          setSaveAlertsForNavigationAction,
-          setAlertSuccessAction,
-          navigateToTrialSessionDetailAction,
-        ],
+        success: [],
       },
     ],
   },
