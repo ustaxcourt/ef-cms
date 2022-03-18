@@ -848,7 +848,7 @@ export const wait = time => {
   });
 };
 
-export const waitMaxTime = async (cerebralTest, maxWait = 10000) => {
+export const waitMaxTimeForResponse = async (cerebralTest, maxWait = 10000) => {
   let waitTime = 0;
   while (
     cerebralTest.getState('progressIndicator.waitingForResponse') &&
