@@ -555,6 +555,9 @@ describe('DateHandler', () => {
       //   'yyyy-MM-dd',
       // );
 
+      // -4:00 UTC offset
+      // August 27
+
       const result = DateHandler.getDateInFuture(mockStartDate, numberOfDays);
 
       expect(result).toEqual(sixtyDaysFromStartDate);
