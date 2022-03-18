@@ -197,9 +197,9 @@ exports.updateTrialSessionInteractor = async (
     applicationContext,
     message: {
       action: 'update_trial_session_complete',
-      docketEntryId: serviceInfo?.docketEntryId,
       hasPaper: serviceInfo?.hasPaper,
       pdfUrl,
+      trialSessionId: trialSession.trialSessionId,
     },
     userId: user.userId,
   });
