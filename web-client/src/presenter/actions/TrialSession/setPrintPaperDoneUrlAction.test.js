@@ -18,18 +18,21 @@ describe('setPrintPaperDoneUrlAction', () => {
   });
 
   it('sets the printPaperDoneUrl to /trial-session-detail/abc when props.trialSessionId is set to abc', async () => {
+    const EXPECTED_TRIAL_SESSION_ID = 'abc';
     const result = await runAction(setPrintPaperDoneUrlAction, {
       modules: {
         presenter,
       },
       props: {
-        trialSessionId: 'abc',
+        trialSessionId: EXPECTED_TRIAL_SESSION_ID,
       },
       state: {
         printPaperDoneUrl: null,
       },
     });
 
-    expect(result.state.printPaperDoneUrl).toEqual('/trial-session-detail/abc');
+    expect(result.state.printPaperDoneUrl).toEqual(
+      `/trial-session-detail/${EXPECTED_TRIAL_SESSION_ID}`,
+    );
   });
 });
