@@ -38,6 +38,12 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       entry => entry.eventCode === 'NOT',
     );
     expect(naneDocketEntry.isDraft).toEqual(true);
+
+    const passedInNoticeTitle =
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
+        .orderTitle;
+
+    expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase());
   });
 
   it('should upload a generated pdf for the provided document', async () => {
@@ -51,31 +57,31 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
-  it.skip('should generate an order for the provided document', async () => {
-    const newDocketEntriesFromNewCaseCount =
-      caseEntity.docketEntries.length + 1;
+  it('should save documentContents and richText for editing the order', async () => {
+    const mockClonedSystemDocument = {
+      content: 'Something else',
+      documentTitle: 'The Trials and Tribulations of Rufio the Jester',
+    };
+
+    const contentToStore = {
+      documentContents: 'Something else',
+      richText: 'Something else',
+    };
 
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
       caseEntity,
-      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
-      user,
+      systemGeneratedDocument: mockClonedSystemDocument,
     });
 
-    expect(caseEntity.docketEntries.length).toEqual(
-      newDocketEntriesFromNewCaseCount,
-    );
-
-    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    const passedInNoticeTitle =
-      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
-        .orderTitle;
-    expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase()); //asserts that the passed in title was uppercase
-
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].document,
+    ).toEqual(Buffer.from(JSON.stringify(contentToStore)));
   });
 
   it('should use the provided document when options are provided', async () => {
