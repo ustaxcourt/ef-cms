@@ -203,9 +203,4 @@ exports.updateTrialSessionInteractor = async (
     },
     userId: user.userId,
   });
-
-  return {
-    newTrialSession: newTrialSessionEntity.toRawObject(),
-    serviceInfo: pdfUrl,
-  };
 };
