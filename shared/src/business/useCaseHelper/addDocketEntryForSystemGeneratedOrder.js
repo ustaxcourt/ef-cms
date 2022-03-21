@@ -3,7 +3,6 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
 /**
  *
- * TODO: move these into tests!
  * Add docket entry for system generated order
  * generates the order and uploads to s3
  * saves documentContents and richText for editing the order
