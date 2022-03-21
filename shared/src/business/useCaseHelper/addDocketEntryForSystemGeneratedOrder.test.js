@@ -19,7 +19,39 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     user = applicationContext.getCurrentUser();
   });
 
-  it('should increase the docket entries and upload a generated pdf for the provided document', async () => {
+  it('should add a draft docket entry for a system generated order', async () => {
+    const newDocketEntriesFromNewCaseCount =
+      caseEntity.docketEntries.length + 1;
+
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+      user,
+    });
+
+    expect(caseEntity.docketEntries.length).toEqual(
+      newDocketEntriesFromNewCaseCount,
+    );
+
+    const naneDocketEntry = caseEntity.docketEntries.find(
+      entry => entry.eventCode === 'NOT',
+    );
+    expect(naneDocketEntry.isDraft).toEqual(true);
+  });
+
+  it('should upload a generated pdf for the provided document', async () => {
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+      user,
+    });
+
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it.skip('should generate an order for the provided document', async () => {
     const newDocketEntriesFromNewCaseCount =
       caseEntity.docketEntries.length + 1;
 
