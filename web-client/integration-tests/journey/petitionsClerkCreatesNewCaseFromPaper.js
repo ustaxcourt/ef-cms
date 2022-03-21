@@ -163,19 +163,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'petitionPaymentStatus',
-      value: PAYMENT_STATUS.WAIVED,
-    },
-    {
-      key: 'paymentDateWaivedDay',
-      value: '05',
-    },
-    {
-      key: 'paymentDateWaivedMonth',
-      value: '05',
-    },
-    {
-      key: 'paymentDateWaivedYear',
-      value: '2005',
+      value: PAYMENT_STATUS.UNPAID,
     },
     {
       key: 'orderForRatification',
@@ -283,6 +271,8 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   });
 
   it('should create case and navigate to review screen when case information has been validated', async () => {
+    console.log('***docketNumber', cerebralTest.docketNumber);
+
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
     expect(cerebralTest.getState('alertError')).toBeUndefined();
     expect(cerebralTest.getState('validationErrors')).toEqual({});
