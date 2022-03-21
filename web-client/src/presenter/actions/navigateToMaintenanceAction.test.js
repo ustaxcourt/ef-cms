@@ -13,7 +13,7 @@ describe('navigateToMaintenanceAction', () => {
     };
   });
 
-  it('navigates to FilePetitionSuccess', async () => {
+  it('navigates to maintenance page', async () => {
     await runAction(navigateToMaintenanceAction, {
       modules: {
         presenter,

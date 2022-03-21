@@ -1,6 +1,3 @@
-// import { wait } from '../helpers';
-// import { withAppContextDecorator } from '../../src/withAppContext';
-
 export const manuallyAddCaseToTrial = cerebralTest => {
   return it('manually add a case to a trial session', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -20,7 +17,5 @@ export const manuallyAddCaseToTrial = cerebralTest => {
     });
 
     await cerebralTest.runSequence('addCaseToTrialSessionSequence');
-
-    // await wait(1000);
   });
 };
