@@ -44,7 +44,6 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
-  // cover this logic
   const sysDoc = options.clonedSystemDocument
     ? options.clonedSystemDocument
     : systemGeneratedDocument;
