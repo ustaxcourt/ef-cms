@@ -899,7 +899,7 @@ app.get(
   );
   app.put(
     '/async/practitioners/:barNumber',
-    lambdaWrapper(updatePractitionerUserLambda),
+    lambdaWrapper(updatePractitionerUserLambda, { isAsync: true }),
   );
   app.get(
     '/practitioners/:userId/printable-case-list',
@@ -959,7 +959,7 @@ app.get(
 {
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
-    lambdaWrapper(setNoticesForCalendaredTrialSessionLambda),
+    lambdaWrapper(setNoticesForCalendaredTrialSessionLambda, { isAsync: true }),
   );
   app.post(
     '/trial-sessions/:trialSessionId/set-swing-session',
@@ -987,7 +987,7 @@ app.get(
   );
   app.get(
     '/async/trial-sessions/:trialSessionId/batch-download',
-    lambdaWrapper(batchDownloadTrialSessionLambda),
+    lambdaWrapper(batchDownloadTrialSessionLambda, { isAsync: true }),
   );
   app.put(
     '/trial-sessions/:trialSessionId/remove-case/:docketNumber',
@@ -1051,7 +1051,7 @@ app.get(
 );
 app.put(
   '/async/users/:userId/contact-info',
-  lambdaWrapper(updateUserContactInformationLambda),
+  lambdaWrapper(updateUserContactInformationLambda, { isAsync: true }),
 );
 app.get(
   '/users/:userId/pending-email',
@@ -1065,7 +1065,7 @@ app.get(
 app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
 app.put(
   '/async/users/verify-email',
-  lambdaWrapper(verifyUserPendingEmailLambda),
+  lambdaWrapper(verifyUserPendingEmailLambda, { isAsync: true }),
 );
 app.get(
   '/users/email-availability',
