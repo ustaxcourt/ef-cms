@@ -1,10 +1,6 @@
-// create a paper case as a petitionsClerk
-// set payment status to "unpaid"
-// go to review and serve page
-// verify alert warning banner displays "OFF" stuff
-// serve the case
-// check that OFF is on the docket record
-// verify that filing fee due date is set to Today+60 (no holidays or weekends)
+// create a paper case as a petitionsClerk x
+// set payment status to "unpaid" x
+// go to review and serve page x
 
 import {
   CASE_TYPES_MAP,
@@ -16,10 +12,17 @@ import { fakeFile, loginAs, setupTest } from './helpers';
 // import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petitionsClerk1ServesPetitionFromMessageDetail';
 // import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 // import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
+import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
+
+const reviewSavedPetitionHelper = withAppContextDecorator(
+  reviewSavedPetitionHelperComputed,
+);
 
 describe('Petitions Clerk Serves Paper Petition With System Generated Documents', () => {
   beforeAll(() => {
@@ -157,6 +160,23 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
 
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
   });
+
+  // verify orders and notices contain 'OF' that is computed
+  it('should display the ordersAndNoticesHeader in the alert banner', async () => {
+    const helper = runCompute(reviewSavedPetitionHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    let expectedObject = {
+      ordersAndNoticesInDraft: ['Order for Filing Fee'],
+    };
+
+    expect(helper).toMatchObject(expectedObject);
+  });
+
+  // serve the case
+  // check that OFF is on the docket record
+  // verify that filing fee due date is set to Today+60 (no holidays or weekends)
 
   // expect
   //   loginAs(cerebralTest, 'petitionsclerk1@example.com');
