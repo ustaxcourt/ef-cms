@@ -1,6 +1,6 @@
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '../../src/presenter/computeds/formattedTrialSessionDetails';
 import { runCompute } from 'cerebral/test';
-import { waitMaxTimeForResponse } from '../helpers.js';
+import { waitForLoadingComponentToHide } from '../helpers.js';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedTrialSessionDetails = withAppContextDecorator(
@@ -24,7 +24,7 @@ export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await waitMaxTimeForResponse(cerebralTest);
+    await waitForLoadingComponentToHide(cerebralTest);
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
     const formatted = runCompute(formattedTrialSessionDetails, {

@@ -847,8 +847,10 @@ export const wait = time => {
     setTimeout(resolve, time);
   });
 };
-
-export const waitMaxTimeForResponse = async (cerebralTest, maxWait = 10000) => {
+export const waitForLoadingComponentToHide = async (
+  cerebralTest,
+  maxWait = 10000,
+) => {
   let waitTime = 0;
   while (
     cerebralTest.getState('progressIndicator.waitingForResponse') &&
@@ -857,6 +859,7 @@ export const waitMaxTimeForResponse = async (cerebralTest, maxWait = 10000) => {
     waitTime += 500;
     await wait(500);
   }
+  console.log(`waited ${waitTime}ms for response`);
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
