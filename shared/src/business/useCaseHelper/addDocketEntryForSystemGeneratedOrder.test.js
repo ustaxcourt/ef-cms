@@ -69,25 +69,23 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
   });
 
   it('should use the provided document when options are provided', async () => {
-    const newDocketEntriesFromNewCaseCount =
-      caseEntity.docketEntries.length + 1;
+    const mockClonedSystemDocument = {
+      content: 'Something else',
+      documentTitle: 'The Trials and Tribulations of Rufio the Jester',
+    };
 
     await addDocketEntryForSystemGeneratedOrder({
       applicationContext,
       caseEntity,
       options: {
-        clonedSystemDocument: 'Something else',
+        clonedSystemDocument: mockClonedSystemDocument,
       },
       systemGeneratedDocument: 'Something',
     });
 
-    expect(caseEntity.docketEntries.length).toEqual(
-      newDocketEntriesFromNewCaseCount,
-    );
-
     expect(
       applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
         .orderContent,
-    ).toEqual('Something else');
+    ).toEqual(mockClonedSystemDocument.content);
   });
 });
