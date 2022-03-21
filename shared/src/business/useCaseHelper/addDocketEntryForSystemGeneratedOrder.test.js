@@ -12,14 +12,14 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
   let user;
   const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
-  const { noticeOfAttachmentsInNatureOfEvidence, orderForFilingFee } =
+  const { noticeOfAttachmentsInNatureOfEvidence } =
     SYSTEM_GENERATED_DOCUMENT_TYPES;
 
   beforeEach(() => {
     user = applicationContext.getCurrentUser();
   });
 
-  it('should increase the docket entries and upload a generated pdf for noticeOfAttachments', async () => {
+  it('should increase the docket entries and upload a generated pdf for the provided document', async () => {
     const newDocketEntriesFromNewCaseCount =
       caseEntity.docketEntries.length + 1;
 
@@ -41,28 +41,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase()); //asserts that the passed in title was uppercase
 
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
-  });
-
-  it('should increase the docket entries and upload a generated pdf for orderForFilingFee', async () => {
-    const newDocketEntriesFromNewCaseCount =
-      caseEntity.docketEntries.length + 1;
-
-    await addDocketEntryForSystemGeneratedOrder({
-      applicationContext,
-      caseEntity,
-      systemGeneratedDocument: orderForFilingFee,
-      user,
-    });
-
-    expect(caseEntity.docketEntries.length).toEqual(
-      newDocketEntriesFromNewCaseCount,
-    );
-
-    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
