@@ -7,6 +7,7 @@ import { formattedTrialSessionDetails } from '../src/presenter/computeds/formatt
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs.js';
+import { petitionsClerkViewsOpenTrialSession } from './journey/petitionsClerkViewsOpenTrialSession';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -84,19 +85,15 @@ describe('petitions clerk sets a remote trial session calendar', () => {
   });
 
   describe('petitions clerk views the trial session', () => {
-    it('the trial session should be open and have 1 manually added cases on it', async () => {
-      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: cerebralTest.trialSessionId,
-      });
+    petitionsClerkViewsOpenTrialSession(cerebralTest);
 
+    it('the trial session should be open and have 1 manually added cases on it', async () => {
       const trialSessionFormatted = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {
           state: cerebralTest.getState(),
         },
       );
-
-      expect(trialSessionFormatted.computedStatus).toEqual('Open');
       expect(trialSessionFormatted.openCases.length).toEqual(1);
     });
   });
