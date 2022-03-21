@@ -93,6 +93,10 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    await cerebralTest.runSequence(
+      'closeVerifyEmailModalAndNavigateToPractitionerDetailSequence',
+    );
+
     practitionerDetailHelperComputed = runCompute(
       withAppContextDecorator(practitionerDetailHelper),
       {
