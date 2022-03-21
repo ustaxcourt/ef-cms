@@ -35,7 +35,6 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
       },
       eventCode: systemGeneratedDocument.eventCode,
       freeText: systemGeneratedDocument.documentTitle,
-      // TODO: test this
       isDraft: true,
       userId: user.userId,
     },
