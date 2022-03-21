@@ -15,7 +15,7 @@ exports.lambdaWrapper = (lambda, options = {}) => {
     // This flag was added because when invoking async endpoints on API gateway, the api gateway will return
     // a 204 response with no body immediately.  This was causing discrepancies between how these endpoints
     // ran locally and how they ran when deployed to an AWS environment.  We now turn this flag on
-    // whenever we are not running in product to mimic how API gateway async endpoints work.
+    // whenever we are not deployed in AWS to mimic how API gateway async endpoints work.
     const shouldMimicApiGatewayAyncEndpoint =
       options.isAsync && process.env.NODE_ENV != 'production';
 
@@ -45,20 +45,21 @@ exports.lambdaWrapper = (lambda, options = {}) => {
       logger: req.locals.logger,
     });
 
-    if (!shouldMimicApiGatewayAyncEndpoint) {
-      res.status(response.statusCode);
-
-      res.set({
-        ...response.headers,
-        'X-Terminal-User': isTerminalUser,
-        ...exports.headerOverride,
-      });
-    }
-
     if (shouldMimicApiGatewayAyncEndpoint) {
       // api gateway async endpoints do not care about the headers returned after we
       // run the lambda; therefore, we do nothing here.
-    } else if (
+      return;
+    }
+
+    res.status(response.statusCode);
+
+    res.set({
+      ...response.headers,
+      'X-Terminal-User': isTerminalUser,
+      ...exports.headerOverride,
+    });
+
+    if (
       ['application/pdf', 'text/html'].includes(
         response.headers['Content-Type'],
       )
