@@ -1,6 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { practitionerDetailHelper } from '../../src/presenter/computeds/practitionerDetailHelper';
-import { refreshElasticsearchIndex } from '../helpers';
+import {
+  refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 const { faker } = require('@faker-js/faker');
@@ -13,6 +16,7 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
 
+    console.log('cerebralTest.barNumber', cerebralTest.barNumber);
     await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
       barNumber: cerebralTest.barNumber,
     });
@@ -27,6 +31,8 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
     });
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
+
+    await waitForLoadingComponentToHide(cerebralTest);
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
@@ -75,9 +81,13 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
       value: mockAvailableEmail,
     });
 
+    console.log('mockAvailableEmail', mockAvailableEmail);
+
     cerebralTest.setState('practitionerDetail', {});
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
+
+    await waitForLoadingComponentToHide(cerebralTest);
 
     await refreshElasticsearchIndex();
 
