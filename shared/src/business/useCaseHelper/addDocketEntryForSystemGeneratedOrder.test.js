@@ -67,4 +67,27 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
   });
+
+  it('should use the provided document when options are provided', async () => {
+    const newDocketEntriesFromNewCaseCount =
+      caseEntity.docketEntries.length + 1;
+
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      options: {
+        clonedSystemDocument: 'Something else',
+      },
+      systemGeneratedDocument: 'Something',
+    });
+
+    expect(caseEntity.docketEntries.length).toEqual(
+      newDocketEntriesFromNewCaseCount,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
+        .orderContent,
+    ).toEqual('Something else');
+  });
 });
