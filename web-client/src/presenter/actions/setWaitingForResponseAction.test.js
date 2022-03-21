@@ -10,6 +10,7 @@ describe('setWaitingForResponseAction', () => {
       },
       state: {
         progressIndicator: {
+          waitText: 'testing',
           waitingForResponse: false,
           waitingForResponseRequests: 0,
         },
@@ -19,5 +20,6 @@ describe('setWaitingForResponseAction', () => {
       waitingForResponse: true,
       waitingForResponseRequests: 1,
     });
+    expect(result.state.progressIndicator.waitText).toBeUndefined();
   });
 });

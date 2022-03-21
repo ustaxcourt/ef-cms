@@ -12,8 +12,13 @@ exports.headerOverride = {
 
 exports.lambdaWrapper = (lambda, options = {}) => {
   return async (req, res) => {
-    const shouldMimicApiGateway =
+    // This flag was added because when invoking async endpoints on API gateway, the api gateway will return
+    // a 204 response with no body immediately.  This was causing discrepancies between how these endpoints
+    // ran locally and how they ran when deployed to an AWS environment.  We now turn this flag on
+    // whenever we are not running in product to mimic how API gateway async endpoints work.
+    const shouldMimicApiGatewayAyncEndpoint =
       options.isAsync && process.env.NODE_ENV != 'production';
+
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
     let isTerminalUser =
@@ -28,7 +33,9 @@ exports.lambdaWrapper = (lambda, options = {}) => {
       queryStringParameters: req.query,
     };
 
-    if (shouldMimicApiGateway) {
+    if (shouldMimicApiGatewayAyncEndpoint) {
+      // we return immediately before we try running the lambda because that is how
+      // the api gateway works with async endpoints.
       res.status(204).send('');
     }
 
@@ -38,7 +45,7 @@ exports.lambdaWrapper = (lambda, options = {}) => {
       logger: req.locals.logger,
     });
 
-    if (!shouldMimicApiGateway) {
+    if (!shouldMimicApiGatewayAyncEndpoint) {
       res.status(response.statusCode);
 
       res.set({
@@ -48,8 +55,9 @@ exports.lambdaWrapper = (lambda, options = {}) => {
       });
     }
 
-    if (shouldMimicApiGateway) {
-      // Do nothing
+    if (shouldMimicApiGatewayAyncEndpoint) {
+      // api gateway async endpoints do not care about the headers returned after we
+      // run the lambda; therefore, we do nothing here.
     } else if (
       ['application/pdf', 'text/html'].includes(
         response.headers['Content-Type'],
