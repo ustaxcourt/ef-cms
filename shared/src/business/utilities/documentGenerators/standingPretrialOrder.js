@@ -33,6 +33,7 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     componentName: 'PageMetaHeaderDocket',
     data: {
       docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
     },
   });
 
@@ -74,8 +75,8 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 
   return await combineTwoPdfs({
     applicationContext,
-    firstPdf: pretrialOrderPdf,
-    secondPdf: checklistPdf,
+    firstPdf: new Uint8Array(pretrialOrderPdf),
+    secondPdf: new Uint8Array(checklistPdf),
   });
 };
 
