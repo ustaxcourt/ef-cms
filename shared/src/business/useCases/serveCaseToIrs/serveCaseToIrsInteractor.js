@@ -392,8 +392,8 @@ const serveCaseToIrsInteractor = async (
       startDate: formatNow(FORMATS.ISO),
     });
 
-    console.log('todayPlus60', todayPlus60);
     const oldOrderForFilingFee = cloneDeep(orderForFilingFee);
+    // refactor this?
     oldOrderForFilingFee.content = replaceBracketed(
       oldOrderForFilingFee.content,
       todayPlus60,
