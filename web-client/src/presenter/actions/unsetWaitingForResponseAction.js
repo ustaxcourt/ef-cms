@@ -16,4 +16,5 @@ export const unsetWaitingForResponseAction = ({ get, store }) => {
 
   store.set(state.progressIndicator.waitingForResponseRequests, requestCount);
   store.set(state.progressIndicator.waitingForResponse, requestCount > 0);
+  store.unset(state.progressIndicator.waitText);
 };

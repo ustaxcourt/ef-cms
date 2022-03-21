@@ -17,9 +17,9 @@ describe('setWaitingForResponseAction', () => {
       },
     });
     expect(result.state.progressIndicator).toMatchObject({
+      waitText: 'testing',
       waitingForResponse: true,
       waitingForResponseRequests: 1,
     });
-    expect(result.state.progressIndicator.waitText).toBeUndefined();
   });
 });
