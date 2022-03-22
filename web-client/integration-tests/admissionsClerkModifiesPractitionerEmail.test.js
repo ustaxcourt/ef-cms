@@ -4,6 +4,7 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
+  waitForLoadingComponentToHide,
 } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
@@ -97,6 +98,8 @@ describe('admissions clerk practitioner journey', () => {
     });
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
+
+    await waitForLoadingComponentToHide(cerebralTest);
 
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'EmailVerificationModal',
