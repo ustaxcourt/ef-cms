@@ -174,8 +174,4 @@ exports.updatePractitionerUserInteractor = async (
     },
     userId: requestUser.userId,
   });
-
-  return new Practitioner(updatedUser, { applicationContext })
-    .validate()
-    .toRawObject();
 };
