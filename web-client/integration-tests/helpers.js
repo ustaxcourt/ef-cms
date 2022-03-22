@@ -859,7 +859,7 @@ export const waitForLoadingComponentToHide = async (
     waitTime += 500;
     await wait(500);
   }
-  console.log(`waited ${waitTime}ms for response`);
+  console.log(`Waited ${waitTime}ms for the loading component to hide`);
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
