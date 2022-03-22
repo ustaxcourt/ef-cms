@@ -11,7 +11,6 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseEntity the caseEntity
  * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
- * @param {string} providers.options options which may contain clonedSystemDocument
  */
 exports.addDocketEntryForSystemGeneratedOrder = async ({
   applicationContext,
