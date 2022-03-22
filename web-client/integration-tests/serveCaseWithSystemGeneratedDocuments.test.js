@@ -12,19 +12,19 @@ import { fakeFile, loginAs, setupTest } from './helpers';
 // import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petitionsClerk1ServesPetitionFromMessageDetail';
 // import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
 // import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
+const { faker } = require('@faker-js/faker');
+import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
-const { faker } = require('@faker-js/faker');
-
-const cerebralTest = setupTest();
-cerebralTest.draftOrders = [];
-
-const reviewSavedPetitionHelper = withAppContextDecorator(
-  reviewSavedPetitionHelperComputed,
-);
 
 describe('Petitions Clerk Serves Paper Petition With System Generated Documents', () => {
+  const cerebralTest = setupTest();
+
+  const reviewSavedPetitionHelper = withAppContextDecorator(
+    reviewSavedPetitionHelperComputed,
+  );
+
   beforeAll(() => {
     jest.setTimeout(40000);
   });
@@ -35,6 +35,8 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('should create a case from paper', async () => {
+    await cerebralTest.runSequence('gotoStartCaseWizardSequence');
+
     let formValues = [
       {
         key: 'receivedAtMonth',
@@ -50,7 +52,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       },
       {
         key: 'mailingDate',
-        value: faker.company.catchPhrase(),
+        value: faker.date.recent().toDateString(),
       },
       {
         key: 'petitionFile',
@@ -106,7 +108,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       },
       {
         key: 'partyType',
-        value: PARTY_TYPES.petitionerDeceasedSpouse,
+        value: PARTY_TYPES.petitioner,
       },
       {
         key: 'contactPrimary.countryType',
@@ -126,7 +128,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       },
       {
         key: 'contactPrimary.city',
-        value: faker.address.city(),
+        value: 'abc',
       },
       {
         key: 'contactPrimary.postalCode',
@@ -158,23 +160,37 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       }
     }
 
+    await cerebralTest.runSequence(
+      'updateFormValueAndCaseCaptionSequence',
+      'Leroy Brown',
+    );
+
+    await cerebralTest.runSequence('validatePetitionFromPaperSequence');
+
     await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+
+    expect(cerebralTest.getState('alertError')).toBeUndefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('currentPage')).toEqual('ReviewSavedPetition');
+
+    cerebralTest.docketNumber = cerebralTest.getState(
+      'caseDetail.docketNumber',
+    );
+    console.log('docketNumber', cerebralTest.docketNumber);
   });
 
   // verify orders and notices contain 'OF' that is computed
-  it('should display the ordersAndNoticesHeader in the alert banner', async () => {
+  it('should display the orders and notices that will be generated after service', async () => {
     const helper = runCompute(reviewSavedPetitionHelper, {
       state: cerebralTest.getState(),
     });
 
-    let expectedObject = {
-      ordersAndNoticesInDraft: ['Order for Filing Fee'],
-    };
-
-    expect(helper).toMatchObject(expectedObject);
+    expect(helper.ordersAndNoticesInDraft).toContain('Order for Filing Fee');
   });
 
   // serve the case
+  // petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+
   // check that OFF is on the docket record
   // verify that filing fee due date is set to Today+60 (no holidays or weekends)
 
