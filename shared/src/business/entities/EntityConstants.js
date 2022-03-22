@@ -493,8 +493,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
       .documentType,
     eventCode: 'OF',
-    documentTitle: ORDER_TYPES.find(order => order.eventCode === 'OF')
-      .documentTitle,
+    documentTitle: 'Order',
   },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
