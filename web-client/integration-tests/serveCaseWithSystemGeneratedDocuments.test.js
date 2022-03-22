@@ -1,7 +1,3 @@
-// create a paper case as a petitionsClerk x
-// set payment status to "unpaid" x
-// go to review and serve page x
-
 import {
   CASE_TYPES_MAP,
   COUNTRY_TYPES,
@@ -9,14 +5,11 @@ import {
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
 import { fakeFile, loginAs, setupTest } from './helpers';
-// import { petitionsClerk1ServesPetitionFromMessageDetail } from './journey/petitionsClerk1ServesPetitionFromMessageDetail';
-// import { petitionsClerk1ViewsMessageDetail } from './journey/petitionsClerk1ViewsMessageDetail';
-// import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1ViewsMessageInbox';
-const { faker } = require('@faker-js/faker');
-import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
+import { servePetitionToIRS } from './userFlows/servePetition.test';
 import { withAppContextDecorator } from '../src/withAppContext';
+const { faker } = require('@faker-js/faker');
 
 describe('Petitions Clerk Serves Paper Petition With System Generated Documents', () => {
   const cerebralTest = setupTest();
@@ -191,14 +184,19 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
   });
 
   // serve the case
-  //   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  servePetitionToIRS(cerebralTest);
 
   // check that OFF is on the docket record
-  // verify that filing fee due date is set to Today+60 (no holidays or weekends)
+  it('should display the orders and notices that will be generated after service', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-  // expect
-  //   loginAs(cerebralTest, 'petitionsclerk1@example.com');
-  //   petitionsClerk1ViewsMessageInbox(cerebralTest);
-  //   petitionsClerk1ViewsMessageDetail(cerebralTest);
-  //   petitionsClerk1ServesPetitionFromMessageDetail(cerebralTest);
+    const orderForFilingFeeDocketEntry = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .find(d => d.eventCode === 'OF');
+
+    console.log(orderForFilingFeeDocketEntry);
+  });
+  // verify that filing fee due date is set to Today+60 (no holidays or weekends)
 });
