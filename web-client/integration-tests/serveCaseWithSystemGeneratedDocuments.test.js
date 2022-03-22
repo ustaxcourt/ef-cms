@@ -171,7 +171,6 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     cerebralTest.docketNumber = cerebralTest.getState(
       'caseDetail.docketNumber',
     );
-    console.log('docketNumber', cerebralTest.docketNumber);
   });
 
   it('should display the orders and notices that will be generated after service', () => {
@@ -185,24 +184,16 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
   servePetitionToIRS(cerebralTest);
 
   describe('orderForFilingFeeDocketEntry', () => {
-    let orderForFilingFeeDocketEntry;
-
-    beforeEach(async () => {
+    it('should display the orders and notices that will be generated after service', async () => {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: cerebralTest.docketNumber,
       });
 
-      orderForFilingFeeDocketEntry = cerebralTest
+      const orderForFilingFeeDocketEntry = cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.eventCode === 'OF');
-    });
 
-    it('should display the orders and notices that will be generated after service', () => {
       expect(orderForFilingFeeDocketEntry.isDraft).toEqual(true);
-    });
-
-    it('should set filing fee due date to 60 days in the future in document contents', () => {
-      expect(orderForFilingFeeDocketEntry.documentContents).toEqual(true);
     });
   });
 });

@@ -23,6 +23,11 @@ const {
   docketClerkUser,
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
+const {
+  formatNow,
+  FORMATS,
+  getDateInFuture,
+} = require('../../utilities/DateHandler');
 const { Case } = require('../../entities/cases/Case');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -636,14 +641,25 @@ describe('serveCaseToIrsInteractor', () => {
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
 
-    // this ensures orderContent is not wrapped in brackets and cloneDeep worked to replace constant's content
-    // anything else worth testing here? todayPlus60 functionality is being unit tested in DateHandler
     expect(
       await applicationContext.getUseCaseHelpers()
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0].options,
     ).toMatchObject({
       clonedSystemDocument: {
         content: expect.not.stringContaining('['),
+      },
+    });
+
+    const mockTodayPlus60 = getDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0].options,
+    ).toMatchObject({
+      clonedSystemDocument: {
+        content: expect.stringContaining(mockTodayPlus60),
       },
     });
   });
