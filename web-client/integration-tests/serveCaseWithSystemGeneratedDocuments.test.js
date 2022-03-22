@@ -37,6 +37,11 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
   it('should create a case from paper', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
 
+    const mockContactPrimary = {
+      key: 'contactPrimary.name',
+      value: `${faker.name.firstName()} ${faker.name.lastName()}`,
+    };
+
     let formValues = [
       {
         key: 'receivedAtMonth',
@@ -118,10 +123,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
         key: 'contactPrimary.country',
         value: 'Switzerland',
       },
-      {
-        key: 'contactPrimary.name',
-        value: `${faker.name.firstName()} ${faker.name.lastName()}`,
-      },
+      mockContactPrimary,
       {
         key: 'contactPrimary.address1',
         value: faker.address.streetAddress(),
@@ -162,7 +164,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
 
     await cerebralTest.runSequence(
       'updateFormValueAndCaseCaptionSequence',
-      'Leroy Brown',
+      mockContactPrimary,
     );
 
     await cerebralTest.runSequence('validatePetitionFromPaperSequence');
@@ -180,7 +182,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
   });
 
   // verify orders and notices contain 'OF' that is computed
-  it('should display the orders and notices that will be generated after service', async () => {
+  it('should display the orders and notices that will be generated after service', () => {
     const helper = runCompute(reviewSavedPetitionHelper, {
       state: cerebralTest.getState(),
     });
@@ -189,7 +191,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
   });
 
   // serve the case
-  // petitionsClerkServesPetitionFromDocumentView(cerebralTest);
+  //   petitionsClerkServesPetitionFromDocumentView(cerebralTest);
 
   // check that OFF is on the docket record
   // verify that filing fee due date is set to Today+60 (no holidays or weekends)
