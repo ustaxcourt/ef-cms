@@ -18,10 +18,6 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     reviewSavedPetitionHelperComputed,
   );
 
-  beforeAll(() => {
-    jest.setTimeout(40000);
-  });
-
   afterAll(() => {
     cerebralTest.closeSocket();
   });
