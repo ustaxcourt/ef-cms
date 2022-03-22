@@ -17,7 +17,6 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   applicationContext,
   caseEntity,
   systemGeneratedDocument,
-  options = {},
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -44,18 +43,14 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
-  const sysDoc = options.clonedSystemDocument
-    ? options.clonedSystemDocument
-    : systemGeneratedDocument;
-
   const pdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
-      orderContent: sysDoc.content,
-      orderTitle: sysDoc.documentTitle.toUpperCase(),
+      orderContent: systemGeneratedDocument.content,
+      orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
       signatureText: applicationContext.getClerkOfCourtNameForSigning(),
     },
   });
@@ -69,8 +64,8 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   const documentContentsId = applicationContext.getUniqueId();
 
   const contentToStore = {
-    documentContents: sysDoc.content,
-    richText: sysDoc.content,
+    documentContents: systemGeneratedDocument.content,
+    richText: systemGeneratedDocument.content,
   };
 
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
