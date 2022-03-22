@@ -9,15 +9,10 @@ const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 
 describe('addDocketEntryForSystemGeneratedOrder', () => {
-  let user;
   const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
   const { noticeOfAttachmentsInNatureOfEvidence } =
     SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-  beforeEach(() => {
-    user = applicationContext.getCurrentUser();
-  });
 
   it('should add a draft docket entry for a system generated order', async () => {
     const newDocketEntriesFromNewCaseCount =
@@ -27,7 +22,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       applicationContext,
       caseEntity,
       systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
-      user,
     });
 
     expect(caseEntity.docketEntries.length).toEqual(
@@ -51,7 +45,6 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       applicationContext,
       caseEntity,
       systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
-      user,
     });
 
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
