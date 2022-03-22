@@ -643,11 +643,10 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(
       await applicationContext.getUseCaseHelpers()
-        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0].options,
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
     ).toMatchObject({
-      clonedSystemDocument: {
-        content: expect.not.stringContaining('['),
-      },
+      content: expect.not.stringContaining('['),
     });
 
     const mockTodayPlus60 = getDateInFuture({
@@ -656,11 +655,10 @@ describe('serveCaseToIrsInteractor', () => {
     });
     expect(
       await applicationContext.getUseCaseHelpers()
-        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0].options,
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
     ).toMatchObject({
-      clonedSystemDocument: {
-        content: expect.stringContaining(mockTodayPlus60),
-      },
+      content: expect.stringContaining(mockTodayPlus60),
     });
   });
 });
