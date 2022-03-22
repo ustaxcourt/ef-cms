@@ -15,7 +15,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
-const { cloneDeep } = require('lodash');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
@@ -392,10 +391,8 @@ const serveCaseToIrsInteractor = async (
       startDate: formatNow(FORMATS.ISO),
     });
 
-    const oldOrderForFilingFee = cloneDeep(orderForFilingFee);
-    // refactor this?
-    oldOrderForFilingFee.content = replaceBracketed(
-      oldOrderForFilingFee.content,
+    const content = replaceBracketed(
+      orderForFilingFee.content,
       todayPlus60,
       todayPlus60, // since there are 2 instances of the date, replace a 2nd time
     );
@@ -405,10 +402,10 @@ const serveCaseToIrsInteractor = async (
       .addDocketEntryForSystemGeneratedOrder({
         applicationContext,
         caseEntity,
-        options: {
-          clonedSystemDocument: oldOrderForFilingFee,
+        systemGeneratedDocument: {
+          ...orderForFilingFee,
+          content,
         },
-        systemGeneratedDocument: orderForFilingFee,
       });
   }
 
