@@ -1,6 +1,13 @@
 /* eslint-disable spellcheck/spell-checker */
 const fs = require('fs');
 
+const sass = require('sass');
+
+const { css } = sass.compile(
+  'shared/src/business/utilities/htmlGenerator/index-main.scss',
+);
+fs.writeFileSync('shared/src/business/utilities/htmlGenerator/index.scss', css);
+
 // USAGE EXAMPLE: node createModule.js path1/file1 path2/file2
 const targets = [
   'shared/src/business/utilities/htmlGenerator/index.pug',

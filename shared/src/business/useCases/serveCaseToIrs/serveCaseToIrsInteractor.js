@@ -1,8 +1,14 @@
 const {
+  formatNow,
+  FORMATS,
+  getDateInFuture,
+} = require('../../utilities/DateHandler');
+const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -11,8 +17,10 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const addDocketEntryForPaymentStatus = ({
@@ -56,7 +64,6 @@ const addDocketEntryForPaymentStatus = ({
     );
   }
 };
-exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
 
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
@@ -118,7 +125,12 @@ const createPetitionWorkItems = async ({
 const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
-  const { docketNumberWithSuffix, preferredTrialCity, receivedAt } = caseEntity;
+  const {
+    docketNumberWithSuffix,
+    preferredTrialCity,
+    procedureType,
+    receivedAt,
+  } = caseEntity;
 
   let pdfData = await applicationContext
     .getDocumentGenerators()
@@ -162,10 +174,43 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const caseConfirmationPdfName =
     caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
+  const isProSe = caseEntity.privatePractitioners.length === 0;
+
+  if (preferredTrialCity && isProSe) {
+    const clinicLetterKey = getClinicLetterKey({
+      procedureType,
+      trialLocation: preferredTrialCity,
+    });
+
+    const doesClinicLetterExist = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: clinicLetterKey,
+      });
+
+    if (doesClinicLetterExist) {
+      const clinicLetter = await applicationContext
+        .getPersistenceGateway()
+        .getDocument({
+          applicationContext,
+          key: clinicLetterKey,
+          protocol: 'S3',
+          useTempBucket: false,
+        });
+
+      pdfData = await applicationContext.getUtilities().combineTwoPdfs({
+        applicationContext,
+        firstPdf: pdfData,
+        secondPdf: clinicLetter,
+      });
+    }
+  }
+
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
     caseConfirmationPdfName,
-    pdfData,
+    pdfData: Buffer.from(pdfData),
   });
 
   let urlToReturn;
@@ -281,7 +326,7 @@ const generatePaperNoticeForContactSecondary = async ({
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-exports.serveCaseToIrsInteractor = async (
+const serveCaseToIrsInteractor = async (
   applicationContext,
   { docketNumber },
 ) => {
@@ -325,6 +370,45 @@ exports.serveCaseToIrsInteractor = async (
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
+  if (caseEntity.noticeOfAttachments) {
+    const { noticeOfAttachmentsInNatureOfEvidence } =
+      SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+      });
+  }
+
+  if (caseEntity.orderForFilingFee) {
+    const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const todayPlus60 = getDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    const content = replaceBracketed(
+      orderForFilingFee.content,
+      todayPlus60,
+      todayPlus60, // since there are 2 instances of the date, replace a 2nd time
+    );
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderForFilingFee,
+          content,
+        },
+      });
+  }
+
   await createPetitionWorkItems({
     applicationContext,
     caseEntity,
@@ -347,4 +431,9 @@ exports.serveCaseToIrsInteractor = async (
   });
 
   return urlToReturn;
+};
+
+module.exports = {
+  addDocketEntryForPaymentStatus,
+  serveCaseToIrsInteractor,
 };

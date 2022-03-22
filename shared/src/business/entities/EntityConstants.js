@@ -185,6 +185,11 @@ const ORDER_TYPES = [
     eventCode: 'ODD',
   },
   {
+    documentTitle: 'Order for Filing Fee',
+    documentType: 'Order for Filing Fee',
+    eventCode: 'OF',
+  },
+  {
     documentTitle: 'Order to Show Cause',
     documentType: 'Order to Show Cause',
     eventCode: 'OSC',
@@ -474,10 +479,31 @@ const EVENT_CODES_VISIBLE_TO_PUBLIC = [
 ];
 
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
+  noticeOfAttachmentsInNatureOfEvidence: {
+    eventCode: 'NOT',
+    content:
+      'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
+      .documentType,
+    documentTitle: 'Notice of Attachments in the Nature of Evidence',
+  },
+  orderForFilingFee: {
+    content:
+      'The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case  related  forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
+      .documentType,
+    eventCode: 'OF',
+    documentTitle: 'Order',
+  },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
     documentType: 'Notice of Docket Change',
     eventCode: 'NODC',
+  },
+  noticeOfChangeToRemoteProceeding: {
+    documentTitle: 'Notice of Change to Remote Proceeding',
+    documentType: 'Notice of Change to Remote Proceeding',
+    eventCode: 'NORP',
   },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',

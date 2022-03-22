@@ -20,13 +20,12 @@ export const validatePetitionerAction = ({
   const { contact } = get(state.form);
   const caseDetail = get(state.caseDetail);
 
-  let errors =
-    applicationContext
-      .getUseCases()
-      .validatePetitionerInteractor(applicationContext, {
-        contactInfo: contact,
-        existingPetitioners: caseDetail.petitioners,
-      }) || {};
+  const errors = applicationContext
+    .getUseCases()
+    .validatePetitionerInteractor(applicationContext, {
+      contactInfo: contact,
+      existingPetitioners: caseDetail.petitioners,
+    });
 
   store.set(state.validationErrors.contact, errors);
 
