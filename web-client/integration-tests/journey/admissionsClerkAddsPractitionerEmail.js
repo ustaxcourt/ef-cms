@@ -16,7 +16,6 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   return it('admissions clerk edits practitioner information', async () => {
     await refreshElasticsearchIndex();
 
-    console.log('cerebralTest.barNumber', cerebralTest.barNumber);
     await cerebralTest.runSequence('gotoEditPractitionerUserSequence', {
       barNumber: cerebralTest.barNumber,
     });
@@ -80,8 +79,6 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
       key: 'confirmEmail',
       value: mockAvailableEmail,
     });
-
-    console.log('mockAvailableEmail', mockAvailableEmail);
 
     cerebralTest.setState('practitionerDetail', {});
 
