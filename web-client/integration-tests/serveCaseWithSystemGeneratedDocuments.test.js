@@ -174,7 +174,6 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     console.log('docketNumber', cerebralTest.docketNumber);
   });
 
-  // verify orders and notices contain 'OF' that is computed
   it('should display the orders and notices that will be generated after service', () => {
     const helper = runCompute(reviewSavedPetitionHelper, {
       state: cerebralTest.getState(),
@@ -183,20 +182,27 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     expect(helper.ordersAndNoticesInDraft).toContain('Order for Filing Fee');
   });
 
-  // serve the case
   servePetitionToIRS(cerebralTest);
 
-  // check that OFF is on the docket record
-  it('should display the orders and notices that will be generated after service', async () => {
-    await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
+  describe('orderForFilingFeeDocketEntry', () => {
+    let orderForFilingFeeDocketEntry;
+
+    beforeEach(async () => {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: cerebralTest.docketNumber,
+      });
+
+      orderForFilingFeeDocketEntry = cerebralTest
+        .getState('caseDetail.docketEntries')
+        .find(d => d.eventCode === 'OF');
     });
 
-    const orderForFilingFeeDocketEntry = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(d => d.eventCode === 'OF');
+    it('should display the orders and notices that will be generated after service', () => {
+      expect(orderForFilingFeeDocketEntry.isDraft).toEqual(true);
+    });
 
-    console.log(orderForFilingFeeDocketEntry);
+    it('should set filing fee due date to 60 days in the future in document contents', () => {
+      expect(orderForFilingFeeDocketEntry.documentContents).toEqual(true);
+    });
   });
-  // verify that filing fee due date is set to Today+60 (no holidays or weekends)
 });
