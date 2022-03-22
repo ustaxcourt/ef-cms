@@ -1,4 +1,4 @@
-import { wait } from '../helpers';
+import { waitForLoadingComponentToHide } from '../helpers';
 
 export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
   return it('Petitions Clerk Sets A Trial Sessions Schedule', async () => {
@@ -10,6 +10,6 @@ export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
     expect(cerebralTest.getState('alertWarning.message')).toBeUndefined();
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
-    await wait(1000);
+    await waitForLoadingComponentToHide(cerebralTest);
   });
 };
