@@ -10,7 +10,7 @@ export const PageMetaHeaderDocket = ({ docketNumber }) => {
           fontSize: '12px',
         }}
       >
-        Docket No.: {docketNumber}
+        Docket No.: {docketNumber}&nbsp;
       </div>
       <div
         style={{
