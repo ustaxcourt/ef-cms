@@ -185,7 +185,11 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
 
   servePetitionToIRS(cerebralTest);
 
-  it('should display the count of draft documents in the drafts tab after petition is served', () => {
+  it('should display the count of draft documents in the drafts tab after petition is served', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
     const helper = runCompute(caseDetailSubnavHelper, {
       state: cerebralTest.getState(),
     });
@@ -194,11 +198,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
   });
 
   describe('orderForFilingFeeDocketEntry', () => {
-    it('should display the orders and notices that will be generated after service', async () => {
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: cerebralTest.docketNumber,
-      });
-
+    it('should display the orders and notices that will be generated after service', () => {
       const orderForFilingFeeDocketEntry = cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.eventCode === 'OF');
