@@ -4,8 +4,10 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { fakeFile, loginAs, setupTest } from './helpers';
+import { caseDetailSubnavHelper as caseDetailSubnavHelperComputed } from '../src/presenter/computeds/caseDetailSubnavHelper';
 import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from '../src/presenter/computeds/reviewSavedPetitionHelper';
+
+import { fakeFile, loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { servePetitionToIRS } from './userFlows/servePetition.test';
 import { withAppContextDecorator } from '../src/withAppContext';
@@ -16,6 +18,10 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
 
   const reviewSavedPetitionHelper = withAppContextDecorator(
     reviewSavedPetitionHelperComputed,
+  );
+
+  const caseDetailSubnavHelper = withAppContextDecorator(
+    caseDetailSubnavHelperComputed,
   );
 
   afterAll(() => {
@@ -178,6 +184,14 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
   });
 
   servePetitionToIRS(cerebralTest);
+
+  it('should display the count of draft documents in the drafts tab after petition is served', () => {
+    const helper = runCompute(caseDetailSubnavHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(helper.draftDocketEntryCount).toEqual(1);
+  });
 
   describe('orderForFilingFeeDocketEntry', () => {
     it('should display the orders and notices that will be generated after service', async () => {
