@@ -18,21 +18,12 @@ const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
     },
   });
 
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
-      docketNumber: data.docketNumberWithSuffix,
-    },
-  });
-
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: data.docketNumberWithSuffix,
-      headerHtml,
-      overwriteHeader: false,
     });
 
   return pdf;
