@@ -130,7 +130,7 @@ export const DocketRecord = ({
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3="Printable Docket Record"
+        documentTitle="Printable Docket Record"
       />
 
       <div className="party-info" id="petitioner-contacts">
