@@ -10,7 +10,7 @@ import React from 'react';
 
 export const TrialSessions = connect(
   {
-    defaultTab: state.screenMetadata.trialSessionFilters.status,
+    defaultTab: state.screenMetadata.trialSessions.tab,
     getTrialSessionByStatusSequence: sequences.getTrialSessionByStatusSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,

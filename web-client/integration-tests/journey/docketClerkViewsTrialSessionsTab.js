@@ -13,16 +13,13 @@ export const docketClerkViewsTrialSessionsTab = (
 ) => {
   const status = overrides.tab || 'Open';
   return it(`Docket clerk views ${status} Trial Sessions tab`, async () => {
-    await cerebralTest.runSequence('gotoTrialSessionsSequence', {
-      query: {
-        status,
-      },
-    });
+    cerebralTest.setState(
+      'currentViewMetadata.trialSessions.tab',
+      status.toLowerCase(),
+    );
+    await cerebralTest.runSequence('gotoTrialSessionsSequence');
 
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
-    expect(
-      cerebralTest.getState('screenMetadata.trialSessionFilters.status'),
-    ).toEqual(status);
 
     const formatted = runCompute(formattedTrialSessions, {
       state: cerebralTest.getState(),

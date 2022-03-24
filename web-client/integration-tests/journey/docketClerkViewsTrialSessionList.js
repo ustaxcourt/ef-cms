@@ -9,6 +9,7 @@ const formattedTrialSessions = withAppContextDecorator(
 
 export const docketClerkViewsTrialSessionList = cerebralTest => {
   return it('Docket clerk views trial session list', async () => {
+    cerebralTest.setState('currentViewMetadata.trialSessions.tab', 'new');
     await cerebralTest.runSequence('gotoTrialSessionsSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
 
@@ -16,7 +17,6 @@ export const docketClerkViewsTrialSessionList = cerebralTest => {
       state: cerebralTest.getState(),
     });
     expect(formatted.formattedSessions.length).toBeGreaterThan(0);
-
     const trialSession = find(formatted.sessionsByTerm, {
       trialSessionId: cerebralTest.lastCreatedTrialSessionId,
     });
