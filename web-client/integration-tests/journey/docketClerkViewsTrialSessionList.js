@@ -7,9 +7,9 @@ const formattedTrialSessions = withAppContextDecorator(
   formattedTrialSessionsComputed,
 );
 
-export const docketClerkViewsTrialSessionList = cerebralTest => {
+export const docketClerkViewsTrialSessionList = (cerebralTest, tab = 'new') => {
   return it('Docket clerk views trial session list', async () => {
-    cerebralTest.setState('currentViewMetadata.trialSessions.tab', 'new');
+    cerebralTest.setState('currentViewMetadata.trialSessions.tab', tab);
     await cerebralTest.runSequence('gotoTrialSessionsSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessions');
 

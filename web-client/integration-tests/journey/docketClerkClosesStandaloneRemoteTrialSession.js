@@ -15,6 +15,7 @@ export const docketClerkClosesStandaloneRemoteTrialSession = cerebralTest => {
     });
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
+    cerebralTest.setState('currentViewMetadata.trialSessions.tab', 'closed');
     await cerebralTest.runSequence('closeTrialSessionSequence');
 
     const formatted = runCompute(formattedTrialSessions, {
