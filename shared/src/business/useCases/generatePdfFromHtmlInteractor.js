@@ -1,3 +1,6 @@
+const {
+  reactTemplateGenerator,
+} = require('../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 /**
  * generatePdfFromHtmlInteractor
  *
@@ -17,7 +20,6 @@ exports.generatePdfFromHtmlInteractor = async (
     footerHtml,
     headerHtml,
     overwriteFooter,
-    overwriteHeader,
   },
 ) => {
   let browser = null;
@@ -29,24 +31,34 @@ exports.generatePdfFromHtmlInteractor = async (
 
     await page.setContent(contentHtml);
 
-    const headerContent = overwriteHeader
-      ? `${headerHtml || ''}`
-      : ` <div style="font-size: 8px; float: right;">
-              Page <span class="pageNumber"></span>
-              of <span class="totalPages"></span>
-            </div>
-            <div style="float: left">
-              ${headerHtml || `Docket Number: ${docketNumber}`}
-            </div>`;
+    let metaHeaderContent = '';
+    if (headerHtml) {
+      metaHeaderContent = headerHtml;
+    } else {
+      metaHeaderContent = reactTemplateGenerator({
+        componentName: 'PageMetaHeaderDocket',
+        data: {
+          docketNumber,
+        },
+      });
+    }
+
+    // const headerContent = overwriteHeader
+    //   ? `${headerHtml || ''}`
+    //   : ` <div style="font-size: 8px; float: right;">
+    //           Page <span class="pageNumber"></span>
+    //           of <span class="totalPages"></span>
+    //         </div>
+    //         <div style="float: left">
+    //           ${headerHtml || `Docket Number: ${docketNumber}`}
+    //         </div>`;
 
     const headerTemplate = `
           <div style="font-size: 8px; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            ${headerContent}
+            ${metaHeaderContent}
           </div>
       </html>
     `;
-
-    console.log('headerTemplate', headerTemplate);
 
     const footerTemplate = overwriteFooter
       ? `${footerHtml || ''}`
