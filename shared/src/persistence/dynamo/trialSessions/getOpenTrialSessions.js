@@ -18,23 +18,3 @@ exports.getOpenTrialSessions = ({ applicationContext }) =>
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,
   });
-
-const AWS = require('aws-sdk');
-console.time('request');
-exports
-  .getOpenTrialSessions({
-    applicationContext: {
-      environment: {
-        dynamoDbTableName: 'efcms-test-beta',
-      },
-      getDocumentClient: () => {
-        return new AWS.DynamoDB.DocumentClient({
-          region: 'us-east-1',
-        });
-      },
-    },
-  })
-  .then(results => {
-    console.timeEnd('request');
-    console.log(results.length);
-  });
