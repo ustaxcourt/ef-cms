@@ -33,10 +33,11 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     componentName: 'PageMetaHeaderDocket',
     data: {
       docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
     },
   });
 
-  const pdfWithHeader = await applicationContext
+  const pretrialOrderPdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtmlWithHeader,
@@ -58,15 +59,15 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     },
   });
 
-  const pdfContentHtmlWithoutHeader = await generateHTMLTemplateForPDF({
+  const checklistContent = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactGettingReadyForTrialChecklistTemplate,
   });
 
-  const pdfWithoutHeader = await applicationContext
+  const checklistPdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
-      contentHtml: pdfContentHtmlWithoutHeader,
+      contentHtml: checklistContent,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
       overwriteHeader: false,
@@ -74,8 +75,8 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
 
   return await combineTwoPdfs({
     applicationContext,
-    firstPdf: pdfWithHeader,
-    secondPdf: pdfWithoutHeader,
+    firstPdf: new Uint8Array(pretrialOrderPdf),
+    secondPdf: new Uint8Array(checklistPdf),
   });
 };
 

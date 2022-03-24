@@ -2,6 +2,7 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
   ROLES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -12,13 +13,14 @@ const {
 const { Case } = require('../../entities/cases/Case');
 const { faker } = require('@faker-js/faker');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
 const { User } = require('../../entities/User');
 
 describe('updateTrialSessionInteractor', () => {
   let mockTrialsById;
   let user;
 
-  const MOCK_TRIAL = {
+  const MOCK_REMOTE_TRIAL = {
     maxCases: 100,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
     sessionType: 'Regular',
@@ -28,12 +30,19 @@ describe('updateTrialSessionInteractor', () => {
     trialLocation: 'Birmingham, Alabama',
   };
 
+  const serviceInfo = {
+    docketEntryId: '',
+    hasPaper: false,
+    url: 'www.example.com',
+  };
+
   const MOCK_TRIAL_ID_1 = '8a3ed061-bdc6-44f0-baec-7e2c007c51bb';
   const MOCK_TRIAL_ID_2 = '84949ffd-9aed-4595-b6af-ff91ea01112b';
   const MOCK_TRIAL_ID_3 = '76cfdfee-795a-4056-a383-8622e5d527d1';
   const MOCK_TRIAL_ID_4 = '195bd58c-e81e-44b5-90e2-b9f0a39575d6';
   const MOCK_TRIAL_ID_5 = '5674b900-517d-4ffc-81c0-140302c10010';
   const MOCK_TRIAL_ID_6 = 'd0293e71-155d-4cdd-9f3d-b21a72b64e51';
+  const MOCK_TRIAL_ID_7 = '959c4338-0fac-42eb-b0eb-d53b8d0195cc';
 
   beforeAll(() => {
     applicationContext
@@ -46,35 +55,44 @@ describe('updateTrialSessionInteractor', () => {
   beforeEach(() => {
     mockTrialsById = {
       [MOCK_TRIAL_ID_1]: {
-        ...MOCK_TRIAL,
+        ...MOCK_REMOTE_TRIAL,
         startDate: '2019-12-01T00:00:00.000Z',
         trialSessionId: MOCK_TRIAL_ID_1,
       },
       [MOCK_TRIAL_ID_2]: {
-        ...MOCK_TRIAL,
+        ...MOCK_REMOTE_TRIAL,
         trialSessionId: MOCK_TRIAL_ID_2,
       },
       [MOCK_TRIAL_ID_3]: {
-        ...MOCK_TRIAL,
+        ...MOCK_REMOTE_TRIAL,
         judge: { userId: 'd7d90c05-f6cd-442c-a168-202db587f16f' },
         trialSessionId: MOCK_TRIAL_ID_3,
       },
       [MOCK_TRIAL_ID_4]: {
-        ...MOCK_TRIAL,
+        ...MOCK_REMOTE_TRIAL,
         caseOrder: [{ docketNumber: '123-45' }],
         trialSessionId: MOCK_TRIAL_ID_4,
       },
       [MOCK_TRIAL_ID_5]: {
-        ...MOCK_TRIAL,
+        ...MOCK_REMOTE_TRIAL,
         judge: { userId: 'd7d90c05-f6cd-442c-a168-202db587f16f' },
         trialClerk: { userId: '267c3601-0296-47dd-bb5a-91d34fe166b3' },
         trialSessionId: MOCK_TRIAL_ID_5,
       },
       [MOCK_TRIAL_ID_6]: {
-        ...MOCK_TRIAL,
+        ...MOCK_REMOTE_TRIAL,
         isCalendared: false,
         judge: { userId: 'd7d90c05-f6cd-442c-a168-202db587f16f' },
         trialSessionId: MOCK_TRIAL_ID_6,
+      },
+      [MOCK_TRIAL_ID_7]: {
+        ...MOCK_TRIAL_INPERSON,
+        caseOrder: [
+          { docketNumber: '123-79' },
+          { docketNumber: '999-99' },
+          { docketNumber: '888-88' },
+        ],
+        isCalendared: true,
       },
     };
 
@@ -95,6 +113,10 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(trial => trial.trialSession);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf.mockReturnValue(serviceInfo);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -105,7 +127,7 @@ describe('updateTrialSessionInteractor', () => {
 
     await expect(
       updateTrialSessionInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL,
+        trialSession: MOCK_REMOTE_TRIAL,
       }),
     ).rejects.toThrow();
   });
@@ -127,7 +149,7 @@ describe('updateTrialSessionInteractor', () => {
 
     await expect(
       updateTrialSessionInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL,
+        trialSession: MOCK_REMOTE_TRIAL,
       }),
     ).rejects.toThrow();
   });
@@ -280,7 +302,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
-    mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
+    mockCalendaredCase.updateTrialSessionInformation(MOCK_REMOTE_TRIAL);
 
     await updateTrialSessionInteractor(applicationContext, {
       trialSession: {
@@ -371,7 +393,7 @@ describe('updateTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
-    mockCalendaredCase.updateTrialSessionInformation(MOCK_TRIAL);
+    mockCalendaredCase.updateTrialSessionInformation(MOCK_REMOTE_TRIAL);
 
     await updateTrialSessionInteractor(applicationContext, {
       trialSession: {
@@ -400,5 +422,78 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate.isCalendared,
     ).toEqual(false);
+  });
+
+  it('should setNoticeOfChangeToRemoteProceeding for each case on the trial session', async () => {
+    const firstOpenCase = {
+      ...MOCK_CASE,
+      docketNumber: '888-88',
+      docketNumberWithSuffix: '888-88',
+      hearings: [],
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+    const secondOpenCase = {
+      ...MOCK_CASE,
+      docketNumber: '123-79',
+      docketNumberWithSuffix: '123-79',
+      hearings: [],
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+    const closedCase = {
+      ...MOCK_CASE,
+      closedDate: '2020-03-01T21:42:29.073Z',
+      docketNumber: '999-99',
+      docketNumberWithSuffix: '999-99',
+      hearings: [],
+      status: CASE_STATUS_TYPES.closed,
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+
+    const mock =
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
+    mock
+      .mockReturnValueOnce(firstOpenCase)
+      .mockReturnValueOnce(secondOpenCase)
+      .mockReturnValue(closedCase);
+
+    const remoteTrialSession = {
+      ...mockTrialsById[MOCK_TRIAL_ID_7],
+      chambersPhoneNumber: '111111',
+      joinPhoneNumber: '222222',
+      meetingId: '333333',
+      password: '4444444',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    };
+
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: remoteTrialSession,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .setNoticeOfChangeToRemoteProceeding,
+    ).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getUseCaseHelpers().savePaperServicePdf,
+    ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0],
+    ).toMatchObject({
+      message: {
+        action: 'update_trial_session_complete',
+        hasPaper: serviceInfo?.hasPaper,
+        pdfUrl: 'www.example.com',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      },
+      userId: user.userId,
+    });
   });
 });

@@ -1,4 +1,9 @@
-jest.mock('./combineTwoPdfs');
+jest.mock('./combineTwoPdfs', () => {
+  const actualModule = jest.requireActual('./combineTwoPdfs');
+  return {
+    combineTwoPdfs: jest.fn().mockImplementation(actualModule.combineTwoPdfs),
+  };
+});
 const fs = require('fs');
 const path = require('path');
 const {
@@ -40,9 +45,9 @@ describe('documentGenerators', () => {
         .generatePdfFromHtmlInteractor.mockImplementation(
           generatePdfFromHtmlInteractor,
         );
+    } else {
+      combineTwoPdfs.mockReturnValue(testPdfDoc);
     }
-
-    combineTwoPdfs.mockReturnValue(testPdfDoc);
   });
 
   describe('standingPretrialOrderForSmallCase', () => {
@@ -74,7 +79,7 @@ describe('documentGenerators', () => {
 
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
-        writePdfFile('Standing_Pretrial_Notice', pdf);
+        writePdfFile('Standing_Pretrial_Order_For_Small_Case', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
