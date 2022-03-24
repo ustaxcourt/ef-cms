@@ -201,6 +201,7 @@ import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities
 import { getStatusOfVirusScanInteractor } from '../../shared/src/proxies/documents/getStatusOfVirusScanProxy';
 import { getTrialSessionDetailsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionDetailsProxy';
 import { getTrialSessionWorkingCopyInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionWorkingCopyProxy';
+import { getTrialSessionsByStatusInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsByStatusProxy';
 import { getTrialSessionsInteractor } from '../../shared/src/proxies/trialSessions/getTrialSessionsProxy';
 import { getUserByIdInteractor } from '../../shared/src/proxies/users/getUserByIdProxy';
 import { getUserCaseNoteInteractor } from '../../shared/src/proxies/caseNote/getUserCaseNoteProxy';
@@ -441,6 +442,7 @@ const allUseCases = {
       : getStatusOfVirusScanInteractor(applicationContext, args),
   getTrialSessionDetailsInteractor,
   getTrialSessionWorkingCopyInteractor,
+  getTrialSessionsByStatusInteractor,
   getTrialSessionsInteractor,
   getUserByIdInteractor,
   getUserCaseNoteForCasesInteractor,

@@ -11,11 +11,13 @@ import React from 'react';
 export const TrialSessions = connect(
   {
     defaultTab: state.screenMetadata.trialSessionFilters.status,
+    getTrialSessionByStatusSequence: sequences.getTrialSessionByStatusSequence,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
   },
   function TrialSessions({
     defaultTab,
+    getTrialSessionByStatusSequence,
     openTrialSessionPlanningModalSequence,
   }) {
     return (
@@ -30,6 +32,9 @@ export const TrialSessions = connect(
             defaultActiveTab={defaultTab || 'open'}
             headingLevel="2"
             id="trial-sessions-tabs"
+            onSelect={tabName => {
+              getTrialSessionByStatusSequence({ status: tabName });
+            }}
           >
             <div className="ustc-ui-tabs ustc-ui-tabs--right-button-container">
               <Button

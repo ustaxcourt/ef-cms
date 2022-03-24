@@ -3,7 +3,7 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getNotificationsAction } from '../actions/getNotificationsAction';
-import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
+import { getTrialSessionsBySelectedTabAction } from '../actions/TrialSession/getTrialSessionsBySelectedTabAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { parallel } from 'cerebral/factories';
@@ -28,7 +28,7 @@ const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
       getNotificationsAction,
       setNotificationsAction,
     ],
-    [getTrialSessionsAction, setTrialSessionsAction],
+    [getTrialSessionsBySelectedTabAction, setTrialSessionsAction],
     [
       getUsersInSectionAction({ section: 'judge' }),
       setAllAndCurrentJudgesAction,

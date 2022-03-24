@@ -586,11 +586,17 @@ const {
   getMessageThreadInteractor,
 } = require('../../shared/src/business/useCases/messages/getMessageThreadInteractor');
 const {
+  getNewTrialSessions,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getNewTrialSessions');
+const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
 const {
   getOpenConsolidatedCasesInteractor,
 } = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
+const {
+  getOpenTrialSessions,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getOpenTrialSessions');
 const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
@@ -1510,6 +1516,8 @@ const gatewayMethods = {
   getMessageThreadByParentId,
   getMessages,
   getMessagesByDocketNumber,
+  getNewTrialSessions,
+  getOpenTrialSessions,
   getPractitionerByBarNumber,
   getPractitionersByName,
   getPublicDownloadPolicyUrl,

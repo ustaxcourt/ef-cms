@@ -1,4 +1,24 @@
 import { sortBy } from 'lodash';
+const memoize = require('memoizee');
+
+/**
+ * Caches the request for getting the users because users do not change often.
+ */
+const getUsersInSection = memoize(
+  function (applicationContext, section) {
+    return applicationContext
+      .getUseCases()
+      .getUsersInSectionInteractor(applicationContext, {
+        section,
+      });
+  },
+  {
+    normalizer(args) {
+      const section = args[1];
+      return section;
+    },
+  },
+);
 
 /**
  * returns a callback function scoped to a section the users in a section
@@ -22,11 +42,8 @@ export const getUsersInSectionAction =
       const user = applicationContext.getCurrentUser();
       sectionToGet = user.section;
     }
-    const users = await applicationContext
-      .getUseCases()
-      .getUsersInSectionInteractor(applicationContext, {
-        section: sectionToGet,
-      });
+
+    const users = await getUsersInSection(applicationContext, sectionToGet);
 
     return {
       users: sortBy(users, 'name'),

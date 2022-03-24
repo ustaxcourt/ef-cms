@@ -9,6 +9,7 @@ import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUse
 import { getOutboxMessagesForSectionAction } from '../actions/getOutboxMessagesForSectionAction';
 import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
@@ -19,18 +20,21 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
   clearErrorAlertsAction,
-  fetchUserNotificationsSequence,
-  setMessageCountsAction,
-  chooseMessageBoxAction,
-  {
-    mycompleted: [getCompletedMessagesForUserAction],
-    myinbox: [getInboxMessagesForUserAction],
-    myoutbox: [getOutboxMessagesForUserAction],
-    sectioncompleted: [getCompletedMessagesForSectionAction],
-    sectioninbox: [getInboxMessagesForSectionAction],
-    sectionoutbox: [getOutboxMessagesForSectionAction],
-  },
-  setMessagesAction,
+  parallel([
+    [fetchUserNotificationsSequence, setMessageCountsAction],
+    [
+      chooseMessageBoxAction,
+      {
+        mycompleted: [getCompletedMessagesForUserAction],
+        myinbox: [getInboxMessagesForUserAction],
+        myoutbox: [getOutboxMessagesForUserAction],
+        sectioncompleted: [getCompletedMessagesForSectionAction],
+        sectioninbox: [getInboxMessagesForSectionAction],
+        sectionoutbox: [getOutboxMessagesForSectionAction],
+      },
+      setMessagesAction,
+    ],
+  ]),
   setCurrentPageAction('Messages'),
 ]);
 
