@@ -32,7 +32,7 @@ exports.generatePdfFromHtmlInteractor = async (
     await page.setContent(contentHtml);
 
     let metaHeaderContent = '';
-    if (headerHtml) {
+    if (headerHtml !== undefined) {
       metaHeaderContent = headerHtml;
     } else {
       metaHeaderContent = reactTemplateGenerator({
