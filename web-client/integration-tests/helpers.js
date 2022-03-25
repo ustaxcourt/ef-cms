@@ -847,6 +847,20 @@ export const wait = time => {
     setTimeout(resolve, time);
   });
 };
+export const waitForLoadingComponentToHide = async (
+  cerebralTest,
+  maxWait = 10000,
+) => {
+  let waitTime = 0;
+  while (
+    cerebralTest.getState('progressIndicator.waitingForResponse') &&
+    waitTime < maxWait
+  ) {
+    waitTime += 500;
+    await wait(500);
+  }
+  console.log(`Waited ${waitTime}ms for the loading component to hide`);
+};
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
