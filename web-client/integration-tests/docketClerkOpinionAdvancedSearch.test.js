@@ -194,7 +194,7 @@ describe('Docket clerk opinion advanced search', () => {
       ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            docketEntryId: '1a92894e-83a5-48ba-9994-3ada44235deb',
             documentTitle:
               'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
           }),
@@ -217,7 +217,7 @@ describe('Docket clerk opinion advanced search', () => {
       ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            docketEntryId: '1a92894e-83a5-48ba-9994-3ada44235deb',
             documentTitle:
               'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
           }),
@@ -240,7 +240,7 @@ describe('Docket clerk opinion advanced search', () => {
       ).toEqual(
         expect.arrayContaining([
           expect.objectContaining({
-            docketEntryId: '130a3790-7e82-4f5c-8158-17f5d9d560e7',
+            docketEntryId: '1a92894e-83a5-48ba-9994-3ada44235deb',
             documentTitle:
               'T.C. Opinion Judge Colvin Some very strong opinions about sunglasses',
           }),
@@ -297,7 +297,7 @@ describe('Docket clerk opinion advanced search', () => {
       ).toBeUndefined();
     });
 
-    it('when searching for opinions with judge "Tamara W. Ashford" should ONLY return results for "Tamara W. Ashford"', async () => {
+    it('when searching for opinions with judge "Ashford" should ONLY return results with judge "Ashford"', async () => {
       await cerebralTest.runSequence('clearAdvancedSearchFormSequence', {
         formType: 'opinionSearch',
       });
@@ -315,29 +315,42 @@ describe('Docket clerk opinion advanced search', () => {
       const searchResults = cerebralTest.getState(
         `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
       );
+
+      console.log('searchResults', searchResults);
+
       expect(cerebralTest.getState('validationErrors')).toEqual({});
-      expect(searchResults).toEqual([
-        {
-          caseCaption: 'Hanae Guerrero, Petitioner',
-          docketEntryId: 'd085a9da-b4a6-41d2-aa40-f933fe2d4188',
-          docketNumber: '313-21',
-          docketNumberWithSuffix: '313-21',
-          documentTitle: 'Summary Opinion Judge Ashford An opinion for testing',
-          documentType: 'Summary Opinion',
-          entityName: 'InternalDocumentSearchResult',
-          eventCode: 'SOP',
-          filingDate: '2021-10-25T18:57:31.742Z',
-          isCaseSealed: false,
-          isDocketEntrySealed: false,
-          isFileAttached: true,
-          isStricken: false,
-          judge: 'Tamara W. Ashford',
-          numberOfPages: 1,
-          signedJudgeName: 'Maurice B. Foley',
-        },
-      ]);
+      expect(searchResults).toMatchObject(
+        expect.arrayContaining([
+          expect.objectContaining({
+            caseCaption: 'Mona Schultz & Jimothy Schultz, Petitioners',
+            docketEntryId: '4555b7a8-1c6e-4010-8606-be3f27b9d84d',
+            isFileAttached: true,
+            judge: 'Judge Ashford',
+          }),
+          expect.objectContaining({
+            caseCaption: 'Hanae Guerrero, Petitioner',
+            docketEntryId: 'd085a9da-b4a6-41d2-aa40-f933fe2d4188',
+            docketNumber: '313-21',
+            docketNumberWithSuffix: '313-21',
+            documentTitle:
+              'Summary Opinion Judge Ashford An opinion for testing',
+            documentType: 'Summary Opinion',
+            entityName: 'InternalDocumentSearchResult',
+            eventCode: 'SOP',
+            filingDate: '2021-10-25T18:57:31.742Z',
+            isCaseSealed: false,
+            isDocketEntrySealed: false,
+            isFileAttached: true,
+            isStricken: false,
+            judge: 'Tamara W. Ashford',
+            numberOfPages: 1,
+            signedJudgeName: 'Maurice B. Foley',
+          }),
+        ]),
+      );
+
       expect(
-        searchResults.find(r => r.judge !== 'Tamara W. Ashford'),
+        searchResults.find(r => !r.judge.includes('Ashford')),
       ).toBeUndefined();
     });
   });
