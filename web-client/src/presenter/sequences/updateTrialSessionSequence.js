@@ -1,18 +1,18 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
+import { setWaitingTextAction } from '../actions/setWaitingTextAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { updateTrialSessionAction } from '../actions/TrialSession/updateTrialSessionAction';
 import { validateTrialSessionAction } from '../actions/TrialSession/validateTrialSessionAction';
 
 export const updateTrialSessionSequence = [
+  clearPdfPreviewUrlAction,
   clearAlertsAction,
   startShowValidationAction,
   getComputedFormDateFactoryAction(null),
@@ -24,16 +24,16 @@ export const updateTrialSessionSequence = [
       setValidationErrorsAction,
       setValidationAlertErrorsAction,
     ],
-    success: showProgressSequenceDecorator([
+    success: [
+      setWaitingForResponseAction,
+      setWaitingTextAction(
+        'Please stay on this page while we process your request.',
+      ),
       updateTrialSessionAction,
       {
         error: [setAlertErrorAction],
-        success: [
-          setSaveAlertsForNavigationAction,
-          setAlertSuccessAction,
-          navigateToTrialSessionDetailAction,
-        ],
+        success: [],
       },
-    ]),
+    ],
   },
 ];

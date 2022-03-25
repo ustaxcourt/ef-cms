@@ -4,6 +4,7 @@ import { runAction } from 'cerebral/test';
 import { updateTrialSessionAction } from './updateTrialSessionAction';
 
 describe('updateTrialSessionAction', () => {
+  const mockPdfUrl = 'a url';
   const MOCK_TRIAL = {
     maxCases: 100,
     sessionType: 'Regular',
@@ -28,7 +29,9 @@ describe('updateTrialSessionAction', () => {
 
     applicationContext
       .getUseCases()
-      .updateTrialSessionInteractor.mockResolvedValue(MOCK_TRIAL);
+      .updateTrialSessionInteractor.mockResolvedValue({
+        newTrialSession: MOCK_TRIAL,
+      });
   });
 
   it('goes to success path if trial session is updated', async () => {
@@ -42,31 +45,6 @@ describe('updateTrialSessionAction', () => {
     });
 
     expect(successMock).toHaveBeenCalled();
-  });
-
-  it('calls setTrialSessionAsSwingSession if swingSession is true and swingSessionId is set', async () => {
-    await runAction(updateTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: { ...MOCK_TRIAL },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().updateTrialSessionInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
-        .mock.calls[0][1],
-    ).toMatchObject({
-      swingSessionId: '123',
-      trialSessionId: '456',
-    });
   });
 
   it('goes to error path if error', async () => {
@@ -84,5 +62,25 @@ describe('updateTrialSessionAction', () => {
     });
 
     expect(errorMock).toHaveBeenCalled();
+  });
+
+  it('returns the paper service pdfUrl and trialSessionId as props if one is present', async () => {
+    applicationContext
+      .getUseCases()
+      .updateTrialSessionInteractor.mockResolvedValue({
+        newTrialSession: MOCK_TRIAL,
+        serviceInfo: mockPdfUrl,
+      });
+
+    await runAction(updateTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: { ...MOCK_TRIAL },
+      },
+    });
+
+    expect(successMock).toHaveBeenCalled();
   });
 });
