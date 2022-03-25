@@ -10,7 +10,7 @@ export const CompressedDocketHeader = ({
     <div id="compressed-header">
       <div className="case-information">
         <div id="caption">
-          {caseTitle}, {caseCaptionExtension} v. halprin_CompressedDocketHeader
+          {caseTitle}, {caseCaptionExtension} v. Commissioner of Internal
           Revenue, Respondent
         </div>
         <div className="condensed" id="docket-number">

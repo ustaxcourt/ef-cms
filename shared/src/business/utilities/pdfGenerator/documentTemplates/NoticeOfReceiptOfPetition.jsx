@@ -15,7 +15,7 @@ export const NoticeOfReceiptOfPetition = ({
   servedDate,
 }) => {
   return (
-    <div id="document-notice-of-receipt" style={{margin: '100px'}}>
+    <div id="document-notice-of-receipt">
       <PrimaryHeader />
       <CompressedDocketHeader
         caseCaptionExtension={caseCaptionExtension}
