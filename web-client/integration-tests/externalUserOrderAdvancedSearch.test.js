@@ -230,7 +230,7 @@ describe('external users perform an advanced search for orders', () => {
               docketNumber: cerebralTest.docketNumber,
             }),
             expect.objectContaining({
-              docketEntryId: '08e59604-fedd-4855-8340-844425fce8dc',
+              docketEntryId: '1a92894e-83a5-48ba-9994-3ada44235deb',
               docketNumber: cerebralTest.docketNumber,
               isDocketEntrySealed: true,
             }),
