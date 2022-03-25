@@ -29,21 +29,12 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     },
   });
 
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
-      docketNumber: docketNumberWithSuffix,
-    },
-  });
-
   const pretrialOrderPdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtmlWithHeader,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
-      headerHtml,
-      overwriteHeader: true,
     });
 
   const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
@@ -69,7 +60,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
       contentHtml: checklistContent,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
-      overwriteHeader: false,
     });
 
   return await combineTwoPdfs({
