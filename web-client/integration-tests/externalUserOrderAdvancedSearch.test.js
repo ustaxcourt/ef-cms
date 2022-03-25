@@ -242,7 +242,7 @@ describe('external users perform an advanced search for orders', () => {
         ).not.toEqual(
           expect.arrayContaining([
             expect.objectContaining({
-              docketEntryId: 'd1ecc2dd-e0ba-490b-9f41-425a1a45f5ac',
+              docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
               docketNumber: cerebralTest.docketNumber,
             }),
           ]),
