@@ -316,17 +316,9 @@ describe('Docket clerk opinion advanced search', () => {
         `searchResults.${ADVANCED_SEARCH_TABS.OPINION}`,
       );
 
-      console.log('searchResults', searchResults);
-
       expect(cerebralTest.getState('validationErrors')).toEqual({});
       expect(searchResults).toMatchObject(
         expect.arrayContaining([
-          expect.objectContaining({
-            caseCaption: 'Mona Schultz & Jimothy Schultz, Petitioners',
-            docketEntryId: '4555b7a8-1c6e-4010-8606-be3f27b9d84d',
-            isFileAttached: true,
-            judge: 'Judge Ashford',
-          }),
           expect.objectContaining({
             caseCaption: 'Hanae Guerrero, Petitioner',
             docketEntryId: 'd085a9da-b4a6-41d2-aa40-f933fe2d4188',

@@ -226,11 +226,11 @@ describe('external users perform an advanced search for orders', () => {
         ).toMatchObject(
           expect.arrayContaining([
             expect.objectContaining({
-              docketEntryId: '67a204c3-7111-48f3-8ddd-3c2e60f4d1ae',
+              docketEntryId: '6d83425c-8ef3-4c66-b776-6c7957c53f4d',
               docketNumber: cerebralTest.docketNumber,
             }),
             expect.objectContaining({
-              docketEntryId: '755684EB-0FF0-416B-B0EC-2F2B3942686F',
+              docketEntryId: '08e59604-fedd-4855-8340-844425fce8dc',
               docketNumber: cerebralTest.docketNumber,
               isDocketEntrySealed: true,
             }),
