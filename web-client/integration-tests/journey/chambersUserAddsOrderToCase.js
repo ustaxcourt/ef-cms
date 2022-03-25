@@ -1,6 +1,5 @@
 import { OrderWithoutBody } from '../../../shared/src/business/entities/orders/OrderWithoutBody';
 import { applicationContext } from '../../src/applicationContext';
-import { first } from 'lodash';
 
 export const chambersUserAddsOrderToCase = cerebralTest => {
   const errorMessages = OrderWithoutBody.VALIDATION_ERROR_MESSAGES;
@@ -16,9 +15,10 @@ export const chambersUserAddsOrderToCase = cerebralTest => {
       eventCode: errorMessages.eventCode,
     });
 
+    const createdOrderEventCode = 'ODD';
     await cerebralTest.runSequence('updateCreateOrderModalFormValueSequence', {
       key: 'eventCode',
-      value: 'ODD',
+      value: createdOrderEventCode,
     });
 
     expect(cerebralTest.getState('modal.documentType')).toEqual(
@@ -49,8 +49,8 @@ export const chambersUserAddsOrderToCase = cerebralTest => {
         caseDetail: cerebralTest.getState('caseDetail'),
       });
 
-    cerebralTest.docketEntryId = first(draftDocuments)
-      ? first(draftDocuments).docketEntryId
-      : undefined;
+    cerebralTest.docketEntryId = draftDocuments.find(
+      document => document.eventCode === createdOrderEventCode,
+    ).docketEntryId;
   });
 };
