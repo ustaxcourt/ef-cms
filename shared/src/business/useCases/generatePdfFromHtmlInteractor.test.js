@@ -89,15 +89,16 @@ describe('generatePdfFromHtmlInteractor', () => {
     expect(result.indexOf('<span class="pageNumber"></span>')).toBeGreaterThan(
       -1,
     );
-    expect(result.indexOf('Docket Number:')).toBeGreaterThan(-1);
+    expect(result.indexOf('Docket No.:')).toBeGreaterThan(-1);
   });
 
   it('should display alternate header html when headerHtml is given', async () => {
+    const customHeader = 'Test Header';
     const args = {
       contentHtml:
         '<!doctype html><html><head></head><body>Hello World</body></html>',
       docketNumber: '123-45',
-      headerHtml: 'Test Header',
+      headerHtml: customHeader,
     };
 
     const result = await generatePdfFromHtmlInteractor(
@@ -105,46 +106,8 @@ describe('generatePdfFromHtmlInteractor', () => {
       args,
     );
 
-    expect(
-      result.indexOf('Page <span class="pageNumber"></span>'),
-    ).toBeGreaterThan(-1);
-    expect(result.indexOf('Test Header')).toBeGreaterThan(-1);
-  });
-
-  it('should not show the default header or additional header content when overwriteHeader is set and headerHTML is not set', async () => {
-    const args = {
-      contentHtml:
-        '<!doctype html><html><head></head><body>Hello World</body></html>',
-      docketNumber: '123-45',
-      overwriteHeader: true,
-    };
-    const defaultHeaderContent = 'Page <span class="pageNumber"></span>'; // This is in the header by default
-
-    const result = await generatePdfFromHtmlInteractor(
-      applicationContext,
-      args,
-    );
-
-    expect(result.indexOf(defaultHeaderContent)).toEqual(-1);
-  });
-
-  it('should overwrite the header with headerHTML when overwriteHeader is set', async () => {
-    const args = {
-      contentHtml:
-        '<!doctype html><html><head></head><body>Hello World</body></html>',
-      docketNumber: '123-45',
-      headerHtml: 'Test Header',
-      overwriteHeader: true,
-    };
-    const defaultHeaderContent = 'Page <span class="pageNumber"></span>'; // This is in the header by default
-
-    const result = await generatePdfFromHtmlInteractor(
-      applicationContext,
-      args,
-    );
-
-    expect(result.indexOf(defaultHeaderContent)).toEqual(-1);
-    expect(result.indexOf('Test Header')).toBeGreaterThan(-1);
+    expect(result.indexOf('Page <span class="pageNumber"></span>')).toEqual(-1); // This is in the header by default
+    expect(result.indexOf(customHeader)).toBeGreaterThan(-1);
   });
 
   it('should display alternate footer html when footerHtml is given', async () => {
