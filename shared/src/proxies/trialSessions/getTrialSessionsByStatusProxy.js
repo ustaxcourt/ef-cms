@@ -1,4 +1,5 @@
 const { get } = require('../requests');
+const { startCase } = require('lodash');
 
 /**
  * getTrialSessionsByStatusInteractor
@@ -14,7 +15,7 @@ exports.getTrialSessionsByStatusInteractor = (
     applicationContext,
     endpoint: '/trial-sessions',
     params: {
-      status,
+      status: startCase(status),
     },
   });
 };

@@ -4,6 +4,7 @@ const {
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
 const {
+  SESSION_STATUS_GROUPS,
   SESSION_TERMS,
   SESSION_TYPES,
   TRIAL_CITY_STRINGS,
@@ -14,7 +15,7 @@ const {
   US_STATES_OTHER,
 } = require('../EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
-const { isEmpty } = require('lodash');
+const { isEmpty, isEqual } = require('lodash');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
 
 /**
@@ -423,6 +424,32 @@ TrialSession.prototype.canSetAsCalendared = function () {
  */
 TrialSession.prototype.isRemote = function () {
   return this.proceedingType === TRIAL_SESSION_PROCEEDING_TYPES.remote;
+};
+
+/**
+ * This can be New, Open, or Closed.  The closed logic is more complex which requires looking at the
+ * caseOrder and checking it against the inactive cases count.
+ *
+ * @returns {string} the current status of the trial session
+ */
+TrialSession.prototype.getStatus = function () {
+  const allCases = this.caseOrder || [];
+  const inactiveCases = allCases.filter(
+    sessionCase => sessionCase.removedFromTrial === true,
+  );
+
+  if (
+    this.isClosed ||
+    (!isEmpty(allCases) &&
+      isEqual(allCases, inactiveCases) &&
+      this.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
+  ) {
+    return SESSION_STATUS_GROUPS.closed;
+  } else if (this.isCalendared) {
+    return SESSION_STATUS_GROUPS.open;
+  } else {
+    return SESSION_STATUS_GROUPS.new;
+  }
 };
 
 /**

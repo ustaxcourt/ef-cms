@@ -2,17 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { isEmpty, isEqual } = require('lodash');
-const { TRIAL_SESSION_SCOPE_TYPES } = require('../../entities/EntityConstants');
+const { SESSION_STATUS_GROUPS } = require('../../entities/EntityConstants');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
-
-// TODO: probably grab from entity constants
-const TRIAL_SESSION_STATUSES = {
-  CLOSED: 'closed',
-  NEW: 'new',
-  OPEN: 'open',
-};
 
 /**
  * getTrialSessionsInteractor
@@ -20,48 +12,52 @@ const TRIAL_SESSION_STATUSES = {
  * @param {object} applicationContext the application context
  * @returns {Array<TrialSession>} the trial sessions returned from persistence
  */
-exports.getTrialSessionsInteractor = async (applicationContext, { status }) => {
+exports.getTrialSessionsInteractor = async (
+  applicationContext,
+  { status = SESSION_STATUS_GROUPS.all },
+) => {
+  const allowedStatuses = [
+    SESSION_STATUS_GROUPS.closed,
+    SESSION_STATUS_GROUPS.new,
+    SESSION_STATUS_GROUPS.open,
+    SESSION_STATUS_GROUPS.all,
+  ];
+
+  if (!allowedStatuses.includes(status)) {
+    throw new Error(`Invalid status: ${status}`);
+  }
+
   const user = applicationContext.getCurrentUser();
+
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let trialSessions;
-  if (status === TRIAL_SESSION_STATUSES.CLOSED) {
-    const allSessions = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions({ applicationContext });
+  const statusToMethodMap = {
+    [SESSION_STATUS_GROUPS.closed]: 'getTrialSessions', // we need to fetch all due to how closed cases are calculated
+    [SESSION_STATUS_GROUPS.new]: 'getNewTrialSessions',
+    [SESSION_STATUS_GROUPS.open]: 'getOpenTrialSessions',
+    [SESSION_STATUS_GROUPS.all]: 'getTrialSessions',
+  };
+  console.log(' status', status);
 
-    trialSessions = allSessions.filter(session => {
-      const allCases = session.caseOrder || [];
-      const inactiveCases = allCases.filter(
-        sessionCase => sessionCase.removedFromTrial === true,
-      );
+  const methodNameToCall = statusToMethodMap[status];
+  const methodToCall =
+    applicationContext.getPersistenceGateway()[methodNameToCall];
 
-      if (
-        session.isClosed ||
-        (!isEmpty(allCases) &&
-          isEqual(allCases, inactiveCases) &&
-          session.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
-      ) {
-        return true;
-      }
+  const rawTrialSessions = await methodToCall({ applicationContext });
+
+  // persistence can't easily know when a session is closed or not,
+  // so we do an additional filter.
+  const trialSessions = rawTrialSessions.filter(rawTrialSession => {
+    const trialSession = new TrialSession(rawTrialSession, {
+      applicationContext,
     });
-  } else if (status === TRIAL_SESSION_STATUSES.NEW) {
-    trialSessions = await applicationContext
-      .getPersistenceGateway()
-      .getNewTrialSessions({ applicationContext });
-  } else if (status === TRIAL_SESSION_STATUSES.OPEN) {
-    trialSessions = await applicationContext
-      .getPersistenceGateway()
-      .getOpenTrialSessions({ applicationContext });
-  } else {
-    trialSessions = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessions({
-        applicationContext,
-      });
-  }
+    return (
+      status === SESSION_STATUS_GROUPS.all ||
+      trialSession.getStatus() === status
+    );
+  });
 
   return TrialSession.validateRawCollection(trialSessions, {
     applicationContext,

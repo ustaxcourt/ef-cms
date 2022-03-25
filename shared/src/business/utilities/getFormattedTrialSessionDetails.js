@@ -1,5 +1,5 @@
-const { compact, isEmpty, isEqual, partition } = require('lodash');
-const { TRIAL_SESSION_SCOPE_TYPES } = require('../entities/EntityConstants');
+const { compact, partition } = require('lodash');
+const { TrialSession } = require('../entities/trialSessions/TrialSession');
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.caseTitle = applicationContext.getCaseTitle(
@@ -141,23 +141,5 @@ exports.formattedTrialSessionDetails = ({
 };
 
 exports.getTrialSessionStatus = ({ applicationContext, session }) => {
-  const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
-
-  const allCases = session.caseOrder || [];
-  const inactiveCases = allCases.filter(
-    sessionCase => sessionCase.removedFromTrial === true,
-  );
-
-  if (
-    session.isClosed ||
-    (!isEmpty(allCases) &&
-      isEqual(allCases, inactiveCases) &&
-      session.sessionScope !== TRIAL_SESSION_SCOPE_TYPES.standaloneRemote)
-  ) {
-    return SESSION_STATUS_GROUPS.closed;
-  } else if (session.isCalendared) {
-    return SESSION_STATUS_GROUPS.open;
-  } else {
-    return SESSION_STATUS_GROUPS.new;
-  }
+  return new TrialSession(session, { applicationContext }).getStatus();
 };
