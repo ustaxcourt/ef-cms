@@ -27,7 +27,7 @@ describe('Trial Sessions UI Smoketests', () => {
       cy.intercept({
         hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
         method: 'GET',
-        url: '/trial-sessions',
+        url: '/trial-sessions?status=open',
       }).as('getOpenTrialSessions');
 
       cy.get('a').contains('Trial Sessions').click();
