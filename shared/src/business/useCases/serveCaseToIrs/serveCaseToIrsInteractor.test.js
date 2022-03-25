@@ -1,5 +1,10 @@
 /* eslint-disable max-lines */
 const {
+  addDocketEntryForPaymentStatus,
+  serveCaseToIrsInteractor,
+} = require('./serveCaseToIrsInteractor');
+
+const {
   applicationContext,
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
@@ -11,16 +16,22 @@ const {
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
+  PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   docketClerkUser,
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
+const {
+  formatNow,
+  FORMATS,
+  getDateInFuture,
+} = require('../../utilities/DateHandler');
+const { Case } = require('../../entities/cases/Case');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
-const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
 
 describe('serveCaseToIrsInteractor', () => {
   const MOCK_WORK_ITEM = {
@@ -601,5 +612,109 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
+  });
+
+  it('should generate an order and upload it to s3 for noticeOfAttachments', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      noticeOfAttachments: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it('should generate an order, upload it to s3, and remove brackets from orderContent for orderForFilingFee', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderForFilingFee: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.not.stringContaining('['),
+    });
+
+    const mockTodayPlus60 = getDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(mockTodayPlus60),
+    });
+  });
+});
+
+describe('addDocketEntryForPaymentStatus', () => {
+  let user;
+
+  beforeEach(() => {
+    user = applicationContext.getCurrentUser();
+  });
+
+  it('adds a docketRecord for a paid petition payment', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitionPaymentDate: 'Today',
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      },
+      { applicationContext },
+    );
+    addDocketEntryForPaymentStatus({
+      applicationContext,
+      caseEntity,
+      user: petitionsClerkUser,
+    });
+
+    const addedDocketRecord = caseEntity.docketEntries.find(
+      docketEntry => docketEntry.eventCode === 'FEE',
+    );
+
+    expect(addedDocketRecord).toBeDefined();
+    expect(addedDocketRecord.filingDate).toEqual('Today');
+  });
+
+  it('adds a docketRecord for a waived petition payment', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        docketEntries: [],
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+        petitionPaymentWaivedDate: 'Today',
+        petitioners: undefined,
+      },
+      { applicationContext },
+    );
+    await addDocketEntryForPaymentStatus({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    const addedDocketRecord = caseEntity.docketEntries.find(
+      docketEntry => docketEntry.eventCode === 'FEEW',
+    );
+
+    expect(addedDocketRecord).toBeDefined();
+    expect(addedDocketRecord.filingDate).toEqual('Today');
   });
 });

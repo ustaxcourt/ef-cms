@@ -482,5 +482,18 @@ describe('updateTrialSessionInteractor', () => {
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0],
+    ).toMatchObject({
+      message: {
+        action: 'update_trial_session_complete',
+        hasPaper: serviceInfo?.hasPaper,
+        pdfUrl: 'www.example.com',
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      },
+      userId: user.userId,
+    });
   });
 });
