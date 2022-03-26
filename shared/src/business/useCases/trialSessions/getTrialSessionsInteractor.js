@@ -34,7 +34,7 @@ exports.getTrialSessionsInteractor = async (
   }
 
   const statusToMethodMap = {
-    [SESSION_STATUS_GROUPS.closed]: 'getTrialSessions', // we need to fetch all due to how closed cases are calculated
+    [SESSION_STATUS_GROUPS.closed]: 'getClosedTrialSessions',
     [SESSION_STATUS_GROUPS.new]: 'getNewTrialSessions',
     [SESSION_STATUS_GROUPS.open]: 'getOpenTrialSessions',
     [SESSION_STATUS_GROUPS.all]: 'getTrialSessions',
@@ -44,18 +44,14 @@ exports.getTrialSessionsInteractor = async (
   const methodToCall =
     applicationContext.getPersistenceGateway()[methodNameToCall];
 
-  const rawTrialSessions = await methodToCall({ applicationContext });
-
-  // persistence can't easily know when a session is closed or not,
-  // so we do an additional filter.
-  const trialSessions = rawTrialSessions.filter(rawTrialSession => {
-    const trialSession = new TrialSession(rawTrialSession, {
-      applicationContext,
-    });
-    return (
-      status === SESSION_STATUS_GROUPS.all ||
-      trialSession.getStatus() === status
-    );
+  const trialSessions = await methodToCall({
+    applicationContext,
+    isClosed: rawTrialSession => {
+      const trialSession = new TrialSession(rawTrialSession, {
+        applicationContext,
+      });
+      return trialSession.getStatus() === SESSION_STATUS_GROUPS.closed;
+    },
   });
 
   return TrialSession.validateRawCollection(trialSessions, {

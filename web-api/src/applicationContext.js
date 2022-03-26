@@ -449,6 +449,9 @@ const {
   getClosedCasesInteractor,
 } = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
+  getClosedTrialSessions,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getClosedTrialSessions');
+const {
   getCognitoUserIdByEmail,
 } = require('../../shared/src/persistence/cognito/getCognitoUserIdByEmail');
 const {
@@ -1495,6 +1498,7 @@ const gatewayMethods = {
   getCasesByUserId,
   getCasesForUser,
   getClientId,
+  getClosedTrialSessions,
   getCognitoUserIdByEmail,
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
