@@ -39,7 +39,6 @@ exports.getTrialSessionsInteractor = async (
     [SESSION_STATUS_GROUPS.open]: 'getOpenTrialSessions',
     [SESSION_STATUS_GROUPS.all]: 'getTrialSessions',
   };
-  console.log(' status', status);
 
   const methodNameToCall = statusToMethodMap[status];
   const methodToCall =
