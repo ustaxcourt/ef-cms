@@ -5,6 +5,7 @@
   "reporterOptions": {
     "toConsole": true
   },
+  "video": false,
   "fixturesFolder": "cypress-integration/fixtures",
   "integrationFolder": "cypress-integration/integration",
   "pluginsFile": "cypress-integration/plugins/index.js",

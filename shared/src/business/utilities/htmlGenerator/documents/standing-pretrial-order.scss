@@ -1,0 +1,51 @@
+#standing-pretrial-order {
+  font-family: 'Century Schoolbook Std', serif;
+
+  p {
+    font-size: 14px;
+    line-height: 15px;
+  }
+
+  .standing-pretrial-order-small-case {
+    font-size: 16px;
+    line-height: 120%;
+
+    &p {
+      line-height: 120%;
+    }
+
+    ol {
+      li {
+        padding-bottom: 20px;
+        padding-left: 2em;
+
+        ol {
+          li {
+            padding-bottom: 0;
+            padding-left: 1em;
+            margin-left: -2em;
+          }
+        }
+      }
+    }
+  }
+
+  .standing-pretrial-order-regular-case {
+    font-size: 16px;
+    line-height: 120%;
+
+    &p {
+      line-height: 120%;
+    }
+  }
+
+  h3 {
+    font-size: 16px;
+  }
+
+  .standing-pretrial-card {
+    padding: 0 8px 0 8px;
+    border: 3px solid #000;
+    margin: 24px 0 12px 0;
+  }
+}

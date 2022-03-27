@@ -10,12 +10,14 @@ describe('setWaitingForResponseAction', () => {
       },
       state: {
         progressIndicator: {
+          waitText: 'testing',
           waitingForResponse: false,
           waitingForResponseRequests: 0,
         },
       },
     });
     expect(result.state.progressIndicator).toMatchObject({
+      waitText: 'testing',
       waitingForResponse: true,
       waitingForResponseRequests: 1,
     });

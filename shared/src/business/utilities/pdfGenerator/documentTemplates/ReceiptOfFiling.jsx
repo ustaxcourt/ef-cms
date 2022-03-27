@@ -52,13 +52,13 @@ export const ReceiptOfFiling = ({
     secondarySupportingDocuments && secondarySupportingDocuments.length;
 
   return (
-    <>
+    <div id="receipt-of-filing">
       <PrimaryHeader />
       <CompressedDocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3="Receipt of Filing"
+        documentTitle="Receipt of Filing"
       />
       <div>
         <div className="float-left width-half" id="receipt-filed-by">
@@ -108,6 +108,6 @@ export const ReceiptOfFiling = ({
             )}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };

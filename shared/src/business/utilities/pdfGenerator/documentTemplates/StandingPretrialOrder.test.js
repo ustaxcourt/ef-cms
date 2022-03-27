@@ -30,7 +30,7 @@ describe('StandingPretrialOrder', () => {
       <StandingPretrialOrder options={options} trialInfo={trialInfo} />,
     );
 
-    expect(wrapper.find('#caption-title').text()).toEqual(options.caseTitle);
+    expect(wrapper.find('#caption-title').text()).toEqual('TEST PETITIONER,');
     expect(wrapper.find('#caption-extension').text()).toEqual(
       options.caseCaptionExtension,
     );

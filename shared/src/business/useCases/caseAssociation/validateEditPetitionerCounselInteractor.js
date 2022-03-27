@@ -11,9 +11,7 @@ const {
  * @returns {object} errors
  */
 exports.validateEditPetitionerCounselInteractor = ({ practitioner }) => {
-  const errors =
-    EditPetitionerCounselFactory(practitioner).getFormattedValidationErrors();
-
-  if (!errors) return null;
-  return errors;
+  return EditPetitionerCounselFactory(
+    practitioner,
+  ).getFormattedValidationErrors();
 };
