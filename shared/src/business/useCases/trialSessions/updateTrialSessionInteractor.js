@@ -16,7 +16,6 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.trialSession the trial session data
- * @returns {object} the created trial session
  */
 exports.updateTrialSessionInteractor = async (
   applicationContext,
@@ -124,9 +123,12 @@ exports.updateTrialSessionInteractor = async (
       });
   }
 
+  let pdfUrl = null;
+  let serviceInfo = null;
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
-    //update all the cases that are calendared with the new trial information
     const calendaredCases = currentTrialSession.caseOrder;
+    const { PDFDocument } = await applicationContext.getPdfLib();
+    const paperServicePdfsCombined = await PDFDocument.create();
 
     for (let calendaredCase of calendaredCases) {
       const caseToUpdate = await applicationContext
@@ -140,6 +142,17 @@ exports.updateTrialSessionInteractor = async (
       if (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeToRemoteProceeding(applicationContext, {
+            PDFDocument,
+            caseEntity,
+            currentTrialSession,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity,
+            user,
+          });
+
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
@@ -160,6 +173,18 @@ exports.updateTrialSessionInteractor = async (
         });
       }
     }
+
+    serviceInfo = await applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf({
+        applicationContext,
+        document: paperServicePdfsCombined,
+      });
+    pdfUrl = serviceInfo.url;
+  }
+
+  if (trialSession.swingSession && trialSession.swingSessionId) {
+    newTrialSessionEntity.setAsSwingSession(trialSession.swingSessionId);
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
@@ -167,5 +192,14 @@ exports.updateTrialSessionInteractor = async (
     trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
   });
 
-  return newTrialSessionEntity.toRawObject();
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'update_trial_session_complete',
+      hasPaper: serviceInfo?.hasPaper,
+      pdfUrl,
+      trialSessionId: trialSession.trialSessionId,
+    },
+    userId: user.userId,
+  });
 };
