@@ -477,7 +477,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfAttachmentsInNatureOfEvidence: {
     eventCode: 'NOT',
     content:
-      'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
+      '&nbsp;&nbsp;&nbsp;&nbsp;Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
     documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
       .documentType,
     documentTitle: 'Notice of Attachments in the Nature of Evidence',
