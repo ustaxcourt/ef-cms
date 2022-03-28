@@ -628,6 +628,20 @@ describe('serveCaseToIrsInteractor', () => {
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
+  it('should generate an order and upload it to s3 for orderToShowCause', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderToShowCause: false,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
   it('should generate an order, upload it to s3, and remove brackets from orderContent for orderForFilingFee', async () => {
     mockCase = {
       ...MOCK_CASE,
