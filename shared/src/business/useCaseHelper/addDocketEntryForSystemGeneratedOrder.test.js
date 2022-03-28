@@ -11,7 +11,7 @@ const { MOCK_CASE } = require('../../test/mockCase');
 describe('addDocketEntryForSystemGeneratedOrder', () => {
   const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
-  const { noticeOfAttachmentsInNatureOfEvidence } =
+  const { noticeOfAttachmentsInNatureOfEvidence, orderForFilingFee } =
     SYSTEM_GENERATED_DOCUMENT_TYPES;
 
   it('should add a draft docket entry for a system generated order', async () => {
@@ -38,6 +38,38 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
         .orderTitle;
 
     expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase());
+  });
+
+  it('should apply a signature for notices', async () => {
+    applicationContext.getClerkOfCourtNameForSigning.mockReturnValue(
+      'Antonia Lafaso',
+    );
+
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+    });
+
+    const mockSignatureText =
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
+        .signatureText;
+
+    expect(mockSignatureText.length).toBeGreaterThan(0);
+  });
+
+  it('should not apply a signature for orders', async () => {
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: orderForFilingFee,
+    });
+
+    const mockSignatureText =
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
+        .signatureText;
+
+    expect(mockSignatureText.length).toEqual(0);
   });
 
   it('should upload a generated pdf for the provided document', async () => {
