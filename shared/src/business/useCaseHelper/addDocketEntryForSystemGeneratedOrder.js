@@ -50,7 +50,10 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
       docketNumberWithSuffix,
       orderContent: systemGeneratedDocument.content,
       orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
-      signatureText: applicationContext.getClerkOfCourtNameForSigning(),
+      signatureText:
+        systemGeneratedDocument.eventCode === 'NOT'
+          ? applicationContext.getClerkOfCourtNameForSigning()
+          : '',
     },
   });
 
