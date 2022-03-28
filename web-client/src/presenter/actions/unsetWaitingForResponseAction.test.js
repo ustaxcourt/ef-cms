@@ -10,6 +10,7 @@ describe('unsetWaitingForResponseAction', () => {
       },
       state: {
         progressIndicator: {
+          waitText: 'hello',
           waitingForResponse: false,
           waitingForResponseRequests: 0,
         },
@@ -19,6 +20,7 @@ describe('unsetWaitingForResponseAction', () => {
       waitingForResponse: false,
       waitingForResponseRequests: 0,
     });
+    expect(result.state.progressIndicator.waitText).toBeUndefined();
   });
 
   it('decrements request count and sets waiting to false if only one remaining', async () => {

@@ -34,12 +34,21 @@ const standingPretrialOrderForSmallCase = async ({
     },
   });
 
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
+    },
+  });
+
   const pdfWithHeader = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtmlWithHeader,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
+      headerHtml,
     });
 
   const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
@@ -69,8 +78,8 @@ const standingPretrialOrderForSmallCase = async ({
 
   return await combineTwoPdfs({
     applicationContext,
-    firstPdf: pdfWithHeader,
-    secondPdf: pdfWithoutHeader,
+    firstPdf: new Uint8Array(pdfWithHeader),
+    secondPdf: new Uint8Array(pdfWithoutHeader),
   });
 };
 

@@ -11,6 +11,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           ...message,
         });
         break;
+      case 'update_trial_session_complete':
+        await app.getSequence('updateTrialSessionCompleteSequence')({
+          ...message,
+        });
+        break;
       case 'batch_download_ready':
         await app.getSequence('batchDownloadReadySequence')({
           ...message,

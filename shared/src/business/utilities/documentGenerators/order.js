@@ -36,12 +36,21 @@ const order = async ({ applicationContext, data }) => {
     },
   });
 
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'PageMetaHeaderDocket',
+    data: {
+      docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
+    },
+  });
+
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
+      headerHtml,
     });
 
   return pdf;
