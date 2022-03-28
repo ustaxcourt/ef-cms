@@ -4,7 +4,6 @@ import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction'
 import { getComputedAdmissionsDateAction } from '../actions/getComputedAdmissionsDateAction';
 import { hasUpdatedEmailFactoryAction } from '../actions/hasUpdatedEmailFactoryAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setPractitionerDetailAction } from '../actions/setPractitionerDetailAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
@@ -18,7 +17,7 @@ const afterSuccess = [
   updatePractitionerUserAction,
   {
     error: [setAlertErrorAction, unsetWaitingForResponseAction],
-    success: [setPractitionerDetailAction, clearScreenMetadataAction],
+    success: [clearScreenMetadataAction],
   },
 ];
 
