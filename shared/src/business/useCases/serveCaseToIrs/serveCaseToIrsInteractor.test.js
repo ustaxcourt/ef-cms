@@ -631,7 +631,7 @@ describe('serveCaseToIrsInteractor', () => {
   it('should generate an order and upload it to s3 for orderToShowCause', async () => {
     mockCase = {
       ...MOCK_CASE,
-      orderToShowCause: false,
+      orderToShowCause: true,
     };
 
     await serveCaseToIrsInteractor(applicationContext, {
