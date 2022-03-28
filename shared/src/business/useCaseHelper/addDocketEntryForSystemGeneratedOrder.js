@@ -1,6 +1,10 @@
+const {
+  combineTwoPdfs,
+} = require('../utilities/documentGenerators/combineTwoPdfs');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-
+//todo: make this better
+const amendedPetitionPdf = require('../../../static/pdfs/amendedPetitionForm');
 /**
  *
  * Add docket entry for system generated order
@@ -13,9 +17,9 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
  */
 exports.addDocketEntryForSystemGeneratedOrder = async ({
+  additionalPdfRequired = false,
   applicationContext,
   caseEntity,
-  pdfToAppend = null,
   systemGeneratedDocument,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -44,7 +48,7 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
-  const pdfData = await applicationContext.getDocumentGenerators().order({
+  let orderPdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,
@@ -58,18 +62,22 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
     },
   });
 
-  if (pdfToAppend) {
-    await combineTwoPdfs({
+  if (additionalPdfRequired) {
+    const { PDFDocument } = await applicationContext.getPdfLib();
+
+    const amendedPetitionFormData = await PDFDocument.load(amendedPetitionPdf);
+
+    orderPdfData = await combineTwoPdfs({
       applicationContext,
-      firstPdf: new Uint8Array(pdfData),
-      secondPdf: new Uint8Array(amendedPetitionFormData),
+      firstPdf: new Uint8Array(orderPdfData),
+      secondPdf: amendedPetitionFormData,
     });
   }
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
     caseConfirmationPdfName: newDocketEntry.docketEntryId,
-    pdfData,
+    pdfData: orderPdfData,
   });
 
   const documentContentsId = applicationContext.getUniqueId();
