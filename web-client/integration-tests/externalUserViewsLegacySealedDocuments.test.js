@@ -13,7 +13,7 @@ describe('External user views legacy sealed documents', () => {
     jest.setTimeout(30000);
 
     cerebralTest.docketNumber = seededDocketNumber;
-    cerebralTest.docketEntryId = 'b868a8d3-6990-4b6b-9ccd-b04b22f075a0';
+    cerebralTest.docketEntryId = 'cdf5a93e-abbd-4225-88df-88fc03f8af18';
   });
 
   afterAll(() => {
