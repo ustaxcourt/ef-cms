@@ -110,6 +110,22 @@ describe('generatePdfFromHtmlInteractor', () => {
     expect(result.indexOf(customHeader)).toBeGreaterThan(-1);
   });
 
+  it('should display no header html when headerHtml is empty string', async () => {
+    const args = {
+      contentHtml:
+        '<!doctype html><html><head></head><body>Hello World</body></html>',
+      docketNumber: '123-45',
+      headerHtml: '',
+    };
+
+    const result = await generatePdfFromHtmlInteractor(
+      applicationContext,
+      args,
+    );
+
+    expect(result.indexOf('Page <span class="pageNumber"></span>')).toEqual(-1); // This is in the header by default
+  });
+
   it('should display alternate footer html when footerHtml is given', async () => {
     const args = {
       contentHtml:
