@@ -649,16 +649,27 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
+    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
+
     const mockTodayPlus60 = getDateInFuture({
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
+
     expect(
       await applicationContext.getUseCaseHelpers()
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
       content: expect.stringContaining(mockTodayPlus60),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(today),
     });
   });
 
