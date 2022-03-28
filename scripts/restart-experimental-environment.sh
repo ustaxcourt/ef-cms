@@ -8,7 +8,7 @@ export REGION=us-east-1
 export SECRETS_LOADED=true
 
 # Setting up calculated environment variables
-export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)
+export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)
 ## we use the current-color from dynamo but name the variable DEPLOYING_COLOR since it's needed in the import judge script
 export DEPLOYING_COLOR=$(aws dynamodb get-item \
  --region us-east-1 \
