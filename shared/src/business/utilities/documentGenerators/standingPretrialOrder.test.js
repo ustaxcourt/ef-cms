@@ -8,6 +8,7 @@ const fs = require('fs');
 const path = require('path');
 const {
   applicationContext,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
   generatePdfFromHtmlInteractor,
@@ -45,20 +46,11 @@ describe('documentGenerators', () => {
     } else {
       combineTwoPdfs.mockReturnValue(testPdfDoc);
     }
-
-    combineTwoPdfs.mockImplementation(async ({ firstPdf, secondPdf }) => {
-      if (!process.env.PDF_OUTPUT) {
-        // Do not write PDF when running on CircleCI
-        return;
-      }
-      writePdfFile('Standing_Pretrial_Order_Page_1', firstPdf);
-      writePdfFile('Standing_Pretrial_Order_Page_2', secondPdf);
-    });
   });
 
   describe('standingPretrialOrder', () => {
     it('generates a Standing Pre-trial Order document', async () => {
-      await standingPretrialOrder({
+      const pdf = await standingPretrialOrder({
         applicationContext,
         data: {
           caseCaptionExtension: 'Petitioner(s)',
@@ -75,7 +67,11 @@ describe('documentGenerators', () => {
         },
       });
 
-      //doesn't run any expects on the PDF from standingPretrialOrder because the combineTwoPdfs is mocked out
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Standing_Pretrial_Order', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
 
       expect(
         applicationContext.getUseCases().generatePdfFromHtmlInteractor,
