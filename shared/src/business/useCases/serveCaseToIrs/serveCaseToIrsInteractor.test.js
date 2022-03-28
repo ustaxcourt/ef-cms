@@ -24,6 +24,11 @@ const {
   docketClerkUser,
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
+const {
+  formatNow,
+  FORMATS,
+  getDateInFuture,
+} = require('../../utilities/DateHandler');
 const { Case } = require('../../entities/cases/Case');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -608,6 +613,68 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
+  });
+
+  it('should generate an order and upload it to s3 for noticeOfAttachments', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      noticeOfAttachments: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it('should generate an order and upload it to s3 for orderToShowCause', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderToShowCause: false,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it('should generate an order, upload it to s3, and remove brackets from orderContent for orderForFilingFee', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderForFilingFee: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.not.stringContaining('['),
+    });
+
+    const mockTodayPlus60 = getDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(mockTodayPlus60),
+    });
   });
 });
 
