@@ -34,6 +34,7 @@ exports.searchByDocketNumber = docketNumber => {
 };
 
 exports.searchByPractitionerName = () => {
+  cy.get('input#practitioner-name').clear();
   cy.get('input#practitioner-name').type('test');
   cy.get('button#practitioner-search-by-name-button').click();
   cy.get('table.search-results').should('exist');
