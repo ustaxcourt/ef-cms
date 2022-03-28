@@ -1,8 +1,14 @@
 const {
+  formatNow,
+  FORMATS,
+  getDateInFuture,
+} = require('../../utilities/DateHandler');
+const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -14,6 +20,7 @@ const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const addDocketEntryForPaymentStatus = ({
@@ -57,7 +64,6 @@ const addDocketEntryForPaymentStatus = ({
     );
   }
 };
-exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
 
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
@@ -320,7 +326,7 @@ const generatePaperNoticeForContactSecondary = async ({
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-exports.serveCaseToIrsInteractor = async (
+const serveCaseToIrsInteractor = async (
   applicationContext,
   { docketNumber },
 ) => {
@@ -364,6 +370,45 @@ exports.serveCaseToIrsInteractor = async (
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
+  if (caseEntity.noticeOfAttachments) {
+    const { noticeOfAttachmentsInNatureOfEvidence } =
+      SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+      });
+  }
+
+  if (caseEntity.orderForFilingFee) {
+    const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const todayPlus60 = getDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    const content = replaceBracketed(
+      orderForFilingFee.content,
+      todayPlus60,
+      todayPlus60, // since there are 2 instances of the date, replace a 2nd time
+    );
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderForFilingFee,
+          content,
+        },
+      });
+  }
+
   await createPetitionWorkItems({
     applicationContext,
     caseEntity,
@@ -386,4 +431,9 @@ exports.serveCaseToIrsInteractor = async (
   });
 
   return urlToReturn;
+};
+
+module.exports = {
+  addDocketEntryForPaymentStatus,
+  serveCaseToIrsInteractor,
 };

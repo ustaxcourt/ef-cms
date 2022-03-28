@@ -2,11 +2,14 @@ import { Button } from '../ustc-ui/Button/Button';
 import { PdfPreview } from '../ustc-ui/PdfPreview/PdfPreview';
 import { WarningNotification } from './WarningNotification';
 import { connect } from '@cerebral/react';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const PrintPaperTrialNotices = connect(
-  {},
-  function PrintPaperTrialNotices() {
+  {
+    printPaperDoneUrl: state.printPaperDoneUrl,
+  },
+  function PrintPaperTrialNotices({ printPaperDoneUrl }) {
     return (
       <>
         <div className="big-blue-header">
@@ -24,7 +27,7 @@ export const PrintPaperTrialNotices = connect(
             <div className="grid-col-4">
               <Button
                 className="push-right margin-right-0 margin-top-6"
-                href="/trial-sessions"
+                href={printPaperDoneUrl}
               >
                 Done
               </Button>
