@@ -33,11 +33,8 @@ exports.generatePdfFromHtmlInteractor = async (
 
     await page.setContent(contentHtml);
 
-    let metaHeaderContent = '';
-    if (headerHtml !== undefined) {
-      metaHeaderContent = headerHtml;
-    } else {
-      metaHeaderContent = reactTemplateGenerator({
+    if (headerHtml === undefined) {
+      headerHtml = reactTemplateGenerator({
         componentName: 'PageMetaHeaderDocket',
         data: {
           docketNumber,
@@ -47,7 +44,7 @@ exports.generatePdfFromHtmlInteractor = async (
 
     const headerTemplate = `
           <div style="font-size: 8px; width: 100%; margin: 0px 40px; margin-top: 25px;">
-            ${metaHeaderContent}
+            ${headerHtml}
           </div>
     `;
 
