@@ -17,7 +17,7 @@ export const setQCWorkItemIdToMarkAsReadIfNeededAction = ({ get, props }) => {
   );
 
   const unreadQCWorkItem =
-    initialDocument.workItem && !initialDocument.workItem.isRead
+    initialDocument?.workItem && !initialDocument.workItem.isRead
       ? initialDocument.workItem
       : undefined;
 
