@@ -1,4 +1,9 @@
-jest.mock('./combineTwoPdfs');
+jest.mock('./combineTwoPdfs', () => {
+  const actualModule = jest.requireActual('./combineTwoPdfs');
+  return {
+    combineTwoPdfs: jest.fn().mockImplementation(actualModule.combineTwoPdfs),
+  };
+});
 const fs = require('fs');
 const path = require('path');
 const {
@@ -39,6 +44,8 @@ describe('documentGenerators', () => {
         .generatePdfFromHtmlInteractor.mockImplementation(
           generatePdfFromHtmlInteractor,
         );
+    } else {
+      combineTwoPdfs.mockReturnValue(testPdfDoc);
     }
 
     // combineTwoPdfs.mockReturnValue(testPdfDoc);
