@@ -19,7 +19,10 @@
     "maxCases": 100,
     "trialSessionId": "c5bee7c0-bd98-4504-890b-b00eb398e547",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "isSealed": true,
@@ -707,7 +710,10 @@
     "maxCases": 100,
     "trialSessionId": "c7220f03-e46e-4d5e-8e1d-a640e64df552",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "associatedJudge": "Chief Judge",
@@ -1728,7 +1734,10 @@
     "maxCases": 125,
     "trialSessionId": "b4bee7c0-bd98-4504-890b-b00eb398e547",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "associatedJudge": "Chief Judge",
@@ -4056,7 +4065,10 @@
     "startDate": "2030-11-25T05:00:00.000Z",
     "maxCases": 125,
     "trialSessionId": "a1b04943-8ea8-422b-8990-dec3ca644c83",
-    "isCalendared": false
+    "isCalendared": false,
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "associatedJudge": "Chief Judge",
@@ -5318,7 +5330,10 @@
     "startDate": "2020-01-26T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "trialSessionId": "159c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "trialSessionId": "159c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "associatedJudge": "Colvin",
@@ -5899,7 +5914,10 @@
     "startDate": "2020-12-02T05:00:00.000Z",
     "maxCases": 125,
     "trialSessionId": "6b6975cf-2b10-4e84-bcae-91e162d2f9d1",
-    "isCalendared": false
+    "isCalendared": false,
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "role": "chambers",
@@ -9894,7 +9912,10 @@
     "maxCases": 30,
     "trialSessionId": "0d943468-bc2e-4631-84e3-b084cf5b1fbb",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "sk": "user|ad07b846-8933-4778-9fe2-b5d8ac8ad728",
@@ -10349,7 +10370,9 @@
     "startDate": "2020-11-27T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "admissionsStatus": "Active",
@@ -10636,7 +10659,10 @@
     "startDate": "2019-12-30T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "trialSessionId": "539c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "trialSessionId": "539c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "sk": "user|86c3f87b-350b-477d-92c3-43bd095cb006",
@@ -11614,7 +11640,10 @@
     "startDate": "2020-11-25T05:00:00.000Z",
     "maxCases": 100,
     "trialSessionId": "5b18af9e-4fbd-459b-8db7-7b15108c7fa5",
-    "isCalendared": false
+    "isCalendared": false,
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "sk": "user|8e4959cd-3e13-4bf6-95bf-a276cc63b9e1",
@@ -12980,7 +13009,9 @@
     "startDate": "2020-11-25T05:00:00.000Z",
     "maxCases": 100,
     "trialSessionId": "111ac21b-99f9-4321-98c8-b95db00af96b",
-    "isCalendared": true
+    "isCalendared": true,
+    "entityName": "TrialSession",
+    "isClosed": false
   },
   {
     "judgeTitle": "Chief Judge",
@@ -13966,7 +13997,10 @@
     "startDate": "2020-01-06T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "trialSessionId": "459c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "trialSessionId": "459c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "caseOrder": [],
@@ -13989,7 +14023,10 @@
     "startDate": "2020-11-25T05:00:00.000Z",
     "maxCases": 6,
     "trialSessionId": "208a959f-9526-4db5-b262-e58c476a4604",
-    "isCalendared": false
+    "isCalendared": false,
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "completedAt": "2019-08-16T17:30:10.526Z",
@@ -16265,7 +16302,9 @@
     "startDate": "2020-08-10T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195fb"
+    "trialSessionId": "959c4338-0fac-42eb-b0eb-d53b8d0195fb",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "role": "irsSuperuser",
@@ -16297,7 +16336,10 @@
     "maxCases": 8,
     "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defee",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "associatedJudge": "Chief Judge",
@@ -16516,7 +16558,10 @@
     "startDate": "2020-12-02T05:00:00.000Z",
     "maxCases": 30,
     "trialSessionId": "9c943468-bc2e-4631-84e3-b084cf5b1faa",
-    "isCalendared": false
+    "isCalendared": false,
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "associatedJudge": "Chief Judge",
@@ -19034,7 +19079,10 @@
     "maxCases": 8,
     "trialSessionId": "259159ca-f4a1-4b2b-bc24-bd1fbe6defef",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "sk": "docketNumberCounter-2020",
@@ -19742,7 +19790,10 @@
     "startDate": "2020-11-25T05:00:00.000Z",
     "maxCases": 125,
     "trialSessionId": "f3b04943-8ea8-422b-8990-dec3ca644c83",
-    "isCalendared": false
+    "isCalendared": false,
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "caseOrder": [],
@@ -19768,7 +19819,10 @@
     "startDate": "2020-01-16T05:00:00.000Z",
     "isCalendared": true,
     "maxCases": 100,
-    "trialSessionId": "359c4338-0fac-42eb-b0eb-d53b8d0195cc"
+    "trialSessionId": "359c4338-0fac-42eb-b0eb-d53b8d0195cc",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "role": "petitioner",
@@ -20623,7 +20677,10 @@
     "maxCases": 6,
     "trialSessionId": "a3bee7c0-bd98-4504-890b-b00eb398e547",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "role": "petitionsclerk",
@@ -23328,7 +23385,10 @@
     "startDate": "2020-12-02T05:00:00.000Z",
     "maxCases": 8,
     "trialSessionId": "149159ca-f4a1-4b2b-bc24-bd1fbe6defdc",
-    "isCalendared": false
+    "isCalendared": false,
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "sk": "case|103-19",
@@ -23762,7 +23822,10 @@
     "maxCases": 125,
     "trialSessionId": "7c6975cf-2b10-4e84-bcae-91e162d2f9ee",
     "isCalendared": false,
-    "status": "Closed"
+    "status": "Closed",
+    "entityName": "TrialSession",
+    "sessionScope": "Location-based",
+    "isClosed": false
   },
   {
     "sk": "document-search-limiter-configuration",

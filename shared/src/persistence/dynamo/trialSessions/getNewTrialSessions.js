@@ -12,8 +12,7 @@ exports.getNewTrialSessions = ({ applicationContext }) =>
       ':isCalendared': false,
       ':isClosed': false,
     },
-    FilterExpression:
-      '#isCalendared = :isCalendared AND (#isClosed = :isClosed OR attribute_not_exists(#isClosed))',
+    FilterExpression: '#isCalendared = :isCalendared AND #isClosed = :isClosed',
     IndexName: 'gsi1',
     KeyConditionExpression: '#gsi1pk = :gsi1pk',
     applicationContext,

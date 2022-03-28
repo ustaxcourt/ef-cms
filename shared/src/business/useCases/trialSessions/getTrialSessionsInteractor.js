@@ -14,7 +14,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.getTrialSessionsInteractor = async (
   applicationContext,
-  { status = SESSION_STATUS_GROUPS.all },
+  { status = SESSION_STATUS_GROUPS.all } = {},
 ) => {
   const allowedStatuses = [
     SESSION_STATUS_GROUPS.closed,
@@ -33,26 +33,44 @@ exports.getTrialSessionsInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const statusToMethodMap = {
-    [SESSION_STATUS_GROUPS.closed]: 'getClosedTrialSessions',
-    [SESSION_STATUS_GROUPS.new]: 'getNewTrialSessions',
-    [SESSION_STATUS_GROUPS.open]: 'getOpenTrialSessions',
-    [SESSION_STATUS_GROUPS.all]: 'getTrialSessions',
-  };
+  let trialSessions;
 
-  const methodNameToCall = statusToMethodMap[status];
-  const methodToCall =
-    applicationContext.getPersistenceGateway()[methodNameToCall];
-
-  const trialSessions = await methodToCall({
-    applicationContext,
-    isClosed: rawTrialSession => {
-      const trialSession = new TrialSession(rawTrialSession, {
-        applicationContext,
-      });
-      return trialSession.getStatus() === SESSION_STATUS_GROUPS.closed;
-    },
-  });
+  switch (status) {
+    case SESSION_STATUS_GROUPS.closed:
+      trialSessions = await applicationContext
+        .getPersistenceGateway()
+        .getClosedTrialSessions({
+          applicationContext,
+          isClosed: rawTrialSession => {
+            const trialSession = new TrialSession(rawTrialSession, {
+              applicationContext,
+            });
+            return trialSession.getStatus() === SESSION_STATUS_GROUPS.closed;
+          },
+        });
+      break;
+    case SESSION_STATUS_GROUPS.new:
+      trialSessions = await applicationContext
+        .getPersistenceGateway()
+        .getNewTrialSessions({
+          applicationContext,
+        });
+      break;
+    case SESSION_STATUS_GROUPS.open:
+      trialSessions = await applicationContext
+        .getPersistenceGateway()
+        .getOpenTrialSessions({
+          applicationContext,
+        });
+      break;
+    case SESSION_STATUS_GROUPS.all:
+      trialSessions = await applicationContext
+        .getPersistenceGateway()
+        .getTrialSessions({
+          applicationContext,
+        });
+      break;
+  }
 
   return TrialSession.validateRawCollection(trialSessions, {
     applicationContext,
