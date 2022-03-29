@@ -118,6 +118,10 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         docketNumber: '101-18',
       },
     ]);
+
+    expect(result[0].docketEntry.createdAt).toBeUndefined();
+    expect(result[1].docketNumberWithSuffix).toBeUndefined();
+    expect(result.length).toEqual(2);
   });
 
   it('successfully returns the work item for a petitionsclerk', async () => {
@@ -146,5 +150,9 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         docketNumber: '101-18',
       },
     ]);
+
+    expect(result[0].docketEntry.createdAt).toBeUndefined();
+    expect(result[0].docketNumberWithSuffix).toBeUndefined();
+    expect(result.length).toEqual(1);
   });
 });
