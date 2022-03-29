@@ -36,7 +36,7 @@ exports.getDocumentQCServedForSectionInteractor = async (
     .filter(workItem =>
       user.role === ROLES.petitionsClerk ? !!workItem.section : true,
     )
-    .map(workItem => new OutboxItem(workItem));
+    .map(workItem => new OutboxItem(workItem, { applicationContext }));
 
   return OutboxItem.validateRawCollection(filteredWorkItems, {
     applicationContext,
