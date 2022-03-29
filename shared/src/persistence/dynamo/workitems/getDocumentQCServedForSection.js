@@ -8,7 +8,7 @@ exports.getDocumentQCServedForSection = ({ applicationContext, section }) => {
   const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateISODate({
     dateString: startOfDay,
-    howMuch: -7,
+    howMuch: -5,
     units: 'days',
   });
 
