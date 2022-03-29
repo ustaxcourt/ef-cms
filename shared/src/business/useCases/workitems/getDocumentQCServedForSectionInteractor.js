@@ -35,6 +35,7 @@ exports.getDocumentQCServedForSectionInteractor = async (
   const filteredWorkItems = workItems.filter(workItem =>
     user.role === ROLES.petitionsClerk ? !!workItem.section : true,
   );
+  // .map(workItem => new NewNotYetNamedEntity(workItem));
 
   return WorkItem.validateRawCollection(filteredWorkItems, {
     applicationContext,
