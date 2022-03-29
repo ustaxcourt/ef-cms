@@ -2,9 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { OutboxItem } = require('../../entities/OutboxItem');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  *
@@ -32,12 +32,13 @@ exports.getDocumentQCServedForSectionInteractor = async (
       section,
     });
 
-  const filteredWorkItems = workItems.filter(workItem =>
-    user.role === ROLES.petitionsClerk ? !!workItem.section : true,
-  );
-  // .map(workItem => new NewNotYetNamedEntity(workItem));
+  const filteredWorkItems = workItems
+    .filter(workItem =>
+      user.role === ROLES.petitionsClerk ? !!workItem.section : true,
+    )
+    .map(workItem => new OutboxItem(workItem));
 
-  return WorkItem.validateRawCollection(filteredWorkItems, {
+  return OutboxItem.validateRawCollection(filteredWorkItems, {
     applicationContext,
   });
 };
