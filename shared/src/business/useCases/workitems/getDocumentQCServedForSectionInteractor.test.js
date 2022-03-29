@@ -2,9 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  DOCKET_SECTION,
+  PETITIONS_SECTION,
+  ROLES,
+} = require('../../entities/EntityConstants');
+const {
   getDocumentQCServedForSectionInteractor,
 } = require('./getDocumentQCServedForSectionInteractor');
-const { DOCKET_SECTION, ROLES } = require('../../entities/EntityConstants');
 const { MOCK_USERS } = require('../../../test/mockUsers');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -21,8 +25,11 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     applicationContext.getPersistenceGateway().getDocumentQCServedForSection =
       () => [
         {
+          caseStatus: 'Closed',
+          caseTitle: 'Lewis Dodgson does not have a case',
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
+            descriptionDisplay: 'Petition filed by Lewis Dodgson',
             docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
             documentType: 'Petition',
             entityName: 'DocketEntry',
@@ -41,24 +48,23 @@ describe('getDocumentQCServedForSectionInteractor', () => {
           sentBy: 'docketclerk',
         },
         {
+          caseStatus: 'Closed',
+          caseTitle: 'Lewis Dodgson does not have a case',
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-            documentType: 'Petition',
+            documentType: 'Order',
             entityName: 'DocketEntry',
-            eventCode: 'P',
+            eventCode: 'O',
             filedBy: 'Lewis Dodgson',
             filingDate: '2019-03-11T21:56:01.625Z',
             isDraft: false,
             isMinuteEntry: false,
             isOnDocketRecord: true,
-            sentBy: 'petitioner',
             userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           },
           docketNumber: '101-18',
           docketNumberWithSuffix: '101-18S',
-          section: DOCKET_SECTION,
-          sentBy: 'docketclerk',
         },
       ];
     applicationContext.getPersistenceGateway().getUserById = ({ userId }) =>
@@ -93,20 +99,23 @@ describe('getDocumentQCServedForSectionInteractor', () => {
 
     expect(result).toMatchObject([
       {
-        docketEntry: { sentBy: 'petitioner' },
-        docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
-        section: DOCKET_SECTION,
-        sentBy: 'docketclerk',
-      },
-      {
+        caseStatus: 'Closed',
+        caseTitle: 'Lewis Dodgson does not have a case',
         docketEntry: {
-          sentBy: 'petitioner',
+          descriptionDisplay: 'Petition filed by Lewis Dodgson',
+          documentType: 'Petition',
+          filedBy: 'Lewis Dodgson',
         },
         docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
-        section: DOCKET_SECTION,
-        sentBy: 'docketclerk',
+      },
+      {
+        caseStatus: 'Closed',
+        caseTitle: 'Lewis Dodgson does not have a case',
+        docketEntry: {
+          documentType: 'Order',
+          filedBy: 'Lewis Dodgson',
+        },
+        docketNumber: '101-18',
       },
     ]);
   });
@@ -121,26 +130,20 @@ describe('getDocumentQCServedForSectionInteractor', () => {
     const result = await getDocumentQCServedForSectionInteractor(
       applicationContext,
       {
-        section: DOCKET_SECTION,
+        section: PETITIONS_SECTION,
       },
     );
 
     expect(result).toMatchObject([
       {
-        docketEntry: { sentBy: 'petitioner' },
-        docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
-        section: DOCKET_SECTION,
-        sentBy: 'docketclerk',
-      },
-      {
+        caseStatus: 'Closed',
+        caseTitle: 'Lewis Dodgson does not have a case',
         docketEntry: {
-          sentBy: 'petitioner',
+          descriptionDisplay: 'Petition filed by Lewis Dodgson',
+          documentType: 'Petition',
+          filedBy: 'Lewis Dodgson',
         },
         docketNumber: '101-18',
-        docketNumberWithSuffix: '101-18S',
-        section: DOCKET_SECTION,
-        sentBy: 'docketclerk',
       },
     ]);
   });
