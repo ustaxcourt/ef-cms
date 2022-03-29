@@ -640,6 +640,17 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it('should replace brackets in orderToShowCause content with a filing date of today, the served date, and todayPlus60', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderToShowCause: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
 
     expect(
       await applicationContext.getUseCaseHelpers()
@@ -650,7 +661,6 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     const today = formatNow(FORMATS.MONTH_DAY_YEAR);
-
     const mockTodayPlus60 = getDateInFuture({
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
@@ -661,7 +671,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(mockTodayPlus60),
+      content: expect.stringContaining(today),
     });
 
     expect(
@@ -669,7 +679,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(today),
+      content: expect.stringContaining(mockTodayPlus60),
     });
   });
 
