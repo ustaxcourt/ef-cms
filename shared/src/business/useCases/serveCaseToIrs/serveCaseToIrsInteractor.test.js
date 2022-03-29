@@ -640,6 +640,17 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it('should replace brackets in orderToShowCause content with a filing date of today, the served date, and todayPlus60', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderToShowCause: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
 
     expect(
       await applicationContext.getUseCaseHelpers()
@@ -661,7 +672,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(mockTodayPlus60),
+      content: expect.stringContaining(today),
     });
 
     expect(
@@ -669,7 +680,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(today),
+      content: expect.stringContaining(mockTodayPlus60),
     });
   });
 
@@ -715,7 +726,7 @@ describe('addDocketEntryForPaymentStatus', () => {
     user = applicationContext.getCurrentUser();
   });
 
-  it('adds a docketRecord for a paid petition payment', async () => {
+  it('adds a docketRecord for a paid petition payment', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
