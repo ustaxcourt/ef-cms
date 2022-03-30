@@ -1,19 +1,20 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getCaseAction } from '../actions/getCaseAction';
-import { getNoticeGenerationSuccessMessageAction } from '../actions/TrialSession/getNoticeGenerationSuccessMessageAction';
 import { hasPaperAction } from '../actions/hasPaperAction';
+import { navigateToTrialSessionDetailAction } from '../actions/TrialSession/navigateToTrialSessionDetailAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setPrintPaperDoneUrlAction } from '../actions/TrialSession/setPrintPaperDoneUrlAction';
+import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { shouldRefreshCaseAction } from '../actions/shouldRefreshCaseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const noticeGenerationCompleteSequence = [
+export const updateTrialSessionCompleteSequence = [
   unsetWaitingForResponseAction,
   clearModalStateAction,
   clearModalAction,
@@ -25,8 +26,14 @@ export const noticeGenerationCompleteSequence = [
   hasPaperAction,
   {
     electronic: [
-      getNoticeGenerationSuccessMessageAction,
+      () => ({
+        alertSuccess: {
+          message: 'Trial session updated.',
+        },
+      }),
       setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
+      navigateToTrialSessionDetailAction,
     ],
     paper: [
       setPdfPreviewUrlSequence,

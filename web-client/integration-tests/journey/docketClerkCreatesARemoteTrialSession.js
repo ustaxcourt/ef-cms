@@ -1,4 +1,7 @@
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../../shared/src/business/entities/EntityConstants';
+import {
+  TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} from '../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
 
 const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
@@ -26,6 +29,11 @@ export const docketClerkCreatesARemoteTrialSession = (
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'proceedingType',
       value: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'sessionScope',
+      value: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
@@ -73,7 +81,6 @@ export const docketClerkCreatesARemoteTrialSession = (
     expect(cerebralTest.getState('validationErrors')).toEqual({
       startDate: errorMessages.startDate[1],
       term: errorMessages.term,
-      trialLocation: errorMessages.trialLocation,
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
