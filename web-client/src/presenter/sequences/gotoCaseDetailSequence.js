@@ -1,7 +1,6 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
-import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { getCaseDeadlinesForCaseAction } from '../actions/CaseDeadline/getCaseDeadlinesForCaseAction';
@@ -10,6 +9,7 @@ import { getConstants } from '../../getConstants';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getJudgesCaseNoteForCaseAction } from '../actions/TrialSession/getJudgesCaseNoteForCaseAction';
 import { getMessagesForCaseAction } from '../actions/CaseDetail/getMessagesForCaseAction';
+import { getNotificationsAction } from '../actions/getNotificationsAction';
 import { getPendingEmailsOnCaseAction } from '../actions/getPendingEmailsOnCaseAction';
 import { getTrialSessionsOnCaseAction } from '../actions/TrialSession/getTrialSessionsOnCaseAction';
 import { parallel } from 'cerebral/factories';
@@ -27,6 +27,7 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setIsPrimaryTabAction } from '../actions/setIsPrimaryTabAction';
 import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setJudgesCaseNoteOnCaseDetailAction } from '../actions/TrialSession/setJudgesCaseNoteOnCaseDetailAction';
+import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setPendingEmailsOnCaseAction } from '../actions/setPendingEmailsOnCaseAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { showModalFromQueryAction } from '../actions/showModalFromQueryAction';
@@ -37,16 +38,20 @@ const { USER_ROLES } = getConstants();
 
 const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
   resetHeaderAccordionsSequence,
-  getTrialSessionsOnCaseAction,
-  setTrialSessionsAction,
-  getJudgeForCurrentUserAction,
-  setJudgeUserAction,
   setDocketEntryIdAction,
   showModalFromQueryAction,
-  getCaseDeadlinesForCaseAction,
-  getMessagesForCaseAction,
-  getPendingEmailsOnCaseAction,
-  setPendingEmailsOnCaseAction,
+  parallel([
+    [getTrialSessionsOnCaseAction, setTrialSessionsAction],
+    [
+      getJudgeForCurrentUserAction,
+      setJudgeUserAction,
+      getNotificationsAction,
+      setNotificationsAction,
+    ],
+    [getCaseDeadlinesForCaseAction],
+    [getMessagesForCaseAction],
+    [getPendingEmailsOnCaseAction, setPendingEmailsOnCaseAction],
+  ]),
   setCurrentPageAction('CaseDetailInternal'),
 ]);
 
@@ -101,7 +106,7 @@ export const gotoCaseDetailSequence = [
         USER_ROLES.reportersOffice,
         USER_ROLES.trialClerk,
       ],
-      [parallel([gotoCaseDetailInternal, fetchUserNotificationsSequence])],
+      [gotoCaseDetailInternal],
     ),
     ...takePathForRoles(
       [USER_ROLES.petitioner, USER_ROLES.irsSuperuser],
