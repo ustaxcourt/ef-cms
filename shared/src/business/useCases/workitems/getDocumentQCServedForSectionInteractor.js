@@ -17,7 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.section the section to get the document qc served box
  * @returns {object} the work items in the section document served inbox
  */
-exports.getDocumentQCServedForSectionInteractor = async (
+const getDocumentQCServedForSectionInteractor = async (
   applicationContext,
   { section },
 ) => {
@@ -29,8 +29,8 @@ exports.getDocumentQCServedForSectionInteractor = async (
     );
   }
 
-  const afterDate = this.calculateAfterDate(applicationContext);
-
+  const afterDate = await calculateAfterDate(applicationContext);
+  console.log('!!!!', afterDate);
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCServedForSection({
@@ -50,7 +50,7 @@ exports.getDocumentQCServedForSectionInteractor = async (
   });
 };
 
-exports.calculateAfterDate = async applicationContext => {
+const calculateAfterDate = async applicationContext => {
   const daysToRetrieveKey =
     applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
       .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
@@ -72,3 +72,7 @@ exports.calculateAfterDate = async applicationContext => {
   });
   return afterDate;
 };
+
+exports.getDocumentQCServedForSectionInteractor =
+  getDocumentQCServedForSectionInteractor;
+exports.calculateAfterDate = calculateAfterDate;
