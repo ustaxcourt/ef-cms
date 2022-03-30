@@ -33,7 +33,8 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const cognitoUrl = 'https://*.auth.us-east-1.amazoncognito.com';
   const dynamsoftUrlStaging = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
   const dynamsoftUrlProd = 'https://dynamsoft-lib.dawson.ustaxcourt.gov';
-  const dynamsoftUrlEnv = `https://dynamsoft-lib.${allowedDomainString}`;
+  const dynamsoftUrlEnv =
+    'https://dynamsoft-lib.exp5.ustc-case-mgmt.flexion.us'; // temp hack
   const websocketUrl = `wss://*.${allowedDomainString}`;
   const localUrl = 'https://127.0.0.1:*';
   const localWebsocketUrl = 'ws://127.0.0.1:*';
