@@ -37,7 +37,7 @@ export const DraftDocumentViewer = connect(
               </div>
               <div className="document-viewer--documents-list">
                 {formattedDocketEntries.formattedDraftDocuments.map(
-                  draftDocument => (
+                  (draftDocument, idx) => (
                     <Button
                       className={classNames(
                         'usa-button--unstyled attachment-viewer-button',
@@ -56,10 +56,16 @@ export const DraftDocumentViewer = connect(
                       }}
                     >
                       <div className="grid-row margin-left-205">
-                        <div className="grid-col-3">
+                        <div
+                          className="grid-col-3"
+                          id={`docket-entry-createdAt-${idx}`}
+                        >
                           {draftDocument.createdAtFormatted}
                         </div>
-                        <div className="grid-col-9">
+                        <div
+                          className="grid-col-9"
+                          id={`docket-entry-description-${idx}`}
+                        >
                           {draftDocument.descriptionDisplay}
                         </div>
                       </div>

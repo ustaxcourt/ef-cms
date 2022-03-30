@@ -89,6 +89,7 @@ export const DraftDocumentViewerDocument = connect(
               <Button
                 link
                 icon="trash"
+                id="delete-pdf"
                 onClick={() =>
                   archiveDraftDocumentModalSequence({
                     docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
@@ -106,6 +107,7 @@ export const DraftDocumentViewerDocument = connect(
                   link
                   href={draftDocumentViewerHelper.applySignatureLink}
                   icon="pencil-alt"
+                  id="apply-signature"
                 >
                   Apply Signature
                 </Button>
@@ -141,6 +143,7 @@ export const DraftDocumentViewerDocument = connect(
                 link
                 icon="file-pdf"
                 iconColor="white"
+                id="view-full-pdf"
                 onClick={() =>
                   openCaseDocumentDownloadUrlSequence({
                     docketEntryId: viewerDraftDocumentToDisplay.docketEntryId,
