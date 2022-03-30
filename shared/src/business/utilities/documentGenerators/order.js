@@ -51,7 +51,6 @@ const order = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;
