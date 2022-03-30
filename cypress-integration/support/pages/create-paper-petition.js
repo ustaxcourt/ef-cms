@@ -28,6 +28,8 @@ exports.fillInCreateCaseFromPaperForm = testData => {
     .scrollIntoView()
     .select('Birmingham, Alabama');
   cy.get('label[for="payment-status-unpaid"]').click();
+  cy.get('label[for="notice-of-attachments"]').scrollIntoView().click();
+  cy.get('label[for="order-for-ratification"]').scrollIntoView().click();
 
   cy.get('#tab-irs-notice').click();
   cy.get('#case-type').scrollIntoView().select('Deficiency');
