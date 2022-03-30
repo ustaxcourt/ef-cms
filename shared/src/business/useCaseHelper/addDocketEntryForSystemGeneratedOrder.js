@@ -11,6 +11,8 @@ const amendedPetitionPdf = require('../../../static/pdfs/amendedPetitionForm');
  * generates the order and uploads to s3
  * saves documentContents and richText for editing the order
  *
+ * //fix doc
+ *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseEntity the caseEntity
@@ -64,8 +66,21 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
 
   if (additionalPdfRequired) {
     const { PDFDocument } = await applicationContext.getPdfLib();
+    // const amendedPetitionPdf = Buffer.from(
+    //   '../../../static/pdfs/amended-petition-form.pdf',
+    // );
+
+    // console.log('got it!!', amendedPetitionPdf);
+
+    const pdfjsLib = await applicationContext.getPdfJs();
+    const thing1 = await pdfjsLib.getDocument(
+      '../../../static/pdfs/amended-petition-form.pdf',
+    ).promise;
+    console.log('got it!2222!', thing1);
 
     const amendedPetitionFormData = await PDFDocument.load(amendedPetitionPdf);
+    // const amendedPetitionFormData = await PDFDocument.load(thing1);
+    // console.log('got it!33333!', amendedPetitionFormData);
 
     orderPdfData = await combineTwoPdfs({
       applicationContext,
