@@ -15,6 +15,6 @@ exports.updateTrialSessionInteractor = (
   return put({
     applicationContext,
     body: trialSession,
-    endpoint: '/trial-sessions',
+    endpoint: '/async/trial-sessions',
   });
 };
