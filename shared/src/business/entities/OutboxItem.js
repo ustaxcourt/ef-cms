@@ -28,20 +28,33 @@ OutboxItem.prototype.init = function init(
   this.caseTitle = rawOutboxItem.caseTitle;
   this.completedAt = rawOutboxItem.completedAt;
   this.completedBy = rawOutboxItem.completedBy;
+  this.caseIsInProgress = rawOutboxItem.caseIsInProgress;
 
   this.docketEntry = pick(rawOutboxItem.docketEntry, [
     'descriptionDisplay',
     'documentType',
+    'docketEntryId',
     'filedBy',
+    'isCourtIssuedDocument',
+    'isFileAttached',
+    'isMinuteEntry',
+    'isUnservable',
+    'isPaper',
+    'isOrder',
+    'eventCode',
+    'servedAt',
+    'isLegacyServed',
   ]);
 
   this.docketNumber = rawOutboxItem.docketNumber;
   this.highPriority =
     rawOutboxItem.highPriority ||
     rawOutboxItem.caseStatus === CASE_STATUS_TYPES.calendared;
+  this.inProgress = rawOutboxItem.inProgress;
   this.trialDate = rawOutboxItem.trialDate;
   this.workItemId =
     rawOutboxItem.workItemId || applicationContext.getUniqueId();
+  this.section = rawOutboxItem.section;
 };
 
 joiValidationDecorator(OutboxItem, OUTBOX_ITEM_VALIDATION_RULES);

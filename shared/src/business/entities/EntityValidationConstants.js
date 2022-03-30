@@ -421,6 +421,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
 };
 
 const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
+  caseIsInProgress: joi.boolean().optional(),
   caseStatus: JoiValidationConstants.STRING.valid(
     ...Object.values(CASE_STATUS_TYPES),
   ).optional(),
@@ -431,6 +432,8 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
   docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
     'Unique case identifier in XXXXX-YY format.',
   ),
+  inProgress: joi.boolean().optional(),
+  section: JoiValidationConstants.STRING.required(),
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
 };
 
