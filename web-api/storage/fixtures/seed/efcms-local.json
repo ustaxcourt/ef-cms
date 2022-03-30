@@ -25232,5 +25232,10 @@
     "pk": "user|9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "userId": "9ef02385-e4c6-49f9-a554-ecf93531d8a4",
     "email": "floater@example.com"
+  },
+  {
+    "sk": "section-outbox-number-of-days",
+    "current": 7,
+    "pk": "section-outbox-number-of-days"
   }
 ]

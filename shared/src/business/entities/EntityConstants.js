@@ -63,6 +63,9 @@ const ALLOWLIST_FEATURE_FLAGS = {
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
   },
+  SECTION_OUTBOX_NUMBER_OF_DAYS: {
+    key: 'section-outbox-number-of-days',
+  },
 };
 
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;

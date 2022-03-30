@@ -1,4 +1,8 @@
 const {
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+} = require('../../../business/utilities/DateHandler');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -24,10 +28,26 @@ exports.getDocumentQCServedForSectionInteractor = async (
       'Unauthorized for getting completed work items',
     );
   }
+  const maxDaysKey =
+    applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
+      .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
+  const maxDays = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: maxDaysKey,
+    });
+
+  const startOfDay = createISODateAtStartOfDayEST();
+  const afterDate = calculateISODate({
+    dateString: startOfDay,
+    howMuch: maxDays,
+    units: 'days',
+  });
 
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCServedForSection({
+      afterDate,
       applicationContext,
       section,
     });
