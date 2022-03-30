@@ -3,6 +3,7 @@ const {
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -15,6 +16,9 @@ const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+const { noticeOfAttachmentsInNatureOfEvidence } =
+  SYSTEM_GENERATED_DOCUMENT_TYPES;
 
 const addDocketEntryForPaymentStatus = ({
   applicationContext,
@@ -58,6 +62,77 @@ const addDocketEntryForPaymentStatus = ({
   }
 };
 exports.addDocketEntryForPaymentStatus = addDocketEntryForPaymentStatus;
+
+const addDocketEntryForNANE = async ({
+  applicationContext,
+  caseEntity,
+  user,
+}) => {
+  if (!caseEntity.noticeOfAttachments) {
+    return;
+  }
+  const newDocketEntry = new DocketEntry(
+    {
+      documentTitle: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
+      documentType: noticeOfAttachmentsInNatureOfEvidence.documentType,
+      draftOrderState: {
+        docketNumber: caseEntity.docketNumber,
+        documentTitle: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
+        documentType: noticeOfAttachmentsInNatureOfEvidence.documentType,
+        eventCode: noticeOfAttachmentsInNatureOfEvidence.eventCode,
+        freeText: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
+      },
+      eventCode: noticeOfAttachmentsInNatureOfEvidence.eventCode,
+      freeText: noticeOfAttachmentsInNatureOfEvidence.documentTitle,
+      isDraft: true,
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
+
+  caseEntity.addDocketEntry(newDocketEntry);
+
+  const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
+  const { docketNumberWithSuffix } = caseEntity;
+
+  const pdfData = await applicationContext.getDocumentGenerators().order({
+    applicationContext,
+    data: {
+      caseCaptionExtension,
+      caseTitle,
+      docketNumberWithSuffix,
+      orderContent: noticeOfAttachmentsInNatureOfEvidence.content,
+      orderTitle:
+        noticeOfAttachmentsInNatureOfEvidence.documentTitle.toUpperCase(),
+      signatureText: applicationContext.getClerkOfCourtNameForSigning(),
+    },
+  });
+
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    caseConfirmationPdfName: newDocketEntry.docketEntryId,
+    pdfData,
+  });
+
+  const documentContentsId = applicationContext.getUniqueId();
+
+  const contentToStore = {
+    documentContents: noticeOfAttachmentsInNatureOfEvidence.content,
+    richText: noticeOfAttachmentsInNatureOfEvidence.content,
+  };
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    contentType: 'application/json',
+    document: Buffer.from(JSON.stringify(contentToStore)),
+    key: documentContentsId,
+    useTempBucket: false,
+  });
+
+  newDocketEntry.documentContentsId = documentContentsId;
+};
+
+exports.addDocketEntryForNANE = addDocketEntryForNANE;
 
 const addDocketEntries = ({ caseEntity }) => {
   const initialDocumentTypesListRequiringDocketEntry = Object.values(
@@ -363,6 +438,14 @@ exports.serveCaseToIrsInteractor = async (
     .updateCaseCaptionDocketRecord({ applicationContext })
     .updateDocketNumberRecord({ applicationContext })
     .validate();
+
+  if (caseEntity.noticeOfAttachments) {
+    await addDocketEntryForNANE({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+  }
 
   await createPetitionWorkItems({
     applicationContext,

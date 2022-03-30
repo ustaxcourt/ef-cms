@@ -123,6 +123,11 @@ const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
+  clerkOfCourtNameForSigning,
+  getEnvironment,
+  getUniqueId,
+} = require('../../shared/src/sharedAppContext');
+const {
   closeTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor');
 const {
@@ -530,10 +535,6 @@ const {
 const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
-const {
-  getEnvironment,
-  getUniqueId,
-} = require('../../shared/src/sharedAppContext.js');
 const {
   getFeatureFlagValue,
 } = require('../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue');
@@ -1601,6 +1602,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
+    getClerkOfCourtNameForSigning: () => {
+      return clerkOfCourtNameForSigning;
+    },
     getCognito: () => {
       if (environment.stage === 'local') {
         return {
@@ -1799,7 +1803,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
       } else {
         notificationServiceCache = new AWS.SNS({});
       }
-
       return notificationServiceCache;
     },
     getPdfJs: () => {

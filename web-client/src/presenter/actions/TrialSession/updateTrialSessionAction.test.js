@@ -47,31 +47,6 @@ describe('updateTrialSessionAction', () => {
     expect(successMock).toHaveBeenCalled();
   });
 
-  it('calls setTrialSessionAsSwingSession if swingSession is true and swingSessionId is set', async () => {
-    await runAction(updateTrialSessionAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        form: { ...MOCK_TRIAL },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().updateTrialSessionInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
-        .mock.calls[0][1],
-    ).toMatchObject({
-      swingSessionId: '123',
-      trialSessionId: '456',
-    });
-  });
-
   it('goes to error path if error', async () => {
     applicationContext
       .getUseCases()
@@ -106,9 +81,6 @@ describe('updateTrialSessionAction', () => {
       },
     });
 
-    expect(successMock.mock.calls[0][0].pdfUrl).toBe(mockPdfUrl);
-    expect(successMock.mock.calls[0][0].trialSessionId).toBe(
-      MOCK_TRIAL.trialSessionId,
-    );
+    expect(successMock).toHaveBeenCalled();
   });
 });
