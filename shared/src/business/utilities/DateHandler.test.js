@@ -1,4 +1,5 @@
 const DateHandler = require('./DateHandler');
+const { createISODateString, formatDateString } = require('./DateHandler');
 const { FORMATS, PATTERNS } = DateHandler;
 
 describe('DateHandler', () => {
@@ -531,6 +532,58 @@ describe('DateHandler', () => {
       });
 
       expect(result).toEqual(previousYearISO);
+    });
+  });
+
+  describe.only('getDateInFuture)', () => {
+    beforeEach(() => {
+      jest
+        .spyOn(DateHandler, 'createISODateString')
+        .mockImplementation(() => '1997-01-01T02:17:27.415Z');
+    });
+
+    afterEach(() => {
+      jest.restoreAllMocks();
+    });
+
+    it("should return 60 days in the future from now that if it's actually on a weekday that is not a federal holiday", () => {
+      const dateRetrievedFromStorage = '2001-01-01';
+      const startDate = DateHandler.formatDateString(
+        dateRetrievedFromStorage,
+        'yyyy-MM-dd',
+      ); // stored literally as ET
+
+      // actually look at this resulting date and make sure it's not a weekend or fed holiday
+      const numberOfDays = 60;
+      const result = DateHandler.getDateInFuture(startDate, numberOfDays);
+
+      expect(result).toEqual('August 27, 2021');
+    });
+
+    it.skip("should return 60 days in the future from now if it's a federal holidayblah", () => {
+      const dateRetrievedFromStorage = '2001-01-01';
+      const startDate = DateHandler.formatDateString(
+        dateRetrievedFromStorage,
+        'yyyy-MM-dd',
+      ); // stored literally as ET
+
+      const numberOfDays = 60;
+      const result = DateHandler.getDateInFuture(startDate, numberOfDays);
+
+      expect(result).toEqual('idk');
+    });
+
+    it.skip('should return 60 days in the future from now if weekend blah blah blah', () => {
+      const dateRetrievedFromStorage = '2001-01-01';
+      const startDate = DateHandler.formatDateString(
+        dateRetrievedFromStorage,
+        'yyyy-MM-dd',
+      ); // stored literally as ET
+
+      const numberOfDays = 60;
+      const result = DateHandler.getDateInFuture(startDate, numberOfDays);
+
+      expect(result).toEqual('idk');
     });
   });
 });

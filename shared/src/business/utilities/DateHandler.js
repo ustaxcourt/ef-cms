@@ -1,6 +1,7 @@
-const { DateTime } = require('luxon');
+const { DATE_FULL, DateTime } = require('luxon');
 
 const FORMATS = {
+  DATE_FULL,
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
   FILENAME_DATE: 'MMMM_d_yyyy',
@@ -443,6 +444,25 @@ const subtractISODates = (date, dateConfig) => {
   return DateTime.fromISO(date).minus(dateConfig).setZone('UTC').toISO();
 };
 
+/**
+ * Returns today plus n numberOfDays
+ * but if the return date results on a Saturday, Sunday, or federal holiday,
+ * it will be moved forward to the next business day
+ *
+ * @param {string} startDate the date to add days to
+ * @param {number} numberOfDays number of days to add to startDate
+ * @returns {string} a formatted DATE_FULL string if date object is valid
+ */
+const getDateInFuture = (startDate, numberOfDays) => {
+  console.log('startDate', startDate);
+  // return prepareDateFromString(startDate.plus({ days: numberOfDays }));
+  const laterDateTime = calculateISODate({
+    dateString: startDate,
+    howMuch: numberOfDays,
+  });
+  return formatDateString(laterDateTime, FORMATS.DATE_FULL);
+};
+
 module.exports = {
   FORMATS,
   PATTERNS,
@@ -461,6 +481,7 @@ module.exports = {
   deconstructDate,
   formatDateString,
   formatNow,
+  getDateInFuture,
   getMonthDayYearInETObj,
   isStringISOFormatted,
   isValidDateString,

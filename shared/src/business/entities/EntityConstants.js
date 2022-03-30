@@ -497,6 +497,14 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     documentTitle: 'Notice of Attachments in the Nature of Evidence',
   },
+  orderForFilingFee: {
+    content:
+      'The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case  related  forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
+      .documentType,
+    eventCode: 'OF',
+    title: ORDER_TYPES.find(order => order.eventCode === 'OF').documentTitle,
+  },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
     documentType: 'Notice of Docket Change',
