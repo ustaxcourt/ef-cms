@@ -261,7 +261,6 @@ const setNoticeForCase = async ({
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the trial session id
  * @param {string} providers.docketNumber optional docketNumber to explicitly set the notice on the ONE specified case
- * @returns {Promise} the promises for the updateCase calls
  */
 exports.setNoticesForCalendaredTrialSessionInteractor = async (
   applicationContext,

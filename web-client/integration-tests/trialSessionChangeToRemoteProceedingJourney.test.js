@@ -15,6 +15,7 @@ import {
   setupTest,
   uploadPetition,
   wait,
+  waitForLoadingComponentToHide,
 } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { runCompute } from 'cerebral/test';
@@ -257,6 +258,7 @@ describe('Trial Session Eligible Cases Journey', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    await waitForLoadingComponentToHide(cerebralTest);
     expect(cerebralTest.getState('currentPage')).toBe('PrintPaperTrialNotices');
   });
 
@@ -282,6 +284,7 @@ describe('Trial Session Eligible Cases Journey', () => {
             .eventCode,
       );
 
+      await waitForLoadingComponentToHide(cerebralTest);
       if (caseDetail.status !== CASE_STATUS_TYPES.closed) {
         expect(norpDocketEntry).toMatchObject({
           servedParties: [
