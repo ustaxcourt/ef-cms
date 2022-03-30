@@ -725,7 +725,7 @@ describe('addDocketEntryForPaymentStatus', () => {
     user = applicationContext.getCurrentUser();
   });
 
-  it('adds a docketRecord for a paid petition payment', async () => {
+  it('adds a docketRecord for a paid petition payment', () => {
     const caseEntity = new Case(
       {
         ...MOCK_CASE,
