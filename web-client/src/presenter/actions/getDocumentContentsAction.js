@@ -24,8 +24,6 @@ export const getDocumentContentsAction = async ({
           documentContentsId: docketEntry.documentContentsId,
         });
 
-      console.log('---does it have html???????', richText);
-
       return { documentContents, richText };
     }
   }
