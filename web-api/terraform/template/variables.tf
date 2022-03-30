@@ -80,9 +80,6 @@ variable "bounced_email_recipient" {
   type = string
 }
 
-variable "scanner_resource_uri" {
-  type = string
-}
 
 variable "cognito_table_name" {
   type = string

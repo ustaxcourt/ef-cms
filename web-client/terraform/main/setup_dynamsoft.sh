@@ -18,7 +18,7 @@ sudo tar xvzf dynamsoft.tar.gz
 cp Dynamic\ Web\ TWAIN\ SDK\ 17.2.1/Resources/dynamsoft.webtwain.config.js /tmp/dynamsoft.webtwain.config.js.tpl
 
 # replace the resource path with the full path to the resources folder
-sudo sed -i "s|DYNAMSOFT_RESOURCE_PATH|${dynamsoft_url}/Dynamic%20Web%20%20TWAIN%20SDK%2017.2.1|" /tmp/dynamsoft.webtwain.config.js.tpl
+sudo sed -i "s|DYNAMSOFT_RESOURCE_PATH|${dynamsoft_url}/Dynamic%20Web%20%20TWAIN%20SDK%2017.2.1/Resources|" /tmp/dynamsoft.webtwain.config.js.tpl
 sudo sed -i "s|DYNAMSOFT_PRODUCT_KEYS|${dynamsoft_product_keys}|" /tmp/dynamsoft.webtwain.config.js.tpl
 
 # copy back from /tmp to main nginx html folder
