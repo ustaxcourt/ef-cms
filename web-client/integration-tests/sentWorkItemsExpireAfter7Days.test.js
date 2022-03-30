@@ -43,10 +43,10 @@ describe('verify old sent work items do not show up in the outbox', () => {
     });
     applicationContext.environment.dynamoDbTableName = 'efcms-local';
 
-    const CREATED_8_DAYS_AGO = applicationContext
+    const CREATED_N_PLUS_1_DAYS_AGO = applicationContext
       .getUtilities()
       .calculateISODate({ howMuch: -8, units: 'days' });
-    const CREATED_7_DAYS_AGO = applicationContext
+    const CREATED_N_DAYS_AGO = applicationContext
       .getUtilities()
       .calculateISODate({ howMuch: -7, units: 'days' });
     const CREATED_6_DAYS_AGO = applicationContext
@@ -63,7 +63,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       caseStatus: CASE_STATUS_TYPES.new,
       completedBy: 'Test Petitionsclerk',
       completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
-      createdAt: CREATED_8_DAYS_AGO,
+      createdAt: CREATED_N_PLUS_1_DAYS_AGO,
       docketEntry: {
         createdAt: '2019-06-25T15:14:11.924Z',
         docketEntryId: '01174a9a-7ac4-43ff-a163-8ed421f9612d',
@@ -82,8 +82,8 @@ describe('verify old sent work items do not show up in the outbox', () => {
 
     workItem7Days = {
       ...workItem8Days,
-      completedAt: CREATED_7_DAYS_AGO,
-      createdAt: CREATED_7_DAYS_AGO,
+      completedAt: CREATED_N_DAYS_AGO,
+      createdAt: CREATED_N_DAYS_AGO,
       workItemId: `${workItemId7}`,
     };
 
