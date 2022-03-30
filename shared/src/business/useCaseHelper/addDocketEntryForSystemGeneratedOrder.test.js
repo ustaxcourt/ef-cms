@@ -40,6 +40,20 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase());
   });
 
+  it('should only add freeText to notices', async () => {
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+    });
+
+    const mostRecentDocketEntry =
+      caseEntity.docketEntries[caseEntity.docketEntries.length - 1];
+
+    expect('freeText' in mostRecentDocketEntry).toEqual(true);
+    expect('freeText' in mostRecentDocketEntry.draftOrderState).toEqual(true);
+  });
+
   it('should apply a signature for notices', async () => {
     applicationContext.getClerkOfCourtNameForSigning.mockReturnValue(
       'Antonia Lafaso',
