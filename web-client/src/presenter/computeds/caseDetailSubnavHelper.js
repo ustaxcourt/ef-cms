@@ -22,7 +22,10 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
   const showNotesIcon =
     get(state.caseDetail.caseNote) || get(state.judgesNote.notes);
 
+  const draftDocketEntryCount = getDraftItems(get);
+
   return {
+    draftDocketEntryCount,
     selectedCaseInformationTab,
     showCaseInformationTab:
       isInternalUser ||
@@ -36,4 +39,13 @@ export const caseDetailSubnavHelper = (get, applicationContext) => {
     showTrackedItemsNotification: hasPendingItems || !!caseDeadlines?.length,
     showTrackedItemsTab: isInternalUser,
   };
+};
+
+const getDraftItems = get => {
+  const caseDetails = get(state.caseDetail);
+
+  const caseDetailsWithDraftDocketEntries = caseDetails.docketEntries.filter(
+    docketEntry => docketEntry.isDraft,
+  );
+  return caseDetailsWithDraftDocketEntries.length;
 };
