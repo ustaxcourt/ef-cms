@@ -50,7 +50,7 @@ export const CreateOrder = connect(
 
         <section className="usa-section grid-container DocumentDetail">
           <div className="grid-container padding-x-0">
-            <h1 className="heading-1">
+            <h1 className="heading-1" id="page-title">
               {pageTitle}{' '}
               <Button
                 link
@@ -94,6 +94,7 @@ export const CreateOrder = connect(
                 </Button>
                 <Button
                   link
+                  id="cancel-order"
                   onClick={() => {
                     formCancelToggleCancelSequence();
                   }}
