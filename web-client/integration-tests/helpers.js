@@ -274,7 +274,7 @@ export const contactSecondaryFromState = cerebralTest => {
   return cerebralTest.getState('caseDetail.petitioners.1');
 };
 
-export const getCaseMessagesForCase = async cerebralTest => {
+export const getCaseMessagesForCase = cerebralTest => {
   return runCompute(formattedCaseMessages, {
     state: cerebralTest.getState(),
   });
@@ -846,6 +846,20 @@ export const wait = time => {
   return new Promise(resolve => {
     setTimeout(resolve, time);
   });
+};
+export const waitForLoadingComponentToHide = async (
+  cerebralTest,
+  maxWait = 10000,
+) => {
+  let waitTime = 0;
+  while (
+    cerebralTest.getState('progressIndicator.waitingForResponse') &&
+    waitTime < maxWait
+  ) {
+    waitTime += 500;
+    await wait(500);
+  }
+  console.log(`Waited ${waitTime}ms for the loading component to hide`);
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {

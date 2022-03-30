@@ -1,6 +1,21 @@
 import { formatStatistic } from './statisticsHelper';
 import { state } from 'cerebral';
 
+export const ordersAndNoticesNeededCodes = {
+  orderDesignatingPlaceOfTrial: 'Order Designating Place of Trial',
+  orderForAmendedPetition: 'Order for Amended Petition',
+  orderForAmendedPetitionAndFilingFee:
+    'Order for Amended Petition and Filing Fee',
+  orderForFilingFee: 'Order for Filing Fee',
+  orderForOds: 'Order for Ownership Disclosure Statement',
+  orderForRatification: 'Order for Ratification of Petition',
+  orderToShowCause: 'Order to Show Cause',
+};
+
+export const ordersAndNoticesInDraftsCodes = {
+  noticeOfAttachments: 'Notice of Attachments in the Nature of Evidence',
+};
+
 export const reviewSavedPetitionHelper = (get, applicationContext) => {
   let irsNoticeDateFormatted;
 
@@ -64,17 +79,28 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
       return acc;
     }, {});
 
-  // orders needed summary
-  const hasOrders = [
-    'orderForAmendedPetition',
-    'orderForAmendedPetitionAndFilingFee',
-    'orderForFilingFee',
-    'orderForOds',
-    'orderForRatification',
-    'orderDesignatingPlaceOfTrial',
-    'orderToShowCause',
-    'noticeOfAttachments',
-  ].some(key => Boolean(caseDetail[key]));
+  const ordersAndNoticesNeededCodesSelected = Object.keys(
+    ordersAndNoticesNeededCodes,
+  ).filter(order => Boolean(caseDetail[order]));
+
+  const ordersAndNoticesInDraftCodesSelected = Object.keys(
+    ordersAndNoticesInDraftsCodes,
+  ).filter(order => Boolean(caseDetail[order]));
+
+  const ordersAndNoticesNeeded = [];
+  const ordersAndNoticesInDraft = [];
+
+  for (const [key, value] of Object.entries(ordersAndNoticesNeededCodes)) {
+    if (ordersAndNoticesNeededCodesSelected.includes(key)) {
+      ordersAndNoticesNeeded.push(value);
+    }
+  }
+
+  for (const [key, value] of Object.entries(ordersAndNoticesInDraftsCodes)) {
+    if (ordersAndNoticesInDraftCodesSelected.includes(key)) {
+      ordersAndNoticesInDraft.push(value);
+    }
+  }
 
   const petitionFile =
     documentsByType[INITIAL_DOCUMENT_TYPES.petition.documentType];
@@ -94,19 +120,28 @@ export const reviewSavedPetitionHelper = (get, applicationContext) => {
     formatStatistic({ applicationContext, statistic }),
   );
 
+  const renderOrderSummary =
+    ordersAndNoticesNeeded.length > 0 || ordersAndNoticesInDraft.length > 0;
+  const showOrdersAndNoticesNeededHeader = ordersAndNoticesNeeded.length > 0;
+  const showOrdersAndNoticesInDraftHeader = ordersAndNoticesInDraft.length > 0;
+
   return {
     applicationForWaiverOfFilingFeeFile,
     formattedStatistics,
     hasIrsNoticeFormatted,
-    hasOrders,
     irsNoticeDateFormatted,
+    ordersAndNoticesInDraft,
+    ordersAndNoticesNeeded,
     ownershipDisclosureFile,
     petitionFile,
     petitionPaymentStatusFormatted,
     preferredTrialCityFormatted,
     receivedAtFormatted,
+    renderOrderSummary,
     requestForPlaceOfTrialFile,
     shouldShowIrsNoticeDate,
+    showOrdersAndNoticesInDraftHeader,
+    showOrdersAndNoticesNeededHeader,
     showStatistics,
     stinFile,
   };

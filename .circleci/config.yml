@@ -777,7 +777,7 @@ jobs:
               npm run backup:dynamo-table -- $TABLE_NAME
             fi
 
-  cleanup:
+  delete-api-mappings:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
         aws_auth:
@@ -793,15 +793,31 @@ jobs:
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Delete Source API Gateway Mappings
+          command: |
+            npm run delete:api-gateway-mappings -- "${EFCMS_DOMAIN}" "${DEPLOYING_COLOR}"
+
+  cleanup:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: small
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
             echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Delete Source API Gateway Mappings
-          command: |
-            npm run delete:api-gateway-mappings -- $EFCMS_DOMAIN $DEPLOYING_COLOR
       - run:
           name: Destroy Migration Infrastructure
           command: |
@@ -1045,7 +1061,12 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - switch-colors
+      - delete-api-mappings:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - switch-colors
       - cleanup:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - backup-source-dynamo-table
+            - delete-api-mappings
