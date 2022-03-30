@@ -3,7 +3,7 @@ import { INITIAL_DOCUMENT_TYPES } from '../business/entities/EntityConstants';
 exports.MOCK_DOCUMENTS = [
   {
     createdAt: '2018-11-21T20:49:28.192Z',
-    docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+    docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
     docketNumber: '101-18',
     documentTitle: 'Petition',
     documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
