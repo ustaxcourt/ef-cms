@@ -21,7 +21,7 @@ const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+const { replaceBracketed } = require('../../../business/utilities');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const addDocketEntryForPaymentStatus = ({
