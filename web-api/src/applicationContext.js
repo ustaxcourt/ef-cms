@@ -91,6 +91,7 @@ const {
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
   CASE_STATUS_TYPES,
+  CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   SESSION_STATUS_GROUPS,
@@ -469,6 +470,9 @@ const {
 const {
   getCompletedUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getCompletedUserInboxMessages');
+const {
+  getConfigurationItemValue,
+} = require('../../shared/src/persistence/dynamo/deployTable/getConfigurationItemValue');
 const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
@@ -1424,6 +1428,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,
     getSesStatus,
@@ -1659,6 +1664,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
+      CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
