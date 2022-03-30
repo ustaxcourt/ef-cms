@@ -266,7 +266,7 @@ This will run the linter, Shellcheck, audit, build, test, Cypress, Cerebral test
 
 ## PDF Testing
 
-Since our system generates a lot of PDFs, we have a set of tests that verify the pdfs didn't change using a checksum of the first exported image of the pdfs.  Since all of these PDFs share a single .scss file, there is risk involved when trying to update a single PDF to accidently change the styles of other PDFs.  Therefore, we have a set of tests that verify that the PDFs are not changing.
+Since our system generates a lot of PDFs, we have a set of tests that verify the pdfs didn't change using a checksum of the first exported image of the pdfs.  Since all of these PDFs share a single .scss file, there is risk involved when trying to update a single PDF to accidentally change the styles of other PDFs.  Therefore, we have a set of tests that verify that the PDFs are not changing.
 
 All of the expected output images are found in the `./shared/test-pdf-expected-images` directory.  In order to update these, you will need to run the following command:
 
