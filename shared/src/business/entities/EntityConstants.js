@@ -63,6 +63,9 @@ const ALLOWLIST_FEATURE_FLAGS = {
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
   },
+};
+
+const CONFIGURATION_ITEM_KEYS = {
   SECTION_OUTBOX_NUMBER_OF_DAYS: {
     key: 'section-outbox-number-of-days',
   },
@@ -1143,6 +1146,7 @@ module.exports = deepFreeze({
   CHAMBERS_SECTION,
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
+  CONFIGURATION_ITEM_KEYS,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,

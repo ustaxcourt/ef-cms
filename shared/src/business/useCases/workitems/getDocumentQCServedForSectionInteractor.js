@@ -28,21 +28,8 @@ exports.getDocumentQCServedForSectionInteractor = async (
       'Unauthorized for getting completed work items',
     );
   }
-  const maxDaysKey =
-    applicationContext.getConstants().ALLOWLIST_FEATURE_FLAGS
-      .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
-  const maxDays = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag: maxDaysKey,
-    });
 
-  const startOfDay = createISODateAtStartOfDayEST();
-  const afterDate = calculateISODate({
-    dateString: startOfDay,
-    howMuch: maxDays,
-    units: 'days',
-  });
+  const afterDate = this.calculateAfterDate(applicationContext);
 
   const workItems = await applicationContext
     .getPersistenceGateway()
@@ -61,4 +48,27 @@ exports.getDocumentQCServedForSectionInteractor = async (
   return OutboxItem.validateRawCollection(filteredWorkItems, {
     applicationContext,
   });
+};
+
+exports.calculateAfterDate = async applicationContext => {
+  const daysToRetrieveKey =
+    applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
+      .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
+  let daysToRetrieve = await applicationContext
+    .getPersistenceGateway()
+    .getConfigurationItemValue({
+      applicationContext,
+      configurationItemKey: daysToRetrieveKey,
+    });
+  if (!daysToRetrieve || !Number.isInteger(daysToRetrieve)) {
+    daysToRetrieve = 7;
+  }
+
+  const startOfDay = createISODateAtStartOfDayEST();
+  const afterDate = calculateISODate({
+    dateString: startOfDay,
+    howMuch: daysToRetrieve * -1,
+    units: 'days',
+  });
+  return afterDate;
 };
