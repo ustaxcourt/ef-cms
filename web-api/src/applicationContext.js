@@ -25,6 +25,9 @@ const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
+  addDocketEntryForSystemGeneratedOrder,
+} = require('../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder');
+const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
@@ -123,8 +126,16 @@ const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
+  clerkOfCourtNameForSigning,
+  getEnvironment,
+  getUniqueId,
+} = require('../../shared/src/sharedAppContext');
+const {
   closeTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor');
+const {
+  combineTwoPdfs,
+} = require('../../shared/src/business/utilities/documentGenerators/combineTwoPdfs');
 const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
@@ -342,6 +353,9 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generateNoticeOfChangeToRemoteProceedingInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor');
+const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
 const {
@@ -527,10 +541,6 @@ const {
 const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
-const {
-  getEnvironment,
-  getUniqueId,
-} = require('../../shared/src/sharedAppContext.js');
 const {
   getFeatureFlagValue,
 } = require('../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue');
@@ -781,6 +791,9 @@ const {
   markMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo');
 const {
+  noticeOfChangeToRemoteProceeding,
+} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding');
+const {
   noticeOfDocketChange,
 } = require('../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange');
 const {
@@ -914,6 +927,9 @@ const {
   saveFileAndGenerateUrl,
 } = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
 const {
+  savePaperServicePdf,
+} = require('../../shared/src/business/useCaseHelper/pdf/savePaperServicePdf');
+const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
 const {
@@ -991,6 +1007,9 @@ const {
 const {
   setMessageAsReadInteractor,
 } = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+const {
+  setNoticeOfChangeToRemoteProceeding,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -1598,6 +1617,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
+    getClerkOfCourtNameForSigning: () => {
+      return clerkOfCourtNameForSigning;
+    },
     getCognito: () => {
       if (environment.stage === 'local') {
         return {
@@ -1681,6 +1703,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       changeOfAddress,
       coverSheet,
       docketRecord,
+      noticeOfChangeToRemoteProceeding,
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
       noticeOfTrialIssued,
@@ -1795,7 +1818,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
       } else {
         notificationServiceCache = new AWS.SNS({});
       }
-
       return notificationServiceCache;
     },
     getPdfJs: () => {
@@ -1862,6 +1884,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        addDocketEntryForSystemGeneratedOrder,
         addExistingUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
@@ -1882,11 +1905,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeCounselFromRemovedPetitioner,
         removeCoversheet,
         saveFileAndGenerateUrl,
+        savePaperServicePdf,
         sealInLowerEnvironment,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        setNoticeOfChangeToRemoteProceeding,
         setPdfFormFields,
         updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
@@ -1948,6 +1973,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fileExternalDocumentInteractor,
         forwardMessageInteractor,
         generateDocketRecordPdfInteractor,
+        generateNoticeOfChangeToRemoteProceedingInteractor,
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
@@ -2090,6 +2116,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return {
         calculateDifferenceInDays,
         calculateISODate,
+        combineTwoPdfs,
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,

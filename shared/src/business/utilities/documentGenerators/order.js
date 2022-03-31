@@ -40,6 +40,7 @@ const order = async ({ applicationContext, data }) => {
     componentName: 'PageMetaHeaderDocket',
     data: {
       docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
     },
   });
 
@@ -50,7 +51,6 @@ const order = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;

@@ -21,11 +21,11 @@ REGION=us-east-1
 
 rm -rf .terraform
 
-BLUE_TABLE_NAME=$(../../../scripts/get-destination-table.sh $ENVIRONMENT)
-GREEN_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
-BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-destination-elasticsearch.sh $ENVIRONMENT)
-GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/get-source-elasticsearch.sh $ENVIRONMENT)
-COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/get-source-table.sh $ENVIRONMENT)
+BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh $ENVIRONMENT)
+GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh $ENVIRONMENT)
+BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh $ENVIRONMENT)
+GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh $ENVIRONMENT)
+COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh $ENVIRONMENT)
 
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
@@ -55,6 +55,6 @@ export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_WARN_OUTPUT_ERRORS=1
 
-terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
+terraform init -upgrade -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform plan -destroy -out execution-plan
 terraform destroy -auto-approve  

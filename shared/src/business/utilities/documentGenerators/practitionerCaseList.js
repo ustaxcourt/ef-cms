@@ -32,7 +32,7 @@ const practitionerCaseList = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       footerHtml,
-      overwriteHeader: true,
+      headerHtml: '',
     });
 
   return pdf;

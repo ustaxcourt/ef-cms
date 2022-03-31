@@ -1,7 +1,9 @@
+/* eslint-disable max-lines */
 const {
   addDocketEntryForPaymentStatus,
   serveCaseToIrsInteractor,
 } = require('./serveCaseToIrsInteractor');
+
 const {
   applicationContext,
   testPdfDoc,
@@ -21,7 +23,13 @@ const {
   docketClerkUser,
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
-const { Case, getContactPrimary } = require('../../entities/cases/Case');
+const {
+  formatNow,
+  FORMATS,
+  getBusinessDateInFuture,
+} = require('../../utilities/DateHandler');
+const { Case } = require('../../entities/cases/Case');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 
@@ -95,6 +103,10 @@ describe('serveCaseToIrsInteractor', () => {
         (_applicationContext, { caseEntity, docketEntryId }) =>
           caseEntity.docketEntries.find(d => d.docketEntryId === docketEntryId),
       );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockReturnValue(testPdfDoc);
   });
 
   it('should throw unauthorized error when user is unauthorized', async () => {
@@ -248,6 +260,162 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().getAddressPhoneDiff,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should append a clinic letter to the notice of receipt of petition when one exists for the requested place of trial and petition is pro se', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockReturnValueOnce(true);
+
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: 'Los Angeles, California',
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0],
+    ).toMatchObject({
+      key: 'clinic-letter-los-angeles-california-regular',
+      protocol: 'S3',
+      useTempBucket: false,
+    });
+
+    expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should generate the receipt like normal even if a trial city is undefined', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: null,
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should NOT append a clinic letter to the notice of receipt of petition if it does NOT exist and petition is pro se', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockReturnValueOnce(false);
+
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      preferredTrialCity: 'Billings, Montana',
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+    ).toHaveBeenCalledTimes(1);
+  });
+
+  it('should NOT append a clinic letter to the notice of receipt of petition if it DOES exist BUT the petitioner is NOT pro se', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      isPaper: false,
+      partyType: PARTY_TYPES.petitioner,
+      preferredTrialCity: 'Los Angeles, California',
+      privatePractitioners: [
+        {
+          barNumber: '123456789',
+          name: 'Test Private Practitioner',
+          practitionerId: '123456789',
+          practitionerType: 'privatePractitioner',
+          representing: [getContactPrimary(MOCK_CASE).contactId],
+          role: 'privatePractitioner',
+          userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+        },
+      ],
+      procedureType: 'Regular',
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs,
+    ).not.toHaveBeenCalled();
+
     expect(
       applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
     ).toHaveBeenCalledTimes(1);
@@ -445,6 +613,54 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
   });
+
+  it('should generate an order and upload it to s3 for noticeOfAttachments', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      noticeOfAttachments: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it('should generate an order, upload it to s3, and remove brackets from orderContent for orderForFilingFee', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderForFilingFee: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.not.stringContaining('['),
+    });
+
+    const mockTodayPlus60 = getBusinessDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(mockTodayPlus60),
+    });
+  });
 });
 
 describe('addDocketEntryForPaymentStatus', () => {
@@ -463,10 +679,10 @@ describe('addDocketEntryForPaymentStatus', () => {
       },
       { applicationContext },
     );
-    await addDocketEntryForPaymentStatus({
+    addDocketEntryForPaymentStatus({
       applicationContext,
       caseEntity,
-      user,
+      user: petitionsClerkUser,
     });
 
     const addedDocketRecord = caseEntity.docketEntries.find(
