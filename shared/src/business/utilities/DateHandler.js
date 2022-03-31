@@ -454,7 +454,11 @@ const subtractISODates = (date, dateConfig) => {
  * @param {number} numberOfDays number of days to add to startDate
  * @returns {string} a formatted MONTH_DAY_YEAR string if date object is valid
  */
-const getDateInFuture = ({ numberOfDays, startDate, units = 'days' }) => {
+const getBusinessDateInFuture = ({
+  numberOfDays,
+  startDate,
+  units = 'days',
+}) => {
   let laterDate = prepareDateFromString(startDate).plus({
     [units]: numberOfDays,
   });
@@ -500,7 +504,7 @@ module.exports = {
   deconstructDate,
   formatDateString,
   formatNow,
-  getDateInFuture,
+  getBusinessDateInFuture,
   getMonthDayYearInETObj,
   isStringISOFormatted,
   isValidDateString,
