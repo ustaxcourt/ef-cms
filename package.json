@@ -234,6 +234,7 @@
     "postinstall": "husky install",
     "preinstall": "npx npm-force-resolutions",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
+    "reindex:cleanup": "./scripts/dynamo/update-deploy-table-after-reindex.sh",
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",
     "reset-cases": "./clear-env.sh",
     "seed:db": "./seed-dynamo.sh",
