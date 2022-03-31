@@ -36,7 +36,6 @@ const coverSheet = async ({ applicationContext, data }) => {
       docketNumber: data.docketNumberWithSuffix,
       footerHtml,
       headerHtml: '',
-      overwriteHeader: true,
     });
 
   return pdf;
