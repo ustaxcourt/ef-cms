@@ -272,7 +272,7 @@ All of the expected output images are found in the `./shared/test-pdf-expected-i
 
 
 ```
-docker build -t "ef-cms-us-east-1:pdf-compare" -f Dockerfile .
+docker build -t "ef-cms-us-east-1:pdf-compare" -f Dockerfile-pdf-testing .
 docker run -it -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output ef-cms-us-east-1:pdf-compare sh -c "cd efcms && ./update-pdf-images.sh"
 cp -r shared/test-output/*.1.png shared/test-pdf-expected-images/
 ```
