@@ -47,7 +47,6 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       footerHtml,
       headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;
