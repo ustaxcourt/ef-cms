@@ -92,6 +92,13 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
         showNotServed: false,
         showServed: true,
       },
+      {
+        createdAtFormatted: expect.anything(),
+        eventCode: 'FEE',
+        index: 5,
+        showNotServed: false,
+        showServed: false,
+      },
     ]);
 
     cerebralTest.docketNumber = null;
@@ -184,7 +191,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       await getFormattedDocketEntriesForTest(cerebralTest);
 
     //4654- docket entries for initial (un-served and served) filing type documents are created when case has been served
-    expect(formattedDocketEntriesOnDocketRecord[4]).toMatchObject({
+    expect(formattedDocketEntriesOnDocketRecord[5]).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'RQT',
       showNotServed: true,
@@ -380,7 +387,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const entry = formattedDocketEntriesOnDocketRecord[6];
+    const entry = formattedDocketEntriesOnDocketRecord.find(
+      docketEntry => docketEntry.eventCode === 'A',
+    );
 
     cerebralTest.docketEntryId = entry.docketEntryId;
 
