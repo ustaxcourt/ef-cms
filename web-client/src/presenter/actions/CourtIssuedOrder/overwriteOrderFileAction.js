@@ -16,13 +16,26 @@ export const overwriteOrderFileAction = async ({
 }) => {
   const { primaryDocumentFile } = get(state.form);
   const documentToEdit = get(state.documentToEdit);
+  let finalDocument = primaryDocumentFile;
 
   try {
+    if (documentToEdit.eventCode === 'OAP') {
+      console.log('-----hbjgvcbkjnl;kvhcg hvjb');
+
+      finalDocument = await applicationContext
+        .getUtilities()
+        .appendAmendedPetitionFormToOrder({
+          applicationContext,
+          orderPdfData: primaryDocumentFile,
+        });
+      console.log('-----', finalDocument);
+    }
+
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
       .uploadOrderDocumentInteractor(applicationContext, {
         docketEntryIdToOverwrite: documentToEdit.docketEntryId,
-        documentFile: primaryDocumentFile,
+        documentFile: finalDocument,
       });
 
     return path.success({

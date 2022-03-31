@@ -1,11 +1,6 @@
-const fs = require('fs');
-const path = require('path');
 const {
-  combineTwoPdfs,
-} = require('../utilities/documentGenerators/combineTwoPdfs');
-const amendedPetitionPdf = fs.readFileSync(
-  path.join(__dirname, '../../../static/pdfs/amended-petition-form.pdf'),
-);
+  appendAmendedPetitionFormToOrder,
+} = require('../utilities/appendAmendedPetitionFormToOrder');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
@@ -69,12 +64,10 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   });
 
   if (additionalPdfRequired) {
-    const orderWithAmendedPetitionForm = await combineTwoPdfs({
+    orderPdfData = await appendAmendedPetitionFormToOrder({
       applicationContext,
-      firstPdf: new Uint8Array(orderPdfData),
-      secondPdf: new Uint8Array(amendedPetitionPdf),
+      orderPdfData,
     });
-    orderPdfData = Buffer.from(orderWithAmendedPetitionForm);
   }
 
   await applicationContext.getUtilities().uploadToS3({
