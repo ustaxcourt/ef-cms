@@ -1,4 +1,9 @@
 const {
+  formatNow,
+  FORMATS,
+  getDateInFuture,
+} = require('../../utilities/DateHandler');
+const {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
@@ -15,6 +20,7 @@ const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
+const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const { noticeOfAttachmentsInNatureOfEvidence } =
@@ -445,6 +451,32 @@ exports.serveCaseToIrsInteractor = async (
       caseEntity,
       user,
     });
+  }
+
+  if (caseEntity.orderToShowCause) {
+    const { orderToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const todayPlus60 = getDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    const content = replaceBracketed(
+      orderToShowCause.content,
+      formatNow(FORMATS.MONTH_DAY_YEAR),
+      todayPlus60,
+    );
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderToShowCause,
+          content,
+        },
+      });
   }
 
   await createPetitionWorkItems({
