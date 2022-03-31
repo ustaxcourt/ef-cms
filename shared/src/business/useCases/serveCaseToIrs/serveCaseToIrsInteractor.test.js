@@ -1,6 +1,5 @@
 /* eslint-disable max-lines */
 const {
-  addDocketEntryForNANE,
   addDocketEntryForPaymentStatus,
   serveCaseToIrsInteractor,
 } = require('./serveCaseToIrsInteractor');
@@ -27,7 +26,7 @@ const {
 const {
   formatNow,
   FORMATS,
-  getDateInFuture,
+  getBusinessDateInFuture,
 } = require('../../utilities/DateHandler');
 const { Case } = require('../../entities/cases/Case');
 const { getContactPrimary } = require('../../entities/cases/Case');
@@ -650,7 +649,7 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const mockTodayPlus60 = getDateInFuture({
+    const mockTodayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
@@ -684,7 +683,7 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const mockTodayPlus60 = getDateInFuture({
+    const mockTodayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
@@ -714,10 +713,10 @@ describe('addDocketEntryForPaymentStatus', () => {
       },
       { applicationContext },
     );
-    await addDocketEntryForPaymentStatus({
+    addDocketEntryForPaymentStatus({
       applicationContext,
       caseEntity,
-      user,
+      user: petitionsClerkUser,
     });
 
     const addedDocketRecord = caseEntity.docketEntries.find(
@@ -751,72 +750,5 @@ describe('addDocketEntryForPaymentStatus', () => {
 
     expect(addedDocketRecord).toBeDefined();
     expect(addedDocketRecord.filingDate).toEqual('Today');
-  });
-});
-
-describe('addDocketEntryForNANE', () => {
-  let user;
-
-  beforeEach(() => {
-    user = applicationContext.getCurrentUser();
-  });
-
-  it('should not increase the docket entries and not upload a generated pdf if noticeOfAttachments is false', async () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        noticeOfAttachments: false,
-      },
-      { applicationContext },
-    );
-
-    const docketEntriesFromNewCaseCount = caseEntity.docketEntries.length;
-
-    await addDocketEntryForNANE({
-      applicationContext,
-      caseEntity,
-      user,
-    });
-
-    expect(caseEntity.docketEntries.length).toEqual(
-      docketEntriesFromNewCaseCount,
-    );
-
-    expect(applicationContext.getUtilities().uploadToS3).not.toHaveBeenCalled();
-  });
-
-  it('should increase the docket entries and upload a generated pdf if noticeOfAttachments is true', async () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        noticeOfAttachments: true,
-      },
-      { applicationContext },
-    );
-
-    const newDocketEntriesFromNewCaseCount =
-      caseEntity.docketEntries.length + 1;
-
-    await addDocketEntryForNANE({
-      applicationContext,
-      caseEntity,
-      user,
-    });
-
-    expect(caseEntity.docketEntries.length).toEqual(
-      newDocketEntriesFromNewCaseCount,
-    );
-
-    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    const passedInNoticeTitle =
-      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
-        .orderTitle;
-    expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase()); //asserts that the passed in title was uppercase
-
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
-    // eslint-disable-next-line max-lines
   });
 });

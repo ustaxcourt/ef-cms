@@ -27,7 +27,10 @@ exports.fillInCreateCaseFromPaperForm = testData => {
   cy.get('#preferred-trial-city')
     .scrollIntoView()
     .select('Birmingham, Alabama');
-  cy.get('label[for="payment-status-unpaid"]').click();
+  cy.get('label[for="payment-status-paid"]').click();
+  cy.get('#payment-date-date').type('01/01/2020');
+  cy.get('#petition-payment-method').type('Tears of my enemies');
+
   cy.get('label[for="notice-of-attachments"]').scrollIntoView().click();
   cy.get('label[for="order-for-ratification"]').scrollIntoView().click();
 

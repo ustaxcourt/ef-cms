@@ -182,7 +182,25 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
       key: 'petitionPaymentStatus',
-      value: PAYMENT_STATUS.UNPAID,
+      value: PAYMENT_STATUS.PAID,
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'paymentDateDay',
+      value: '01',
+    });
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'paymentDateMonth',
+      value: '01',
+    });
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'paymentDateYear',
+      value: '2001',
+    });
+
+    await cerebralTest.runSequence('updatePetitionPaymentFormValueSequence', {
+      key: 'petitionPaymentMethod',
+      value: 'Money, I guess',
     });
 
     await cerebralTest.runSequence('validatePetitionFromPaperSequence');
