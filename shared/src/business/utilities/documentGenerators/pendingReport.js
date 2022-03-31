@@ -44,7 +44,6 @@ const pendingReport = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       footerHtml,
       headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;
