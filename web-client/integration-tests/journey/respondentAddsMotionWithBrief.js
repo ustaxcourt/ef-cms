@@ -2,7 +2,11 @@ import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
-export const respondentAddsMotion = (cerebralTest, fakeFile) => {
+export const respondentAddsMotionWithBrief = (
+  cerebralTest,
+  fakeFile,
+  overrides,
+) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Respondent adds Motion with supporting Brief', async () => {
@@ -166,6 +170,8 @@ export const respondentAddsMotion = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('submitExternalDocumentSequence');
 
-    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(7);
+    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
+      overrides.documentCount,
+    );
   });
 };
