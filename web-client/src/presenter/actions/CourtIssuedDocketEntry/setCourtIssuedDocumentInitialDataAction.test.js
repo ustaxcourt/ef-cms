@@ -98,7 +98,7 @@ describe('setCourtIssuedDocumentInitialDataAction', () => {
         presenter,
       },
       props: {
-        docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859', //Petition document on MOCK_CASE
+        docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07', //Petition document on MOCK_CASE
       },
       state: {
         caseDetail: MOCK_CASE,

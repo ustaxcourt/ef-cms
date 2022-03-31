@@ -44,7 +44,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
-      overwriteHeader: true,
     });
 
   const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
@@ -70,7 +69,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
       contentHtml: checklistContent,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
-      overwriteHeader: false,
     });
 
   return await combineTwoPdfs({

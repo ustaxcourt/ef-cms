@@ -1,5 +1,11 @@
 /* eslint-disable max-lines */
 const {
+  addDocketEntryForNANE,
+  addDocketEntryForPaymentStatus,
+  serveCaseToIrsInteractor,
+} = require('./serveCaseToIrsInteractor');
+
+const {
   applicationContext,
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
@@ -11,16 +17,17 @@ const {
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
+  PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   docketClerkUser,
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
+const { Case } = require('../../entities/cases/Case');
 const { getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
-const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
 
 describe('serveCaseToIrsInteractor', () => {
   const MOCK_WORK_ITEM = {
@@ -601,5 +608,128 @@ describe('serveCaseToIrsInteractor', () => {
     expect(
       applicationContext.getUtilities().serveCaseDocument,
     ).toHaveBeenCalledTimes(Object.keys(INITIAL_DOCUMENT_TYPES).length);
+  });
+});
+
+describe('addDocketEntryForPaymentStatus', () => {
+  let user;
+
+  beforeEach(() => {
+    user = applicationContext.getCurrentUser();
+  });
+
+  it('adds a docketRecord for a paid petition payment', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitionPaymentDate: 'Today',
+        petitionPaymentStatus: PAYMENT_STATUS.PAID,
+      },
+      { applicationContext },
+    );
+    await addDocketEntryForPaymentStatus({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    const addedDocketRecord = caseEntity.docketEntries.find(
+      docketEntry => docketEntry.eventCode === 'FEE',
+    );
+
+    expect(addedDocketRecord).toBeDefined();
+    expect(addedDocketRecord.filingDate).toEqual('Today');
+  });
+
+  it('adds a docketRecord for a waived petition payment', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        docketEntries: [],
+        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
+        petitionPaymentWaivedDate: 'Today',
+        petitioners: undefined,
+      },
+      { applicationContext },
+    );
+    await addDocketEntryForPaymentStatus({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    const addedDocketRecord = caseEntity.docketEntries.find(
+      docketEntry => docketEntry.eventCode === 'FEEW',
+    );
+
+    expect(addedDocketRecord).toBeDefined();
+    expect(addedDocketRecord.filingDate).toEqual('Today');
+  });
+});
+
+describe('addDocketEntryForNANE', () => {
+  let user;
+
+  beforeEach(() => {
+    user = applicationContext.getCurrentUser();
+  });
+
+  it('should not increase the docket entries and not upload a generated pdf if noticeOfAttachments is false', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        noticeOfAttachments: false,
+      },
+      { applicationContext },
+    );
+
+    const docketEntriesFromNewCaseCount = caseEntity.docketEntries.length;
+
+    await addDocketEntryForNANE({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    expect(caseEntity.docketEntries.length).toEqual(
+      docketEntriesFromNewCaseCount,
+    );
+
+    expect(applicationContext.getUtilities().uploadToS3).not.toHaveBeenCalled();
+  });
+
+  it('should increase the docket entries and upload a generated pdf if noticeOfAttachments is true', async () => {
+    const caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        noticeOfAttachments: true,
+      },
+      { applicationContext },
+    );
+
+    const newDocketEntriesFromNewCaseCount =
+      caseEntity.docketEntries.length + 1;
+
+    await addDocketEntryForNANE({
+      applicationContext,
+      caseEntity,
+      user,
+    });
+
+    expect(caseEntity.docketEntries.length).toEqual(
+      newDocketEntriesFromNewCaseCount,
+    );
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    const passedInNoticeTitle =
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
+        .orderTitle;
+    expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase()); //asserts that the passed in title was uppercase
+
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
+    // eslint-disable-next-line max-lines
   });
 });
