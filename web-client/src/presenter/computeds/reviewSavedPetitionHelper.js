@@ -6,7 +6,6 @@ export const ordersAndNoticesNeededCodes = {
   orderForAmendedPetition: 'Order for Amended Petition',
   orderForAmendedPetitionAndFilingFee:
     'Order for Amended Petition and Filing Fee',
-  orderForFilingFee: 'Order for Filing Fee',
   orderForOds: 'Order for Ownership Disclosure Statement',
   orderForRatification: 'Order for Ratification of Petition',
 };
