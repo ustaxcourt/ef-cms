@@ -49,7 +49,6 @@ const standingPretrialOrderForSmallCase = async ({
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
-      overwriteHeader: true,
     });
 
   const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
@@ -75,7 +74,6 @@ const standingPretrialOrderForSmallCase = async ({
       contentHtml: pdfContentHtmlWithoutHeader,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
-      overwriteHeader: false,
     });
 
   return await combineTwoPdfs({

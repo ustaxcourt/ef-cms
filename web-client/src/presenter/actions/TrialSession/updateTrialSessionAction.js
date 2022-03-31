@@ -32,22 +32,12 @@ export const updateTrialSessionAction = async ({
     ['year', 'month', 'day'],
   );
 
-  let result;
   try {
-    result = await applicationContext
+    await applicationContext
       .getUseCases()
       .updateTrialSessionInteractor(applicationContext, {
         trialSession: { ...trialSession, startDate },
       });
-
-    if (trialSession.swingSession && trialSession.swingSessionId) {
-      await applicationContext
-        .getUseCases()
-        .setTrialSessionAsSwingSessionInteractor(applicationContext, {
-          swingSessionId: result.newTrialSession.trialSessionId,
-          trialSessionId: trialSession.swingSessionId,
-        });
-    }
   } catch (err) {
     return path.error({
       alertError: {
@@ -57,16 +47,5 @@ export const updateTrialSessionAction = async ({
     });
   }
 
-  let pdfUrl;
-  if (result.serviceInfo) {
-    pdfUrl = result.serviceInfo;
-  }
-
-  return path.success({
-    alertSuccess: {
-      message: 'Trial session updated.',
-    },
-    pdfUrl,
-    trialSessionId: result.newTrialSession.trialSessionId,
-  });
+  return path.success();
 };

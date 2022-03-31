@@ -1,4 +1,4 @@
-import { wait } from '../helpers';
+import { waitForLoadingComponentToHide } from '../helpers';
 
 export const petitionsClerkCompletesAndSetsTrialSession = (
   cerebralTest,
@@ -58,7 +58,8 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
-    await wait(1000); // we need to wait for some reason
+
+    await waitForLoadingComponentToHide(cerebralTest);
 
     if (overrides.hasPaper) {
       expect(cerebralTest.getState('currentPage')).toEqual(

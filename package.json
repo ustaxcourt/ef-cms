@@ -5,6 +5,7 @@
   "license": "CC0-1.0",
   "repository": "https://github.com/ustaxcourt/ef-cms",
   "dependencies": {
+    "@18f/us-federal-holidays": "^2.1.1",
     "@babel/cli": "^7.17.6",
     "@babel/core": "^7.17.5",
     "@babel/eslint-parser": "^7.17.0",
@@ -233,6 +234,7 @@
     "postinstall": "husky install",
     "preinstall": "npx npm-force-resolutions",
     "print:success": "echo 'Build successful. You can access the site at http://localhost:1234'",
+    "reindex:cleanup": "./scripts/dynamo/update-deploy-table-after-reindex.sh",
     "reindex:elasticsearch": "./reindex-elasticsearch.sh",
     "reset-cases": "./clear-env.sh",
     "seed:db": "./seed-dynamo.sh",
