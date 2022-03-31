@@ -502,10 +502,10 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       procedures are only applicable to deficiency cases in which the amount in dispute for each taxable year is
       $50,000 or less. See section 7463(a)(1), Internal Revenue Code; Rules 170 and 171, Tax Court Rules of Practice
       and Procedure.
-      <p>&nbsp;&nbsp;&nbsp;&nbsp;Upon due consideration and for cause, it is</p>
-      <p>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [ORDER_DATE_PLUS_60] petitioners shall show cause in writing why
+      <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Upon due consideration and for cause, it is
+      <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [ORDER_DATE_PLUS_60] petitioners shall show cause in writing why
       the Court should not issue an Order directing that the small tax case designation be removed in this case and the
-      proceedings not be conducted under the Small Tax Case Rules.</p>`,
+      proceedings not be conducted under the Small Tax Case Rules.`,
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OSC')
       .documentType,
     eventCode: 'OSC',
