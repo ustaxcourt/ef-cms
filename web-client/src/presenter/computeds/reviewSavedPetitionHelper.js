@@ -8,12 +8,12 @@ export const ordersAndNoticesNeededCodes = {
     'Order for Amended Petition and Filing Fee',
   orderForOds: 'Order for Ownership Disclosure Statement',
   orderForRatification: 'Order for Ratification of Petition',
-  orderToShowCause: 'Order to Show Cause',
 };
 
 export const ordersAndNoticesInDraftsCodes = {
   noticeOfAttachments: 'Notice of Attachments in the Nature of Evidence',
   orderForFilingFee: 'Order for Filing Fee',
+  orderToShowCause: 'Order to Show Cause',
 };
 
 export const reviewSavedPetitionHelper = (get, applicationContext) => {

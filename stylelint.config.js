@@ -5,6 +5,12 @@ module.exports = {
     'stylelint-config-recommended',
   ],
   rules: {
+    'function-no-unknown': [
+      true,
+      {
+        ignoreFunctions: ['units'],
+      },
+    ],
     'no-descending-specificity': null,
     'selector-class-pattern': null,
     'shorthand-property-no-redundant-values': null,
