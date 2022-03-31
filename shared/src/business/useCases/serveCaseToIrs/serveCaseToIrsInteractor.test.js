@@ -26,7 +26,7 @@ const {
 const {
   formatNow,
   FORMATS,
-  getDateInFuture,
+  getBusinessDateInFuture,
 } = require('../../utilities/DateHandler');
 const { Case } = require('../../entities/cases/Case');
 const { getContactPrimary } = require('../../entities/cases/Case');
@@ -661,7 +661,8 @@ describe('serveCaseToIrsInteractor', () => {
     });
 
     const today = formatNow(FORMATS.MONTH_DAY_YEAR);
-    const mockTodayPlus60 = getDateInFuture({
+
+    const mockTodayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
@@ -704,7 +705,7 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const mockTodayPlus60 = getDateInFuture({
+    const mockTodayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });

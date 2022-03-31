@@ -1,7 +1,7 @@
 const {
   formatNow,
   FORMATS,
-  getDateInFuture,
+  getBusinessDateInFuture,
 } = require('../../utilities/DateHandler');
 const {
   INITIAL_DOCUMENT_TYPES,
@@ -386,7 +386,7 @@ const serveCaseToIrsInteractor = async (
   if (caseEntity.orderForFilingFee) {
     const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    const todayPlus60 = getDateInFuture({
+    const todayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
@@ -412,7 +412,7 @@ const serveCaseToIrsInteractor = async (
   if (caseEntity.orderToShowCause) {
     const { orderToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    const todayPlus60 = getDateInFuture({
+    const todayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
