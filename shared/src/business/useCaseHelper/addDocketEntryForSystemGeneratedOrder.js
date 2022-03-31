@@ -1,6 +1,11 @@
+const fs = require('fs');
+const path = require('path');
 const {
   combineTwoPdfs,
 } = require('../utilities/documentGenerators/combineTwoPdfs');
+const amendedPetitionPdf = fs.readFileSync(
+  path.join(__dirname, '../../../static/pdfs/amended-petition-form.pdf'),
+);
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
@@ -10,9 +15,9 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  * generates the order and uploads to s3
  * saves documentContents and richText for editing the order
  *
- * //fix doc
  *
  * @param {object} providers the providers object
+ * @param {object} providers.additionalPdfRequired flag to indicate if a form is to be appended to the document
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseEntity the caseEntity
  * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
@@ -64,24 +69,12 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   });
 
   if (additionalPdfRequired) {
-    // const { PDFDocument } = await applicationContext.getPdfLib();
-    // const amendedPetitionPdf = Buffer.from(
-    //   '../../../static/pdfs/amended-petition-form.pdf',
-    // );
-    // console.log('got it!!', amendedPetitionPdf);
-    // const pdfjsLib = await applicationContext.getPdfJs();
-    // const thing1 = await pdfjsLib.getDocument(
-    //   '../../../static/pdfs/amended-petition-form.pdf',
-    // ).promise;
-    // console.log('got it!2222!', thing1);
-    // const amendedPetitionFormData = await PDFDocument.load(amendedPetitionPdf);
-    // // const amendedPetitionFormData = await PDFDocument.load(thing1);
-    // // console.log('got it!33333!', amendedPetitionFormData);
-    // orderPdfData = await combineTwoPdfs({
-    //   applicationContext,
-    //   firstPdf: new Uint8Array(orderPdfData),
-    //   secondPdf: amendedPetitionFormData,
-    // });
+    const orderWithAmendedPetitionForm = await combineTwoPdfs({
+      applicationContext,
+      firstPdf: new Uint8Array(orderPdfData),
+      secondPdf: new Uint8Array(amendedPetitionPdf),
+    });
+    orderPdfData = Buffer.from(orderWithAmendedPetitionForm);
   }
 
   await applicationContext.getUtilities().uploadToS3({
