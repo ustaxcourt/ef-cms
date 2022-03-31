@@ -27,6 +27,13 @@ BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elast
 GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh $ENVIRONMENT)
 COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh $ENVIRONMENT)
 
+
+if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
+  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/dynamic-web-twain-sdk-14.3.1"
+else
+  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/dynamic-web-twain-sdk-14.3.1"
+fi
+
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
@@ -44,6 +51,7 @@ export TF_VAR_green_table_name=$GREEN_TABLE_NAME
 export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_my_s3_state_bucket=$BUCKET
 export TF_VAR_my_s3_state_key=$KEY
+export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
 export TF_VAR_zone_name=$ZONE_NAME
 export TF_WARN_OUTPUT_ERRORS=1
 
