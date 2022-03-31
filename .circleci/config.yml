@@ -7,10 +7,10 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v10-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v11-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v10-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -32,18 +32,18 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v10-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v11-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v10-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v10-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
@@ -51,14 +51,14 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v10-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
 jobs:
   build-client-integration:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -96,8 +96,17 @@ jobs:
             URL=http://localhost:9000/ ./wait-until.sh
             URL=http://localhost:8000/shell ./wait-until.sh
             sleep 20 # figure out why we need to sleep here since we wait above ^
-            export TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
-            npm run test:client:integration:ci
+            TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
+            NO_SCANNER=true \
+            SKIP_VIRUS_SCAN=true \
+            IS_LOCAL=true \
+            AWS_ACCESS_KEY_ID=S3RVER \
+            AWS_SECRET_ACCESS_KEY=S3RVER \
+            TEMP_DOCUMENTS_BUCKET_NAME=noop-temp-documents-local-us-east-1 \
+            QUARANTINE_BUCKET_NAME=noop-quarantine-local-us-east-1 \
+            DOCUMENTS_BUCKET_NAME=noop-documents-local-us-east-1 \
+            S3_ENDPOINT=http://localhost:9000 \
+            npx jest --coverageDirectory=./coverage-integration-${CIRCLE_NODE_INDEX} --runInBand --config web-client/jest-integration.config.js ${TESTFILES} --no-install
       - store_artifacts:
           path: /tmp/web-client
       - persist_to_workspace:
@@ -106,25 +115,9 @@ jobs:
             - project/web-client
             - project/web-client/coverage-integration-*
 
-  verify-pdfs:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: medium+
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Verify PDFs
-          command: |
-            npm run test:pdf-output
-            node image-compare-pdfs.js
-
   e2e-pa11y:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -174,7 +167,7 @@ jobs:
 
   e2e-pa11y-public:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -219,7 +212,7 @@ jobs:
 
   e2e-pa11y-public-search:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -264,7 +257,7 @@ jobs:
 
   e2e-cypress:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -309,7 +302,7 @@ jobs:
 
   e2e-cypress-smoketests-local:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -358,7 +351,7 @@ jobs:
 
   e2e-cypress-public:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -408,7 +401,7 @@ jobs:
 
   deploy:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -421,8 +414,8 @@ jobs:
           command: |
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Build Docker Image
           command: |
@@ -433,10 +426,10 @@ jobs:
             ./setup-for-blue-green-migration.sh
       - run:
           name: Setup Migrate Flag
-          command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+          command: echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
       - run:
           name: Setup Destination Table Var
-          command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+          command: echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
@@ -451,38 +444,6 @@ jobs:
           name: Setup Elasticsearch Index Settings
           command: |
             ./web-api/setup-elasticsearch-index.sh $ENV
-      - run:
-          name: Admin User Setup
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
-              node shared/admin-tools/user/setup-admin.js
-            else
-              echo "skipping…"
-            fi
-      - run:
-          name: Test Users Setup
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
-              ./shared/admin-tools/user/setup-test-users.sh $ENV
-            else
-              echo "skipping…"
-            fi
-      - run:
-          name: Setup Judge Users File Var
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              echo "export FILE_NAME=./scripts/data-import/judge/judge_users.csv" >> $BASH_ENV
-            else
-              echo "skipping…"
-            fi
-      - run:
-          name: Judge Users Setup
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              ./scripts/data-import/judge/bulk-import-judge-users.sh
-            else
-              echo "skipping…"
-            fi
       - run:
           name: 'Deploy - Web Client - S3'
           command: |
@@ -531,7 +492,7 @@ jobs:
 
   migrate:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -544,10 +505,10 @@ jobs:
           command: |
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DESTINATION_TABLE=$(./scripts/get-destination-table.sh $ENV)" >> $BASH_ENV
+            echo "export SOURCE_TABLE=$(./scripts/get-source-table.sh $ENV)" >> $BASH_ENV
       - run:
           name: Deploy Migration Cron Lambda
           command: |
@@ -596,7 +557,7 @@ jobs:
 
   disable-reindex-cron:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -609,7 +570,7 @@ jobs:
           command: |
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Disable Check Reindex Status Cron
           command: |
@@ -617,7 +578,7 @@ jobs:
 
   smoketests:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -633,7 +594,7 @@ jobs:
           command: |
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: 'Disable Maintenance Mode'
           command: npm run maintenance:disengage $ENV
@@ -648,7 +609,7 @@ jobs:
 
   smoketests-readonly:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -664,7 +625,7 @@ jobs:
           command: |
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: Create and Enable Test User
           command: node ./scripts/create-and-enable-smoketest-user.js
@@ -689,7 +650,7 @@ jobs:
 
   switch-colors:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -702,107 +663,12 @@ jobs:
           command: |
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
-            echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/get-deploying-color.sh $ENV)" >> $BASH_ENV
+            echo "export CURRENT_COLOR=$(./scripts/get-current-color.sh $ENV)" >> $BASH_ENV
       - run:
           name: 'Switch Colors'
           command: npm run switch-colors
-
-  backup-source-dynamo-table:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
-            source $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export TABLE_NAME=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Backup Source DynamoDB table
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run backup:dynamo-table -- $TABLE_NAME
-            fi
-
-  delete-api-mappings:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
-            source $BASH_ENV
-            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Delete Source API Gateway Mappings
-          command: |
-            npm run delete:api-gateway-mappings -- "${EFCMS_DOMAIN}" "${DEPLOYING_COLOR}"
-
-  cleanup:
-    docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
-        aws_auth:
-          aws_access_key_id: $AWS_ACCESS_KEY_ID
-          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: small
-    steps:
-      - git-shallow-clone/checkout
-      - npm-install
-      - run:
-          name: Setup Env
-          command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
-            source $BASH_ENV
-            echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
-            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
-            echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Destroy Migration Infrastructure
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:migration -- $ENV
-            fi
-      - run:
-          name: Destroy Migration Cron Infrastructure
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run destroy:migration-cron -- $ENV
-            fi
-      - run:
-          name: Delete Source ElasticSearch cluster
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run delete:elasticsearch-cluster -- $SOURCE_ELASTICSEARCH
-            fi
-      - run:
-          name: Delete Source Dynamo table
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run delete:dynamo-table -- $SOURCE_TABLE
-            fi
-      - run:
-          name: Cleanup Deploy Table After Migration
-          command: |
-            if [ $MIGRATE_FLAG == true ]; then
-              npm run migration:cleanup -- $ENV
-            fi
 
 build-and-deploy-defaults: &build-and-deploy-defaults
   filters:
@@ -822,32 +688,29 @@ workflows:
 
   build-and-deploy:
     jobs:
-      # - build-client-integration:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-pa11y-public-search:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress-smoketests-local:
-      #     <<: *build-and-deploy-defaults
-      # - e2e-cypress-public:
-      #     <<: *build-and-deploy-defaults
-      # - verify-pdfs:
-      #     <<: *build-and-deploy-defaults
+      - build-client-integration:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public:
+          <<: *build-and-deploy-defaults
+      - e2e-pa11y-public-search:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-smoketests-local:
+          <<: *build-and-deploy-defaults
+      - e2e-cypress-public:
+          <<: *build-and-deploy-defaults
       - deploy:
-          # requires:
-          #   - build-client-integration
-          #   - e2e-pa11y
-          #   - e2e-pa11y-public
-          #   - e2e-pa11y-public-search
-          #   - e2e-cypress
-          #   - e2e-cypress-smoketests-local
-          #   - e2e-cypress-public
-          #   - verify-pdfs
+          requires:
+            - build-client-integration
+            - e2e-pa11y
+            - e2e-pa11y-public
+            - e2e-pa11y-public-search
+            - e2e-cypress
+            - e2e-cypress-smoketests-local
+            - e2e-cypress-public
           filters:
             branches:
               only:
@@ -855,11 +718,13 @@ workflows:
                 - irs
                 - staging
                 - test
+                - master
                 - experimental1
                 - experimental2
                 - experimental3
                 - experimental4
                 - experimental5
+                - dawson
                 - migration
       - migrate:
           requires:
@@ -926,27 +791,13 @@ workflows:
                 - irs
                 - staging
                 - test
+                - master
                 - experimental1
                 - experimental2
                 - experimental3
                 - experimental4
                 - experimental5
-                - migration
-      - cleanup:
-          requires:
-            - switch-colors
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
+                - dawson
                 - migration
 
   build-and-deploy-with-context:
@@ -965,8 +816,6 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
       - e2e-cypress-public:
           <<: *build-and-deploy-with-context-defaults
-      - verify-pdfs:
-          <<: *build-and-deploy-with-context-defaults
       - deploy:
           <<: *build-and-deploy-with-context-defaults
           requires:
@@ -977,7 +826,6 @@ workflows:
             - e2e-cypress
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
-            - verify-pdfs
       - migrate:
           <<: *build-and-deploy-with-context-defaults
           requires:
@@ -999,16 +847,3 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - smoketests-readonly
-      - backup-source-dynamo-table:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - switch-colors
-      - delete-api-mappings:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - switch-colors
-      - cleanup:
-          <<: *build-and-deploy-with-context-defaults
-          requires:
-            - backup-source-dynamo-table
-            - delete-api-mappings
