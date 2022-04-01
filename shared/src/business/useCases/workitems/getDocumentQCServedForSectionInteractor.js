@@ -62,6 +62,7 @@ const calculateAfterDate = async applicationContext => {
   if (!daysToRetrieve || !Number.isInteger(daysToRetrieve)) {
     daysToRetrieve = 7;
   }
+  daysToRetrieve = Math.abs(daysToRetrieve);
 
   const startOfDay = createISODateAtStartOfDayEST();
   const afterDate = calculateISODate({
