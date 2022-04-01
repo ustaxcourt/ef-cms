@@ -1,7 +1,7 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 import { contactPrimaryFromState } from '../helpers';
 
-export const respondentAddsAnswer = (cerebralTest, fakeFile) => {
+export const respondentAddsAnswer = (cerebralTest, fakeFile, overrides) => {
   return it('Respondent adds an answer', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -101,6 +101,8 @@ export const respondentAddsAnswer = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('submitExternalDocumentSequence');
 
-    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(4);
+    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
+      overrides.documentCount,
+    );
   });
 };

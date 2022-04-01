@@ -49,7 +49,7 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] Story has been tested on a mobile device (for external users only)
 
 **Engineering**
- - [ ] Automated test scripts have been written
+ - [ ] Automated test scripts have been written, including visual tests for newly added PDFs
  - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning
  - [ ] Verify that language for docket record for internal users and external users is identical
  - [ ] New screens have been added to pa11y scripts
@@ -60,5 +60,4 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] Code refactored for clarity and to remove any known technical debt
  - [ ] Acceptance criteria for the story has been met
  - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story
- - [ ] Deployed to any Flexion environment for Engineering Review
- - [ ] Deployed to the Court's migration environment
+ - [ ] Deployed to the Court's `test` environment for PO Review
