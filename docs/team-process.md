@@ -79,7 +79,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 #### Caveats
 - `cypress`: Do not upgrade past 8.5.0 as anything above that version will cause the "Failed to connect to bus" [error](https://trello.com/c/iuq0gJ6P/1008-ci-error-failed-to-connect-to-the-bus). 
 
-- `@fortawesome/free-solid-svg-icons`: v6.0.0 caused a regression with faThumbtack so it is not importable. [Github issue](https://github.com/FortAwesome/Font-Awesome/issues/18661) Leaving both this package and `fortawesome/free-regular-svg-icons` at v5.15.4 until this is patched.
+- `@fortawesome/free-solid-svg-icons`: v6.0.0 caused a regression with faThumbtack so it is not importable. [Github issue](https://github.com/FortAwesome/Font-Awesome/issues/18661) Temporarily locking this package and `fortawesome/free-regular-svg-icons` at v5.15.4 until this is patched. Attempted to bump this to ^6.1.0 on 03/17/22 since this [comment](https://github.com/FortAwesome/Font-Awesome/issues/18661#issuecomment-1069357035) says it's fixed in that version, but still seeing multiple icons missing, e.g. `long-arrow-alt-up` and `times-circle`.
 
 - `@fortawesome/fontawesome-svg-core`: Temporarily set to only accept bugfix updates. Upgrading from v1.2.36 to v1.3.0 causes icon sizing issues. Since it was released 2 days ago as of writing this, seems worth waiting for a patch, similar to the other @fortawesome packages (Update: Still causing issues as of 03/04 [related GitHub issue](https://github.com/FortAwesome/Font-Awesome/issues/18663)).
 
