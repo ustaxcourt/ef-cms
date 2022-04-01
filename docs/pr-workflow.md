@@ -82,4 +82,5 @@ Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8c
    2. Merge work into `court/irs` for IRS environment verification.  This step can be skipped if no testing with IRS is necessary.
    3. If tests fail, see step 4 above in the [Flexion Developer section](#flexion-developer).
 3. Once a PR exists to `court/staging`, approve and merge the PR assuming it had already passed PO/PS review.
-4. Once deploy window opens, merge `court/staging` into `court/prod`.
+4. We need to keep `court/test` up-to-date with the canonical code that is merged into `court/staging`.  From time to time `court/staging` must be merged into `court/test`.
+5. Once a deploy window opens, merge `court/staging` into `court/prod`.
