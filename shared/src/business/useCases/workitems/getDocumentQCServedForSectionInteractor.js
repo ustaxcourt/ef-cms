@@ -30,7 +30,6 @@ const getDocumentQCServedForSectionInteractor = async (
   }
 
   const afterDate = await calculateAfterDate(applicationContext);
-  console.log('!!!!', afterDate);
   const workItems = await applicationContext
     .getPersistenceGateway()
     .getDocumentQCServedForSection({
