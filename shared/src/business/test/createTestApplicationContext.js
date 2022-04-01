@@ -314,6 +314,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getAttachmentDocumentById: jest
       .fn()
       .mockImplementation(Case.getAttachmentDocumentById),
+    getBusinessDateInFuture: jest
+      .fn()
+      .mockImplementation(DateHandler.getBusinessDateInFuture),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
