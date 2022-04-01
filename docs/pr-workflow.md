@@ -8,7 +8,7 @@ Since we mentioned we work from two forks of the repo, it is useful to understan
 
 ### Flexion Fork Branches
 
-- `flexion/develop` (for demonstrating complete work to the P.O.)
+- `flexion/develop`
 - `flexion/experimental1` (for deploying to a test environment)
 - `flexion/experimental2` (for deploying to a test environment)
 - `flexion/experimental3` (for deploying to a test environment)
@@ -19,11 +19,11 @@ You will occasionally push your changes to an experimental branch to verify if m
 
 ### US Tax Court Fork Branches
 
-Multiple times during a sprint we need to interact with the US Tax Court fork.  Take note of the following branches.
+We need to interact with the US Tax Court fork often.  Take note of the following branches.
 
-- `court/hotfix` (a staging environment for when we need to fix something in production without also releasing other story/bug work)
+- `court/migration` (a staging environment for when we need to fix something in production without also releasing other story/bug work)
 - `court/test` (kept up to date with `court/staging`, but a staging environment for tests to run and the PO to verify work; where we merge our PRs to)
-- `court/staging` (kept up to date with `court/prod`, but also a staging environment for the upcoming deploy; `court/test` merges into this after testing is complete; any new work branches off this branch)
+- `court/staging` (kept up to date with `court/prod`, but also a staging environment for the upcoming deploy; our second PR merges into this after testing is complete; any new work branches off this branch)
 - `court/prod` (the current version which is running on production)
 
 If you are at Flexion, you will never need to touch `court/prod`.
@@ -47,18 +47,27 @@ Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8c
 2. Work on the work item.
    1. Feel free to push to the Flexion experimental branches as you go and do quick demos at stand-up.
    2. While work is ongoing, other work may be merged into `court/staging`.  Backmerge that into your branch (and any sub-branches) so you have the latest and greatest.
-3. At some point, you presume the work is done.  The work needs to be reviewed by the Court and a PR created and merged.  This can be accomplished in two ways.
-   - Verification occurs in a Flexion environment.
-     1. Directly merge work to the `flexion/develop` branch or push to an experimental branch.
-     2. Give the PO/PS a link to the environment that has your deployed work for PO/PS sign-off.
-     3. Once verified by PO/PS, create the PR from your branch to `court/test`.
-     4. Ask for PR reviews.  Reviews can come from both Flexion and the Court.
-     5. Merge the PR.
-   - Verification occurs in the `test` environment.
-     1. Create the PR from your branch to `court/test`.
-     2. Ask for PR reviews.  Reviews can come from both Flexion and the Court.
-     3. Merge the PR.
-     4. As mentioned under [Court Ops](#court-ops) below, tell the PO/PS that we're ready for review in the `test` environment.
+3. At some point, you presume the work is done.  The work needs to be reviewed by the Court and PRs created and merged.
+   - This can be accomplished in two ways.
+     - Verification occurs in a Flexion environment.
+       1. Directly merge work to an experimental branch.
+       2. Give the PO/PS a link to the environment that has your deployed work for PO/PS sign-off.
+       3. Once verified by PO/PS, create the PR from your branch to `court/test`.  Close your PR and see below if there are merge conflicts between your feature branch and `court/test`.
+       4. Ask for PR reviews.  Reviews can come from both Flexion and the Court.
+       5. Merge the PR.  Do not delete your feature branch.
+     - Verification occurs in the `test` environment.
+       1. Create the PR from your branch to `court/test`.  Close your PR and see below if there are merge conflicts between your feature branch and `court/test`.
+       2. Ask for PR reviews.  Reviews can come from both Flexion and the Court.
+       3. Merge the PR.  Do not delete your feature branch.
+       4. As mentioned under [Court Ops](#court-ops) below, tell the PO/PS that we're ready for review in the `test` environment.
+   - _If_ merge conflicts exist between your feature branch and `court/test`.
+
+     In an effort to keep untested `court/test` changes out of your feature branch, make an intermediate duplicate branch that will contain the resolved merge conflicts.
+       1. Create an intermediate duplicate branch while on your feature branch: `git checkout -b intermediate-feature-123`.
+       2. Resolve merge conflicts: `git merge court/test`.  You will need to replace `court` with the name of the court's upstream.
+       3. Then create the PR between `court/test` and your intermediate feature branch (e.g. `intermediate-feature-123`).
+4. If there is PO feedback, address the feedback on the original feature branch.  Go back to step 3.
+5. If your work passes PO review, congratulations!  Create a PR from your original feature branch to `court/staging`.  You will need to wait for a court engineer to approve your PR and merge it.  Your code is now in `court/staging` and ready to fly to production on the next deployment!
 
 ### Court Developer
 
@@ -71,6 +80,7 @@ Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8c
 2. Tests after PRs are merged into `court/test`.
    1. PO/PS verifies the work in the `test` environment which has prod-like data.  This step can be skipped if the PO/PS is confident enough with their initial verification earlier.
    2. Merge work into `court/irs` for IRS environment verification.  This step can be skipped if no testing with IRS is necessary.
-   3. If tests fail, fail forward by branching from `court/test` into a branch to fix the bug.  If Flexion is working on the fix, branch into the Flexion fork or remain in the USTC repository if USTC is working on the fix.
-3. Merge work to `court/staging` upon passing tests.
-4. Once deploy window opens, merge `court/staging` into `court/prod`.
+   3. If tests fail, see step 4 above in the [Flexion Developer section](#flexion-developer).
+3. Once a PR exists to `court/staging`, approve and merge the PR assuming it had already passed PO/PS review.
+4. We need to keep `court/test` up-to-date with the canonical code that is merged into `court/staging`.  From time to time `court/staging` must be merged into `court/test`.
+5. Once a deploy window opens, merge `court/staging` into `court/prod`.
