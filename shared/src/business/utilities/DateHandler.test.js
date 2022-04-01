@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const DateHandler = require('./DateHandler');
 const { FORMATS, PATTERNS } = DateHandler;
 
@@ -531,6 +532,91 @@ describe('DateHandler', () => {
       });
 
       expect(result).toEqual(previousYearISO);
+    });
+  });
+
+  describe('getBusinessDateInFuture)', () => {
+    it('should return 60 days in the future from the provided date if that later date is not a holiday or weekend', () => {
+      const numberOfDays = 60;
+      const mockStartDate = '2021-05-31';
+      const sixtyDaysFromStartDate = 'July 30, 2021';
+
+      const result = DateHandler.getBusinessDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(sixtyDaysFromStartDate);
+    });
+
+    it('should return a weekday >60 days in the future from now if 60 days from now lands on a Saturday', () => {
+      const numberOfDays = 60;
+      const mockStartDate = '2021-06-01';
+      const weekdaySixtyDaysFromStartDate = 'August 2, 2021';
+
+      const result = DateHandler.getBusinessDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(weekdaySixtyDaysFromStartDate);
+    });
+
+    it('should return a weekday >60 days in the future from now if 60 days from now lands on a Sunday', () => {
+      const numberOfDays = 60;
+      const mockStartDate = '2021-06-02';
+      const weekdaySixtyDaysFromStartDate = 'August 2, 2021';
+
+      const result = DateHandler.getBusinessDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(weekdaySixtyDaysFromStartDate);
+    });
+
+    it('should return a non-holiday weekday >60 days in the future from now if 60 days from now lands on a shifted Sunday federal holiday', () => {
+      const numberOfDays = 60;
+      const mockStartDate = '2022-10-27';
+      // Christmas is 12/25/22, but observed on Monday 12/26/22
+      const weekdayNonHolidayAtLeastSixtyDaysFromStartDate =
+        'December 27, 2022';
+
+      const result = DateHandler.getBusinessDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
+    });
+
+    it('should return a non-holiday weekday >60 days in the future from now if 60 days from now lands on a shifted Saturday federal holiday', () => {
+      const numberOfDays = 60;
+      const mockStartDate = '2021-11-01';
+      const weekdayNonHolidayAtLeastSixtyDaysFromStartDate = 'January 3, 2022';
+      // New Year's Day is 1/1/22, but observed on Friday 12/31/21
+
+      const result = DateHandler.getBusinessDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
+    });
+
+    it('should return a non-holiday weekday >60 days in the future from now if 60 days from now lands on a federal holiday', () => {
+      const numberOfDays = 60;
+      const mockStartDate = '2022-09-12';
+      // Veterans day is Friday 11/11/22
+      const weekdayNonHolidayAtLeastSixtyDaysFromStartDate =
+        'November 14, 2022';
+
+      const result = DateHandler.getBusinessDateInFuture({
+        numberOfDays,
+        startDate: mockStartDate,
+      });
+
+      expect(result).toEqual(weekdayNonHolidayAtLeastSixtyDaysFromStartDate);
     });
   });
 });
