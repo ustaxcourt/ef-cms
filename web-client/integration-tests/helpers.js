@@ -274,7 +274,7 @@ export const contactSecondaryFromState = cerebralTest => {
   return cerebralTest.getState('caseDetail.petitioners.1');
 };
 
-export const getCaseMessagesForCase = async cerebralTest => {
+export const getCaseMessagesForCase = cerebralTest => {
   return runCompute(formattedCaseMessages, {
     state: cerebralTest.getState(),
   });

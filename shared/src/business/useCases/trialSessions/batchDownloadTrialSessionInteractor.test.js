@@ -129,7 +129,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [
-        'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        '9de27a7d-7c6b-434b-803b-7655f82d5e07',
         '25ae8e71-9dc4-40c6-bece-89acb974a82e',
       ],
       uploadToTempBucket: true,

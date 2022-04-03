@@ -147,7 +147,7 @@ describe('verify opinion search works for external users', () => {
 
   describe('private practitioner performs opinion search', () => {
     const colvinDocketEntryIdKeyValue =
-      '"docketEntryId":"130a3790-7e82-4f5c-8158-17f5d9d560e7"';
+      '"docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb"';
     const ashfordDocketEntryIdKeyValue =
       '"docketEntryId":"d085a9da-b4a6-41d2-aa40-f933fe2d4188"';
     const colvinOpinionDocumentTitleKeyValue =

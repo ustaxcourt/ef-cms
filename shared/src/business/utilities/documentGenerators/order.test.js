@@ -6,6 +6,9 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
+const {
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../../entities/EntityConstants');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
 const { order } = require('./order');
 
@@ -135,6 +138,33 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Order', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+
+    it('generates an Order for Filing Fee document', async () => {
+      const pdf = await order({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          orderContent:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.content,
+          orderTitle:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.documentTitle,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Order_For_Filing_Fee', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
