@@ -14,12 +14,12 @@ import applicationContextFactory from '../../web-api/src/applicationContext';
 const cerebralTest = setupTest();
 
 describe('verify old sent work items do not show up in the outbox', () => {
-  let workItem6Days;
-  let workItem7Days;
-  let workItem8Days;
-  let workItemId6;
-  let workItemId7;
-  let workItemId8;
+  let workItemNMinus1Days;
+  let workItemNDays;
+  let workItemNPlus1Days;
+  let workItemIdNMinus1;
+  let workItemIdN;
+  let workItemIdNPlus1;
   let caseDetail;
 
   beforeAll(() => {
@@ -33,6 +33,16 @@ describe('verify old sent work items do not show up in the outbox', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
 
   it('creates the case', async () => {
+    const daysToRetrieveKey =
+      applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
+        .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
+    let daysToRetrieve = await applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue({
+        applicationContext,
+        configurationItemKey: daysToRetrieveKey,
+      });
+
     caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
 
@@ -45,19 +55,19 @@ describe('verify old sent work items do not show up in the outbox', () => {
 
     const CREATED_N_PLUS_1_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: -8, units: 'days' });
+      .calculateISODate({ howMuch: daysToRetrieve + 1, units: 'days' });
     const CREATED_N_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: -7, units: 'days' });
-    const CREATED_6_DAYS_AGO = applicationContext
+      .calculateISODate({ howMuch: daysToRetrieve, units: 'days' });
+    const CREATED_N_MINUS_1_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: -6, units: 'days' });
+      .calculateISODate({ howMuch: daysToRetrieve - 1, units: 'days' });
 
-    workItemId6 = applicationContext.getUniqueId();
-    workItemId7 = applicationContext.getUniqueId();
-    workItemId8 = applicationContext.getUniqueId();
+    workItemIdNMinus1 = applicationContext.getUniqueId();
+    workItemIdN = applicationContext.getUniqueId();
+    workItemIdNPlus1 = applicationContext.getUniqueId();
 
-    workItem8Days = {
+    workItemNPlus1Days = {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test petitionsclerk1',
       caseStatus: CASE_STATUS_TYPES.new,
@@ -77,36 +87,36 @@ describe('verify old sent work items do not show up in the outbox', () => {
       sentBySection: 'petitions',
       sentByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       updatedAt: '2019-06-26T16:31:17.643Z',
-      workItemId: `${workItemId8}`,
+      workItemId: `${workItemIdNPlus1}`,
     };
 
-    workItem7Days = {
-      ...workItem8Days,
+    workItemNDays = {
+      ...workItemNPlus1Days,
       completedAt: CREATED_N_DAYS_AGO,
       createdAt: CREATED_N_DAYS_AGO,
-      workItemId: `${workItemId7}`,
+      workItemId: `${workItemIdN}`,
     };
 
-    workItem6Days = {
-      ...workItem8Days,
-      completedAt: CREATED_6_DAYS_AGO,
-      createdAt: CREATED_6_DAYS_AGO,
-      workItemId: `${workItemId6}`,
+    workItemNMinus1Days = {
+      ...workItemNPlus1Days,
+      completedAt: CREATED_N_MINUS_1_DAYS_AGO,
+      createdAt: CREATED_N_MINUS_1_DAYS_AGO,
+      workItemId: `${workItemIdNMinus1}`,
     };
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
-      workItem: workItem8Days,
+      workItem: workItemNPlus1Days,
     });
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
-      workItem: workItem7Days,
+      workItem: workItemNDays,
     });
 
     await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
       applicationContext,
-      workItem: workItem6Days,
+      workItem: workItemNMinus1Days,
     });
   });
 
@@ -118,10 +128,10 @@ describe('verify old sent work items do not show up in the outbox', () => {
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(myOutbox.length).toEqual(2);
     expect(
-      myOutbox.find(item => item.workItemId === workItemId6),
+      myOutbox.find(item => item.workItemId === workItemIdNMinus1),
     ).toBeDefined();
     expect(
-      myOutbox.find(item => item.workItemId === workItemId7),
+      myOutbox.find(item => item.workItemId === workItemIdN),
     ).toBeDefined();
 
     const sectionOutbox = (
@@ -129,10 +139,10 @@ describe('verify old sent work items do not show up in the outbox', () => {
     ).filter(item => item.docketNumber === caseDetail.docketNumber);
     expect(sectionOutbox.length).toEqual(2);
     expect(
-      sectionOutbox.find(item => item.workItemId === workItemId6),
+      sectionOutbox.find(item => item.workItemId === workItemIdNMinus1),
     ).toBeDefined();
     expect(
-      sectionOutbox.find(item => item.workItemId === workItemId7),
+      sectionOutbox.find(item => item.workItemId === workItemIdN),
     ).toBeDefined();
   });
 });
