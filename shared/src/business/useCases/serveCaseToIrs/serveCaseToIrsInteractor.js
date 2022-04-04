@@ -417,9 +417,7 @@ const serveCaseToIrsInteractor = async (
       doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
     ); //reuse
 
-    const amendedPetitionFormTemplate = applicationContext
-      .getDocumentGenerators()
-      .amendedPetitionForm({ applicationContext });
+    // do something else to retrieve the amended petition from s3
 
     const content = replaceBracketed(
       orderForAmendedPetition.content,
@@ -427,7 +425,7 @@ const serveCaseToIrsInteractor = async (
       todayPlus60,
     );
 
-    content.push(amendedPetitionFormTemplate);
+    // content.push(amendedPetitionFormTemplate);
 
     await applicationContext
       .getUseCaseHelpers()

@@ -46,9 +46,6 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
-  amendedPetitionForm,
-} = require('../../shared/src/business/utilities/documentGenerators/amendedPetitionForm');
-const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -1696,7 +1693,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getDocumentClient,
     getDocumentGenerators: () => ({
       addressLabelCoverSheet,
-      amendedPetitionForm,
       caseInventoryReport,
       changeOfAddress,
       coverSheet,
