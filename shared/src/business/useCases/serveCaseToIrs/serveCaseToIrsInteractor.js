@@ -417,11 +417,17 @@ const serveCaseToIrsInteractor = async (
       doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
     ); //reuse
 
+    const amendedPetitionFormTemplate = applicationContext
+      .getDocumentGenerators()
+      .amendedPetitionForm({ applicationContext });
+
     const content = replaceBracketed(
       orderForAmendedPetition.content,
       formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
       todayPlus60,
     );
+
+    content.push(amendedPetitionFormTemplate);
 
     await applicationContext
       .getUseCaseHelpers()
