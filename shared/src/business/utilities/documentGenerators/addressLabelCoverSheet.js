@@ -23,7 +23,6 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: false,
-      overwriteHeader: true,
     });
 
   return pdf;
