@@ -9,13 +9,11 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  *
  *
  * @param {object} providers the providers object
- * @param {object} providers.additionalPdfRequired flag to indicate if a form is to be appended to the document
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseEntity the caseEntity
  * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
  */
 exports.addDocketEntryForSystemGeneratedOrder = async ({
-  additionalPdfRequired = false,
   applicationContext,
   caseEntity,
   systemGeneratedDocument,
@@ -59,15 +57,6 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
         : '',
     },
   });
-
-  if (additionalPdfRequired) {
-    orderPdfData = await applicationContext
-      .getUtilities()
-      .appendAmendedPetitionFormToOrder({
-        applicationContext,
-        orderPdfData,
-      });
-  }
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,

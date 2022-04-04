@@ -432,7 +432,6 @@ const serveCaseToIrsInteractor = async (
     await applicationContext
       .getUseCaseHelpers()
       .addDocketEntryForSystemGeneratedOrder({
-        additionalPdfRequired: true,
         applicationContext,
         caseEntity,
         systemGeneratedDocument: {
