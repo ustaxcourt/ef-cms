@@ -18,6 +18,7 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   systemGeneratedDocument,
 }) => {
   const user = applicationContext.getCurrentUser();
+  const isNotice = systemGeneratedDocument.eventCode === 'NOT';
 
   const newDocketEntry = new DocketEntry(
     {
@@ -28,10 +29,10 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
         documentTitle: systemGeneratedDocument.documentTitle,
         documentType: systemGeneratedDocument.documentType,
         eventCode: systemGeneratedDocument.eventCode,
-        freeText: systemGeneratedDocument.documentTitle,
+        ...(isNotice && { freeText: systemGeneratedDocument.documentTitle }),
       },
       eventCode: systemGeneratedDocument.eventCode,
-      freeText: systemGeneratedDocument.documentTitle,
+      ...(isNotice && { freeText: systemGeneratedDocument.documentTitle }),
       isDraft: true,
       userId: user.userId,
     },
@@ -50,7 +51,9 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
       docketNumberWithSuffix,
       orderContent: systemGeneratedDocument.content,
       orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
-      signatureText: applicationContext.getClerkOfCourtNameForSigning(),
+      signatureText: isNotice
+        ? applicationContext.getClerkOfCourtNameForSigning()
+        : '',
     },
   });
 

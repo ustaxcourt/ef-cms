@@ -535,13 +535,13 @@ describe('DateHandler', () => {
     });
   });
 
-  describe('getDateInFuture)', () => {
+  describe('getBusinessDateInFuture)', () => {
     it('should return 60 days in the future from the provided date if that later date is not a holiday or weekend', () => {
       const numberOfDays = 60;
       const mockStartDate = '2021-05-31';
       const sixtyDaysFromStartDate = 'July 30, 2021';
 
-      const result = DateHandler.getDateInFuture({
+      const result = DateHandler.getBusinessDateInFuture({
         numberOfDays,
         startDate: mockStartDate,
       });
@@ -554,7 +554,7 @@ describe('DateHandler', () => {
       const mockStartDate = '2021-06-01';
       const weekdaySixtyDaysFromStartDate = 'August 2, 2021';
 
-      const result = DateHandler.getDateInFuture({
+      const result = DateHandler.getBusinessDateInFuture({
         numberOfDays,
         startDate: mockStartDate,
       });
@@ -567,7 +567,7 @@ describe('DateHandler', () => {
       const mockStartDate = '2021-06-02';
       const weekdaySixtyDaysFromStartDate = 'August 2, 2021';
 
-      const result = DateHandler.getDateInFuture({
+      const result = DateHandler.getBusinessDateInFuture({
         numberOfDays,
         startDate: mockStartDate,
       });
@@ -582,7 +582,7 @@ describe('DateHandler', () => {
       const weekdayNonHolidayAtLeastSixtyDaysFromStartDate =
         'December 27, 2022';
 
-      const result = DateHandler.getDateInFuture({
+      const result = DateHandler.getBusinessDateInFuture({
         numberOfDays,
         startDate: mockStartDate,
       });
@@ -596,7 +596,7 @@ describe('DateHandler', () => {
       const weekdayNonHolidayAtLeastSixtyDaysFromStartDate = 'January 3, 2022';
       // New Year's Day is 1/1/22, but observed on Friday 12/31/21
 
-      const result = DateHandler.getDateInFuture({
+      const result = DateHandler.getBusinessDateInFuture({
         numberOfDays,
         startDate: mockStartDate,
       });
@@ -611,7 +611,7 @@ describe('DateHandler', () => {
       const weekdayNonHolidayAtLeastSixtyDaysFromStartDate =
         'November 14, 2022';
 
-      const result = DateHandler.getDateInFuture({
+      const result = DateHandler.getBusinessDateInFuture({
         numberOfDays,
         startDate: mockStartDate,
       });
