@@ -438,7 +438,6 @@ jobs:
       - run:
           name: Setup Migrate Flag
           command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-            ./setup-for-reindex.sh
       - run:
           name: Setup Reindex Flag
           command: echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
