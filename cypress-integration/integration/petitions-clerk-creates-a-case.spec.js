@@ -41,7 +41,7 @@ describe('Create case and submit to IRS', function () {
     cy.intercept('PUT', '**/cases/**').as('submitCase');
     cy.get('#submit-case').click();
     cy.wait('@submitCase').then(() => {
-      cy.get('#orders-notices-needed-header').should('exist');
+      cy.get('#orders-notices-needed-header').should('not.exist');
       cy.get('#orders-notices-auto-created-in-draft').should('not.exist');
     });
   });
