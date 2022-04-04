@@ -315,7 +315,7 @@ const generatePaperNoticeForContactSecondary = async ({
   pdfDoc.insertPage(1, coverPageDocumentPages[0]);
 
   const pdfDataBuffer = await pdfDoc.save();
-  return Buffer.from(pdfDataBuffer);
+  return pdfDataBuffer;
 };
 
 /**
