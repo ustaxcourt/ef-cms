@@ -27,6 +27,8 @@ Because of this, you will need to make sure you node and npm installed locked to
     - Node v14.16.0
     - npm v6.14.11
 
+As of 03/17/22, AWS Lambda only supports up to [`nodejs14.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+
 ### Java 11+ 
 
 You will need Java installed in order to run **[elasticsearch](https://www.elastic.co/)** and **[dynamodb](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)** locally on your machine.  Grabbing the latest version of Java JDK should work fine.

@@ -432,8 +432,15 @@ jobs:
           command: |
             ./setup-for-blue-green-migration.sh
       - run:
+          name: Setup Reindex If Needed
+          command: |
+            ./setup-for-reindex.sh
+      - run:
           name: Setup Migrate Flag
           command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Setup Reindex Flag
+          command: echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
       - run:
           name: Setup Destination Table Var
           command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
@@ -528,6 +535,42 @@ jobs:
       - run:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
+
+  reindex:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.0.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+              source $BASH_ENV
+              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+            fi
+      - run:
+          name: Enable Check Reindex Status Cron
+          command: |
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              ./enable-reindex-cron.sh
+              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+            fi
+      - run:
+          name: Reindex
+          command: |
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
+            fi
 
   migrate:
     docker:
@@ -771,6 +814,7 @@ jobs:
             source $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
       - run:
@@ -802,6 +846,12 @@ jobs:
           command: |
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
+            fi
+      - run:
+          name: Cleanup Deploy Table After Reindex
+          command: |
+            if [ $REINDEX_FLAG == true ]; then
+              npm run reindex:cleanup -- $ENV
             fi
 
 build-and-deploy-defaults: &build-and-deploy-defaults
@@ -861,9 +911,12 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - migrate:
+      - reindex:
           requires:
             - deploy
+      - migrate:
+          requires:
+            - reindex
           filters:
             branches:
               only:
@@ -978,10 +1031,14 @@ workflows:
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
             - verify-pdfs
-      - migrate:
+      - reindex:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
+      - migrate:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - reindex
       - wait-for-reindex:
           <<: *build-and-deploy-with-context-defaults
           type: approval
