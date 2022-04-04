@@ -33,16 +33,6 @@ describe('verify old sent work items do not show up in the outbox', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
 
   it('creates the case', async () => {
-    const daysToRetrieveKey =
-      applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
-        .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
-    let daysToRetrieve = await applicationContext
-      .getPersistenceGateway()
-      .getConfigurationItemValue({
-        applicationContext,
-        configurationItemKey: daysToRetrieveKey,
-      });
-
     caseDetail = await uploadPetition(cerebralTest);
     expect(caseDetail.docketNumber).toBeDefined();
 
@@ -52,6 +42,15 @@ describe('verify old sent work items do not show up in the outbox', () => {
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.environment.dynamoDbTableName = 'efcms-local';
+    const daysToRetrieveKey =
+      applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
+        .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
+    let daysToRetrieve = await applicationContext
+      .getPersistenceGateway()
+      .getConfigurationItemValue({
+        applicationContext,
+        configurationItemKey: daysToRetrieveKey,
+      });
 
     const CREATED_N_PLUS_1_DAYS_AGO = applicationContext
       .getUtilities()
