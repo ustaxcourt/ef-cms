@@ -27,7 +27,7 @@
     "artillery": "^2.0.0-14",
     "artillery-plugin-metrics-by-endpoint": "^1.0.2",
     "autoprefixer": "^10.4.2",
-    "aws-sdk": "^2.1106.0",
+    "aws-sdk": "^2.1107.0",
     "axios": "^0.26.1",
     "axios-retry": "^3.2.4",
     "babel-jest": "^27.5.1",
