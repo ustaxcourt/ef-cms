@@ -280,4 +280,28 @@ describe('reviewSavedPetitionHelper', () => {
       },
     ]);
   });
+
+  it('adds the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is true', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { orderForAmendedPetition: true },
+      },
+    });
+
+    expect(result.ordersAndNoticesInDraft).toEqual([
+      'Order for Amended Petition',
+    ]);
+  });
+
+  it('does not add the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is false', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { orderForAmendedPetition: false },
+      },
+    });
+
+    expect(result.ordersAndNoticesInDraft).not.toBe([
+      'Order for Amended Petition',
+    ]);
+  });
 });

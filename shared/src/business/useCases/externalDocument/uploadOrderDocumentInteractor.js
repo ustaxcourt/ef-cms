@@ -22,11 +22,21 @@ exports.uploadOrderDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  let finalDocument = documentFile;
+  // if (documentFile.eventCode === 'OAP') {
+  // finalDocument = await applicationContext
+  //   .getUtilities()
+  //   .appendAmendedPetitionFormToOrder({
+  //     applicationContext,
+  //     orderPdfData: documentFile,
+  //   });
+  // }
+
   const orderDocketEntryId = await applicationContext
     .getPersistenceGateway()
     .uploadDocumentFromClient({
       applicationContext,
-      document: documentFile,
+      document: finalDocument,
       key: docketEntryIdToOverwrite,
     });
 
