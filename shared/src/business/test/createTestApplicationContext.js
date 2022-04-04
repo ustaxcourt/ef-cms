@@ -2,6 +2,9 @@ const DateHandler = require('../utilities/DateHandler');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
 const {
+  addDocketEntryForSystemGeneratedOrder,
+} = require('../useCaseHelper/addDocketEntryForSystemGeneratedOrder');
+const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
@@ -311,6 +314,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getAttachmentDocumentById: jest
       .fn()
       .mockImplementation(Case.getAttachmentDocumentById),
+    getBusinessDateInFuture: jest
+      .fn()
+      .mockImplementation(DateHandler.getBusinessDateInFuture),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
@@ -405,6 +411,9 @@ const createTestApplicationContext = ({ user } = {}) => {
   });
 
   const mockGetUseCaseHelpers = appContextProxy({
+    addDocketEntryForSystemGeneratedOrder: jest
+      .fn()
+      .mockImplementation(addDocketEntryForSystemGeneratedOrder),
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
