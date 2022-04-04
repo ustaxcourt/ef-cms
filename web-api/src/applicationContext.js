@@ -1289,7 +1289,7 @@ const environment = {
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   masterDynamoDbEndpoint:
-    process.env.MASTER_DYNAMODB_ENDPOINT || 'http://localhost:8000',
+    process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
