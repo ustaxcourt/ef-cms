@@ -1,6 +1,6 @@
 const React = require('react');
 
-export const AddressLabelCoverSheet = () => {
+export const AmendedPetitionForm = () => {
   return (
     <div id="address-label-cover-sheet">
       <h1 className="text-center">UNITED STATES TAX COURT</h1>

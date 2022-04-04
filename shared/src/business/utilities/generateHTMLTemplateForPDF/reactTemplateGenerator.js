@@ -9,6 +9,9 @@ const {
   AddressLabelCoverSheet,
 } = require('../pdfGenerator/documentTemplates/AddressLabelCoverSheet.jsx');
 const {
+  AmendedPetitionForm,
+} = require('../pdfGenerator/documentTemplates/AmendedPetitionForm.jsx');
+const {
   CaseInventoryReport,
 } = require('../pdfGenerator/documentTemplates/CaseInventoryReport.jsx');
 const {
@@ -89,6 +92,7 @@ const ReactDOM = require('react-dom/server');
 
 const components = {
   AddressLabelCoverSheet,
+  AmendedPetitionForm,
   CaseInventoryReport,
   ChangeOfAddress,
   CoverSheet,
