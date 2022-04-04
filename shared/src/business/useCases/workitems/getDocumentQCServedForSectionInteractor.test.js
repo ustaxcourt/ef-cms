@@ -223,7 +223,6 @@ describe('getDocumentQCServedForSectionInteractor', () => {
         units: 'days',
       });
       const actual = await calculateAfterDate(applicationContext);
-      console.log(actual);
       expect(actual).toEqual(expected);
     });
   });
