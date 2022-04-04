@@ -452,6 +452,46 @@ describe('serveCaseToIrsInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should generate an OAP with a form appended to it when orderForAmendedPetition is true', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderForAmendedPetition: true,
+      orderForFilingFee: false,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0],
+    ).toMatchObject({
+      additionalPdfRequired: true,
+      systemGeneratedDocument: {
+        documentTitle: 'Order',
+        documentType: 'Order for Amended Petition',
+        eventCode: 'OAP',
+      },
+    });
+  });
+
+  it('should not generate an OAP with a form appended to it when orderForAmendedPetition is false', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderForAmendedPetition: false,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should not return a paper service pdf when the case is electronic', async () => {
     mockCase = {
       ...MOCK_CASE,

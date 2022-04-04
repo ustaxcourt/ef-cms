@@ -11,8 +11,11 @@ const { MOCK_CASE } = require('../../test/mockCase');
 describe('addDocketEntryForSystemGeneratedOrder', () => {
   const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
-  const { noticeOfAttachmentsInNatureOfEvidence, orderForFilingFee } =
-    SYSTEM_GENERATED_DOCUMENT_TYPES;
+  const {
+    noticeOfAttachmentsInNatureOfEvidence,
+    orderForAmendedPetition,
+    orderForFilingFee,
+  } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
   it('should add a draft docket entry for a system generated order', async () => {
     const newDocketEntriesFromNewCaseCount =
@@ -121,5 +124,18 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0].document,
     ).toEqual(Buffer.from(JSON.stringify(contentToStore)));
+  });
+
+  it('should append aditional pdf form data when additionalPdfRequired is true', async () => {
+    await addDocketEntryForSystemGeneratedOrder({
+      additionalPdfRequired: true,
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: orderForAmendedPetition,
+    });
+
+    expect(
+      applicationContext.getUtilities().appendAmendedPetitionFormToOrder,
+    ).toHaveBeenCalled();
   });
 });

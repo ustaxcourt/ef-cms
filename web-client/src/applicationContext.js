@@ -76,7 +76,6 @@ import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseS
 import { addPaperFilingInteractor } from '../../shared/src/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '../../shared/src/proxies/addPetitionerToCaseProxy';
 import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
-import { appendAmendedPetitionFormToOrder } from '../../shared/src/business/utilities/appendAmendedPetitionFormToOrder';
 import { archiveCorrespondenceDocumentInteractor } from '../../shared/src/proxies/correspondence/archiveCorrespondenceDocumentProxy';
 import { archiveDraftDocumentInteractor } from '../../shared/src/proxies/archiveDraftDocumentProxy';
 import { assignWorkItemsInteractor } from '../../shared/src/proxies/workitems/assignWorkItemsProxy';
@@ -669,7 +668,6 @@ const applicationContext = {
   getUtilities: () => {
     return {
       aggregatePartiesForService,
-      appendAmendedPetitionFormToOrder,
       calculateISODate,
       canAllowDocumentServiceForCase,
       caseHasServedDocketEntries,

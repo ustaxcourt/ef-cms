@@ -1,6 +1,3 @@
-const {
-  appendAmendedPetitionFormToOrder,
-} = require('../utilities/appendAmendedPetitionFormToOrder');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 
@@ -64,10 +61,12 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   });
 
   if (additionalPdfRequired) {
-    orderPdfData = await appendAmendedPetitionFormToOrder({
-      applicationContext,
-      orderPdfData,
-    });
+    orderPdfData = await applicationContext
+      .getUtilities()
+      .appendAmendedPetitionFormToOrder({
+        applicationContext,
+        orderPdfData,
+      });
   }
 
   await applicationContext.getUtilities().uploadToS3({
