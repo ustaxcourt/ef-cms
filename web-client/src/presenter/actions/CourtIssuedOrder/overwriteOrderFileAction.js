@@ -18,6 +18,9 @@ export const overwriteOrderFileAction = async ({
   const documentToEdit = get(state.documentToEdit);
   let finalDocument = primaryDocumentFile;
 
+  // Identify an endpoint to call if eventCode === OAP
+  // We will probably need a new endpoint so that we can edit the draft OAP
+
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
