@@ -1,6 +1,9 @@
+const {
+  combineTwoPdfs,
+} = require('../utilities/documentGenerators/combineTwoPdfs');
+const { AMENDED_PETITION_FORM_NAME } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-
 /**
  *
  * Add docket entry for system generated order
@@ -58,10 +61,24 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
     },
   });
 
+  // if current order is an OAP retrieve the emended_petition_form pdf from s3
+  // Combine with the order pdf
+  // Reupload to S3 (already doing)
+
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: AMENDED_PETITION_FORM_NAME,
+    })
+    .promise();
+
+  const combinedPdf = combineTwoPdfs(applicationContext, orderPdfData, pdfData);
+
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
     caseConfirmationPdfName: newDocketEntry.docketEntryId,
-    pdfData: orderPdfData,
+    pdfData: combinedPdf,
   });
 
   const documentContentsId = applicationContext.getUniqueId();
