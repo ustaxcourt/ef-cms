@@ -15,7 +15,13 @@ exports.goToCaseDetail = docketNumber => {
 };
 
 exports.goToCaseOverview = docketNumber => {
+  // first visit /search because if this step fails and has to be rerun, cerebral will
+  // not see it as a new page visit when routing to the same route again and the page
+  // will not reload
+  cy.goToRoute('/');
   cy.get('.message-unread-column').should('exist');
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(1000);
   cy.goToRoute(`/case-detail/${docketNumber}`);
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
   cy.get('#tab-case-information').click();
