@@ -23,6 +23,8 @@ const ORDER_JUDGE_FIELD = 'signedJudgeName';
 
 const OPINION_JUDGE_FIELD = 'judge';
 
+const AMENDED_PETITION_FORM_NAME = 'amended_petition_form.pdf';
+
 const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
