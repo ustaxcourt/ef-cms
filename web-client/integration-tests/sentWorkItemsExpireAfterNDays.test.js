@@ -54,13 +54,13 @@ describe('verify old sent work items do not show up in the outbox', () => {
 
     const CREATED_N_PLUS_1_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: daysToRetrieve + 1, units: 'days' });
+      .calculateISODate({ howMuch: (daysToRetrieve + 1) * -1, units: 'days' });
     const CREATED_N_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: daysToRetrieve, units: 'days' });
+      .calculateISODate({ howMuch: daysToRetrieve * -1, units: 'days' });
     const CREATED_N_MINUS_1_DAYS_AGO = applicationContext
       .getUtilities()
-      .calculateISODate({ howMuch: daysToRetrieve - 1, units: 'days' });
+      .calculateISODate({ howMuch: (daysToRetrieve - 1) * -1, units: 'days' });
 
     workItemIdNMinus1 = applicationContext.getUniqueId();
     workItemIdN = applicationContext.getUniqueId();
@@ -70,6 +70,7 @@ describe('verify old sent work items do not show up in the outbox', () => {
       assigneeId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       assigneeName: 'Test petitionsclerk1',
       caseStatus: CASE_STATUS_TYPES.new,
+      completedAt: CREATED_N_PLUS_1_DAYS_AGO,
       completedBy: 'Test Petitionsclerk',
       completedByUserId: '3805d1ab-18d0-43ec-bafb-654e83405416',
       createdAt: CREATED_N_PLUS_1_DAYS_AGO,
