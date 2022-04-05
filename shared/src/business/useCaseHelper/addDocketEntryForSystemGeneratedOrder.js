@@ -76,17 +76,13 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
     console.log(typeof amendedPetitionFormData, 'this is the form data');
     console.log(typeof orderPdfData, 'this is the orderPDF data');
 
-    console.log(
-      'pdfData',
-      amendedPetitionFormData,
-      typeof amendedPetitionFormData,
+    combinedPdf = Buffer.from(
+      await applicationContext.getUtilities().combineTwoPdfs({
+        applicationContext,
+        firstPdf: orderPdfData,
+        secondPdf: amendedPetitionFormData,
+      }),
     );
-
-    combinedPdf = applicationContext.getUtilities().combineTwoPdfs({
-      applicationContext,
-      firstPdf: orderPdfData,
-      secondPdf: amendedPetitionFormData,
-    });
   }
 
   await applicationContext.getUtilities().uploadToS3({
