@@ -131,7 +131,46 @@ describe('updateCourtIssuedOrderInteractor', () => {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to Show Cause Title',
+        documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
+        documentType: 'Notice',
+        draftOrderState: {
+          documentType: 'Order of Dismissal for Lack of Jurisdiction',
+          eventCode: 'ODJ',
+        },
+        eventCode: 'NOT',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries.length,
+    ).toEqual(3);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          docketEntries: expect.arrayContaining([
+            expect.objectContaining({
+              documentType: 'Order of Dismissal for Lack of Jurisdiction',
+              eventCode: 'ODJ',
+              freeText: 'Order of Dismissal for Lack of Jurisdiction',
+            }),
+          ]),
+        }),
+      }),
+    );
+  });
+
+  it('should not populate free text for system generated orders', async () => {
+    await updateCourtIssuedOrderInteractor(applicationContext, {
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order to Show Cause',
         documentType: 'Notice',
         draftOrderState: {
           documentType: 'Order to Show Cause',
@@ -154,10 +193,8 @@ describe('updateCourtIssuedOrderInteractor', () => {
       expect.objectContaining({
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
-            expect.objectContaining({
-              documentType: 'Order to Show Cause',
-              eventCode: 'OSC',
-              freeText: 'Order to Show Cause Title',
+            expect.not.objectContaining({
+              freeText: 'Order to Show Cause',
             }),
           ]),
         }),
