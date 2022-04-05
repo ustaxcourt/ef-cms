@@ -32,18 +32,18 @@ OutboxItem.prototype.init = function init(
 
   this.docketEntry = pick(rawOutboxItem.docketEntry, [
     'descriptionDisplay',
-    'documentType',
     'docketEntryId',
+    'documentType',
+    'eventCode',
     'filedBy',
     'isCourtIssuedDocument',
     'isFileAttached',
-    'isMinuteEntry',
-    'isUnservable',
-    'isPaper',
-    'isOrder',
-    'eventCode',
-    'servedAt',
     'isLegacyServed',
+    'isMinuteEntry',
+    'isOrder',
+    'isPaper',
+    'isUnservable',
+    'servedAt',
   ]);
 
   this.docketNumber = rawOutboxItem.docketNumber;
