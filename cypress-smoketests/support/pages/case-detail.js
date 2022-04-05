@@ -15,7 +15,7 @@ exports.goToCaseDetail = docketNumber => {
 };
 
 exports.goToCaseOverview = docketNumber => {
-  // first visit /search because if this step fails and has to be rerun, cerebral will
+  // first visit / because if this step fails and has to be rerun, cerebral will
   // not see it as a new page visit when routing to the same route again and the page
   // will not reload
   cy.goToRoute('/');
