@@ -155,6 +155,7 @@ export const getWorkItemDocumentLink = ({
   const formattedDocketEntry = applicationContext
     .getUtilities()
     .formatDocketEntry(applicationContext, result.docketEntry);
+
   const isInProgress = workItem.inProgress;
 
   const qcWorkItemsUntouched =
@@ -199,6 +200,7 @@ export const getWorkItemDocumentLink = ({
       }
     }
   }
+
   return editLink;
 };
 
@@ -236,7 +238,6 @@ const memoizedFormatItemWithLink = memoize(
       workItem,
       workQueueToDisplay,
     });
-
     return { ...result, editLink };
   },
   ({ isSelected, workItem, workQueueToDisplay }) =>
