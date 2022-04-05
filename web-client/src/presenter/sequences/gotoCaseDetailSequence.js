@@ -42,12 +42,8 @@ const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
   showModalFromQueryAction,
   parallel([
     [getTrialSessionsOnCaseAction, setTrialSessionsAction],
-    [
-      getJudgeForCurrentUserAction,
-      setJudgeUserAction,
-      getNotificationsAction,
-      setNotificationsAction,
-    ],
+    [getJudgeForCurrentUserAction, setJudgeUserAction],
+    [getNotificationsAction, setNotificationsAction],
     [getCaseDeadlinesForCaseAction],
     [getMessagesForCaseAction],
     [getPendingEmailsOnCaseAction, setPendingEmailsOnCaseAction],
