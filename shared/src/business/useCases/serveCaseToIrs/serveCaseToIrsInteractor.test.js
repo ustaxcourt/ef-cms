@@ -423,6 +423,40 @@ describe('serveCaseToIrsInteractor', () => {
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
       ).toHaveBeenCalledTimes(1);
     });
+
+    it('should append a clinic letter to both notice of receipt of petitions when there are two pro se petitioners at different addresses', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockReturnValueOnce(true);
+
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      };
+
+      await serveCaseToIrsInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(2);
+
+      //TODO: replace this assertion with an assertion that calculates the number of pages expected and expects the final PDF to have that many pages
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(2);
+    });
   });
 
   it('should have the same contact id on contactPrimary before and after serving the case', async () => {
