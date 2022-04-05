@@ -27,7 +27,7 @@ describe('Docket Clerk Creates A Trial', () => {
   docketClerkCreatesARemoteTrialSession(cerebralTest, {
     trialLocation,
   });
-  docketClerkViewsTrialSessionList(cerebralTest);
+  docketClerkViewsTrialSessionList(cerebralTest, 'open');
 
   docketClerkCreatesARemoteTrialSession(cerebralTest, {
     sessionType: SESSION_TYPES.special,

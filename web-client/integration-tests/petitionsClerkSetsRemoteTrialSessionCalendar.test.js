@@ -34,22 +34,22 @@ describe('petitions clerk sets a remote trial session calendar', () => {
   describe(`Create a remote trial session with Small session type for '${trialLocation}'`, () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkCreatesARemoteTrialSession(cerebralTest, overrides);
-    docketClerkViewsTrialSessionList(cerebralTest);
-  });
+    docketClerkViewsTrialSessionList(cerebralTest, 'open');
 
-  it('status of remote trial sessions should be open', async () => {
-    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-      trialSessionId: cerebralTest.trialSessionId,
+    it('status of remote trial sessions should be open', async () => {
+      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+        trialSessionId: cerebralTest.trialSessionId,
+      });
+
+      const trialSessionFormatted = runCompute(
+        withAppContextDecorator(formattedTrialSessionDetails),
+        {
+          state: cerebralTest.getState(),
+        },
+      );
+
+      expect(trialSessionFormatted.computedStatus).toEqual('Open');
     });
-
-    const trialSessionFormatted = runCompute(
-      withAppContextDecorator(formattedTrialSessionDetails),
-      {
-        state: cerebralTest.getState(),
-      },
-    );
-
-    expect(trialSessionFormatted.computedStatus).toEqual('Open');
   });
 
   describe('Create cases', () => {
