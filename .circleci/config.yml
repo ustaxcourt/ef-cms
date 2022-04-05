@@ -7,10 +7,10 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v12-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v11-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v12-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -32,18 +32,18 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v12-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v11-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v12-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v12-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
@@ -51,7 +51,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v12-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
