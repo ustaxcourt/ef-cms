@@ -20,6 +20,7 @@ describe('OutboxItem', () => {
           docketEntry: {},
           docketNumber: '101-18',
           docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+          section: DOCKET_SECTION,
         },
         { applicationContext },
       );
@@ -99,6 +100,7 @@ describe('OutboxItem', () => {
           filingDate: '2018-03-01T00:01:00.000Z',
           index: 5,
           isFileAttached: true,
+          isLegacyServed: false,
           processingStatus: 'pending',
           receivedAt: '2018-03-01T00:01:00.000Z',
           servedAt: '2019-08-25T05:00:00.000Z',
@@ -113,14 +115,11 @@ describe('OutboxItem', () => {
     expect(outboxItem.docketEntry.editState).toBeUndefined();
     expect(outboxItem.docketEntry.processingStatus).toBeUndefined();
     expect(outboxItem.docketEntry.createdAt).toBeUndefined();
-    expect(outboxItem.docketEntry.eventCode).toBeUndefined();
     expect(outboxItem.docketEntry.documentTitle).toBeUndefined();
     expect(outboxItem.docketEntry.filingDate).toBeUndefined();
     expect(outboxItem.docketEntry.index).toBeUndefined();
-    expect(outboxItem.docketEntry.isFileAttached).toBeUndefined();
     expect(outboxItem.docketEntry.processingStatus).toBeUndefined();
     expect(outboxItem.docketEntry.receivedAt).toBeUndefined();
-    expect(outboxItem.docketEntry.servedAt).toBeUndefined();
     expect(outboxItem.docketEntry.documentType).toEqual(
       'Proposed Stipulated Decision',
     );
