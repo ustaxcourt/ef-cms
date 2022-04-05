@@ -409,6 +409,32 @@ const serveCaseToIrsInteractor = async (
       });
   }
 
+  if (caseEntity.orderToShowCause) {
+    const { orderToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const todayPlus60 = getBusinessDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    const content = replaceBracketed(
+      orderToShowCause.content,
+      formatNow(FORMATS.MONTH_DAY_YEAR),
+      todayPlus60,
+    );
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderToShowCause,
+          content,
+        },
+      });
+  }
+
   await createPetitionWorkItems({
     applicationContext,
     caseEntity,
