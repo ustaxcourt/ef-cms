@@ -64,16 +64,25 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   // if current order is an OAP retrieve the emended_petition_form pdf from s3
   // Combine with the order pdf
   // Reupload to S3 (already doing)
+  let combinedPdf = orderPdfData;
+  if (systemGeneratedDocument.eventCode === 'OAP') {
+    const { Body: amendedPetitionFormData } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: AMENDED_PETITION_FORM_NAME,
+      })
+      .promise();
 
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: AMENDED_PETITION_FORM_NAME,
-    })
-    .promise();
+    console.log(typeof amendedPetitionFormData, 'this is the form data');
+    console.log(typeof orderPdfData, 'this is the orderPDF data');
 
-  const combinedPdf = combineTwoPdfs(applicationContext, orderPdfData, pdfData);
+    combinedPdf = combineTwoPdfs(
+      applicationContext,
+      orderPdfData,
+      amendedPetitionFormData,
+    );
+  }
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
