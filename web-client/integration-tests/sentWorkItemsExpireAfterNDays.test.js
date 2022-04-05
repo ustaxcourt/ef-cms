@@ -42,8 +42,6 @@ describe('verify old sent work items do not show up in the outbox', () => {
       userId: '3805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.environment.dynamoDbTableName = 'efcms-local';
-    applicationContext.environment.masterDynamoDbEndpoint =
-      'http://localhost:8000';
     const daysToRetrieveKey =
       applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
         .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
