@@ -10,7 +10,7 @@ import { state } from 'cerebral';
  * @returns {object} the path to take next
  */
 export const canUnconsolidateAction = ({ get, path }) => {
-  const casesToRemove = get(state.modal.casesToRemove) || {};
+  const { casesToRemove } = get(state.modal) || {};
   const docketNumbersToRemove = Object.entries(casesToRemove)
     .filter(([, shouldRemove]) => shouldRemove)
     .map(([docketNumber]) => docketNumber);
