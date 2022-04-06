@@ -132,12 +132,14 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     receivedAt,
   } = caseEntity;
 
+  const contactPrimary = caseEntity.getContactPrimary();
+
   let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address: caseEntity.petitioners[0],
+        address: contactPrimary,
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
@@ -180,9 +182,8 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
 
   let clinicLetter;
   const isPrimaryContactProSe =
-    caseEntity.getPractitionersRepresenting(
-      caseEntity.getContactPrimary().contactId,
-    ).length === 0;
+    caseEntity.getPractitionersRepresenting(contactPrimary.contactId).length ===
+    0;
   const isSecondaryContactProSe =
     !!contactSecondary &&
     caseEntity.getPractitionersRepresenting(contactSecondary.contactId)
