@@ -29,6 +29,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
 
+  const { docketEntries } = caseDetail;
+
   const caseDocument =
     applicationContext.getUtilities().getAttachmentDocumentById({
       caseDetail,
@@ -131,7 +133,6 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const showServePetitionButton =
     showNotServed && isPetitionDocument && permissions.SERVE_PETITION;
 
-  const { docketEntries } = caseDetail;
   const showSignStipulatedDecisionButton =
     isInternalUser &&
     caseDocument.eventCode === PROPOSED_STIPULATED_DECISION_EVENT_CODE &&
