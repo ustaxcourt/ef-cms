@@ -204,12 +204,6 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
           protocol: 'S3',
           useTempBucket: false,
         });
-
-      // primaryContactNotrPdfData = await applicationContext.getUtilities().combineTwoPdfs({
-      //   applicationContext,
-      //   firstPdf: primaryContactNotrPdfData,
-      //   secondPdf: clinicLetter,
-      // });
     }
   }
 

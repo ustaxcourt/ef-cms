@@ -28,8 +28,7 @@ const {
   FORMATS,
   getBusinessDateInFuture,
 } = require('../../utilities/DateHandler');
-const { Case } = require('../../entities/cases/Case');
-const { getContactPrimary } = require('../../entities/cases/Case');
+const { Case, getContactPrimary } = require('../../entities/cases/Case');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 
@@ -445,7 +444,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(2);
+      ).toHaveBeenCalledTimes(3);
     });
 
     it('should append a clinic letter to one notice of receipt of petition when there are two petitioners at different addresses but one has representation', async () => {
@@ -453,17 +452,29 @@ describe('serveCaseToIrsInteractor', () => {
         .getPersistenceGateway()
         .isFileExists.mockReturnValueOnce(true);
 
+      const secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
         ...MOCK_CASE,
         contactSecondary: {
           ...getContactPrimary(MOCK_CASE),
           address1: '123 A Different Street',
-          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          contactId: secondaryContactId,
           name: 'Test Petitioner Secondary',
         },
         isPaper: false,
         partyType: PARTY_TYPES.petitionerSpouse,
         preferredTrialCity: 'Los Angeles, California',
+        privatePractitioners: [
+          {
+            barNumber: '123456789',
+            name: 'Test Private Practitioner',
+            practitionerId: '123456789',
+            practitionerType: 'privatePractitioner',
+            representing: [secondaryContactId],
+            role: 'privatePractitioner',
+            userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+          },
+        ],
         procedureType: 'Regular',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
@@ -478,7 +489,7 @@ describe('serveCaseToIrsInteractor', () => {
 
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
-      ).toHaveBeenCalledTimes(1);
+      ).toHaveBeenCalledTimes(2);
     });
 
     it('should append a clinic letter to the one notice of receipt of petition when there are two pro se petitioners at the same addresses', async () => {
@@ -490,7 +501,6 @@ describe('serveCaseToIrsInteractor', () => {
         ...MOCK_CASE,
         contactSecondary: {
           ...getContactPrimary(MOCK_CASE),
-          address1: '123 A Different Street',
           contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
           name: 'Test Petitioner Secondary',
         },
@@ -519,17 +529,28 @@ describe('serveCaseToIrsInteractor', () => {
         .getPersistenceGateway()
         .isFileExists.mockReturnValueOnce(true);
 
+      let secondaryContactId = 'f30c6634-4c3d-4cda-874c-d9a9387e00e2';
       mockCase = {
         ...MOCK_CASE,
         contactSecondary: {
           ...getContactPrimary(MOCK_CASE),
-          address1: '123 A Different Street',
-          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          contactId: secondaryContactId,
           name: 'Test Petitioner Secondary',
         },
         isPaper: false,
         partyType: PARTY_TYPES.petitionerSpouse,
         preferredTrialCity: 'Los Angeles, California',
+        privatePractitioners: [
+          {
+            barNumber: '123456789',
+            name: 'Test Private Practitioner',
+            practitionerId: '123456789',
+            practitionerType: 'privatePractitioner',
+            representing: [secondaryContactId],
+            role: 'privatePractitioner',
+            userId: '130c6634-4c3d-4cda-874c-d9a9387e00e2',
+          },
+        ],
         procedureType: 'Regular',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       };
