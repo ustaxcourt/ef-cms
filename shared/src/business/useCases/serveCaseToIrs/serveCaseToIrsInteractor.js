@@ -190,15 +190,15 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       caseEntity.getContactSecondary().contactId,
     ).length === 0;
 
-  const includeClinicalLetter = shouldIncludeClinicalLetter(
-    preferredTrialCity,
-    isPrimaryContactProSe,
-    contactSecondary,
-    addressesAreDifferent,
-    isSecondaryContactProSe,
-  );
-
-  if (includeClinicalLetter) {
+  if (
+    shouldIncludeClinicalLetter(
+      preferredTrialCity,
+      isPrimaryContactProSe,
+      contactSecondary,
+      addressesAreDifferent,
+      isSecondaryContactProSe,
+    )
+  ) {
     const clinicLetterKey = getClinicLetterKey({
       procedureType,
       trialLocation: preferredTrialCity,
@@ -223,7 +223,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     }
   }
 
-  if (includeClinicalLetter && isPrimaryContactProSe) {
+  if (clinicLetter && isPrimaryContactProSe) {
     primaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
@@ -233,11 +233,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       });
   }
 
-  if (
-    includeClinicalLetter &&
-    secondaryContactNotrPdfData &&
-    isSecondaryContactProSe
-  ) {
+  if (clinicLetter && secondaryContactNotrPdfData && isSecondaryContactProSe) {
     secondaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
