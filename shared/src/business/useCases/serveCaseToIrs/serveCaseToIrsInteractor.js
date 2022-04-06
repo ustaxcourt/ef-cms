@@ -190,15 +190,15 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       caseEntity.getContactSecondary().contactId,
     ).length === 0;
 
-  if (
-    shouldIncludeClinicalLetter(
-      preferredTrialCity,
-      isPrimaryContactProSe,
-      contactSecondary,
-      addressesAreDifferent,
-      isSecondaryContactProSe,
-    )
-  ) {
+  const includeClinicalLetter = shouldIncludeClinicalLetter(
+    preferredTrialCity,
+    isPrimaryContactProSe,
+    contactSecondary,
+    addressesAreDifferent,
+    isSecondaryContactProSe,
+  );
+
+  if (includeClinicalLetter) {
     const clinicLetterKey = getClinicLetterKey({
       procedureType,
       trialLocation: preferredTrialCity,
@@ -223,7 +223,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     }
   }
 
-  if (clinicLetter && isPrimaryContactProSe) {
+  if (includeClinicalLetter && isPrimaryContactProSe) {
     primaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
@@ -233,7 +233,11 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       });
   }
 
-  if (clinicLetter && secondaryContactNotrPdfData && isSecondaryContactProSe) {
+  if (
+    includeClinicalLetter &&
+    secondaryContactNotrPdfData &&
+    isSecondaryContactProSe
+  ) {
     secondaryContactNotrPdfData = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
@@ -285,18 +289,30 @@ const shouldIncludeClinicalLetter = (
   addressesAreDifferent,
   isSecondaryContactProSe,
 ) => {
+  const primaryIsProSe_And_NoSecondary =
+    isPrimaryContactProSe && !contactSecondary;
+
+  const primaryIsProSe_And_SecondaryExists_And_SameAddress_SecondaryIsProSe =
+    isPrimaryContactProSe &&
+    contactSecondary &&
+    !addressesAreDifferent &&
+    isSecondaryContactProSe;
+
+  const primaryIsProSe_And_SecondaryExists_And_DifferentAddress =
+    isPrimaryContactProSe && contactSecondary && addressesAreDifferent; //it doesn't matter whether the secondary is pro se or not, as long as the primary is pro se and we have different addresses
+
+  const primaryNotProSe_And_SecondaryExists_And_DifferentAddress_And_SecondaryIsProSe =
+    !isPrimaryContactProSe &&
+    contactSecondary &&
+    addressesAreDifferent &&
+    isSecondaryContactProSe;
+
   return (
     preferredTrialCity &&
-    ((isPrimaryContactProSe && !contactSecondary) ||
-      (isPrimaryContactProSe &&
-        contactSecondary &&
-        !addressesAreDifferent &&
-        isSecondaryContactProSe) ||
-      (isPrimaryContactProSe && contactSecondary && addressesAreDifferent) ||
-      (!isPrimaryContactProSe &&
-        contactSecondary &&
-        addressesAreDifferent &&
-        isSecondaryContactProSe))
+    (primaryIsProSe_And_NoSecondary ||
+      primaryIsProSe_And_SecondaryExists_And_SameAddress_SecondaryIsProSe ||
+      primaryIsProSe_And_SecondaryExists_And_DifferentAddress ||
+      primaryNotProSe_And_SecondaryExists_And_DifferentAddress_And_SecondaryIsProSe)
   );
 };
 
