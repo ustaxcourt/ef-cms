@@ -425,6 +425,7 @@ describe('serveCaseToIrsInteractor', () => {
           ...getContactPrimary(MOCK_CASE),
           address1: '123 A Different Street',
           contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          contactSecondary: CONTACT_TYPES.secondary,
           name: 'Test Petitioner Secondary',
         },
         isPaper: false,
