@@ -153,18 +153,29 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
 
   let secondaryContactNotrPdfData;
   const contactSecondary = caseEntity.petitioners[1];
-  //caseEntity.getContactSecondary()
-  if (contactSecondary) {
-    secondaryContactNotrPdfData =
-      await generateNotrForSecondaryContactIfDifferent({
+  // caseEntity.getContactSecondary()
+  const addressesAreDifferent = await contactAddressesAreDifferent({
+    applicationContext,
+    caseEntity,
+  });
+  if (contactSecondary && addressesAreDifferent) {
+    secondaryContactNotrPdfData = await applicationContext
+      .getDocumentGenerators()
+      .noticeOfReceiptOfPetition({
         applicationContext,
-        caseCaptionExtension,
-        caseEntity,
-        caseTitle,
-        contactSecondary,
-        docketNumberWithSuffix,
-        preferredTrialCity,
-        receivedAt,
+        data: {
+          address: contactSecondary,
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          preferredTrialCity,
+          receivedAtFormatted: applicationContext
+            .getUtilities()
+            .formatDateString(receivedAt, 'MONTH_DAY_YEAR'),
+          servedDate: applicationContext
+            .getUtilities()
+            .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
+        },
       });
   }
 
@@ -180,8 +191,13 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     ).length === 0;
 
   if (
-    preferredTrialCity &&
-    (isPrimaryContactProSe || isSecondaryContactProSe)
+    shouldIncludeClinicalLetter(
+      preferredTrialCity,
+      isPrimaryContactProSe,
+      contactSecondary,
+      addressesAreDifferent,
+      isSecondaryContactProSe,
+    )
   ) {
     const clinicLetterKey = getClinicLetterKey({
       procedureType,
@@ -262,6 +278,28 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   return urlToReturn;
 };
 
+const shouldIncludeClinicalLetter = (
+  preferredTrialCity,
+  isPrimaryContactProSe,
+  contactSecondary,
+  addressesAreDifferent,
+  isSecondaryContactProSe,
+) => {
+  return (
+    preferredTrialCity &&
+    ((isPrimaryContactProSe && !contactSecondary) ||
+      (isPrimaryContactProSe &&
+        contactSecondary &&
+        !addressesAreDifferent &&
+        isSecondaryContactProSe) ||
+      (isPrimaryContactProSe && contactSecondary && addressesAreDifferent) ||
+      (!isPrimaryContactProSe &&
+        contactSecondary &&
+        addressesAreDifferent &&
+        isSecondaryContactProSe))
+  );
+};
+
 const createCoversheetsForServedEntries = async ({
   applicationContext,
   caseEntity,
@@ -283,20 +321,20 @@ const createCoversheetsForServedEntries = async ({
   }
 };
 
-const generateNotrForSecondaryContactIfDifferent = async ({
+const contactAddressesAreDifferent = async ({
   applicationContext,
-  caseCaptionExtension,
   caseEntity,
-  caseTitle,
-  contactSecondary,
-  docketNumberWithSuffix,
-  preferredTrialCity,
-  receivedAt,
 }) => {
+  const contactSecondary = caseEntity.getContactSecondary();
+
+  if (!contactSecondary) {
+    return false;
+  }
+
   const contactInformationDiff = applicationContext
     .getUtilities()
     .getAddressPhoneDiff({
-      newData: caseEntity.petitioners[0],
+      newData: caseEntity.getContactPrimary(),
       oldData: contactSecondary,
     });
 
@@ -311,45 +349,68 @@ const generateNotrForSecondaryContactIfDifferent = async ({
     'postalCode',
   ];
 
-  const contactAddressesAreDifferent = Object.keys(contactInformationDiff).some(
-    field => addressFields.includes(field),
+  return Object.keys(contactInformationDiff).some(field =>
+    addressFields.includes(field),
   );
-
-  if (!contactAddressesAreDifferent) {
-    return;
-  }
-
-  const secondaryPdfData = await applicationContext
-    .getDocumentGenerators()
-    .noticeOfReceiptOfPetition({
-      applicationContext,
-      data: {
-        address: contactSecondary,
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-        preferredTrialCity,
-        receivedAtFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(receivedAt, 'MONTH_DAY_YEAR'),
-        servedDate: applicationContext
-          .getUtilities()
-          .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
-      },
-    });
-
-  // const { PDFDocument } = await applicationContext.getPdfLib();
-  // const pdfDoc = await PDFDocument.load(pdfData);
-  // const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
-  // const coverPageDocumentPages = await pdfDoc.copyPages(
-  //   secondaryPdfDoc,
-  //   secondaryPdfDoc.getPageIndices(),
-  // );
-  // pdfDoc.insertPage(1, coverPageDocumentPages[0]);
-  //
-  // const pdfDataBuffer = await pdfDoc.save();
-  return secondaryPdfData;
 };
+
+// const generateNotrForSecondaryContactIfDifferent = async ({
+//   applicationContext,
+//   caseCaptionExtension,
+//   caseEntity,
+//   caseTitle,
+//   contactSecondary,
+//   docketNumberWithSuffix,
+//   preferredTrialCity,
+//   receivedAt,
+// }) => {
+//   const contactInformationDiff = applicationContext
+//     .getUtilities()
+//     .getAddressPhoneDiff({
+//       newData: caseEntity.petitioners[0],
+//       oldData: contactSecondary,
+//     });
+//
+//   const addressFields = [
+//     'country',
+//     'countryType',
+//     'address1',
+//     'address2',
+//     'address3',
+//     'city',
+//     'state',
+//     'postalCode',
+//   ];
+//
+//   const contactAddressesAreDifferent = Object.keys(contactInformationDiff).some(
+//     field => addressFields.includes(field),
+//   );
+//
+//   if (!contactAddressesAreDifferent) {
+//     return;
+//   }
+//
+//   const secondaryPdfData = await applicationContext
+//     .getDocumentGenerators()
+//     .noticeOfReceiptOfPetition({
+//       applicationContext,
+//       data: {
+//         address: contactSecondary,
+//         caseCaptionExtension,
+//         caseTitle,
+//         docketNumberWithSuffix,
+//         preferredTrialCity,
+//         receivedAtFormatted: applicationContext
+//           .getUtilities()
+//           .formatDateString(receivedAt, 'MONTH_DAY_YEAR'),
+//         servedDate: applicationContext
+//           .getUtilities()
+//           .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
+//       },
+//     });
+//
+//   return secondaryPdfData;
+// };
 
 /**
  * serveCaseToIrsInteractor
