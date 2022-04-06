@@ -4,7 +4,7 @@
   "reporterOptions": {
     "toConsole": true
   },
-  "video": true,
+  "video": false,
   "fixturesFolder": "cypress-smoketests/fixtures",
   "integrationFolder": "cypress-smoketests/integration",
   "pluginsFile": "cypress-smoketests/plugins/index.js",
