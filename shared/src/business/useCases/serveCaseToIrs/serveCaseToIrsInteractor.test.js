@@ -305,13 +305,8 @@ describe('serveCaseToIrsInteractor', () => {
 
       mockCase = {
         ...MOCK_CASE,
-        contactSecondary: {
-          ...getContactPrimary(MOCK_CASE),
-          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
-          name: 'Test Petitioner Secondary',
-        },
         isPaper: false,
-        partyType: PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Los Angeles, California',
         procedureType: 'Regular',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -349,13 +344,8 @@ describe('serveCaseToIrsInteractor', () => {
 
       mockCase = {
         ...MOCK_CASE,
-        contactSecondary: {
-          ...getContactPrimary(MOCK_CASE),
-          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
-          name: 'Test Petitioner Secondary',
-        },
         isPaper: false,
-        partyType: PARTY_TYPES.petitionerSpouse,
+        partyType: PARTY_TYPES.petitioner,
         preferredTrialCity: 'Billings, Montana',
         procedureType: 'Regular',
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
@@ -452,10 +442,108 @@ describe('serveCaseToIrsInteractor', () => {
         applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
       ).toHaveBeenCalledTimes(2);
 
-      //TODO: replace this assertion with an assertion that calculates the number of pages expected and expects the final PDF to have that many pages
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
       ).toHaveBeenCalledTimes(2);
+    });
+
+    it('should append a clinic letter to one notice of receipt of petition when there are two petitioners at different addresses but one has representation', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockReturnValueOnce(true);
+
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      };
+
+      await serveCaseToIrsInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(2);
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(1);
+    });
+
+    it('should append a clinic letter to the one notice of receipt of petition when there are two pro se petitioners at the same addresses', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockReturnValueOnce(true);
+
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      };
+
+      await serveCaseToIrsInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(1);
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(1);
+    });
+
+    it('should not append a clinic letter to the one notice of receipt of petition when there are two petitioners at the same addresses with one having representation', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .isFileExists.mockReturnValueOnce(true);
+
+      mockCase = {
+        ...MOCK_CASE,
+        contactSecondary: {
+          ...getContactPrimary(MOCK_CASE),
+          address1: '123 A Different Street',
+          contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+          name: 'Test Petitioner Secondary',
+        },
+        isPaper: false,
+        partyType: PARTY_TYPES.petitionerSpouse,
+        preferredTrialCity: 'Los Angeles, California',
+        procedureType: 'Regular',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      };
+
+      await serveCaseToIrsInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+      });
+
+      expect(
+        applicationContext.getDocumentGenerators().noticeOfReceiptOfPetition,
+      ).toHaveBeenCalledTimes(1);
+
+      expect(
+        applicationContext.getUtilities().combineTwoPdfs,
+      ).toHaveBeenCalledTimes(0);
     });
   });
 
