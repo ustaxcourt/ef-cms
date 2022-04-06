@@ -152,8 +152,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     });
 
   let secondaryContactNotrPdfData;
-  const contactSecondary = caseEntity.petitioners[1];
-  // caseEntity.getContactSecondary()
+  const contactSecondary = caseEntity.getContactSecondary();
   const addressesAreDifferent = await contactAddressesAreDifferent({
     applicationContext,
     caseEntity,
@@ -185,10 +184,9 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       caseEntity.getContactPrimary().contactId,
     ).length === 0;
   const isSecondaryContactProSe =
-    !!caseEntity.getContactSecondary() &&
-    caseEntity.getPractitionersRepresenting(
-      caseEntity.getContactSecondary().contactId,
-    ).length === 0;
+    !!contactSecondary &&
+    caseEntity.getPractitionersRepresenting(contactSecondary.contactId)
+      .length === 0;
 
   if (
     shouldIncludeClinicalLetter(
