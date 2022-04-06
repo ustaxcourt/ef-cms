@@ -11,6 +11,7 @@ export const openAddToTrialModalSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   getTrialSessionsAction,
   setTrialSessionsOnModalAction,
+  setTrialSessionsOnModalAction,
   setShowAllLocationsFalseAction,
   setShowModalFactoryAction('AddToTrialModal'),
 ]);
