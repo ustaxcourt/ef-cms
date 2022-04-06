@@ -209,7 +209,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
 
     const orderToShowCauseDocketEntry = cerebralTest
       .getState('caseDetail.docketEntries')
-      .find(d => d.eventCode === 'OSC');
+      .find(d => d.eventCode === 'OSCP');
 
     expect(orderForFilingFeeDocketEntry.isDraft).toEqual(true);
     expect(orderToShowCauseDocketEntry.isDraft).toEqual(true);
