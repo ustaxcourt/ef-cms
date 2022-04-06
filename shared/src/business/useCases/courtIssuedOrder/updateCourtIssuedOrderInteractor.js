@@ -51,7 +51,7 @@ exports.updateCourtIssuedOrderInteractor = async (
     throw new NotFoundError('Document not found');
   }
 
-  const systemGeneratedOrderTypeEventCodes = ['OSC', 'OF'];
+  const systemGeneratedOrderTypeEventCodes = ['OSCP', 'OF'];
 
   const orderTypeEventCodes = Object.values(ORDER_TYPES)
     .filter(d => !systemGeneratedOrderTypeEventCodes.includes(d.eventCode))
