@@ -172,11 +172,12 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   const isPrimaryContactProSe =
     caseEntity.getPractitionersRepresenting(
       caseEntity.getContactPrimary().contactId,
-    ) === undefined;
+    ).length === 0;
   const isSecondaryContactProSe =
+    !!caseEntity.getContactSecondary() &&
     caseEntity.getPractitionersRepresenting(
       caseEntity.getContactSecondary().contactId,
-    ) === undefined;
+    ).length === 0;
 
   if (
     preferredTrialCity &&
