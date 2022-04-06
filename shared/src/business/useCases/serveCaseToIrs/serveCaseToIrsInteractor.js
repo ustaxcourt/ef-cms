@@ -132,7 +132,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     receivedAt,
   } = caseEntity;
 
-  let pdfData = await applicationContext
+  let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
@@ -151,32 +151,37 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       },
     });
 
+  let secondaryContactNotrPdfData;
   const contactSecondary = caseEntity.petitioners[1];
+  //caseEntity.getContactSecondary()
   if (contactSecondary) {
-    const dataWithNoticeAttached = await generatePaperNoticeForContactSecondary(
-      {
+    secondaryContactNotrPdfData =
+      await generateNotrForSecondaryContactIfDifferent({
         applicationContext,
         caseCaptionExtension,
         caseEntity,
         caseTitle,
         contactSecondary,
         docketNumberWithSuffix,
-        pdfData,
         preferredTrialCity,
         receivedAt,
-      },
-    );
-    if (dataWithNoticeAttached) {
-      pdfData = dataWithNoticeAttached;
-    }
+      });
   }
 
-  const caseConfirmationPdfName =
-    caseEntity.getCaseConfirmationGeneratedPdfFileName();
+  let clinicLetter;
+  const isPrimaryContactProSe =
+    caseEntity.getPractitionersRepresenting(
+      caseEntity.getContactPrimary().contactId,
+    ) === undefined;
+  const isSecondaryContactProSe =
+    caseEntity.getPractitionersRepresenting(
+      caseEntity.getContactSecondary().contactId,
+    ) === undefined;
 
-  const isProSe = caseEntity.privatePractitioners.length === 0;
-
-  if (preferredTrialCity && isProSe) {
+  if (
+    preferredTrialCity &&
+    (isPrimaryContactProSe || isSecondaryContactProSe)
+  ) {
     const clinicLetterKey = getClinicLetterKey({
       procedureType,
       trialLocation: preferredTrialCity,
@@ -190,7 +195,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       });
 
     if (doesClinicLetterExist) {
-      const clinicLetter = await applicationContext
+      clinicLetter = await applicationContext
         .getPersistenceGateway()
         .getDocument({
           applicationContext,
@@ -199,18 +204,52 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
           useTempBucket: false,
         });
 
-      pdfData = await applicationContext.getUtilities().combineTwoPdfs({
-        applicationContext,
-        firstPdf: pdfData,
-        secondPdf: clinicLetter,
-      });
+      // primaryContactNotrPdfData = await applicationContext.getUtilities().combineTwoPdfs({
+      //   applicationContext,
+      //   firstPdf: primaryContactNotrPdfData,
+      //   secondPdf: clinicLetter,
+      // });
     }
   }
+
+  if (clinicLetter && isPrimaryContactProSe) {
+    primaryContactNotrPdfData = await applicationContext
+      .getUtilities()
+      .combineTwoPdfs({
+        applicationContext,
+        firstPdf: primaryContactNotrPdfData,
+        secondPdf: clinicLetter,
+      });
+  }
+
+  if (clinicLetter && secondaryContactNotrPdfData && isSecondaryContactProSe) {
+    secondaryContactNotrPdfData = await applicationContext
+      .getUtilities()
+      .combineTwoPdfs({
+        applicationContext,
+        firstPdf: primaryContactNotrPdfData,
+        secondPdf: clinicLetter,
+      });
+  }
+
+  let combinedNotrPdfData = primaryContactNotrPdfData;
+  if (secondaryContactNotrPdfData) {
+    combinedNotrPdfData = await applicationContext
+      .getUtilities()
+      .combineTwoPdfs({
+        applicationContext,
+        firstPdf: primaryContactNotrPdfData,
+        secondPdf: secondaryContactNotrPdfData,
+      });
+  }
+
+  const caseConfirmationPdfName =
+    caseEntity.getCaseConfirmationGeneratedPdfFileName();
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
     caseConfirmationPdfName,
-    pdfData: Buffer.from(pdfData),
+    pdfData: Buffer.from(combinedNotrPdfData),
   });
 
   let urlToReturn;
@@ -249,14 +288,13 @@ const createCoversheetsForServedEntries = async ({
   }
 };
 
-const generatePaperNoticeForContactSecondary = async ({
+const generateNotrForSecondaryContactIfDifferent = async ({
   applicationContext,
   caseCaptionExtension,
   caseEntity,
   caseTitle,
   contactSecondary,
   docketNumberWithSuffix,
-  pdfData,
   preferredTrialCity,
   receivedAt,
 }) => {
@@ -305,17 +343,17 @@ const generatePaperNoticeForContactSecondary = async ({
       },
     });
 
-  const { PDFDocument } = await applicationContext.getPdfLib();
-  const pdfDoc = await PDFDocument.load(pdfData);
-  const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
-  const coverPageDocumentPages = await pdfDoc.copyPages(
-    secondaryPdfDoc,
-    secondaryPdfDoc.getPageIndices(),
-  );
-  pdfDoc.insertPage(1, coverPageDocumentPages[0]);
-
-  const pdfDataBuffer = await pdfDoc.save();
-  return pdfDataBuffer;
+  // const { PDFDocument } = await applicationContext.getPdfLib();
+  // const pdfDoc = await PDFDocument.load(pdfData);
+  // const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
+  // const coverPageDocumentPages = await pdfDoc.copyPages(
+  //   secondaryPdfDoc,
+  //   secondaryPdfDoc.getPageIndices(),
+  // );
+  // pdfDoc.insertPage(1, coverPageDocumentPages[0]);
+  //
+  // const pdfDataBuffer = await pdfDoc.save();
+  return secondaryPdfData;
 };
 
 /**
