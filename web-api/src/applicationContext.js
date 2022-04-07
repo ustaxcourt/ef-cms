@@ -2143,7 +2143,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),
       info: logger.info.bind(logger),
-      warn: logger.warn.bind(logger),
+      warn: logger.warning.bind(logger),
     },
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);
