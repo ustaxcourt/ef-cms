@@ -23,7 +23,7 @@ exports.getEligibleCasesForTrialSession = async ({
   mappings.map(metadata => {
     const { docketNumber } = metadata;
     if (docketNumbers.includes(docketNumber)) {
-      console.warn(
+      applicationContext.logger.info(
         `Encountered duplicate eligible-for-trial-case-catalog mapping for case ${docketNumber}.`,
       );
     } else {
