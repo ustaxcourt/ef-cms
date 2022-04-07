@@ -67,7 +67,5 @@ if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
 fi
 
-echo $TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
-
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
 terraform apply

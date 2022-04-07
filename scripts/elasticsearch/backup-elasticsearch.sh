@@ -26,9 +26,9 @@
 curl -XPUT 'http://localhost:9200/_snapshot/snapshot-repository' -H "Content-Type: application/json" -d'{
    "type": "s3",
    "settings": {
-      "bucket": "'${ENV}'-es-snapshots-flexion.us",
+      "bucket": "'"${ENV}"'-es-snapshots-flexion.us",
       "region": "us-east-1",
-      "role_arn": "arn:aws:iam::'${AWS_ACCOUNT_ID}':role/es-snapshots-flexion.us"
+      "role_arn": "arn:aws:iam::'"${AWS_ACCOUNT_ID}"':role/es-snapshots-flexion.us"
    }
  }' 
 

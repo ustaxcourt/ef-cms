@@ -32,5 +32,5 @@ ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA#\"}"
 ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA%\"}"
 ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA#\"}"
 
-node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_ALPHA}
-node ./web-api/elasticsearch/elasticsearch-index-settings.js ${ELASTICSEARCH_ENDPOINT_BETA}
+node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_ALPHA}"
+node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_BETA}"

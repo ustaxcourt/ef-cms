@@ -3,3 +3,9 @@
 
 npx lint-staged
 ./check-auto-approve.sh
+
+find . \
+    -iname "*.sh" \
+    -not -path "./node_modules/*" \
+    -not -path "./.husky/**/*.sh" \
+    -exec shellcheck -x "{}" \;

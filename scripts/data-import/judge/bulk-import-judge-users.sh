@@ -7,11 +7,11 @@
 #
 
 # Getting the account-wide deployment settings and injecting them into the shell environment
-if [ -z ${SECRETS_LOADED} ]; then
+if [ -z "${SECRETS_LOADED}" ]; then
   . ./scripts/load-environment-from-secrets.sh
 fi
 
-if [ -z ${CI} ]; then
+if [ -z "${CI}" ]; then
   ./check-env-variables.sh \
     "ENV" \
     "USTC_ADMIN_PASS" \
@@ -26,7 +26,14 @@ fi
 
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
-ENV=${ENV} STAGE=${ENV} DEPLOYING_COLOR=${DEPLOYING_COLOR} REGION=${REGION} DYNAMODB_ENDPOINT=dynamodb.${REGION}.amazonaws.com \
-S3_ENDPOINT=s3.${REGION}.amazonaws.com DOCUMENTS_BUCKET_NAME=${EFCMS_DOMAIN}-documents-${ENV}-${REGION} \
-USER_POOL_ID=${USER_POOL_ID} \
-FILE_NAME=${FILE_NAME} node ./scripts/data-import/judge/bulkImportJudgeUsers.js | tee bulk-import-log.txt
+export ENV
+export REGION
+export DEPLOYING_COLOR
+export USER_POOL_ID
+export FILE_NAME
+
+STAGE=${ENV} \
+  DYNAMODB_ENDPOINT="dynamodb.${REGION}.amazonaws.com" \
+  S3_ENDPOINT="s3.${REGION}.amazonaws.com" \
+  DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" \
+  node ./scripts/data-import/judge/bulkImportJudgeUsers.js | tee bulk-import-log.txt

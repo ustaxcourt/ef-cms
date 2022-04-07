@@ -2,11 +2,14 @@
 
 ENV=$1
 
-export DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh ${ENV})
-export MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh ${ENV})
+DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
+MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
+
+export DEPLOYING_COLOR
+export MIGRATE_FLAG
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
-if [ -z ${SECRETS_LOADED} ]; then
+if [ -z "${SECRETS_LOADED}" ]; then
   pushd ../../../
   . ./scripts/load-environment-from-secrets.sh
   popd
