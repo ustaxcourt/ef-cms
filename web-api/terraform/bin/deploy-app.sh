@@ -2,7 +2,7 @@
 
 ENV=$1
 
-DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
+DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh $ENV)
 MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 
 export DEPLOYING_COLOR
