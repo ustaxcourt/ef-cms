@@ -8,4 +8,4 @@ find . \
     -iname "*.sh" \
     -not -path "./node_modules/*" \
     -not -path "./.husky/**/*.sh" \
-    -exec shellcheck -x "{}" \;
+    -exec shellcheck -x -S style "{}" \;
