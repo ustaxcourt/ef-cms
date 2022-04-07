@@ -40,7 +40,7 @@ S3RVER_PID=$!
 URL=http://localhost:9000/ ./wait-until.sh
 npm run seed:s3
 
-if [ ! -z "$RESUME" ]; then
+if [ -n "$RESUME" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
 else
   echo "creating & seeding dynamo tables"

@@ -23,7 +23,7 @@ BUCKETS=(
 for bucket in "${BUCKETS[@]}"; do
   # The only way to grant a bucket as public is via a bucket policy, so we check if the policy
   # file exists and throw an error on status codes
-  $(aws s3api get-bucket-policy --bucket "${bucket}")
+  aws s3api get-bucket-policy --bucket "${bucket}" >> /dev/null 2>&1
   code=$?
   if [ "${code}" == "0" ]; then
     echo "ERROR: the bucket of $bucket is not private; it has a bucket policy when it should not"
@@ -31,7 +31,7 @@ for bucket in "${BUCKETS[@]}"; do
   fi
 
   # there should be a public access block defined for the buckets
-  blocks=$(aws s3api get-public-access-block --bucket $bucket)
+  blocks=$(aws s3api get-public-access-block --bucket "${bucket}")
   blockPublicAcls=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.BlockPublicAcls")
   ignorePublicAcls=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.IgnorePublicAcls")
   blockPublicPolicy=$(echo "${blocks}" | jq -r ".PublicAccessBlockConfiguration.BlockPublicPolicy")
