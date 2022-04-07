@@ -4,6 +4,7 @@
 npx lint-staged
 ./check-auto-approve.sh
 
+# run shellcheck over all .sh scripts in our project
 bash_files=$(find . \
     -iname "*.sh" \
     -not -path "./node_modules/*" \
