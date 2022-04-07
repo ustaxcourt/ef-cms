@@ -19,9 +19,17 @@ exports.getEligibleCasesForTrialSession = async ({
     applicationContext,
   });
 
-  const docketNumbers = [
-    ...new Set(mappings.map(metadata => metadata.docketNumber)),
-  ];
+  let docketNumbers = [];
+  mappings.map(metadata => {
+    const { docketNumber } = metadata;
+    if (docketNumbers.includes(docketNumber)) {
+      console.warn(
+        `Encountered duplicate eligible-for-trial-case-catalog mapping for case ${docketNumber}.`,
+      );
+    } else {
+      docketNumbers.push(docketNumber);
+    }
+  });
 
   const results = await client.batchGet({
     applicationContext,
