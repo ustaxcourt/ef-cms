@@ -4,8 +4,11 @@
 npx lint-staged
 ./check-auto-approve.sh
 
-find . \
+bash_files=$(find . \
     -iname "*.sh" \
     -not -path "./node_modules/*" \
-    -not -path "./.husky/**/*.sh" \
-    -exec shellcheck -x -S style "{}" \;
+    -not -path "./.husky/**/*.sh")
+
+for file in $bash_files; do
+    shellcheck -x -S style $file
+done
