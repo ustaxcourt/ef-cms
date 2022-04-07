@@ -684,6 +684,25 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
+  it('should underline "See" in orderToShowCause content', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderToShowCause: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining('<u>See</u>'),
+    });
+  });
+
   it('should generate an order, upload it to s3, and remove brackets from orderContent for orderForFilingFee', async () => {
     mockCase = {
       ...MOCK_CASE,
