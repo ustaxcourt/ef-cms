@@ -41,6 +41,10 @@ const onFileUploadedSuccess = [
   },
 ];
 
+// override pdf using docketentryid in s3
+// retrieve the overriden pdf in s3
+// append!
+
 export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
   isFormPristineAction,
   {
@@ -66,7 +70,17 @@ export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
             success: [onFileUploadedSuccess],
           },
         ],
-        yes: [appendFormAndOverwriteOrderFileAction],
+        // yes: [appendFormAndOverwriteOrderFileAction],
+        yes: [
+          overwriteOrderFileAction,
+          {
+            error: [openFileUploadErrorModal],
+            success: [
+              appendFormAndOverwriteOrderFileAction,
+              ...onFileUploadedSuccess,
+            ],
+          },
+        ],
       },
     ],
   },
