@@ -29,6 +29,7 @@ const {
   getBusinessDateInFuture,
 } = require('../../utilities/DateHandler');
 const { Case, getContactPrimary } = require('../../entities/cases/Case');
+const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
 
@@ -418,6 +419,13 @@ describe('serveCaseToIrsInteractor', () => {
         .getPersistenceGateway()
         .isFileExists.mockReturnValueOnce(true);
 
+      const primaryContactNotr = getFakeFile(true, true);
+      const secondaryContactNotr = getFakeFile(true);
+
+      applicationContext
+        .getDocumentGenerators()
+        .noticeOfReceiptOfPetition.mockReturnValueOnce(primaryContactNotr);
+
       mockCase = {
         ...MOCK_CASE,
         contactSecondary: {
@@ -445,6 +453,16 @@ describe('serveCaseToIrsInteractor', () => {
       expect(
         applicationContext.getUtilities().combineTwoPdfs,
       ).toHaveBeenCalledTimes(3);
+
+      const actualPrimaryContactNotr =
+        applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
+          .firstPdf;
+      expect(actualPrimaryContactNotr).toEqual(primaryContactNotr);
+
+      const actualSecondaryContactNotr =
+        applicationContext.getUtilities().combineTwoPdfs.mock.calls[1][0]
+          .firstPdf;
+      expect(actualSecondaryContactNotr).toEqual(secondaryContactNotr);
     });
 
     it('should append a clinic letter to one notice of receipt of petition when there are two petitioners at different addresses but one has representation', async () => {
