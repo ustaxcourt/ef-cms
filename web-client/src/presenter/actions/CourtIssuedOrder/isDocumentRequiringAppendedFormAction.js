@@ -1,3 +1,4 @@
+import { SYSTEM_GENERATED_DOCUMENT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 
 /**
@@ -9,8 +10,15 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method used for getting state
  * @returns {object} the next path based on if the file was successfully uploaded or not
  */
-export const isDocumentRequiringAppendedForm = async ({
-  applicationContext,
-  get,
-  path,
-}) => {};
+export const isDocumentRequiringAppendedFormAction = async ({ get, path }) => {
+  const { eventCode } = get(state.documentToEdit);
+
+  if (
+    eventCode ===
+    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode
+  ) {
+    return path.yes();
+  }
+
+  return path.no();
+};
