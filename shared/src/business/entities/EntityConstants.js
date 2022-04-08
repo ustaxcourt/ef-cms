@@ -65,6 +65,12 @@ const ALLOWLIST_FEATURE_FLAGS = {
   },
 };
 
+const CONFIGURATION_ITEM_KEYS = {
+  SECTION_OUTBOX_NUMBER_OF_DAYS: {
+    key: 'section-outbox-number-of-days',
+  },
+};
+
 const DEFAULT_PROCEEDING_TYPE = TRIAL_SESSION_PROCEEDING_TYPES.inPerson;
 
 const SERVICE_INDICATOR_TYPES = {
@@ -489,7 +495,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   },
   orderForFilingFee: {
     content:
-      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case  related  forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
+      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
       .documentType,
     eventCode: 'OF',
@@ -1161,6 +1167,7 @@ module.exports = deepFreeze({
   CHAMBERS_SECTION,
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
+  CONFIGURATION_ITEM_KEYS,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,

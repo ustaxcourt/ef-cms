@@ -8,7 +8,7 @@
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
 [ -z "${ZONE_NAME}" ] && echo "You must have ZONE_NAME set in your environment" && exit 1
 
-MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)
+MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
 
 # disabling aws pager https://github.com/aws/aws-cli/pull/4702#issue-344978525
 export AWS_PAGER=""
@@ -35,7 +35,7 @@ node ./web-client/switch-api-colors.js
 node ./web-client/switch-public-api-colors.js
 node ./web-api/switch-cognito-triggers-color.js
 
-aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"'$DEPLOYING_COLOR'"}}'
+aws dynamodb put-item --region us-east-1 --table-name "efcms-deploy-${ENV}" --item '{"pk":{"S":"current-color"},"sk":{"S":"current-color"},"current":{"S":"'"${DEPLOYING_COLOR}"'"}}'
 
 # check if both streams are disabled
 UUID=$(aws lambda list-event-source-mappings --function-name "arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:streams_${ENV}_${CURRENT_COLOR}" --region us-east-1 | jq -r ".EventSourceMappings[0].UUID")

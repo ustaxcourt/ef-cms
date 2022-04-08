@@ -19,9 +19,9 @@
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
-./web-api/clear-elasticsearch-index.sh $ENV $ELASTICSEARCH_ENDPOINT
-./web-api/setup-elasticsearch-index.sh $ENV
+./web-api/clear-elasticsearch-index.sh "${ENV}" "${ELASTICSEARCH_ENDPOINT}"
+./web-api/setup-elasticsearch-index.sh "${ENV}"
 
 pushd web-api
-node reindex-dynamodb-records.js $DYNAMODB_TABLE_NAME
+node reindex-dynamodb-records.js "${DYNAMODB_TABLE_NAME}"
 popd
