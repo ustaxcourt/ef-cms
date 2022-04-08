@@ -46,6 +46,9 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
+  appendAmendedPetitionForm,
+} = require('../../shared/src/business/utilities/documentGenerators/appendAmendedPetitionForm');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -2108,6 +2111,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
+        appendAmendedPetitionForm,
         calculateDifferenceInDays,
         calculateISODate,
         combineTwoPdfs,
