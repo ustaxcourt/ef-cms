@@ -5,6 +5,7 @@ module.exports = user => {
     debug: jest.fn(),
     error: jest.fn(),
     info: jest.fn(),
+    warn: jest.fn(),
   });
 
   applicationContext.environment.dynamoDbTableName = 'mocked';
