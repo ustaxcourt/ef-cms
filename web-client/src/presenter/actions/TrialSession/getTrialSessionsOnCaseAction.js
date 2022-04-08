@@ -5,6 +5,8 @@ import { state } from 'cerebral';
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext needed for getting the getCase use case
+ * @param {object} providers.get the cerebral get function for fetching state variables
+ * @param {object} providers.store the cerebral store used for setting state variables
  * @returns {object} contains the trial sessions returned from the use case
  */
 export const getTrialSessionsOnCaseAction = async ({
