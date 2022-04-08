@@ -9,7 +9,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get method used for getting state
  * @returns {object} the next path based on if the file was successfully uploaded or not
  */
-export const overwriteOrderFileAction = async ({
+export const appendFormAndOverwriteOrderFileAction = async ({
   applicationContext,
   get,
   path,
@@ -21,18 +21,8 @@ export const overwriteOrderFileAction = async ({
   // Identify an endpoint to call if eventCode === OAP
   // We will probably need a new endpoint so that we can edit the draft OAP
 
-  try {
-    const primaryDocumentFileId = await applicationContext
-      .getUseCases()
-      .uploadOrderDocumentInteractor(applicationContext, {
-        docketEntryIdToOverwrite: documentToEdit.docketEntryId,
-        documentFile: finalDocument,
-      });
+  //create an endpoint to combine the 2 pdfs
+  applicationContext.getUseCases().appendAmendedPetitionFormInteractor();
 
-    return path.success({
-      primaryDocumentFileId,
-    });
-  } catch (err) {
-    return path.error();
-  }
+  // proxy (web client app context) -> lambda -> interactor (web api )
 };
