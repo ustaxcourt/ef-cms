@@ -7,6 +7,46 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   }
 }
 
+resource "aws_s3_bucket" "documents_bucket_east" {
+  bucket = "${var.dns_domain}-documents-${var.environment}-us-east-1"
+  acl    = "private"
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "aws_s3_bucket" "documents_bucket_west" {
+  bucket = "${var.dns_domain}-documents-${var.environment}-us-west-1"
+  acl    = "private"
+
+  tags = {
+    environment = var.environment
+  }
+}
+
+resource "null_resource" "documents_east_object" {
+  depends_on = [aws_s3_bucket.documents_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_api.output_path}/amended-petition-form.pdf s3://${aws_s3_bucket.documents_bucket_east.id}/amended-petition-form.pdf"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
+resource "null_resource" "documents_west_object" {
+  depends_on = [aws_s3_bucket.documents_bucket_west]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_api.output_path}/amended-petition-form.pdf s3://${aws_s3_bucket.documents_bucket_west.id}/amended-petition-form.pdf"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
 data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
