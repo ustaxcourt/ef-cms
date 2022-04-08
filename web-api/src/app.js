@@ -568,7 +568,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   // POST
   app.post(
-    '/case-documents/append-pdf',
+    '/case-documents/:docketEntryId/append-pdf',
     lambdaWrapper(appendAmendedPetitionFormLambda),
   );
   app.post(

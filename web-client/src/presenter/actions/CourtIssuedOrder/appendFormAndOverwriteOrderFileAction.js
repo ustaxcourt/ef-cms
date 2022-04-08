@@ -15,15 +15,11 @@ export const appendFormAndOverwriteOrderFileAction = async ({
 }) => {
   // use docketentry id to retrieve file from s3
   // then call new endpoint to append petition form to the retrieved file from s3
+  const { docketEntryId } = get(state.documentToEdit);
 
-  //create an endpoint to combine the 2 pdfs
   const thing1 = await applicationContext
     .getUseCases()
     .appendAmendedPetitionFormInteractor(applicationContext, {
-      orderContent: primaryDocumentFile,
+      docketEntryId,
     });
-
-  console.log(thing1, '----');
-
-  // proxy (web client app context) -> lambda -> interactor (web api )
 };

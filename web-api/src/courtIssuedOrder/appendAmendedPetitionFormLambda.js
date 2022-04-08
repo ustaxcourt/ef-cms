@@ -12,9 +12,10 @@ exports.appendAmendedPetitionFormLambda = event =>
     async ({ applicationContext }) => {
       return await applicationContext
         .getUseCases()
-        .appendAmendedPetitionFormInteractor(applicationContext, {
-          ...JSON.parse(event.body),
-        });
+        .appendAmendedPetitionFormInteractor(
+          applicationContext,
+          event.pathParameters,
+        );
     },
     { logResults: false },
   );

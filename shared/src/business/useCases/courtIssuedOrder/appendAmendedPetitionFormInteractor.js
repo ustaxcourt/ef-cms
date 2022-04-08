@@ -4,7 +4,7 @@ const {
 
 exports.appendAmendedPetitionFormInteractor = async (
   applicationContext,
-  { orderContent },
+  { docketEntryId },
 ) => {
   const { Body: amendedPetitionFormData } = await applicationContext
     .getStorageClient()
