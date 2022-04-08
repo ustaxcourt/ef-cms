@@ -4,6 +4,7 @@
 TEMP_ENV=${ENV}
 export ENV=account
 pushd ../../../../
+# shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 popd
 export ENV=${TEMP_ENV}

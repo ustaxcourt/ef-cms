@@ -5,6 +5,7 @@
 # Usage
 #   ./clear-env.sh
 
+# shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 
 ./check-env-variables.sh \
@@ -52,6 +53,6 @@ echo "setting up elasticsearch"
 echo "clearing dynamo"
 node ./web-api/clear-dynamodb-table.js "efcms-${ENV}-${SOURCE_TABLE_VERSION}"
 echo "setting up test users"
-. ./shared/admin-tools/user/setup-test-users.sh ${ENV}
+. ./shared/admin-tools/user/setup-test-users.sh "${ENV}"
 echo "importing judge users"
 ./scripts/data-import/judge/bulk-import-judge-users.sh
