@@ -1,4 +1,6 @@
-const { AMENDED_PETITION_FORM_NAME } = require('../entities/EntityConstants');
+const {
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 /**
@@ -58,31 +60,15 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
     },
   });
 
-  console.log('orderPdfData', orderPdfData, typeof orderPdfData);
-
-  // if current order is an OAP retrieve the emended_petition_form pdf from s3
-  // Combine with the order pdf
-  // Reupload to S3 (already doing)
   let combinedPdf = orderPdfData;
-  if (systemGeneratedDocument.eventCode === 'OAP') {
-    const { Body: amendedPetitionFormData } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: AMENDED_PETITION_FORM_NAME,
-      })
-      .promise();
-
-    console.log(typeof amendedPetitionFormData, 'this is the form data');
-    console.log(typeof orderPdfData, 'this is the orderPDF data');
-
-    combinedPdf = Buffer.from(
-      await applicationContext.getUtilities().combineTwoPdfs({
-        applicationContext,
-        firstPdf: orderPdfData,
-        secondPdf: amendedPetitionFormData,
-      }),
-    );
+  if (
+    systemGeneratedDocument.eventCode ===
+    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode
+  ) {
+    combinedPdf = await applicationContext.getUtilities().uploadToS3({
+      applicationContext,
+      oapDocument: orderPdfData,
+    });
   }
 
   await applicationContext.getUtilities().uploadToS3({
