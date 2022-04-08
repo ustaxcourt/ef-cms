@@ -28,7 +28,7 @@ resource "aws_s3_bucket" "documents_bucket_west" {
 resource "null_resource" "documents_east_object" {
   depends_on = [aws_s3_bucket.documents_bucket_east]
   provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.zip_api.output_path}/amended-petition-form.pdf s3://${aws_s3_bucket.documents_bucket_east.id}/amended-petition-form.pdf"
+    command = "aws s3 cp ${data.archive_file.pdfs.output_path} s3://${aws_s3_bucket.documents_bucket_west.id}"
   }
 
   triggers = {
@@ -39,12 +39,18 @@ resource "null_resource" "documents_east_object" {
 resource "null_resource" "documents_west_object" {
   depends_on = [aws_s3_bucket.documents_bucket_west]
   provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.zip_api.output_path}/amended-petition-form.pdf s3://${aws_s3_bucket.documents_bucket_west.id}/amended-petition-form.pdf"
+    command = "aws s3 cp ${data.archive_file.pdfs.output_path} s3://${aws_s3_bucket.documents_bucket_west.id}"
   }
 
   triggers = {
     always_run = timestamp()
   }
+}
+
+data "archive_file" "pdfs" {
+  type        = "pdf"
+  output_path = "${path.module}/../template/lambdas/amended-pdf-form.pdf"
+  source_dir  = "${path.module}/../template/lambdas/dist/"
 }
 
 data "archive_file" "zip_api" {
