@@ -42,7 +42,7 @@ describe('getTrialSessionsOnCaseAction', () => {
     applicationContext
       .getUseCases()
       .getTrialSessionDetailsInteractor.mockResolvedValue({
-        judge: 'Armen',
+        judge: { name: 'Armen' },
         sort: 'practitioner',
         sortOrder: 'desc',
         trialSessionId: '123',
@@ -62,7 +62,7 @@ describe('getTrialSessionsOnCaseAction', () => {
       },
     });
 
-    expect(result.state.trialSessionJudge).toEqual('Armen');
+    expect(result.state.trialSessionJudge).toEqual({ name: 'Armen' });
   });
 
   it('should return an empty array if no trial session id or hearing is set', async () => {
@@ -79,5 +79,34 @@ describe('getTrialSessionsOnCaseAction', () => {
     });
 
     expect(result.output.trialSessions.length).toEqual(0);
+  });
+
+  it('should set the judge as Unassigned if the trial session has no judge assigned', async () => {
+    applicationContext
+      .getUseCases()
+      .getTrialSessionDetailsInteractor.mockResolvedValue({
+        judge: null,
+        sort: 'practitioner',
+        sortOrder: 'desc',
+        trialSessionId: '123',
+        userId: '234',
+      });
+
+    const result = await runAction(getTrialSessionsOnCaseAction, {
+      modules: {
+        presenter,
+      },
+      props: {},
+      state: {
+        caseDetail: {
+          hearings: [],
+          trialSessionId: 'abc',
+        },
+      },
+    });
+
+    expect(result.state.trialSessionJudge).toEqual({
+      name: 'Unassigned',
+    });
   });
 });
