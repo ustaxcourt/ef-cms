@@ -7,28 +7,10 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   }
 }
 
-resource "aws_s3_bucket" "documents_bucket_east" {
-  bucket = "${var.dns_domain}-documents-${var.environment}-us-east-1"
-  acl    = "private"
-
-  tags = {
-    environment = var.environment
-  }
-}
-
-resource "aws_s3_bucket" "documents_bucket_west" {
-  bucket = "${var.dns_domain}-documents-${var.environment}-us-west-1"
-  acl    = "private"
-
-  tags = {
-    environment = var.environment
-  }
-}
-
 resource "null_resource" "documents_east_object" {
-  depends_on = [aws_s3_bucket.documents_bucket_east]
+  depends_on = [aws_s3_bucket.documents_us_east_1]
   provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.pdfs.output_path} s3://${aws_s3_bucket.documents_bucket_west.id}"
+    command = "aws s3 cp ${data.archive_file.pdfs.output_path} s3://${aws_s3_bucket.documents_us_east_1.id}"
   }
 
   triggers = {
@@ -37,9 +19,9 @@ resource "null_resource" "documents_east_object" {
 }
 
 resource "null_resource" "documents_west_object" {
-  depends_on = [aws_s3_bucket.documents_bucket_west]
+  depends_on = [aws_s3_bucket.documents_us_west_1]
   provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.pdfs.output_path} s3://${aws_s3_bucket.documents_bucket_west.id}"
+    command = "aws s3 cp ${data.archive_file.pdfs.output_path} s3://${aws_s3_bucket.documents_us_west_1.id}"
   }
 
   triggers = {
