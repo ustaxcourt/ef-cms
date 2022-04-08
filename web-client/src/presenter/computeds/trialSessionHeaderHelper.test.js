@@ -3,233 +3,286 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { User } from '../../../../shared/src/business/entities/User';
-import { isStandaloneRemoteSession } from '../../../../shared/src/business/entities/trialSessions/TrialSession';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { trialSessionHeaderHelper as trialSessionHeaderHelperComputed } from './trialSessionHeaderHelper';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const CHAMBERS_USER_ID = 'c7602d72-050c-46ae-bfc8-57052a101fee';
-const JUDGE_USER_ID = '8979ce01-bb0f-43ec-acee-fb3c0e967f0d';
-const TRIAL_CLERK_USER_ID = '6a2bc4a9-6cd0-44bb-92e0-b7cd7404fa0d';
+describe('trialSessionHeaderHelper', () => {
+  const trialSessionHeaderHelper = withAppContextDecorator(
+    trialSessionHeaderHelperComputed,
+    {
+      ...applicationContext,
+    },
+  );
 
-let currentUser;
+  const mockJudgeUser = new User({
+    name: 'Trial Judge',
+    role: ROLES.judge,
+    userId: '8979ce01-bb0f-43ec-acee-fb3c0e967f0d',
+  });
 
-const trialSessionHeaderHelper = withAppContextDecorator(
-  trialSessionHeaderHelperComputed,
-  {
-    getConstants: () => ({
-      TRIAL_SESSION_SCOPE_TYPES,
-      USER_ROLES: ROLES,
-    }),
-    getCurrentUser: () => currentUser,
-    getUtilities: () => ({
-      formattedTrialSessionDetails: ({ trialSession }) => ({
-        ...trialSession,
-        formattedJudge:
-          (trialSession.judge && trialSession.judge.name) || 'Not assigned',
-      }),
-      isStandaloneRemoteSession: jest
-        .fn()
-        .mockImplementation(isStandaloneRemoteSession),
-    }),
-  },
-);
+  const mockTrialClerkUser = new User({
+    name: 'Trial Clerk',
+    role: ROLES.trialClerk,
+    userId: '6a2bc4a9-6cd0-44bb-92e0-b7cd7404fa0d',
+  });
 
-const chambersUser = new User({
-  name: 'Trial Judge Chambers',
-  role: ROLES.chambers,
-  userId: CHAMBERS_USER_ID,
-});
+  const baseState = { trialSession: {} };
 
-const judgeUser = new User({
-  name: 'Trial Judge',
-  role: ROLES.judge,
-  userId: JUDGE_USER_ID,
-});
+  let mockFormattedTrialSession = {
+    formattedJudge: 'Trial Judge',
+    sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+  };
 
-const trialClerkUser = new User({
-  name: 'Trial Clerk',
-  role: ROLES.trialClerk,
-  userId: TRIAL_CLERK_USER_ID,
-});
-
-const baseState = {
-  constants: { USER_ROLES: ROLES },
-  judgeUser: { role: ROLES.judge, userId: JUDGE_USER_ID },
-};
-
-describe('trial session helper computed', () => {
   beforeEach(() => {
-    currentUser = judgeUser;
+    mockFormattedTrialSession = {
+      formattedJudge: 'Trial Judge',
+      sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+    };
+
+    applicationContext
+      .getUtilities()
+      .formattedTrialSessionDetails.mockImplementation(
+        () => mockFormattedTrialSession,
+      );
   });
 
-  it('computes defaults with no data', () => {
-    const result = runCompute(trialSessionHeaderHelper, {});
-    expect(result).toBeDefined();
+  it('should not throw an error when state.trialSession is undefined', () => {
+    expect(() => runCompute(trialSessionHeaderHelper, {})).not.toThrow();
   });
 
-  it('does not show switch-links in header if not the assigned judge or trial clerk', () => {
-    const result = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionDetail',
-        trialSession: {
-          judge: { userId: '98765' },
+  describe('isStandaloneSession', () => {
+    it('should be set to the result of a call to applicationContext.getUtilities().isStandaloneRemoteSession', () => {
+      const mockIsStandaloneSession = true;
+      applicationContext
+        .getUtilities()
+        .isStandaloneRemoteSession.mockReturnValue(mockIsStandaloneSession);
+      mockFormattedTrialSession = {
+        ...mockFormattedTrialSession,
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      };
+
+      const { isStandaloneSession } = runCompute(trialSessionHeaderHelper, {
+        state: baseState,
+      });
+
+      expect(
+        applicationContext.getUtilities().isStandaloneRemoteSession,
+      ).toHaveBeenCalledWith(mockFormattedTrialSession.sessionScope);
+      expect(isStandaloneSession).toEqual(mockIsStandaloneSession);
+    });
+  });
+
+  describe('nameToDisplay', () => {
+    it("should be the assigned judge's name when the current user is NOT a trial clerk", () => {
+      applicationContext.getCurrentUser.mockReturnValue(mockJudgeUser);
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: baseState,
+      });
+
+      expect(result.nameToDisplay).toBe(
+        mockFormattedTrialSession.formattedJudge,
+      );
+    });
+
+    it("should be the current user's name when the current user is a trial clerk", () => {
+      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: baseState,
+      });
+
+      expect(result.nameToDisplay).toBe(mockTrialClerkUser.name);
+    });
+  });
+
+  describe('showBatchDownloadButton', () => {
+    it('should be false when at the trial session does not have any assigned cases', () => {
+      mockFormattedTrialSession = {
+        ...mockFormattedTrialSession,
+        allCases: [],
+      };
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: baseState,
+      });
+
+      expect(result.showBatchDownloadButton).toBe(false);
+    });
+
+    it('should be true when at least one case has been added to the session', () => {
+      mockFormattedTrialSession = {
+        ...mockFormattedTrialSession,
+        allCases: [{ docketNumber: '123-45' }],
+      };
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: baseState,
+      });
+
+      expect(result.showBatchDownloadButton).toBe(true);
+    });
+  });
+
+  describe('showSwitchToSessionDetail', () => {
+    it('should be false when the user is a judge, they are on the TrialSessionWorkingCopy screen, but they are not assigned to the trial session', () => {
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionWorkingCopy',
+          judgeUser: { userId: mockJudgeUser.userId },
+          trialSession: {
+            judge: { userId: 'NOT_ASSIGNED' },
+          },
         },
-      },
+      });
+
+      expect(result.showSwitchToSessionDetail).toBe(false);
     });
-    expect(result).toMatchObject({
-      showSwitchToSessionDetail: false,
-      showSwitchToWorkingCopy: false,
+
+    it('should be false when the user is a trial clerk, they are on the TrialSessionWorkingCopy screen, but they are not assigned to the trial session', () => {
+      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionWorkingCopy',
+          trialSession: {
+            trialClerk: { userId: 'NOT_ASSIGNED' },
+          },
+        },
+      });
+
+      expect(result.showSwitchToSessionDetail).toBe(false);
+    });
+
+    it('should be false when the user is assigned to the session but they are already on the TrialSessionDetail screen', () => {
+      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionDetail',
+          trialSession: {
+            trialClerk: { userId: mockTrialClerkUser.userId },
+          },
+        },
+      });
+
+      expect(result.showSwitchToSessionDetail).toBe(false);
+    });
+
+    it('should be true when the user is assigned to the session and they are on the TrialSessionWorkingCopy screen', () => {
+      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionWorkingCopy',
+          trialSession: {
+            trialClerk: { userId: mockTrialClerkUser.userId },
+          },
+        },
+      });
+
+      expect(result.showSwitchToSessionDetail).toBe(true);
+    });
+
+    it('should be true when the user is a judge assigned to the session and they are on the TrialSessionWorkingCopy screen', () => {
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionWorkingCopy',
+          judgeUser: { userId: mockJudgeUser.userId },
+          trialSession: {
+            judge: { userId: mockJudgeUser.userId },
+          },
+        },
+      });
+
+      expect(result.showSwitchToSessionDetail).toBe(true);
     });
   });
 
-  it('shows "Switch to Session Detail" in header if viewing Working Copy and user is assigned judge', () => {
-    const result = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionWorkingCopy',
-        trialSession: {
-          judge: { userId: JUDGE_USER_ID },
+  describe('showSwitchToWorkingCopy', () => {
+    it('should be false when the user is a judge, they are on the TrialSessionDetail screen, but they are not assigned to the trial session', () => {
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionDetail',
+          judgeUser: { userId: mockJudgeUser.userId },
+          trialSession: {
+            judge: { userId: 'NOT_ASSIGNED' },
+          },
         },
-      },
-    });
-    expect(result).toMatchObject({
-      showSwitchToSessionDetail: true,
-      showSwitchToWorkingCopy: false,
-    });
-  });
+      });
 
-  it('shows "Switch to Session Working Copy" in header if viewing Session Detail and user is assigned judge', () => {
-    const result = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionDetail',
-        trialSession: {
-          judge: { userId: JUDGE_USER_ID },
+      expect(result.showSwitchToWorkingCopy).toBe(false);
+    });
+
+    it('should be false when the user is a trial clerk, they are on the TrialSessionDetail screen, but they are not assigned to the trial session', () => {
+      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionDetail',
+          trialSession: {
+            trialClerk: { userId: 'NOT_ASSIGNED' },
+          },
         },
-      },
-    });
-    expect(result).toMatchObject({
-      showSwitchToSessionDetail: false,
-      showSwitchToWorkingCopy: true,
-    });
-  });
+      });
 
-  it('shows "Switch to Session Detail" in header if viewing Working Copy and user is assigned trial clerk', () => {
-    currentUser = trialClerkUser;
+      expect(result.showSwitchToWorkingCopy).toBe(false);
+    });
 
-    const result = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionWorkingCopy',
-        trialSession: {
-          judge: { userId: 'b721e8d8-2e9b-4e69-89eb-d7f3e8a2ba4c' },
-          trialClerk: { userId: TRIAL_CLERK_USER_ID },
+    it('should be false when the user is assigned to the session but they are already on the TrialSessionWorkingCopy screen', () => {
+      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionWorkingCopy',
+          trialSession: {
+            trialClerk: { userId: mockTrialClerkUser.userId },
+          },
         },
-      },
-    });
-    expect(result).toMatchObject({
-      showSwitchToSessionDetail: true,
-      showSwitchToWorkingCopy: false,
-    });
-  });
+      });
 
-  it('shows "Switch to Session Working Copy" in header if viewing Session Detail and user is assigned trial clerk', () => {
-    currentUser = trialClerkUser;
+      expect(result.showSwitchToWorkingCopy).toBe(false);
+    });
 
-    const result = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionDetail',
-        trialSession: {
-          judge: { userId: 'b721e8d8-2e9b-4e69-89eb-d7f3e8a2ba4c' },
-          trialClerk: { userId: TRIAL_CLERK_USER_ID },
+    it('should be true when the user is a trial clerk assigned to the session and they are on the TrialSessionDetail screen', () => {
+      applicationContext.getCurrentUser.mockReturnValue(mockTrialClerkUser);
+
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionDetail',
+          trialSession: {
+            trialClerk: { userId: mockTrialClerkUser.userId },
+          },
         },
-      },
-    });
-    expect(result).toMatchObject({
-      showSwitchToSessionDetail: false,
-      showSwitchToWorkingCopy: true,
-    });
-  });
+      });
 
-  it('shows nameToDisplay as the assigned judge name when the current user is the assigned judge user', () => {
-    const result = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionDetail',
-        trialSession: {
-          judge: judgeUser,
-        },
-      },
+      expect(result.showSwitchToWorkingCopy).toBe(true);
     });
-    expect(result).toMatchObject({
-      nameToDisplay: 'Trial Judge',
-    });
-  });
 
-  it("shows nameToDisplay as the assigned judge name when the current user is the assigned judge's chambers user", () => {
-    currentUser = chambersUser;
-    const result = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionDetail',
-        trialSession: {
-          judge: judgeUser, // current user is "Trial Judge"
+    it('should be true when the user is a judge assigned to the session and they are on the TrialSessionDetail screen', () => {
+      const result = runCompute(trialSessionHeaderHelper, {
+        state: {
+          ...baseState,
+          currentPage: 'TrialSessionDetail',
+          judgeUser: { userId: mockJudgeUser.userId },
+          trialSession: {
+            judge: { userId: mockJudgeUser.userId },
+          },
         },
-      },
-    });
-    expect(result).toMatchObject({
-      nameToDisplay: 'Trial Judge',
-    });
-  });
+      });
 
-  it('shows nameToDisplay as the assigned trial clerk name when the current user is the assigned trial clerk user', () => {
-    currentUser = trialClerkUser;
-    const result = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionDetail',
-        trialSession: {
-          trialClerk: trialClerkUser, // current user is "Trial Judge"
-        },
-      },
+      expect(result.showSwitchToWorkingCopy).toBe(true);
     });
-    expect(result).toMatchObject({
-      nameToDisplay: 'Trial Clerk',
-    });
-  });
-
-  it(`returns false for isStandaloneSession when the trial sessions scope is ${TRIAL_SESSION_SCOPE_TYPES.locationBased}`, () => {
-    currentUser = trialClerkUser;
-    const { isStandaloneSession } = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionDetail',
-        trialSession: {
-          // current user is "Trial Judge"
-          sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
-          trialClerk: trialClerkUser,
-        },
-      },
-    });
-    expect(isStandaloneSession).toEqual(false);
-  });
-
-  it(`returns true for isStandaloneSession when the trial sessions scope is ${TRIAL_SESSION_SCOPE_TYPES.standaloneRemote}`, () => {
-    currentUser = trialClerkUser;
-    const { isStandaloneSession } = runCompute(trialSessionHeaderHelper, {
-      state: {
-        ...baseState,
-        currentPage: 'TrialSessionDetail',
-        trialSession: {
-          // current user is "Trial Judge"
-          sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-          trialClerk: trialClerkUser,
-        },
-      },
-    });
-    expect(isStandaloneSession).toEqual(true);
   });
 });
