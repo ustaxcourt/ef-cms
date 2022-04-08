@@ -17,7 +17,7 @@ export const appendFormAndOverwriteOrderFileAction = async ({
   // then call new endpoint to append petition form to the retrieved file from s3
   const { docketEntryId } = get(state.documentToEdit);
 
-  const thing1 = await applicationContext
+  await applicationContext
     .getUseCases()
     .appendAmendedPetitionFormInteractor(applicationContext, {
       docketEntryId,
