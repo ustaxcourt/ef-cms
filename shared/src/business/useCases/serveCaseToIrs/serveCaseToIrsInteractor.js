@@ -155,7 +155,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
 
   let secondaryContactNotrPdfData;
   const contactSecondary = caseEntity.getContactSecondary();
-  const addressesAreDifferent = await contactAddressesAreDifferent({
+  const addressesAreDifferent = contactAddressesAreDifferent({
     applicationContext,
     caseEntity,
   });
@@ -190,7 +190,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       .length === 0;
 
   if (
-    shouldIncludeClinicalLetter(
+    shouldIncludeClinicLetter(
       preferredTrialCity,
       isPrimaryContactProSe,
       contactSecondary,
@@ -277,7 +277,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
   return urlToReturn;
 };
 
-const shouldIncludeClinicalLetter = (
+const shouldIncludeClinicLetter = (
   preferredTrialCity,
   isPrimaryContactProSe,
   contactSecondary,
@@ -332,10 +332,7 @@ const createCoversheetsForServedEntries = async ({
   }
 };
 
-const contactAddressesAreDifferent = async ({
-  applicationContext,
-  caseEntity,
-}) => {
+const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
   const contactSecondary = caseEntity.getContactSecondary();
 
   if (!contactSecondary) {
