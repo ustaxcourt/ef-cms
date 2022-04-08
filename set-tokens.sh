@@ -28,6 +28,6 @@ response=$(aws cognito-idp admin-initiate-auth \
     --auth-flow ADMIN_NO_SRP_AUTH \
     --auth-parameters USERNAME="petitionsclerk1@example.com"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}")
 
-PETITIONS_CLERK_TOKEN=$(echo $response | jq -r '.AuthenticationResult.IdToken')
+PETITIONS_CLERK_TOKEN=$(echo "${response}" | jq -r '.AuthenticationResult.IdToken')
 
 export PETITIONS_CLERK_TOKEN

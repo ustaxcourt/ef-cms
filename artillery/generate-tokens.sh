@@ -80,5 +80,5 @@ do
     --auth-flow ADMIN_NO_SRP_AUTH \
     --auth-parameters USERNAME="${user}"',PASSWORD'="${DEFAULT_ACCOUNT_PASS}")
   token=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
-  echo $token >> tokens.csv
+  echo "${token}" >> tokens.csv
 done

@@ -1,4 +1,9 @@
 #!/bin/bash
+
+# we disable SC2269 because these variables are actually defined in terraform and passed in externally.
+
+# shellcheck disable=SC2269
+# these comes from terraform
 dynamsoft_s3_zip_path="${dynamsoft_s3_zip_path}"
 dynamsoft_url="${dynamsoft_url}"
 dynamsoft_product_keys="${dynamsoft_product_keys}"
