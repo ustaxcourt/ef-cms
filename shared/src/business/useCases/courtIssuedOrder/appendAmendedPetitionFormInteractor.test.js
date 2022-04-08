@@ -6,7 +6,6 @@ const {
 } = require('./appendAmendedPetitionFormInteractor');
 const {
   applicationContext,
-  getFakeFile,
 } = require('../../test/createTestApplicationContext');
 const { ROLES } = require('../../entities/EntityConstants');
 
@@ -18,9 +17,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
   const returnedCombinedPdf = {
     lastName: 'ever',
   };
-  applicationContext
-    .getUtilities()
-    .combineTwoPdfs.mockReturnValue(returnedCombinedPdf);
+
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -30,6 +27,16 @@ describe('appendAmendedPetitionFormInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockReturnValue(fakeFile1);
+
+    applicationContext
+      .getUtilities()
+      .combineTwoPdfs.mockReturnValue(returnedCombinedPdf);
+
+    applicationContext.getStorageClient().getObject.mockReturnValue({
+      promise: () => ({
+        Body: fakeFile2,
+      }),
+    });
   });
 
   it('should throw an error when the user is not authorized to modify docket entries', async () => {
@@ -76,13 +83,10 @@ describe('appendAmendedPetitionFormInteractor', () => {
     ).toEqual(AMENDED_PETITION_FORM_NAME);
   });
 
-  it('should return the combined order and form documents as a pdf', async () => {
-    const result = await appendAmendedPetitionFormInteractor(
-      applicationContext,
-      {
-        docketEntryId: mockDocketEntryId,
-      },
-    );
+  it('should make a call to combine the order and form documents', async () => {
+    await appendAmendedPetitionFormInteractor(applicationContext, {
+      docketEntryId: mockDocketEntryId,
+    });
 
     expect(
       applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0],
@@ -90,6 +94,19 @@ describe('appendAmendedPetitionFormInteractor', () => {
       firstPdf: fakeFile1,
       secondPdf: fakeFile2,
     });
-    expect(result).toEqual(returnedCombinedPdf);
+  });
+
+  it('should use the provided docketEntryId to overwrite the order file in s3', async () => {
+    await appendAmendedPetitionFormInteractor(applicationContext, {
+      docketEntryId: mockDocketEntryId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0],
+    ).toMatchObject({
+      document: Buffer.from(JSON.stringify(returnedCombinedPdf)),
+      key: mockDocketEntryId,
+    });
   });
 });

@@ -44,9 +44,15 @@ exports.appendAmendedPetitionFormInteractor = async (
     })
     .promise();
 
-  return await applicationContext.getUtilities().combineTwoPdfs({
+  const combinedPdf = await applicationContext.getUtilities().combineTwoPdfs({
     applicationContext,
-    firstPdf: new Uint8Array(orderDocument),
-    secondPdf: new Uint8Array(amendedPetitionFormData),
+    firstPdf: orderDocument,
+    secondPdf: amendedPetitionFormData,
+  });
+
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    caseConfirmationPdfName: docketEntryId,
+    pdfData: Buffer.from(combinedPdf),
   });
 };
