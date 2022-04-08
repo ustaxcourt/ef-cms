@@ -237,7 +237,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       .getUtilities()
       .combineTwoPdfs({
         applicationContext,
-        firstPdf: primaryContactNotrPdfData,
+        firstPdf: secondaryContactNotrPdfData,
         secondPdf: clinicLetter,
       });
   }
