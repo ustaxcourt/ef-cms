@@ -14,9 +14,7 @@ const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
 describe('appendAmendedPetitionFormInteractor', () => {
   const fakeFile1 = 'docket tre';
   const fakeFile2 = 'snoop docket';
-  const returnedCombinedPdf = {
-    lastName: 'ever',
-  };
+  const returnedCombinedPdf = 'ever';
 
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
@@ -102,11 +100,10 @@ describe('appendAmendedPetitionFormInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[0][0],
+      applicationContext.getUtilities().uploadToS3.mock.calls[0][0],
     ).toMatchObject({
-      document: Buffer.from(JSON.stringify(returnedCombinedPdf)),
-      key: mockDocketEntryId,
+      caseConfirmationPdfName: mockDocketEntryId,
+      pdfData: Buffer.from(returnedCombinedPdf),
     });
   });
 });
