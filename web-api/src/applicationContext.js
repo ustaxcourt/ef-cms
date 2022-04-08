@@ -46,8 +46,8 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
-  appendAmendedPetitionForm,
-} = require('../../shared/src/business/utilities/documentGenerators/appendAmendedPetitionForm');
+  appendAmendedPetitionFormInteractor,
+} = require('../../shared/src/business/useCases/courtIssuedOrder/appendAmendedPetitionFormInteractor');
 const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
@@ -1929,6 +1929,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addDeficiencyStatisticInteractor,
         addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
+        appendAmendedPetitionFormInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
@@ -2111,7 +2112,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getUtilities: () => {
       return {
-        appendAmendedPetitionForm,
         calculateDifferenceInDays,
         calculateISODate,
         combineTwoPdfs,

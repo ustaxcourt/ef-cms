@@ -2,9 +2,9 @@ const {
   AMENDED_PETITION_FORM_NAME,
 } = require('../../entities/EntityConstants');
 
-exports.appendAmendedPetitionForm = async ({
+exports.appendAmendedPetitionFormInteractor = async ({
   applicationContext,
-  oapDocument,
+  orderContent,
 }) => {
   const { Body: amendedPetitionFormData } = await applicationContext
     .getStorageClient()
@@ -16,7 +16,7 @@ exports.appendAmendedPetitionForm = async ({
 
   const combinedPdf = await applicationContext.getUtilities().combineTwoPdfs({
     applicationContext,
-    firstPdf: oapDocument,
+    firstPdf: orderContent,
     secondPdf: amendedPetitionFormData,
   });
 
