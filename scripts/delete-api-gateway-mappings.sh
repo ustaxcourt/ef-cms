@@ -21,24 +21,24 @@ DEPLOYING_COLOR=$2
 
 REGIONS=("us-east-1" "us-west-1")
 
-for REGION in ${REGIONS[*]}
+for REGION in "${REGIONS[@]}"
 do
-  BASE_PATH_MAPPING_RESTAPIID=$(aws apigateway get-base-path-mapping --domain-name "api-$DEPLOYING_COLOR.$EFCMS_DOMAIN" --base-path "(none)" --region $REGION | jq -r ".restApiId")
+  BASE_PATH_MAPPING_RESTAPIID=$(aws apigateway get-base-path-mapping --domain-name "api-$DEPLOYING_COLOR.$EFCMS_DOMAIN" --base-path "(none)" --region "${REGION}" | jq -r ".restApiId")
   if [[ -z "$BASE_PATH_MAPPING_RESTAPIID" ]] ; then
     echo "The non-public api-gateway mapping for api-$DEPLOYING_COLOR.$EFCMS_DOMAIN on $REGION was not found."
   else
-    aws apigateway delete-base-path-mapping --domain-name "api-$DEPLOYING_COLOR.$EFCMS_DOMAIN" --base-path "(none)" --region $REGION
+    aws apigateway delete-base-path-mapping --domain-name "api-$DEPLOYING_COLOR.$EFCMS_DOMAIN" --base-path "(none)" --region "${REGION}"
     echo "Deleted api gateway mapping for: api-$DEPLOYING_COLOR.$EFCMS_DOMAIN, $REGION with restApiId: $BASE_PATH_MAPPING_RESTAPIID"
   fi
 done
 
-for REGION in ${REGIONS[*]}
+for REGION in "${REGIONS[@]}"
 do
-  PUBLIC_BASE_PATH_MAPPING_RESTAPIID=$(aws apigateway get-base-path-mapping --domain-name "public-api-$DEPLOYING_COLOR.$EFCMS_DOMAIN" --base-path "(none)" --region $REGION | jq -r ".restApiId")
+  PUBLIC_BASE_PATH_MAPPING_RESTAPIID=$(aws apigateway get-base-path-mapping --domain-name "public-api-$DEPLOYING_COLOR.$EFCMS_DOMAIN" --base-path "(none)" --region "${REGION}" | jq -r ".restApiId")
   if [[ -z "$PUBLIC_BASE_PATH_MAPPING_RESTAPIID" ]] ; then
     echo "The public api-gateway mapping for public-api-$DEPLOYING_COLOR.$EFCMS_DOMAIN on $REGION was not found."
   else
-    aws apigateway delete-base-path-mapping --domain-name "public-api-$DEPLOYING_COLOR.$EFCMS_DOMAIN" --base-path "(none)" --region $REGION
+    aws apigateway delete-base-path-mapping --domain-name "public-api-$DEPLOYING_COLOR.$EFCMS_DOMAIN" --base-path "(none)" --region "${REGION}"
     echo "Deleted api gateway mapping for: public-api-$DEPLOYING_COLOR.$EFCMS_DOMAIN, $REGION with restApiId: $PUBLIC_BASE_PATH_MAPPING_RESTAPIID"
   fi
 done
