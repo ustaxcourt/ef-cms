@@ -1,4 +1,7 @@
 const {
+  AMENDED_PETITION_FORM_NAME,
+} = require('../../entities/EntityConstants');
+const {
   appendAmendedPetitionFormInteractor,
 } = require('./appendAmendedPetitionFormInteractor');
 const {
@@ -41,7 +44,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
       appendAmendedPetitionFormInteractor(applicationContext, {
         docketEntryId: mockDocketEntryId,
       }),
-    ).rejects.toThrow('Not Found');
+    ).rejects.toThrow(`Docket entry ${mockDocketEntryId} was not found`);
   });
 
   it('should use the provided docketEntryId to retrieve the file from s3', async () => {
@@ -53,5 +56,32 @@ describe('appendAmendedPetitionFormInteractor', () => {
       applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0]
         .key,
     ).toEqual(mockDocketEntryId);
+  });
+
+  it('should make a call to retrieve the amended petition form from s3', async () => {
+    await appendAmendedPetitionFormInteractor(applicationContext, {
+      docketEntryId: mockDocketEntryId,
+    });
+
+    expect(
+      applicationContext.getStorageClient().getObject.mock.calls[0][0].Key,
+    ).toEqual(AMENDED_PETITION_FORM_NAME);
+  });
+
+  it('should return the combined order and form documents as a pdf', async () => {
+    const result = await appendAmendedPetitionFormInteractor(
+      applicationContext,
+      {
+        docketEntryId: mockDocketEntryId,
+      },
+    );
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0],
+    ).toMatchObject({
+      firstPdf: ,
+      secondPdf: 
+    });
+    expect(result).toEqual();
   });
 });

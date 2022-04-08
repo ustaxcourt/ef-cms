@@ -1,12 +1,11 @@
-// const {
-//   AMENDED_PETITION_FORM_NAME,
-// } = require('../../entities/EntityConstants');
-
+const {
+  AMENDED_PETITION_FORM_NAME,
+} = require('../../entities/EntityConstants');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 
 exports.appendAmendedPetitionFormInteractor = async (
   applicationContext,
@@ -23,9 +22,9 @@ exports.appendAmendedPetitionFormInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  let signedDocument;
+  let orderDocument;
   try {
-    signedDocument = await applicationContext
+    orderDocument = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
@@ -34,17 +33,17 @@ exports.appendAmendedPetitionFormInteractor = async (
         useTempBucket: false,
       });
   } catch (e) {
-    throw new UnauthorizedError('Not Found');
+    throw new NotFoundError(`Docket entry ${docketEntryId} was not found`);
   }
 
-  console.log(signedDocument);
-  // const { Body: amendedPetitionFormData } = await applicationContext
-  //   .getStorageClient()
-  //   .getObject({
-  //     Bucket: applicationContext.environment.documentsBucketName,
-  //     Key: AMENDED_PETITION_FORM_NAME,
-  //   })
-  //   .promise();
+  const { Body: amendedPetitionFormData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: AMENDED_PETITION_FORM_NAME,
+    })
+    .promise();
+
   // return await applicationContext.getUtilities().combineTwoPdfs({
   //   applicationContext,
   //   firstPdf: new Uint8Array(orderContent),
