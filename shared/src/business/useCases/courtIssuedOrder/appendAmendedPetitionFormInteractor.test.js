@@ -13,6 +13,14 @@ const { ROLES } = require('../../entities/EntityConstants');
 const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
 
 describe('appendAmendedPetitionFormInteractor', () => {
+  const fakeFile1 = 'docket tre';
+  const fakeFile2 = 'snoop docket';
+  const returnedCombinedPdf = {
+    lastName: 'ever',
+  };
+  applicationContext
+    .getUtilities()
+    .combineTwoPdfs.mockReturnValue(returnedCombinedPdf);
   beforeEach(() => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitionsClerk,
@@ -21,7 +29,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocument.mockReturnValue(getFakeFile);
+      .getDocument.mockReturnValue(fakeFile1);
   });
 
   it('should throw an error when the user is not authorized to modify docket entries', async () => {
@@ -79,9 +87,9 @@ describe('appendAmendedPetitionFormInteractor', () => {
     expect(
       applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0],
     ).toMatchObject({
-      firstPdf: ,
-      secondPdf: 
+      firstPdf: fakeFile1,
+      secondPdf: fakeFile2,
     });
-    expect(result).toEqual();
+    expect(result).toEqual(returnedCombinedPdf);
   });
 });
