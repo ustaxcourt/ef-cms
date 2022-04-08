@@ -19,7 +19,7 @@ get_total () {
   local total=0
   for count in $response
     do
-      total=$(( $total + $count ))
+      total=$(( total + count ))
     done
   echo "$total"
 }
@@ -29,7 +29,7 @@ fail_on_dlq () {
   local total=0
   for count in $response
     do
-      total=$(( $total + $count ))
+      total=$(( total + count ))
     done
 
   if [[ "$total" != "0" ]]; then
@@ -43,27 +43,27 @@ fail_on_segments_error_count () {
   # anything greater than 50% should probably be considered a failed migration
   start=$(node -e 'var d = new Date(); d.setTime(d.getTime() - (60 * 15000)); console.log(d.toISOString())')
   end=$(node -e 'var d = new Date(); d.setTime(d.getTime()); console.log(d.toISOString())')
-  errorResponse=$(aws cloudwatch get-metric-statistics --metric-name Errors --namespace AWS/Lambda --statistics Sum --start-time $start --end-time $end --period 60 --dimensions Name=FunctionName,Value=migration_segments_lambda_${ENV} --query "Datapoints[].Sum" --output=text --region us-east-1)
-  invocationsResponse=$(aws cloudwatch get-metric-statistics --metric-name Invocations --namespace AWS/Lambda --statistics Sum --start-time $start --end-time $end --period 60 --dimensions Name=FunctionName,Value=migration_segments_lambda_${ENV} --query "Datapoints[].Sum" --output=text --region us-east-1)
+  errorResponse=$(aws cloudwatch get-metric-statistics --metric-name Errors --namespace AWS/Lambda --statistics Sum --start-time "${start}" --end-time "${end}" --period 60 --dimensions "Name=FunctionName,Value=migration_segments_lambda_${ENV}" --query "Datapoints[].Sum" --output=text --region us-east-1)
+  invocationsResponse=$(aws cloudwatch get-metric-statistics --metric-name Invocations --namespace AWS/Lambda --statistics Sum --start-time "${start}" --end-time "${end}" --period 60 --dimensions "Name=FunctionName,Value=migration_segments_lambda_${ENV}" --query "Datapoints[].Sum" --output=text --region us-east-1)
 
   local errorTotal=0
   for count in $errorResponse
     do
-      intCount=$(printf "%.0f\n" $count)
-      errorTotal=$(( $errorTotal + $intCount ))
+      intCount=$(printf "%.0f\n" "${count}")
+      errorTotal=$(( errorTotal + intCount ))
     done
   
   local invocationTotal=0
   for count in $invocationsResponse
     do
-      intCount=$(printf "%.0f\n" $count)
-      invocationTotal=$(( $invocationTotal + $intCount ))
+      intCount=$(printf "%.0f\n" "${count}")
+      invocationTotal=$(( invocationTotal + intCount ))
     done
 
   if [[ "$errorTotal" -gt "0" ]] && [[ "$invocationTotal" -gt "0" ]]; then
     echo "There were $errorTotal errors in the last 15 minutes"
     echo "There were $invocationTotal invocations in the last 15 minutes"
-    local failurePercentage=$(( $errorTotal * 100 / $invocationTotal ))
+    local failurePercentage=$(( errorTotal * 100 / invocationTotal ))
     echo "There were $failurePercentage% errors in the last 15 minutes"
 
     if [ $failurePercentage -gt 50 ]; then

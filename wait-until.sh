@@ -12,7 +12,7 @@ try_count=0
 while true
 do
   set +e
-  code=$(curl -sL -w "%{http_code}\\n" "$URL" -o /dev/null)
+  curl -sL -w "%{http_code}\\n" "$URL" -o /dev/null > /dev/null 2>&1
   exitCode=$?
   set -e
 
