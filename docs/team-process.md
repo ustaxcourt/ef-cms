@@ -76,11 +76,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 4. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
-5. (Optional) Check through the list of caveats to see if any of the documented issues have been resolved.
-
 #### Caveats
-##### Below is a list of depedencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
-
 - `cypress`: Do not upgrade past 8.5.0 as anything above that version will cause the "Failed to connect to bus" [error](https://trello.com/c/iuq0gJ6P/1008-ci-error-failed-to-connect-to-the-bus). 
 
 - `@fortawesome/free-solid-svg-icons`: v6.0.0 caused a regression with faThumbtack so it is not importable. [Github issue](https://github.com/FortAwesome/Font-Awesome/issues/18661) Temporarily locking this package and `fortawesome/free-regular-svg-icons` at v5.15.4 until this is patched. Attempted to bump this to ^6.1.0 on 03/17/22 since this [comment](https://github.com/FortAwesome/Font-Awesome/issues/18661#issuecomment-1069357035) says it's fixed in that version, but still seeing multiple icons missing, e.g. `long-arrow-alt-up` and `times-circle`.
@@ -90,8 +86,6 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 - `puppeteer-core` within `web-api/runtimes/puppeteer`: locked to v13.0.1 because that's the highest version that `chrome-aws-lambda` [supports](https://github.com/alixaxel/chrome-aws-lambda/issues/254) at the moment. Note that this package can be updated in the main package.json.
 
 - `pdfjs-dist`: temporarily locked to 2.12.313 as v2.13.216 causes issues with pdf rendering in cypress tests
-
-- `webpack` and `webpack-cli`: Removed `^` due to [known issue](https://stackoverflow.com/questions/52724312/webpack-typeerror-cannot-read-property-properties-of-undefined) with minor version updates breaking app startup.
 
 #### Validating Updates
 -  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
