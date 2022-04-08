@@ -19,5 +19,7 @@ exports.appendAmendedPetitionForm = async ({
     firstPdf: oapDocument,
     secondPdf: amendedPetitionFormData,
   });
+
+  //todo: return something else but buffer!
   return Buffer.from(combinedPdf);
 };
