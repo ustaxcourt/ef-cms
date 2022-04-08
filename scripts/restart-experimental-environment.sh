@@ -4,11 +4,12 @@ export ENV=$1
 export REGION=us-east-1
 
 # Getting the account-wide deployment settings and injecting them into the shell environment
+# shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 export SECRETS_LOADED=true
 
 # Setting up calculated environment variables
-DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)
+DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh "${ENV}")
 ## we use the current-color from dynamo but name the variable DEPLOYING_COLOR since it's needed in the import judge script
 DEPLOYING_COLOR=$(aws dynamodb get-item \
  --region us-east-1 \
@@ -31,7 +32,7 @@ export DEPLOYING_COLOR
 export CI=true
 
 # Deploying the API because this is what creates the elasticsearch domains we need as the first step
-npm run deploy:api ${ENV}
+npm run deploy:api "${ENV}"
 
 # Setting up indices
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
@@ -41,7 +42,7 @@ node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
 
 # Setting up users
 node shared/admin-tools/user/setup-admin.js
-. ./shared/admin-tools/user/setup-test-users.sh ${ENV}
+. ./shared/admin-tools/user/setup-test-users.sh "${ENV}"
 
 # Setting up Judge users
 ./scripts/data-import/judge/bulk-import-judge-users.sh

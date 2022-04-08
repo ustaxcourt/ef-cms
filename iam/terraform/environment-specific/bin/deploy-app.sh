@@ -5,6 +5,7 @@ ENVIRONMENT=$1
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 export ENV=${ENVIRONMENT}
 pushd ../../../../
+# shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 popd
 

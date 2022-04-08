@@ -25,6 +25,7 @@ URL=http://localhost:9200/ ./wait-until.sh
 npm run build:assets
 
 # these exported values expire when script terminates
+# shellcheck disable=SC1091
 . ./setup-local-env.sh
 
 echo "creating elasticsearch index"
@@ -40,7 +41,7 @@ S3RVER_PID=$!
 URL=http://localhost:9000/ ./wait-until.sh
 npm run seed:s3
 
-if [ -n "$RESUME" ]; then
+if [ -n "${RESUME}" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
 else
   echo "creating & seeding dynamo tables"

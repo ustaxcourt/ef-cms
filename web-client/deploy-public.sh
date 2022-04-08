@@ -1,5 +1,6 @@
 #!/bin/bash -e
 
+# shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 
 

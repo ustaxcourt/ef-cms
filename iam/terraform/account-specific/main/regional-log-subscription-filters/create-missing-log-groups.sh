@@ -7,10 +7,9 @@
 
 set -e
 
-ENVIRONMENT_STR=$*
-IFS=' ' read -r -a ENVIRONMENTS <<< "$*"
+ENVIRONMENTS=("$@")
 
-if [[ -z "${ENVIRONMENT_STR}" ]]; then
+if [[ -z "${ENVIRONMENTS[0]}" ]]; then
   echo "Pass environment list as space-separated arguments."
   echo
   echo "Example: "
