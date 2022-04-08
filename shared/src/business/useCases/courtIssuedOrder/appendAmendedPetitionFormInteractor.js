@@ -2,10 +2,10 @@ const {
   AMENDED_PETITION_FORM_NAME,
 } = require('../../entities/EntityConstants');
 
-exports.appendAmendedPetitionFormInteractor = async ({
+exports.appendAmendedPetitionFormInteractor = async (
   applicationContext,
-  orderContent,
-}) => {
+  { orderContent },
+) => {
   const { Body: amendedPetitionFormData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -14,12 +14,9 @@ exports.appendAmendedPetitionFormInteractor = async ({
     })
     .promise();
 
-  const combinedPdf = await applicationContext.getUtilities().combineTwoPdfs({
+  return await applicationContext.getUtilities().combineTwoPdfs({
     applicationContext,
-    firstPdf: orderContent,
-    secondPdf: amendedPetitionFormData,
+    firstPdf: new Uint8Array(orderContent),
+    secondPdf: new Uint8Array(amendedPetitionFormData),
   });
-
-  //todo: return something else but buffer!
-  return Buffer.from(combinedPdf);
 };
