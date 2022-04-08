@@ -44,9 +44,9 @@ exports.appendAmendedPetitionFormInteractor = async (
     })
     .promise();
 
-  // return await applicationContext.getUtilities().combineTwoPdfs({
-  //   applicationContext,
-  //   firstPdf: new Uint8Array(orderContent),
-  //   secondPdf: new Uint8Array(amendedPetitionFormData),
-  // });
+  return await applicationContext.getUtilities().combineTwoPdfs({
+    applicationContext,
+    firstPdf: new Uint8Array(orderDocument),
+    secondPdf: new Uint8Array(amendedPetitionFormData),
+  });
 };
