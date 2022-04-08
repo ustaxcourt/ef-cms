@@ -23,6 +23,21 @@ exports.appendAmendedPetitionFormInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  let signedDocument;
+  try {
+    signedDocument = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: docketEntryId,
+        protocol: 'S3',
+        useTempBucket: false,
+      });
+  } catch (e) {
+    throw new UnauthorizedError('Not Found');
+  }
+
+  console.log(signedDocument);
   // const { Body: amendedPetitionFormData } = await applicationContext
   //   .getStorageClient()
   //   .getObject({
