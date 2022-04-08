@@ -13,12 +13,8 @@ export const appendFormAndOverwriteOrderFileAction = async ({
   applicationContext,
   get,
 }) => {
-  const { primaryDocumentFile } = get(state.form);
-  // const documentToEdit = get(state.documentToEdit);
-  // let finalDocument = primaryDocumentFile;
-
-  // Identify an endpoint to call if eventCode === OAP
-  // We will probably need a new endpoint so that we can edit the draft OAP
+  // use docketentry id to retrieve file from s3
+  // then call new endpoint to append petition form to the retrieved file from s3
 
   //create an endpoint to combine the 2 pdfs
   const thing1 = await applicationContext
