@@ -1,22 +1,38 @@
+// const {
+//   AMENDED_PETITION_FORM_NAME,
+// } = require('../../entities/EntityConstants');
+
 const {
-  AMENDED_PETITION_FORM_NAME,
-} = require('../../entities/EntityConstants');
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../../errors/errors');
 
 exports.appendAmendedPetitionFormInteractor = async (
   applicationContext,
   { docketEntryId },
 ) => {
-  const { Body: amendedPetitionFormData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: AMENDED_PETITION_FORM_NAME,
-    })
-    .promise();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  return await applicationContext.getUtilities().combineTwoPdfs({
-    applicationContext,
-    firstPdf: new Uint8Array(orderContent),
-    secondPdf: new Uint8Array(amendedPetitionFormData),
-  });
+  const hasPermission = isAuthorized(
+    authorizedUser,
+    ROLE_PERMISSIONS.EDIT_ORDER,
+  );
+
+  if (!hasPermission) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
+  // const { Body: amendedPetitionFormData } = await applicationContext
+  //   .getStorageClient()
+  //   .getObject({
+  //     Bucket: applicationContext.environment.documentsBucketName,
+  //     Key: AMENDED_PETITION_FORM_NAME,
+  //   })
+  //   .promise();
+  // return await applicationContext.getUtilities().combineTwoPdfs({
+  //   applicationContext,
+  //   firstPdf: new Uint8Array(orderContent),
+  //   secondPdf: new Uint8Array(amendedPetitionFormData),
+  // });
 };
