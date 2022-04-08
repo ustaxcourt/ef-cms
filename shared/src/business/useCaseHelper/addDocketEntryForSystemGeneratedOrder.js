@@ -1,4 +1,5 @@
 const {
+  AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -65,10 +66,20 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
     systemGeneratedDocument.eventCode ===
     SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode
   ) {
-    combinedPdf = await applicationContext.getUtilities().uploadToS3({
+    const { Body: amendedPetitionFormData } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: AMENDED_PETITION_FORM_NAME,
+      })
+      .promise();
+
+    const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
       applicationContext,
-      oapDocument: orderPdfData,
+      firstPdf: combinedPdf,
+      secondPdf: amendedPetitionFormData,
     });
+    combinedPdf = Buffer.from(returnVal);
   }
 
   await applicationContext.getUtilities().uploadToS3({

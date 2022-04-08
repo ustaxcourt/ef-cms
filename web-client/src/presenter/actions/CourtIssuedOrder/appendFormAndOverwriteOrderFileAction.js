@@ -12,17 +12,22 @@ import { state } from 'cerebral';
 export const appendFormAndOverwriteOrderFileAction = async ({
   applicationContext,
   get,
-  path,
 }) => {
   const { primaryDocumentFile } = get(state.form);
-  const documentToEdit = get(state.documentToEdit);
-  let finalDocument = primaryDocumentFile;
+  // const documentToEdit = get(state.documentToEdit);
+  // let finalDocument = primaryDocumentFile;
 
   // Identify an endpoint to call if eventCode === OAP
   // We will probably need a new endpoint so that we can edit the draft OAP
 
   //create an endpoint to combine the 2 pdfs
-  applicationContext.getUseCases().appendAmendedPetitionFormInteractor();
+  const thing1 = await applicationContext
+    .getUseCases()
+    .appendAmendedPetitionFormInteractor(applicationContext, {
+      orderContent: primaryDocumentFile,
+    });
+
+  console.log(thing1, '----');
 
   // proxy (web client app context) -> lambda -> interactor (web api )
 };
