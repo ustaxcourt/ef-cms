@@ -362,64 +362,6 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
   );
 };
 
-// const generateNotrForSecondaryContactIfDifferent = async ({
-//   applicationContext,
-//   caseCaptionExtension,
-//   caseEntity,
-//   caseTitle,
-//   contactSecondary,
-//   docketNumberWithSuffix,
-//   preferredTrialCity,
-//   receivedAt,
-// }) => {
-//   const contactInformationDiff = applicationContext
-//     .getUtilities()
-//     .getAddressPhoneDiff({
-//       newData: caseEntity.petitioners[0],
-//       oldData: contactSecondary,
-//     });
-//
-//   const addressFields = [
-//     'country',
-//     'countryType',
-//     'address1',
-//     'address2',
-//     'address3',
-//     'city',
-//     'state',
-//     'postalCode',
-//   ];
-//
-//   const contactAddressesAreDifferent = Object.keys(contactInformationDiff).some(
-//     field => addressFields.includes(field),
-//   );
-//
-//   if (!contactAddressesAreDifferent) {
-//     return;
-//   }
-//
-//   const secondaryPdfData = await applicationContext
-//     .getDocumentGenerators()
-//     .noticeOfReceiptOfPetition({
-//       applicationContext,
-//       data: {
-//         address: contactSecondary,
-//         caseCaptionExtension,
-//         caseTitle,
-//         docketNumberWithSuffix,
-//         preferredTrialCity,
-//         receivedAtFormatted: applicationContext
-//           .getUtilities()
-//           .formatDateString(receivedAt, 'MONTH_DAY_YEAR'),
-//         servedDate: applicationContext
-//           .getUtilities()
-//           .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
-//       },
-//     });
-//
-//   return secondaryPdfData;
-// };
-
 /**
  * serveCaseToIrsInteractor
  *
