@@ -72,7 +72,7 @@ createAccount() {
     --client-id "${CLIENT_ID}" \
     --region "${REGION}" \
     --auth-flow ADMIN_NO_SRP_AUTH \
-    --auth-parameters USERNAME=${email},PASSWORD=${DEFAULT_ACCOUNT_PASS})
+    --auth-parameters "USERNAME=${email},PASSWORD=${DEFAULT_ACCOUNT_PASS}")
 
   session=$(echo "${response}" | jq -r ".Session")
 
@@ -82,7 +82,7 @@ createAccount() {
       --client-id "${CLIENT_ID}" \
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
-      --challenge-responses NEW_PASSWORD=${DEFAULT_ACCOUNT_PASS},USERNAME=${email} \
+      --challenge-responses "NEW_PASSWORD=${DEFAULT_ACCOUNT_PASS},USERNAME=${email}" \
       --session="${session}")
   fi
 }
@@ -92,7 +92,7 @@ response=$(aws cognito-idp admin-initiate-auth \
   --client-id "${CLIENT_ID}" \
   --region "${REGION}" \
   --auth-flow ADMIN_NO_SRP_AUTH \
-  --auth-parameters USERNAME="${USTC_ADMIN_USER}"',PASSWORD'="${USTC_ADMIN_PASS}")
+  --auth-parameters "USERNAME=${USTC_ADMIN_USER},PASSWORD=${USTC_ADMIN_PASS}")
 adminToken=$(echo "${response}" | jq -r ".AuthenticationResult.IdToken")
 
 (( i=1 ))
@@ -114,7 +114,7 @@ do
 
   if [[ "$i" == "15" ]]; then
     wait
-    let i=1
+    (( i=1 ))
   else
     i=$((i+1))
   fi
