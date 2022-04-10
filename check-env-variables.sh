@@ -8,15 +8,15 @@ NC='\033[0m'
 # verify expected env variables are set
 for EXPECTED_ENV_VAR in "$@"
 do
-  [ -z ${!EXPECTED_ENV_VAR} ] && MISSING_ENV="true" && printf "${RED}ERROR - You must have ${YELLOW}${EXPECTED_ENV_VAR}${RED} set in your environment to run this script${NC}!\n"
+  [ -z "${!EXPECTED_ENV_VAR}" ] && MISSING_ENV="true" && printf "%bERROR - You must have %b${EXPECTED_ENV_VAR}%b set in your environment to run this script!%b\n" "${RED}" "${YELLOW}" "${RED}" "${NC}"
 done
 
-if [ ! -z ${MISSING_ENV} ]; then
+if [ -n "${MISSING_ENV}" ]; then
   exit 1;
 fi
 
 
-printf "\n${GREEN}Verify these env variables seem correct:${NC}\n"
+printf "\n%bVerify these env variables seem correct:%b\n" "${GREEN}" "${NC}"
 # # print all expected env variables
 for EXPECTED_ENV_VAR in "$@"
 do
@@ -27,12 +27,12 @@ do
   fi
 done
 
-if [ -z ${CI} ]; then
-  printf  "${YELLOW}Are you sure you want to continue? (press y to confirm)${NC}\n\n"
+if [ -z "${CI}" ]; then
+  printf  "%bAre you sure you want to continue? (press y to confirm)%b\n\n" "${YELLOW}" "${NC}"
   read -p "continue? (press y to confirm)" -n 1 -r
 
   echo    # (optional) move to a new line
-  if [[ !($REPLY =~ ^[Yy]$) ]]
+  if [[ ! ($REPLY =~ ^[Yy]$) ]]
   then
     echo "Aborted..."
     exit 1;

@@ -39,6 +39,13 @@ JQ is a tool used for parsing JSON in the command line.  We use JQ a lot in vari
 
 `brew install jq`
 
+### Shellcheck
+
+Shellcheck is a tool we run locally against our .sh scripts to check for potential issues and keep the styling consistent.  You can install it with brew:
+
+`brew install shellcheck`
+
+
 ### AWS CLI
 
 The AWS CLI is again used for a majority of our deployment scripts.  You can follow this [tutorial](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) to get the AWS CLI v2 installed on your laptop.
