@@ -166,7 +166,7 @@ EF-CMS currently has both the concept of a deployment at a domain as well as a n
     node shared/admin-tools/user/setup-admin.js
     ```
     ```bash
-    . ./shared/admin-tools/user/setup-test-users.sh ${ENV}
+    . ./shared/admin-tools/user/setup-test-users.sh "${ENV}"
     ```
     ```bash
     ENV=exp5 FILE_NAME=./scripts/data-import/judge/judge_users.csv ./scripts/data-import/judge/bulk-import-judge-users.sh
