@@ -8,7 +8,7 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
 }
 
 data "local_file" "amended_petition_form_pdf" {
-    filename = "${path.module}/../template/lambdas/dist/amended-pdf-form.pdf"
+    filename = "${path.module}/lambdas/dist/amended-pdf-form.pdf"
 }
 
 resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
