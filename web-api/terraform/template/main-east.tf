@@ -7,32 +7,14 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   }
 }
 
-resource "null_resource" "documents_east_object" {
-  depends_on = [aws_s3_bucket.documents_us_east_1]
-  provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.pdfs.output_path} s3://${aws_s3_bucket.documents_us_east_1.id}"
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
+data "local_file" "amended_petition_form_pdf" {
+    filename = "${path.module}/../template/lambdas/dist/amended-pdf-form.pdf"
 }
 
-resource "null_resource" "documents_west_object" {
-  depends_on = [aws_s3_bucket.documents_us_west_1]
-  provisioner "local-exec" {
-    command = "aws s3 cp ${data.archive_file.pdfs.output_path} s3://${aws_s3_bucket.documents_us_west_1.id}"
-  }
-
-  triggers = {
-    always_run = timestamp()
-  }
-}
-
-data "archive_file" "pdfs" {
-  type        = "pdf"
-  output_path = "${path.module}/../template/lambdas/amended-pdf-form.pdf"
-  source_dir  = "${path.module}/../template/lambdas/dist/"
+resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
+  bucket     = aws_s3_bucket.documents_us_east_1
+  key        = "amended-petition-file"
+  content     = data.local_file.amended_petition_form_pdf.content
 }
 
 data "archive_file" "zip_api" {
