@@ -13,7 +13,7 @@ ENV="${1}"
 
 cognito_user_pool_name="efcms-${ENV}"
 
-user_pool_has_both_lambda_triggers=$(aws cognito-idp list-user-pools --max-results=60 | jq '.UserPools[] | select(.Name=="'"${cognito_user_pool_name}"'") | .LambdaConfig | .PostConfirmation and .PostAuthentication')
+user_pool_has_both_lambda_triggers=$(aws cognito-idp list-user-pools --max-results=60 --region=us-east-1 | jq '.UserPools[] | select(.Name=="'"${cognito_user_pool_name}"'") | .LambdaConfig | .PostConfirmation and .PostAuthentication')
 
 if [ "${user_pool_has_both_lambda_triggers}" != 'true' ]; then
   echo "ERROR: Cognito user pool ${cognito_user_pool_name} is missing either the PostConfirmation or PostAuthentication Lambda trigger"
