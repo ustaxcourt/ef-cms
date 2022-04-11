@@ -34,8 +34,8 @@ aws ses verify-email-identity --email-address "noreply@${EFCMS_DOMAIN}"
 
 VERIFICATION_OBJECT_KEY=$(aws s3api list-objects --bucket "${BUCKET}" --query "Contents[?Key != 'AMAZON_SES_SETUP_NOTIFICATION'].Key | [0]" --output text)
 aws s3api get-object --bucket "${BUCKET}" --key "${VERIFICATION_OBJECT_KEY}" verification-email.txt
-VERIFICATION_LINK=$(cat verification-email.txt | grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-].*(\?|\&)([^=]+)\=([^&]+)" | tr '\r' '\0')
-curl -X GET $VERIFICATION_LINK
+VERIFICATION_LINK=$(grep -Eo "(http|https)://[a-zA-Z0-9./?=_%:-].*(\?|\&)([^=]+)\=([^&]+)" verification-email.txt | tr '\r' '\0')
+curl -X GET "${VERIFICATION_LINK}"
 rm verification-email.txt
 
 # remove rule set
