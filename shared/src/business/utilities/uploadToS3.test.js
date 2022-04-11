@@ -35,7 +35,7 @@ describe('uploadToS3', () => {
     await expect(
       uploadToS3({
         applicationContext,
-        mockCaseConfirmationPdfName,
+        pdfName: mockCaseConfirmationPdfName,
         testPdfDoc,
       }),
     ).rejects.toEqual('there was an error uploading');
@@ -66,7 +66,7 @@ describe('uploadToS3', () => {
 
     await uploadToS3({
       applicationContext,
-      mockCaseConfirmationPdfName,
+      pdfName: mockCaseConfirmationPdfName,
       testPdfDoc,
     });
     expect(applicationContext.logger.error).not.toHaveBeenCalled();

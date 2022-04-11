@@ -516,6 +516,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Trial',
     eventCode: 'NTD',
   },
+  noticeOfReceiptOfPetition: {
+    documentTitle: 'Notice of Receipt of Petition',
+    documentType: 'Notice of Receipt of Petition',
+    eventCode: 'NOTR',
+  },
   standingPretrialOrderForSmallCase: {
     documentTitle: SPOS_DOCUMENT.documentTitle,
     documentType: SPOS_DOCUMENT.documentType,

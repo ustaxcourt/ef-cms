@@ -59,8 +59,8 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    caseConfirmationPdfName: newDocketEntry.docketEntryId,
     pdfData,
+    pdfName: newDocketEntry.docketEntryId,
   });
 
   const documentContentsId = applicationContext.getUniqueId();
