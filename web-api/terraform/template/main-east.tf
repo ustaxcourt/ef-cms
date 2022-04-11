@@ -8,12 +8,12 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
 }
 
 data "local_file" "amended_petition_form_pdf" {
-    filename = "${path.module}/lambdas/dist/amended-pdf-form.pdf"
+    filename = "${path.module}/lambdas/dist/amended-petition-form.pdf"
 }
 
 resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
   bucket     = aws_s3_bucket.documents_us_east_1
-  key        = "amended-petition-file"
+  key        = "amended-petition-form"
   content     = data.local_file.amended_petition_form_pdf.content
 }
 
