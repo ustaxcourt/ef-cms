@@ -15,5 +15,5 @@ In order to do this, you need to have an empty DDB table in the environment to w
 4. After the blue/green migration completes, you will need to recreate the test users for that environment as they are not included in the production data.
 
     ```bash
-    . ./shared/admin-tools/users/setup-test-users.sh ${ENV}
+    . ./shared/admin-tools/users/setup-test-users.sh "${ENV}"
     ```
