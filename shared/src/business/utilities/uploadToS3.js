@@ -5,7 +5,7 @@
  * @param {string} pdfData the pdfData
  */
 
-const uploadToS3 = ({ applicationContext, caseConfirmationPdfName, pdfData }) =>
+const uploadToS3 = ({ applicationContext, pdfData, pdfName }) =>
   new Promise((resolve, reject) => {
     const documentsBucket = applicationContext.getDocumentsBucketName();
     const s3Client = applicationContext.getStorageClient();
@@ -14,7 +14,7 @@ const uploadToS3 = ({ applicationContext, caseConfirmationPdfName, pdfData }) =>
       Body: pdfData,
       Bucket: documentsBucket,
       ContentType: 'application/pdf',
-      Key: caseConfirmationPdfName,
+      Key: pdfName,
     };
 
     s3Client.upload(params, function (err) {

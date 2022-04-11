@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
@@ -122,7 +125,11 @@ const createPetitionWorkItems = async ({
   });
 };
 
-const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
+const generateNoticeOfReceipt = async ({
+  applicationContext,
+  caseEntity,
+  userIdServingPetition,
+}) => {
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
   const {
@@ -171,9 +178,6 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     }
   }
 
-  const caseConfirmationPdfName =
-    caseEntity.getCaseConfirmationGeneratedPdfFileName();
-
   const isProSe = caseEntity.privatePractitioners.length === 0;
 
   if (preferredTrialCity && isProSe) {
@@ -207,20 +211,49 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     }
   }
 
+  const notrDocketEntryId = applicationContext.getUniqueId();
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    caseConfirmationPdfName,
     pdfData: Buffer.from(pdfData),
+    pdfName: notrDocketEntryId,
   });
 
   let urlToReturn;
+
+  const notrDocketEntry = new DocketEntry(
+    {
+      docketEntryId: notrDocketEntryId,
+      documentTitle:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentTitle,
+      documentType:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentType,
+      eventCode:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.eventCode,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      userId: userIdServingPetition,
+    },
+    { applicationContext, petitioners: caseEntity.petitioners },
+  );
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+  notrDocketEntry.setAsServed(servedParties.all);
+
+  caseEntity.addDocketEntry(notrDocketEntry);
+
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    docketEntryId: notrDocketEntry.docketEntryId,
+    servedParties,
+  });
 
   if (caseEntity.isPaper) {
     ({ url: urlToReturn } = await applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl({
         applicationContext,
-        key: caseConfirmationPdfName,
+        key: notrDocketEntry.docketEntryId,
         useTempBucket: false,
       }));
   }
@@ -423,6 +456,7 @@ const serveCaseToIrsInteractor = async (
   const urlToReturn = await generateNoticeOfReceipt({
     applicationContext,
     caseEntity,
+    userIdServingPetition: user.userId,
   });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
