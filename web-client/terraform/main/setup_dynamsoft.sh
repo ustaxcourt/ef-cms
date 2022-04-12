@@ -1,9 +1,5 @@
 #!/bin/bash
-
-# we disable SC2269 because these variables are actually defined in terraform and passed in externally.
-
 # shellcheck disable=SC2269
-# these comes from terraform
 dynamsoft_s3_zip_path="${dynamsoft_s3_zip_path}"
 dynamsoft_url="${dynamsoft_url}"
 dynamsoft_product_keys="${dynamsoft_product_keys}"
@@ -16,15 +12,15 @@ sudo ufw allow 'Nginx HTTP'
 cd /var/www/html || exit
 
 # download the zip
-sudo aws s3 cp "${dynamsoft_s3_zip_path}" dynamsoft.tar.gz
+sudo aws s3 cp "s3://ustc-case-mgmt.flexion.us-software/dynamic-web-twain-sdk-17.2.5.tar.gz" dynamsoft.tar.gz
 sudo tar xvzf dynamsoft.tar.gz
 
 # copy config to /tmp due to permission issues
-cp dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js /tmp/dynamsoft.webtwain.config.js.tpl
+cp Dynamic\ Web\ TWAIN\ SDK\ 17.2.5/Resources/dynamsoft.webtwain.config.js /tmp/dynamsoft.webtwain.config.js.tpl
 
 # replace the resource path with the full path to the resources folder
-sudo sed -i "s|DYNAMSOFT_RESOURCE_PATH|${dynamsoft_url}/dynamic-web-twain-sdk-14.3.1|" /tmp/dynamsoft.webtwain.config.js.tpl
+sudo sed -i "s|DYNAMSOFT_RESOURCE_PATH|${dynamsoft_url}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources|" /tmp/dynamsoft.webtwain.config.js.tpl
 sudo sed -i "s|DYNAMSOFT_PRODUCT_KEYS|${dynamsoft_product_keys}|" /tmp/dynamsoft.webtwain.config.js.tpl
 
 # copy back from /tmp to main nginx html folder
-sudo cp /tmp/dynamsoft.webtwain.config.js.tpl dynamic-web-twain-sdk-14.3.1/dynamsoft.webtwain.config.js
+sudo cp /tmp/dynamsoft.webtwain.config.js.tpl Dynamic\ Web\ TWAIN\ SDK\ 17.2.5/Resources/dynamsoft.webtwain.config.js
