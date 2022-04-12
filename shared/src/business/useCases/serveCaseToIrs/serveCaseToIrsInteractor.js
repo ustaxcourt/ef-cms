@@ -239,6 +239,13 @@ const generateNoticeOfReceipt = async ({
   const servedParties = aggregatePartiesForService(caseEntity);
   notrDocketEntry.setAsServed(servedParties.all);
 
+  notrDocketEntry.numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      documentBytes: pdfData,
+    });
+
   caseEntity.addDocketEntry(notrDocketEntry);
 
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
