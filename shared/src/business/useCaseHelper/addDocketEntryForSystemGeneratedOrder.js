@@ -15,6 +15,7 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
 exports.addDocketEntryForSystemGeneratedOrder = async ({
   applicationContext,
   caseEntity,
+  pdfToAppend = null,
   systemGeneratedDocument,
 }) => {
   const user = applicationContext.getCurrentUser();
@@ -56,6 +57,14 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
         : '',
     },
   });
+
+  if (pdfToAppend) {
+    await combineTwoPdfs({
+      applicationContext,
+      firstPdf: new Uint8Array(pdfData),
+      secondPdf: new Uint8Array(amendedPetitionFormData),
+    });
+  }
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
