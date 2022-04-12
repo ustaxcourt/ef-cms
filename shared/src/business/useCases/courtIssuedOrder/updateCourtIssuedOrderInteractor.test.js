@@ -207,7 +207,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to Show Cause',
+        documentTitle: 'Order for Filing Fee',
         documentType: 'Notice',
         draftOrderState: {
           documentType: 'Order for Filing Fee',
@@ -231,7 +231,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
             expect.not.objectContaining({
-              freeText: 'Order for Filinf Fee',
+              freeText: 'Order for Filing Fee',
             }),
           ]),
         }),
@@ -244,7 +244,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to Show Cause',
+        documentTitle: 'Order to Amended Petition',
         documentType: 'Notice',
         draftOrderState: {
           documentType: 'Order for Amended Petition',
