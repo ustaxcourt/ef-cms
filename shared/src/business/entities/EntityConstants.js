@@ -201,6 +201,10 @@ const ORDER_TYPES = [
     eventCode: 'OSC',
   },
   {
+    documentType: 'Order petr(s) to show cause why "S" should not be removed',
+    eventCode: 'OSCP',
+  },
+  {
     documentTitle: 'Order and Decision',
     documentType: 'Order and Decision',
     eventCode: 'OAD',
@@ -495,7 +499,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   },
   orderForFilingFee: {
     content:
-      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case  related  forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
+      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
       .documentType,
     eventCode: 'OF',
@@ -506,15 +510,15 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       petitioners elected to have this deficiency case conducted under the small tax case procedures. However, a review
       of the record shows that the amount in dispute for one or more taxable years exceeds $50,000. The small tax case
       procedures are only applicable to deficiency cases in which the amount in dispute for each taxable year is
-      $50,000 or less. See section 7463(a)(1), Internal Revenue Code; Rules 170 and 171, Tax Court Rules of Practice
+      $50,000 or less. <u>See</u> section 7463(a)(1), Internal Revenue Code; Rules 170 and 171, Tax Court Rules of Practice
       and Procedure.
       <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Upon due consideration and for cause, it is
       <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [ORDER_DATE_PLUS_60] petitioners shall show cause in writing why
       the Court should not issue an Order directing that the small tax case designation be removed in this case and the
       proceedings not be conducted under the Small Tax Case Rules.`,
-    documentType: ORDER_TYPES.find(order => order.eventCode === 'OSC')
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OSCP')
       .documentType,
-    eventCode: 'OSC',
+    eventCode: 'OSCP',
     documentTitle: 'Order to Show Cause',
   },
   noticeOfDocketChange: {

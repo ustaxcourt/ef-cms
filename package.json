@@ -157,6 +157,9 @@
     ],
     "swagger.json,v1.yaml,v2.yaml": [
       "swagger-cli validate"
+    ],
+    "*.{sh}": [
+      "lint-staged-shellcheck"
     ]
   },
   "scripts": {
@@ -290,7 +293,6 @@
   "resolutions": {
     "ansi-regex": "^5.0.1",
     "bl": "^4.0.3",
-    "css-what": "^5.0.1",
     "dot-prop": "5.1.1",
     "lodash": "^4.17.21",
     "minimist": "^1.2.5",
@@ -300,6 +302,7 @@
   },
   "devDependencies": {
     "checksum": "^1.0.0",
+    "lint-staged-shellcheck": "^0.1.2",
     "pdf2pic": "^2.1.4",
     "pixelmatch": "^5.2.1",
     "pngjs": "^6.0.0",

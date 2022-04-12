@@ -174,7 +174,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         documentType: 'Notice',
         draftOrderState: {
           documentType: 'Order to Show Cause',
-          eventCode: 'OSC',
+          eventCode: 'OSCP',
         },
         eventCode: 'NOT',
       },
