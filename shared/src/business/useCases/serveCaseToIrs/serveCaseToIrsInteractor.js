@@ -417,17 +417,13 @@ const serveCaseToIrsInteractor = async (
 
     const petitionDocument = caseEntity.docketEntries.find(
       doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-    ); //reuse
-
-    // do something else to retrieve the amended petition from s3
+    );
 
     const content = replaceBracketed(
       orderForAmendedPetition.content,
       formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
       todayPlus60,
     );
-
-    // content.push(amendedPetitionFormTemplate);
 
     await applicationContext
       .getUseCaseHelpers()
@@ -436,6 +432,27 @@ const serveCaseToIrsInteractor = async (
         caseEntity,
         systemGeneratedDocument: {
           ...orderForAmendedPetition,
+          content,
+        },
+      });
+  }
+
+  if (caseEntity.orderToShowCause) {
+    const { orderToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const content = replaceBracketed(
+      orderToShowCause.content,
+      formatNow(FORMATS.MONTH_DAY_YEAR),
+      todayPlus60,
+    );
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderToShowCause,
           content,
         },
       });
