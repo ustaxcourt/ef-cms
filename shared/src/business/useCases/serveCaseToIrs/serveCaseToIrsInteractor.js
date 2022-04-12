@@ -15,13 +15,15 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  replaceBracketed,
+} = require('../../../business/utilities/replaceBracketed');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
-const { replaceBracketed } = require('../../../business/utilities');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const addDocketEntryForPaymentStatus = ({
