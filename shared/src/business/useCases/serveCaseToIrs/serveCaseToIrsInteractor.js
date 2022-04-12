@@ -182,12 +182,14 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
 
   let clinicLetter;
   const isPrimaryContactProSe =
-    caseEntity.getPractitionersRepresenting(contactPrimary.contactId).length ===
-    0;
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      contactPrimary.contactId,
+    );
   const isSecondaryContactProSe =
     !!contactSecondary &&
-    caseEntity.getPractitionersRepresenting(contactSecondary.contactId)
-      .length === 0;
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      contactSecondary.contactId,
+    );
 
   if (
     shouldIncludeClinicLetter(
