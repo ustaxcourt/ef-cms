@@ -61,7 +61,7 @@ exports.appendAmendedPetitionFormInteractor = async (
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    caseConfirmationPdfName: docketEntryId,
     pdfData: Buffer.from(combinedPdf),
+    pdfName: docketEntryId,
   });
 };

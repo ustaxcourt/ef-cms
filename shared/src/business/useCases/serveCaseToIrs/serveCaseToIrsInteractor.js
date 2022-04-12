@@ -212,8 +212,8 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    caseConfirmationPdfName,
     pdfData: Buffer.from(pdfData),
+    pdfName: caseConfirmationPdfName,
   });
 
   let urlToReturn;
