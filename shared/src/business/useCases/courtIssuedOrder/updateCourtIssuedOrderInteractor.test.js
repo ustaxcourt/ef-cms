@@ -165,7 +165,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
     );
   });
 
-  it('should not populate free text for system generated orders', async () => {
+  it('should not populate free text for OSCP', async () => {
     await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
@@ -195,6 +195,80 @@ describe('updateCourtIssuedOrderInteractor', () => {
           docketEntries: expect.arrayContaining([
             expect.not.objectContaining({
               freeText: 'Order to Show Cause',
+            }),
+          ]),
+        }),
+      }),
+    );
+  });
+
+  it('should not populate free text for OF', async () => {
+    await updateCourtIssuedOrderInteractor(applicationContext, {
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order to Show Cause',
+        documentType: 'Notice',
+        draftOrderState: {
+          documentType: 'Order for Filing Fee',
+          eventCode: 'OF',
+        },
+        eventCode: 'NOT',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries.length,
+    ).toEqual(3);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          docketEntries: expect.arrayContaining([
+            expect.not.objectContaining({
+              freeText: 'Order for Filinf Fee',
+            }),
+          ]),
+        }),
+      }),
+    );
+  });
+
+  it('should not populate free text for OAP', async () => {
+    await updateCourtIssuedOrderInteractor(applicationContext, {
+      docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      documentMetadata: {
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order to Show Cause',
+        documentType: 'Notice',
+        draftOrderState: {
+          documentType: 'Order for Amended Petition',
+          eventCode: 'OAP',
+        },
+        eventCode: 'NOT',
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+        .caseToUpdate.docketEntries.length,
+    ).toEqual(3);
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        caseToUpdate: expect.objectContaining({
+          docketEntries: expect.arrayContaining([
+            expect.not.objectContaining({
+              freeText: 'Order for Amended Petition',
             }),
           ]),
         }),
