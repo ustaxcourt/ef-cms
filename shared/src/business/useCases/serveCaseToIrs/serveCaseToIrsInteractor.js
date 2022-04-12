@@ -1,4 +1,5 @@
 const {
+  formatDateString,
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
@@ -383,13 +384,13 @@ const serveCaseToIrsInteractor = async (
       });
   }
 
+  const todayPlus60 = getBusinessDateInFuture({
+    numberOfDays: 60,
+    startDate: formatNow(FORMATS.ISO),
+  });
+
   if (caseEntity.orderForFilingFee) {
     const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    const todayPlus60 = getBusinessDateInFuture({
-      numberOfDays: 60,
-      startDate: formatNow(FORMATS.ISO),
-    });
 
     const content = replaceBracketed(
       orderForFilingFee.content,
@@ -404,6 +405,31 @@ const serveCaseToIrsInteractor = async (
         caseEntity,
         systemGeneratedDocument: {
           ...orderForFilingFee,
+          content,
+        },
+      });
+  }
+
+  if (caseEntity.orderForAmendedPetition) {
+    const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const petitionDocument = caseEntity.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ); //reuse
+
+    const content = replaceBracketed(
+      orderForAmendedPetition.content,
+      formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
+      todayPlus60,
+    );
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderForAmendedPetition,
           content,
         },
       });
