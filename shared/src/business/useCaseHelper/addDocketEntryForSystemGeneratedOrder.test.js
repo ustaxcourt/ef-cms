@@ -2,6 +2,7 @@ const {
   addDocketEntryForSystemGeneratedOrder,
 } = require('./addDocketEntryForSystemGeneratedOrder');
 const {
+  AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
@@ -126,16 +127,33 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
     ).toEqual(Buffer.from(JSON.stringify(contentToStore)));
   });
 
-  it('should append aditional pdf form data when additionalPdfRequired is true', async () => {
+  it('should append additional pdf form data when the document is an orderForAmendedPetition', async () => {
+    const mockAmendedPetitionFormData = 'Elmo the Third';
+
+    applicationContext.getStorageClient.mockReturnValue({
+      getObject: jest.fn().mockReturnValue({
+        promise: () => ({ Body: mockAmendedPetitionFormData }),
+      }),
+    });
+
+    const mockCombinedPdfsReturnVal = 'Antonia Lafaso';
+    applicationContext
+      .getUtilities()
+      .combineTwoPdfs.mockReturnValue(mockCombinedPdfsReturnVal);
+
     await addDocketEntryForSystemGeneratedOrder({
-      additionalPdfRequired: true,
       applicationContext,
       caseEntity,
       systemGeneratedDocument: orderForAmendedPetition,
     });
 
     expect(
-      applicationContext.getUtilities().appendAmendedPetitionFormToOrder,
-    ).toHaveBeenCalled();
+      applicationContext.getStorageClient().getObject.mock.calls[0][0].Key,
+    ).toEqual(AMENDED_PETITION_FORM_NAME);
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
+        .secondPdf,
+    ).toEqual(mockAmendedPetitionFormData);
   });
 });
