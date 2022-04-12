@@ -467,7 +467,6 @@ describe('serveCaseToIrsInteractor', () => {
       applicationContext.getUseCaseHelpers()
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0],
     ).toMatchObject({
-      additionalPdfRequired: true,
       systemGeneratedDocument: {
         documentTitle: 'Order',
         documentType: 'Order for Amended Petition',
@@ -721,6 +720,40 @@ describe('serveCaseToIrsInteractor', () => {
         .systemGeneratedDocument,
     ).toMatchObject({
       content: expect.stringContaining(mockTodayPlus60),
+    });
+  });
+
+  it('should replace brackets in orderForAmendedPetition content with the served date of the petition, and today plus sixty twice', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderForAmendedPetition: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.not.stringContaining('['),
+    });
+
+    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
+
+    const mockTodayPlus60 = getBusinessDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${today}, a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper amended petition. If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.`,
     });
   });
 

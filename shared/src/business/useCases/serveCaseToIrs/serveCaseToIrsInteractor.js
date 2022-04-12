@@ -423,6 +423,7 @@ const serveCaseToIrsInteractor = async (
       orderForAmendedPetition.content,
       formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
       todayPlus60,
+      todayPlus60,
     );
 
     await applicationContext
