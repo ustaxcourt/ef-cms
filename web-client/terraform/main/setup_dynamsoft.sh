@@ -1,4 +1,7 @@
 #!/bin/bash
+
+# we disable SC2269 because these variables are actually defined in terraform and passed in externally.
+# these comes from terraform
 # shellcheck disable=SC2269
 dynamsoft_s3_zip_path="${dynamsoft_s3_zip_path}"
 dynamsoft_url="${dynamsoft_url}"
@@ -12,7 +15,7 @@ sudo ufw allow 'Nginx HTTP'
 cd /var/www/html || exit
 
 # download the zip
-sudo aws s3 cp "s3://ustc-case-mgmt.flexion.us-software/dynamic-web-twain-sdk-17.2.5.tar.gz" dynamsoft.tar.gz
+sudo aws s3 cp "${dynamsoft_s3_zip_path}" dynamsoft.tar.gz
 sudo tar xvzf dynamsoft.tar.gz
 
 # copy config to /tmp due to permission issues
