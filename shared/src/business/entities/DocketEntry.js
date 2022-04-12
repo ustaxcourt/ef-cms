@@ -425,12 +425,17 @@ const getServedPartiesCode = servedParties => {
   let servedPartiesCode = '';
   if (servedParties && servedParties.length > 0) {
     if (
+      servedParties.length >= 2 &&
+      servedParties.find(party => party.role === ROLES.irsSuperuser)
+    ) {
+      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
+    } else if (
       servedParties.length === 1 &&
       servedParties[0].role === ROLES.irsSuperuser
     ) {
       servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
     } else {
-      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
+      servedPartiesCode = SERVED_PARTIES_CODES.PETITIONER;
     }
   }
   return servedPartiesCode;
