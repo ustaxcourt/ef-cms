@@ -166,11 +166,13 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should not populate free text for OSCP', async () => {
+    const mockDocumentTitle = 'Order to Show Cause Title';
+
     await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to Show Cause',
+        documentTitle: mockDocumentTitle,
         documentType: 'Notice',
         draftOrderState: {
           documentType: 'Order to Show Cause',
@@ -194,7 +196,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
             expect.not.objectContaining({
-              freeText: 'Order to Show Cause',
+              freeText: mockDocumentTitle,
             }),
           ]),
         }),
@@ -203,11 +205,13 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should not populate free text for OF', async () => {
+    const mockDocumentTitle = 'Order for Filing Fee Title';
+
     await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order for Filing Fee',
+        documentTitle: mockDocumentTitle,
         documentType: 'Notice',
         draftOrderState: {
           documentType: 'Order for Filing Fee',
@@ -231,7 +235,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
             expect.not.objectContaining({
-              freeText: 'Order for Filing Fee',
+              freeText: mockDocumentTitle,
             }),
           ]),
         }),
@@ -240,11 +244,12 @@ describe('updateCourtIssuedOrderInteractor', () => {
   });
 
   it('should not populate free text for OAP', async () => {
+    const mockDocumentTitle = 'Order for Amended Petition Title';
     await updateCourtIssuedOrderInteractor(applicationContext, {
       docketEntryIdToEdit: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
-        documentTitle: 'Order to Amended Petition',
+        documentTitle: mockDocumentTitle,
         documentType: 'Notice',
         draftOrderState: {
           documentType: 'Order for Amended Petition',
@@ -268,7 +273,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
         caseToUpdate: expect.objectContaining({
           docketEntries: expect.arrayContaining([
             expect.not.objectContaining({
-              freeText: 'Order for Amended Petition',
+              freeText: mockDocumentTitle,
             }),
           ]),
         }),

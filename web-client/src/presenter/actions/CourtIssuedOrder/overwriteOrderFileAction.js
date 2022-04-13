@@ -16,14 +16,13 @@ export const overwriteOrderFileAction = async ({
 }) => {
   const { primaryDocumentFile } = get(state.form);
   const documentToEdit = get(state.documentToEdit);
-  let finalDocument = primaryDocumentFile;
 
   try {
     const primaryDocumentFileId = await applicationContext
       .getUseCases()
       .uploadOrderDocumentInteractor(applicationContext, {
         docketEntryIdToOverwrite: documentToEdit.docketEntryId,
-        documentFile: finalDocument,
+        documentFile: primaryDocumentFile,
       });
 
     return path.success({
