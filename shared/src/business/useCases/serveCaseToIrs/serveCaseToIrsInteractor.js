@@ -253,6 +253,7 @@ const generateNoticeOfReceipt = async ({
     caseEntity,
     docketEntryId: notrDocketEntry.docketEntryId,
     servedParties,
+    skipEmailToIrs: true,
   });
 
   if (caseEntity.isPaper) {
