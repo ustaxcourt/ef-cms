@@ -201,6 +201,10 @@ const ORDER_TYPES = [
     eventCode: 'OSC',
   },
   {
+    documentType: 'Order petr(s) to show cause why "S" should not be removed',
+    eventCode: 'OSCP',
+  },
+  {
     documentTitle: 'Order and Decision',
     documentType: 'Order and Decision',
     eventCode: 'OAD',
@@ -500,6 +504,22 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OF',
     documentTitle: 'Order',
+  },
+  orderToShowCause: {
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
+      petitioners elected to have this deficiency case conducted under the small tax case procedures. However, a review
+      of the record shows that the amount in dispute for one or more taxable years exceeds $50,000. The small tax case
+      procedures are only applicable to deficiency cases in which the amount in dispute for each taxable year is
+      $50,000 or less. <u>See</u> section 7463(a)(1), Internal Revenue Code; Rules 170 and 171, Tax Court Rules of Practice
+      and Procedure.
+      <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Upon due consideration and for cause, it is
+      <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [ORDER_DATE_PLUS_60] petitioners shall show cause in writing why
+      the Court should not issue an Order directing that the small tax case designation be removed in this case and the
+      proceedings not be conducted under the Small Tax Case Rules.`,
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OSCP')
+      .documentType,
+    eventCode: 'OSCP',
+    documentTitle: 'Order to Show Cause',
   },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
