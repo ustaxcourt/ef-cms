@@ -21,11 +21,8 @@ describe('getServedPartiesCode', () => {
     expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
   });
 
-  it('returns the servedParties code for both if the given servedParties array contains multiple servedParties', () => {
+  it('returns the servedParties code for both if the only party in the given servedParties array does not have the irsSuperUser role', () => {
     const servedPartiesCode = getServedPartiesCode([
-      {
-        role: ROLES.irsSuperuser,
-      },
       {
         role: ROLES.petitioner,
       },
@@ -33,25 +30,13 @@ describe('getServedPartiesCode', () => {
     expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
   });
 
-  it('returns the servedParties code of P if no irsSuperuser is present in the servedPartiesCode', () => {
+  it('returns the servedParties code for both if the given servedParties array contains multiple servedParties', () => {
     const servedPartiesCode = getServedPartiesCode([
-      {
-        name: 'suzy',
-      },
-    ]);
-    expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.PETITIONER);
-  });
-
-  it('returns the servedParties code of B if a irsSuperuser is present in the servedPartiesCode with other parties', () => {
-    const servedPartiesCode = getServedPartiesCode([
-      {
-        name: 'john',
-      },
-      {
-        name: 'bob',
-      },
       {
         role: ROLES.irsSuperuser,
+      },
+      {
+        role: ROLES.petitioner,
       },
     ]);
     expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
