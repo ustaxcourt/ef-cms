@@ -849,7 +849,7 @@ export const wait = time => {
 };
 export const waitForLoadingComponentToHide = async (
   cerebralTest,
-  maxWait = 10000,
+  maxWait = 30000,
 ) => {
   let waitTime = 0;
   while (
