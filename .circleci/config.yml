@@ -530,6 +530,10 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
+      - run:
+          name: 'Deploy - Verify Cognito Lambda Triggers'
+          command: |
+            npm run verify-cognito-lambda-triggers -- $ENV
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
       - run:
