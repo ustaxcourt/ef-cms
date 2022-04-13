@@ -238,6 +238,7 @@ const generateNoticeOfReceipt = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
   notrDocketEntry.setAsServed(servedParties.all);
+  notrDocketEntry.servedPartiesCode = 'P';
 
   notrDocketEntry.numberOfPages = await applicationContext
     .getUseCaseHelpers()
