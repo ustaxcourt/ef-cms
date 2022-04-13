@@ -13,8 +13,7 @@
 
 SOURCE_TABLE=$1
 
-WEST_TABLE_STATUS=$(aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-west-1 | jq -r ".TableDescription.TableStatus")
-
+aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-west-1 | jq -r ".TableDescription.TableStatus"
 aws dynamodb describe-table --table-name "${SOURCE_TABLE}" --region us-west-1
 CODE=$?
 
@@ -28,7 +27,7 @@ done
 
 echo "${SOURCE_TABLE} in region us-west-1 is deleted."
 
-EAST_TABLE_STATUS=$(aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-east-1 | jq -r ".TableDescription.TableStatus")
+aws dynamodb delete-table --table-name "${SOURCE_TABLE}" --region us-east-1 | jq -r ".TableDescription.TableStatus"
 aws dynamodb describe-table --table-name "${SOURCE_TABLE}" --region us-east-1
 CODE=$?
 

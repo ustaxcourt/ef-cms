@@ -4,8 +4,8 @@ ENV=$1
 DEPLOYING_COLOR=$2
 
 [ -z "${EFCMS_DOMAIN}" ] && echo "You must have EFCMS_DOMAIN set in your environment" && exit 1
-[ -z "${ENV}" ] && echo 'You must pass ENV as argument $1' && exit 1
-[ -z "${DEPLOYING_COLOR}" ] && echo 'You must pass DEPLOYING_COLOR as argument $2' && exit 1
+[ -z "${ENV}" ] && echo "You must pass ENV as argument \$1" && exit 1
+[ -z "${DEPLOYING_COLOR}" ] && echo "You must pass DEPLOYING_COLOR as argument \$2" && exit 1
 
 REGION="us-east-1"
 API_URL="https://api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
@@ -35,7 +35,6 @@ STAGE="${CLIENT_STAGE}" \
   COGNITO_CLIENT_ID="${CLIENT_ID}" \
   SCANNER_RESOURCE_URI="${SCANNER_RESOURCE_URI}" \
   COGNITO_TOKEN_URL="${COGNITO_TOKEN_URL}" \
-  COGNITO_REDIRECT_URI="${COGNITO_REDIRECT_URI}" \
   COGNITO_REDIRECT_URI="${COGNITO_REDIRECT_URI}" \
   PDF_EXPRESS_LICENSE_KEY="${PDF_EXPRESS_LICENSE_KEY}" \
   WS_URL="${WS_URL}" \
