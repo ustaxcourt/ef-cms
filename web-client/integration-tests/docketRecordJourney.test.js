@@ -457,6 +457,10 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
         showNotServed: true,
         showServed: false,
       },
+      {
+        createdAtFormatted: expect.anything(),
+        eventCode: 'NOTR',
+      },
     ]);
   });
 
