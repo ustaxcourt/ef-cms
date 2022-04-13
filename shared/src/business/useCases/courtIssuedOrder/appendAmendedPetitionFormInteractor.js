@@ -14,7 +14,6 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketEntryId the docketEntryId of the document
- * @returns {Object} the combined pdf
  */
 exports.appendAmendedPetitionFormInteractor = async (
   applicationContext,

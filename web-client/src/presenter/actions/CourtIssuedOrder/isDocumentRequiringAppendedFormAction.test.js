@@ -1,4 +1,3 @@
-// import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { isDocumentRequiringAppendedFormAction } from './isDocumentRequiringAppendedFormAction';
 import { presenter } from '../../presenter-mock';
 
