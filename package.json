@@ -294,7 +294,6 @@
   "resolutions": {
     "ansi-regex": "^5.0.1",
     "bl": "^4.0.3",
-    "css-what": "^5.0.1",
     "dot-prop": "5.1.1",
     "lodash": "^4.17.21",
     "minimist": "^1.2.5",
