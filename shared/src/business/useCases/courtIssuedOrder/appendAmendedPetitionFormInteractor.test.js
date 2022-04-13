@@ -102,8 +102,8 @@ describe('appendAmendedPetitionFormInteractor', () => {
     expect(
       applicationContext.getUtilities().uploadToS3.mock.calls[0][0],
     ).toMatchObject({
-      caseConfirmationPdfName: mockDocketEntryId,
       pdfData: Buffer.from(returnedCombinedPdf),
+      pdfName: mockDocketEntryId,
     });
   });
 });
