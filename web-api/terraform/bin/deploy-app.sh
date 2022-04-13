@@ -2,12 +2,16 @@
 
 ENV=$1
 
-export DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh ${ENV})
-export MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh ${ENV})
+DEPLOYING_COLOR=$(../../../scripts/dynamo/get-deploying-color.sh "${ENV}")
+MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
+
+export DEPLOYING_COLOR
+export MIGRATE_FLAG
 
 # Getting the environment-specific deployment settings and injecting them into the shell environment
-if [ -z ${SECRETS_LOADED} ]; then
+if [ -z "${SECRETS_LOADED}" ]; then
   pushd ../../../
+  # shellcheck disable=SC1091
   . ./scripts/load-environment-from-secrets.sh
   popd
 fi
@@ -76,24 +80,24 @@ if [ -z "${CIRCLE_BRANCH}" ]; then
 fi
 
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
-  BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh $ENV)
-  GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh $ENV)
-  BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh $ENV)
-  GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh $ENV)
-  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh $ENV)
+  BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+  GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+  BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+  GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+  COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
 else
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
-    BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh $ENV)
-    GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh $ENV)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh $ENV)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh $ENV)
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh $ENV)
+    BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+    GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
   else
-    GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh $ENV)
-    BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh $ENV)
-    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh $ENV)
-    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh $ENV)
-    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh $ENV)
+    GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+    BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
+    GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+    BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-source-elasticsearch.sh "${ENV}")
+    COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
   fi
 fi
 
