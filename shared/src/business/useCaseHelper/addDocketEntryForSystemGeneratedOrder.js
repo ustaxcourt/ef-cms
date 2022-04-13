@@ -10,7 +10,6 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  * generates the order and uploads to s3
  * saves documentContents and richText for editing the order
  *
- *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.caseEntity the caseEntity
