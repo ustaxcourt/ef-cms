@@ -16,19 +16,19 @@ import { messageDocumentHelper as messageDocumentHeperComputed } from './message
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-let globalUser;
-
-const messageDocumentHelper = withAppContextDecorator(
-  messageDocumentHeperComputed,
-  {
-    ...applicationContext,
-    getCurrentUser: () => {
-      return globalUser;
-    },
-  },
-);
-
 describe('messageDocumentHelper', () => {
+  let globalUser;
+
+  const messageDocumentHelper = withAppContextDecorator(
+    messageDocumentHeperComputed,
+    {
+      ...applicationContext,
+      getCurrentUser: () => {
+        return globalUser;
+      },
+    },
+  );
+
   const mockDocumentId = '968b10f7-d111-45a9-8729-df050ff6c961';
   const mockParentMessageId = 'b5c87dd2-98b1-462a-9c21-ff6bb1e0c9f7';
 
@@ -73,7 +73,7 @@ describe('messageDocumentHelper', () => {
     };
   };
 
-  it('return empty object if messageViewerDocumentToDisplay is not set', () => {
+  it('should return an empty object when state.messageViewerDocumentToDisplay is not set', () => {
     const result = runCompute(messageDocumentHelper, {
       state: {
         ...getBaseState(docketClerkUser),

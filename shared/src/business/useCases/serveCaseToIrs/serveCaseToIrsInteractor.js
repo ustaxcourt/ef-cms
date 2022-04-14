@@ -1,4 +1,5 @@
 const {
+  formatDateString,
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
@@ -14,13 +15,15 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const {
+  replaceBracketed,
+} = require('../../../business/utilities/replaceBracketed');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const addDocketEntryForPaymentStatus = ({
@@ -260,8 +263,8 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    caseConfirmationPdfName,
     pdfData: Buffer.from(combinedNotrPdfData),
+    pdfName: caseConfirmationPdfName,
   });
 
   let urlToReturn;
@@ -429,13 +432,13 @@ const serveCaseToIrsInteractor = async (
       });
   }
 
+  const todayPlus60 = getBusinessDateInFuture({
+    numberOfDays: 60,
+    startDate: formatNow(FORMATS.ISO),
+  });
+
   if (caseEntity.orderForFilingFee) {
     const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    const todayPlus60 = getBusinessDateInFuture({
-      numberOfDays: 60,
-      startDate: formatNow(FORMATS.ISO),
-    });
 
     const content = replaceBracketed(
       orderForFilingFee.content,
@@ -455,13 +458,34 @@ const serveCaseToIrsInteractor = async (
       });
   }
 
+  if (caseEntity.orderForAmendedPetition) {
+    const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const petitionDocument = caseEntity.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    );
+
+    const content = replaceBracketed(
+      orderForAmendedPetition.content,
+      formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
+      todayPlus60,
+      todayPlus60,
+    );
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderForAmendedPetition,
+          content,
+        },
+      });
+  }
+
   if (caseEntity.orderToShowCause) {
     const { orderToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    const todayPlus60 = getBusinessDateInFuture({
-      numberOfDays: 60,
-      startDate: formatNow(FORMATS.ISO),
-    });
 
     const content = replaceBracketed(
       orderToShowCause.content,
