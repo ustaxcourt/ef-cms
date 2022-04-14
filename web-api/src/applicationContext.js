@@ -1850,7 +1850,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
               credentials: new EnvironmentCredentials('AWS'),
               region: environment.region,
             },
-            apiVersion: '8.1',
+            apiVersion: '7.7',
             awsConfig: new AWS.Config({ region: 'us-east-1' }),
             connectionClass,
             host: environment.elasticsearchEndpoint,
