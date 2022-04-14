@@ -46,6 +46,9 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
+  appendAmendedPetitionFormInteractor,
+} = require('../../shared/src/business/useCases/courtIssuedOrder/appendAmendedPetitionFormInteractor');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -1926,6 +1929,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addDeficiencyStatisticInteractor,
         addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
+        appendAmendedPetitionFormInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
