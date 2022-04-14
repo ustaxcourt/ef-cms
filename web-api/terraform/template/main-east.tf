@@ -7,6 +7,12 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   }
 }
 
+resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
+  bucket     = aws_s3_bucket.documents_us_east_1.id
+  key        = "amended-petition-form.pdf"
+  source     = "${path.module}/lambdas/dist/amended-petition-form.pdf"
+}
+
 data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
