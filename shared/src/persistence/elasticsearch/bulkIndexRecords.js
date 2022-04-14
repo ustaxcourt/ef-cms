@@ -46,7 +46,7 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
       if (body.length) {
         const response = await searchClient.bulk({
           body,
-          refresh: false,
+          refresh: true,
         });
         if (response.errors) {
           response.items.forEach((action, i) => {
