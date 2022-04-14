@@ -36,7 +36,7 @@ CONFIG
 
 resource "aws_elasticsearch_domain" "efcms-search" {
   domain_name           = var.domain_name
-  elasticsearch_version = "7.10"
+  elasticsearch_version = "8.1"
 
   cluster_config {
     instance_type  = var.es_instance_type
