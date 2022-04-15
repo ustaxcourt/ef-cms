@@ -867,10 +867,6 @@ export const waitForProgressBarToHide = async (
   maxWait = 30000,
 ) => {
   let waitTime = 0;
-  console.log(
-    'before while loop, userContactEditProgress',
-    JSON.stringify(cerebralTest.getState('userContactEditProgress')),
-  );
   while (
     cerebralTest.getState('userContactEditProgress.inProgress') &&
     waitTime < maxWait

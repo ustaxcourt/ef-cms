@@ -62,7 +62,6 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
     await waitForLoadingComponentToHide(cerebralTest);
 
     if (overrides.hasPaper) {
-      // wait for PrintPaperTrialNotices page
       expect(cerebralTest.getState('currentPage')).toEqual(
         'PrintPaperTrialNotices',
       );
