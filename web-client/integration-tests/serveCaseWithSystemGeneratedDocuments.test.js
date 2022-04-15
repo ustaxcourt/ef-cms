@@ -147,6 +147,10 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
         key: 'orderForAmendedPetition',
         value: true,
       },
+      {
+        key: 'orderForAmendedPetitionAndFilingFee',
+        value: true,
+      },
     ];
 
     for (const item of formValues) {
@@ -183,16 +187,21 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     );
   });
 
+  const ordersAndNoticesToGenerate = [
+    'Order for Filing Fee',
+    'Order to Show Cause',
+    'Order for Amended Petition',
+    'Order for Amended Petition and Filing Fee',
+  ];
   it('should display the orders and notices that will be generated after service', () => {
     const helper = runCompute(reviewSavedPetitionHelper, {
       state: cerebralTest.getState(),
     });
 
-    expect(helper.ordersAndNoticesInDraft).toContain('Order for Filing Fee');
-    expect(helper.ordersAndNoticesInDraft).toContain('Order to Show Cause');
-    expect(helper.ordersAndNoticesInDraft).toContain(
-      'Order for Amended Petition',
-    );
+    for (let document of ordersAndNoticesToGenerate) {
+      console.log(document);
+      expect(helper.ordersAndNoticesInDraft).toContain(document);
+    }
   });
 
   servePetitionToIRS(cerebralTest);
@@ -206,7 +215,9 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       state: cerebralTest.getState(),
     });
 
-    expect(helper.draftDocketEntryCount).toEqual(3);
+    expect(helper.draftDocketEntryCount).toEqual(
+      ordersAndNoticesToGenerate.length,
+    );
   });
 
   it('should display the orders and notices that will be generated after service', () => {
@@ -222,8 +233,15 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       .getState('caseDetail.docketEntries')
       .find(d => d.eventCode === 'OAP');
 
+    const orderForAmendedPetitionAndFilingFeeDocketEntry = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .find(d => d.eventCode === 'OAPF');
+
     expect(orderForFilingFeeDocketEntry.isDraft).toEqual(true);
     expect(orderToShowCauseDocketEntry.isDraft).toEqual(true);
     expect(orderForAmendedPetitionDocketEntry.isDraft).toEqual(true);
+    expect(orderForAmendedPetitionAndFilingFeeDocketEntry.isDraft).toEqual(
+      true,
+    );
   });
 });
