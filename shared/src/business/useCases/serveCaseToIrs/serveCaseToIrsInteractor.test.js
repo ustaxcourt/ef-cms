@@ -839,19 +839,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderDesignatingPlaceOfTrial: true,
     };
 
-    await serveCaseToIrsInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-    });
-
-    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
-    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
-  });
-
-  it('should generate an order and upload it to s3 for orderToShowCause', async () => {
-    mockCase = {
-      ...MOCK_CASE,
-      orderToShowCause: true,
-    };
+    // const today = formatNow(FORMATS.MONTH_DAY_YEAR);
 
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -867,6 +855,44 @@ describe('serveCaseToIrsInteractor', () => {
       eventCode: 'O',
     });
 
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+
+    // expect(
+    //   await applicationContext.getUseCaseHelpers()
+    //     .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+    //     .systemGeneratedDocument,
+    // ).toMatchObject({
+    //   content: expect.stringContaining(),
+    // });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(MOCK_CASE.procedureType),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(MOCK_CASE.trialLocation),
+    });
+  });
+
+  it('should generate an order and upload it to s3 for orderToShowCause', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderToShowCause: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
