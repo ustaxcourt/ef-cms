@@ -833,6 +833,20 @@ describe('serveCaseToIrsInteractor', () => {
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
+  it('should generate an order and upload it to s3 for orderDesignatingPlaceOfTrial', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderDesignatingPlaceOfTrial: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
   it('should generate an order and upload it to s3 for orderToShowCause', async () => {
     mockCase = {
       ...MOCK_CASE,
@@ -843,7 +857,16 @@ describe('serveCaseToIrsInteractor', () => {
       docketNumber: MOCK_CASE.docketNumber,
     });
 
-    expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      documentTitle: 'Order',
+      documentType: 'Order',
+      eventCode: 'O',
+    });
+
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
