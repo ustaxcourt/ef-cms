@@ -508,6 +508,14 @@ const serveCaseToIrsInteractor = async (
   if (caseEntity.orderForAmendedPetitionAndFilingFee) {
     const { orderForAmendedPetitionAndFilingFee } =
       SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    const content = replaceBracketed(
+      orderForAmendedPetitionAndFilingFee.content,
+      formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
+      todayPlus60,
+      todayPlus60,
+    );
+    
     console.log(orderForAmendedPetitionAndFilingFee);
   }
 
