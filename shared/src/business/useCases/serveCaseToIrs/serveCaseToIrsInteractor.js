@@ -435,17 +435,26 @@ const serveCaseToIrsInteractor = async (
   }
 
   if (caseEntity.orderDesignatingPlaceOfTrial) {
-    const content = replaceBracketed(
-      caseEntity.filedDate,
-      caseEntity.procedureType,
-      caseEntity.trialLocation,
+    const petitionDocument = caseEntity.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
     );
+    const content = replaceBracketed(
+      orderDesignatingPlaceOfTrial.content,
+      formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
+      caseEntity.procedureType,
+      caseEntity.preferredTrialCity,
+    );
+    console.log('content', content);
+
     await applicationContext
       .getUseCaseHelpers()
       .addDocketEntryForSystemGeneratedOrder({
         applicationContext,
         caseEntity,
-        systemGeneratedDocument: { content, ...orderDesignatingPlaceOfTrial },
+        systemGeneratedDocument: {
+          ...orderDesignatingPlaceOfTrial,
+          content,
+        },
       });
   }
 
