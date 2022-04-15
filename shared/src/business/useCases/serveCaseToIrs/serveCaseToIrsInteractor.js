@@ -509,14 +509,27 @@ const serveCaseToIrsInteractor = async (
     const { orderForAmendedPetitionAndFilingFee } =
       SYSTEM_GENERATED_DOCUMENT_TYPES;
 
+    const petitionDocument = caseEntity.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    );
+
     const content = replaceBracketed(
       orderForAmendedPetitionAndFilingFee.content,
       formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
       todayPlus60,
       todayPlus60,
     );
-    
-    console.log(orderForAmendedPetitionAndFilingFee);
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderForAmendedPetitionAndFilingFee,
+          content,
+        },
+      });
   }
 
   await createPetitionWorkItems({
