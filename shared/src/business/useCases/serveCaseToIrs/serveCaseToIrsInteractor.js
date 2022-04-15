@@ -15,11 +15,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const {
-  replaceBracketed,
-} = require('../../../business/utilities/replaceBracketed');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
+const { generateDraftDocument } = require('./generateDraftDocument');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
@@ -432,6 +430,15 @@ const serveCaseToIrsInteractor = async (
       });
   }
 
+  const petitionDocument = caseEntity.docketEntries.find(
+    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+
+  const servedAt = formatDateString(
+    petitionDocument.servedAt,
+    FORMATS.MONTH_DAY_YEAR,
+  );
+
   const todayPlus60 = getBusinessDateInFuture({
     numberOfDays: 60,
     startDate: formatNow(FORMATS.ISO),
@@ -440,96 +447,46 @@ const serveCaseToIrsInteractor = async (
   if (caseEntity.orderForFilingFee) {
     const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    const content = replaceBracketed(
-      orderForFilingFee.content,
-      todayPlus60,
-      todayPlus60, // since there are 2 instances of the date, replace a 2nd time
-    );
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .addDocketEntryForSystemGeneratedOrder({
-        applicationContext,
-        caseEntity,
-        systemGeneratedDocument: {
-          ...orderForFilingFee,
-          content,
-        },
-      });
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderForFilingFee,
+      replacements: [todayPlus60, todayPlus60],
+    });
   }
 
   if (caseEntity.orderForAmendedPetition) {
     const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    const petitionDocument = caseEntity.docketEntries.find(
-      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-    );
-
-    const content = replaceBracketed(
-      orderForAmendedPetition.content,
-      formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
-      todayPlus60,
-      todayPlus60,
-    );
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .addDocketEntryForSystemGeneratedOrder({
-        applicationContext,
-        caseEntity,
-        systemGeneratedDocument: {
-          ...orderForAmendedPetition,
-          content,
-        },
-      });
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderForAmendedPetition,
+      replacements: [servedAt, todayPlus60, todayPlus60],
+    });
   }
 
   if (caseEntity.orderToShowCause) {
     const { orderToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    const content = replaceBracketed(
-      orderToShowCause.content,
-      formatNow(FORMATS.MONTH_DAY_YEAR),
-      todayPlus60,
-    );
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .addDocketEntryForSystemGeneratedOrder({
-        applicationContext,
-        caseEntity,
-        systemGeneratedDocument: {
-          ...orderToShowCause,
-          content,
-        },
-      });
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderToShowCause,
+      replacements: [formatNow(FORMATS.MONTH_DAY_YEAR), todayPlus60],
+    });
   }
 
   if (caseEntity.orderForAmendedPetitionAndFilingFee) {
     const { orderForAmendedPetitionAndFilingFee } =
       SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    const petitionDocument = caseEntity.docketEntries.find(
-      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
-    );
-
-    const content = replaceBracketed(
-      orderForAmendedPetitionAndFilingFee.content,
-      formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
-      todayPlus60,
-      todayPlus60,
-    );
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .addDocketEntryForSystemGeneratedOrder({
-        applicationContext,
-        caseEntity,
-        systemGeneratedDocument: {
-          ...orderForAmendedPetitionAndFilingFee,
-          content,
-        },
-      });
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderForAmendedPetitionAndFilingFee,
+      replacements: [servedAt, todayPlus60, todayPlus60],
+    });
   }
 
   await createPetitionWorkItems({
