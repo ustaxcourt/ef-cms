@@ -187,20 +187,32 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     );
   });
 
-  const ordersAndNoticesToGenerate = [
-    'Order for Filing Fee',
-    'Order to Show Cause',
-    'Order for Amended Petition',
-    'Order for Amended Petition and Filing Fee',
-  ];
+  const ordersAndNoticesToGenerate = {
+    OAP: {
+      stateKey: 'orderForAmendedPetition',
+      title: 'Order for Amended Petition',
+    },
+    OAPF: {
+      stateKey: 'orderForAmendedPetitionAndFilingFee',
+      title: 'Order for Amended Petition and Filing Fee',
+    },
+    OF: {
+      stateKey: 'orderForFilingFee',
+      title: 'Order for Filing Fee',
+    },
+    OSCP: {
+      stateKey: 'orderToShowCause',
+      title: 'Order to Show Cause',
+    },
+  };
+
   it('should display the orders and notices that will be generated after service', () => {
     const helper = runCompute(reviewSavedPetitionHelper, {
       state: cerebralTest.getState(),
     });
 
-    for (let document of ordersAndNoticesToGenerate) {
-      console.log(document);
-      expect(helper.ordersAndNoticesInDraft).toContain(document);
+    for (let document of Object.values(ordersAndNoticesToGenerate)) {
+      expect(helper.ordersAndNoticesInDraft).toContain(document.title);
     }
   });
 
@@ -216,32 +228,18 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     });
 
     expect(helper.draftDocketEntryCount).toEqual(
-      ordersAndNoticesToGenerate.length,
+      Object.keys(ordersAndNoticesToGenerate).length,
     );
   });
 
   it('should display the orders and notices that will be generated after service', () => {
-    const orderForFilingFeeDocketEntry = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(d => d.eventCode === 'OF');
+    const eventCodes = Object.keys(ordersAndNoticesToGenerate);
+    for (const eventCodesIndex in eventCodes) {
+      const docketEntry = cerebralTest
+        .getState('caseDetail.docketEntries')
+        .find(d => d.eventCode === eventCodes[eventCodesIndex]);
 
-    const orderToShowCauseDocketEntry = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(d => d.eventCode === 'OSCP');
-
-    const orderForAmendedPetitionDocketEntry = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(d => d.eventCode === 'OAP');
-
-    const orderForAmendedPetitionAndFilingFeeDocketEntry = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(d => d.eventCode === 'OAPF');
-
-    expect(orderForFilingFeeDocketEntry.isDraft).toEqual(true);
-    expect(orderToShowCauseDocketEntry.isDraft).toEqual(true);
-    expect(orderForAmendedPetitionDocketEntry.isDraft).toEqual(true);
-    expect(orderForAmendedPetitionAndFilingFeeDocketEntry.isDraft).toEqual(
-      true,
-    );
+      expect(docketEntry.isDraft).toEqual(true);
+    }
   });
 });
