@@ -203,6 +203,11 @@ const ORDER_TYPES = [
     eventCode: 'OAP',
   },
   {
+    documentTitle: 'Order for Amended Petition and Filing Fee',
+    documentType: 'Order for Amended Petition and Filing Fee',
+    eventCode: 'OAPF',
+  },
+  {
     documentTitle: 'Order to Show Cause',
     documentType: 'Order to Show Cause',
     eventCode: 'OSC',
@@ -518,6 +523,13 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OAP')
       .documentType,
     eventCode: 'OAP',
+    documentTitle: 'Order',
+  },
+  orderForAmendedPetitionAndFilingFee: {
+    content: '',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OAPF')
+      .documentType,
+    eventCode: 'OAPF',
     documentTitle: 'Order',
   },
   orderToShowCause: {

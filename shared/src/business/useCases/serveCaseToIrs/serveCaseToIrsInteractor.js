@@ -506,7 +506,9 @@ const serveCaseToIrsInteractor = async (
   }
 
   if (caseEntity.orderForAmendedPetitionAndFilingFee) {
-    // const { orderForAmendedPetitionAndFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+    const { orderForAmendedPetitionAndFilingFee } =
+      SYSTEM_GENERATED_DOCUMENT_TYPES;
+    console.log(orderForAmendedPetitionAndFilingFee);
   }
 
   await createPetitionWorkItems({
