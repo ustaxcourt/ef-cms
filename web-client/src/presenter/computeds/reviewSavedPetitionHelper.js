@@ -3,8 +3,6 @@ import { state } from 'cerebral';
 
 export const ordersAndNoticesNeededCodes = {
   orderDesignatingPlaceOfTrial: 'Order Designating Place of Trial',
-  orderForAmendedPetitionAndFilingFee:
-    'Order for Amended Petition and Filing Fee',
   orderForOds: 'Order for Ownership Disclosure Statement',
   orderForRatification: 'Order for Ratification of Petition',
 };
@@ -12,6 +10,8 @@ export const ordersAndNoticesNeededCodes = {
 export const ordersAndNoticesInDraftsCodes = {
   noticeOfAttachments: 'Notice of Attachments in the Nature of Evidence',
   orderForAmendedPetition: 'Order for Amended Petition',
+  orderForAmendedPetitionAndFilingFee:
+    'Order for Amended Petition and Filing Fee',
   orderForFilingFee: 'Order for Filing Fee',
   orderToShowCause: 'Order to Show Cause',
 };
