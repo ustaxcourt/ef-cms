@@ -46,6 +46,9 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
+  appendAmendedPetitionFormInteractor,
+} = require('../../shared/src/business/useCases/courtIssuedOrder/appendAmendedPetitionFormInteractor');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -94,6 +97,7 @@ const {
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
   CASE_STATUS_TYPES,
+  CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   SESSION_STATUS_GROUPS,
@@ -477,6 +481,9 @@ const {
 const {
   getCompletedUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getCompletedUserInboxMessages');
+const {
+  getConfigurationItemValue,
+} = require('../../shared/src/persistence/dynamo/deployTable/getConfigurationItemValue');
 const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
@@ -1285,7 +1292,7 @@ const environment = {
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   masterDynamoDbEndpoint:
-    process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
+    process.env.MASTER_DYNAMODB_ENDPOINT || 'http://localhost:8000',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
@@ -1428,6 +1435,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,
     getSesStatus,
@@ -1666,6 +1674,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
+      CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
@@ -1920,6 +1929,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addDeficiencyStatisticInteractor,
         addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
+        appendAmendedPetitionFormInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
@@ -2137,6 +2147,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),
       info: logger.info.bind(logger),
+      warn: logger.warn.bind(logger),
     },
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);

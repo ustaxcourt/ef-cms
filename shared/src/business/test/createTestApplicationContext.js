@@ -314,6 +314,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getAttachmentDocumentById: jest
       .fn()
       .mockImplementation(Case.getAttachmentDocumentById),
+    getBusinessDateInFuture: jest
+      .fn()
+      .mockImplementation(DateHandler.getBusinessDateInFuture),
     getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
     getContactPrimary: jest.fn().mockImplementation(getContactPrimary),
     getContactSecondary: jest.fn().mockImplementation(getContactSecondary),
@@ -383,6 +386,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockImplementation(setServiceIndicatorsForCase),
     setupPdfDocument: jest.fn().mockImplementation(setupPdfDocument),
     sortDocketEntries: jest.fn().mockImplementation(sortDocketEntries),
+    uploadToS3: jest.fn(),
     validateDateAndCreateISO: jest
       .fn()
       .mockImplementation(DateHandler.validateDateAndCreateISO),

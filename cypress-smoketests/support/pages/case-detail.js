@@ -20,6 +20,8 @@ exports.goToCaseOverview = docketNumber => {
   // will not reload
   cy.goToRoute('/');
   cy.get('.message-unread-column').should('exist');
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(1000);
   cy.goToRoute(`/case-detail/${docketNumber}`);
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
   cy.get('#tab-case-information').click();

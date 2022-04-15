@@ -30,7 +30,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         isTerminalUser: false,
-        key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
       }),
     ).rejects.toThrow('Unauthorized to access private document');
   });
@@ -41,7 +41,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       {
         docketNumber: '123-20',
         isTerminalUser: true,
-        key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
       },
     );
 
@@ -53,7 +53,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       applicationContext.getPersistenceGateway().getPublicDownloadPolicyUrl.mock
         .calls[0][0],
     ).toMatchObject({
-      key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+      key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
     });
 
     expect(result).toEqual('localhost');
@@ -67,7 +67,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
     await expect(
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
-        key: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+        key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
       }),
     ).rejects.toThrow('Case 123-20 was not found.');
   });

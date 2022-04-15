@@ -23,6 +23,8 @@ const ORDER_JUDGE_FIELD = 'signedJudgeName';
 
 const OPINION_JUDGE_FIELD = 'judge';
 
+const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
+
 const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
@@ -62,6 +64,12 @@ const ALLOWLIST_FEATURE_FLAGS = {
   },
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
+  },
+};
+
+const CONFIGURATION_ITEM_KEYS = {
+  SECTION_OUTBOX_NUMBER_OF_DAYS: {
+    key: 'section-outbox-number-of-days',
   },
 };
 
@@ -190,9 +198,18 @@ const ORDER_TYPES = [
     eventCode: 'OF',
   },
   {
+    documentTitle: 'Order for Amended Petition',
+    documentType: 'Order for Amended Petition',
+    eventCode: 'OAP',
+  },
+  {
     documentTitle: 'Order to Show Cause',
     documentType: 'Order to Show Cause',
     eventCode: 'OSC',
+  },
+  {
+    documentType: 'Order petr(s) to show cause why "S" should not be removed',
+    eventCode: 'OSCP',
   },
   {
     documentTitle: 'Order and Decision',
@@ -482,18 +499,42 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfAttachmentsInNatureOfEvidence: {
     eventCode: 'NOT',
     content:
-      'Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
+      '&nbsp;&nbsp;&nbsp;&nbsp;Certain documents attached to the Petition that you filed with this Court appear to be in the nature of evidence. Please be advised that these documents have not been received into evidence by the Court. You may offer evidentiary materials to the Court at the time of trial.',
     documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
       .documentType,
     documentTitle: 'Notice of Attachments in the Nature of Evidence',
   },
   orderForFilingFee: {
     content:
-      'The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case  related  forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
+      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
       .documentType,
     eventCode: 'OF',
     documentTitle: 'Order',
+  },
+  orderForAmendedPetition: {
+    content:
+      '&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_60], petitioner(s) shall file a proper amended petition. If, by [ORDER_PLUS_60], petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OAP')
+      .documentType,
+    eventCode: 'OAP',
+    documentTitle: 'Order',
+  },
+  orderToShowCause: {
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
+      petitioners elected to have this deficiency case conducted under the small tax case procedures. However, a review
+      of the record shows that the amount in dispute for one or more taxable years exceeds $50,000. The small tax case
+      procedures are only applicable to deficiency cases in which the amount in dispute for each taxable year is
+      $50,000 or less. <u>See</u> section 7463(a)(1), Internal Revenue Code; Rules 170 and 171, Tax Court Rules of Practice
+      and Procedure.
+      <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Upon due consideration and for cause, it is
+      <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [ORDER_DATE_PLUS_60] petitioners shall show cause in writing why
+      the Court should not issue an Order directing that the small tax case designation be removed in this case and the
+      proceedings not be conducted under the Small Tax Case Rules.`,
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OSCP')
+      .documentType,
+    eventCode: 'OSCP',
+    documentTitle: 'Order to Show Cause',
   },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
@@ -521,6 +562,12 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: SPTO_DOCUMENT.eventCode,
   },
 };
+
+const ORDERS_WITHOUT_AUTOGENERATED_DOCUMENT_TITLE = [
+  SYSTEM_GENERATED_DOCUMENT_TYPES.orderToShowCause.eventCode,
+  SYSTEM_GENERATED_DOCUMENT_TYPES.orderForFilingFee.eventCode,
+  SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode,
+];
 
 const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
   Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
@@ -568,6 +615,7 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     eventCode: 'NOEI',
   },
 ];
+
 const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(d => d.documentType);
 
@@ -1130,6 +1178,7 @@ const DOCKET_ENTRY_SEALED_TO_TYPES = {
 };
 
 module.exports = deepFreeze({
+  AMENDED_PETITION_FORM_NAME,
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
@@ -1161,6 +1210,7 @@ module.exports = deepFreeze({
   CHAMBERS_SECTION,
   CHIEF_JUDGE,
   CLERK_OF_COURT_SECTION,
+  CONFIGURATION_ITEM_KEYS,
   CONTACT_CHANGE_DOCUMENT_TYPES,
   CONTACT_TYPES,
   CONTACT_TYPE_TITLES,
@@ -1246,6 +1296,7 @@ module.exports = deepFreeze({
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  ORDERS_WITHOUT_AUTOGENERATED_DOCUMENT_TITLE,
   TODAYS_ORDERS_PAGE_SIZE,
   TODAYS_ORDERS_SORT_DEFAULT,
   TODAYS_ORDERS_SORTS,

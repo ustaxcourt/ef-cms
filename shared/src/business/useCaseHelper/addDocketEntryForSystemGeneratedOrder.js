@@ -1,6 +1,9 @@
+const {
+  AMENDED_PETITION_FORM_NAME,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-
 /**
  *
  * Add docket entry for system generated order
@@ -18,6 +21,7 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   systemGeneratedDocument,
 }) => {
   const user = applicationContext.getCurrentUser();
+  const isNotice = systemGeneratedDocument.eventCode === 'NOT';
 
   const newDocketEntry = new DocketEntry(
     {
@@ -28,10 +32,10 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
         documentTitle: systemGeneratedDocument.documentTitle,
         documentType: systemGeneratedDocument.documentType,
         eventCode: systemGeneratedDocument.eventCode,
-        freeText: systemGeneratedDocument.documentTitle,
+        ...(isNotice && { freeText: systemGeneratedDocument.documentTitle }),
       },
       eventCode: systemGeneratedDocument.eventCode,
-      freeText: systemGeneratedDocument.documentTitle,
+      ...(isNotice && { freeText: systemGeneratedDocument.documentTitle }),
       isDraft: true,
       userId: user.userId,
     },
@@ -42,7 +46,7 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
-  const pdfData = await applicationContext.getDocumentGenerators().order({
+  let orderPdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,
@@ -50,14 +54,37 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
       docketNumberWithSuffix,
       orderContent: systemGeneratedDocument.content,
       orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
-      signatureText: applicationContext.getClerkOfCourtNameForSigning(),
+      signatureText: isNotice
+        ? applicationContext.getClerkOfCourtNameForSigning()
+        : '',
     },
   });
 
+  let combinedPdf = orderPdfData;
+  if (
+    systemGeneratedDocument.eventCode ===
+    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode
+  ) {
+    const { Body: amendedPetitionFormData } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: AMENDED_PETITION_FORM_NAME,
+      })
+      .promise();
+
+    const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
+      applicationContext,
+      firstPdf: combinedPdf,
+      secondPdf: amendedPetitionFormData,
+    });
+    combinedPdf = Buffer.from(returnVal);
+  }
+
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    caseConfirmationPdfName: newDocketEntry.docketEntryId,
-    pdfData,
+    pdfData: combinedPdf,
+    pdfName: newDocketEntry.docketEntryId,
   });
 
   const documentContentsId = applicationContext.getUniqueId();

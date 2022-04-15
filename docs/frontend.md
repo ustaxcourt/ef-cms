@@ -38,12 +38,12 @@ The overall structure of the web-client directory is as follows with a short des
 │   ├── styles // all styles in the UI
 │   ├── tryCatchDecorator.js // logic for catching certain error codes from interactors changing routes
 │   ├── ustc-ui // useable react components 
-│   ├── utilities // various untilies used in the UI
+│   ├── utilities // various utilities used in the UI
 │   ├── views // all the non reusable react components in the UI
 └── terraform // terraform files for deploying the UIs
     ├── bin // script for running terraform
     ├── common // shared UI module
-    ├── dynamsoft // module for deploying dynamosoft EC2 instance
+    ├── dynamsoft // module for deploying dynamsoft EC2 instance
     ├── main // the entrypoint for terraform
     └── ui // module for creating the UI related resources
 ```

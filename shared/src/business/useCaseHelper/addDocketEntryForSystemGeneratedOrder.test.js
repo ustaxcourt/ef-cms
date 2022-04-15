@@ -2,6 +2,7 @@ const {
   addDocketEntryForSystemGeneratedOrder,
 } = require('./addDocketEntryForSystemGeneratedOrder');
 const {
+  AMENDED_PETITION_FORM_NAME,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
@@ -11,8 +12,11 @@ const { MOCK_CASE } = require('../../test/mockCase');
 describe('addDocketEntryForSystemGeneratedOrder', () => {
   const caseEntity = new Case(MOCK_CASE, { applicationContext });
 
-  const { noticeOfAttachmentsInNatureOfEvidence } =
-    SYSTEM_GENERATED_DOCUMENT_TYPES;
+  const {
+    noticeOfAttachmentsInNatureOfEvidence,
+    orderForAmendedPetition,
+    orderForFilingFee,
+  } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
   it('should add a draft docket entry for a system generated order', async () => {
     const newDocketEntriesFromNewCaseCount =
@@ -38,6 +42,52 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
         .orderTitle;
 
     expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase());
+  });
+
+  it('should only add freeText to notices', async () => {
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+    });
+
+    const mostRecentDocketEntry =
+      caseEntity.docketEntries[caseEntity.docketEntries.length - 1];
+
+    expect('freeText' in mostRecentDocketEntry).toEqual(true);
+    expect('freeText' in mostRecentDocketEntry.draftOrderState).toEqual(true);
+  });
+
+  it('should apply a signature for notices', async () => {
+    applicationContext.getClerkOfCourtNameForSigning.mockReturnValue(
+      'Antonia Lafaso',
+    );
+
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+    });
+
+    const mockSignatureText =
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
+        .signatureText;
+
+    expect(mockSignatureText.length).toBeGreaterThan(0);
+  });
+
+  it('should not apply a signature for orders', async () => {
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: orderForFilingFee,
+    });
+
+    const mockSignatureText =
+      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
+        .signatureText;
+
+    expect(mockSignatureText.length).toEqual(0);
   });
 
   it('should upload a generated pdf for the provided document', async () => {
@@ -75,5 +125,35 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0].document,
     ).toEqual(Buffer.from(JSON.stringify(contentToStore)));
+  });
+
+  it('should append additional pdf form data when the document is an orderForAmendedPetition', async () => {
+    const mockAmendedPetitionFormData = 'Elmo the Third';
+
+    applicationContext.getStorageClient.mockReturnValue({
+      getObject: jest.fn().mockReturnValue({
+        promise: () => ({ Body: mockAmendedPetitionFormData }),
+      }),
+    });
+
+    const mockCombinedPdfsReturnVal = 'Antonia Lafaso';
+    applicationContext
+      .getUtilities()
+      .combineTwoPdfs.mockReturnValue(mockCombinedPdfsReturnVal);
+
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: orderForAmendedPetition,
+    });
+
+    expect(
+      applicationContext.getStorageClient().getObject.mock.calls[0][0].Key,
+    ).toEqual(AMENDED_PETITION_FORM_NAME);
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
+        .secondPdf,
+    ).toEqual(mockAmendedPetitionFormData);
   });
 });

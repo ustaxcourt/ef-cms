@@ -7,10 +7,10 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v14-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v11-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v14-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -32,18 +32,18 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v14-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v11-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v14-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v14-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: '[ ! -d node_modules ] && npm ci || echo package.json and package-lock.json are unchanged. Using cached dependency folder.'
@@ -51,14 +51,14 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v11-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v14-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
 jobs:
   build-client-integration:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -108,7 +108,7 @@ jobs:
 
   verify-pdfs:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -124,7 +124,7 @@ jobs:
 
   e2e-pa11y:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -174,7 +174,7 @@ jobs:
 
   e2e-pa11y-public:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -219,7 +219,7 @@ jobs:
 
   e2e-pa11y-public-search:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -264,7 +264,7 @@ jobs:
 
   e2e-cypress:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -309,7 +309,7 @@ jobs:
 
   e2e-cypress-smoketests-local:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -358,7 +358,7 @@ jobs:
 
   e2e-cypress-public:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -408,7 +408,7 @@ jobs:
 
   deploy:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -432,8 +432,15 @@ jobs:
           command: |
             ./setup-for-blue-green-migration.sh
       - run:
+          name: Setup Reindex If Needed
+          command: |
+            ./setup-for-reindex.sh
+      - run:
           name: Setup Migrate Flag
           command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+      - run:
+          name: Setup Reindex Flag
+          command: echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
       - run:
           name: Setup Destination Table Var
           command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
@@ -523,15 +530,55 @@ jobs:
           name: 'Deploy - Verify Private Elasticsearch'
           command: |
             npm run verify-private-elasticsearch -- $ENV
+      - run:
+          name: 'Deploy - Verify Cognito Lambda Triggers'
+          command: |
+            npm run verify-cognito-lambda-triggers -- $ENV
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
       - run:
           name: 'Deploy - Pending Color Switch'
           command: npm run pending-color-switch
 
+  reindex:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    resource_class: medium+
+    steps:
+      - git-shallow-clone/checkout
+      - npm-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
+            echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+              source $BASH_ENV
+              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+            fi
+      - run:
+          name: Enable Check Reindex Status Cron
+          command: |
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              ./enable-reindex-cron.sh
+              echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+            fi
+      - run:
+          name: Reindex
+          command: |
+            if [ "$REINDEX_FLAG" == "true" ] && [ "$MIGRATE_FLAG" == "false" ]; then
+              node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
+            fi
+
   migrate:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -596,7 +643,7 @@ jobs:
 
   disable-reindex-cron:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -617,7 +664,7 @@ jobs:
 
   smoketests:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -648,7 +695,7 @@ jobs:
 
   smoketests-readonly:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -689,7 +736,7 @@ jobs:
 
   switch-colors:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -711,7 +758,7 @@ jobs:
 
   backup-source-dynamo-table:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -735,7 +782,7 @@ jobs:
 
   delete-api-mappings:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -756,7 +803,7 @@ jobs:
 
   cleanup:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.1.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.3.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -771,6 +818,7 @@ jobs:
             source $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_ELASTICSEARCH=$(./scripts/elasticsearch/get-source-elasticsearch.sh $ENV)" >> $BASH_ENV
       - run:
@@ -802,6 +850,12 @@ jobs:
           command: |
             if [ $MIGRATE_FLAG == true ]; then
               npm run migration:cleanup -- $ENV
+            fi
+      - run:
+          name: Cleanup Deploy Table After Reindex
+          command: |
+            if [ $REINDEX_FLAG == true ]; then
+              npm run reindex:cleanup -- $ENV
             fi
 
 build-and-deploy-defaults: &build-and-deploy-defaults
@@ -861,9 +915,12 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - migrate:
+      - reindex:
           requires:
             - deploy
+      - migrate:
+          requires:
+            - reindex
           filters:
             branches:
               only:
@@ -978,10 +1035,14 @@ workflows:
             - e2e-cypress-smoketests-local
             - e2e-cypress-public
             - verify-pdfs
-      - migrate:
+      - reindex:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - deploy
+      - migrate:
+          <<: *build-and-deploy-with-context-defaults
+          requires:
+            - reindex
       - wait-for-reindex:
           <<: *build-and-deploy-with-context-defaults
           type: approval
