@@ -864,7 +864,7 @@ export const waitForLoadingComponentToHide = async (
 
 export const waitForProgressBarToHide = async (
   cerebralTest,
-  maxWait = 900000,
+  maxWait = 30000,
 ) => {
   let waitTime = 0;
   console.log(
