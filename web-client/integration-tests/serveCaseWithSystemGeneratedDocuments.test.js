@@ -28,6 +28,25 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     cerebralTest.closeSocket();
   });
 
+  const ordersAndNoticesToGenerate = {
+    OAP: {
+      stateKey: 'orderForAmendedPetition',
+      title: 'Order for Amended Petition',
+    },
+    OAPF: {
+      stateKey: 'orderForAmendedPetitionAndFilingFee',
+      title: 'Order for Amended Petition and Filing Fee',
+    },
+    OF: {
+      stateKey: 'orderForFilingFee',
+      title: 'Order for Filing Fee',
+    },
+    OSCP: {
+      stateKey: 'orderToShowCause',
+      title: 'Order to Show Cause',
+    },
+  };
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('should create a case from paper', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
@@ -139,18 +158,6 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
         key: 'petitionPaymentStatus',
         value: PAYMENT_STATUS.UNPAID,
       },
-      {
-        key: 'orderToShowCause',
-        value: true,
-      },
-      {
-        key: 'orderForAmendedPetition',
-        value: true,
-      },
-      {
-        key: 'orderForAmendedPetitionAndFilingFee',
-        value: true,
-      },
     ];
 
     for (const item of formValues) {
@@ -167,6 +174,13 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       } else {
         await cerebralTest.runSequence('updateFormValueSequence', item);
       }
+    }
+
+    for (const item of Object.values(ordersAndNoticesToGenerate)) {
+      await cerebralTest.runSequence('updateFormValueSequence', {
+        key: item.stateKey,
+        value: true,
+      });
     }
 
     await cerebralTest.runSequence(
@@ -186,25 +200,6 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       'caseDetail.docketNumber',
     );
   });
-
-  const ordersAndNoticesToGenerate = {
-    OAP: {
-      stateKey: 'orderForAmendedPetition',
-      title: 'Order for Amended Petition',
-    },
-    OAPF: {
-      stateKey: 'orderForAmendedPetitionAndFilingFee',
-      title: 'Order for Amended Petition and Filing Fee',
-    },
-    OF: {
-      stateKey: 'orderForFilingFee',
-      title: 'Order for Filing Fee',
-    },
-    OSCP: {
-      stateKey: 'orderToShowCause',
-      title: 'Order to Show Cause',
-    },
-  };
 
   it('should display the orders and notices that will be generated after service', () => {
     const helper = runCompute(reviewSavedPetitionHelper, {
