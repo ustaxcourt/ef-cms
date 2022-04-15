@@ -864,7 +864,7 @@ export const waitForLoadingComponentToHide = async (
 
 export const waitForProgressBarToHide = async (
   cerebralTest,
-  maxWait = 45000,
+  maxWait = 900000,
 ) => {
   let waitTime = 0;
   console.log(
@@ -875,8 +875,8 @@ export const waitForProgressBarToHide = async (
     cerebralTest.getState('userContactEditProgress.inProgress') &&
     waitTime < maxWait
   ) {
-    waitTime += 500;
-    await wait(500);
+    waitTime += 1000;
+    await wait(1000);
   }
   console.log(`Waited ${waitTime}ms for the progress bar to hide`);
 };
