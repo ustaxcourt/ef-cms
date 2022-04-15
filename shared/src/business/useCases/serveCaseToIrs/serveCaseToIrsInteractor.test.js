@@ -839,7 +839,7 @@ describe('serveCaseToIrsInteractor', () => {
       orderDesignatingPlaceOfTrial: true,
     };
 
-    // const today = formatNow(FORMATS.MONTH_DAY_YEAR);
+    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
 
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
@@ -857,13 +857,13 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
 
-    // expect(
-    //   await applicationContext.getUseCaseHelpers()
-    //     .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
-    //     .systemGeneratedDocument,
-    // ).toMatchObject({
-    //   content: expect.stringContaining(),
-    // });
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(today),
+    });
 
     expect(
       await applicationContext.getUseCaseHelpers()
@@ -878,7 +878,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(MOCK_CASE.trialLocation),
+      content: expect.stringContaining(MOCK_CASE.preferredTrialCity),
     });
   });
 
