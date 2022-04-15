@@ -870,7 +870,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(MOCK_CASE.procedureType),
+      content: expect.stringContaining(MOCK_CASE.procedureType.toLowerCase()),
     });
 
     expect(
@@ -878,7 +878,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(MOCK_CASE.preferredTrialCity),
+      content: expect.stringContaining('TRIAL_LOCATION'),
     });
   });
 
