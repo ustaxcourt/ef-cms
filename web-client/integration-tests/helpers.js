@@ -862,6 +862,25 @@ export const waitForLoadingComponentToHide = async (
   console.log(`Waited ${waitTime}ms for the loading component to hide`);
 };
 
+export const waitForProgressBarToHide = async (
+  cerebralTest,
+  maxWait = 45000,
+) => {
+  let waitTime = 0;
+  console.log(
+    'before while loop, userContactEditProgress',
+    JSON.stringify(cerebralTest.getState('userContactEditProgress')),
+  );
+  while (
+    cerebralTest.getState('userContactEditProgress.inProgress') &&
+    waitTime < maxWait
+  ) {
+    waitTime += 500;
+    await wait(500);
+  }
+  console.log(`Waited ${waitTime}ms for the progress bar to hide`);
+};
+
 export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex

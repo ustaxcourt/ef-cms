@@ -27,5 +27,5 @@ sleep 20 # figure out why we need to sleep here since we wait above ^
 # noticeOfChangeOfAddressQCJourney failed 5 times from 3/22/22 - 4/14/22 on ustc/test
 # noticeOfTrialSessionWithPaperService failed 9 times 3/22/22 - 4/14/22 on ustc/test
 npm run test:file web-client/integration-tests/noticeOfChangeOfAddressQCJourney.test.js
-npm run test:file web-client/integration-tests/noticeOfTrialSessionWithPaperService.test.js
+# npm run test:file web-client/integration-tests/noticeOfTrialSessionWithPaperService.test.js
 
