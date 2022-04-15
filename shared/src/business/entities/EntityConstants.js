@@ -514,7 +514,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   },
   orderDesignatingPlaceOfTrial: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
-    <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that [TRIAL_LOCATION] is designated as the place of trial in this case.`,
+    <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
     documentType: ORDER_TYPES.find(order => order.eventCode === 'O')
       .documentType,
     eventCode: 'O',
