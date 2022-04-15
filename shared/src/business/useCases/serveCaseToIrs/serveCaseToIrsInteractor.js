@@ -505,6 +505,10 @@ const serveCaseToIrsInteractor = async (
       });
   }
 
+  if (caseEntity.orderForAmendedPetitionAndFilingFee) {
+    // const { orderForAmendedPetitionAndFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+  }
+
   await createPetitionWorkItems({
     applicationContext,
     caseEntity,
