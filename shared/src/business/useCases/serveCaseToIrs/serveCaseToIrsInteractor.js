@@ -9,7 +9,6 @@ const {
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-  PROCEDURE_TYPES_MAP,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -422,8 +421,7 @@ const serveCaseToIrsInteractor = async (
 
   const {
     noticeOfAttachmentsInNatureOfEvidence,
-    orderDesignatingPlaceOfTrialRegular,
-    orderDesignatingPlaceOfTrialSmall,
+    orderDesignatingPlaceOfTrial,
   } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
   if (caseEntity.noticeOfAttachments) {
@@ -437,17 +435,17 @@ const serveCaseToIrsInteractor = async (
   }
 
   if (caseEntity.orderDesignatingPlaceOfTrial) {
-    let documentTypeToUse =
-      caseEntity.procedureType === PROCEDURE_TYPES_MAP.regular
-        ? orderDesignatingPlaceOfTrialRegular
-        : orderDesignatingPlaceOfTrialSmall;
-
+    const content = replaceBracketed(
+      caseEntity.filedDate,
+      caseEntity.procedureType,
+      caseEntity.trialLocation,
+    );
     await applicationContext
       .getUseCaseHelpers()
       .addDocketEntryForSystemGeneratedOrder({
         applicationContext,
         caseEntity,
-        systemGeneratedDocument: documentTypeToUse,
+        systemGeneratedDocument: { content, ...orderDesignatingPlaceOfTrial },
       });
   }
 
