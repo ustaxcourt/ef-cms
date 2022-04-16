@@ -10,6 +10,6 @@ export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
     expect(cerebralTest.getState('alertWarning.message')).toBeUndefined();
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
   });
 };

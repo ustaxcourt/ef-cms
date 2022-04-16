@@ -1,4 +1,4 @@
-import { waitForItemToHide, waitForLoadingComponentToHide } from '../helpers';
+import { waitForLoadingComponentToHide } from '../helpers';
 
 const { faker } = require('@faker-js/faker');
 const { refreshElasticsearchIndex } = require('../helpers');
@@ -36,13 +36,13 @@ export const practitionerUpdatesAddress = cerebralTest => {
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
-    await waitForItemToHide(
+    await waitForLoadingComponentToHide({
       cerebralTest,
-      'userContactEditProgress.inProgress',
-      1000,
-    );
+      component: 'userContactEditProgress.inProgress',
+      refreshInterval: 1000,
+    });
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
     await cerebralTest.runSequence('userContactUpdateCompleteSequence');
 
     await refreshElasticsearchIndex(5000);
