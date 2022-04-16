@@ -59,7 +59,7 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     if (overrides.hasPaper) {
       expect(cerebralTest.getState('currentPage')).toEqual(

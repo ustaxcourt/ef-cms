@@ -258,7 +258,7 @@ describe('Trial Session Eligible Cases Journey', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
     expect(cerebralTest.getState('currentPage')).toBe('PrintPaperTrialNotices');
   });
 
@@ -284,7 +284,7 @@ describe('Trial Session Eligible Cases Journey', () => {
             .eventCode,
       );
 
-      await waitForLoadingComponentToHide(cerebralTest);
+      await waitForLoadingComponentToHide({ cerebralTest });
       if (caseDetail.status !== CASE_STATUS_TYPES.closed) {
         expect(norpDocketEntry).toMatchObject({
           servedParties: [
