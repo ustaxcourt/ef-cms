@@ -862,19 +862,19 @@ export const waitForLoadingComponentToHide = async (
   console.log(`Waited ${waitTime}ms for the loading component to hide`);
 };
 
-export const waitForProgressBarToHide = async (
+export const waitForItemToHide = async (
   cerebralTest,
+  item,
+  refreshInterval = 500,
   maxWait = 30000,
 ) => {
   let waitTime = 0;
-  while (
-    cerebralTest.getState('userContactEditProgress.inProgress') &&
-    waitTime < maxWait
-  ) {
-    waitTime += 1000;
-    await wait(1000);
+
+  while (cerebralTest.getState(item) && waitTime < maxWait) {
+    waitTime += refreshInterval;
+    await wait(refreshInterval);
   }
-  console.log(`Waited ${waitTime}ms for the progress bar to hide`);
+  console.log(`Waited ${waitTime}ms for the ${item} to hide`);
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
