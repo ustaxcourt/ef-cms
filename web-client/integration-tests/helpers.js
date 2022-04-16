@@ -863,6 +863,23 @@ export const waitForLoadingComponentToHide = async ({
   console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
+export const waitForExpectedItem = async ({
+  cerebralTest,
+  currentItem,
+  expectedItem,
+  maxWait = 10000,
+}) => {
+  let waitTime = 0;
+  while (
+    cerebralTest.getState(currentItem) != expectedItem &&
+    waitTime < maxWait
+  ) {
+    waitTime += 500;
+    await wait(500);
+  }
+  console.log(`Waited ${waitTime}ms for ${expectedItem}`);
+};
+
 export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
