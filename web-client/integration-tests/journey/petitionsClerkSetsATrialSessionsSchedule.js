@@ -1,4 +1,4 @@
-import { waitForLoadingComponentToHide } from '../helpers';
+import { waitForExpectedItem, waitForLoadingComponentToHide } from '../helpers';
 
 export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
   return it('Petitions Clerk Sets A Trial Sessions Schedule', async () => {
@@ -11,5 +11,11 @@ export const petitionsClerkSetsATrialSessionsSchedule = cerebralTest => {
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
     await waitForLoadingComponentToHide({ cerebralTest });
+
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'currentPage',
+      expectedItem: 'PrintPaperTrialNotices',
+    });
   });
 };
