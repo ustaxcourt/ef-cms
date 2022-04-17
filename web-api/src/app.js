@@ -72,6 +72,9 @@ const {
   addPetitionerToCaseLambda,
 } = require('./cases/addPetitionerToCaseLambda');
 const {
+  appendAmendedPetitionFormLambda,
+} = require('./courtIssuedOrder/appendAmendedPetitionFormLambda');
+const {
   archiveCorrespondenceDocumentLambda,
 } = require('./correspondence/archiveCorrespondenceDocumentLambda');
 const {
@@ -564,6 +567,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(orderAdvancedSearchLambda),
   );
   // POST
+  app.post(
+    '/case-documents/:docketEntryId/append-pdf',
+    lambdaWrapper(appendAmendedPetitionFormLambda),
+  );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
     lambdaWrapper(serveCourtIssuedDocumentLambda),
