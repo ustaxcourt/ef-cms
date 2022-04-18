@@ -833,6 +833,55 @@ describe('serveCaseToIrsInteractor', () => {
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
+  it('should generate an order and upload it to s3 for orderDesignatingPlaceOfTrial', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderDesignatingPlaceOfTrial: true,
+    };
+
+    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      documentTitle: 'Order',
+      documentType: 'Order',
+      eventCode: 'O',
+    });
+
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(today),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(MOCK_CASE.procedureType.toLowerCase()),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining('TRIAL_LOCATION'),
+    });
+  });
+
   it('should generate an order and upload it to s3 for orderToShowCause', async () => {
     mockCase = {
       ...MOCK_CASE,

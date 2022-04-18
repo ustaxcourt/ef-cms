@@ -512,6 +512,14 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'OF',
     documentTitle: 'Order',
   },
+  orderDesignatingPlaceOfTrial: {
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
+    <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'O')
+      .documentType,
+    eventCode: 'O',
+    documentTitle: 'Order',
+  },
   orderForAmendedPetition: {
     content:
       '&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_60], petitioner(s) shall file a proper amended petition. If, by [ORDER_PLUS_60], petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.',
@@ -625,7 +633,15 @@ const PAYMENT_STATUS = {
   WAIVED: 'Waived',
 };
 
-const PROCEDURE_TYPES = ['Regular', 'Small']; // This is the order that they appear in the UI
+const PROCEDURE_TYPES_MAP = {
+  regular: 'Regular',
+  small: 'Small',
+};
+
+const PROCEDURE_TYPES = [
+  PROCEDURE_TYPES_MAP.regular,
+  PROCEDURE_TYPES_MAP.small,
+]; // This is the order that they appear in the UI
 
 const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
   CASE_STATUS_TYPES.assignedCase,
@@ -1287,6 +1303,7 @@ module.exports = deepFreeze({
   SECTIONS,
   SERVED_PARTIES_CODES,
   SERVICE_INDICATOR_TYPES,
+  PROCEDURE_TYPES_MAP,
   SESSION_STATUS_GROUPS,
   SESSION_TERMS,
   SESSION_TYPES,
