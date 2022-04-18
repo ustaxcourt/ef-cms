@@ -5,6 +5,7 @@ import { formattedPendingItems as formattedPendingItemsComputed } from '../src/p
 import { loginAs, setupTest } from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
+import { workQueueSectionHelper as workQueueSectionHelperComputed } from '../src/presenter/computeds/workQueueSectionHelper';
 
 const cerebralTest = setupTest();
 
@@ -76,6 +77,21 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
 
       expect(cerebralTest.getState('judges')).not.toContain(judgeName);
     });
+
+    it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, async () => {
+      const workQueueSection = withAppContextDecorator(
+        workQueueSectionHelperComputed,
+      );
+
+      const workQueueSectionHelper = runCompute(workQueueSection, {
+        state: cerebralTest.getState(),
+      });
+
+      expect(workQueueSectionHelper.chambersSections).not.toContain(judgeName);
+    });
+
+    // Remove "Guy" from the Judge's Name dropdown menu that appears when adding a Decision, Stipulated Decision, Order and Decision, and Order of Dismissal and Decision as a docket entry
+    // Do not remove Judge Guy's name from any data currently associated with him
 
     // this requires giving it a trial session thing
     // it(`petitions clerk verifies judge ${judgeName} does not appear in the edit trial session judge drop down`, async () => {
