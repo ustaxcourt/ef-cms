@@ -72,12 +72,22 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
       CASE_STATUS_TYPES.generalDocket,
     );
     //check that documents were served
-    const documents = cerebralTest.getState('caseDetail.docketEntries');
-    for (const document of documents) {
-      if (!document.isMinuteEntry && !document.isDraft) {
-        expect(document.servedAt).toBeDefined();
-        expect(document.servedParties.length).toEqual(1);
-        expect(document.servedParties[0].role).toEqual(ROLES.irsSuperuser);
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
+    for (const docketEntry of docketEntries) {
+      if (
+        !docketEntry.isMinuteEntry &&
+        !docketEntry.isDraft &&
+        docketEntry.eventCode !== 'NOTR'
+      ) {
+        expect(docketEntry.servedAt).toBeDefined();
+        expect(docketEntry.servedParties.length).toEqual(1);
+        expect(docketEntry.servedParties[0].role).toEqual(ROLES.irsSuperuser);
+      } else if (docketEntry.eventCode === 'NOTR') {
+        expect(docketEntry.servedAt).toBeDefined();
+        expect(docketEntry.servedParties.length).toBeGreaterThan(0);
+        for (const party of docketEntry.servedParties) {
+          expect(party.role).toBeUndefined();
+        }
       }
     }
   });

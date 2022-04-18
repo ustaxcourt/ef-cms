@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   formatDateString,
   formatNow,
   FORMATS,
@@ -9,6 +12,7 @@ const {
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
+  SERVED_PARTIES_CODES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -125,7 +129,11 @@ const createPetitionWorkItems = async ({
   });
 };
 
-const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
+const generateNoticeOfReceipt = async ({
+  applicationContext,
+  caseEntity,
+  userIdServingPetition,
+}) => {
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
   const {
@@ -267,14 +275,58 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     pdfName: caseConfirmationPdfName,
   });
 
+  const notrDocketEntryId = applicationContext.getUniqueId();
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    pdfData: Buffer.from(combinedNotrPdfData),
+    pdfName: notrDocketEntryId,
+  });
+
   let urlToReturn;
+
+  const notrDocketEntry = new DocketEntry(
+    {
+      docketEntryId: notrDocketEntryId,
+      documentTitle:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentTitle,
+      documentType:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentType,
+      eventCode:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.eventCode,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      userId: userIdServingPetition,
+    },
+    { applicationContext, petitioners: caseEntity.petitioners },
+  );
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+  notrDocketEntry.setAsServed(servedParties.all);
+  notrDocketEntry.servedPartiesCode = SERVED_PARTIES_CODES.PETITIONER; //overwrite the served party code for the NOTR docket entry because this is a special one-off with special rules that don't follow the normal party code algorithm
+
+  notrDocketEntry.numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      documentBytes: combinedNotrPdfData,
+    });
+
+  caseEntity.addDocketEntry(notrDocketEntry);
+
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    docketEntryId: notrDocketEntry.docketEntryId,
+    servedParties,
+    skipEmailToIrs: true,
+  });
 
   if (caseEntity.isPaper) {
     ({ url: urlToReturn } = await applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl({
         applicationContext,
-        key: caseConfirmationPdfName,
+        key: notrDocketEntry.docketEntryId,
         useTempBucket: false,
       }));
   }
@@ -543,6 +595,7 @@ const serveCaseToIrsInteractor = async (
   const urlToReturn = await generateNoticeOfReceipt({
     applicationContext,
     caseEntity,
+    userIdServingPetition: user.userId,
   });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
