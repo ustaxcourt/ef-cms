@@ -508,6 +508,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
       .documentType,
     documentTitle: 'Notice of Attachments in the Nature of Evidence',
+    notOverrideFreeText: false,
   },
   orderForFilingFee: {
     content:
@@ -516,6 +517,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OF',
     documentTitle: 'Order',
+    notOverrideFreeText: true,
   },
   orderForAmendedPetition: {
     content:
@@ -524,6 +526,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAP',
     documentTitle: 'Order',
+    notOverrideFreeText: true,
   },
   orderForAmendedPetitionAndFilingFee: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a document as the petition of the above-named
@@ -546,6 +549,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAPF',
     documentTitle: 'Order',
+    notOverrideFreeText: true,
   },
   orderToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
@@ -562,31 +566,37 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OSCP',
     documentTitle: 'Order to Show Cause',
+    notOverrideFreeText: true,
   },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
     documentType: 'Notice of Docket Change',
     eventCode: 'NODC',
+    notOverrideFreeText: false,
   },
   noticeOfChangeToRemoteProceeding: {
     documentTitle: 'Notice of Change to Remote Proceeding',
     documentType: 'Notice of Change to Remote Proceeding',
     eventCode: 'NORP',
+    notOverrideFreeText: false,
   },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
     eventCode: 'NTD',
+    notOverrideFreeText: false,
   },
   standingPretrialOrderForSmallCase: {
     documentTitle: SPOS_DOCUMENT.documentTitle,
     documentType: SPOS_DOCUMENT.documentType,
     eventCode: SPOS_DOCUMENT.eventCode,
+    notOverrideFreeText: false,
   },
   standingPretrialOrder: {
     documentTitle: SPTO_DOCUMENT.documentTitle,
     documentType: SPTO_DOCUMENT.documentType,
     eventCode: SPTO_DOCUMENT.eventCode,
+    notOverrideFreeText: false,
   },
 };
 
