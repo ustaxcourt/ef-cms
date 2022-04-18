@@ -90,14 +90,12 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
       expect(workQueueSectionHelper.chambersSections).not.toContain(judgeName);
     });
 
-    // Remove "Guy" from the Judge's Name dropdown menu that appears when adding a Decision, Stipulated Decision, Order and Decision, and Order of Dismissal and Decision as a docket entry
-    // Do not remove Judge Guy's name from any data currently associated with him
+    it(`petitions clerk verifies judge ${judgeName} does not appear in the edit trial session judge drop down`, async () => {
+      await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
+        trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
+      });
 
-    // this requires giving it a trial session thing
-    // it(`petitions clerk verifies judge ${judgeName} does not appear in the edit trial session judge drop down`, async () => {
-    //   await cerebralTest.runSequence('gotoEditTrialSessionSequence');
-
-    //   expect(cerebralTest.getState('judges')).not.toContain(judgeName);
-    // });
+      expect(cerebralTest.getState('judges')).not.toContain(judgeName);
+    });
   }
 });
