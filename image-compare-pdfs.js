@@ -21,6 +21,7 @@ const pdfs = [
   'Notice.pdf',
   'Order.pdf',
   'Order_For_Amended_Petition.pdf',
+  'Order_For_Amended_Petition_And_Filing_Fee.pdf',
   'Order_For_Filing_Fee.pdf',
   'Order_To_Show_Cause.pdf',
   'Pending_Report.pdf',
