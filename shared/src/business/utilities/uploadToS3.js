@@ -1,7 +1,7 @@
 /**
  *
  * @param {object} applicationContext the applicationContext
- * @param {string} caseConfirmationPdfName the case confirmation pdf name
+ * @param {string} pdfName the pdf name
  * @param {string} pdfData the pdfData
  */
 
