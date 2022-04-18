@@ -229,5 +229,34 @@ describe('documentGenerators', () => {
       expect(applicationContext.getNodeSass).toHaveBeenCalled();
       expect(applicationContext.getPug).toHaveBeenCalled();
     });
+
+    it('generates an Order Designating Place Of Trial', async () => {
+      const pdf = await order({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          orderContent:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderDesignatingPlaceOfTrial
+              .content,
+          orderTitle:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderDesignatingPlaceOfTrial
+              .documentTitle,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Order_Designating_Place_Of_Trial', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
   });
 });
