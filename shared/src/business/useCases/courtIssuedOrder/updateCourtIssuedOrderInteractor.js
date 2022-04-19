@@ -1,7 +1,6 @@
 const {
   DOCUMENT_RELATIONSHIPS,
   ORDER_TYPES,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -52,9 +51,12 @@ exports.updateCourtIssuedOrderInteractor = async (
     throw new NotFoundError('Document not found');
   }
 
+  console.log('JOB::right above filter');
   const orderTypeEventCodes = Object.values(ORDER_TYPES)
-    .filter(Object.values(SYSTEM_GENERATED_DOCUMENT_TYPES).notOverrideFreeText)
+    .filter(orderType => orderType.notOverrideFreeText)
     .map(d => d.eventCode);
+
+  console.log('JOB', orderTypeEventCodes);
 
   if (orderTypeEventCodes.includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;
