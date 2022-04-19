@@ -4,6 +4,7 @@ import {
   contactPrimaryFromState,
   getFormattedDocketEntriesForTest,
   refreshElasticsearchIndex,
+  waitForExpectedItem,
 } from '../helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
@@ -21,6 +22,13 @@ export const docketClerkQCsNCAForCaseWithPaperService = cerebralTest => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
+
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'currentPage',
+      expectedItem: 'CaseDetailInternal',
+    });
+
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
