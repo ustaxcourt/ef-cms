@@ -176,59 +176,71 @@ const ORDER_TYPES = [
   {
     documentType: 'Order',
     eventCode: 'O',
+    notOverrideFreeText: false,
   },
   {
     documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
     documentType: 'Order of Dismissal for Lack of Jurisdiction',
     eventCode: 'ODJ',
+    notOverrideFreeText: false,
   },
   {
     documentTitle: 'Order of Dismissal',
     documentType: 'Order of Dismissal',
     eventCode: 'OD',
+    notOverrideFreeText: false,
   },
   {
     documentTitle: 'Order of Dismissal and Decision',
     documentType: 'Order of Dismissal and Decision',
     eventCode: 'ODD',
+    notOverrideFreeText: false,
   },
   {
     documentTitle: 'Order for Filing Fee',
     documentType: 'Order for Filing Fee',
     eventCode: 'OF',
+    notOverrideFreeText: true,
   },
   {
     documentTitle: 'Order for Amended Petition',
     documentType: 'Order for Amended Petition',
     eventCode: 'OAP',
+    notOverrideFreeText: true,
   },
   {
     documentTitle: 'Order for Amended Petition and Filing Fee',
     documentType: 'Order for Amended Petition and Filing Fee',
     eventCode: 'OAPF',
+    notOverrideFreeText: true,
   },
   {
     documentTitle: 'Order to Show Cause',
     documentType: 'Order to Show Cause',
     eventCode: 'OSC',
+    notOverrideFreeText: false,
   },
   {
     documentType: 'Order petr(s) to show cause why "S" should not be removed',
     eventCode: 'OSCP',
+    notOverrideFreeText: true,
   },
   {
     documentTitle: 'Order and Decision',
     documentType: 'Order and Decision',
     eventCode: 'OAD',
+    notOverrideFreeText: false,
   },
   {
     documentTitle: 'Decision',
     documentType: 'Decision',
     eventCode: 'DEC',
+    notOverrideFreeText: false,
   },
   {
     documentType: 'Notice',
     eventCode: 'NOT',
+    notOverrideFreeText: false,
   },
 ];
 
@@ -508,7 +520,6 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: ORDER_TYPES.find(order => order.eventCode === 'NOT')
       .documentType,
     documentTitle: 'Notice of Attachments in the Nature of Evidence',
-    notOverrideFreeText: false,
   },
   orderForFilingFee: {
     content:
@@ -517,7 +528,6 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OF',
     documentTitle: 'Order',
-    notOverrideFreeText: true,
   },
   orderForAmendedPetition: {
     content:
@@ -526,7 +536,6 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAP',
     documentTitle: 'Order',
-    notOverrideFreeText: true,
   },
   orderForAmendedPetitionAndFilingFee: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a document as the petition of the above-named
@@ -549,7 +558,6 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OAPF',
     documentTitle: 'Order',
-    notOverrideFreeText: true,
   },
   orderToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
@@ -566,37 +574,31 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       .documentType,
     eventCode: 'OSCP',
     documentTitle: 'Order to Show Cause',
-    notOverrideFreeText: true,
   },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
     documentType: 'Notice of Docket Change',
     eventCode: 'NODC',
-    notOverrideFreeText: false,
   },
   noticeOfChangeToRemoteProceeding: {
     documentTitle: 'Notice of Change to Remote Proceeding',
     documentType: 'Notice of Change to Remote Proceeding',
     eventCode: 'NORP',
-    notOverrideFreeText: false,
   },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
     eventCode: 'NTD',
-    notOverrideFreeText: false,
   },
   standingPretrialOrderForSmallCase: {
     documentTitle: SPOS_DOCUMENT.documentTitle,
     documentType: SPOS_DOCUMENT.documentType,
     eventCode: SPOS_DOCUMENT.eventCode,
-    notOverrideFreeText: false,
   },
   standingPretrialOrder: {
     documentTitle: SPTO_DOCUMENT.documentTitle,
     documentType: SPTO_DOCUMENT.documentType,
     eventCode: SPTO_DOCUMENT.eventCode,
-    notOverrideFreeText: false,
   },
 };
 
