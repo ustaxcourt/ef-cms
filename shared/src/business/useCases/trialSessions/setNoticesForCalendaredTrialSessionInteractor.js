@@ -11,6 +11,7 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
+const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -29,6 +30,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data for the standing pretrial
  */
 const serveNoticesForCase = async ({
+  appendClinicLetter,
   applicationContext,
   caseEntity,
   newPdfDoc,
@@ -53,37 +55,78 @@ const serveNoticesForCase = async ({
     servedParties,
   });
 
+  const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
+  const standingPretrialPdf = await PDFDocument.load(standingPretrialPdfData);
+  const combinedDocumentsPdf = await PDFDocument.create();
+
   if (servedParties.paper.length > 0) {
-    const combinedDocumentsPdf = await PDFDocument.create();
-    const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
-    const standingPretrialPdf = await PDFDocument.load(standingPretrialPdfData);
+    for (let party of servedParties.paper) {
+      let noticeDocumentPdfCopy = await noticeDocumentPdf.copy();
+      const addressPage = await applicationContext
+        .getDocumentGenerators()
+        .addressLabelCoverSheet({
+          applicationContext,
+          data: {
+            ...party,
+            docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+          },
+        });
 
-    let copiedPages = await combinedDocumentsPdf.copyPages(
-      noticeDocumentPdf,
-      noticeDocumentPdf.getPageIndices(),
-    );
+      const addressPageDoc = await PDFDocument.load(addressPage);
+      let copiedAddressPages = await combinedDocumentsPdf.copyPages(
+        addressPageDoc,
+        addressPageDoc.getPageIndices(),
+      );
 
-    copiedPages = copiedPages.concat(
-      await combinedDocumentsPdf.copyPages(
-        standingPretrialPdf,
-        standingPretrialPdf.getPageIndices(),
-      ),
-    );
-
-    copiedPages.forEach(page => {
-      combinedDocumentsPdf.addPage(page);
-    });
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: combinedDocumentsPdf,
-        servedParties,
+      // TODO: should only be one page, maybe try taking only copiedAddressPages[0]
+      copiedAddressPages.forEach(page => {
+        combinedDocumentsPdf.addPage(page);
       });
+
+      if (
+        // petitioner is NOT pro se, but clinic letter has already been appended
+        caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId) &&
+        appendClinicLetter
+      ) {
+        const totalPages = noticeDocumentPdfCopy.getPageCount();
+        const lastPageIndex = totalPages - 1;
+        noticeDocumentPdfCopy.removePage(lastPageIndex);
+      }
+
+      let copiedPages = await combinedDocumentsPdf.copyPages(
+        noticeDocumentPdfCopy,
+        noticeDocumentPdfCopy.getPageIndices(),
+      );
+
+      copiedPages = copiedPages.concat(
+        await combinedDocumentsPdf.copyPages(
+          standingPretrialPdf,
+          standingPretrialPdf.getPageIndices(),
+        ),
+      );
+
+      copiedPages.forEach(page => {
+        combinedDocumentsPdf.addPage(page);
+      });
+    }
   }
+  let copiedPages = await newPdfDoc.copyPages(
+    combinedDocumentsPdf,
+    combinedDocumentsPdf.getPageIndices(),
+  );
+  copiedPages.forEach(page => {
+    newPdfDoc.addPage(page);
+  });
+
+  // await applicationContext
+  //   .getUseCaseHelpers()
+  //   .appendPaperServiceAddressPageToPdf({
+  //     applicationContext,
+  //     caseEntity,
+  //     newPdfDoc,
+  //     noticeDoc: combinedDocumentsPdf,
+  //     servedParties,
+  //   });
 };
 
 /**
@@ -105,12 +148,52 @@ const setNoticeForCase = async ({
   const { procedureType } = caseRecord;
 
   // Notice of Trial Issued
-  const noticeOfTrialIssuedFile = await applicationContext
+  let noticeOfTrialIssuedFile = await applicationContext
     .getUseCases()
     .generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: caseEntity.docketNumber,
       trialSessionId: trialSessionEntity.trialSessionId,
     });
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  let appendClinicLetter = false;
+  let clinicLetterKey;
+  for (let party in servedParties.paper) {
+    if (!caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId)) {
+      clinicLetterKey = getClinicLetterKey({
+        procedureType,
+        trialLocation: trialSession.trialLocation,
+      });
+      const doesClinicLetterExist = await applicationContext
+        .getPersistenceGateway()
+        .isFileExists({
+          applicationContext,
+          key: clinicLetterKey,
+        });
+      if (doesClinicLetterExist) {
+        appendClinicLetter = true;
+      }
+    }
+  }
+
+  if (appendClinicLetter) {
+    const clinicLetter = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: clinicLetterKey,
+        protocol: 'S3',
+        useTempBucket: false,
+      });
+    noticeOfTrialIssuedFile = await applicationContext
+      .getUtilities()
+      .combineTwoPdfs({
+        applicationContext,
+        firstPdf: noticeOfTrialIssuedFile,
+        secondPdf: clinicLetter,
+      });
+  }
 
   const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
 
@@ -225,8 +308,7 @@ const setNoticeForCase = async ({
 
   caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
-  const servedParties = aggregatePartiesForService(caseEntity);
-
+  // TODO: consider moving these two (four) calls to below `serveNoticesForCase`
   noticeOfTrialDocketEntry.setAsServed(servedParties.all);
   standingPretrialDocketEntry.setAsServed(servedParties.all);
 
@@ -236,6 +318,7 @@ const setNoticeForCase = async ({
   // Serve notice
   await serveNoticesForCase({
     PDFDocument,
+    appendClinicLetter,
     applicationContext,
     caseEntity,
     newPdfDoc,
