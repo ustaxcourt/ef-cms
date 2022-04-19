@@ -53,7 +53,7 @@ exports.updateCourtIssuedOrderInteractor = async (
 
   console.log('JOB::right above filter');
   const orderTypeEventCodes = Object.values(ORDER_TYPES)
-    .filter(orderType => orderType.notOverrideFreeText)
+    .filter(orderType => orderType.overrideFreeText)
     .map(d => d.eventCode);
 
   console.log('JOB', orderTypeEventCodes);
