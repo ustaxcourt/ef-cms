@@ -36,6 +36,7 @@ export const practitionerUpdatesAddress = cerebralTest => {
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
     await waitForLoadingComponentToHide({
       cerebralTest,
       component: 'userContactEditProgress.inProgress',
@@ -43,7 +44,6 @@ export const practitionerUpdatesAddress = cerebralTest => {
     });
 
     await waitForLoadingComponentToHide({ cerebralTest });
-    await cerebralTest.runSequence('userContactUpdateCompleteSequence');
 
     await refreshElasticsearchIndex(5000);
 
