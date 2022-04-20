@@ -25,6 +25,7 @@ const {
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
 const {
+  formatDateString,
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
@@ -870,8 +871,6 @@ describe('serveCaseToIrsInteractor', () => {
       orderDesignatingPlaceOfTrial: true,
     };
 
-    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
-
     await serveCaseToIrsInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
     });
@@ -888,12 +887,17 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
 
+    const petitionFiledDate = formatDateString(
+      MOCK_CASE.docketEntries[0].filingDate,
+      FORMATS.MONTH_DAY_YEAR,
+    );
+
     expect(
       await applicationContext.getUseCaseHelpers()
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(today),
+      content: expect.stringContaining(petitionFiledDate),
     });
 
     expect(

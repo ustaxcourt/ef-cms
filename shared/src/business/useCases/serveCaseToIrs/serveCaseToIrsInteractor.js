@@ -492,7 +492,7 @@ const serveCaseToIrsInteractor = async (
     );
     const content = replaceBracketed(
       orderDesignatingPlaceOfTrial.content,
-      formatDateString(petitionDocument.servedAt, FORMATS.MONTH_DAY_YEAR),
+      formatDateString(petitionDocument.filingDate, FORMATS.MONTH_DAY_YEAR),
       caseEntity.procedureType.toLowerCase(),
     );
 
