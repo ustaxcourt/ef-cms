@@ -7,6 +7,9 @@ const {
 describe('Sign order', function () {
   before(() => {
     navigateToCaseDetail('docketclerk', '101-19');
+  });
+
+  it('create an order on the case', () => {
     createOrder('101-19');
   });
 
