@@ -28,7 +28,7 @@ exports.getCaseDetailTab = tabName => {
 };
 
 exports.hoverOverSignatureWarning = () => {
-  return cy.get('#signature-warning').realHover();
+  return cy.get('#signature-warning').realHover({ position: 'center' });
 };
 
 exports.createOrder = docketNumber => {
