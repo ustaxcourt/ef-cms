@@ -1,5 +1,4 @@
 import { camelCase, pickBy } from 'lodash';
-import { makeMap } from './makeMap';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -14,15 +13,16 @@ const compareCasesByPractitioner = (a, b) => {
 export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   const { STATUS_TYPES, TRIAL_STATUS_TYPES } =
     applicationContext.getConstants();
-  const trialSession = get(state.trialSession) || {};
-  const { filters, sort, sortOrder, userNotes } =
-    get(state.trialSessionWorkingCopy) || {};
-  const caseMetadata = get(state.trialSessionWorkingCopy.caseMetadata) || {};
+
+  const trialSession = get(state.trialSession);
+  const { caseMetadata, filters, sort, sortOrder, userNotes } = get(
+    state.trialSessionWorkingCopy,
+  );
 
   //get an array of strings of the trial statuses that are set to true
   const trueFilters = Object.keys(pickBy(filters));
 
-  let formattedCases = (trialSession.calendaredCases || [])
+  let formattedCases = trialSession.calendaredCases
     .slice()
     .filter(
       calendaredCase =>
@@ -46,8 +46,6 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     )
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
 
-  const casesShownCount = formattedCases.length;
-
   if (sort === 'practitioner') {
     formattedCases.sort(compareCasesByPractitioner);
   }
@@ -56,21 +54,12 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     formattedCases.reverse();
   }
 
-  const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
-    key: camelCase(value),
-    value,
-  }));
-
-  const formattedCasesByDocketRecord = makeMap(formattedCases, 'docketNumber');
-
   Object.keys(userNotes).forEach(docketNumber => {
-    if (userNotes[docketNumber]) {
-      const caseToUpdate = formattedCases.find(
-        aCase => aCase.docketNumber === docketNumber,
-      );
-      if (caseToUpdate) {
-        caseToUpdate.userNotes = userNotes[docketNumber].notes;
-      }
+    const caseToUpdate = formattedCases.find(
+      aCase => aCase.docketNumber === docketNumber,
+    );
+    if (caseToUpdate) {
+      caseToUpdate.userNotes = userNotes[docketNumber].notes;
     }
   });
 
@@ -85,11 +74,14 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     }
   });
 
+  const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
+    key: camelCase(value),
+    value,
+  }));
+
   return {
-    casesShownCount,
+    casesShownCount: formattedCases.length,
     formattedCases,
-    formattedCasesByDocketRecord,
-    title: trialSession.title || 'Birmingham, Alabama',
     trialStatusOptions,
   };
 };

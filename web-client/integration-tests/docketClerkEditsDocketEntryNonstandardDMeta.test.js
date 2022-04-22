@@ -37,5 +37,5 @@ describe("Docket Clerk Edits a Docket Entry's Nonstandard D Metadata", () => {
   docketClerkQCsDocketEntry(cerebralTest);
   docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
 
-  docketClerkNavigatesToEditDocketEntryCertificateOfService(cerebralTest, 3);
+  docketClerkNavigatesToEditDocketEntryCertificateOfService(cerebralTest, 4);
 });
