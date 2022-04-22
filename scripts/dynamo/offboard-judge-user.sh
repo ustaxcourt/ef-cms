@@ -1,63 +1,51 @@
 #!/bin/bash
 
-# Updates the offboarded judge user in the dynamo table
+# Updates the offboarded judge user in the dynamo table based on their userId passed in
 
 # Usage
-#   ./offboard-judge-user.sh Guy
+#   ./offboard-judge-user.sh 68686578-bc34-4aea-bc1d-25e505422843
 
 # Arguments
-#   - $1 - The name of the judge to offboard
-
-# todo: 
-# find the judge (by name? userId is env specific)
-# update that judge\'s role to 'legacyJudge' and section to 'legacyJudgesChambers'
-# change legacyJudge to judge when we actually commit this, only using legacyJudge since its updated to that on exp2
-# do we need to specify source/destination table?
+#   - $1 - The userId of the judge to offboard
 
 ( ! command -v jq > /dev/null ) && echo "jq must be installed on your machine." && exit 1
-# [ -z "$1" ] && echo "The value to set for the judge name must be provided as the \$1 argument." && exit 1
-# USER_ID=$1
+[ -z "$1" ] && echo "The value to set for the judge userId must be provided as the \$1 argument." && exit 1
+USER_ID=$1
 REGION=us-east-1
 
-../../check-env-variables.sh \
+./check-env-variables.sh \
   "ENV" \
   "AWS_SECRET_ACCESS_KEY" \
   "AWS_ACCESS_KEY_ID"
 
-# JUDGE_USER_ID=$(aws dynamodb scan \
-#   --table-name "efcms-${ENV}-alpha"  \
-#   --filter-expression "#judge_name = :a AND #user_role = :b" \
-#   --expression-attribute-names '{"#judge_name":"name","#user_role":"role"}' \
-#   --expression-attribute-values '{":a":{"S":"'${JUDGE_NAME}'"},":b":{"S":"judge"}}' \
-#   --region ${REGION} \
-#   | jq -r ".Items[0].userId.S" \
-# )
-# echo "Judge user ID found for ${JUDGE_NAME} is: ${JUDGE_USER_ID}"
-
-# for checking that we have the right object
-JUDGE_USER=$(aws dynamodb get-item --region ${REGION} --table-name "efcms-${ENV}-alpha" \
---key '{"pk":{"S":"user|9bab3bd3-08a9-4833-9b7c-276f07d6098e"},"sk":{"S":"user|9bab3bd3-08a9-4833-9b7c-276f07d6098e"}}' \
-| jq -r ".Item"
-)
-# 9bab3bd3-08a9-4833-9b7c-276f07d6098e
-echo "${JUDGE_USER}"
-
-OUTPUTTT=$(aws dynamodb update-item \
-    --table-name "efcms-${ENV}-alpha" \
-    --key '{"pk": {"S": "9bab3bd3-08a9-4833-9b7c-276f07d6098e"},"sk": {"S": "9bab3bd3-08a9-4833-9b7c-276f07d6098e"}}' \
-   --attribute-updates  '{"role": {"Value": {"S": "judge"},"Action": "PUT"}, "section": {"Value": {"S": "guysChambers"},"Action": "PUT"}}' \
-    --region ${REGION} \
+# should we do it to both like this? or just SOURCE_TABLE?
+TABLES=(
+  "alpha"
+  "beta"
 )
 
-echo "${OUTPUTTT}"
-# put-item fully overwrites the object, not just the attribute, should use update-item
-# OUTPUT=$(aws dynamodb put-item --region ${REGION} --table-name "efcms-${ENV}-alpha" \
-# --item '{"pk":{"S":"user|'${JUDGE_USER_ID}'"},"sk":{"S":"user|'${JUDGE_USER_ID}'"},"role":{"S":"legacyJudge"}}')
-# echo "${OUTPUT}"
-JUDGE_USER=$(aws dynamodb get-item --region ${REGION} --table-name "efcms-${ENV}-alpha" \
---key '{"pk":{"S":"user|9bab3bd3-08a9-4833-9b7c-276f07d6098e"},"sk":{"S":"user|9bab3bd3-08a9-4833-9b7c-276f07d6098e"}}' \
-| jq -r ".Item"
-)
-# c3b4d14e-f764-4355-b1f9-0af887ef0210 -- guy test
-# 9bab3bd3-08a9-4833-9b7c-276f07d6098e -- guy on exp2
-echo "${JUDGE_USER}"
+for table in "${TABLES[@]}"; do
+  # for checking that we have the right object
+  JUDGE_USER=$(aws dynamodb get-item --region ${REGION} --table-name "efcms-${ENV}-${table}" \
+  --key '{"pk":{"S":"user|'${USER_ID}'"},"sk":{"S":"user|'${USER_ID}'"}}' \
+  | jq -r ".Item" \
+  )
+  echo "---Retrieved Judge User: ${JUDGE_USER}"
+  if( [ -z "${JUDGE_USER}" ] ); then
+    echo "Could not find judge user with userId: ${USER_ID} on ${table} table."
+    exit 1
+  fi
+
+  UPDATE_OUTPUT=$(aws dynamodb update-item \
+      --table-name "efcms-${ENV}-${table}" \
+      --key '{"pk":{"S":"user|'${USER_ID}'"},"sk":{"S":"user|'${USER_ID}'"}}' \
+      --update-expression 'SET #role = :role, #section = :section' \
+      --expression-attribute-names '{"#role": "role", "#section": "section"}' \
+      --expression-attribute-values '{":role": {"S": "legacyJudge"}, ":section": {"S": "legacyJudgesChambers"}}' \
+      --return-values UPDATED_NEW \
+      --region ${REGION} \
+  )
+
+  echo "---Updated attributes of user ${USER_ID}: ${UPDATE_OUTPUT} on ${table} table."
+done
+
