@@ -439,6 +439,11 @@ const serveCaseToIrsInteractor = async (
     FORMATS.MONTH_DAY_YEAR,
   );
 
+  const filedDate = formatDateString(
+    petitionDocument.receivedAt,
+    FORMATS.MONTH_DAY_YEAR,
+  );
+
   const todayPlus60 = getBusinessDateInFuture({
     numberOfDays: 60,
     startDate: formatNow(FORMATS.ISO),
@@ -485,7 +490,7 @@ const serveCaseToIrsInteractor = async (
       applicationContext,
       caseEntity,
       document: orderForAmendedPetitionAndFilingFee,
-      replacements: [servedAt, todayPlus60, todayPlus60],
+      replacements: [filedDate, todayPlus60, todayPlus60],
     });
   }
 
