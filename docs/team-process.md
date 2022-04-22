@@ -91,8 +91,6 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 - `pdfjs-dist`: temporarily locked to 2.12.313 as v2.13.216 causes issues with pdf rendering in cypress tests
 
-- `webpack` and `webpack-cli`: Removed `^` due to [known issue](https://stackoverflow.com/questions/52724312/webpack-typeerror-cannot-read-property-properties-of-undefined) with minor version updates breaking app startup.
-
 #### Validating Updates
 -  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
     - Be sure the deploy runs a migration to verify the updates do not affect the migration workflow.

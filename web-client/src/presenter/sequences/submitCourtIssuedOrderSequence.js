@@ -1,8 +1,10 @@
+import { appendFormAndOverwriteOrderFileAction } from '../actions/CourtIssuedOrder/appendFormAndOverwriteOrderFileAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getEditedDocumentDetailParamsAction } from '../actions/getEditedDocumentDetailParamsAction';
 import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocument/getFileExternalDocumentAlertSuccessAction';
 import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectToSigningAction';
+import { isDocumentRequiringAppendedFormAction } from '../actions/CourtIssuedOrder/isDocumentRequiringAppendedFormAction';
 import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrderAction';
 import { isFormPristineAction } from '../actions/CourtIssuedOrder/isFormPristineAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
@@ -58,7 +60,14 @@ export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
       overwriteOrderFileAction,
       {
         error: [openFileUploadErrorModal],
-        success: [onFileUploadedSuccess],
+        success: [
+          isDocumentRequiringAppendedFormAction,
+          {
+            no: [],
+            yes: [appendFormAndOverwriteOrderFileAction],
+          },
+          onFileUploadedSuccess,
+        ],
       },
     ],
   },
