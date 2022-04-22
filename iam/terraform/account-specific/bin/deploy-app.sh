@@ -69,4 +69,4 @@ if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
 fi
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
-terraform apply
+terraform plan

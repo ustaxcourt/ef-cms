@@ -18,6 +18,10 @@ terraform {
 
   required_providers {
     aws = "3.70.0"
+    elasticsearch = {
+      source = "phillbaker/elasticsearch"
+      version = "2.0.0"
+    }
   }
 }
 
