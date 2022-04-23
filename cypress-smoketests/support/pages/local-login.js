@@ -13,6 +13,8 @@ exports.getUserToken = async username => {
 exports.login = email => {
   cy.visit(`/log-in?code=${email}`);
   cy.get('.progress-indicator').should('not.exist');
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(1000);
 };
 
 exports.getRestApi = async () => {
