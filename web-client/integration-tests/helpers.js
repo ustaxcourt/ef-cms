@@ -800,10 +800,10 @@ export const setupTest = ({ useCases = {}, constantsOverrides = {} } = {}) => {
 
   cerebralTest.setState('constants', applicationContext.getConstants());
 
-  router.initialize(cerebralTest, (path, cb) => {
+  router.initialize(cerebralTest, (route, cb) => {
     routes.push({
       cb,
-      path,
+      route,
     });
   });
   initializeSocketProvider(cerebralTest);
