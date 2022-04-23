@@ -303,7 +303,6 @@
   },
   "devDependencies": {
     "checksum": "^1.0.0",
-    "cypress-log-to-output": "^1.1.2",
     "lint-staged-shellcheck": "^0.1.2",
     "pdf2pic": "^2.1.4",
     "pixelmatch": "^5.2.1",
