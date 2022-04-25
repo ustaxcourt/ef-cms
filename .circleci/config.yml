@@ -52,7 +52,7 @@ commands:
             else
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.             
             fi
-      -run:
+      - run:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
