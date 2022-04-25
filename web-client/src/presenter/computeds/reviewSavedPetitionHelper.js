@@ -2,13 +2,13 @@ import { formatStatistic } from './statisticsHelper';
 import { state } from 'cerebral';
 
 export const ordersAndNoticesNeededCodes = {
-  orderDesignatingPlaceOfTrial: 'Order Designating Place of Trial',
   orderForOds: 'Order for Ownership Disclosure Statement',
   orderForRatification: 'Order for Ratification of Petition',
 };
 
 export const ordersAndNoticesInDraftsCodes = {
   noticeOfAttachments: 'Notice of Attachments in the Nature of Evidence',
+  orderDesignatingPlaceOfTrial: 'Order Designating Place of Trial',
   orderForAmendedPetition: 'Order for Amended Petition',
   orderForAmendedPetitionAndFilingFee:
     'Order for Amended Petition and Filing Fee',
