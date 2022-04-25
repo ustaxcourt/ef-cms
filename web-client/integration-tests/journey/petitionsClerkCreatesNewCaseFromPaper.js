@@ -7,41 +7,8 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const reviewSavedPetitionHelper = withAppContextDecorator(
   reviewSavedPetitionHelperComputed,
 );
-const {
-  COUNTRY_TYPES,
-  DEFAULT_PROCEDURE_TYPE,
-  PARTY_TYPES,
-  PAYMENT_STATUS,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = applicationContext.getConstants();
-
-const { documentTitle } =
-  SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfAttachmentsInNatureOfEvidence;
-
-const findNoticeOfAttachments = formValues => {
-  return formValues.find(
-    formItem =>
-      formItem && formItem.key === 'noticeOfAttachments' && formItem.value,
-  );
-};
-
-const getExpectedOutputBasedOnOrderOrNoticeSelected = (
-  formValues,
-  expectedObject,
-) => {
-  const noticeOfAttachmentsSelected = findNoticeOfAttachments(formValues);
-
-  let draftItems = [];
-
-  if (noticeOfAttachmentsSelected) {
-    draftItems.push(documentTitle);
-  }
-
-  return {
-    ...expectedObject,
-    ordersAndNoticesInDraft: draftItems,
-  };
-};
+const { COUNTRY_TYPES, DEFAULT_PROCEDURE_TYPE, PARTY_TYPES, PAYMENT_STATUS } =
+  applicationContext.getConstants();
 
 export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
@@ -295,20 +262,12 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
 
     let expectedObject = {
       hasIrsNoticeFormatted: 'No',
-      ordersAndNoticesInDraft: [],
-      ordersAndNoticesNeeded: [
-        'Order Designating Place of Trial',
-        'Order for Ratification of Petition',
-      ],
+      ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+      ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
       petitionPaymentStatusFormatted: 'Waived 05/05/05',
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
     };
-
-    expectedObject = getExpectedOutputBasedOnOrderOrNoticeSelected(
-      formValues,
-      expectedObject,
-    );
 
     expect(helper).toMatchObject(expectedObject);
 
