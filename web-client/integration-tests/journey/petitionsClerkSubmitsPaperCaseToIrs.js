@@ -76,8 +76,8 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
     for (const docketEntry of docketEntries) {
       if (
         !docketEntry.isMinuteEntry &&
-        !docketEntry.isDraft &&
-        docketEntry.eventCode !== 'NOTR'
+        docketEntry.eventCode !== 'NOTR' &&
+        !docketEntry.isDraft
       ) {
         expect(docketEntry.servedAt).toBeDefined();
         expect(docketEntry.servedParties.length).toEqual(1);
