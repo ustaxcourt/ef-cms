@@ -84,9 +84,10 @@ const serveNoticesForCase = async ({
       });
 
       if (
-        // petitioner is NOT pro se, but clinic letter has already been appended
-        caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId) &&
-        appendClinicLetter
+        //clinic letter has already been appended, but party is either NOT pro se or is a private practitioner
+        appendClinicLetter &&
+        (caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId) ||
+          party.role !== 'petitioner')
       ) {
         const totalPages = noticeDocumentPdfCopy.getPageCount();
         const lastPageIndex = totalPages - 1;
