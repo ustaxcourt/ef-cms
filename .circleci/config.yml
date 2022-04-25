@@ -211,9 +211,10 @@ jobs:
             MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
             AWS_ACCESS_KEY_ID: S3RVER
             AWS_SECRET_ACCESS_KEY: S3RVER
+            NODE_ENV: production
           command: |
-            echo $NODE_ENV
             npx --no-install run-p start:api:ci start:public:ci >> /tmp/pa11y/pa11y-server.txt &
+            echo $NODE_ENV
             ./wait-until-services.sh
             URL=http://localhost:5000/ ./wait-until.sh
             sleep 10
