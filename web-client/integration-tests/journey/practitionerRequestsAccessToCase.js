@@ -146,8 +146,15 @@ export const practitionerRequestsAccessToCase = (cerebralTest, fakeFile) => {
     expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'Limited Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
+
+    const createdDocketEntry = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .find(entry => entry.eventCode === 'LEA');
+
+    expect(createdDocketEntry.filedBy).toEqual('Test Private Practitioner');
   });
 };
