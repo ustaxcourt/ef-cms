@@ -27,7 +27,7 @@ export const userSuccessfullyUpdatesEmailAddress = (
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('modal.showModal')).toEqual(
       'VerifyNewEmailModal',
