@@ -852,6 +852,7 @@ describe('serveCaseToIrsInteractor', () => {
     mockCase = {
       ...MOCK_CASE,
       orderToShowCause: true,
+      receivedAt: '2018-03-01T21:40:46.415Z',
     };
 
     await serveCaseToIrsInteractor(applicationContext, {
@@ -866,7 +867,10 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
+    const receivedDate = formatDateString(
+      '2018-03-01T21:40:46.415Z',
+      FORMATS.MONTH_DAY_YEAR,
+    );
 
     const mockTodayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
@@ -878,7 +882,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(today),
+      content: expect.stringContaining(receivedDate),
     });
 
     expect(
@@ -894,6 +898,7 @@ describe('serveCaseToIrsInteractor', () => {
     mockCase = {
       ...MOCK_CASE,
       orderForAmendedPetition: true,
+      receivedAt: '2018-03-01T21:40:46.415Z',
     };
 
     await serveCaseToIrsInteractor(applicationContext, {
@@ -908,7 +913,10 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
+    const receivedDate = formatDateString(
+      '2018-03-01T21:40:46.415Z',
+      FORMATS.MONTH_DAY_YEAR,
+    );
 
     const mockTodayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
@@ -920,7 +928,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${today}, a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper amended petition. If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.`,
+      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${receivedDate}, a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper amended petition. If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.`,
     });
   });
 

@@ -434,12 +434,7 @@ const serveCaseToIrsInteractor = async (
     doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
   );
 
-  const servedAt = formatDateString(
-    petitionDocument.servedAt,
-    FORMATS.MONTH_DAY_YEAR,
-  );
-
-  const filedDate = formatDateString(
+  const formattedFiledDate = formatDateString(
     petitionDocument.receivedAt,
     FORMATS.MONTH_DAY_YEAR,
   );
@@ -467,7 +462,7 @@ const serveCaseToIrsInteractor = async (
       applicationContext,
       caseEntity,
       document: orderForAmendedPetition,
-      replacements: [servedAt, todayPlus60, todayPlus60],
+      replacements: [formattedFiledDate, todayPlus60, todayPlus60],
     });
   }
 
@@ -478,7 +473,7 @@ const serveCaseToIrsInteractor = async (
       applicationContext,
       caseEntity,
       document: orderToShowCause,
-      replacements: [formatNow(FORMATS.MONTH_DAY_YEAR), todayPlus60],
+      replacements: [formattedFiledDate, todayPlus60],
     });
   }
 
@@ -490,7 +485,7 @@ const serveCaseToIrsInteractor = async (
       applicationContext,
       caseEntity,
       document: orderForAmendedPetitionAndFilingFee,
-      replacements: [filedDate, todayPlus60, todayPlus60],
+      replacements: [formattedFiledDate, todayPlus60, todayPlus60],
     });
   }
 
