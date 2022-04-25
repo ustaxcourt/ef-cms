@@ -1,8 +1,5 @@
 /* eslint-disable max-lines */
-const {
-  addDocketEntryForPaymentStatus,
-  serveCaseToIrsInteractor,
-} = require('./serveCaseToIrsInteractor');
+const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
 
 const {
   applicationContext,
@@ -16,7 +13,6 @@ const {
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
-  PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
@@ -30,7 +26,7 @@ const {
   FORMATS,
   getBusinessDateInFuture,
 } = require('../../utilities/DateHandler');
-const { Case, getContactPrimary } = require('../../entities/cases/Case');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
@@ -1058,61 +1054,5 @@ describe('serveCaseToIrsInteractor', () => {
     ).toMatchObject({
       content: expect.stringContaining(mockTodayPlus60),
     });
-  });
-});
-
-describe('addDocketEntryForPaymentStatus', () => {
-  let user;
-
-  beforeEach(() => {
-    user = applicationContext.getCurrentUser();
-  });
-
-  it('adds a docketRecord for a paid petition payment', () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        petitionPaymentDate: 'Today',
-        petitionPaymentStatus: PAYMENT_STATUS.PAID,
-      },
-      { applicationContext },
-    );
-    addDocketEntryForPaymentStatus({
-      applicationContext,
-      caseEntity,
-      user: petitionsClerkUser,
-    });
-
-    const addedDocketRecord = caseEntity.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'FEE',
-    );
-
-    expect(addedDocketRecord).toBeDefined();
-    expect(addedDocketRecord.filingDate).toEqual('Today');
-  });
-
-  it('adds a docketRecord for a waived petition payment', async () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        docketEntries: [],
-        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-        petitionPaymentWaivedDate: 'Today',
-        petitioners: undefined,
-      },
-      { applicationContext },
-    );
-    await addDocketEntryForPaymentStatus({
-      applicationContext,
-      caseEntity,
-      user,
-    });
-
-    const addedDocketRecord = caseEntity.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'FEEW',
-    );
-
-    expect(addedDocketRecord).toBeDefined();
-    expect(addedDocketRecord.filingDate).toEqual('Today');
   });
 });
