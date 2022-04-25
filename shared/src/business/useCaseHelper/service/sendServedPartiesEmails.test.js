@@ -70,6 +70,48 @@ describe('sendServedPartiesEmails', () => {
     ]);
   });
 
+  it('should call sendBulkTemplatedEmail if there are electronic service parties on the case and not include the irs superuser if skipEmailToIrs is true even if the case is not new', async () => {
+    const caseEntity = new Case(
+      {
+        caseCaption: 'A Caption',
+        docketEntries: [
+          {
+            docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+            documentType: 'The Document',
+            index: 1,
+            servedAt: '2019-03-01T21:40:46.415Z',
+          },
+        ],
+        docketNumber: '123-20',
+        docketNumberWithSuffix: '123-20L',
+        petitioners: MOCK_CASE.petitioners,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      { applicationContext },
+    );
+
+    await sendServedPartiesEmails({
+      applicationContext,
+      caseEntity,
+      docketEntryId: '0c745ceb-364a-4a1e-83b0-061f6f96a360',
+      servedParties: {
+        electronic: [
+          { email: '1@example.com', name: '1' },
+          { email: '2@example.com', name: '2' },
+        ],
+      },
+      skipEmailToIrs: true,
+    });
+
+    expect(
+      applicationContext.getDispatchers().sendBulkTemplatedEmail,
+    ).toBeCalled();
+    expect(
+      applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
+        .calls[0][0].destinations,
+    ).toMatchObject([{ email: '1@example.com' }, { email: '2@example.com' }]);
+  });
+
   it('should call sendBulkTemplatedEmail if there are electronic service parties on the case and not include the irs superuser if the case status is new', async () => {
     const caseEntity = new Case(
       {

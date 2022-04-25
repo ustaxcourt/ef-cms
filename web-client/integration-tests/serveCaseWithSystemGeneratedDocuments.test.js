@@ -29,6 +29,10 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
   });
 
   const ordersAndNoticesToGenerate = {
+    O: {
+      stateKey: 'orderDesignatingPlaceOfTrial',
+      title: 'Order Designating Place of Trial',
+    },
     OAP: {
       stateKey: 'orderForAmendedPetition',
       title: 'Order for Amended Petition',
