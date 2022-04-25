@@ -2,6 +2,7 @@ FROM cypress/base:14.19.0
 
 WORKDIR /home/app
 
+# TODO: find out what else this image doesn't need
 RUN sh -c 'echo "deb [check-valid-until=no] http://ftp.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list'
 RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/apt/sources.list
 RUN apt-get -o Acquire::Check-Valid-Until=false update
