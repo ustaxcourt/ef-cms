@@ -74,7 +74,11 @@ export const petitionsClerkSubmitsPaperCaseToIrs = cerebralTest => {
     //check that documents were served
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
     for (const docketEntry of docketEntries) {
-      if (!docketEntry.isMinuteEntry && !docketEntry.eventCode === 'NOTR') {
+      if (
+        !docketEntry.isMinuteEntry &&
+        docketEntry.eventCode !== 'NOTR' &&
+        !docketEntry.isDraft
+      ) {
         expect(docketEntry.servedAt).toBeDefined();
         expect(docketEntry.servedParties.length).toEqual(1);
         expect(docketEntry.servedParties[0].role).toEqual(ROLES.irsSuperuser);
