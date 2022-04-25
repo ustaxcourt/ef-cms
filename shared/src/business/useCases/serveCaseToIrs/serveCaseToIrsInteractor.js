@@ -471,16 +471,40 @@ const serveCaseToIrsInteractor = async (
     .updateDocketNumberRecord({ applicationContext })
     .validate();
 
-  if (caseEntity.noticeOfAttachments) {
-    const { noticeOfAttachmentsInNatureOfEvidence } =
-      SYSTEM_GENERATED_DOCUMENT_TYPES;
+  const {
+    noticeOfAttachmentsInNatureOfEvidence,
+    orderDesignatingPlaceOfTrial,
+  } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
+  if (caseEntity.noticeOfAttachments) {
     await applicationContext
       .getUseCaseHelpers()
       .addDocketEntryForSystemGeneratedOrder({
         applicationContext,
         caseEntity,
         systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+      });
+  }
+
+  if (caseEntity.orderDesignatingPlaceOfTrial) {
+    const petitionDocument = caseEntity.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    );
+    const content = replaceBracketed(
+      orderDesignatingPlaceOfTrial.content,
+      formatDateString(petitionDocument.filingDate, FORMATS.MONTH_DAY_YEAR),
+      caseEntity.procedureType.toLowerCase(),
+    );
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .addDocketEntryForSystemGeneratedOrder({
+        applicationContext,
+        caseEntity,
+        systemGeneratedDocument: {
+          ...orderDesignatingPlaceOfTrial,
+          content,
+        },
       });
   }
 
