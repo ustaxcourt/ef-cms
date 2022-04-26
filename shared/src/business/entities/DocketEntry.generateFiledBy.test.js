@@ -5,7 +5,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketEntry } = require('./DocketEntry');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
-describe('generateFiledBy', () => {
+describe('generateFiledBy (called in constructor)', () => {
   const mockDocketEntry = MOCK_DOCUMENTS[0];
   const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
   const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
@@ -110,11 +110,12 @@ describe('generateFiledBy', () => {
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
-  it("should set filedBy to the privatePractitioner's name when partyPrivatePractitioner is true", () => {
+  it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
     const docketEntry = new DocketEntry(
       {
         ...mockDocketEntry,
-        partyIrsPractitioner: false,
+        partyIrsPractitioner: true,
+        partyPrivatePractitioner: true,
         privatePractitioners: [
           {
             name: 'Test Practitioner',
@@ -124,15 +125,15 @@ describe('generateFiledBy', () => {
       },
       { applicationContext, petitioners },
     );
-
-    expect(docketEntry.filedBy).toEqual('Test Practitioner');
+    expect(docketEntry.filedBy).toEqual('Resp. & Test Practitioner');
   });
 
-  it('should set filedBy to "Resp." when partyIrsPractitioner is true', () => {
+  it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
     const docketEntry = new DocketEntry(
       {
         ...mockDocketEntry,
         partyIrsPractitioner: true,
+        partyPrivatePractitioner: true,
         privatePractitioners: [
           {
             name: 'Test Practitioner',
@@ -142,7 +143,6 @@ describe('generateFiledBy', () => {
       },
       { applicationContext, petitioners },
     );
-
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
@@ -166,7 +166,7 @@ describe('generateFiledBy', () => {
       { applicationContext, petitioners },
     );
     expect(docketEntry.filedBy).toEqual(
-      'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
+      'Resp. & Test Practitioner & Test Practitioner1',
     );
   });
 
@@ -189,7 +189,7 @@ describe('generateFiledBy', () => {
       },
       { applicationContext, petitioners },
     );
-    expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
+    expect(docketEntry.filedBy).toEqual('Resp. & Test Practitioner1');
   });
 
   it('should generate correct filedBy string for single petitioner in filers and partyIrsPractitioner in the constructor when values are present', () => {
@@ -230,7 +230,7 @@ describe('generateFiledBy', () => {
       },
       { applicationContext, petitioners },
     );
-    expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner');
+    expect(docketEntry.filedBy).toEqual('Resp. & Test Practitioner');
   });
 
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
@@ -271,7 +271,7 @@ describe('generateFiledBy', () => {
       { applicationContext, petitioners },
     );
     expect(docketEntry.filedBy).toEqual(
-      'Resp. & Counsel Test Practitioner & Counsel Test Practitioner1',
+      'Resp. & Test Practitioner & Test Practitioner1',
     );
   });
 
@@ -294,7 +294,7 @@ describe('generateFiledBy', () => {
       },
       { applicationContext, petitioners },
     );
-    expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner1');
+    expect(docketEntry.filedBy).toEqual('Resp. & Test Practitioner1');
   });
 
   it('should set filedBy to undefined when the docket entry is an auto-generated notice of contact change', () => {
@@ -339,7 +339,7 @@ describe('generateFiledBy', () => {
     );
 
     expect(docketEntry.filedBy).toEqual(
-      'Counsel Bob Practitioner & Petr. Bill Petitioner',
+      'Bob Practitioner & Petr. Bill Petitioner',
     );
   });
 });
