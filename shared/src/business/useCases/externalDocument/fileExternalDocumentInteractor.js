@@ -109,7 +109,6 @@ exports.fileExternalDocumentInteractor = async (
 
   for (let [docketEntryId, metadata, relationship] of documentsToAdd) {
     if (docketEntryId && metadata) {
-      console.log('baseMetadata', baseMetadata.practitioner);
       const docketEntryEntity = new DocketEntry(
         {
           ...baseMetadata,
@@ -122,10 +121,6 @@ exports.fileExternalDocumentInteractor = async (
         },
         { applicationContext, petitioners: caseEntity.petitioners },
       ).validate();
-
-      if (docketEntryEntity.eventCode === 'SOC') {
-        console.log('docketEntryEntity after adding it', docketEntryEntity);
-      }
 
       const highPriorityWorkItem =
         caseEntity.status === CASE_STATUS_TYPES.calendared;
@@ -156,11 +151,6 @@ exports.fileExternalDocumentInteractor = async (
 
       workItems.push(workItem);
       caseEntity.addDocketEntry(docketEntryEntity);
-
-      console.log(
-        'SOC off caseEntity',
-        caseEntity.docketEntries.find(d => d.eventCode === 'SOC'),
-      );
 
       const isAutoServed = docketEntryEntity.isAutoServed();
 
