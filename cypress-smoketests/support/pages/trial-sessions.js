@@ -2,7 +2,7 @@ const { faker } = require('@faker-js/faker');
 
 faker.seed(faker.datatype.number());
 
-exports.createTrialSession = testData => {
+exports.createTrialSession = (testData, overrides = {}) => {
   const createFutureDate = () => {
     const month = faker.datatype.number({ max: 12, min: 1 });
     const day = faker.datatype.number({ max: 28, min: 1 });
@@ -39,6 +39,10 @@ exports.createTrialSession = testData => {
 
   // session assignments
   cy.get('#judgeId').select(testData.judgeName || 'Foley');
+  cy.get(`#judgeId option:contains(${overrides.offboardedJudge})`).should(
+    'not.exist',
+  );
+
   cy.get('#chambers-phone-number').type(faker.phone.phoneNumber());
   cy.get('#trial-clerk').select(testData.trialClerk || 'Test trialclerk1');
   cy.get('#court-reporter').type(faker.name.findName());

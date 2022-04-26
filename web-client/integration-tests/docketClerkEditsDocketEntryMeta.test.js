@@ -60,12 +60,12 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkVerifiesDocketEntryMetaUpdatesMinuteEntry(cerebralTest);
   docketClerkNavigatesToEditDocketEntryMetaMinuteEntry(cerebralTest);
 
-  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 3);
-  docketClerkEditsDocketEntryMeta(cerebralTest, 3, {
+  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 4);
+  docketClerkEditsDocketEntryMeta(cerebralTest, 4, {
     filedBy: 'Resp. & Petr. Mona Schultz, Brianna Noble',
   });
-  docketClerkVerifiesDocketEntryMetaUpdates(cerebralTest, 3);
-  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 3);
+  docketClerkVerifiesDocketEntryMetaUpdates(cerebralTest, 4);
+  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 4);
   docketClerkVerifiesDocketEntryMetaUpdatesInEditForm(cerebralTest);
 
   docketClerkCreatesAnOrder(cerebralTest, {
@@ -76,10 +76,10 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
-  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(cerebralTest, 4);
-  docketClerkEditsDocketEntryMetaCourtIssued(cerebralTest, 4);
-  docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates(cerebralTest, 4);
-  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(cerebralTest, 4);
+  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(cerebralTest, 5);
+  docketClerkEditsDocketEntryMetaCourtIssued(cerebralTest, 5);
+  docketClerkVerifiesDocketEntryMetaCourtIssuedUpdates(cerebralTest, 5);
+  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(cerebralTest, 5);
   docketClerkVerifiesEditCourtIssuedNonstandardFields(cerebralTest);
 
   docketClerkCreatesAnOrder(cerebralTest, {
@@ -90,15 +90,15 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkSignsOrder(cerebralTest, 1);
   docketClerkAddsDocketEntryFromOrderOfDismissal(cerebralTest, 1);
   docketClerkServesDocument(cerebralTest, 1);
-  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(cerebralTest, 5);
+  docketClerkNavigatesToEditDocketEntryMetaCourtIssued(cerebralTest, 6);
   docketClerkVerifiesEditCourtIssuedNonstandardFieldsWithJudge(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerFilesApplicationToTakeDeposition(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 6);
-  docketClerkEditsDocketEntryMetaWithNewFreeText(cerebralTest, 6);
+  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 7);
+  docketClerkEditsDocketEntryMetaWithNewFreeText(cerebralTest, 7);
 
   irsSuperuserGetsReconciliationReport(cerebralTest);
 });

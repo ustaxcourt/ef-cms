@@ -82,12 +82,12 @@ describe('unauthed user sees stricken docket entry', () => {
     docketClerkSignsOrder(testClient, 0);
     docketClerkAddsDocketEntryFromOrder(testClient, 0);
     docketClerkServesDocument(testClient, 0);
-    docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(testClient, 4);
-    docketClerkStrikesDocketEntry(testClient, 4);
+    docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(testClient, 5);
+    docketClerkStrikesDocketEntry(testClient, 5);
   });
 
   describe('Unauthed user views stricken docket entry for order', () => {
-    unauthedUserSeesStrickenDocketEntry(cerebralTest, 4);
+    unauthedUserSeesStrickenDocketEntry(cerebralTest, 5);
     unauthedUserAttemptsToViewStrickenDocumentUnsuccessfully(cerebralTest);
   });
 
