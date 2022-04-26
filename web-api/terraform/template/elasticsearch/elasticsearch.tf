@@ -86,6 +86,5 @@ module "logs_alarms" {
 
 module "indices" {
   source = "./indices"
-  blue_elasticsearch_domain  = var.blue_elasticsearch_domain
-  green_elasticsearch_domain = var.green_elasticsearch_domain
+  elasticsearch_domain  = aws_elasticsearch_domain.efcms-search.endpoint
 }
