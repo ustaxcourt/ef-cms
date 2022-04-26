@@ -271,26 +271,26 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
       }),
     );
 
-    if (petitionersArray.length === 1) {
-      partiesArray.push(`Petr. ${petitionersArray[0]}`);
-    } else if (petitionersArray.length > 1) {
-      partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
-    }
+    // if (petitionersArray.length === 1) {
+    //   partiesArray.push(`Petr. ${petitionersArray[0]}`);
+    // } else if (petitionersArray.length > 1) {
+    //   partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
+    // }
 
-    const filedByArray = [];
-    if (partiesArray.length) {
-      filedByArray.push(partiesArray.join(' & '));
-    }
-    if (this.otherFilingParty) {
-      filedByArray.push(this.otherFilingParty);
-    }
+    // const filedByArray = [];
+    // if (partiesArray.length) {
+    //   filedByArray.push(partiesArray.join(' & '));
+    // }
+    // if (this.otherFilingParty) {
+    //   filedByArray.push(this.otherFilingParty);
+    // }
 
-    const filedByString = filedByArray.join(', ');
-    if (filedByString) {
-      this.filedBy = filedByString;
-    }
+    // const filedByString = filedByArray.join(', ');
+    // if (filedByString) {
+    //   this.filedBy = filedByString;
+    // }
 
-    console.log('this DocketEntry entity', this);
+    console.log('333this DocketEntry entity before', this.filedBy);
 
     if (
       this.privatePractitioners?.length &&
@@ -315,6 +315,8 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
         );
       }
     }
+
+    console.log('333this DocketEntry entity after', this.filedBy);
   }
 };
 /**
