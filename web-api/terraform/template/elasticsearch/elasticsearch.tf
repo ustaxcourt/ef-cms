@@ -83,3 +83,9 @@ module "logs_alarms" {
   create_sns_topic             = false
   sns_topic                    = var.alert_sns_topic_arn
 }
+
+module "indices" {
+  source = "./indices"
+  blue_elasticsearch_domain  = var.blue_elasticsearch_domain
+  green_elasticsearch_domain = var.green_elasticsearch_domain
+}

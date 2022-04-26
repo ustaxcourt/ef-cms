@@ -6,7 +6,7 @@ provider "elasticsearch" {
 }
 
 provider "elasticsearch" {
-    url = var.elasticsearch_endpoint_beta
+    url = var.url
     aws_access_key = "${AWS_ACCESS_KEY_ID}"
     aws_secret_key = "${AWS_SECRET_ACCESS_KEY}"
     alias = "elasticsearch_beta"

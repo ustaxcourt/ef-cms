@@ -21,3 +21,11 @@ variable "es_volume_size" {
 variable "alert_sns_topic_arn" {
   type = string
 }
+
+variable "blue_elasticsearch_domain" {
+  type = string
+}
+
+variable "green_elasticsearch_domain" {
+  type = string
+}
