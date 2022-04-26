@@ -259,7 +259,7 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
     Array.isArray(this.privatePractitioners) &&
       this.privatePractitioners.forEach(practitioner => {
         practitioner.partyPrivatePractitioner &&
-          partiesArray.push(`Counsel ${practitioner.name}`);
+          partiesArray.push(`${practitioner.name}`);
       });
 
     const petitionersArray = [];
@@ -291,18 +291,18 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
     }
 
     // todo: refactor this
-    if (
-      this.privatePractitioners?.length &&
-      Array.isArray(this.privatePractitioners)
-    ) {
-      const filedByPrivatePractitioner = this.privatePractitioners.find(
-        practitioner => practitioner.partyPrivatePractitioner,
-      );
+    // if (
+    //   this.privatePractitioners?.length &&
+    //   Array.isArray(this.privatePractitioners)
+    // ) {
+    //   const filedByPrivatePractitioner = this.privatePractitioners.find(
+    //     practitioner => practitioner.partyPrivatePractitioner,
+    //   );
 
-      if (filedByPrivatePractitioner) {
-        this.filedBy = filedByPrivatePractitioner.name;
-      }
-    }
+    //   if (filedByPrivatePractitioner) {
+    //     this.filedBy = filedByPrivatePractitioner.name;
+    //   }
+    // }
   }
 };
 /**
