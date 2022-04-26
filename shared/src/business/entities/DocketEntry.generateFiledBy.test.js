@@ -5,7 +5,7 @@ const { applicationContext } = require('../test/createTestApplicationContext');
 const { DocketEntry } = require('./DocketEntry');
 const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
 
-describe('generateFiledBy (called in constructor)', () => {
+describe('generateFiledBy', () => {
   const mockDocketEntry = MOCK_DOCUMENTS[0];
   const mockPrimaryId = '7111b30b-ad38-42c8-9db0-d938cb2cb16b';
   const mockSecondaryId = '55e5129c-ab54-4a9d-a8cf-5a4479ec08b6';
@@ -110,7 +110,7 @@ describe('generateFiledBy (called in constructor)', () => {
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
-  it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
+  it("should set filedBy to the privatePractitioner's name when partyPrivatePractitioner is true", () => {
     const docketEntry = new DocketEntry(
       {
         ...mockDocketEntry,
@@ -125,15 +125,15 @@ describe('generateFiledBy (called in constructor)', () => {
       },
       { applicationContext, petitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner');
   });
 
-  it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
+  it('should set filedBy to "Resp." when partyIrsPractitioner is true', () => {
     const docketEntry = new DocketEntry(
       {
         ...mockDocketEntry,
         partyIrsPractitioner: true,
-        partyPrivatePractitioner: true,
         privatePractitioners: [
           {
             name: 'Test Practitioner',
@@ -143,6 +143,7 @@ describe('generateFiledBy (called in constructor)', () => {
       },
       { applicationContext, petitioners },
     );
+
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
