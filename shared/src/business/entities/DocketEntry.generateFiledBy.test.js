@@ -114,8 +114,7 @@ describe('generateFiledBy', () => {
     const docketEntry = new DocketEntry(
       {
         ...mockDocketEntry,
-        partyIrsPractitioner: true,
-        partyPrivatePractitioner: true,
+        partyIrsPractitioner: false,
         privatePractitioners: [
           {
             name: 'Test Practitioner',
@@ -126,7 +125,7 @@ describe('generateFiledBy', () => {
       { applicationContext, petitioners },
     );
 
-    expect(docketEntry.filedBy).toEqual('Resp. & Counsel Test Practitioner');
+    expect(docketEntry.filedBy).toEqual('Test Practitioner');
   });
 
   it('should set filedBy to "Resp." when partyIrsPractitioner is true', () => {

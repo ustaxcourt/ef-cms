@@ -290,6 +290,7 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
       this.filedBy = filedByString;
     }
 
+    // todo: refactor this
     if (
       this.privatePractitioners?.length &&
       Array.isArray(this.privatePractitioners)
