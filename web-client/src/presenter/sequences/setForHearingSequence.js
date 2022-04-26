@@ -2,9 +2,11 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
+import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setForHearingAction } from '../actions/CaseDetail/setForHearingAction';
 import { setTrialSessionJudgeAction } from '../actions/setTrialSessionJudgeAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
@@ -38,6 +40,8 @@ export const setForHearingSequence = [
         setTrialSessionsAction,
         unsetWaitingForResponseAction,
         showSuccessAlert,
+        getConsolidatedCasesByCaseAction,
+        setConsolidatedCasesForCaseAction,
       ]),
     ],
   },
