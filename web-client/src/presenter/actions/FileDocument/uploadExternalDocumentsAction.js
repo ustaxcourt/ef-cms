@@ -20,10 +20,16 @@ export const uploadExternalDocumentsAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
 
+  let privatePractitioners = null;
+  if (form.practitioner) {
+    privatePractitioners = [...form.practitioner];
+  }
+
   const documentMetadata = {
     ...form,
     docketNumber,
     isFileAttached: true,
+    privatePractitioners,
   };
 
   const documentFiles = {
