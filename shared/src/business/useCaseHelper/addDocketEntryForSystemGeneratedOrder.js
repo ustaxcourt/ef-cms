@@ -63,7 +63,10 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   let combinedPdf = orderPdfData;
   if (
     systemGeneratedDocument.eventCode ===
-    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode ||
+    systemGeneratedDocument.eventCode ===
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
+        .eventCode
   ) {
     const { Body: amendedPetitionFormData } = await applicationContext
       .getStorageClient()

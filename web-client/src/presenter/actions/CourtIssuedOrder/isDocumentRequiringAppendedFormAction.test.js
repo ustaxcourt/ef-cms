@@ -38,6 +38,27 @@ describe('isDocumentRequiringAppendedFormAction', () => {
     expect(yesStub).toBeCalled();
   });
 
+  it('should call path.yes when the document to edit is an OAPF', async () => {
+    await runAction(isDocumentRequiringAppendedFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        documentToEdit: {
+          docketEntryId: 'document-id-123',
+          eventCode:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
+              .eventCode,
+        },
+        form: {
+          primaryDocumentFile: {},
+        },
+      },
+    });
+
+    expect(yesStub).toBeCalled();
+  });
+
   it('should call path.no when the document to edit is not an OAP', async () => {
     await runAction(isDocumentRequiringAppendedFormAction, {
       modules: {
