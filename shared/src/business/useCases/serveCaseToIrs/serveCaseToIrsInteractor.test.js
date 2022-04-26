@@ -18,12 +18,14 @@ const {
   PARTY_TYPES,
   PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   docketClerkUser,
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
 const {
+  formatDateString,
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
@@ -775,7 +777,37 @@ describe('serveCaseToIrsInteractor', () => {
         index: 2,
         isOnDocketRecord: true,
       },
+      {
+        documentTitle:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition
+            .documentTitle,
+        index: 3,
+        isOnDocketRecord: true,
+      },
     ]);
+  });
+
+  it('should serve the NOTR to parties on the case', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+    const MOCK_NOTR_ID = 'ea10afeb-f189-4657-a862-c607a091beaa';
+    applicationContext.getUniqueId.mockReturnValue(MOCK_NOTR_ID);
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0].docketEntryId,
+    ).toEqual(MOCK_NOTR_ID);
   });
 
   it('should call serveCaseDocument for every intially filed document', async () => {
@@ -831,6 +863,58 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(applicationContext.getDocumentGenerators().order).toHaveBeenCalled();
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+  });
+
+  it('should generate an order and upload it to s3 for orderDesignatingPlaceOfTrial', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderDesignatingPlaceOfTrial: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      documentTitle: 'Order',
+      documentType: 'Order',
+      eventCode: 'O',
+    });
+
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+
+    const petitionFiledDate = formatDateString(
+      MOCK_CASE.docketEntries[0].filingDate,
+      FORMATS.MONTH_DAY_YEAR,
+    );
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(petitionFiledDate),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(MOCK_CASE.procedureType.toLowerCase()),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining('TRIAL_LOCATION'),
+    });
   });
 
   it('should generate an order and upload it to s3 for orderToShowCause', async () => {
