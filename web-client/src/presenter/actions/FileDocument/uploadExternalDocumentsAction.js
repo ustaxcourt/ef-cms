@@ -1,6 +1,15 @@
 import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
+const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
+  return applicationContext
+    .getUseCases()
+    .addCoversheetInteractor(applicationContext, {
+      docketEntryId,
+      docketNumber,
+    });
+};
+
 /**
  * upload document to s3.
  *
@@ -22,8 +31,8 @@ export const uploadExternalDocumentsAction = async ({
 
   let privatePractitioners = null;
   let { filers } = form;
-  if (form.practitioner?.length) {
-    privatePractitioners = [...form.practitioner];
+  if (form.practitioner) {
+    privatePractitioners = [form.practitioner];
     filers = undefined;
   }
 
@@ -58,9 +67,9 @@ export const uploadExternalDocumentsAction = async ({
     });
   }
 
-  const progressFunctions = setupPercentDone(documentFiles, store);
-
   try {
+    const progressFunctions = setupPercentDone(documentFiles, store);
+
     const { caseDetail, docketEntryIdsAdded } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor(applicationContext, {
@@ -69,17 +78,8 @@ export const uploadExternalDocumentsAction = async ({
         progressFunctions,
       });
 
-    const addCoversheet = docketEntryId => {
-      return applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          docketEntryId,
-          docketNumber: caseDetail.docketNumber,
-        });
-    };
-
     for (let docketEntryId of docketEntryIdsAdded) {
-      await addCoversheet(docketEntryId);
+      await addCoversheet({ applicationContext, docketEntryId, docketNumber });
     }
 
     return path.success({
