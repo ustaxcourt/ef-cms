@@ -186,7 +186,7 @@ DocketEntry.prototype.init = function init(
  *
  * @returns {boolean} is the docket entry is pending when it is created
  */
-DocketEntry.prototype.isPendingOnCreation = rawDocketEntry => {
+DocketEntry.isPendingOnCreation = rawDocketEntry => {
   return TRACKED_DOCUMENT_TYPES_EVENT_CODES.includes(rawDocketEntry.eventCode);
 };
 
@@ -206,7 +206,7 @@ DocketEntry.prototype.setWorkItem = function (workItem) {
  * @param {DocketEntry} docketEntry the docket entry to check pending state
  * @returns {boolean} is the docket entry is pending or not
  */
-DocketEntry.prototype.isPending = function (docketEntry) {
+DocketEntry.isPending = function (docketEntry) {
   return (
     docketEntry.pending &&
     (isServed(docketEntry) ||
