@@ -38,15 +38,15 @@ export const submitCaseAssociationRequestAction = async ({
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
       item => item.allowImmediateAssociation,
     )
-      .map(item => item.documentType)
-      .includes(documentMetadata.documentType);
+      .map(item => item.eventCode)
+      .includes(documentMetadata.eventCode);
 
   const isDocumentWithPendingAssociation =
     PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
       item => !item.allowImmediateAssociation,
     )
-      .map(item => item.documentType)
-      .includes(documentMetadata.documentType);
+      .map(item => item.eventCode)
+      .includes(documentMetadata.eventCode);
 
   if (isDocumentWithImmediateAssociation) {
     await applicationContext

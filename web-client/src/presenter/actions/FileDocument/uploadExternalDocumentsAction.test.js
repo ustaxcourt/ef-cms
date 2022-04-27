@@ -1,4 +1,5 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
+import { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -144,7 +145,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
-  it('should set documentMetadata.privatePractitioners to form.practitioner and documentMetadata.filers to undefined when form.practitioner has at least one entry', async () => {
+  it('should set documentMetadata.privatePractitioners to form.practitioner and unset documentMetadata.filers when the document to upload is a practitioner association request', async () => {
     const mockPrimaryDocumentFile = { data: 'something' };
     const mockPrivatePractitioner = {
       name: 'Simone Baulk',
@@ -167,6 +168,7 @@ describe('uploadExternalDocumentsAction', () => {
         caseDetail: MOCK_CASE,
         form: {
           attachments: true,
+          eventCode: PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP[0].eventCode,
           filers: [{}, {}],
           practitioner: [mockPrivatePractitioner],
           primaryDocumentFile: mockPrimaryDocumentFile,
