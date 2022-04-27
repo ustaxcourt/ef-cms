@@ -118,16 +118,13 @@ describe('Case Consolidation Journey', () => {
   overrides = {
     ...overrides,
     caseCaption: 'Mona Schultz, Petitioner',
-    caseStatus: 'General Docket - At Issue (Ready for Trial)',
-    docketNumberSuffix: 'S',
+    docketNumberSuffix: 'L',
   };
 
-  console.log('caseDetail*** ', caseDetail);
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkBlocksCase(cerebralTest, trialLocation, {});
+  petitionsClerkBlocksCase(cerebralTest, trialLocation, overrides);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-
   it('Docket clerk verifies consolidates cases remain in state after blocking a case', () => {
     expect(cerebralTest.getState('caseDetail')).toHaveProperty(
       'consolidatedCases',
