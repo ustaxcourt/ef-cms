@@ -115,9 +115,9 @@ import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACogn
 import { wasLoginUsingTokenInUrl } from './utilities/wasLoginUsingTokenInUrl';
 import { withAppContextDecorator } from './withAppContext';
 
+import { createRoot } from 'react-dom/client';
 import App from 'cerebral';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 /**
  * Instantiates the Cerebral app with React
@@ -314,7 +314,10 @@ const app = {
     initializeSocketProvider(cerebralApp, applicationContext);
     router.initialize(cerebralApp, route);
 
-    ReactDOM.render(
+    const container = window.document.querySelector('#app');
+    const root = createRoot(container);
+
+    root.render(
       <Container app={cerebralApp}>
         {!process.env.CI && (
           <>
@@ -327,7 +330,6 @@ const app = {
 
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      window.document.querySelector('#app'),
     );
   },
 };
