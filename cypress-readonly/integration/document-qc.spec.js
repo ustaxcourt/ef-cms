@@ -24,6 +24,10 @@ describe('Document QC UI Smoketests', () => {
     it("should fetch the user's inbox upon navigation", () => {
       login(token);
 
+      cy.get('.button-switch-box')
+        .contains('Switch to Section Messages')
+        .click();
+
       cy.intercept({
         hostname: `api-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}`,
         method: 'GET',
