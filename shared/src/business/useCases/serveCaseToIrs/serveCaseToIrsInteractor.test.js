@@ -705,7 +705,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toBeDefined();
   });
 
-  it('should set isOnDocketRecord true for all intially filed documents except for the petition and stin file', async () => {
+  it('should set isOnDocketRecord true for all initially filed documents except for the petition and stin file', async () => {
     const mockCaseWithoutServedDocketEntries = {
       ...MOCK_CASE,
       docketEntries: [
@@ -810,7 +810,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toEqual(MOCK_NOTR_ID);
   });
 
-  it('should call serveCaseDocument for every intially filed document', async () => {
+  it('should call serveCaseDocument for every initially filed document', async () => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
@@ -887,8 +887,11 @@ describe('serveCaseToIrsInteractor', () => {
 
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
 
-    const petitionFiledDate = formatDateString(
-      MOCK_CASE.docketEntries[0].filingDate,
+    const petitionFilingDate = mockCase.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ).filingDate;
+    const expectedFilingDate = formatDateString(
+      petitionFilingDate,
       FORMATS.MONTH_DAY_YEAR,
     );
 
@@ -897,7 +900,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(petitionFiledDate),
+      content: expect.stringContaining(expectedFilingDate),
     });
 
     expect(
@@ -931,11 +934,10 @@ describe('serveCaseToIrsInteractor', () => {
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
-  it('should replace brackets in orderToShowCause content with a filing date of today, the served date, and todayPlus60', async () => {
+  it('should replace brackets in orderToShowCause content with a filing date and todayPlus60', async () => {
     mockCase = {
       ...MOCK_CASE,
       orderToShowCause: true,
-      receivedAt: '2018-03-01T21:40:46.415Z',
     };
 
     await serveCaseToIrsInteractor(applicationContext, {
@@ -950,8 +952,11 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const receivedDate = formatDateString(
-      '2018-03-01T21:40:46.415Z',
+    const petitionFilingDate = mockCase.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ).filingDate;
+    const expectedFilingDate = formatDateString(
+      petitionFilingDate,
       FORMATS.MONTH_DAY_YEAR,
     );
 
@@ -965,7 +970,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(receivedDate),
+      content: expect.stringContaining(expectedFilingDate),
     });
 
     expect(
@@ -977,11 +982,10 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
-  it('should replace brackets in orderForAmendedPetition content with the served date of the petition, and today plus sixty twice', async () => {
+  it('should replace brackets in orderForAmendedPetition content with the filed date of the petition, and today plus sixty twice', async () => {
     mockCase = {
       ...MOCK_CASE,
       orderForAmendedPetition: true,
-      receivedAt: '2018-03-01T21:40:46.415Z',
     };
 
     await serveCaseToIrsInteractor(applicationContext, {
@@ -996,8 +1000,11 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const receivedDate = formatDateString(
-      '2018-03-01T21:40:46.415Z',
+    const petitionFilingDate = mockCase.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ).filingDate;
+    const expectedFilingDate = formatDateString(
+      petitionFilingDate,
       FORMATS.MONTH_DAY_YEAR,
     );
 
@@ -1011,7 +1018,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${receivedDate}, a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper amended petition. If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.`,
+      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${expectedFilingDate}, a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper amended petition. If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.`,
     });
   });
 
