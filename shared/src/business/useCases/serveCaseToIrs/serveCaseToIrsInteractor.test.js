@@ -1015,11 +1015,10 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
-  it('should replace brackets in orderForAmendedPetitionAndFilingFee content with the served date of the petition, and today plus sixty twice', async () => {
+  it('should replace brackets in orderForAmendedPetitionAndFilingFee content with the filing date of the petition, and today plus sixty twice', async () => {
     mockCase = {
       ...MOCK_CASE,
       orderForAmendedPetitionAndFilingFee: true,
-      receivedAt: '2018-03-01T21:40:46.415Z',
     };
 
     await serveCaseToIrsInteractor(applicationContext, {
@@ -1034,8 +1033,11 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const receivedDate = formatDateString(
-      '2018-03-01T21:40:46.415Z',
+    const petitionFilingDate = mockCase.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ).filingDate;
+    const expectedFilingDate = formatDateString(
+      petitionFilingDate,
       FORMATS.MONTH_DAY_YEAR,
     );
 
@@ -1049,7 +1051,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${receivedDate}, a document as the petition of the above-named
+      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${expectedFilingDate}, a document as the petition of the above-named
       petitioner(s) at the docket number indicated. That docket number MUST appear on all documents
       and papers subsequently sent to the Court for filing or otherwise. The document did not comply with
       the Rules of the Court as to the form and content of a proper petition. The filing fee was not paid.<br/>
