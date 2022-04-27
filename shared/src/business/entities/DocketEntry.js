@@ -180,19 +180,15 @@ DocketEntry.prototype.init = function init(
   this.generateFiledBy(petitioners);
 };
 
-DocketEntry.isPendingOnCreation = rawDocketEntry => {
+/**
+ * Determines if the docket entry is in the list of document types that
+ * are marked as pending as soon as they are created.
+ *
+ * @returns {boolean} is the docket entry is pending when it is created
+ */
+DocketEntry.prototype.isPendingOnCreation = rawDocketEntry => {
   return TRACKED_DOCUMENT_TYPES_EVENT_CODES.includes(rawDocketEntry.eventCode);
 };
-
-joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES, {
-  filedBy: [
-    {
-      contains: 'must be less than or equal to',
-      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
-    },
-    'Enter a filed by',
-  ],
-});
 
 /**
  *
@@ -207,9 +203,10 @@ DocketEntry.prototype.setWorkItem = function (workItem) {
  * add to pending report checkbox.  This is a computed that uses that along with
  * eventCodes and servedAt to determine if the docket entry is pending.
  *
+ * @param {DocketEntry} docketEntry the docket entry to check pending state
  * @returns {boolean} is the docket entry is pending or not
  */
-DocketEntry.isPending = function (docketEntry) {
+DocketEntry.prototype.isPending = function (docketEntry) {
   return (
     docketEntry.pending &&
     (isServed(docketEntry) ||
@@ -227,6 +224,12 @@ DocketEntry.prototype.archive = function () {
   this.archived = true;
 };
 
+/**
+ * Mark a docket entry as served
+ *
+ * @param {Array} servedParties the list of parties to serve the docket entry on
+ * @returns {DocketEntry} the docket entry that was marked as served
+ */
 DocketEntry.prototype.setAsServed = function (servedParties = null) {
   this.servedAt = createISODateString();
   this.draftOrderState = null;
@@ -242,7 +245,8 @@ DocketEntry.prototype.setAsServed = function (servedParties = null) {
  * generates the filedBy string from parties selected for the document
 and contact info from the raw docket entry
  *
- * @param {object} docketEntry the docket entry
+ * @param {Array} petitioners the petitioners on the case the docket entry belongs
+ * to
  */
 DocketEntry.prototype.generateFiledBy = function (petitioners) {
   const isNoticeOfContactChange =
@@ -255,7 +259,6 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
     let partiesArray = [];
     this.partyIrsPractitioner && partiesArray.push('Resp.');
 
-    //todo: is this dead code?
     Array.isArray(this.privatePractitioners) &&
       this.privatePractitioners.forEach(practitioner => {
         practitioner.partyPrivatePractitioner &&
@@ -289,22 +292,9 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
     if (filedByString) {
       this.filedBy = filedByString;
     }
-
-    // todo: refactor this
-    // if (
-    //   this.privatePractitioners?.length &&
-    //   Array.isArray(this.privatePractitioners)
-    // ) {
-    //   const filedByPrivatePractitioner = this.privatePractitioners.find(
-    //     practitioner => practitioner.partyPrivatePractitioner,
-    //   );
-
-    //   if (filedByPrivatePractitioner) {
-    //     this.filedBy = filedByPrivatePractitioner.name;
-    //   }
-    // }
   }
 };
+
 /**
  * attaches a signedAt date to the document
  *
@@ -327,6 +317,9 @@ DocketEntry.prototype.setQCed = function (user) {
   this.qcAt = createISODateString();
 };
 
+/**
+ * Unsets signature related fields on the docket entry
+ */
 DocketEntry.prototype.unsignDocument = function () {
   this.signedAt = null;
   this.signedJudgeName = null;
@@ -334,10 +327,20 @@ DocketEntry.prototype.unsignDocument = function () {
   this.signedByUserId = null;
 };
 
+/**
+ * Sets the docket entry's processing status as complete
+ */
 DocketEntry.prototype.setAsProcessingStatusAsCompleted = function () {
   this.processingStatus = DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
 };
 
+/**
+ * Determines whether or not the docket entry is of a document
+ * type that is automatically served
+ *
+ * @returns {boolean} true if the docket entry should be automatically served,
+ *  otherwise false
+ */
 DocketEntry.prototype.isAutoServed = function () {
   const isExternalDocumentType = EXTERNAL_DOCUMENT_TYPES.includes(
     this.documentType,
@@ -414,7 +417,6 @@ DocketEntry.prototype.sealEntry = function ({ sealedTo }) {
 /**
  * Unseal this docket entry
  *
- * @param {object} obj param
  */
 DocketEntry.prototype.unsealEntry = function () {
   delete this.sealedTo;
@@ -425,6 +427,7 @@ DocketEntry.prototype.unsealEntry = function () {
 /**
  * Determines if the docket entry has been served
  *
+ * @param {object} rawDocketEntry Docket entry object
  * @returns {Boolean} true if the docket entry has been served, false otherwise
  */
 const isServed = function (rawDocketEntry) {
@@ -434,6 +437,7 @@ const isServed = function (rawDocketEntry) {
 /**
  * Determines the servedPartiesCode based on the given servedParties
  *
+ * @param {Array} servedParties List of parties that have been served
  * @returns {String} served parties code
  */
 const getServedPartiesCode = servedParties => {
@@ -450,6 +454,16 @@ const getServedPartiesCode = servedParties => {
   }
   return servedPartiesCode;
 };
+
+joiValidationDecorator(DocketEntry, DOCKET_ENTRY_VALIDATION_RULES, {
+  filedBy: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 500 characters. Enter 500 or fewer characters.',
+    },
+    'Enter a filed by',
+  ],
+});
 
 module.exports = {
   DocketEntry: validEntityDecorator(DocketEntry),
