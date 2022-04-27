@@ -601,31 +601,43 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     documentType: 'Entry of Appearance',
     documentTitle: 'Entry of Appearance',
     eventCode: 'EA',
+    allowImmediateAssociation: true,
   },
   {
     documentType: 'Limited Entry of Appearance',
     documentTitle: 'Limited Entry of Appearance',
     eventCode: 'LEA',
+    allowImmediateAssociation: true,
   },
   {
     documentType: 'Substitution of Counsel',
     documentTitle: 'Substitution of Counsel',
     eventCode: 'SOC',
+    allowImmediateAssociation: true,
   },
   {
     documentType: 'Notice of Intervention',
     documentTitle: 'Notice of Intervention',
     eventCode: 'NOI',
+    allowImmediateAssociation: false,
+  },
+  {
+    documentType: 'Motion to Substitute Parties and Change Caption',
+    documentTitle: 'Motion to Substitute Parties and Change Caption',
+    eventCode: 'M107',
+    allowImmediateAssociation: false,
   },
   {
     documentType: 'Notice of Election to Participate',
     documentTitle: 'Notice of Election to Participate',
     eventCode: 'NOEP',
+    allowImmediateAssociation: false,
   },
   {
     documentType: 'Notice of Election to Intervene',
     documentTitle: 'Notice of Election to Intervene',
     eventCode: 'NOEI',
+    allowImmediateAssociation: false,
   },
 ];
 
