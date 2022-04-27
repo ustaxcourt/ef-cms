@@ -31,8 +31,8 @@ export const uploadExternalDocumentsAction = async ({
 
   let privatePractitioners = null;
   let { filers } = form;
-  if (form.practitioner) {
-    privatePractitioners = [form.practitioner];
+  if (form.practitioner?.length) {
+    privatePractitioners = form.practitioner;
     filers = undefined;
   }
 
