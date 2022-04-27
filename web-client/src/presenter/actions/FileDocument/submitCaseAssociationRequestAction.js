@@ -13,6 +13,9 @@ export const submitCaseAssociationRequestAction = async ({
   get,
   props,
 }) => {
+  const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
+    applicationContext.getConstants();
+
   const { primaryDocumentId } = props.documentsFiled;
   const { docketNumber } = get(state.caseDetail);
   const user = applicationContext.getCurrentUser();
@@ -31,27 +34,28 @@ export const submitCaseAssociationRequestAction = async ({
     ],
   };
 
-  const documentWithImmediateAssociation = [
-    'Entry of Appearance',
-    'Limited Entry of Appearance',
-    'Substitution of Counsel',
-  ].includes(documentMetadata.documentType);
+  const isDocumentWithImmediateAssociation =
+    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
+      item => item.allowImmediateAssociation,
+    )
+      .map(item => item.documentType)
+      .includes(documentMetadata.documentType);
 
-  const documentWithPendingAssociation = [
-    'Motion to Substitute Parties and Change Caption',
-    'Notice of Intervention',
-    'Notice of Election to Participate',
-    'Notice of Election to Intervene',
-  ].includes(documentMetadata.documentType);
+  const isDocumentWithPendingAssociation =
+    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
+      item => !item.allowImmediateAssociation,
+    )
+      .map(item => item.documentType)
+      .includes(documentMetadata.documentType);
 
-  if (documentWithImmediateAssociation) {
+  if (isDocumentWithImmediateAssociation) {
     await applicationContext
       .getUseCases()
       .submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber,
         filers: documentMetadata.filers,
       });
-  } else if (documentWithPendingAssociation) {
+  } else if (isDocumentWithPendingAssociation) {
     await applicationContext
       .getUseCases()
       .submitPendingCaseAssociationRequestInteractor(applicationContext, {
@@ -61,8 +65,8 @@ export const submitCaseAssociationRequestAction = async ({
 
   return {
     docketNumber,
-    documentWithImmediateAssociation,
-    documentWithPendingAssociation,
+    documentWithImmediateAssociation: isDocumentWithImmediateAssociation,
+    documentWithPendingAssociation: isDocumentWithPendingAssociation,
     documentsFiled: documentMetadata,
   };
 };
