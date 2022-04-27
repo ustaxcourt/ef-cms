@@ -26,7 +26,7 @@ JUDGE_USER=$(aws dynamodb get-item --region ${REGION} --table-name "efcms-${ENV}
 --key '{"pk":{"S":"user|'"${USER_ID}"'"},"sk":{"S":"user|'"${USER_ID}"'"}}' \
 | jq -r ".Item" \
 )
-echo "---Retrieved Judge User: ${JUDGE_USER}"
+echo "Retrieved Judge User: ${JUDGE_USER}"
 if [ -z "${JUDGE_USER}" ]; then
   echo "Could not find judge user with userId: ${USER_ID} on ${SOURCE_TABLE} table."
   exit 1
@@ -42,5 +42,5 @@ UPDATE_OUTPUT=$(aws dynamodb update-item \
     --region ${REGION} \
 )
 
-echo "---Updated attributes of user ${USER_ID}: ${UPDATE_OUTPUT} on ${SOURCE_TABLE} table."
+echo "Updated attributes of user ${USER_ID}: ${UPDATE_OUTPUT} on ${SOURCE_TABLE} table."
 
