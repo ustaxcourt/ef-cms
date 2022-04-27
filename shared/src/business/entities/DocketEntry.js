@@ -262,7 +262,7 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
     Array.isArray(this.privatePractitioners) &&
       this.privatePractitioners.forEach(practitioner => {
         practitioner.partyPrivatePractitioner &&
-          partiesArray.push(`${practitioner.name}`);
+          partiesArray.push(practitioner.name);
       });
 
     const petitionersArray = [];
