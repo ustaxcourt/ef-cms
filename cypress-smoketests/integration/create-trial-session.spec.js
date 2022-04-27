@@ -158,8 +158,11 @@ describe('Petitions Clerk', () => {
       login(petitionsClerkToken);
     });
 
-    it('creates two trial sessions', () => {
-      createTrialSession(testData);
+    it('creates two trial sessions with existing judges', () => {
+      const overrides = {
+        offboardedJudge: 'Guy',
+      };
+      createTrialSession(testData, overrides);
       createTrialSession(testData);
     });
 
