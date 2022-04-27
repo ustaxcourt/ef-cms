@@ -86,5 +86,5 @@ module "logs_alarms" {
 
 module "indices" {
   source = "./indices"
-  elasticsearch_domain  = aws_elasticsearch_domain.efcms-search.endpoint
+  elasticsearch_domain  = aws_elasticsearch_domain.efcms-search
 }

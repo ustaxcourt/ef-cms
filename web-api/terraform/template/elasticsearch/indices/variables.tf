@@ -1,3 +1,3 @@
 variable "elasticsearch_domain" {
-  type = string
+  type = any
 }
