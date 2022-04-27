@@ -5,6 +5,8 @@ import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketCle
 import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
+import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
 
 const cerebralTest = setupTest();
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
@@ -78,8 +80,46 @@ describe('Case Consolidation Journey', () => {
 
   // Mark a case as 'high priority' with a case that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkPrioritizesCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+
+  it('Docket clerk verifies consolidates cases remain in state after marking a case as high priority', () => {
+    expect(cerebralTest.getState('caseDetail')).toHaveProperty(
+      'consolidatedCases',
+    );
+    expect(
+      cerebralTest.getState('caseDetail.consolidatedCases').length,
+    ).toEqual(2);
+  });
 
   // Unmark a case as 'high priority' case with a case that's consolidated
+  // test that consolidatedCases are STILL set on caseDetail
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkUnprioritizesCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+
+  it('Docket clerk verifies consolidates cases remain in state aafter unmarking a case as high priority', () => {
+    expect(cerebralTest.getState('caseDetail')).toHaveProperty(
+      'consolidatedCases',
+    );
+    expect(
+      cerebralTest.getState('caseDetail.consolidatedCases').length,
+    ).toEqual(2);
+  });
+
+  // Block a case that's consolidated
+  // test that consolidatedCases are STILL set on caseDetail
+
+  // Unblock a case that's consolidated
+  // test that consolidatedCases are STILL set on caseDetail
+
+  // Add a case to trial that's consolidated
+  // test that consolidatedCases are STILL set on caseDetail
+
+  // Remove a case from trial that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
 
   // TODO: Check for other functions that need to be tested.
