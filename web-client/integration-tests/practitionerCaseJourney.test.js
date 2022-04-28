@@ -97,7 +97,7 @@ describe('Practitioner requests access to case', () => {
   practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
   loginAs(cerebralTest, 'privatePractitioner4@example.com');
-  it('Practitioner requests access to case using "Motion to Substitute Parties and Change Caption" document type', async () => {
+  it('Practitioner requests access to case using "Notice of Election to Intervene" document type', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -120,17 +120,17 @@ describe('Practitioner requests access to case', () => {
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentType',
-      value: 'Motion to Substitute Parties and Change Caption',
+      value: 'Notice of Election to Intervene',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'documentTitleTemplate',
-      value: 'Motion to Substitute Parties and Change Caption',
+      value: 'Notice of Election to Intervene',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
       key: 'eventCode',
-      value: 'M107',
+      value: 'NOEI',
     });
 
     await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
@@ -165,7 +165,7 @@ describe('Practitioner requests access to case', () => {
     await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
 
     expect(cerebralTest.getState('form.documentTitle')).toEqual(
-      'Motion to Substitute Parties and Change Caption',
+      'Notice of Election to Intervene',
     );
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -174,7 +174,7 @@ describe('Practitioner requests access to case', () => {
 
     const createdDocketEntry = cerebralTest
       .getState('caseDetail.docketEntries')
-      .find(entry => entry.eventCode === 'M107');
+      .find(entry => entry.eventCode === 'NOEI');
 
     expect(createdDocketEntry.filedBy).toEqual('Alden Rivas');
   });
