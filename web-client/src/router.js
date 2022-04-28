@@ -79,12 +79,29 @@ const ifHasAccess = (
 };
 
 const router = {
-  initialize: (app, registerRoute) => {
+  initialize: (app, originalRegisterRoute) => {
     setPageTitle('U.S. Tax Court');
     // expose route function on window for use with cypress
     // eslint-disable-next-line no-underscore-dangle
     window.__cy_route = path => route(path || '/');
     const { ROLE_PERMISSIONS } = app.getState('constants');
+
+    /*
+    This is a decorated added to fix race conditions in our UI related to changing routes.
+    We use riot-router and it works by using an event listener to the window object when
+    the push state occurs, which can cause two of our routes to run in parallel.
+    This causes our UI to get into bad states where the url in the browser says /case-detail, but
+    we are actually viewing the trial-session page.  These race conditions also cause our integration tests
+    and smoke tests to become very flaky.
+    */
+    let processQueue = Promise.resolve();
+    const registerRoute = (path, cb) => {
+      originalRegisterRoute(path, function () {
+        processQueue = processQueue.then(() => {
+          return cb(...arguments);
+        });
+      });
+    };
 
     registerRoute(
       '/',
