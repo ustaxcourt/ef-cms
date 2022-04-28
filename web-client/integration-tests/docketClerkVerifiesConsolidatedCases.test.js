@@ -4,9 +4,11 @@ import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { docketClerkVerifiesConsolidatesCases } from './journey/docketClerkVerifiesConsolidatesCases';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
+import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
 import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
 
 const cerebralTest = setupTest();
@@ -44,6 +46,11 @@ describe('Case Consolidation Journey', () => {
 
   it('login as a petitioner and create the case to consolidate with', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
+    /*
+  TODO:
+  1. refactor caseDetail to use cerebralTest
+  */
+
     caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
@@ -55,31 +62,21 @@ describe('Case Consolidation Journey', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest);
 
+  /*
+  TODO:
+  1. refactor caseDetail to use cerebralTest
+  */
+
   // seal case with a case that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
-
-  it('Docket clerk verifies consolidates cases remain in state after sealing case', () => {
-    expect(cerebralTest.getState('caseDetail')).toHaveProperty(
-      'consolidatedCases',
-    );
-    expect(
-      cerebralTest.getState('caseDetail.consolidatedCases').length,
-    ).toEqual(2);
-  });
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   // Unseal case with a case that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
   docketClerkUnsealsCase(cerebralTest);
-  it('Docket clerk verifies consolidates cases remain in state after unsealing case', () => {
-    expect(cerebralTest.getState('caseDetail')).toHaveProperty(
-      'consolidatedCases',
-    );
-    expect(
-      cerebralTest.getState('caseDetail.consolidatedCases').length,
-    ).toEqual(2);
-  });
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   // Mark a case as 'high priority' with a case that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
@@ -87,15 +84,7 @@ describe('Case Consolidation Journey', () => {
   petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-
-  it('Docket clerk verifies consolidates cases remain in state after marking a case as high priority', () => {
-    expect(cerebralTest.getState('caseDetail')).toHaveProperty(
-      'consolidatedCases',
-    );
-    expect(
-      cerebralTest.getState('caseDetail.consolidatedCases').length,
-    ).toEqual(2);
-  });
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   // Unmark a case as 'high priority' case with a case that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
@@ -103,15 +92,7 @@ describe('Case Consolidation Journey', () => {
   petitionsClerkUnprioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-
-  it('Docket clerk verifies consolidates cases remain in state after unmarking a case as high priority', () => {
-    expect(cerebralTest.getState('caseDetail')).toHaveProperty(
-      'consolidatedCases',
-    );
-    expect(
-      cerebralTest.getState('caseDetail.consolidatedCases').length,
-    ).toEqual(2);
-  });
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   // Block a case that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
@@ -125,23 +106,32 @@ describe('Case Consolidation Journey', () => {
   petitionsClerkBlocksCase(cerebralTest, trialLocation, overrides);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  it('Docket clerk verifies consolidates cases remain in state after blocking a case', () => {
-    expect(cerebralTest.getState('caseDetail')).toHaveProperty(
-      'consolidatedCases',
-    );
-    expect(
-      cerebralTest.getState('caseDetail.consolidatedCases').length,
-    ).toEqual(2);
-  });
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   // Unblock a case that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
 
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkUnblocksCase(cerebralTest, trialLocation);
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
+
   // Add a case to trial that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
 
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkUnblocksCase(cerebralTest, trialLocation);
+
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  //docketClerkVerifiesConsolidatesCases(cerebralTest);
+
   // Remove a case from trial that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
+
+  // loginAs(cerebralTest, 'petitionsclerk@example.com');
+  // petitionsClerkUnblocksCase(cerebralTest, trialLocation);
+
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  //   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   // TODO: Check for other functions that need to be tested.
 });
