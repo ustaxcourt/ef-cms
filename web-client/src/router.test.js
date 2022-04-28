@@ -109,24 +109,24 @@ describe('router', () => {
     });
 
     describe('fires only upon change of location', () => {
-      it('does not fire for "/" because that is already the window location', () => {
+      it('does not fire for "/" because that is already the window location', async () => {
         expect(window.location.pathname).toBe('/'); // the default route
-        route('/');
+        await route('/');
         expect(window.document.title).toEqual(
           expect.stringMatching('Dashboard'),
         );
         expect(getSequenceMock).not.toHaveBeenCalled();
       });
 
-      it('tries to navigate to /does-not-exist', () => {
-        route('/does-not-exist');
+      it('tries to navigate to /does-not-exist', async () => {
+        await route('/does-not-exist');
         expect(window.document.title).toEqual(expect.stringMatching('Error'));
         expect(getSequenceMock).toBeCalledWith('notFoundErrorSequence');
       });
 
-      it('successfully navigates to / if that is not the current url', () => {
+      it('successfully navigates to / if that is not the current url', async () => {
         expect(window.location.pathname).not.toBe('/');
-        route('/');
+        await route('/');
         expect(window.document.title).toEqual(
           expect.stringMatching('Dashboard'),
         );
@@ -134,8 +134,8 @@ describe('router', () => {
       });
     });
 
-    it('/case-detail/*', () => {
-      route('/case-detail/123-45');
+    it('/case-detail/*', async () => {
+      await route('/case-detail/123-45');
       expect(window.document.title).toEqual(
         expect.stringMatching('Docket 123-45'),
       );
@@ -143,8 +143,8 @@ describe('router', () => {
       expect(sequenceMock).toBeCalledWith({ docketNumber: '123-45' });
     });
 
-    it('/case-detail/*?openModal=*', () => {
-      route('/case-detail/123-45?openModal=MyModal');
+    it('/case-detail/*?openModal=*', async () => {
+      await route('/case-detail/123-45?openModal=MyModal');
       expect(window.document.title).toEqual(
         expect.stringMatching('Docket 123-45'),
       );
@@ -155,12 +155,12 @@ describe('router', () => {
       });
     });
 
-    it('/case-detail/*/documents/*/add-court-issued-docket-entry/*', () => {
+    it('/case-detail/*/documents/*/add-court-issued-docket-entry/*', async () => {
       const docketNumber = '111-44';
       const docketEntryId = '000-001';
       const parentMessageId = '222-555';
 
-      route(
+      await route(
         `/case-detail/${docketNumber}/documents/${docketEntryId}/add-court-issued-docket-entry/${parentMessageId}`,
       );
       expect(window.document.title).toEqual(
