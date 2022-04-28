@@ -1,4 +1,6 @@
+import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHearing';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
+import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
@@ -116,6 +118,11 @@ describe('Case Consolidation Journey', () => {
 
   // Add a case to trial that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
+  docketClerkCreatesATrialSession(cerebralTest, {
+    sessionType: 'Motion/Hearing',
+    trialLocation,
+  });
+  docketClerkAddsCaseToHearing(cerebralTest, 'Low blast radius', 0);
 
   // Remove a case from trial that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
