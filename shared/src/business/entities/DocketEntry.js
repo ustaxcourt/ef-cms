@@ -258,10 +258,10 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
   if (shouldGenerateFiledBy) {
     let partiesArray = [];
     const privatePractitionerIsFiling = this.privatePractitioners?.some(
-      practitioner => practitioner.privatePractitionerIsFiling,
+      practitioner => practitioner.partyPrivatePractitioner,
     );
 
-    console.log(this.privatePractitioners, '....');
+    console.log(privatePractitionerIsFiling, this.privatePractitioners, '....');
 
     if (privatePractitionerIsFiling) {
       Array.isArray(this.privatePractitioners) &&
@@ -293,19 +293,19 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
       } else if (petitionersArray.length > 1) {
         partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
       }
+    }
 
-      const filedByArray = [];
-      if (partiesArray.length) {
-        filedByArray.push(partiesArray.join(' & '));
-      }
-      if (this.otherFilingParty) {
-        filedByArray.push(this.otherFilingParty);
-      }
+    const filedByArray = [];
+    if (partiesArray.length) {
+      filedByArray.push(partiesArray.join(' & '));
+    }
+    if (this.otherFilingParty) {
+      filedByArray.push(this.otherFilingParty);
+    }
 
-      const filedByString = filedByArray.join(', ');
-      if (filedByString) {
-        this.filedBy = filedByString;
-      }
+    const filedByString = filedByArray.join(', ');
+    if (filedByString) {
+      this.filedBy = filedByString;
     }
   }
 };

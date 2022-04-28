@@ -110,24 +110,6 @@ describe('generateFiledBy (called in constructor)', () => {
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
-  it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...mockDocketEntry,
-        partyIrsPractitioner: true,
-        partyPrivatePractitioner: true,
-        privatePractitioners: [
-          {
-            name: 'Test Practitioner',
-            partyPrivatePractitioner: true,
-          },
-        ],
-      },
-      { applicationContext, petitioners },
-    );
-    expect(docketEntry.filedBy).toEqual('Resp. & Test Practitioner');
-  });
-
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false', () => {
     const docketEntry = new DocketEntry(
       {
@@ -343,7 +325,7 @@ describe('generateFiledBy (called in constructor)', () => {
     );
   });
 
-  it.only('should ignore filers array when the filer is a private practitioner', () => {
+  it('should ignore filers array when the filer is a private practitioner', () => {
     const docketEntry = new DocketEntry(
       {
         ...mockDocketEntry,
@@ -352,7 +334,6 @@ describe('generateFiledBy (called in constructor)', () => {
           {
             name: 'Bob Practitioner',
             partyPrivatePractitioner: true,
-            privatePractitionerIsFiling: true,
           },
         ],
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
