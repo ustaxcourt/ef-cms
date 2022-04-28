@@ -343,5 +343,26 @@ describe('generateFiledBy (called in constructor)', () => {
     );
   });
 
-  it.skip('should ignore filers array when the filer is a private practitioner', () => {});
+  it.only('should ignore filers array when the filer is a private practitioner', () => {
+    const docketEntry = new DocketEntry(
+      {
+        ...mockDocketEntry,
+        filers: [mockPrimaryId],
+        privatePractitioners: [
+          {
+            name: 'Bob Practitioner',
+            partyPrivatePractitioner: true,
+            privatePractitionerIsFiling: true,
+          },
+        ],
+        userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
+      },
+      {
+        applicationContext,
+        petitioners: [{ contactId: mockPrimaryId, name: 'Bill Petitioner' }],
+      },
+    );
+
+    expect(docketEntry.filedBy).toEqual('Bob Practitioner');
+  });
 });

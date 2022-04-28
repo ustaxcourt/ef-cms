@@ -257,40 +257,55 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
 
   if (shouldGenerateFiledBy) {
     let partiesArray = [];
-    this.partyIrsPractitioner && partiesArray.push('Resp.');
-
-    Array.isArray(this.privatePractitioners) &&
-      this.privatePractitioners.forEach(practitioner => {
-        practitioner.partyPrivatePractitioner &&
-          partiesArray.push(practitioner.name);
-      });
-
-    const petitionersArray = [];
-    this.filers.forEach(contactId =>
-      petitioners.forEach(p => {
-        if (p.contactId === contactId) {
-          petitionersArray.push(p.name);
-        }
-      }),
+    const privatePractitionerIsFiling = this.privatePractitioners?.some(
+      practitioner => practitioner.privatePractitionerIsFiling,
     );
 
-    if (petitionersArray.length === 1) {
-      partiesArray.push(`Petr. ${petitionersArray[0]}`);
-    } else if (petitionersArray.length > 1) {
-      partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
-    }
+    console.log(this.privatePractitioners, '....');
 
-    const filedByArray = [];
-    if (partiesArray.length) {
-      filedByArray.push(partiesArray.join(' & '));
-    }
-    if (this.otherFilingParty) {
-      filedByArray.push(this.otherFilingParty);
-    }
+    if (privatePractitionerIsFiling) {
+      Array.isArray(this.privatePractitioners) &&
+        this.privatePractitioners.forEach(practitioner => {
+          practitioner.partyPrivatePractitioner &&
+            partiesArray.push(practitioner.name);
+        });
+    } else {
+      this.partyIrsPractitioner && partiesArray.push('Resp.');
 
-    const filedByString = filedByArray.join(', ');
-    if (filedByString) {
-      this.filedBy = filedByString;
+      //delete this
+      // Array.isArray(this.privatePractitioners) &&
+      //   this.privatePractitioners.forEach(practitioner => {
+      //     practitioner.partyPrivatePractitioner &&
+      //       partiesArray.push(practitioner.name);
+      //   });
+
+      const petitionersArray = [];
+      this.filers.forEach(contactId =>
+        petitioners.forEach(p => {
+          if (p.contactId === contactId) {
+            petitionersArray.push(p.name);
+          }
+        }),
+      );
+
+      if (petitionersArray.length === 1) {
+        partiesArray.push(`Petr. ${petitionersArray[0]}`);
+      } else if (petitionersArray.length > 1) {
+        partiesArray.push(`Petrs. ${petitionersArray.join(' & ')}`);
+      }
+
+      const filedByArray = [];
+      if (partiesArray.length) {
+        filedByArray.push(partiesArray.join(' & '));
+      }
+      if (this.otherFilingParty) {
+        filedByArray.push(this.otherFilingParty);
+      }
+
+      const filedByString = filedByArray.join(', ');
+      if (filedByString) {
+        this.filedBy = filedByString;
+      }
     }
   }
 };
