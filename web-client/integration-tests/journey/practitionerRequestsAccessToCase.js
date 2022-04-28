@@ -7,15 +7,15 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderHelperComputed,
-);
-const requestAccessHelper = withAppContextDecorator(
-  requestAccessHelperComputed,
-);
-
 export const practitionerRequestsAccessToCase = (cerebralTest, fakeFile) => {
   return it('Practitioner requests access to case', async () => {
+    const caseDetailHeaderHelper = withAppContextDecorator(
+      caseDetailHeaderHelperComputed,
+    );
+    const requestAccessHelper = withAppContextDecorator(
+      requestAccessHelperComputed,
+    );
+
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
