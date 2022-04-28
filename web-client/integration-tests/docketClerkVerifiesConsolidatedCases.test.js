@@ -108,30 +108,17 @@ describe('Case Consolidation Journey', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
-  // Unblock a case that's consolidated
-  // test that consolidatedCases are STILL set on caseDetail
-
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkUnblocksCase(cerebralTest, trialLocation);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   // Add a case to trial that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
 
-  // loginAs(cerebralTest, 'petitionsclerk@example.com');
-  // petitionsClerkUnblocksCase(cerebralTest, trialLocation);
-
-  // loginAs(cerebralTest, 'docketclerk@example.com');
-  //docketClerkVerifiesConsolidatesCases(cerebralTest);
-
   // Remove a case from trial that's consolidated
   // test that consolidatedCases are STILL set on caseDetail
-
-  // loginAs(cerebralTest, 'petitionsclerk@example.com');
-  // petitionsClerkUnblocksCase(cerebralTest, trialLocation);
-
-  // loginAs(cerebralTest, 'docketclerk@example.com');
-  //   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   // TODO: Check for other functions that need to be tested.
 });
