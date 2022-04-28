@@ -98,6 +98,7 @@ const router = {
     const registerRoute = (path, cb) => {
       originalRegisterRoute(path, function () {
         processQueue = processQueue.then(() => {
+          // eslint-disable-next-line promise/no-callback-in-promise
           return cb(...arguments);
         });
       });
