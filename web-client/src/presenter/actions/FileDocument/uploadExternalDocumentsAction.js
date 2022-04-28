@@ -40,7 +40,6 @@ export const uploadExternalDocumentsAction = async ({
     ).includes(form.eventCode)
   ) {
     privatePractitioners = form.practitioner;
-    filers = undefined;
   }
 
   const documentMetadata = {
