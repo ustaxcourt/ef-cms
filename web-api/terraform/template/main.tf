@@ -35,7 +35,6 @@ module "elasticsearch_alpha" {
   es_instance_type    = var.es_instance_type
   es_volume_size      = var.es_volume_size
   alert_sns_topic_arn = var.alert_sns_topic_arn
-  elasticsearch_domain = var.green_elasticsearch_domain
 
   providers = {
     aws.us-east-1 = aws.us-east-1
@@ -51,7 +50,6 @@ module "elasticsearch_beta" {
   es_instance_type    = var.es_instance_type
   es_volume_size      = var.es_volume_size
   alert_sns_topic_arn = var.alert_sns_topic_arn
-  elasticsearch_domain  = var.blue_elasticsearch_domain
 
   providers = {
     aws.us-east-1 = aws.us-east-1
