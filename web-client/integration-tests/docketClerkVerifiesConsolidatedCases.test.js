@@ -19,12 +19,12 @@ import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprior
 const cerebralTest = setupTest();
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
 
-let overrides = {
+const overrides = {
+  caseCaption: 'Mona Schultz, Petitioner',
+  docketNumberSuffix: 'L',
   preferredTrialCity: trialLocation,
   trialLocation,
 };
-
-let caseDetail;
 
 describe('Case Consolidation Journey', () => {
   beforeAll(() => {
@@ -40,7 +40,7 @@ describe('Case Consolidation Journey', () => {
   loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner and create the lead case', async () => {
-    caseDetail = await uploadPetition(cerebralTest, overrides);
+    const caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
       caseDetail.docketNumber;
@@ -53,12 +53,7 @@ describe('Case Consolidation Journey', () => {
 
   it('login as a petitioner and create the case to consolidate with', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
-    /*
-  TODO:
-  1. refactor caseDetail to use cerebralTest
-  */
-
-    caseDetail = await uploadPetition(cerebralTest, overrides);
+    const caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
   });
@@ -69,46 +64,10 @@ describe('Case Consolidation Journey', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest);
 
-  /*
-  TODO:
-  1. refactor caseDetail to use cerebralTest
-  */
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   docketClerkUnsealsCase(cerebralTest);
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
-
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkPrioritizesCase(cerebralTest);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
-
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkUnprioritizesCase(cerebralTest);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
-
-  overrides = {
-    ...overrides,
-    caseCaption: 'Mona Schultz, Petitioner',
-    docketNumberSuffix: 'L',
-  };
-
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkBlocksCase(cerebralTest, trialLocation, overrides);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
-
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkUnblocksCase(cerebralTest, trialLocation);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   docketClerkCreatesATrialSession(cerebralTest, {
@@ -123,5 +82,27 @@ describe('Case Consolidation Journey', () => {
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   manuallyAddCaseToTrial(cerebralTest);
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkPrioritizesCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkUnprioritizesCase(cerebralTest);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkBlocksCase(cerebralTest, trialLocation, overrides);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkUnblocksCase(cerebralTest, trialLocation);
+  loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 });
