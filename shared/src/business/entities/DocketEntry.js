@@ -261,8 +261,6 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
       practitioner => practitioner.partyPrivatePractitioner,
     );
 
-    console.log(privatePractitionerIsFiling, this.privatePractitioners, '....');
-
     if (privatePractitionerIsFiling) {
       Array.isArray(this.privatePractitioners) &&
         this.privatePractitioners.forEach(practitioner => {
@@ -271,13 +269,6 @@ DocketEntry.prototype.generateFiledBy = function (petitioners) {
         });
     } else {
       this.partyIrsPractitioner && partiesArray.push('Resp.');
-
-      //delete this
-      // Array.isArray(this.privatePractitioners) &&
-      //   this.privatePractitioners.forEach(practitioner => {
-      //     practitioner.partyPrivatePractitioner &&
-      //       partiesArray.push(practitioner.name);
-      //   });
 
       const petitionersArray = [];
       this.filers.forEach(contactId =>
