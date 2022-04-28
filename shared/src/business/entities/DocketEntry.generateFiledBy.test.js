@@ -128,52 +128,6 @@ describe('generateFiledBy (called in constructor)', () => {
     expect(docketEntry.filedBy).toEqual('Resp.');
   });
 
-  it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...mockDocketEntry,
-        partyIrsPractitioner: true,
-        partyPrivatePractitioner: true,
-        privatePractitioners: [
-          {
-            name: 'Test Practitioner',
-            partyPrivatePractitioner: true,
-          },
-          {
-            name: 'Test Practitioner1',
-            partyPrivatePractitioner: true,
-          },
-        ],
-      },
-      { applicationContext, petitioners },
-    );
-    expect(docketEntry.filedBy).toEqual(
-      'Resp. & Test Practitioner & Test Practitioner1',
-    );
-  });
-
-  it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...mockDocketEntry,
-        partyIrsPractitioner: true,
-        partyPrivatePractitioner: true,
-        privatePractitioners: [
-          {
-            name: 'Test Practitioner',
-            partyPrivatePractitioner: false,
-          },
-          {
-            name: 'Test Practitioner1',
-            partyPrivatePractitioner: true,
-          },
-        ],
-      },
-      { applicationContext, petitioners },
-    );
-    expect(docketEntry.filedBy).toEqual('Resp. & Test Practitioner1');
-  });
-
   it('should generate correct filedBy string for single petitioner in filers and partyIrsPractitioner in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {
@@ -197,24 +151,6 @@ describe('generateFiledBy (called in constructor)', () => {
     expect(docketEntry.filedBy).toEqual('Petrs. Bob & Bill');
   });
 
-  it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner in the constructor when values are present', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...mockDocketEntry,
-        partyIrsPractitioner: true,
-        partyPrivatePractitioner: true,
-        privatePractitioners: [
-          {
-            name: 'Test Practitioner',
-            partyPrivatePractitioner: true,
-          },
-        ],
-      },
-      { applicationContext, petitioners },
-    );
-    expect(docketEntry.filedBy).toEqual('Resp. & Test Practitioner');
-  });
-
   it('should generate correct filedBy string for partyIrsPractitioner and partyPrivatePractitioner set to false in the constructor when values are present', () => {
     const docketEntry = new DocketEntry(
       {
@@ -231,52 +167,6 @@ describe('generateFiledBy (called in constructor)', () => {
       { applicationContext, petitioners },
     );
     expect(docketEntry.filedBy).toEqual('Resp.');
-  });
-
-  it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners in the constructor when values are present', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...mockDocketEntry,
-        partyIrsPractitioner: true,
-        partyPrivatePractitioner: true,
-        privatePractitioners: [
-          {
-            name: 'Test Practitioner',
-            partyPrivatePractitioner: true,
-          },
-          {
-            name: 'Test Practitioner1',
-            partyPrivatePractitioner: true,
-          },
-        ],
-      },
-      { applicationContext, petitioners },
-    );
-    expect(docketEntry.filedBy).toEqual(
-      'Resp. & Test Practitioner & Test Practitioner1',
-    );
-  });
-
-  it('should generate correct filedBy string for partyIrsPractitioner and multiple partyPrivatePractitioners with one set to false in the constructor when values are present', () => {
-    const docketEntry = new DocketEntry(
-      {
-        ...mockDocketEntry,
-        partyIrsPractitioner: true,
-        partyPrivatePractitioner: true,
-        privatePractitioners: [
-          {
-            name: 'Test Practitioner',
-            partyPrivatePractitioner: false,
-          },
-          {
-            name: 'Test Practitioner1',
-            partyPrivatePractitioner: true,
-          },
-        ],
-      },
-      { applicationContext, petitioners },
-    );
-    expect(docketEntry.filedBy).toEqual('Resp. & Test Practitioner1');
   });
 
   it('should set filedBy to undefined when the docket entry is an auto-generated notice of contact change', () => {
@@ -304,14 +194,15 @@ describe('generateFiledBy (called in constructor)', () => {
     expect(docketEntry.filedBy).toBeUndefined();
   });
 
-  it('should generate filed by when the docket entry is a non-auto-generated notice of contact change', () => {
+  it('should generate filed by when the docket entry is a non-auto-generated notice of contact change and is not served', () => {
+    const nonNoticeOfContactChangeEventCode = 'O';
     const docketEntry = new DocketEntry(
       {
         ...mockDocketEntry,
+        eventCode: nonNoticeOfContactChangeEventCode,
         filers: [mockPrimaryId],
-        privatePractitioners: [
-          { name: 'Bob Practitioner', partyPrivatePractitioner: true },
-        ],
+        isAutoGenerated: false,
+        servedAt: undefined,
         userId: '02323349-87fe-4d29-91fe-8dd6916d2fda',
       },
       {
@@ -320,9 +211,7 @@ describe('generateFiledBy (called in constructor)', () => {
       },
     );
 
-    expect(docketEntry.filedBy).toEqual(
-      'Bob Practitioner & Petr. Bill Petitioner',
-    );
+    expect(docketEntry.filedBy).not.toBeUndefined();
   });
 
   it('should ignore filers array when the filer is a private practitioner', () => {
