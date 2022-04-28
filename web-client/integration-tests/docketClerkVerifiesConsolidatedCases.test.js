@@ -2,12 +2,15 @@ import { docketClerkAddsCaseToHearing } from './journey/docketClerkAddsCaseToHea
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
+import { docketClerkRemovesCaseFromHearing } from './journey/docketClerkRemovesCaseFromHearing';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkVerifiesConsolidatesCases } from './journey/docketClerkVerifiesConsolidatesCases';
+import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
@@ -31,6 +34,8 @@ describe('Case Consolidation Journey', () => {
   afterAll(() => {
     cerebralTest.closeSocket();
   });
+
+  cerebralTest.createdTrialSessions = [];
 
   loginAs(cerebralTest, 'petitioner@example.com');
 
@@ -69,35 +74,25 @@ describe('Case Consolidation Journey', () => {
   1. refactor caseDetail to use cerebralTest
   */
 
-  // seal case with a case that's consolidated
-  // test that consolidatedCases are STILL set on caseDetail
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSealsCase(cerebralTest);
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
-  // Unseal case with a case that's consolidated
-  // test that consolidatedCases are STILL set on caseDetail
   docketClerkUnsealsCase(cerebralTest);
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
-  // Mark a case as 'high priority' with a case that's consolidated
-  // test that consolidatedCases are STILL set on caseDetail
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
-  // Unmark a case as 'high priority' case with a case that's consolidated
-  // test that consolidatedCases are STILL set on caseDetail
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkUnprioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
-  // Block a case that's consolidated
-  // test that consolidatedCases are STILL set on caseDetail
   overrides = {
     ...overrides,
     caseCaption: 'Mona Schultz, Petitioner',
@@ -116,16 +111,17 @@ describe('Case Consolidation Journey', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
-  // Add a case to trial that's consolidated
-  // test that consolidatedCases are STILL set on caseDetail
   docketClerkCreatesATrialSession(cerebralTest, {
     sessionType: 'Motion/Hearing',
     trialLocation,
   });
+  docketClerkViewsTrialSessionList(cerebralTest);
   docketClerkAddsCaseToHearing(cerebralTest, 'Low blast radius', 0);
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
 
-  // Remove a case from trial that's consolidated
-  // test that consolidatedCases are STILL set on caseDetail
+  docketClerkRemovesCaseFromHearing(cerebralTest);
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
 
-  // TODO: Check for other functions that need to be tested.
+  manuallyAddCaseToTrial(cerebralTest);
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
 });
