@@ -169,7 +169,6 @@ describe('uploadExternalDocumentsAction', () => {
         form: {
           attachments: true,
           eventCode: PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP[0].eventCode,
-          filers: [{}, {}],
           practitioner: [mockPrivatePractitioner],
           primaryDocumentFile: mockPrimaryDocumentFile,
         },
