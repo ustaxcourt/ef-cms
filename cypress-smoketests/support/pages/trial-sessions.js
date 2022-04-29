@@ -14,7 +14,9 @@ exports.createTrialSession = (testData, overrides = {}) => {
   };
 
   cy.get('a[href="/trial-sessions"]').click();
+  cy.get('.big-blue-header').should('exist');
   cy.get('a[href="/add-a-trial-session"]').click();
+  cy.get('.big-blue-header').should('exist');
 
   // session information
   cy.get('#start-date-date').type(createFutureDate());
@@ -62,6 +64,7 @@ exports.createTrialSession = (testData, overrides = {}) => {
 
 exports.goToTrialSession = trialSessionId => {
   cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
+  cy.get('.big-blue-header').should('exist');
 };
 
 exports.setTrialSessionAsCalendared = trialSessionId => {
