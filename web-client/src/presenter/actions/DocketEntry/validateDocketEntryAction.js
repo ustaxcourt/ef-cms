@@ -16,11 +16,9 @@ export const validateDocketEntryAction = ({
 }) => {
   const entryMetadata = get(state.form);
 
-  let errors = applicationContext
-    .getUseCases()
-    .validateDocketEntryInteractor(applicationContext, {
-      entryMetadata,
-    });
+  let errors = applicationContext.getUseCases().validateDocketEntryInteractor({
+    entryMetadata,
+  });
 
   if (
     entryMetadata.dateReceivedYear &&
