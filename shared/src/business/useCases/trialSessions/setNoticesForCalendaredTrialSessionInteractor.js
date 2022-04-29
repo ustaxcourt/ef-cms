@@ -80,8 +80,13 @@ const serveNoticesForCase = async ({
     for (let party of servedParties.paper) {
       let noticeDocumentPdfCopy = await noticeDocumentPdf.copy();
 
+      // practitioners do not have a contactId
+      const userId = party.userId || party.contactId;
       if (
-        caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId) &&
+        (caseEntity.isPractitioner(userId) ||
+          caseEntity.isUserIdRepresentedByPrivatePractitioner(
+            party.contactId,
+          )) &&
         appendClinicLetter
       ) {
         removeLastPage(noticeDocumentPdfCopy);
