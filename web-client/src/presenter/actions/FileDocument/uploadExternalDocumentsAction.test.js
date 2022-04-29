@@ -183,7 +183,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
-  it('should not set documentMetadata.privatePractitioners to form.practitioner when the document to upload has field omitFiledByPractitioner', async () => {
+  it('should not set documentMetadata.privatePractitioners to form.practitioner when the document to upload does not have field filedByPractitioner', async () => {
     const mockPrimaryDocumentFile = { data: 'something' };
     const mockPrivatePractitioner = {
       name: 'Simone Biles',
@@ -206,7 +206,6 @@ describe('uploadExternalDocumentsAction', () => {
         caseDetail: MOCK_CASE,
         form: {
           attachments: true,
-          omitFiledByPractitioner: true,
           practitioner: [mockPrivatePractitioner],
           primaryDocumentFile: mockPrimaryDocumentFile,
         },
