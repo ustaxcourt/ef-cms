@@ -26,7 +26,7 @@ const overrides = {
   trialLocation,
 };
 
-describe('Case Consolidation Journey', () => {
+describe('Docket Clerk verifies Consolidated Cases', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
