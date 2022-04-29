@@ -38,7 +38,6 @@ describe('Case Consolidation Journey', () => {
   cerebralTest.createdTrialSessions = [];
 
   loginAs(cerebralTest, 'petitioner@example.com');
-
   it('login as a petitioner and create the lead case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -48,9 +47,8 @@ describe('Case Consolidation Journey', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-  docketClerkOpensCaseConsolidateModal(cerebralTest);
-  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
 
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create the case to consolidate with', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
     const caseDetail = await uploadPetition(cerebralTest, overrides);
@@ -98,11 +96,13 @@ describe('Case Consolidation Journey', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkBlocksCase(cerebralTest, trialLocation, overrides);
+
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkUnblocksCase(cerebralTest, trialLocation);
+
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 });
