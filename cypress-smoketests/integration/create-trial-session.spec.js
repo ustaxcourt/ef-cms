@@ -26,7 +26,9 @@ const {
 } = require('../support/pages/create-electronic-petition');
 const {
   createTrialSession,
+  goToCreateTrialSession,
   goToTrialSession,
+  goToTrialSessions,
   markCaseAsQcCompleteForTrial,
   setTrialSessionAsCalendared,
   verifyOpenCaseOnTrialSession,
@@ -158,11 +160,19 @@ describe('Petitions Clerk', () => {
       login(petitionsClerkToken);
     });
 
-    it('creates two trial sessions with existing judges', () => {
+    it('creates a trial sessions with an offboarded judge', () => {
       const overrides = {
         offboardedJudge: 'Guy',
       };
+
+      goToTrialSessions();
+      goToCreateTrialSession();
       createTrialSession(testData, overrides);
+    });
+
+    it('creates a trial session with an existing judge', () => {
+      goToTrialSessions();
+      goToCreateTrialSession();
       createTrialSession(testData);
     });
 
