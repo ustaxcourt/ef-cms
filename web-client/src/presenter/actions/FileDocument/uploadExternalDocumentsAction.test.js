@@ -145,7 +145,7 @@ describe('uploadExternalDocumentsAction', () => {
     });
   });
 
-  it('should set documentMetadata.privatePractitioners to form.practitioner and unset documentMetadata.filers when the document to upload is a practitioner association request', async () => {
+  it('should set documentMetadata.privatePractitioners to form.practitioner when the document to upload is a practitioner association request', async () => {
     const mockPrimaryDocumentFile = { data: 'something' };
     const mockPrivatePractitioner = {
       name: 'Simone Baulk',
@@ -179,8 +179,45 @@ describe('uploadExternalDocumentsAction', () => {
       applicationContext.getUseCases().uploadExternalDocumentsInteractor.mock
         .calls[0][1].documentMetadata,
     ).toMatchObject({
-      filers: undefined,
       privatePractitioners: [mockPrivatePractitioner],
+    });
+  });
+
+  it('should not set documentMetadata.privatePractitioners to form.practitioner when the document to upload has field omitFiledByPractitioner', async () => {
+    const mockPrimaryDocumentFile = { data: 'something' };
+    const mockPrivatePractitioner = {
+      name: 'Simone Biles',
+    };
+    applicationContext
+      .getUseCases()
+      .uploadExternalDocumentsInteractor.mockReturnValue({
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [mockAnswerDocketEntry],
+        },
+        docketEntryIdsAdded: [mockAnswerDocketEntry.docketEntryId],
+      });
+
+    await runAction(uploadExternalDocumentsAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: MOCK_CASE,
+        form: {
+          attachments: true,
+          omitFiledByPractitioner: true,
+          practitioner: [mockPrivatePractitioner],
+          primaryDocumentFile: mockPrimaryDocumentFile,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().uploadExternalDocumentsInteractor.mock
+        .calls[0][1].documentMetadata,
+    ).toMatchObject({
+      privatePractitioners: null,
     });
   });
 });
