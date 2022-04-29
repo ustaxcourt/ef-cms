@@ -2,6 +2,19 @@ const { faker } = require('@faker-js/faker');
 
 faker.seed(faker.datatype.number());
 
+exports.goToTrialSessions = () => {
+  cy.get('a[href="/trial-sessions"]').click();
+  cy.waitUntilSettled(50);
+  cy.get('h1').contains('Trial Sessions').should('exist');
+};
+
+exports.goToCreateTrialSession = () => {
+  cy.get('a[href="/add-a-trial-session"]').click();
+  cy.waitUntilSettled(50);
+  cy.get('h1').contains('Create Trial Session').should('exist');
+  cy.waitUntilSettled(50);
+};
+
 exports.createTrialSession = (testData, overrides = {}) => {
   const createFutureDate = () => {
     const month = faker.datatype.number({ max: 12, min: 1 });
@@ -12,11 +25,6 @@ exports.createTrialSession = (testData, overrides = {}) => {
       new Date().getUTCFullYear() + faker.datatype.number({ max: 5, min: 1 });
     return `${month}/${day}/${year}`;
   };
-
-  cy.get('a[href="/trial-sessions"]').click();
-  cy.get('.big-blue-header').should('exist');
-  cy.get('a[href="/add-a-trial-session"]').click();
-  cy.get('.big-blue-header').should('exist');
 
   // session information
   cy.get('#start-date-date').type(createFutureDate());
