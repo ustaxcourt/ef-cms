@@ -35,9 +35,11 @@ export const uploadExternalDocumentsAction = async ({
   let privatePractitioners = null;
   let { filers } = form;
   if (
-    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(
-      item => item.eventCode,
-    ).includes(form.eventCode)
+    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
+      d => !d.omitFiledByPractitioner,
+    )
+      .map(item => item.eventCode)
+      .includes(form.eventCode)
   ) {
     privatePractitioners = form.practitioner;
   }

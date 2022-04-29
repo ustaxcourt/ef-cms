@@ -622,6 +622,13 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     allowImmediateAssociation: false,
   },
   {
+    documentType: 'Motion to Substitute Parties and Change Caption',
+    documentTitle: 'Motion to Substitute Parties and Change Caption',
+    eventCode: 'M107',
+    allowImmediateAssociation: false,
+    omitFiledByPractitioner: true,
+  },
+  {
     documentType: 'Notice of Election to Participate',
     documentTitle: 'Notice of Election to Participate',
     eventCode: 'NOEP',
