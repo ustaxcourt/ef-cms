@@ -174,5 +174,89 @@ describe('documentGenerators', () => {
       expect(applicationContext.getNodeSass).toHaveBeenCalled();
       expect(applicationContext.getPug).toHaveBeenCalled();
     });
+
+    it('generates an Order To Show Cause document', async () => {
+      const pdf = await order({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          orderContent:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderToShowCause.content,
+          orderTitle:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderToShowCause.documentTitle,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Order_To_Show_Cause', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+
+    it('generates an Order for Amended Petition', async () => {
+      const pdf = await order({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          orderContent:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.content,
+          orderTitle:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition
+              .documentTitle,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Order_For_Amended_Petition', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+
+    it('generates an Order Designating Place Of Trial', async () => {
+      const pdf = await order({
+        applicationContext,
+        data: {
+          caseCaptionExtension: 'Petitioner(s)',
+          caseTitle: 'Test Petitioner',
+          docketNumberWithSuffix: '123-45S',
+          orderContent:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderDesignatingPlaceOfTrial
+              .content,
+          orderTitle:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderDesignatingPlaceOfTrial
+              .documentTitle,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Order_Designating_Place_Of_Trial', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
   });
 });

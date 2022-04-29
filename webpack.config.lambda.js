@@ -26,6 +26,7 @@ module.exports = {
       patterns: [
         { from: 'node_modules/pdfjs-dist/legacy/build', to: '.' },
         { from: 'node_modules/pdf-lib/dist', to: '.' },
+        { from: 'shared/static/pdfs/amended-petition-form.pdf', to: '.' },
       ],
     }),
   ],

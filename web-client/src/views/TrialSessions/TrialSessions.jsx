@@ -13,10 +13,12 @@ export const TrialSessions = connect(
     defaultTab: state.screenMetadata.trialSessionFilters.status,
     openTrialSessionPlanningModalSequence:
       sequences.openTrialSessionPlanningModalSequence,
+    showNewTab: state.screenMetadata.showNewTab,
   },
   function TrialSessions({
     defaultTab,
     openTrialSessionPlanningModalSequence,
+    showNewTab,
   }) {
     return (
       <>
@@ -49,9 +51,11 @@ export const TrialSessions = connect(
             >
               Add Trial Session
             </Button>
-            <Tab id="new-trial-sessions-tab" tabName="new" title="New">
-              <TrialSessionsTable filter="New" />
-            </Tab>
+            {showNewTab && (
+              <Tab id="new-trial-sessions-tab" tabName="new" title="New">
+                <TrialSessionsTable filter="New" />
+              </Tab>
+            )}
             <Tab id="open-trial-sessions-tab" tabName="open" title="Open">
               <TrialSessionsTable filter="Open" />
             </Tab>

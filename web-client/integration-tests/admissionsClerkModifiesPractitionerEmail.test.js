@@ -99,7 +99,7 @@ describe('admissions clerk practitioner journey', () => {
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'EmailVerificationModal',

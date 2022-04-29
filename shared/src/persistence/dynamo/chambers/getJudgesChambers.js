@@ -49,10 +49,6 @@ const JUDGES_CHAMBERS = {
     label: 'Gustafson’s Chambers',
     section: 'gustafsonsChambers',
   },
-  GUYS_CHAMBERS_SECTION: {
-    label: 'Guy’s Chambers',
-    section: 'guysChambers',
-  },
   HALPERNS_CHAMBERS_SECTION: {
     label: 'Halpern’s Chambers',
     section: 'halpernsChambers',

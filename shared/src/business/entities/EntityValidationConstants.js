@@ -420,6 +420,23 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
   workItemId: JoiValidationConstants.UUID.required(),
 };
 
+const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
+  caseIsInProgress: joi.boolean().optional(),
+  caseStatus: JoiValidationConstants.STRING.valid(
+    ...Object.values(CASE_STATUS_TYPES),
+  ).optional(),
+  caseTitle: JoiValidationConstants.CASE_CAPTION.optional(),
+  completedAt: JoiValidationConstants.ISO_DATE.optional(),
+  completedBy: JoiValidationConstants.STRING.max(100).optional().allow(null),
+  docketEntry: joi.object().required(),
+  docketNumber: JoiValidationConstants.DOCKET_NUMBER.required().description(
+    'Unique case identifier in XXXXX-YY format.',
+  ),
+  inProgress: joi.boolean().optional(),
+  section: JoiValidationConstants.STRING.required(),
+  trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
+};
+
 // TODO: validate workItems in DocketEntry
 // DOCKET_ENTRY_VALIDATION_RULE_KEYS.workItem = joi
 //   .object()
@@ -431,6 +448,9 @@ module.exports = {
   DOCKET_ENTRY_VALIDATION_RULES: joi
     .object()
     .keys(DOCKET_ENTRY_VALIDATION_RULE_KEYS),
+  OUTBOX_ITEM_VALIDATION_RULES: joi
+    .object()
+    .keys(OUTBOX_ITEM_VALIDATION_RULE_KEYS),
   SERVICE_INDICATOR_ERROR,
   WORK_ITEM_VALIDATION_RULES: joi.object().keys(WORK_ITEM_VALIDATION_RULE_KEYS),
 };

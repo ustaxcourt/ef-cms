@@ -1163,6 +1163,7 @@ hr.lighter {
   }
 
   #signature-warning {
+    position: relative;
     display: block;
     width: 612px;
     padding: 20px;
@@ -1192,7 +1193,7 @@ hr.lighter {
   min-height: 640px;
   max-height: 640px;
   font-family: 'Times New Roman', Times, serif;
-  font-size: 14px;
+  font-size: 16px;
 
   p {
     max-width: 100%;
@@ -1213,14 +1214,14 @@ hr.lighter {
 
 /* default */
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='14px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='14px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label:not(.ql-active)::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='14px']::before {
   content: '14px';
   font-size: 14px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='16px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='16px']::before {
+.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='16px']::before,
+.ql-snow .ql-picker.ql-size .ql-picker-label:not(.ql-active)::before {
   content: '16px';
   font-size: 16px !important;
 }
