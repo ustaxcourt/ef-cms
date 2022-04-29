@@ -209,7 +209,7 @@
     "docs": "npx docsify-cli serve ./docs",
     "dynamo:admin": "AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER DYNAMO_ENDPOINT=http://localhost:8000 dynamodb-admin",
     "dynamo:export": "AWS_ACCESS_KEY_ID=S3RVER AWS_SECRET_ACCESS_KEY=S3RVER SLS_DEPLOYMENT_BUCKET=noop node web-api/dynamo-export.js > ./web-api/storage/fixtures/efcms.json",
-    "dynamo:import": "pushd ./web-api && node ./create-dynamo-tables.js && node ./seed-dynamo.js ./storage/fixtures/efcms.json && popd",
+    "dynamo:import": "node ./web-api/create-dynamo-tables.js && node ./web-api/seed-dynamo.js ./storage/fixtures/efcms.json",
     "init:api": "cd web-api/terraform/main && ../bin/deploy-init.sh",
     "init:ui": "cd web-client/terraform/main && ../bin/deploy-init.sh",
     "lint:css:fix": "npm run lint:css -- --fix",
