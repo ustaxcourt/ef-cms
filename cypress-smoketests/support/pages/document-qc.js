@@ -1,5 +1,6 @@
 exports.goToMyDocumentQC = () => {
   cy.get('a[href*="document-qc/my/inbox"]').click();
+  cy.get('.big-blue-header').should('exist');
 };
 
 exports.goToSectionDocumentQC = () => {
