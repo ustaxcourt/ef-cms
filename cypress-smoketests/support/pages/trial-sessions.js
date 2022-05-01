@@ -2,7 +2,7 @@ const { faker } = require('@faker-js/faker');
 
 faker.seed(faker.datatype.number());
 
-exports.createTrialSession = testData => {
+exports.createTrialSession = (testData, overrides = {}) => {
   const createFutureDate = () => {
     const month = faker.datatype.number({ max: 12, min: 1 });
     const day = faker.datatype.number({ max: 28, min: 1 });
@@ -14,7 +14,9 @@ exports.createTrialSession = testData => {
   };
 
   cy.get('a[href="/trial-sessions"]').click();
+  cy.get('.big-blue-header').should('exist');
   cy.get('a[href="/add-a-trial-session"]').click();
+  cy.get('.big-blue-header').should('exist');
 
   // session information
   cy.get('#start-date-date').type(createFutureDate());
@@ -39,6 +41,10 @@ exports.createTrialSession = testData => {
 
   // session assignments
   cy.get('#judgeId').select(testData.judgeName || 'Foley');
+  cy.get(`#judgeId option:contains(${overrides.offboardedJudge})`).should(
+    'not.exist',
+  );
+
   cy.get('#chambers-phone-number').type(faker.phone.phoneNumber());
   cy.get('#trial-clerk').select(testData.trialClerk || 'Test trialclerk1');
   cy.get('#court-reporter').type(faker.name.findName());
@@ -58,6 +64,7 @@ exports.createTrialSession = testData => {
 
 exports.goToTrialSession = trialSessionId => {
   cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
+  cy.get('.big-blue-header').should('exist');
 };
 
 exports.setTrialSessionAsCalendared = trialSessionId => {
