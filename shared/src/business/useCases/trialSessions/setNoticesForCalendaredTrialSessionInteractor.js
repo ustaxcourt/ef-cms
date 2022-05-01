@@ -171,6 +171,7 @@ const setNoticeForCase = async ({
         });
       if (doesClinicLetterExist) {
         appendClinicLetter = true;
+        break;
       }
     }
   }
