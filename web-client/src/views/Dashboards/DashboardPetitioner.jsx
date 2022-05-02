@@ -9,7 +9,6 @@ import { WhatToExpect } from '../WhatToExpect';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-import howToCreateACase from '../../pdfs/how-to-create-a-case.pdf';
 
 export const DashboardPetitioner = connect(
   {
@@ -41,7 +40,7 @@ export const DashboardPetitioner = connect(
                     />
                     <a
                       className="usa-link--external"
-                      href={howToCreateACase}
+                      href="https://ustaxcourt.gov/resources/dawson/how_to_efile_a_petition.pdf"
                       rel="noopener noreferrer"
                       target="_blank"
                     >
