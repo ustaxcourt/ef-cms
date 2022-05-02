@@ -12,7 +12,7 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseEntity the caseEntity
+ * @param {Case} providers.caseEntity the caseEntity
  * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
  */
 exports.addDocketEntryForSystemGeneratedOrder = async ({
