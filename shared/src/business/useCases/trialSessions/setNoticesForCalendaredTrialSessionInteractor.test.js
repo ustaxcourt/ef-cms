@@ -1,6 +1,6 @@
 const {
   applicationContext,
-  fakeData,
+  testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
   SERVICE_INDICATOR_TYPES,
@@ -10,6 +10,7 @@ const {
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
+const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
@@ -52,84 +53,70 @@ const serviceInfo = {
   url: 'www.example.com',
 };
 
-let user;
+const user = new User({
+  name: 'Docket Clerk',
+  role: ROLES.docketClerk,
+  userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+});
 let calendaredCases;
 let trialSession;
+const case0 = {
+  // should get electronic service
+  ...MOCK_CASE,
+  contactPrimary: {
+    ...MOCK_CASE.contactPrimary,
+    email: 'petitioner@example.com',
+  },
+  docketNumber: '102-20',
+  procedureType: 'Regular',
+};
+const case1 = {
+  // should get paper service
+  ...MOCK_CASE,
+  contactPrimary: {
+    ...MOCK_CASE.contactPrimary,
+  },
+  docketNumber: '103-20',
+  isPaper: true,
+  mailingDate: 'testing',
+  procedureType: 'Small',
+};
+const caseWithPaperProSePetitioner = {
+  ...case0,
+  petitioners: [
+    {
+      ...case0.petitioners[0],
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    },
+  ],
+};
+const fakeClinicLetter = getFakeFile(true, true);
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
-  beforeEach(() => {
-    const case0 = {
-      // should get electronic service
-      ...MOCK_CASE,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-        email: 'petitioner@example.com',
-      },
-      docketNumber: '102-20',
-      procedureType: 'Regular',
-    };
-
-    const case1 = {
-      // should get paper service
-      ...MOCK_CASE,
-      contactPrimary: {
-        ...MOCK_CASE.contactPrimary,
-      },
-      docketNumber: '103-20',
-      isPaper: true,
-      mailingDate: 'testing',
-      procedureType: 'Small',
-    };
-
-    calendaredCases = [case0, case1];
-
-    trialSession = { ...MOCK_TRIAL };
-
-    user = new User({
-      name: 'Docket Clerk',
-      role: ROLES.docketClerk,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    applicationContext.getCurrentUser.mockImplementation(() => user);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(case0)
-      .mockReturnValueOnce(case0)
-      .mockReturnValueOnce(case1)
-      .mockReturnValueOnce(case1);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue(calendaredCases);
-
+  beforeAll(() => {
+    applicationContext.getCurrentUser.mockReturnValue(user);
     applicationContext
       .getNotificationGateway()
       .sendNotificationToUser.mockReturnValue(null);
-
     applicationContext
       .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords.mockReturnValue({});
-
+      .getCalendaredCasesForTrialSession.mockImplementation(
+        () => calendaredCases,
+      );
     applicationContext
       .getPersistenceGateway()
       .deleteCaseTrialSortMappingRecords.mockReturnValue(calendaredCases);
-
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue('http://example.com');
-
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockImplementation(() => trialSession);
-
     applicationContext
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(({ trialSessionToUpdate }) => {
         trialSession = trialSessionToUpdate;
       });
-
     applicationContext
       .getPersistenceGateway()
       .updateCase.mockImplementation(({ caseToUpdate }) => {
@@ -143,28 +130,42 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     applicationContext
       .getUseCases()
-      .generateNoticeOfTrialIssuedInteractor.mockReturnValue(fakeData);
+      .generateNoticeOfTrialIssuedInteractor.mockReturnValue(testPdfDoc);
     applicationContext
       .getUseCases()
       .generateStandingPretrialOrderForSmallCaseInteractor.mockReturnValue(
-        fakeData,
+        testPdfDoc,
       );
     applicationContext
       .getUseCases()
-      .generateStandingPretrialOrderInteractor.mockReturnValue(fakeData);
-
+      .generateStandingPretrialOrderInteractor.mockReturnValue(testPdfDoc);
     applicationContext
       .getUseCaseHelpers()
       .savePaperServicePdf.mockReturnValue(serviceInfo);
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValue(fakeClinicLetter);
+  });
+
+  beforeEach(() => {
+    calendaredCases = [case0, case1];
+    trialSession = { ...MOCK_TRIAL };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(case0)
+      .mockReturnValueOnce(case0)
+      .mockReturnValueOnce(case1)
+      .mockReturnValueOnce(case1);
   });
 
   it('Should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
-    user = new User({
+    const mockUser = new User({
       name: PARTY_TYPES.petitioner,
       role: ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-
+    applicationContext.getCurrentUser.mockReturnValueOnce(mockUser);
     let error;
 
     try {
@@ -181,7 +182,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   it('Should return immediately if there are no calendared cases to be set', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([]); // returning no cases
+      .getCalendaredCasesForTrialSession.mockReturnValueOnce([]); // returning no cases
 
     const result = await setNoticesForCalendaredTrialSessionInteractor(
       applicationContext,
@@ -210,7 +211,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(findNoticeOfTrial(calendaredCases[0])).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
   });
@@ -242,7 +242,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-
     const findNoticeOfTrialDocketEntry = caseRecord => {
       return caseRecord.docketEntries.find(
         entry =>
@@ -254,7 +253,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
     ).toHaveBeenCalled();
-
     expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toMatchObject({
       date: '2025-12-01T00:00:00.000Z',
       index: expect.anything(),
@@ -284,7 +282,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeDefined();
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
   });
@@ -300,7 +297,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeTruthy();
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeTruthy();
   });
@@ -316,7 +312,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(
       findNoticeOfTrial(calendaredCases[0]).servedParties.length,
     ).toBeGreaterThan(0);
@@ -373,7 +368,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
     expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
   });
@@ -394,16 +388,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    const findNoticeOfTrialDocketEntry = caseRecord => {
-      return caseRecord.docketEntries.find(
-        entry =>
-          entry.documentType ===
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
-      );
-    };
-
-    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeFalsy();
-    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
+    expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
+    expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
   });
 
   it('Should set the status of the Notice of Trial as served for a single case if a docketNumber is set', async () => {
@@ -424,7 +410,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
     expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
   });
@@ -474,7 +459,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(
       findStandingPretrialDocument(calendaredCases[0]).servedAt,
     ).toBeDefined();
@@ -494,7 +478,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(
       findStandingPretrialDocument(calendaredCases[0]).servedAt,
     ).toBeTruthy();
@@ -514,7 +497,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-
     expect(
       findStandingPretrialDocument(calendaredCases[0]).servedParties.length,
     ).toBeGreaterThan(0);
@@ -523,31 +505,73 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toBeGreaterThan(0);
   });
 
-  it('should save PaperServiceAddressPage to s3 when the case has a party with paper service', async () => {
-    calendaredCases[0].petitioners[0].serviceIndicator =
-      SERVICE_INDICATOR_TYPES.SI_PAPER;
+  it('should append a clinic letter to the docket record NTD when one exists, a petitioner on the case has paper service, and that petitioner is pro se', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReset()
+      .mockReturnValueOnce(caseWithPaperProSePetitioner)
+      .mockReturnValueOnce(caseWithPaperProSePetitioner)
+      .mockReturnValueOnce(calendaredCases[1])
+      .mockReturnValueOnce(calendaredCases[1]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockReturnValue(true);
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().savePaperServicePdf,
+      applicationContext.getPersistenceGateway().isFileExists,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0],
+    ).toMatchObject({
+      firstPdf: testPdfDoc,
+      secondPdf: fakeClinicLetter,
+    });
   });
 
-  it('should fetch the clinic letter when it exists when party has paper service and is not represented', async () => {
-    calendaredCases[0].petitioners[0].serviceIndicator =
-      SERVICE_INDICATOR_TYPES.SI_PAPER;
-    console.log('calendaredCases[0]', calendaredCases[0]);
+  it('should NOT append a clinic letter to docket record NTD when one exists, but no petitioner has paper service', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockReturnValue(true);
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should fetch the clinic letter correctly when it exists when party has paper service and is not represented', async () => {
+    const smallCase = {
+      ...caseWithPaperProSePetitioner,
+      procedureType: 'Small',
+    };
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReset()
+      .mockReturnValueOnce(caseWithPaperProSePetitioner)
+      .mockReturnValueOnce(caseWithPaperProSePetitioner)
+      .mockReturnValueOnce(smallCase)
+      .mockReturnValueOnce(smallCase);
 
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
-
-    applicationContext
-      .getPersistenceGateway()
-      .getDocument.mockResolvedValue(fakeData);
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
