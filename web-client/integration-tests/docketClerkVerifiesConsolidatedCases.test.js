@@ -15,6 +15,7 @@ import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkPrioritizesCase } from './journey/petitionsClerkPrioritizesCase';
 import { petitionsClerkUnblocksCase } from './journey/petitionsClerkUnblocksCase';
 import { petitionsClerkUnprioritizesCase } from './journey/petitionsClerkUnprioritizesCase';
+import { updateACaseCaption } from './journey/updateACaseCaption';
 
 const cerebralTest = setupTest();
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
@@ -104,5 +105,14 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
   petitionsClerkUnblocksCase(cerebralTest, trialLocation);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkVerifiesConsolidatesCases(cerebralTest);
+
+  const updatedCaseCaption = 'I am the new case caption!';
+  updateACaseCaption(cerebralTest, updatedCaseCaption);
+  it('docketClerk updates Case Caption', async () => {
+    const caseDetail = cerebralTest.getState('caseDetail');
+    expect(caseDetail.caseCaption).toBeDefined();
+    expect(caseDetail.caseCaption).toEqual(updatedCaseCaption);
+  });
   docketClerkVerifiesConsolidatesCases(cerebralTest);
 });
