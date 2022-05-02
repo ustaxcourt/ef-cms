@@ -523,26 +523,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toBeGreaterThan(0);
   });
 
-  it('should append the PaperServiceAddressPage to the pdf when the case has a party with paper service', async () => {
-    calendaredCases[0].petitioners[0].serviceIndicator =
-      SERVICE_INDICATOR_TYPES.SI_PAPER;
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReset()
-      .mockReturnValueOnce(calendaredCases[0])
-      .mockReturnValueOnce(calendaredCases[0])
-      .mockReturnValueOnce(calendaredCases[1])
-      .mockReturnValueOnce(calendaredCases[1]);
-
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toHaveBeenCalled();
-  });
-
   it('should save PaperServiceAddressPage to s3 when the case has a party with paper service', async () => {
     calendaredCases[0].petitioners[0].serviceIndicator =
       SERVICE_INDICATOR_TYPES.SI_PAPER;
@@ -554,5 +534,31 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().savePaperServicePdf,
     ).toHaveBeenCalled();
+  });
+
+  it('should fetch the clinic letter when it exists when party has paper service and is not represented', async () => {
+    calendaredCases[0].petitioners[0].serviceIndicator =
+      SERVICE_INDICATOR_TYPES.SI_PAPER;
+    console.log('calendaredCases[0]', calendaredCases[0]);
+
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(true);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValue(fakeData);
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[0][0]
+        .key,
+    ).toEqual('clinic-letter-birmingham-alabama-regular');
+    expect(
+      applicationContext.getPersistenceGateway().getDocument.mock.calls[1][0]
+        .key,
+    ).toEqual('clinic-letter-birmingham-alabama-small');
   });
 });
