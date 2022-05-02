@@ -32,6 +32,36 @@ const removeLastPage = pdfDocumentData => {
   pdfDocumentData.removePage(lastPageIndex);
 };
 
+const shouldAppendClinicLetter = async ({
+  applicationContext,
+  caseEntity,
+  procedureType,
+  servedParties,
+  trialSession,
+}) => {
+  let appendClinicLetter = false;
+  let clinicLetterKey;
+
+  for (let party in servedParties.paper) {
+    if (!caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId)) {
+      clinicLetterKey = getClinicLetterKey({
+        procedureType,
+        trialLocation: trialSession.trialLocation,
+      });
+      const doesClinicLetterExist = await applicationContext
+        .getPersistenceGateway()
+        .isFileExists({
+          applicationContext,
+          key: clinicLetterKey,
+        });
+      if (doesClinicLetterExist) {
+        appendClinicLetter = true;
+      }
+    }
+  }
+  return { appendClinicLetter, clinicLetterKey };
+};
+
 /**
  * serves a notice of trial session and standing pretrial document on electronic
  * recipients and generates paper notices for those that get paper service
@@ -155,26 +185,14 @@ const setNoticeForCase = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  let appendClinicLetter = false;
-  let clinicLetterKey;
-  for (let party of servedParties.paper) {
-    if (!caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId)) {
-      clinicLetterKey = getClinicLetterKey({
-        procedureType,
-        trialLocation: trialSession.trialLocation,
-      });
-      const doesClinicLetterExist = await applicationContext
-        .getPersistenceGateway()
-        .isFileExists({
-          applicationContext,
-          key: clinicLetterKey,
-        });
-      if (doesClinicLetterExist) {
-        appendClinicLetter = true;
-        break;
-      }
-    }
-  }
+  const { appendClinicLetter, clinicLetterKey } =
+    await shouldAppendClinicLetter({
+      applicationContext,
+      caseEntity,
+      procedureType,
+      servedParties,
+      trialSession,
+    });
 
   if (appendClinicLetter) {
     const clinicLetter = await applicationContext
