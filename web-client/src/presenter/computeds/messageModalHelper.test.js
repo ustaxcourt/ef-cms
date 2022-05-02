@@ -391,5 +391,21 @@ describe('messageModalHelper', () => {
 
       expect(showMessageAttachments).toEqual(false);
     });
+
+    it('should be false when message attachments are undefined', () => {
+      const { showMessageAttachments } = runCompute(messageModalHelper, {
+        state: {
+          caseDetail: {},
+          modal: {
+            form: {
+              attachments: undefined,
+            },
+          },
+          screenMetadata: {},
+        },
+      });
+
+      expect(showMessageAttachments).toEqual(false);
+    });
   });
 });
