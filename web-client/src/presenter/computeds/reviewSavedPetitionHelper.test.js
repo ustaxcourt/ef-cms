@@ -182,7 +182,7 @@ describe('reviewSavedPetitionHelper', () => {
   });
 
   Object.keys(ordersAndNoticesNeededCodes).forEach(orderOrNotice => {
-    it('should verify ordersAndNoticesNeeded is populated with the order(s) or notice(s) that were selected', () => {
+    it(`should verify ordersAndNoticesNeeded is populated with ${orderOrNotice}`, () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
@@ -198,7 +198,7 @@ describe('reviewSavedPetitionHelper', () => {
   });
 
   Object.keys(ordersAndNoticesInDraftsCodes).forEach(orderOrNoticeInDraft => {
-    it('should verify ordersAndNoticesInDraft is populated with the order(s) or notice(s) that were selected', () => {
+    it(`should verify ordersAndNoticesInDraft is populated with ${orderOrNoticeInDraft}`, () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
