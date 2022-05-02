@@ -5,7 +5,6 @@ import { Mobile, NonMobile } from '../ustc-ui/Responsive/Responsive';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import howToMergePdfs from '../pdfs/how-to-merge-pdfs.pdf';
 
 export const BeforeStartingCase = connect(
   {
@@ -161,7 +160,7 @@ export const BeforeStartingCase = connect(
                     <Button
                       link
                       className="usa-link--external text-left mobile-text-wrap"
-                      href={howToMergePdfs}
+                      href="https://ustaxcourt.gov/resources/dawson/merge_files.pdf"
                       icon="file-pdf"
                       iconColor="blue"
                       overrideMargin="margin-right-1 margin-left-1"
