@@ -389,7 +389,7 @@ describe('getFormattedCaseDetail', () => {
       });
     });
 
-    it('should set isLeadCase true on the case if it has a leadDocketNumber that matches its docketNumber', () => {
+    it("should set isLeadCase to true on the case when the leadDocketNumber matches the current case's docketNumber", () => {
       const result = formatCase(applicationContext, {
         ...MOCK_CASE,
         leadDocketNumber: MOCK_CASE.docketNumber,
@@ -400,7 +400,7 @@ describe('getFormattedCaseDetail', () => {
       });
     });
 
-    it('should set isLeadCase false on the case if it has a leadDocketNumber that matches its docketNumber', () => {
+    it("should set isLeadCase to false when the leadDocketNumber does not match the current case's docket number", () => {
       const result = formatCase(applicationContext, {
         ...MOCK_CASE,
         leadDocketNumber: 'notthedocketNumber',
