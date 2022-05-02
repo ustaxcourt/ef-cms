@@ -156,6 +156,12 @@ export const CaseDetailHeader = connect(
                   {caseDetailHeaderHelper.hidePublicCaseInformation && (
                     <>
                       <span
+                        aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
+                        className="usa-tag"
+                      >
+                        <span aria-hidden="true">Lead case</span>
+                      </span>
+                      <span
                         aria-label={`status: ${formattedCaseDetail.status}`}
                         className="usa-tag"
                       >
