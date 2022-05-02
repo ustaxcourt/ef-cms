@@ -415,7 +415,7 @@ describe('addCoversheetInteractor', () => {
       expect(result.mailingDate).toEqual('04/16/2019');
     });
 
-    it('returns the index of the docket entry as a part of the coverhseet data', () => {
+    it('returns the index of the docket entry as part of the coversheet data', () => {
       const result = generateCoverSheetData({
         applicationContext,
         caseEntity: testingCaseData,
