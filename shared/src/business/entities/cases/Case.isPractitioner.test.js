@@ -35,7 +35,7 @@ describe('isPractitioner', () => {
     ).toEqual(true);
   });
 
-  it('returns false is the contactId is not any form of practitioner', () => {
+  it('returns false if the contactId is not any form of practitioner', () => {
     const caseRecord = new Case(
       {
         ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
