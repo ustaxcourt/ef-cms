@@ -15,7 +15,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
-const findNoticeOfTrial = caseRecord => {
+const findNoticeOfTrialDocketEntry = caseRecord => {
   return caseRecord.docketEntries.find(
     doc =>
       doc.documentType ===
@@ -23,7 +23,7 @@ const findNoticeOfTrial = caseRecord => {
   );
 };
 
-const findStandingPretrialDocument = caseRecord => {
+const findStandingPretrialDocketEntry = caseRecord => {
   return caseRecord.docketEntries.find(
     doc =>
       doc.documentType ===
@@ -211,8 +211,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(findNoticeOfTrial(calendaredCases[0])).toBeTruthy();
-    expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeTruthy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
   });
 
   it('Should include the signedAt field on the Notice of Trial document', async () => {
@@ -220,8 +220,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(findNoticeOfTrial(calendaredCases[0]).signedAt).toBeTruthy();
-    expect(findNoticeOfTrial(calendaredCases[1]).signedAt).toBeTruthy();
+    expect(
+      findNoticeOfTrialDocketEntry(calendaredCases[0]).signedAt,
+    ).toBeTruthy();
+    expect(
+      findNoticeOfTrialDocketEntry(calendaredCases[1]).signedAt,
+    ).toBeTruthy();
   });
 
   it('Should set the noticeOfTrialDate field on each case', async () => {
@@ -242,13 +246,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    const findNoticeOfTrialDocketEntry = caseRecord => {
-      return caseRecord.docketEntries.find(
-        entry =>
-          entry.documentType ===
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
-      );
-    };
 
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
@@ -282,8 +279,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeDefined();
-    expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
+    expect(
+      findNoticeOfTrialDocketEntry(calendaredCases[0]).servedAt,
+    ).toBeDefined();
+    expect(
+      findNoticeOfTrialDocketEntry(calendaredCases[1]).servedAt,
+    ).toBeDefined();
   });
 
   it('Should set the servedAt field for the Notice of Trial for each case', async () => {
@@ -297,8 +298,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(findNoticeOfTrial(calendaredCases[0]).servedAt).toBeTruthy();
-    expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeTruthy();
+    expect(
+      findNoticeOfTrialDocketEntry(calendaredCases[0]).servedAt,
+    ).toBeTruthy();
+    expect(
+      findNoticeOfTrialDocketEntry(calendaredCases[1]).servedAt,
+    ).toBeTruthy();
   });
 
   it('Should set the servedParties field for the Notice of Trial for each case', async () => {
@@ -313,10 +318,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
     expect(
-      findNoticeOfTrial(calendaredCases[0]).servedParties.length,
+      findNoticeOfTrialDocketEntry(calendaredCases[0]).servedParties.length,
     ).toBeGreaterThan(0);
     expect(
-      findNoticeOfTrial(calendaredCases[1]).servedParties.length,
+      findNoticeOfTrialDocketEntry(calendaredCases[1]).servedParties.length,
     ).toBeGreaterThan(0);
   });
 
@@ -368,8 +373,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
-    expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeFalsy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
   });
 
   it('Should only set the notice for a single case if a docketNumber is set', async () => {
@@ -388,8 +393,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy();
-    expect(findNoticeOfTrial(calendaredCases[1])).toBeTruthy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeFalsy();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[1])).toBeTruthy();
   });
 
   it('Should set the status of the Notice of Trial as served for a single case if a docketNumber is set', async () => {
@@ -410,8 +415,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
-    expect(findNoticeOfTrial(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
-    expect(findNoticeOfTrial(calendaredCases[1]).servedAt).toBeDefined();
+    expect(findNoticeOfTrialDocketEntry(calendaredCases[0])).toBeFalsy(); // Document should not exist on this case
+    expect(
+      findNoticeOfTrialDocketEntry(calendaredCases[1]).servedAt,
+    ).toBeDefined();
   });
 
   it('Should generate a signed Standing Pretrial Order for REGULAR cases', async () => {
@@ -423,7 +430,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).toHaveBeenCalled();
-    expect(findStandingPretrialDocument(calendaredCases[0])).toMatchObject({
+    expect(findStandingPretrialDocketEntry(calendaredCases[0])).toMatchObject({
       attachments: false,
       eventCode:
         SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
@@ -442,7 +449,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getUseCases()
         .generateStandingPretrialOrderForSmallCaseInteractor,
     ).toHaveBeenCalled();
-    expect(findStandingPretrialDocument(calendaredCases[1]).eventCode).toBe(
+    expect(findStandingPretrialDocketEntry(calendaredCases[1]).eventCode).toBe(
       SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
         .eventCode,
     );
@@ -460,10 +467,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
     expect(
-      findStandingPretrialDocument(calendaredCases[0]).servedAt,
+      findStandingPretrialDocketEntry(calendaredCases[0]).servedAt,
     ).toBeDefined();
     expect(
-      findStandingPretrialDocument(calendaredCases[1]).servedAt,
+      findStandingPretrialDocketEntry(calendaredCases[1]).servedAt,
     ).toBeDefined();
   });
 
@@ -479,10 +486,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
     expect(
-      findStandingPretrialDocument(calendaredCases[0]).servedAt,
+      findStandingPretrialDocketEntry(calendaredCases[0]).servedAt,
     ).toBeTruthy();
     expect(
-      findStandingPretrialDocument(calendaredCases[1]).servedAt,
+      findStandingPretrialDocketEntry(calendaredCases[1]).servedAt,
     ).toBeTruthy();
   });
 
@@ -498,10 +505,10 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
     ).toHaveBeenCalled();
     expect(
-      findStandingPretrialDocument(calendaredCases[0]).servedParties.length,
+      findStandingPretrialDocketEntry(calendaredCases[0]).servedParties.length,
     ).toBeGreaterThan(0);
     expect(
-      findStandingPretrialDocument(calendaredCases[1]).servedParties.length,
+      findStandingPretrialDocketEntry(calendaredCases[1]).servedParties.length,
     ).toBeGreaterThan(0);
   });
 
