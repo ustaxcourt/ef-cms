@@ -10,6 +10,7 @@ export const CoverSheet = ({
   docketNumberWithSuffix,
   documentTitle,
   electronicallyFiled,
+  index,
   mailingDate,
 }) => {
   return (
@@ -54,6 +55,7 @@ export const CoverSheet = ({
           {electronicallyFiled && <div>Electronically Filed</div>}
           {mailingDate && <div>{mailingDate}</div>}
           <div>Docket No. {docketNumberWithSuffix}</div>
+          <div>Document No. {index}</div>
         </div>
         <div className="clear"></div>
       </div>

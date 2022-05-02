@@ -415,6 +415,19 @@ describe('addCoversheetInteractor', () => {
       expect(result.mailingDate).toEqual('04/16/2019');
     });
 
+    it('returns the index of the docket entry as a part of the coverhseet data', () => {
+      const result = generateCoverSheetData({
+        applicationContext,
+        caseEntity: testingCaseData,
+        docketEntryEntity: {
+          ...testingCaseData.docketEntries[0],
+          mailingDate: '04/16/2019',
+        },
+      });
+
+      expect(result.index).toEqual(testingCaseData.docketEntries[0].index);
+    });
+
     it('returns an empty string for the mailing date if NOT present', () => {
       const result = generateCoverSheetData({
         applicationContext,
