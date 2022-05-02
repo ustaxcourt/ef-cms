@@ -7,7 +7,7 @@ import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUnsealsCase } from './journey/docketClerkUnsealsCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import { docketClerkVerifiesConsolidatesCases } from './journey/docketClerkVerifiesConsolidatesCases';
+import { docketClerkVerifiesConsolidatedCases } from './journey/docketClerkVerifiesConsolidatedCases';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { loginAs, setupTest, uploadPetition } from './helpers';
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
@@ -64,10 +64,10 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
   docketClerkConsolidatesCases(cerebralTest);
 
   docketClerkSealsCase(cerebralTest);
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   docketClerkUnsealsCase(cerebralTest);
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   docketClerkCreatesATrialSession(cerebralTest, {
     sessionType: 'Motion/Hearing',
@@ -75,37 +75,37 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
   });
   docketClerkViewsTrialSessionList(cerebralTest);
   docketClerkAddsCaseToHearing(cerebralTest, 'Low blast radius', 0);
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   docketClerkRemovesCaseFromHearing(cerebralTest);
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   manuallyAddCaseToTrial(cerebralTest);
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkPrioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkUnprioritizesCase(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkBlocksCase(cerebralTest, trialLocation, overrides);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkUnblocksCase(cerebralTest, trialLocation);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 
   const updatedCaseCaption = 'I am the new case caption!';
   updateACaseCaption(cerebralTest, updatedCaseCaption);
@@ -114,5 +114,5 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
     expect(caseDetail.caseCaption).toBeDefined();
     expect(caseDetail.caseCaption).toEqual(updatedCaseCaption);
   });
-  docketClerkVerifiesConsolidatesCases(cerebralTest);
+  docketClerkVerifiesConsolidatedCases(cerebralTest);
 });
