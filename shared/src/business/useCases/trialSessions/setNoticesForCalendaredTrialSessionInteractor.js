@@ -42,7 +42,7 @@ const shouldAppendClinicLetter = async ({
   let appendClinicLetter = false;
   let clinicLetterKey;
 
-  for (let party in servedParties.paper) {
+  for (let party of servedParties.paper) {
     if (!caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId)) {
       clinicLetterKey = getClinicLetterKey({
         procedureType,
