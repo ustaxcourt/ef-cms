@@ -67,6 +67,7 @@ const shouldAppendClinicLetter = async ({
  * recipients and generates paper notices for those that get paper service
  *
  * @param {object} deconstructed.applicationContext the applicationContext
+ * @param {object} deconstructed.appendClinicLetter true if the clinic letter has been appended to the notice
  * @param {object} deconstructed.caseEntity the case entity
  * @param {object} deconstructed.newPdfDoc the pdf we are generating
  * @param {Uint8Array} deconstructed.noticeDocketEntryEntity the docket entry entity
@@ -325,7 +326,6 @@ const setNoticeForCase = async ({
 
   caseEntity.addDocketEntry(standingPretrialDocketEntry);
 
-  // TODO: consider moving these two (four) calls to below `serveNoticesForCase`
   noticeOfTrialDocketEntry.setAsServed(servedParties.all);
   standingPretrialDocketEntry.setAsServed(servedParties.all);
 
