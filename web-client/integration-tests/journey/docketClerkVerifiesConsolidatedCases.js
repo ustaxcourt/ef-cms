@@ -1,4 +1,4 @@
-export const docketClerkVerifiesConsolidatesCases = cerebralTest => {
+export const docketClerkVerifiesConsolidatedCases = cerebralTest => {
   return it('Docket clerk verifies consolidates cases', () => {
     const expectedDocketNumber = cerebralTest.leadDocketNumber;
     const caseDetail = cerebralTest.getState('caseDetail');
