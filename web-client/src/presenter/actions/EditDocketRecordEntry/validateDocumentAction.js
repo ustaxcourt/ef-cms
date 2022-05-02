@@ -37,11 +37,9 @@ export const validateDocumentAction = ({ applicationContext, get, path }) => {
     errors = omit(
       {
         ...errors,
-        ...applicationContext
-          .getUseCases()
-          .validateDocketEntryInteractor(applicationContext, {
-            entryMetadata: formMetadata,
-          }),
+        ...applicationContext.getUseCases().validateDocketEntryInteractor({
+          entryMetadata: formMetadata,
+        }),
       },
       ['dateReceived', 'filers'],
     );
