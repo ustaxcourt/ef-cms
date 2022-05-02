@@ -23,17 +23,6 @@ const findNoticeOfTrialDocketEntry = caseRecord => {
   );
 };
 
-const findStandingPretrialDocketEntry = caseRecord => {
-  return caseRecord.docketEntries.find(
-    doc =>
-      doc.documentType ===
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
-          .documentType ||
-      doc.documentType ===
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.documentType,
-  );
-};
-
 const MOCK_TRIAL = {
   judge: {
     name: 'Judge Mary Kate and Ashley',
@@ -419,97 +408,6 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       findNoticeOfTrialDocketEntry(calendaredCases[1]).servedAt,
     ).toBeDefined();
-  });
-
-  it('Should generate a signed Standing Pretrial Order for REGULAR cases', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      docketNumber: '102-20', // MOCK_CASE with procedureType: 'Regular'
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(
-      applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
-    ).toHaveBeenCalled();
-    expect(findStandingPretrialDocketEntry(calendaredCases[0])).toMatchObject({
-      attachments: false,
-      eventCode:
-        SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode,
-      signedByUserId: MOCK_TRIAL.judge.userId,
-      signedJudgeName: MOCK_TRIAL.judge.name,
-    });
-  });
-
-  it('Should generate a Standing Pretrial Order for Small Case for SMALL cases', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      docketNumber: '103-20', // MOCK_CASE with procedureType: 'Small'
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(
-      applicationContext.getUseCases()
-        .generateStandingPretrialOrderForSmallCaseInteractor,
-    ).toHaveBeenCalled();
-    expect(findStandingPretrialDocketEntry(calendaredCases[1]).eventCode).toBe(
-      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
-        .eventCode,
-    );
-  });
-
-  it('Should set the status of the Standing Pretrial Document as served for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
-    expect(
-      findStandingPretrialDocketEntry(calendaredCases[0]).servedAt,
-    ).toBeDefined();
-    expect(
-      findStandingPretrialDocketEntry(calendaredCases[1]).servedAt,
-    ).toBeDefined();
-  });
-
-  it('Should set the servedAt field for the Standing Pretrial Document for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
-    expect(
-      findStandingPretrialDocketEntry(calendaredCases[0]).servedAt,
-    ).toBeTruthy();
-    expect(
-      findStandingPretrialDocketEntry(calendaredCases[1]).servedAt,
-    ).toBeTruthy();
-  });
-
-  it('Should set the servedParties field for the Standing Pretrial Document for each case', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenCalled();
-    expect(
-      findStandingPretrialDocketEntry(calendaredCases[0]).servedParties.length,
-    ).toBeGreaterThan(0);
-    expect(
-      findStandingPretrialDocketEntry(calendaredCases[1]).servedParties.length,
-    ).toBeGreaterThan(0);
   });
 
   it('should append a clinic letter to the docket record NTD when one exists, a petitioner on the case has paper service, and that petitioner is pro se', async () => {
