@@ -1,9 +1,5 @@
 const baseConfig = require('../jest.config');
 
-const { TextDecoder, TextEncoder } = require('util');
-global.TextEncoder = TextEncoder;
-global.TextDecoder = TextDecoder;
-
 module.exports = {
   ...baseConfig,
   collectCoverage: true,
@@ -32,8 +28,6 @@ module.exports = {
   globals: {
     File() {},
     FileReader() {},
-    TextDecoder,
-    TextEncoder,
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
@@ -41,9 +35,4 @@ module.exports = {
     '^uuid$': require.resolve('uuid'),
   },
   testEnvironment: './JsdomWithTextEncoderEnvironment.js',
-  //this is to ignore imported html files
-  // transform: {
-  //   '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
-  //   '^.+\\.html?$': './htmlLoader.js',
-  // },
 };

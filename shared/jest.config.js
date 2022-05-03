@@ -30,8 +30,5 @@ module.exports = {
     '^uuid$': require.resolve('uuid'),
   },
   testEnvironment: '../web-client/JsdomWithTextEncoderEnvironment.js',
-  // transform: {
-  //   '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
-  // },
   verbose: false,
 };
