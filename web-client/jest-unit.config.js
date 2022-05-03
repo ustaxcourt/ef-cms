@@ -42,8 +42,8 @@ module.exports = {
   },
   testEnvironment: './JsdomWithTextEncoderEnvironment.js',
   //this is to ignore imported html files
-  transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
-    '^.+\\.html?$': './htmlLoader.js',
-  },
+  // transform: {
+  //   '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+  //   '^.+\\.html?$': './htmlLoader.js',
+  // },
 };

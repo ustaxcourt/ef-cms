@@ -11,8 +11,8 @@ module.exports = {
   testEnvironment: 'node',
   testTimeout: 30000,
   //this is to ignore imported html files
-  transform: {
-    '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
-    '^.+\\.html?$': './htmlLoader.js',
-  },
+  // transform: {
+  //   '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
+  //   '^.+\\.html?$': './htmlLoader.js',
+  // },
 };
