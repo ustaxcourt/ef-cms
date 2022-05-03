@@ -79,6 +79,7 @@ describe('Docket Clerk', () => {
 
     // expect that the message came to me (we think with the bug this would have been broken)
   });
+
   describe('forward a message', () => {
     it('should go to case detail, navigate to case messages, and go to the first message detail', () => {
       goToCaseDetail('103-20');

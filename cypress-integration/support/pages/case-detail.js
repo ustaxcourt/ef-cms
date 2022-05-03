@@ -48,7 +48,7 @@ exports.goToCaseMessages = () => {
 };
 
 exports.goToMessageDetail = () => {
-  cy.get('div.message-document-title').first().click();
+  cy.get('div.message-document-title>a').first().click();
 };
 
 exports.openReplyToMessageModal = () => {
