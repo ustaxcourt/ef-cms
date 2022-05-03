@@ -67,9 +67,9 @@ export const createNewMessageOnCase = cerebralTest => {
 
     await cerebralTest.runSequence('createMessageSequence');
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    expect(cerebralTest.getState('modal.form')).toBeDefined();
 
-    expect(getHelper().showMessageAttachments).toBeDefined();
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await refreshElasticsearchIndex();
   });
