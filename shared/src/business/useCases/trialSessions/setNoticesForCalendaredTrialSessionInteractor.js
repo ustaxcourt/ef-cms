@@ -40,10 +40,9 @@ const shouldAppendClinicLetter = async ({
 }) => {
   let appendClinicLetter = false;
   let clinicLetterKey;
-  console.log('caseEntity', caseEntity);
+
   // add clinic letter for ANY pro se petitioner
   for (let petitioner of caseEntity.petitioners) {
-    console.log('petitioner', petitioner);
     if (
       !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
     ) {
