@@ -11,44 +11,6 @@ exports.goToPetitionNeedingQC = () => {
   cy.get('a[href*="petition-qc"]').first().click();
 };
 
-exports.goToDocumentNeedingQC = () => {
-  cy.get('a.case-link').first().click();
-};
-
-exports.openCompleteAndSendMessageDialog = () => {
-  cy.get('button#save-and-add-supporting').click();
-};
-
-exports.selectSection = section => {
-  cy.get('#toSection').scrollIntoView().select(section);
-};
-
-exports.selectRecipient = recipient => {
-  cy.get('#toUserId').scrollIntoView().select(recipient);
-};
-
-exports.fillOutMessageField = () => {
-  cy.get('#message').clear().type("I don't appreciate your lack of sarcasm.");
-};
-
-exports.enterSubject = () => {
-  cy.get('#subject').clear().type('Demeanor');
-};
-
-exports.sendMessage = () => {
-  cy.get('#confirm').click();
-};
-
-exports.goToCaseDetail = docketNumber => {
-  cy.goToRoute(`/case-detail/${docketNumber}`);
-  cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
-};
-
-exports.createMessage = () => {
-  cy.get('#case-detail-menu-button').click();
-  cy.get('#menu-button-add-new-message').click();
-};
-
 exports.goToPetitionNeedingQCByCaseTitle = caseTitle => {
   cy.get(`td:contains(${caseTitle})`)
     .first()
@@ -89,12 +51,4 @@ exports.confirmServePetition = () => {
   cy.get('button#confirm').click();
 
   cy.get('div.usa-alert--success').should('exist');
-};
-
-exports.alertSuccessShouldExist = () => {
-  cy.get('div.usa-alert--success').should('exist');
-};
-
-exports.progressIndicatorDoesNotExist = () => {
-  cy.get('.progress-indicator').should('not.exist');
 };

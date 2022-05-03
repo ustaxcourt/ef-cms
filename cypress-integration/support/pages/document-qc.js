@@ -24,10 +24,6 @@ exports.createMessage = () => {
   cy.get('#menu-button-add-new-message').click();
 };
 
-exports.goToDocumentNeedingQC = () => {
-  cy.get('a.case-link').first().click();
-};
-
 exports.openCompleteAndSendMessageDialog = () => {
   cy.get('button#save-and-add-supporting').click();
 };
