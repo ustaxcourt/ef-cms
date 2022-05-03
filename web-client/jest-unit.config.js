@@ -1,4 +1,4 @@
-const baseConfig = require('../jest.config');
+const baseConfig = require('../jest-browser.config');
 
 module.exports = {
   ...baseConfig,
@@ -31,8 +31,8 @@ module.exports = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
-  moduleNameMapper: {
-    '^uuid$': require.resolve('uuid'),
-  },
-  testEnvironment: './JsdomWithTextEncoderEnvironment.js',
+  // moduleNameMapper: {
+  //   '^uuid$': require.resolve('uuid'),
+  // },
+  // testEnvironment: './JsdomWithTextEncoderEnvironment.js',
 };
