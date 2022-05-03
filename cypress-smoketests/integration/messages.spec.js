@@ -1,5 +1,4 @@
 const {
-  alertSuccessShouldExist,
   createMessage,
   enterSubject,
   fillOutMessageField,
@@ -72,7 +71,7 @@ describe('Docket Clerk', () => {
       enterSubject();
       fillOutMessageField();
       sendMessage();
-      alertSuccessShouldExist();
+      progressIndicatorDoesNotExist();
     });
   });
 
