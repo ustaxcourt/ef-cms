@@ -28,11 +28,11 @@ exports.selectRecipient = recipient => {
 };
 
 exports.fillOutMessageField = () => {
-  cy.get('#message').type("I don't appreciate your lack of sarcasm.");
+  cy.get('#message').clear().type("I don't appreciate your lack of sarcasm.");
 };
 
 exports.enterSubject = () => {
-  cy.get('#subject').type('Demeanor');
+  cy.get('#subject').clear().type('Demeanor');
 };
 
 exports.sendMessage = () => {

@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
+import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeMessageAction } from '../actions/CaseDetail/completeMessageAction';
@@ -15,6 +16,7 @@ export const completeMessageSequence = showProgressSequenceDecorator([
   clearScreenMetadataAction,
   clearUsersAction,
   clearModalAction,
+  clearModalStateAction,
   getMessageThreadAction,
   setMessageAction,
 ]);
