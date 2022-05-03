@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
+import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { forwardMessageAction } from '../actions/CaseDetail/forwardMessageAction';
@@ -31,6 +32,7 @@ export const forwardMessageSequence = showProgressSequenceDecorator([
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
+      clearModalStateAction,
     ]),
   },
 ]);
