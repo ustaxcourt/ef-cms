@@ -1,4 +1,4 @@
-const baseConfig = require('../jest.config');
+const baseConfig = require('../jest-browser.config');
 
 module.exports = {
   ...baseConfig,
@@ -26,9 +26,9 @@ module.exports = {
       statements: 98.25,
     },
   },
-  moduleNameMapper: {
-    '^uuid$': require.resolve('uuid'),
-  },
-  testEnvironment: '../web-client/JsdomWithTextEncoderEnvironment.js',
+  // moduleNameMapper: {
+  //   '^uuid$': require.resolve('uuid'),
+  // },
+  // testEnvironment: '../web-client/JsdomWithTextEncoderEnvironment.js',
   verbose: false,
 };

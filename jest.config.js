@@ -7,7 +7,7 @@ module.exports = {
   collectCoverage: false,
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
-  setupFilesAfterEnv: [`${__dirname}/enzyme.config.js`],
+  // setupFilesAfterEnv: [`${__dirname}/enzyme.config.js`],
   testEnvironment: 'jsdom',
   testSequencer: `${__dirname}/jestSequencer.js`,
   transform: {
