@@ -1,7 +1,10 @@
 import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
 import { PETITIONS_SECTION } from '../../../shared/src/business/entities/EntityConstants';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
-import { refreshElasticsearchIndex } from '../helpers';
+import {
+  refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -69,7 +72,10 @@ export const createNewMessageOnCase = cerebralTest => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(getHelper().showMessageAttachments).toBeDefined();
+    await waitForLoadingComponentToHide({ cerebralTest, maxWait: 12000 });
+    expect(cerebralTest.getState('progressIndicator.waitingForResponse')).toBe(
+      false,
+    );
 
     await refreshElasticsearchIndex();
   });
