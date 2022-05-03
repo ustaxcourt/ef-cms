@@ -11,19 +11,12 @@ const {
   selectSection,
   sendMessage,
 } = require('../support/pages/document-qc');
-const {
-  goToCaseDetail,
-  goToMessageDetail,
-  openCompleteMessageModal,
-  openForwardMessageModal,
-  openReplyToMessageModal,
-} = require('../support/pages/case-detail');
-const { goToCaseMessages } = require('../support/pages/case-detail');
+const { goToCaseDetail } = require('../support/pages/case-detail');
 
-describe('Docket Clerk', () => {
-  describe('complete and send message', () => {
+describe('Messages', () => {
+  describe('Docket clerk completes qc and sends a message', () => {
     it('should go to section document QC inbox', () => {
-      cy.login('docketclerk'); // this can be any logged in user
+      cy.login('docketclerk');
       goToMyDocumentQC();
       goToSectionDocumentQC();
     });
@@ -48,8 +41,9 @@ describe('Docket Clerk', () => {
     });
   });
 
-  describe('create and send a message', () => {
+  describe('Docket clerk creates and sends a message', () => {
     it('should go to case detail and open the dialog to create a new message', () => {
+      cy.login('docketclerk');
       goToCaseDetail('103-20');
       createMessage();
     });
@@ -62,55 +56,5 @@ describe('Docket Clerk', () => {
       sendMessage();
       progressIndicatorDoesNotExist();
     });
-  });
-
-  describe('reply to a message', () => {
-    it('should go to case detail, navigate to case messages, and go to the first message detail', () => {
-      goToCaseDetail('103-20');
-      goToCaseMessages();
-      goToMessageDetail();
-    });
-
-    it('should reply to the message', () => {
-      openReplyToMessageModal();
-      fillOutMessageField();
-      sendMessage();
-    });
-
-    // expect that the message came to me (we think with the bug this would have been broken)
-  });
-
-  describe('forward a message', () => {
-    it('should go to case detail, navigate to case messages, and go to the first message detail', () => {
-      goToCaseDetail('103-20');
-      goToCaseMessages();
-      goToMessageDetail();
-    });
-
-    it('should forward the message', () => {
-      openForwardMessageModal();
-      selectSection('ADC');
-      selectRecipient('Test ADC');
-      enterSubject();
-      fillOutMessageField();
-      sendMessage();
-    });
-
-    // expect that the message came to me (we think with the bug this would have been broken)
-  });
-
-  describe('complete a message', () => {
-    it('should go to case detail, navigate to case messages, and go to the first message detail', () => {
-      goToCaseDetail('103-20');
-      goToCaseMessages();
-      goToMessageDetail();
-    });
-
-    it('should complete the message', () => {
-      openCompleteMessageModal();
-      sendMessage();
-    });
-
-    // expect that the message came to me (we think with the bug this would have been broken)
   });
 });
