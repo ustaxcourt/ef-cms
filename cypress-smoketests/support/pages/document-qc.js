@@ -31,8 +31,22 @@ exports.fillOutMessageField = () => {
   cy.get('#message').type("I don't appreciate your lack of sarcasm.");
 };
 
+exports.enterSubject = () => {
+  cy.get('#subject').type('Demeanor');
+};
+
 exports.sendMessage = () => {
   cy.get('#confirm').click();
+};
+
+exports.goToCaseDetail = docketNumber => {
+  cy.goToRoute(`/case-detail/${docketNumber}`);
+  cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
+};
+
+exports.createMessage = () => {
+  cy.get('#case-detail-menu-button').click();
+  cy.get('#menu-button-add-new-message').click();
 };
 
 exports.goToPetitionNeedingQCByCaseTitle = caseTitle => {
@@ -74,6 +88,10 @@ exports.servePetition = () => {
 exports.confirmServePetition = () => {
   cy.get('button#confirm').click();
 
+  cy.get('div.usa-alert--success').should('exist');
+};
+
+exports.alertSuccessShouldExist = () => {
   cy.get('div.usa-alert--success').should('exist');
 };
 
