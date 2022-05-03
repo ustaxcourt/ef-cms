@@ -258,6 +258,7 @@ exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
   docketNumber: '321-21',
   docketNumberSuffix: 'W',
   highPriority: true,
+  highPriorityReason: 'High priority is a state of mind',
   irsPractitioners: [
     {
       barNumber: 'VS0062',
@@ -280,6 +281,8 @@ exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
       userId: '020374b7-b274-462b-8a16-65783147efa9',
     },
   ],
+  partyType: PARTY_TYPES.petitioner,
+  petitioners: this.MOCK_CASE.petitioners,
   privatePractitioners: [
     {
       barNumber: 'OK0063',
@@ -302,4 +305,5 @@ exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
       userId: '3bcd5fb7-434e-4354-aa08-1d10846c1867',
     },
   ],
+  procedureType: 'Regular',
 };
