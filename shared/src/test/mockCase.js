@@ -280,7 +280,6 @@ exports.MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS = {
       userId: '020374b7-b274-462b-8a16-65783147efa9',
     },
   ],
-  partyType: PARTY_TYPES.petitioner,
   privatePractitioners: [
     {
       barNumber: 'OK0063',
