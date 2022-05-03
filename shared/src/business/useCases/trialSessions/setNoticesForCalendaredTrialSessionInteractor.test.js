@@ -68,11 +68,11 @@ const case1 = {
 };
 
 const caseWithNoProSePetitioner = {
-  ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+  ...MOCK_CASE,
   privatePractitioners: [
     {
       ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-      representing: [case0.petitioners[0].contactId],
+      representing: [MOCK_CASE.petitioners[0].contactId],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     },
   ],
