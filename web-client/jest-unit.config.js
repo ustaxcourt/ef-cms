@@ -31,8 +31,4 @@ module.exports = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
-  // moduleNameMapper: {
-  //   '^uuid$': require.resolve('uuid'),
-  // },
-  // testEnvironment: './JsdomWithTextEncoderEnvironment.js',
 };
