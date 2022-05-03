@@ -153,23 +153,20 @@ export const CaseDetailHeader = connect(
                       {formattedCaseDetail.docketNumberWithSuffix}
                     </CaseLink>
                   </h1>
-                  {formattedCaseDetail.isLeadCase && (
-                    <span
-                      aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
-                      className="usa-tag"
-                      id="lead-case-tag"
-                    >
-                      <span aria-hidden="true">Lead case</span>
-                    </span>
-                  )}
                   {caseDetailHeaderHelper.hidePublicCaseInformation && (
                     <>
+                      {formattedCaseDetail.isLeadCase && (
+                        <span
+                          aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
+                          className="usa-tag"
+                          id="lead-case-tag"
+                        >
+                          <span aria-hidden="true">Lead case</span>
+                        </span>
+                      )}
                       <span
                         aria-label={`status: ${formattedCaseDetail.status}`}
-                        className={classNames(
-                          'usa-tag',
-                          formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
-                        )}
+                        className="usa-tag"
                       >
                         <span aria-hidden="true">
                           {formattedCaseDetail.status}
