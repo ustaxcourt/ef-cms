@@ -8,6 +8,7 @@ import { petitionsClerkCreatesNewCaseFromPaper } from './journey/petitionsClerkC
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
+import { userVerifiesLengthOfDocketEntry } from './journey/userVerifiesLengthOfDocketEntry';
 
 const cerebralTest = setupTest();
 
@@ -61,21 +62,6 @@ describe('Petitions Clerk creates a paper case which should have a clinic letter
   });
 
   describe('verify the docket record has the NTD with clinic letter appended (2 pages total)', () => {
-    it('should have 2 pages', async () => {
-      cerebralTest.setState('caseDetail', {});
-
-      await cerebralTest.runSequence('gotoCaseDetailSequence', {
-        docketNumber: cerebralTest.docketNumber,
-      });
-
-      console.log('cerebralTest.docketNumber', cerebralTest.docketNumber);
-      expect(
-        cerebralTest
-          .getState('caseDetail.docketEntries')
-          .find(entry => entry.eventCode === 'NTD'),
-      ).toMatchObject({
-        numberOfPages: 2,
-      });
-    });
+    userVerifiesLengthOfDocketEntry(cerebralTest, 'NTD', 2);
   });
 });
