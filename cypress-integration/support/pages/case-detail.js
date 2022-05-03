@@ -42,23 +42,3 @@ exports.createOrder = docketNumber => {
   cy.get('#save-order-button').click();
   cy.url().should('contain', '/sign');
 };
-
-exports.goToCaseMessages = () => {
-  cy.get('button#tab-case-messages').click();
-};
-
-exports.goToMessageDetail = () => {
-  cy.get('div.message-document-title>a').first().click();
-};
-
-exports.openReplyToMessageModal = () => {
-  cy.get('button#button-reply').click();
-};
-
-exports.openForwardMessageModal = () => {
-  cy.get('button#button-forward').click();
-};
-
-exports.openCompleteMessageModal = () => {
-  cy.get('button#button-complete').click();
-};
