@@ -2,7 +2,6 @@ const {
   createMessage,
   enterSubject,
   fillOutMessageField,
-  goToCaseDetail,
   goToDocumentNeedingQC,
   goToMyDocumentQC,
   goToSectionDocumentQC,
@@ -13,28 +12,18 @@ const {
   sendMessage,
 } = require('../support/pages/document-qc');
 const {
-  getEnvironmentSpecificFunctions,
-} = require('../support/pages/environment-specific-factory');
-const { getUserToken, login } = getEnvironmentSpecificFunctions();
-
-const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
-let token = null;
+  goToCaseDetail,
+  goToMessageDetail,
+  openCompleteMessageModal,
+  openForwardMessageModal,
+  openReplyToMessageModal,
+} = require('../support/pages/case-detail');
+const { goToCaseMessages } = require('../support/pages/case-detail');
 
 describe('Docket Clerk', () => {
-  before(async () => {
-    const results = await getUserToken(
-      'docketclerk1@example.com',
-      DEFAULT_ACCOUNT_PASS,
-    );
-    token = results.AuthenticationResult.IdToken;
-  });
-
-  it('should be able to login', () => {
-    login(token);
-  });
-
   describe('complete and send message', () => {
     it('should go to section document QC inbox', () => {
+      cy.login('docketclerk'); // this can be any logged in user
       goToMyDocumentQC();
       goToSectionDocumentQC();
     });
@@ -76,18 +65,51 @@ describe('Docket Clerk', () => {
   });
 
   describe('reply to a message', () => {
-    // go to message ^^^
-    // reply to it
+    it('should go to case detail, navigate to case messages, and go to the first message detail', () => {
+      goToCaseDetail('103-20');
+      goToCaseMessages();
+      goToMessageDetail();
+    });
+
+    it('should reply to the message', () => {
+      openReplyToMessageModal();
+      fillOutMessageField();
+      sendMessage();
+    });
+
     // expect that the message came to me (we think with the bug this would have been broken)
   });
   describe('forward a message', () => {
-    // go to message ^^^
-    // forward it
+    it('should go to case detail, navigate to case messages, and go to the first message detail', () => {
+      goToCaseDetail('103-20');
+      goToCaseMessages();
+      goToMessageDetail();
+    });
+
+    it('should forward the message', () => {
+      openForwardMessageModal();
+      selectSection('ADC');
+      selectRecipient('Test ADC');
+      enterSubject();
+      fillOutMessageField();
+      sendMessage();
+    });
+
     // expect that the message came to me (we think with the bug this would have been broken)
   });
+
   describe('complete a message', () => {
-    // go to message ^^^
-    // complete it
+    it('should go to case detail, navigate to case messages, and go to the first message detail', () => {
+      goToCaseDetail('103-20');
+      goToCaseMessages();
+      goToMessageDetail();
+    });
+
+    it('should complete the message', () => {
+      openCompleteMessageModal();
+      sendMessage();
+    });
+
     // expect that the message came to me (we think with the bug this would have been broken)
   });
 });

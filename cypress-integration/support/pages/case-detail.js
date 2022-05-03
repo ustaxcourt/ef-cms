@@ -2,6 +2,12 @@ exports.navigateTo = (username, docketNumber) => {
   cy.login(username, `/case-detail/${docketNumber}`);
 };
 
+exports.goToCaseDetail = docketNumber => {
+  cy.get('#search-field').clear().type(docketNumber);
+  cy.get('.ustc-search-button').click();
+  cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
+};
+
 exports.getActionMenuButton = () => {
   return cy.get('button.case-detail-menu__button');
 };
@@ -35,4 +41,24 @@ exports.createOrder = docketNumber => {
   cy.get('.ql-editor').type('A created order!');
   cy.get('#save-order-button').click();
   cy.url().should('contain', '/sign');
+};
+
+exports.goToCaseMessages = () => {
+  cy.get('button#tab-case-messages').click();
+};
+
+exports.goToMessageDetail = () => {
+  cy.get('div.message-document-title').first().click();
+};
+
+exports.openReplyToMessageModal = () => {
+  cy.get('button#button-reply').click();
+};
+
+exports.openForwardMessageModal = () => {
+  cy.get('button#button-forward').click();
+};
+
+exports.openCompleteMessageModal = () => {
+  cy.get('button#button-complete').click();
 };
