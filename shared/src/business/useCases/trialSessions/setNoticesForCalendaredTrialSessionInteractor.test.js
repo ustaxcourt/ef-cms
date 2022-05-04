@@ -3,6 +3,10 @@ const {
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
+  MOCK_CASE,
+  MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+} = require('../../../test/mockCase');
+const {
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
@@ -11,7 +15,6 @@ const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
 const { getFakeFile } = require('../../test/getFakeFile');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
@@ -52,33 +55,29 @@ let trialSession;
 const case0 = {
   // should get electronic service
   ...MOCK_CASE,
-  contactPrimary: {
-    ...MOCK_CASE.contactPrimary,
-    email: 'petitioner@example.com',
-  },
   docketNumber: '102-20',
   procedureType: 'Regular',
 };
 const case1 = {
   // should get paper service
   ...MOCK_CASE,
-  contactPrimary: {
-    ...MOCK_CASE.contactPrimary,
-  },
   docketNumber: '103-20',
   isPaper: true,
   mailingDate: 'testing',
   procedureType: 'Small',
 };
-const caseWithPaperProSePetitioner = {
-  ...case0,
-  petitioners: [
+
+const caseWithNoProSePetitioner = {
+  ...MOCK_CASE,
+  privatePractitioners: [
     {
-      ...case0.petitioners[0],
+      ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+      representing: [MOCK_CASE.petitioners[0].contactId],
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     },
   ],
 };
+
 const fakeClinicLetter = getFakeFile(true, true);
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
@@ -410,12 +409,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).toBeDefined();
   });
 
-  it('should append a clinic letter to the docket record NTD when one exists, a petitioner on the case has paper service, and that petitioner is pro se', async () => {
+  it('should append a clinic letter to the docket record NTD when one exists, and a petitioner on the case is pro se', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReset()
-      .mockReturnValueOnce(caseWithPaperProSePetitioner)
-      .mockReturnValueOnce(caseWithPaperProSePetitioner)
+      .mockReturnValueOnce(calendaredCases[0])
+      .mockReturnValueOnce(calendaredCases[0])
       .mockReturnValueOnce(calendaredCases[1])
       .mockReturnValueOnce(calendaredCases[1]);
 
@@ -441,10 +440,18 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     });
   });
 
-  it('should NOT append a clinic letter to docket record NTD when one exists, but no petitioner has paper service', async () => {
+  it('should NOT append a clinic letter to the docket record NTD when one exists, but there are no pro se petitioners on the case', async () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockReturnValue(true);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReset()
+      .mockReturnValueOnce(caseWithNoProSePetitioner)
+      .mockReturnValueOnce(caseWithNoProSePetitioner)
+      .mockReturnValueOnce(caseWithNoProSePetitioner)
+      .mockReturnValueOnce(caseWithNoProSePetitioner);
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -461,16 +468,16 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should fetch the clinic letter correctly when it exists when party has paper service and is not represented', async () => {
+  it('should fetch the clinic letter correctly when it exists when party is not represented', async () => {
     const smallCase = {
-      ...caseWithPaperProSePetitioner,
+      ...calendaredCases[0],
       procedureType: 'Small',
     };
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReset()
-      .mockReturnValueOnce(caseWithPaperProSePetitioner)
-      .mockReturnValueOnce(caseWithPaperProSePetitioner)
+      .mockReturnValueOnce(calendaredCases[0])
+      .mockReturnValueOnce(calendaredCases[0])
       .mockReturnValueOnce(smallCase)
       .mockReturnValueOnce(smallCase);
 

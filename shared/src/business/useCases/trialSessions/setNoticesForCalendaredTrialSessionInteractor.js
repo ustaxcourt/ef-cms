@@ -36,14 +36,16 @@ const shouldAppendClinicLetter = async ({
   applicationContext,
   caseEntity,
   procedureType,
-  servedParties,
   trialSession,
 }) => {
   let appendClinicLetter = false;
   let clinicLetterKey;
 
-  for (let party in servedParties.paper) {
-    if (!caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId)) {
+  // add clinic letter for ANY pro se petitioner
+  for (let petitioner of caseEntity.petitioners) {
+    if (
+      !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
+    ) {
       clinicLetterKey = getClinicLetterKey({
         procedureType,
         trialLocation: trialSession.trialLocation,
