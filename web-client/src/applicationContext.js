@@ -25,7 +25,6 @@ import {
 } from '../../shared/src/business/entities/DocketEntry';
 import {
   ERROR_MAP_429,
-  chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
   getEnvironment,
@@ -171,6 +170,7 @@ import {
   getChambersSections,
   getChambersSectionsLabels,
 } from '../../shared/src/persistence/dynamo/chambers/getJudgesChambers';
+import { getChiefJudgeNameForSigningInteractor } from '../../shared/src/proxies/getChiefJudgeNameForSigningProxy';
 import { getClinicLetterKey } from '../../shared/src/business/utilities/getClinicLetterKey';
 import { getClosedCasesInteractor } from '../../shared/src/proxies/getClosedCasesProxy';
 import { getConsolidatedCasesByCaseInteractor } from '../../shared/src/proxies/getConsolidatedCasesByCaseProxy';
@@ -349,6 +349,7 @@ const allUseCases = {
   addPetitionerToCaseInteractor,
   appendAmendedPetitionFormInteractor,
   archiveCorrespondenceDocumentInteractor,
+
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
   associateIrsPractitionerWithCaseInteractor,
@@ -408,6 +409,7 @@ const allUseCases = {
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getChiefJudgeNameForSigningInteractor,
   getClosedCasesInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
@@ -575,7 +577,6 @@ const applicationContext = {
     return broadcastChannel;
   },
   getCaseTitle: Case.getCaseTitle,
-  getChiefJudgeNameForSigning: () => chiefJudgeNameForSigning,
   getClerkOfCourtNameForSigning: () => clerkOfCourtNameForSigning,
   getCognitoClientId: () => {
     return process.env.COGNITO_CLIENT_ID || '6tu6j1stv5ugcut7dqsqdurn8q';
