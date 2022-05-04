@@ -167,6 +167,7 @@ import { getCaseDeadlinesInteractor } from '../../shared/src/proxies/caseDeadlin
 import { getCaseExistsInteractor } from '../../shared/src/proxies/getCaseExistsProxy';
 import { getCaseInteractor } from '../../shared/src/proxies/getCaseProxy';
 import { getCaseInventoryReportInteractor } from '../../shared/src/proxies/reports/getCaseInventoryReportProxy';
+import { getCasesForUserInteractor } from '../../shared/src/proxies/getCasesForUserProxy';
 import {
   getChambersSections,
   getChambersSectionsLabels,
@@ -191,7 +192,6 @@ import { getItemInteractor } from '../../shared/src/business/useCases/getItemInt
 import { getMessageThreadInteractor } from '../../shared/src/proxies/messages/getMessageThreadProxy';
 import { getMessagesForCaseInteractor } from '../../shared/src/proxies/messages/getMessagesForCaseProxy';
 import { getNotificationsInteractor } from '../../shared/src/proxies/users/getNotificationsProxy';
-import { getOpenConsolidatedCasesInteractor } from '../../shared/src/proxies/getOpenConsolidatedCasesProxy';
 import { getOutboxMessagesForSectionInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForSectionProxy';
 import { getOutboxMessagesForUserInteractor } from '../../shared/src/proxies/messages/getOutboxMessagesForUserProxy';
 import { getPdfFromUrl } from '../../shared/src/persistence/s3/getPdfFromUrl';
@@ -408,6 +408,7 @@ const allUseCases = {
   getCaseExistsInteractor,
   getCaseInteractor,
   getCaseInventoryReportInteractor,
+  getCasesForUserInteractor,
   getClosedCasesInteractor,
   getCompletedMessagesForSectionInteractor,
   getCompletedMessagesForUserInteractor,
@@ -431,7 +432,6 @@ const allUseCases = {
   getMessageThreadInteractor,
   getMessagesForCaseInteractor,
   getNotificationsInteractor,
-  getOpenConsolidatedCasesInteractor,
   getOutboxMessagesForSectionInteractor,
   getOutboxMessagesForUserInteractor,
   getPdfFromUrlInteractor,

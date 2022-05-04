@@ -249,9 +249,6 @@ const {
   getMessagesForCaseLambda,
 } = require('./messages/getMessagesForCaseLambda');
 const {
-  getOpenConsolidatedCasesLambda,
-} = require('./cases/getOpenConsolidatedCasesLambda');
-const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
 const {
@@ -440,6 +437,7 @@ const { getCaseExistsLambda } = require('./cases/getCaseExistsLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
 const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
+const { getCasesForUserLambda } = require('./cases/getCasesForUserLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
@@ -803,7 +801,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  * cases
  */
 {
-  app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
+  app.get('/cases/open', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
