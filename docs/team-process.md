@@ -81,7 +81,8 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 6. (Optional) Check through the list of caveats to see if any of the documented issues have been resolved.
 
 #### Caveats
-##### Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
+
+Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
 
 - `@fortawesome/free-solid-svg-icons`: v6.0.0 caused a regression with faThumbtack so it is not importable. [Github issue](https://github.com/FortAwesome/Font-Awesome/issues/18661) Temporarily locking this package and `fortawesome/free-regular-svg-icons` at v5.15.4 until this is patched. Attempted to bump this to ^6.1.0 on 03/17/22 since this [comment](https://github.com/FortAwesome/Font-Awesome/issues/18661#issuecomment-1069357035) says it's fixed in that version, but still seeing multiple icons missing, e.g. `long-arrow-alt-up` and `times-circle`.
 
@@ -93,5 +94,4 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 #### Validating Updates
 -  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
-    - Be sure the deploy runs a migration to verify the updates do not affect the migration workflow.
-
+    - Be sure the deploy [runs a migration](./additional-resources/blue-green-migration.md#manual-migration-steps) to verify the updates do not affect the migration workflow.
