@@ -1,4 +1,5 @@
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
+const { compareISODateStrings } = require('../utilities/sortFunctions');
 const { UserCase } = require('../entities/UserCase');
 
 /**
@@ -10,24 +11,29 @@ const { UserCase } = require('../entities/UserCase');
 exports.getCasesForUserInteractor = async applicationContext => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  let openUserCases = await applicationContext
+  const allUserCases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
       applicationContext,
       userId,
     });
 
-  const filteredOpenCases = openUserCases.filter(
-    ({ status }) => status !== CASE_STATUS_TYPES.closed,
-  );
+  let sortedClosedCases = allUserCases
+    .filter(({ status }) => status === CASE_STATUS_TYPES.closed)
+    .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
+    .reverse();
 
-  openUserCases = UserCase.validateRawCollection(filteredOpenCases, {
+  sortedClosedCases = UserCase.validateRawCollection(sortedClosedCases, {
     applicationContext,
   });
 
-  if (!openUserCases.length) {
-    return { closedCaseList: [], openCaseList: [] };
-  }
+  let filteredOpenCases = allUserCases.filter(
+    ({ status }) => status !== CASE_STATUS_TYPES.closed,
+  );
+
+  filteredOpenCases = UserCase.validateRawCollection(filteredOpenCases, {
+    applicationContext,
+  });
 
   let {
     casesAssociatedWithUserOrLeadCaseMap,
@@ -35,7 +41,7 @@ exports.getCasesForUserInteractor = async applicationContext => {
     userAssociatedDocketNumbersMap,
   } = applicationContext
     .getUseCaseHelpers()
-    .processUserAssociatedCases(openUserCases);
+    .processUserAssociatedCases(filteredOpenCases);
 
   for (const leadDocketNumber of leadDocketNumbersAssociatedWithUser) {
     const consolidatedCases = await applicationContext
@@ -62,15 +68,15 @@ exports.getCasesForUserInteractor = async applicationContext => {
       });
   }
 
-  const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap).map(
-    c => {
-      // explicitly unset the entityName because this is returning a composite entity and if an entityName
-      // is set, the genericHandler will send it through the entity constructor for that entity and strip
-      // out necessary data
-      c.entityName = undefined;
-      return c;
-    },
-  );
+  const foundOpenCases = Object.values(
+    casesAssociatedWithUserOrLeadCaseMap,
+  ).map(c => {
+    // explicitly unset the entityName because this is returning a composite entity and if an entityName
+    // is set, the genericHandler will send it through the entity constructor for that entity and strip
+    // out necessary data
+    c.entityName = undefined;
+    return c;
+  });
 
-  return { closedCaseList: [], openCaseList: foundCases };
+  return { closedCaseList: sortedClosedCases, openCaseList: foundOpenCases };
 };
