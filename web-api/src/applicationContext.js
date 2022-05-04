@@ -458,6 +458,9 @@ const {
   getCasesForUser,
 } = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
 const {
+  getCasesForUserInteractor,
+} = require('../../shared/src/business/useCases/getCasesForUserInteractor');
+const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
@@ -605,9 +608,6 @@ const {
 const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
-const {
-  getOpenConsolidatedCasesInteractor,
-} = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
@@ -1990,6 +1990,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
+        getCasesForUserInteractor,
         getClosedCasesInteractor,
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,
@@ -2013,7 +2014,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
-        getOpenConsolidatedCasesInteractor,
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,

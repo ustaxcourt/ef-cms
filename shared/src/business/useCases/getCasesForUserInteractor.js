@@ -2,12 +2,12 @@ const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UserCase } = require('../entities/UserCase');
 
 /**
- * getOpenConsolidatedCasesInteractor
+ * getCasesForUserInteractor
  *
  * @param {object} applicationContext the application context
  * @returns {object} the open cases data
  */
-exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
+exports.getCasesForUserInteractor = async applicationContext => {
   const { userId } = await applicationContext.getCurrentUser();
 
   let openUserCases = await applicationContext
@@ -26,7 +26,7 @@ exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
   });
 
   if (!openUserCases.length) {
-    return [];
+    return { closedCaseList: [], openCaseList: [] };
   }
 
   let {
@@ -62,13 +62,15 @@ exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
       });
   }
 
-  const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap);
+  const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap).map(
+    c => {
+      // explicitly unset the entityName because this is returning a composite entity and if an entityName
+      // is set, the genericHandler will send it through the entity constructor for that entity and strip
+      // out necessary data
+      c.entityName = undefined;
+      return c;
+    },
+  );
 
-  return foundCases.map(c => {
-    // explicitly unset the entityName because this is returning a composite entity and if an entityName
-    // is set, the genericHandler will send it through the entity constructor for that entity and strip
-    // out necessary data
-    c.entityName = undefined;
-    return c;
-  });
+  return { closedCaseList: [], openCaseList: foundCases };
 };
