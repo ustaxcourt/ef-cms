@@ -41,10 +41,6 @@ describe('getOpenAndClosedCasesByUserAction', () => {
       closedCaseList: mockClosedCases,
       openCaseList: mockOpenCases,
     });
-
-    // applicationContext.getCurrentUser.mockReturnValue({
-    //   userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291',
-    // });
   });
 
   it('should return open and closed cases for the current user', async () => {
@@ -75,7 +71,7 @@ describe('getOpenAndClosedCasesByUserAction', () => {
       },
     });
 
-    expect(output.openCaseList).toBe([
+    expect(output.openCaseList).toEqual([
       { createdAt: '2019-07-21T20:20:15.680Z', docketNumber: '000-00' },
       { createdAt: '2019-07-20T20:20:15.680Z', docketNumber: '123-45' },
       { createdAt: '2019-07-19T20:20:15.680Z', docketNumber: '678-90' },
