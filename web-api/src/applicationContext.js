@@ -467,9 +467,6 @@ const {
   getClientId,
 } = require('../../shared/src/persistence/cognito/getClientId');
 const {
-  getClosedCasesInteractor,
-} = require('../../shared/src/business/useCases/getClosedCasesInteractor');
-const {
   getCognitoUserIdByEmail,
 } = require('../../shared/src/persistence/cognito/getCognitoUserIdByEmail');
 const {
@@ -1991,7 +1988,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCaseInteractor,
         getCaseInventoryReportInteractor,
         getCasesForUserInteractor,
-        getClosedCasesInteractor,
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,
         getConsolidatedCasesByCaseInteractor,
