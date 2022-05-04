@@ -5,7 +5,7 @@ import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
-import { getOpenAndClosedCasesByUserAction } from '../actions/CaseConsolidation/getOpenAndClosedCasesByUserAction';
+import { getOpenAndClosedCasesByUserAction } from '../actions/Dashboard/getOpenAndClosedCasesByUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
