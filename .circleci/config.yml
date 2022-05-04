@@ -7,16 +7,16 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v15-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v16-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v15-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v16-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
             if [ ! -d node_modules ]; then
               npm ci
-            else
+            elseEvbFqSa7pGsLJnx
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.             
             fi
       - run:
@@ -32,18 +32,18 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v15-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v16-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v15-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v16-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v15-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v16-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -56,7 +56,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v15-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v16-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
