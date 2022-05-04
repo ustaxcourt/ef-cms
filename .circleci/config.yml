@@ -16,7 +16,7 @@ commands:
           command: |
             if [ ! -d node_modules ]; then
               npm ci
-            elseEvbFqSa7pGsLJnx
+            else
               echo package.json and package-lock.json are unchanged. Using cached node_modules folder.             
             fi
       - run:
