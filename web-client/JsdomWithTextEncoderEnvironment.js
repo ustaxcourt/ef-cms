@@ -1,9 +1,9 @@
-// const JsdomEnvironment = require('jest-environment-jsdom');
 import JSDOMEnvironment from 'jest-environment-jsdom';
 
 /**
- * A custom environment to set the TextEncoder
+ * A custom JSDOM environment to set the TextEncoder
  */
+// eslint-disable-next-line import/no-default-export
 export default class JsdomWithTextEncoderEnvironment extends JSDOMEnvironment {
   async setup() {
     await super.setup();
