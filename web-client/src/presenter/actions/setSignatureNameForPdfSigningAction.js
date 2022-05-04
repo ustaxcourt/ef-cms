@@ -4,7 +4,7 @@ import { state } from 'cerebral';
  * sets the name to be used for signing a pdf
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext contains the getChiefJudgeNameForSigning method we will use to get the chief judge's name
+ * @param {object} providers.applicationContext the applicationContext object
  * @param {object} providers.store the cerebral store object used for setting pdfForSigning.nameForSigning
  */
 export const setSignatureNameForPdfSigningAction = async ({
@@ -26,7 +26,9 @@ export const setSignatureNameForPdfSigningAction = async ({
     nameForPdfSigning = judgeUser.judgeFullName;
     nameForSigningLine2 = judgeUser.judgeTitle;
   } else {
-    nameForPdfSigning = applicationContext.getChiefJudgeNameForSigning();
+    nameForPdfSigning = await applicationContext
+      .getUseCases()
+      .getChiefJudgeNameForSigningInteractor(applicationContext);
     nameForSigningLine2 = CHIEF_JUDGE;
   }
   store.set(state.pdfForSigning.nameForSigning, nameForPdfSigning);
