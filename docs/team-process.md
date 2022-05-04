@@ -70,13 +70,15 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
     NOTE: If any npm packages are updated, update the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
 
-3. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
+4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
 
     - Once verification is complete, you will need to increment the docker image version being used in `.circleci/config.yml` and publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts.
 
-4. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
+5. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
-5. (Optional) Check through the list of caveats to see if any of the documented issues have been resolved.
+    See [here](ci-cd.md#docker) for the documentation to create and push the updated docker container for use in CircleCI.
+
+6. (Optional) Check through the list of caveats to see if any of the documented issues have been resolved.
 
 #### Caveats
 ##### Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
