@@ -3,10 +3,8 @@ describe('Docket clerk views consolidated case', function () {
     cy.login('docketclerk');
   });
 
-  describe('case information tab', () => {
-    it('should display other petitioners in main party information box', () => {
-      cy.visit('/case-detail/111-19');
-      cy.get('#lead-case-tag').should('exist');
-    });
+  it('should display lead case tag on the lead case in a consolidated group', () => {
+    cy.visit('/case-detail/111-19');
+    cy.get('#lead-case-tag').should('exist');
   });
 });
