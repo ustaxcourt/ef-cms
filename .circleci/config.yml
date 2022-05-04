@@ -17,7 +17,7 @@ commands:
             if [ ! -d node_modules ]; then
               npm ci
             else
-              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.             
+              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
             fi
       - run:
           name: Install Cypress dependency
@@ -26,7 +26,7 @@ commands:
               echo Installing Cypress
               ./node_modules/.bin/cypress install
             else
-              echo Found cached Cypress version. Using cached Cypress folder.             
+              echo Found cached Cypress version. Using cached Cypress folder.
             fi
       - run:
           name: Reset package-lock
@@ -50,7 +50,7 @@ commands:
             if [ ! -d node_modules ]; then
               npm ci
             else
-              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.             
+              echo package.json and package-lock.json are unchanged. Using cached node_modules folder.
             fi
       - run:
           name: Reset package-lock
