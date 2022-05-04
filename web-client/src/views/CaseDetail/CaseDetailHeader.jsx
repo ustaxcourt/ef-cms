@@ -166,7 +166,10 @@ export const CaseDetailHeader = connect(
                       )}
                       <span
                         aria-label={`status: ${formattedCaseDetail.status}`}
-                        className="usa-tag"
+                        className={classNames(
+                          'usa-tag',
+                          formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
+                        )}
                       >
                         <span aria-hidden="true">
                           {formattedCaseDetail.status}
