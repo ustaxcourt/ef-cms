@@ -27,7 +27,6 @@ exports.getFeatureFlagValueInteractor = async (
     .getFeatureFlagValue({ applicationContext, featureFlag });
 
   if (result) {
-    console.log(typeof result.current);
     if (typeof result.current === 'boolean') {
       return !!result.current;
     } else {
