@@ -7,7 +7,7 @@
  * @param {object} providers.applicationContext needed for getting the getCasesByUser use case
  * @returns {object} open and closed case lists for the current user
  */
-export const getOpenAndClosedCasesByUserAction = async ({
+export const getOpenAndClosedCasesForUserAction = async ({
   applicationContext,
 }) => {
   const { closedCaseList, openCaseList } = await applicationContext
