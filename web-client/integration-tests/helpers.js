@@ -330,6 +330,34 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   });
 };
 
+export const setChiefJudgeNameFlagValue = async newJudgeName => {
+  return client.put({
+    Item: {
+      current: newJudgeName,
+      pk: 'chief-judge-name',
+      sk: 'chief-judge-name',
+    },
+    applicationContext,
+  });
+};
+
+export const setJudgeTitle = async (judgeUserId, newJudgeTitle) => {
+  return client.update({
+    ExpressionAttributeNames: {
+      '#judgeTitle': 'judgeTitle',
+    },
+    ExpressionAttributeValues: {
+      ':judgeTitle': newJudgeTitle,
+    },
+    Key: {
+      pk: `user|${judgeUserId}`,
+      sk: `user|${judgeUserId}`,
+    },
+    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
+    applicationContext,
+  });
+};
+
 export const setOrderSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
