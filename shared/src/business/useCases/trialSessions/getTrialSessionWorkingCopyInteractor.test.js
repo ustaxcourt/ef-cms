@@ -50,8 +50,8 @@ describe('Get trial session working copy', () => {
       .getTrialSessionWorkingCopy.mockResolvedValue(MOCK_WORKING_COPY);
 
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue({
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue({
         role: ROLES.judge,
         userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
       });
@@ -104,8 +104,8 @@ describe('Get trial session working copy', () => {
       .getPersistenceGateway()
       .getTrialSessionWorkingCopy.mockImplementation(() => {});
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue(undefined);
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(null);
 
     await expect(
       getTrialSessionWorkingCopyInteractor(applicationContext, {
@@ -120,8 +120,8 @@ describe('Get trial session working copy', () => {
       userId: 'a9ae05ba-d48a-43a6-9981-ee536a7601be',
     };
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockImplementation(() => {});
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockImplementation(() => {});
 
     const result = await getTrialSessionWorkingCopyInteractor(
       applicationContext,
@@ -144,8 +144,8 @@ describe('Get trial session working copy', () => {
         .getPersistenceGateway()
         .getTrialSessionWorkingCopy.mockResolvedValue(undefined);
       applicationContext
-        .getUseCases()
-        .getJudgeForUserChambersInteractor.mockReturnValue({
+        .getUseCaseHelpers()
+        .getJudgeInSectionHelper.mockReturnValue({
           role: ROLES.judge,
           userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
         });
@@ -210,8 +210,8 @@ describe('Get trial session working copy', () => {
 
     it('for current user who is a trial clerk on this trial session', async () => {
       applicationContext
-        .getUseCases()
-        .getJudgeForUserChambersInteractor.mockReturnValueOnce(undefined);
+        .getUseCaseHelpers()
+        .getJudgeInSectionHelper.mockReturnValueOnce(undefined);
       applicationContext.getCurrentUser.mockReturnValue({
         role: ROLES.trialClerk,
         userId: 'ffd90c05-f6cd-442c-a168-202db587f16f',

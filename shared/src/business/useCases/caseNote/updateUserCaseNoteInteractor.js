@@ -30,7 +30,9 @@ exports.updateUserCaseNoteInteractor = async (
     const judgeUser = await applicationContext
       .getUseCaseHelpers()
       .getJudgeInSectionHelper(applicationContext, { section: user.section });
-    ({ userId } = judgeUser);
+    if (judgeUser) {
+      ({ userId } = judgeUser);
+    }
   }
 
   const caseNoteEntity = new UserCaseNote({

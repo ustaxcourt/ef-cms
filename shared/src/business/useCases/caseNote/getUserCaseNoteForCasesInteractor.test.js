@@ -22,6 +22,7 @@ describe('getUserCaseNoteForCasesInteractor', () => {
 
   const mockJudge = {
     role: ROLES.judge,
+    section: 'colvinChambers',
     userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
   };
 
@@ -29,13 +30,15 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     mockCurrentUser = mockJudge;
     mockNote = MOCK_NOTE;
 
-    applicationContext.getCurrentUser.mockImplementation(() => mockCurrentUser);
+    applicationContext.getCurrentUser.mockImplementation(
+      () => new User(mockCurrentUser),
+    );
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNoteForCases.mockResolvedValue([mockNote]);
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue(mockJudge);
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(mockJudge);
   });
 
   it('throws error if user is unauthorized', async () => {
@@ -76,11 +79,12 @@ describe('getUserCaseNoteForCasesInteractor', () => {
     const mockUser = new User({
       name: 'Judge Colvin',
       role: ROLES.judge,
+      section: 'colvinChambers',
       userId: userIdToExpect,
     });
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => null,
+    applicationContext.getUseCaseHelpers.mockReturnValue({
+      getJudgeInSectionHelper: () => null,
     });
 
     await getUserCaseNoteForCasesInteractor(applicationContext, {
