@@ -271,6 +271,8 @@ describe('Create a work item', () => {
 
     errors = cerebralTest.getState('validationErrors');
 
+    expect(cerebralTest.getState('modal.form')).toBeDefined();
+
     expect(errors).toEqual({});
 
     expect(cerebralTest.getState('alertSuccess')).toMatchObject({
