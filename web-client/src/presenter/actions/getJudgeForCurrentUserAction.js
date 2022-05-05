@@ -8,9 +8,9 @@
 export const getJudgeForCurrentUserAction = async ({ applicationContext }) => {
   const judgeUser = await applicationContext
     .getUseCases()
-    .getJudgeForUserChambersInteractor(applicationContext);
+    .getJudgeInSectionInteractor(applicationContext, {
+      section: applicationContext.getCurrentUser().section,
+    });
 
-  if (judgeUser) {
-    return { judgeUser };
-  }
+  return { judgeUser };
 };

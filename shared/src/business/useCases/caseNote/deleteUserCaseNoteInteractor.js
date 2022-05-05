@@ -26,8 +26,8 @@ exports.deleteUserCaseNoteInteractor = async (
 
   if (user.isChambersUser()) {
     const judgeUser = await applicationContext
-      .getUseCasesHelpers()
-      .getJudgeInSection(applicationContext, user.section);
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper(applicationContext, { section: user.section });
     ({ userId } = judgeUser);
   }
 
