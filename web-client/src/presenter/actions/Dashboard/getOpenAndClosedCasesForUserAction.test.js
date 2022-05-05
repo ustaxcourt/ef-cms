@@ -1,9 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
-import { getOpenAndClosedCasesByUserAction } from './getOpenAndClosedCasesByUserAction';
+import { getOpenAndClosedCasesForUserAction } from './getOpenAndClosedCasesForUserAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-describe('getOpenAndClosedCasesByUserAction', () => {
+describe('getOpenAndClosedCasesForUserAction', () => {
   const mockOpenCases = [
     {
       createdAt: '2019-07-20T20:20:15.680Z',
@@ -44,7 +44,7 @@ describe('getOpenAndClosedCasesByUserAction', () => {
   });
 
   it('should return open and closed cases for the current user', async () => {
-    const { output } = await runAction(getOpenAndClosedCasesByUserAction, {
+    const { output } = await runAction(getOpenAndClosedCasesForUserAction, {
       modules: { presenter },
       state: {
         currentViewMetadata: {

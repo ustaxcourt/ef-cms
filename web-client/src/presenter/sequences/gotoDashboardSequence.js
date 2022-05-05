@@ -5,7 +5,7 @@ import { getConstants } from '../../getConstants';
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getJudgeForCurrentUserAction } from '../actions/getJudgeForCurrentUserAction';
 import { getMaintenanceModeAction } from '../actions/getMaintenanceModeAction';
-import { getOpenAndClosedCasesByUserAction } from '../actions/Dashboard/getOpenAndClosedCasesByUserAction';
+import { getOpenAndClosedCasesForUserAction } from '../actions/Dashboard/getOpenAndClosedCasesForUserAction';
 import { getTrialSessionsAction } from '../actions/TrialSession/getTrialSessionsAction';
 import { getUserAction } from '../actions/getUserAction';
 import { gotoMaintenanceSequence } from './gotoMaintenanceSequence';
@@ -77,7 +77,7 @@ const goToDashboard = [
             inactivePractitioner: [setCurrentPageAction('DashboardInactive')],
             irsPractitioner: [
               setDefaultCaseTypeToDisplayAction,
-              getOpenAndClosedCasesByUserAction,
+              getOpenAndClosedCasesForUserAction,
               setCasesAction,
               setCurrentPageAction('DashboardRespondent'),
             ],
@@ -91,13 +91,13 @@ const goToDashboard = [
             ],
             petitioner: [
               setDefaultCaseTypeToDisplayAction,
-              getOpenAndClosedCasesByUserAction,
+              getOpenAndClosedCasesForUserAction,
               setCasesAction,
               setCurrentPageAction('DashboardPetitioner'),
             ],
             privatePractitioner: [
               setDefaultCaseTypeToDisplayAction,
-              getOpenAndClosedCasesByUserAction,
+              getOpenAndClosedCasesForUserAction,
               setCasesAction,
               setCurrentPageAction('DashboardPractitioner'),
             ],
