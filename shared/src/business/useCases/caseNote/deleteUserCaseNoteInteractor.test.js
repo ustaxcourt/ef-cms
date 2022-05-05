@@ -24,12 +24,13 @@ describe('deleteUserCaseNoteInteractor', () => {
     const mockUser = new User({
       name: 'Judge Colvin',
       role: ROLES.judge,
+      section: 'colvinChambers',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
     applicationContext.getPersistenceGateway().deleteUserCaseNote = v => v;
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => ({
+    applicationContext.getUseCaseHelpers.mockReturnValue({
+      getJudgeInSectionHelper: () => ({
         role: ROLES.judge,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
@@ -46,14 +47,14 @@ describe('deleteUserCaseNoteInteractor', () => {
     const mockUser = new User({
       name: 'Judge Colvin',
       role: ROLES.judge,
+      section: 'colvinChambers',
       userId: '123456',
     });
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
     applicationContext.getPersistenceGateway().deleteUserCaseNote = jest.fn();
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => null,
+    applicationContext.getUseCaseHelpers.mockReturnValue({
+      getJudgeInSectionHelper: () => null,
     });
-
     await deleteUserCaseNoteInteractor(applicationContext, {
       docketNumber: '123-45',
     });

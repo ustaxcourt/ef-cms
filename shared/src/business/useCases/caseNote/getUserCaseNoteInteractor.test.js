@@ -6,6 +6,7 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { omit } = require('lodash');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
+const { User } = require('../../entities/User');
 
 describe('Get case note', () => {
   const MOCK_NOTE = {
@@ -21,6 +22,7 @@ describe('Get case note', () => {
 
   const mockJudge = {
     role: ROLES.judge,
+    section: 'colvinChambers',
     userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
   };
 
@@ -42,7 +44,7 @@ describe('Get case note', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
+    applicationContext.getCurrentUser.mockReturnValue(new User(mockJudge));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(omit(MOCK_NOTE, 'userId'));
@@ -58,7 +60,7 @@ describe('Get case note', () => {
   });
 
   it('correctly returns data from persistence if a judgeUser exists', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
+    applicationContext.getCurrentUser.mockReturnValue(new User(mockJudge));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
@@ -75,7 +77,7 @@ describe('Get case note', () => {
   });
 
   it('correctly returns data from persistence for the current user if a judgeUser does not exist', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
+    applicationContext.getCurrentUser.mockReturnValue(new User(mockJudge));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
@@ -92,7 +94,7 @@ describe('Get case note', () => {
   });
 
   it('does not return anything if nothing is returned from persistence', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockJudge);
+    applicationContext.getCurrentUser.mockReturnValue(new User(mockJudge));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockReturnValue(null);
