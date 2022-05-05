@@ -56,6 +56,11 @@ rm -rf .terraform
 echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
+if [[ ${ENVIRONMENT} == "prod" ]] && [[ ${REGION} == "us-east-1" ]]; then
+  echo "Adding glue job policy to [${ENVIRONMENT}] in AWS region [${REGION}]"
+  sh ../bin/add-glue-job-policy.sh "${BUCKET}" "${KEY}" "${REGION}"
+fi
+
 echo "checking for the dynamodb lock table..."
 aws dynamodb list-tables --output json --region "${REGION}" --query "contains(TableNames, '${LOCK_TABLE}')" | grep 'true'
 result=$?
