@@ -5,12 +5,12 @@
       "Sid": "DelegateS3Access",
       "Effect": "Allow",
       "Principal": {
-        "AWS": "arn:aws:iam::${prod_env_account_id}:root"
+        "AWS": "arn:aws:iam::${PROD_ENV_ACCOUNT_ID}:root"
       },
-      "Action": ["s3:GetObject", "s3:PutObject", "s3:GetObjectTagging"],
+      "Action": ["s3:GetObject", "s3:ListBucket", "s3:GetObjectTagging"],
       "Resource": [
-        "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*", 
-        "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1" 
+        "arn:aws:s3:::${var.EFCMS_DOMAIN}-documents-${var.ENV}-us-east-1/*", 
+        "arn:aws:s3:::${var.EFCMS_DOMAIN}-documents-${var.ENV}-us-east-1" 
       ]
     }
   ]

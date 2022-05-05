@@ -1,17 +1,10 @@
 #!/bin/bash
 # adds an S3 bucket policy for prod glue jobs for the documents bucket on us-east-1, only assigned to the root user on the prod environment
 
-# KEY=$2
-# if [ -z "${KEY}" ]
-# then
-#       echo "You must provide a key name when calling this script"
-#       exit 1
-# fi
-
-REGION=us-east-1
-if [ -z "${REGION}" ]
+DOCUMENTS_BUCKET=$1
+if [ -z "${DOCUMENTS_BUCKET}" ]
 then
-      echo "You must provide a region when calling this script"
+      echo "You must provide a documents bucket name when calling this script"
       exit 1
 fi
 
@@ -26,10 +19,11 @@ then
     exit 1
   fi
 fi
-echo "BLAH [${MY_ARN}], bucket [${BUCKET}], key [${KEY}] in region [${REGION}]"
+echo "Adding s3 policy for ARN [${MY_ARN}] on bucket [${DOCUMENTS_BUCKET}]"
 
-# aws s3 mb "s3://${BUCKET}" --region "${REGION}" check for bucket instead here?
-sed -e "s/RESOURCE/arn:aws:s3:::exp5.ustc-case-mgmt.flexion.us-documents-exp5-us-east-1/g" -e "s|ARN|${MY_ARN}|g" "$(dirname "$0")/documents-bucket-policy.json" > new-policy.json
-aws s3api put-bucket-policy --bucket "exp5.ustc-case-mgmt.flexion.us-documents-exp5-us-east-1" --policy file://new-policy.json
-aws s3api put-bucket-versioning --bucket "exp5.ustc-case-mgmt.flexion.us-documents-exp5-us-east-1" --versioning-configuration Status=Enabled
+sed -e "s/RESOURCE/arn:aws:s3:::${DOCUMENTS_BUCKET}/g" -e "s|ARN|${MY_ARN}|g" "$(dirname "$0")/documents-bucket-policy.json" > new-policy.json
+aws s3api put-bucket-policy --bucket "${DOCUMENTS_BUCKET}" --policy file://new-policy.json
+aws s3api put-bucket-versioning --bucket "${DOCUMENTS_BUCKET}" --versioning-configuration Status=Enabled
 rm new-policy.json
+
+

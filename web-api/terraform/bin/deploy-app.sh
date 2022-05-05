@@ -57,8 +57,9 @@ echo "Initiating provisioning for environment [${ENV}] in AWS region [${REGION}]
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
 if [[ ${ENVIRONMENT} == "prod" ]] && [[ ${REGION} == "us-east-1" ]]; then
-  echo "Adding glue job policy to [${ENVIRONMENT}] in AWS region [${REGION}]"
-  sh ../bin/add-glue-job-policy.sh "${BUCKET}" "${KEY}" "${REGION}"
+  echo "About to add glue job policy to bucket ${DOCUMENTS_BUCKET}]"
+  DOCUMENTS_BUCKET="${EFCMS_DOMAIN}-documents-${ENV}-us-east-1"
+  sh ../bin/add-glue-job-policy.sh "${DOCUMENTS_BUCKET}"
 fi
 
 echo "checking for the dynamodb lock table..."
