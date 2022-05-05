@@ -60,16 +60,42 @@ describe('getCasesForUserInteractor', () => {
     expect(UserCase.validateRawCollection).toBeCalled();
   });
 
-  it('should return a list of open and closed cases for the current user', async () => {
+  it('should return a list of open cases sorted by createdAt date descending', async () => {
+    const createdToday = applicationContext
+      .getUtilities()
+      .createISODateString();
+    const createdYesterday = applicationContext
+      .getUtilities()
+      .calculateISODate({ dateString: createdToday, howMuch: -1 });
+    mockFoundCasesList = [
+      {
+        ...MOCK_CASE,
+        createdAt: createdYesterday,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      {
+        ...MOCK_CASE,
+        createdAt: createdToday,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    ];
+    applicationContext
+      .getUseCaseHelpers()
+      .processUserAssociatedCases.mockReturnValue({
+        casesAssociatedWithUserOrLeadCaseMap: mockFoundCasesList,
+        leadDocketNumbersAssociatedWithUser: [],
+      });
+
     const { openCaseList } = await getCasesForUserInteractor(
       applicationContext,
     );
 
     expect(openCaseList).toMatchObject([
       {
-        caseCaption: MOCK_CASE.caseCaption,
-        docketNumber: MOCK_CASE.docketNumber,
-        docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
+        createdAt: createdToday,
+      },
+      {
+        createdAt: createdYesterday,
       },
     ]);
   });
@@ -99,11 +125,9 @@ describe('getCasesForUserInteractor', () => {
     expect(closedCaseList).toMatchObject([
       {
         closedDate: closedToday,
-        docketNumber: MOCK_CASE.docketNumber,
       },
       {
         closedDate: closedYesterday,
-        docketNumber: MOCK_CASE.docketNumber,
       },
     ]);
   });

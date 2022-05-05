@@ -1,5 +1,3 @@
-import { orderBy } from 'lodash';
-
 /**
  * Fetches the cases (including consolidated) associated with the currently
  *  authenticated user.
@@ -12,12 +10,9 @@ import { orderBy } from 'lodash';
 export const getOpenAndClosedCasesByUserAction = async ({
   applicationContext,
 }) => {
-  let { closedCaseList, openCaseList } = await applicationContext
+  const { closedCaseList, openCaseList } = await applicationContext
     .getUseCases()
     .getCasesForUserInteractor(applicationContext);
-
-  // todo: move to interactor?
-  openCaseList = orderBy(openCaseList, 'createdAt', 'desc');
 
   return { closedCaseList, openCaseList };
 };
