@@ -29,6 +29,11 @@ NEW_JUDGE_NAME=$(aws dynamodb get-item \
   --region us-east-1 \
   --query 'Item.judgeFullName.S')
 
+if [[ ${NEW_JUDGE_NAME} == "None" ]]; then
+ echo "ERROR: Judge with userId: ${NEW_JUDGE_ID} has no dynamo record" 
+ exit 1; 
+fi
+
 # update the judge's signature in deploy table
 ITEM=$(cat <<-END
 {
@@ -44,6 +49,7 @@ ITEM=$(cat <<-END
 }
 END
 )
+
 aws dynamodb put-item \
     --region us-east-1 \
     --table-name "efcms-deploy-${ENV}" \
@@ -66,6 +72,3 @@ aws dynamodb update-item \
     --expression-attribute-names '{"#judgeTitle":"judgeTitle"}' \
     --expression-attribute-values '{":judgeTitle":{"S":"Chief Judge"}}' \
     --key '{"pk":{"S":"user|'"${NEW_JUDGE_ID}"'"}, "sk":{"S":"user|'"${NEW_JUDGE_ID}"'"}}'
-
-
-
