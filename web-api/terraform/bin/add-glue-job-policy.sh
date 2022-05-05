@@ -8,6 +8,13 @@ then
       exit 1
 fi
 
+ACCOUNT_ID=$2
+if [ -z "${ACCOUNT_ID}" ]
+then
+      echo "You must provide an ACCOUNT_ID when calling this script"
+      exit 1
+fi
+
 MY_ARN=$(aws iam get-user --query User.Arn --output text 2>/dev/null)
 if [ -z "${MY_ARN}" ]
 then
@@ -21,7 +28,7 @@ then
 fi
 echo "Adding s3 policy for ARN [${MY_ARN}] on bucket [${DOCUMENTS_BUCKET}]"
 
-sed -e "s/RESOURCE/arn:aws:s3:::${DOCUMENTS_BUCKET}/g" -e "s|ARN|${MY_ARN}|g" "$(dirname "$0")/documents-bucket-policy.json" > new-policy.json
+sed -e "s/RESOURCE/arn:aws:s3:::${DOCUMENTS_BUCKET}/g" -e "s|ARN|${MY_ARN}|g" -e "s|ACCOUNT_ID|${ACCOUNT_ID}|g" -e "s|DOCUMENTS_BUCKET|${DOCUMENTS_BUCKET}|g" "$(dirname "$0")/documents-bucket-policy.json" > new-policy.json
 aws s3api put-bucket-policy --bucket "${DOCUMENTS_BUCKET}" --policy file://new-policy.json
 aws s3api put-bucket-versioning --bucket "${DOCUMENTS_BUCKET}" --versioning-configuration Status=Enabled
 rm new-policy.json
