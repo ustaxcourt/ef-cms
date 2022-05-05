@@ -1,0 +1,17 @@
+{
+  "Version": "2012-10-17",
+  "Statement": [
+    {
+      "Sid": "DelegateS3Access",
+      "Effect": "Allow",
+      "Principal": {
+        "AWS": "arn:aws:iam::${prod_env_account_id}:root"
+      },
+      "Action": ["s3:GetObject", "s3:PutObject", "s3:GetObjectTagging"],
+      "Resource": [
+        "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*", 
+        "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1" 
+      ]
+    }
+  ]
+}
