@@ -1,12 +1,18 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
-import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import {
+  COUNTRY_TYPES,
+  PARTY_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
+import { caseDetailHeaderHelper as caseDetailHeaderHelperComputed } from '../src/presenter/computeds/caseDetailHeaderHelper';
+import {
+  contactPrimaryFromState,
   fakeFile,
   getFormattedDocumentQCSectionInbox,
   loginAs,
   setupTest,
   uploadPetition,
 } from './helpers';
+import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
+import { docketClerkSealsCase } from './journey/docketClerkSealsCase';
 import { irsPractitionerViewsPetitionerInfoForUnassociatedCase } from './journey/irsPractitionerViewsPetitionerInfoForUnassociatedCase';
 import { petitionsClerkAddsDocketEntryFromOrder } from './journey/petitionsClerkAddsDocketEntryFromOrder';
 import { petitionsClerkCreateOrder } from './journey/petitionsClerkCreateOrder';
@@ -24,11 +30,12 @@ import { practitionerViewsCaseDetailOfPendingCase } from './journey/practitioner
 import { practitionerViewsCaseDetailWithPublicOrder } from './journey/practitionerViewsCaseDetailWithPublicOrder';
 import { practitionerViewsDashboard } from './journey/practitionerViewsDashboard';
 import { practitionerViewsDashboardBeforeAddingCase } from './journey/practitionerViewsDashboardBeforeAddingCase';
-
-const cerebralTest = setupTest();
-const { COUNTRY_TYPES, PARTY_TYPES } = applicationContext.getConstants();
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
 describe('Practitioner requests access to case', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -61,8 +68,6 @@ describe('Practitioner requests access to case', () => {
     expect(found).toBeTruthy();
   });
 
-  //tests for practitioner requesting access to existing case
-  //petitioner must first create a case for practitioner to request access to
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case #1', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
@@ -91,8 +96,92 @@ describe('Practitioner requests access to case', () => {
   practitionerViewsCaseDetailOfOwnedCase(cerebralTest);
   practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  //tests for practitioner requesting access to existing case
-  //petitioner must first create a case for practitioner to request access to
+  loginAs(cerebralTest, 'privatePractitioner4@example.com');
+  it('Practitioner requests access to case using "Notice of Election to Intervene" document type', async () => {
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    const caseDetailHeaderHelper = withAppContextDecorator(
+      caseDetailHeaderHelperComputed,
+    );
+
+    const headerHelper = runCompute(caseDetailHeaderHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(headerHelper.showRequestAccessToCaseButton).toBeTruthy();
+
+    await cerebralTest.runSequence('gotoRequestAccessSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'documentType',
+      value: 'Notice of Election to Intervene',
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'documentTitleTemplate',
+      value: 'Notice of Election to Intervene',
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'eventCode',
+      value: 'NOEI',
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'scenario',
+      value: 'Standard',
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'objections',
+      value: 'No',
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'primaryDocumentFile',
+      value: fakeFile,
+    });
+
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: 'certificateOfService',
+      value: false,
+    });
+
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
+    await cerebralTest.runSequence('updateCaseAssociationFormValueSequence', {
+      key: `filersMap.${contactPrimary.contactId}`,
+      value: true,
+    });
+
+    await cerebralTest.runSequence('validateCaseAssociationRequestSequence');
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await cerebralTest.runSequence('reviewRequestAccessInformationSequence');
+
+    expect(cerebralTest.getState('form.documentTitle')).toEqual(
+      'Notice of Election to Intervene',
+    );
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
+
+    const createdDocketEntry = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .find(entry => entry.eventCode === 'NOEI');
+
+    expect(createdDocketEntry.filedBy).toEqual('Alden Rivas');
+  });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkQCsDocketEntry(cerebralTest);
+
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case #2', async () => {
     const caseDetail = await uploadPetition(cerebralTest, {
