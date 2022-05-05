@@ -37,10 +37,10 @@ echo "Initiating Terraform state bucket creation for [${MY_ARN}], bucket [${BUCK
 
 aws s3 mb "s3://${BUCKET}" --region "${REGION}"
 
-if [[ "${KEY}" == *"prod"* ]] && [[ "${REGION}" == "us-east-1" ]] # should only be for documents_us_east_1 on prod
+if [[ "${KEY}" == *"exp5"* ]] && [[ "${REGION}" == "us-east-1" ]] # should only be for documents_us_east_1 on prod
 then
       echo "Setting private bucket policy for [${BUCKET}] in region [${REGION}]"
-      sed -e "s/RESOURCE/arn:aws:s3:::${BUCKET}/g" -e "s/KEY/${KEY}/g" -e "s|ARN|${MY_ARN}|g" "$(dirname "$0")/s3-private-policy.json" private-> new-policy.json
+      sed -e "s/RESOURCE/arn:aws:s3:::${BUCKET}/g" -e "s/KEY/${KEY}/g" -e "s|ARN|${MY_ARN}|g" "$(dirname "$0")/s3-private-policy.json" > new-private-policy.json
       aws s3api put-bucket-policy --bucket "${BUCKET}" --policy file://new-private-policy.json
       aws s3api put-bucket-versioning --bucket "${BUCKET}" --versioning-configuration Status=Enabled
       rm new-private-policy.json
