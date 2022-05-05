@@ -14,10 +14,9 @@ exports.getJudgeForUserChambersInteractor = async (
   { user },
 ) => {
   let judgeUser;
-  if (user.role === ROLES.judge) {
-    judgeUser = user;
-  } else if (user.role === ROLES.chambers) {
-    let chambersSection;
+  let chambersSection;
+
+  if (user.role === ROLES.chambers || user.role === ROLES.judge) {
     if (user.section) {
       chambersSection = user.section;
     } else {
