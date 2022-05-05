@@ -9,6 +9,6 @@ const { get } = require('./requests');
 exports.getCasesForUserInteractor = applicationContext => {
   return get({
     applicationContext,
-    endpoint: '/cases/open',
+    endpoint: '/cases',
   });
 };

@@ -800,7 +800,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  * cases
  */
 {
-  app.get('/cases/open', lambdaWrapper(getCasesForUserLambda));
+  app.get('/cases', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
   app.delete(
