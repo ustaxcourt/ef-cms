@@ -66,9 +66,7 @@ describe('getJudgeForUserChambersInteractor', () => {
   it('Fetches the judge associated with a given chambers user', async () => {
     currentUser = chambersUser;
 
-    const result = await getJudgeForUserChambersInteractor(applicationContext, {
-      user: chambersUser,
-    });
+    const result = await getJudgeForUserChambersInteractor(applicationContext);
 
     expect(result).toMatchObject(judgeUser);
     expect(
@@ -99,9 +97,7 @@ describe('getJudgeForUserChambersInteractor', () => {
       userId: chambersUser.userId,
     };
 
-    const result = await getJudgeForUserChambersInteractor(applicationContext, {
-      user: currentUser,
-    });
+    const result = await getJudgeForUserChambersInteractor(applicationContext);
 
     expect(result).toMatchObject(judgeUser);
     expect(
@@ -118,9 +114,7 @@ describe('getJudgeForUserChambersInteractor', () => {
       userId: 'docketclerk1',
     };
 
-    const result = await getJudgeForUserChambersInteractor(applicationContext, {
-      user: currentUser,
-    });
+    const result = await getJudgeForUserChambersInteractor(applicationContext);
 
     expect(result).toBeUndefined();
     expect(

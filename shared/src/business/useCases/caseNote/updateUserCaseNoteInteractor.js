@@ -19,13 +19,14 @@ exports.updateUserCaseNoteInteractor = async (
   { docketNumber, notes },
 ) => {
   const user = applicationContext.getCurrentUser();
+
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
   const judgeUser = await applicationContext
     .getUseCases()
-    .getJudgeForUserChambersInteractor(applicationContext, { user });
+    .getJudgeForUserChambersInteractor(applicationContext);
 
   const caseNoteEntity = new UserCaseNote({
     docketNumber,

@@ -6,13 +6,9 @@
  * @returns {object} Associated Judge user object if found
  */
 export const getJudgeForCurrentUserAction = async ({ applicationContext }) => {
-  const user = applicationContext.getCurrentUser();
-
   const judgeUser = await applicationContext
     .getUseCases()
-    .getJudgeForUserChambersInteractor(applicationContext, {
-      user,
-    });
+    .getJudgeForUserChambersInteractor(applicationContext);
 
   if (judgeUser) {
     return { judgeUser };
