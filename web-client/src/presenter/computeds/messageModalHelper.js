@@ -6,7 +6,7 @@ export const messageModalHelper = (get, applicationContext) => {
 
   const caseDetail = get(state.caseDetail);
   const screenMetadata = get(state.screenMetadata);
-  const { attachments } = get(state.modal.form);
+  const attachments = get(state.modal.form.attachments);
 
   const { correspondence, draftDocuments, formattedDocketEntries } =
     applicationContext
