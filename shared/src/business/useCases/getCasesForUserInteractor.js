@@ -11,29 +11,25 @@ const { UserCase } = require('../entities/UserCase');
 exports.getCasesForUserInteractor = async applicationContext => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  const allUserCases = await applicationContext
+  let allUserCases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
       applicationContext,
       userId,
     });
 
-  let sortedClosedCases = allUserCases
+  allUserCases = UserCase.validateRawCollection(allUserCases, {
+    applicationContext,
+  });
+
+  const sortedClosedCases = allUserCases
     .filter(({ status }) => status === CASE_STATUS_TYPES.closed)
     .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
     .reverse();
 
-  sortedClosedCases = UserCase.validateRawCollection(sortedClosedCases, {
-    applicationContext,
-  });
-
   let filteredOpenCases = allUserCases.filter(
     ({ status }) => status !== CASE_STATUS_TYPES.closed,
   );
-
-  filteredOpenCases = UserCase.validateRawCollection(filteredOpenCases, {
-    applicationContext,
-  });
 
   let {
     casesAssociatedWithUserOrLeadCaseMap,
