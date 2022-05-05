@@ -63,24 +63,24 @@ describe('Chief Judge feature flag configuration', () => {
     });
   });
 
-  // describe('Update judgeTitle', () => {
-  //   loginAs(cerebralTest, 'judgeFoley@example.com');
+  describe('Update judgeTitle', () => {
+    loginAs(cerebralTest, 'judgeFoley@example.com');
 
-  //   it('should retrieve correct judgeTitle before and after being updated in dynamo', async () => {
-  //     const { docketEntryId } = cerebralTest.draftOrders[0];
+    it('should retrieve correct judgeTitle before and after being updated in dynamo', async () => {
+      const { docketEntryId } = cerebralTest.draftOrders[0];
 
-  //     expect(cerebralTest.getState('user.judgeTitle')).toEqual('Chief Judge');
+      expect(cerebralTest.getState('user.judgeTitle')).toEqual('Chief Judge');
 
-  //     await setJudgeTitle(judgeFoleyUserId, 'Judge');
+      await setJudgeTitle(judgeFoleyUserId, 'Judge');
 
-  //     await cerebralTest.runSequence('gotoSignOrderSequence', {
-  //       docketEntryId,
-  //       docketNumber: cerebralTest.docketNumber,
-  //     });
+      await cerebralTest.runSequence('gotoSignOrderSequence', {
+        docketEntryId,
+        docketNumber: cerebralTest.docketNumber,
+      });
 
-  //     expect(
-  //       cerebralTest.getState('pdfForSigning.nameForSigningLine2'),
-  //     ).toEqual('Judge');
-  //   });
-  // });
+      expect(
+        cerebralTest.getState('pdfForSigning.nameForSigningLine2'),
+      ).toEqual('Judge');
+    });
+  });
 });
