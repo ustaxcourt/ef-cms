@@ -579,6 +579,9 @@ const {
   getJudgeForUserChambersInteractor,
 } = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
 const {
+  getJudgeInSectionHelper,
+} = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
+const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
 const {
@@ -1896,6 +1899,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
+        getJudgeInSectionHelper,
         getUnassociatedLeadCase,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
