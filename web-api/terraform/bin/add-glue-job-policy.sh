@@ -25,5 +25,3 @@ sed -e "s/RESOURCE/arn:aws:s3:::${DOCUMENTS_BUCKET}/g" -e "s|ARN|${MY_ARN}|g" "$
 aws s3api put-bucket-policy --bucket "${DOCUMENTS_BUCKET}" --policy file://new-policy.json
 aws s3api put-bucket-versioning --bucket "${DOCUMENTS_BUCKET}" --versioning-configuration Status=Enabled
 rm new-policy.json
-
-
