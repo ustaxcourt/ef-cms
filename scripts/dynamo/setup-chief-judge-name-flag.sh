@@ -1,6 +1,6 @@
 #!/bin/bash
 
-# Sets the pdfjs-express-viewer-enabled flag to "true" in the dynamo deploy table
+# Creates and sets the deploy table value for the name of the chief judge
 
 # Usage
 #   ENV=dev ./setup-pdfjs-express-viewer-flag.sh
