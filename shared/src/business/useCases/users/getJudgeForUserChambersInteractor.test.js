@@ -79,20 +79,6 @@ describe('getJudgeForUserChambersInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('Fetches the judge associated with a given chambers user when the user is a judge', async () => {
-    const result = await getJudgeForUserChambersInteractor(applicationContext, {
-      user: judgeUser,
-    });
-
-    expect(result).toMatchObject(judgeUser);
-    expect(
-      applicationContext.getUseCases().getUserInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().getUsersInSectionInteractor,
-    ).not.toHaveBeenCalled();
-  });
-
   it('Calls persistence methods to look up the user if the given `user.section` is undefined', async () => {
     currentUser = {
       role: chambersUser.role,
