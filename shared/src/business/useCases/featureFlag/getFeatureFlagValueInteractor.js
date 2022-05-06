@@ -26,5 +26,13 @@ exports.getFeatureFlagValueInteractor = async (
     .getPersistenceGateway()
     .getFeatureFlagValue({ applicationContext, featureFlag });
 
-  return !!(result && result.current);
+  if (result) {
+    if (typeof result.current === 'boolean') {
+      return !!result.current;
+    } else {
+      return result.current;
+    }
+  } else {
+    return false;
+  }
 };
