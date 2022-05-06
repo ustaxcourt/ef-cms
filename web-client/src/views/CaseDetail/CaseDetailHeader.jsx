@@ -137,9 +137,12 @@ export const CaseDetailHeader = connect(
         <div className={classNames(className, 'big-blue-header')}>
           <div className="grid-container">
             <div className="display-flex flex-row flex-justify">
-              <div className="tablet:grid-col-8">
+              <div className="tablet:grid-col-10">
                 <div className="margin-bottom-1">
-                  <h1 className="heading-2 captioned" tabIndex="-1">
+                  <h1
+                    className="heading-2 captioned margin-bottom-1"
+                    tabIndex="-1"
+                  >
                     {caseDetailHeaderHelper.showConsolidatedCaseIcon && (
                       <Icon
                         aria-label="consolidated case"
