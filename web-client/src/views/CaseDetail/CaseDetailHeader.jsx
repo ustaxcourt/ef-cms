@@ -140,7 +140,7 @@ export const CaseDetailHeader = connect(
               <div className="tablet:grid-col-10">
                 <div className="margin-bottom-1">
                   <h1
-                    className="heading-2 captioned margin-bottom-1"
+                    className="heading-2 captioned docket-number-header"
                     tabIndex="-1"
                   >
                     {caseDetailHeaderHelper.showConsolidatedCaseIcon && (
