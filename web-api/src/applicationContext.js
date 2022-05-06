@@ -576,8 +576,11 @@ const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
 const {
-  getJudgeForUserChambersInteractor,
-} = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
+  getJudgeInSectionHelper,
+} = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
+const {
+  getJudgeInSectionInteractor,
+} = require('../../shared/src/business/useCases/users/getJudgeInSectionInteractor');
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
@@ -1893,6 +1896,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
+        getJudgeInSectionHelper,
         getUnassociatedLeadCase,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
@@ -2004,7 +2008,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
-        getJudgeForUserChambersInteractor,
+        getJudgeInSectionInteractor,
         getJudgesForPublicSearchInteractor,
         getMaintenanceModeInteractor,
         getMessageThreadInteractor,

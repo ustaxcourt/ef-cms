@@ -26,8 +26,8 @@ exports.getTrialSessionWorkingCopyInteractor = async (
   }
 
   const judgeUser = await applicationContext
-    .getUseCases()
-    .getJudgeForUserChambersInteractor(applicationContext, { user });
+    .getUseCaseHelpers()
+    .getJudgeInSectionHelper(applicationContext, { section: user.section });
 
   const chambersUserId = (judgeUser && judgeUser.userId) || user.userId;
 
