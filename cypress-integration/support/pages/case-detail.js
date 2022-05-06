@@ -2,6 +2,12 @@ exports.navigateTo = (username, docketNumber) => {
   cy.login(username, `/case-detail/${docketNumber}`);
 };
 
+exports.goToCaseDetail = docketNumber => {
+  cy.get('#search-field').clear().type(docketNumber);
+  cy.get('.ustc-search-button').click();
+  cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
+};
+
 exports.getActionMenuButton = () => {
   return cy.get('button.case-detail-menu__button');
 };
