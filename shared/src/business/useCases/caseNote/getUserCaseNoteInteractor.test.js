@@ -32,8 +32,8 @@ describe('Get case note', () => {
       .getPersistenceGateway()
       .getUserCaseNote.mockReturnValue({});
 
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => null,
+    applicationContext.getUseCaseHelpers.mockReturnValue({
+      getJudgeInSectionHelper: () => null,
     });
 
     await expect(
@@ -48,8 +48,8 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(omit(MOCK_NOTE, 'userId'));
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => mockJudge,
+    applicationContext.getUseCaseHelpers.mockReturnValue({
+      getJudgeInSectionHelper: () => mockJudge,
     });
 
     await expect(
@@ -65,8 +65,8 @@ describe('Get case note', () => {
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
 
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => mockJudge,
+    applicationContext.getUseCaseHelpers.mockReturnValue({
+      getJudgeInSectionHelper: () => mockJudge,
     });
 
     const result = await getUserCaseNoteInteractor(applicationContext, {
@@ -82,8 +82,8 @@ describe('Get case note', () => {
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
 
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => null,
+    applicationContext.getUseCaseHelpers.mockReturnValue({
+      getJudgeInSectionHelper: () => null,
     });
 
     const result = await getUserCaseNoteInteractor(applicationContext, {
@@ -98,8 +98,8 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockReturnValue(null);
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => mockJudge,
+    applicationContext.getUseCaseHelpers.mockReturnValue({
+      getJudgeInSectionHelper: () => mockJudge,
     });
 
     const result = await getUserCaseNoteInteractor(applicationContext, {
