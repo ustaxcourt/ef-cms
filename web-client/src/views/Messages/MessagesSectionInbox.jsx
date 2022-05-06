@@ -1,47 +1,60 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { sortSectionMessagesSequence } from '../../presenter/sequences/sortSectionMessagesSequence';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
+import classNames from 'classnames';
 
 export const MessagesSectionInbox = connect(
-  { formattedMessages: state.formattedMessages.messages },
-  function MessagesSectionInbox({ formattedMessages }) {
+  {
+    formattedMessages: state.formattedMessages.messages,
+    sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
+    tableSort: state.tableSort,
+  },
+  function MessagesSectionInbox({
+    formattedMessages,
+    sortSectionMessagesSequence,
+    tableSort,
+  }) {
     return (
       <>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
-                Docket No.
-              </th>
-              <Button
-                link
-                className="sortable-header-button margin-right-0"
-                onClick={() => {
-                  sortSectionMessagesSequence({
-                    sort: 'docket',
-                  });
-                }}
-              >
-                <span
-                  className={classNames(
-                    'margin-right-105',
-                    sort === 'docket' && 'sortActive',
-                  )}
+                {/* TODO: this should be put into a abstracted component */}
+                <Button
+                  link
+                  className="sortable-header-button margin-right-0"
+                  onClick={() => {
+                    sortSectionMessagesSequence({
+                      sortField: 'docketNumber',
+                    });
+                  }}
                 >
-                  Docket No.
-                </span>
-                {(sort === 'docket' && sortOrder === 'desc' && (
-                  <FontAwesomeIcon icon="caret-up" title="in ascending order" />
-                )) || (
-                  <FontAwesomeIcon
-                    icon="caret-down"
-                    title="in descending order"
-                  />
-                )}
-              </Button>
+                  <span
+                    className={classNames(
+                      'margin-right-105',
+                      tableSort.sortField === 'docketNumber' && 'sortActive',
+                    )}
+                  >
+                    Docket No.
+                  </span>
+                  {(tableSort.sortField === 'docketNumber' &&
+                    tableSort.sortOrder === 'desc' && (
+                      <FontAwesomeIcon
+                        icon="caret-up"
+                        title="in ascending order"
+                      />
+                    )) || (
+                    <FontAwesomeIcon
+                      icon="caret-down"
+                      title="in descending order"
+                    />
+                  )}
+                </Button>
+              </th>
+
               <th className="small">Received</th>
               <th>Message</th>
               <th>Case Title</th>
