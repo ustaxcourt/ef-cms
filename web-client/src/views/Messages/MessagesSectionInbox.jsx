@@ -1,5 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
+import { sortSectionMessagesSequence } from '../../presenter/sequences/sortSectionMessagesSequence';
 import { state } from 'cerebral';
 import React from 'react';
 
@@ -14,6 +16,32 @@ export const MessagesSectionInbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 Docket No.
               </th>
+              <Button
+                link
+                className="sortable-header-button margin-right-0"
+                onClick={() => {
+                  sortSectionMessagesSequence({
+                    sort: 'docket',
+                  });
+                }}
+              >
+                <span
+                  className={classNames(
+                    'margin-right-105',
+                    sort === 'docket' && 'sortActive',
+                  )}
+                >
+                  Docket No.
+                </span>
+                {(sort === 'docket' && sortOrder === 'desc' && (
+                  <FontAwesomeIcon icon="caret-up" title="in ascending order" />
+                )) || (
+                  <FontAwesomeIcon
+                    icon="caret-down"
+                    title="in descending order"
+                  />
+                )}
+              </Button>
               <th className="small">Received</th>
               <th>Message</th>
               <th>Case Title</th>
