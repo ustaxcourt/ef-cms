@@ -6,24 +6,12 @@ import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValue
 import { getOpinionTypesAction } from '../actions/getOpinionTypesAction';
 import { getUsersInSectionAction } from '../actions/getUsersInSectionAction';
 import { isInternalUserAction } from '../actions/isInternalUserAction';
-import { parallel } from 'cerebral';
+import { setAdvancedSearchPropsOnFormAction } from '../actions/AdvancedSearch/setAdvancedSearchPropsOnFormAction';
 import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setAllAndCurrentJudgesAction } from '../actions/setAllAndCurrentJudgesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setOpinionTypesAction } from '../actions/setOpinionTypesAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
-
-const fetchFeatureFlag = flagName => {
-  return [
-    getFeatureFlagValueFactoryAction(
-      getConstants().ALLOWLIST_FEATURE_FLAGS[flagName],
-    ),
-    {
-      no: [setAlertWarningAction],
-      yes: [],
-    },
-  ];
-};
 
 export const gotoAdvancedSearchSequence =
   startWebSocketConnectionSequenceDecorator([
@@ -31,29 +19,45 @@ export const gotoAdvancedSearchSequence =
     clearScreenMetadataAction,
     closeMobileMenuAction,
     defaultAdvancedSearchFormAction,
-    parallel([
-      [
-        getUsersInSectionAction({ section: 'judge' }),
-        setAllAndCurrentJudgesAction,
-      ],
-      [getOpinionTypesAction, setOpinionTypesAction],
-      [
-        isInternalUserAction,
+    getUsersInSectionAction({ section: 'judge' }),
+    setAllAndCurrentJudgesAction,
+    getOpinionTypesAction,
+    setOpinionTypesAction,
+    setAdvancedSearchPropsOnFormAction,
+    setCurrentPageAction('AdvancedSearch'),
+    isInternalUserAction,
+    {
+      no: [
+        getFeatureFlagValueFactoryAction(
+          getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_ORDER_SEARCH,
+        ),
         {
-          no: [
-            parallel([
-              fetchFeatureFlag('EXTERNAL_ORDER_SEARCH'),
-              fetchFeatureFlag('EXTERNAL_OPINION_SEARCH'),
-            ]),
-          ],
-          yes: [
-            parallel([
-              fetchFeatureFlag('INTERNAL_ORDER_SEARCH'),
-              fetchFeatureFlag('INTERNAL_OPINION_SEARCH'),
-            ]),
-          ],
+          no: [setAlertWarningAction],
+          yes: [],
+        },
+        getFeatureFlagValueFactoryAction(
+          getConstants().ALLOWLIST_FEATURE_FLAGS.EXTERNAL_OPINION_SEARCH,
+        ),
+        {
+          no: [setAlertWarningAction],
+          yes: [],
         },
       ],
-    ]),
-    setCurrentPageAction('AdvancedSearch'),
+      yes: [
+        getFeatureFlagValueFactoryAction(
+          getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_ORDER_SEARCH,
+        ),
+        {
+          no: [setAlertWarningAction],
+          yes: [],
+        },
+        getFeatureFlagValueFactoryAction(
+          getConstants().ALLOWLIST_FEATURE_FLAGS.INTERNAL_OPINION_SEARCH,
+        ),
+        {
+          no: [setAlertWarningAction],
+          yes: [],
+        },
+      ],
+    },
   ]);
