@@ -768,6 +768,12 @@ const {
   getWorkItemsByWorkItemId,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByWorkItemId');
 const {
+  handleBounceNotifications,
+} = require('../../shared/src/business/useCaseHelpers/handleBounceNotifications');
+const {
+  handleBounceNotificationsInteractor,
+} = require('../../shared/src/business/useCases/email/handleBounceNotificationInteractor');
+const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
@@ -1897,6 +1903,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
         getUnassociatedLeadCase,
+        handleBounceNotifications,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
         removeCounselFromRemovedPetitioner,
@@ -2038,6 +2045,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUsersInSectionInteractor,
         getUsersPendingEmailInteractor,
         getWorkItemInteractor,
+        handleBounceNotificationsInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
         opinionAdvancedSearchInteractor,

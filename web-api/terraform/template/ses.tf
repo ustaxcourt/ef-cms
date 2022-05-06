@@ -118,3 +118,13 @@ resource "aws_ses_template" "email_change_verification" {
   {{emailContent}}
 EOF
 }
+
+
+#IRS Super User Bounce Report Email Template
+resource "aws_ses_template" "bounce_alert" {
+  name    = "bounce_alert_${var.environment}"
+  subject = "ALERT: Email to the IRS Super User has bounced"
+  html    = <<EOF
+  {{emailContent}}
+EOF
+}

@@ -80,6 +80,10 @@ variable "bounced_email_recipient" {
   type = string
 }
 
+variable "bounce_alert_recipients" {
+  type = string
+}
+
 variable "scanner_resource_uri" {
   type = string
 }
