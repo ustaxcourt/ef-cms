@@ -5,11 +5,12 @@ const {
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
- * getJudgeForUserChambersInteractor - returns the judge user for a given user in a chambers section
+ * getJudgeInSectionInteractor - returns the judge user for a given section
  *
  * @param {object} applicationContext the application context
- * @param {object} providers the providers object
- * @returns {User} the judge user for the given chambers user
+ * @param {object} obj the options object
+ * @param {string} obj.section the section to fetch the judge from
+ * @returns {User} the judge user in this section provided
  */
 
 exports.getJudgeInSectionInteractor = async (

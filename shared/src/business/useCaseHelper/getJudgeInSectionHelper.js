@@ -2,7 +2,7 @@ const { ROLES } = require('../entities/EntityConstants');
 const { User } = require('../entities/User');
 
 /**
- * getJudgeForUserChambersInteractor - returns the judge user for a given user in a chambers section
+ * getJudgeInSectionHelper - returns the judge user for a given section
  *
  * @param {object} applicationContext the application context
  * @param {object} obj the options argument
