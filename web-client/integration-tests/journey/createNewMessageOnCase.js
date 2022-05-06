@@ -1,15 +1,15 @@
 import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business//test/createTestApplicationContext';
+import { PETITIONS_SECTION } from '../../../shared/src/business/entities/EntityConstants';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const { PETITIONS_SECTION } = applicationContext.getConstants();
-
-const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
-
 export const createNewMessageOnCase = cerebralTest => {
+  const messageModalHelper = withAppContextDecorator(
+    messageModalHelperComputed,
+  );
+
   const getHelper = () => {
     return runCompute(messageModalHelper, {
       state: cerebralTest.getState(),
@@ -66,6 +66,8 @@ export const createNewMessageOnCase = cerebralTest => {
     });
 
     await cerebralTest.runSequence('createMessageSequence');
+
+    expect(cerebralTest.getState('modal.form')).toBeDefined();
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
