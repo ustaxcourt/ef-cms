@@ -12,7 +12,7 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseEntity the caseEntity
+ * @param {Case} providers.caseEntity the caseEntity
  * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
  */
 exports.addDocketEntryForSystemGeneratedOrder = async ({
@@ -63,7 +63,10 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   let combinedPdf = orderPdfData;
   if (
     systemGeneratedDocument.eventCode ===
-    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode ||
+    systemGeneratedDocument.eventCode ===
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
+        .eventCode
   ) {
     const { Body: amendedPetitionFormData } = await applicationContext
       .getStorageClient()
