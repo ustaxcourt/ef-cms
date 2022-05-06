@@ -1710,6 +1710,19 @@ const getOtherFilers = function (rawCase) {
 };
 
 /**
+ * Checks if the provided userId is a private practitioner or irs practitioner on the case.
+ *
+ * @param {string} userId the userId of the user to check
+ * @returns  {boolean} if the userId is a private practitioner or irs practitioner on the case
+ */
+Case.prototype.isPractitioner = function (userId) {
+  return (
+    this.privatePractitioners.some(p => p.userId === userId) ||
+    this.irsPractitioners.some(p => p.userId === userId)
+  );
+};
+
+/**
  * Returns the secondary contact on the case
  *
  * @returns {Object} the secondary contact object on the case
