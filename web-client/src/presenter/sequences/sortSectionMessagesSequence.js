@@ -1,1 +1,3 @@
-export const sortSectionMessagesSequence = {};
+import { setSectionMessagesSortAction } from '../actions/setSectionMessagesSortAction';
+
+export const sortSectionMessagesSequence = [setSectionMessagesSortAction];
