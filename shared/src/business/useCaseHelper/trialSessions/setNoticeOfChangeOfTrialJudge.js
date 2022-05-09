@@ -8,7 +8,7 @@ const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { isEqual } = require('lodash');
+const { get } = require('lodash');
 
 const serveNoticesForCase = async (
   applicationContext,
@@ -59,9 +59,16 @@ exports.setNoticeOfChangeOfTrialJudge = async (
     userId,
   },
 ) => {
+  const trialSessionJudgeHasChanged =
+    (!get(currentTrialSession, 'judge.userId') &&
+      get(newTrialSessionEntity, 'judge.userId')) ||
+    (currentTrialSession.judge &&
+      newTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !== newTrialSessionEntity.judge.userId);
+
   const shouldIssueNoticeOfChangeOfTrialJudge =
     currentTrialSession.isCalendared &&
-    currentTrialSession.judge?.userId !== newTrialSessionEntity.judge?.userId &&
+    trialSessionJudgeHasChanged &&
     caseEntity.status !== CASE_STATUS_TYPES.closed;
 
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
