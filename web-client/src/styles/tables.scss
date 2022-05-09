@@ -68,6 +68,10 @@ table,
     &.small {
       max-width: $table-column-width-small;
     }
+
+    &.medium {
+      width: 140px;
+    }
   }
 
   td {

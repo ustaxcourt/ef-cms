@@ -1,21 +1,52 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const MessagesSectionOutbox = connect(
-  { formattedMessages: state.formattedMessages.messages },
-  function MessagesSectionOutbox({ formattedMessages }) {
+  {
+    formattedMessages: state.formattedMessages.messages,
+    sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
+    tableSort: state.tableSort,
+  },
+  function MessagesSectionOutbox({
+    formattedMessages,
+    sortSectionMessagesSequence,
+    tableSort,
+  }) {
     return (
       <>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
-                Docket No.
+                <SortableColumnHeaderButton
+                  defaultSort="desc"
+                  sortField="docketNumber"
+                  tableSort={tableSort}
+                  title="Docket No."
+                  onClickSequence={sortSectionMessagesSequence}
+                />
               </th>
-              <th className="small">Sent</th>
-              <th>Message</th>
+              <th className="small">
+                <SortableColumnHeaderButton
+                  defaultSort="desc"
+                  sortField="createdAt"
+                  tableSort={tableSort}
+                  title="Sent"
+                  onClickSequence={sortSectionMessagesSequence}
+                />
+              </th>
+              <th>
+                <SortableColumnHeaderButton
+                  defaultSort="desc"
+                  sortField="message"
+                  tableSort={tableSort}
+                  title="Message"
+                  onClickSequence={sortSectionMessagesSequence}
+                />
+              </th>
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>

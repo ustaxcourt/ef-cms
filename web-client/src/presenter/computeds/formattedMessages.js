@@ -20,12 +20,13 @@ export const getFormattedMessages = ({
       messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
     }))
     .sort((a, b) => {
-      // TODO: localeCompare only works for dates
-      // TODO: find a elegant way to sort by values
+      let sortNumber = 0;
       if (
         ['createdAt', 'completedAt', 'subject'].includes(tableSort.sortField)
       ) {
-        return a[tableSort.sortField].localeCompare(b[tableSort.sortField]);
+        sortNumber = a[tableSort.sortField].localeCompare(
+          b[tableSort.sortField],
+        );
       } else if (tableSort.sortField === 'docketNumber') {
         const aSplit = a.docketNumber.split('-');
         const bSplit = b.docketNumber.split('-');
@@ -33,14 +34,18 @@ export const getFormattedMessages = ({
         if (aSplit[1] !== bSplit[1]) {
           // compare years if they aren't the same;
           // compare as strings, because they *might* have suffix
-          return aSplit[1].localeCompare(bSplit[1]);
+          sortNumber = aSplit[1].localeCompare(bSplit[1]);
         } else {
           // compare index if years are the same, compare as integers
-          return +aSplit[0] - +bSplit[0];
+          sortNumber = +aSplit[0] - +bSplit[0];
         }
-        // return a[tableSort.sortField].localeCompare(b[tableSort.sortField]);
       }
+      return sortNumber;
     });
+
+  if (tableSort.sortOrder === 'desc') {
+    formattedCaseMessages.reverse();
+  }
 
   const inProgressMessages = formattedCaseMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,
@@ -59,14 +64,19 @@ export const getFormattedMessages = ({
 };
 
 export const formattedMessages = (get, applicationContext) => {
+  const tableSort = get(state.tableSort);
+
   const { completedMessages, messages } = getFormattedMessages({
     applicationContext,
     messages: get(state.messages) || [],
+    tableSort,
   });
 
-  const currentMessageBox = get(state.messageBoxToDisplay.box);
+  const { box, section } = get(state.messageBoxToDisplay);
+  console.log(get(state.messageBoxToDisplay));
+  const userRole = get(state.user.role);
 
-  if (currentMessageBox === 'outbox') {
+  if (box === 'outbox' && section === 'section' && userRole !== 'adc') {
     messages.reverse();
   }
 
