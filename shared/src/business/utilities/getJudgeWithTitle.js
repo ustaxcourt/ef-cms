@@ -1,7 +1,7 @@
 const getJudgeWithTitle = async ({
   applicationContext,
   judgeUserName,
-  shouldReturnFullName = false,
+  shouldUseFullName = false,
 }) => {
   const judges = await applicationContext
     .getPersistenceGateway()
@@ -16,7 +16,7 @@ const getJudgeWithTitle = async ({
     throw new Error(`Judge ${judgeUserName} was not found`);
   }
 
-  const judgeName = shouldReturnFullName
+  const judgeName = shouldUseFullName
     ? foundJudge.judgeFullName
     : foundJudge.name;
 

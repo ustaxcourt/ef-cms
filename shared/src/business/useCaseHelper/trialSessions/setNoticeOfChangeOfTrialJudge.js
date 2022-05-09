@@ -79,13 +79,13 @@ exports.setNoticeOfChangeOfTrialJudge = async (
     const priorJudgeTitleWithFullName = await getJudgeWithTitle({
       applicationContext,
       judgeUserName: currentTrialSession.judge.name,
-      shouldReturnFullName: true,
+      shouldUseFullName: true,
     });
 
     const updatedJudgeTitleWithFullName = await getJudgeWithTitle({
       applicationContext,
       judgeUserName: newTrialSessionEntity.judge.name,
-      shouldReturnFullName: true,
+      shouldUseFullName: true,
     });
 
     const trialSessionInformation = {

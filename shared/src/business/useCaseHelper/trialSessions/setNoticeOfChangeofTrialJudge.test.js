@@ -153,11 +153,11 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
 
     expect(getJudgeWithTitle.mock.calls[0][0]).toMatchObject({
       judgeUserName: currentTrialSession.judge.name,
-      shouldReturnFullName: true,
+      shouldUseFullName: true,
     });
     expect(getJudgeWithTitle.mock.calls[1][0]).toMatchObject({
       judgeUserName: updatedTrialSession.judge.name,
-      shouldReturnFullName: true,
+      shouldUseFullName: true,
     });
   });
 

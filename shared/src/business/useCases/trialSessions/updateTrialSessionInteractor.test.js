@@ -508,18 +508,16 @@ describe('updateTrialSessionInteractor', () => {
       },
       { applicationContext },
     );
-
-    const mock =
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
-    mock.mockReturnValue(mockCalendaredCase);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase);
 
     await updateTrialSessionInteractor(applicationContext, {
       trialSession: mockTrialsById[MOCK_TRIAL_ID_4],
     });
 
     expect(
-      applicationContext.getUseCaseHelpers()
-        .setNoticeOfChangeToRemoteProceeding,
+      applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
     ).toHaveBeenCalledTimes(1);
   });
 });
