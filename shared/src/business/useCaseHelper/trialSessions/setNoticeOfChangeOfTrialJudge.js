@@ -64,27 +64,28 @@ exports.setNoticeOfChangeOfTrialJudge = async (
     currentTrialSession.judge?.userId !== newTrialSessionEntity.judge?.userId &&
     caseEntity.status !== CASE_STATUS_TYPES.closed;
 
-  //fixme
-  const priorJudgeFromPersistence = getJudgeWithTitle();
-  const updatedJudgeFromPersistence = getJudgeWithTitle();
-
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
+    const priorJudgeFromPersistence = await applicationContext
+      .getPersistenceGateway()
+      .getUsersInSection({ applicationContext, section: 'judge' });
+    const updatedJudgeFromPersistence = getJudgeWithTitle();
+
     const trialSessionInformation = {
+      caseProcedureType: caseEntity.procedureType,
       caseType: caseEntity.caseType,
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
+      docketNumber: caseEntity.docketNumber,
       judgeName: newTrialSessionEntity.judge.name,
       priorJudge: priorJudgeFromPersistence,
       proceedingType: newTrialSessionEntity.proceedingType,
       startDate: newTrialSessionEntity.startDate,
       trialLocation: newTrialSessionEntity.trialLocation,
       updatedJudge: updatedJudgeFromPersistence,
-      //procedure type
     };
 
     const notice = await applicationContext
       .getUseCases()
       .generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
-        docketNumber: caseEntity.docketNumber,
         trialSessionInformation,
       });
 
