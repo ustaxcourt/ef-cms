@@ -21,7 +21,9 @@ export const getFormattedMessages = ({
     }))
     .sort((a, b) => {
       let sortNumber = 0;
-      if (
+      if (!tableSort) {
+        sortNumber = a.createdAt.localeCompare(b.createdAt);
+      } else if (
         ['createdAt', 'completedAt', 'subject'].includes(tableSort.sortField)
       ) {
         sortNumber = a[tableSort.sortField].localeCompare(
@@ -43,7 +45,7 @@ export const getFormattedMessages = ({
       return sortNumber;
     });
 
-  if (tableSort.sortOrder === 'desc') {
+  if (tableSort && tableSort.sortOrder === 'desc') {
     formattedCaseMessages.reverse();
   }
 
