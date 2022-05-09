@@ -34,11 +34,11 @@ describe('getJudgeWithTitle', () => {
     expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.name}`);
   });
 
-  it('should return the found judge full name with title when shouldReturnFullName is true', async () => {
+  it('should return the found judge full name with title when shouldUseFullName is true', async () => {
     const result = await getJudgeWithTitle({
       applicationContext,
       judgeUserName: mockJudgeUserName,
-      shouldReturnFullName: true,
+      shouldUseFullName: true,
     });
 
     expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.fullName}`);
