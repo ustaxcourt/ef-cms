@@ -20,7 +20,7 @@ export const NoticeOfChangeOfTrialJudge = ({
       />
 
       <div id="notice-body">
-        <p>
+        <p className="indent-paragraph">
           The {trialInfo.trialLocation}, {trialInfo.proceedingType} trial
           session scheduled to begin on {trialInfo.formattedStartDate}, has been
           reassigned from {trialInfo.priorJudgeTitleWithFullName} to{' '}
