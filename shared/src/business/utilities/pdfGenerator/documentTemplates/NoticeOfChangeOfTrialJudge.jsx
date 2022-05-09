@@ -12,8 +12,6 @@ export const NoticeOfChangeOfTrialJudge = ({
   return (
     <div id="notice-of-change-of-trial-judge-pdf">
       <PrimaryHeader />
-      {console.log(caseCaptionExtension)}
-      {console.log(docketNumberWithSuffix)}
       <DocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
@@ -26,8 +24,8 @@ export const NoticeOfChangeOfTrialJudge = ({
           The {trialInfo.trialLocation}, {trialInfo.proceedingType} trial
           session scheduled to begin on {trialInfo.formattedStartDate}, has been
           reassigned from {trialInfo.priorJudgeTitleWithFullName} to{' '}
-          {trialInfo.priorJudgeTitleWithFullName}.{' '}
-          {trialInfo.priorJudgeTitleWithFullName}’s chambers are located at:
+          {trialInfo.updatedJudgeTitleWithFullName}.{' '}
+          {trialInfo.updatedJudgeTitleWithFullName}’s chambers are located at:
           United States Tax Court, 400 Second St., N.W., Washington, DC 20217, (
           {trialInfo.chambersPhoneNumber}). The Standing Pretrial Order{' '}
           {trialInfo.caseProcedureType === PROCEDURE_TYPES_MAP.small && (
