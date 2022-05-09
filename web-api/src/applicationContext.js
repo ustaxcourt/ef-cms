@@ -985,6 +985,9 @@ const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
+  sendSlackNotification,
+} = require('../../shared/src/dispatchers/slack/sendSlackNotification');
+const {
   sendUpdatePetitionerCasesMessage,
 } = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
 const {
@@ -1617,6 +1620,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getAppEndpoint: () => {
       return environment.appEndpoint;
     },
+    getBounceAlertRecipients: () =>
+      process.env.EMAIL_BOUNCED_SUPER_USER_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getClerkOfCourtNameForSigning: () => {
@@ -1698,6 +1703,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         process.env.PROD_ENV_ACCOUNT_ID === process.env.AWS_ACCOUNT_ID
           ? sendNotificationOfSealing
           : () => {},
+      sendSlackNotification,
     }),
     getDocumentClient,
     getDocumentGenerators: () => ({
@@ -1871,6 +1877,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       }
       return searchClientCache;
     },
+    getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient: () => {
       if (!s3Cache) {
         s3Cache = new S3({
