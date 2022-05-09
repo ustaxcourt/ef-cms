@@ -1,21 +1,53 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const MessagesSectionCompleted = connect(
-  { formattedMessages: state.formattedMessages.completedMessages },
-  function MessagesSectionCompleted({ formattedMessages }) {
+  {
+    formattedMessages: state.formattedMessages.completedMessages,
+    sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
+    tableSort: state.tableSort,
+  },
+  function MessagesSectionCompleted({
+    formattedMessages,
+    sortSectionMessagesSequence,
+    tableSort,
+  }) {
     return (
       <>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
-                Docket No.
+                <SortableColumnHeaderButton
+                  defaultSort="desc"
+                  sortField="docketNumber"
+                  tableSort={tableSort}
+                  title="Docket No."
+                  onClickSequence={sortSectionMessagesSequence}
+                />
               </th>
-              <th className="small">Completed</th>
-              <th>Last Message</th>
+              <th className="medium">
+                <SortableColumnHeaderButton
+                  defaultSort="asc"
+                  sortField="completedAt"
+                  tableSort={tableSort}
+                  title="Completed"
+                  onClickSequence={sortSectionMessagesSequence}
+                />
+              </th>
+
+              <th>
+                <SortableColumnHeaderButton
+                  defaultSort="desc"
+                  sortField="message"
+                  tableSort={tableSort}
+                  title="Last Message"
+                  onClickSequence={sortSectionMessagesSequence}
+                />
+              </th>
               <th>Comment</th>
               <th>Completed by</th>
               <th>Section</th>

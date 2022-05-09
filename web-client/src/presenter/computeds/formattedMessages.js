@@ -6,6 +6,7 @@ export const getFormattedMessages = ({
   messages,
   tableSort,
 }) => {
+  // TODO: refactor this whole function
   const formattedCaseMessages = messages
     .map(message => ({
       ...message,
@@ -56,7 +57,11 @@ export const getFormattedMessages = ({
     message => message.isCompleted,
   );
 
-  completedMessages.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
+  if (!tableSort) {
+    completedMessages.sort((a, b) =>
+      b.completedAt.localeCompare(a.completedAt),
+    );
+  }
 
   return {
     completedMessages,
@@ -75,7 +80,6 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   const { box, section } = get(state.messageBoxToDisplay);
-  console.log(get(state.messageBoxToDisplay));
   const userRole = get(state.user.role);
 
   if (box === 'outbox' && section === 'section' && userRole !== 'adc') {

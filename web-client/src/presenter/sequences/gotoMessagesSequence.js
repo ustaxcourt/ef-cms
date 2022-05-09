@@ -11,6 +11,7 @@ import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForU
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -30,6 +31,7 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
     sectioninbox: [getInboxMessagesForSectionAction],
     sectionoutbox: [getOutboxMessagesForSectionAction],
   },
+  setDefaultTableSortAction,
   setMessagesAction,
   setCurrentPageAction('Messages'),
 ]);
