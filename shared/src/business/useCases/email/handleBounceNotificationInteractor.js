@@ -8,7 +8,7 @@
  * @param {string} providers.bounceSubType the sub type of the SES bounced email
  * @returns {Promise<object>} item updated in persistence
  */
-exports.handleBounceNotificationsInteractor = async (
+exports.handleBounceNotificationInteractor = async (
   applicationContext,
   { bouncedRecipients, bounceSubType, bounceType },
 ) => {
@@ -21,21 +21,15 @@ exports.handleBounceNotificationsInteractor = async (
     return;
   }
 
-  // Warning Emails sent to specified addresses
   await applicationContext.getDispatchers().sendBulkTemplatedEmail({
     applicationContext,
     defaultTemplateData: {},
-    destinations: process.env.EMAIL_BOUNCED_SUPER_USER_RECIPIENTS.split(','),
+    destinations: applicationContext.getBounceAlertRecipients(),
     templateName: process.env.EMAIL_BOUNCED_SUPER_USER_TEMPLATE,
   });
 
-  // Slack notification occurs in specified channel
   await applicationContext.getDispatchers().sendSlackNotification({
     applicationContext,
-    message: `An Email to the IRS Super User has triggered a ${bounceType} bounce`,
+    message: `An Email to the IRS Super User has triggered a ${bounceType} bounce (${bounceSubType})`,
   });
-
-  if (bounceSubType === 'OnAccountSuppressionList') {
-    // They are removed from suppression list, unless they have been added to it five times in the last hour.
-  }
 };
