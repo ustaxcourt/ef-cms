@@ -27,8 +27,17 @@ export const getFormattedMessages = ({
       ) {
         return a[tableSort.sortField].localeCompare(b[tableSort.sortField]);
       } else if (tableSort.sortField === 'docketNumber') {
-        // TODO: find existing sort logic for docket number, or make one
-        return true;
+        const aSplit = a.docketNumber.split('-');
+        const bSplit = b.docketNumber.split('-');
+
+        if (aSplit[1] !== bSplit[1]) {
+          // compare years if they aren't the same;
+          // compare as strings, because they *might* have suffix
+          return aSplit[1].localeCompare(bSplit[1]);
+        } else {
+          // compare index if years are the same, compare as integers
+          return +aSplit[0] - +bSplit[0];
+        }
         // return a[tableSort.sortField].localeCompare(b[tableSort.sortField]);
       }
     });
