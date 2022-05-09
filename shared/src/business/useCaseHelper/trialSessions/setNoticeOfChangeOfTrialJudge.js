@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   CASE_STATUS_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
@@ -6,43 +9,51 @@ const {
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
-// const serveNoticesForCase = async (
-//   applicationContext,
-//   {
-//     caseEntity,
-//     newPdfDoc,
-//     noticeDocketEntryEntity,
-//     noticeDocumentPdfData,
-//     PDFDocument,
-//     servedParties,
-//   },
-// ) => {
-//   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-//     applicationContext,
-//     caseEntity,
-//     docketEntryId: noticeDocketEntryEntity.docketEntryId,
-//     servedParties,
-//   });
+const serveNoticesForCase = async (
+  applicationContext,
+  {
+    caseEntity,
+    newPdfDoc,
+    noticeDocketEntryEntity,
+    noticeDocumentPdfData,
+    PDFDocument,
+    servedParties,
+  },
+) => {
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    docketEntryId: noticeDocketEntryEntity.docketEntryId,
+    servedParties,
+  });
 
-//   if (servedParties.paper.length > 0) {
-//     const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
+  if (servedParties.paper.length > 0) {
+    const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
 
-//     await applicationContext
-//       .getUseCaseHelpers()
-//       .appendPaperServiceAddressPageToPdf({
-//         applicationContext,
-//         caseEntity,
-//         newPdfDoc,
-//         noticeDoc: noticeDocumentPdf,
-//         servedParties,
-//       });
-//   }
-// };
+    await applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf({
+        applicationContext,
+        caseEntity,
+        newPdfDoc,
+        noticeDoc: noticeDocumentPdf,
+        servedParties,
+      });
+  }
+};
 
 /**
  * setNoticeOfChangeOfTrialJudge
  *
-fixme
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.caseEntity the case data
+ * @param {object} providers.currentTrialSession the old trial session data
+ * @param {object} providers.newPdfDoc the new PDF contents to be appended
+ * @param {object} providers.newTrialSessionEntity the new trial session data
+ * @param {object} providers.PDFDocument the PDF document to append to
+ * @param {object} providers.userId the user ID
+ * @returns {Promise<void>} the created trial session
  */
 exports.setNoticeOfChangeOfTrialJudge = async (
   applicationContext,
@@ -127,17 +138,17 @@ exports.setNoticeOfChangeOfTrialJudge = async (
       });
 
     caseEntity.addDocketEntry(noticeOfChangeToRemoteProceedingDocketEntry);
-    // const servedParties = aggregatePartiesForService(caseEntity);
+    const servedParties = aggregatePartiesForService(caseEntity);
 
-    // noticeOfChangeToRemoteProceedingDocketEntry.setAsServed(servedParties.all);
+    noticeOfChangeToRemoteProceedingDocketEntry.setAsServed(servedParties.all);
 
-    // await serveNoticesForCase(applicationContext, {
-    //   PDFDocument,
-    //   caseEntity,
-    //   newPdfDoc,
-    //   noticeDocketEntryEntity: noticeOfChangeToRemoteProceedingDocketEntry,
-    //   noticeDocumentPdfData: notice,
-    //   servedParties,
-    // });
+    await serveNoticesForCase(applicationContext, {
+      PDFDocument,
+      caseEntity,
+      newPdfDoc,
+      noticeDocketEntryEntity: noticeOfChangeToRemoteProceedingDocketEntry,
+      noticeDocumentPdfData: notice,
+      servedParties,
+    });
   }
 };

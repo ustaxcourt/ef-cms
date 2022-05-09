@@ -1009,6 +1009,9 @@ const {
   setMessageAsReadInteractor,
 } = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
 const {
+  setNoticeOfChangeOfTrialJudge,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge');
+const {
   setNoticeOfChangeToRemoteProceeding,
 } = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding');
 const {
@@ -1911,6 +1914,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        setNoticeOfChangeOfTrialJudge,
         setNoticeOfChangeToRemoteProceeding,
         setPdfFormFields,
         updateAssociatedJudgeOnWorkItems,

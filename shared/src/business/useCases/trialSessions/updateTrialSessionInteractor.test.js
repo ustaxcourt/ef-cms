@@ -496,4 +496,30 @@ describe('updateTrialSessionInteractor', () => {
       userId: user.userId,
     });
   });
+
+  it('should call setNoticeOfChangeOfTrialJudge for each case on the trial session', async () => {
+    const mockCalendaredCase = new Case(
+      {
+        ...MOCK_CASE,
+        docketNumber: '123-45',
+        hearings: [],
+        trialDate: '2025-12-02T00:00:00.000Z',
+        trialSessionId: MOCK_TRIAL_ID_4,
+      },
+      { applicationContext },
+    );
+
+    const mock =
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
+    mock.mockReturnValue(mockCalendaredCase);
+
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: mockTrialsById[MOCK_TRIAL_ID_4],
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .setNoticeOfChangeToRemoteProceeding,
+    ).toHaveBeenCalledTimes(1);
+  });
 });

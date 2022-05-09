@@ -3,6 +3,7 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
+  SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -186,7 +187,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     });
   });
 
-  it('should create a new docket entry for the notice of change of trial judge and add it to the docket record', async () => {
+  it('should create and serve new docket entry for the notice of change of trial judge and add it to the docket record', async () => {
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
@@ -204,6 +205,63 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     );
     expect(expectedNotice).toMatchObject({
       isOnDocketRecord: true,
+      servedAt: expect.anything(),
+      servedParties: [
+        {
+          email: 'petitioner@example.com',
+          name: 'Test Petitioner',
+        },
+      ],
     });
+  });
+
+  it('should send service emails to the appropriate parties when the case has no paper service', async () => {
+    await setNoticeOfChangeOfTrialJudge(applicationContext, {
+      PDFDocument: mockPdfDocument,
+      caseEntity: mockOpenCase,
+      currentTrialSession,
+      newPdfDoc: getFakeFile,
+      newTrialSessionEntity: updatedTrialSession,
+      userId,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should send service emails to the appropriate parties when the case has no paper service', async () => {
+    const mockCaseWithPaperService = new Case(
+      {
+        ...mockOpenCase,
+        petitioners: [
+          {
+            ...mockOpenCase.petitioners[0],
+            email: undefined,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    await setNoticeOfChangeOfTrialJudge(applicationContext, {
+      PDFDocument: mockPdfDocument,
+      caseEntity: mockCaseWithPaperService,
+      currentTrialSession,
+      newPdfDoc: getFakeFile,
+      newTrialSessionEntity: updatedTrialSession,
+      userId,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalled();
   });
 });
