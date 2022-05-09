@@ -14,10 +14,6 @@ const noticeOfChangeOfTrialJudge = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: noticeOfChangeOfTrialJudgeTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Notice of Change of Trial Judge',
-    },
   });
 
   const footerHtml = reactTemplateGenerator({
