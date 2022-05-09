@@ -274,7 +274,7 @@
     "file-loader": "^6.2.0",
     "html-webpack-plugin": "^5.5.0",
     "html-webpack-pug-plugin": "^4.0.0",
-    "husky": "^7.0.4",
+    "husky": "^8.0.1",
     "jest": "^28.1.0",
     "jest-environment-jsdom": "^28.1.0",
     "jest-environment-node": "^28.1.0",
