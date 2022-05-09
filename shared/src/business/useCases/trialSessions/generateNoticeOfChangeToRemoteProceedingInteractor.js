@@ -15,7 +15,7 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
  * @param {string} providers.trialSessionInformation the trial session information
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateNoticeOfChangeOfTrialJudgeInteractor = async (
+exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
   applicationContext,
   { docketNumber, trialSessionInformation },
 ) => {
