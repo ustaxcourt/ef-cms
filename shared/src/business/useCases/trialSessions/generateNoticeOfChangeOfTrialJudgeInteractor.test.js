@@ -68,7 +68,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfChangeofTrialJudge.mock
+      applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
         .calls[0][0],
     ).toMatchObject({
       data: {
@@ -94,7 +94,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().noticeOfChangeofTrialJudge.mock
+      applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
         .calls[0][0],
     ).toMatchObject({
       data: {

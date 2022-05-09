@@ -39,7 +39,7 @@ exports.generateNoticeOfChangeOfTrialJudgeInteractor = async (
 
   return await applicationContext
     .getDocumentGenerators()
-    .noticeOfChangeofTrialJudge({
+    .noticeOfChangeOfTrialJudge({
       applicationContext,
       data: {
         caseCaptionExtension,
