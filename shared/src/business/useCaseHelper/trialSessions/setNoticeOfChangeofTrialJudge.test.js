@@ -142,22 +142,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should not generate an NOT when the trial session is calendared but does not have a judge assigned', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession: { ...currentTrialSession, judge: undefined },
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: { ...updatedTrialSession, judge: undefined },
-      userId,
-    });
-
-    expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeOfTrialJudgeInteractor,
-    ).not.toHaveBeenCalled();
-  });
-
   // it('should save the generated NORP to persistence', async () => {
   //   await setNoticeOfChangeOfTrialJudge(applicationContext, {
   //     PDFDocument: mockPdfDocument,

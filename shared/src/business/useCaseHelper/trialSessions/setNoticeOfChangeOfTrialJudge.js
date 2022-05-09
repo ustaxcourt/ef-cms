@@ -59,28 +59,26 @@ exports.setNoticeOfChangeOfTrialJudge = async (
     userId,
   },
 ) => {
-  const trialSessionJudgeHasChanged =
-    (!get(currentTrialSession, 'judge.userId') &&
-      get(newTrialSessionEntity, 'judge.userId')) ||
-    (currentTrialSession.judge &&
-      newTrialSessionEntity.judge &&
-      currentTrialSession.judge.userId !== newTrialSessionEntity.judge.userId);
-
   const shouldIssueNoticeOfChangeOfTrialJudge =
     currentTrialSession.isCalendared &&
-    trialSessionJudgeHasChanged &&
+    currentTrialSession.judge?.userId !== newTrialSessionEntity.judge?.userId &&
     caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+  //fixme
+  const priorJudgeFromPersistence = getJudgeWithTitle();
+  const updatedJudgeFromPersistence = getJudgeWithTitle();
 
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
     const trialSessionInformation = {
+      caseType: caseEntity.caseType,
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
-      joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
       judgeName: newTrialSessionEntity.judge.name,
-      meetingId: newTrialSessionEntity.meetingId,
-      password: newTrialSessionEntity.password,
+      priorJudge: priorJudgeFromPersistence,
+      proceedingType: newTrialSessionEntity.proceedingType,
       startDate: newTrialSessionEntity.startDate,
-      startTime: newTrialSessionEntity.startTime,
       trialLocation: newTrialSessionEntity.trialLocation,
+      updatedJudge: updatedJudgeFromPersistence,
+      //procedure type
     };
 
     const notice = await applicationContext
