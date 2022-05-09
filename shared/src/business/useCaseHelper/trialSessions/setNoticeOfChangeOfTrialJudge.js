@@ -6,7 +6,11 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
-const { DocketEntry } = require('../../entities/DocketEntry');
+const {
+  DocketEntry,
+  getServedPartiesCode,
+} = require('../../entities/DocketEntry');
+const { createISODateString } = require('../../utilities/DateHandler');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 const serveNoticesForCase = async (
@@ -109,6 +113,8 @@ exports.setNoticeOfChangeOfTrialJudge = async (
       key: docketEntryId,
     });
 
+    const servedParties = aggregatePartiesForService(caseEntity);
+
     const noticeOfChangeOfTrialJudgeDocketEntry = new DocketEntry(
       {
         docketEntryId,
@@ -124,6 +130,9 @@ exports.setNoticeOfChangeOfTrialJudge = async (
         isFileAttached: true,
         isOnDocketRecord: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        servedAt: createISODateString(),
+        servedParties: servedParties.all,
+        servedPartiesCode: getServedPartiesCode(servedParties.all),
         userId,
       },
       { applicationContext },
@@ -136,9 +145,6 @@ exports.setNoticeOfChangeOfTrialJudge = async (
       });
 
     caseEntity.addDocketEntry(noticeOfChangeOfTrialJudgeDocketEntry);
-    const servedParties = aggregatePartiesForService(caseEntity);
-
-    noticeOfChangeOfTrialJudgeDocketEntry.setAsServed(servedParties.all);
 
     await serveNoticesForCase(applicationContext, {
       PDFDocument,
