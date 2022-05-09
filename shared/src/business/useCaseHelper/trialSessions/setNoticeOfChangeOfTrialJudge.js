@@ -74,13 +74,13 @@ exports.setNoticeOfChangeOfTrialJudge = async (
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
     const priorJudgeTitleWithFullName = await getJudgeWithTitle({
       applicationContext,
-      judgeUserName: currentTrialSession.judgeName,
+      judgeUserName: currentTrialSession.judge.name,
       shouldReturnFullName: true,
     });
 
     const updatedJudgeTitleWithFullName = await getJudgeWithTitle({
       applicationContext,
-      judgeUserName: newTrialSessionEntity.judgeName,
+      judgeUserName: newTrialSessionEntity.judge.name,
       shouldReturnFullName: true,
     });
 
@@ -109,7 +109,7 @@ exports.setNoticeOfChangeOfTrialJudge = async (
       key: docketEntryId,
     });
 
-    const noticeOfChangeToRemoteProceedingDocketEntry = new DocketEntry(
+    const noticeOfChangeOfTrialJudgeDocketEntry = new DocketEntry(
       {
         docketEntryId,
         documentTitle:
@@ -129,23 +129,22 @@ exports.setNoticeOfChangeOfTrialJudge = async (
       { applicationContext },
     );
 
-    noticeOfChangeToRemoteProceedingDocketEntry.numberOfPages =
+    noticeOfChangeOfTrialJudgeDocketEntry.numberOfPages =
       await applicationContext.getUseCaseHelpers().countPagesInDocument({
         applicationContext,
-        docketEntryId:
-          noticeOfChangeToRemoteProceedingDocketEntry.docketEntryId,
+        docketEntryId: noticeOfChangeOfTrialJudgeDocketEntry.docketEntryId,
       });
 
-    caseEntity.addDocketEntry(noticeOfChangeToRemoteProceedingDocketEntry);
+    caseEntity.addDocketEntry(noticeOfChangeOfTrialJudgeDocketEntry);
     const servedParties = aggregatePartiesForService(caseEntity);
 
-    noticeOfChangeToRemoteProceedingDocketEntry.setAsServed(servedParties.all);
+    noticeOfChangeOfTrialJudgeDocketEntry.setAsServed(servedParties.all);
 
     await serveNoticesForCase(applicationContext, {
       PDFDocument,
       caseEntity,
       newPdfDoc,
-      noticeDocketEntryEntity: noticeOfChangeToRemoteProceedingDocketEntry,
+      noticeDocketEntryEntity: noticeOfChangeOfTrialJudgeDocketEntry,
       noticeDocumentPdfData: notice,
       servedParties,
     });
