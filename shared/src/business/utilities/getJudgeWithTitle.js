@@ -17,7 +17,7 @@ const getJudgeWithTitle = async ({
   }
 
   const judgeName = shouldReturnFullName
-    ? foundJudge.fullName
+    ? foundJudge.judgeFullName
     : foundJudge.name;
 
   return `${foundJudge.judgeTitle} ${judgeName}`;

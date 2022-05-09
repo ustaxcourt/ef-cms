@@ -1,5 +1,4 @@
-import { PROCEDURE_TYPES } from '../../../entities/EntityConstants.js';
-
+import { PROCEDURE_TYPES_MAP } from '../../../entities/EntityConstants.js';
 const React = require('react');
 const { DocketHeader } = require('../components/DocketHeader.jsx');
 const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
@@ -29,8 +28,9 @@ export const NoticeOfChangeOfTrialJudge = ({
           {trialInfo.priorJudgeTitleWithFullName}’s chambers are located at:
           United States Tax Court, 400 Second St., N.W., Washington, DC 20217, (
           {trialInfo.chambersPhoneNumber}). The Standing Pretrial Order{' '}
-          {trialInfo.caseProcedureType === PROCEDURE_TYPES.small &&
-            'for Small Tax Cases'}{' '}
+          {trialInfo.caseProcedureType === PROCEDURE_TYPES_MAP.small && (
+            <>for Small Tax Cases</>
+          )}{' '}
           and the Notice Setting Case for Trial for the{' '}
           {trialInfo.formattedStartDate},{trialInfo.proceedingType} trial
           session remains in full force and effect.
