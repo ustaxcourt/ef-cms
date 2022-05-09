@@ -43,10 +43,6 @@ const changeOfAddress = async ({ applicationContext, content }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: changeOfAddressTemplate,
-    options: {
-      overwriteMain: true,
-      title: content.documentType.title,
-    },
   });
 
   const { docketNumber } = content;
