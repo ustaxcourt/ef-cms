@@ -16,9 +16,11 @@ const getJudgeWithTitle = async ({
     throw new Error(`Judge ${judgeUserName} was not found`);
   }
 
-  return `${foundJudge.judgeTitle} ${
-    shouldReturnFullName ? foundJudge.fullName : foundJudge.name
-  }`;
+  const judgeName = shouldReturnFullName
+    ? foundJudge.fullName
+    : foundJudge.name;
+
+  return `${foundJudge.judgeTitle} ${judgeName}`;
 };
 
 module.exports = {

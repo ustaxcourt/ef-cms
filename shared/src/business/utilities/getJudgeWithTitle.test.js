@@ -31,16 +31,17 @@ describe('getJudgeWithTitle', () => {
       judgeUserName: mockJudgeUserName,
     });
 
-    expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.fullName}`);
+    expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.name}`);
   });
 
   it('should return the found judge full name with title when shouldReturnFullName is true', async () => {
     const result = await getJudgeWithTitle({
       applicationContext,
       judgeUserName: mockJudgeUserName,
+      shouldReturnFullName: true,
     });
 
-    expect(result).toEqual('Special Trial Judge Judy');
+    expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.fullName}`);
   });
 
   it('throws an error when the specified judge is not found in persistence', async () => {

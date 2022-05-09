@@ -1,47 +1,38 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
-  CASE_STATUS_TYPES,
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { get } = require('lodash');
+const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
+const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
-const serveNoticesForCase = async (
-  applicationContext,
-  {
-    caseEntity,
-    newPdfDoc,
-    noticeDocketEntryEntity,
-    noticeDocumentPdfData,
-    PDFDocument,
-    servedParties,
-  },
-) => {
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: noticeDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
+// const serveNoticesForCase = async (
+//   applicationContext,
+//   {
+//     caseEntity,
+//     newPdfDoc,
+//     noticeDocketEntryEntity,
+//     noticeDocumentPdfData,
+//     PDFDocument,
+//     servedParties,
+//   },
+// ) => {
+//   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+//     applicationContext,
+//     caseEntity,
+//     docketEntryId: noticeDocketEntryEntity.docketEntryId,
+//     servedParties,
+//   });
 
-  if (servedParties.paper.length > 0) {
-    const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
+//   if (servedParties.paper.length > 0) {
+//     const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
 
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: noticeDocumentPdf,
-        servedParties,
-      });
-  }
-};
+//     await applicationContext
+//       .getUseCaseHelpers()
+//       .appendPaperServiceAddressPageToPdf({
+//         applicationContext,
+//         caseEntity,
+//         newPdfDoc,
+//         noticeDoc: noticeDocumentPdf,
+//         servedParties,
+//       });
+//   }
+// };
 
 /**
  * setNoticeOfChangeOfTrialJudge
@@ -65,22 +56,28 @@ exports.setNoticeOfChangeOfTrialJudge = async (
     caseEntity.status !== CASE_STATUS_TYPES.closed;
 
   if (shouldIssueNoticeOfChangeOfTrialJudge) {
-    const priorJudgeFromPersistence = await applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection({ applicationContext, section: 'judge' });
-    const updatedJudgeFromPersistence = getJudgeWithTitle();
+    const priorJudgeTitleWithFullName = await getJudgeWithTitle({
+      applicationContext,
+      judgeUserName: currentTrialSession.judgeName,
+      shouldReturnFullName: true,
+    });
+
+    const updatedJudgeTitleWithFullName = await getJudgeWithTitle({
+      applicationContext,
+      judgeUserName: newTrialSessionEntity.judgeName,
+      shouldReturnFullName: true,
+    });
 
     const trialSessionInformation = {
       caseProcedureType: caseEntity.procedureType,
       caseType: caseEntity.caseType,
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
       docketNumber: caseEntity.docketNumber,
-      judgeName: newTrialSessionEntity.judge.name,
-      priorJudge: priorJudgeFromPersistence,
+      priorJudgeTitleWithFullName,
       proceedingType: newTrialSessionEntity.proceedingType,
       startDate: newTrialSessionEntity.startDate,
       trialLocation: newTrialSessionEntity.trialLocation,
-      updatedJudge: updatedJudgeFromPersistence,
+      updatedJudgeTitleWithFullName,
     };
 
     const notice = await applicationContext
