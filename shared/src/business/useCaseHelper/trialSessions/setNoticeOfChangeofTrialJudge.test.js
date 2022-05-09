@@ -2,10 +2,13 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   setNoticeOfChangeOfTrialJudge,
 } = require('./setNoticeOfChangeOfTrialJudge');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
 const { getFakeFile } = require('../../test/getFakeFile');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -16,7 +19,6 @@ jest.mock('../../utilities/getJudgeWithTitle', () => ({
 }));
 
 describe('setNoticeOfChangeOfTrialJudge', () => {
-  const mockDocumentId = '98c6b1c8-1eed-44b6-932a-967af060597a';
   const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
   const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
 
@@ -72,8 +74,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       .generateNoticeOfChangeToRemoteProceedingInteractor.mockReturnValue(
         getFakeFile,
       );
-
-    applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
   });
 
   it('should generate an NOT when the trial judge has been changed on a calendared trial session, and the case is not closed', async () => {
@@ -154,9 +154,56 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       judgeUserName: currentTrialSession.judgeName,
       shouldReturnFullName: true,
     });
-    expect(getJudgeWithTitle.mock.calls[0][1]).toMatchObject({
+    expect(getJudgeWithTitle.mock.calls[1][0]).toMatchObject({
       judgeUserName: updatedTrialSession.judgeName,
       shouldReturnFullName: true,
+    });
+  });
+
+  it('should save the generated notice to s3', async () => {
+    const mockDocketEntryId = '1ed611ad-17f9-4e2d-84fb-a084fe475dd7';
+    const mockNotice = 'The rain falls mainly on the plane';
+    applicationContext.getUniqueId.mockReturnValue(mockDocketEntryId);
+    applicationContext
+      .getUseCases()
+      .generateNoticeOfChangeOfTrialJudgeInteractor.mockReturnValue(mockNotice);
+
+    await setNoticeOfChangeOfTrialJudge(applicationContext, {
+      PDFDocument: mockPdfDocument,
+      caseEntity: mockOpenCase,
+      currentTrialSession,
+      newPdfDoc: getFakeFile,
+      newTrialSessionEntity: updatedTrialSession,
+      userId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0],
+    ).toMatchObject({
+      document: mockNotice,
+      key: mockDocketEntryId,
+    });
+  });
+
+  it('should create a new docket entry for the notice of change of trial judge and add it to the docket record', async () => {
+    await setNoticeOfChangeOfTrialJudge(applicationContext, {
+      PDFDocument: mockPdfDocument,
+      caseEntity: mockOpenCase,
+      currentTrialSession,
+      newPdfDoc: getFakeFile,
+      newTrialSessionEntity: updatedTrialSession,
+      userId,
+    });
+
+    const expectedNotice = mockOpenCase.docketEntries.find(
+      doc =>
+        doc.documentTitle ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge
+          .documentTitle,
+    );
+    expect(expectedNotice).toMatchObject({
+      isOnDocketRecord: true,
     });
   });
 });

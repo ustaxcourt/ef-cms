@@ -613,6 +613,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: SPTO_DOCUMENT.documentType,
     eventCode: SPTO_DOCUMENT.eventCode,
   },
+  noticeOfChangeOfTrialJudge: {
+    documentTitle: 'Notice of Change of Trial Judge',
+    documentType: 'Notice of Change of Trial Judge',
+    eventCode: 'NOT',
+  },
 };
 
 const PROPOSED_STIPULATED_DECISION_EVENT_CODE = flatten(
