@@ -16,7 +16,6 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
   const mockTrialSessionInformation = {
     caseProcedureType: PROCEDURE_TYPES.SMALL,
     chambersPhoneNumber: '1234567890',
-    docketNumber: '999-99',
     priorJudgeTitleWithFullName: 'Special Trial Judge Judifer Judy',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     startDate: '2019-08-25T05:00:00.000Z',
