@@ -3,30 +3,25 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   DOCKET_NUMBER_SUFFIXES,
+  PROCEDURE_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
-  generateNoticeOfChangeToRemoteProceedingInteractor,
-} = require('./generateNoticeOfChangeToRemoteProceedingInteractor');
+  generateNoticeOfChangeOfTrialJudgeInteractor,
+} = require('./generateNoticeOfChangeOfTrialJudgeInteractor');
 
-describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
-  const TEST_JUDGE = {
-    judgeTitle: 'Judge',
-    name: 'Test Judge',
-  };
-
+describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
   const formattedPhoneNumber = '123-456-7890';
 
   const mockTrialSessionInformation = {
+    caseProcedureType: PROCEDURE_TYPES.SMALL,
     chambersPhoneNumber: '1234567890',
-    joinPhoneNumber: '1234567890',
-    judgeName: 'Test Judge',
-    meetingId: '1111',
-    password: '2222',
-    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    docketNumber: '999-99',
+    priorJudgeTitleWithFullName: 'Special Trial Judge Judifer Judy',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     startDate: '2019-08-25T05:00:00.000Z',
-    startTime: '10:00',
-    trialLocation: 'Boise, Idaho',
+    trialLocation: 'Mobile, Alabama',
+    updatedJudgeTitleWithFullName: 'Chief Judge Lady Macbeth',
   };
 
   beforeEach(() => {
@@ -61,62 +56,46 @@ describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
       .generatePdfFromHtmlInteractor.mockImplementation(
         ({ contentHtml }) => contentHtml,
       );
-
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([TEST_JUDGE]);
   });
 
   it('should generate a template with the case and formatted trial information and call the pdf generator', async () => {
-    await generateNoticeOfChangeToRemoteProceedingInteractor(
-      applicationContext,
-      {
-        docketNumber: '123-45',
-        trialSessionInformation: mockTrialSessionInformation,
-      },
-    );
+    await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
+      docketNumber: '123-45',
+      trialSessionInformation: mockTrialSessionInformation,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators()
-        .noticeOfChangeToRemoteProceeding.mock.calls[0][0],
+      applicationContext.getDocumentGenerators().noticeOfChangeofTrialJudge.mock
+        .calls[0][0],
     ).toMatchObject({
       data: {
         caseCaptionExtension: '',
         caseTitle: 'Test Case Caption',
         docketNumberWithSuffix: '123-45',
         trialInfo: {
+          ...mockTrialSessionInformation,
           chambersPhoneNumber: formattedPhoneNumber,
-          formattedJudge: 'Judge Test Judge',
           formattedStartDate: 'Sunday, August 25, 2019',
-          formattedStartTime: '10:00 am',
-          joinPhoneNumber: formattedPhoneNumber,
-          meetingId: '1111',
-          password: '2222',
-          proceedingType: 'Remote',
-          trialLocation: 'Boise, Idaho',
         },
       },
     });
   });
 
   it('should append the docket number suffix if present on the caseDetail', async () => {
-    await generateNoticeOfChangeToRemoteProceedingInteractor(
-      applicationContext,
-      {
-        docketNumber: '234-56',
-        trialSessionInformation: mockTrialSessionInformation,
-      },
-    );
+    await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
+      docketNumber: '234-56',
+      trialSessionInformation: mockTrialSessionInformation,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators()
-        .noticeOfChangeToRemoteProceeding.mock.calls[0][0],
+      applicationContext.getDocumentGenerators().noticeOfChangeofTrialJudge.mock
+        .calls[0][0],
     ).toMatchObject({
       data: {
         docketNumberWithSuffix: '234-56S',

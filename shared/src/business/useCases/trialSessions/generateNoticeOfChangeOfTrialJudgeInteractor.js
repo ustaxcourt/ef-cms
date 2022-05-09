@@ -1,13 +1,8 @@
-const {
-  createISODateString,
-  formatDateString,
-  FORMATS,
-} = require('../../utilities/DateHandler');
+const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
 const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 /**
- * generateNoticeOfChangeToRemoteProceedingInteractor
+ * generateNoticeOfChangeOfTrialJudgeInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -15,7 +10,7 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
  * @param {string} providers.trialSessionInformation the trial session information
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
+exports.generateNoticeOfChangeOfTrialJudgeInteractor = async (
   applicationContext,
   { docketNumber, trialSessionInformation },
 ) => {
@@ -24,26 +19,12 @@ exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
   );
 
-  const trialStartTimeIso = createISODateString(
-    trialSessionInformation.startTime,
-    'HH:mm',
-  );
-  const formattedStartTime = formatDateString(trialStartTimeIso, FORMATS.TIME);
-
-  const judgeWithTitle = await getJudgeWithTitle({
-    applicationContext,
-    judgeUserName: trialSessionInformation.judgeName,
-  });
-
   const trialInfo = {
     ...trialSessionInformation,
     chambersPhoneNumber: formatPhoneNumber(
       trialSessionInformation.chambersPhoneNumber,
     ),
-    formattedJudge: judgeWithTitle,
     formattedStartDate,
-    formattedStartTime,
-    joinPhoneNumber: formatPhoneNumber(trialSessionInformation.joinPhoneNumber),
   };
 
   const caseDetail = await applicationContext
@@ -58,7 +39,7 @@ exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
 
   return await applicationContext
     .getDocumentGenerators()
-    .noticeOfChangeToRemoteProceeding({
+    .noticeOfChangeofTrialJudge({
       applicationContext,
       data: {
         caseCaptionExtension,

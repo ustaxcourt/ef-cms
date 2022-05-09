@@ -86,7 +86,6 @@ exports.setNoticeOfChangeOfTrialJudge = async (
 
     const trialSessionInformation = {
       caseProcedureType: caseEntity.procedureType,
-      caseType: caseEntity.caseType,
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
       docketNumber: caseEntity.docketNumber,
       priorJudgeTitleWithFullName,
