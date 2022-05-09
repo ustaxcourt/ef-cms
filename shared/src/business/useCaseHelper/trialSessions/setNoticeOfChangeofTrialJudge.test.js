@@ -17,37 +17,52 @@ const { Case } = require('../../entities/cases/Case');
 const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-const mockDocumentId = '98c6b1c8-1eed-44b6-932a-967af060597a';
-const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
-const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
-
-const currentTrialSession = { ...MOCK_TRIAL_INPERSON, trialSessionId };
-const updatedTrialSession = { ...MOCK_TRIAL_REMOTE, trialSessionId };
-
-const mockPdfDocument = {
-  load: () => jest.fn().mockReturnValue(getFakeFile),
-};
-const mockOpenCase = new Case(
-  {
-    ...MOCK_CASE,
-    trialDate: '2019-03-01T21:42:29.073Z',
-    trialSessionId,
-  },
-  { applicationContext },
-);
-const mockClosedCase = new Case(
-  {
-    ...MOCK_CASE,
-    closedDate: '2020-03-01T21:42:29.073Z',
-    docketNumber: '999-99',
-    status: CASE_STATUS_TYPES.closed,
-    trialDate: '2019-03-01T21:42:29.073Z',
-    trialSessionId,
-  },
-  { applicationContext },
-);
-
 describe('setNoticeOfChangeOfTrialJudge', () => {
+  const mockDocumentId = '98c6b1c8-1eed-44b6-932a-967af060597a';
+  const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
+  const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
+
+  const currentTrialSession = {
+    ...MOCK_TRIAL_INPERSON,
+    judge: {
+      name: 'Judy Judge',
+      userId: '7679fd72-deaf-4e26-adb0-e94ee6108612',
+    },
+  };
+
+  const updatedTrialSession = {
+    ...MOCK_TRIAL_INPERSON,
+    judge: {
+      name: 'Justice Judge',
+      userId: 'f1364b45-56e0-48a7-a89f-db61db5bbfb4',
+    },
+  };
+
+  const mockPdfDocument = {
+    load: () => jest.fn().mockReturnValue(getFakeFile),
+  };
+
+  const mockOpenCase = new Case(
+    {
+      ...MOCK_CASE,
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId,
+    },
+    { applicationContext },
+  );
+
+  const mockClosedCase = new Case(
+    {
+      ...MOCK_CASE,
+      closedDate: '2020-03-01T21:42:29.073Z',
+      docketNumber: '999-99',
+      status: CASE_STATUS_TYPES.closed,
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId,
+    },
+    { applicationContext },
+  );
+
   beforeEach(() => {
     applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf =
       jest.fn();
@@ -61,7 +76,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
   });
 
-  it('should generate an NOT when the trial judge changes', async () => {
+  it('should generate an NOT when the trial judge has been changed and the case is not closed', async () => {
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
@@ -73,20 +88,40 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
 
     expect(
       applicationContext.getUseCases()
-        .generateNoticeOfChangeToRemoteProceedingInteractor.mock.calls[0][1],
-    ).toMatchObject({
-      docketNumber: mockOpenCase.docketNumber,
-      trialSessionInformation: {
-        chambersPhoneNumber: '1111111',
-        joinPhoneNumber: '0987654321',
-        judgeName: 'Chief Judge',
-        meetingId: '1234567890',
-        password: 'abcdefg',
-        startDate: '2025-12-01T00:00:00.000Z',
-        startTime: undefined,
-        trialLocation: 'Birmingham, Alabama',
-      },
+        .generateNoticeOfChangeOfTrialJudgeInteractor,
+    ).toHaveBeenCalled();
+  });
+
+  it('should not generate an NOT when the trial judge has been changed but the case is closed', async () => {
+    await setNoticeOfChangeOfTrialJudge(applicationContext, {
+      PDFDocument: mockPdfDocument,
+      caseEntity: mockClosedCase,
+      currentTrialSession,
+      newPdfDoc: getFakeFile,
+      newTrialSessionEntity: updatedTrialSession,
+      userId,
     });
+
+    expect(
+      applicationContext.getUseCases()
+        .generateNoticeOfChangeOfTrialJudgeInteractor,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not generate an NOT when the trial judge has not been changed and the case is open', async () => {
+    await setNoticeOfChangeOfTrialJudge(applicationContext, {
+      PDFDocument: mockPdfDocument,
+      caseEntity: mockOpenCase,
+      currentTrialSession,
+      newPdfDoc: getFakeFile,
+      newTrialSessionEntity: currentTrialSession,
+      userId,
+    });
+
+    expect(
+      applicationContext.getUseCases()
+        .generateNoticeOfChangeOfTrialJudgeInteractor,
+    ).not.toHaveBeenCalled();
   });
 
   // it('should save the generated NORP to persistence', async () => {
