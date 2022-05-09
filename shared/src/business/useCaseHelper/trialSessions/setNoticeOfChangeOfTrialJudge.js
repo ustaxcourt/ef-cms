@@ -91,7 +91,6 @@ exports.setNoticeOfChangeOfTrialJudge = async (
     const trialSessionInformation = {
       caseProcedureType: caseEntity.procedureType,
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
-      docketNumber: caseEntity.docketNumber,
       priorJudgeTitleWithFullName,
       proceedingType: newTrialSessionEntity.proceedingType,
       startDate: newTrialSessionEntity.startDate,
@@ -102,6 +101,7 @@ exports.setNoticeOfChangeOfTrialJudge = async (
     const notice = await applicationContext
       .getUseCases()
       .generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
+        docketNumber: caseEntity.docketNumber,
         trialSessionInformation,
       });
 
