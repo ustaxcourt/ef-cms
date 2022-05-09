@@ -30,7 +30,6 @@ Cypress.Commands.add('login', (username, route = '/') => {
   cy.url().should('include', route);
   cy.showsErrorMessage(false);
   cy.url().should('not.include', '/mock-login');
-  cy.get('.big-blue-header').should('exist');
 });
 
 Cypress.Commands.add('goToRoute', (...args) => {
