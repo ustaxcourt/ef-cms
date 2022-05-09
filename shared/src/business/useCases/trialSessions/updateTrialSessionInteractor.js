@@ -153,6 +153,19 @@ exports.updateTrialSessionInteractor = async (
             user,
           });
 
+        //if the current trial session judge is NOT the new trial session judge
+        //generate NOT for trial judge
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeOfTrialJudge(applicationContext, {
+            PDFDocument,
+            caseEntity,
+            currentTrialSession,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity,
+            user,
+          });
+
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
