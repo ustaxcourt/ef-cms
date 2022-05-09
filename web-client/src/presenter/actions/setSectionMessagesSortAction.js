@@ -9,9 +9,14 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  */
 export const setSectionMessagesSortAction = ({ get, props, store }) => {
-  const { sortField } = props;
+  // TODO: UNIT TEST THIS
+  const { defaultSort, sortField } = props;
   const fromSortOrder = get(state.tableSort.sortOrder);
-  let newSortOrder = fromSortOrder === 'desc' ? 'asc' : 'desc';
+  if (get(state.tableSort.sortField) !== sortField) {
+    store.set(state.tableSort.sortOrder, defaultSort);
+  } else {
+    const newSortOrder = fromSortOrder === 'desc' ? 'asc' : 'desc';
+    store.set(state.tableSort.sortOrder, newSortOrder);
+  }
   store.set(state.tableSort.sortField, sortField);
-  store.set(state.tableSort.sortOrder, newSortOrder);
 };

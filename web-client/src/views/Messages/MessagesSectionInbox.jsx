@@ -1,9 +1,8 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const MessagesSectionInbox = connect(
   {
@@ -22,41 +21,33 @@ export const MessagesSectionInbox = connect(
           <thead>
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
-                {/* TODO: this should be put into a abstracted component */}
-                <Button
-                  link
-                  className="sortable-header-button margin-right-0"
-                  onClick={() => {
-                    sortSectionMessagesSequence({
-                      sortField: 'docketNumber',
-                    });
-                  }}
-                >
-                  <span
-                    className={classNames(
-                      'margin-right-105',
-                      tableSort.sortField === 'docketNumber' && 'sortActive',
-                    )}
-                  >
-                    Docket No.
-                  </span>
-                  {(tableSort.sortField === 'docketNumber' &&
-                    tableSort.sortOrder === 'desc' && (
-                      <FontAwesomeIcon
-                        icon="caret-up"
-                        title="in ascending order"
-                      />
-                    )) || (
-                    <FontAwesomeIcon
-                      icon="caret-down"
-                      title="in descending order"
-                    />
-                  )}
-                </Button>
+                <SortableColumnHeaderButton
+                  defaultSort="desc"
+                  sortField="docketNumber"
+                  tableSort={tableSort}
+                  title="Docket No."
+                  onClickSequence={sortSectionMessagesSequence}
+                />
               </th>
 
-              <th className="small">Received</th>
-              <th>Message</th>
+              <th className="medium">
+                <SortableColumnHeaderButton
+                  defaultSort="asc"
+                  sortField="createdAt"
+                  tableSort={tableSort}
+                  title="Received"
+                  onClickSequence={sortSectionMessagesSequence}
+                />
+              </th>
+              <th>
+                <SortableColumnHeaderButton
+                  defaultSort="desc"
+                  sortField="message"
+                  tableSort={tableSort}
+                  title="Message"
+                  onClickSequence={sortSectionMessagesSequence}
+                />
+              </th>
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
