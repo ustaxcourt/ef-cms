@@ -24,6 +24,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
 
   const currentTrialSession = {
     ...MOCK_TRIAL_INPERSON,
+    isCalendared: true,
     judge: {
       name: 'Judy Judge',
       userId: '7679fd72-deaf-4e26-adb0-e94ee6108612',
@@ -32,6 +33,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
 
   const updatedTrialSession = {
     ...MOCK_TRIAL_INPERSON,
+    isCalendared: true,
     judge: {
       name: 'Justice Judge',
       userId: 'f1364b45-56e0-48a7-a89f-db61db5bbfb4',
@@ -76,7 +78,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
   });
 
-  it('should generate an NOT when the trial judge has been changed and the case is not closed', async () => {
+  it('should generate an NOT when the trial judge has been changed on a calendared trial session, and the case is not closed', async () => {
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
@@ -90,6 +92,22 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       applicationContext.getUseCases()
         .generateNoticeOfChangeOfTrialJudgeInteractor,
     ).toHaveBeenCalled();
+  });
+
+  it('should not generate an NOT when the trial judge has been changed on an uncalendared trial session, and the case is not closed', async () => {
+    await setNoticeOfChangeOfTrialJudge(applicationContext, {
+      PDFDocument: mockPdfDocument,
+      caseEntity: mockOpenCase,
+      currentTrialSession: { ...currentTrialSession, isCalendared: false },
+      newPdfDoc: getFakeFile,
+      newTrialSessionEntity: updatedTrialSession,
+      userId,
+    });
+
+    expect(
+      applicationContext.getUseCases()
+        .generateNoticeOfChangeOfTrialJudgeInteractor,
+    ).not.toHaveBeenCalled();
   });
 
   it('should not generate an NOT when the trial judge has been changed but the case is closed', async () => {
@@ -108,7 +126,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should not generate an NOT when the trial judge has not been changed and the case is open', async () => {
+  it.only('should not generate an NOT when the trial judge has not been changed and the case is open', async () => {
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
