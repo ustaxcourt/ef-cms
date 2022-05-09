@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -78,6 +79,13 @@ export const CaseDetailSubnavTabs = connect(
                 iconClass="icon-case-notes"
                 iconColor="#ffbe2e"
                 id="tab-notes"
+                realIcon={
+                  <FontAwesomeIcon
+                    className="icon-case-notes"
+                    color="#ffbe2e"
+                    icon="sticky-note"
+                  />
+                }
                 showIcon={caseDetailSubnavHelper.showNotesIcon}
                 tabName="notes"
                 title="Notes"
