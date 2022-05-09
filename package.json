@@ -14,7 +14,7 @@
     "@hapi/joi-date": "^2.0.1",
     "@pdftron/pdfjs-express-viewer": "^8.4.0",
     "archiver": "^5.3.1",
-    "aws-sdk": "^2.1127.0",
+    "aws-sdk": "^2.1131.0",
     "broadcast-channel": "^4.11.0",
     "canvas": "^2.9.1",
     "cerebral": "5.2.1",
