@@ -17,8 +17,6 @@ const {
 } = require('../../src/business/useCaseHelper/service/sendServedPartiesEmails');
 const { Case } = require('../../src/business/entities/cases/Case');
 
-// shared/src/business/useCaseHelper/service/sendIrsSuperuserPetitionEmail.js
-
 const getCase = async (applicationContext, { docketNumber }) => {
   const caseToBatch = await applicationContext
     .getPersistenceGateway()
