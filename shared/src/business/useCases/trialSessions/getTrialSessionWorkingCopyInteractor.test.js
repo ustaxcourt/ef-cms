@@ -44,6 +44,10 @@ describe('Get trial session working copy', () => {
       });
 
     applicationContext.getCurrentUser.mockImplementation(() => user);
+    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
+      ...user,
+      section: 'colvinsChambers',
+    });
 
     applicationContext
       .getPersistenceGateway()
