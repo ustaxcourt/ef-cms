@@ -49,6 +49,7 @@ web-api/runtimes/clamav/lib
 web-api/storage/s3/*
 web-api/terraform/main/new-policy.json
 web-api/terraform/template/lambdas/*.zip
+web-api/storage/fixtures/efcms-export.json
 web-client/.cache/
 web-client/coverage-e2e
 web-client/coverage-integration/*

@@ -83,6 +83,7 @@ exports.generateCoverSheetData = ({
     docketNumberWithSuffix,
     documentTitle,
     electronicallyFiled: !docketEntryEntity.isPaper,
+    index: docketEntryEntity.index,
     mailingDate: docketEntryEntity.mailingDate || '',
   };
 
