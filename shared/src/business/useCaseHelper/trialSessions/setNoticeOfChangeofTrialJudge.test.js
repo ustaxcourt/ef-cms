@@ -3,7 +3,6 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   CASE_STATUS_TYPES,
-  SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -187,35 +186,14 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     });
   });
 
-  it('should create and serve new docket entry for the notice of change of trial judge and add it to the docket record', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-      userId,
-    });
+  it('should create a docket entry and serve the generated notice', async () => {
+    const mockDocketEntryId = '1ed611ad-17f9-4e2d-84fb-a084fe475dd7';
+    const mockNotice = 'The rain falls mainly on the plane';
+    applicationContext.getUniqueId.mockReturnValue(mockDocketEntryId);
+    applicationContext
+      .getUseCases()
+      .generateNoticeOfChangeOfTrialJudgeInteractor.mockReturnValue(mockNotice);
 
-    const expectedNotice = mockOpenCase.docketEntries.find(
-      doc =>
-        doc.documentTitle ===
-        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge
-          .documentTitle,
-    );
-    expect(expectedNotice).toMatchObject({
-      isOnDocketRecord: true,
-      servedAt: expect.anything(),
-      servedParties: [
-        {
-          email: 'petitioner@example.com',
-          name: 'Test Petitioner',
-        },
-      ],
-    });
-  });
-
-  it('should send service emails to the appropriate parties when the case has no paper service', async () => {
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
@@ -226,42 +204,10 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should send service emails to the appropriate parties when the case has no paper service', async () => {
-    const mockCaseWithPaperService = new Case(
-      {
-        ...mockOpenCase,
-        petitioners: [
-          {
-            ...mockOpenCase.petitioners[0],
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-      { applicationContext },
-    );
-
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockCaseWithPaperService,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-      userId,
+      applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry
+        .mock.calls[0][0],
+    ).toMatchObject({
+      documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
     });
-
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toHaveBeenCalled();
   });
 });

@@ -171,6 +171,9 @@ const {
   coverSheet,
 } = require('../../shared/src/business/utilities/documentGenerators/coverSheet');
 const {
+  createAndServeNoticeDocketEntry,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/createAndServeNoticeDocketEntry');
+const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
 const {
@@ -1896,6 +1899,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
+        createAndServeNoticeDocketEntry,
         createCaseAndAssociations,
         createTrialSessionAndWorkingCopy,
         createUserForContact,
