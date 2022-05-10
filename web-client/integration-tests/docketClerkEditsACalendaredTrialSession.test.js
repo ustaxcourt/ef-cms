@@ -8,9 +8,9 @@ import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
 
-const cerebralTest = setupTest();
-
 describe('Docket Clerk edits a calendared trial session', () => {
+  const cerebralTest = setupTest();
+
   beforeEach(() => {
     jest.setTimeout(30000);
   });
