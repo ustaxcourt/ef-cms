@@ -70,7 +70,7 @@ describe('documentGenerators', () => {
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
         const { PDFDocument } = await applicationContext.getPdfLib();
         const pdfDoc = await PDFDocument.load(new Uint8Array(pdf));
-        expect(pdfDoc.getPages().length).toEqual(2);
+        expect(pdfDoc.getPages().length).toEqual(1);
       }
 
       expect(
