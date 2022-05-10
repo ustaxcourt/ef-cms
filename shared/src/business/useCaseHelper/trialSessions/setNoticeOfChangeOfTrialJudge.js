@@ -48,7 +48,7 @@ exports.setNoticeOfChangeOfTrialJudge = async (
       updatedJudgeTitleWithFullName,
     };
 
-    const notice = await applicationContext
+    const noticePdf = await applicationContext
       .getUseCases()
       .generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
         docketNumber: caseEntity.docketNumber,
@@ -62,7 +62,7 @@ exports.setNoticeOfChangeOfTrialJudge = async (
         documentInfo:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
         newPdfDoc,
-        notice,
+        noticePdf,
         userId,
       });
   }
