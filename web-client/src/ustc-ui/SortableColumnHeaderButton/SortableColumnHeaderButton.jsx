@@ -51,7 +51,7 @@ const getIcon = ({ ascText, descText, sortField, sortOrder, tableSort }) => {
       ? { icon: 'caret-up', title: ascText }
       : { icon: 'caret-down', title: descText };
 
-  // if (tableSort.sortField !== sortField) {
-  //   return <FontAwesomeIcon icon=`${sortOrderToSomething.icon}` title=`${sortOrderToSomething.title}` />;
-  // }
+  if (tableSort.sortField !== sortField) {
+    return <FontAwesomeIcon icon=`${sortOrderToSomething.icon}` title=`${sortOrderToSomething.title}` />;
+  }
 };
