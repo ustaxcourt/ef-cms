@@ -42,7 +42,7 @@ export const MessagesSectionCompleted = connect(
               <th>
                 <SortableColumnHeaderButton
                   defaultSort="desc"
-                  sortField="message"
+                  sortField="subject"
                   tableSort={tableSort}
                   title="Last Message"
                   onClickSequence={sortSectionMessagesSequence}

@@ -41,7 +41,7 @@ export const MessagesSectionOutbox = connect(
               <th>
                 <SortableColumnHeaderButton
                   defaultSort="desc"
-                  sortField="message"
+                  sortField="subject"
                   tableSort={tableSort}
                   title="Message"
                   onClickSequence={sortSectionMessagesSequence}
