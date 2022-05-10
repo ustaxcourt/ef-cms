@@ -4,6 +4,11 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const chronAsc = 'Oldest to newest';
+const chronDesc = 'Newest to oldest';
+const alphaAsc = 'In A-Z ascending order';
+const alphaDesc = 'In Z-A descending order';
+
 export const MessagesSectionOutbox = connect(
   {
     formattedMessages: state.formattedMessages.messages,
@@ -22,7 +27,9 @@ export const MessagesSectionOutbox = connect(
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <SortableColumnHeaderButton
+                  ascText={chronAsc}
                   defaultSort="desc"
+                  descText={chronDesc}
                   sortField="docketNumber"
                   tableSort={tableSort}
                   title="Docket No."
@@ -31,7 +38,9 @@ export const MessagesSectionOutbox = connect(
               </th>
               <th className="small">
                 <SortableColumnHeaderButton
+                  ascText={chronAsc}
                   defaultSort="desc"
+                  descText={chronDesc}
                   sortField="createdAt"
                   tableSort={tableSort}
                   title="Sent"
@@ -40,7 +49,9 @@ export const MessagesSectionOutbox = connect(
               </th>
               <th>
                 <SortableColumnHeaderButton
-                  defaultSort="desc"
+                  ascText={alphaAsc}
+                  defaultSort="asc"
+                  descText={alphaDesc}
                   sortField="subject"
                   tableSort={tableSort}
                   title="Message"
