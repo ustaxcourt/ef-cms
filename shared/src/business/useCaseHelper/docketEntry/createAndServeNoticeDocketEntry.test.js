@@ -15,18 +15,14 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 describe('createAndServeDocketEntry', () => {
   const mockDocketEntryId = '85a5b1c81eed44b6932a967af060597a';
   const mockUserId = '85a5b1c81eed44b6932a967af060597a';
-  const trialSessionId = '76a5b1c81eed44b6932a967af060597a';
+  const mockNotice = 'The rain falls mainly on the plane';
 
-  const mockOpenCase = new Case(
+  const mockCaseEntity = new Case(
     {
       ...MOCK_CASE,
-      trialDate: '20190301T21:42:29.073Z',
-      trialSessionId,
     },
     { applicationContext },
   );
-
-  const mockNotice = 'The rain falls mainly on the plane';
 
   beforeEach(() => {
     applicationContext
@@ -35,25 +31,19 @@ describe('createAndServeDocketEntry', () => {
 
     applicationContext.getUniqueId.mockReturnValue(mockDocketEntryId);
 
-    applicationContext
-      .getUseCases()
-      .generateNoticeOfChangeOfTrialJudgeInteractor.mockReturnValue(mockNotice);
-
     applicationContext.getPdfLib = jest.fn().mockResolvedValue({
       PDFDocument: {
-        load: jest.fn().mockResolvedValue({
-          isEncrypted: true,
-        }),
+        load: jest.fn().mockResolvedValue({}),
       },
     });
   });
 
   it('should save the generated notice to s3', async () => {
     await createAndServeNoticeDocketEntry(applicationContext, {
-      caseEntity: mockOpenCase,
+      caseEntity: mockCaseEntity,
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc: getFakeFile,
-      notice: mockNotice,
+      noticePdf: mockNotice,
       userId: mockUserId,
     });
 
@@ -66,22 +56,21 @@ describe('createAndServeDocketEntry', () => {
     });
   });
 
-  it('should create and serve new docket entry and add it to the docket record', async () => {
+  it('should create and serve a docket entry and add it to the docket record', async () => {
     await createAndServeNoticeDocketEntry(applicationContext, {
-      caseEntity: mockOpenCase,
+      caseEntity: mockCaseEntity,
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc: getFakeFile,
-      notice: mockNotice,
+      noticePdf: mockNotice,
       userId: mockUserId,
     });
 
-    const expectedNotice = mockOpenCase.docketEntries.find(
+    const expectedNotice = mockCaseEntity.docketEntries.find(
       doc =>
         doc.documentTitle ===
         SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge
           .documentTitle,
     );
-
     expect(expectedNotice).toMatchObject({
       isOnDocketRecord: true,
       servedAt: expect.anything(),
@@ -94,13 +83,27 @@ describe('createAndServeDocketEntry', () => {
     });
   });
 
-  it('should send service emails to the appropriate parties when the case has no paper service', async () => {
+  it('should send service emails to the appropriate parties', async () => {
+    await createAndServeNoticeDocketEntry(applicationContext, {
+      caseEntity: mockCaseEntity,
+      documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
+      newPdfDoc: getFakeFile,
+      noticePdf: getFakeFile,
+      userId: mockUserId,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
+  });
+
+  it('should send generate an address page for paper service when the case has at least one served party with paper service', async () => {
     const mockCaseWithPaperService = new Case(
       {
-        ...mockOpenCase,
+        ...mockCaseEntity,
         petitioners: [
           {
-            ...mockOpenCase.petitioners[0],
+            ...mockCaseEntity.petitioners[0],
             email: undefined,
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
@@ -113,7 +116,7 @@ describe('createAndServeDocketEntry', () => {
       caseEntity: mockCaseWithPaperService,
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
       newPdfDoc: getFakeFile,
-      notice: getFakeFile,
+      noticePdf: getFakeFile,
       userId: mockUserId,
     });
 
