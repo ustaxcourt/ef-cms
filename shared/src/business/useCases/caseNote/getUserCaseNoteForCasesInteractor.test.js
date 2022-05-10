@@ -29,10 +29,12 @@ describe('getUserCaseNoteForCasesInteractor', () => {
   beforeEach(() => {
     mockCurrentUser = mockJudge;
     mockNote = MOCK_NOTE;
-
-    applicationContext.getCurrentUser.mockImplementation(
-      () => new User(mockCurrentUser),
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(new User(mockCurrentUser), 'section'),
     );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockCurrentUser);
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNoteForCases.mockResolvedValue([mockNote]);
@@ -46,7 +48,6 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       role: 'unauthorizedRole',
       userId: 'unauthorizedUser',
     };
-
     await expect(
       getUserCaseNoteForCasesInteractor(applicationContext, {
         docketNumbers: [MOCK_NOTE.docketNumber],
@@ -82,6 +83,12 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       section: 'colvinChambers',
       userId: userIdToExpect,
     });
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(mockUser, 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockUser);
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
     applicationContext.getUseCaseHelpers.mockReturnValue({
       getJudgeInSectionHelper: () => null,

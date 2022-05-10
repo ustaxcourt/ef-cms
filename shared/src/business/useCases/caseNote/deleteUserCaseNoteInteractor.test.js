@@ -4,6 +4,7 @@ const {
 const {
   deleteUserCaseNoteInteractor,
 } = require('./deleteUserCaseNoteInteractor');
+const { omit } = require('lodash');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -27,7 +28,12 @@ describe('deleteUserCaseNoteInteractor', () => {
       section: 'colvinChambers',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockReturnValue(
+      omit(mockUser, 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockUser);
     applicationContext.getPersistenceGateway().deleteUserCaseNote = v => v;
     applicationContext.getUseCaseHelpers.mockReturnValue({
       getJudgeInSectionHelper: () => ({
@@ -50,7 +56,12 @@ describe('deleteUserCaseNoteInteractor', () => {
       section: 'colvinChambers',
       userId: '123456',
     });
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockReturnValue(
+      omit(mockUser, 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(mockUser);
     applicationContext.getPersistenceGateway().deleteUserCaseNote = jest.fn();
     applicationContext.getUseCaseHelpers.mockReturnValue({
       getJudgeInSectionHelper: () => null,

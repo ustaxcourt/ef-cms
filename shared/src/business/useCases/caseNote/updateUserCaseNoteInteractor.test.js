@@ -4,6 +4,7 @@ const {
 const {
   updateUserCaseNoteInteractor,
 } = require('./updateUserCaseNoteInteractor');
+const { omit } = require('lodash');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -33,7 +34,12 @@ describe('updateUserCaseNoteInteractor', () => {
       section: 'colvinChambers',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(mockUser, 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
       .updateUserCaseNote.mockImplementation(v => v.caseNoteToUpdate);
@@ -60,7 +66,12 @@ describe('updateUserCaseNoteInteractor', () => {
       section: 'colvinChambers',
       userId: userIdToExpect,
     });
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(mockUser, 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockUser);
     applicationContext.getPersistenceGateway().updateUserCaseNote = jest.fn();
     applicationContext.getUseCaseHelpers.mockReturnValue({
       getJudgeInSectionHelper: () => null,
