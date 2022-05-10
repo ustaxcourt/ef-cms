@@ -22,6 +22,7 @@ export const MessagesSectionInbox = connect(
     sortSectionMessagesSequence,
     tableSort,
   }) {
+    const hasMessages = formattedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">
@@ -32,6 +33,7 @@ export const MessagesSectionInbox = connect(
                   ascText={CHRONOLOGICALLY_ASCENDING}
                   defaultSort={DESCENDING}
                   descText={CHRONOLOGICALLY_DESCENDING}
+                  hasMessages={hasMessages}
                   sortField="docketNumber"
                   tableSort={tableSort}
                   title="Docket No."
