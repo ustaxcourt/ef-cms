@@ -35,30 +35,43 @@ export const SortableColumnHeaderButton = ({
         sortField,
         tableSort,
       })}
-      {tableSort.sortField !== sortField && defaultSort === 'desc' && (
-        <FontAwesomeIcon icon="caret-down" title="in descending order" />
-      )}
-      {tableSort.sortField !== sortField && defaultSort === 'asc' && (
-        <FontAwesomeIcon icon="caret-up" title="in ascending order" />
-      )}
-      {tableSort.sortField === sortField && tableSort.sortOrder === 'asc' && (
-        <FontAwesomeIcon icon="caret-up" title="in ascending order" />
-      )}
-      {tableSort.sortField === sortField && tableSort.sortOrder === 'desc' && (
-        <FontAwesomeIcon icon="caret-down" title="in descending order" />
-      )}
+      {/*{tableSort.sortField !== sortField && defaultSort === 'desc' && (*/}
+      {/*  <FontAwesomeIcon icon="caret-down" title="in descending order" />*/}
+      {/*)}*/}
+      {/*{tableSort.sortField !== sortField && defaultSort === 'asc' && (*/}
+      {/*  <FontAwesomeIcon icon="caret-up" title="in ascending order" />*/}
+      {/*)}*/}
+      {/*{tableSort.sortField === sortField && tableSort.sortOrder === 'asc' && (*/}
+      {/*  <FontAwesomeIcon icon="caret-up" title="in ascending order" />*/}
+      {/*)}*/}
+      {/*{tableSort.sortField === sortField && tableSort.sortOrder === 'desc' && (*/}
+      {/*  <FontAwesomeIcon icon="caret-down" title="in descending order" />*/}
+      {/*)}*/}
     </Button>
   );
 };
 
 const getIcon = ({ ascText, defaultSort, descText, sortField, tableSort }) => {
-  // TODO: Continue work, capture logic correctly
-
   let icon = '';
   let title = '';
   if (tableSort.sortField !== sortField && defaultSort === 'desc') {
-    icon = 'alksdfjklasdflksdajf';
-    title = 'something else';
+    icon = 'caret-down';
+    title = descText;
+  } else if (tableSort.sortField !== sortField && defaultSort === 'asc') {
+    icon = 'caret-up';
+    title = ascText;
+  } else if (
+    tableSort.sortField === sortField &&
+    tableSort.sortOrder === 'desc'
+  ) {
+    icon = 'caret-down';
+    title = descText;
+  } else if (
+    tableSort.sortField === sortField &&
+    tableSort.sortOrder === 'asc'
+  ) {
+    icon = 'caret-up';
+    title = ascText;
   }
 
   return <FontAwesomeIcon icon={icon} title={title} />;
