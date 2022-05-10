@@ -4,7 +4,6 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
   acl      = "private"
-  policy   = var.environment == "exp5" ? data.aws_iam_policy_document.allow_access_for_glue_job : ""
   
   cors_rule {
     allowed_headers = ["Authorization"]
@@ -36,11 +35,19 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   }
 }
 
+resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
+  bucket = aws_s3_bucket.documents_us_east_1.bucket
+  policy = var.environment == "exp5" ? data.aws_iam_policy_document.allow_access_for_glue_job : null
+}
+
 data "aws_iam_policy_document" "allow_access_for_glue_job" {
+  condition {
+    test = 
+  }
   statement {
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.prod_env_account_id}:root"]
+      identifiers = ["arn:aws:iam::${var.lower_env_account_id}:root"] #todo change to prod_env_account_id
     }
 
     actions = [
@@ -50,8 +57,8 @@ data "aws_iam_policy_document" "allow_access_for_glue_job" {
     ]
 
     resources = [
-      "${var.dns_domain}-documents-${var.environment}-us-east-1",
-      "${var.dns_domain}-documents-${var.environment}-us-east-1/*",
+      "arn:aws:s3::${var.dns_domain}-documents-${var.environment}-us-east-1",
+      "arn:aws:s3::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
     ]
   }
 }
