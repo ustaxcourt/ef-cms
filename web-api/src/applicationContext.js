@@ -1618,7 +1618,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return environment.appEndpoint;
     },
     getBounceAlertRecipients: () =>
-      process.env.EMAIL_BOUNCED_SUPER_USER_RECIPIENTS?.split(',') || [],
+      process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getClerkOfCourtNameForSigning: () => {

@@ -31,6 +31,7 @@ fi
 echo "Running terraform with the following environment configs:"
 echo "  - BOUNCED_EMAIL_RECIPIENT=${BOUNCED_EMAIL_RECIPIENT}"
 echo "  - BOUNCE_ALERT_RECIPIENTS=${BOUNCE_ALERT_RECIPIENTS}"
+echo "  - SLACK_WEBHOOK_URL=${SLACK_WEBHOOK_URL}"
 echo "  - CIRCLE_BRANCH=${CIRCLE_BRANCH}"
 echo "  - COGNITO_SUFFIX=${COGNITO_SUFFIX}"
 echo "  - DEPLOYING_COLOR=${DEPLOYING_COLOR}"
@@ -112,6 +113,7 @@ export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
 export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_bounce_alert_recipients=$BOUNCE_ALERT_RECIPIENTS
+export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
