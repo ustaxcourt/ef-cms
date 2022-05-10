@@ -50,8 +50,8 @@ data "aws_iam_policy_document" "allow_access_for_glue_job" {
     ]
 
     resources = [
-      aws_s3_bucket.documents_us_east_1.arn,
-      "${aws_s3_bucket.documents_us_east_1.arn}/*",
+      "${var.dns_domain}-documents-${var.environment}-us-east-1",
+      "${var.dns_domain}-documents-${var.environment}-us-east-1/*",
     ]
   }
 }
