@@ -4,7 +4,8 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
   acl      = "private"
-
+  policy   = var.environment == "exp5" ? data.aws_iam_policy_document.allow_access_for_glue_job : ""
+  
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
@@ -32,6 +33,26 @@ resource "aws_s3_bucket" "documents_us_east_1" {
         storage_class = "STANDARD"
       }
     }
+  }
+}
+
+data "aws_iam_policy_document" "allow_access_for_glue_job" {
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.prod_env_account_id}:root"]
+    }
+
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectTagging",
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      aws_s3_bucket.documents_us_east_1.arn,
+      "${aws_s3_bucket.documents_us_east_1.arn}/*",
+    ]
   }
 }
 
