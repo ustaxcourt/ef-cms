@@ -2,6 +2,10 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
+  CASE_STATUS_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
 } = require('../../../test/mockTrial');
@@ -9,29 +13,22 @@ const {
   setNoticeOfChangeToRemoteProceeding,
 } = require('./setNoticeOfChangeToRemoteProceeding');
 const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('setNoticeOfChangeToRemoteProceeding', () => {
-  const mockDocumentId = '98c6b1c8-1eed-44b6-932a-967af060597a';
-  const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
-  const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
+  const mockUserId = '85a5b1c8-1eed-44b6-932a-967af060597a';
+  const mockNoticePdf = 'Blah blah blah';
+  const mockNewPdf = 'This is some other newer stuff';
 
-  const inPersonTrialSession = { ...MOCK_TRIAL_INPERSON, trialSessionId };
-  const remoteTrialSession = { ...MOCK_TRIAL_REMOTE, trialSessionId };
-
-  const mockPdfDocument = {
-    load: () => jest.fn().mockReturnValue(getFakeFile),
-  };
   const mockOpenCase = new Case(
     {
       ...MOCK_CASE,
       trialDate: '2019-03-01T21:42:29.073Z',
-      trialSessionId,
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     },
     { applicationContext },
   );
+
   const mockClosedCase = new Case(
     {
       ...MOCK_CASE,
@@ -39,32 +36,68 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       docketNumber: '999-99',
       status: CASE_STATUS_TYPES.closed,
       trialDate: '2019-03-01T21:42:29.073Z',
-      trialSessionId,
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     },
     { applicationContext },
   );
 
   beforeEach(() => {
-    applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf =
-      jest.fn();
-
     applicationContext
       .getUseCases()
       .generateNoticeOfChangeToRemoteProceedingInteractor.mockReturnValue(
-        getFakeFile,
+        mockNoticePdf,
       );
-
-    applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
   });
 
-  it('should generate a NORP when the proceeding type changes from in person to remote and the case status is not closed', async () => {
+  it('should not do anything when the case status is closed', async () => {
     await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
+      caseEntity: mockClosedCase,
+      currentTrialSession: MOCK_TRIAL_INPERSON,
+      newPdfDoc: mockNewPdf,
+      newTrialSessionEntity: MOCK_TRIAL_REMOTE,
+      userId: mockUserId,
+    });
+
+    expect(
+      applicationContext.getUseCases()
+        .generateNoticeOfChangeToRemoteProceedingInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should not do anything when the case status is open but the trial session proceeding type has not changed', async () => {
+    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
       caseEntity: mockOpenCase,
-      currentTrialSession: inPersonTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: remoteTrialSession,
-      userId,
+      currentTrialSession: MOCK_TRIAL_INPERSON,
+      newPdfDoc: mockNewPdf,
+      newTrialSessionEntity: MOCK_TRIAL_INPERSON,
+      userId: mockUserId,
+    });
+
+    expect(
+      applicationContext.getUseCases()
+        .generateNoticeOfChangeToRemoteProceedingInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should generate and serve a NORP when the proceeding type changes from in person to remote and the case status is not closed', async () => {
+    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
+      caseEntity: mockOpenCase,
+      currentTrialSession: MOCK_TRIAL_INPERSON,
+      newPdfDoc: mockNewPdf,
+      newTrialSessionEntity: MOCK_TRIAL_REMOTE,
+      userId: mockUserId,
     });
 
     expect(
@@ -83,49 +116,16 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
         trialLocation: 'Birmingham, Alabama',
       },
     });
-  });
-
-  it('should not do anything when the case status is closed', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockClosedCase,
-      currentTrialSession: inPersonTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: remoteTrialSession,
-      userId,
-    });
-
     expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeToRemoteProceedingInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should not do anything when the case status is open but the trial session proceeding type has not changed', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
+      applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry
+        .mock.calls[0][1],
+    ).toMatchObject({
       caseEntity: mockOpenCase,
-      currentTrialSession: inPersonTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: inPersonTrialSession,
-      userId,
+      documentInfo:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
+      newPdfDoc: mockNewPdf,
+      noticePdf: mockNoticePdf,
+      userId: mockUserId,
     });
-
-    expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeToRemoteProceedingInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
   });
 });
