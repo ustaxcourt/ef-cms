@@ -26,11 +26,6 @@ describe('sendSlackNotification', () => {
       {
         message: 'How about now?',
       },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
     );
     expect(resp).toBe('ok');
   });

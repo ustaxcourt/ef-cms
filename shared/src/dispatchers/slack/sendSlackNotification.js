@@ -6,16 +6,10 @@
  * @returns {promise}
  */
 exports.sendSlackNotification = async ({ applicationContext, message }) => {
-  const response = await applicationContext.getHttpClient().post(
-    applicationContext.getSlackWebhookUrl(),
-    {
+  const response = await applicationContext
+    .getHttpClient()
+    .post(applicationContext.getSlackWebhookUrl(), {
       message,
-    },
-    {
-      headers: {
-        ContentType: 'application/json',
-      },
-    },
-  );
+    });
   return response.data;
 };
