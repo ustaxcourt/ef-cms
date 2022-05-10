@@ -38,7 +38,7 @@ describe('getJudgeWithTitle', () => {
     const result = await getJudgeWithTitle({
       applicationContext,
       judgeUserName: mockJudgeUserName,
-      shouldUseFullName: true,
+      useFullName: true,
     });
 
     expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.fullName}`);
