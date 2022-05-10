@@ -6,7 +6,6 @@ import classNames from 'classnames';
 
 export const SortableColumnHeaderButton = ({
   ascText = 'in ascending order',
-  defaultSort,
   descText = 'in descending order',
   hasRows,
   onClickSequence,
@@ -21,7 +20,6 @@ export const SortableColumnHeaderButton = ({
       onClick={() => {
         if (hasRows) {
           onClickSequence({
-            defaultSort,
             sortField,
           });
         }
@@ -36,7 +34,6 @@ export const SortableColumnHeaderButton = ({
       </span>
       {getIcon({
         ascText,
-        defaultSort,
         descText,
         sortField,
         tableSort,
@@ -45,24 +42,30 @@ export const SortableColumnHeaderButton = ({
   );
 };
 
-const getIcon = ({ ascText, defaultSort, descText, sortField, tableSort }) => {
+const getIcon = ({ ascText, descText, sortField, tableSort }) => {
   let icon = '';
   let title = '';
-  if (tableSort.sortField !== sortField && defaultSort === DESCENDING) {
+  if (
+    tableSort.sortField !== sortField &&
+    tableSort.fields[sortField].defaultSortOrder === DESCENDING
+  ) {
     icon = 'caret-down';
     title = descText;
-  } else if (tableSort.sortField !== sortField && defaultSort === ASCENDING) {
+  } else if (
+    tableSort.sortField !== sortField &&
+    tableSort.fields[sortField].defaultSortOrder === ASCENDING
+  ) {
     icon = 'caret-up';
     title = ascText;
   } else if (
     tableSort.sortField === sortField &&
-    tableSort.sortOrder === DESCENDING
+    tableSort.fields[sortField].sortOrder === DESCENDING
   ) {
     icon = 'caret-down';
     title = descText;
   } else if (
     tableSort.sortField === sortField &&
-    tableSort.sortOrder === ASCENDING
+    tableSort.fields[sortField].sortOrder === ASCENDING
   ) {
     icon = 'caret-up';
     title = ascText;
