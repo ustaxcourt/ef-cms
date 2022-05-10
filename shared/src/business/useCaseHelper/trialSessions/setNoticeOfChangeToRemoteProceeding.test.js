@@ -63,10 +63,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
         .generateNoticeOfChangeToRemoteProceedingInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+      applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
     ).not.toHaveBeenCalled();
   });
 
@@ -84,10 +81,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
         .generateNoticeOfChangeToRemoteProceedingInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
+      applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry,
     ).not.toHaveBeenCalled();
   });
 
