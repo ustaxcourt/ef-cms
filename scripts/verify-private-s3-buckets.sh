@@ -20,12 +20,18 @@ BUCKETS=(
   "${EFCMS_DOMAIN}-quarantine-${ENV}-us-west-1"
 )
 
+bucket_with_policy_for_glue_job () {
+  if [[ $1 == "$EFCMS_DOMAIN-documents-prod-us-east-1" ]]; then
+    echo "true"
+  fi
+}
+
 for bucket in "${BUCKETS[@]}"; do
   # The only way to grant a bucket as public is via a bucket policy, so we check if the policy
   # file exists and throw an error on status codes
   aws s3api get-bucket-policy --bucket "${bucket}" >> /dev/null 2>&1
   code=$?
-  if [[ "${code}" == "0" ]] && [[ ${bucket} != "$EFCMS_DOMAIN-documents-prod-us-east-1" ]]; then 
+  if [[ "${code}" == "0" ]] && [[ ! $(bucket_with_policy_for_glue_job "${bucket}") ]]; then 
     echo "ERROR: the bucket of $bucket is not private; it has a bucket policy when it should not"
     exit 1
   fi
