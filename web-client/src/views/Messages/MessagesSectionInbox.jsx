@@ -22,7 +22,9 @@ export const MessagesSectionInbox = connect(
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <SortableColumnHeaderButton
+                  ascText="oldest to newest"
                   defaultSort="desc"
+                  descText="newest to oldest"
                   sortField="docketNumber"
                   tableSort={tableSort}
                   title="Docket No."

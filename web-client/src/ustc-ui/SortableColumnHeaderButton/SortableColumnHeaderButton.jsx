@@ -3,8 +3,12 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import classNames from 'classnames';
 
+//TODO:
+//    - pass in more stuff -> ascText, descText
 export const SortableColumnHeaderButton = ({
+  ascText = 'in ascending order',
   defaultSort,
+  descText = 'in descending order',
   onClickSequence,
   sortField,
   tableSort,
@@ -29,9 +33,9 @@ export const SortableColumnHeaderButton = ({
         {title}
       </span>
       {getIcon({
-        ascText: 'moof',
+        ascText,
         defaultSort,
-        descText: 'dogcow',
+        descText,
         sortField,
         tableSort,
       })}
