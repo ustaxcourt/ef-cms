@@ -27,7 +27,12 @@ describe('Get case note', () => {
   };
 
   it('throws error if user is unauthorized', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(mockUnauthorizedUser);
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(new User(mockUnauthorizedUser), 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => new User(mockUnauthorizedUser));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockReturnValue({});
@@ -44,7 +49,12 @@ describe('Get case note', () => {
   });
 
   it('throws an error if the entity returned from persistence is invalid', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(new User(mockJudge));
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(new User(mockJudge), 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => new User(mockJudge));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(omit(MOCK_NOTE, 'userId'));
@@ -60,7 +70,12 @@ describe('Get case note', () => {
   });
 
   it('correctly returns data from persistence if a judgeUser exists', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(new User(mockJudge));
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(new User(mockJudge), 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => new User(mockJudge));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
@@ -77,7 +92,12 @@ describe('Get case note', () => {
   });
 
   it('correctly returns data from persistence for the current user if a judgeUser does not exist', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(new User(mockJudge));
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(new User(mockJudge), 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => new User(mockJudge));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
@@ -94,7 +114,12 @@ describe('Get case note', () => {
   });
 
   it('does not return anything if nothing is returned from persistence', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(new User(mockJudge));
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(new User(mockJudge), 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => new User(mockJudge));
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockReturnValue(null);
