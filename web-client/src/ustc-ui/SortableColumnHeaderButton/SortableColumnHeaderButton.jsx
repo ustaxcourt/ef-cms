@@ -8,6 +8,7 @@ export const SortableColumnHeaderButton = ({
   ascText = 'in ascending order',
   defaultSort,
   descText = 'in descending order',
+  hasMessages,
   onClickSequence,
   sortField,
   tableSort,
@@ -26,7 +27,7 @@ export const SortableColumnHeaderButton = ({
     >
       <span
         className={classNames('margin-right-105', {
-          sortActive: tableSort.sortField === sortField,
+          sortActive: tableSort.sortField === sortField && hasMessages,
         })}
       >
         {title}
