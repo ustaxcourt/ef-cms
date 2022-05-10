@@ -160,40 +160,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     });
   });
 
-  it('should save the generated notice to s3', async () => {
-    const mockDocketEntryId = '1ed611ad-17f9-4e2d-84fb-a084fe475dd7';
-    const mockNotice = 'The rain falls mainly on the plane';
-    applicationContext.getUniqueId.mockReturnValue(mockDocketEntryId);
-    applicationContext
-      .getUseCases()
-      .generateNoticeOfChangeOfTrialJudgeInteractor.mockReturnValue(mockNotice);
-
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-      userId,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[0][0],
-    ).toMatchObject({
-      document: mockNotice,
-      key: mockDocketEntryId,
-    });
-  });
-
   it('should create a docket entry and serve the generated notice', async () => {
-    const mockDocketEntryId = '1ed611ad-17f9-4e2d-84fb-a084fe475dd7';
-    const mockNotice = 'The rain falls mainly on the plane';
-    applicationContext.getUniqueId.mockReturnValue(mockDocketEntryId);
-    applicationContext
-      .getUseCases()
-      .generateNoticeOfChangeOfTrialJudgeInteractor.mockReturnValue(mockNotice);
-
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
@@ -205,7 +172,7 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().createAndServeNoticeDocketEntry
-        .mock.calls[0][0],
+        .mock.calls[0][1],
     ).toMatchObject({
       documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
     });

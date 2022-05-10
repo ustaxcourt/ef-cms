@@ -17,37 +17,37 @@ const { Case } = require('../../entities/cases/Case');
 const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 
-const mockDocumentId = '98c6b1c8-1eed-44b6-932a-967af060597a';
-const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
-const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
-
-const inPersonTrialSession = { ...MOCK_TRIAL_INPERSON, trialSessionId };
-const remoteTrialSession = { ...MOCK_TRIAL_REMOTE, trialSessionId };
-
-const mockPdfDocument = {
-  load: () => jest.fn().mockReturnValue(getFakeFile),
-};
-const mockOpenCase = new Case(
-  {
-    ...MOCK_CASE,
-    trialDate: '2019-03-01T21:42:29.073Z',
-    trialSessionId,
-  },
-  { applicationContext },
-);
-const mockClosedCase = new Case(
-  {
-    ...MOCK_CASE,
-    closedDate: '2020-03-01T21:42:29.073Z',
-    docketNumber: '999-99',
-    status: CASE_STATUS_TYPES.closed,
-    trialDate: '2019-03-01T21:42:29.073Z',
-    trialSessionId,
-  },
-  { applicationContext },
-);
-
 describe('setNoticeOfChangeToRemoteProceeding', () => {
+  const mockDocumentId = '98c6b1c8-1eed-44b6-932a-967af060597a';
+  const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
+  const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
+
+  const inPersonTrialSession = { ...MOCK_TRIAL_INPERSON, trialSessionId };
+  const remoteTrialSession = { ...MOCK_TRIAL_REMOTE, trialSessionId };
+
+  const mockPdfDocument = {
+    load: () => jest.fn().mockReturnValue(getFakeFile),
+  };
+  const mockOpenCase = new Case(
+    {
+      ...MOCK_CASE,
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId,
+    },
+    { applicationContext },
+  );
+  const mockClosedCase = new Case(
+    {
+      ...MOCK_CASE,
+      closedDate: '2020-03-01T21:42:29.073Z',
+      docketNumber: '999-99',
+      status: CASE_STATUS_TYPES.closed,
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId,
+    },
+    { applicationContext },
+  );
+
   beforeEach(() => {
     applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf =
       jest.fn();

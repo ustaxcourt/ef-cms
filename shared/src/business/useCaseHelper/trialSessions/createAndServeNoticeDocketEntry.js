@@ -17,7 +17,6 @@ const serveNoticesForCase = async (
     newPdfDoc,
     noticeDocketEntryEntity,
     noticeDocumentPdfData,
-    PDFDocument,
     servedParties,
   },
 ) => {
@@ -29,6 +28,7 @@ const serveNoticesForCase = async (
   });
 
   if (servedParties.paper.length > 0) {
+    const { PDFDocument } = await applicationContext.getPdfLib();
     const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
 
     await applicationContext
@@ -52,13 +52,12 @@ const serveNoticesForCase = async (
  * @param {object} providers.documentInfo information on the document being served
  * @param {object} providers.newPdfDoc the new PDF contents to be appended
  * @param {object} providers.notice the notice being served
- * @param {object} providers.PDFDocument the PDF document to append to
  * @param {object} providers.userId the user ID
  * @returns {Promise<void>} the created trial session
  */
 exports.createAndServeNoticeDocketEntry = async (
   applicationContext,
-  { caseEntity, documentInfo, newPdfDoc, notice, PDFDocument, userId },
+  { caseEntity, documentInfo, newPdfDoc, notice, userId },
 ) => {
   const docketEntryId = applicationContext.getUniqueId();
 
@@ -98,7 +97,6 @@ exports.createAndServeNoticeDocketEntry = async (
   caseEntity.addDocketEntry(noticeOfChangeOfTrialJudgeDocketEntry);
 
   await serveNoticesForCase(applicationContext, {
-    PDFDocument,
     caseEntity,
     newPdfDoc,
     noticeDocketEntryEntity: noticeOfChangeOfTrialJudgeDocketEntry,
