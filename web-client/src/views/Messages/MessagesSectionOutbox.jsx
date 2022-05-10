@@ -1,13 +1,14 @@
+import {
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+} from './sortConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
-
-const chronAsc = 'Oldest to newest';
-const chronDesc = 'Newest to oldest';
-const alphaAsc = 'In A-Z ascending order';
-const alphaDesc = 'In Z-A descending order';
 
 export const MessagesSectionOutbox = connect(
   {
@@ -27,9 +28,9 @@ export const MessagesSectionOutbox = connect(
             <tr>
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <SortableColumnHeaderButton
-                  ascText={chronAsc}
+                  ascText={CHRONOLOGICALLY_ASCENDING}
                   defaultSort="desc"
-                  descText={chronDesc}
+                  descText={CHRONOLOGICALLY_DESCENDING}
                   sortField="docketNumber"
                   tableSort={tableSort}
                   title="Docket No."
@@ -38,9 +39,9 @@ export const MessagesSectionOutbox = connect(
               </th>
               <th className="small">
                 <SortableColumnHeaderButton
-                  ascText={chronAsc}
+                  ascText={CHRONOLOGICALLY_ASCENDING}
                   defaultSort="desc"
-                  descText={chronDesc}
+                  descText={CHRONOLOGICALLY_DESCENDING}
                   sortField="createdAt"
                   tableSort={tableSort}
                   title="Sent"
@@ -49,9 +50,9 @@ export const MessagesSectionOutbox = connect(
               </th>
               <th>
                 <SortableColumnHeaderButton
-                  ascText={alphaAsc}
+                  ascText={ALPHABETICALLY_ASCENDING}
                   defaultSort="asc"
-                  descText={alphaDesc}
+                  descText={ALPHABETICALLY_DESCENDING}
                   sortField="subject"
                   tableSort={tableSort}
                   title="Message"
