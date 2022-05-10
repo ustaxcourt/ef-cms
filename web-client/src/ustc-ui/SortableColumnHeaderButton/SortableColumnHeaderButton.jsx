@@ -43,3 +43,7 @@ export const SortableColumnHeaderButton = ({
     </Button>
   );
 };
+
+const getIcon = ({ sortField, sortOrder, ascText, descText }) => {
+  // TODO: do the whole thing
+};
