@@ -1,3 +1,4 @@
+import { DESCENDING } from '../presenterConstants';
 import { formatDateIfToday } from './formattedWorkQueue';
 import { state } from 'cerebral';
 
@@ -46,7 +47,7 @@ export const getFormattedMessages = ({
       return sortNumber;
     });
 
-  if (tableSort && tableSort.sortOrder === 'desc') {
+  if (tableSort && tableSort.sortOrder === DESCENDING) {
     formattedCaseMessages.reverse();
   }
 

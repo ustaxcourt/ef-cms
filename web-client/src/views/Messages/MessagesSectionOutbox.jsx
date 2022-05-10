@@ -4,6 +4,7 @@ import {
   CHRONOLOGICALLY_ASCENDING,
   CHRONOLOGICALLY_DESCENDING,
 } from './sortConstants';
+import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
@@ -29,7 +30,7 @@ export const MessagesSectionOutbox = connect(
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <SortableColumnHeaderButton
                   ascText={CHRONOLOGICALLY_ASCENDING}
-                  defaultSort="desc"
+                  defaultSort={DESCENDING}
                   descText={CHRONOLOGICALLY_DESCENDING}
                   sortField="docketNumber"
                   tableSort={tableSort}
@@ -40,7 +41,7 @@ export const MessagesSectionOutbox = connect(
               <th className="small">
                 <SortableColumnHeaderButton
                   ascText={CHRONOLOGICALLY_ASCENDING}
-                  defaultSort="desc"
+                  defaultSort={DESCENDING}
                   descText={CHRONOLOGICALLY_DESCENDING}
                   sortField="createdAt"
                   tableSort={tableSort}
@@ -51,7 +52,7 @@ export const MessagesSectionOutbox = connect(
               <th>
                 <SortableColumnHeaderButton
                   ascText={ALPHABETICALLY_ASCENDING}
-                  defaultSort="asc"
+                  defaultSort={ASCENDING}
                   descText={ALPHABETICALLY_DESCENDING}
                   sortField="subject"
                   tableSort={tableSort}
