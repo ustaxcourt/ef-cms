@@ -15,7 +15,11 @@ exports.handleBounceNotificationLambda = async event => {
     ...JSON.parse(record.Sns.Message),
   }));
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .handleBounceNotifications(applicationContext, records);
+  return await Promise.all(
+    records.map(record =>
+      applicationContext
+        .getUseCaseHelpers()
+        .handleBounceNotificationInteractor(applicationContext, record),
+    ),
+  );
 };
