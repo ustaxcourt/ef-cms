@@ -40,6 +40,9 @@ const {
   compareStrings,
 } = require('../utilities/sortFunctions');
 const {
+  createAndServeNoticeDocketEntry,
+} = require('../useCaseHelper/trialSessions/createAndServeNoticeDocketEntry');
+const {
   createCaseAndAssociations,
 } = require('../useCaseHelper/caseAssociation/createCaseAndAssociations');
 const {
@@ -418,6 +421,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     appendPaperServiceAddressPageToPdf: jest
       .fn()
       .mockImplementation(appendPaperServiceAddressPageToPdf),
+    createAndServeNoticeDocketEntry: jest
+      .fn()
+      .mockImplementation(createAndServeNoticeDocketEntry),
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
