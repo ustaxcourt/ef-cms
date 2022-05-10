@@ -37,13 +37,10 @@ resource "aws_s3_bucket" "documents_us_east_1" {
 
 resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
   bucket = aws_s3_bucket.documents_us_east_1.bucket
-  policy = var.environment == "exp5" ? data.aws_iam_policy_document.allow_access_for_glue_job : null
+  policy = var.environment == "exp5" ? data.aws_iam_policy_document.allow_access_for_glue_job.json : ""
 }
 
 data "aws_iam_policy_document" "allow_access_for_glue_job" {
-  condition {
-    test = 
-  }
   statement {
     principals {
       type        = "AWS"
@@ -57,8 +54,8 @@ data "aws_iam_policy_document" "allow_access_for_glue_job" {
     ]
 
     resources = [
-      "arn:aws:s3::${var.dns_domain}-documents-${var.environment}-us-east-1",
-      "arn:aws:s3::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
+      "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1",
+      "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
     ]
   }
 }
