@@ -20,12 +20,30 @@ export const setDefaultTableSortAction = ({ get, props, store }) => {
   // different tables require different sorting
   if (props.box === 'inbox') {
     store.set(state.tableSort.sortField, 'createdAt');
-    store.set(state.tableSort.sortOrder, ASCENDING);
+    const fields = {
+      createdAt: {
+        defaultSortOrder: ASCENDING,
+        icon: 'caret-up',
+        tooltip: 'In A-Z ascending order',
+      },
+      docketNumber: {
+        defaultSortOrder: DESCENDING,
+        icon: 'caret-down',
+      },
+      subject: {
+        defaultSortOrder: ASCENDING,
+        icon: 'caret-up',
+      },
+    };
+    store.set(state.tableSort.fields, fields);
   } else if (props.box === 'outbox') {
     store.set(state.tableSort.sortField, 'createdAt');
-    store.set(state.tableSort.sortOrder, DESCENDING);
+    store.set(state.tableSort.fields['createdAt'].defaultSortOrder, DESCENDING);
   } else if (props.box === 'completed') {
     store.set(state.tableSort.sortField, 'completedAt');
-    store.set(state.tableSort.sortOrder, DESCENDING);
+    store.set(
+      state.tableSort.fields['completedAt'].defaultSortOrder,
+      DESCENDING,
+    );
   }
 };
