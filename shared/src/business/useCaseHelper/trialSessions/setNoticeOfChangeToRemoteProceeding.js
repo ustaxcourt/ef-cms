@@ -39,7 +39,7 @@ exports.setNoticeOfChangeToRemoteProceeding = async (
       trialLocation: newTrialSessionEntity.trialLocation,
     };
 
-    const notice = await applicationContext
+    const noticePdf = await applicationContext
       .getUseCases()
       .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
         docketNumber: caseEntity.docketNumber,
@@ -53,7 +53,7 @@ exports.setNoticeOfChangeToRemoteProceeding = async (
         documentInfo:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
         newPdfDoc,
-        notice,
+        noticePdf,
         userId,
       });
   }

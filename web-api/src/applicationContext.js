@@ -172,7 +172,7 @@ const {
 } = require('../../shared/src/business/utilities/documentGenerators/coverSheet');
 const {
   createAndServeNoticeDocketEntry,
-} = require('../../shared/src/business/useCaseHelper/trialSessions/createAndServeNoticeDocketEntry');
+} = require('../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry');
 const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
