@@ -1,3 +1,4 @@
+import { ASCENDING, DESCENDING } from '../presenterConstants';
 import { state } from 'cerebral';
 
 /**
@@ -15,7 +16,7 @@ export const setSectionMessagesSortAction = ({ get, props, store }) => {
   if (get(state.tableSort.sortField) !== sortField) {
     store.set(state.tableSort.sortOrder, defaultSort);
   } else {
-    const newSortOrder = fromSortOrder === 'desc' ? 'asc' : 'desc';
+    const newSortOrder = fromSortOrder === DESCENDING ? ASCENDING : DESCENDING;
     store.set(state.tableSort.sortOrder, newSortOrder);
   }
   store.set(state.tableSort.sortField, sortField);

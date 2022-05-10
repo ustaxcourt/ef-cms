@@ -1,3 +1,4 @@
+import { ASCENDING, DESCENDING } from '../presenterConstants';
 import { state } from 'cerebral';
 
 /**
@@ -19,12 +20,12 @@ export const setDefaultTableSortAction = ({ get, props, store }) => {
   // different tables require different sorting
   if (props.box === 'inbox') {
     store.set(state.tableSort.sortField, 'createdAt');
-    store.set(state.tableSort.sortOrder, 'asc');
+    store.set(state.tableSort.sortOrder, ASCENDING);
   } else if (props.box === 'outbox') {
     store.set(state.tableSort.sortField, 'createdAt');
-    store.set(state.tableSort.sortOrder, 'desc');
+    store.set(state.tableSort.sortOrder, DESCENDING);
   } else if (props.box === 'completed') {
     store.set(state.tableSort.sortField, 'completedAt');
-    store.set(state.tableSort.sortOrder, 'desc');
+    store.set(state.tableSort.sortOrder, DESCENDING);
   }
 };

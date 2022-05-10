@@ -1,10 +1,9 @@
+import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import React from 'react';
 import classNames from 'classnames';
 
-//TODO:
-//    - pass in more stuff -> ascText, descText
 export const SortableColumnHeaderButton = ({
   ascText = 'in ascending order',
   defaultSort,
@@ -58,21 +57,21 @@ export const SortableColumnHeaderButton = ({
 const getIcon = ({ ascText, defaultSort, descText, sortField, tableSort }) => {
   let icon = '';
   let title = '';
-  if (tableSort.sortField !== sortField && defaultSort === 'desc') {
+  if (tableSort.sortField !== sortField && defaultSort === DESCENDING) {
     icon = 'caret-down';
     title = descText;
-  } else if (tableSort.sortField !== sortField && defaultSort === 'asc') {
+  } else if (tableSort.sortField !== sortField && defaultSort === ASCENDING) {
     icon = 'caret-up';
     title = ascText;
   } else if (
     tableSort.sortField === sortField &&
-    tableSort.sortOrder === 'desc'
+    tableSort.sortOrder === DESCENDING
   ) {
     icon = 'caret-down';
     title = descText;
   } else if (
     tableSort.sortField === sortField &&
-    tableSort.sortOrder === 'asc'
+    tableSort.sortOrder === ASCENDING
   ) {
     icon = 'caret-up';
     title = ascText;
