@@ -28,6 +28,13 @@ export const SortableColumnHeaderButton = ({
       >
         {title}
       </span>
+      {getIcon({
+        ascText: 'moof',
+        defaultSort,
+        descText: 'dogcow',
+        sortField,
+        tableSort,
+      })}
       {tableSort.sortField !== sortField && defaultSort === 'desc' && (
         <FontAwesomeIcon icon="caret-down" title="in descending order" />
       )}
@@ -44,14 +51,15 @@ export const SortableColumnHeaderButton = ({
   );
 };
 
-const getIcon = ({ ascText, descText, sortField, sortOrder, tableSort }) => {
+const getIcon = ({ ascText, defaultSort, descText, sortField, tableSort }) => {
   // TODO: Continue work, capture logic correctly
-  const sortOrderToSomething =
-    sortOrder === 'asc'
-      ? { icon: 'caret-up', title: ascText }
-      : { icon: 'caret-down', title: descText };
 
-  if (tableSort.sortField !== sortField) {
-    return <FontAwesomeIcon icon=`${sortOrderToSomething.icon}` title=`${sortOrderToSomething.title}` />;
+  let icon = '';
+  let title = '';
+  if (tableSort.sortField !== sortField && defaultSort === 'desc') {
+    icon = 'alksdfjklasdflksdajf';
+    title = 'something else';
   }
+
+  return <FontAwesomeIcon icon={icon} title={title} />;
 };
