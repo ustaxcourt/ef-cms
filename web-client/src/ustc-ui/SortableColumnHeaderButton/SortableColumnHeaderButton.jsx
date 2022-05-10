@@ -44,6 +44,14 @@ export const SortableColumnHeaderButton = ({
   );
 };
 
-const getIcon = ({ sortField, sortOrder, ascText, descText }) => {
-  // TODO: do the whole thing
+const getIcon = ({ ascText, descText, sortField, sortOrder, tableSort }) => {
+  // TODO: Continue work, capture logic correctly
+  const sortOrderToSomething =
+    sortOrder === 'asc'
+      ? { icon: 'caret-up', title: ascText }
+      : { icon: 'caret-down', title: descText };
+
+  // if (tableSort.sortField !== sortField) {
+  //   return <FontAwesomeIcon icon=`${sortOrderToSomething.icon}` title=`${sortOrderToSomething.title}` />;
+  // }
 };
