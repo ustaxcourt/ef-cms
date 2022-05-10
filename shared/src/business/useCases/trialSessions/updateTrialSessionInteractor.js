@@ -145,7 +145,6 @@ exports.updateTrialSessionInteractor = async (
         await applicationContext
           .getUseCaseHelpers()
           .setNoticeOfChangeToRemoteProceeding(applicationContext, {
-            PDFDocument,
             caseEntity,
             currentTrialSession,
             newPdfDoc: paperServicePdfsCombined,
@@ -156,7 +155,6 @@ exports.updateTrialSessionInteractor = async (
         await applicationContext
           .getUseCaseHelpers()
           .setNoticeOfChangeOfTrialJudge(applicationContext, {
-            PDFDocument,
             caseEntity,
             currentTrialSession,
             newPdfDoc: paperServicePdfsCombined,

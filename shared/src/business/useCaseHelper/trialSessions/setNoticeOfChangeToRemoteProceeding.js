@@ -13,20 +13,12 @@ const {
  * @param {object} providers.currentTrialSession the old trial session data
  * @param {object} providers.newPdfDoc the new PDF contents to be appended
  * @param {object} providers.newTrialSessionEntity the new trial session data
- * @param {object} providers.PDFDocument the PDF document to append to
  * @param {object} providers.userId the user ID
  * @returns {Promise<void>} the created trial session
  */
 exports.setNoticeOfChangeToRemoteProceeding = async (
   applicationContext,
-  {
-    caseEntity,
-    currentTrialSession,
-    newPdfDoc,
-    newTrialSessionEntity,
-    PDFDocument,
-    userId,
-  },
+  { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity, userId },
 ) => {
   const shouldIssueNoticeOfChangeToRemoteProceeding =
     currentTrialSession.proceedingType ===
@@ -57,7 +49,6 @@ exports.setNoticeOfChangeToRemoteProceeding = async (
     await applicationContext
       .getUseCaseHelpers()
       .createAndServeNoticeDocketEntry(applicationContext, {
-        PDFDocument,
         caseEntity,
         documentInfo:
           SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
