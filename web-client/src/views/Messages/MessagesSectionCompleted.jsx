@@ -22,6 +22,7 @@ export const MessagesSectionCompleted = connect(
     sortSectionMessagesSequence,
     tableSort,
   }) {
+    const hasMessages = formattedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">
@@ -32,6 +33,7 @@ export const MessagesSectionCompleted = connect(
                   ascText={CHRONOLOGICALLY_ASCENDING}
                   defaultSort={DESCENDING}
                   descText={CHRONOLOGICALLY_DESCENDING}
+                  hasRows={hasMessages}
                   sortField="docketNumber"
                   tableSort={tableSort}
                   title="Docket No."
@@ -43,6 +45,7 @@ export const MessagesSectionCompleted = connect(
                   ascText={CHRONOLOGICALLY_ASCENDING}
                   defaultSort={ASCENDING}
                   descText={CHRONOLOGICALLY_DESCENDING}
+                  hasRows={hasMessages}
                   sortField="completedAt"
                   tableSort={tableSort}
                   title="Completed"
@@ -55,6 +58,7 @@ export const MessagesSectionCompleted = connect(
                   ascText={ALPHABETICALLY_ASCENDING}
                   defaultSort={ASCENDING}
                   descText={ALPHABETICALLY_DESCENDING}
+                  hasRows={hasMessages}
                   sortField="subject"
                   tableSort={tableSort}
                   title="Last Message"

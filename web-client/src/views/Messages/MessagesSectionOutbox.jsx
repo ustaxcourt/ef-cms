@@ -22,6 +22,7 @@ export const MessagesSectionOutbox = connect(
     sortSectionMessagesSequence,
     tableSort,
   }) {
+    const hasMessages = formattedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">
@@ -32,6 +33,7 @@ export const MessagesSectionOutbox = connect(
                   ascText={CHRONOLOGICALLY_ASCENDING}
                   defaultSort={DESCENDING}
                   descText={CHRONOLOGICALLY_DESCENDING}
+                  hasRows={hasMessages}
                   sortField="docketNumber"
                   tableSort={tableSort}
                   title="Docket No."
@@ -43,6 +45,7 @@ export const MessagesSectionOutbox = connect(
                   ascText={CHRONOLOGICALLY_ASCENDING}
                   defaultSort={DESCENDING}
                   descText={CHRONOLOGICALLY_DESCENDING}
+                  hasRows={hasMessages}
                   sortField="createdAt"
                   tableSort={tableSort}
                   title="Sent"
@@ -54,6 +57,7 @@ export const MessagesSectionOutbox = connect(
                   ascText={ALPHABETICALLY_ASCENDING}
                   defaultSort={ASCENDING}
                   descText={ALPHABETICALLY_DESCENDING}
+                  hasRows={hasMessages}
                   sortField="subject"
                   tableSort={tableSort}
                   title="Message"
