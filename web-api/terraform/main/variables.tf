@@ -78,6 +78,10 @@ variable "bounce_alert_recipients" {
   type = string
 }
 
+variable "slack_webhook_url" {
+  type = string
+}
+
 variable "scanner_resource_uri" {
   type = string
 }
