@@ -1,7 +1,7 @@
 const React = require('react');
 const {
-  NoticeOfChangeofTrialJudge,
-} = require('./NoticeOfChangeofTrialJudge.jsx');
+  NoticeOfChangeOfTrialJudge,
+} = require('./NoticeOfChangeOfTrialJudge.jsx');
 const { mount, shallow } = require('enzyme');
 
 describe('NoticeOfChangeofTrialJudge', () => {
@@ -21,7 +21,7 @@ describe('NoticeOfChangeofTrialJudge', () => {
 
   it('renders a document header with trial information', () => {
     const wrapper = mount(
-      <NoticeOfChangeofTrialJudge
+      <NoticeOfChangeOfTrialJudge
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
@@ -36,9 +36,9 @@ describe('NoticeOfChangeofTrialJudge', () => {
     );
   });
 
-  it('renders the trial information', () => {
+  it('should render the trial session information', () => {
     const wrapper = shallow(
-      <NoticeOfChangeofTrialJudge
+      <NoticeOfChangeOfTrialJudge
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
@@ -57,9 +57,9 @@ describe('NoticeOfChangeofTrialJudge', () => {
     expect(noticeBodyContent).toContain(trialInfo.joinPhoneNumber);
   });
 
-  it('renders the formatted judge name', () => {
+  it('should render the formatted judge name', () => {
     const wrapper = shallow(
-      <NoticeOfChangeofTrialJudge
+      <NoticeOfChangeOfTrialJudge
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
@@ -72,15 +72,16 @@ describe('NoticeOfChangeofTrialJudge', () => {
     );
   });
 
-  it('renders the formatted start date and time', () => {
+  it('should render the formatted trial session start date and time', () => {
     const wrapper = shallow(
-      <NoticeOfChangeofTrialJudge
+      <NoticeOfChangeOfTrialJudge
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
         trialInfo={trialInfo}
       />,
     );
+
     const textContent = wrapper.find('#notice-body').text();
 
     expect(textContent).toContain(trialInfo.formattedStartTime);
