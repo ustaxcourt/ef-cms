@@ -99,7 +99,6 @@ resource "aws_ses_template" "document_served" {
 EOF
 }
 
-
 #Petition Service Email Template
 resource "aws_ses_template" "petition_served" {
   name    = "petition_served_${var.environment}"
@@ -108,7 +107,6 @@ resource "aws_ses_template" "petition_served" {
   {{emailContent}}
 EOF
 }
-
 
 #Email Change Verification Email Template
 resource "aws_ses_template" "email_change_verification" {
@@ -119,7 +117,6 @@ resource "aws_ses_template" "email_change_verification" {
 EOF
 }
 
-
 #IRS Super User Bounce Report Email Template
 resource "aws_ses_template" "bounce_alert" {
   name    = "bounce_alert_${var.environment}"
@@ -127,4 +124,21 @@ resource "aws_ses_template" "bounce_alert" {
   html    = <<EOF
   {{emailContent}}
 EOF
+}
+
+resource "aws_sns_topic" "bounced_service_emails" {
+  name = "bounced_service_emails"
+}
+
+resource "aws_ses_identity_notification_topic" "bounced_service_emails" {
+  topic_arn                = aws_sns_topic.bounced_service_emails.arn
+  notification_type        = "Bounce"
+  identity                 = aws_ses_domain_identity.main.domain
+  include_original_headers = true
+}
+
+resource "aws_sns_topic_subscription" "bounced_service_emails" {
+  topic_arn = aws_sns_topic.bounced_service_emails.arn
+  protocol  = "lambda"
+  endpoint  = aws_lambda_function.zip_handle_bounce.arn
 }
