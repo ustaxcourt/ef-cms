@@ -1,3 +1,7 @@
+import {
+  CASE_STATUS_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSession';
 import { docketClerkUpdatesCaseStatusToClosed } from './journey/docketClerkUpdatesCaseStatusToClosed';
@@ -84,6 +88,29 @@ describe('Docket Clerk edits a calendared trial session', () => {
     });
 
     expect(cerebralTest.getState('trialSession.caseOrder').length).toBe(3);
+  });
+
+  it('verify that a Notice of Change of Trial Judge was generated for each open case', async () => {
+    for (const calendaredCase of cerebralTest.casesReadyForTrial) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: calendaredCase.docketNumber,
+      });
+
+      const { docketEntries, status } = cerebralTest.getState('caseDetail');
+
+      const expectedGeneratedNotice = docketEntries.find(
+        entry =>
+          entry.documentType ===
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge
+            .documentType,
+      );
+
+      if (status === CASE_STATUS_TYPES.closed) {
+        expect(expectedGeneratedNotice).toBeUndefined();
+      } else {
+        expect(expectedGeneratedNotice).toBeDefined();
+      }
+    }
   });
 
   docketClerkVerifiesCaseStatusIsUnchanged(cerebralTest);
