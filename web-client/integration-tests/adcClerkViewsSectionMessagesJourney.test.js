@@ -1,6 +1,6 @@
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
+import { getUserMessageCount } from './journey/getUserMessageCount';
 import { loginAs, setupTest, uploadPetition } from './helpers';
-import { userViewsMessages } from './journey/userViewsMessages';
 
 const cerebralTest = setupTest();
 
@@ -15,13 +15,27 @@ describe('ADC Clerk Views Section Messages Journey', () => {
 
   const testAdcId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const petitionsClerkId = '4805d1ab-18d0-43ec-bafb-654e83405416';
-  let beforeMessageCount = 0;
+  let beforeInboxMessageCount = 0;
+  // let beforeOutboxMessageCount = 0;
+  // let beforeCompletedMessageCount = 0;
 
   loginAs(cerebralTest, 'adc@example.com');
-  userViewsMessages(cerebralTest, 'inbox', 'section');
-  it('has some messages or does not', () => {
-    const inboxMessages = cerebralTest.getState('messages');
-    beforeMessageCount = inboxMessages.length;
+  it('get before counts for all section message boxes', () => {
+    beforeInboxMessageCount = getUserMessageCount(
+      cerebralTest,
+      'inbox',
+      'section',
+    );
+    // beforeOutboxMessageCount = getUserMessageCount(
+    //   cerebralTest,
+    //   'outbox',
+    //   'section',
+    // );
+    // beforeCompletedMessageCount = getUserMessageCount(
+    //   cerebralTest,
+    //   'completed',
+    //   'section',
+    // );
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -86,22 +100,26 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   //    correct handling of empty table
   //    Send messages from adc
 
-  userViewsMessages(cerebralTest, 'inbox', 'section');
-  it('verify default sorting of section inbox createdAt sort field', () => {
+  it('verify default sorting of section inbox createdAt sort field, ascending', () => {
+    let afterInboxMessageCount = getUserMessageCount(
+      cerebralTest,
+      'inbox',
+      'section',
+    );
     const expectedMessageCount = 3;
     const inboxMessages = cerebralTest.getState('messages');
-    // const messageOne = { subject: message1Subject };
-    // const messageTwo = { subject: message2Subject };
-    // const messageThree = { subject: message3Subject };
     const expected = [];
     expected.push(message1Subject);
     expected.push(message2Subject);
     expected.push(message3Subject);
 
-    expect(inboxMessages.length).toEqual(
-      expectedMessageCount + beforeMessageCount,
+    expect(afterInboxMessageCount).toEqual(
+      expectedMessageCount + beforeInboxMessageCount,
     );
 
+    // Iterating over the inboxMessages array verifies that we
+    // found the expected messages in the order we expected them to be.
+    // The expectation on pointer verifies the count of expected messages.
     let pointer = 0;
     inboxMessages.forEach(message => {
       if (message.subject === expected[pointer]) {
@@ -109,12 +127,5 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       }
     });
     expect(pointer).toEqual(3);
-
-    // const actual = inboxMessages.slice(-3);
-    // expect(actual).toEqual([
-    //   expect.objectContaining(messageOne),
-    //   expect.objectContaining(messageTwo),
-    //   expect.objectContaining(messageThree),
-    // ]);
   });
 });
