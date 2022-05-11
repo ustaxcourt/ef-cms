@@ -90,31 +90,31 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   it('verify default sorting of section inbox createdAt sort field', () => {
     const expectedMessageCount = 3;
     const inboxMessages = cerebralTest.getState('messages');
-    const messageOne = { subject: message1Subject };
-    const messageTwo = { subject: message2Subject };
-    const messageThree = { subject: message3Subject };
-    // const expected = [];
-    // expected.push(message1Subject);
-    // expected.push(message2Subject);
-    // expected.push(message3Subject);
+    // const messageOne = { subject: message1Subject };
+    // const messageTwo = { subject: message2Subject };
+    // const messageThree = { subject: message3Subject };
+    const expected = [];
+    expected.push(message1Subject);
+    expected.push(message2Subject);
+    expected.push(message3Subject);
 
     expect(inboxMessages.length).toEqual(
       expectedMessageCount + beforeMessageCount,
     );
 
-    // let pointer = 0;
-    // inboxMessages.forEach(message => {
-    //   if (message.subject === expected[0]) {
-    //     pointer++;
-    //   }
-    // });
-    // expect(pointer).toEqual(3);
+    let pointer = 0;
+    inboxMessages.forEach(message => {
+      if (message.subject === expected[pointer]) {
+        pointer++;
+      }
+    });
+    expect(pointer).toEqual(3);
 
-    const actual = inboxMessages.slice(-3);
-    expect(actual).toEqual([
-      expect.objectContaining(messageOne),
-      expect.objectContaining(messageTwo),
-      expect.objectContaining(messageThree),
-    ]);
+    // const actual = inboxMessages.slice(-3);
+    // expect(actual).toEqual([
+    //   expect.objectContaining(messageOne),
+    //   expect.objectContaining(messageTwo),
+    //   expect.objectContaining(messageThree),
+    // ]);
   });
 });
