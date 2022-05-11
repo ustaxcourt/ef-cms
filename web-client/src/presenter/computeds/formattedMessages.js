@@ -8,7 +8,6 @@ export const getFormattedMessages = ({
   tableSort,
 }) => {
   // TODO: refactor this whole function
-  const { sortField } = tableSort;
   const formattedCaseMessages = messages
     .map(message => ({
       ...message,
@@ -48,7 +47,7 @@ export const getFormattedMessages = ({
       return sortNumber;
     });
 
-  if (tableSort && tableSort.fields[sortField].sortOrder === DESCENDING) {
+  if (tableSort && tableSort.sortOrder === DESCENDING) {
     formattedCaseMessages.reverse();
   }
 
