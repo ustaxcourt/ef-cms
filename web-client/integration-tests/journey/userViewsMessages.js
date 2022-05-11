@@ -6,7 +6,6 @@ export const userViewsMessages = (cerebralTest, box, queue) => {
     });
 
     const messages = cerebralTest.getState('messages');
-    console.log('messages*** ', messages);
 
     expect(messages).toBeDefined();
   });
