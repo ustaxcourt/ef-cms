@@ -56,6 +56,37 @@ describe('NoticeOfChangeofTrialJudge', () => {
     expect(noticeBodyContent).toContain(trialInfo.trialLocation);
   });
 
+  it('should NOT render additional text when the caseProcedureType is "regular"', () => {
+    const wrapper = shallow(
+      <NoticeOfChangeOfTrialJudge
+        caseCaptionExtension={caseCaptionExtension}
+        caseTitle={caseTitle}
+        docketNumberWithSuffix={docketNumberWithSuffix}
+        trialInfo={trialInfo}
+      />,
+    );
+
+    const noticeBodyContent = wrapper.find('#notice-body').text();
+    expect(noticeBodyContent).toContain('for Small Tax Cases');
+  });
+
+  it('should render additional text when the caseProcedureType is "small"', () => {
+    const wrapper = shallow(
+      <NoticeOfChangeOfTrialJudge
+        caseCaptionExtension={caseCaptionExtension}
+        caseTitle={caseTitle}
+        docketNumberWithSuffix={docketNumberWithSuffix}
+        trialInfo={{
+          ...trialInfo,
+          caseProcedureType: PROCEDURE_TYPES_MAP.regular,
+        }}
+      />,
+    );
+
+    const noticeBodyContent = wrapper.find('#notice-body').text();
+    expect(noticeBodyContent).not.toContain('for Small Tax Cases');
+  });
+
   it('should render the formatted names of the previous and current trial judges', () => {
     const wrapper = shallow(
       <NoticeOfChangeOfTrialJudge

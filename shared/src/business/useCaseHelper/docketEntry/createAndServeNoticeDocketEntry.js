@@ -51,9 +51,8 @@ const serveNoticesForCase = async (
  * @param {object} providers.caseEntity the case data
  * @param {object} providers.documentInfo information on the document being served
  * @param {object} providers.newPdfDoc the new PDF contents to be appended
- * @param {object} providers.noticePdf the notice pdfbeing served
+ * @param {object} providers.noticePdf the notice pdf being served
  * @param {object} providers.userId the user ID
- * @returns {Promise<void>} the created trial session
  */
 exports.createAndServeNoticeDocketEntry = async (
   applicationContext,
