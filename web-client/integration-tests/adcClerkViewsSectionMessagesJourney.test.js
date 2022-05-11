@@ -173,4 +173,41 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     });
     expect(pointer).toEqual(expected.length);
   });
+
+  it('go to section completed', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'completed',
+      queue: 'section',
+    });
+  });
+
+  // completed is empty right now
+  it('verify default sorting of section completed completedAt sort field, descending', async () => {
+    let afterCompletedMessageCount = await getUserMessageCount(
+      cerebralTest,
+      'completed',
+      'section',
+    );
+
+    const { completedMessages } = runCompute(formattedMessagesComputed, {
+      state: cerebralTest.getState(),
+    });
+
+    const expected = [];
+
+    expect(afterCompletedMessageCount).toEqual(
+      expected.length + beforeCompletedMessageCount,
+    );
+
+    // Iterating over the inboxMessages array verifies that we
+    // found the expected messages in the order we expected them to be.
+    // The expectation on pointer verifies the count of expected messages.
+    let pointer = 0;
+    completedMessages.forEach(message => {
+      if (message.subject === expected[pointer]) {
+        pointer++;
+      }
+    });
+    expect(pointer).toEqual(expected.length);
+  });
 });
