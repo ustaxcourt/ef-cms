@@ -20,8 +20,8 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   // let beforeCompletedMessageCount = 0;
 
   loginAs(cerebralTest, 'adc@example.com');
-  it('get before counts for all section message boxes', () => {
-    beforeInboxMessageCount = getUserMessageCount(
+  it('get before counts for all section message boxes', async () => {
+    beforeInboxMessageCount = await getUserMessageCount(
       cerebralTest,
       'inbox',
       'section',
@@ -100,8 +100,8 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   //    correct handling of empty table
   //    Send messages from adc
 
-  it('verify default sorting of section inbox createdAt sort field, ascending', () => {
-    let afterInboxMessageCount = getUserMessageCount(
+  it('verify default sorting of section inbox createdAt sort field, ascending', async () => {
+    let afterInboxMessageCount = await getUserMessageCount(
       cerebralTest,
       'inbox',
       'section',
