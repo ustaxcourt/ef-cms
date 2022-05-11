@@ -1,6 +1,15 @@
+import { applicationContext } from '../src/applicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
+import { formattedMessages } from '../src/presenter/computeds/formattedMessages';
 import { getUserMessageCount } from './journey/getUserMessageCount';
 import { loginAs, setupTest, uploadPetition } from './helpers';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
+
+const formattedMessagesComputed = withAppContextDecorator(
+  formattedMessages,
+  applicationContext,
+);
 
 const cerebralTest = setupTest();
 
@@ -16,8 +25,8 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   const testAdcId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const petitionsClerkId = '4805d1ab-18d0-43ec-bafb-654e83405416';
   let beforeInboxMessageCount = 0;
-  // let beforeOutboxMessageCount = 0;
-  // let beforeCompletedMessageCount = 0;
+  let beforeOutboxMessageCount = 0;
+  let beforeCompletedMessageCount = 0;
 
   loginAs(cerebralTest, 'adc@example.com');
   it('get before counts for all section message boxes', async () => {
@@ -26,16 +35,16 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       'inbox',
       'section',
     );
-    // beforeOutboxMessageCount = getUserMessageCount(
-    //   cerebralTest,
-    //   'outbox',
-    //   'section',
-    // );
-    // beforeCompletedMessageCount = getUserMessageCount(
-    //   cerebralTest,
-    //   'completed',
-    //   'section',
-    // );
+    beforeOutboxMessageCount = await getUserMessageCount(
+      cerebralTest,
+      'outbox',
+      'section',
+    );
+    beforeCompletedMessageCount = await getUserMessageCount(
+      cerebralTest,
+      'completed',
+      'section',
+    );
   });
 
   loginAs(cerebralTest, 'petitioner@example.com');
@@ -106,15 +115,15 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       'inbox',
       'section',
     );
-    const expectedMessageCount = 3;
-    const inboxMessages = cerebralTest.getState('messages');
-    const expected = [];
-    expected.push(message1Subject);
-    expected.push(message2Subject);
-    expected.push(message3Subject);
+
+    const { messages: inboxMessages } = runCompute(formattedMessagesComputed, {
+      state: cerebralTest.getState(),
+    });
+
+    const expected = [message1Subject, message2Subject, message3Subject];
 
     expect(afterInboxMessageCount).toEqual(
-      expectedMessageCount + beforeInboxMessageCount,
+      expected.length + beforeInboxMessageCount,
     );
 
     // Iterating over the inboxMessages array verifies that we
@@ -126,6 +135,42 @@ describe('ADC Clerk Views Section Messages Journey', () => {
         pointer++;
       }
     });
-    expect(pointer).toEqual(3);
+    expect(pointer).toEqual(expected.length);
+  });
+
+  it('go to section outbox', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'outbox',
+      queue: 'section',
+    });
+  });
+
+  it('verify default sorting of section outbox createdAt sort field, descending', async () => {
+    let afterOutboxMessageCount = await getUserMessageCount(
+      cerebralTest,
+      'outbox',
+      'section',
+    );
+
+    const { messages: outboxMessages } = runCompute(formattedMessagesComputed, {
+      state: cerebralTest.getState(),
+    });
+
+    const expected = [message5Subject, message4Subject];
+
+    expect(afterOutboxMessageCount).toEqual(
+      expected.length + beforeOutboxMessageCount,
+    );
+
+    // Iterating over the inboxMessages array verifies that we
+    // found the expected messages in the order we expected them to be.
+    // The expectation on pointer verifies the count of expected messages.
+    let pointer = 0;
+    outboxMessages.forEach(message => {
+      if (message.subject === expected[pointer]) {
+        pointer++;
+      }
+    });
+    expect(pointer).toEqual(expected.length);
   });
 });
