@@ -90,9 +90,9 @@ describe('getUserCaseNoteForCasesInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
     applicationContext.getCurrentUser.mockReturnValue(mockUser);
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => null,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(null);
 
     await getUserCaseNoteForCasesInteractor(applicationContext, {
       docketNumbers: [MOCK_NOTE.docketNumber],
