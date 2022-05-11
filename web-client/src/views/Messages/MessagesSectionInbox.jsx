@@ -13,58 +13,73 @@ import React from 'react';
 
 export const MessagesSectionInbox = connect(
   {
+    currentUser: state.user,
     formattedMessages: state.formattedMessages.messages,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
     tableSort: state.tableSort,
   },
   function MessagesSectionInbox({
+    currentUser,
     formattedMessages,
     sortSectionMessagesSequence,
     tableSort,
   }) {
+    const userRole = currentUser.role;
     const hasMessages = formattedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              <th aria-label="Docket Number" className="small" colSpan="2">
-                <SortableColumnHeaderButton
-                  ascText={CHRONOLOGICALLY_ASCENDING}
-                  defaultSort={DESCENDING}
-                  descText={CHRONOLOGICALLY_DESCENDING}
-                  hasRows={hasMessages}
-                  sortField="docketNumber"
-                  tableSort={tableSort}
-                  title="Docket No."
-                  onClickSequence={sortSectionMessagesSequence}
-                />
-              </th>
-
-              <th className="medium">
-                <SortableColumnHeaderButton
-                  ascText={CHRONOLOGICALLY_ASCENDING}
-                  defaultSort={ASCENDING}
-                  descText={CHRONOLOGICALLY_DESCENDING}
-                  hasRows={hasMessages}
-                  sortField="createdAt"
-                  tableSort={tableSort}
-                  title="Received"
-                  onClickSequence={sortSectionMessagesSequence}
-                />
-              </th>
-              <th>
-                <SortableColumnHeaderButton
-                  ascText={ALPHABETICALLY_ASCENDING}
-                  defaultSort={ASCENDING}
-                  descText={ALPHABETICALLY_DESCENDING}
-                  hasRows={hasMessages}
-                  sortField="subject"
-                  tableSort={tableSort}
-                  title="Message"
-                  onClickSequence={sortSectionMessagesSequence}
-                />
-              </th>
+              {userRole === 'adc' && (
+                <th aria-label="Docket Number" className="small" colSpan="2">
+                  <SortableColumnHeaderButton
+                    ascText={CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={DESCENDING}
+                    descText={CHRONOLOGICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="docketNumber"
+                    tableSort={tableSort}
+                    title="Docket No."
+                    onClickSequence={sortSectionMessagesSequence}
+                  />
+                </th>
+              )}
+              {userRole !== 'adc' && (
+                <th aria-label="Docket Number" className="small" colSpan="2">
+                  Docket No.
+                </th>
+              )}
+              {userRole === 'adc' && (
+                <th className="medium">
+                  <SortableColumnHeaderButton
+                    ascText={CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={ASCENDING}
+                    descText={CHRONOLOGICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="createdAt"
+                    tableSort={tableSort}
+                    title="Received"
+                    onClickSequence={sortSectionMessagesSequence}
+                  />
+                </th>
+              )}
+              {userRole !== 'adc' && <th className="small">Received</th>}
+              {userRole === 'adc' && (
+                <th>
+                  <SortableColumnHeaderButton
+                    ascText={ALPHABETICALLY_ASCENDING}
+                    defaultSort={ASCENDING}
+                    descText={ALPHABETICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="subject"
+                    tableSort={tableSort}
+                    title="Message"
+                    onClickSequence={sortSectionMessagesSequence}
+                  />
+                </th>
+              )}
+              {userRole !== 'adc' && <th>Message</th>}
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
