@@ -1,4 +1,4 @@
-const baseConfig = require('../jest.config');
+const baseConfig = require('../jest-browser.config');
 
 module.exports = {
   ...baseConfig,
@@ -30,12 +30,5 @@ module.exports = {
     FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
-  },
-  testEnvironment: 'jsdom',
-  //this is to ignore imported html files
-  transform: {
-    '^.+\\.html?$': './htmlLoader.js',
-    '^.+\\.js$': 'babel-jest',
-    '^.+\\.jsx$': 'babel-jest',
   },
 };
