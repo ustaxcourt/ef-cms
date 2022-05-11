@@ -4,7 +4,7 @@ const { getJudgeWithTitle } = require('./getJudgeWithTitle');
 describe('getJudgeWithTitle', () => {
   const mockJudgeUserName = 'Judy';
   const mockJudge = {
-    fullName: 'Judifer Justice Judy',
+    judgFullName: 'Judifer Justice Judy',
     judgeTitle: 'Special Trial Judge',
     name: 'Judy',
   };
@@ -34,7 +34,7 @@ describe('getJudgeWithTitle', () => {
     expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.name}`);
   });
 
-  it('should return the found judge full name with title when shouldUseFullName is true', async () => {
+  it('should return the found judge full name with title when useFullName is true', async () => {
     const result = await getJudgeWithTitle({
       applicationContext,
       judgeUserName: mockJudgeUserName,
