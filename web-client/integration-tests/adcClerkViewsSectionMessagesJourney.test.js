@@ -59,6 +59,7 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   const message3Subject = `message 3 ${Date.now()}`;
   const message4Subject = `message 4 ${Date.now()}`;
   const message5Subject = `message 5 ${Date.now()}`;
+  const messageCompletedSubject = `message Completed ${Date.now()}`;
 
   // Send some messages to ADC user(s)
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -80,6 +81,39 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     subject: message3Subject,
     toSection: 'adc',
     toUserId: testAdcId,
+  });
+
+  createNewMessageOnCase(cerebralTest, {
+    subject: messageCompletedSubject,
+    toSection: 'adc',
+    toUserId: testAdcId,
+  });
+
+  it('docket clerk completes message thread', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'outbox',
+      queue: 'section',
+    });
+
+    const messages = cerebralTest.getState('messages');
+
+    const foundMessage = messages.find(
+      message => message.subject === cerebralTest.testMessageSubject,
+    );
+
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: foundMessage.parentMessageId,
+    });
+
+    await cerebralTest.runSequence('openCompleteMessageModalSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'form.message',
+      value: messageCompletedSubject,
+    });
+
+    await cerebralTest.runSequence('completeMessageSequence');
   });
 
   loginAs(cerebralTest, 'adc@example.com');
@@ -181,6 +215,8 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     });
   });
 
+  // mark item as complete
+
   // completed is empty right now
   it('verify default sorting of section completed completedAt sort field, descending', async () => {
     let afterCompletedMessageCount = await getUserMessageCount(
@@ -193,7 +229,7 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       state: cerebralTest.getState(),
     });
 
-    const expected = [];
+    const expected = [messageCompletedSubject];
 
     expect(afterCompletedMessageCount).toEqual(
       expected.length + beforeCompletedMessageCount,
