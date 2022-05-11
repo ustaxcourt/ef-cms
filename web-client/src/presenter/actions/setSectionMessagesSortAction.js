@@ -11,16 +11,13 @@ import { state } from 'cerebral';
  */
 export const setSectionMessagesSortAction = ({ get, props, store }) => {
   // TODO: UNIT TEST THIS
-  const { sortField } = props;
-  const fromSortOrder = get(state.tableSort.fields[sortField].sortOrder);
+  const { defaultSort, sortField } = props;
+  const fromSortOrder = get(state.tableSort.sortOrder);
   if (get(state.tableSort.sortField) !== sortField) {
-    store.set(
-      state.tableSort.fields[sortField],
-      state.tableSort.fields[sortField].defaultSortOrder,
-    );
+    store.set(state.tableSort.sortOrder, defaultSort);
   } else {
     const newSortOrder = fromSortOrder === DESCENDING ? ASCENDING : DESCENDING;
-    store.set(state.tableSort.fields[sortField].sortOrder, newSortOrder);
+    store.set(state.tableSort.sortOrder, newSortOrder);
   }
   store.set(state.tableSort.sortField, sortField);
 };
