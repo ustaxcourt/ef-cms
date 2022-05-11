@@ -867,7 +867,7 @@ export const waitForExpectedItem = async ({
   cerebralTest,
   currentItem,
   expectedItem,
-  maxWait = 20000,
+  maxWait = 10000,
 }) => {
   let waitTime = 0;
   while (
