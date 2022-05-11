@@ -2,10 +2,17 @@
 
 Now that you've logged in and played around with our Dawson system a bit on a deployed environment, let's talk about our team process and what is expected from our fellow teammates.  This part of the documentation should help members get on the same page when it comes to the soft-skills required to work as a well-oiled agile machine.
 
-## 🤝🏿 Working Agreement
+## Onboarding
+
+Here are some few resources for documentation associated with onboarding:
+
+1. [Onboarding checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk/edit#)
+2. [Onboarding Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c/edit#)
+
+If you do not have permissions to view these documents, please reaach out to the scrum master. 
+## Working Agreement
 
 We have talked about writing some form of working agreement so team members have a common understanding of what is expected from them during their daily work.  Great teams strive for open communication, safe spaces to speak their mind, and continous improvement in process.  Embracing some of the following ideologies will help grow and sustain a healthy team.
-
 
 
 ### Vision Statement
@@ -75,27 +82,36 @@ Since we strive to work in pairs and mobs, our stand ups focus more on group goa
  - Time of Ceremony: 9:30 AM CST
  - Frequency of Ceremony: Daily Monday through Friday
 
-### Sprint Grooming
-
- - Time of Ceremony: 11:30-12:00 CST
- - Frequency of Ceremony: Once a week Tuesday 
-
 ### Sprint Retrospective 
 
- - Time of Ceremony: 2:30-4:30 CST
+The retrospective is performed at the end of the sprint and offers the team a time to reflect on what went well or what they’d like to improve. 
+
+ - Time of Ceremony: 2:30-4:00 CST
  - Frequency of Ceremony: Every other week Tuesday
 
-### Sprint Planning 
+### Sprint Planning/Refinement
 
-TODO
+We have combined our grooming and planning into one event. During this meeting we groom stories for the sprint. While a sprint is 2 weeks, we groom every week to allow for shifting PO priorities.
 
-### Sprint Review Prep
+ - Time of Ceremony: 11:30-12:00 PM CST
+ - Frequency of Ceremony: Every Tuesday 
 
-TODO
+### OpEx/DevEx Backlog Review
 
-### Sprint Review
+A meeting for the team to review the backlog of larger refactoring items and point for priority (importance/urgency).
 
-TODO
+Refactoring backlog: https://trello.com/b/9tgrIFfA/ef-cms-opex-devex
+
+Planning poker: https://play.planningpoker.com/play/game/6sDzcKNshsnarUet2HrnTeUYR3e5tvqB 
+
+ - Time of Ceremony: 2:00-3:00 PM CST
+ - Frequency of Ceremony: Every 2 weeks on Monday 
+
+
+### Epic Refinement 
+
+ - Time of Ceremony: 2:00-3:00 PM CST
+ - Frequency of Ceremony: Every 2 weeks on Monday rint Review
 
 ### Refactoring Backlog
 
