@@ -2,6 +2,10 @@ const React = require('react');
 const {
   NoticeOfChangeOfTrialJudge,
 } = require('./NoticeOfChangeOfTrialJudge.jsx');
+const {
+  PROCEDURE_TYPES_MAP,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../../entities/EntityConstants.js');
 const { mount, shallow } = require('enzyme');
 
 describe('NoticeOfChangeofTrialJudge', () => {
@@ -9,17 +13,16 @@ describe('NoticeOfChangeofTrialJudge', () => {
   const caseTitle = 'Test Petitioner';
   const docketNumberWithSuffix = '123-19S';
   const trialInfo = {
+    caseProcedureType: PROCEDURE_TYPES_MAP.small,
     chambersPhoneNumber: '11111',
-    formattedJudge: 'Judge Dredd',
     formattedStartDate: 'Monday, January 20, 2020',
-    formattedStartTime: '10:00 am',
-    joinPhoneNumber: '11111',
-    meetingId: '22222',
-    password: '33333',
+    priorJudgeTitleWithFullName: 'Judge Lorna G. Schofield',
+    proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     trialLocation: 'Boise, Idaho',
+    updatedJudgeTitleWithFullName: 'Judge Jacqueline Nguyen',
   };
 
-  it('renders a document header with trial information', () => {
+  it('should renders a document header with the case information', () => {
     const wrapper = mount(
       <NoticeOfChangeOfTrialJudge
         caseCaptionExtension={caseCaptionExtension}
@@ -46,45 +49,27 @@ describe('NoticeOfChangeofTrialJudge', () => {
       />,
     );
 
-    const trialInfoContent = wrapper.find('#trial-info').text();
+    const noticeBodyContent = wrapper.find('#notice-body').text();
+    expect(noticeBodyContent).toContain(trialInfo.chambersPhoneNumber);
+    expect(noticeBodyContent).toContain(trialInfo.formattedStartDate);
+    expect(noticeBodyContent).toContain(trialInfo.proceedingType);
+    expect(noticeBodyContent).toContain(trialInfo.trialLocation);
+  });
 
-    expect(trialInfoContent).toContain(trialInfo.trialLocation);
+  it('should render the formatted names of the previous and current trial judges', () => {
+    const wrapper = shallow(
+      <NoticeOfChangeOfTrialJudge
+        caseCaptionExtension={caseCaptionExtension}
+        caseTitle={caseTitle}
+        docketNumberWithSuffix={docketNumberWithSuffix}
+        trialInfo={trialInfo}
+      />,
+    );
 
     const noticeBodyContent = wrapper.find('#notice-body').text();
-
-    expect(noticeBodyContent).toContain(trialInfo.meetingId);
-    expect(noticeBodyContent).toContain(trialInfo.password);
-    expect(noticeBodyContent).toContain(trialInfo.joinPhoneNumber);
-  });
-
-  it('should render the formatted judge name', () => {
-    const wrapper = shallow(
-      <NoticeOfChangeOfTrialJudge
-        caseCaptionExtension={caseCaptionExtension}
-        caseTitle={caseTitle}
-        docketNumberWithSuffix={docketNumberWithSuffix}
-        trialInfo={trialInfo}
-      />,
+    expect(noticeBodyContent).toContain(trialInfo.priorJudgeTitleWithFullName);
+    expect(noticeBodyContent).toContain(
+      trialInfo.updatedJudgeTitleWithFullName,
     );
-
-    expect(wrapper.find('#judge-info').text()).toContain(
-      trialInfo.formattedJudge,
-    );
-  });
-
-  it('should render the formatted trial session start date and time', () => {
-    const wrapper = shallow(
-      <NoticeOfChangeOfTrialJudge
-        caseCaptionExtension={caseCaptionExtension}
-        caseTitle={caseTitle}
-        docketNumberWithSuffix={docketNumberWithSuffix}
-        trialInfo={trialInfo}
-      />,
-    );
-
-    const textContent = wrapper.find('#notice-body').text();
-
-    expect(textContent).toContain(trialInfo.formattedStartTime);
-    expect(textContent).toContain(trialInfo.formattedStartDate);
   });
 });
