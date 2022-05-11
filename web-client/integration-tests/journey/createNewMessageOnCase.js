@@ -13,7 +13,7 @@ export const createNewMessageOnCase = (
     subject = 'A generic subject',
     toSection = PETITIONS_SECTION,
     toUserId = petitionsClerk1User,
-  },
+  } = {},
 ) => {
   const messageModalHelper = withAppContextDecorator(
     messageModalHelperComputed,
