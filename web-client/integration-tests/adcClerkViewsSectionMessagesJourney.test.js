@@ -15,6 +15,14 @@ describe('ADC Clerk Views Section Messages Journey', () => {
 
   const testAdcId = '6805d1ab-18d0-43ec-bafb-654e83405416';
   const petitionsClerkId = '4805d1ab-18d0-43ec-bafb-654e83405416';
+  let beforeMessageCount = 0;
+
+  loginAs(cerebralTest, 'adc@example.com');
+  userViewsMessages(cerebralTest, 'inbox', 'section');
+  it('has some messages or does not', () => {
+    const inboxMessages = cerebralTest.getState('messages');
+    beforeMessageCount = inboxMessages.length;
+  });
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create case', async () => {
@@ -85,9 +93,25 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     const messageOne = { subject: message1Subject };
     const messageTwo = { subject: message2Subject };
     const messageThree = { subject: message3Subject };
+    // const expected = [];
+    // expected.push(message1Subject);
+    // expected.push(message2Subject);
+    // expected.push(message3Subject);
 
-    expect(inboxMessages.length).toEqual(expectedMessageCount);
-    expect(inboxMessages).toEqual([
+    expect(inboxMessages.length).toEqual(
+      expectedMessageCount + beforeMessageCount,
+    );
+
+    // let pointer = 0;
+    // inboxMessages.forEach(message => {
+    //   if (message.subject === expected[0]) {
+    //     pointer++;
+    //   }
+    // });
+    // expect(pointer).toEqual(3);
+
+    const actual = inboxMessages.slice(-3);
+    expect(actual).toEqual([
       expect.objectContaining(messageOne),
       expect.objectContaining(messageTwo),
       expect.objectContaining(messageThree),
