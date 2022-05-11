@@ -14,7 +14,6 @@ const {
  * @param {object} providers.newPdfDoc the new PDF contents to be appended
  * @param {object} providers.newTrialSessionEntity the new trial session data
  * @param {object} providers.userId the user ID
- * @returns {Promise<void>} the created trial session
  */
 exports.setNoticeOfChangeToRemoteProceeding = async (
   applicationContext,
