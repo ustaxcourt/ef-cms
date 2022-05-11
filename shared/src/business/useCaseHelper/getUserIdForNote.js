@@ -7,7 +7,7 @@ const { User } = require('../entities/User');
  *
  * @param {object} applicationContext the application context
  * @param {object} obj the options argument
- * @param {string} obj.section the section to fetch the judge from
+ * @param {string} obj.userIdMakingRequest the userId who made the request to this interactor
  * @returns {string} the user id this note should be attached to
  */
 
