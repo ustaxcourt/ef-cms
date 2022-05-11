@@ -4,7 +4,7 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   provider = aws.us-east-1
   bucket   = "${var.dns_domain}-documents-${var.environment}-us-east-1"
   acl      = "private"
-  
+
   cors_rule {
     allowed_headers = ["Authorization"]
     allowed_methods = ["GET", "POST"]
@@ -36,8 +36,9 @@ resource "aws_s3_bucket" "documents_us_east_1" {
 }
 
 resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
+  count = var.environment == "prod" ? 1 : 0
   bucket = aws_s3_bucket.documents_us_east_1.bucket
-  policy = var.environment == "prod" ? data.aws_iam_policy_document.allow_access_for_glue_job.json : ""
+  policy = data.aws_iam_policy_document.allow_access_for_glue_job.json
 }
 
 data "aws_iam_policy_document" "allow_access_for_glue_job" {
