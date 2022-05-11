@@ -1,11 +1,11 @@
 const {
   CASE_STATUS_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
+const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
 
 /**
- * setNoticeOfChangeToRemoteProceeding
+ * setNoticeOfChangeOfTrialJudge
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -16,32 +16,41 @@ const {
  * @param {object} providers.userId the user ID
  * @returns {Promise<void>} the created trial session
  */
-exports.setNoticeOfChangeToRemoteProceeding = async (
+exports.setNoticeOfChangeOfTrialJudge = async (
   applicationContext,
   { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity, userId },
 ) => {
-  const shouldIssueNoticeOfChangeToRemoteProceeding =
-    currentTrialSession.proceedingType ===
-      TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-    newTrialSessionEntity.proceedingType ===
-      TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+  const shouldIssueNoticeOfChangeOfTrialJudge =
+    currentTrialSession.isCalendared &&
+    currentTrialSession.judge?.userId !== newTrialSessionEntity.judge?.userId &&
     caseEntity.status !== CASE_STATUS_TYPES.closed;
 
-  if (shouldIssueNoticeOfChangeToRemoteProceeding) {
+  if (shouldIssueNoticeOfChangeOfTrialJudge) {
+    const priorJudgeTitleWithFullName = await getJudgeWithTitle({
+      applicationContext,
+      judgeUserName: currentTrialSession.judge.name,
+      useFullName: true,
+    });
+
+    const updatedJudgeTitleWithFullName = await getJudgeWithTitle({
+      applicationContext,
+      judgeUserName: newTrialSessionEntity.judge.name,
+      useFullName: true,
+    });
+
     const trialSessionInformation = {
+      caseProcedureType: caseEntity.procedureType,
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
-      joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
-      judgeName: newTrialSessionEntity.judge.name,
-      meetingId: newTrialSessionEntity.meetingId,
-      password: newTrialSessionEntity.password,
+      priorJudgeTitleWithFullName,
+      proceedingType: newTrialSessionEntity.proceedingType,
       startDate: newTrialSessionEntity.startDate,
-      startTime: newTrialSessionEntity.startTime,
       trialLocation: newTrialSessionEntity.trialLocation,
+      updatedJudgeTitleWithFullName,
     };
 
     const noticePdf = await applicationContext
       .getUseCases()
-      .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
+      .generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
         docketNumber: caseEntity.docketNumber,
         trialSessionInformation,
       });
@@ -51,7 +60,7 @@ exports.setNoticeOfChangeToRemoteProceeding = async (
       .createAndServeNoticeDocketEntry(applicationContext, {
         caseEntity,
         documentInfo:
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
         newPdfDoc,
         noticePdf,
         userId,

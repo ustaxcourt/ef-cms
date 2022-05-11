@@ -12,10 +12,6 @@ const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactNoticeReceiptPetitionTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Notice of Receipt of Petition',
-    },
   });
 
   const pdf = await applicationContext
