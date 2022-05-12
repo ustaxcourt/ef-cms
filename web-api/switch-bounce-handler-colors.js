@@ -19,17 +19,30 @@ check(AWS_ACCOUNT_ID, 'You must have AWS_ACCOUNT_ID set in your environment');
 const SNS = new AWS.SNS({ region: 'us-east-1' });
 
 const run = async () => {
-  await SNS.subscribe({
-    Endpoint: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${DEPLOYING_COLOR}`,
-    Protocol: 'lambda',
-    TopicArn: `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`,
-  });
+  const TopicArn = `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`;
+  const Protocol = 'lambda';
+  const DeployingLambda = `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${DEPLOYING_COLOR}`;
+  const CurrentLambda = `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${CURRENT_COLOR}`;
 
-  await SNS.unsubscribe({
-    Endpoint: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${CURRENT_COLOR}`,
-    Protocol: 'lambda',
-    TopicArn: `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`,
-  });
+  await SNS.subscribe({
+    Endpoint: DeployingLambda,
+    Protocol,
+    TopicArn,
+  }).promise();
+
+  const { SubscriptionArn } = await SNS.confirmSubscription({
+    Endpoint: CurrentLambda,
+    Protocol,
+    TopicArn,
+  }).promise();
+
+  if (SubscriptionArn) {
+    await SNS.unsubscribe({
+      Endpoint: CurrentLambda,
+      Protocol,
+      TopicArn,
+    }).promise();
+  }
 };
 
 run();
