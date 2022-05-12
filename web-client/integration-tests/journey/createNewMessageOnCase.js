@@ -10,7 +10,7 @@ const petitionsClerk1User = '4805d1ab-18d0-43ec-bafb-654e83405416';
 export const createNewMessageOnCase = (
   cerebralTest,
   {
-    subject = 'A generic subject',
+    subject,
     toSection = PETITIONS_SECTION,
     toUserId = petitionsClerk1User,
   } = {},
