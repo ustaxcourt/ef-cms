@@ -1,4 +1,5 @@
-import { DESCENDING } from '../presenterConstants';
+/* eslint-disable max-lines */
+import { ASCENDING, DESCENDING } from '../presenterConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedMessages as formattedMessagesComputed,
@@ -348,6 +349,49 @@ describe('formattedMessages', () => {
     });
     expect(result.messages[2]).toMatchObject({
       docketNumber: DOCKET_NUMBER_1,
+    });
+  });
+
+  it('reverses the messages when sortOrder is set to DESCENDING', () => {
+    const DOCKET_NUMBER_1 = '101-19';
+    const DOCKET_NUMBER_2 = '101-20';
+    const DOCKET_NUMBER_3 = '105-20';
+    const result = getFormattedMessages({
+      applicationContext,
+      messages: [
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_1,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_2,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_3,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+      ],
+      tableSort: {
+        sortField: 'UNKNOWN',
+        sortOrder: ASCENDING,
+      },
+    });
+
+    expect(result.messages[0]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_1,
+    });
+    expect(result.messages[1]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_2,
+    });
+    expect(result.messages[2]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_3,
     });
   });
 
