@@ -222,7 +222,7 @@
     "node-fetch": "^2.6.1",
     "node-forge": "^1.2.1",
     "underscore": "^1.13.1",
-    "async": "2.6.4"
+    "async": "^2.6.4"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",

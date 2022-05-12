@@ -78,7 +78,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
     See [here](ci-cd.md#docker) for the documentation to create and push the updated docker container for use in CircleCI.
 
-6. (Optional) Check through the list of caveats to see if any of the documented issues have been resolved.
+6. Check through the list of caveats to see if any of the documented issues have been resolved.
 
 #### Caveats
 
