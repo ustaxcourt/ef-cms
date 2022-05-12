@@ -22,13 +22,13 @@ const run = async () => {
   await SNS.subscribe({
     Endpoint: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${DEPLOYING_COLOR}`,
     Protocol: 'lambda',
-    TopicArn: `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails`,
+    TopicArn: `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`,
   });
 
   await SNS.unsubscribe({
     Endpoint: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${CURRENT_COLOR}`,
     Protocol: 'lambda',
-    TopicArn: `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails`,
+    TopicArn: `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`,
   });
 };
 
