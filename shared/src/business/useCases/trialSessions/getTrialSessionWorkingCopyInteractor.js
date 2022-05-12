@@ -7,6 +7,7 @@ const {
 } = require('../../entities/trialSessions/TrialSessionWorkingCopy');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { User } = require('../../entities/User');
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -21,13 +22,23 @@ exports.getTrialSessionWorkingCopyInteractor = async (
   { trialSessionId },
 ) => {
   const user = applicationContext.getCurrentUser();
+
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const rawUser = await applicationContext.getPersistenceGateway().getUserById({
+    applicationContext,
+    userId: user.userId,
+  });
+
+  const userEntity = new User(rawUser);
+
   const judgeUser = await applicationContext
-    .getUseCases()
-    .getJudgeForUserChambersInteractor(applicationContext, { user });
+    .getUseCaseHelpers()
+    .getJudgeInSectionHelper(applicationContext, {
+      section: userEntity.section,
+    });
 
   const chambersUserId = (judgeUser && judgeUser.userId) || user.userId;
 
