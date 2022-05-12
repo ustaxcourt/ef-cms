@@ -109,11 +109,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     });
   });
 
-  // Do sorting and validate:
-  //    correct ordering
-  //    correct handling of empty table
-  //    Send messages from adc
-
   it('verify default sorting of section inbox createdAt sort field, ascending', async () => {
     let afterInboxMessageCount = await getUserMessageCount(
       cerebralTest,
@@ -131,16 +126,7 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       expected.length + beforeInboxMessageCount,
     );
 
-    // Iterating over the inboxMessages array verifies that we
-    // found the expected messages in the order we expected them to be.
-    // The expectation on pointer verifies the count of expected messages.
-    let pointer = 0;
-    inboxMessages.forEach(message => {
-      if (message.subject === expected[pointer]) {
-        pointer++;
-      }
-    });
-    expect(pointer).toEqual(expected.length);
+    validateMessageOrdering(inboxMessages, expected);
   });
 
   it('go to section outbox', async () => {
@@ -167,16 +153,7 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       expected.length + beforeOutboxMessageCount,
     );
 
-    // Iterating over the inboxMessages array verifies that we
-    // found the expected messages in the order we expected them to be.
-    // The expectation on pointer verifies the count of expected messages.
-    let pointer = 0;
-    outboxMessages.forEach(message => {
-      if (message.subject === expected[pointer]) {
-        pointer++;
-      }
-    });
-    expect(pointer).toEqual(expected.length);
+    validateMessageOrdering(outboxMessages, expected);
   });
 
   it('go to section completed', async () => {
@@ -271,16 +248,7 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       expected.length + beforeCompletedMessageCount,
     );
 
-    // Iterating over the inboxMessages array verifies that we
-    // found the expected messages in the order we expected them to be.
-    // The expectation on pointer verifies the count of expected messages.
-    let pointer = 0;
-    completedMessages.forEach(message => {
-      if (message.subject === expected[pointer]) {
-        pointer++;
-      }
-    });
-    expect(pointer).toEqual(expected.length);
+    validateMessageOrdering(completedMessages, expected);
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -297,3 +265,16 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     expect(showSortableHeaders).toBeFalsy();
   });
 });
+
+const validateMessageOrdering = (actualMessages, expectedMessageSubjects) => {
+  // Iterating over the inboxMessages array verifies that we
+  // found the expected messages in the order we expected them to be.
+  // The expectation on pointer verifies the count of expected messages.
+  let pointer = 0;
+  actualMessages.forEach(message => {
+    if (message.subject === expectedMessageSubjects[pointer]) {
+      pointer++;
+    }
+  });
+  expect(pointer).toEqual(expectedMessageSubjects.length);
+};
