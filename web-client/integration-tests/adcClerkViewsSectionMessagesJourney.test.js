@@ -64,8 +64,8 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   const message3Subject = `message 3 ${Date.now()}`;
   const message4Subject = `message 4 ${Date.now()}`;
   const message5Subject = `message 5 ${Date.now()}`;
-  const messageCompletedSubject1 = `message Completed 1 ${Date.now()}`;
-  const messageCompletedSubject2 = `message Completed 2 ${Date.now()}`;
+  const message6Subject = `message Completed 1 ${Date.now()}`;
+  const message7Subject = `message Completed 2 ${Date.now()}`;
 
   // Send some messages to ADC user(s)
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -163,25 +163,26 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     });
   });
 
-  // mark items as complete
   loginAs(cerebralTest, 'docketclerk@example.com');
-  let completedMessage1Subject = '';
-  let completedMessage2Subject = '';
+  let message6SubjectFromState = '';
+  let message7SubjectFromState = '';
+
   createNewMessageOnCase(cerebralTest, {
-    subject: messageCompletedSubject1,
+    subject: message6Subject,
     toSection: 'adc',
     toUserId: testAdcId,
   });
-  it('get completedMessage1Subject', () => {
-    completedMessage1Subject = cerebralTest.testMessageSubject;
+  it('get message6SubjectFromState', () => {
+    message6SubjectFromState = cerebralTest.testMessageSubject;
   });
+
   createNewMessageOnCase(cerebralTest, {
-    subject: messageCompletedSubject2,
+    subject: message7Subject,
     toSection: 'adc',
     toUserId: testAdcId,
   });
-  it('get completedMessage2Subject', () => {
-    completedMessage2Subject = cerebralTest.testMessageSubject;
+  it('get message7SubjectFromState', () => {
+    message7SubjectFromState = cerebralTest.testMessageSubject;
   });
 
   loginAs(cerebralTest, 'adc@example.com');
@@ -193,41 +194,20 @@ describe('ADC Clerk Views Section Messages Journey', () => {
 
     const messages = cerebralTest.getState('messages');
 
-    const foundMessage1 = messages.find(
-      message => message.subject === completedMessage1Subject,
+    await markMessageAsComplete(
+      cerebralTest,
+      messages,
+      message6Subject,
+      message6SubjectFromState,
     );
 
-    await cerebralTest.runSequence('gotoMessageDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-      parentMessageId: foundMessage1.parentMessageId,
-    });
-
-    await cerebralTest.runSequence('openCompleteMessageModalSequence');
-
-    await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'form.message',
-      value: messageCompletedSubject1,
-    });
-
-    await cerebralTest.runSequence('completeMessageSequence');
-
-    const foundMessage2 = messages.find(
-      message => message.subject === completedMessage2Subject,
+    await markMessageAsComplete(
+      cerebralTest,
+      messages,
+      message7Subject,
+      message7SubjectFromState,
     );
 
-    await cerebralTest.runSequence('gotoMessageDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-      parentMessageId: foundMessage2.parentMessageId,
-    });
-
-    await cerebralTest.runSequence('openCompleteMessageModalSequence');
-
-    await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'form.message',
-      value: messageCompletedSubject2,
-    });
-
-    await cerebralTest.runSequence('completeMessageSequence');
     await refreshElasticsearchIndex();
   });
 
@@ -242,7 +222,7 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       state: cerebralTest.getState(),
     });
 
-    const expected = [completedMessage2Subject, completedMessage1Subject];
+    const expected = [message7SubjectFromState, message6SubjectFromState];
 
     expect(afterCompletedMessageCount).toEqual(
       expected.length + beforeCompletedMessageCount,
@@ -277,4 +257,29 @@ const validateMessageOrdering = (actualMessages, expectedMessageSubjects) => {
     }
   });
   expect(pointer).toEqual(expectedMessageSubjects.length);
+};
+
+const markMessageAsComplete = async (
+  context,
+  messages,
+  messageCompletedSubject,
+  completedMessageSubject,
+) => {
+  const foundMessage = messages.find(
+    message => message.subject === completedMessageSubject,
+  );
+
+  await context.runSequence('gotoMessageDetailSequence', {
+    docketNumber: context.docketNumber,
+    parentMessageId: foundMessage.parentMessageId,
+  });
+
+  await context.runSequence('openCompleteMessageModalSequence');
+
+  await context.runSequence('updateModalValueSequence', {
+    key: 'form.message',
+    value: messageCompletedSubject,
+  });
+
+  await context.runSequence('completeMessageSequence');
 };
