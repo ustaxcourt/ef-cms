@@ -2,7 +2,12 @@ import { applicationContext } from '../src/applicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages } from '../src/presenter/computeds/formattedMessages';
 import { getUserMessageCount } from './journey/getUserMessageCount';
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import {
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -59,7 +64,8 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   const message3Subject = `message 3 ${Date.now()}`;
   const message4Subject = `message 4 ${Date.now()}`;
   const message5Subject = `message 5 ${Date.now()}`;
-  const messageCompletedSubject = `message Completed ${Date.now()}`;
+  const messageCompletedSubject1 = `message Completed 1 ${Date.now()}`;
+  const messageCompletedSubject2 = `message Completed 2 ${Date.now()}`;
 
   // Send some messages to ADC user(s)
   loginAs(cerebralTest, 'petitionsclerk@example.com');
@@ -81,39 +87,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     subject: message3Subject,
     toSection: 'adc',
     toUserId: testAdcId,
-  });
-
-  createNewMessageOnCase(cerebralTest, {
-    subject: messageCompletedSubject,
-    toSection: 'adc',
-    toUserId: testAdcId,
-  });
-
-  it('docket clerk completes message thread', async () => {
-    await cerebralTest.runSequence('gotoMessagesSequence', {
-      box: 'outbox',
-      queue: 'section',
-    });
-
-    const messages = cerebralTest.getState('messages');
-
-    const foundMessage = messages.find(
-      message => message.subject === cerebralTest.testMessageSubject,
-    );
-
-    await cerebralTest.runSequence('gotoMessageDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
-      parentMessageId: foundMessage.parentMessageId,
-    });
-
-    await cerebralTest.runSequence('openCompleteMessageModalSequence');
-
-    await cerebralTest.runSequence('updateModalValueSequence', {
-      key: 'form.message',
-      value: messageCompletedSubject,
-    });
-
-    await cerebralTest.runSequence('completeMessageSequence');
   });
 
   loginAs(cerebralTest, 'adc@example.com');
@@ -215,21 +188,92 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     });
   });
 
-  // mark item as complete
+  // mark items as complete
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  let completedMessage1Subject = '';
+  let completedMessage2Subject = '';
+  createNewMessageOnCase(cerebralTest, {
+    subject: messageCompletedSubject1,
+    toSection: 'adc',
+    toUserId: testAdcId,
+  });
+  it('get completedMessage1Subject', () => {
+    completedMessage1Subject = cerebralTest.testMessageSubject;
+    console.log(completedMessage1Subject);
+  });
+  createNewMessageOnCase(cerebralTest, {
+    subject: messageCompletedSubject2,
+    toSection: 'adc',
+    toUserId: testAdcId,
+  });
+  it('get completedMessage2Subject', () => {
+    completedMessage2Subject = cerebralTest.testMessageSubject;
+    console.log(completedMessage2Subject);
+  });
 
-  // completed is empty right now
+  loginAs(cerebralTest, 'adc@example.com');
+  it('adc clerk completes message threads', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'inbox',
+      queue: 'section',
+    });
+
+    const messages = cerebralTest.getState('messages');
+
+    const foundMessage1 = messages.find(
+      message => message.subject === completedMessage1Subject,
+    );
+
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: foundMessage1.parentMessageId,
+    });
+
+    await cerebralTest.runSequence('openCompleteMessageModalSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'form.message',
+      value: messageCompletedSubject1,
+    });
+
+    await cerebralTest.runSequence('completeMessageSequence');
+
+    const foundMessage2 = messages.find(
+      message => message.subject === completedMessage2Subject,
+    );
+
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: foundMessage2.parentMessageId,
+    });
+
+    await cerebralTest.runSequence('openCompleteMessageModalSequence');
+
+    await cerebralTest.runSequence('updateModalValueSequence', {
+      key: 'form.message',
+      value: messageCompletedSubject2,
+    });
+
+    await cerebralTest.runSequence('completeMessageSequence');
+    await refreshElasticsearchIndex();
+  });
+
   it('verify default sorting of section completed completedAt sort field, descending', async () => {
     let afterCompletedMessageCount = await getUserMessageCount(
       cerebralTest,
       'completed',
       'section',
     );
+    console.log('beforeCompletedMessageCount:', beforeCompletedMessageCount);
+    console.log('afterCompletedMessageCount:', afterCompletedMessageCount);
 
     const { completedMessages } = runCompute(formattedMessagesComputed, {
       state: cerebralTest.getState(),
     });
 
-    const expected = [messageCompletedSubject];
+    console.log('completed messages:', completedMessages);
+
+    const expected = [completedMessage2Subject, completedMessage1Subject];
 
     expect(afterCompletedMessageCount).toEqual(
       expected.length + beforeCompletedMessageCount,
