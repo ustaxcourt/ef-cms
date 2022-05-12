@@ -73,9 +73,9 @@ describe('updateUserCaseNoteInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockImplementation(() => mockUser);
     applicationContext.getPersistenceGateway().updateUserCaseNote = jest.fn();
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => null,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(null);
 
     await updateUserCaseNoteInteractor(applicationContext, {
       docketNumber: mockCaseNote.docketNumber,

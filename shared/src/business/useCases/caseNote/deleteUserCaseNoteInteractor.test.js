@@ -35,12 +35,12 @@ describe('deleteUserCaseNoteInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockUser);
     applicationContext.getPersistenceGateway().deleteUserCaseNote = v => v;
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => ({
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue({
         role: ROLES.judge,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    });
+      });
 
     const caseNote = await deleteUserCaseNoteInteractor(applicationContext, {
       docketNumber: '123-45',
@@ -63,9 +63,9 @@ describe('deleteUserCaseNoteInteractor', () => {
       .getPersistenceGateway()
       .getUserById.mockReturnValue(mockUser);
     applicationContext.getPersistenceGateway().deleteUserCaseNote = jest.fn();
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => null,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(null);
     await deleteUserCaseNoteInteractor(applicationContext, {
       docketNumber: '123-45',
     });

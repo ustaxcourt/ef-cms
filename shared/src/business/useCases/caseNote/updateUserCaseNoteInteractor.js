@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
 const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
 
 /**
@@ -25,25 +24,11 @@ exports.updateUserCaseNoteInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const rawUser = await applicationContext.getPersistenceGateway().getUserById({
-    applicationContext,
-    userId: user.userId,
-  });
-
-  const userEntity = new User(rawUser);
-
-  let { userId } = userEntity;
-
-  if (userEntity.isChambersUser()) {
-    const judgeUser = await applicationContext
-      .getUseCaseHelpers()
-      .getJudgeInSectionHelper(applicationContext, {
-        section: userEntity.section,
-      });
-    if (judgeUser) {
-      ({ userId } = judgeUser);
-    }
-  }
+  const userId = await applicationContext
+    .getUseCaseHelpers()
+    .getUserIdForNote(applicationContext, {
+      userIdMakingRequest: user.userId,
+    });
 
   const caseNoteEntity = new UserCaseNote({
     docketNumber,
