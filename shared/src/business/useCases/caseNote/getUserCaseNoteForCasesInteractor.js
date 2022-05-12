@@ -23,16 +23,18 @@ exports.getUserCaseNoteForCasesInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const judgeUser = await applicationContext
-    .getUseCases()
-    .getJudgeForUserChambersInteractor(applicationContext, { user });
+  const userId = await applicationContext
+    .getUseCaseHelpers()
+    .getUserIdForNote(applicationContext, {
+      userIdMakingRequest: user.userId,
+    });
 
   const caseNotes = await applicationContext
     .getPersistenceGateway()
     .getUserCaseNoteForCases({
       applicationContext,
       docketNumbers,
-      userId: (judgeUser && judgeUser.userId) || user.userId,
+      userId,
     });
 
   return caseNotes.map(note => new UserCaseNote(note).validate().toRawObject());
