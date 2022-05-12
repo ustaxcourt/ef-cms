@@ -16,13 +16,11 @@ export const MessagesSectionCompleted = connect(
     formattedMessages: state.formattedMessages.completedMessages,
     showSortableHeaders: state.formattedMessages.showSortableHeaders,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
-    tableSort: state.tableSort,
   },
   function MessagesSectionCompleted({
     formattedMessages,
     showSortableHeaders,
     sortSectionMessagesSequence,
-    tableSort,
   }) {
     const hasMessages = formattedMessages.length > 0;
     return (
@@ -38,7 +36,6 @@ export const MessagesSectionCompleted = connect(
                     descText={CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="docketNumber"
-                    tableSort={tableSort}
                     title="Docket No."
                     onClickSequence={sortSectionMessagesSequence}
                   />
@@ -57,7 +54,6 @@ export const MessagesSectionCompleted = connect(
                     descText={CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="completedAt"
-                    tableSort={tableSort}
                     title="Completed"
                     onClickSequence={sortSectionMessagesSequence}
                   />
@@ -72,7 +68,6 @@ export const MessagesSectionCompleted = connect(
                     descText={ALPHABETICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="subject"
-                    tableSort={tableSort}
                     title="Last Message"
                     onClickSequence={sortSectionMessagesSequence}
                   />

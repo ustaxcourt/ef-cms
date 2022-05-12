@@ -86,6 +86,7 @@ import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
+import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
@@ -194,6 +195,7 @@ const helpers = {
   scanHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
+  sortableColumnHelper,
   startCaseHelper,
   startCaseInternalContactsHelper,
   startCaseInternalHelper,

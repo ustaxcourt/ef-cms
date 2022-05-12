@@ -16,13 +16,11 @@ export const MessagesSectionInbox = connect(
     formattedMessages: state.formattedMessages.messages,
     showSortableHeaders: state.formattedMessages.showSortableHeaders,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
-    tableSort: state.tableSort,
   },
   function MessagesSectionInbox({
     formattedMessages,
     showSortableHeaders,
     sortSectionMessagesSequence,
-    tableSort,
   }) {
     const hasMessages = formattedMessages.length > 0;
     return (
@@ -38,7 +36,6 @@ export const MessagesSectionInbox = connect(
                     descText={CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="docketNumber"
-                    tableSort={tableSort}
                     title="Docket No."
                     onClickSequence={sortSectionMessagesSequence}
                   />
@@ -57,7 +54,6 @@ export const MessagesSectionInbox = connect(
                     descText={CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="createdAt"
-                    tableSort={tableSort}
                     title="Received"
                     onClickSequence={sortSectionMessagesSequence}
                   />
@@ -72,7 +68,6 @@ export const MessagesSectionInbox = connect(
                     descText={ALPHABETICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="subject"
-                    tableSort={tableSort}
                     title="Message"
                     onClickSequence={sortSectionMessagesSequence}
                   />
