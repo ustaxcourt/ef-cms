@@ -111,8 +111,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
 
   // Do sorting and validate:
   //    correct ordering
-  //    correct icon direction
-  //    correct column selection (i.e. underlining)
   //    correct handling of empty table
   //    Send messages from adc
 

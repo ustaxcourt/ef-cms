@@ -8,7 +8,9 @@ import classNames from 'classnames';
 
 export const SortableColumnHeaderButton = connect(
   {
-    getSortIndicatorConfiguration: state.sortableColumnHelper,
+    getSortIndicatorConfiguration:
+      state.sortableColumnHelper.getSortIndicatorConfiguration,
+    isActive: state.sortableColumnHelper.isActive,
     tableSort: state.tableSort,
   },
   ({
@@ -17,6 +19,7 @@ export const SortableColumnHeaderButton = connect(
     descText = 'in descending order',
     getSortIndicatorConfiguration,
     hasRows,
+    isActive,
     onClickSequence,
     sortField,
     tableSort,
@@ -37,7 +40,7 @@ export const SortableColumnHeaderButton = connect(
       >
         <span
           className={classNames('margin-right-105', {
-            sortActive: tableSort.sortField === sortField && hasRows,
+            sortActive: isActive({ hasRows, sortField, tableSort }),
           })}
         >
           {title}
