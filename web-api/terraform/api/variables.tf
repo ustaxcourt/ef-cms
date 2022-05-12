@@ -167,7 +167,7 @@ variable "create_bounce_handler" {
 }
 
 variable "bounce_handler_object" {
-  type = string
+  type = any
 }
 
 variable "bounce_handler_object_hash" {
