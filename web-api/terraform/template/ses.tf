@@ -136,9 +136,3 @@ resource "aws_ses_identity_notification_topic" "bounced_service_emails" {
   identity                 = aws_ses_domain_identity.main.domain
   include_original_headers = true
 }
-
-resource "aws_sns_topic_subscription" "bounced_service_emails" {
-  topic_arn = aws_sns_topic.bounced_service_emails.arn
-  protocol  = "lambda"
-  endpoint  = aws_lambda_function.zip_handle_bounce.arn
-}
