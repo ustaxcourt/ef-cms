@@ -1,4 +1,5 @@
 resource "aws_lambda_function" "zip_handle_bounce" {
+  count            = var.create_bounce_handler
   depends_on       = [var.bounce_handler_object]
   s3_bucket        = var.lambda_bucket_id
   s3_key           = "bounce_handler_${var.current_color}.js.zip"
