@@ -576,8 +576,11 @@ const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
 const {
-  getJudgeForUserChambersInteractor,
-} = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
+  getJudgeInSectionHelper,
+} = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
+const {
+  getJudgeInSectionInteractor,
+} = require('../../shared/src/business/useCases/users/getJudgeInSectionInteractor');
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
@@ -719,6 +722,9 @@ const {
 const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
+const {
+  getUserIdForNote,
+} = require('../../shared/src/business/useCaseHelper/getUserIdForNote');
 const {
   getUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
@@ -1893,7 +1899,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
+        getJudgeInSectionHelper,
         getUnassociatedLeadCase,
+        getUserIdForNote,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
         removeCounselFromRemovedPetitioner,
@@ -2004,7 +2012,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
-        getJudgeForUserChambersInteractor,
+        getJudgeInSectionInteractor,
         getJudgesForPublicSearchInteractor,
         getMaintenanceModeInteractor,
         getMessageThreadInteractor,
