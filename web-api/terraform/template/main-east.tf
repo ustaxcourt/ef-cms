@@ -345,6 +345,18 @@ data "aws_s3_bucket_object" "triggers_blue_east_object" {
   key        = "triggers_blue.js.zip"
 }
 
+data "aws_s3_bucket_object" "bounce_handler_blue_east_object" {
+  depends_on = [null_resource.bounce_handler_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "bounce_Handler_blue.js.zip"
+}
+
+data "aws_s3_bucket_object" "bounce_handler_green_east_object" {
+  depends_on = [null_resource.bounce_handler_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "bounce_handler_green.js.zip"
+}
+
 data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
   depends_on = [
     module.elasticsearch_alpha,
@@ -494,7 +506,7 @@ module "api-east-green" {
 
   # lambda to handle bounced service email notifications
   bounce_handler_object          = null_resource.bounce_handler_east_object
-  bounce_handler_object_hash     = data.aws_s3_bucket_object.bounce_handler_east_object.etag
+  bounce_handler_object_hash     = data.aws_s3_bucket_object.bounce_handler_green_east_object.etag
   create_bounce_handler          = 1
 }
 
@@ -553,6 +565,6 @@ module "api-east-blue" {
 
   # lambda to handle bounced service email notifications
   bounce_handler_object          = null_resource.bounce_handler_east_object
-  bounce_handler_object_hash     = data.aws_s3_bucket_object.bounce_handler_east_object.etag
+  bounce_handler_object_hash     = data.aws_s3_bucket_object.bounce_handler_blue_east_object.etag
   create_bounce_handler          = 1
 }
