@@ -348,7 +348,7 @@ data "aws_s3_bucket_object" "triggers_blue_east_object" {
 data "aws_s3_bucket_object" "bounce_handler_blue_east_object" {
   depends_on = [null_resource.bounce_handler_east_object]
   bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
-  key        = "bounce_Handler_blue.js.zip"
+  key        = "bounce_handler_blue.js.zip"
 }
 
 data "aws_s3_bucket_object" "bounce_handler_green_east_object" {
