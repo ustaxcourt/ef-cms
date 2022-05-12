@@ -17,6 +17,7 @@ describe('Messages', () => {
   describe('Docket clerk completes qc and sends a message', () => {
     it('should go to section document QC inbox', () => {
       cy.login('docketclerk');
+      cy.get('.big-blue-header').should('exist');
       goToMyDocumentQC();
       goToSectionDocumentQC();
     });
