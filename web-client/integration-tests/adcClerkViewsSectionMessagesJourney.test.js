@@ -199,7 +199,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   });
   it('get completedMessage1Subject', () => {
     completedMessage1Subject = cerebralTest.testMessageSubject;
-    console.log(completedMessage1Subject);
   });
   createNewMessageOnCase(cerebralTest, {
     subject: messageCompletedSubject2,
@@ -208,7 +207,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
   });
   it('get completedMessage2Subject', () => {
     completedMessage2Subject = cerebralTest.testMessageSubject;
-    console.log(completedMessage2Subject);
   });
 
   loginAs(cerebralTest, 'adc@example.com');
@@ -264,14 +262,10 @@ describe('ADC Clerk Views Section Messages Journey', () => {
       'completed',
       'section',
     );
-    console.log('beforeCompletedMessageCount:', beforeCompletedMessageCount);
-    console.log('afterCompletedMessageCount:', afterCompletedMessageCount);
 
     const { completedMessages } = runCompute(formattedMessagesComputed, {
       state: cerebralTest.getState(),
     });
-
-    console.log('completed messages:', completedMessages);
 
     const expected = [completedMessage2Subject, completedMessage1Subject];
 
