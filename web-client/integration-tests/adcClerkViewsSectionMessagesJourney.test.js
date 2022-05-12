@@ -282,4 +282,18 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     });
     expect(pointer).toEqual(expected.length);
   });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  it('verify the table headers are not clickable', async () => {
+    await cerebralTest.runSequence('gotoMessagesSequence', {
+      box: 'inbox',
+      queue: 'section',
+    });
+
+    const { showSortableHeaders } = runCompute(formattedMessagesComputed, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(showSortableHeaders).toBeFalsy();
+  });
 });
