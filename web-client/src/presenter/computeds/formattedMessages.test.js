@@ -291,6 +291,9 @@ describe('formattedMessages', () => {
             message: 'This is a test message',
           },
         ],
+        user: {
+          role: 'adc',
+        },
       },
     });
 
@@ -323,6 +326,7 @@ describe('formattedMessages', () => {
           message: 'This is a test message',
         },
       ],
+      showSortableHeaders: true,
     });
   });
 
@@ -331,6 +335,7 @@ describe('formattedMessages', () => {
       state: {
         messageBoxToDisplay: {
           box: 'outbox',
+          section: 'section',
         },
         messages: [
           {
@@ -353,6 +358,9 @@ describe('formattedMessages', () => {
             message: 'This is a test message',
           },
         ],
+        user: {
+          role: 'docketclerk',
+        },
       },
     });
 
@@ -376,12 +384,21 @@ describe('formattedMessages', () => {
           message: 'This is a test message',
         },
       ],
+      showSortableHeaders: false,
     });
   });
 
   it('returns empty arrays for completedMessages and messages if state.messages is not set', () => {
     const result = runCompute(formattedMessages, {
-      state: {},
+      state: {
+        messageBoxToDisplay: {
+          box: 'inbox',
+          section: 'section',
+        },
+        user: {
+          role: 'adc',
+        },
+      },
     });
 
     expect(result).toMatchObject({

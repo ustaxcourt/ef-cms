@@ -13,25 +13,24 @@ import React from 'react';
 
 export const MessagesSectionCompleted = connect(
   {
-    currentUser: state.user,
     formattedMessages: state.formattedMessages.completedMessages,
+    showSortableHeaders: state.formattedMessages.showSortableHeaders,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
     tableSort: state.tableSort,
   },
   function MessagesSectionCompleted({
-    currentUser,
     formattedMessages,
+    showSortableHeaders,
     sortSectionMessagesSequence,
     tableSort,
   }) {
-    const userRole = currentUser.role;
     const hasMessages = formattedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              {userRole === 'adc' && (
+              {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
                     ascText={CHRONOLOGICALLY_ASCENDING}
@@ -45,12 +44,12 @@ export const MessagesSectionCompleted = connect(
                   />
                 </th>
               )}
-              {userRole !== 'adc' && (
+              {!showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   Docket No.
                 </th>
               )}
-              {userRole === 'adc' && (
+              {showSortableHeaders && (
                 <th className="medium">
                   <SortableColumnHeaderButton
                     ascText={CHRONOLOGICALLY_ASCENDING}
@@ -64,8 +63,8 @@ export const MessagesSectionCompleted = connect(
                   />
                 </th>
               )}
-              {userRole !== 'adc' && <th className="medium">Completed</th>}
-              {userRole === 'adc' && (
+              {!showSortableHeaders && <th className="medium">Completed</th>}
+              {showSortableHeaders && (
                 <th>
                   <SortableColumnHeaderButton
                     ascText={ALPHABETICALLY_ASCENDING}
@@ -79,7 +78,7 @@ export const MessagesSectionCompleted = connect(
                   />
                 </th>
               )}
-              {userRole !== 'adc' && <th>Message</th>}
+              {!showSortableHeaders && <th>Message</th>}
               <th>Comment</th>
               <th>Completed by</th>
               <th>Section</th>
