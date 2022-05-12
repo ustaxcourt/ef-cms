@@ -56,22 +56,26 @@ export const createNewMessageOnCase = (
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    cerebralTest.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+    if (subject) {
+      cerebralTest.testMessageSubject = subject;
 
-    await cerebralTest.runSequence('updateModalFormValueSequence', {
-      key: 'subject',
-      value: cerebralTest.testMessageSubject,
-    });
+      await cerebralTest.runSequence('updateModalFormValueSequence', {
+        key: 'subject',
+        value: subject,
+      });
+    } else {
+      cerebralTest.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+
+      await cerebralTest.runSequence('updateModalFormValueSequence', {
+        key: 'subject',
+        value: cerebralTest.testMessageSubject,
+      });
+    }
 
     await cerebralTest.runSequence('createMessageSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       message: NewMessage.VALIDATION_ERROR_MESSAGES.message[0].message,
-    });
-
-    await cerebralTest.runSequence('updateModalFormValueSequence', {
-      key: 'subject',
-      value: subject,
     });
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
