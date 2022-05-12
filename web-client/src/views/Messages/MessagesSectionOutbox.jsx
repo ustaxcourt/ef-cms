@@ -13,25 +13,24 @@ import React from 'react';
 
 export const MessagesSectionOutbox = connect(
   {
-    currentUser: state.user,
     formattedMessages: state.formattedMessages.messages,
+    showSortableHeaders: state.formattedMessages.showSortableHeaders,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
     tableSort: state.tableSort,
   },
   function MessagesSectionOutbox({
-    currentUser,
     formattedMessages,
+    showSortableHeaders,
     sortSectionMessagesSequence,
     tableSort,
   }) {
-    const userRole = currentUser.role;
     const hasMessages = formattedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              {userRole === 'adc' && (
+              {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
                     ascText={CHRONOLOGICALLY_ASCENDING}
@@ -45,12 +44,12 @@ export const MessagesSectionOutbox = connect(
                   />
                 </th>
               )}
-              {userRole !== 'adc' && (
+              {!showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   Docket No.
                 </th>
               )}
-              {userRole === 'adc' && (
+              {showSortableHeaders && (
                 <th className="small">
                   <SortableColumnHeaderButton
                     ascText={CHRONOLOGICALLY_ASCENDING}
@@ -64,8 +63,8 @@ export const MessagesSectionOutbox = connect(
                   />
                 </th>
               )}
-              {userRole !== 'adc' && <th className="small">Sent</th>}
-              {userRole === 'adc' && (
+              {!showSortableHeaders && <th className="small">Sent</th>}
+              {showSortableHeaders && (
                 <th>
                   <SortableColumnHeaderButton
                     ascText={ALPHABETICALLY_ASCENDING}
@@ -79,7 +78,7 @@ export const MessagesSectionOutbox = connect(
                   />
                 </th>
               )}
-              {userRole !== 'adc' && <th>Message</th>}
+              {!showSortableHeaders && <th>Message</th>}
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>

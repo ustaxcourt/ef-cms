@@ -81,14 +81,17 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   const { box, section } = get(state.messageBoxToDisplay);
-  const userRole = get(state.user.role);
+  const { role } = get(state.user);
 
-  if (box === 'outbox' && section === 'section' && userRole !== 'adc') {
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  if (box === 'outbox' && section === 'section' && role !== USER_ROLES.adc) {
     messages.reverse();
   }
 
   return {
     completedMessages,
     messages,
+    showSortableHeaders: role === USER_ROLES.adc,
   };
 };
