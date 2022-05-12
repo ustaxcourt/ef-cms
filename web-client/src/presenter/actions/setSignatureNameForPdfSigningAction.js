@@ -20,8 +20,8 @@ export const setSignatureNameForPdfSigningAction = async ({
   if (user.section.includes('Chambers')) {
     const judgeUser = await applicationContext
       .getUseCases()
-      .getJudgeForUserChambersInteractor(applicationContext, {
-        user,
+      .getJudgeInSectionInteractor(applicationContext, {
+        section: user.section,
       });
     nameForPdfSigning = judgeUser.judgeFullName;
     nameForSigningLine2 = judgeUser.judgeTitle;
