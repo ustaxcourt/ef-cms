@@ -127,8 +127,8 @@ EOF
 }
 
 resource "aws_sns_topic" "bounced_service_emails" {
-  name = "bounced_service_emails"
-}
+  name = "bounced_service_emails_${var.environment}"
+} 
 
 resource "aws_ses_identity_notification_topic" "bounced_service_emails" {
   topic_arn                = aws_sns_topic.bounced_service_emails.arn
