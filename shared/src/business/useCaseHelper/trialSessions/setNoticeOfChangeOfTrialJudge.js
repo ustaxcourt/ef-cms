@@ -42,6 +42,7 @@ exports.setNoticeOfChangeOfTrialJudge = async (
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
       priorJudgeTitleWithFullName,
       proceedingType: newTrialSessionEntity.proceedingType,
+      sessionScope: newTrialSessionEntity.sessionScope,
       startDate: newTrialSessionEntity.startDate,
       trialLocation: newTrialSessionEntity.trialLocation,
       updatedJudgeTitleWithFullName,
