@@ -5,6 +5,7 @@ const {
   DOCKET_NUMBER_SUFFIXES,
   PROCEDURE_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   generateNoticeOfChangeOfTrialJudgeInteractor,
@@ -83,10 +84,13 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
     });
   });
 
-  it('should append the docket number suffix if present on the caseDetail', async () => {
+  it('should set trialLocationAndProceedingType to "remote" when the trial session scope is "Standalone Remote"', async () => {
     await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
       docketNumber: '234-56',
-      trialSessionInformation: mockTrialSessionInformation,
+      trialSessionInformation: {
+        ...mockTrialSessionInformation,
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      },
     });
 
     expect(
@@ -97,7 +101,58 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       data: {
-        docketNumberWithSuffix: '234-56S',
+        trialInfo: {
+          trialLocationAndProceedingType: 'remote',
+        },
+      },
+    });
+  });
+
+  it('should set trialLocationAndProceedingType to "Mobile, Alabama, Remote" when the trial session scope is "Location Based"', async () => {
+    await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
+      docketNumber: '234-56',
+      trialSessionInformation: {
+        ...mockTrialSessionInformation,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        trialInfo: {
+          trialLocationAndProceedingType: 'Mobile, Alabama, Remote',
+        },
+      },
+    });
+  });
+
+  it('should set trialLocationAndProceedingType to "Mobile, Alabama, In Person" when the trial session scope is "Location Based"', async () => {
+    await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
+      docketNumber: '234-56',
+      trialSessionInformation: {
+        ...mockTrialSessionInformation,
+        sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getDocumentGenerators().noticeOfChangeOfTrialJudge.mock
+        .calls[0][0],
+    ).toMatchObject({
+      data: {
+        trialInfo: {
+          trialLocationAndProceedingType: 'Mobile, Alabama, In Person',
+        },
       },
     });
   });
