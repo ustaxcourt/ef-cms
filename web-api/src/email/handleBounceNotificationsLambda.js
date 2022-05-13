@@ -11,6 +11,11 @@ exports.handleBounceNotificationLambda = async event => {
   const user = {};
   const applicationContext = createApplicationContext(user);
 
+  console.log(event);
+  applicationContext.logger.info('received an SNS notification!', {
+    event,
+  });
+
   const records = event.Records.map(record => ({
     ...JSON.parse(record.Sns.Message),
   }));
