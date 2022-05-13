@@ -17,6 +17,7 @@ exports.handleBounceNotificationInteractor = async (
       'received a bounce notification, but missing bounce attribute',
       obj,
     );
+    return;
   }
 
   const isIrsSuperUser = obj.bounce.bouncedRecipients?.some(
