@@ -1,4 +1,7 @@
-export const trialClerkViewsTrialSessionWorkingCopy = cerebralTest => {
+export const trialClerkViewsTrialSessionWorkingCopy = (
+  cerebralTest,
+  { expectedNumberOfCases = 1 } = {},
+) => {
   return it('Trial Clerk views trial session working copy', async () => {
     await cerebralTest.runSequence('gotoTrialSessionWorkingCopySequence', {
       trialSessionId: cerebralTest.trialSessionId,
@@ -18,6 +21,8 @@ export const trialClerkViewsTrialSessionWorkingCopy = cerebralTest => {
     expect(cerebralTest.getState('trialSessionWorkingCopy.sortOrder')).toEqual(
       'asc',
     );
-    expect(cerebralTest.getState('trialSession.caseOrder').length).toEqual(1);
+    expect(cerebralTest.getState('trialSession.caseOrder').length).toEqual(
+      expectedNumberOfCases,
+    );
   });
 };

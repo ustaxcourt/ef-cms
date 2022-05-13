@@ -14,14 +14,14 @@ describe('getJudgeForCurrentUserAction', () => {
   it('Should call the interactor for fetching the associated judge for the judge or chambers user', async () => {
     applicationContext
       .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue({ user: 'a judge' });
+      .getJudgeInSectionInteractor.mockReturnValue({ user: 'a judge' });
     const result = await runAction(getJudgeForCurrentUserAction, {
       modules: {
         presenter,
       },
     });
     expect(
-      applicationContext.getUseCases().getJudgeForUserChambersInteractor,
+      applicationContext.getUseCases().getJudgeInSectionInteractor,
     ).toHaveBeenCalled();
     expect(result.output).toEqual({ judgeUser: { user: 'a judge' } });
   });
@@ -29,12 +29,12 @@ describe('getJudgeForCurrentUserAction', () => {
   it('return undefined if associated judge interactor returns undefined', async () => {
     applicationContext
       .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue(undefined);
+      .getJudgeInSectionInteractor.mockReturnValue(undefined);
     const result = await runAction(getJudgeForCurrentUserAction, {
       modules: {
         presenter,
       },
     });
-    expect(result.output).toBeUndefined();
+    expect(result.output.judgeUser).toBeUndefined();
   });
 });

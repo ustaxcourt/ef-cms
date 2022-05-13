@@ -442,6 +442,7 @@ const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
 const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
 const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
+const { getJudgeInSectionLambda } = require('./users/getJudgeInSectionLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
@@ -959,6 +960,7 @@ app.get(
   '/sections/:section/document-qc/inbox',
   lambdaWrapper(getDocumentQCInboxForSectionLambda),
 );
+app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
 
 /**
  * trial-sessions
