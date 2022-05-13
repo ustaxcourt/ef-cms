@@ -22,6 +22,7 @@ exports.deleteCaseNoteInteractor = async (
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_NOTES)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -37,5 +38,6 @@ exports.deleteCaseNoteInteractor = async (
       applicationContext,
       caseToUpdate: caseRecord,
     });
+
   return new Case(result, { applicationContext }).validate().toRawObject();
 };
