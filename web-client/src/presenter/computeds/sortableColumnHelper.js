@@ -1,5 +1,12 @@
 import { ASCENDING, DESCENDING } from '../presenterConstants';
 
+/**
+ * Provides two functions for use with SortableColumnHeaderButton.
+ * getSortIndicatorConfiguration provides information for choosing the FontAwesome icon.
+ * isActive informs whether the column is the active column.
+ *
+ * @returns { object } the getSortIndicatorConfiguration and isActive functions
+ */
 export const sortableColumnHelper = () => {
   return {
     getSortIndicatorConfiguration: ({

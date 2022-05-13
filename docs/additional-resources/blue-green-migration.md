@@ -6,10 +6,9 @@ Every deployment, whether it's to production or a development environment, is a 
 
 Additionally, for deployments that require change in the data schema or broad stroke changes to the database in order for the application to function, we build an empty copy of the data stores (DynamoDB and Elasticsearch). Then we perform a migration of information from the old data store into the newly created one. This migration passes all of the data through a lambda to update and verify the data before saving it into a new data store.
 
-## Automated Migration Steps 
----
+## Automated Migration Steps
 
-<b>All of the automated migration steps are now handled by CircleCI, as defined in `config.yml`. </b>
+**All of the automated migration steps are now handled by CircleCI, as defined in `config.yml`.**
 
 Some key steps, excluding automated tests, include:
 
@@ -33,7 +32,7 @@ Some key steps, excluding automated tests, include:
 
 
 ## Manual Migration Steps
----
+
 The application kicks off a migration automatically if it detects migrations that need to be run in the codebase that haven't yet been run upon that environment. In order to force a migration, perform the following manual steps. You might do this if you were doing a package update that might impact the migration and wanted to test it fully.
 
 1. Remove a migration script item from the environment's `efcms-<ENV>-deploy` DynamoDB table that is expected to migrate, from the `migrationsToRun.js` file. For example, if `migrationsToRun.js` includes a script called `0001-test-script.js`, delete that item from the DynamoDB table.
