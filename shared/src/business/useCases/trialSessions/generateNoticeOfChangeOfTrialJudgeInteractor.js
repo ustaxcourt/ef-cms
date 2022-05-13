@@ -1,6 +1,7 @@
 const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
 const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
+const { TRIAL_SESSION_SCOPE_TYPES } = require('../../entities/EntityConstants');
 /**
  * generateNoticeOfChangeOfTrialJudgeInteractor
  *
@@ -19,12 +20,21 @@ exports.generateNoticeOfChangeOfTrialJudgeInteractor = async (
     FORMATS.MONTH_DAY_YEAR_WITH_DAY_OF_WEEK,
   );
 
+  let trialLocationAndProceedingType = `${trialSessionInformation.trialLocation}, ${trialSessionInformation.proceedingType}`;
+  if (
+    trialSessionInformation.sessionScope ===
+    TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
+  ) {
+    trialLocationAndProceedingType = 'remote';
+  }
+
   const trialInfo = {
     ...trialSessionInformation,
     chambersPhoneNumber: formatPhoneNumber(
       trialSessionInformation.chambersPhoneNumber,
     ),
     formattedStartDate,
+    trialLocationAndProceedingType,
   };
 
   const caseDetail = await applicationContext

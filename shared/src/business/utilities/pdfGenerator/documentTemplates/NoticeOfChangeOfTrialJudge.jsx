@@ -21,9 +21,9 @@ export const NoticeOfChangeOfTrialJudge = ({
 
       <div id="notice-body">
         <p className="indent-paragraph">
-          The {trialInfo.trialLocation}, {trialInfo.proceedingType} trial
-          session scheduled to begin on {trialInfo.formattedStartDate}, has been
-          reassigned from {trialInfo.priorJudgeTitleWithFullName} to{' '}
+          The {trialInfo.trialLocationAndProceedingType} trial session scheduled
+          to begin on {trialInfo.formattedStartDate}, has been reassigned from{' '}
+          {trialInfo.priorJudgeTitleWithFullName} to{' '}
           {trialInfo.updatedJudgeTitleWithFullName}.{' '}
           {trialInfo.updatedJudgeTitleWithFullName}’s chambers are located at:
           United States Tax Court, 400 Second St., N.W., Washington, DC 20217, (
