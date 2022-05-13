@@ -54,6 +54,7 @@ describe('documentGenerators', () => {
           docketNumberWithSuffix: '123-45S',
           documentTitle: 'Petition',
           electronicallyFiled: true,
+          index: 10,
         },
       });
 
