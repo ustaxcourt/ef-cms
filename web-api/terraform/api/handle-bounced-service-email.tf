@@ -20,9 +20,3 @@ resource "aws_lambda_function" "zip_handle_bounce" {
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 }
-
-resource "aws_lambda_event_source_mapping" "bounced_service_emails_mapping" {
-  count            = var.create_bounce_handler
-  event_source_arn = "arn:aws:sns:us-east-1:${var.account_id}:bounced_service_emails_${var.environment}"
-  function_name    = aws_lambda_function.zip_handle_bounce[0].arn
-}
