@@ -10,14 +10,21 @@
  */
 exports.handleBounceNotificationInteractor = async (
   applicationContext,
-  { bouncedRecipients, bounceSubType, bounceType },
+  obj,
 ) => {
-  const isIrsSuperUser = bouncedRecipients?.some(
+  if (!obj.bounce) {
+    applicationContext.logger.console.warn(
+      'received a bounce notification, but missing bounce attribute',
+      obj,
+    );
+  }
+
+  const isIrsSuperUser = obj.bounce.bouncedRecipients?.some(
     recipient =>
       recipient.emailAddress === applicationContext.getIrsSuperuserEmail(),
   );
 
-  if (!isIrsSuperUser || bounceType !== 'Permanent') {
+  if (!isIrsSuperUser || obj.bounce.bounceType !== 'Permanent') {
     return;
   }
 
@@ -30,6 +37,6 @@ exports.handleBounceNotificationInteractor = async (
 
   await applicationContext.getDispatchers().sendSlackNotification({
     applicationContext,
-    message: `An Email to the IRS Super User has triggered a ${bounceType} bounce (${bounceSubType})`,
+    message: `An Email to the IRS Super User has triggered a ${obj.bounce.bounceType} bounce (${obj.bounce.bounceSubType})`,
   });
 };
