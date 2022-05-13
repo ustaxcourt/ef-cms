@@ -108,7 +108,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
     });
   });
 
-  it('should set trialLocationAndProceedingType to "Mobile, Alabama, Remote" when the trial session scope is "Location Based"', async () => {
+  it('should set trialLocationAndProceedingType to "Mobile, Alabama, Remote" when the trial session scope is "Location Based" and proceeding type is "Remote"', async () => {
     await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionInformation: {
@@ -133,7 +133,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
     });
   });
 
-  it('should set trialLocationAndProceedingType to "Mobile, Alabama, In Person" when the trial session scope is "Location Based"', async () => {
+  it('should set trialLocationAndProceedingType to "Mobile, Alabama, In Person" when the trial session scope is "Location Based" and proceeding type is "In Person"', async () => {
     await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionInformation: {
