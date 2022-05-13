@@ -19,6 +19,7 @@ describe('NoticeOfChangeofTrialJudge', () => {
     priorJudgeTitleWithFullName: 'Judge Lorna G. Schofield',
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     trialLocation: 'Boise, Idaho',
+    trialLocationAndProceedingType: `Boise, Idaho, ${TRIAL_SESSION_PROCEEDING_TYPES.inPerson}`,
     updatedJudgeTitleWithFullName: 'Judge Jacqueline Nguyen',
   };
 
