@@ -7,7 +7,7 @@ const createApplicationContext = require('../applicationContext');
  * @param {object} event the AWS event object received that includes any messages from our SNS subscription
  * @returns {Promise<*>|undefined} the response to the topic
  */
-exports.handleBounceNotificationLambda = async event => {
+exports.handleBounceNotificationsLambda = async event => {
   const user = {};
   const applicationContext = createApplicationContext(user);
 
