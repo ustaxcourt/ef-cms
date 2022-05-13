@@ -36,10 +36,9 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockReturnValue({});
-
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => null,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(null);
 
     await expect(
       getUserCaseNoteInteractor(applicationContext, {
@@ -58,9 +57,9 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(omit(MOCK_NOTE, 'userId'));
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => mockJudge,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(mockJudge);
 
     await expect(
       getUserCaseNoteInteractor(applicationContext, {
@@ -79,10 +78,9 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
-
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => mockJudge,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(mockJudge);
 
     const result = await getUserCaseNoteInteractor(applicationContext, {
       docketNumber: MOCK_NOTE.docketNumber,
@@ -101,10 +99,9 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockResolvedValue(MOCK_NOTE);
-
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => null,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(null);
 
     const result = await getUserCaseNoteInteractor(applicationContext, {
       docketNumber: MOCK_NOTE.docketNumber,
@@ -123,9 +120,9 @@ describe('Get case note', () => {
     applicationContext
       .getPersistenceGateway()
       .getUserCaseNote.mockReturnValue(null);
-    applicationContext.getUseCaseHelpers.mockReturnValue({
-      getJudgeInSectionHelper: () => mockJudge,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(mockJudge);
 
     const result = await getUserCaseNoteInteractor(applicationContext, {
       docketNumber: MOCK_NOTE.docketNumber,

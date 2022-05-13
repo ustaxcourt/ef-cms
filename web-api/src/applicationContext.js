@@ -729,6 +729,9 @@ const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
 const {
+  getUserIdForNote,
+} = require('../../shared/src/business/useCaseHelper/getUserIdForNote');
+const {
   getUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
 const {
@@ -1912,6 +1915,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getConsolidatedCasesForLeadCase,
         getJudgeInSectionHelper,
         getUnassociatedLeadCase,
+        getUserIdForNote,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
         removeCounselFromRemovedPetitioner,
