@@ -59,6 +59,7 @@ describe('documentGenerators', () => {
             proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
             startDate: '2019-08-25T05:00:00.000Z',
             trialLocation: 'Mobile, Alabama',
+            trialLocationAndProceedingType: `Mobile, Alabama, ${TRIAL_SESSION_PROCEEDING_TYPES.inPerson}`,
             updatedJudgeTitleWithFullName: 'Chief Judge Lady Macbeth',
           },
         },
