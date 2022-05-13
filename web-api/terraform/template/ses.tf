@@ -160,7 +160,12 @@ data "aws_iam_policy_document" "sns_bounced_service_emails_policy" {
     }
 
     effect = "Allow"
-    principal = "ses.amazonaws.com"
+    principals {
+      type        = "Service"
+      identifiers = [
+        "ses.amazonaws.com"
+      ]
+    }
 
     resources = [
       aws_sns_topic.bounced_service_emails.arn,
