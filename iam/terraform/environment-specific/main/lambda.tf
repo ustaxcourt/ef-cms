@@ -57,7 +57,8 @@ resource "aws_iam_role_policy" "lambda_policy" {
             ],
             "Resource": [
                 "arn:aws:lambda:us-east-1:${data.aws_caller_identity.current.account_id}:function:*",
-                "arn:aws:lambda:us-west-1:${data.aws_caller_identity.current.account_id}:function:*"
+                "arn:aws:lambda:us-west-1:${data.aws_caller_identity.current.account_id}:function:*",
+                "arn:aws:sns:us-east-1:${data.aws_caller_identity.current.account_id}:bounced_service_emails_${var.environment}"
             ],
             "Effect": "Allow"
         },

@@ -23,7 +23,7 @@ exports.handleBounceNotificationsLambda = async event => {
   return await Promise.all(
     records.map(record =>
       applicationContext
-        .getUseCaseHelpers()
+        .getUseCases()
         .handleBounceNotificationInteractor(applicationContext, record),
     ),
   );
