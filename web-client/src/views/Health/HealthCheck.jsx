@@ -31,13 +31,6 @@ export const HealthCheck = connect(
   },
   function HealthCheck({ health }) {
     const components = {
-      clamav: (
-        <RenderHealthStatus
-          id="clamav"
-          item={health.clamAV}
-          requiresMargin={true}
-        />
-      ),
       cognito: (
         <RenderHealthStatus
           id="cognito"
@@ -127,13 +120,7 @@ export const HealthCheck = connect(
         <section className="usa-section grid-container">
           <NonMobile>
             <div className="grid-row grid-gap">
-              <div className="grid-col-3">
-                <div className="card height-8">
-                  <h2 className="margin-top-2 margin-left-205 grid-row">
-                    <div className="grid-col-9"> ClamAV</div>
-                    {components.clamav}
-                  </h2>
-                </div>
+              <div className="grid-col-4">
                 <div className="card height-8">
                   <h2 className="margin-top-2 margin-left-205 grid-row">
                     <div className="grid-col-9">Cognito</div>
@@ -146,8 +133,6 @@ export const HealthCheck = connect(
                     {components.dynamsoft}
                   </h2>
                 </div>
-              </div>
-              <div className="grid-col-3">
                 <div className="card">
                   <h2 className="margin-top-2 margin-left-205">DynamoDB</h2>
                   <hr />
@@ -162,13 +147,6 @@ export const HealthCheck = connect(
                     {components.dynamoEfcmsDeploy}
                   </div>
                 </div>
-
-                <div className="card height-8">
-                  <h2 className="margin-top-2 margin-left-2 grid-row">
-                    <div className="grid-col-9">ElasticSearch</div>
-                    {components.elasticsearch}
-                  </h2>
-                </div>
                 <div className="card height-8">
                   <h2 className="margin-top-2 margin-left-2 grid-row">
                     <div className="grid-col-9">Email Service</div>
@@ -176,9 +154,9 @@ export const HealthCheck = connect(
                   </h2>
                 </div>
               </div>
-              <div className="grid-col-3">
+              <div className="grid-col-4">
                 <div className="card">
-                  <h2 className="margin-top-2 margin-left-205">s3 public</h2>
+                  <h2 className="margin-top-2 margin-left-205">s3 Public</h2>
                   <hr />
                   <div className="margin-left-205 margin-top-negative grid-row">
                     <div className="health-check-text grid-col-9">client</div>
@@ -192,7 +170,29 @@ export const HealthCheck = connect(
                   </div>
                 </div>
                 <div className="card">
-                  <h2 className="margin-top-2 margin-left-205">s3 east</h2>
+                  <h2 className="margin-top-2 margin-left-205">s3 App</h2>
+                  <hr />
+                  <div className="margin-left-205 margin-top-negative grid-row">
+                    <div className="health-check-text grid-col-9">client</div>
+                    {components.s3App}
+                  </div>
+                  <div className="margin-left-205 margin-bottom-205 grid-row">
+                    <div className="health-check-text grid-col-9">
+                      clientFailover
+                    </div>
+                    {components.s3AppFailover}
+                  </div>
+                </div>
+                <div className="card height-8">
+                  <h2 className="margin-top-2 margin-left-2 grid-row">
+                    <div className="grid-col-9">ElasticSearch</div>
+                    {components.elasticsearch}
+                  </h2>
+                </div>
+              </div>
+              <div className="grid-col-4">
+                <div className="card">
+                  <h2 className="margin-top-2 margin-left-205">s3 East</h2>
                   <hr />
                   <div className="margin-left-205 margin-top-negative grid-row">
                     <div className="health-check-text  grid-col-9">
@@ -213,24 +213,8 @@ export const HealthCheck = connect(
                     {components.s3EastQuarantine}
                   </div>
                 </div>
-              </div>
-              <div className="grid-col-3">
                 <div className="card">
-                  <h2 className="margin-top-2 margin-left-205">s3 app</h2>
-                  <hr />
-                  <div className="margin-left-205 margin-top-negative grid-row">
-                    <div className="health-check-text grid-col-9">client</div>
-                    {components.s3App}
-                  </div>
-                  <div className="margin-left-205 margin-bottom-205 grid-row">
-                    <div className="health-check-text grid-col-9">
-                      clientFailover
-                    </div>
-                    {components.s3AppFailover}
-                  </div>
-                </div>
-                <div className="card">
-                  <h2 className="margin-top-2 margin-left-205">s3 west</h2>
+                  <h2 className="margin-top-2 margin-left-205">s3 West</h2>
                   <hr />
                   <div className="margin-left-205 margin-top-negative grid-row">
                     <div className="health-check-text grid-col-9">
@@ -256,12 +240,6 @@ export const HealthCheck = connect(
           </NonMobile>
           <Mobile>
             <div className="grid-row">
-              <div className="card height-8 width-full">
-                <h2 className="margin-top-2 margin-left-205 grid-row">
-                  <div className="grid-col-9">ClamAV</div>
-                  {components.clamav}
-                </h2>
-              </div>
               <div className="card height-8 width-full">
                 <h2 className="margin-top-2 margin-left-205 grid-row">
                   <div className="grid-col-9"> Cognito</div>
@@ -306,7 +284,7 @@ export const HealthCheck = connect(
             </div>
             <div className="grid-row">
               <div className="card width-full">
-                <h2 className="margin-top-2 margin-left-205">s3 public</h2>
+                <h2 className="margin-top-2 margin-left-205">s3 Public</h2>
                 <hr />
                 <div className="margin-left-205 margin-top-negative grid-row">
                   <div className="health-check-text grid-col-9">client</div>
@@ -320,7 +298,7 @@ export const HealthCheck = connect(
                 </div>
               </div>
               <div className="card width-full">
-                <h2 className="margin-top-2 margin-left-205">s3 east</h2>
+                <h2 className="margin-top-2 margin-left-205">s3 East</h2>
                 <hr />
                 <div className="margin-left-205 margin-top-negative grid-row">
                   <div className="health-check-text grid-col-9">documents</div>
@@ -340,7 +318,7 @@ export const HealthCheck = connect(
             </div>
             <div className="grid-row">
               <div className="card  width-full">
-                <h2 className="margin-top-2 margin-left-205">s3 app</h2>
+                <h2 className="margin-top-2 margin-left-205">s3 App</h2>
                 <hr />
                 <div className="margin-left-205 margin-top-negative grid-row">
                   <div className="health-check-text grid-col-9">client</div>
@@ -354,7 +332,7 @@ export const HealthCheck = connect(
                 </div>
               </div>
               <div className="card width-full">
-                <h2 className="margin-top-2 margin-left-205">s3 west</h2>
+                <h2 className="margin-top-2 margin-left-205">s3 West</h2>
                 <hr />
                 <div className="margin-left-205 margin-top-negative grid-row">
                   <div className="health-check-text grid-col-9">documents</div>
