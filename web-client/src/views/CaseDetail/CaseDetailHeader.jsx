@@ -137,9 +137,12 @@ export const CaseDetailHeader = connect(
         <div className={classNames(className, 'big-blue-header')}>
           <div className="grid-container">
             <div className="display-flex flex-row flex-justify">
-              <div className="tablet:grid-col-8">
+              <div className="tablet:grid-col-10">
                 <div className="margin-bottom-1">
-                  <h1 className="heading-2 captioned" tabIndex="-1">
+                  <h1
+                    className="heading-2 captioned docket-number-header"
+                    tabIndex="-1"
+                  >
                     {caseDetailHeaderHelper.showConsolidatedCaseIcon && (
                       <Icon
                         aria-label="consolidated case"
@@ -155,9 +158,21 @@ export const CaseDetailHeader = connect(
                   </h1>
                   {caseDetailHeaderHelper.hidePublicCaseInformation && (
                     <>
+                      {formattedCaseDetail.isLeadCase && (
+                        <span
+                          aria-label={`isLeadCase: ${formattedCaseDetail.isLeadCase}`}
+                          className="usa-tag"
+                          id="lead-case-tag"
+                        >
+                          <span aria-hidden="true">Lead case</span>
+                        </span>
+                      )}
                       <span
                         aria-label={`status: ${formattedCaseDetail.status}`}
-                        className="usa-tag"
+                        className={classNames(
+                          'usa-tag',
+                          formattedCaseDetail.isLeadCase ? 'margin-left-1' : '',
+                        )}
                       >
                         <span aria-hidden="true">
                           {formattedCaseDetail.status}
