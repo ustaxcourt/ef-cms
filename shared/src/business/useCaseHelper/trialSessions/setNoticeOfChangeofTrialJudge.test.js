@@ -4,6 +4,7 @@ const {
 const {
   CASE_STATUS_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
+  TRIAL_SESSION_SCOPE_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   setNoticeOfChangeOfTrialJudge,
@@ -77,19 +78,27 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
   });
 
   it('should generate an NOT when the trial judge has been changed on a calendared trial session, and the case is not closed', async () => {
+    const mockSessionScope = TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
+
     await setNoticeOfChangeOfTrialJudge(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
+      newTrialSessionEntity: {
+        ...updatedTrialSession,
+        sessionScope: mockSessionScope,
+      },
       userId,
     });
 
     expect(
       applicationContext.getUseCases()
-        .generateNoticeOfChangeOfTrialJudgeInteractor,
-    ).toHaveBeenCalled();
+        .generateNoticeOfChangeOfTrialJudgeInteractor.mock.calls[0][1]
+        .trialSessionInformation,
+    ).toMatchObject({
+      sessionScope: mockSessionScope,
+    });
   });
 
   it('should not generate an NOT when the trial judge has been changed on an uncalendared trial session, and the case is not closed', async () => {
