@@ -153,6 +153,17 @@ exports.updateTrialSessionInteractor = async (
             user,
           });
 
+        await applicationContext
+          .getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding(applicationContext, {
+            PDFDocument,
+            caseEntity,
+            currentTrialSession,
+            newPdfDoc: paperServicePdfsCombined,
+            newTrialSessionEntity,
+            user,
+          });
+
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 
         await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
