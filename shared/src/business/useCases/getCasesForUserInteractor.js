@@ -6,7 +6,7 @@ const { UserCase } = require('../entities/UserCase');
  * getCasesForUserInteractor
  *
  * @param {object} applicationContext the application context
- * @returns {object} the open cases data
+ * @returns {object} A list of the open cases and a list of the closed cases for the user
  */
 exports.getCasesForUserInteractor = async applicationContext => {
   const { userId } = await applicationContext.getCurrentUser();
