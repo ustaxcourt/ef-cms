@@ -93,7 +93,7 @@ The retrospective is performed at the end of the sprint and offers the team a ti
 
 We have combined our grooming and planning into one event. During this meeting we groom stories for the sprint. While a sprint is 2 weeks, we groom every week to allow for shifting PO priorities.
 
- - Time of Ceremony: 11:30-12:00 PM CST
+ - Time of Ceremony: 11:30-12:00 PM CT
  - Frequency of Ceremony: Every Tuesday 
 
 ### OpEx/DevEx Backlog Review
