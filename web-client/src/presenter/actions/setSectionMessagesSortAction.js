@@ -10,7 +10,6 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  */
 export const setSectionMessagesSortAction = ({ get, props, store }) => {
-  // TODO: UNIT TEST THIS
   const { defaultSort, sortField } = props;
   const fromSortOrder = get(state.tableSort.sortOrder);
   if (get(state.tableSort.sortField) !== sortField) {
