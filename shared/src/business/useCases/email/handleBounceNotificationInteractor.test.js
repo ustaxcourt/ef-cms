@@ -18,6 +18,7 @@ describe('handleBounceNotificationInteractor', () => {
   it('should do nothing if the user is not the irs super user', async () => {
     await handleBounceNotificationInteractor(applicationContext, {
       bounce: {
+        bounceSubType: 'OnSuppressionList',
         bounceType: 'Permanent',
         bouncedRecipients: [{ emailAddress: 'petitioner@example.com' }],
       },
@@ -34,6 +35,7 @@ describe('handleBounceNotificationInteractor', () => {
   it('should do nothing if the bounce is not permanent', async () => {
     await handleBounceNotificationInteractor(applicationContext, {
       bounce: {
+        bounceSubType: 'Example',
         bounceType: 'Temporary',
         bouncedRecipients: [{ emailAddress: 'service.agent.test@example.com' }],
       },
@@ -71,8 +73,7 @@ describe('handleBounceNotificationInteractor', () => {
       applicationContext.getDispatchers().sendSlackNotification,
     ).toBeCalledWith({
       applicationContext,
-      message:
-        'An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
+      text: 'An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
     });
   });
 });
