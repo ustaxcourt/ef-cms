@@ -3,6 +3,7 @@ const combine = require('logform/combine');
 const errors = require('logform/errors');
 const json = require('logform/json');
 const printf = require('logform/printf');
+const util = require('util');
 const {
   config,
   createLogger: createWinstonLogger,
@@ -40,7 +41,7 @@ exports.createLogger = (opts = {}) => {
           message: undefined,
         });
 
-        const stringified = JSON.stringify(metadata, null, 2);
+        const stringified = JSON.stringify(util.inspect(metadata), null, 2);
         const lines = stringified === '{}' ? [] : stringified.split('\n');
 
         return [`${info.level}:\t${info.message}`, ...lines].join('\n  ');
