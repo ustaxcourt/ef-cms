@@ -15,14 +15,21 @@ export const NoticeOfChangeToInPersonProceeding = ({
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
-        documentTitle="Notice of Change to In Person Proceeding"
+        documentTitle="Notice of Change to In-Person Proceeding"
       />
       <div>
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
           <div className="info-box-content">
+            {trialInfo.trialLocation && <div>{trialInfo.address1}</div>}
+            {trialInfo.trialLocation && <div>{trialInfo.address2}</div>}
+            {trialInfo.trialLocation && (
+              <div>
+                {trialInfo.city}, {trialInfo.state}
+              </div>
+            )}
             {trialInfo.trialLocation && <div>{trialInfo.trialLocation}</div>}
-            <span className="text-bold">Remote Proceeding</span>
+            <span className="text-bold">In-Person</span>
           </div>
         </div>
 

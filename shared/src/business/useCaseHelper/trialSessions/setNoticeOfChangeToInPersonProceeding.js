@@ -78,16 +78,14 @@ exports.setNoticeOfChangeToInPersonProceeding = async (
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
       joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
       judgeName: newTrialSessionEntity.judge.name,
-      meetingId: newTrialSessionEntity.meetingId,
-      password: newTrialSessionEntity.password,
       startDate: newTrialSessionEntity.startDate,
       startTime: newTrialSessionEntity.startTime,
       trialLocation: newTrialSessionEntity.trialLocation,
     };
 
     const notice = await applicationContext
-      .getUseCases()
-      .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
+      .getUseCaseHelpers()
+      .generateNoticeOfChangeToInPersonProceeding(applicationContext, {
         docketNumber: caseEntity.docketNumber,
         trialSessionInformation,
       });
