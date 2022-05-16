@@ -10,6 +10,7 @@ export const ConfirmInitiateServiceModal = connect(
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: props.confirmSequence,
     documentTitle: props.documentTitle,
+    formattedCaseDetail: state.formattedCaseDetail,
     serveCourtIssuedDocumentFromDocketEntrySequence:
       sequences.serveCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
@@ -19,6 +20,7 @@ export const ConfirmInitiateServiceModal = connect(
     confirmInitiateServiceModalHelper,
     confirmSequence,
     documentTitle,
+    formattedCaseDetail,
     serveCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse,
   }) {
@@ -67,6 +69,10 @@ export const ConfirmInitiateServiceModal = connect(
             )}
           </Hint>
         )}
+        {formattedCaseDetail.isLeadCase &&
+          formattedCaseDetail.consolidatedCases.map(
+            consolidatedCase => consolidatedCase.docketNumber,
+          )}
       </ModalDialog>
     );
   },
