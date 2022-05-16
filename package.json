@@ -238,7 +238,7 @@
     "artillery": "^2.0.0-16",
     "artillery-plugin-metrics-by-endpoint": "^1.0.2",
     "autoprefixer": "^10.4.7",
-    "axios": "^0.26.1",
+    "axios": "^0.27.2",
     "axios-retry": "^3.2.5",
     "babel-jest": "^28.1.0",
     "babel-loader": "^8.2.5",
