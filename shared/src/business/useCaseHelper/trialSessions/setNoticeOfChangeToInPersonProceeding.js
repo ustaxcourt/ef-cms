@@ -71,6 +71,7 @@ exports.setNoticeOfChangeToInPersonProceeding = async (
       TRIAL_SESSION_PROCEEDING_TYPES.remote &&
     newTrialSessionEntity.proceedingType ===
       TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+    newTrialSessionEntity.isCalendared &&
     caseEntity.status !== CASE_STATUS_TYPES.closed;
 
   if (shouldIssueNoticeOfChangeToInPersonProceeding) {
