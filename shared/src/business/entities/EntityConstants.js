@@ -596,7 +596,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   noticeOfChangeToInPersonProceeding: {
     documentTitle: 'Notice of Change to In Person Proceeding',
     documentType: 'Notice of Change to In Person Proceeding',
-    eventCode: 'NORP',
+    eventCode: 'NOIP',
   },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
