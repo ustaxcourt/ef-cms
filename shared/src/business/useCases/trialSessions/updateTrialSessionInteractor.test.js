@@ -68,12 +68,18 @@ describe('updateTrialSessionInteractor', () => {
       },
       [MOCK_TRIAL_ID_3]: {
         ...MOCK_REMOTE_TRIAL,
+        isCalendared: false,
         judge: { userId: 'd7d90c05-f6cd-442c-a168-202db587f16f' },
         trialSessionId: MOCK_TRIAL_ID_3,
       },
       [MOCK_TRIAL_ID_4]: {
         ...MOCK_REMOTE_TRIAL,
         caseOrder: [{ docketNumber: '123-45' }],
+        chambersPhoneNumber: '653-541-5542',
+        isCalendared: true,
+        joinPhoneNumber: '321-444-5791',
+        meetingId: '55adcc88-cb98-4d0b-918d-d0add8d723cc',
+        password: 'pass1234',
         trialSessionId: MOCK_TRIAL_ID_4,
       },
       [MOCK_TRIAL_ID_5]: {
@@ -312,7 +318,10 @@ describe('updateTrialSessionInteractor', () => {
     };
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
+      .getCaseByDocketNumber.mockReturnValueOnce(
+        mockCalendaredCase.toRawObject(),
+      );
+
     mockCalendaredCase.updateTrialSessionInformation(MOCK_REMOTE_TRIAL);
 
     await updateTrialSessionInteractor(applicationContext, {
@@ -403,7 +412,9 @@ describe('updateTrialSessionInteractor', () => {
     );
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase.toRawObject());
+      .getCaseByDocketNumber.mockReturnValueOnce(
+        mockCalendaredCase.toRawObject(),
+      );
     mockCalendaredCase.updateTrialSessionInformation(MOCK_REMOTE_TRIAL);
 
     await updateTrialSessionInteractor(applicationContext, {
@@ -435,19 +446,19 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
-  it('should setNoticeOfChangeToRemoteProceeding for each case on the trial session', async () => {
+  it.only('should setNoticeOfChangeToRemoteProceeding for each open case on the trial session', async () => {
     const firstOpenCase = {
       ...MOCK_CASE,
-      docketNumber: '888-88',
-      docketNumberWithSuffix: '888-88',
+      docketNumber: '123-79',
+      docketNumberWithSuffix: '123-79',
       hearings: [],
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: MOCK_TRIAL_ID_7,
     };
     const secondOpenCase = {
       ...MOCK_CASE,
-      docketNumber: '123-79',
-      docketNumberWithSuffix: '123-79',
+      docketNumber: '888-88',
+      docketNumberWithSuffix: '888-88',
       hearings: [],
       trialDate: '2019-03-01T21:42:29.073Z',
       trialSessionId: MOCK_TRIAL_ID_7,
@@ -463,12 +474,11 @@ describe('updateTrialSessionInteractor', () => {
       trialSessionId: MOCK_TRIAL_ID_7,
     };
 
-    const mock =
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
-    mock
-      .mockReturnValueOnce(firstOpenCase)
-      .mockReturnValueOnce(secondOpenCase)
-      .mockReturnValue(closedCase);
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(firstOpenCase)
+      .mockResolvedValueOnce(secondOpenCase)
+      .mockResolvedValueOnce(closedCase);
 
     const remoteTrialSession = {
       ...mockTrialsById[MOCK_TRIAL_ID_7],
@@ -493,7 +503,6 @@ describe('updateTrialSessionInteractor', () => {
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalled();
-
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0],
@@ -506,40 +515,6 @@ describe('updateTrialSessionInteractor', () => {
       },
       userId: user.userId,
     });
-  });
-
-  it.only('should not generate a NOIP when the case status is open, the proceeding type changes from remote to in-person, but the trial session is NOT calendared', async () => {
-    const inPersonTrialSession = {
-      ...mockTrialsById[MOCK_TRIAL_ID_7],
-      chambersPhoneNumber: '111111',
-      isCalendared: false,
-      joinPhoneNumber: '222222',
-      meetingId: '333333',
-      password: '4444444',
-      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-    };
-
-    const firstOpenCase = {
-      ...MOCK_CASE,
-      docketNumber: '888-88',
-      docketNumberWithSuffix: '888-88',
-      hearings: [],
-      trialDate: '2019-03-01T21:42:29.073Z',
-      trialSessionId: MOCK_TRIAL_ID_7,
-    };
-
-    const mock =
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
-    mock.mockReturnValueOnce(firstOpenCase);
-
-    await updateTrialSessionInteractor(applicationContext, {
-      trialSession: inPersonTrialSession,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers()
-        .setNoticeOfChangeToInPersonProceeding,
-    ).not.toHaveBeenCalled();
   });
 
   it('should setNoticeOfChangeToInPersonProceeding for each case on the trial session', async () => {
@@ -570,12 +545,11 @@ describe('updateTrialSessionInteractor', () => {
       trialSessionId: MOCK_TRIAL_ID_7,
     };
 
-    const mock =
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
-    mock
-      .mockReturnValueOnce(firstOpenCase)
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(firstOpenCase)
       .mockReturnValueOnce(secondOpenCase)
-      .mockReturnValue(closedCase);
+      .mockReturnValueOnce(closedCase);
 
     const inPersonTrialSession = {
       ...mockTrialsById[MOCK_TRIAL_ID_7],
@@ -624,12 +598,11 @@ describe('updateTrialSessionInteractor', () => {
       trialSessionId: MOCK_TRIAL_ID_7,
     };
 
-    const mock =
-      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
-    mock
-      .mockReturnValueOnce(firstOpenCase)
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(firstOpenCase)
       .mockReturnValueOnce(secondOpenCase)
-      .mockReturnValue(closedCase);
+      .mockReturnValueOnce(closedCase);
 
     const inPersonTrialSession = {
       ...mockTrialsById[MOCK_TRIAL_ID_7],
@@ -648,5 +621,104 @@ describe('updateTrialSessionInteractor', () => {
       applicationContext.getUseCaseHelpers()
         .setNoticeOfChangeToInPersonProceeding,
     ).toHaveBeenCalledTimes(3);
+  });
+
+  describe('generated notices', () => {
+    it('should NOT generate a NOIP when the proceeding type changes from remote to in-person, the case status is not closed but the trial session is NOT calendared', async () => {
+      const inPersonTrialSession = {
+        ...mockTrialsById[MOCK_TRIAL_ID_3],
+        isCalendared: false,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce({
+          ...MOCK_CASE,
+          docketNumber: '888-88',
+          docketNumberWithSuffix: '888-88',
+          hearings: [],
+          trialDate: '2019-03-01T21:42:29.073Z',
+          trialSessionId: MOCK_TRIAL_ID_3,
+        });
+
+      await updateTrialSessionInteractor(applicationContext, {
+        trialSession: inPersonTrialSession,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should NOT generate a NOIP when the proceeding type changes from remote to in-person, the trial session is calendared but the case is closed', async () => {
+      const mockInPersonCalendaredTrialSession = {
+        ...mockTrialsById[MOCK_TRIAL_ID_4],
+        isCalendared: true,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce({
+          ...MOCK_CASE,
+          closedDate: '2019-03-01T21:42:29.073Z',
+          docketNumber: '888-88',
+          docketNumberWithSuffix: '888-88',
+          hearings: [],
+          status: CASE_STATUS_TYPES.closed,
+          trialDate: '2019-03-01T21:42:29.073Z',
+          trialSessionId: MOCK_TRIAL_ID_4,
+        });
+
+      await updateTrialSessionInteractor(applicationContext, {
+        trialSession: mockInPersonCalendaredTrialSession,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should NOT generate a NOIP when the case status is open, the trial session is calendared but the trial session proceeding type has not changed', async () => {
+      await updateTrialSessionInteractor(applicationContext, {
+        trialSession: mockTrialsById[MOCK_TRIAL_ID_4],
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should generate a NOIP when the proceeding type changes from remote to in-person, the case status is not closed, and the trial session is calendared', async () => {
+      const inPersonTrialSession = {
+        ...mockTrialsById[MOCK_TRIAL_ID_4],
+        isCalendared: true,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      };
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValueOnce({
+          ...MOCK_CASE,
+          docketNumber: '888-88',
+          docketNumberWithSuffix: '888-88',
+          hearings: [],
+          trialDate: '2019-03-01T21:42:29.073Z',
+          trialSessionId: MOCK_TRIAL_ID_4,
+        });
+
+      await updateTrialSessionInteractor(applicationContext, {
+        trialSession: inPersonTrialSession,
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .setNoticeOfChangeToInPersonProceeding,
+      ).toHaveBeenCalled();
+    });
   });
 });

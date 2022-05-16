@@ -2,7 +2,6 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  CASE_STATUS_TYPES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVED_PARTIES_CODES,
   SERVICE_INDICATOR_TYPES,
@@ -59,104 +58,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument.mockResolvedValue(mockNumberOfPages);
-  });
-
-  it('should generate a NOIP when the proceeding type changes from remote to in-person, the case status is not closed, and the trial session is calendared', async () => {
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession: mockRemoteTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      userId: mockUserId,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers()
-        .generateNoticeOfChangeToInPersonProceeding.mock.calls[0][1],
-    ).toMatchObject({
-      docketNumber: mockOpenCase.docketNumber,
-      trialSessionInformation: {
-        address1: '123 Street Lane',
-        address2: undefined,
-        chambersPhoneNumber: undefined, // why is this undefined
-        city: 'Scottsburg',
-        courthouseName: undefined,
-        judgeName: 'A Judge',
-        startDate: '3000-03-01T00:00:00.000Z',
-        startTime: undefined,
-        state: 'IN',
-      },
-    });
-  });
-
-  it('should not generate a NOIP when the case status is closed', async () => {
-    const mockClosedCase = new Case(
-      {
-        ...MOCK_CASE,
-        closedDate: '2020-03-01T21:42:29.073Z',
-        docketNumber: '999-99',
-        status: CASE_STATUS_TYPES.closed,
-        trialDate: '2019-03-01T21:42:29.073Z',
-        trialSessionId: mockTrialSessionId,
-      },
-      { applicationContext },
-    );
-
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockClosedCase,
-      currentTrialSession: mockRemoteTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      userId: mockUserId,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should not generate a NOIP when the case status is open but the trial session proceeding type has not changed', async () => {
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession: mockInPersonCalendaredTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      userId: mockUserId,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should not generate a NOIP when the case status is open, the proceeding type changes from remote to in-person, but the trial session is NOT calendared', async () => {
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession: mockRemoteTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: {
-        ...mockInPersonCalendaredTrialSession,
-        isCalendared: false,
-      },
-      userId: mockUserId,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toHaveBeenCalled();
   });
 
   it('should save the generated NOIP to persistence', async () => {
