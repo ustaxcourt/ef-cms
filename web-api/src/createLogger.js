@@ -40,7 +40,7 @@ exports.createLogger = (opts = {}) => {
           level: undefined,
           message: undefined,
         });
-
+        // `util.inspect`ing to avoid stringifying circular request/response error objects
         const stringified = JSON.stringify(util.inspect(metadata), null, 2);
         const lines = stringified === '{}' ? [] : stringified.split('\n');
 
