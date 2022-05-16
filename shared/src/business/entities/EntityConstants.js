@@ -42,6 +42,11 @@ const PARTY_VIEW_TABS = {
 };
 
 const ALLOWLIST_FEATURE_FLAGS = {
+  CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES: {
+    disabledMessage:
+      'Docket entries are not being duplicated across consolidated cases temporarily.',
+    key: 'consolidated-case-with-duplicating-docket-entries',
+  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
