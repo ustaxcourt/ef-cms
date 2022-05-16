@@ -8,24 +8,22 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
 
 describe('generateNoticeOfChangeToInPersonProceeding', () => {
-  beforeEach(() => {});
+  const mockTrialSessionInformation = {
+    ...MOCK_TRIAL_INPERSON,
+    chambersPhoneNumber: '203-456-9888',
+    courthouseName: 'A Court Of Law',
+    judgeName: 'Batman',
+  };
+
+  const mockJudge = {
+    judgeTitle: 'Judge',
+    name: 'Batman',
+  };
 
   it('should call the document generator to generate the NOIP', async () => {
-    const mockTrialSessionInformation = {
-      ...MOCK_TRIAL_INPERSON,
-      chambersPhoneNumber: '203-456-9888',
-      courthouseName: 'A Court Of Law',
-      judgeName: 'Batman',
-    };
-
-    const TEST_JUDGE = {
-      judgeTitle: 'Judge',
-      name: 'Batman',
-    };
-
     applicationContext
       .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([TEST_JUDGE]);
+      .getUsersInSection.mockReturnValue([mockJudge]);
 
     applicationContext
       .getPersistenceGateway()

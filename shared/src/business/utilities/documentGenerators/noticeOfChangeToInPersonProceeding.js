@@ -7,8 +7,6 @@ const noticeOfChangeToInPersonProceeding = async ({
   applicationContext,
   data,
 }) => {
-  const { docketNumberWithSuffix } = data;
-
   const noticeOfChangeToInPersonProceedingTemplate = reactTemplateGenerator({
     componentName: 'NoticeOfChangeToInPersonProceeding',
     data,
@@ -17,10 +15,6 @@ const noticeOfChangeToInPersonProceeding = async ({
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: noticeOfChangeToInPersonProceedingTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Notice of Change to In Person Proceeding',
-    },
   });
 
   const footerHtml = reactTemplateGenerator({
@@ -35,7 +29,7 @@ const noticeOfChangeToInPersonProceeding = async ({
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
-      docketNumber: docketNumberWithSuffix,
+      docketNumber: data.docketNumberWithSuffix,
       footerHtml,
     });
 
