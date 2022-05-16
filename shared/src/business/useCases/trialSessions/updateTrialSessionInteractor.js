@@ -1,3 +1,8 @@
+/* eslint-disable complexity */
+const {
+  CASE_STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
 const {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -144,27 +149,44 @@ exports.updateTrialSessionInteractor = async (
       if (
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
-        await applicationContext
-          .getUseCaseHelpers()
-          .setNoticeOfChangeToRemoteProceeding(applicationContext, {
-            PDFDocument,
-            caseEntity,
-            currentTrialSession,
-            newPdfDoc: paperServicePdfsCombined,
-            newTrialSessionEntity,
-            user,
-          });
+        if (
+          currentTrialSession.proceedingType ===
+            TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+          newTrialSessionEntity.proceedingType ===
+            TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+          caseEntity.status !== CASE_STATUS_TYPES.closed
+        ) {
+          await applicationContext
+            .getUseCaseHelpers()
+            .setNoticeOfChangeToRemoteProceeding(applicationContext, {
+              PDFDocument,
+              caseEntity,
+              currentTrialSession,
+              newPdfDoc: paperServicePdfsCombined,
+              newTrialSessionEntity,
+              user,
+            });
+        }
 
-        await applicationContext
-          .getUseCaseHelpers()
-          .setNoticeOfChangeToInPersonProceeding(applicationContext, {
-            PDFDocument,
-            caseEntity,
-            currentTrialSession,
-            newPdfDoc: paperServicePdfsCombined,
-            newTrialSessionEntity,
-            user,
-          });
+        if (
+          currentTrialSession.proceedingType ===
+            TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+          newTrialSessionEntity.proceedingType ===
+            TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+          newTrialSessionEntity.isCalendared &&
+          caseEntity.status !== CASE_STATUS_TYPES.closed
+        ) {
+          await applicationContext
+            .getUseCaseHelpers()
+            .setNoticeOfChangeToInPersonProceeding(applicationContext, {
+              PDFDocument,
+              caseEntity,
+              currentTrialSession,
+              newPdfDoc: paperServicePdfsCombined,
+              newTrialSessionEntity,
+              user,
+            });
+        }
 
         caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
 

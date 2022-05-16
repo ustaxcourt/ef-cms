@@ -508,6 +508,40 @@ describe('updateTrialSessionInteractor', () => {
     });
   });
 
+  it.only('should not generate a NOIP when the case status is open, the proceeding type changes from remote to in-person, but the trial session is NOT calendared', async () => {
+    const inPersonTrialSession = {
+      ...mockTrialsById[MOCK_TRIAL_ID_7],
+      chambersPhoneNumber: '111111',
+      isCalendared: false,
+      joinPhoneNumber: '222222',
+      meetingId: '333333',
+      password: '4444444',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    };
+
+    const firstOpenCase = {
+      ...MOCK_CASE,
+      docketNumber: '888-88',
+      docketNumberWithSuffix: '888-88',
+      hearings: [],
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+
+    const mock =
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
+    mock.mockReturnValueOnce(firstOpenCase);
+
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: inPersonTrialSession,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .setNoticeOfChangeToInPersonProceeding,
+    ).not.toHaveBeenCalled();
+  });
+
   it('should setNoticeOfChangeToInPersonProceeding for each case on the trial session', async () => {
     const firstOpenCase = {
       ...MOCK_CASE,
