@@ -17,8 +17,10 @@ describe('handleBounceNotificationInteractor', () => {
 
   it('should do nothing if the user is not the irs super user', async () => {
     await handleBounceNotificationInteractor(applicationContext, {
-      bounceType: 'Permanent',
-      bouncedRecipients: [{ emailAddress: 'petitioner@example.com' }],
+      bounce: {
+        bounceType: 'Permanent',
+        bouncedRecipients: [{ emailAddress: 'petitioner@example.com' }],
+      },
     });
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
@@ -31,8 +33,10 @@ describe('handleBounceNotificationInteractor', () => {
 
   it('should do nothing if the bounce is not permanent', async () => {
     await handleBounceNotificationInteractor(applicationContext, {
-      bounceType: 'Temporary',
-      bouncedRecipients: [{ emailAddress: 'service.agent.test@example.com' }],
+      bounce: {
+        bounceType: 'Temporary',
+        bouncedRecipients: [{ emailAddress: 'service.agent.test@example.com' }],
+      },
     });
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
@@ -45,16 +49,21 @@ describe('handleBounceNotificationInteractor', () => {
 
   it('sends alerts when the user is the irs super user and the bounce is Permanent', async () => {
     await handleBounceNotificationInteractor(applicationContext, {
-      bounceSubType: 'On Suppression List',
-      bounceType: 'Permanent',
-      bouncedRecipients: [{ emailAddress: 'service.agent.test@example.com' }],
+      bounce: {
+        bounceSubType: 'On Suppression List',
+        bounceType: 'Permanent',
+        bouncedRecipients: [{ emailAddress: 'service.agent.test@example.com' }],
+      },
     });
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
     ).toBeCalledWith({
       applicationContext,
-      defaultTemplateData: {},
-      destinations: ['sysadmin@example.com'],
+      defaultTemplateData: {
+        emailContent:
+          'An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
+      },
+      destinations: [{ email: 'sysadmin@example.com' }],
       templateName: process.env.EMAIL_BOUNCED_SUPER_USER_TEMPLATE,
     });
 
@@ -63,7 +72,7 @@ describe('handleBounceNotificationInteractor', () => {
     ).toBeCalledWith({
       applicationContext,
       message:
-        'An Email to the IRS Super User has triggered a Permanent bounce (On Suppression List)',
+        'An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
     });
   });
 });
