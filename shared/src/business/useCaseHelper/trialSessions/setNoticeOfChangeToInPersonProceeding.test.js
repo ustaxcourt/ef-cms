@@ -22,49 +22,39 @@ const { MOCK_CASE } = require('../../../test/mockCase');
 describe('setNoticeOfChangeToInPersonProceeding', () => {
   const mockNumberOfPages = 123;
   const mockDocumentId = '98c6b1c8-1eed-44b6-932a-967af060597a';
-  const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
-  const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
-
-  const inPersonCalendaredTrialSession = {
-    ...MOCK_TRIAL_INPERSON,
-    isCalendared: true,
-    trialSessionId,
-  };
-  const remoteTrialSession = { ...MOCK_TRIAL_REMOTE, trialSessionId };
+  const mockTrialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
+  const mockUserId = '85a5b1c8-1eed-44b6-932a-967af060597a';
 
   const mockPdfDocument = {
     load: () => jest.fn().mockReturnValue(getFakeFile),
   };
+
+  const mockInPersonCalendaredTrialSession = {
+    ...MOCK_TRIAL_INPERSON,
+    isCalendared: true,
+    trialSessionId: mockTrialSessionId,
+  };
+
+  const mockRemoteTrialSession = {
+    ...MOCK_TRIAL_REMOTE,
+    trialSessionId: mockTrialSessionId,
+  };
+
   const mockOpenCase = new Case(
     {
       ...MOCK_CASE,
       trialDate: '2019-03-01T21:42:29.073Z',
-      trialSessionId,
-    },
-    { applicationContext },
-  );
-  const mockClosedCase = new Case(
-    {
-      ...MOCK_CASE,
-      closedDate: '2020-03-01T21:42:29.073Z',
-      docketNumber: '999-99',
-      status: CASE_STATUS_TYPES.closed,
-      trialDate: '2019-03-01T21:42:29.073Z',
-      trialSessionId,
+      trialSessionId: mockTrialSessionId,
     },
     { applicationContext },
   );
 
   beforeEach(() => {
-    applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf.mockReturnValue({});
+    applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
 
     applicationContext
       .getUseCaseHelpers()
       .generateNoticeOfChangeToInPersonProceeding.mockReturnValue(getFakeFile);
-
-    applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
 
     applicationContext
       .getUseCaseHelpers()
@@ -75,10 +65,10 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
-      currentTrialSession: remoteTrialSession,
+      currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: inPersonCalendaredTrialSession,
-      userId,
+      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      userId: mockUserId,
     });
 
     expect(
@@ -101,13 +91,25 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   });
 
   it('should not generate a NOIP when the case status is closed', async () => {
+    const mockClosedCase = new Case(
+      {
+        ...MOCK_CASE,
+        closedDate: '2020-03-01T21:42:29.073Z',
+        docketNumber: '999-99',
+        status: CASE_STATUS_TYPES.closed,
+        trialDate: '2019-03-01T21:42:29.073Z',
+        trialSessionId: mockTrialSessionId,
+      },
+      { applicationContext },
+    );
+
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockClosedCase,
-      currentTrialSession: remoteTrialSession,
+      currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: inPersonCalendaredTrialSession,
-      userId,
+      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      userId: mockUserId,
     });
 
     expect(
@@ -122,10 +124,10 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
-      currentTrialSession: inPersonCalendaredTrialSession,
+      currentTrialSession: mockInPersonCalendaredTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: inPersonCalendaredTrialSession,
-      userId,
+      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      userId: mockUserId,
     });
 
     expect(
@@ -140,13 +142,13 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
-      currentTrialSession: remoteTrialSession,
+      currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
       newTrialSessionEntity: {
-        ...inPersonCalendaredTrialSession,
+        ...mockInPersonCalendaredTrialSession,
         isCalendared: false,
       },
-      userId,
+      userId: mockUserId,
     });
 
     expect(
@@ -161,10 +163,10 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
-      currentTrialSession: remoteTrialSession,
+      currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: inPersonCalendaredTrialSession,
-      userId,
+      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      userId: mockUserId,
     });
 
     expect(
@@ -180,10 +182,10 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
-      currentTrialSession: remoteTrialSession,
+      currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: inPersonCalendaredTrialSession,
-      userId,
+      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      userId: mockUserId,
     });
 
     const noipDocketEntry = applicationContext
@@ -241,10 +243,10 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockCaseWithPaperService,
-      currentTrialSession: remoteTrialSession,
+      currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: inPersonCalendaredTrialSession,
-      userId,
+      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
+      userId: mockUserId,
     });
 
     expect(
