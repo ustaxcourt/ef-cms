@@ -53,6 +53,8 @@ const mockClosedCase = new Case(
   { applicationContext },
 );
 
+const mockNumberOfPages = 123;
+
 describe('setNoticeOfChangeToInPersonProceeding', () => {
   beforeEach(() => {
     applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf =
@@ -63,6 +65,10 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
       .generateNoticeOfChangeToInPersonProceeding.mockReturnValue(getFakeFile);
 
     applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockResolvedValue(mockNumberOfPages);
   });
 
   it('should generate a NOIP when the proceeding type changes from remote to in-person, the case status is not closed, and the trial session is calendared', async () => {
@@ -96,7 +102,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
 
   // TODO: add a test to verify if the trial session is not calendared, it shouldn't work...
 
-  it.only('should save the generated NOIP to persistence', async () => {
+  it('should save the generated NOIP to persistence', async () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
@@ -115,12 +121,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     });
   });
 
-  it.only('should create and serve the NOIP docket entry on the case', async () => {
-    const mockNumberOfPages = 123;
-    applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument.mockResolvedValue(mockNumberOfPages);
-
+  it('should create and serve the NOIP docket entry on the case', async () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
