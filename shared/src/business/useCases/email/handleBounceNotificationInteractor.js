@@ -10,7 +10,7 @@ exports.handleBounceNotificationInteractor = async (
   applicationContext,
   { bounce },
 ) => {
-  if (!bounce) {
+  if (bounce.bounceType !== 'Permanent') {
     return;
   }
 
@@ -18,13 +18,13 @@ exports.handleBounceNotificationInteractor = async (
   const isIrsSuperUser = bounce.bouncedRecipients?.some(
     recipient => recipient.emailAddress === IRS_SUPERUSER_EMAIL,
   );
-
-  if (!isIrsSuperUser || bounce.bounceType !== 'Permanent') {
+  if (!isIrsSuperUser) {
     return;
   }
 
-  const destinations = applicationContext.getBounceAlertRecipients();
   const message = `An Email to the IRS Super User (${IRS_SUPERUSER_EMAIL}) has triggered a ${bounce.bounceType} bounce (${bounce.bounceSubType})`;
+
+  const destinations = applicationContext.getBounceAlertRecipients();
   if (destinations) {
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
@@ -36,8 +36,21 @@ exports.handleBounceNotificationInteractor = async (
     });
   }
 
-  await applicationContext.getDispatchers().sendSlackNotification({
-    applicationContext,
-    message,
-  });
+  const hasRecentNotification = applicationContext
+    .getPersistenceGateway()
+    .getDispatchNotification({
+      applicationContext,
+      channel: 'bounce-notification',
+    });
+
+  if (!hasRecentNotification) {
+    await applicationContext.getDispatchers().sendSlackNotification({
+      applicationContext,
+      text: message,
+    });
+    await applicationContext.getPersistenceGateway().saveDispatchNotification({
+      applicationContext,
+      channel: 'bounce-notification',
+    });
+  }
 };

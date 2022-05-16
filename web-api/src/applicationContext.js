@@ -497,6 +497,9 @@ const {
   getDeployTableStatus,
 } = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
 const {
+  getDispatchNotification,
+} = require('../../shared/src/persistence/dynamo/notifications/getDispatchNotification');
+const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
@@ -927,6 +930,9 @@ const {
 const {
   saveCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/saveCaseNoteInteractor');
+const {
+  saveDispatchNotification,
+} = require('../../shared/src/persistence/dynamo/notifications/saveDispatchNotification');
 const {
   saveDocumentFromLambda,
 } = require('../../shared/src/persistence/s3/saveDocumentFromLambda');
@@ -1532,6 +1538,7 @@ const gatewayMethods = {
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
+  getDispatchNotification,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
@@ -1584,6 +1591,7 @@ const gatewayMethods = {
     : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
+  saveDispatchNotification,
   updateCaseCorrespondence,
   updateUserCaseMapping,
   updateWorkItemAssociatedJudge,
