@@ -2,14 +2,13 @@
  * sendSlackNotification
  *
  * @param {object} applicationContext the application context
- * @param {string} message the message to dispatch
- * @returns {promise}
+ * @param {object} providers the providers object
+ * @param {string} providers.text the message to dispatch
  */
 exports.sendSlackNotification = async ({ applicationContext, message }) => {
-  const response = await applicationContext
+  await applicationContext
     .getHttpClient()
     .post(applicationContext.getSlackWebhookUrl(), {
-      message,
+      text: message,
     });
-  return response.data;
 };

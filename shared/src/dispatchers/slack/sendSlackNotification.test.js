@@ -17,14 +17,14 @@ describe('sendSlackNotification', () => {
   it('sends a message to the Slack webhook', async () => {
     const resp = await sendSlackNotification({
       applicationContext,
-      message: 'How about now?',
+      text: 'How about now?',
     });
 
     expect(applicationContext.getHttpClient).toBeCalled();
     expect(applicationContext.getHttpClient().post).toBeCalledWith(
       'https://slack.example.com',
       {
-        message: 'How about now?',
+        text: 'How about now?',
       },
     );
     expect(resp).toBe('ok');
