@@ -96,7 +96,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
 
   // TODO: add a test to verify if the trial session is not calendared, it shouldn't work...
 
-  it('should save the generated NOIP to persistence', async () => {
+  it.only('should save the generated NOIP to persistence', async () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
@@ -115,11 +115,11 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     });
   });
 
-  it('should create and serve the NOIP docket entry on the case', async () => {
+  it.only('should create and serve the NOIP docket entry on the case', async () => {
     const mockNumberOfPages = 123;
     applicationContext
       .getUseCaseHelpers()
-      .countPagesInDocument.mockReturnValue(mockNumberOfPages);
+      .countPagesInDocument.mockResolvedValue(mockNumberOfPages);
 
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
@@ -167,7 +167,7 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     });
   });
 
-  it.only('should append the paper service info to the NOIP docket entry on the case when the case has parties with paper service', async () => {
+  it('should append the paper service info to the NOIP docket entry on the case when the case has parties with paper service', async () => {
     const mockCaseWithPaperService = new Case(
       {
         ...mockOpenCase,
@@ -185,9 +185,9 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockCaseWithPaperService,
-      currentTrialSession: inPersonTrialSession,
+      currentTrialSession: remoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: remoteTrialSession,
+      newTrialSessionEntity: inPersonTrialSession,
       userId,
     });
 
@@ -200,9 +200,9 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockClosedCase,
-      currentTrialSession: inPersonTrialSession,
+      currentTrialSession: remoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: remoteTrialSession,
+      newTrialSessionEntity: inPersonTrialSession,
       userId,
     });
 
