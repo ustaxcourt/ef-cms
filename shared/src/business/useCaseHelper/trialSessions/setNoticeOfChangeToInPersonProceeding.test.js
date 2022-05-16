@@ -11,8 +11,8 @@ const {
   MOCK_TRIAL_REMOTE,
 } = require('../../../test/mockTrial');
 const {
-  setNoticeOfChangeToRemoteProceeding,
-} = require('./setNoticeOfChangeToRemoteProceeding');
+  setNoticeOfChangeToInPersonProceeding,
+} = require('./setNoticeOfChangeToInPersonProceeding');
 const { Case } = require('../../entities/cases/Case');
 const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
@@ -21,7 +21,11 @@ const mockDocumentId = '98c6b1c8-1eed-44b6-932a-967af060597a';
 const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
 const userId = '85a5b1c8-1eed-44b6-932a-967af060597a';
 
-const inPersonTrialSession = { ...MOCK_TRIAL_INPERSON, trialSessionId };
+const inPersonTrialSession = {
+  ...MOCK_TRIAL_INPERSON,
+  isCalendared: true,
+  trialSessionId,
+};
 const remoteTrialSession = { ...MOCK_TRIAL_REMOTE, trialSessionId };
 
 const mockPdfDocument = {
@@ -47,55 +51,56 @@ const mockClosedCase = new Case(
   { applicationContext },
 );
 
-describe('setNoticeOfChangeToRemoteProceeding', () => {
+describe('setNoticeOfChangeToInPersonProceeding', () => {
   beforeEach(() => {
     applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf =
       jest.fn();
 
     applicationContext
-      .getUseCases()
-      .generateNoticeOfChangeToRemoteProceedingInteractor.mockReturnValue(
-        getFakeFile,
-      );
+      .getUseCaseHelpers()
+      .generateNoticeOfChangeToInPersonProceeding.mockReturnValue(getFakeFile);
 
     applicationContext.getUniqueId.mockReturnValue(mockDocumentId);
   });
 
-  it('should generate a NORP when the proceeding type changes from in person to remote and the case status is not closed', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
+  it('should generate a NOIP when the proceeding type changes from remote to in-person, the case status is not closed, and the trial session is calendared', async () => {
+    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
-      currentTrialSession: inPersonTrialSession,
+      currentTrialSession: remoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: remoteTrialSession,
+      newTrialSessionEntity: inPersonTrialSession,
       userId,
     });
 
     expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeToRemoteProceedingInteractor.mock.calls[0][1],
+      applicationContext.getUseCaseHelpers()
+        .generateNoticeOfChangeToInPersonProceeding.mock.calls[0][1],
     ).toMatchObject({
       docketNumber: mockOpenCase.docketNumber,
       trialSessionInformation: {
-        chambersPhoneNumber: '1111111',
-        joinPhoneNumber: '0987654321',
-        judgeName: 'Chief Judge',
-        meetingId: '1234567890',
-        password: 'abcdefg',
-        startDate: '2025-12-01T00:00:00.000Z',
+        address1: '123 Street Lane',
+        address2: undefined,
+        chambersPhoneNumber: undefined, // why is this undefined
+        city: 'Scottsburg',
+        courthouseName: undefined,
+        judgeName: 'A Judge',
+        startDate: '3000-03-01T00:00:00.000Z',
         startTime: undefined,
-        trialLocation: 'Birmingham, Alabama',
+        state: 'IN',
       },
     });
   });
 
-  it('should save the generated NORP to persistence', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
+  // TODO: add a test to verify if the trial session is not calendared, it shouldn't work...
+
+  it('should save the generated NOIP to persistence', async () => {
+    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
-      currentTrialSession: inPersonTrialSession,
+      currentTrialSession: remoteTrialSession,
       newPdfDoc: getFakeFile,
-      newTrialSessionEntity: remoteTrialSession,
+      newTrialSessionEntity: inPersonTrialSession,
       userId,
     });
 
@@ -108,8 +113,8 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
     });
   });
 
-  it('should create and serve the NORP docket entry on the case', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
+  it.only('should create and serve the NORP docket entry on the case', async () => {
+    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession: inPersonTrialSession,
@@ -159,7 +164,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       { applicationContext },
     );
 
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
+    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockCaseWithPaperService,
       currentTrialSession: inPersonTrialSession,
@@ -174,7 +179,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
   });
 
   it('should not do anything when the case status is closed', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
+    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockClosedCase,
       currentTrialSession: inPersonTrialSession,
@@ -196,7 +201,7 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
   });
 
   it('should not do anything when the case status is open but the trial session proceeding type has not changed', async () => {
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
+    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
       PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession: inPersonTrialSession,
