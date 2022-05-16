@@ -21,14 +21,12 @@ export const NoticeOfChangeToInPersonProceeding = ({
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
           <div className="info-box-content">
-            {trialInfo.trialLocation && <div>{trialInfo.address1}</div>}
-            {trialInfo.trialLocation && <div>{trialInfo.address2}</div>}
-            {trialInfo.trialLocation && (
-              <div>
-                {trialInfo.city}, {trialInfo.state}
-              </div>
-            )}
-            {trialInfo.trialLocation && <div>{trialInfo.trialLocation}</div>}
+            {trialInfo.courthouseName && <div>{trialInfo.courthouseName}</div>}
+            <div>{trialInfo.address1}</div>
+            {trialInfo.address2 && <div>{trialInfo.address2}</div>}
+            <div>
+              {trialInfo.city}, {trialInfo.state}
+            </div>
             <span className="text-bold">In-Person</span>
           </div>
         </div>

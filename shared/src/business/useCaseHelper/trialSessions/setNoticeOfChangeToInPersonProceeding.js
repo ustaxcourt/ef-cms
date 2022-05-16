@@ -75,12 +75,15 @@ exports.setNoticeOfChangeToInPersonProceeding = async (
 
   if (shouldIssueNoticeOfChangeToInPersonProceeding) {
     const trialSessionInformation = {
+      address1: newTrialSessionEntity.address1,
+      address2: newTrialSessionEntity.address2,
       chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
-      joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
+      city: newTrialSessionEntity.city,
+      courthouseName: newTrialSessionEntity.courthouseName,
       judgeName: newTrialSessionEntity.judge.name,
       startDate: newTrialSessionEntity.startDate,
       startTime: newTrialSessionEntity.startTime,
-      trialLocation: newTrialSessionEntity.trialLocation,
+      state: newTrialSessionEntity.state,
     };
 
     const notice = await applicationContext
