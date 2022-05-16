@@ -35,7 +35,7 @@ Team Relationship Building - We encourage trust, strengthen our comfort in commu
 
 ### Working Agreement
 
-1. Methods of Communication:Slack is the preferred messaging platform. Our slack workspace is organized into rooms with clear topics for focused discussion. The team maintains a #welcome channel with a directory of channels with clear descriptions and posting guidelines.
+1. Methods of Communication: Slack is the preferred messaging platform. Our Slack workspace is organized into rooms with clear topics for focused discussion. The team maintains a #welcome channel with a directory of channels with clear descriptions and posting guidelines.
 2. Retrospective: We retrospect often, following up on past experiments and other topics and coming up with future experiments to improve the team and project. We courageously bring topics to the retro in a psychologically safe space.
 
 3. Meetings: Bring attention to questions or comments in the zoom chat to the presenter, as they are not always able to see them.  While zooming, we value the relationship benefits of cameras on, but also respect the right to have cameras off.  When creating meeting invites, be respectful of other people's time. This includes only inviting those who will find value in the meeting, and marking attendees as optional where appropropriate. Care should also be taken to schedule during attendees' core working hours and not overlap with previously scheduled meetings.
