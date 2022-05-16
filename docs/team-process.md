@@ -35,7 +35,7 @@ Team Relationship Building - We encourage trust, strengthen our comfort in commu
 
 ### How We Work
 
-1. Methods of Communication:Slack is the preferred messaging platform. Our slack workspace is organized into rooms with clear topics for focused discussion. The team maintains a #welcome channel with a directory of channels with clear descriptions and posting guidelines.
+1. Methods of Communication: Slack is the preferred messaging platform. Our Slack workspace is organized into rooms with clear topics for focused discussion. The team maintains a #welcome channel with a directory of channels with clear descriptions and posting guidelines.
 
 2. Retrospective: We retrospect often, following up on past experiments and other topics and coming up with future experiments to improve the team and project. We courageously bring topics to the retro in a psychologically safe space.
 
