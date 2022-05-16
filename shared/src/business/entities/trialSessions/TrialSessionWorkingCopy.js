@@ -34,7 +34,6 @@ TrialSessionWorkingCopy.prototype.init = function init(rawSession) {
   this.sort = rawSession.sort;
   this.sortOrder = rawSession.sortOrder;
   this.trialSessionId = rawSession.trialSessionId;
-  this.userNotes = rawSession.userNotes || {};
   this.userId = rawSession.userId;
 };
 
