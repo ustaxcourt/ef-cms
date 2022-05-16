@@ -3,41 +3,41 @@
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {array} providers.bouncedRecipients an array of the email addresses for this bounce
- * @param {string} providers.bounceType the type of the SES bounced email
- * @param {string} providers.bounceSubType the sub type of the SES bounced email
+ * @param {object} providers.bounce an object containing the information about the bounce
  * @returns {Promise<object>} resolves upon completion
  */
 exports.handleBounceNotificationInteractor = async (
   applicationContext,
-  obj,
+  { bounce },
 ) => {
-  if (!obj.bounce) {
-    applicationContext.logger.console.warn(
-      'received a bounce notification, but missing bounce attribute',
-      obj,
-    );
+  if (!bounce) {
     return;
   }
 
-  const isIrsSuperUser = obj.bounce.bouncedRecipients?.some(
-    recipient =>
-      recipient.emailAddress === applicationContext.getIrsSuperuserEmail(),
+  const IRS_SUPERUSER_EMAIL = applicationContext.getIrsSuperuserEmail();
+  const isIrsSuperUser = bounce.bouncedRecipients?.some(
+    recipient => recipient.emailAddress === IRS_SUPERUSER_EMAIL,
   );
 
-  if (!isIrsSuperUser || obj.bounce.bounceType !== 'Permanent') {
+  if (!isIrsSuperUser || bounce.bounceType !== 'Permanent') {
     return;
   }
 
-  await applicationContext.getDispatchers().sendBulkTemplatedEmail({
-    applicationContext,
-    defaultTemplateData: {},
-    destinations: applicationContext.getBounceAlertRecipients(),
-    templateName: process.env.EMAIL_BOUNCED_SUPER_USER_TEMPLATE,
-  });
+  const destinations = applicationContext.getBounceAlertRecipients();
+  const message = `An Email to the IRS Super User (${IRS_SUPERUSER_EMAIL}) has triggered a ${bounce.bounceType} bounce (${bounce.bounceSubType})`;
+  if (destinations) {
+    await applicationContext.getDispatchers().sendBulkTemplatedEmail({
+      applicationContext,
+      defaultTemplateData: {
+        emailContent: message,
+      },
+      destinations: destinations.map(email => ({ email })),
+      templateName: process.env.BOUNCE_ALERT_TEMPLATE,
+    });
+  }
 
   await applicationContext.getDispatchers().sendSlackNotification({
     applicationContext,
-    message: `An Email to the IRS Super User has triggered a ${obj.bounce.bounceType} bounce (${obj.bounce.bounceSubType})`,
+    message,
   });
 };
