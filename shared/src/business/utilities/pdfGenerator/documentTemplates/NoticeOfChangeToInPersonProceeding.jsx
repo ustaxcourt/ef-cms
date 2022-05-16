@@ -25,7 +25,7 @@ export const NoticeOfChangeToInPersonProceeding = ({
             <div>{trialInfo.address1}</div>
             {trialInfo.address2 && <div>{trialInfo.address2}</div>}
             <div>
-              {trialInfo.city}, {trialInfo.state}
+              {trialInfo.city}, {trialInfo.state}, {trialInfo.zip}
             </div>
             <span className="text-bold">In-Person</span>
           </div>
