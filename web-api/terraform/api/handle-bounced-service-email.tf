@@ -20,3 +20,10 @@ resource "aws_lambda_function" "zip_handle_bounce" {
     aws_lambda_layer_version.puppeteer_layer.arn
   ]
 }
+
+resource "aws_lambda_permission" "allow_sns" {
+  action        = "lambda:InvokeFunction"
+  function_name = aws_lambda_function.zip_handle_bounce.function_name
+  principal     = "sns.amazonaws.com"
+  source_arn    = "arn:aws:sns:us-east-1:${var.account_id}:bounced_service_emails_dev_${var.denvironment}"
+}
