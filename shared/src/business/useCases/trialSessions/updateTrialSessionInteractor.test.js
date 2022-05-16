@@ -45,6 +45,8 @@ describe('updateTrialSessionInteractor', () => {
   const MOCK_TRIAL_ID_6 = 'd0293e71-155d-4cdd-9f3d-b21a72b64e51';
   const MOCK_TRIAL_ID_7 = '959c4338-0fac-42eb-b0eb-d53b8d0195cc';
 
+  const mockCaseRemovedFromTrialDocketNumber = '321-56';
+
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
@@ -91,7 +93,15 @@ describe('updateTrialSessionInteractor', () => {
         caseOrder: [
           { docketNumber: '123-79' },
           { docketNumber: '999-99' },
-          { docketNumber: '888-88' },
+          {
+            docketNumber: '888-88',
+          },
+          {
+            disposition: 'no longer on trial session',
+            docketNumber: mockCaseRemovedFromTrialDocketNumber,
+            removedFromTrial: true,
+            removedFromTrialDate: '2025-12-01T00:00:00.000Z',
+          },
         ],
         isCalendared: true,
       },
@@ -499,6 +509,60 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   it('should setNoticeOfChangeToInPersonProceeding for each case on the trial session', async () => {
+    const firstOpenCase = {
+      ...MOCK_CASE,
+      docketNumber: '888-88',
+      docketNumberWithSuffix: '888-88',
+      hearings: [],
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+    const secondOpenCase = {
+      ...MOCK_CASE,
+      docketNumber: '123-79',
+      docketNumberWithSuffix: '123-79',
+      hearings: [],
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+    const closedCase = {
+      ...MOCK_CASE,
+      closedDate: '2020-03-01T21:42:29.073Z',
+      docketNumber: '999-99',
+      docketNumberWithSuffix: '999-99',
+      hearings: [],
+      status: CASE_STATUS_TYPES.closed,
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId: MOCK_TRIAL_ID_7,
+    };
+
+    const mock =
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber;
+    mock
+      .mockReturnValueOnce(firstOpenCase)
+      .mockReturnValueOnce(secondOpenCase)
+      .mockReturnValue(closedCase);
+
+    const inPersonTrialSession = {
+      ...mockTrialsById[MOCK_TRIAL_ID_7],
+      chambersPhoneNumber: '111111',
+      joinPhoneNumber: '222222',
+      meetingId: '333333',
+      password: '4444444',
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+    };
+
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: inPersonTrialSession,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .setNoticeOfChangeToInPersonProceeding,
+    ).toHaveBeenCalledTimes(3);
+  });
+
+  it('should not generate notices for the cases on the trial session that have been removed when the trial session has been changed', async () => {
     const firstOpenCase = {
       ...MOCK_CASE,
       docketNumber: '888-88',
