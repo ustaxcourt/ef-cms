@@ -6,8 +6,8 @@ Now that you've logged in and played around with our Dawson system a bit on a de
 
 Here are some few resources for documentation associated with onboarding:
 
-1. [Onboarding checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk/edit#)
-2. [Onboarding Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c/edit#)
+1. [Onboarding checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk)
+2. [Onboarding Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c)
 
 If you do not have permissions to view these documents, please reaach out to the scrum master. 
 ## Working Agreement
@@ -33,19 +33,22 @@ The mission of the DAWSON Product Team is to continue to add and improve functio
 6. Psychological Safety - Team members should feel safe to explore their ideas. Psych safety in a team ensures that all paths are seen as viable, therefore helping generate options in order to find the most effective and high quality path forward. Mistakes are valued as learning opportunities and failure generates more knowledge
 Team Relationship Building - We encourage trust, strengthen our comfort in communicating with others, diversity of opinions, and foster empathy. 
 
-### Working Agreement
+### How We Work
 
 1. Methods of Communication:Slack is the preferred messaging platform. Our slack workspace is organized into rooms with clear topics for focused discussion. The team maintains a #welcome channel with a directory of channels with clear descriptions and posting guidelines.
+
 2. Retrospective: We retrospect often, following up on past experiments and other topics and coming up with future experiments to improve the team and project. We courageously bring topics to the retro in a psychologically safe space.
 
 3. Meetings: Bring attention to questions or comments in the zoom chat to the presenter, as they are not always able to see them.  While zooming, we value the relationship benefits of cameras on, but also respect the right to have cameras off.  When creating meeting invites, be respectful of other people's time. This includes only inviting those who will find value in the meeting, and marking attendees as optional where appropropriate. Care should also be taken to schedule during attendees' core working hours and not overlap with previously scheduled meetings.
+
 4. Voting: As a team we will use multiple methods of voting for decision making within the team. The team will use Roman voting for quick feedback from the group on a singular topic. The team will use dot voting for discussions that have a variety of options to choose from in order to narrow down to a smaller list of actionable items.  Planning poker will be the tool we will use for estimation voting on the urgency and importance in regards to the DevEx/OpEx backlog.
+
 5. Verbal Communication: Do your share of listening, and then verbally ask questions when you don’t understand.  Use the hand raising mechanism in Zoom to draw attention to your question.  Verbally checking for understanding is better than assuming.  Verbalize your concerns because others feel the same way.  Sometimes verbal communication doesn’t work, so try other communication mechanisms.
 
-### Team Working Agreement
+### How We Code
 
 1. Smoke and integration tests are accurate to real life scenarios.
-2. We don't merge a PR unless it's associated build is passing and the PR as at least one approval.
+2. We don't merge a PR unless its associated build is passing and the PR as at least one approval.
 3. When merge conflicts are encountered, we post in the public channel so that no team members feel left out and can help with resolution. 
 4. When a bug-fix or story has unexpected side-effects, reach out to the assignee of that issue so they can address the feedback. 
 5. UX will collaborate with engineering when a technical issue arises over a design, before and during development.
@@ -79,21 +82,21 @@ We strive to be keep our project as Agile as possible.  This means that every sp
 
 Since we strive to work in pairs and mobs, our stand ups focus more on group goals.  Every morning we meet to talk about our goals for our current sprint and also talk about our story goals for the day.  We setup **parking lot** items to give an opportunity to discuss any important topics that the entire team should be aware of.  We will often give small demos of story / bug progress to the Tax Court.
 
- - Time of Ceremony: 9:30 AM CST
+ - Time of Ceremony: 9:30 AM CT
  - Frequency of Ceremony: Daily Monday through Friday
 
 ### Sprint Retrospective 
 
 The retrospective is performed at the end of the sprint and offers the team a time to reflect on what went well or what they’d like to improve. 
 
- - Time of Ceremony: 2:30-4:00 CST
+ - Time of Ceremony: 2:30-4:00 CT
  - Frequency of Ceremony: Every other week Tuesday
 
 ### Sprint Planning/Refinement
 
 We have combined our grooming and planning into one event. During this meeting we groom stories for the sprint. While a sprint is 2 weeks, we groom every week to allow for shifting PO priorities.
 
- - Time of Ceremony: 11:30-12:00 PM CST
+ - Time of Ceremony: 11:30-12:00 PM CT
  - Frequency of Ceremony: Every Tuesday 
 
 ### OpEx/DevEx Backlog Review
@@ -102,16 +105,14 @@ A meeting for the team to review the backlog of larger refactoring items and poi
 
 Refactoring backlog: https://trello.com/b/9tgrIFfA/ef-cms-opex-devex
 
-Planning poker: https://play.planningpoker.com/play/game/6sDzcKNshsnarUet2HrnTeUYR3e5tvqB 
-
- - Time of Ceremony: 2:00-3:00 PM CST
+ - Time of Ceremony: 2:00-3:00 PM CT
  - Frequency of Ceremony: Every 2 weeks on Monday 
 
 
 ### Epic Refinement 
 
- - Time of Ceremony: 2:00-3:00 PM CST
- - Frequency of Ceremony: Every 2 weeks on Monday rint Review
+ - Time of Ceremony: 2:00-3:00 PM CT
+ - Frequency of Ceremony: Ad hoc meeting
 
 ### Refactoring Backlog
 
