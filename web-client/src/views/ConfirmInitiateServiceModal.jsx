@@ -9,6 +9,8 @@ export const ConfirmInitiateServiceModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: props.confirmSequence,
+    consolidatedCaseServiceInitiateHelper:
+      state.consolidatedCaseServiceInitiateHelper,
     documentTitle: props.documentTitle,
     formattedCaseDetail: state.formattedCaseDetail,
     serveCourtIssuedDocumentFromDocketEntrySequence:
@@ -19,6 +21,7 @@ export const ConfirmInitiateServiceModal = connect(
     cancelSequence,
     confirmInitiateServiceModalHelper,
     confirmSequence,
+    consolidatedCaseServiceInitiateHelper,
     documentTitle,
     formattedCaseDetail,
     serveCourtIssuedDocumentFromDocketEntrySequence,
