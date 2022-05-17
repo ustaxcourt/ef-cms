@@ -1006,6 +1006,9 @@ const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
+  serveGeneratedNoticesOnCase,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase');
+const {
   setForHearingInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
 const {
@@ -1924,6 +1927,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        serveGeneratedNoticesOnCase,
         setNoticeOfChangeToInPersonProceeding,
         setNoticeOfChangeToRemoteProceeding,
         setPdfFormFields,
