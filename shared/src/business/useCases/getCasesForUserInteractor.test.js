@@ -1,29 +1,25 @@
-const {
-  getOpenConsolidatedCasesInteractor,
-} = require('./getOpenConsolidatedCasesInteractor');
 const { applicationContext } = require('../test/createTestApplicationContext');
+const { getCasesForUserInteractor } = require('./getCasesForUserInteractor');
 const { MOCK_CASE } = require('../../test/mockCase');
 const { MOCK_USERS } = require('../../test/mockUsers');
 jest.mock('../entities/UserCase');
+const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
 const { UserCase } = require('../entities/UserCase');
 
-describe('getOpenConsolidatedCasesInteractor', () => {
+describe('getCasesForUserInteractor', () => {
   let mockFoundCasesList;
 
   beforeEach(() => {
     mockFoundCasesList = [MOCK_CASE];
 
-    applicationContext
-      .getPersistenceGateway()
-      .getUserById.mockReturnValue(
-        MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
-      );
     applicationContext.getCurrentUser.mockReturnValue(
       MOCK_USERS['d7d90c05-f6cd-442c-a168-202db587f16f'],
     );
+
     applicationContext
       .getPersistenceGateway()
       .getCasesForUser.mockImplementation(() => mockFoundCasesList);
+
     applicationContext
       .getUseCaseHelpers()
       .processUserAssociatedCases.mockReturnValue({
@@ -33,52 +29,105 @@ describe('getOpenConsolidatedCasesInteractor', () => {
         leadDocketNumbersAssociatedWithUser: [MOCK_CASE.docketNumber],
         userAssociatedDocketNumbersMap: {},
       });
+
     applicationContext
       .getUseCaseHelpers()
       .getConsolidatedCasesForLeadCase.mockReturnValue([]);
+
     UserCase.validateRawCollection.mockImplementation(foundCases => foundCases);
   });
 
   it('should retrieve the current user information', async () => {
-    await getOpenConsolidatedCasesInteractor(applicationContext);
+    await getCasesForUserInteractor(applicationContext);
 
     expect(applicationContext.getCurrentUser).toBeCalled();
   });
 
-  it('should make a call to retrieve open cases by user', async () => {
-    await getOpenConsolidatedCasesInteractor(applicationContext);
+  it('should make a call to retrieve open and closed cases for the current user', async () => {
+    await getCasesForUserInteractor(applicationContext);
 
     expect(
       applicationContext.getPersistenceGateway().getCasesForUser,
     ).toHaveBeenCalledWith({
       applicationContext,
-      statuses: applicationContext.getConstants().OPEN_CASE_STATUSES,
       userId: 'd7d90c05-f6cd-442c-a168-202db587f16f',
     });
   });
 
-  it('should validate the list of found open cases', async () => {
-    await getOpenConsolidatedCasesInteractor(applicationContext);
+  it('should validate the list of cases found for the current user', async () => {
+    await getCasesForUserInteractor(applicationContext);
 
     expect(UserCase.validateRawCollection).toBeCalled();
   });
 
-  it('should return an empty list when no open cases are found', async () => {
-    mockFoundCasesList = [];
+  it('should return a list of open cases sorted by createdAt date descending', async () => {
+    const createdToday = applicationContext
+      .getUtilities()
+      .createISODateString();
+    const createdYesterday = applicationContext
+      .getUtilities()
+      .calculateISODate({ dateString: createdToday, howMuch: -1 });
+    mockFoundCasesList = [
+      {
+        ...MOCK_CASE,
+        createdAt: createdYesterday,
+        status: CASE_STATUS_TYPES.generalDocket,
+      },
+      {
+        ...MOCK_CASE,
+        createdAt: createdToday,
+        status: CASE_STATUS_TYPES.generalDocketReadyForTrial,
+      },
+    ];
+    applicationContext
+      .getUseCaseHelpers()
+      .processUserAssociatedCases.mockReturnValue({
+        casesAssociatedWithUserOrLeadCaseMap: mockFoundCasesList,
+        leadDocketNumbersAssociatedWithUser: [],
+      });
 
-    const result = await getOpenConsolidatedCasesInteractor(applicationContext);
+    const { openCaseList } = await getCasesForUserInteractor(
+      applicationContext,
+    );
 
-    expect(result).toEqual([]);
+    expect(openCaseList).toMatchObject([
+      {
+        createdAt: createdToday,
+      },
+      {
+        createdAt: createdYesterday,
+      },
+    ]);
   });
 
-  it('should return a list of open cases', async () => {
-    const result = await getOpenConsolidatedCasesInteractor(applicationContext);
-
-    expect(result).toMatchObject([
+  it('should return a list of closed cases sorted by closedDate descending', async () => {
+    const closedToday = applicationContext.getUtilities().createISODateString();
+    const closedYesterday = applicationContext
+      .getUtilities()
+      .calculateISODate({ dateString: closedToday, howMuch: -1 });
+    mockFoundCasesList = [
       {
-        caseCaption: MOCK_CASE.caseCaption,
-        docketNumber: MOCK_CASE.docketNumber,
-        docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
+        ...MOCK_CASE,
+        closedDate: closedYesterday,
+        status: CASE_STATUS_TYPES.closed,
+      },
+      {
+        ...MOCK_CASE,
+        closedDate: closedToday,
+        status: CASE_STATUS_TYPES.closed,
+      },
+    ];
+
+    const { closedCaseList } = await getCasesForUserInteractor(
+      applicationContext,
+    );
+
+    expect(closedCaseList).toMatchObject([
+      {
+        closedDate: closedToday,
+      },
+      {
+        closedDate: closedYesterday,
       },
     ]);
   });
@@ -111,10 +160,12 @@ describe('getOpenConsolidatedCasesInteractor', () => {
         consolidatedCaseThatIsNotTheLeadCase,
       ]);
 
-    const result = await getOpenConsolidatedCasesInteractor(applicationContext);
+    const { openCaseList } = await getCasesForUserInteractor(
+      applicationContext,
+    );
 
-    expect(result[0]).toBe(MOCK_CASE);
-    expect(result[0].consolidatedCases[0]).toBe(
+    expect(openCaseList[0]).toBe(MOCK_CASE);
+    expect(openCaseList[0].consolidatedCases[0]).toBe(
       consolidatedCaseThatIsNotTheLeadCase,
     );
   });
