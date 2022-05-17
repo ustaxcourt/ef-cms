@@ -12,12 +12,17 @@ describe('sendSlackNotification', () => {
     applicationContext
       .getHttpClient()
       .post.mockReturnValue(Promise.resolve({ data: 'ok' }));
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDispatchNotification.mockReturnValue(undefined);
   });
 
   it('sends a message to the Slack webhook', async () => {
-    const resp = await sendSlackNotification({
+    await sendSlackNotification({
       applicationContext,
       text: 'How about now?',
+      topic: 'test-topic',
     });
 
     expect(applicationContext.getHttpClient).toBeCalled();
@@ -27,6 +32,53 @@ describe('sendSlackNotification', () => {
         text: 'How about now?',
       },
     );
-    expect(resp).toBe('ok');
+  });
+
+  it('sends checks persistence to see if we have recently messaged the specified topic', async () => {
+    await sendSlackNotification({
+      applicationContext,
+      text: 'How about now?',
+      topic: 'test-topic',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getDispatchNotification,
+    ).toBeCalledWith({
+      applicationContext,
+      topic: 'test-topic',
+    });
+  });
+
+  it('saves a record to persistence to signal that we have recently messaged the specified topic', async () => {
+    await sendSlackNotification({
+      applicationContext,
+      text: 'How about now?',
+      topic: 'test-topic',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDispatchNotification,
+    ).toBeCalledWith({
+      applicationContext,
+      topic: 'test-topic',
+    });
+  });
+
+  it('does not call slack webhook if persistence check says that we notified the topic', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDispatchNotification.mockReturnValue({
+        pk: 'dispatch-notification',
+        sk: 'test-topic',
+        ttl: 50,
+      });
+
+    await sendSlackNotification({
+      applicationContext,
+      text: 'How about now?',
+      topic: 'test-topic',
+    });
+
+    expect(applicationContext.getHttpClient().post).not.toBeCalled();
   });
 });
