@@ -15,6 +15,86 @@ const { get } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const updateAssociatedCaseAndSetNoticeOfChange = async ({
+  applicationContext,
+  currentTrialSession,
+  docketNumber,
+  paperServicePdfsCombined,
+  updatedTrialSessionEntity,
+}) => {
+  const caseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  if (
+    caseToUpdate.trialSessionId === updatedTrialSessionEntity.trialSessionId
+  ) {
+    const shouldSetNoticeOfChangeToRemoteProceeding =
+      currentTrialSession.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+      updatedTrialSessionEntity.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+    if (shouldSetNoticeOfChangeToRemoteProceeding) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeToRemoteProceeding(applicationContext, {
+          PDFDocument: await applicationContext.getPdfLib(),
+          caseEntity,
+          currentTrialSession,
+          newPdfDoc: paperServicePdfsCombined,
+          newTrialSessionEntity: updatedTrialSessionEntity,
+          user: applicationContext.getCurrentUser(),
+        });
+    }
+
+    const shouldSetNoticeOfChangeToInPersonProceeding =
+      currentTrialSession.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+      updatedTrialSessionEntity.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+      updatedTrialSessionEntity.isCalendared &&
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+    if (shouldSetNoticeOfChangeToInPersonProceeding) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeToInPersonProceeding(applicationContext, {
+          PDFDocument: await applicationContext.getPdfLib(),
+          caseEntity,
+          currentTrialSession,
+          newPdfDoc: paperServicePdfsCombined,
+          newTrialSessionEntity: updatedTrialSessionEntity,
+          user: applicationContext.getCurrentUser(),
+        });
+    }
+
+    caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
+
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
+  }
+
+  const matchingHearing = caseToUpdate.hearings.find(
+    hearing =>
+      hearing.trialSessionId == updatedTrialSessionEntity.trialSessionId,
+  );
+  if (matchingHearing) {
+    applicationContext.getPersistenceGateway().updateCaseHearing({
+      applicationContext,
+      docketNumber,
+      hearingToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
+    });
+  }
+};
+
 const createWorkingCopyForNewUserOnSession = async ({
   applicationContext,
   trialSessionId,
@@ -143,75 +223,13 @@ exports.updateTrialSessionInteractor = async (
     const paperServicePdfsCombined = await PDFDocument.create();
 
     for (let calendaredCase of calendaredCases) {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: calendaredCase.docketNumber,
-        });
-
-      const caseEntity = new Case(caseToUpdate, { applicationContext });
-      if (
-        caseToUpdate.trialSessionId === updatedTrialSessionEntity.trialSessionId
-      ) {
-        if (
-          currentTrialSession.proceedingType ===
-            TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-          updatedTrialSessionEntity.proceedingType ===
-            TRIAL_SESSION_PROCEEDING_TYPES.remote &&
-          caseEntity.status !== CASE_STATUS_TYPES.closed
-        ) {
-          await applicationContext
-            .getUseCaseHelpers()
-            .setNoticeOfChangeToRemoteProceeding(applicationContext, {
-              PDFDocument,
-              caseEntity,
-              currentTrialSession,
-              newPdfDoc: paperServicePdfsCombined,
-              newTrialSessionEntity: updatedTrialSessionEntity,
-              user,
-            });
-        }
-
-        if (
-          currentTrialSession.proceedingType ===
-            TRIAL_SESSION_PROCEEDING_TYPES.remote &&
-          updatedTrialSessionEntity.proceedingType ===
-            TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-          updatedTrialSessionEntity.isCalendared &&
-          caseEntity.status !== CASE_STATUS_TYPES.closed
-        ) {
-          await applicationContext
-            .getUseCaseHelpers()
-            .setNoticeOfChangeToInPersonProceeding(applicationContext, {
-              PDFDocument,
-              caseEntity,
-              currentTrialSession,
-              newPdfDoc: paperServicePdfsCombined,
-              newTrialSessionEntity: updatedTrialSessionEntity,
-              user,
-            });
-        }
-
-        caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
-
-        await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        });
-      }
-
-      const matchingHearing = caseToUpdate.hearings.find(
-        hearing =>
-          hearing.trialSessionId == updatedTrialSessionEntity.trialSessionId,
-      );
-      if (matchingHearing) {
-        applicationContext.getPersistenceGateway().updateCaseHearing({
-          applicationContext,
-          docketNumber: calendaredCase.docketNumber,
-          hearingToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
-        });
-      }
+      updateAssociatedCaseAndSetNoticeOfChange({
+        applicationContext,
+        currentTrialSession,
+        docketNumber: calendaredCase.docketNumber,
+        paperServicePdfsCombined,
+        updatedTrialSessionEntity,
+      });
     }
 
     serviceInfo = await applicationContext
