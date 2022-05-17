@@ -20,9 +20,6 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
   const inPersonTrialSession = { ...MOCK_TRIAL_INPERSON, trialSessionId };
   const remoteTrialSession = { ...MOCK_TRIAL_REMOTE, trialSessionId };
 
-  const mockPdfDocument = {
-    load: () => jest.fn().mockReturnValue(getFakeFile),
-  };
   const mockOpenCase = new Case(
     {
       ...MOCK_CASE,
@@ -47,7 +44,6 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
 
   it('should save the generated NORP to persistence', async () => {
     await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession: inPersonTrialSession,
       newPdfDoc: getFakeFile,
@@ -66,7 +62,6 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
 
   it('should create and serve the NORP docket entry on the case', async () => {
     await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession: inPersonTrialSession,
       newPdfDoc: getFakeFile,

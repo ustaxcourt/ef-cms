@@ -43,7 +43,6 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
       await applicationContext
         .getUseCaseHelpers()
         .setNoticeOfChangeToRemoteProceeding(applicationContext, {
-          PDFDocument: await applicationContext.getPdfLib(),
           caseEntity,
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
@@ -64,7 +63,6 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
       await applicationContext
         .getUseCaseHelpers()
         .setNoticeOfChangeToInPersonProceeding(applicationContext, {
-          PDFDocument: await applicationContext.getPdfLib(),
           caseEntity,
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
