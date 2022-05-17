@@ -6,15 +6,6 @@ exports.getCreateACaseButton = () => {
   return cy.get('a#file-a-petition');
 };
 
-exports.goToMyDocumentQC = () => {
-  cy.get('a[href*="document-qc/my/inbox"]').click();
-  cy.get('.big-blue-header').should('exist');
-};
-
-exports.goToSectionDocumentQC = () => {
-  cy.get('button:contains("Switch to Section Document QC")').click();
-};
-
 exports.goToDocumentNeedingQC = () => {
   cy.get('a.case-link').first().click();
 };
