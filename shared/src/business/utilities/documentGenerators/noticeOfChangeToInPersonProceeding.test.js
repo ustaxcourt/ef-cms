@@ -59,6 +59,7 @@ describe('noticeOfChangeToInPersonProceeding', () => {
             formattedStartTime: '12:00 am',
             judgeName: 'Judge Judy',
             state: 'Alaska',
+            trialLocation: 'Birmingham, Alabama',
             zip: '33333',
           },
         },
