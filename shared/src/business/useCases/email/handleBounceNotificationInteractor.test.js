@@ -74,6 +74,7 @@ describe('handleBounceNotificationInteractor', () => {
     ).toBeCalledWith({
       applicationContext,
       text: 'An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
+      topic: 'bounce-notification',
     });
   });
 });
