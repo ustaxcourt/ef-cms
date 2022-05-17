@@ -87,11 +87,14 @@ export const ConfirmInitiateServiceModal = connect(
                 htmlFor="check-historical-truth"
               >
                 {consolidatedCase.docketNumber}{' '}
-                {consolidatedCase.petitioners.reduce(
-                  (previousValue, currentValue) =>
-                    previousValue + currentValue.name + ' & ',
-                  '',
-                )}
+                {consolidatedCase.petitioners.length === 1 &&
+                  consolidatedCase.petitioners[0].name}
+                {consolidatedCase.petitioners.length > 1 &&
+                  consolidatedCase.petitioners.reduce(
+                    (previousValue, currentValue) =>
+                      previousValue + currentValue.name + ' & ',
+                    '',
+                  )}
               </label>
             </div>
           ))}
