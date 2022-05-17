@@ -1,4 +1,8 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
+  formatDateString,
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
@@ -8,6 +12,7 @@ const {
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
+  SERVED_PARTIES_CODES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -16,11 +21,11 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
+const { generateDraftDocument } = require('./generateDraftDocument');
 const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
 const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
 const { remove } = require('lodash');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 const addDocketEntryForPaymentStatus = ({
@@ -122,7 +127,11 @@ const createPetitionWorkItems = async ({
   });
 };
 
-const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
+const generateNoticeOfReceipt = async ({
+  applicationContext,
+  caseEntity,
+  userIdServingPetition,
+}) => {
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
 
   const {
@@ -132,12 +141,14 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
     receivedAt,
   } = caseEntity;
 
-  let pdfData = await applicationContext
+  const contactPrimary = caseEntity.getContactPrimary();
+
+  let primaryContactNotrPdfData = await applicationContext
     .getDocumentGenerators()
     .noticeOfReceiptOfPetition({
       applicationContext,
       data: {
-        address: caseEntity.petitioners[0],
+        address: contactPrimary,
         caseCaptionExtension,
         caseTitle,
         docketNumberWithSuffix,
@@ -151,32 +162,53 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       },
     });
 
-  const contactSecondary = caseEntity.petitioners[1];
-  if (contactSecondary) {
-    const dataWithNoticeAttached = await generatePaperNoticeForContactSecondary(
-      {
+  let secondaryContactNotrPdfData;
+  const contactSecondary = caseEntity.getContactSecondary();
+  const addressesAreDifferent = contactAddressesAreDifferent({
+    applicationContext,
+    caseEntity,
+  });
+  if (contactSecondary && addressesAreDifferent) {
+    secondaryContactNotrPdfData = await applicationContext
+      .getDocumentGenerators()
+      .noticeOfReceiptOfPetition({
         applicationContext,
-        caseCaptionExtension,
-        caseEntity,
-        caseTitle,
-        contactSecondary,
-        docketNumberWithSuffix,
-        pdfData,
-        preferredTrialCity,
-        receivedAt,
-      },
-    );
-    if (dataWithNoticeAttached) {
-      pdfData = dataWithNoticeAttached;
-    }
+        data: {
+          address: contactSecondary,
+          caseCaptionExtension,
+          caseTitle,
+          docketNumberWithSuffix,
+          preferredTrialCity,
+          receivedAtFormatted: applicationContext
+            .getUtilities()
+            .formatDateString(receivedAt, 'MONTH_DAY_YEAR'),
+          servedDate: applicationContext
+            .getUtilities()
+            .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
+        },
+      });
   }
 
-  const caseConfirmationPdfName =
-    caseEntity.getCaseConfirmationGeneratedPdfFileName();
+  let clinicLetter;
+  const isPrimaryContactProSe =
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      contactPrimary.contactId,
+    );
+  const isSecondaryContactProSe =
+    !!contactSecondary &&
+    !caseEntity.isUserIdRepresentedByPrivatePractitioner(
+      contactSecondary.contactId,
+    );
 
-  const isProSe = caseEntity.privatePractitioners.length === 0;
-
-  if (preferredTrialCity && isProSe) {
+  if (
+    shouldIncludeClinicLetter(
+      preferredTrialCity,
+      isPrimaryContactProSe,
+      contactSecondary,
+      addressesAreDifferent,
+      isSecondaryContactProSe,
+    )
+  ) {
     const clinicLetterKey = getClinicLetterKey({
       procedureType,
       trialLocation: preferredTrialCity,
@@ -190,7 +222,7 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
       });
 
     if (doesClinicLetterExist) {
-      const clinicLetter = await applicationContext
+      clinicLetter = await applicationContext
         .getPersistenceGateway()
         .getDocument({
           applicationContext,
@@ -198,34 +230,140 @@ const generateNoticeOfReceipt = async ({ applicationContext, caseEntity }) => {
           protocol: 'S3',
           useTempBucket: false,
         });
-
-      pdfData = await applicationContext.getUtilities().combineTwoPdfs({
-        applicationContext,
-        firstPdf: pdfData,
-        secondPdf: clinicLetter,
-      });
     }
   }
 
+  if (clinicLetter && isPrimaryContactProSe) {
+    primaryContactNotrPdfData = await applicationContext
+      .getUtilities()
+      .combineTwoPdfs({
+        applicationContext,
+        firstPdf: primaryContactNotrPdfData,
+        secondPdf: clinicLetter,
+      });
+  }
+
+  if (clinicLetter && secondaryContactNotrPdfData && isSecondaryContactProSe) {
+    secondaryContactNotrPdfData = await applicationContext
+      .getUtilities()
+      .combineTwoPdfs({
+        applicationContext,
+        firstPdf: secondaryContactNotrPdfData,
+        secondPdf: clinicLetter,
+      });
+  }
+
+  let combinedNotrPdfData = primaryContactNotrPdfData;
+  if (secondaryContactNotrPdfData) {
+    combinedNotrPdfData = await applicationContext
+      .getUtilities()
+      .combineTwoPdfs({
+        applicationContext,
+        firstPdf: primaryContactNotrPdfData,
+        secondPdf: secondaryContactNotrPdfData,
+      });
+  }
+
+  const caseConfirmationPdfName =
+    caseEntity.getCaseConfirmationGeneratedPdfFileName();
+
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    caseConfirmationPdfName,
-    pdfData: Buffer.from(pdfData),
+    pdfData: Buffer.from(combinedNotrPdfData),
+    pdfName: caseConfirmationPdfName,
+  });
+
+  const notrDocketEntryId = applicationContext.getUniqueId();
+  await applicationContext.getUtilities().uploadToS3({
+    applicationContext,
+    pdfData: Buffer.from(combinedNotrPdfData),
+    pdfName: notrDocketEntryId,
   });
 
   let urlToReturn;
+
+  const notrDocketEntry = new DocketEntry(
+    {
+      docketEntryId: notrDocketEntryId,
+      documentTitle:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentTitle,
+      documentType:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.documentType,
+      eventCode:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition.eventCode,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      userId: userIdServingPetition,
+    },
+    { applicationContext, petitioners: caseEntity.petitioners },
+  );
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+  notrDocketEntry.setAsServed(servedParties.all);
+  notrDocketEntry.servedPartiesCode = SERVED_PARTIES_CODES.PETITIONER; //overwrite the served party code for the NOTR docket entry because this is a special one-off with special rules that don't follow the normal party code algorithm
+
+  notrDocketEntry.numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      documentBytes: combinedNotrPdfData,
+    });
+
+  caseEntity.addDocketEntry(notrDocketEntry);
+
+  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
+    applicationContext,
+    caseEntity,
+    docketEntryId: notrDocketEntry.docketEntryId,
+    servedParties,
+    skipEmailToIrs: true,
+  });
 
   if (caseEntity.isPaper) {
     ({ url: urlToReturn } = await applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl({
         applicationContext,
-        key: caseConfirmationPdfName,
+        key: notrDocketEntry.docketEntryId,
         useTempBucket: false,
       }));
   }
 
   return urlToReturn;
+};
+
+const shouldIncludeClinicLetter = (
+  preferredTrialCity,
+  isPrimaryContactProSe,
+  contactSecondary,
+  addressesAreDifferent,
+  isSecondaryContactProSe,
+) => {
+  const primaryIsProSe_And_NoSecondary =
+    isPrimaryContactProSe && !contactSecondary;
+
+  const primaryIsProSe_And_SecondaryExists_And_SameAddress_SecondaryIsProSe =
+    isPrimaryContactProSe &&
+    contactSecondary &&
+    !addressesAreDifferent &&
+    isSecondaryContactProSe;
+
+  const primaryIsProSe_And_SecondaryExists_And_DifferentAddress =
+    isPrimaryContactProSe && contactSecondary && addressesAreDifferent; //it doesn't matter whether the secondary is pro se or not, as long as the primary is pro se and we have different addresses
+
+  const primaryNotProSe_And_SecondaryExists_And_DifferentAddress_And_SecondaryIsProSe =
+    !isPrimaryContactProSe &&
+    contactSecondary &&
+    addressesAreDifferent &&
+    isSecondaryContactProSe;
+
+  return (
+    preferredTrialCity &&
+    (primaryIsProSe_And_NoSecondary ||
+      primaryIsProSe_And_SecondaryExists_And_SameAddress_SecondaryIsProSe ||
+      primaryIsProSe_And_SecondaryExists_And_DifferentAddress ||
+      primaryNotProSe_And_SecondaryExists_And_DifferentAddress_And_SecondaryIsProSe)
+  );
 };
 
 const createCoversheetsForServedEntries = async ({
@@ -249,21 +387,17 @@ const createCoversheetsForServedEntries = async ({
   }
 };
 
-const generatePaperNoticeForContactSecondary = async ({
-  applicationContext,
-  caseCaptionExtension,
-  caseEntity,
-  caseTitle,
-  contactSecondary,
-  docketNumberWithSuffix,
-  pdfData,
-  preferredTrialCity,
-  receivedAt,
-}) => {
+const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
+  const contactSecondary = caseEntity.getContactSecondary();
+
+  if (!contactSecondary) {
+    return false;
+  }
+
   const contactInformationDiff = applicationContext
     .getUtilities()
     .getAddressPhoneDiff({
-      newData: caseEntity.petitioners[0],
+      newData: caseEntity.getContactPrimary(),
       oldData: contactSecondary,
     });
 
@@ -278,44 +412,9 @@ const generatePaperNoticeForContactSecondary = async ({
     'postalCode',
   ];
 
-  const contactAddressesAreDifferent = Object.keys(contactInformationDiff).some(
-    field => addressFields.includes(field),
+  return Object.keys(contactInformationDiff).some(field =>
+    addressFields.includes(field),
   );
-
-  if (!contactAddressesAreDifferent) {
-    return;
-  }
-
-  const secondaryPdfData = await applicationContext
-    .getDocumentGenerators()
-    .noticeOfReceiptOfPetition({
-      applicationContext,
-      data: {
-        address: contactSecondary,
-        caseCaptionExtension,
-        caseTitle,
-        docketNumberWithSuffix,
-        preferredTrialCity,
-        receivedAtFormatted: applicationContext
-          .getUtilities()
-          .formatDateString(receivedAt, 'MONTH_DAY_YEAR'),
-        servedDate: applicationContext
-          .getUtilities()
-          .formatDateString(caseEntity.getIrsSendDate(), 'MONTH_DAY_YEAR'),
-      },
-    });
-
-  const { PDFDocument } = await applicationContext.getPdfLib();
-  const pdfDoc = await PDFDocument.load(pdfData);
-  const secondaryPdfDoc = await PDFDocument.load(secondaryPdfData);
-  const coverPageDocumentPages = await pdfDoc.copyPages(
-    secondaryPdfDoc,
-    secondaryPdfDoc.getPageIndices(),
-  );
-  pdfDoc.insertPage(1, coverPageDocumentPages[0]);
-
-  const pdfDataBuffer = await pdfDoc.save();
-  return Buffer.from(pdfDataBuffer);
 };
 
 /**
@@ -373,7 +472,6 @@ const serveCaseToIrsInteractor = async (
   if (caseEntity.noticeOfAttachments) {
     const { noticeOfAttachmentsInNatureOfEvidence } =
       SYSTEM_GENERATED_DOCUMENT_TYPES;
-
     await applicationContext
       .getUseCaseHelpers()
       .addDocketEntryForSystemGeneratedOrder({
@@ -383,30 +481,77 @@ const serveCaseToIrsInteractor = async (
       });
   }
 
+  const petitionDocument = caseEntity.docketEntries.find(
+    doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+  );
+
+  const formattedFiledDate = formatDateString(
+    petitionDocument.filingDate,
+    FORMATS.MONTH_DAY_YEAR,
+  );
+
+  if (caseEntity.orderDesignatingPlaceOfTrial) {
+    const { orderDesignatingPlaceOfTrial } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderDesignatingPlaceOfTrial,
+      replacements: [
+        formattedFiledDate,
+        caseEntity.procedureType.toLowerCase(),
+      ],
+    });
+  }
+
+  const todayPlus60 = getBusinessDateInFuture({
+    numberOfDays: 60,
+    startDate: formatNow(FORMATS.ISO),
+  });
+
   if (caseEntity.orderForFilingFee) {
     const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    const todayPlus60 = getBusinessDateInFuture({
-      numberOfDays: 60,
-      startDate: formatNow(FORMATS.ISO),
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderForFilingFee,
+      replacements: [todayPlus60, todayPlus60],
     });
+  }
 
-    const content = replaceBracketed(
-      orderForFilingFee.content,
-      todayPlus60,
-      todayPlus60, // since there are 2 instances of the date, replace a 2nd time
-    );
+  if (caseEntity.orderForAmendedPetition) {
+    const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
-    await applicationContext
-      .getUseCaseHelpers()
-      .addDocketEntryForSystemGeneratedOrder({
-        applicationContext,
-        caseEntity,
-        systemGeneratedDocument: {
-          ...orderForFilingFee,
-          content,
-        },
-      });
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderForAmendedPetition,
+      replacements: [formattedFiledDate, todayPlus60, todayPlus60],
+    });
+  }
+
+  if (caseEntity.orderToShowCause) {
+    const { orderToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderToShowCause,
+      replacements: [formattedFiledDate, todayPlus60],
+    });
+  }
+
+  if (caseEntity.orderForAmendedPetitionAndFilingFee) {
+    const { orderForAmendedPetitionAndFilingFee } =
+      SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderForAmendedPetitionAndFilingFee,
+      replacements: [formattedFiledDate, todayPlus60, todayPlus60],
+    });
   }
 
   await createPetitionWorkItems({
@@ -423,6 +568,7 @@ const serveCaseToIrsInteractor = async (
   const urlToReturn = await generateNoticeOfReceipt({
     applicationContext,
     caseEntity,
+    userIdServingPetition: user.userId,
   });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

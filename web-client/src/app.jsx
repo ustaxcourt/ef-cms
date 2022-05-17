@@ -115,9 +115,9 @@ import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACogn
 import { wasLoginUsingTokenInUrl } from './utilities/wasLoginUsingTokenInUrl';
 import { withAppContextDecorator } from './withAppContext';
 
+import { createRoot } from 'react-dom/client';
 import App from 'cerebral';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 /**
  * Instantiates the Cerebral app with React
@@ -312,9 +312,30 @@ const app = {
     }
 
     initializeSocketProvider(cerebralApp, applicationContext);
-    router.initialize(cerebralApp, route);
 
-    ReactDOM.render(
+    /*
+    This is a decorated added to fix race conditions in our UI related to changing routes.
+    We use riot-router and it works by using an event listener to the window object when
+    the push state occurs, which can cause two of our routes to run in parallel.
+    This causes our UI to get into bad states where the url in the browser says /case-detail, but
+    we are actually viewing the trial-session page.  These race conditions also cause our integration tests
+    and smoke tests to become very flaky.
+    */
+    let processQueue = Promise.resolve();
+    const wrappedRoute = (path, cb) => {
+      route(path, function () {
+        return (processQueue = processQueue.then(() => {
+          // eslint-disable-next-line promise/no-callback-in-promise
+          return cb(...arguments);
+        }));
+      });
+    };
+    router.initialize(cerebralApp, wrappedRoute);
+
+    const container = window.document.querySelector('#app');
+    const root = createRoot(container);
+
+    root.render(
       <Container app={cerebralApp}>
         {!process.env.CI && (
           <>
@@ -327,7 +348,6 @@ const app = {
 
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      window.document.querySelector('#app'),
     );
   },
 };

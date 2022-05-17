@@ -24,8 +24,8 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockReturnValue([MOCK_CASE]);
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue(mockJudge);
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(mockJudge);
   });
 
   it('throws an exception when the user is unauthorized', async () => {

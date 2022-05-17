@@ -28,6 +28,29 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
     cerebralTest.closeSocket();
   });
 
+  const ordersAndNoticesToGenerate = {
+    O: {
+      stateKey: 'orderDesignatingPlaceOfTrial',
+      title: 'Order Designating Place of Trial',
+    },
+    OAP: {
+      stateKey: 'orderForAmendedPetition',
+      title: 'Order for Amended Petition',
+    },
+    OAPF: {
+      stateKey: 'orderForAmendedPetitionAndFilingFee',
+      title: 'Order for Amended Petition and Filing Fee',
+    },
+    OF: {
+      stateKey: 'orderForFilingFee',
+      title: 'Order for Filing Fee',
+    },
+    OSCP: {
+      stateKey: 'orderToShowCause',
+      title: 'Order to Show Cause',
+    },
+  };
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('should create a case from paper', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
@@ -157,6 +180,13 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       }
     }
 
+    for (const item of Object.values(ordersAndNoticesToGenerate)) {
+      await cerebralTest.runSequence('updateFormValueSequence', {
+        key: item.stateKey,
+        value: true,
+      });
+    }
+
     await cerebralTest.runSequence(
       'updateFormValueAndCaseCaptionSequence',
       mockContactPrimary,
@@ -180,7 +210,9 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       state: cerebralTest.getState(),
     });
 
-    expect(helper.ordersAndNoticesInDraft).toContain('Order for Filing Fee');
+    for (let document of Object.values(ordersAndNoticesToGenerate)) {
+      expect(helper.ordersAndNoticesInDraft).toContain(document.title);
+    }
   });
 
   servePetitionToIRS(cerebralTest);
@@ -194,16 +226,19 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       state: cerebralTest.getState(),
     });
 
-    expect(helper.draftDocketEntryCount).toEqual(1);
+    expect(helper.draftDocketEntryCount).toEqual(
+      Object.keys(ordersAndNoticesToGenerate).length,
+    );
   });
 
-  describe('orderForFilingFeeDocketEntry', () => {
-    it('should display the orders and notices that will be generated after service', () => {
-      const orderForFilingFeeDocketEntry = cerebralTest
+  it('should display the orders and notices that will be generated after service', () => {
+    const eventCodes = Object.keys(ordersAndNoticesToGenerate);
+    for (const eventCodesIndex in eventCodes) {
+      const docketEntry = cerebralTest
         .getState('caseDetail.docketEntries')
-        .find(d => d.eventCode === 'OF');
+        .find(d => d.eventCode === eventCodes[eventCodesIndex]);
 
-      expect(orderForFilingFeeDocketEntry.isDraft).toEqual(true);
-    });
+      expect(docketEntry.isDraft).toEqual(true);
+    }
   });
 });

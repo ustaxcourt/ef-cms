@@ -97,4 +97,4 @@ If the Court is not able to reproduce the bug, add the “Unable to reproduce”
  - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required)
  - [ ] Interactors should validate entities before calling persistence methods
  - [ ] Code refactored for clarity and to remove any known technical debt
- - [ ] Deployed to the Court's test environment
+ - [ ] Deployed to the Court's `test` environment if prod-like data is required. Otherwise, deployed to any `experimental` environment for review.

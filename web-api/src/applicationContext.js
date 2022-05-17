@@ -46,6 +46,9 @@ const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
 const {
+  appendAmendedPetitionFormInteractor,
+} = require('../../shared/src/business/useCases/courtIssuedOrder/appendAmendedPetitionFormInteractor');
+const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
@@ -455,14 +458,14 @@ const {
   getCasesForUser,
 } = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
 const {
+  getCasesForUserInteractor,
+} = require('../../shared/src/business/useCases/getCasesForUserInteractor');
+const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
   getClientId,
 } = require('../../shared/src/persistence/cognito/getClientId');
-const {
-  getClosedCasesInteractor,
-} = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
   getCognitoUserIdByEmail,
 } = require('../../shared/src/persistence/cognito/getCognitoUserIdByEmail');
@@ -573,8 +576,11 @@ const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
 const {
-  getJudgeForUserChambersInteractor,
-} = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
+  getJudgeInSectionHelper,
+} = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
+const {
+  getJudgeInSectionInteractor,
+} = require('../../shared/src/business/useCases/users/getJudgeInSectionInteractor');
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
@@ -602,9 +608,6 @@ const {
 const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
-const {
-  getOpenConsolidatedCasesInteractor,
-} = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
@@ -719,6 +722,9 @@ const {
 const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
+const {
+  getUserIdForNote,
+} = require('../../shared/src/business/useCaseHelper/getUserIdForNote');
 const {
   getUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
@@ -1893,7 +1899,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateCaseInventoryReportPdf,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
+        getJudgeInSectionHelper,
         getUnassociatedLeadCase,
+        getUserIdForNote,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
         removeCounselFromRemovedPetitioner,
@@ -1926,6 +1934,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addDeficiencyStatisticInteractor,
         addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
+        appendAmendedPetitionFormInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
@@ -1986,7 +1995,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
-        getClosedCasesInteractor,
+        getCasesForUserInteractor,
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,
         getConsolidatedCasesByCaseInteractor,
@@ -2003,13 +2012,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
-        getJudgeForUserChambersInteractor,
+        getJudgeInSectionInteractor,
         getJudgesForPublicSearchInteractor,
         getMaintenanceModeInteractor,
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
-        getOpenConsolidatedCasesInteractor,
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,
