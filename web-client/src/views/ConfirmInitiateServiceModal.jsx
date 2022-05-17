@@ -86,13 +86,33 @@ export const ConfirmInitiateServiceModal = connect(
                 className="usa-checkbox__label"
                 htmlFor="check-historical-truth"
               >
+                {/*TODO: move these bits of information into a computed*/}
                 {consolidatedCase.docketNumber}{' '}
                 {consolidatedCase.petitioners.length === 1 &&
                   consolidatedCase.petitioners[0].name}
                 {consolidatedCase.petitioners.length > 1 &&
                   consolidatedCase.petitioners.reduce(
-                    (previousValue, currentValue) =>
-                      previousValue + currentValue.name + ' & ',
+                    (previousValue, currentValue) => {
+                      if (consolidatedCase.petitioners.length === 1) {
+                        //one petitioner, so no need for an &
+                        return currentValue.name;
+                      }
+
+                      const concatinatedPetitionersName =
+                        previousValue + currentValue.name;
+
+                      if (
+                        currentValue ===
+                        consolidatedCase.petitioners[
+                          consolidatedCase.petitioners.length - 1
+                        ]
+                      ) {
+                        //this is the last petitioner, no need for an ending &
+                        return concatinatedPetitionersName;
+                      }
+
+                      return concatinatedPetitionersName + ' & ';
+                    },
                     '',
                   )}
               </label>
