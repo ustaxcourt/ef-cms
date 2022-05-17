@@ -506,6 +506,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChambersSectionsLabels: jest
       .fn()
       .mockImplementation(getChambersSectionsLabels),
+    getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest
       .fn()
@@ -541,6 +542,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
+    saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setExpiresAt: jest.fn(),
