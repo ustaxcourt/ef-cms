@@ -190,7 +190,7 @@ exports.updateTrialSessionInteractor = async (
         updatedTrialSessionEntity.judge.userId);
 
   if (shouldCreateWorkingCopyForNewJudge) {
-    createWorkingCopyForNewUserOnSession({
+    await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
       userId: updatedTrialSessionEntity.judge.userId,
@@ -206,7 +206,7 @@ exports.updateTrialSessionInteractor = async (
         updatedTrialSessionEntity.trialClerk.userId);
 
   if (shouldCreateWorkingCopyForNewTrialClerk) {
-    createWorkingCopyForNewUserOnSession({
+    await createWorkingCopyForNewUserOnSession({
       applicationContext,
       trialSessionId: updatedTrialSessionEntity.trialSessionId,
       userId: updatedTrialSessionEntity.trialClerk.userId,
