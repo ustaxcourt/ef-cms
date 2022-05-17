@@ -19,6 +19,7 @@ const { User } = require('../../entities/User');
 
 describe('updateTrialSessionInteractor', () => {
   let mockTrialsById;
+  let inPersonTrialSession;
   let user;
 
   const MOCK_REMOTE_TRIAL = {
@@ -117,6 +118,11 @@ describe('updateTrialSessionInteractor', () => {
         ],
         isCalendared: true,
       },
+    };
+
+    inPersonTrialSession = {
+      ...mockTrialsById[MOCK_TRIAL_ID_7],
+      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     };
 
     user = new User({
@@ -452,71 +458,22 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
+  it('should not retrieve the case from persistence when it has been removed from the trial session', async () => {
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: inPersonTrialSession,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalledWith({
+      applicationContext,
+      docketNumber: mockCaseRemovedFromTrialDocketNumber,
+    });
+  });
+
   describe('should Generate Notices of', () => {
     describe('In-Person Proceeding', () => {
-      it.only('should setNoticeOfChangeToInPersonProceeding for each case on the trial session', async () => {
-        const firstOpenCase = {
-          ...MOCK_CASE,
-          docketNumber:
-            mockTrialsById[MOCK_TRIAL_ID_4].caseOrder[0].docketNumber,
-          docketNumberWithSuffix:
-            mockTrialsById[MOCK_TRIAL_ID_4].caseOrder[0].docketNumber,
-          hearings: [],
-          trialDate: '2019-03-01T21:42:29.073Z',
-          trialSessionId: MOCK_TRIAL_ID_4,
-        };
-
-        const secondOpenCase = {
-          ...MOCK_CASE,
-          docketNumber: '111-22',
-          docketNumberWithSuffix: '111-22',
-          hearings: [],
-          trialDate: '2019-03-01T21:42:29.033Z',
-          trialSessionId: MOCK_TRIAL_ID_4,
-        };
-        const closedCase = {
-          ...MOCK_CASE,
-          closedDate: '2020-03-01T21:42:29.073Z',
-          docketNumber: '999-99',
-          docketNumberWithSuffix: '999-99',
-          hearings: [],
-          status: CASE_STATUS_TYPES.closed,
-          trialDate: '2019-03-01T21:42:29.073Z',
-          trialSessionId: MOCK_TRIAL_ID_4,
-        };
-
-        applicationContext
-          .getPersistenceGateway()
-          .getCaseByDocketNumber.mockReset()
-          .mockReturnValueOnce(firstOpenCase)
-          .mockReturnValueOnce(secondOpenCase)
-          .mockReturnValueOnce(closedCase);
-
-        const inPersonTrialSession = {
-          ...mockTrialsById[MOCK_TRIAL_ID_4],
-          address1: '123 Sesame Street',
-          city: 'Nowhereville',
-          courthouseName: 'The Courthouse',
-          judge: {
-            name: 'Judge Buch',
-            userId: '96bf390d-7418-41a3-b411-f1d8d89fb3d8',
-          },
-          postalCode: '12345',
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-          state: 'AZ',
-        };
-
-        await updateTrialSessionInteractor(applicationContext, {
-          trialSession: inPersonTrialSession,
-        });
-
-        expect(
-          applicationContext.getUseCaseHelpers()
-            .setNoticeOfChangeToInPersonProceeding,
-        ).toHaveBeenCalledTimes(2);
-      });
-
-      it.skip('should not generate notices for the cases on the trial session that have been removed when the trial session has been changed', async () => {
+      it('should not generate notices for the cases on the trial session that have been removed when the trial session has been changed', async () => {
         const firstOpenCase = {
           ...MOCK_CASE,
           docketNumber: '888-88',
@@ -550,15 +507,6 @@ describe('updateTrialSessionInteractor', () => {
           .mockReturnValueOnce(secondOpenCase)
           .mockReturnValueOnce(closedCase);
 
-        const inPersonTrialSession = {
-          ...mockTrialsById[MOCK_TRIAL_ID_7],
-          chambersPhoneNumber: '111111',
-          joinPhoneNumber: '222222',
-          meetingId: '333333',
-          password: '4444444',
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-        };
-
         await updateTrialSessionInteractor(applicationContext, {
           trialSession: inPersonTrialSession,
         });
@@ -570,7 +518,7 @@ describe('updateTrialSessionInteractor', () => {
       });
 
       it('should NOT generate a NOIP when the proceeding type changes from remote to in-person, the case status is not closed but the trial session is NOT calendared', async () => {
-        const inPersonTrialSession = {
+        const inPersonNonCalendaredTrialSession = {
           ...mockTrialsById[MOCK_TRIAL_ID_3],
           isCalendared: false,
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -588,7 +536,7 @@ describe('updateTrialSessionInteractor', () => {
           });
 
         await updateTrialSessionInteractor(applicationContext, {
-          trialSession: inPersonTrialSession,
+          trialSession: inPersonNonCalendaredTrialSession,
         });
 
         expect(
