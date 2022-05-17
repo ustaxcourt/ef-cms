@@ -15,12 +15,11 @@ const { DocketEntry } = require('../../entities/DocketEntry');
  * @param {object} providers.caseEntity the case data
  * @param {object} providers.newPdfDoc the new PDF contents to be appended
  * @param {object} providers.newTrialSessionEntity the new trial session data
- * @param {object} providers.PDFDocument the PDF document to append to
  * @param {object} providers.userId the user ID
  */
 exports.setNoticeOfChangeToInPersonProceeding = async (
   applicationContext,
-  { caseEntity, newPdfDoc, newTrialSessionEntity, PDFDocument, userId },
+  { caseEntity, newPdfDoc, newTrialSessionEntity, userId },
 ) => {
   const trialSessionInformation = {
     address1: newTrialSessionEntity.address1,
@@ -87,7 +86,6 @@ exports.setNoticeOfChangeToInPersonProceeding = async (
   noticeOfChangeToInPersonProceedingDocketEntry.setAsServed(servedParties.all);
 
   await applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase({
-    PDFDocument,
     applicationContext,
     caseEntity,
     newPdfDoc,

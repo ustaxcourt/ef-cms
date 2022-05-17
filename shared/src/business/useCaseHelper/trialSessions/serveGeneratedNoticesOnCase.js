@@ -1,8 +1,8 @@
 /**
  * serveGeneratedNoticesOnCase
  *
- * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {object} applicationContext the application context
  * @param {object} providers.caseEntity the case data
  * @param {object} providers.newPdfDoc the new pdf document
  * @param {object} providers.noticeDocketEntryEntity the notice docket entry entity
@@ -16,7 +16,6 @@ exports.serveGeneratedNoticesOnCase = async ({
   newPdfDoc,
   noticeDocketEntryEntity,
   noticeDocumentPdfData,
-  PDFDocument,
   servedParties,
 }) => {
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
@@ -27,6 +26,7 @@ exports.serveGeneratedNoticesOnCase = async ({
   });
 
   if (servedParties.paper.length > 0) {
+    const { PDFDocument } = applicationContext.getPdfLib();
     const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
 
     await applicationContext

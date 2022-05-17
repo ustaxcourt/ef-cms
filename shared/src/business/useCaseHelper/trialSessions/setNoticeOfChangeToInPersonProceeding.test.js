@@ -23,10 +23,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
   const mockTrialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
   const mockUserId = '85a5b1c8-1eed-44b6-932a-967af060597a';
 
-  const mockPdfDocument = {
-    load: () => jest.fn().mockReturnValue(getFakeFile),
-  };
-
   const mockInPersonCalendaredTrialSession = {
     ...MOCK_TRIAL_INPERSON,
     isCalendared: true,
@@ -61,7 +57,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
 
   it('should save the generated NOIP to persistence', async () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
@@ -80,7 +75,6 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
 
   it('should create and serve the NOIP docket entry on the case', async () => {
     await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
       caseEntity: mockOpenCase,
       currentTrialSession: mockRemoteTrialSession,
       newPdfDoc: getFakeFile,
