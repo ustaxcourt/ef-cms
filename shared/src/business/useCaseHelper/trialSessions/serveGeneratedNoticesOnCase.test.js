@@ -4,73 +4,114 @@ const {
 const {
   serveGeneratedNoticesOnCase,
 } = require('./serveGeneratedNoticesOnCase');
+const { Case } = require('../../entities/cases/Case');
+const { DocketEntry } = require('../../entities/DocketEntry');
+const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
+const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('serveGeneratedNoticesOnCase', () => {
-  const mockTrialSessionInformation = {
-    ...MOCK_TRIAL_INPERSON,
-    chambersPhoneNumber: '203-456-9888',
-    courthouseName: 'A Court Of Law',
-    judgeName: 'Batman',
+  const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
+
+  const mockPdfDocument = {
+    load: () => jest.fn().mockReturnValue(getFakeFile),
   };
+  const mockOpenCase = new Case(
+    {
+      ...MOCK_CASE,
+      trialDate: '2019-03-01T21:42:29.073Z',
+      trialSessionId,
+    },
+    { applicationContext },
+  );
 
-  const mockJudge = {
-    judgeTitle: 'Judge',
-    name: 'Batman',
-  };
+  it('should sendServedPartiesEmails and append the paper service info to the docket entry on the case when the case has parties with paper service', async () => {
+    const mockCaseWithPaperService = new Case(
+      {
+        ...mockOpenCase,
+        petitioners: [
+          {
+            ...mockOpenCase.petitioners[0],
+            email: undefined,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { applicationContext },
+    );
 
-  it('should call the document generator to generate the NOIP', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue([mockJudge]);
+    const mockNoticeDocketEntry = new DocketEntry(
+      {
+        ...MOCK_CASE.docketEntries[0],
+      },
+      { applicationContext },
+    );
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+    const mockNoticeDocumentPdfData = applicationContext
+      .getUseCaseHelpers()
+      .generateNoticeOfChangeToInPersonProceeding.mockReturnValue(getFakeFile);
 
-    await generateNoticeOfChangeToInPersonProceeding(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      trialSessionInformation: mockTrialSessionInformation,
+    await serveGeneratedNoticesOnCase({
+      PDFDocument: mockPdfDocument,
+      applicationContext,
+      caseEntity: mockCaseWithPaperService,
+      newPdfDoc: getFakeFile,
+      noticeDocketEntryEntity: mockNoticeDocketEntry,
+      noticeDocumentPdfData: mockNoticeDocumentPdfData,
+      servedParties: {
+        paper: ['test'],
+      },
     });
 
     expect(
-      applicationContext.getDocumentGenerators()
-        .noticeOfChangeToInPersonProceeding.mock.calls[0][0].data,
-    ).toMatchObject({
-      caseCaptionExtension: 'Petitioner',
-      caseTitle: 'Test Petitioner',
-      docketNumberWithSuffix: MOCK_CASE.docketNumberWithSuffix,
-      trialInfo: mockTrialSessionInformation,
-    });
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
   });
 
-  // it('should append the paper service info to the NORP docket entry on the case when the case has parties with paper service', async () => {
-  //   const mockCaseWithPaperService = new Case(
-  //     {
-  //       ...mockOpenCase,
-  //       petitioners: [
-  //         {
-  //           ...mockOpenCase.petitioners[0],
-  //           email: undefined,
-  //           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-  //         },
-  //       ],
-  //     },
-  //     { applicationContext },
-  //   );
+  it('should not append the paper service info to the docket entry on the case when the case does not have parties with paper service', async () => {
+    const mockCaseWithPaperService = new Case(
+      {
+        ...mockOpenCase,
+        petitioners: [
+          {
+            ...mockOpenCase.petitioners[0],
+            email: undefined,
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+      },
+      { applicationContext },
+    );
 
-  //   await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-  //     PDFDocument: mockPdfDocument,
-  //     caseEntity: mockCaseWithPaperService,
-  //     currentTrialSession: inPersonTrialSession,
-  //     newPdfDoc: getFakeFile,
-  //     newTrialSessionEntity: remoteTrialSession,
-  //     userId,
-  //   });
+    const mockNoticeDocketEntry = new DocketEntry(
+      {
+        ...MOCK_CASE.docketEntries[0],
+      },
+      { applicationContext },
+    );
 
-  //   expect(
-  //     applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-  //   ).toHaveBeenCalled();
-  // });
+    const mockNoticeDocumentPdfData = applicationContext
+      .getUseCaseHelpers()
+      .generateNoticeOfChangeToInPersonProceeding.mockReturnValue(getFakeFile);
+
+    await serveGeneratedNoticesOnCase({
+      PDFDocument: mockPdfDocument,
+      applicationContext,
+      caseEntity: mockCaseWithPaperService,
+      newPdfDoc: getFakeFile,
+      noticeDocketEntryEntity: mockNoticeDocketEntry,
+      noticeDocumentPdfData: mockNoticeDocumentPdfData,
+      servedParties: {
+        paper: [],
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).not.toHaveBeenCalled();
+  });
 });
