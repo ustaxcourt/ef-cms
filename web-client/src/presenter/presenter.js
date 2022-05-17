@@ -70,6 +70,7 @@ import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
+import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
 import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequence';
@@ -564,6 +565,7 @@ export const presenter = {
     completePrintPaperPetitionReceiptSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
+    consolidatedCaseCheckboxAllChangeSequence,
     contactPrimaryCountryTypeChangeSequence,
     convertHtml2PdfSequence,
     copyPrimaryContactSequence,
