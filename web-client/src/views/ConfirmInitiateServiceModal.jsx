@@ -11,6 +11,8 @@ export const ConfirmInitiateServiceModal = connect(
     confirmSequence: props.confirmSequence,
     consolidatedCaseServiceInitiateHelper:
       state.consolidatedCaseServiceInitiateHelper,
+    consolodatedCaseCheckboxAllChange:
+      sequences.consolodatedCaseCheckboxAllChangeSequence,
     documentTitle: props.documentTitle,
     formattedCaseDetail: state.formattedCaseDetail,
     serveCourtIssuedDocumentFromDocketEntrySequence:
@@ -21,6 +23,7 @@ export const ConfirmInitiateServiceModal = connect(
     cancelSequence,
     confirmInitiateServiceModalHelper,
     confirmSequence,
+    consolidatedCaseCheckboxAllChange,
     consolidatedCaseServiceInitiateHelper,
     documentTitle,
     formattedCaseDetail,
@@ -83,6 +86,7 @@ export const ConfirmInitiateServiceModal = connect(
               name="consolidated-case"
               type="checkbox"
               value="consolidated-case-checkbox-all"
+              onChange={consolidatedCaseCheckboxAllChange}
             />
             <label
               className="usa-checkbox__label"
