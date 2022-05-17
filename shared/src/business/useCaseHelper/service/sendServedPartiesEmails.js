@@ -10,6 +10,7 @@ exports.sendServedPartiesEmails = async ({
   caseEntity,
   docketEntryId,
   servedParties,
+  skipEmailToIrs = false,
 }) => {
   const { caseCaption, docketNumber, docketNumberWithSuffix } = caseEntity;
   const partiesToServe = cloneDeep(servedParties);
@@ -33,8 +34,7 @@ exports.sendServedPartiesEmails = async ({
     .getUtilities()
     .formatNow('MONTH_DAY_YEAR');
 
-  //serve every document on IRS superuser if case has been served to the IRS
-  if (caseEntity.status !== CASE_STATUS_TYPES.new) {
+  if (!skipEmailToIrs && caseEntity.status !== CASE_STATUS_TYPES.new) {
     partiesToServe.electronic.push({
       email: applicationContext.getIrsSuperuserEmail(),
       name: 'IRS',

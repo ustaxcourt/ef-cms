@@ -1005,6 +1005,8 @@ header.usa-header {
   }
 
   #case-title {
+    max-width: none;
+
     span {
       margin-right: 15px;
     }
@@ -1163,6 +1165,7 @@ hr.lighter {
   }
 
   #signature-warning {
+    position: relative;
     display: block;
     width: 612px;
     padding: 20px;
@@ -1969,4 +1972,8 @@ button.change-scanner-button {
       color: color($theme-color-primary-dark);
     }
   }
+}
+
+.docket-number-header {
+  margin-bottom: 0.5rem !important;
 }

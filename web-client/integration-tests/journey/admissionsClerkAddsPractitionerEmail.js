@@ -31,7 +31,7 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
@@ -84,7 +84,7 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     await refreshElasticsearchIndex();
 

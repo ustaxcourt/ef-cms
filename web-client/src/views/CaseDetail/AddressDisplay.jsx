@@ -11,7 +11,7 @@ export const AddressDisplay = connect(
     constants: state.constants,
     contact: props.contact,
     formattedCaseDetail: state.formattedCaseDetail,
-    nameOverride: props.nameOverride || {},
+    nameOverride: props.nameOverride,
     noMargin: props.noMargin || false,
     openSealAddressModalSequence: sequences.openSealAddressModalSequence,
     showEmail: props.showEmail || false,

@@ -1,6 +1,9 @@
+const {
+  AMENDED_PETITION_FORM_NAME,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../entities/EntityConstants');
 const { DocketEntry } = require('../entities/DocketEntry');
 const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-
 /**
  *
  * Add docket entry for system generated order
@@ -9,7 +12,7 @@ const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {string} providers.caseEntity the caseEntity
+ * @param {Case} providers.caseEntity the caseEntity
  * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
  */
 exports.addDocketEntryForSystemGeneratedOrder = async ({
@@ -43,7 +46,7 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
-  const pdfData = await applicationContext.getDocumentGenerators().order({
+  let orderPdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
       caseCaptionExtension,
@@ -57,10 +60,34 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
     },
   });
 
+  let combinedPdf = orderPdfData;
+  if (
+    systemGeneratedDocument.eventCode ===
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode ||
+    systemGeneratedDocument.eventCode ===
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
+        .eventCode
+  ) {
+    const { Body: amendedPetitionFormData } = await applicationContext
+      .getStorageClient()
+      .getObject({
+        Bucket: applicationContext.environment.documentsBucketName,
+        Key: AMENDED_PETITION_FORM_NAME,
+      })
+      .promise();
+
+    const returnVal = await applicationContext.getUtilities().combineTwoPdfs({
+      applicationContext,
+      firstPdf: combinedPdf,
+      secondPdf: amendedPetitionFormData,
+    });
+    combinedPdf = Buffer.from(returnVal);
+  }
+
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    caseConfirmationPdfName: newDocketEntry.docketEntryId,
-    pdfData,
+    pdfData: combinedPdf,
+    pdfName: newDocketEntry.docketEntryId,
   });
 
   const documentContentsId = applicationContext.getUniqueId();

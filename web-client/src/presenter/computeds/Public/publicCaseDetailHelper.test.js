@@ -426,6 +426,56 @@ describe('publicCaseDetailHelper', () => {
         },
       ]);
     });
+
+    it('should not show a link for sealed documents requested by a terminal user', () => {
+      state.caseDetail.docketEntries = [
+        {
+          ...baseDocketEntry,
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          index: 1,
+          isFileAttached: false,
+          isLegacyServed: true,
+          isSealed: true,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          index: 2,
+          isFileAttached: false,
+          isLegacySealed: true,
+          isLegacyServed: true,
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, {
+        state: { ...state, isTerminalUser: true },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          eventCode: 'SPTO',
+          index: 1,
+          openInSameTab: false,
+          showLinkToDocument: false,
+        },
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          eventCode: 'SPTO',
+          index: 2,
+          openInSameTab: false,
+          showLinkToDocument: false,
+        },
+      ]);
+    });
   });
 
   it('should indicate when a case is sealed', () => {

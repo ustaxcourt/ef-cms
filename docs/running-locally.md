@@ -62,6 +62,12 @@ tfenv use 1.1.0
 
 !> Before running terraform on your workspace, double check you are on the correct version.
 
+### Circleci
+Since we use circle ci in our CI/CD process, we using a husky pre-commit to validate our config file.  Because of this, you'll need to install this circleci package.
+
+```bash
+brew install circleci
+```
 
 ## Getting Running
 

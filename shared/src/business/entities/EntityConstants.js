@@ -23,6 +23,8 @@ const ORDER_JUDGE_FIELD = 'signedJudgeName';
 
 const OPINION_JUDGE_FIELD = 'judge';
 
+const AMENDED_PETITION_FORM_NAME = 'amended-petition-form.pdf';
+
 const TRIAL_SESSION_PROCEEDING_TYPES = {
   inPerson: 'In Person',
   remote: 'Remote',
@@ -174,45 +176,71 @@ const ORDER_TYPES = [
   {
     documentType: 'Order',
     eventCode: 'O',
+    overrideFreeText: true,
   },
   {
     documentTitle: 'Order of Dismissal for Lack of Jurisdiction',
     documentType: 'Order of Dismissal for Lack of Jurisdiction',
     eventCode: 'ODJ',
+    overrideFreeText: true,
   },
   {
     documentTitle: 'Order of Dismissal',
     documentType: 'Order of Dismissal',
     eventCode: 'OD',
+    overrideFreeText: true,
   },
   {
     documentTitle: 'Order of Dismissal and Decision',
     documentType: 'Order of Dismissal and Decision',
     eventCode: 'ODD',
+    overrideFreeText: true,
   },
   {
     documentTitle: 'Order for Filing Fee',
     documentType: 'Order for Filing Fee',
     eventCode: 'OF',
+    overrideFreeText: false,
+  },
+  {
+    documentTitle: 'Order for Amended Petition',
+    documentType: 'Order for Amended Petition',
+    eventCode: 'OAP',
+    overrideFreeText: false,
+  },
+  {
+    documentTitle: 'Order for Amended Petition and Filing Fee',
+    documentType: 'Order for Amended Petition and Filing Fee',
+    eventCode: 'OAPF',
+    overrideFreeText: false,
   },
   {
     documentTitle: 'Order to Show Cause',
     documentType: 'Order to Show Cause',
     eventCode: 'OSC',
+    overrideFreeText: true,
+  },
+  {
+    documentType: 'Order petr(s) to show cause why "S" should not be removed',
+    eventCode: 'OSCP',
+    overrideFreeText: false,
   },
   {
     documentTitle: 'Order and Decision',
     documentType: 'Order and Decision',
     eventCode: 'OAD',
+    overrideFreeText: true,
   },
   {
     documentTitle: 'Decision',
     documentType: 'Decision',
     eventCode: 'DEC',
+    overrideFreeText: true,
   },
   {
     documentType: 'Notice',
     eventCode: 'NOT',
+    overrideFreeText: true,
   },
 ];
 
@@ -501,6 +529,60 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'OF',
     documentTitle: 'Order',
   },
+  orderDesignatingPlaceOfTrial: {
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a petition for petitioner(s) to commence the above referenced case.  Because the Request for Place of Trial was not submitted with the Petition, the Court will designate the place of trial for this case. If petitioner(s) wishes to designate a place of trial other than the place of trial designated by the Court below, petitioner(s) may file a Motion to Change Place of Trial and designate therein a place of trial at which this Court tries [PROCEDURE_TYPE] tax cases (any city on the Request for Place of Trial form which is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html).<br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is
+    <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that <span style="color: red;">TRIAL_LOCATION</span> is designated as the place of trial in this case.`,
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'O')
+      .documentType,
+    eventCode: 'O',
+    documentTitle: 'Order',
+  },
+  orderForAmendedPetition: {
+    content:
+      '&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_60], petitioner(s) shall file a proper amended petition. If, by [ORDER_PLUS_60], petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.',
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OAP')
+      .documentType,
+    eventCode: 'OAP',
+    documentTitle: 'Order',
+  },
+  orderForAmendedPetitionAndFilingFee: {
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on [FILED_DATE], a document as the petition of the above-named
+      petitioner(s) at the docket number indicated. That docket number MUST appear on all documents
+      and papers subsequently sent to the Court for filing or otherwise. The document did not comply with
+      the Rules of the Court as to the form and content of a proper petition. The filing fee was not paid.<br/>
+      <br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is<br/>
+      <br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_60], petitioner(s) shall file a proper
+      amended petition and pay the $60.00 filing fee. Waiver of the filing fee requires an affidavit
+      containing specific financial information regarding the inability to make such payment. An
+      Application for Waiver of Filing Fee and Affidavit form is available under "Case Related Forms" on
+      the Court's website at www.ustaxcourt.gov/case_related_forms.html.<br/>
+      <br/>
+      If, by [ORDER_PLUS_60], petitioner(s) do not file an Amended Petition and either pay the Court's
+      $60.00 filing fee or submit an Application for Waiver of the Filing Fee, the case will be dismissed or
+      other action taken as the Court deems appropriate.`,
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OAPF')
+      .documentType,
+    eventCode: 'OAPF',
+    documentTitle: 'Order',
+  },
+  orderToShowCause: {
+    content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
+      petitioners elected to have this deficiency case conducted under the small tax case procedures. However, a review
+      of the record shows that the amount in dispute for one or more taxable years exceeds $50,000. The small tax case
+      procedures are only applicable to deficiency cases in which the amount in dispute for each taxable year is
+      $50,000 or less. <u>See</u> section 7463(a)(1), Internal Revenue Code; Rules 170 and 171, Tax Court Rules of Practice
+      and Procedure.
+      <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Upon due consideration and for cause, it is
+      <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [ORDER_DATE_PLUS_60] petitioners shall show cause in writing why
+      the Court should not issue an Order directing that the small tax case designation be removed in this case and the
+      proceedings not be conducted under the Small Tax Case Rules.`,
+    documentType: ORDER_TYPES.find(order => order.eventCode === 'OSCP')
+      .documentType,
+    eventCode: 'OSCP',
+    documentTitle: 'Order to Show Cause',
+  },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
     documentType: 'Notice of Docket Change',
@@ -515,6 +597,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
     eventCode: 'NTD',
+  },
+  noticeOfReceiptOfPetition: {
+    documentTitle: 'Notice of Receipt of Petition',
+    documentType: 'Notice of Receipt of Petition',
+    eventCode: 'NOTR',
   },
   standingPretrialOrderForSmallCase: {
     documentTitle: SPOS_DOCUMENT.documentTitle,
@@ -547,33 +634,52 @@ const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP = [
     documentType: 'Entry of Appearance',
     documentTitle: 'Entry of Appearance',
     eventCode: 'EA',
+    allowImmediateAssociation: true,
+    filedByPractitioner: true,
   },
   {
     documentType: 'Limited Entry of Appearance',
     documentTitle: 'Limited Entry of Appearance',
     eventCode: 'LEA',
+    allowImmediateAssociation: true,
+    filedByPractitioner: true,
   },
   {
     documentType: 'Substitution of Counsel',
     documentTitle: 'Substitution of Counsel',
     eventCode: 'SOC',
+    allowImmediateAssociation: true,
+    filedByPractitioner: true,
   },
   {
     documentType: 'Notice of Intervention',
     documentTitle: 'Notice of Intervention',
     eventCode: 'NOI',
+    allowImmediateAssociation: false,
+    filedByPractitioner: true,
+  },
+  {
+    documentType: 'Motion to Substitute Parties and Change Caption',
+    documentTitle: 'Motion to Substitute Parties and Change Caption',
+    eventCode: 'M107',
+    allowImmediateAssociation: false,
   },
   {
     documentType: 'Notice of Election to Participate',
     documentTitle: 'Notice of Election to Participate',
     eventCode: 'NOEP',
+    allowImmediateAssociation: false,
+    filedByPractitioner: true,
   },
   {
     documentType: 'Notice of Election to Intervene',
     documentTitle: 'Notice of Election to Intervene',
     eventCode: 'NOEI',
+    allowImmediateAssociation: false,
+    filedByPractitioner: true,
   },
 ];
+
 const PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES =
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.map(d => d.documentType);
 
@@ -583,7 +689,15 @@ const PAYMENT_STATUS = {
   WAIVED: 'Waived',
 };
 
-const PROCEDURE_TYPES = ['Regular', 'Small']; // This is the order that they appear in the UI
+const PROCEDURE_TYPES_MAP = {
+  regular: 'Regular',
+  small: 'Small',
+};
+
+const PROCEDURE_TYPES = [
+  PROCEDURE_TYPES_MAP.regular,
+  PROCEDURE_TYPES_MAP.small,
+]; // This is the order that they appear in the UI
 
 const STATUS_TYPES_WITH_ASSOCIATED_JUDGE = [
   CASE_STATUS_TYPES.assignedCase,
@@ -1136,6 +1250,7 @@ const DOCKET_ENTRY_SEALED_TO_TYPES = {
 };
 
 module.exports = deepFreeze({
+  AMENDED_PETITION_FORM_NAME,
   ADC_SECTION,
   ADMISSIONS_SECTION,
   ADMISSIONS_STATUS_OPTIONS,
@@ -1244,6 +1359,7 @@ module.exports = deepFreeze({
   SECTIONS,
   SERVED_PARTIES_CODES,
   SERVICE_INDICATOR_TYPES,
+  PROCEDURE_TYPES_MAP,
   SESSION_STATUS_GROUPS,
   SESSION_TERMS,
   SESSION_TYPES,

@@ -276,3 +276,11 @@ docker build -t "ef-cms-us-east-1:pdf-compare" -f Dockerfile-pdf-testing .
 docker run -it -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output ef-cms-us-east-1:pdf-compare sh -c "cd efcms && ./update-pdf-images.sh"
 cp -r shared/test-output/*.1.png shared/test-pdf-expected-images/
 ```
+
+## Client Integration Testing
+If you want to be able to run `build-client-integration` tests within a Docker container locally for debuggging purposes without deploying, you could use these commands.
+
+```
+docker build -t "ef-cms-us-east-1:integration-tests" -f Dockerfile-integration .
+docker run -it -v `pwd`/shared/test-output:/home/app/efcms/shared/test-output ef-cms-us-east-1:integration-tests sh -c "cd efcms && ./run-integration-tests.sh"
+```

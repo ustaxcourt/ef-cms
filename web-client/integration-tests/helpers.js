@@ -847,19 +847,37 @@ export const wait = time => {
     setTimeout(resolve, time);
   });
 };
-export const waitForLoadingComponentToHide = async (
+
+export const waitForLoadingComponentToHide = async ({
   cerebralTest,
+  component = 'progressIndicator.waitingForResponse',
+  maxWait = 30000,
+  refreshInterval = 500,
+}) => {
+  let waitTime = 0;
+
+  while (cerebralTest.getState(component) && waitTime < maxWait) {
+    waitTime += refreshInterval;
+    await wait(refreshInterval);
+  }
+  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
+};
+
+export const waitForExpectedItem = async ({
+  cerebralTest,
+  currentItem,
+  expectedItem,
   maxWait = 10000,
-) => {
+}) => {
   let waitTime = 0;
   while (
-    cerebralTest.getState('progressIndicator.waitingForResponse') &&
+    cerebralTest.getState(currentItem) != expectedItem &&
     waitTime < maxWait
   ) {
     waitTime += 500;
     await wait(500);
   }
-  console.log(`Waited ${waitTime}ms for the loading component to hide`);
+  console.log(`Waited ${waitTime}ms for ${expectedItem}`);
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {

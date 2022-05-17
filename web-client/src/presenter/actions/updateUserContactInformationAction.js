@@ -10,9 +10,12 @@ import { state } from 'cerebral';
 export const updateUserContactInformationAction = async ({
   applicationContext,
   get,
+  store,
 }) => {
   const formUser = get(state.form);
   const currentUser = applicationContext.getCurrentUser();
+
+  store.set(state.userContactEditProgress.inProgress, true);
 
   await applicationContext
     .getUseCases()

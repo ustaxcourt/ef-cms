@@ -1,464 +1,395 @@
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from './messageModalHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-const messageModalHelper = withAppContextDecorator(
-  messageModalHelperComputed,
-  applicationContext,
-);
-
 describe('messageModalHelper', () => {
-  let caseDetail;
+  const mockDocketEntryIdOnDocketRecord = '123';
+  const mockDocketEntryIdAlsoOnDocketRecord = '234';
 
-  beforeAll(() => {
-    applicationContext.getCurrentUser = () => ({
-      userId: '2db2d514-cc08-4900-a2fc-6113abdc43e8',
+  const mockDocketEntryWithFileAttachedOnDocketRecord = {
+    descriptionDisplay: 'Hello with additional info',
+    documentId: mockDocketEntryIdOnDocketRecord,
+    documentType: 'Petition',
+    index: 1,
+    isFileAttached: true,
+    isOnDocketRecord: true,
+  };
+
+  const mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription = {
+    documentId: mockDocketEntryIdAlsoOnDocketRecord,
+    documentTitle: 'Some Document',
+    index: 2,
+    isFileAttached: true,
+    isOnDocketRecord: true,
+  };
+
+  const mockDocketEntries = [
+    mockDocketEntryWithFileAttachedOnDocketRecord,
+    mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription,
+    { index: 3, isOnDocketRecord: true },
+  ];
+
+  const mockDraftDocketEntry = {
+    documentId: '345',
+    documentTitle: 'Order to do something',
+    documentType: 'Order',
+    isDraft: true,
+  };
+
+  const mockDraftDocketEntryNoTitle = {
+    documentType: 'Hello documentType',
+    isDraft: true,
+  };
+
+  const mockDraftDocuments = [
+    mockDraftDocketEntry,
+    mockDraftDocketEntryNoTitle,
+  ];
+
+  const mockCorrespondences = [
+    {
+      correspondenceId: '986',
+      documentTitle: 'Test Correspondence',
+    },
+  ];
+
+  const baseState = {
+    caseDetail: {},
+    modal: {
+      form: {
+        attachments: [],
+      },
+    },
+    screenMetadata: {},
+  };
+
+  const messageModalHelper = withAppContextDecorator(
+    messageModalHelperComputed,
+    applicationContext,
+  );
+
+  describe('correspondence', () => {
+    it('should be set to the list of correspondences from formattedCaseDetail', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: mockCorrespondences,
+        draftDocuments: [],
+        formattedDocketEntries: [],
+      });
+
+      const { correspondence } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(correspondence).toBe(mockCorrespondences);
     });
 
-    caseDetail = {
-      ...MOCK_CASE,
-      correspondence: [
+    it('should set a title on each entry from the documentTitle or documentType', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        draftDocuments: mockDraftDocuments,
+        formattedDocketEntries: [],
+      });
+
+      const { draftDocuments } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(draftDocuments).toMatchObject([
         {
-          correspondenceId: '986',
-          documentTitle: 'Test Correspondence',
-        },
-      ],
-      docketEntries: [
-        {
-          documentId: '123',
-          documentType: 'Petition',
-          index: 1,
-          isFileAttached: true,
-          isOnDocketRecord: true,
+          title: mockDraftDocketEntry.documentTitle,
         },
         {
-          documentId: '234',
-          documentTitle: 'Some Document',
-          index: 2,
-          isFileAttached: true,
-          isOnDocketRecord: true,
+          title: mockDraftDocketEntryNoTitle.documentType,
         },
-        { index: 3, isOnDocketRecord: true },
-        { documentId: '345', documentType: 'Order', isDraft: true },
-      ],
-    };
+      ]);
+    });
   });
 
-  it('returns documents on the docket record', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
+  describe('documents', () => {
+    it('should include only documents that are on the docket record', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [],
+        draftDocuments: [],
+        formattedDocketEntries: mockDocketEntries,
+      });
+
+      const { documents } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(documents).toMatchObject([
+        { documentId: mockDocketEntryIdOnDocketRecord },
+        { documentId: mockDocketEntryIdAlsoOnDocketRecord },
+      ]);
+      expect(documents.length).toEqual(2);
     });
 
-    expect(result.documents).toMatchObject([
-      { documentId: '123' },
-      { documentId: '234' },
-    ]);
-    expect(result.documents.length).toEqual(2);
+    it('should set a title on each entry from either the descriptionDisplay or documentType', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        draftDocuments: [],
+        formattedDocketEntries: mockDocketEntries,
+      });
+
+      const { documents } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(documents[0].title).toEqual(
+        mockDocketEntryWithFileAttachedOnDocketRecord.descriptionDisplay,
+      );
+      expect(documents[1].title).toEqual(
+        mockDocketEntryWithFileAttachedOnDocketRecordAndNoDescription.documentType,
+      );
+    });
   });
 
-  it('returns correspondence from formattedCaseDetail', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
+  describe('draftDocuments', () => {
+    it('should be set to the list of draftDocuments from formattedCaseDetail', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [],
+        draftDocuments: mockDraftDocuments,
+        formattedDocketEntries: [],
+      });
+
+      const { draftDocuments } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(draftDocuments).toBe(mockDraftDocuments);
+    });
+  });
+
+  describe('hasCorrespondence', () => {
+    it('should be true when there is at least one correspondence document on the case', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: mockCorrespondences,
+        draftDocuments: [],
+        formattedDocketEntries: [],
+      });
+
+      const { hasCorrespondence } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(hasCorrespondence).toEqual(true);
     });
 
-    expect(result.correspondence).toMatchObject([
-      { correspondenceId: '986', documentTitle: 'Test Correspondence' },
-    ]);
+    it('should be false when there are NO correspondence documents on the case', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [],
+        draftDocuments: [],
+        formattedDocketEntries: [],
+      });
+
+      const { hasCorrespondence } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(hasCorrespondence).toEqual(false);
+    });
   });
 
-  it('returns draftDocuments from formattedCaseDetail', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
+  describe('hasDocuments', () => {
+    it('should be true when there is at least one docketEntry on the docket record with file attached on the case', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [],
+        draftDocuments: [],
+        formattedDocketEntries: [mockDocketEntryWithFileAttachedOnDocketRecord],
+      });
+
+      const { hasDocuments } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(hasDocuments).toEqual(true);
     });
 
-    expect(result.draftDocuments).toMatchObject([{ documentId: '345' }]);
+    it('should be false when there are NO docketEntries on the case', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [],
+        draftDocuments: [],
+        formattedDocketEntries: [],
+      });
+
+      const { hasDocuments } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(hasDocuments).toEqual(false);
+    });
   });
 
-  it('returns hasCorrespondence true when there are correspondence documents on the case', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail: {
-          ...caseDetail,
-          correspondence: [{ correspondenceId: '123' }],
-          docketEntries: [],
-        },
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
+  describe('hasDraftDocuments', () => {
+    it('should be true when there is at least one draft documents on the case', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [],
+        draftDocuments: [mockDraftDocketEntry],
+        formattedDocketEntries: [],
+      });
+
+      const { hasDraftDocuments } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(hasDraftDocuments).toEqual(true);
     });
 
-    expect(result.hasCorrespondence).toEqual(true);
+    it('should be false when there are NO draft documents on the case', () => {
+      applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
+        correspondence: [],
+        draftDocuments: [],
+        formattedDocketEntries: [],
+      });
+
+      const { hasDraftDocuments } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(hasDraftDocuments).toEqual(false);
+    });
   });
 
-  it('returns hasCorrespondence false when there are NO correspondence documents on the case', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail: {
-          ...caseDetail,
-          correspondence: [],
-          docketEntries: [],
-        },
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
+  describe('showAddDocumentForm', () => {
+    it("should be true when the message doesn't have any attachments", () => {
+      const { showAddDocumentForm } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
+
+      expect(showAddDocumentForm).toEqual(true);
     });
 
-    expect(result.hasDocuments).toEqual(false);
-  });
+    it('should be true when screenMetadata.showAddDocumentForm is true and the maximum number of attachments has not been met', () => {
+      applicationContext.getConstants.mockReturnValue({
+        CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
+      });
 
-  it('returns hasDocuments true when there are docketEntries with files attached on the case', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail: {
-          ...caseDetail,
-          correspondence: [],
-          docketEntries: [
-            {
-              documentId: '123',
-              index: 1,
-              isDraft: true,
-              isFileAttached: true,
-              isOnDocketRecord: true,
+      const { showAddDocumentForm } = runCompute(messageModalHelper, {
+        state: {
+          caseDetail: {},
+          modal: {
+            form: {
+              attachments: [{}], // 1/2 documents attached
             },
-          ],
+          },
+          screenMetadata: {
+            showAddDocumentForm: true,
+          },
         },
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
+      });
+
+      expect(showAddDocumentForm).toEqual(true);
     });
 
-    expect(result.hasDocuments).toEqual(true);
-  });
+    it('should be false when screenMetadata.showAddDocumentForm is false and the maximum number of attachments has not been met', () => {
+      applicationContext.getConstants.mockReturnValue({
+        CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
+      });
 
-  it('returns hasDocuments false when there are NO docketEntries on the case', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail: {
-          ...caseDetail,
-          correspondence: [],
-          docketEntries: [],
-        },
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
-    });
-
-    expect(result.hasCorrespondence).toEqual(false);
-  });
-
-  it('returns hasDraftDocuments true when there are draft documents on the case', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail: {
-          ...caseDetail,
-          correspondence: [],
-          docketEntries: [
-            { documentId: '123', documentType: 'Order', isDraft: true },
-          ],
-        },
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
-    });
-
-    expect(result.hasDraftDocuments).toEqual(true);
-  });
-
-  it('returns hasDraftDocuments false when there are NO draft documents on the case', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail: {
-          ...caseDetail,
-          correspondence: [{ correspondenceId: '234' }],
-          docketEntries: [
-            {
-              documentId: '123',
-              documentType: 'Order',
-              index: 1,
-              isOnDocketRecord: true,
+      const { showAddDocumentForm } = runCompute(messageModalHelper, {
+        state: {
+          caseDetail: {},
+          modal: {
+            form: {
+              attachments: [{}], // 1/2 documents attached
             },
-          ],
-        },
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
-    });
-
-    expect(result.hasDraftDocuments).toEqual(false);
-  });
-
-  it('returns showAddDocumentForm true when the current attachment count is zero', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {},
-        },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
-    });
-
-    expect(result.showAddDocumentForm).toEqual(true);
-  });
-
-  it('returns showAddDocumentForm true when screenMetadata.showAddDocumentForm is true and the maximum number of attachments has not been met', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [{}, {}, {}, {}], // 4/5 documents attached
+          },
+          screenMetadata: {
+            showAddDocumentForm: false,
           },
         },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
+      });
+
+      expect(showAddDocumentForm).toEqual(false);
     });
 
-    expect(result.showAddDocumentForm).toEqual(true);
-  });
+    it('should be false when screenMetadata.showAddDocumentForm is true and maximum number of attachments have been reached', () => {
+      applicationContext.getConstants.mockReturnValue({
+        CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
+      });
 
-  it('returns showAddDocumentForm false when screenMetadata.showAddDocumentForm is false and the maximum number of attachments has not been met', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [{}, {}, {}, {}], // 4/5 documents attached
+      const { showAddDocumentForm } = runCompute(messageModalHelper, {
+        state: {
+          caseDetail: {},
+          modal: {
+            form: {
+              attachments: [{}, {}], // 2/2 documents attached
+            },
+          },
+          screenMetadata: {
+            showAddDocumentForm: true,
           },
         },
-        screenMetadata: {
-          showAddDocumentForm: false,
-        },
-      },
-    });
+      });
 
-    expect(result.showAddDocumentForm).toEqual(false);
+      expect(showAddDocumentForm).toEqual(false);
+    });
   });
 
-  it('returns showAddDocumentForm false when maximum number of attachments have been reached', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [{}, {}, {}, {}, {}], // 5/5 documents attached
+  describe('showAddMoreDocumentsButton', () => {
+    it('should be true when there is at least one attachment already but the maximum number of attachments have not been reached', () => {
+      applicationContext.getConstants.mockReturnValue({
+        CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
+      });
+
+      const { showAddMoreDocumentsButton } = runCompute(messageModalHelper, {
+        state: {
+          caseDetail: {},
+          modal: {
+            form: {
+              attachments: [{}], // 1/2 documents attached
+            },
           },
+          screenMetadata: {},
         },
-        screenMetadata: {
-          showAddDocumentForm: true,
-        },
-      },
+      });
+
+      expect(showAddMoreDocumentsButton).toEqual(true);
     });
 
-    expect(result.showAddDocumentForm).toEqual(false);
+    it('should be false when the maximum number of attachments have been reached', () => {
+      applicationContext.getConstants.mockReturnValue({
+        CASE_MESSAGE_DOCUMENT_ATTACHMENT_LIMIT: 2,
+      });
+
+      const { showAddMoreDocumentsButton } = runCompute(messageModalHelper, {
+        state: {
+          caseDetail: {},
+          modal: {
+            form: {
+              attachments: [{}, {}], // 2/2 documents attached
+            },
+          },
+          screenMetadata: {},
+        },
+      });
+
+      expect(showAddMoreDocumentsButton).toEqual(false);
+    });
   });
 
-  it('returns showAddMoreDocumentsButton true when showAddDocumentForm is false and the current attachment count is greater than zero but less than the maximum', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [{}, {}, {}, {}], // 4/5 documents attached
+  describe('showMessageAttachments', () => {
+    it('should be true when there is at least one attachment on the message', () => {
+      const { showMessageAttachments } = runCompute(messageModalHelper, {
+        state: {
+          caseDetail: {},
+          modal: {
+            form: {
+              attachments: [{}],
+            },
           },
+          screenMetadata: {},
         },
-        screenMetadata: {
-          showAddDocumentForm: false,
-        },
-      },
+      });
+
+      expect(showMessageAttachments).toEqual(true);
     });
 
-    expect(result.showAddMoreDocumentsButton).toEqual(true);
-  });
+    it('should be false when message does not have any attachments', () => {
+      const { showMessageAttachments } = runCompute(messageModalHelper, {
+        state: baseState,
+      });
 
-  it('returns showAddMoreDocumentsButton false when maximum number of attachments have been reached', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [{}, {}, {}, {}, {}], // 5/5 documents attached
-          },
-        },
-        screenMetadata: {
-          showAddDocumentForm: false,
-        },
-      },
+      expect(showMessageAttachments).toEqual(false);
     });
-
-    expect(result.showAddMoreDocumentsButton).toEqual(false);
-  });
-
-  it('returns showMessageAttachments true when the form has message attachments', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [{}], // has at least one attachment
-          },
-        },
-        screenMetadata: {
-          showAddDocumentForm: false,
-        },
-      },
-    });
-
-    expect(result.showMessageAttachments).toEqual(true);
-  });
-
-  it('returns showMessageAttachments false when the form has NO message attachments', () => {
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [], // no attachments on form
-          },
-        },
-        screenMetadata: {
-          showAddDocumentForm: false,
-        },
-      },
-    });
-
-    expect(result.showMessageAttachments).toEqual(false);
-  });
-
-  it('populates documents from formattedDocketEntries and sets a title on each entry', () => {
-    const mockFormattedDocketEntries = [
-      {
-        descriptionDisplay: 'Hello with additional info',
-        isFileAttached: true,
-        isOnDocketRecord: true,
-      },
-      {
-        documentType: 'Hello documentType',
-        isFileAttached: true,
-        isOnDocketRecord: true,
-      },
-    ];
-
-    applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
-      draftDocuments: [],
-      formattedDocketEntries: mockFormattedDocketEntries,
-    });
-
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [], // no attachments on form
-          },
-        },
-        screenMetadata: {
-          showAddDocumentForm: false,
-        },
-      },
-    });
-
-    expect(result.documents).toEqual(mockFormattedDocketEntries);
-    expect(result.documents[0].title).toEqual(
-      mockFormattedDocketEntries[0].descriptionDisplay,
-    );
-    expect(result.documents[1].title).toEqual(
-      mockFormattedDocketEntries[1].documentType,
-    );
-  });
-
-  it('should set a title on draftDocuments from the documentTitle or documentType', () => {
-    const mockDraftDocuments = [
-      {
-        documentTitle: 'Order to do something',
-      },
-      {
-        documentType: 'Hello documentType',
-      },
-    ];
-
-    applicationContext.getUtilities().getFormattedCaseDetail.mockReturnValue({
-      draftDocuments: mockDraftDocuments,
-      formattedDocketEntries: [],
-    });
-
-    const result = runCompute(messageModalHelper, {
-      state: {
-        caseDetail,
-        modal: {
-          form: {
-            attachments: [], // no attachments on form
-          },
-        },
-        screenMetadata: {
-          showAddDocumentForm: false,
-        },
-      },
-    });
-
-    expect(result.draftDocuments).toMatchObject([
-      {
-        documentTitle: 'Order to do something',
-        title: 'Order to do something',
-      },
-      {
-        documentType: 'Hello documentType',
-        title: 'Hello documentType',
-      },
-    ]);
   });
 });

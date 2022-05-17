@@ -24,7 +24,7 @@ export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
     const formatted = runCompute(formattedTrialSessionDetails, {

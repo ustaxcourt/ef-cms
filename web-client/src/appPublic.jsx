@@ -29,6 +29,7 @@ import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 
 // Icons - Regular
+import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
@@ -37,7 +38,6 @@ import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
 import App from 'cerebral';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 /**
  * Instantiates the Cerebral app with React
@@ -132,12 +132,14 @@ const appPublic = {
 
     router.initialize(cerebralApp);
 
-    ReactDOM.render(
+    const container = window.document.querySelector('#app-public');
+    const root = createRoot(container);
+
+    root.render(
       <Container app={cerebralApp}>
         <AppComponentPublic />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      window.document.querySelector('#app-public'),
     );
   },
 };
