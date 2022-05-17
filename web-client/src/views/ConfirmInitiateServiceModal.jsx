@@ -75,7 +75,7 @@ export const ConfirmInitiateServiceModal = connect(
         {formattedCaseDetail.isLeadCase && (
           <div className="usa-checkbox">
             <input
-              checked="checked"
+              checked={true}
               className="usa-checkbox__input"
               id="consolidated-case-checkbox-all"
               name="consolidated-case"
@@ -94,8 +94,9 @@ export const ConfirmInitiateServiceModal = connect(
           consolidatedCaseServiceInitiateHelper.map(consolidatedCase => (
             <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
               <input
-                checked="checked"
+                checked={consolidatedCase.checked}
                 className="usa-checkbox__input"
+                disabled={!consolidatedCase.enabled}
                 id={
                   'consolidated-case-checkbox-' + consolidatedCase.docketNumber
                 }
