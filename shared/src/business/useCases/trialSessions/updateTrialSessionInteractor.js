@@ -147,6 +147,7 @@ exports.updateTrialSessionInteractor = async (
 
       const caseEntity = new Case(caseToUpdate, { applicationContext });
       if (
+        // is this enough to make sure the case is NOT on the trial session?
         caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
       ) {
         if (
