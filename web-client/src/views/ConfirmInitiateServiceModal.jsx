@@ -71,7 +71,22 @@ export const ConfirmInitiateServiceModal = connect(
         )}
         {formattedCaseDetail.isLeadCase &&
           formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
-            <p>{consolidatedCase.docketNumber}</p>
+            <div className="usa-checkbox">
+              <input
+                className="usa-checkbox__input"
+                id="consolidated-case-checkbox"
+                type="checkbox"
+                name="consolidated-case"
+                value={consolidatedCase.docketNumber}
+                checked="checked"
+              />
+              <label
+                className="usa-checkbox__label"
+                htmlFor="check-historical-truth"
+              >
+                {consolidatedCase.docketNumber}
+              </label>
+            </div>
           ))}
       </ModalDialog>
     );
