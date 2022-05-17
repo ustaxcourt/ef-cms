@@ -1,33 +1,35 @@
 const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
+const { compareISODateStrings } = require('../utilities/sortFunctions');
 const { UserCase } = require('../entities/UserCase');
 
 /**
- * getOpenConsolidatedCasesInteractor
+ * getCasesForUserInteractor
  *
  * @param {object} applicationContext the application context
- * @returns {object} the open cases data
+ * @returns {object} A list of the open cases and a list of the closed cases for the user
  */
-exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
+exports.getCasesForUserInteractor = async applicationContext => {
   const { userId } = await applicationContext.getCurrentUser();
 
-  let openUserCases = await applicationContext
+  let allUserCases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
       applicationContext,
       userId,
     });
 
-  const filteredOpenCases = openUserCases.filter(
-    ({ status }) => status !== CASE_STATUS_TYPES.closed,
-  );
-
-  openUserCases = UserCase.validateRawCollection(filteredOpenCases, {
+  allUserCases = UserCase.validateRawCollection(allUserCases, {
     applicationContext,
   });
 
-  if (!openUserCases.length) {
-    return [];
-  }
+  const sortedClosedCases = allUserCases
+    .filter(({ status }) => status === CASE_STATUS_TYPES.closed)
+    .sort((a, b) => compareISODateStrings(a.closedDate, b.closedDate))
+    .reverse();
+
+  let filteredOpenCases = allUserCases.filter(
+    ({ status }) => status !== CASE_STATUS_TYPES.closed,
+  );
 
   let {
     casesAssociatedWithUserOrLeadCaseMap,
@@ -35,7 +37,7 @@ exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
     userAssociatedDocketNumbersMap,
   } = applicationContext
     .getUseCaseHelpers()
-    .processUserAssociatedCases(openUserCases);
+    .processUserAssociatedCases(filteredOpenCases);
 
   for (const leadDocketNumber of leadDocketNumbersAssociatedWithUser) {
     const consolidatedCases = await applicationContext
@@ -62,13 +64,16 @@ exports.getOpenConsolidatedCasesInteractor = async applicationContext => {
       });
   }
 
-  const foundCases = Object.values(casesAssociatedWithUserOrLeadCaseMap);
+  const foundOpenCases = Object.values(casesAssociatedWithUserOrLeadCaseMap)
+    .map(c => {
+      // explicitly unset the entityName because this is returning a composite entity and if an entityName
+      // is set, the genericHandler will send it through the entity constructor for that entity and strip
+      // out necessary data
+      c.entityName = undefined;
+      return c;
+    })
+    .sort((a, b) => compareISODateStrings(a.createdAt, b.createdAt))
+    .reverse();
 
-  return foundCases.map(c => {
-    // explicitly unset the entityName because this is returning a composite entity and if an entityName
-    // is set, the genericHandler will send it through the entity constructor for that entity and strip
-    // out necessary data
-    c.entityName = undefined;
-    return c;
-  });
+  return { closedCaseList: sortedClosedCases, openCaseList: foundOpenCases };
 };
