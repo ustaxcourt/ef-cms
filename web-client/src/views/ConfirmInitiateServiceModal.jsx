@@ -69,6 +69,24 @@ export const ConfirmInitiateServiceModal = connect(
             )}
           </Hint>
         )}
+        {formattedCaseDetail.isLeadCase && (
+          <div className="usa-checkbox">
+            <input
+              checked="checked"
+              className="usa-checkbox__input"
+              id="consolidated-case-checkbox-all"
+              name="consolidated-case"
+              type="checkbox"
+              value="consolidated-case-checkbox-all"
+            />
+            <label
+              className="usa-checkbox__label"
+              htmlFor="consolidated-case-checkbox-all"
+            >
+              All in the consolidated group
+            </label>
+          </div>
+        )}
         {formattedCaseDetail.isLeadCase &&
           formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
             <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
@@ -84,7 +102,9 @@ export const ConfirmInitiateServiceModal = connect(
               />
               <label
                 className="usa-checkbox__label"
-                htmlFor="check-historical-truth"
+                htmlFor={
+                  'consolidated-case-checkbox-' + consolidatedCase.docketNumber
+                }
               >
                 {/*TODO: move these bits of information into a computed*/}
                 {consolidatedCase.docketNumber}{' '}
