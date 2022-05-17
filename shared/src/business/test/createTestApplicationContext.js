@@ -440,6 +440,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeToInPersonProceeding: jest
       .fn()
       .mockImplementation(getFakeFile),
@@ -598,7 +599,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getBaseUrl: () => 'http://localhost',
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
-    getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),

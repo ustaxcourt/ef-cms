@@ -42,6 +42,9 @@ const PARTY_VIEW_TABS = {
 };
 
 const ALLOWLIST_FEATURE_FLAGS = {
+  CHIEF_JUDGE_NAME: {
+    key: 'chief-judge-name',
+  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
@@ -617,6 +620,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentTitle: SPTO_DOCUMENT.documentTitle,
     documentType: SPTO_DOCUMENT.documentType,
     eventCode: SPTO_DOCUMENT.eventCode,
+  },
+  noticeOfChangeOfTrialJudge: {
+    documentTitle: 'Notice of Change of Trial Judge',
+    documentType: 'Notice of Change of Trial Judge',
+    eventCode: 'NOT',
   },
 };
 

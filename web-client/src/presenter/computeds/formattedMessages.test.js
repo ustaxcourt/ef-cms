@@ -1,3 +1,5 @@
+/* eslint-disable max-lines */
+import { ASCENDING, DESCENDING } from '../presenterConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   formattedMessages as formattedMessagesComputed,
@@ -262,6 +264,135 @@ describe('formattedMessages', () => {
         },
       ]);
     });
+
+    it('reverses the messages when sortOrder is set to DESCENDING', () => {
+      const MESSAGE1 = 'This is a test message one';
+      const MESSAGE2 = 'This is a test message two';
+      const MESSAGE3 = 'This is a test message three';
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [
+          {
+            createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
+            message: MESSAGE1,
+            parentMessageId: PARENT_MESSAGE_ID,
+          },
+          {
+            createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '101-20',
+            message: MESSAGE2,
+            parentMessageId: PARENT_MESSAGE_ID,
+          },
+          {
+            createdAt: '2019-01-03T17:29:13.122Z',
+            docketNumber: '101-20',
+            message: MESSAGE3,
+            parentMessageId: PARENT_MESSAGE_ID,
+          },
+        ],
+        tableSort: {
+          sortField: 'createdAt',
+          sortOrder: DESCENDING,
+        },
+      });
+
+      expect(result.messages[0]).toMatchObject({
+        message: MESSAGE3,
+      });
+      expect(result.messages[1]).toMatchObject({
+        message: MESSAGE2,
+      });
+      expect(result.messages[2]).toMatchObject({
+        message: MESSAGE1,
+      });
+    });
+  });
+
+  it('reverses the messages when sortOrder is set to DESCENDING', () => {
+    const DOCKET_NUMBER_1 = '101-19';
+    const DOCKET_NUMBER_2 = '101-20';
+    const DOCKET_NUMBER_3 = '105-20';
+    const result = getFormattedMessages({
+      applicationContext,
+      messages: [
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_1,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_2,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_3,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+      ],
+      tableSort: {
+        sortField: 'docketNumber',
+        sortOrder: DESCENDING,
+      },
+    });
+
+    expect(result.messages[0]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_3,
+    });
+    expect(result.messages[1]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_2,
+    });
+    expect(result.messages[2]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_1,
+    });
+  });
+
+  it('reverses the messages when sortOrder is set to DESCENDING', () => {
+    const DOCKET_NUMBER_1 = '101-19';
+    const DOCKET_NUMBER_2 = '101-20';
+    const DOCKET_NUMBER_3 = '105-20';
+    const result = getFormattedMessages({
+      applicationContext,
+      messages: [
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_1,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_2,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+        {
+          createdAt: '2019-01-03T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_3,
+          message: 'hello',
+          parentMessageId: PARENT_MESSAGE_ID,
+        },
+      ],
+      tableSort: {
+        sortField: 'UNKNOWN',
+        sortOrder: ASCENDING,
+      },
+    });
+
+    expect(result.messages[0]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_1,
+    });
+    expect(result.messages[1]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_2,
+    });
+    expect(result.messages[2]).toMatchObject({
+      docketNumber: DOCKET_NUMBER_3,
+    });
   });
 
   it('returns filtered messages sorted oldest to newest and completedMessages from state.messages when messageBoxToDisplay.box is inbox', () => {
@@ -291,6 +422,9 @@ describe('formattedMessages', () => {
             message: 'This is a test message',
           },
         ],
+        user: {
+          role: 'adc',
+        },
       },
     });
 
@@ -323,6 +457,7 @@ describe('formattedMessages', () => {
           message: 'This is a test message',
         },
       ],
+      showSortableHeaders: true,
     });
   });
 
@@ -331,6 +466,7 @@ describe('formattedMessages', () => {
       state: {
         messageBoxToDisplay: {
           box: 'outbox',
+          section: 'section',
         },
         messages: [
           {
@@ -353,6 +489,9 @@ describe('formattedMessages', () => {
             message: 'This is a test message',
           },
         ],
+        user: {
+          role: 'docketclerk',
+        },
       },
     });
 
@@ -376,12 +515,21 @@ describe('formattedMessages', () => {
           message: 'This is a test message',
         },
       ],
+      showSortableHeaders: false,
     });
   });
 
   it('returns empty arrays for completedMessages and messages if state.messages is not set', () => {
     const result = runCompute(formattedMessages, {
-      state: {},
+      state: {
+        messageBoxToDisplay: {
+          box: 'inbox',
+          section: 'section',
+        },
+        user: {
+          role: 'adc',
+        },
+      },
     });
 
     expect(result).toMatchObject({
