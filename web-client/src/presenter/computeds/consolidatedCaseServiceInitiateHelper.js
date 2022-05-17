@@ -6,9 +6,10 @@ export const consolidatedCaseServiceInitiateHelper = (
 ) => {
   const formattedCaseDetail = get(state.formattedCaseDetail);
   return formattedCaseDetail.consolidatedCases.map(consolidatedCase => {
-    console.log('consolidatedCase', consolidatedCase);
     return {
       docketNumber: consolidatedCase.docketNumber,
+      enabled: false,
+      checked: true,
       petitioners: consolidatedCase.petitioners.reduce((acc, current) => {
         if (consolidatedCase.petitioners.length === 1) {
           //one petitioner, so no need for an &
@@ -27,7 +28,6 @@ export const consolidatedCaseServiceInitiateHelper = (
 
         return concatenatedPetitionersName + ' & ';
       }, ''),
-      enabled: true,
     };
   });
 };
