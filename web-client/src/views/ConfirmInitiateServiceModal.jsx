@@ -71,20 +71,27 @@ export const ConfirmInitiateServiceModal = connect(
         )}
         {formattedCaseDetail.isLeadCase &&
           formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
-            <div className="usa-checkbox">
+            <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
               <input
-                className="usa-checkbox__input"
-                id="consolidated-case-checkbox"
-                type="checkbox"
-                name="consolidated-case"
-                value={consolidatedCase.docketNumber}
                 checked="checked"
+                className="usa-checkbox__input"
+                id={
+                  'consolidated-case-checkbox-' + consolidatedCase.docketNumber
+                }
+                name="consolidated-case"
+                type="checkbox"
+                value={consolidatedCase.docketNumber}
               />
               <label
                 className="usa-checkbox__label"
                 htmlFor="check-historical-truth"
               >
-                {consolidatedCase.docketNumber}
+                {consolidatedCase.docketNumber}{' '}
+                {consolidatedCase.petitioners.reduce(
+                  (previousValue, currentValue) =>
+                    previousValue + currentValue.name + ' & ',
+                  '',
+                )}
               </label>
             </div>
           ))}
