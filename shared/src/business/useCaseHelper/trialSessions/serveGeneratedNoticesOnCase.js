@@ -1,3 +1,15 @@
+/**
+ * serveGeneratedNoticesOnCase
+ *
+ * @param {object} applicationContext the application context
+ * @param {object} providers the providers object
+ * @param {object} providers.caseEntity the case data
+ * @param {object} providers.newPdfDoc the new pdf document
+ * @param {object} providers.noticeDocketEntryEntity the notice docket entry entity
+ * @param {object} providers.noticeDocumentPdfData the notice document pdf data
+ * @param {object} providers.PDFDocument the PDF document to append to
+ * @param {object} providers.servedParties the served parties
+ */
 exports.serveGeneratedNoticesOnCase = async ({
   applicationContext,
   caseEntity,

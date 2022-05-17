@@ -13,12 +13,10 @@ const { DocketEntry } = require('../../entities/DocketEntry');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.caseEntity the case data
- * @param {object} providers.currentTrialSession the old trial session data
  * @param {object} providers.newPdfDoc the new PDF contents to be appended
  * @param {object} providers.newTrialSessionEntity the new trial session data
  * @param {object} providers.PDFDocument the PDF document to append to
  * @param {object} providers.userId the user ID
- * @returns {Promise<void>} the created trial session
  */
 exports.setNoticeOfChangeToInPersonProceeding = async (
   applicationContext,

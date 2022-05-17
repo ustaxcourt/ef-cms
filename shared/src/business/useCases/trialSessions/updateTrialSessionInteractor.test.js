@@ -54,8 +54,6 @@ describe('updateTrialSessionInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
       });
-
-    // because of this, you'll get some errors on some other tests
   });
 
   beforeEach(() => {

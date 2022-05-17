@@ -1,4 +1,3 @@
-/* eslint-disable complexity */
 const {
   CASE_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
