@@ -15,7 +15,7 @@ describe('sendSlackNotification', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDispatchNotification.mockReturnValue(undefined);
+      .getDispatchNotification.mockReturnValue([]);
   });
 
   it('sends a message to the Slack webhook', async () => {
@@ -67,11 +67,13 @@ describe('sendSlackNotification', () => {
   it('does not call slack webhook if persistence check says that we notified the topic', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getDispatchNotification.mockReturnValue({
-        pk: 'dispatch-notification',
-        sk: 'test-topic',
-        ttl: 50,
-      });
+      .getDispatchNotification.mockReturnValue([
+        {
+          pk: 'dispatch-notification',
+          sk: 'test-topic',
+          ttl: 50,
+        },
+      ]);
 
     await sendSlackNotification({
       applicationContext,

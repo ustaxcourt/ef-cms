@@ -7,23 +7,23 @@
  * @param {string} providers.topic the topic of the message to dispatch (to prevent spamming)
  */
 exports.sendSlackNotification = async ({ applicationContext, text, topic }) => {
-  const url = applicationContext.getSlackWebhookUrl();
-  if (!url) {
+  const slackWebhookUrl = applicationContext.getSlackWebhookUrl();
+  if (!slackWebhookUrl) {
     return;
   }
 
-  const hasRecentNotification = await applicationContext
+  const recentNotifications = await applicationContext
     .getPersistenceGateway()
     .getDispatchNotification({
       applicationContext,
       topic,
     });
 
-  if (hasRecentNotification) {
+  if (recentNotifications.length) {
     return;
   }
 
-  await applicationContext.getHttpClient().post(url, {
+  await applicationContext.getHttpClient().post(slackWebhookUrl, {
     text,
   });
 
