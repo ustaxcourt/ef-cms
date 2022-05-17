@@ -4,7 +4,6 @@ const {
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVED_PARTIES_CODES,
-  SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
@@ -89,14 +88,9 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
       userId: mockUserId,
     });
 
-    const noipDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .sendServedPartiesEmails.mock.calls[0][0].caseEntity.docketEntries.find(
-        d =>
-          d.eventCode ===
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToInPersonProceeding
-            .eventCode,
-      );
+    const noipDocketEntry =
+      applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase.mock
+        .calls[0][0].noticeDocketEntryEntity;
 
     expect(noipDocketEntry).toMatchObject({
       docketEntryId: mockDocumentId,
@@ -124,34 +118,5 @@ describe('setNoticeOfChangeToInPersonProceeding', () => {
       servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
       signedAt: expect.anything(),
     });
-  });
-
-  it('should append the paper service info to the NOIP docket entry on the case when the case has parties with paper service', async () => {
-    const mockCaseWithPaperService = new Case(
-      {
-        ...mockOpenCase,
-        petitioners: [
-          {
-            ...mockOpenCase.petitioners[0],
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-      { applicationContext },
-    );
-
-    await setNoticeOfChangeToInPersonProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockCaseWithPaperService,
-      currentTrialSession: mockRemoteTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: mockInPersonCalendaredTrialSession,
-      userId: mockUserId,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toHaveBeenCalled();
   });
 });

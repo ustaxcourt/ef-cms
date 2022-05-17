@@ -78,14 +78,9 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       userId,
     });
 
-    const norpDocketEntry = applicationContext
-      .getUseCaseHelpers()
-      .sendServedPartiesEmails.mock.calls[0][0].caseEntity.docketEntries.find(
-        d =>
-          d.eventCode ===
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding
-            .eventCode,
-      );
+    const norpDocketEntry =
+      applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase.mock
+        .calls[0][0].noticeDocketEntryEntity;
 
     expect(norpDocketEntry).toMatchObject({
       docketEntryId: mockDocumentId,
@@ -102,34 +97,5 @@ describe('setNoticeOfChangeToRemoteProceeding', () => {
       ],
       servedPartiesCode: 'B',
     });
-  });
-
-  it('should append the paper service info to the NORP docket entry on the case when the case has parties with paper service', async () => {
-    const mockCaseWithPaperService = new Case(
-      {
-        ...mockOpenCase,
-        petitioners: [
-          {
-            ...mockOpenCase.petitioners[0],
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-      { applicationContext },
-    );
-
-    await setNoticeOfChangeToRemoteProceeding(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockCaseWithPaperService,
-      currentTrialSession: inPersonTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: remoteTrialSession,
-      userId,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toHaveBeenCalled();
   });
 });
