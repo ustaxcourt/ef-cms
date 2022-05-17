@@ -10,12 +10,12 @@ exports.handleBounceNotificationInteractor = async (
   applicationContext,
   { bounce },
 ) => {
-  if (bounce.bounceType !== 'Permanent') {
+  if (bounce?.bounceType !== 'Permanent') {
     return;
   }
 
   const IRS_SUPERUSER_EMAIL = applicationContext.getIrsSuperuserEmail();
-  const isIrsSuperUser = bounce.bouncedRecipients?.some(
+  const isIrsSuperUser = bounce?.bouncedRecipients?.some(
     recipient => recipient.emailAddress === IRS_SUPERUSER_EMAIL,
   );
   if (!isIrsSuperUser) {
@@ -36,21 +36,9 @@ exports.handleBounceNotificationInteractor = async (
     });
   }
 
-  const hasRecentNotification = applicationContext
-    .getPersistenceGateway()
-    .getDispatchNotification({
-      applicationContext,
-      channel: 'bounce-notification',
-    });
-
-  if (!hasRecentNotification) {
-    await applicationContext.getDispatchers().sendSlackNotification({
-      applicationContext,
-      text: message,
-    });
-    await applicationContext.getPersistenceGateway().saveDispatchNotification({
-      applicationContext,
-      channel: 'bounce-notification',
-    });
-  }
+  await applicationContext.getDispatchers().sendSlackNotification({
+    applicationContext,
+    text: message,
+    topic: 'bounce-notification',
+  });
 };
