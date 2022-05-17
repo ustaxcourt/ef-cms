@@ -223,7 +223,7 @@ exports.updateTrialSessionInteractor = async (
     const paperServicePdfsCombined = await PDFDocument.create();
 
     for (let calendaredCase of calendaredCases) {
-      updateAssociatedCaseAndSetNoticeOfChange({
+      await updateAssociatedCaseAndSetNoticeOfChange({
         applicationContext,
         currentTrialSession,
         docketNumber: calendaredCase.docketNumber,
