@@ -6,10 +6,6 @@ const {
   MOCK_TRIAL_REMOTE,
 } = require('../../../test/mockTrial');
 const {
-  SERVICE_INDICATOR_TYPES,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const {
   setNoticeOfChangeToRemoteProceeding,
 } = require('./setNoticeOfChangeToRemoteProceeding');
 const { Case } = require('../../entities/cases/Case');
