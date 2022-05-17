@@ -10,10 +10,10 @@ describe('saveDispatchNotification', () => {
     });
   });
 
-  it('attempts to persist the notification of a dispatched message to a specified channel', async () => {
+  it('attempts to persist the notification of a dispatched message to a specified topic', async () => {
     await saveDispatchNotification({
       applicationContext,
-      channel: 'test-channel',
+      topic: 'test-topic',
     });
 
     expect(
@@ -21,7 +21,7 @@ describe('saveDispatchNotification', () => {
     ).toMatchObject({
       Item: {
         pk: 'dispatch-notification',
-        sk: 'test-channel',
+        sk: 'test-topic',
         ttl: expect.anything(),
       },
       applicationContext: expect.anything(),
