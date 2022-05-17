@@ -91,7 +91,7 @@ export const ConfirmInitiateServiceModal = connect(
           </div>
         )}
         {formattedCaseDetail.isLeadCase &&
-          formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
+          consolidatedCaseServiceInitiateHelper.map(consolidatedCase => (
             <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
               <input
                 checked="checked"
@@ -109,35 +109,7 @@ export const ConfirmInitiateServiceModal = connect(
                   'consolidated-case-checkbox-' + consolidatedCase.docketNumber
                 }
               >
-                {/*TODO: move these bits of information into a computed*/}
-                {consolidatedCase.docketNumber}{' '}
-                {consolidatedCase.petitioners.length === 1 &&
-                  consolidatedCase.petitioners[0].name}
-                {consolidatedCase.petitioners.length > 1 &&
-                  consolidatedCase.petitioners.reduce(
-                    (previousValue, currentValue) => {
-                      if (consolidatedCase.petitioners.length === 1) {
-                        //one petitioner, so no need for an &
-                        return currentValue.name;
-                      }
-
-                      const concatinatedPetitionersName =
-                        previousValue + currentValue.name;
-
-                      if (
-                        currentValue ===
-                        consolidatedCase.petitioners[
-                          consolidatedCase.petitioners.length - 1
-                        ]
-                      ) {
-                        //this is the last petitioner, no need for an ending &
-                        return concatinatedPetitionersName;
-                      }
-
-                      return concatinatedPetitionersName + ' & ';
-                    },
-                    '',
-                  )}
+                {consolidatedCase.docketNumber} {consolidatedCase.petitioners}
               </label>
             </div>
           ))}
