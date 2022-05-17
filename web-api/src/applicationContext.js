@@ -461,14 +461,14 @@ const {
   getCasesForUser,
 } = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
 const {
+  getCasesForUserInteractor,
+} = require('../../shared/src/business/useCases/getCasesForUserInteractor');
+const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
   getClientId,
 } = require('../../shared/src/persistence/cognito/getClientId');
-const {
-  getClosedCasesInteractor,
-} = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
   getCognitoUserIdByEmail,
 } = require('../../shared/src/persistence/cognito/getCognitoUserIdByEmail');
@@ -611,9 +611,6 @@ const {
 const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
-const {
-  getOpenConsolidatedCasesInteractor,
-} = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
@@ -2010,7 +2007,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
-        getClosedCasesInteractor,
+        getCasesForUserInteractor,
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,
         getConsolidatedCasesByCaseInteractor,
@@ -2033,7 +2030,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
-        getOpenConsolidatedCasesInteractor,
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,
