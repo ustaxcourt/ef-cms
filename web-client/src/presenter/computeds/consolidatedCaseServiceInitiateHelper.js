@@ -1,15 +1,12 @@
 import { state } from 'cerebral';
 
-export const consolidatedCaseServiceInitiateHelper = (
-  get,
-  applicationContext,
-) => {
+export const consolidatedCaseServiceInitiateHelper = get => {
   const formattedCaseDetail = get(state.formattedCaseDetail);
   return formattedCaseDetail.consolidatedCases.map(consolidatedCase => {
     return {
+      checked: true,
       docketNumber: consolidatedCase.docketNumber,
       enabled: false,
-      checked: true,
       petitioners: consolidatedCase.petitioners.reduce((acc, current) => {
         if (consolidatedCase.petitioners.length === 1) {
           //one petitioner, so no need for an &

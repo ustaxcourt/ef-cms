@@ -75,7 +75,9 @@ export const ConfirmInitiateServiceModal = connect(
         {formattedCaseDetail.isLeadCase && (
           <div className="usa-checkbox">
             <input
-              checked={true}
+              checked={consolidatedCaseServiceInitiateHelper.every(
+                consolidatedCase => consolidatedCase.checked,
+              )}
               className="usa-checkbox__input"
               id="consolidated-case-checkbox-all"
               name="consolidated-case"
