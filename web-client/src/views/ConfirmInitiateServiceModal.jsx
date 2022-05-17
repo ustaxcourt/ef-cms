@@ -70,9 +70,9 @@ export const ConfirmInitiateServiceModal = connect(
           </Hint>
         )}
         {formattedCaseDetail.isLeadCase &&
-          formattedCaseDetail.consolidatedCases.map(
-            consolidatedCase => consolidatedCase.docketNumber,
-          )}
+          formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
+            <p>{consolidatedCase.docketNumber}</p>
+          ))}
       </ModalDialog>
     );
   },
