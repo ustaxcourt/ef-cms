@@ -70,6 +70,8 @@ exports.serveExternallyFiledDocumentInteractor = async (
       })
       .promise();
 
+    caseEntity.updateDocketEntry(currentDocketEntry);
+
     const { pdfData: servedDocWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
@@ -107,8 +109,6 @@ exports.serveExternallyFiledDocumentInteractor = async (
           workItem: workItemToUpdate.validate().toRawObject(),
         });
     }
-
-    caseEntity.updateDocketEntry(currentDocketEntry);
 
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,

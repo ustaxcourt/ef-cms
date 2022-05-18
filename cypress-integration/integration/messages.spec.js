@@ -3,22 +3,18 @@ const {
   enterSubject,
   fillOutMessageField,
   goToDocumentNeedingQC,
-  goToMyDocumentQC,
-  goToSectionDocumentQC,
   openCompleteAndSendMessageDialog,
   progressIndicatorDoesNotExist,
   selectRecipient,
   selectSection,
   sendMessage,
 } = require('../support/pages/document-qc');
-const { goToCaseDetail } = require('../support/pages/case-detail');
 
 describe('Messages', () => {
   describe('Docket clerk completes qc and sends a message', () => {
     it('should go to section document QC inbox', () => {
-      cy.login('docketclerk');
-      goToMyDocumentQC();
-      goToSectionDocumentQC();
+      cy.login('docketclerk', '/document-qc/section/inbox');
+      cy.get('.big-blue-header').should('exist');
     });
 
     it('should go to first document needing QC', () => {
@@ -43,8 +39,7 @@ describe('Messages', () => {
 
   describe('Docket clerk creates and sends a message', () => {
     it('should go to case detail and open the dialog to create a new message', () => {
-      cy.login('docketclerk');
-      goToCaseDetail('103-20');
+      cy.login('docketclerk', '/case-detail/103-20');
       createMessage();
     });
 
