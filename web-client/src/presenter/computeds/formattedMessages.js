@@ -1,4 +1,3 @@
-import { DESCENDING } from '../presenterConstants';
 import { formatDateIfToday } from './formattedWorkQueue';
 import { sortFormattedMessages } from '../utilities/sortFormattedMessages';
 import { state } from 'cerebral';
@@ -27,11 +26,6 @@ export const getFormattedMessages = ({
     formattedCaseMessages,
     tableSort,
   );
-
-  // if (tableSort?.sortOrder === DESCENDING) {
-  if (tableSort && tableSort.sortOrder === DESCENDING) {
-    sortedFormattedMessages.reverse();
-  }
 
   const inProgressMessages = sortedFormattedMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,
