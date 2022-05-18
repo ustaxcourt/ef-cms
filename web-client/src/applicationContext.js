@@ -346,7 +346,6 @@ const allUseCases = {
   addPetitionerToCaseInteractor,
   appendAmendedPetitionFormInteractor,
   archiveCorrespondenceDocumentInteractor,
-
   archiveDraftDocumentInteractor,
   assignWorkItemsInteractor,
   associateIrsPractitionerWithCaseInteractor,
