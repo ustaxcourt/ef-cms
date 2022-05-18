@@ -221,50 +221,45 @@ describe('updateTrialSessionInteractor', () => {
     });
 
     expect(
-      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
+        .mock.calls[0][0].trialSessionWorkingCopy,
+    ).toMatchObject({
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      userId: '65b74937-3edb-4220-b1e1-fdf7c9ace813',
+    });
   });
 
   it('should create a trial session working copy when the updated trial session has judge assigned and they are a different judge than was on the old trial session', async () => {
-    const trialSessionWithJudge = {
-      ...MOCK_TRIAL_INPERSON,
-      judge: {
-        name: 'Judge North',
-        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-      },
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
         ...MOCK_TRIAL_INPERSON,
         judge: {
           name: 'Judge South',
-          userId: '7c062db4-ea1e-4a51-a615-9ef8d6499ed7', // different judge id
+          userId: '7c062db4-ea1e-4a51-a615-9ef8d6499ed7',
         },
       });
 
     await updateTrialSessionInteractor(applicationContext, {
-      trialSession: trialSessionWithJudge,
+      trialSession: {
+        ...MOCK_TRIAL_INPERSON,
+        judge: {
+          name: 'Judge North',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f', // different judge id
+        },
+      },
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
+        .mock.calls[0][0].trialSessionWorkingCopy,
+    ).toMatchObject({
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+    });
   });
 
   it('should create a trial session working copy when the updated trial session has a trial clerk assigned and a trial clerk was not set on the old trial session', async () => {
-    const trialSessionWithTrialClerk = {
-      ...MOCK_TRIAL_INPERSON,
-      trialClerk: {
-        name: 'Clerk McIntosh',
-        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-      },
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
@@ -273,54 +268,52 @@ describe('updateTrialSessionInteractor', () => {
       });
 
     await updateTrialSessionInteractor(applicationContext, {
-      trialSession: trialSessionWithTrialClerk,
+      trialSession: {
+        ...MOCK_TRIAL_INPERSON,
+        trialClerk: {
+          name: 'Clerk McIntosh',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+        },
+      },
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
-        .mock.calls[0][0].trialSessionWorkingCopy.userId,
-    ).toEqual('c7d90c05-f6cd-442c-a168-202db587f16f');
+        .mock.calls[0][0].trialSessionWorkingCopy,
+    ).toMatchObject({
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+    });
   });
 
   it('should create a trial session working copy when the updated trial session has a trial clerk assigned and it is a different trial clerk than was on the old trial session', async () => {
-    const trialSessionWithTrialClerk = {
-      ...MOCK_TRIAL_INPERSON,
-      trialClerk: {
-        name: 'Clerk Magni',
-        userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
-      },
-    };
-
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue({
         ...MOCK_TRIAL_INPERSON,
         trialClerk: {
           name: 'Clerk Tom Haberford',
-          userId: 'a2d6531c-93fb-432b-a71d-5ea11f953963', // different trial clerk id
+          userId: 'a2d6531c-93fb-432b-a71d-5ea11f953963',
         },
       });
 
     await updateTrialSessionInteractor(applicationContext, {
-      trialSession: trialSessionWithTrialClerk,
+      trialSession: {
+        ...MOCK_TRIAL_INPERSON,
+        trialClerk: {
+          name: 'Clerk Magni',
+          userId: 'c7d90c05-f6cd-442c-a168-202db587f16f', // different trial clerk id
+        },
+      },
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().createTrialSessionWorkingCopy
-        .mock.calls[0][0].trialSessionWorkingCopy.userId,
-    ).toEqual('c7d90c05-f6cd-442c-a168-202db587f16f');
+        .mock.calls[0][0].trialSessionWorkingCopy,
+    ).toMatchObject({
+      trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      userId: 'c7d90c05-f6cd-442c-a168-202db587f16f',
+    });
   });
 
   it('should update the hearing associated with the updated trial session when a hearing trialSessionId matches the case.trialSessionId', async () => {
