@@ -1,6 +1,6 @@
 const { put } = require('../../dynamodbClientService');
 
-const TIME_TO_EXIST = 60;
+const TIME_TO_EXIST = 300; // seconds
 
 exports.saveDispatchNotification = ({ applicationContext, topic }) =>
   put({
