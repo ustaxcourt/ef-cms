@@ -272,7 +272,10 @@
 //   });
 // });
 
-import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../shared/src/business/entities/EntityConstants';
+import {
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCreatesARemoteTrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
@@ -280,6 +283,7 @@ import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTria
 import {
   fakeFile,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
   waitForExpectedItem,
@@ -313,69 +317,79 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     cerebralTest.closeSocket();
   });
 
-  describe(`Create a remote trial session with Small session type for '${trialLocation}'`, () => {
-    loginAs(cerebralTest, 'docketclerk@example.com');
-    docketClerkCreatesARemoteTrialSession(cerebralTest, overrides);
-    docketClerkViewsTrialSessionList(cerebralTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesARemoteTrialSession(cerebralTest, overrides);
+  docketClerkViewsTrialSessionList(cerebralTest);
+
+  const caseOverrides = {
+    ...overrides,
+    caseType: CASE_TYPES_MAP.cdp,
+    procedureType: 'Small',
+  };
+
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('create case and set ready for trial', async () => {
+    const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
   });
 
-  describe('Create cases', () => {
-    describe('cases #1-3 - eligible for trial', () => {
-      const caseOverrides = {
-        ...overrides,
-        caseType: CASE_TYPES_MAP.cdp,
-        procedureType: 'Small',
-      };
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkSubmitsCaseToIrs(cerebralTest);
 
-      for (let i = 0; i < 3; i++) {
-        loginAs(cerebralTest, 'petitioner@example.com');
-        it(`create case ${i} and set ready for trial`, async () => {
-          const caseDetail = await uploadPetition(cerebralTest, caseOverrides);
-          expect(caseDetail.docketNumber).toBeDefined();
-          cerebralTest.docketNumber = caseDetail.docketNumber;
-        });
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkSetsCaseReadyForTrial(cerebralTest);
+  manuallyAddCaseToTrial(cerebralTest);
 
-        loginAs(cerebralTest, 'petitionsclerk@example.com');
-        petitionsClerkSubmitsCaseToIrs(cerebralTest);
-
-        loginAs(cerebralTest, 'docketclerk@example.com');
-        docketClerkSetsCaseReadyForTrial(cerebralTest);
-      }
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  it('Petitions clerk edits a remote trial session to be in person', async () => {
+    await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
     });
 
-    describe('case #5 - manually added to session', () => {
-      loginAs(cerebralTest, 'petitionsclerk@example.com');
-      cerebralTest.casesReadyForTrial = [];
-      petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
-      manuallyAddCaseToTrial(cerebralTest);
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'proceedingType',
+      value: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     });
+
+    await cerebralTest.runSequence('updateTrialSessionSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'currentPage',
+      expectedItem: 'TrialSessionDetail',
+    });
+    expect(cerebralTest.getState('currentPage')).toBe('TrialSessionDetail');
   });
 
-  describe('this is grabage', () => {
-    loginAs(cerebralTest, 'petitionsclerk@example.com');
-    it('Petitions clerk edits a remote trial session to be in person', async () => {
-      await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
-        trialSessionId: cerebralTest.trialSessionId,
-      });
+  it('Petitions clerk verifies NOIP docket entries for open cases', async () => {
+    await refreshElasticsearchIndex();
 
-      await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-        key: 'proceedingType',
-        value: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      });
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
 
-      await cerebralTest.runSequence('updateTrialSessionSequence');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
 
-      expect(cerebralTest.getState('validationErrors')).toEqual({});
+    const caseDetail = cerebralTest.getState('caseDetail');
 
-      await waitForLoadingComponentToHide({ cerebralTest });
-      await waitForExpectedItem({
-        cerebralTest,
-        currentItem: 'currentPage',
-        expectedItem: 'PrintPaperTrialNotices',
-      });
-      expect(cerebralTest.getState('currentPage')).toBe(
-        'PrintPaperTrialNotices',
-      );
+    const noipDocketEntry = caseDetail.docketEntries.find(
+      ({ eventCode }) =>
+        eventCode ===
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToInPersonProceeding
+          .eventCode,
+    );
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+    expect(noipDocketEntry).toMatchObject({
+      servedParties: [
+        {
+          name: 'Mona Schultz',
+        },
+      ],
     });
   });
 });
