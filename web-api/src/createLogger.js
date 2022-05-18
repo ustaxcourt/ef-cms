@@ -18,6 +18,7 @@ const redact = format(logEntry => {
   return copy;
 });
 
+const EMPTY_METADATA_OBJECT = '{ level: undefined, message: undefined }';
 exports.createLogger = (opts = {}) => {
   const options = {
     defaultMeta: {},
@@ -45,7 +46,8 @@ exports.createLogger = (opts = {}) => {
           compact: false,
           maxStringLength: null,
         });
-        const lines = stringified === '{}' ? [] : stringified.split('\n');
+        const lines =
+          stringified === EMPTY_METADATA_OBJECT ? [] : stringified.split('\n');
 
         return [`${info.level}:\t${info.message}`, ...lines].join('\n  ');
       }),
