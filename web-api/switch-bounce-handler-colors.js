@@ -23,7 +23,7 @@ check(AWS_ACCOUNT_ID, 'You must have AWS_ACCOUNT_ID set in your environment');
  * returns undefined
  *
  * @param {string} Token A string to use if we do not find what we are looking for and there are more results
- * @returns {Promise} which resolves to the ARN of the current color's Lambda subscription, if found
+ * @returns {Promise<string|undefined>} which resolves to the ARN of the current color's Lambda subscription, if found
  */
 const getCurrentColorSubscription = async Token => {
   const CurrentLambda = `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${CURRENT_COLOR}`;
@@ -31,7 +31,7 @@ const getCurrentColorSubscription = async Token => {
     NextToken: Token,
   }).promise();
 
-  // Look for subscriptions that match the current color, and return it.
+  // Look for a subscription that match the current color and return it
   const foundSubscription = Subscriptions.find(
     ({ Endpoint, Protocol, TopicArn: SubscriptionTopicArn }) =>
       Endpoint === CurrentLambda &&
@@ -47,17 +47,15 @@ const getCurrentColorSubscription = async Token => {
 };
 
 const run = async () => {
-  const Protocol = 'lambda';
-  const DeployingLambda = `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${DEPLOYING_COLOR}`;
-
+  // subscribe deploying lambda to topic
   await SNS.subscribe({
-    Endpoint: DeployingLambda,
-    Protocol,
+    Endpoint: `arn:aws:lambda:us-east-1:${AWS_ACCOUNT_ID}:function:bounce_handler_${ENV}_${DEPLOYING_COLOR}`,
+    Protocol: 'lambda',
     TopicArn,
   }).promise();
 
+  // find current lambda subscription and unsubscribe from topic
   const SubscriptionArn = await getCurrentColorSubscription();
-
   if (SubscriptionArn) {
     await SNS.unsubscribe({ SubscriptionArn }).promise();
   }
