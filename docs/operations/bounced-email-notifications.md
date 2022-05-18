@@ -20,7 +20,7 @@ This interactor checks to see if the Bounced Email was to sent to the `IRS_SUPER
 
 We could send all notifications (Bounce, Delivery, and Complaint) for more advanced handling.
 
-Perhaps we want to record somewhere in the Docket Entry what users received the Email. Or perhaps we would like to take action when Bounces or Complaint events happen for petitioners and practitioners. This sets up the scaffolding for this future possibility.
+Perhaps we want to record somewhere in the Docket Entry what users received the Email and for whom it may have bounced. Or perhaps we would like to take action when Bounces or Complaint events happen for petitioners and practitioners (creating work items to address the Bounce or Complaint). This sets up the scaffolding for this future possibility.
 
 ## Manual Steps
 
