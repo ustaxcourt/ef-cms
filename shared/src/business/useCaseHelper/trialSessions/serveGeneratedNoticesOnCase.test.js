@@ -8,99 +8,57 @@ const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { getFakeFile, testPdfDoc } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
 describe('serveGeneratedNoticesOnCase', () => {
-  const trialSessionId = '76a5b1c8-1eed-44b6-932a-967af060597a';
+  const mockOpenCaseEntity = new Case(MOCK_CASE, { applicationContext });
 
-  const mockPdfDocument = {
-    load: () => jest.fn().mockReturnValue(getFakeFile),
-  };
-  const mockOpenCase = new Case(
+  const mockNoticeDocketEntryEntity = new DocketEntry(
     {
-      ...MOCK_CASE,
-      trialDate: '2019-03-01T21:42:29.073Z',
-      trialSessionId,
+      ...MOCK_CASE.docketEntries[0],
     },
     { applicationContext },
   );
 
   it('should sendServedPartiesEmails and append the paper service info to the docket entry on the case when the case has parties with paper service', async () => {
-    const mockCaseWithPaperService = new Case(
-      {
-        ...mockOpenCase,
-        petitioners: [
-          {
-            ...mockOpenCase.petitioners[0],
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-      { applicationContext },
-    );
-
-    const mockNoticeDocketEntry = new DocketEntry(
-      {
-        ...MOCK_CASE.docketEntries[0],
-      },
-      { applicationContext },
-    );
+    const mockServedParties = {
+      paper: ['test'],
+    };
 
     await serveGeneratedNoticesOnCase({
-      PDFDocument: mockPdfDocument,
       applicationContext,
-      caseEntity: mockCaseWithPaperService,
+      caseEntity: mockOpenCaseEntity,
       newPdfDoc: getFakeFile,
-      noticeDocketEntryEntity: mockNoticeDocketEntry,
+      noticeDocketEntryEntity: mockNoticeDocketEntryEntity,
       noticeDocumentPdfData: testPdfDoc,
-      servedParties: {
-        paper: ['test'],
-      },
+      servedParties: mockServedParties,
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toHaveBeenCalled();
-
-    expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      caseEntity: mockOpenCaseEntity,
+      docketEntryId: mockNoticeDocketEntryEntity.docketEntryId,
+      servedParties: mockServedParties,
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      caseEntity: mockOpenCaseEntity,
+      newPdfDoc: expect.anything(),
+      noticeDoc: expect.anything(),
+      servedParties: mockServedParties,
+    });
   });
 
-  it('should not append the paper service info to the docket entry on the case when the case does not have parties with paper service', async () => {
-    const mockCaseWithPaperService = new Case(
-      {
-        ...mockOpenCase,
-        petitioners: [
-          {
-            ...mockOpenCase.petitioners[0],
-            email: undefined,
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-      },
-      { applicationContext },
-    );
-
-    const mockNoticeDocketEntry = new DocketEntry(
-      {
-        ...MOCK_CASE.docketEntries[0],
-      },
-      { applicationContext },
-    );
-
-    const mockNoticeDocumentPdfData = applicationContext
-      .getUseCaseHelpers()
-      .generateNoticeOfChangeToInPersonProceeding.mockReturnValue(getFakeFile);
-
+  it('should not append the paper service info to the docket entry on the case when servedParties does not include any paper entries', async () => {
     await serveGeneratedNoticesOnCase({
-      PDFDocument: mockPdfDocument,
       applicationContext,
-      caseEntity: mockCaseWithPaperService,
+      caseEntity: mockOpenCaseEntity,
       newPdfDoc: getFakeFile,
-      noticeDocketEntryEntity: mockNoticeDocketEntry,
-      noticeDocumentPdfData: mockNoticeDocumentPdfData,
+      noticeDocketEntryEntity: mockNoticeDocketEntryEntity,
+      noticeDocumentPdfData: testPdfDoc,
       servedParties: {
         paper: [],
       },
