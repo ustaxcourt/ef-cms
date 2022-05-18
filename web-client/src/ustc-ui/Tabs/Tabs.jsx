@@ -9,20 +9,6 @@ import { props, sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-let FontAwesomeIcon;
-
-if (process.env.NODE_ENV === 'test') {
-  console.log('Test?!');
-  // eslint-disable-next-line no-shadow
-  // FontAwesomeIcon = function FontAwesomeIcon() {
-  //   return <i className="fa" />;
-  // };
-  ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
-} else {
-  console.log('Not Test');
-  ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
-}
-
 const renderTabFactory = ({
   activeKey,
   asSwitch,
@@ -35,13 +21,13 @@ const renderTabFactory = ({
       children: tabChildren,
       className: childClassName,
       disabled,
-      draftCount = 0,
-      icon,
-      iconClass,
-      iconColor,
+      // draftCount = 0,
+      // icon,
+      // iconClass,
+      // iconColor,
       id: tabId,
-      showIcon,
-      showNotificationIcon,
+      // showIcon,
+      // showNotificationIcon,
       tabName,
       title,
       realIcon,
