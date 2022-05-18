@@ -21,14 +21,6 @@ const { User } = require('../../entities/User');
 describe('updateTrialSessionInteractor', () => {
   let mockUser;
 
-  const serviceInfo = {
-    docketEntryId: '',
-    hasPaper: false,
-    url: 'www.example.com',
-  };
-
-  const mockCaseRemovedFromTrialDocketNumber = '321-56';
-
   beforeEach(() => {
     mockUser = new User({
       name: 'Docket Clerk',
@@ -42,9 +34,11 @@ describe('updateTrialSessionInteractor', () => {
       .getPersistenceGateway()
       .updateTrialSession.mockImplementation(trial => trial.trialSession);
 
-    applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf.mockReturnValue(serviceInfo);
+    applicationContext.getUseCaseHelpers().savePaperServicePdf.mockReturnValue({
+      docketEntryId: '',
+      hasPaper: false,
+      url: 'www.example.com',
+    });
   });
 
   it('should throw an error when user not unauthorized to update a trial session', async () => {
@@ -370,6 +364,8 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   it('should NOT retrieve the case from persistence when it has been removed from the trial session', async () => {
+    const mockCaseRemovedFromTrialDocketNumber = '321-56';
+
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
