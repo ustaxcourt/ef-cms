@@ -172,6 +172,10 @@ User.isInternalUser = function (role) {
   return internalRoles.includes(role);
 };
 
+User.prototype.isChambersUser = function () {
+  return this.section.includes('Chambers');
+};
+
 module.exports = {
   USER_CONTACT_VALIDATION_RULES,
   User: validEntityDecorator(User),
