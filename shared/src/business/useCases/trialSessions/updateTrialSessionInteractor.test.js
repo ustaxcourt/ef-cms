@@ -331,29 +331,20 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual('c7d90c05-f6cd-442c-a168-202db587f16f');
   });
 
-  it.only('should update the hearing associated with the updated trial sesssion when a hearing trialSessionId matches the case.trialSessionId', async () => {
+  it('should update the hearing associated with the updated trial session when a hearing trialSessionId matches the case.trialSessionId', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce({
+      .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        docketNumber: '123-45',
         hearings: [MOCK_TRIAL_INPERSON],
-        trialDate: '2045-12-01T00:00:00.000Z',
       });
-
-    const calendaredTrialSession = {
-      ...MOCK_TRIAL_INPERSON,
-      judge: { name: 'Shoeless Joe Jackson', userId: faker.datatype.uuid() },
-    };
 
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue({
-        ...MOCK_TRIAL_INPERSON,
-      });
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
-      trialSession: calendaredTrialSession,
+      trialSession: MOCK_TRIAL_INPERSON,
     });
 
     expect(
@@ -361,48 +352,33 @@ describe('updateTrialSessionInteractor', () => {
         .calls[0][0],
     ).toMatchObject({
       applicationContext,
-      docketNumber: '123-45',
-      hearingToUpdate: calendaredTrialSession,
+      docketNumber: MOCK_CASE.docketNumber,
+      hearingToUpdate: MOCK_TRIAL_INPERSON,
     });
   });
 
   it('should update the calendared case with new trial session information when the trialSessionId matches the case.trialSessionId', async () => {
-    const mockCalendaredCase = new Case(
-      {
-        ...MOCK_CASE,
-        docketNumber: '123-45',
-        trialDate: '2045-12-01T00:00:00.000Z',
-        trialSessionId: MOCK_TRIAL_ID_4,
-      },
-      { applicationContext },
-    );
-    const calendaredTrialSession = {
-      ...mockTrialsById[MOCK_TRIAL_ID_4],
-      startDate: '2025-12-02T00:00:00.000Z',
-    };
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(
-        mockCalendaredCase.toRawObject(),
-      );
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        trialDate: MOCK_TRIAL_INPERSON.startDate,
+        trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+      });
 
-    mockCalendaredCase.updateTrialSessionInformation(MOCK_REMOTE_TRIAL);
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
-      trialSession: {
-        ...calendaredTrialSession,
-        startDate: '2025-12-02T00:00:00.000Z',
-      },
+      trialSession: MOCK_TRIAL_INPERSON,
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().updateCase,
-    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
     ).toMatchObject({
-      trialDate: '2025-12-02T00:00:00.000Z',
+      trialDate: MOCK_TRIAL_INPERSON.startDate,
     });
   });
 
@@ -441,68 +417,61 @@ describe('updateTrialSessionInteractor', () => {
       trialLocation: 'Boise, Idaho',
     };
 
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+
     await updateTrialSessionInteractor(applicationContext, {
       trialSession: {
-        ...mockTrialsById[MOCK_TRIAL_ID_6],
+        ...MOCK_TRIAL_INPERSON,
         ...updatedFields,
       },
     });
 
     expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
-    expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
     ).toMatchObject({
-      ...mockTrialsById[MOCK_TRIAL_ID_6],
+      ...MOCK_TRIAL_INPERSON,
       ...updatedFields,
     });
   });
 
   it('should NOT update fields that are NOT editable on the trial session', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue({
+        ...MOCK_TRIAL_INPERSON,
+        isCalendared: false,
+      });
+
     await updateTrialSessionInteractor(applicationContext, {
       trialSession: {
-        ...mockTrialsById[MOCK_TRIAL_ID_6],
+        ...MOCK_TRIAL_INPERSON,
         isCalendared: true,
       },
     });
 
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate.isCalendared,
     ).toEqual(false);
   });
 
-  it('should NOT update the calendared case with new trial session info when the trialSessionId does NOT match the case.trialSessionId', async () => {
-    const calendaredTrialSession = {
-      ...mockTrialsById[MOCK_TRIAL_ID_4],
-      startDate: '2025-12-02T00:00:00.000Z',
-    };
-    const mockCalendaredCase = new Case(
-      {
-        ...MOCK_CASE,
-        docketNumber: '123-45',
-        hearings: [calendaredTrialSession],
-        trialSessionId: MOCK_TRIAL_ID_3,
-      },
-      { applicationContext },
-    );
+  it.only('should NOT update the calendared case with new trial session info when the trialSessionId does NOT match the case.trialSessionId', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(
-        mockCalendaredCase.toRawObject(),
-      );
-    mockCalendaredCase.updateTrialSessionInformation(MOCK_REMOTE_TRIAL);
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        trialSessionId: '49990fd4-296e-4340-97e9-c66b6f25b6ab',
+      });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
 
     await updateTrialSessionInteractor(applicationContext, {
-      trialSession: {
-        ...calendaredTrialSession,
-        startDate: '2025-12-02T00:00:00.000Z',
-      },
+      trialSession: MOCK_TRIAL_INPERSON,
     });
 
     expect(
