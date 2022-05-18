@@ -1,8 +1,8 @@
-export const sortFormattedMessagesHelper = ({
+export const sortFormattedMessagesHelper = (
   formattedCaseMessages,
   tableSort = {},
-}) => {
-  formattedCaseMessages.sort((a, b) => {
+) => {
+  return formattedCaseMessages.sort((a, b) => {
     let sortNumber = 0;
     if (!tableSort) {
       sortNumber = a.createdAt.localeCompare(b.createdAt);
