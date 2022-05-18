@@ -21,16 +21,10 @@ const renderTabFactory = ({
       children: tabChildren,
       className: childClassName,
       disabled,
-      // draftCount = 0,
-      // icon,
-      // iconClass,
-      // iconColor,
       id: tabId,
-      // showIcon,
-      // showNotificationIcon,
+      realIcon,
       tabName,
       title,
-      realIcon,
     } = child.props;
 
     const isActiveTab = tabName === activeKey;
@@ -68,23 +62,6 @@ const renderTabFactory = ({
         <button {...buttonProps}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
           {realIcon}
-          {/*{showIcon && (*/}
-          {/*  <FontAwesomeIcon*/}
-          {/*    className={iconClass}*/}
-          {/*    color={iconColor || null}*/}
-          {/*    icon={icon}*/}
-          {/*  />*/}
-          {/*)}*/}
-          {/*{showNotificationIcon && (*/}
-          {/*  <div className="icon-tab-notification">*/}
-          {/*    <div className="icon-tab-notification-exclamation">!</div>*/}
-          {/*  </div>*/}
-          {/*)}*/}
-          {/*{draftCount !== 0 && (*/}
-          {/*  <div className="icon-tab-unread-messages">*/}
-          {/*    <div className="icon-tab-unread-messages-count">{draftCount}</div>*/}
-          {/*  </div>*/}
-          {/*)}*/}
         </button>
       </li>
     );
