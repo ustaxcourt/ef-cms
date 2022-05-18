@@ -1,7 +1,4 @@
-export const sortFormattedMessagesHelper = (
-  formattedCaseMessages,
-  tableSort = {},
-) => {
+export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   return formattedCaseMessages.sort((a, b) => {
     let sortNumber = 0;
     if (!tableSort) {

@@ -1,6 +1,6 @@
 import { DESCENDING } from '../presenterConstants';
 import { formatDateIfToday } from './formattedWorkQueue';
-import { sortFormattedMessagesHelper } from './sortFormattedMessagesHelper';
+import { sortFormattedMessages } from '../utilities/sortFormattedMessages';
 import { state } from 'cerebral';
 
 export const getFormattedMessages = ({
@@ -22,10 +22,8 @@ export const getFormattedMessages = ({
     messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
   }));
 
-  console.log('formattedCaseMessages*** ', formattedCaseMessages);
-
   // extract into a helper function
-  const sortedFormattedMessages = sortFormattedMessagesHelper(
+  const sortedFormattedMessages = sortFormattedMessages(
     formattedCaseMessages,
     tableSort,
   );
