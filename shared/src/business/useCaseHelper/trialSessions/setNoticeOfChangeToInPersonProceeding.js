@@ -32,6 +32,7 @@ exports.setNoticeOfChangeToInPersonProceeding = async (
     startTime: newTrialSessionEntity.startTime,
     state: newTrialSessionEntity.state,
     trialLocation: newTrialSessionEntity.trialLocation,
+    zip: newTrialSessionEntity.postalCode,
   };
 
   const notice = await applicationContext
