@@ -430,8 +430,7 @@ export const ScanBatchPreviewer = connect(
           >
             {documentTabsList.map(documentTab => (
               <Tab
-                key={documentTab.documentType}
-                realIcon={
+                icon={
                   scanHelper[`${documentTab.documentType}Completed`] && (
                     <FontAwesomeIcon
                       color="green"
@@ -439,6 +438,7 @@ export const ScanBatchPreviewer = connect(
                     />
                   )
                 }
+                key={documentTab.documentType}
                 tabName={documentTab.documentType}
                 title={documentTab.title}
               />
