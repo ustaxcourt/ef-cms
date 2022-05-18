@@ -9,16 +9,17 @@ const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
+  MOCK_TRIAL_INPERSON,
+  MOCK_TRIAL_REMOTE,
+} = require('../../../test/mockTrial');
+const {
   updateTrialSessionInteractor,
 } = require('./updateTrialSessionInteractor');
 const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
 const { User } = require('../../entities/User');
 
 describe('updateTrialSessionInteractor', () => {
   let mockUser;
-
-  let mockTrialsById;
 
   const MOCK_REMOTE_TRIAL = {
     maxCases: 100,
@@ -527,28 +528,36 @@ describe('updateTrialSessionInteractor', () => {
         ).not.toHaveBeenCalled();
       });
 
-      it.only('should NOT generate a NOIP when the proceeding type changes from remote to in-person, the trial session is calendared but the case is closed', async () => {
-        const mockInPersonCalendaredTrialSession = {
-          ...mockTrialsById[MOCK_TRIAL_ID_4],
+      it('should NOT generate a NOIP when the proceeding type changes from remote to in-person, the trial session is calendared but the case is closed', async () => {
+        const inPersonCalendaredTrialSession = {
+          ...MOCK_TRIAL_INPERSON,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
           isCalendared: true,
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         };
 
         applicationContext
           .getPersistenceGateway()
-          .getCaseByDocketNumber.mockReturnValueOnce({
+          .getTrialSessionById.mockReturnValue({
+            ...inPersonCalendaredTrialSession,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          });
+
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
             ...MOCK_CASE,
-            closedDate: '2019-03-01T21:42:29.073Z',
-            docketNumber: '888-88',
-            docketNumberWithSuffix: '888-88',
-            hearings: [],
+            closedDate: '2019-01-01T00:00:00.000Z',
             status: CASE_STATUS_TYPES.closed,
-            trialDate: '2019-03-01T21:42:29.073Z',
-            trialSessionId: MOCK_TRIAL_ID_4,
+            trialDate: MOCK_TRIAL_INPERSON.startDate,
+            trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
           });
 
         await updateTrialSessionInteractor(applicationContext, {
-          trialSession: mockInPersonCalendaredTrialSession,
+          trialSession: inPersonCalendaredTrialSession,
         });
 
         expect(
@@ -558,8 +567,32 @@ describe('updateTrialSessionInteractor', () => {
       });
 
       it('should NOT generate a NOIP when the case status is open, the trial session is calendared but the trial session proceeding type has not changed', async () => {
+        const inPersonCalendaredTrialSession = {
+          ...MOCK_TRIAL_INPERSON,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
+          isCalendared: true,
+        };
+
+        applicationContext
+          .getPersistenceGateway()
+          .getTrialSessionById.mockReturnValue({
+            ...inPersonCalendaredTrialSession,
+          });
+
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
+            ...MOCK_CASE,
+            trialDate: MOCK_TRIAL_INPERSON.startDate,
+            trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
+          });
+
         await updateTrialSessionInteractor(applicationContext, {
-          trialSession: mockTrialsById[MOCK_TRIAL_ID_4],
+          trialSession: inPersonCalendaredTrialSession,
         });
 
         expect(
@@ -570,20 +603,28 @@ describe('updateTrialSessionInteractor', () => {
 
       it('should generate a NOIP when the proceeding type changes from remote to in-person, the case status is not closed, and the trial session is calendared', async () => {
         const inPersonCalendaredTrialSession = {
-          ...mockTrialsById[MOCK_TRIAL_ID_4],
+          ...MOCK_TRIAL_INPERSON,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
           isCalendared: true,
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         };
 
         applicationContext
           .getPersistenceGateway()
-          .getCaseByDocketNumber.mockReturnValueOnce({
+          .getTrialSessionById.mockReturnValue({
+            ...inPersonCalendaredTrialSession,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          });
+
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
             ...MOCK_CASE,
-            docketNumber: '888-88',
-            docketNumberWithSuffix: '888-88',
-            hearings: [],
-            trialDate: '2019-03-01T21:42:29.073Z',
-            trialSessionId: MOCK_TRIAL_ID_4,
+            trialDate: MOCK_TRIAL_INPERSON.startDate,
+            trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
           });
 
         await updateTrialSessionInteractor(applicationContext, {
@@ -598,9 +639,33 @@ describe('updateTrialSessionInteractor', () => {
     });
 
     describe('Remote Proceeding', () => {
-      it('should NOT generate a NORP when the case status is open, the trial session is calendared but the trial session proceeding type has not changed', async () => {
+      it('should NOT generate a NORP when the case status is open, trial session is calendared, but the proceeding type has not changed', async () => {
+        const remoteCalendaredTrialSession = {
+          ...MOCK_TRIAL_REMOTE,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
+          isCalendared: true,
+        };
+
+        applicationContext
+          .getPersistenceGateway()
+          .getTrialSessionById.mockReturnValue({
+            ...remoteCalendaredTrialSession,
+          });
+
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
+            ...MOCK_CASE,
+            trialDate: MOCK_TRIAL_REMOTE.startDate,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+          });
+
         await updateTrialSessionInteractor(applicationContext, {
-          trialSession: mockTrialsById[MOCK_TRIAL_ID_4],
+          trialSession: remoteCalendaredTrialSession,
         });
 
         expect(
@@ -610,30 +675,35 @@ describe('updateTrialSessionInteractor', () => {
       });
 
       it('should NOT generate a NORP when the proceeding type changes from in-person to remote, the trial session is calendared but the case is closed', async () => {
-        const mockRemoteCalendaredTrialSession = {
-          ...mockTrialsById[MOCK_TRIAL_ID_7],
-          chambersPhoneNumber: '1111111',
-          joinPhoneNumber: '0987654321',
-          meetingId: '1234567890',
-          password: 'abcdefg',
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+        const remoteCalendaredTrialSession = {
+          ...MOCK_TRIAL_REMOTE,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
+          isCalendared: true,
         };
 
         applicationContext
           .getPersistenceGateway()
-          .getCaseByDocketNumber.mockReturnValueOnce({
+          .getTrialSessionById.mockReturnValue({
+            ...remoteCalendaredTrialSession,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+          });
+
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
             ...MOCK_CASE,
-            closedDate: '2019-03-01T21:42:29.073Z',
-            docketNumber: '888-88',
-            docketNumberWithSuffix: '888-88',
-            hearings: [],
+            closedDate: '2019-01-01T00:00:00.000Z',
             status: CASE_STATUS_TYPES.closed,
-            trialDate: '2019-03-01T21:42:29.073Z',
-            trialSessionId: MOCK_TRIAL_ID_7,
+            trialDate: MOCK_TRIAL_REMOTE.startDate,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
           });
 
         await updateTrialSessionInteractor(applicationContext, {
-          trialSession: mockRemoteCalendaredTrialSession,
+          trialSession: remoteCalendaredTrialSession,
         });
 
         expect(
@@ -642,29 +712,34 @@ describe('updateTrialSessionInteractor', () => {
         ).not.toHaveBeenCalled();
       });
 
-      it('should generate a NORP when the proceeding type changes from in-person to remote, the case status is not closed, and the trial session is calendared', async () => {
-        const mockRemoteCalendaredTrialSession = {
-          ...mockTrialsById[MOCK_TRIAL_ID_7],
-          chambersPhoneNumber: '1111111',
-          joinPhoneNumber: '0987654321',
-          meetingId: '1234567890',
-          password: 'abcdefg',
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+      it.only('should generate a NORP when the proceeding type changes from in-person to remote, the case status is not closed, and the trial session is calendared', async () => {
+        const remoteTrialSession = {
+          ...MOCK_TRIAL_REMOTE,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
         };
 
         applicationContext
           .getPersistenceGateway()
-          .getCaseByDocketNumber.mockReturnValueOnce({
+          .getTrialSessionById.mockReturnValue({
+            ...remoteTrialSession,
+            isCalendared: true,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+          });
+
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
             ...MOCK_CASE,
-            docketNumber: '888-88',
-            docketNumberWithSuffix: '888-88',
-            hearings: [],
-            trialDate: '2019-03-01T21:42:29.073Z',
-            trialSessionId: MOCK_TRIAL_ID_7,
+            trialDate: MOCK_TRIAL_REMOTE.startDate,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
           });
 
         await updateTrialSessionInteractor(applicationContext, {
-          trialSession: mockRemoteCalendaredTrialSession,
+          trialSession: remoteTrialSession,
         });
 
         expect(
