@@ -9,6 +9,9 @@
 exports.sendSlackNotification = async ({ applicationContext, text, topic }) => {
   const slackWebhookUrl = applicationContext.getSlackWebhookUrl();
   if (!slackWebhookUrl) {
+    applicationContext.logger.warn(
+      'No environment variable specified for Slack Webhook URL',
+    );
     return;
   }
 
@@ -20,6 +23,7 @@ exports.sendSlackNotification = async ({ applicationContext, text, topic }) => {
     });
 
   if (recentNotifications.length) {
+    // topic has recently been notified; ignore this request
     return;
   }
 
