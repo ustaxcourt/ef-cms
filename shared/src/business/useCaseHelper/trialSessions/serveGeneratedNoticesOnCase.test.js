@@ -6,7 +6,7 @@ const {
 } = require('./serveGeneratedNoticesOnCase');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { getFakeFile } = require('../../test/getFakeFile');
+const { getFakeFile, testPdfDoc } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
 
@@ -47,17 +47,13 @@ describe('serveGeneratedNoticesOnCase', () => {
       { applicationContext },
     );
 
-    const mockNoticeDocumentPdfData = applicationContext
-      .getUseCaseHelpers()
-      .generateNoticeOfChangeToInPersonProceeding.mockReturnValue(getFakeFile);
-
     await serveGeneratedNoticesOnCase({
       PDFDocument: mockPdfDocument,
       applicationContext,
       caseEntity: mockCaseWithPaperService,
       newPdfDoc: getFakeFile,
       noticeDocketEntryEntity: mockNoticeDocketEntry,
-      noticeDocumentPdfData: mockNoticeDocumentPdfData,
+      noticeDocumentPdfData: testPdfDoc,
       servedParties: {
         paper: ['test'],
       },
