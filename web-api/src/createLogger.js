@@ -47,7 +47,9 @@ exports.createLogger = (opts = {}) => {
           maxStringLength: null,
         });
         const lines =
-          stringified === EMPTY_METADATA_OBJECT ? [] : stringified.split('\n');
+          stringified.trim() === EMPTY_METADATA_OBJECT.trim()
+            ? []
+            : stringified.split('\n');
 
         return [`${info.level}:\t${info.message}`, ...lines].join('\n  ');
       }),
