@@ -1,55 +1,146 @@
 // import { ASCENDING, DESCENDING } from '../presenterConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getFormattedMessages } from '../computeds/formattedMessages';
 import { sortFormattedMessages } from './sortFormattedMessages';
 
 describe('sortFormattedMessages', () => {
-  const { DOCKET_SECTION, PETITIONS_SECTION } =
-    applicationContext.getConstants();
-  const PARENT_MESSAGE_ID = '078ffe53-23ed-4386-9cc5-d7a175f5c948';
-  it('should sort alphabetically if there is there is no sort config', () => {
-    const messages = [
-      {
-        caseStatus: 'Ready for trial 1',
-        completedAt: '2019-05-01T17:29:13.122Z',
-        createdAt: '2019-01-01T17:29:13.122Z',
-        docketNumber: '123-45',
-        docketNumberSuffix: '',
-        from: 'Test Sender',
-        fromSection: DOCKET_SECTION,
-        fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
-        message: 'This is a test message',
-        messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
-        parentMessageId: PARENT_MESSAGE_ID,
-        subject: 'Test subject...',
-        to: 'Test Recipient',
-        toSection: PETITIONS_SECTION,
-        toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
-      },
-      {
-        caseStatus: 'Ready for trial 2',
-        completedAt: '2019-06-01T17:29:13.122Z',
-        createdAt: '2019-02-01T17:29:13.122Z',
-        docketNumber: '123-45',
-        docketNumberSuffix: '',
-        from: 'Test Sender 2',
-        fromSection: DOCKET_SECTION,
-        fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
-        message: 'This is a test message',
-        messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
-        parentMessageId: PARENT_MESSAGE_ID,
-        subject: 'Test subject...',
-        to: 'Test Recipient',
-        toSection: PETITIONS_SECTION,
-        toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
-      },
-    ];
+  const messages = [
+    {
+      createdAt: '2019-01-01T16:29:13.122Z',
+      docketNumber: '101-19',
+      message: 'This is a test message on 2019-01-01T16:29:13.122Z',
+    },
+    {
+      createdAt: '2019-01-02T17:29:13.122Z',
+      docketNumber: '103-20',
+      message: 'This is a test message on 2019-01-02T17:29:13.122Z',
+    },
+    {
+      createdAt: '2019-01-01T17:29:13.122Z',
+      docketNumber: '102-20',
+      message: 'This is a test message on 2019-01-01T17:29:13.122Z',
+    },
+  ];
 
-    const formattedMessages = getFormattedMessages(messages);
-    const sortedFormattedMessages = sortFormattedMessages(formattedMessages);
+  // const QUALIFIED_SORT_FIELDS = ['createdAt', 'completedAt', 'subject'];
 
-    expect(sortedFormattedMessages).toEqual(
-      'Docket 123-19 | Document details | U.S. Tax Court',
-    );
+  it('should not sort the messages if sortField is not a qualified sortable field', () => {
+    const result = sortFormattedMessages(messages, {
+      sortField: 'unqualifiedSortField',
+    });
+
+    expect(result).toEqual(messages);
   });
+
+  it('sorts messages by createdAt when there is no tableSort configuration', () => {
+    const result = sortFormattedMessages(messages);
+
+    expect(result).toMatchObject([
+      {
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: '101-19',
+      },
+      {
+        createdAt: '2019-01-01T17:29:13.122Z',
+        docketNumber: '102-20',
+      },
+      {
+        createdAt: '2019-01-02T17:29:13.122Z',
+        docketNumber: '103-20',
+      },
+    ]);
+  });
+
+  // it('should sort docketNumber chronologically', () => {
+  //   const result = sortFormattedMessages(messages, {
+  //     sortField: 'docketNumber',
+  //   });
+
+  //   expect(result).toMatchObject([
+  //     {
+  //       createdAt: '2019-01-01T16:29:13.122Z',
+  //       docketNumber: '101-19',
+  //     },
+  //     {
+  //       createdAt: '2019-01-01T17:29:13.122Z',
+  //       docketNumber: '102-20',
+  //     },
+  //     {
+  //       createdAt: '2019-01-02T17:29:13.122Z',
+  //       docketNumber: '103-20',
+  //     },
+  //   ]);
+  // });
+
+  it('should sort docketNumber chronologically', () => {
+    const result = sortFormattedMessages(messages, {
+      sortField: 'docketNumber',
+    });
+
+    expect(result).toMatchObject([
+      {
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: '101-19',
+      },
+      {
+        createdAt: '2019-01-01T17:29:13.122Z',
+        docketNumber: '102-20',
+      },
+      {
+        createdAt: '2019-01-02T17:29:13.122Z',
+        docketNumber: '103-20',
+      },
+    ]);
+  });
+
+  // QUALIFIED_SORT_FIELDS.forEach(sortField => {
+  // it('', () => {});
+  // });
+
+  // it('returns messages sorted by completedAt', () => {
+  //   const result = sortFormattedMessages(
+  //     [
+  //       {
+  //         completedAt: '2019-01-03T16:29:13.122Z',
+  //         createdAt: '2019-01-01T16:29:13.122Z',
+  //         docketNumber: '101-20',
+  //         message: 'This is a test message',
+  //       },
+  //       {
+  //         completedAt: '2019-01-01T16:29:13.122Z',
+  //         createdAt: '2019-01-02T17:29:13.122Z',
+  //         docketNumber: '102-20',
+  //         message: 'This is a test message',
+  //       },
+  //       {
+  //         completedAt: '2019-01-02T16:29:13.122Z',
+  //         createdAt: '2019-01-01T17:29:13.122Z',
+  //         docketNumber: '103-20',
+  //         message: 'This is a test message',
+  //       },
+  //     ],
+  //     {
+  //       sortField: 'completedAt',
+  //     },
+  //   );
+
+  //   expect(result).toMatchObject([
+  //     {
+  //       completedAt: '2019-01-03T16:29:13.122Z',
+  //       createdAt: '2019-01-01T16:29:13.122Z',
+  //       docketNumber: '101-20',
+  //       message: 'This is a test message',
+  //     },
+  //     {
+  //       completedAt: '2019-01-02T16:29:13.122Z',
+  //       createdAt: '2019-01-01T17:29:13.122Z',
+  //       docketNumber: '103-20',
+  //       message: 'This is a test message',
+  //     },
+  //     {
+  //       completedAt: '2019-01-01T16:29:13.122Z',
+  //       createdAt: '2019-01-02T17:29:13.122Z',
+  //       docketNumber: '102-20',
+  //       message: 'This is a test message',
+  //     },
+  //   ]);
+  // });
 });
