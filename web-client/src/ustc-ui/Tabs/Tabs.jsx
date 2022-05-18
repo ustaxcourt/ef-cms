@@ -19,6 +19,7 @@ if (process.env.NODE_ENV === 'test') {
   // };
   ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
 } else {
+  console.log('Not Test');
   ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
 }
 
@@ -43,6 +44,7 @@ const renderTabFactory = ({
       showNotificationIcon,
       tabName,
       title,
+      realIcon,
     } = child.props;
 
     const isActiveTab = tabName === activeKey;
@@ -79,23 +81,24 @@ const renderTabFactory = ({
       <li {...tabProps}>
         <button {...buttonProps}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
-          {showIcon && (
-            <FontAwesomeIcon
-              className={iconClass}
-              color={iconColor || null}
-              icon={icon}
-            />
-          )}
-          {showNotificationIcon && (
-            <div className="icon-tab-notification">
-              <div className="icon-tab-notification-exclamation">!</div>
-            </div>
-          )}
-          {draftCount !== 0 && (
-            <div className="icon-tab-unread-messages">
-              <div className="icon-tab-unread-messages-count">{draftCount}</div>
-            </div>
-          )}
+          {realIcon}
+          {/*{showIcon && (*/}
+          {/*  <FontAwesomeIcon*/}
+          {/*    className={iconClass}*/}
+          {/*    color={iconColor || null}*/}
+          {/*    icon={icon}*/}
+          {/*  />*/}
+          {/*)}*/}
+          {/*{showNotificationIcon && (*/}
+          {/*  <div className="icon-tab-notification">*/}
+          {/*    <div className="icon-tab-notification-exclamation">!</div>*/}
+          {/*  </div>*/}
+          {/*)}*/}
+          {/*{draftCount !== 0 && (*/}
+          {/*  <div className="icon-tab-unread-messages">*/}
+          {/*    <div className="icon-tab-unread-messages-count">{draftCount}</div>*/}
+          {/*  </div>*/}
+          {/*)}*/}
         </button>
       </li>
     );
