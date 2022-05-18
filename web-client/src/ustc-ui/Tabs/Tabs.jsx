@@ -21,8 +21,8 @@ const renderTabFactory = ({
       children: tabChildren,
       className: childClassName,
       disabled,
+      icon,
       id: tabId,
-      realIcon,
       tabName,
       title,
     } = child.props;
@@ -61,7 +61,7 @@ const renderTabFactory = ({
       <li {...tabProps}>
         <button {...buttonProps}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
-          {realIcon}
+          {icon}
         </button>
       </li>
     );

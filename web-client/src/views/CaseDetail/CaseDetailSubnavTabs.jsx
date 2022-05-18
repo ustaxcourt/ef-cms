@@ -36,22 +36,21 @@ export const CaseDetailSubnavTabs = connect(
                   caseDetailSubnavHelper.showTrackedItemsNotification &&
                     'tracked-items-padding-right',
                 )}
-                id="tab-tracked-items"
-                realIcon={
+                icon={
                   caseDetailSubnavHelper.showTrackedItemsNotification && (
                     <div className="icon-tab-notification">
                       <div className="icon-tab-notification-exclamation">!</div>
                     </div>
                   )
                 }
+                id="tab-tracked-items"
                 tabName="trackedItems"
                 title="Tracked Items"
               />
             )}
             {caseDetailSubnavHelper.showDraftsTab && (
               <Tab
-                id="tab-drafts"
-                realIcon={
+                icon={
                   caseDetailSubnavHelper.draftDocketEntryCount !== 0 && (
                     <div className="icon-tab-unread-messages">
                       <div className="icon-tab-unread-messages-count">
@@ -60,6 +59,7 @@ export const CaseDetailSubnavTabs = connect(
                     </div>
                   )
                 }
+                id="tab-drafts"
                 tabName="drafts"
                 title="Drafts"
               />
@@ -87,8 +87,7 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showNotesTab && (
               <Tab
-                id="tab-notes"
-                realIcon={
+                icon={
                   caseDetailSubnavHelper.showNotesIcon && (
                     <FontAwesomeIcon
                       className="icon-case-notes"
@@ -97,6 +96,7 @@ export const CaseDetailSubnavTabs = connect(
                     />
                   )
                 }
+                id="tab-notes"
                 tabName="notes"
                 title="Notes"
               />
