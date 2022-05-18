@@ -318,7 +318,90 @@ describe('petitions clerk sets a remote trial session calendar', () => {
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkCreatesARemoteTrialSession(cerebralTest, overrides);
+  it('docket clerk created a location based remote trial session', async () => {
+    await cerebralTest.runSequence('gotoAddTrialSessionSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'proceedingType',
+      value: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'maxCases',
+      value: overrides.maxCases || 100,
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'sessionType',
+      value: overrides.sessionType || 'Hybrid',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'month',
+      value: '8',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'day',
+      value: '12',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'year',
+      value: '2025',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'month',
+      value: '12',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'trialLocation',
+      value: overrides.trialLocation || 'Seattle, Washington',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'meetingId',
+      value: '123456789',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'password',
+      value: '123456789',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'joinPhoneNumber',
+      value: '123456789',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'chambersPhoneNumber',
+      value: '123456789',
+    });
+
+    await cerebralTest.runSequence('validateTrialSessionSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await cerebralTest.runSequence('submitTrialSessionSequence');
+
+    expect(cerebralTest.getState('alertSuccess')).toEqual({
+      message: 'Trial session added.',
+    });
+
+    const lastCreatedTrialSessionId = cerebralTest.getState(
+      'lastCreatedTrialSessionId',
+    );
+    expect(lastCreatedTrialSessionId).toBeDefined();
+
+    cerebralTest.trialSessionId = lastCreatedTrialSessionId;
+    cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
+  });
+
   docketClerkViewsTrialSessionList(cerebralTest);
 
   const caseOverrides = {
