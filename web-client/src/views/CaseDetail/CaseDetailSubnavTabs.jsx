@@ -37,8 +37,12 @@ export const CaseDetailSubnavTabs = connect(
                     'tracked-items-padding-right',
                 )}
                 id="tab-tracked-items"
-                showNotificationIcon={
-                  caseDetailSubnavHelper.showTrackedItemsNotification
+                realIcon={
+                  caseDetailSubnavHelper.showTrackedItemsNotification && (
+                    <div className="icon-tab-notification">
+                      <div className="icon-tab-notification-exclamation">!</div>
+                    </div>
+                  )
                 }
                 tabName="trackedItems"
                 title="Tracked Items"
@@ -46,8 +50,16 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showDraftsTab && (
               <Tab
-                draftCount={caseDetailSubnavHelper.draftDocketEntryCount}
                 id="tab-drafts"
+                realIcon={
+                  caseDetailSubnavHelper.draftDocketEntryCount !== 0 && (
+                    <div className="icon-tab-unread-messages">
+                      <div className="icon-tab-unread-messages-count">
+                        {caseDetailSubnavHelper.draftDocketEntryCount}
+                      </div>
+                    </div>
+                  )
+                }
                 tabName="drafts"
                 title="Drafts"
               />
@@ -75,18 +87,16 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showNotesTab && (
               <Tab
-                icon="sticky-note"
-                iconClass="icon-case-notes"
-                iconColor="#ffbe2e"
                 id="tab-notes"
                 realIcon={
-                  <FontAwesomeIcon
-                    className="icon-case-notes"
-                    color="#ffbe2e"
-                    icon="sticky-note"
-                  />
+                  caseDetailSubnavHelper.showNotesIcon && (
+                    <FontAwesomeIcon
+                      className="icon-case-notes"
+                      color="#ffbe2e"
+                      icon="sticky-note"
+                    />
+                  )
                 }
-                showIcon={caseDetailSubnavHelper.showNotesIcon}
                 tabName="notes"
                 title="Notes"
               />
