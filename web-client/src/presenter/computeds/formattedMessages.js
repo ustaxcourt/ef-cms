@@ -8,56 +8,60 @@ export const getFormattedMessages = ({
   tableSort,
 }) => {
   // TODO: refactor this whole function
-  const formattedCaseMessages = messages
-    .map(message => ({
-      ...message,
-      completedAtFormatted: formatDateIfToday(
-        message.completedAt,
-        applicationContext,
-      ),
-      createdAtFormatted: formatDateIfToday(
-        message.createdAt,
-        applicationContext,
-      ),
-      messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
-    }))
-    .sort((a, b) => {
-      let sortNumber = 0;
-      if (!tableSort) {
-        sortNumber = a.createdAt.localeCompare(b.createdAt);
-      } else if (
-        ['createdAt', 'completedAt', 'subject'].includes(tableSort.sortField)
-      ) {
-        sortNumber = a[tableSort.sortField].localeCompare(
-          b[tableSort.sortField],
-        );
-      } else if (tableSort.sortField === 'docketNumber') {
-        const aSplit = a.docketNumber.split('-');
-        const bSplit = b.docketNumber.split('-');
+  const formattedCaseMessages = messages.map(message => ({
+    ...message,
+    completedAtFormatted: formatDateIfToday(
+      message.completedAt,
+      applicationContext,
+    ),
+    createdAtFormatted: formatDateIfToday(
+      message.createdAt,
+      applicationContext,
+    ),
+    messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
+  }));
 
-        if (aSplit[1] !== bSplit[1]) {
-          // compare years if they aren't the same;
-          // compare as strings, because they *might* have suffix
-          sortNumber = aSplit[1].localeCompare(bSplit[1]);
-        } else {
-          // compare index if years are the same, compare as integers
-          sortNumber = +aSplit[0] - +bSplit[0];
-        }
+  // extract into a helper function
+  const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
+    let sortNumber = 0;
+    if (!tableSort) {
+      sortNumber = a.createdAt.localeCompare(b.createdAt);
+    } else if (
+      // 'createdAt' = Recieved Column on Inbox Tab and Sent Column on Sent Tab (Outbox)
+      // 'completedAt' = Completed COlumn on Completed Tab
+
+      ['createdAt', 'completedAt', 'subject'].includes(tableSort.sortField)
+    ) {
+      sortNumber = a[tableSort.sortField].localeCompare(b[tableSort.sortField]);
+    } else if (tableSort.sortField === 'docketNumber') {
+      const aSplit = a.docketNumber.split('-');
+      const bSplit = b.docketNumber.split('-');
+
+      if (aSplit[1] !== bSplit[1]) {
+        // compare years if they aren't the same;
+        // compare as strings, because they *might* have suffix
+        sortNumber = aSplit[1].localeCompare(bSplit[1]);
+      } else {
+        // compare index if years are the same, compare as integers
+        sortNumber = +aSplit[0] - +bSplit[0];
       }
-      return sortNumber;
-    });
+    }
+    return sortNumber;
+  });
 
+  // if (tableSort?.sortOrder === DESCENDING) {
   if (tableSort && tableSort.sortOrder === DESCENDING) {
-    formattedCaseMessages.reverse();
+    sortedFormattedMessages.reverse();
   }
 
-  const inProgressMessages = formattedCaseMessages.filter(
+  const inProgressMessages = sortedFormattedMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,
   );
-  const completedMessages = formattedCaseMessages.filter(
+  const completedMessages = sortedFormattedMessages.filter(
     message => message.isCompleted,
   );
 
+  // TODO: Determine if conditional is needed
   if (!tableSort) {
     completedMessages.sort((a, b) =>
       b.completedAt.localeCompare(a.completedAt),
@@ -67,7 +71,7 @@ export const getFormattedMessages = ({
   return {
     completedMessages,
     inProgressMessages,
-    messages: formattedCaseMessages,
+    messages: sortedFormattedMessages,
   };
 };
 
@@ -92,6 +96,7 @@ export const formattedMessages = (get, applicationContext) => {
   return {
     completedMessages,
     messages,
+    // TODO: extract this to its own compute
     showSortableHeaders: role === USER_ROLES.adc,
   };
 };
