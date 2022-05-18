@@ -1,9 +1,13 @@
+const {
+  reactTemplateGenerator,
+} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
+
 /**
  * handleBounceNotificationInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {object} providers.bounce an object containing the information about the bounce
+ * @param {object} providers.bounce an object containing the information about the bounced email
  * @returns {Promise<object>} resolves upon completion
  */
 exports.handleBounceNotificationInteractor = async (
@@ -22,14 +26,23 @@ exports.handleBounceNotificationInteractor = async (
     return;
   }
 
-  const message = `An Email to the IRS Super User (${IRS_SUPERUSER_EMAIL}) has triggered a ${bounce.bounceType} bounce (${bounce.bounceSubType})`;
-
   const destinations = applicationContext.getBounceAlertRecipients();
   if (destinations) {
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
-        emailContent: message,
+        emailContent: reactTemplateGenerator({
+          componentName: 'BouncedEmailAlert',
+          data: {
+            ...bounce,
+            bouncedRecipients: bounce.bouncedRecipients
+              .map(recipient => recipient.emailAddress)
+              .join(', '),
+            currentDate: applicationContext
+              .getUtilities()
+              .formatNow('DATE_TIME_TZ'),
+          },
+        }),
       },
       destinations: destinations.map(email => ({ email })),
       templateName: process.env.BOUNCE_ALERT_TEMPLATE,
@@ -38,7 +51,7 @@ exports.handleBounceNotificationInteractor = async (
 
   await applicationContext.getDispatchers().sendSlackNotification({
     applicationContext,
-    text: message,
+    text: `:warning: An Email to the IRS Super User (${IRS_SUPERUSER_EMAIL}) has triggered a ${bounce.bounceType} bounce (${bounce.bounceSubType})`,
     topic: 'bounce-notification',
   });
 };

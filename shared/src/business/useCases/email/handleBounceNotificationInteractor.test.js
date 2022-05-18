@@ -15,7 +15,7 @@ describe('handleBounceNotificationInteractor', () => {
     ]);
   });
 
-  it('should do nothing if the user is not the irs super user', async () => {
+  it('should do nothing if the recipient is not the irs super user', async () => {
     await handleBounceNotificationInteractor(applicationContext, {
       bounce: {
         bounceSubType: 'OnSuppressionList',
@@ -59,21 +59,18 @@ describe('handleBounceNotificationInteractor', () => {
     });
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
-    ).toBeCalledWith({
-      applicationContext,
-      defaultTemplateData: {
-        emailContent:
-          'An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
-      },
-      destinations: [{ email: 'sysadmin@example.com' }],
-      templateName: process.env.EMAIL_BOUNCED_SUPER_USER_TEMPLATE,
-    });
+    ).toBeCalledWith(
+      expect.objectContaining({
+        destinations: [{ email: 'sysadmin@example.com' }],
+        templateName: process.env.EMAIL_BOUNCED_SUPER_USER_TEMPLATE,
+      }),
+    );
 
     expect(
       applicationContext.getDispatchers().sendSlackNotification,
     ).toBeCalledWith({
       applicationContext,
-      text: 'An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
+      text: ':warning: An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
       topic: 'bounce-notification',
     });
   });
