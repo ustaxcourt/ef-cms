@@ -11,8 +11,6 @@ const {
 const {
   updateTrialSessionInteractor,
 } = require('./updateTrialSessionInteractor');
-const { Case } = require('../../entities/cases/Case');
-const { faker } = require('@faker-js/faker');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
 const { User } = require('../../entities/User');
@@ -21,7 +19,6 @@ describe('updateTrialSessionInteractor', () => {
   let mockUser;
 
   let mockTrialsById;
-  let inPersonTrialSession;
 
   const MOCK_REMOTE_TRIAL = {
     maxCases: 100,
@@ -135,11 +132,6 @@ describe('updateTrialSessionInteractor', () => {
         ],
         isCalendared: true,
       },
-    };
-
-    inPersonTrialSession = {
-      ...mockTrialsById[MOCK_TRIAL_ID_7],
-      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
     };
 
     // applicationContext
@@ -458,7 +450,7 @@ describe('updateTrialSessionInteractor', () => {
     ).toEqual(false);
   });
 
-  it.only('should NOT update the calendared case with new trial session info when the trialSessionId does NOT match the case.trialSessionId', async () => {
+  it('should NOT update the calendared case with new trial session info when the trialSessionId does NOT match the case.trialSessionId', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -480,8 +472,20 @@ describe('updateTrialSessionInteractor', () => {
   });
 
   it('should NOT retrieve the case from persistence when it has been removed from the trial session', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+
     await updateTrialSessionInteractor(applicationContext, {
-      trialSession: inPersonTrialSession,
+      trialSession: {
+        ...MOCK_TRIAL_INPERSON,
+        caseOrder: [
+          {
+            docketNumber: mockCaseRemovedFromTrialDocketNumber,
+            removedFromTrial: true,
+          },
+        ],
+      },
     });
 
     expect(
@@ -496,20 +500,28 @@ describe('updateTrialSessionInteractor', () => {
     describe('In-Person Proceeding', () => {
       it('should NOT generate a NOIP when the proceeding type changes from remote to in-person, the case status is not closed but the trial session is NOT calendared', async () => {
         const inPersonNonCalendaredTrialSession = {
-          ...mockTrialsById[MOCK_TRIAL_ID_3],
+          ...MOCK_TRIAL_INPERSON,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
           isCalendared: false,
-          proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         };
 
         applicationContext
           .getPersistenceGateway()
-          .getCaseByDocketNumber.mockReturnValueOnce({
+          .getTrialSessionById.mockReturnValue({
+            ...inPersonNonCalendaredTrialSession,
+            proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
+          });
+
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
             ...MOCK_CASE,
-            docketNumber: '888-88',
-            docketNumberWithSuffix: '888-88',
-            hearings: [],
-            trialDate: '2019-03-01T21:42:29.073Z',
-            trialSessionId: MOCK_TRIAL_ID_3,
+            trialDate: MOCK_TRIAL_INPERSON.startDate,
+            trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
           });
 
         await updateTrialSessionInteractor(applicationContext, {
@@ -522,7 +534,7 @@ describe('updateTrialSessionInteractor', () => {
         ).not.toHaveBeenCalled();
       });
 
-      it('should NOT generate a NOIP when the proceeding type changes from remote to in-person, the trial session is calendared but the case is closed', async () => {
+      it.only('should NOT generate a NOIP when the proceeding type changes from remote to in-person, the trial session is calendared but the case is closed', async () => {
         const mockInPersonCalendaredTrialSession = {
           ...mockTrialsById[MOCK_TRIAL_ID_4],
           isCalendared: true,
