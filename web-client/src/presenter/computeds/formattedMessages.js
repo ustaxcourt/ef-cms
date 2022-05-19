@@ -7,7 +7,6 @@ export const getFormattedMessages = ({
   messages,
   tableSort,
 }) => {
-  // TODO: refactor this whole function
   const formattedCaseMessages = messages.map(message => ({
     ...message,
     completedAtFormatted: formatDateIfToday(
@@ -21,7 +20,6 @@ export const getFormattedMessages = ({
     messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
   }));
 
-  // extract into a helper function
   const sortedFormattedMessages = sortFormattedMessages(
     formattedCaseMessages,
     tableSort,
@@ -30,22 +28,31 @@ export const getFormattedMessages = ({
   const inProgressMessages = sortedFormattedMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,
   );
-  const completedMessages = sortedFormattedMessages.filter(
-    message => message.isCompleted,
-  );
 
-  // TODO: Determine if conditional is needed
-  if (!tableSort) {
-    completedMessages.sort((a, b) =>
-      b.completedAt.localeCompare(a.completedAt),
-    );
-  }
+  const completedMessages = processCompletedMessages(
+    sortedFormattedMessages,
+    tableSort,
+  );
 
   return {
     completedMessages,
     inProgressMessages,
     messages: sortedFormattedMessages,
   };
+};
+
+export const processCompletedMessages = (sortedMessages, tableSort) => {
+  const completedMessages = sortedMessages.filter(
+    message => message.isCompleted,
+  );
+
+  if (!tableSort) {
+    return completedMessages.sort((a, b) =>
+      b.completedAt.localeCompare(a.completedAt),
+    );
+  }
+
+  return completedMessages;
 };
 
 export const formattedMessages = (get, applicationContext) => {
