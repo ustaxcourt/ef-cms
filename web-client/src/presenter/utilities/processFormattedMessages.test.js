@@ -1,10 +1,10 @@
 import {
   sortCompletedMessages,
   sortFormattedMessages,
-} from './sortFormattedMessages';
+} from './processFormattedMessages';
 
-describe('sortFormattedMessages', () => {
-  describe('sortFormattedMessages helper', () => {
+describe('processFormattedMessages', () => {
+  describe('sortFormattedMessages', () => {
     const unsortedMessages = [
       {
         completedAt: '2019-01-02T16:29:13.122Z',
@@ -128,7 +128,6 @@ describe('sortFormattedMessages', () => {
   });
 
   describe('sortCompletedMessages', () => {
-    //TODO: WRITE TESTS
     const sortedMessages = [
       {
         completedAt: '2019-01-02T16:29:13.122Z',

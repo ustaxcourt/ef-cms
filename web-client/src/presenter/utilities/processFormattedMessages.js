@@ -1,6 +1,5 @@
 import { DESCENDING } from '../presenterConstants';
 
-//TODO: change name of file??
 export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
     let sortNumber = 0;
