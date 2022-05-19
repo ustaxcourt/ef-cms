@@ -137,61 +137,7 @@ describe('batchDownloadTrialSessionInteractor', () => {
     });
   });
 
-  it('checks that the files to be zipped exist in persistence when verifyFiles param is true', async () => {
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-      verifyFiles: true,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().isFileExists,
-    ).toHaveBeenCalledTimes(2);
-  });
-
-  it('throws an error if a file to be zipped does not exist in persistence when verifyFiles param is true', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .isFileExists.mockResolvedValue(false);
-
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-      verifyFiles: true,
-    });
-
-    const errorCall =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0];
-
-    expect(
-      applicationContext.getPersistenceGateway().isFileExists,
-    ).toHaveBeenCalled();
-    expect(errorCall).toBeTruthy();
-    expect(errorCall[0].message.error.message).toEqual(
-      `Batch Download Error: File ${mockCase.docketEntries[0].docketEntryId} for case ${mockCase.docketNumber} does not exist!`,
-    );
-  });
-
-  it('does not check for missing files or throw an associated error if a file to be zipped does not exist in persistence when verifyFiles param is false', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .isFileExists.mockResolvedValue(false);
-
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-      verifyFiles: false,
-    });
-
-    const errorCall =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0];
-
-    expect(
-      applicationContext.getPersistenceGateway().isFileExists,
-    ).not.toHaveBeenCalled();
-    expect(errorCall[0].message.error).toBeUndefined();
-  });
-
-  it('does not check for missing files or throw an associated error if a file to be zipped does not exist in persistence when verifyFiles param is undefined', async () => {
+  it('does not check for missing files or throw an associated error if a file to be zipped does not exist in persistence', async () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(false);

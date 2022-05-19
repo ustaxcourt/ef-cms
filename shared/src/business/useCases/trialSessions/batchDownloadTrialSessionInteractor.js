@@ -19,7 +19,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 const batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  { trialSessionId, verifyFiles = false },
+  { trialSessionId },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -79,23 +79,6 @@ const batchDownloadTrialSessionInteractor = async (
 
     for (const docketEntry of docketEntriesWithFileAttached) {
       if (!docketEntry.docketEntryId) continue;
-
-      // check that all file exists before continuing
-      if (verifyFiles) {
-        const isFileExists = await applicationContext
-          .getPersistenceGateway()
-          .isFileExists({
-            applicationContext,
-            key: docketEntry.docketEntryId,
-          });
-
-        if (!isFileExists) {
-          throw new Error(
-            `Batch Download Error: File ${docketEntry.docketEntryId} for case ${caseToBatch.docketNumber} does not exist!`,
-          );
-        }
-      }
-
       const filename = exports.generateValidDocketEntryFilename(docketEntry);
       const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
       s3Ids.push(docketEntry.docketEntryId);
@@ -261,12 +244,11 @@ exports.generateValidDocketEntryFilename = ({
  */
 exports.batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  { trialSessionId, verifyFiles = false },
+  { trialSessionId },
 ) => {
   try {
     await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId,
-      verifyFiles,
     });
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
