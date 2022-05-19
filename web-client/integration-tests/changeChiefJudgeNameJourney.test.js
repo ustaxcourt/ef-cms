@@ -12,12 +12,14 @@ const cerebralTest = setupTest();
 cerebralTest.draftOrders = [];
 
 const judgeFoleyUserId = '659789b4-acc5-40b7-9318-3354e7eb8604';
+const kerriganFullName = 'Kathleen Kerrigan';
+const foleyFullName = 'Maurice B. Foley';
 
 describe('Chief Judge feature flag configuration', () => {
   beforeAll(async () => {
     jest.setTimeout(30000);
     await setJudgeTitle(judgeFoleyUserId, 'Chief Judge');
-    await setChiefJudgeNameFlagValue('Maurice B. Foley');
+    await setChiefJudgeNameFlagValue(foleyFullName);
   });
 
   afterAll(() => {
@@ -43,14 +45,14 @@ describe('Chief Judge feature flag configuration', () => {
       });
 
       expect(cerebralTest.getState('pdfForSigning.nameForSigning')).toEqual(
-        'Maurice B. Foley',
+        foleyFullName,
       );
     });
 
     it('should correctly retrieve the Chief Judge name flag value after it has been update in dynamo', async () => {
       const { docketEntryId } = cerebralTest.draftOrders[0];
 
-      await setChiefJudgeNameFlagValue('Kathleen Kerrigan');
+      await setChiefJudgeNameFlagValue(kerriganFullName);
 
       await cerebralTest.runSequence('gotoSignOrderSequence', {
         docketEntryId,
@@ -58,7 +60,7 @@ describe('Chief Judge feature flag configuration', () => {
       });
 
       expect(cerebralTest.getState('pdfForSigning.nameForSigning')).toEqual(
-        'Kathleen Kerrigan',
+        kerriganFullName,
       );
     });
   });
