@@ -76,45 +76,43 @@ describe('formattedMessages', () => {
       );
     });
 
-    // EXTRACTED
+    it('sorts messages by createdAt when there is no tableSort configuration', () => {
+      const result = getFormattedMessages({
+        applicationContext,
+        messages: [
+          {
+            createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: '101-20',
+            message: 'This is a test message on 2019-01-01T16:29:13.122Z',
+          },
+          {
+            createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: '103-20',
+            message: 'This is a test message on 2019-01-02T17:29:13.122Z',
+          },
+          {
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '102-20',
+            message: 'This is a test message on 2019-01-01T17:29:13.122Z',
+          },
+        ],
+      });
 
-    // it('sorts messages by createdAt when there is no tableSort configuration', () => {
-    //   const result = getFormattedMessages({
-    //     applicationContext,
-    //     messages: [
-    //       {
-    //         createdAt: '2019-01-01T16:29:13.122Z',
-    //         docketNumber: '101-20',
-    //         message: 'This is a test message on 2019-01-01T16:29:13.122Z',
-    //       },
-    //       {
-    //         createdAt: '2019-01-02T17:29:13.122Z',
-    //         docketNumber: '103-20',
-    //         message: 'This is a test message on 2019-01-02T17:29:13.122Z',
-    //       },
-    //       {
-    //         createdAt: '2019-01-01T17:29:13.122Z',
-    //         docketNumber: '102-20',
-    //         message: 'This is a test message on 2019-01-01T17:29:13.122Z',
-    //       },
-    //     ],
-    //   });
-
-    //   expect(result.messages).toMatchObject([
-    //     {
-    //       createdAt: '2019-01-01T16:29:13.122Z',
-    //       docketNumber: '101-20',
-    //     },
-    //     {
-    //       createdAt: '2019-01-01T17:29:13.122Z',
-    //       docketNumber: '102-20',
-    //     },
-    //     {
-    //       createdAt: '2019-01-02T17:29:13.122Z',
-    //       docketNumber: '103-20',
-    //     },
-    //   ]);
-    // });
+      expect(result.messages).toMatchObject([
+        {
+          createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-20',
+        },
+        {
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '102-20',
+        },
+        {
+          createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
+        },
+      ]);
+    });
 
     it('returns completedMessages from the given messages', () => {
       const result = getFormattedMessages({
@@ -314,7 +312,6 @@ describe('formattedMessages', () => {
     });
   });
 
-  // TODO: move tests related to order to sortFormattedMessages.test.js (317 and 361)
   it('reverses the messages when sortOrder is set to DESCENDING', () => {
     const DOCKET_NUMBER_1 = '101-19';
     const DOCKET_NUMBER_2 = '101-20';
@@ -358,7 +355,7 @@ describe('formattedMessages', () => {
     });
   });
 
-  it('reverses the messages when sortOrder is set to DESCENDING', () => {
+  it('reverses the messages when sortOrder is set to ASCENDING', () => {
     const DOCKET_NUMBER_1 = '101-19';
     const DOCKET_NUMBER_2 = '101-20';
     const DOCKET_NUMBER_3 = '105-20';

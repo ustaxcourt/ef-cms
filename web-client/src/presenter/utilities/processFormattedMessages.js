@@ -31,7 +31,6 @@ export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   if (tableSort && tableSort.sortOrder === DESCENDING) {
     return sortedFormattedMessages.reverse();
   }
-
   return sortedFormattedMessages;
 };
 

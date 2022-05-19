@@ -5,7 +5,6 @@ import {
 } from '../utilities/processFormattedMessages';
 import { state } from 'cerebral';
 
-//TODO move function to sortFormattedMessage.js util file
 export const getFormattedMessages = ({
   applicationContext,
   messages,
