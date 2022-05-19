@@ -1,7 +1,5 @@
 const {
-  CASE_STATUS_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 
 /**
@@ -17,43 +15,34 @@ const {
  */
 exports.setNoticeOfChangeToRemoteProceeding = async (
   applicationContext,
-  { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity, userId },
+  { caseEntity, newPdfDoc, newTrialSessionEntity, userId },
 ) => {
-  const shouldIssueNoticeOfChangeToRemoteProceeding =
-    currentTrialSession.proceedingType ===
-      TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
-    newTrialSessionEntity.proceedingType ===
-      TRIAL_SESSION_PROCEEDING_TYPES.remote &&
-    caseEntity.status !== CASE_STATUS_TYPES.closed;
+  const trialSessionInformation = {
+    chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
+    joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
+    judgeName: newTrialSessionEntity.judge.name,
+    meetingId: newTrialSessionEntity.meetingId,
+    password: newTrialSessionEntity.password,
+    startDate: newTrialSessionEntity.startDate,
+    startTime: newTrialSessionEntity.startTime,
+    trialLocation: newTrialSessionEntity.trialLocation,
+  };
 
-  if (shouldIssueNoticeOfChangeToRemoteProceeding) {
-    const trialSessionInformation = {
-      chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
-      joinPhoneNumber: newTrialSessionEntity.joinPhoneNumber,
-      judgeName: newTrialSessionEntity.judge.name,
-      meetingId: newTrialSessionEntity.meetingId,
-      password: newTrialSessionEntity.password,
-      startDate: newTrialSessionEntity.startDate,
-      startTime: newTrialSessionEntity.startTime,
-      trialLocation: newTrialSessionEntity.trialLocation,
-    };
+  const noticePdf = await applicationContext
+    .getUseCases()
+    .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
+      docketNumber: caseEntity.docketNumber,
+      trialSessionInformation,
+    });
 
-    const noticePdf = await applicationContext
-      .getUseCases()
-      .generateNoticeOfChangeToRemoteProceedingInteractor(applicationContext, {
-        docketNumber: caseEntity.docketNumber,
-        trialSessionInformation,
-      });
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .createAndServeNoticeDocketEntry(applicationContext, {
-        caseEntity,
-        documentInfo:
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
-        newPdfDoc,
-        noticePdf,
-        userId,
-      });
-  }
+  await applicationContext
+    .getUseCaseHelpers()
+    .createAndServeNoticeDocketEntry(applicationContext, {
+      caseEntity,
+      documentInfo:
+        SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeToRemoteProceeding,
+      newPdfDoc,
+      noticePdf,
+      userId,
+    });
 };

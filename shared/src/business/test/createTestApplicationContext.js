@@ -8,9 +8,6 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
-  appendPaperServiceAddressPageToPdf,
-} = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
-const {
   bulkDeleteRecords,
 } = require('../../persistence/elasticsearch/bulkDeleteRecords');
 const {
@@ -416,9 +413,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     addDocketEntryForSystemGeneratedOrder: jest
       .fn()
       .mockImplementation(addDocketEntryForSystemGeneratedOrder),
-    appendPaperServiceAddressPageToPdf: jest
-      .fn()
-      .mockImplementation(appendPaperServiceAddressPageToPdf),
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
@@ -447,6 +441,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeToInPersonProceeding: jest
+      .fn()
+      .mockImplementation(getFakeFile),
     noticeOfChangeToRemoteProceeding: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
