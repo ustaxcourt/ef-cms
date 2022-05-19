@@ -1,6 +1,6 @@
 const {
-  getFeatureFlagValueInteractor,
-} = require('./featureFlag/getFeatureFlagValueProxy');
+  ALLOWLIST_FEATURE_FLAGS,
+} = require('../business/entities/EntityConstants');
 
 /**
  * getChiefJudgeNameForSigningInteractor
@@ -10,6 +10,8 @@ const {
  * @returns {Promise<*>} the promise of the api call
  */
 exports.getChiefJudgeNameForSigningInteractor = applicationContext =>
-  getFeatureFlagValueInteractor(applicationContext, {
-    featureFlag: 'chief-judge-name',
-  });
+  applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key,
+    });
