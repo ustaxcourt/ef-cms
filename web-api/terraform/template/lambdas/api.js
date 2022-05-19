@@ -8,7 +8,7 @@ exports.handler = (event, context) => {
   // Bug Detail: https://github.com/vendia/serverless-express/issues/400
   if (event.path && event.path.startsWith('/auth')) {
     // awsServerlessExpress will expect this to be set correctly: event.pathParameters.proxy
-    event.pathParameters.proxy = `/auth/${event.pathParameters.proxy}`;
+    event.pathParameters.proxy = `auth/${event.pathParameters.proxy}`;
   }
 
   // This is a hack needed for when we use async api gateway events.  Normal api gateway requests
