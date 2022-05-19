@@ -23,10 +23,8 @@ exports.zipDocuments = ({
   zipName,
 }) => {
   return new Promise((resolve, reject) => {
-    const { region } = applicationContext.environment;
-    const documentsBucket = applicationContext.environment.documentsBucketName;
-    const destinationBucket =
-      applicationContext.environment.tempDocumentsBucketName;
+    const { documentsBucketName, tempDocumentsBucketName } =
+      applicationContext.environment;
 
     const s3Client = applicationContext.getStorageClient();
 
@@ -37,7 +35,7 @@ exports.zipDocuments = ({
     s3Client.upload(
       {
         Body: passThrough,
-        Bucket: destinationBucket,
+        Bucket: tempDocumentsBucketName,
         Key: zipName,
       },
       () => resolve(),
@@ -48,19 +46,18 @@ exports.zipDocuments = ({
     s3Zip
       .archive(
         {
-          bucket: documentsBucket,
-          gzip: false,
+          bucket: documentsBucketName,
           onEntry,
           onError,
           onProgress,
-          region,
           s3: s3Client,
         },
-        '',
-        s3Ids,
-        fileNames,
-        extraFiles,
-        extraFileNames,
+        {
+          extras: extraFiles,
+          extrasZip: extraFileNames,
+          filesS3: s3Ids,
+          filesZip: fileNames,
+        },
       )
       .pipe(passThrough);
   });

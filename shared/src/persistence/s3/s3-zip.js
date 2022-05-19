@@ -5,74 +5,58 @@ const s3Files = require('s3-files');
 const s3Zip = {};
 module.exports = s3Zip;
 
-s3Zip.archive = function (opts, folder, filesS3, filesZip, extra, extraZip) {
-  const thisArchive = this;
+const noop = () => {};
+
+s3Zip.archive = function (
+  {
+    bucket,
+    debug = false,
+    onEntry = noop,
+    onError = noop,
+    onProgress = noop,
+    s3,
+  },
+  { extras, extrasZip, filesS3, filesZip, folder = '' },
+) {
   let connectionConfig;
 
-  this.folder = folder;
-
-  const noop = () => {};
-  thisArchive.debug = opts.debug || false;
-  thisArchive.onEntry = opts.onEntry || noop;
-  thisArchive.onProgress = opts.onProgress || noop;
-  thisArchive.onError = opts.onError || noop;
-
   connectionConfig = {
-    s3: opts.s3,
+    s3,
   };
 
-  connectionConfig.bucket = opts.bucket;
+  connectionConfig.bucket = bucket;
 
-  thisArchive.client = s3Files.connect(connectionConfig);
+  const client = s3Files.connect(connectionConfig);
 
-  const keyStream = thisArchive.client.createKeyStream(folder, filesS3);
+  const keyStream = client.createKeyStream(folder, filesS3);
 
-  const preserveFolderStructure =
-    opts.preserveFolderStructure === true || filesZip;
-  const fileStream = s3Files.createFileStream(
-    keyStream,
-    preserveFolderStructure,
-  );
-  const archive = thisArchive.archiveStream(
-    fileStream,
-    filesS3,
-    filesZip,
-    extra,
-    extraZip,
-  );
+  const stream = s3Files.createFileStream(keyStream, true);
 
-  return archive;
-};
-
-s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
-  const thisArchive = this;
-  const folder = this.folder || '';
   const archive = archiver('zip', { gzip: false });
 
   const extrasPromises = (extras || []).map((extra, index) =>
     Promise.resolve(extra).then(file => {
-      thisArchive.debug &&
-        console.log('append to zip from promise', extrasZip[index]);
+      debug && console.log('append to zip from promise', extrasZip[index]);
       archive.append(file, { name: extrasZip[index] });
     }),
   );
 
   const extraFilesPromisesAll = Promise.all(extrasPromises).then(() => {
-    thisArchive.debug && console.log('promise.all complete');
+    debug && console.log('promise.all complete');
   });
 
   archive.on('error', function (err) {
-    thisArchive.debug && console.log('archive error', err);
-    thisArchive.onError(err);
+    debug && console.log('archive error', err);
+    onError(err);
   });
 
-  archive.on('progress', thisArchive.onProgress);
-  archive.on('entry', thisArchive.onEntry);
+  archive.on('progress', onProgress);
+  archive.on('entry', onEntry);
 
   stream
     .on('data', function (file) {
       if (file.path[file.path.length - 1] === '/') {
-        thisArchive.debug && console.log("don't append to zip", file.path);
+        debug && console.log("don't append to zip", file.path);
         return;
       }
       let fname;
@@ -89,7 +73,7 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
         fname = file.path;
       }
       const entryData = typeof fname === 'object' ? fname : { name: fname };
-      thisArchive.debug && console.log('append to zip', fname);
+      debug && console.log('append to zip', fname);
       if (file.data.length === 0) {
         archive.append('', entryData);
       } else {
@@ -97,12 +81,12 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
       }
     })
     .on('end', function () {
-      thisArchive.debug && console.log('end -> finalize');
+      debug && console.log('end -> finalize');
       extraFilesPromisesAll
         .then(() => {})
         .catch(() => {})
         .then(() => {
-          thisArchive.debug && console.log('promise.all -> finalize');
+          debug && console.log('promise.all -> finalize');
           archive.finalize();
         });
     })
