@@ -2,7 +2,7 @@ import { formatDateIfToday } from './formattedWorkQueue';
 import {
   sortCompletedMessages,
   sortFormattedMessages,
-} from '../utilities/sortFormattedMessages';
+} from '../utilities/processFormattedMessages';
 import { state } from 'cerebral';
 
 //TODO move function to sortFormattedMessage.js util file
@@ -11,7 +11,7 @@ export const getFormattedMessages = ({
   messages,
   tableSort,
 }) => {
-  const formattedCaseMessages = messages.map(message => ({
+  const formattedMessages = messages.map(message => ({
     ...message,
     completedAtFormatted: formatDateIfToday(
       message.completedAt,
@@ -24,10 +24,7 @@ export const getFormattedMessages = ({
     messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
   }));
 
-  const sortedMessages = sortFormattedMessages(
-    formattedCaseMessages,
-    tableSort,
-  );
+  const sortedMessages = sortFormattedMessages(formattedMessages, tableSort);
 
   const inProgressMessages = sortedMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,
