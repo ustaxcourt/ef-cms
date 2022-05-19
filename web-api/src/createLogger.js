@@ -18,7 +18,6 @@ const redact = format(logEntry => {
   return copy;
 });
 
-const EMPTY_METADATA_OBJECT = '{ level: undefined, message: undefined }';
 exports.createLogger = (opts = {}) => {
   const options = {
     defaultMeta: {},
@@ -37,20 +36,7 @@ exports.createLogger = (opts = {}) => {
       ...formatters,
       colorize(),
       printf(info => {
-        const metadata = Object.assign({}, info, {
-          level: undefined,
-          message: undefined,
-        });
-        // `util.inspect`ing to avoid stringifying circular request/response error objects
-        const stringified = util.inspect(metadata, {
-          compact: false,
-          maxStringLength: null,
-        });
-        const lines =
-          stringified.trim() === EMPTY_METADATA_OBJECT.trim()
-            ? []
-            : stringified.split('\n');
-
+        const lines = exports.getMetadataLines(info);
         return [`${info.level}:\t${info.message}`, ...lines].join('\n  ');
       }),
     );
@@ -61,4 +47,22 @@ exports.createLogger = (opts = {}) => {
   // alias Winston's "warning" to "warn".
   logger.warn = logger.warning;
   return logger;
+};
+
+exports.getMetadataLines = info => {
+  const metadata = Object.assign({}, info, {
+    level: undefined,
+    message: undefined,
+  });
+  // `util.inspect`ing to avoid stringifying circular request/response error objects
+  const stringified = util.inspect(metadata, {
+    compact: false,
+    maxStringLength: null,
+  });
+  const undefinedPropertyMatcher = /.+: undefined,*/gm;
+  const stripped = stringified.replace(undefinedPropertyMatcher, '');
+  if (stripped.match(/{\s*}/gm)) {
+    return [];
+  }
+  return stripped.trim().split('\n');
 };
