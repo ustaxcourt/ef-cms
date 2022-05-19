@@ -17,15 +17,9 @@ s3Zip.archive = function (opts, folder, filesS3, filesZip, extra, extraZip) {
   thisArchive.onProgress = opts.onProgress || noop;
   thisArchive.onError = opts.onError || noop;
 
-  if ('s3' in opts) {
-    connectionConfig = {
-      s3: opts.s3,
-    };
-  } else {
-    connectionConfig = {
-      region: opts.region,
-    };
-  }
+  connectionConfig = {
+    s3: opts.s3,
+  };
 
   connectionConfig.bucket = opts.bucket;
 
@@ -53,10 +47,7 @@ s3Zip.archive = function (opts, folder, filesS3, filesZip, extra, extraZip) {
 s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
   const thisArchive = this;
   const folder = this.folder || '';
-  if (this.registerFormat) {
-    archiver.registerFormat(this.registerFormat, this.formatModule);
-  }
-  const archive = archiver(this.format || 'zip', this.archiverOpts || {});
+  const archive = archiver('zip', { gzip: false });
 
   const extrasPromises = (extras || []).map((extra, index) =>
     Promise.resolve(extra).then(file => {
@@ -120,20 +111,4 @@ s3Zip.archiveStream = function (stream, filesS3, filesZip, extras, extrasZip) {
     });
 
   return archive;
-};
-
-s3Zip.setFormat = function (format) {
-  this.format = format;
-  return this;
-};
-
-s3Zip.setArchiverOptions = function (archiverOpts) {
-  this.archiverOpts = archiverOpts;
-  return this;
-};
-
-s3Zip.setRegisterFormatOptions = function (registerFormat, formatModule) {
-  this.registerFormat = registerFormat;
-  this.formatModule = formatModule;
-  return this;
 };

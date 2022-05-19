@@ -213,7 +213,6 @@ const batchDownloadTrialSessionInteractor = async (
     onProgress,
     onUploadStart,
     s3Ids,
-    uploadToTempBucket: true,
     zipName,
   });
 

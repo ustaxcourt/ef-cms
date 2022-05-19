@@ -20,42 +20,36 @@ exports.zipDocuments = ({
   onProgress,
   onUploadStart,
   s3Ids,
-  uploadToTempBucket,
   zipName,
 }) => {
   return new Promise((resolve, reject) => {
     const { region } = applicationContext.environment;
     const documentsBucket = applicationContext.environment.documentsBucketName;
-    const destinationBucket = uploadToTempBucket
-      ? applicationContext.environment.tempDocumentsBucketName
-      : applicationContext.environment.documentsBucketName;
+    const destinationBucket =
+      applicationContext.environment.tempDocumentsBucketName;
 
     const s3Client = applicationContext.getStorageClient();
 
-    const uploadFromStream = s3ClientForUpload => {
-      if (onUploadStart) onUploadStart();
+    onUploadStart?.();
 
-      const pass = new stream.PassThrough();
+    const passThrough = new stream.PassThrough();
 
-      const params = {
-        Body: pass,
+    s3Client.upload(
+      {
+        Body: passThrough,
         Bucket: destinationBucket,
         Key: zipName,
-      };
-      s3ClientForUpload.upload(params, () => resolve());
+      },
+      () => resolve(),
+    );
 
-      pass.on('error', reject);
-
-      return pass;
-    };
-
-    const passThrough = uploadFromStream(s3Client);
+    passThrough.on('error', reject);
 
     s3Zip
-      .setArchiverOptions({ gzip: false })
       .archive(
         {
           bucket: documentsBucket,
+          gzip: false,
           onEntry,
           onError,
           onProgress,
