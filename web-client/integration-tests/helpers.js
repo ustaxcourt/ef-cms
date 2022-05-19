@@ -330,7 +330,7 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   });
 };
 
-export const setChiefJudgeNameFlagValue = async newJudgeName => {
+export const setChiefJudgeNameFlagValue = newJudgeName => {
   return client.put({
     Item: {
       current: newJudgeName,
@@ -341,7 +341,7 @@ export const setChiefJudgeNameFlagValue = async newJudgeName => {
   });
 };
 
-export const setJudgeTitle = async (judgeUserId, newJudgeTitle) => {
+export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
   return client.update({
     ExpressionAttributeNames: {
       '#judgeTitle': 'judgeTitle',
