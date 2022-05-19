@@ -69,7 +69,5 @@ export const formattedMessages = (get, applicationContext) => {
   return {
     completedMessages,
     messages,
-    // TODO: extract this to its own compute
-    showSortableHeaders: role === USER_ROLES.adc,
   };
 };
