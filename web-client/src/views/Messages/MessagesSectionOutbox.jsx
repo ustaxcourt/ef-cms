@@ -14,7 +14,7 @@ import React from 'react';
 export const MessagesSectionOutbox = connect(
   {
     formattedMessages: state.formattedMessages.messages,
-    showSortableHeaders: state.formattedMessages.showSortableHeaders,
+    showSortableHeaders: state.showSortableHeaders,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
   },
   function MessagesSectionOutbox({

@@ -14,7 +14,7 @@ import React from 'react';
 export const MessagesSectionCompleted = connect(
   {
     formattedMessages: state.formattedMessages.completedMessages,
-    showSortableHeaders: state.formattedMessages.showSortableHeaders,
+    showSortableHeaders: state.showSortableHeaders,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
   },
   function MessagesSectionCompleted({
