@@ -61,7 +61,8 @@ exports.getMetadataLines = info => {
   });
   const undefinedPropertyMatcher = /.+: undefined,*/gm;
   const stripped = stringified.replace(undefinedPropertyMatcher, '');
-  if (stripped.match(/{\s*}/gm)) {
+  const emptyObjectMatcher = /{\s*}/gm;
+  if (stripped.match(emptyObjectMatcher)) {
     return [];
   }
   return stripped.trim().split('\n');
