@@ -60,8 +60,8 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] Code refactored for clarity and to remove any known technical debt
  - [ ] Acceptance criteria for the story has been met
  - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story
- - [ ] Deployed to an environment for Engineering Review so an engineer who didn't work on the story can go through the test cases
- - [ ] Deployed to an environment for UX Review 
- - [ ] Deployed to the Court's `test` environment if prod-like data is required. Otherwise deployed to any `experimental` environment for review.
- - [ ] Deployed to the Court's `staging` environment for PO review.
+ - [ ] Test cases reviewed by an engineer on a deployed environment for Engineering Review.
+ - [ ] Reviewed by UX on a deployed environment.
+ - [ ] Reviewed by PO on a deployed environment. Can be deployed to the Court's `test` environment if prod-like data is required. Otherwise deployed to any `experimental` environment.
+ - [ ] Deployed to the Court's `staging` environment.
 
