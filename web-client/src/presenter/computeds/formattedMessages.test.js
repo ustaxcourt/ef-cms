@@ -314,6 +314,7 @@ describe('formattedMessages', () => {
     });
   });
 
+  // TODO: move tests related to order to sortFormattedMessages.test.js (317 and 361)
   it('reverses the messages when sortOrder is set to DESCENDING', () => {
     const DOCKET_NUMBER_1 = '101-19';
     const DOCKET_NUMBER_2 = '101-20';

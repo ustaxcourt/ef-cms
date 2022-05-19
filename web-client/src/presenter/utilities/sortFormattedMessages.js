@@ -1,5 +1,6 @@
 import { DESCENDING } from '../presenterConstants';
 
+//TODO: change name of file??
 export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
     let sortNumber = 0;
@@ -33,4 +34,18 @@ export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   }
 
   return sortedFormattedMessages;
+};
+
+export const sortCompletedMessages = (sortedMessages, tableSort) => {
+  const completedMessages = sortedMessages.filter(
+    message => message.isCompleted,
+  );
+
+  if (!tableSort) {
+    return completedMessages.sort((a, b) =>
+      b.completedAt.localeCompare(a.completedAt),
+    );
+  }
+
+  return completedMessages;
 };
