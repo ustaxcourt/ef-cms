@@ -1,7 +1,11 @@
 import { formatDateIfToday } from './formattedWorkQueue';
-import { sortFormattedMessages } from '../utilities/sortFormattedMessages';
+import {
+  sortCompletedMessages,
+  sortFormattedMessages,
+} from '../utilities/sortFormattedMessages';
 import { state } from 'cerebral';
 
+//TODO move function to sortFormattedMessage.js util file
 export const getFormattedMessages = ({
   applicationContext,
   messages,
@@ -20,39 +24,22 @@ export const getFormattedMessages = ({
     messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
   }));
 
-  const sortedFormattedMessages = sortFormattedMessages(
+  const sortedMessages = sortFormattedMessages(
     formattedCaseMessages,
     tableSort,
   );
 
-  const inProgressMessages = sortedFormattedMessages.filter(
+  const inProgressMessages = sortedMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,
   );
 
-  const completedMessages = processCompletedMessages(
-    sortedFormattedMessages,
-    tableSort,
-  );
+  const completedMessages = sortCompletedMessages(sortedMessages, tableSort);
 
   return {
     completedMessages,
     inProgressMessages,
-    messages: sortedFormattedMessages,
+    messages: sortedMessages,
   };
-};
-
-export const processCompletedMessages = (sortedMessages, tableSort) => {
-  const completedMessages = sortedMessages.filter(
-    message => message.isCompleted,
-  );
-
-  if (!tableSort) {
-    return completedMessages.sort((a, b) =>
-      b.completedAt.localeCompare(a.completedAt),
-    );
-  }
-
-  return completedMessages;
 };
 
 export const formattedMessages = (get, applicationContext) => {
