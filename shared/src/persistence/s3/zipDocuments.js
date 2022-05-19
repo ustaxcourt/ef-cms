@@ -1,5 +1,8 @@
-const s3Zip = require('./s3-zip');
+const archiver = require('archiver');
+const s3FilesLib = require('s3-files');
 const stream = require('stream');
+const { zipS3Files } = require('./zipS3Files');
+
 /**
  * zipDocuments
  *
@@ -43,22 +46,18 @@ exports.zipDocuments = ({
 
     passThrough.on('error', reject);
 
-    s3Zip
-      .archive(
-        {
-          bucket: documentsBucketName,
-          onEntry,
-          onError,
-          onProgress,
-          s3: s3Client,
-        },
-        {
-          extras: extraFiles,
-          extrasZip: extraFileNames,
-          filesS3: s3Ids,
-          filesZip: fileNames,
-        },
-      )
-      .pipe(passThrough);
+    zipS3Files({
+      additionalFileNames: extraFileNames,
+      additionalFiles: extraFiles,
+      archiver,
+      bucket: documentsBucketName,
+      onEntry,
+      onError,
+      onProgress,
+      s3Client,
+      s3FilesLib,
+      s3Keys: s3Ids,
+      s3KeysFileNames: fileNames,
+    }).pipe(passThrough);
   });
 };
