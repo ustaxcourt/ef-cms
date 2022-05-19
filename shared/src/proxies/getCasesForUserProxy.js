@@ -1,14 +1,14 @@
 const { get } = require('./requests');
 
 /**
- * getClosedCasesInteractor
+ * getCasesForUserInteractor
  *
  * @param {object} applicationContext the application context
  * @returns {Promise<*>} the promise of the api call
  */
-exports.getClosedCasesInteractor = applicationContext => {
+exports.getCasesForUserInteractor = applicationContext => {
   return get({
     applicationContext,
-    endpoint: '/cases/closed',
+    endpoint: '/cases',
   });
 };
