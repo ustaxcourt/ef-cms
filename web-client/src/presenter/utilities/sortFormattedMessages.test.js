@@ -101,7 +101,7 @@ describe('sortFormattedMessages', () => {
     ]);
   });
 
-  it('should reverse the sorted order or messages if sortOrder is descending', () => {
+  it('should reverse the sorted order of messages if sortOrder is descending', () => {
     const result = sortFormattedMessages(unsortedMessages, {
       sortOrder: 'desc',
     });

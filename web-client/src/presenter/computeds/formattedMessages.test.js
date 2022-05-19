@@ -462,7 +462,6 @@ describe('formattedMessages', () => {
           message: 'This is a test message',
         },
       ],
-      showSortableHeaders: true,
     });
   });
 
@@ -520,7 +519,6 @@ describe('formattedMessages', () => {
           message: 'This is a test message',
         },
       ],
-      showSortableHeaders: false,
     });
   });
 
