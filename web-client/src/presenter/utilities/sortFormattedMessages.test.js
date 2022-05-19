@@ -1,4 +1,7 @@
-import { sortFormattedMessages } from './sortFormattedMessages';
+import {
+  sortCompletedMessages,
+  sortFormattedMessages,
+} from './sortFormattedMessages';
 
 describe('sortFormattedMessages', () => {
   describe('sortFormattedMessages helper', () => {
@@ -126,5 +129,80 @@ describe('sortFormattedMessages', () => {
 
   describe('sortCompletedMessages', () => {
     //TODO: WRITE TESTS
+    const sortedMessages = [
+      {
+        completedAt: '2019-01-02T16:29:13.122Z',
+        createdAt: '2019-01-01T16:29:13.122Z',
+        docketNumber: '101-19',
+        isCompleted: true,
+        message: 'This is a test message on 2019-01-01T16:29:13.122Z',
+        subject: 'AAAA',
+      },
+      {
+        completedAt: '2019-01-02T17:29:13.122Z',
+        createdAt: '2019-01-01T17:29:13.122Z',
+        docketNumber: '102-20',
+        isCompleted: false,
+        message: 'This is a test message on 2019-01-01T17:29:13.122Z',
+        subject: 'BBBB',
+      },
+      {
+        completedAt: '2019-01-03T17:29:13.122Z',
+        createdAt: '2019-01-02T17:29:13.122Z',
+        docketNumber: '103-20',
+        isCompleted: true,
+        message: 'This is a test message on 2019-01-02T17:29:13.122Z',
+        subject: 'CCCC',
+      },
+    ];
+
+    it('should sort completed messages and return them in descending order when there is no table sort configuration', () => {
+      const result = sortCompletedMessages(sortedMessages);
+
+      expect(result).toMatchObject([
+        {
+          completedAt: '2019-01-03T17:29:13.122Z',
+          createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
+          isCompleted: true,
+          message: 'This is a test message on 2019-01-02T17:29:13.122Z',
+          subject: 'CCCC',
+        },
+        {
+          completedAt: '2019-01-02T16:29:13.122Z',
+          createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-19',
+          isCompleted: true,
+          message: 'This is a test message on 2019-01-01T16:29:13.122Z',
+          subject: 'AAAA',
+        },
+      ]);
+    });
+
+    it('should sort completed messages and return them in ascending order when there is a table sort configuration', () => {
+      const result = sortCompletedMessages(sortedMessages, {
+        sortField: 'irrelevent',
+        sortOrder: 'irrelevent',
+      });
+
+      expect(result).toMatchObject([
+        {
+          completedAt: '2019-01-02T16:29:13.122Z',
+          createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: '101-19',
+          isCompleted: true,
+          message: 'This is a test message on 2019-01-01T16:29:13.122Z',
+          subject: 'AAAA',
+        },
+        {
+          completedAt: '2019-01-03T17:29:13.122Z',
+          createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: '103-20',
+          isCompleted: true,
+          message: 'This is a test message on 2019-01-02T17:29:13.122Z',
+          subject: 'CCCC',
+        },
+      ]);
+    });
   });
 });
