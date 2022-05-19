@@ -13,12 +13,13 @@
   "OLD_JUDGE_ID" \
   "NEW_JUDGE_ID"
 
+REGION="us-east-1"
 # look up current table version from deploy table
 TABLE_VERSION=$(aws dynamodb get-item \
   --table-name "efcms-deploy-${ENV}" \
   --key '{"pk":{"S":"source-table-version"}, "sk":{"S":"source-table-version"}}' \
   --output text \
-  --region us-east-1 \
+  --region ${REGION} \
   --query 'Item.current.S')
 
 # get judge name from dynamo table
@@ -26,7 +27,7 @@ NEW_JUDGE_NAME=$(aws dynamodb get-item \
   --table-name "efcms-${ENV}-${TABLE_VERSION}" \
   --key '{"pk":{"S":"user|'"${NEW_JUDGE_ID}"'"}, "sk":{"S":"user|'"${NEW_JUDGE_ID}"'"}}' \
   --output text \
-  --region us-east-1 \
+  --region ${REGION} \
   --query 'Item.judgeFullName.S')
 
 if [[ ${NEW_JUDGE_NAME} == "None" ]]; then
@@ -51,13 +52,13 @@ END
 )
 
 aws dynamodb put-item \
-    --region us-east-1 \
+    --region ${REGION} \
     --table-name "efcms-deploy-${ENV}" \
     --item "${ITEM}"
 
 # update the old judge's title to now only be Judge
 OLD_JUDGE_NAME=$(aws dynamodb update-item \
-    --region us-east-1 \
+    --region ${REGION} \
     --table-name "efcms-${ENV}-${TABLE_VERSION}" \
     --update-expression "SET #judgeTitle = :judgeTitle" \
     --expression-attribute-names '{"#judgeTitle":"judgeTitle"}' \
@@ -69,7 +70,7 @@ echo "Updating judge with last name: ${OLD_JUDGE_NAME} to Judge"
 
 # update the new judge's title to be Chief Judge
 NEW_JUDGE_NAME=$(aws dynamodb update-item \
-    --region us-east-1 \
+    --region ${REGION} \
     --table-name "efcms-${ENV}-${TABLE_VERSION}" \
     --update-expression "SET #judgeTitle = :judgeTitle" \
     --expression-attribute-names '{"#judgeTitle":"judgeTitle"}' \
@@ -80,8 +81,6 @@ NEW_JUDGE_NAME=$(aws dynamodb update-item \
 echo "Updating judge with last name: ${NEW_JUDGE_NAME} to Chief Judge"
 
 # update the judge's names in cognito
-REGION="us-east-1"
-
 USER_POOL_ID=$(aws cognito-idp list-user-pools --query "UserPools[?Name == 'efcms-${ENV}'].Id | [0]" --max-results 30 --region "${REGION}" --output text)
 
 aws cognito-idp admin-update-user-attributes \
