@@ -37,7 +37,7 @@ The user story must:
 
 Process: Flexion developers and designers will test if the story meets acceptance criteria and test cases in Flexion dev and staging environments (“standard testing”). If additional acceptance criteria or testing scenarios are discovered while the story is in progress, a new story should be created, added to the backlog and prioritized by the product owner. 
 
-## Definition of Done (Updated 10-6-21)
+## Definition of Done (Updated 5-19-22)
 **Product Owner**
  - [ ]  Acceptance criteria have been met and validated on the Court's migration environment
  - [ ] Add scenario to testing document, if applicable (https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA/edit?usp=sharing)
