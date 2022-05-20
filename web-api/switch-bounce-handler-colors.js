@@ -11,7 +11,7 @@ const { AWS_ACCOUNT_ID, CURRENT_COLOR, DEPLOYING_COLOR, ENV } = process.env;
 const SNS = new AWS.SNS({ region: 'us-east-1' });
 const TopicArn = `arn:aws:sns:us-east-1:${AWS_ACCOUNT_ID}:bounced_service_emails_${ENV}`;
 
-check(CURRENT_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
+check(CURRENT_COLOR, 'You must have CURRENT_COLOR set in your environment');
 check(DEPLOYING_COLOR, 'You must have DEPLOYING_COLOR set in your environment');
 check(ENV, 'You must have ENV set in your environment');
 check(AWS_ACCOUNT_ID, 'You must have AWS_ACCOUNT_ID set in your environment');
