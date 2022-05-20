@@ -10,12 +10,8 @@ export const flipConsolidatedCaseAllCheckboxAction = ({
 }) => {
   console.log('flipConsolidatedCaseAllCheckboxAction');
   console.log('props.checked', props.checked);
-  const consolidatedCaseAllCheckbox = get(state.consolidatedCasesEnabled) || [];
-  const newEnabled = consolidatedCaseAllCheckbox.map(consolidatedCase => {
-    return {
-      ...consolidatedCase,
-      enabled: !consolidatedCase.enabled,
-    };
-  });
-  store.set(state.consolidatedCaseAllCheckbox, newEnabled);
+
+  const consolidatedCaseAllCheckbox = get(state.consolidatedCaseAllCheckbox);
+
+  store.set(state.consolidatedCaseAllCheckbox, !consolidatedCaseAllCheckbox);
 };
