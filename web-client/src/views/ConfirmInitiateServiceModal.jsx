@@ -16,6 +16,7 @@ export const ConfirmInitiateServiceModal = connect(
       state.consolidatedCaseServiceInitiateHelper,
     documentTitle: props.documentTitle,
     formattedCaseDetail: state.formattedCaseDetail,
+    initialEnabledCheckboxValue: state.initialEnabledCheckBoxValue,
     serveCourtIssuedDocumentFromDocketEntrySequence:
       sequences.serveCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
@@ -29,6 +30,7 @@ export const ConfirmInitiateServiceModal = connect(
     consolidatedCaseServiceInitiateHelper,
     documentTitle,
     formattedCaseDetail,
+    initialEnabledCheckboxValue,
     serveCourtIssuedDocumentFromDocketEntrySequence,
     waitingForResponse,
   }) {
@@ -107,7 +109,7 @@ export const ConfirmInitiateServiceModal = connect(
                 <input
                   checked={consolidatedCase.checked}
                   className="usa-checkbox__input"
-                  disabled={!consolidatedCase.enabled}
+                  disabled={initialEnabledCheckboxValue}
                   id={
                     'consolidated-case-checkbox-' +
                     consolidatedCase.docketNumber
