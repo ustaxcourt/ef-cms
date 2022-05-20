@@ -30,6 +30,7 @@ import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 //if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
+import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -53,6 +54,7 @@ import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
 import { faEdit as faEditSolid } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faEnvelopeOpen } from '@fortawesome/free-solid-svg-icons/faEnvelopeOpen';
 import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons/faEnvelope';
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
@@ -105,8 +107,6 @@ import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
-
-import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
 import { isOnMockLogin } from './utilities/isOnMockLogin';
 import { presenter } from './presenter/presenter';
@@ -204,6 +204,7 @@ const app = {
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,
       faAddressCard,
+      faExchangeAlt,
       faCalculator,
       faCalendarAlt,
       faCalendarCheck,

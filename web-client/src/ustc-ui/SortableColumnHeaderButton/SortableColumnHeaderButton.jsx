@@ -64,13 +64,14 @@ const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
   let fontAwesomeIcon =
     direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';
 
-  console.log('isActive*** ', isActiveColumn);
+  let rotation;
 
   if (!isActiveColumn) {
-    fontAwesomeIcon = 'sort';
+    fontAwesomeIcon = 'exchange-alt';
+    rotation = 90;
   }
 
-  console.log('fontAwesomeIcon*** ', fontAwesomeIcon);
-
-  return <FontAwesomeIcon icon={fontAwesomeIcon} title={title} />;
+  return (
+    <FontAwesomeIcon icon={fontAwesomeIcon} rotation={rotation} title={title} />
+  );
 };
