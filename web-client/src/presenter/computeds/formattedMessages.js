@@ -1,42 +1,5 @@
-import { formatDateIfToday } from './formattedWorkQueue';
-import {
-  sortCompletedMessages,
-  sortFormattedMessages,
-} from '../utilities/processFormattedMessages';
+import { getFormattedMessages } from '../utilities/processFormattedMessages';
 import { state } from 'cerebral';
-
-export const getFormattedMessages = ({
-  applicationContext,
-  messages,
-  tableSort,
-}) => {
-  const formattedMessages = messages.map(message => ({
-    ...message,
-    completedAtFormatted: formatDateIfToday(
-      message.completedAt,
-      applicationContext,
-    ),
-    createdAtFormatted: formatDateIfToday(
-      message.createdAt,
-      applicationContext,
-    ),
-    messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
-  }));
-
-  const sortedMessages = sortFormattedMessages(formattedMessages, tableSort);
-
-  const inProgressMessages = sortedMessages.filter(
-    message => !message.isRepliedTo && !message.isCompleted,
-  );
-
-  const completedMessages = sortCompletedMessages(sortedMessages, tableSort);
-
-  return {
-    completedMessages,
-    inProgressMessages,
-    messages: sortedMessages,
-  };
-};
 
 export const formattedMessages = (get, applicationContext) => {
   const tableSort = get(state.tableSort);
