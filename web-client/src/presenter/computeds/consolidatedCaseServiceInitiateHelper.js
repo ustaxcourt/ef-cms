@@ -5,14 +5,11 @@ export const consolidatedCaseServiceInitiateHelper = get => {
   const consolidatedCaseAllCheckbox =
     get(state.consolidatedCaseAllCheckbox) || true;
 
-  console.log('new: ', formattedCaseDetail);
-
   const formattedConsolidatedCases = formattedCaseDetail.consolidatedCases.map(
     consolidatedCase => {
       return {
         checked: consolidatedCase.checked,
         docketNumber: consolidatedCase.docketNumber,
-        enabled: false,
         petitioners: consolidatedCase.petitioners.reduce((acc, current) => {
           if (consolidatedCase.petitioners.length === 1) {
             //one petitioner, so no need for an &

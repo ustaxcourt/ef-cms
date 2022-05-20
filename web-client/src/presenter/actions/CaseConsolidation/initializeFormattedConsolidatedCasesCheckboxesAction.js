@@ -23,6 +23,8 @@ export const initializeFormattedConsolidatedCasesCheckboxesAction = ({
   });
 
   const initialCheckBoxValue = true;
+  const initialEnabledCheckBoxValue = true;
   store.set(state.consolidatedCaseAllCheckbox, initialCheckBoxValue);
+  store.set(state.initialEnabledCheckBoxValue, initialEnabledCheckBoxValue);
   store.set(state.caseDetail.consolidatedCases, consolidatedCases);
 };
