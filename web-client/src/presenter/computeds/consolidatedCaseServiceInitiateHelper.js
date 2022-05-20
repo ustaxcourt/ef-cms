@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const consolidatedCaseServiceInitiateHelper = get => {
   const formattedCaseDetail = get(state.formattedCaseDetail);
+  console.log('new: ', formattedCaseDetail);
   return formattedCaseDetail.consolidatedCases.map(consolidatedCase => {
     return {
       checked: true,
