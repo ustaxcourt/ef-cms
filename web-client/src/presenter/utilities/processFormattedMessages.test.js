@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { ASCENDING, DESCENDING } from '../presenterConstants';
 import {
   DOCKET_SECTION,
@@ -18,32 +17,36 @@ describe('processFormattedMessages', () => {
   const PARENT_MESSAGE_ID = '078ffe53-23ed-4386-9cc5-d7a175f5c948';
 
   describe('sortFormattedMessages', () => {
-    const messages = [
-      {
-        completedAt: '2019-01-02T16:29:13.122Z',
-        createdAt: '2019-01-01T16:29:13.122Z',
-        docketNumber: DOCKET_NUMBER_1,
-        message: 'This is a test message on 2019-01-01T16:29:13.122Z',
-        parentMessageId: PARENT_MESSAGE_ID,
-        subject: 'AAAA',
-      },
-      {
-        completedAt: '2019-01-03T17:29:13.122Z',
-        createdAt: '2019-01-02T17:29:13.122Z',
-        docketNumber: DOCKET_NUMBER_3,
-        message: 'This is a test message on 2019-01-02T17:29:13.122Z',
-        parentMessageId: PARENT_MESSAGE_ID,
-        subject: 'CCCC',
-      },
-      {
-        completedAt: '2019-01-02T17:29:13.122Z',
-        createdAt: '2019-01-01T17:29:13.122Z',
-        docketNumber: DOCKET_NUMBER_2,
-        message: 'This is a test message on 2019-01-01T17:29:13.122Z',
-        parentMessageId: PARENT_MESSAGE_ID,
-        subject: 'BBBB',
-      },
-    ];
+    let messages;
+
+    beforeEach(() => {
+      messages = [
+        {
+          completedAt: '2019-01-02T16:29:13.122Z',
+          createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_1,
+          message: 'This is a test message on 2019-01-01T16:29:13.122Z',
+          parentMessageId: PARENT_MESSAGE_ID,
+          subject: 'AAAA',
+        },
+        {
+          completedAt: '2019-01-03T17:29:13.122Z',
+          createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_3,
+          message: 'This is a test message on 2019-01-02T17:29:13.122Z',
+          parentMessageId: PARENT_MESSAGE_ID,
+          subject: 'CCCC',
+        },
+        {
+          completedAt: '2019-01-02T17:29:13.122Z',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_2,
+          message: 'This is a test message on 2019-01-01T17:29:13.122Z',
+          parentMessageId: PARENT_MESSAGE_ID,
+          subject: 'BBBB',
+        },
+      ];
+    });
 
     const QUALIFIED_SORT_FIELDS = ['createdAt', 'completedAt', 'subject'];
 
@@ -55,7 +58,7 @@ describe('processFormattedMessages', () => {
       expect(result).toEqual(messages);
     });
 
-    it('sorts messages by createdAt when there is no tableSort configuration or tableSort.field is undefined', () => {
+    it('sorts messages by createdAt when there is no tableSort configuration', () => {
       const result = sortFormattedMessages(messages);
 
       expect(result).toMatchObject([
@@ -75,7 +78,7 @@ describe('processFormattedMessages', () => {
     });
 
     QUALIFIED_SORT_FIELDS.forEach(sortField => {
-      it(`should sort messages based on ${sortField}`, () => {
+      it(`should sort messages in ascending order based on ${sortField}`, () => {
         const result = sortFormattedMessages(messages, {
           sortField,
         });
@@ -100,7 +103,34 @@ describe('processFormattedMessages', () => {
       });
     });
 
-    it('should sort docketNumber chronologically by default', () => {
+    QUALIFIED_SORT_FIELDS.forEach(sortField => {
+      it(`should sort messages in descending order based on ${sortField}`, () => {
+        const result = sortFormattedMessages(messages, {
+          sortField,
+          sortOrder: DESCENDING,
+        });
+
+        expect(result).toMatchObject([
+          {
+            completedAt: '2019-01-03T17:29:13.122Z',
+            createdAt: '2019-01-02T17:29:13.122Z',
+            docketNumber: DOCKET_NUMBER_3,
+          },
+          {
+            completedAt: '2019-01-02T17:29:13.122Z',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: DOCKET_NUMBER_2,
+          },
+          {
+            completedAt: '2019-01-02T16:29:13.122Z',
+            createdAt: '2019-01-01T16:29:13.122Z',
+            docketNumber: DOCKET_NUMBER_1,
+          },
+        ]);
+      });
+    });
+
+    it('should sort docketNumber oldest to newest by default', () => {
       const result = sortFormattedMessages(messages, {
         sortField: 'docketNumber',
       });
@@ -121,21 +151,43 @@ describe('processFormattedMessages', () => {
       ]);
     });
 
-    it('should reverse the order of messages if sortOrder is descending', () => {
+    it('should sort docketNumber newest to oldest if sortOrder is set to descending', () => {
       const result = sortFormattedMessages(messages, {
-        sortField: 'UNKNOWN',
-        sortOrder: 'desc',
+        sortField: 'docketNumber',
+        sortOrder: DESCENDING,
       });
 
       expect(result).toMatchObject([
         {
           createdAt: '2019-01-02T17:29:13.122Z',
           docketNumber: DOCKET_NUMBER_3,
-          parentMessageId: PARENT_MESSAGE_ID,
         },
         {
           createdAt: '2019-01-01T17:29:13.122Z',
           docketNumber: DOCKET_NUMBER_2,
+        },
+        {
+          createdAt: '2019-01-01T16:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_1,
+        },
+      ]);
+    });
+
+    it('should reverse the order of messages if sortOrder is descending', () => {
+      const result = sortFormattedMessages(messages, {
+        sortField: 'UNKNOWN',
+        sortOrder: DESCENDING,
+      });
+
+      expect(result).toMatchObject([
+        {
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_2,
+        },
+        {
+          createdAt: '2019-01-02T17:29:13.122Z',
+          docketNumber: DOCKET_NUMBER_3,
+          parentMessageId: PARENT_MESSAGE_ID,
         },
         {
           createdAt: '2019-01-01T16:29:13.122Z',
@@ -196,10 +248,10 @@ describe('processFormattedMessages', () => {
       ]);
     });
 
-    it('should sort completed messages and return them in ascending order when there is a table sort configuration', () => {
+    it('should only filter for and return completed messages when there is a table sort configuration', () => {
       const result = sortCompletedMessages(sortedMessages, {
-        sortField: 'irrelevent',
-        sortOrder: 'irrelevent',
+        sortField: 'docketNumber',
+        sortOrder: ASCENDING,
       });
 
       expect(result).toMatchObject([
@@ -283,86 +335,6 @@ describe('processFormattedMessages', () => {
       expect(result.messages[0].messageDetailLink).toEqual(
         `/messages/123-45/message-detail/${PARENT_MESSAGE_ID}`,
       );
-    });
-
-    it('sorts messages by createdAt when there is no tableSort configuration', () => {
-      const result = getFormattedMessages({
-        applicationContext,
-        messages: [
-          {
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            message: 'This is a test message on 2019-01-01T16:29:13.122Z',
-          },
-          {
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            message: 'This is a test message on 2019-01-02T17:29:13.122Z',
-          },
-          {
-            createdAt: '2019-01-01T17:29:13.122Z',
-            docketNumber: '102-20',
-            message: 'This is a test message on 2019-01-01T17:29:13.122Z',
-          },
-        ],
-      });
-
-      expect(result.messages).toMatchObject([
-        {
-          createdAt: '2019-01-01T16:29:13.122Z',
-          docketNumber: '101-20',
-        },
-        {
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '102-20',
-        },
-        {
-          createdAt: '2019-01-02T17:29:13.122Z',
-          docketNumber: '103-20',
-        },
-      ]);
-    });
-
-    it('returns completedMessages from the given messages', () => {
-      const result = getFormattedMessages({
-        applicationContext,
-        messages: [
-          {
-            completedAt: '2019-01-02T16:29:13.122Z',
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            isCompleted: true,
-            message: 'This is a test message',
-          },
-          {
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '103-20',
-            message: 'This is a test message',
-          },
-          {
-            completedAt: '2019-01-03T16:29:13.122Z',
-            createdAt: '2019-01-01T17:29:13.122Z',
-            docketNumber: '102-20',
-            isCompleted: true,
-            message: 'This is a test message',
-          },
-        ],
-      });
-
-      expect(result.completedMessages).toMatchObject([
-        {
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '102-20',
-          isCompleted: true,
-          message: 'This is a test message',
-        },
-        {
-          createdAt: '2019-01-01T16:29:13.122Z',
-          docketNumber: '101-20',
-          isCompleted: true,
-          message: 'This is a test message',
-        },
-      ]);
     });
 
     it('returns completedMessages in descending order of completedAt', () => {
@@ -475,129 +447,6 @@ describe('processFormattedMessages', () => {
           parentMessageId: PARENT_MESSAGE_ID,
         },
       ]);
-    });
-
-    it('reverses the messages when sortOrder is set to DESCENDING', () => {
-      const MESSAGE1 = 'This is a test message one';
-      const MESSAGE2 = 'This is a test message two';
-      const MESSAGE3 = 'This is a test message three';
-      const result = getFormattedMessages({
-        applicationContext,
-        messages: [
-          {
-            createdAt: '2019-01-01T16:29:13.122Z',
-            docketNumber: '101-20',
-            message: MESSAGE1,
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-          {
-            createdAt: '2019-01-02T17:29:13.122Z',
-            docketNumber: '101-20',
-            message: MESSAGE2,
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-          {
-            createdAt: '2019-01-03T17:29:13.122Z',
-            docketNumber: '101-20',
-            message: MESSAGE3,
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-        ],
-        tableSort: {
-          sortField: 'createdAt',
-          sortOrder: DESCENDING,
-        },
-      });
-
-      expect(result.messages[0]).toMatchObject({
-        message: MESSAGE3,
-      });
-      expect(result.messages[1]).toMatchObject({
-        message: MESSAGE2,
-      });
-      expect(result.messages[2]).toMatchObject({
-        message: MESSAGE1,
-      });
-    });
-
-    it('reverses the messages when sortOrder is set to DESCENDING', () => {
-      const result = getFormattedMessages({
-        applicationContext,
-        messages: [
-          {
-            createdAt: '2019-01-03T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_1,
-            message: 'hello',
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-          {
-            createdAt: '2019-01-03T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_2,
-            message: 'hello',
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-          {
-            createdAt: '2019-01-03T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_3,
-            message: 'hello',
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-        ],
-        tableSort: {
-          sortField: 'docketNumber',
-          sortOrder: DESCENDING,
-        },
-      });
-
-      expect(result.messages[0]).toMatchObject({
-        docketNumber: DOCKET_NUMBER_3,
-      });
-      expect(result.messages[1]).toMatchObject({
-        docketNumber: DOCKET_NUMBER_2,
-      });
-      expect(result.messages[2]).toMatchObject({
-        docketNumber: DOCKET_NUMBER_1,
-      });
-    });
-
-    it('reverses the messages when sortOrder is set to ASCENDING', () => {
-      const result = getFormattedMessages({
-        applicationContext,
-        messages: [
-          {
-            createdAt: '2019-01-03T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_1,
-            message: 'hello',
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-          {
-            createdAt: '2019-01-03T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_2,
-            message: 'hello',
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-          {
-            createdAt: '2019-01-03T17:29:13.122Z',
-            docketNumber: DOCKET_NUMBER_3,
-            message: 'hello',
-            parentMessageId: PARENT_MESSAGE_ID,
-          },
-        ],
-        tableSort: {
-          sortField: 'UNKNOWN',
-          sortOrder: ASCENDING,
-        },
-      });
-
-      expect(result.messages[0]).toMatchObject({
-        docketNumber: DOCKET_NUMBER_1,
-      });
-      expect(result.messages[1]).toMatchObject({
-        docketNumber: DOCKET_NUMBER_2,
-      });
-      expect(result.messages[2]).toMatchObject({
-        docketNumber: DOCKET_NUMBER_3,
-      });
     });
   });
 });
