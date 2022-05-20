@@ -1,4 +1,5 @@
 import { DESCENDING } from '../presenterConstants';
+import { formatDateIfToday } from '../computeds/formattedWorkQueue';
 
 export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
@@ -46,4 +47,37 @@ export const sortCompletedMessages = (sortedMessages, tableSort) => {
   }
 
   return completedMessages;
+};
+
+export const getFormattedMessages = ({
+  applicationContext,
+  messages,
+  tableSort,
+}) => {
+  const formattedMessages = messages.map(message => ({
+    ...message,
+    completedAtFormatted: formatDateIfToday(
+      message.completedAt,
+      applicationContext,
+    ),
+    createdAtFormatted: formatDateIfToday(
+      message.createdAt,
+      applicationContext,
+    ),
+    messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
+  }));
+
+  const sortedMessages = sortFormattedMessages(formattedMessages, tableSort);
+
+  const inProgressMessages = sortedMessages.filter(
+    message => !message.isRepliedTo && !message.isCompleted,
+  );
+
+  const completedMessages = sortCompletedMessages(sortedMessages, tableSort);
+
+  return {
+    completedMessages,
+    inProgressMessages,
+    messages: sortedMessages,
+  };
 };
