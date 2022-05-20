@@ -9,25 +9,20 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 
-export const initializeFormattedConsolidatedCasesCheckboxesAction = async ({
-  applicationContext,
+export const initializeFormattedConsolidatedCasesCheckboxesAction = ({
   get,
-  props,
   store,
 }) => {
-  let formattedCaseDetail = get(state.formattedCaseDetail);
+  let consolidatedCases = get(state.caseDetail.consolidatedCases);
 
-  console.log('formattedCaseDetail: ', formattedCaseDetail);
+  consolidatedCases = consolidatedCases.map(consolidatedCase => {
+    return {
+      ...consolidatedCase,
+      checked: true,
+    };
+  });
 
-  const consolidatedCases = formattedCaseDetail.consolidatedCases.map(
-    consolidateCase => {
-      return {
-        ...consolidateCase,
-        checked: true,
-      };
-    },
-  );
-  console.log('consolidatedCases', consolidatedCases);
-  store.set(state.formattedCaseDetail.consolidatedCases, consolidatedCases);
-  formattedCaseDetail = get(state.formattedCaseDetail);
+  const initialCheckBoxValue = true;
+  store.set(state.consolidatedCaseAllCheckbox, initialCheckBoxValue);
+  store.set(state.caseDetail.consolidatedCases, consolidatedCases);
 };

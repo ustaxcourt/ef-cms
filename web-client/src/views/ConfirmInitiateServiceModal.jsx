@@ -9,6 +9,7 @@ export const ConfirmInitiateServiceModal = connect(
     cancelSequence: sequences.dismissModalSequence,
     confirmInitiateServiceModalHelper: state.confirmInitiateServiceModalHelper,
     confirmSequence: props.confirmSequence,
+    consolidatedCaseAllCheckbox: state.consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange:
       sequences.consolidatedCaseCheckboxAllChangeSequence,
     consolidatedCaseServiceInitiateHelper:
@@ -23,6 +24,7 @@ export const ConfirmInitiateServiceModal = connect(
     cancelSequence,
     confirmInitiateServiceModalHelper,
     confirmSequence,
+    consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange,
     consolidatedCaseServiceInitiateHelper,
     documentTitle,
@@ -78,9 +80,7 @@ export const ConfirmInitiateServiceModal = connect(
         {formattedCaseDetail.isLeadCase && (
           <div className="usa-checkbox">
             <input
-              checked={consolidatedCaseServiceInitiateHelper.every(
-                consolidatedCase => consolidatedCase.checked,
-              )}
+              checked={consolidatedCaseAllCheckbox}
               className="usa-checkbox__input"
               id="consolidated-case-checkbox-all"
               name="consolidated-case"
@@ -101,29 +101,33 @@ export const ConfirmInitiateServiceModal = connect(
           </div>
         )}
         {formattedCaseDetail.isLeadCase &&
-          consolidatedCaseServiceInitiateHelper.map(consolidatedCase => (
-            <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
-              <input
-                checked={consolidatedCase.checked}
-                className="usa-checkbox__input"
-                disabled={!consolidatedCase.enabled}
-                id={
-                  'consolidated-case-checkbox-' + consolidatedCase.docketNumber
-                }
-                name="consolidated-case"
-                type="checkbox"
-                value={consolidatedCase.docketNumber}
-              />
-              <label
-                className="usa-checkbox__label"
-                htmlFor={
-                  'consolidated-case-checkbox-' + consolidatedCase.docketNumber
-                }
-              >
-                {consolidatedCase.docketNumber} {consolidatedCase.petitioners}
-              </label>
-            </div>
-          ))}
+          consolidatedCaseServiceInitiateHelper.formattedConsolidatedCases.map(
+            consolidatedCase => (
+              <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
+                <input
+                  checked={consolidatedCase.checked}
+                  className="usa-checkbox__input"
+                  disabled={!consolidatedCase.enabled}
+                  id={
+                    'consolidated-case-checkbox-' +
+                    consolidatedCase.docketNumber
+                  }
+                  name="consolidated-case"
+                  type="checkbox"
+                  value={consolidatedCase.docketNumber}
+                />
+                <label
+                  className="usa-checkbox__label"
+                  htmlFor={
+                    'consolidated-case-checkbox-' +
+                    consolidatedCase.docketNumber
+                  }
+                >
+                  {consolidatedCase.docketNumber} {consolidatedCase.petitioners}
+                </label>
+              </div>
+            ),
+          )}
       </ModalDialog>
     );
   },
