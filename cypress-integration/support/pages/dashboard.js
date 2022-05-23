@@ -1,5 +1,6 @@
 exports.navigateTo = username => {
   cy.login(username, '/');
+  cy.checkA11y();
 };
 
 exports.viewMyOutbox = () => {
