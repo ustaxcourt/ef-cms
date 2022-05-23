@@ -42,6 +42,9 @@ const PARTY_VIEW_TABS = {
 };
 
 const ALLOWLIST_FEATURE_FLAGS = {
+  CHIEF_JUDGE_NAME: {
+    key: 'chief-judge-name',
+  },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
       'Opinion search has been temporarily disabled. Please try again later.',
