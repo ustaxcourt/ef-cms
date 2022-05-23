@@ -12,6 +12,7 @@ const ScrollToTopButton = () => {
     <Button
       link
       className="usa-footer__primary-link inline-block text-left"
+      id="return-to-top"
       overrideMargin={true}
       onClick={e => {
         e.preventDefault();
