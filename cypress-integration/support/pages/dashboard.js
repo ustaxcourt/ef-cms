@@ -1,6 +1,11 @@
 exports.navigateTo = username => {
   cy.login(username, '/');
-  cy.checkA11y();
+  cy.checkA11y('html', {
+    rules: {
+      //disabling this because app.jsx > AppComponent > CurrentPage components have headings
+      'page-has-heading-one': { enabled: false },
+    },
+  });
 };
 
 exports.viewMyOutbox = () => {
