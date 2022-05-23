@@ -88,10 +88,7 @@ export const Footer = connect(
                       </ul>
                     </nav>
                   </div>
-                  <div
-                    className="grid-col-3 hide-on-mobile text-right"
-                    role="none"
-                  >
+                  <div className="grid-col-3 hide-on-mobile text-right">
                     <ScrollToTopButton />
                   </div>
                 </div>
