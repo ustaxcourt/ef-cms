@@ -42,7 +42,7 @@ export const Footer = connect(
               <DeployedDate />
               <div className="usa-footer__primary-section">
                 <div className="usa-footer__primary-container grid-row">
-                  <div className="grid-col-9" id="footer-links">
+                  <div className="grid-col-11" id="footer-links">
                     <nav
                       aria-label="Footer navigation"
                       className="usa-footer__nav"
@@ -85,17 +85,22 @@ export const Footer = connect(
                       </ul>
                     </nav>
                   </div>
-                  <div className="grid-col-3 hide-on-mobile text-right">
-                    <ul className="grid-row">
-                      <li className="usa-footer__primary-content">
-                        <a
-                          className="usa-footer__primary-link usa-link--external"
-                          href="#top"
-                        >
-                          Return to top
-                        </a>
-                      </li>
-                    </ul>
+                  <div
+                    className="grid-col-1 hide-on-mobile text-right"
+                    id="footer-links"
+                  >
+                    <nav
+                      aria-label="Footer navigation"
+                      className="usa-footer__nav"
+                    >
+                      <ul className="grid-row">
+                        <li className="usa-footer__primary-content">
+                          <a className="usa-footer__primary-link" href="#top">
+                            Return to top
+                          </a>
+                        </li>
+                      </ul>
+                    </nav>
                   </div>
                 </div>
               </div>
