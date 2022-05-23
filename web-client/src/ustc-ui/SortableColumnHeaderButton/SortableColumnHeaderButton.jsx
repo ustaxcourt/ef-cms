@@ -53,13 +53,30 @@ export const SortableColumnHeaderButton = connect(
             sortField,
             tableSort,
           }),
+          isActive({ hasRows, sortField, tableSort }),
         )}
       </Button>
     );
   },
 );
 
-const getFontAwesomeIcon = ({ direction, title }) => {
-  const fontAwesomeIcon = direction === DESCENDING ? 'caret-down' : 'caret-up';
-  return <FontAwesomeIcon icon={fontAwesomeIcon} title={title} />;
+const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
+  let fontAwesomeIcon =
+    direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';
+
+  let rotation;
+
+  if (!isActiveColumn) {
+    fontAwesomeIcon = 'exchange-alt';
+    rotation = 90;
+  }
+
+  return (
+    <FontAwesomeIcon
+      className={isActiveColumn ? 'icon-sortable-header' : ''}
+      icon={fontAwesomeIcon}
+      rotation={rotation}
+      title={title}
+    />
+  );
 };
