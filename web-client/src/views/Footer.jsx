@@ -11,7 +11,7 @@ const ScrollToTopButton = () => {
   return (
     <Button
       link
-      className="usa-footer__primary-link inline-block text-left margin-top-1"
+      className="usa-footer__primary-link inline-block text-left"
       overrideMargin={true}
       onClick={e => {
         e.preventDefault();
@@ -45,7 +45,7 @@ export const Footer = connect(
                   <div className="grid-col-10" id="footer-links">
                     <nav
                       aria-label="Footer navigation"
-                      className="usa-footer__nav"
+                      className="usa-footer__nav margin-left-0"
                     >
                       <ul className="grid-row grid-gap">
                         <li className="usa-footer__primary-content">
