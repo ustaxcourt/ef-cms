@@ -85,10 +85,7 @@ export const Footer = connect(
                       </ul>
                     </nav>
                   </div>
-                  <div
-                    className="grid-col-1 hide-on-mobile text-right"
-                    id="footer-links"
-                  >
+                  <div className="grid-col-1 text-right" id="footer-links">
                     <nav
                       aria-label="Footer navigation"
                       className="usa-footer__nav"
