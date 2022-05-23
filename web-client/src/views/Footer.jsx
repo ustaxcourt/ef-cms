@@ -7,27 +7,27 @@ import { state } from 'cerebral';
 import React from 'react';
 import seal from '../images/ustc_seal.svg';
 
-const ScrollToTopButton = () => {
-  return (
-    <Button
-      link
-      className="usa-footer__primary-link inline-block text-left margin-top-1"
-      overrideMargin={true}
-      onClick={e => {
-        e.preventDefault();
-        window.scrollTo(0, 0);
-      }}
-    >
-      <Icon
-        aria-label="return to top"
-        className="margin-right-1"
-        icon={['fas', 'long-arrow-alt-up']}
-        size="1x"
-      />{' '}
-      Return to top
-    </Button>
-  );
-};
+// const ScrollToTopButton = () => {
+//   return (
+//     <Button
+//       link
+//       className="usa-footer__primary-link inline-block text-left margin-top-1"
+//       overrideMargin={true}
+//       onClick={e => {
+//         e.preventDefault();
+//         window.scrollTo(0, 0);
+//       }}
+//     >
+//       <Icon
+//         aria-label="return to top"
+//         className="margin-right-1"
+//         icon={['fas', 'long-arrow-alt-up']}
+//         size="1x"
+//       />{' '}
+//       Return to top
+//     </Button>
+//   );
+// };
 
 export const Footer = connect(
   {
@@ -49,7 +49,13 @@ export const Footer = connect(
                     >
                       <ul className="grid-row grid-gap">
                         <li className="usa-footer__primary-content show-on-mobile">
-                          <ScrollToTopButton />
+                          {/* <ScrollToTopButton /> */}
+                          <a
+                            className="usa-footer__primary-link usa-link--external"
+                            href="#top"
+                          >
+                            Return to top
+                          </a>
                         </li>
                         <li className="usa-footer__primary-content">
                           <a
@@ -89,7 +95,12 @@ export const Footer = connect(
                     </nav>
                   </div>
                   <div className="grid-col-3 hide-on-mobile text-right">
-                    <ScrollToTopButton />
+                    <a
+                      className="usa-footer__primary-link usa-link--external"
+                      href="#top"
+                    >
+                      Return to top
+                    </a>
                   </div>
                 </div>
               </div>

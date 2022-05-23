@@ -235,7 +235,7 @@ export const Header = connect(
               <div className="usa-nav-container">
                 <div className="usa-navbar">
                   <div className="usa-logo">
-                    <a href="/">
+                    <a href="/" name="top">
                       <img alt="USTC Seal" src={seal} />
                     </a>
                   </div>
