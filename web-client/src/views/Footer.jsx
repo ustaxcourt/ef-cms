@@ -7,27 +7,27 @@ import { state } from 'cerebral';
 import React from 'react';
 import seal from '../images/ustc_seal.svg';
 
-// const ScrollToTopButton = () => {
-//   return (
-//     <Button
-//       link
-//       className="usa-footer__primary-link inline-block text-left margin-top-1"
-//       overrideMargin={true}
-//       onClick={e => {
-//         e.preventDefault();
-//         window.scrollTo(0, 0);
-//       }}
-//     >
-//       <Icon
-//         aria-label="return to top"
-//         className="margin-right-1"
-//         icon={['fas', 'long-arrow-alt-up']}
-//         size="1x"
-//       />{' '}
-//       Return to top
-//     </Button>
-//   );
-// };
+const ScrollToTopButton = () => {
+  return (
+    <Button
+      link
+      className="usa-footer__primary-link inline-block text-left margin-top-1"
+      overrideMargin={true}
+      onClick={e => {
+        e.preventDefault();
+        window.scrollTo(0, 0);
+      }}
+    >
+      <Icon
+        aria-label="return to top"
+        className="margin-right-1"
+        icon={['fas', 'long-arrow-alt-up']}
+        size="1x"
+      />{' '}
+      Return to top
+    </Button>
+  );
+};
 
 export const Footer = connect(
   {
@@ -42,7 +42,7 @@ export const Footer = connect(
               <DeployedDate />
               <div className="usa-footer__primary-section">
                 <div className="usa-footer__primary-container grid-row">
-                  <div className="grid-col-11" id="footer-links">
+                  <div className="grid-col-10" id="footer-links">
                     <nav
                       aria-label="Footer navigation"
                       className="usa-footer__nav"
@@ -85,16 +85,14 @@ export const Footer = connect(
                       </ul>
                     </nav>
                   </div>
-                  <div className="grid-col-1 text-right" id="footer-links">
+                  <div className="grid-col-2 text-right" id="footer-links">
                     <nav
                       aria-label="Footer navigation"
                       className="usa-footer__nav"
                     >
                       <ul className="grid-row">
                         <li className="usa-footer__primary-content">
-                          <a className="usa-footer__primary-link" href="#top">
-                            Return to top
-                          </a>
+                          <ScrollToTopButton />
                         </li>
                       </ul>
                     </nav>
