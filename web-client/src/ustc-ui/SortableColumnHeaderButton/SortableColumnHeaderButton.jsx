@@ -72,6 +72,11 @@ const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
   }
 
   return (
-    <FontAwesomeIcon icon={fontAwesomeIcon} rotation={rotation} title={title} />
+    <FontAwesomeIcon
+      className={isActiveColumn ? 'icon-sortable-header' : ''}
+      icon={fontAwesomeIcon}
+      rotation={rotation}
+      title={title}
+    />
   );
 };
