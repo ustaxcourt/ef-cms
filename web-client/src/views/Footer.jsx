@@ -90,7 +90,7 @@ export const Footer = connect(
                       aria-label="Footer navigation"
                       className="usa-footer__nav"
                     >
-                      <ul className="grid-row">
+                      <ul className="grid-row justify-items-end">
                         <li className="usa-footer__primary-content">
                           <ScrollToTopButton />
                         </li>

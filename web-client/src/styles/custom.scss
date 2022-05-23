@@ -1810,6 +1810,10 @@ button.change-scanner-button {
     }
   }
 
+  .justify-items-end {
+    justify-content: end;
+  }
+
   .usa-footer__primary-link {
     color: color($theme-color-primary);
     font-family: $font-source-sans;
