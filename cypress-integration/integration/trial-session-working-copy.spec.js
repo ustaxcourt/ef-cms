@@ -39,7 +39,7 @@ const testData = {
   trialSessionIds: [],
 };
 
-describe.skip('Petitioner', () => {
+describe('Petitioner', () => {
   describe('should be able to create the first case', () => {
     it('should complete wizard step 1', () => {
       cy.login('petitioner');
@@ -48,7 +48,6 @@ describe.skip('Petitioner', () => {
       completeWizardStep1();
     });
 
-    // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
     });
@@ -75,7 +74,6 @@ describe.skip('Petitioner', () => {
       completeWizardStep1();
     });
 
-    // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
     });
@@ -96,9 +94,7 @@ describe.skip('Petitioner', () => {
   });
 });
 
-// eslint-disable-next-line no-unused-vars
-let judgeUserId;
-describe.skip('Petitions Clerk', () => {
+describe('Petitions Clerk', () => {
   describe('should create and set a trial session', () => {
     beforeEach(() => {
       cy.intercept({ method: 'POST', url: '/trial-sessions' }).as(
@@ -107,7 +103,7 @@ describe.skip('Petitions Clerk', () => {
     });
 
     it('creates a trial session', () => {
-      cy.login('petitionsclerk');
+      cy.login('petitionsclerk', '/add-a-trial-session');
       createTrialSession(testData);
     });
 
@@ -130,7 +126,7 @@ describe.skip('Petitions Clerk', () => {
   });
 });
 
-describe.skip('Judge', () => {
+describe('Judge', () => {
   it('should be able to login', () => {
     cy.login('judgeCohen');
   });
@@ -161,7 +157,7 @@ describe.skip('Judge', () => {
   });
 });
 
-describe.skip('Judge Chambers', () => {
+describe('Judge Chambers', () => {
   it('should be able to login', () => {
     cy.login('cohensChambers');
   });
