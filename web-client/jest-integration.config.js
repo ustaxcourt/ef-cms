@@ -10,10 +10,4 @@ module.exports = {
   },
   testEnvironment: 'node',
   testTimeout: 30000,
-  //this is to ignore imported html files
-  transform: {
-    '^.+\\.html?$': './htmlLoader.js',
-    '^.+\\.js$': 'babel-jest',
-    '^.+\\.jsx$': 'babel-jest',
-  },
 };

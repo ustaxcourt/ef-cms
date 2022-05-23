@@ -1,8 +1,5 @@
 /* eslint-disable max-lines */
-const {
-  addDocketEntryForPaymentStatus,
-  serveCaseToIrsInteractor,
-} = require('./serveCaseToIrsInteractor');
+const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
 
 const {
   applicationContext,
@@ -16,19 +13,20 @@ const {
   DOCKET_SECTION,
   INITIAL_DOCUMENT_TYPES,
   PARTY_TYPES,
-  PAYMENT_STATUS,
   SERVICE_INDICATOR_TYPES,
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   docketClerkUser,
   petitionsClerkUser,
 } = require('../../../test/mockUsers');
 const {
+  formatDateString,
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
 } = require('../../utilities/DateHandler');
-const { Case, getContactPrimary } = require('../../entities/cases/Case');
+const { getContactPrimary } = require('../../entities/cases/Case');
 const { getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { ROLES } = require('../../entities/EntityConstants');
@@ -703,7 +701,7 @@ describe('serveCaseToIrsInteractor', () => {
     ).toBeDefined();
   });
 
-  it('should set isOnDocketRecord true for all intially filed documents except for the petition and stin file', async () => {
+  it('should set isOnDocketRecord true for all initially filed documents except for the petition and stin file', async () => {
     const mockCaseWithoutServedDocketEntries = {
       ...MOCK_CASE,
       docketEntries: [
@@ -775,10 +773,40 @@ describe('serveCaseToIrsInteractor', () => {
         index: 2,
         isOnDocketRecord: true,
       },
+      {
+        documentTitle:
+          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfReceiptOfPetition
+            .documentTitle,
+        index: 3,
+        isOnDocketRecord: true,
+      },
     ]);
   });
 
-  it('should call serveCaseDocument for every intially filed document', async () => {
+  it('should serve the NOTR to parties on the case', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      contactSecondary: {
+        ...getContactPrimary(MOCK_CASE),
+        contactId: 'f30c6634-4c3d-4cda-874c-d9a9387e00e2',
+        name: 'Test Petitioner Secondary',
+      },
+      isPaper: false,
+      partyType: PARTY_TYPES.petitionerSpouse,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    };
+    const MOCK_NOTR_ID = 'ea10afeb-f189-4657-a862-c607a091beaa';
+    applicationContext.getUniqueId.mockReturnValue(MOCK_NOTR_ID);
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0].docketEntryId,
+    ).toEqual(MOCK_NOTR_ID);
+  });
+
+  it('should call serveCaseDocument for every initially filed document', async () => {
     mockCase = {
       ...MOCK_CASE,
       docketEntries: [
@@ -833,6 +861,61 @@ describe('serveCaseToIrsInteractor', () => {
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
+  it('should generate an order and upload it to s3 for orderDesignatingPlaceOfTrial', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderDesignatingPlaceOfTrial: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      documentTitle: 'Order',
+      documentType: 'Order',
+      eventCode: 'O',
+    });
+
+    expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+
+    const petitionFilingDate = mockCase.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ).filingDate;
+    const expectedFilingDate = formatDateString(
+      petitionFilingDate,
+      FORMATS.MONTH_DAY_YEAR,
+    );
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(expectedFilingDate),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining(MOCK_CASE.procedureType.toLowerCase()),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.stringContaining('TRIAL_LOCATION'),
+    });
+  });
+
   it('should generate an order and upload it to s3 for orderToShowCause', async () => {
     mockCase = {
       ...MOCK_CASE,
@@ -847,7 +930,7 @@ describe('serveCaseToIrsInteractor', () => {
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
   });
 
-  it('should replace brackets in orderToShowCause content with a filing date of today, the served date, and todayPlus60', async () => {
+  it('should replace brackets in orderToShowCause content with a filing date and todayPlus60', async () => {
     mockCase = {
       ...MOCK_CASE,
       orderToShowCause: true,
@@ -865,7 +948,13 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
+    const petitionFilingDate = mockCase.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ).filingDate;
+    const expectedFilingDate = formatDateString(
+      petitionFilingDate,
+      FORMATS.MONTH_DAY_YEAR,
+    );
 
     const mockTodayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
@@ -877,7 +966,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(today),
+      content: expect.stringContaining(expectedFilingDate),
     });
 
     expect(
@@ -889,7 +978,7 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
-  it('should replace brackets in orderForAmendedPetition content with the served date of the petition, and today plus sixty twice', async () => {
+  it('should replace brackets in orderForAmendedPetition content with the filed date of the petition, and today plus sixty twice', async () => {
     mockCase = {
       ...MOCK_CASE,
       orderForAmendedPetition: true,
@@ -907,7 +996,13 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const today = formatNow(FORMATS.MONTH_DAY_YEAR);
+    const petitionFilingDate = mockCase.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ).filingDate;
+    const expectedFilingDate = formatDateString(
+      petitionFilingDate,
+      FORMATS.MONTH_DAY_YEAR,
+    );
 
     const mockTodayPlus60 = getBusinessDateInFuture({
       numberOfDays: 60,
@@ -919,7 +1014,62 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${today}, a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper amended petition. If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.`,
+      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${expectedFilingDate}, a document as the petition of the above-named petitioner(s) at the docket number indicated. That docket number MUST appear on all documents and papers subsequently sent to the Court for filing or otherwise. The document did not comply with the Rules of the Court as to the form and content of a proper petition. <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is <br/><br/>&nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper amended petition. If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition, the case will be dismissed or other action taken as the Court deems appropriate.`,
+    });
+  });
+
+  it('should replace brackets in orderForAmendedPetitionAndFilingFee content with the filing date of the petition, and today plus sixty twice', async () => {
+    mockCase = {
+      ...MOCK_CASE,
+      orderForAmendedPetitionAndFilingFee: true,
+    };
+
+    await serveCaseToIrsInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: expect.not.stringContaining('['),
+    });
+
+    const petitionFilingDate = mockCase.docketEntries.find(
+      doc => doc.documentType === INITIAL_DOCUMENT_TYPES.petition.documentType,
+    ).filingDate;
+    const expectedFilingDate = formatDateString(
+      petitionFilingDate,
+      FORMATS.MONTH_DAY_YEAR,
+    );
+
+    const mockTodayPlus60 = getBusinessDateInFuture({
+      numberOfDays: 60,
+      startDate: formatNow(FORMATS.ISO),
+    });
+
+    expect(
+      await applicationContext.getUseCaseHelpers()
+        .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
+        .systemGeneratedDocument,
+    ).toMatchObject({
+      content: `&nbsp;&nbsp;&nbsp;&nbsp;The Court filed on ${expectedFilingDate}, a document as the petition of the above-named
+      petitioner(s) at the docket number indicated. That docket number MUST appear on all documents
+      and papers subsequently sent to the Court for filing or otherwise. The document did not comply with
+      the Rules of the Court as to the form and content of a proper petition. The filing fee was not paid.<br/>
+      <br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is<br/>
+      <br/>
+      &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper
+      amended petition and pay the $60.00 filing fee. Waiver of the filing fee requires an affidavit
+      containing specific financial information regarding the inability to make such payment. An
+      Application for Waiver of Filing Fee and Affidavit form is available under "Case Related Forms" on
+      the Court's website at www.ustaxcourt.gov/case_related_forms.html.<br/>
+      <br/>
+      If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition and either pay the Court's
+      $60.00 filing fee or submit an Application for Waiver of the Filing Fee, the case will be dismissed or
+      other action taken as the Court deems appropriate.`,
     });
   });
 
@@ -974,61 +1124,5 @@ describe('serveCaseToIrsInteractor', () => {
     ).toMatchObject({
       content: expect.stringContaining(mockTodayPlus60),
     });
-  });
-});
-
-describe('addDocketEntryForPaymentStatus', () => {
-  let user;
-
-  beforeEach(() => {
-    user = applicationContext.getCurrentUser();
-  });
-
-  it('adds a docketRecord for a paid petition payment', () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        petitionPaymentDate: 'Today',
-        petitionPaymentStatus: PAYMENT_STATUS.PAID,
-      },
-      { applicationContext },
-    );
-    addDocketEntryForPaymentStatus({
-      applicationContext,
-      caseEntity,
-      user: petitionsClerkUser,
-    });
-
-    const addedDocketRecord = caseEntity.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'FEE',
-    );
-
-    expect(addedDocketRecord).toBeDefined();
-    expect(addedDocketRecord.filingDate).toEqual('Today');
-  });
-
-  it('adds a docketRecord for a waived petition payment', async () => {
-    const caseEntity = new Case(
-      {
-        ...MOCK_CASE,
-        docketEntries: [],
-        petitionPaymentStatus: PAYMENT_STATUS.WAIVED,
-        petitionPaymentWaivedDate: 'Today',
-        petitioners: undefined,
-      },
-      { applicationContext },
-    );
-    await addDocketEntryForPaymentStatus({
-      applicationContext,
-      caseEntity,
-      user,
-    });
-
-    const addedDocketRecord = caseEntity.docketEntries.find(
-      docketEntry => docketEntry.eventCode === 'FEEW',
-    );
-
-    expect(addedDocketRecord).toBeDefined();
-    expect(addedDocketRecord.filingDate).toEqual('Today');
   });
 });
