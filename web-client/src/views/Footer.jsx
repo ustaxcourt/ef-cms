@@ -48,15 +48,6 @@ export const Footer = connect(
                       className="usa-footer__nav"
                     >
                       <ul className="grid-row grid-gap">
-                        <li className="usa-footer__primary-content show-on-mobile">
-                          {/* <ScrollToTopButton /> */}
-                          <a
-                            className="usa-footer__primary-link usa-link--external"
-                            href="#top"
-                          >
-                            Return to top
-                          </a>
-                        </li>
                         <li className="usa-footer__primary-content">
                           <a
                             className="usa-footer__primary-link usa-link--external"
@@ -95,12 +86,16 @@ export const Footer = connect(
                     </nav>
                   </div>
                   <div className="grid-col-3 hide-on-mobile text-right">
-                    <a
-                      className="usa-footer__primary-link usa-link--external"
-                      href="#top"
-                    >
-                      Return to top
-                    </a>
+                    <ul className="grid-row">
+                      <li className="usa-footer__primary-content">
+                        <a
+                          className="usa-footer__primary-link usa-link--external"
+                          href="#top"
+                        >
+                          Return to top
+                        </a>
+                      </li>
+                    </ul>
                   </div>
                 </div>
               </div>
