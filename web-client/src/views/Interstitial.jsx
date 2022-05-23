@@ -58,6 +58,7 @@ export const Interstitial = connect(
               aria-label="please wait"
               aria-live="polite"
               className="progress-indicator"
+              role="progressbar"
             >
               <FontAwesomeIcon
                 className="fa-spin spinner"
