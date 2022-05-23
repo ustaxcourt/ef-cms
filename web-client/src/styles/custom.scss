@@ -1814,7 +1814,7 @@ button.change-scanner-button {
     justify-content: end;
   }
 
-  #return-to-top {
+  .return-to-top {
     @media only screen and (max-width: ($medium-screen - 1)) {
       float: left;
     }
