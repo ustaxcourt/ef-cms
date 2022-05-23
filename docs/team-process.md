@@ -154,8 +154,6 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
 
-- `puppeteer-core` within `web-api/runtimes/puppeteer`: locked to v13.0.1 because that's the highest version that `chrome-aws-lambda` [supports](https://github.com/alixaxel/chrome-aws-lambda/issues/254) at the moment. Note that this package can be updated in the main package.json. Additionally, waiting to update main `puppeteer-core` and `puppeteer-chromium` to v14 until `chrome-aws-lamdba` can be [updated](https://github.com/alixaxel/chrome-aws-lambda/pull/264)
-
 - `pdfjs-dist`: temporarily locked to 2.12.313 as v2.13.216 causes issues with pdf rendering in cypress tests
 
 #### Validating Updates
