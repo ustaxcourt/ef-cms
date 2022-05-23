@@ -442,10 +442,15 @@ export const PetitionQcScanBatchPreviewer = connect(
           >
             {documentTabsList.map(documentTab => (
               <Tab
-                icon={['fas', 'check-circle']}
-                iconColor="green"
+                icon={
+                  scanHelper[`${documentTab.documentType}Completed`] && (
+                    <FontAwesomeIcon
+                      color="green"
+                      icon={['fas', 'check-circle']}
+                    />
+                  )
+                }
                 key={documentTab.documentType}
-                showIcon={scanHelper[`${documentTab.documentType}Completed`]}
                 tabName={documentTab.documentType}
                 title={documentTab.title}
               />
