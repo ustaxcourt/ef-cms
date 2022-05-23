@@ -24,7 +24,6 @@ const getUniqueId = () => {
   return uuidv4();
 };
 
-const chiefJudgeNameForSigning = 'Maurice B. Foley';
 const clerkOfCourtNameForSigning = 'Stephanie A. Servoss';
 
 module.exports = {
@@ -42,7 +41,6 @@ module.exports = {
       title: 'Search is experiencing high traffic',
     },
   },
-  chiefJudgeNameForSigning,
   clerkOfCourtNameForSigning,
   getCognitoLoginUrl,
   getEnvironment,
