@@ -92,16 +92,7 @@ export const Footer = connect(
                     className="grid-col-2 hide-on-mobile text-right"
                     role="none"
                   >
-                    <nav
-                      aria-label="Footer navigation"
-                      className="usa-footer__nav"
-                    >
-                      <ul className="grid-row justify-items-end">
-                        <li className="usa-footer__primary-content">
-                          <ScrollToTopButton />
-                        </li>
-                      </ul>
-                    </nav>
+                    <ScrollToTopButton />
                   </div>
                 </div>
               </div>
