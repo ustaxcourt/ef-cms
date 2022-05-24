@@ -1,14 +1,12 @@
 import { state } from 'cerebral';
-//TODO: fix jsdocs
+
 /**
- * call to consolidate cases
+ * initialize consolidated case state values for ConfirmInitiateServiceModal
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.props the cerebral props object
- * @returns {Promise} async action
+ * @param {object} providers.get the cerebral get object
+ * @param {object} providers.store the cerebral store object
  */
-
 export const setupConsolidatedCasesAction = ({ get, store }) => {
   let consolidatedCases = get(state.caseDetail.consolidatedCases);
 
@@ -23,6 +21,5 @@ export const setupConsolidatedCasesAction = ({ get, store }) => {
   });
 
   store.set(state.consolidatedCaseAllCheckbox, true);
-  store.set(state.initialEnabledCheckBoxValue, true);
   store.set(state.caseDetail.consolidatedCases, consolidatedCases);
 };
