@@ -124,8 +124,10 @@ describe('Petitions Clerk', () => {
 
 describe('Judge', () => {
   it('views trial session working copy', () => {
-    cy.login('judgeCohen');
-    cy.goToRoute(`/trial-session-working-copy/${testData.trialSessionIds[0]}`);
+    cy.login(
+      'judgeCohen',
+      `/trial-session-working-copy/${testData.trialSessionIds[0]}`,
+    );
   });
 
   it('views all cases on the trial session', () => {
@@ -152,8 +154,10 @@ describe('Judge', () => {
 
 describe('Judge Chambers', () => {
   it('views trial session working copy', () => {
-    cy.login('cohensChambers');
-    cy.goToRoute(`/trial-session-working-copy/${testData.trialSessionIds[0]}`);
+    cy.login(
+      'cohensChambers',
+      `/trial-session-working-copy/${testData.trialSessionIds[0]}`,
+    );
   });
 
   it('views all cases on the trial session', () => {
