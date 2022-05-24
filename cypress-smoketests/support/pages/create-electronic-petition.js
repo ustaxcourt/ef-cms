@@ -105,6 +105,7 @@ exports.goToDashboard = () => {
 
   cy.checkA11y('html', {
     rules: {
+      'nested-interactive': { enabled: false },
       region: { enabled: false },
     },
   });
