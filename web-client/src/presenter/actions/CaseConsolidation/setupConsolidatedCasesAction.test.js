@@ -5,8 +5,8 @@ import {
 import { runAction } from 'cerebral/test';
 import { setupConsolidatedCasesAction } from './setupConsolidatedCasesAction';
 
-describe('primePropsForCanConsolidateAction', () => {
-  it('should update the props from state', async () => {
+describe('setupConsolidatedCasesAction', () => {
+  it('should format petitioner names and update state correctly', async () => {
     const result = await runAction(setupConsolidatedCasesAction, {
       state: {
         caseDetail: {
@@ -46,7 +46,6 @@ describe('primePropsForCanConsolidateAction', () => {
       ],
     });
 
-    expect(result.state.initialEnabledCheckboxValue).toEqual(true);
     expect(result.state.consolidatedCaseAllCheckbox).toEqual(true);
   });
 });

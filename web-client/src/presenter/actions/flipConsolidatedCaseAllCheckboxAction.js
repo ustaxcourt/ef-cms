@@ -5,7 +5,6 @@ import { state } from 'cerebral';
  */
 export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
   const consolidatedCaseAllCheckbox = get(state.consolidatedCaseAllCheckbox);
-  const initialEnabledCheckboxValue = get(state.initialEnabledCheckboxValue);
 
   let consolidatedCases = get(state.caseDetail.consolidatedCases);
 
@@ -26,6 +25,5 @@ export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
   });
 
   store.set(state.consolidatedCaseAllCheckbox, !consolidatedCaseAllCheckbox);
-  store.set(state.initialEnabledCheckboxValue, !initialEnabledCheckboxValue);
   store.set(state.caseDetail.consolidatedCases, consolidatedCases);
 };
