@@ -19,12 +19,13 @@ export const initializeFormattedConsolidatedCasesCheckboxesAction = ({
     return {
       ...consolidatedCase,
       checked: true,
+      formattedPetitioners: consolidatedCase.petitioners
+        .map(ptr => ptr.name)
+        .join(' & '),
     };
   });
 
-  const initialCheckBoxValue = true;
-  const initialEnabledCheckBoxValue = true;
-  store.set(state.consolidatedCaseAllCheckbox, initialCheckBoxValue);
-  store.set(state.initialEnabledCheckBoxValue, initialEnabledCheckBoxValue);
+  store.set(state.consolidatedCaseAllCheckbox, true);
+  store.set(state.initialEnabledCheckBoxValue, true);
   store.set(state.caseDetail.consolidatedCases, consolidatedCases);
 };

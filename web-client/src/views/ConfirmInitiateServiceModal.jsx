@@ -12,8 +12,6 @@ export const ConfirmInitiateServiceModal = connect(
     consolidatedCaseAllCheckbox: state.consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange:
       sequences.consolidatedCaseCheckboxAllChangeSequence,
-    consolidatedCaseServiceInitiateHelper:
-      state.consolidatedCaseServiceInitiateHelper,
     documentTitle: props.documentTitle,
     formattedCaseDetail: state.formattedCaseDetail,
     serveCourtIssuedDocumentFromDocketEntrySequence:
@@ -27,7 +25,6 @@ export const ConfirmInitiateServiceModal = connect(
     confirmSequence,
     consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange,
-    consolidatedCaseServiceInitiateHelper,
     documentTitle,
     formattedCaseDetail,
     serveCourtIssuedDocumentFromDocketEntrySequence,
@@ -103,38 +100,35 @@ export const ConfirmInitiateServiceModal = connect(
           </div>
         )}
         {formattedCaseDetail.isLeadCase &&
-          consolidatedCaseServiceInitiateHelper.formattedConsolidatedCases.map(
-            consolidatedCase => (
-              <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
-                <input
-                  checked={consolidatedCase.checked}
-                  className="usa-checkbox__input"
-                  disabled={consolidatedCaseAllCheckbox}
-                  id={
-                    'consolidated-case-checkbox-' +
-                    consolidatedCase.docketNumber
-                  }
-                  name="consolidated-case"
-                  type="checkbox"
-                  value={consolidatedCase.docketNumber}
-                  onChange={event =>
-                    updateCaseCheckbox({
-                      docketNumber: event.target.value,
-                    })
-                  }
-                />
-                <label
-                  className="usa-checkbox__label"
-                  htmlFor={
-                    'consolidated-case-checkbox-' +
-                    consolidatedCase.docketNumber
-                  }
-                >
-                  {consolidatedCase.docketNumber} {consolidatedCase.petitioners}
-                </label>
-              </div>
-            ),
-          )}
+          formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
+            <div className="usa-checkbox" key={consolidatedCase.docketNumber}>
+              <input
+                checked={consolidatedCase.checked}
+                className="usa-checkbox__input"
+                disabled={consolidatedCaseAllCheckbox}
+                id={
+                  'consolidated-case-checkbox-' + consolidatedCase.docketNumber
+                }
+                name="consolidated-case"
+                type="checkbox"
+                value={consolidatedCase.docketNumber}
+                onChange={event =>
+                  updateCaseCheckbox({
+                    docketNumber: event.target.value,
+                  })
+                }
+              />
+              <label
+                className="usa-checkbox__label"
+                htmlFor={
+                  'consolidated-case-checkbox-' + consolidatedCase.docketNumber
+                }
+              >
+                {consolidatedCase.docketNumber}{' '}
+                {consolidatedCase.formattedPetitioners}
+              </label>
+            </div>
+          ))}
       </ModalDialog>
     );
   },
