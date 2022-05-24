@@ -1,10 +1,10 @@
 import { ASCENDING, DESCENDING } from '../presenterConstants';
 import { runAction } from 'cerebral/test';
-import { setSectionMessagesSortAction } from './setSectionMessagesSortAction';
+import { setTableSortConfigurationAction } from './setTableSortConfigurationAction';
 
-describe('setSectionMessagesSortAction', () => {
+describe('setTableSortConfigurationAction', () => {
   it('should return default sortOrder', async () => {
-    const { state } = await runAction(setSectionMessagesSortAction, {
+    const { state } = await runAction(setTableSortConfigurationAction, {
       props: { defaultSort: ASCENDING, sortField: 'createdAt' },
       state: {
         tableSort: {
@@ -21,7 +21,7 @@ describe('setSectionMessagesSortAction', () => {
   it('should return correct sortField', async () => {
     const NEW_SORT_FIELD = 'createdAt';
 
-    const { state } = await runAction(setSectionMessagesSortAction, {
+    const { state } = await runAction(setTableSortConfigurationAction, {
       props: { defaultSort: ASCENDING, sortField: NEW_SORT_FIELD },
       state: {
         tableSort: {
@@ -38,7 +38,7 @@ describe('setSectionMessagesSortAction', () => {
   it('should return descending sortOrder if sort fields match and sortOrder is ascending', async () => {
     const SORT_FIELD = 'docketNumber';
 
-    const { state } = await runAction(setSectionMessagesSortAction, {
+    const { state } = await runAction(setTableSortConfigurationAction, {
       props: { defaultSort: ASCENDING, sortField: SORT_FIELD },
       state: {
         tableSort: {
@@ -57,7 +57,7 @@ describe('setSectionMessagesSortAction', () => {
   it('should return ascending sortOrder if sort fields match and sortOrder is descending', async () => {
     const SORT_FIELD = 'createdAt';
 
-    const { state } = await runAction(setSectionMessagesSortAction, {
+    const { state } = await runAction(setTableSortConfigurationAction, {
       props: { defaultSort: ASCENDING, sortField: SORT_FIELD },
       state: {
         tableSort: {
@@ -76,7 +76,7 @@ describe('setSectionMessagesSortAction', () => {
   it('should return default table sort values if tableSort is not set', async () => {
     const SORT_FIELD = 'createdAt';
 
-    const { state } = await runAction(setSectionMessagesSortAction, {
+    const { state } = await runAction(setTableSortConfigurationAction, {
       props: { defaultSort: ASCENDING, sortField: SORT_FIELD },
       state: {},
     });
