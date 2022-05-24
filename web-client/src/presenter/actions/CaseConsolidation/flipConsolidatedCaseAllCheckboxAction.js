@@ -19,7 +19,10 @@ export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
     );
 
     if (isLeadCase) {
-      return consolidatedCase;
+      return {
+        ...consolidatedCase,
+        checked: true,
+      };
     }
 
     return {

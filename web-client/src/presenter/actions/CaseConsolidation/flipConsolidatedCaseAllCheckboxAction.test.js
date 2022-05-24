@@ -31,6 +31,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
             },
           ],
         },
+        consolidatedCaseAllCheckbox: false,
       },
     });
 
@@ -41,6 +42,76 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
         {
           ...SECOND_CASE,
           checked: !changedCheckValue,
+        },
+      ],
+    });
+  });
+
+  it('should set checked to true for all cases when all checkbox is set to checked', async () => {
+    const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+      state: {
+        caseDetail: {
+          ...LEAD_CASE,
+          consolidatedCases: [
+            {
+              ...LEAD_CASE,
+              checked: false,
+            },
+            {
+              ...SECOND_CASE,
+              checked: false,
+            },
+          ],
+        },
+        consolidatedCaseAllCheckbox: false,
+      },
+    });
+
+    expect(result.state.caseDetail).toEqual({
+      ...LEAD_CASE,
+      consolidatedCases: [
+        {
+          ...LEAD_CASE,
+          checked: true,
+        },
+        {
+          ...SECOND_CASE,
+          checked: true,
+        },
+      ],
+    });
+  });
+
+  it('should only have lead case checked when all checkbox is set to unchecked', async () => {
+    const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
+      state: {
+        caseDetail: {
+          ...LEAD_CASE,
+          consolidatedCases: [
+            {
+              ...LEAD_CASE,
+              checked: true,
+            },
+            {
+              ...SECOND_CASE,
+              checked: true,
+            },
+          ],
+        },
+        consolidatedCaseAllCheckbox: true,
+      },
+    });
+
+    expect(result.state.caseDetail).toEqual({
+      ...LEAD_CASE,
+      consolidatedCases: [
+        {
+          ...LEAD_CASE,
+          checked: true,
+        },
+        {
+          ...SECOND_CASE,
+          checked: false,
         },
       ],
     });
