@@ -17,6 +17,7 @@ exports.goToStartCreatePetition = () => {
 
   cy.waitUntilSettled();
 
+  cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
       region: { enabled: false },
@@ -30,6 +31,7 @@ exports.goToWizardStep1 = () => {
 
   cy.waitUntilSettled();
 
+  cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
       region: { enabled: false },
@@ -41,6 +43,7 @@ exports.goToWizardStep2 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-2');
 
+  cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
       region: { enabled: false },
@@ -54,6 +57,7 @@ exports.goToWizardStep3 = () => {
 
   cy.waitUntilSettled();
 
+  cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
       region: { enabled: false },
@@ -67,6 +71,7 @@ exports.goToWizardStep4 = () => {
 
   cy.waitUntilSettled();
 
+  cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
       region: { enabled: false },
@@ -80,6 +85,7 @@ exports.goToWizardStep5 = () => {
 
   cy.waitUntilSettled();
 
+  cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
       region: { enabled: false },
@@ -109,6 +115,7 @@ exports.goToDashboard = () => {
 
   cy.waitUntilSettled();
 
+  cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
       'nested-interactive': { enabled: false },
