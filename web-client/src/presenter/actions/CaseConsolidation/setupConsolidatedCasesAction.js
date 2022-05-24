@@ -9,10 +9,7 @@ import { state } from 'cerebral';
  * @returns {Promise} async action
  */
 
-export const initializeFormattedConsolidatedCasesCheckboxesAction = ({
-  get,
-  store,
-}) => {
+export const setupConsolidatedCasesAction = ({ get, store }) => {
   let consolidatedCases = get(state.caseDetail.consolidatedCases);
 
   consolidatedCases = consolidatedCases.map(consolidatedCase => {
