@@ -6,8 +6,14 @@ import React from 'react';
 import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
-  { formattedMessages: state.formattedMessages.messages },
-  function MessagesIndividualInbox({ formattedMessages }) {
+  {
+    formattedMessages: state.formattedMessages.messages,
+    showSortableHeaders: state.showSortableHeaders,
+  },
+  function MessagesIndividualInbox({
+    formattedMessages,
+    //  showSortableHeaders
+  }) {
     return (
       <>
         <table className="usa-table ustc-table subsection">
