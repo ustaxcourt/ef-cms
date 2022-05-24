@@ -246,6 +246,7 @@ export const Header = connect(
                     </button>
                   </div>
                   <nav
+                    aria-label="primary-navigation"
                     className={classNames(
                       'usa-nav ustc-nav',
                       showMobileMenu && 'is-visible',
