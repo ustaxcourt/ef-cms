@@ -1,7 +1,11 @@
 import { state } from 'cerebral';
 // TODO
 /**
- * fill me in
+ *
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.get the Cerebral get object
+ * @param {object} providers.store the Cerebral store object
  */
 export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
   const consolidatedCaseAllCheckbox = get(state.consolidatedCaseAllCheckbox);

@@ -3,27 +3,31 @@ import { flipConsolidatedCaseAllCheckboxAction } from './flipConsolidatedCaseAll
 import { runAction } from 'cerebral/test';
 
 describe('flipConsolidatedCaseAllCheckboxAction', () => {
-  it("should flip the correct case's checked state", async () => {
-    const unchangedCheckValue = true;
-    const changedCheckValue = false;
+  const LEAD_CASE = {
+    ...MOCK_CASE,
+    checked: true,
+    leadDocketNumber: MOCK_CASE.docketNumber,
+  };
 
-    const customizedDocketNumber = '1337-42';
+  const customizedDocketNumber = '1337-42';
+  const SECOND_CASE = {
+    ...MOCK_CASE,
+    docketNumber: customizedDocketNumber,
+    leadDocketNumber: MOCK_CASE.docketNumber,
+  };
+
+  it("should flip the non-lead cases' checked states", async () => {
+    const changedCheckValue = false;
 
     const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       state: {
         caseDetail: {
-          ...MOCK_CASE,
+          ...LEAD_CASE,
           consolidatedCases: [
+            LEAD_CASE,
             {
-              ...MOCK_CASE,
+              ...SECOND_CASE,
               checked: changedCheckValue,
-              docketNumber: customizedDocketNumber,
-              leadDocketNumber: MOCK_CASE.docketNumber,
-            },
-            {
-              ...MOCK_CASE,
-              checked: unchangedCheckValue,
-              leadDocketNumber: MOCK_CASE.docketNumber,
             },
           ],
         },
@@ -31,15 +35,11 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
     });
 
     expect(result.state.caseDetail).toEqual({
-      ...MOCK_CASE,
+      ...LEAD_CASE,
       consolidatedCases: [
+        LEAD_CASE,
         {
-          ...MOCK_CASE,
-          checked: unchangedCheckValue,
-          docketNumber: customizedDocketNumber,
-        },
-        {
-          ...MOCK_CASE,
+          ...SECOND_CASE,
           checked: !changedCheckValue,
         },
       ],
