@@ -1,5 +1,8 @@
-const s3Zip = require('./s3-zip');
+const archiver = require('archiver');
+const s3FilesLib = require('s3-files');
 const stream = require('stream');
+const { zipS3Files } = require('./zipS3Files');
+
 /**
  * zipDocuments
  *
@@ -20,54 +23,41 @@ exports.zipDocuments = ({
   onProgress,
   onUploadStart,
   s3Ids,
-  uploadToTempBucket,
   zipName,
 }) => {
   return new Promise((resolve, reject) => {
-    const { region } = applicationContext.environment;
-    const documentsBucket = applicationContext.environment.documentsBucketName;
-    const destinationBucket = uploadToTempBucket
-      ? applicationContext.environment.tempDocumentsBucketName
-      : applicationContext.environment.documentsBucketName;
+    const { documentsBucketName, tempDocumentsBucketName } =
+      applicationContext.environment;
 
     const s3Client = applicationContext.getStorageClient();
 
-    const uploadFromStream = s3ClientForUpload => {
-      if (onUploadStart) onUploadStart();
+    onUploadStart?.();
 
-      const pass = new stream.PassThrough();
+    const passThrough = new stream.PassThrough();
 
-      const params = {
-        Body: pass,
-        Bucket: destinationBucket,
+    s3Client.upload(
+      {
+        Body: passThrough,
+        Bucket: tempDocumentsBucketName,
         Key: zipName,
-      };
-      s3ClientForUpload.upload(params, () => resolve());
+      },
+      () => resolve(),
+    );
 
-      pass.on('error', reject);
+    passThrough.on('error', reject);
 
-      return pass;
-    };
-
-    const passThrough = uploadFromStream(s3Client);
-
-    s3Zip
-      .setArchiverOptions({ gzip: false })
-      .archive(
-        {
-          bucket: documentsBucket,
-          onEntry,
-          onError,
-          onProgress,
-          region,
-          s3: s3Client,
-        },
-        '',
-        s3Ids,
-        fileNames,
-        extraFiles,
-        extraFileNames,
-      )
-      .pipe(passThrough);
+    zipS3Files({
+      additionalFileNames: extraFileNames,
+      additionalFiles: extraFiles,
+      archiver,
+      bucket: documentsBucketName,
+      onEntry,
+      onError,
+      onProgress,
+      s3Client,
+      s3FilesLib,
+      s3Keys: s3Ids,
+      s3KeysFileNames: fileNames,
+    }).pipe(passThrough);
   });
 };
