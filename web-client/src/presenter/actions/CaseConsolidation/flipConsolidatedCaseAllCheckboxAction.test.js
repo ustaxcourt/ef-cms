@@ -1,5 +1,5 @@
 import { MOCK_CASE } from '../../../../../shared/src/test/mockCase';
-import { flipConsolidatedCaseAllCheckboxAction } from '../flipConsolidatedCaseAllCheckboxAction';
+import { flipConsolidatedCaseAllCheckboxAction } from './flipConsolidatedCaseAllCheckboxAction';
 import { runAction } from 'cerebral/test';
 
 describe('flipConsolidatedCaseAllCheckboxAction', () => {
@@ -10,21 +10,20 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
     const customizedDocketNumber = '1337-42';
 
     const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
-      props: {
-        docketNumber: MOCK_CASE.docketNumber,
-      },
       state: {
         caseDetail: {
           ...MOCK_CASE,
           consolidatedCases: [
             {
               ...MOCK_CASE,
-              checked: unchangedCheckValue,
+              checked: changedCheckValue,
               docketNumber: customizedDocketNumber,
+              leadDocketNumber: MOCK_CASE.docketNumber,
             },
             {
               ...MOCK_CASE,
-              checked: changedCheckValue,
+              checked: unchangedCheckValue,
+              leadDocketNumber: MOCK_CASE.docketNumber,
             },
           ],
         },

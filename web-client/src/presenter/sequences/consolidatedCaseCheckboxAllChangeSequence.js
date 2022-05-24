@@ -1,4 +1,4 @@
-import { flipConsolidatedCaseAllCheckboxAction } from '../actions/flipConsolidatedCaseAllCheckboxAction';
+import { flipConsolidatedCaseAllCheckboxAction } from '../actions/CaseConsolidation/flipConsolidatedCaseAllCheckboxAction';
 
 export const consolidatedCaseCheckboxAllChangeSequence = [
   flipConsolidatedCaseAllCheckboxAction,
