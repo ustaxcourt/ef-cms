@@ -132,7 +132,11 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
 }
 
 .icon-sortable-header {
-  margin-top: 0.5rem;
+  transform: rotate(0.25turn) scale(0.95);
+}
+
+.icon-sortable-header-active {
+  transform: translate(0, 15%);
 }
 
 .icon-consolidated {

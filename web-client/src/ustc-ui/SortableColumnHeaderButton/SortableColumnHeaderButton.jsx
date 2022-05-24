@@ -68,12 +68,14 @@ const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
 
   if (!isActiveColumn) {
     fontAwesomeIcon = 'exchange-alt';
-    rotation = 90;
+    // rotation = 90;
   }
 
   return (
     <FontAwesomeIcon
-      className={isActiveColumn ? 'icon-sortable-header' : ''}
+      className={
+        isActiveColumn ? 'icon-sortable-header-active' : 'icon-sortable-header'
+      }
       icon={fontAwesomeIcon}
       rotation={rotation}
       title={title}
