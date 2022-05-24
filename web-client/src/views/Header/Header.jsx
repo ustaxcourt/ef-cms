@@ -16,6 +16,7 @@ const BetaBar = toggleBetaBarSequence => {
       <div className="grid-container">
         <div className="grid-row">
           <div className="grid-col-10">
+            {/* this div ^ */}
             This is a testing site for the U.S. Tax Court and not intended for
             public use. To learn more about starting a case, visit the{' '}
             <a href="https://www.ustaxcourt.gov/">U.S. Tax Court website</a>.
@@ -226,56 +227,55 @@ export const Header = connect(
     return (
       <>
         <div ref={headerRef}>
-          {showBetaBar && BetaBar(toggleBetaBarSequence)}
-          <div className="grid-container no-mobile-padding">
-            <header
-              className="usa-header usa-header--basic ustc-header"
-              role="banner"
-            >
-              <div className="usa-nav-container">
-                <div className="usa-navbar">
-                  <div className="usa-logo">
-                    <a href="/">
-                      <img alt="USTC Seal" src={seal} />
-                    </a>
+          <section aria-label="header">
+            {showBetaBar && BetaBar(toggleBetaBarSequence)}
+            <div className="grid-container no-mobile-padding">
+              <header className="usa-header usa-header--basic ustc-header">
+                <div className="usa-nav-container">
+                  <div className="usa-navbar">
+                    <div className="usa-logo">
+                      <a href="/">
+                        <img alt="USTC Seal" src={seal} />
+                      </a>
+                    </div>
+                    <button
+                      className="usa-menu-btn"
+                      onClick={() => toggleMobileMenuSequence()}
+                    >
+                      Menu
+                    </button>
                   </div>
-                  <button
-                    className="usa-menu-btn"
-                    onClick={() => toggleMobileMenuSequence()}
+                  <nav
+                    className={classNames(
+                      'usa-nav ustc-nav',
+                      showMobileMenu && 'is-visible',
+                    )}
+                    role="navigation"
                   >
-                    Menu
-                  </button>
+                    <Button
+                      iconRight
+                      link
+                      className="usa-nav__close float-right margin-right-0 padding-top-0"
+                      icon="times-circle"
+                      onClick={() => toggleMobileMenuSequence()}
+                    >
+                      Close
+                    </Button>
+                    {user &&
+                      NavigationItems(headerHelper, {
+                        isReportsMenuOpen,
+                        signOutSequence,
+                        toggleMobileMenuSequence,
+                      })}
+                    {headerHelper.showSearchInHeader && <SearchBox />}
+                    {headerHelper.showAccountMenu && (
+                      <AccountMenu isExpanded={isAccountMenuOpen} />
+                    )}
+                  </nav>
                 </div>
-                <nav
-                  className={classNames(
-                    'usa-nav ustc-nav',
-                    showMobileMenu && 'is-visible',
-                  )}
-                  role="navigation"
-                >
-                  <Button
-                    iconRight
-                    link
-                    className="usa-nav__close float-right margin-right-0 padding-top-0"
-                    icon="times-circle"
-                    onClick={() => toggleMobileMenuSequence()}
-                  >
-                    Close
-                  </Button>
-                  {user &&
-                    NavigationItems(headerHelper, {
-                      isReportsMenuOpen,
-                      signOutSequence,
-                      toggleMobileMenuSequence,
-                    })}
-                  {headerHelper.showSearchInHeader && <SearchBox />}
-                  {headerHelper.showAccountMenu && (
-                    <AccountMenu isExpanded={isAccountMenuOpen} />
-                  )}
-                </nav>
-              </div>
-            </header>
-          </div>
+              </header>
+            </div>
+          </section>
         </div>
 
         {headerHelper.showVerifyEmailWarningNotification && (
