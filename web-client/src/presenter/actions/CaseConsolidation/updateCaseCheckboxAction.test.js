@@ -3,9 +3,9 @@ import { runAction } from 'cerebral/test';
 import { updateCaseCheckboxAction } from './updateCaseCheckboxAction';
 
 describe('updateCaseCheckboxAction', () => {
-  it('should format petitioner names and update state correctly', async () => {
-    const mockCaseChecked = true;
-    const initialCheckedValue = false;
+  it("should flip the correct case's checked state", async () => {
+    const unchangedCheckValue = true;
+    const changedCheckValue = false;
 
     const customizedDocketNumber = '1337-42';
 
@@ -19,12 +19,12 @@ describe('updateCaseCheckboxAction', () => {
           consolidatedCases: [
             {
               ...MOCK_CASE,
-              checked: mockCaseChecked,
+              checked: unchangedCheckValue,
               docketNumber: customizedDocketNumber,
             },
             {
               ...MOCK_CASE,
-              checked: initialCheckedValue,
+              checked: changedCheckValue,
             },
           ],
         },
@@ -36,12 +36,12 @@ describe('updateCaseCheckboxAction', () => {
       consolidatedCases: [
         {
           ...MOCK_CASE,
-          checked: mockCaseChecked,
+          checked: unchangedCheckValue,
           docketNumber: customizedDocketNumber,
         },
         {
           ...MOCK_CASE,
-          checked: !initialCheckedValue,
+          checked: !changedCheckValue,
         },
       ],
     });
