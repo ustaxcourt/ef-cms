@@ -1,7 +1,7 @@
 exports.navigateTo = username => {
   cy.login(username, '/');
-  cy.injectAxe();
-  cy.waitUntilSettled(50);
+
+  cy.waitUntilSettled();
 
   cy.injectAxe();
   cy.checkA11y('html', {
