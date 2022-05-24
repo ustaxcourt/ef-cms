@@ -16,9 +16,9 @@ export const ConfirmInitiateServiceModal = connect(
       state.consolidatedCaseServiceInitiateHelper,
     documentTitle: props.documentTitle,
     formattedCaseDetail: state.formattedCaseDetail,
-    initialEnabledCheckboxValue: state.initialEnabledCheckBoxValue,
     serveCourtIssuedDocumentFromDocketEntrySequence:
       sequences.serveCourtIssuedDocumentFromDocketEntrySequence,
+    updateCaseCheckbox: sequences.updateCaseCheckboxSequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
   function ConfirmInitiateServiceModal({
@@ -30,8 +30,8 @@ export const ConfirmInitiateServiceModal = connect(
     consolidatedCaseServiceInitiateHelper,
     documentTitle,
     formattedCaseDetail,
-    initialEnabledCheckboxValue,
     serveCourtIssuedDocumentFromDocketEntrySequence,
+    updateCaseCheckbox,
     waitingForResponse,
   }) {
     let isSubmitDebounced = false;
@@ -109,7 +109,7 @@ export const ConfirmInitiateServiceModal = connect(
                 <input
                   checked={consolidatedCase.checked}
                   className="usa-checkbox__input"
-                  disabled={initialEnabledCheckboxValue}
+                  disabled={consolidatedCaseAllCheckbox}
                   id={
                     'consolidated-case-checkbox-' +
                     consolidatedCase.docketNumber
@@ -117,6 +117,11 @@ export const ConfirmInitiateServiceModal = connect(
                   name="consolidated-case"
                   type="checkbox"
                   value={consolidatedCase.docketNumber}
+                  onChange={event =>
+                    updateCaseCheckbox({
+                      docketNumber: event.target.value,
+                    })
+                  }
                 />
                 <label
                   className="usa-checkbox__label"
