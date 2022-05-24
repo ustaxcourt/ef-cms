@@ -8,6 +8,8 @@ exports.navigateTo = username => {
     rules: {
       //disabling this because app.jsx > AppComponent > CurrentPage components have headings
       'page-has-heading-one': { enabled: false },
+      // disabling because the "CI Test Environment" footer is causing this error
+      region: { enabled: false },
     },
   });
 };
