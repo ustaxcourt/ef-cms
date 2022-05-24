@@ -43,7 +43,7 @@ const firstCasePetitionerName = `${faker.name.firstName()} ${faker.name.lastName
 const secondCasePetitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
 
 describe('Petitioner', () => {
-  describe(`should create a case for ${firstCasePetitionerName}`, () => {
+  describe.only(`should create a case for ${firstCasePetitionerName}`, () => {
     it('should complete wizard step 1', () => {
       cy.injectAxe();
 

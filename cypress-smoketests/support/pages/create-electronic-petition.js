@@ -72,6 +72,8 @@ exports.goToWizardStep5 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-5');
 
+  cy.waitUntilSettled(50);
+
   cy.checkA11y('html', {
     rules: {
       region: { enabled: false },
@@ -98,6 +100,8 @@ exports.submitPetition = testData => {
 
 exports.goToDashboard = () => {
   cy.get('a#button-back-to-dashboard').click();
+
+  cy.waitUntilSettled(50);
 
   cy.checkA11y('html', {
     rules: {
