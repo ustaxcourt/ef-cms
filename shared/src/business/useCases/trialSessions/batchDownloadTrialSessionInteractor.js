@@ -19,7 +19,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 const batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  { trialSessionId, verifyFiles = false },
+  { trialSessionId },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -34,7 +34,7 @@ const batchDownloadTrialSessionInteractor = async (
       trialSessionId,
     });
 
-  let sessionCases = await applicationContext
+  let allSessionCases = await applicationContext
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
@@ -55,7 +55,7 @@ const batchDownloadTrialSessionInteractor = async (
     .replace(/\s/g, '_')
     .replace(/,/g, '');
 
-  sessionCases = sessionCases
+  const batchableSessionCases = allSessionCases
     .filter(
       caseToFilter =>
         caseToFilter.status !== CASE_STATUS_TYPES.closed &&
@@ -72,49 +72,22 @@ const batchDownloadTrialSessionInteractor = async (
       };
     });
 
-  for (const caseToBatch of sessionCases) {
-    const docketEntriesOnDocketRecord = caseToBatch.docketEntries.filter(
+  for (const caseToBatch of batchableSessionCases) {
+    const docketEntriesWithFileAttached = caseToBatch.docketEntries.filter(
       d => d.isOnDocketRecord && d.isFileAttached,
     );
 
-    const documentMap = docketEntriesOnDocketRecord.reduce((acc, doc) => {
-      acc[doc.docketEntryId] = doc;
-      return acc;
-    }, {});
-
-    for (const aDocketRecord of docketEntriesOnDocketRecord) {
-      let myDoc;
-      if (
-        aDocketRecord.docketEntryId &&
-        (myDoc = documentMap[aDocketRecord.docketEntryId])
-      ) {
-        // check that all file exists before continuing
-        if (verifyFiles) {
-          const isFileExists = await applicationContext
-            .getPersistenceGateway()
-            .isFileExists({
-              applicationContext,
-              key: aDocketRecord.docketEntryId,
-            });
-
-          if (!isFileExists) {
-            throw new Error(
-              `Batch Download Error: File ${aDocketRecord.docketEntryId} for case ${caseToBatch.docketNumber} does not exist!`,
-            );
-          }
-        }
-
-        const filename =
-          exports.generateValidDocketEntryFilename(aDocketRecord);
-        const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
-        s3Ids.push(myDoc.docketEntryId);
-        fileNames.push(pdfTitle);
-      }
+    for (const docketEntry of docketEntriesWithFileAttached) {
+      if (!docketEntry.docketEntryId) continue;
+      const filename = exports.generateValidDocketEntryFilename(docketEntry);
+      const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
+      s3Ids.push(docketEntry.docketEntryId);
+      fileNames.push(pdfTitle);
     }
   }
 
   let numberOfDocketRecordsGenerated = 0;
-  const numberOfDocketRecordsToGenerate = sessionCases.length;
+  const numberOfDocketRecordsToGenerate = batchableSessionCases.length;
   const numberOfFilesToBatch = numberOfDocketRecordsToGenerate + s3Ids.length;
 
   const onDocketRecordCreation = async docketNumber => {
@@ -159,7 +132,7 @@ const batchDownloadTrialSessionInteractor = async (
     extraFileNames.push(`${sessionCase.caseFolder}/0_Docket Record.pdf`);
   };
 
-  for (const sessionCase of sessionCases) {
+  for (const sessionCase of batchableSessionCases) {
     await generateDocumentAndDocketRecordForCase(sessionCase);
   }
 
@@ -223,7 +196,6 @@ const batchDownloadTrialSessionInteractor = async (
     onProgress,
     onUploadStart,
     s3Ids,
-    uploadToTempBucket: true,
     zipName,
   });
 
@@ -272,12 +244,11 @@ exports.generateValidDocketEntryFilename = ({
  */
 exports.batchDownloadTrialSessionInteractor = async (
   applicationContext,
-  { trialSessionId, verifyFiles = false },
+  { trialSessionId },
 ) => {
   try {
     await batchDownloadTrialSessionInteractor(applicationContext, {
       trialSessionId,
-      verifyFiles,
     });
   } catch (error) {
     const { userId } = applicationContext.getCurrentUser();
