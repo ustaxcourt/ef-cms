@@ -17,9 +17,9 @@ export const updateCaseCheckboxAction = ({ get, props, store }) => {
         ...consolidatedCase,
         checked: !consolidatedCase.checked,
       };
-    } else {
-      return consolidatedCase;
     }
+
+    return consolidatedCase;
   });
 
   store.set(state.caseDetail.consolidatedCases, consolidatedCases);
