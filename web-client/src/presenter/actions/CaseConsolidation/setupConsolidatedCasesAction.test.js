@@ -16,10 +16,37 @@ describe('primePropsForCanConsolidateAction', () => {
       },
     });
 
-    expect(result.output).toEqual({
-      caseDetail: '123',
-      caseToConsolidate: '345',
-      confirmSelection: false,
+    const mockCaseSinglePetitioner = MOCK_CASE.petitioners[0].name;
+    const mockCaseMultiplePetitioners =
+      MOCK_CASE_WITH_SECONDARY_OTHERS.petitioners[0].name +
+      ' & ' +
+      MOCK_CASE_WITH_SECONDARY_OTHERS.petitioners[1].name +
+      ' & ' +
+      MOCK_CASE_WITH_SECONDARY_OTHERS.petitioners[2].name +
+      ' & ' +
+      MOCK_CASE_WITH_SECONDARY_OTHERS.petitioners[3].name +
+      ' & ' +
+      MOCK_CASE_WITH_SECONDARY_OTHERS.petitioners[4].name +
+      ' & ' +
+      MOCK_CASE_WITH_SECONDARY_OTHERS.petitioners[5].name;
+
+    expect(result.state.caseDetail).toEqual({
+      ...MOCK_CASE,
+      consolidatedCases: [
+        {
+          ...MOCK_CASE,
+          checked: true,
+          formattedPetitioners: mockCaseSinglePetitioner,
+        },
+        {
+          ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+          checked: true,
+          formattedPetitioners: mockCaseMultiplePetitioners,
+        },
+      ],
     });
+
+    expect(result.state.initialEnabledCheckboxValue).toEqual(true);
+    expect(result.state.consolidatedCaseAllCheckbox).toEqual(true);
   });
 });
