@@ -1,14 +1,11 @@
-import { Button } from '../../ustc-ui/Button/Button';
 import {
-  // ALPHABETICALLY_ASCENDING,
-  // ALPHABETICALLY_DESCENDING,
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
   CHRONOLOGICALLY_ASCENDING,
   CHRONOLOGICALLY_DESCENDING,
 } from './sortConstants';
-import {
-  // ASCENDING,
-  DESCENDING,
-} from '../../presenter/presenterConstants';
+import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
+import { Button } from '../../ustc-ui/Button/Button';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -50,8 +47,34 @@ export const MessagesIndividualOutbox = connect(
                   Docket No.
                 </th>
               )}
-              <th className="small">Sent</th>
-              <th>Message</th>
+              {showSortableHeaders && (
+                <th className="small">
+                  <SortableColumnHeaderButton
+                    ascText={CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={DESCENDING}
+                    descText={CHRONOLOGICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="createdAt"
+                    title="Sent"
+                    onClickSequence={sortMessagesSequence}
+                  />
+                </th>
+              )}
+              {!showSortableHeaders && <th className="small">Sent</th>}
+              {showSortableHeaders && (
+                <th>
+                  <SortableColumnHeaderButton
+                    ascText={ALPHABETICALLY_ASCENDING}
+                    defaultSort={ASCENDING}
+                    descText={ALPHABETICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="subject"
+                    title="Message"
+                    onClickSequence={sortMessagesSequence}
+                  />
+                </th>
+              )}
+              {!showSortableHeaders && <th>Message</th>}
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
