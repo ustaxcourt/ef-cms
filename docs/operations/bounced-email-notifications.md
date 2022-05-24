@@ -2,7 +2,7 @@
 
 ## Problem
 
-Occasionally, service Email bounces and we may need to take programmatic action when such an event occurs. Specifically, if the bounce was the result of an email to the `IRS_SUPERUER_EMAIL` account, we need to take immediate action by alerting Court personnel and a distribution list.
+Occasionally, service Email bounces and we may need to take programmatic action when such an event occurs. Specifically, if the bounce was the result of an email to the `IRS_SUPERUSER_EMAIL` account, we need to take immediate action by alerting Court personnel and a distribution list.
 
 ## Solution
 
@@ -14,7 +14,7 @@ Each of these notifications get sent to an SNS Topic that is environment specifi
 
 A Lambda subscribed to that topic calls `handleBounceNotificationInteractor` to process each SNS message it receives.
 
-This interactor checks to see if the Bounced Email was to sent to the `IRS_SUPERUER_EMAIL` and whether or not it is has a "Permanent" `bounceType`. If so, it will trigger a POST call via the Application's HTTP Client to the webhook specified in the environment variable `SLACK_WEBHOOK_URL`. It will also send an Email to any email addresses specified via a comma-delimited string in `BOUNCE_ALERT_RECIPIENTS`.
+This interactor checks to see if the Bounced Email was to sent to the `IRS_SUPERUSER_EMAIL` and whether or not it is has a "Permanent" `bounceType`. If so, it will trigger a POST call via the Application's HTTP Client to the webhook specified in the environment variable `SLACK_WEBHOOK_URL`. It will also send an Email to any email addresses specified via a comma-delimited string in `BOUNCE_ALERT_RECIPIENTS`.
 
 ## Future Considerations
 
