@@ -43,6 +43,8 @@ exports.goToWizardStep2 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-2');
 
+  cy.waitUntilSettled();
+
   cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
@@ -118,6 +120,7 @@ exports.goToDashboard = () => {
   cy.injectAxe();
   cy.checkA11y('html', {
     rules: {
+      'color-contrast': { enabled: false },
       'nested-interactive': { enabled: false },
       region: { enabled: false },
     },
