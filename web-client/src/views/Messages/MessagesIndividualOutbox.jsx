@@ -1,19 +1,55 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import {
+  // ALPHABETICALLY_ASCENDING,
+  // ALPHABETICALLY_DESCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+} from './sortConstants';
+import {
+  // ASCENDING,
+  DESCENDING,
+} from '../../presenter/presenterConstants';
+import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const MessagesIndividualOutbox = connect(
-  { formattedMessages: state.formattedMessages.messages },
-  function MessagesIndividualOutbox({ formattedMessages }) {
+  {
+    formattedMessages: state.formattedMessages.messages,
+    showSortableHeaders: state.showSortableHeaders,
+    sortMessagesSequence: sequences.sortMessagesSequence,
+  },
+  function MessagesIndividualOutbox({
+    formattedMessages,
+    showSortableHeaders,
+    sortMessagesSequence,
+  }) {
+    const hasMessages = formattedMessages.length > 0;
+
     return (
       <>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              <th aria-label="Docket Number" className="small" colSpan="2">
-                Docket No.
-              </th>
+              {showSortableHeaders && (
+                <th aria-label="Docket Number" className="small" colSpan="2">
+                  <SortableColumnHeaderButton
+                    ascText={CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={DESCENDING}
+                    descText={CHRONOLOGICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="docketNumber"
+                    title="Docket No."
+                    onClickSequence={sortMessagesSequence}
+                  />
+                </th>
+              )}
+              {!showSortableHeaders && (
+                <th aria-label="Docket Number" className="small" colSpan="2">
+                  Docket No.
+                </th>
+              )}
               <th className="small">Sent</th>
               <th>Message</th>
               <th>Case Title</th>
