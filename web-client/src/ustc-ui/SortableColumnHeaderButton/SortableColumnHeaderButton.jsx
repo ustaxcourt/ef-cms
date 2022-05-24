@@ -64,12 +64,7 @@ const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
   let fontAwesomeIcon =
     direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';
 
-  let rotation;
-
-  if (!isActiveColumn) {
-    fontAwesomeIcon = 'exchange-alt';
-    // rotation = 90;
-  }
+  if (!isActiveColumn) fontAwesomeIcon = 'exchange-alt';
 
   return (
     <FontAwesomeIcon
@@ -77,7 +72,6 @@ const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
         isActiveColumn ? 'icon-sortable-header-active' : 'icon-sortable-header'
       }
       icon={fontAwesomeIcon}
-      rotation={rotation}
       title={title}
     />
   );
