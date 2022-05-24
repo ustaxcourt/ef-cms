@@ -1,5 +1,6 @@
 exports.navigateTo = username => {
   cy.login(username, '/');
+  cy.waitUntilSettled(50);
   cy.checkA11y('html', {
     rules: {
       //disabling this because app.jsx > AppComponent > CurrentPage components have headings
