@@ -13,18 +13,13 @@ import { state } from 'cerebral';
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const { CONTACT_TYPE_TITLES, SERVICE_INDICATOR_TYPES } =
     applicationContext.getConstants();
-  const caseDetail = get(state.caseDetail);
 
-  const formattedCase = applicationContext
-    .getUtilities()
-    .setServiceIndicatorsForCase({
-      ...get(state.caseDetail),
-    });
+  const formattedCaseDetail = get(state.formattedCaseDetail);
 
   const parties = {
-    petitioner: caseDetail.petitioners,
-    privatePractitioners: formattedCase.privatePractitioners,
-    respondent: formattedCase.irsPractitioners,
+    petitioner: formattedCaseDetail.petitioners,
+    privatePractitioners: formattedCaseDetail.privatePractitioners,
+    respondent: formattedCaseDetail.irsPractitioners,
   };
 
   const contactsNeedingPaperService = [];
@@ -52,7 +47,17 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     });
   });
 
+  let caseOrGroup = 'case';
+
+  if (
+    formattedCaseDetail.isLeadCase &&
+    formattedCaseDetail.condsolidatedCases.filter(c => c.checked).length > 1
+  ) {
+    caseOrGroup = 'group';
+  }
+
   return {
+    caseOrGroup,
     contactsNeedingPaperService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };

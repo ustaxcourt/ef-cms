@@ -65,7 +65,7 @@ export const ConfirmInitiateServiceModal = connect(
         {confirmInitiateServiceModalHelper.showPaperAlert && (
           <Hint exclamation fullWidth className="block">
             <div className="margin-bottom-1">
-              This case has parties receiving paper service:
+              This {$} has parties receiving paper service:
             </div>
             {confirmInitiateServiceModalHelper.contactsNeedingPaperService.map(
               contact => (

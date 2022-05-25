@@ -20,7 +20,8 @@ describe('confirmInitiateServiceModalHelper', () => {
   it('returns the expected contacts needed if someone needs paper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
-        caseDetail: {
+        form: {},
+        formattedCaseDetail: {
           irsPractitioners: [
             {
               name: 'Ms. Respondent Counsel',
@@ -50,6 +51,7 @@ describe('confirmInitiateServiceModalHelper', () => {
               countryType: COUNTRY_TYPES.DOMESTIC,
               name: 'Chelsea Hogan',
               postalCode: '33333',
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
               state: 'AL',
             },
           ],
@@ -62,7 +64,6 @@ describe('confirmInitiateServiceModalHelper', () => {
             },
           ],
         },
-        form: {},
       },
     });
 
@@ -83,7 +84,8 @@ describe('confirmInitiateServiceModalHelper', () => {
   it('returns the expected values if no contacts need paper service', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
-        caseDetail: {
+        form: {},
+        formattedCaseDetail: {
           irsPractitioners: [],
           isPaper: false,
           petitioners: [
@@ -102,7 +104,6 @@ describe('confirmInitiateServiceModalHelper', () => {
           ],
           privatePractitioners: [],
         },
-        form: {},
       },
     });
 
