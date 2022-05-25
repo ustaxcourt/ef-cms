@@ -13,16 +13,15 @@ import React from 'react';
 
 export const MessagesSectionCompleted = connect(
   {
-    formattedMessages: state.formattedMessages.completedMessages,
-    showSortableHeaders: state.showSortableHeaders,
+    formattedMessagesHelper: state.formattedMessages,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
   },
   function MessagesSectionCompleted({
-    formattedMessages,
-    showSortableHeaders,
+    formattedMessagesHelper,
     sortSectionMessagesSequence,
   }) {
-    const hasMessages = formattedMessages.length > 0;
+    const { completedMessages, showSortableHeaders } = formattedMessagesHelper;
+    const hasMessages = completedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">
@@ -79,48 +78,57 @@ export const MessagesSectionCompleted = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => {
-            return (
-              <tbody key={message.messageId}>
-                <tr key={message.messageId}>
-                  <td aria-hidden="true" className="focus-toggle" />
-                  <td className="message-queue-row small">
-                    {message.docketNumberWithSuffix}
-                  </td>
-                  <td className="message-queue-row small">
-                    <span className="no-wrap">
-                      {message.completedAtFormatted}
-                    </span>
-                  </td>
-                  <td className="message-queue-row">
-                    <div className="message-document-title">
-                      <Button
-                        link
-                        className="padding-0"
-                        href={message.messageDetailLink}
-                      >
-                        {message.subject}
-                      </Button>
-                    </div>
-
-                    <div className="message-document-detail">
-                      {message.message}
-                    </div>
-                  </td>
-                  <td className="message-queue-row">
-                    {message.completedMessage}
-                  </td>
-                  <td className="message-queue-row">{message.completedBy}</td>
-                  <td className="message-queue-row">
-                    {message.completedBySection}
-                  </td>
-                </tr>
-              </tbody>
-            );
-          })}
+          {completedMessages.map(message => (
+            <CompletedMessageRow
+              completedAtFormatted={message.completedAtFormatted}
+              completedBy={message.completedBy}
+              completedBySection={message.completedBySection}
+              completedMessage={message.completedMessage}
+              docketNumberWithSuffix={message.docketNumberWithSuffix}
+              key={message.messageId}
+              message={message.message}
+              messageDetailLink={message.messageDetailLink}
+              subject={message.subject}
+            />
+          ))}
         </table>
-        {formattedMessages.length === 0 && <div>There are no messages.</div>}
+        {!hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
 );
+
+const CompletedMessageRow = React.memo(function CompletedMessageRow({
+  completedAtFormatted,
+  completedBy,
+  completedBySection,
+  completedMessage,
+  docketNumberWithSuffix,
+  message,
+  messageDetailLink,
+  subject,
+}) {
+  return (
+    <tbody>
+      <tr>
+        <td aria-hidden="true" className="focus-toggle" />
+        <td className="message-queue-row small">{docketNumberWithSuffix}</td>
+        <td className="message-queue-row small">
+          <span className="no-wrap">{completedAtFormatted}</span>
+        </td>
+        <td className="message-queue-row">
+          <div className="message-document-title">
+            <Button link className="padding-0" href={messageDetailLink}>
+              {subject}
+            </Button>
+          </div>
+
+          <div className="message-document-detail">{message}</div>
+        </td>
+        <td className="message-queue-row">{completedMessage}</td>
+        <td className="message-queue-row">{completedBy}</td>
+        <td className="message-queue-row">{completedBySection}</td>
+      </tr>
+    </tbody>
+  );
+});
