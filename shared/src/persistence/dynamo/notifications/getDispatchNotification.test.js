@@ -34,4 +34,21 @@ describe('getDispatchNotification', () => {
     );
     expect(result).toEqual([]);
   });
+
+  it('uses the current date time as a way to filter records out with a lower time to live', async () => {
+    await getDispatchNotification({
+      applicationContext,
+      topic: 'test-topic',
+    });
+
+    const anHourAgo = Date.now() / 1000 - 3600;
+    expect(
+      applicationContext.getDocumentClient().query.mock.calls[0][0]
+        .ExpressionAttributeValues[':currentEpoch'],
+    ).toBeGreaterThan(anHourAgo);
+    expect(
+      applicationContext.getDocumentClient().query.mock.calls[0][0]
+        .FilterExpression,
+    ).toBe('#ttl >= :currentEpoch');
+  });
 });
