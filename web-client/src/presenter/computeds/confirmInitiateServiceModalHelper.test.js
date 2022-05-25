@@ -141,6 +141,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
+          contactId: "make me unique from the lead case's",
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
@@ -155,13 +156,14 @@ describe('confirmInitiateServiceModalHelper', () => {
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
+          contactId: 'really, I want this to be unique from the above',
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
     };
     formattedCaseDetail.isLeadCase = true;
 
-    it('should say case if only lead case is checked', () => {
+    it('should say case if only lead case is checked & have only one contact', () => {
       const nonLeadCase = {
         ...SECOND_CASE,
         checked: false,
@@ -179,7 +181,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.caseOrGroup).toEqual('case');
     });
 
-    it('should say group if any non-lead case is checked', () => {
+    it('should say group if any non-lead case is checked & have the correct number of contacts', () => {
       const firstNonLeadCase = {
         ...SECOND_CASE,
         checked: false,
@@ -201,9 +203,45 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      // TODO: make this check for more than one again
-      expect(result.contactsNeedingPaperService.length).toEqual(1);
+      expect(result.contactsNeedingPaperService.length).toEqual(2);
       expect(result.caseOrGroup).toEqual('group');
+    });
+
+    it('should remove duplicated paper contacts', () => {
+      const firstNonLeadCase = {
+        ...SECOND_CASE,
+        checked: false,
+        petitioners: [
+          {
+            ...SECOND_CASE.petitioners[0],
+            contactId: LEAD_CASE.petitioners[0].contactId, //have the same contactId as the lead case
+          },
+        ],
+      };
+      const secondNonLeadCase = {
+        ...THIRD_CASE,
+        checked: true,
+        petitioners: [
+          {
+            ...THIRD_CASE.petitioners[0],
+            contactId: LEAD_CASE.petitioners[0].contactId, //have the same contactId as the lead case
+          },
+        ],
+      };
+      formattedCaseDetail.consolidatedCases = [
+        LEAD_CASE,
+        firstNonLeadCase,
+        secondNonLeadCase,
+      ];
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          form: {},
+          formattedCaseDetail,
+        },
+      });
+
+      expect(result.contactsNeedingPaperService.length).toEqual(1);
     });
   });
 });
