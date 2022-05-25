@@ -54,15 +54,26 @@ export const getFormattedMessages = ({
   messages,
   tableSort,
 }) => {
+  const now = applicationContext.getUtilities().formatNow('MMDDYY');
+  const yesterday = applicationContext.getUtilities().formatDateString(
+    applicationContext.getUtilities().calculateISODate({
+      howMuch: -1,
+    }),
+    'MMDDYY',
+  );
   const formattedMessages = messages.map(message => ({
     ...message,
     completedAtFormatted: formatDateIfToday(
       message.completedAt,
       applicationContext,
+      now,
+      yesterday,
     ),
     createdAtFormatted: formatDateIfToday(
       message.createdAt,
       applicationContext,
+      now,
+      yesterday,
     ),
     messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
   }));
