@@ -125,6 +125,12 @@ describe('confirmInitiateServiceModalHelper', () => {
       checkboxDisabled: true,
       checked: true,
       leadDocketNumber: MOCK_CASE.docketNumber,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
     };
 
     const customizedDocketNumberOne = '1337-42';
@@ -132,6 +138,12 @@ describe('confirmInitiateServiceModalHelper', () => {
       ...MOCK_CASE,
       docketNumber: customizedDocketNumberOne,
       leadDocketNumber: MOCK_CASE.docketNumber,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
     };
     formattedCaseDetail.isLeadCase = true;
 
@@ -140,6 +152,12 @@ describe('confirmInitiateServiceModalHelper', () => {
       ...MOCK_CASE,
       docketNumber: customizedDocketNumberTwo,
       leadDocketNumber: MOCK_CASE.docketNumber,
+      petitioners: [
+        {
+          ...MOCK_CASE.petitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
     };
     formattedCaseDetail.isLeadCase = true;
 
@@ -156,7 +174,8 @@ describe('confirmInitiateServiceModalHelper', () => {
           formattedCaseDetail,
         },
       });
-      expect(result.contactsNeedingPaperService.length).toEqual(0);
+
+      expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('case');
     });
 
@@ -182,6 +201,8 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
+      // TODO: make this check for more than one again
+      expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('group');
     });
   });
