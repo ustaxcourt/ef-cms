@@ -62,7 +62,7 @@ describe('confirmInitiateServiceModalHelper', () => {
     ],
   };
 
-  it('returns the expected contacts needed if someone needs paper', () => {
+  it('returns the expected contacts needed if someone needs paper without consolidated cases', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
         form: {},
