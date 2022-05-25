@@ -7,7 +7,8 @@ describe('updateCaseCheckboxAction', () => {
     const unchangedCheckValue = true;
     const changedCheckValue = false;
 
-    const customizedDocketNumber = '1337-42';
+    const customizedDocketNumberOne = '1337-42';
+    const customizedDocketNumberTwo = '1234-42';
 
     const result = await runAction(updateCaseCheckboxAction, {
       props: {
@@ -20,11 +21,19 @@ describe('updateCaseCheckboxAction', () => {
             {
               ...MOCK_CASE,
               checked: unchangedCheckValue,
-              docketNumber: customizedDocketNumber,
+              docketNumber: customizedDocketNumberOne,
+              leadDocketNumber: customizedDocketNumberOne,
             },
             {
               ...MOCK_CASE,
               checked: changedCheckValue,
+              leadDocketNumber: customizedDocketNumberOne,
+            },
+            {
+              ...MOCK_CASE,
+              checked: unchangedCheckValue,
+              docketNumber: customizedDocketNumberTwo,
+              leadDocketNumber: customizedDocketNumberOne,
             },
           ],
         },
@@ -37,11 +46,66 @@ describe('updateCaseCheckboxAction', () => {
         {
           ...MOCK_CASE,
           checked: unchangedCheckValue,
-          docketNumber: customizedDocketNumber,
+          docketNumber: customizedDocketNumberOne,
+          leadDocketNumber: customizedDocketNumberOne,
         },
         {
           ...MOCK_CASE,
           checked: !changedCheckValue,
+          leadDocketNumber: customizedDocketNumberOne,
+        },
+        {
+          ...MOCK_CASE,
+          checked: unchangedCheckValue,
+          docketNumber: customizedDocketNumberTwo,
+          leadDocketNumber: customizedDocketNumberOne,
+        },
+      ],
+    });
+  });
+
+  it('should not flip the checked value of the lead case', async () => {
+    const unchangedCheckValue = true;
+
+    const customizedDocketNumberOne = '1337-42';
+
+    const result = await runAction(updateCaseCheckboxAction, {
+      props: {
+        docketNumber: customizedDocketNumberOne,
+      },
+      state: {
+        caseDetail: {
+          ...MOCK_CASE,
+          consolidatedCases: [
+            {
+              ...MOCK_CASE,
+              checked: unchangedCheckValue,
+              docketNumber: customizedDocketNumberOne,
+              leadDocketNumber: customizedDocketNumberOne,
+            },
+            {
+              ...MOCK_CASE,
+              checked: unchangedCheckValue,
+              leadDocketNumber: customizedDocketNumberOne,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.state.caseDetail).toEqual({
+      ...MOCK_CASE,
+      consolidatedCases: [
+        {
+          ...MOCK_CASE,
+          checked: unchangedCheckValue,
+          docketNumber: customizedDocketNumberOne,
+          leadDocketNumber: customizedDocketNumberOne,
+        },
+        {
+          ...MOCK_CASE,
+          checked: unchangedCheckValue,
+          leadDocketNumber: customizedDocketNumberOne,
         },
       ],
     });
