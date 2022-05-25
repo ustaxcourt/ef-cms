@@ -20,6 +20,9 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   if (formattedCaseDetail.consolidatedCases) {
     parties = formattedCaseDetail.consolidatedCases.reduce(
       (aggregatedParties, aCase) => {
+        if (!aCase.checked) {
+          return aggregatedParties;
+        }
         aggregatedParties.petitioner = aggregatedParties.petitioner.concat(
           aCase.petitioners,
         );
