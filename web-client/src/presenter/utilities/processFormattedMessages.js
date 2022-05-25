@@ -78,9 +78,7 @@ export const getFormattedMessages = ({
     messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
   }));
 
-  console.time('sortFormattedMessages');
   const sortedMessages = sortFormattedMessages(formattedMessages, tableSort);
-  console.timeEnd('sortFormattedMessages');
 
   const inProgressMessages = sortedMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,
