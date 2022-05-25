@@ -156,7 +156,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           formattedCaseDetail,
         },
       });
-
+      expect(result.contactsNeedingPaperService.length).toEqual(0);
       expect(result.caseOrGroup).toEqual('case');
     });
 
