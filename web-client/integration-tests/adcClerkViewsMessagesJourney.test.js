@@ -257,6 +257,22 @@ describe('ADC Clerk Views Messages Journey', () => {
 
       expect(isTableHeaderClickable).toBe(false);
     });
+    it('verify the messages in sent box are sorted from newest to oldest non-ADC users', async () => {
+      await cerebralTest.runSequence('gotoMessagesSequence', {
+        box: 'outbox',
+        queue: messageQueue,
+      });
+
+      const { messages } = runCompute(formattedMessagesComputed, {
+        state: cerebralTest.getState(),
+      });
+
+      const newSortedMessages = [...messages].sort((a, b) =>
+        b.createdAt.localeCompare(a.createdAt),
+      );
+
+      expect(messages).toEqual(newSortedMessages);
+    });
   });
 });
 

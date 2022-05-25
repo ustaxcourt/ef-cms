@@ -77,7 +77,6 @@ describe('formattedMessages', () => {
         hasMessages: true,
         messageBoxToDisplay: {
           box: 'outbox',
-          section: 'section',
         },
         messages: [
           {
@@ -134,7 +133,6 @@ describe('formattedMessages', () => {
       state: {
         messageBoxToDisplay: {
           box: 'inbox',
-          section: 'section',
         },
         user: {
           role: 'adc',
