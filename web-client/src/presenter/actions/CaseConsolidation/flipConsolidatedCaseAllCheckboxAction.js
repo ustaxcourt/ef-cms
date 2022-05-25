@@ -1,7 +1,10 @@
 import { state } from 'cerebral';
-// TODO
+
 /**
- *
+ * Negates consolidatedCaseAllCheckbox and:
+ *   enables/disables non-lead checkboxes as appropriate
+ *   checks/unchecks non-lead cases as appropriate
+ *   sets tooltip on lead case if non-lead cases are enabled
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the Cerebral get object

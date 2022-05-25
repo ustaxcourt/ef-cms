@@ -35,13 +35,17 @@ describe('setupConsolidatedCasesAction', () => {
       consolidatedCases: [
         {
           ...MOCK_CASE,
+          checkboxDisabled: true,
           checked: true,
           formattedPetitioners: mockCaseSinglePetitioner,
+          tooltip: '',
         },
         {
           ...MOCK_CASE_WITH_SECONDARY_OTHERS,
+          checkboxDisabled: true,
           checked: true,
           formattedPetitioners: mockCaseMultiplePetitioners,
+          tooltip: '',
         },
       ],
     });
