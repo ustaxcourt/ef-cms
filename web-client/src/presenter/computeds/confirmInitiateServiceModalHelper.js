@@ -16,11 +16,32 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const formattedCaseDetail = get(state.formattedCaseDetail);
 
-  const parties = {
-    petitioner: formattedCaseDetail.petitioners,
-    privatePractitioners: formattedCaseDetail.privatePractitioners,
-    respondent: formattedCaseDetail.irsPractitioners,
-  };
+  let parties;
+  if (formattedCaseDetail.consolidatedCases) {
+    parties = formattedCaseDetail.consolidatedCases.reduce(
+      (aggregatedParties, aCase) => {
+        aggregatedParties.petitioner = aggregatedParties.petitioner.concat(
+          aCase.petitioners,
+        );
+        aggregatedParties.privatePractitioners =
+          aggregatedParties.privatePractitioners.concat(
+            aCase.privatePractitioners,
+          );
+        aggregatedParties.respondent = aggregatedParties.respondent.concat(
+          aCase.respondent,
+        );
+
+        return aggregatedParties;
+      },
+      { petitioner: [], privatePractitioners: [], respondent: [] },
+    );
+  } else {
+    parties = {
+      petitioner: formattedCaseDetail.petitioners,
+      privatePractitioners: formattedCaseDetail.privatePractitioners,
+      respondent: formattedCaseDetail.irsPractitioners,
+    };
+  }
 
   const contactsNeedingPaperService = [];
 
