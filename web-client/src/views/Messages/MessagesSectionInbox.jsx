@@ -13,14 +13,15 @@ import React from 'react';
 
 export const MessagesSectionInbox = connect(
   {
-    formattedMessagesHelper: state.formattedMessages,
+    messages: state.formattedMessages.messages,
+    showSortableHeaders: state.showSortableHeaders,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
   },
   function MessagesSectionInbox({
-    formattedMessagesHelper,
+    messages,
+    showSortableHeaders,
     sortSectionMessagesSequence,
   }) {
-    const { messages, showSortableHeaders } = formattedMessagesHelper;
     const hasMessages = messages.length > 0;
 
     return (
