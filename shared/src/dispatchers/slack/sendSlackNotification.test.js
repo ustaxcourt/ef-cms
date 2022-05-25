@@ -34,7 +34,7 @@ describe('sendSlackNotification', () => {
     );
   });
 
-  it('sends checks persistence to see if we have recently messaged the specified topic', async () => {
+  it('should check persistence to see if we have recently messaged the specified topic', async () => {
     await sendSlackNotification({
       applicationContext,
       text: 'How about now?',
