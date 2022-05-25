@@ -13,10 +13,12 @@ export const setupConsolidatedCasesAction = ({ get, store }) => {
   consolidatedCases = consolidatedCases.map(consolidatedCase => {
     return {
       ...consolidatedCase,
+      checkboxDisabled: true,
       checked: true,
       formattedPetitioners: consolidatedCase.petitioners
         .map(ptr => ptr.name)
         .join(' & '),
+      tooltip: '',
     };
   });
 
