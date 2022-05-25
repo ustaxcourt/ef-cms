@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the Cerebral store object
  */
 export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
-  const consolidatedCaseAllCheckbox = get(state.consolidatedCaseAllCheckbox);
+  const allCheckboxPreviousState = get(state.consolidatedCaseAllCheckbox);
 
   let consolidatedCases = get(state.caseDetail.consolidatedCases);
 
@@ -19,18 +19,26 @@ export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
     );
 
     if (isLeadCase) {
+      const LEAD_CASE_TOOLTIP = 'Lead case cannot be unselected';
+      const displayedTooltip = allCheckboxPreviousState
+        ? LEAD_CASE_TOOLTIP
+        : '';
       return {
         ...consolidatedCase,
+        checkboxDisabled: true,
         checked: true,
+        tooltip: displayedTooltip,
       };
     }
 
     return {
       ...consolidatedCase,
-      checked: !consolidatedCaseAllCheckbox,
+      checkboxDisabled: !allCheckboxPreviousState,
+      checked: !allCheckboxPreviousState,
+      tooltip: '',
     };
   });
 
-  store.set(state.consolidatedCaseAllCheckbox, !consolidatedCaseAllCheckbox);
+  store.set(state.consolidatedCaseAllCheckbox, !allCheckboxPreviousState);
   store.set(state.caseDetail.consolidatedCases, consolidatedCases);
 };
