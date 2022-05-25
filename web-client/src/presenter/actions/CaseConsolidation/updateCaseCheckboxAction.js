@@ -12,7 +12,10 @@ export const updateCaseCheckboxAction = ({ get, props, store }) => {
   let consolidatedCases = get(state.caseDetail.consolidatedCases);
 
   consolidatedCases = consolidatedCases.map(consolidatedCase => {
-    if (consolidatedCase.docketNumber === props.docketNumber) {
+    if (
+      consolidatedCase.docketNumber === props.docketNumber &&
+      props.docketNumber !== consolidatedCase.leadDocketNumber
+    ) {
       return {
         ...consolidatedCase,
         checked: !consolidatedCase.checked,
