@@ -4,6 +4,7 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from './confirmInitiateServiceModalHelper';
 import { runCompute } from 'cerebral/test';
@@ -17,57 +18,60 @@ describe('confirmInitiateServiceModalHelper', () => {
     applicationContext,
   );
 
+  const FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES = {
+    irsPractitioners: [
+      {
+        name: 'Ms. Respondent Counsel',
+        role: ROLES.irsPractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    ],
+    isPaper: false,
+    petitioners: [
+      {
+        address1: '609 East Cowley Parkway',
+        address2: 'Ullamco quibusdam ea',
+        address3: 'Consectetur quos do',
+        city: 'asdf',
+        contactId: mockContactId,
+        contactType: CONTACT_TYPES.primary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        email: 'petitioner@example.com',
+        name: 'Callie Bullock',
+        postalCode: '33333',
+        state: 'AK',
+      },
+      {
+        address1: 'asdf',
+        city: 'asadf',
+        contactType: CONTACT_TYPES.secondary,
+        countryType: COUNTRY_TYPES.DOMESTIC,
+        name: 'Chelsea Hogan',
+        postalCode: '33333',
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        state: 'AL',
+      },
+    ],
+    privatePractitioners: [
+      {
+        name: 'Ms. Private Counsel',
+        representing: [mockContactId],
+        role: ROLES.privatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    ],
+  };
+
   it('returns the expected contacts needed if someone needs paper', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
         form: {},
-        formattedCaseDetail: {
-          irsPractitioners: [
-            {
-              name: 'Ms. Respondent Counsel',
-              role: ROLES.irsPractitioner,
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-            },
-          ],
-          isPaper: false,
-          petitioners: [
-            {
-              address1: '609 East Cowley Parkway',
-              address2: 'Ullamco quibusdam ea',
-              address3: 'Consectetur quos do',
-              city: 'asdf',
-              contactId: mockContactId,
-              contactType: CONTACT_TYPES.primary,
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              email: 'petitioner@example.com',
-              name: 'Callie Bullock',
-              postalCode: '33333',
-              state: 'AK',
-            },
-            {
-              address1: 'asdf',
-              city: 'asadf',
-              contactType: CONTACT_TYPES.secondary,
-              countryType: COUNTRY_TYPES.DOMESTIC,
-              name: 'Chelsea Hogan',
-              postalCode: '33333',
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-              state: 'AL',
-            },
-          ],
-          privatePractitioners: [
-            {
-              name: 'Ms. Private Counsel',
-              representing: [mockContactId],
-              role: ROLES.privatePractitioner,
-              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-            },
-          ],
-        },
+        formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
       },
     });
 
     expect(result).toEqual({
+      caseOrGroup: 'case',
       contactsNeedingPaperService: [
         { name: 'Chelsea Hogan, Petitioner' },
         {
@@ -108,8 +112,77 @@ describe('confirmInitiateServiceModalHelper', () => {
     });
 
     expect(result).toEqual({
+      caseOrGroup: 'case',
       contactsNeedingPaperService: [],
       showPaperAlert: false,
+    });
+  });
+
+  describe('should handle consolidated cases', () => {
+    const formattedCaseDetail = { ...FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES };
+    const LEAD_CASE = {
+      ...MOCK_CASE,
+      checkboxDisabled: true,
+      checked: true,
+      leadDocketNumber: MOCK_CASE.docketNumber,
+    };
+
+    const customizedDocketNumberOne = '1337-42';
+    const SECOND_CASE = {
+      ...MOCK_CASE,
+      docketNumber: customizedDocketNumberOne,
+      leadDocketNumber: MOCK_CASE.docketNumber,
+    };
+    formattedCaseDetail.isLeadCase = true;
+
+    const customizedDocketNumberTwo = '1234-42';
+    const THIRD_CASE = {
+      ...MOCK_CASE,
+      docketNumber: customizedDocketNumberTwo,
+      leadDocketNumber: MOCK_CASE.docketNumber,
+    };
+    formattedCaseDetail.isLeadCase = true;
+
+    it('should say case if only lead case is checked', () => {
+      const nonLeadCase = {
+        ...SECOND_CASE,
+        checked: false,
+      };
+      formattedCaseDetail.consolidatedCases = [LEAD_CASE, nonLeadCase];
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          form: {},
+          formattedCaseDetail,
+        },
+      });
+
+      expect(result.caseOrGroup).toEqual('case');
+    });
+
+    it('should say group if any non-lead case is checked', () => {
+      const firstNonLeadCase = {
+        ...SECOND_CASE,
+        checked: false,
+      };
+      const secondNonLeadCase = {
+        ...THIRD_CASE,
+        checked: true,
+      };
+      formattedCaseDetail.consolidatedCases = [
+        LEAD_CASE,
+        firstNonLeadCase,
+        secondNonLeadCase,
+      ];
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          form: {},
+          formattedCaseDetail,
+        },
+      });
+
+      expect(result.caseOrGroup).toEqual('group');
     });
   });
 });

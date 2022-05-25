@@ -51,7 +51,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   if (
     formattedCaseDetail.isLeadCase &&
-    formattedCaseDetail.condsolidatedCases.filter(c => c.checked).length > 1
+    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
   ) {
     caseOrGroup = 'group';
   }
