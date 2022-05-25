@@ -27,4 +27,21 @@ describe('saveDispatchNotification', () => {
       applicationContext: expect.anything(),
     });
   });
+
+  it('adds five minutes to the current time to determine the ttl value for this record', async () => {
+    const fiveMinutesFromNow = Math.floor(Date.now() / 1000) + 5 * 60;
+    const sixMinutesFromNow = Math.floor(Date.now() / 1000) + 6 * 60;
+
+    await saveDispatchNotification({
+      applicationContext,
+      topic: 'test-topic',
+    });
+
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0].Item.ttl,
+    ).toBeGreaterThanOrEqual(fiveMinutesFromNow);
+    expect(
+      applicationContext.getDocumentClient().put.mock.calls[0][0].Item.ttl,
+    ).toBeLessThan(sixMinutesFromNow);
+  });
 });
