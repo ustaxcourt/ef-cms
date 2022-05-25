@@ -14,15 +14,16 @@ import React from 'react';
 export const MessagesSectionInbox = connect(
   {
     formattedMessages: state.formattedMessages.messages,
+    hasMessages: state.formattedMessages.hasMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesSectionInbox({
     formattedMessages,
+    hasMessages,
     showSortableHeaders,
     sortMessagesSequence,
   }) {
-    const hasMessages = formattedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">

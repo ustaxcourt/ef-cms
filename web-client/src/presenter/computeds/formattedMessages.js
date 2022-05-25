@@ -19,8 +19,11 @@ export const formattedMessages = (get, applicationContext) => {
     messages.reverse();
   }
 
+  const hasMessages = messages.length > 0;
+
   return {
     completedMessages,
+    hasMessages,
     messages,
   };
 };

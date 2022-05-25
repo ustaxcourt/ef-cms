@@ -14,15 +14,16 @@ import React from 'react';
 export const MessagesSectionCompleted = connect(
   {
     formattedMessages: state.formattedMessages.completedMessages,
+    hasMessages: state.formattedMessages.hasMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesSectionCompleted({
     formattedMessages,
+    hasMessages,
     showSortableHeaders,
     sortMessagesSequence,
   }) {
-    const hasMessages = formattedMessages.length > 0;
     return (
       <>
         <table className="usa-table ustc-table subsection">

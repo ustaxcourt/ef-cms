@@ -14,16 +14,16 @@ import React from 'react';
 export const MessagesIndividualOutbox = connect(
   {
     formattedMessages: state.formattedMessages.messages,
+    hasMessages: state.formattedMessages.hasMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesIndividualOutbox({
     formattedMessages,
+    hasMessages,
     showSortableHeaders,
     sortMessagesSequence,
   }) {
-    const hasMessages = formattedMessages.length > 0;
-
     return (
       <>
         <table className="usa-table ustc-table subsection">
