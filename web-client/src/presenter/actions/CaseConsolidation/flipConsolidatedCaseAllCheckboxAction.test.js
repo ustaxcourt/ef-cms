@@ -5,8 +5,10 @@ import { runAction } from 'cerebral/test';
 describe('flipConsolidatedCaseAllCheckboxAction', () => {
   const LEAD_CASE = {
     ...MOCK_CASE,
+    checkboxDisabled: true,
     checked: true,
     leadDocketNumber: MOCK_CASE.docketNumber,
+    tooltip: '',
   };
 
   const customizedDocketNumber = '1337-42';
@@ -14,6 +16,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
     ...MOCK_CASE,
     docketNumber: customizedDocketNumber,
     leadDocketNumber: MOCK_CASE.docketNumber,
+    tooltip: '',
   };
 
   it("should flip the non-lead cases' checked states", async () => {
@@ -41,13 +44,15 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
         LEAD_CASE,
         {
           ...SECOND_CASE,
+          checkboxDisabled: true,
           checked: !changedCheckValue,
+          tooltip: '',
         },
       ],
     });
   });
 
-  it('should set checked to true for all cases when all checkbox is set to checked', async () => {
+  it('should set checked to true for all cases & disable all checkboxes when consolidatedCaseAllCheckbox is set to checked', async () => {
     const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       state: {
         caseDetail: {
@@ -59,6 +64,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
             },
             {
               ...SECOND_CASE,
+              checkboxDisabled: false,
               checked: false,
             },
           ],
@@ -72,17 +78,19 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
       consolidatedCases: [
         {
           ...LEAD_CASE,
+          checkboxDisabled: true,
           checked: true,
         },
         {
           ...SECOND_CASE,
+          checkboxDisabled: true,
           checked: true,
         },
       ],
     });
   });
 
-  it('should only have lead case checked when all checkbox is set to unchecked', async () => {
+  it('should only have lead case checked & all sub-cases are enabled & lead case is disabled & lead case as a tooltip when consolidatedCaseAllCheckbox is set to unchecked', async () => {
     const result = await runAction(flipConsolidatedCaseAllCheckboxAction, {
       state: {
         caseDetail: {
@@ -90,10 +98,12 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
           consolidatedCases: [
             {
               ...LEAD_CASE,
+              checkboxDisabled: true,
               checked: true,
             },
             {
               ...SECOND_CASE,
+              checkboxDisabled: true,
               checked: true,
             },
           ],
@@ -107,10 +117,13 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
       consolidatedCases: [
         {
           ...LEAD_CASE,
+          checkboxDisabled: true,
           checked: true,
+          tooltip: 'Lead case cannot be unselected',
         },
         {
           ...SECOND_CASE,
+          checkboxDisabled: false,
           checked: false,
         },
       ],
