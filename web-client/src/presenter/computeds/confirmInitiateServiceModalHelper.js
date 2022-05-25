@@ -1,5 +1,6 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
+import { uniqBy } from 'lodash';
 
 /**
  * returns computed values for the confirm initiate service modal
@@ -38,6 +39,12 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
       },
       { petitioner: [], privatePractitioners: [], respondent: [] },
     );
+    parties.petitioner = uniqBy(parties.petitioner, 'contactId');
+    parties.privatePractitioners = uniqBy(
+      parties.privatePractitioners,
+      'contactId',
+    );
+    parties.respondent = uniqBy(parties.respondent, 'contactId');
   } else {
     parties = {
       petitioner: formattedCaseDetail.petitioners,
