@@ -64,7 +64,10 @@ const getFontAwesomeIcon = ({ direction, title }, isActiveColumn) => {
   let fontAwesomeIcon =
     direction === DESCENDING ? 'long-arrow-alt-down' : 'long-arrow-alt-up';
 
-  if (!isActiveColumn) fontAwesomeIcon = 'exchange-alt';
+  if (!isActiveColumn) {
+    fontAwesomeIcon = 'exchange-alt';
+    title = '';
+  }
 
   return (
     <FontAwesomeIcon
