@@ -596,6 +596,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: 'Notice of Change to Remote Proceeding',
     eventCode: 'NORP',
   },
+  noticeOfChangeToInPersonProceeding: {
+    documentTitle: 'Notice of Change to In Person Proceeding',
+    documentType: 'Notice of Change to In Person Proceeding',
+    eventCode: 'NOIP',
+  },
   noticeOfTrial: {
     documentTitle: 'Notice of Trial on [Date] at [Time]',
     documentType: 'Notice of Trial',
@@ -615,6 +620,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentTitle: SPTO_DOCUMENT.documentTitle,
     documentType: SPTO_DOCUMENT.documentType,
     eventCode: SPTO_DOCUMENT.eventCode,
+  },
+  noticeOfChangeOfTrialJudge: {
+    documentTitle: 'Notice of Change of Trial Judge',
+    documentType: 'Notice of Change of Trial Judge',
+    eventCode: 'NOT',
   },
 };
 
