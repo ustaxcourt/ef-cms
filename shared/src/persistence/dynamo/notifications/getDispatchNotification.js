@@ -3,12 +3,15 @@ const { query } = require('../../dynamodbClientService');
 /**
  * getDispatchNotification
  *
- * @param {object} providers
+ * Uses a filter to retrieve only the information where `ttl` is greater than currentEpoch;
+ * AWS doesn't remove those records for 24-48 hours after ttl has expired
+ *
+ * @param {object} providers The providers object
  * @param {object} providers.applicationContext the application context
  * @param {string} providers.topic the topic of the dispatch being sent
  * @returns {array} an array of the results returned by the query
  */
-exports.getDispatchNotification = async ({ applicationContext, topic }) =>
+exports.getDispatchNotification = ({ applicationContext, topic }) =>
   query({
     ExpressionAttributeNames: {
       '#pk': 'pk',
@@ -16,7 +19,7 @@ exports.getDispatchNotification = async ({ applicationContext, topic }) =>
       '#ttl': 'ttl',
     },
     ExpressionAttributeValues: {
-      ':currentEpoch': Date.now() / 1000,
+      ':currentEpoch': Date.now() / 1000, // time to live
       ':pk': 'dispatch-notification',
       ':sk': topic,
     },
