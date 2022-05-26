@@ -60,13 +60,12 @@ export const getFormattedMessages = ({
   tableSort,
   cacheKey = applicationContext.getUniqueId(),
 }) => {
+  // We cache these results because recalculating these dates takes a lot of time.
+  // this cache is cleared from the resetCacheKeyAction whenever a user changes their displayed
+  // queue & section type.
   if (cacheKey !== lastCacheKey) {
-    console.log(
-      'getFormattedMessages: cache miss, last key: ',
-      lastCacheKey,
-      'current key: ',
-      cacheKey,
-    );
+    // we calculate these outside of the .map function because calling them 3000 times (ADC User)
+    // takes a lot of time due to the nature of doing string / date logic.
     const now = applicationContext.getUtilities().formatNow('MMDDYY');
     const yesterday = applicationContext.getUtilities().formatDateString(
       applicationContext.getUtilities().calculateISODate({
