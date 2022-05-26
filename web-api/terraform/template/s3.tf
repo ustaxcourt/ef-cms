@@ -35,6 +35,32 @@ resource "aws_s3_bucket" "documents_us_east_1" {
   }
 }
 
+resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
+  count = var.environment == "prod" ? 1 : 0
+  bucket = aws_s3_bucket.documents_us_east_1.bucket
+  policy = data.aws_iam_policy_document.allow_access_for_glue_job.json
+}
+
+data "aws_iam_policy_document" "allow_access_for_glue_job" {
+  statement {
+    principals {
+      type        = "AWS"
+      identifiers = ["arn:aws:iam::${var.prod_env_account_id}:root"]
+    }
+
+    actions = [
+      "s3:GetObject",
+      "s3:GetObjectTagging",
+      "s3:ListBucket",
+    ]
+
+    resources = [
+      "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1",
+      "arn:aws:s3:::${var.dns_domain}-documents-${var.environment}-us-east-1/*",
+    ]
+  }
+}
+
 resource "aws_s3_bucket_public_access_block" "block_documents_east" {
   bucket = aws_s3_bucket.documents_us_east_1.id
 
