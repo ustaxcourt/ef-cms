@@ -9,12 +9,21 @@ describe('resetCacheKeyAction', () => {
   });
 
   it('should set a new cache key every call', async () => {
-    const { state } = await runAction(resetCacheKeyAction, {
+    let { state } = await runAction(resetCacheKeyAction, {
       modules: { presenter },
       state: {
         messageCacheKey: '',
       },
     });
-    expect(state.messageCacheKey).toBeDefined();
+    const lastCacheKey = state.messageCacheKey;
+    expect(lastCacheKey).toBeDefined();
+    const { state: newState } = await runAction(resetCacheKeyAction, {
+      modules: { presenter },
+      state: {
+        messageCacheKey: '',
+      },
+    });
+
+    expect(lastCacheKey).not.toEqual(newState);
   });
 });
