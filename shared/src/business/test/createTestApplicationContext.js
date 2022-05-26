@@ -195,6 +195,7 @@ const { getCropBox } = require('../../../src/business/utilities/getCropBox');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { getTextByCount } = require('../utilities/getTextByCount');
+const { getUserIdForNote } = require('../useCaseHelper/getUserIdForNote');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
@@ -424,6 +425,8 @@ const createTestApplicationContext = ({ user } = {}) => {
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),
+    getJudgeInSectionHelper: jest.fn(),
+    getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
@@ -503,6 +506,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChambersSectionsLabels: jest
       .fn()
       .mockImplementation(getChambersSectionsLabels),
+    getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest
       .fn()
@@ -538,6 +542,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
+    saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setExpiresAt: jest.fn(),
@@ -596,9 +601,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
+    getBounceAlertRecipients: jest.fn(),
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
-    getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
@@ -636,6 +641,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
+      sendSlackNotification: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
@@ -670,6 +676,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: emptyAppContextProxy,
+    getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
