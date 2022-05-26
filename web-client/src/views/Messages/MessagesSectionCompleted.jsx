@@ -13,14 +13,14 @@ import React from 'react';
 
 export const MessagesSectionCompleted = connect(
   {
-    hasMessages: state.formattedMessages.hasMessages,
     completedMessages: state.formattedMessages.completedMessages,
+    hasMessages: state.formattedMessages.hasMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesSectionCompleted({
-    hasMessages,
     completedMessages,
+    hasMessages,
     showSortableHeaders,
     sortMessagesSequence,
   }) {
