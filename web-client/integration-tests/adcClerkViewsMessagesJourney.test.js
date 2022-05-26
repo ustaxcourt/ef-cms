@@ -2,8 +2,8 @@ import { MESSAGE_QUEUE_TYPES } from '../../shared/src/business/entities/EntityCo
 import { applicationContext } from '../src/applicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages } from '../src/presenter/computeds/formattedMessages';
-import { getUserMessageCount } from './journey/getUserMessageCount';
 import {
+  getUserMessageCount,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -38,21 +38,14 @@ describe('ADC Clerk Views Messages Journey', () => {
 
     loginAs(cerebralTest, 'adc@example.com');
     it('get before counts for all section message boxes', async () => {
-      beforeInboxMessageCount = await getUserMessageCount(
-        cerebralTest,
-        'inbox',
-        messageQueue,
-      );
-      beforeOutboxMessageCount = await getUserMessageCount(
-        cerebralTest,
-        'outbox',
-        messageQueue,
-      );
-      beforeCompletedMessageCount = await getUserMessageCount(
-        cerebralTest,
-        'completed',
-        messageQueue,
-      );
+      await getUserMessageCount(cerebralTest, 'inbox', messageQueue);
+      beforeInboxMessageCount = cerebralTest.getState('messages').length;
+
+      await getUserMessageCount(cerebralTest, 'outbox', messageQueue);
+      beforeOutboxMessageCount = cerebralTest.getState('messages').length;
+
+      await getUserMessageCount(cerebralTest, 'completed', messageQueue);
+      beforeCompletedMessageCount = cerebralTest.getState('messages').length;
     });
 
     loginAs(cerebralTest, 'petitioner@example.com');
@@ -113,18 +106,13 @@ describe('ADC Clerk Views Messages Journey', () => {
     });
 
     it(`verify default sorting of ${messageQueue} inbox createdAt sort field, ascending`, async () => {
-      let afterInboxMessageCount = await getUserMessageCount(
+      const { messages: inboxMessages } = await getUserMessageCount(
         cerebralTest,
         'inbox',
         messageQueue,
       );
 
-      const { messages: inboxMessages } = runCompute(
-        formattedMessagesComputed,
-        {
-          state: cerebralTest.getState(),
-        },
-      );
+      let afterInboxMessageCount = cerebralTest.getState('messages').length;
 
       const expected = [message1Subject, message2Subject, message3Subject];
 
@@ -143,18 +131,13 @@ describe('ADC Clerk Views Messages Journey', () => {
     });
 
     it(`verify default sorting of ${messageQueue} outbox createdAt sort field, descending`, async () => {
-      let afterOutboxMessageCount = await getUserMessageCount(
+      const { messages: outboxMessages } = await getUserMessageCount(
         cerebralTest,
         'outbox',
         messageQueue,
       );
 
-      const { messages: outboxMessages } = runCompute(
-        formattedMessagesComputed,
-        {
-          state: cerebralTest.getState(),
-        },
-      );
+      let afterOutboxMessageCount = cerebralTest.getState('messages').length;
 
       const expected = [message5Subject, message4Subject];
 
@@ -221,15 +204,13 @@ describe('ADC Clerk Views Messages Journey', () => {
     });
 
     it(`verify default sorting of ${messageQueue} completed box completedAt sort field, descending`, async () => {
-      let afterCompletedMessageCount = await getUserMessageCount(
+      const { completedMessages } = await getUserMessageCount(
         cerebralTest,
         'completed',
         messageQueue,
       );
 
-      const { completedMessages } = runCompute(formattedMessagesComputed, {
-        state: cerebralTest.getState(),
-      });
+      let afterCompletedMessageCount = cerebralTest.getState('messages').length;
 
       const expected = [message7SubjectFromState, message6SubjectFromState];
 
