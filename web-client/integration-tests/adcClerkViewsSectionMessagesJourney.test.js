@@ -129,13 +129,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     validateMessageOrdering(inboxMessages, expected);
   });
 
-  it('go to section outbox', async () => {
-    await cerebralTest.runSequence('gotoMessagesSequence', {
-      box: 'outbox',
-      queue: 'section',
-    });
-  });
-
   it('verify default sorting of section outbox createdAt sort field, descending', async () => {
     let afterOutboxMessageCount = await getUserMessageCount(
       cerebralTest,
