@@ -6,6 +6,7 @@ export const formattedMessages = (get, applicationContext) => {
 
   const { completedMessages, messages } = getFormattedMessages({
     applicationContext,
+    cacheKey: get(state.messageCacheKey),
     messages: get(state.messages) || [],
     tableSort,
   });

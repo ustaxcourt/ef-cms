@@ -389,6 +389,15 @@ export const getFormattedDocumentQCMyOutbox = async cerebralTest => {
   });
 };
 
+export const getUserMessageCount = async (cerebralTest, box, queue) => {
+  await cerebralTest.runSequence('gotoMessagesSequence', {
+    box,
+    queue,
+  });
+
+  return cerebralTest.getState('messages').length;
+};
+
 export const getFormattedDocumentQCSectionOutbox = async cerebralTest => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',

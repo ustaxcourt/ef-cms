@@ -25,15 +25,23 @@ export const SortableColumnHeaderButton = connect(
     tableSort,
     title,
   }) => {
+    const [isLoading, setIsLoading] = React.useState(false);
+
     return (
       <Button
         link
         className={'sortable-header-button margin-right-0'}
         onClick={() => {
           if (hasRows) {
-            onClickSequence({
-              defaultSort,
-              sortField,
+            setIsLoading(true);
+            // we invoke the click sequence AFTER the next animation frame to give
+            // the browser time to display the spinner in the header before it tries to fetch
+            // and re-render the 3000 messages in the message table.
+            requestAnimationFrame(() => {
+              onClickSequence({
+                defaultSort,
+                sortField,
+              }).then(() => setIsLoading(false));
             });
           }
         }}
@@ -45,16 +53,25 @@ export const SortableColumnHeaderButton = connect(
         >
           {title}
         </span>
-        {getFontAwesomeIcon(
-          getSortIndicatorConfiguration({
-            ascText,
-            defaultSort,
-            descText,
-            sortField,
-            tableSort,
-          }),
-          isActive({ hasRows, sortField, tableSort }),
+        {isLoading && (
+          <FontAwesomeIcon
+            className="fa-spin spinner"
+            icon="sync"
+            size="sm"
+            title="sorting results"
+          />
         )}
+        {!isLoading &&
+          getFontAwesomeIcon(
+            getSortIndicatorConfiguration({
+              ascText,
+              defaultSort,
+              descText,
+              sortField,
+              tableSort,
+            }),
+            isActive({ hasRows, sortField, tableSort }),
+          )}
       </Button>
     );
   },
