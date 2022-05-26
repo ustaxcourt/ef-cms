@@ -49,36 +49,52 @@ export const sortCompletedMessages = (sortedMessages, tableSort) => {
   return completedMessages;
 };
 
+// useful for users that have a large amount of messages (ADC Users) since
+// recalculating the formatted date fields is expensive.
+let messageCache = null;
+let lastCacheKey = null;
+
 export const getFormattedMessages = ({
   applicationContext,
   messages,
   tableSort,
+  cacheKey = applicationContext.getUniqueId(),
 }) => {
-  const now = applicationContext.getUtilities().formatNow('MMDDYY');
-  const yesterday = applicationContext.getUtilities().formatDateString(
-    applicationContext.getUtilities().calculateISODate({
-      howMuch: -1,
-    }),
-    'MMDDYY',
-  );
-  const formattedMessages = messages.map(message => ({
-    ...message,
-    completedAtFormatted: formatDateIfToday(
-      message.completedAt,
-      applicationContext,
-      now,
-      yesterday,
-    ),
-    createdAtFormatted: formatDateIfToday(
-      message.createdAt,
-      applicationContext,
-      now,
-      yesterday,
-    ),
-    messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
-  }));
+  if (cacheKey !== lastCacheKey) {
+    console.log(
+      'getFormattedMessages: cache miss, last key: ',
+      lastCacheKey,
+      'current key: ',
+      cacheKey,
+    );
+    const now = applicationContext.getUtilities().formatNow('MMDDYY');
+    const yesterday = applicationContext.getUtilities().formatDateString(
+      applicationContext.getUtilities().calculateISODate({
+        howMuch: -1,
+      }),
+      'MMDDYY',
+    );
+    const formattedMessages = messages.map(message => ({
+      ...message,
+      completedAtFormatted: formatDateIfToday(
+        message.completedAt,
+        applicationContext,
+        now,
+        yesterday,
+      ),
+      createdAtFormatted: formatDateIfToday(
+        message.createdAt,
+        applicationContext,
+        now,
+        yesterday,
+      ),
+      messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
+    }));
+    messageCache = formattedMessages;
+    lastCacheKey = cacheKey;
+  }
 
-  const sortedMessages = sortFormattedMessages(formattedMessages, tableSort);
+  const sortedMessages = sortFormattedMessages(messageCache, tableSort);
 
   const inProgressMessages = sortedMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,

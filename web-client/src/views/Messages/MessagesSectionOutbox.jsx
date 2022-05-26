@@ -112,13 +112,12 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
   from,
   message,
   messageDetailLink,
-  messageId,
   subject,
   to,
   toSection,
 }) {
   return (
-    <tbody key={messageId}>
+    <tbody>
       <tr>
         <td aria-hidden="true" className="focus-toggle" />
         <td className="message-queue-row small">{docketNumberWithSuffix}</td>
