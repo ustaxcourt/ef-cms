@@ -13,13 +13,13 @@ import React from 'react';
 
 export const MessagesSectionCompleted = connect(
   {
-    formattedMessages: state.formattedMessages.completedMessages,
+    completedMessages: state.formattedMessages.completedMessages,
     hasMessages: state.formattedMessages.hasMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesSectionCompleted({
-    formattedMessages,
+    completedMessages,
     hasMessages,
     showSortableHeaders,
     sortMessagesSequence,
@@ -80,7 +80,7 @@ export const MessagesSectionCompleted = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => (
+          {completedMessages.map(message => (
             <CompletedMessageRow
               completedAtFormatted={message.completedAtFormatted}
               completedBy={message.completedBy}
