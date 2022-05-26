@@ -2,8 +2,8 @@ import { MESSAGE_QUEUE_TYPES } from '../../shared/src/business/entities/EntityCo
 import { applicationContext } from '../src/applicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages } from '../src/presenter/computeds/formattedMessages';
-import { getUserMessageCount } from './journey/getUserMessageCount';
 import {
+  getUserMessageCount,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
