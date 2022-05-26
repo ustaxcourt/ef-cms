@@ -15,9 +15,15 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   const docketEntryId = get(state.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
+  const consolidatedCases =
+    get(state.formattedCaseDetail.consolidatedCases) || [];
+  const consolidatedCaseIds = consolidatedCases
+    .filter(consolidatedCase => consolidatedCase.checked)
+    .map(consolidatedCase => consolidatedCase.docketNumber);
 
   const documentMeta = {
     ...form,
+    consolidatedCaseIds,
     docketEntryId,
     docketNumber,
   };
