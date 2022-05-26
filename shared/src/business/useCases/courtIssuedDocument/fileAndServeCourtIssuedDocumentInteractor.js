@@ -48,8 +48,28 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumber } = documentMeta;
+  const { consolidatedCaseIds, docketEntryId } = documentMeta;
 
+  const servingDocumentPromises = consolidatedCaseIds.map(
+    consolidatedDocketNumber =>
+      fileAndServeDocumentOnOneCase(
+        applicationContext,
+        authorizedUser,
+        consolidatedDocketNumber,
+        docketEntryId,
+        documentMeta,
+      ),
+  );
+  await Promise.all(servingDocumentPromises);
+};
+
+const fileAndServeDocumentOnOneCase = async (
+  applicationContext,
+  authorizedUser,
+  docketNumber,
+  docketEntryId,
+  documentMeta,
+) => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
