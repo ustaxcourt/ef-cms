@@ -137,7 +137,7 @@ export const MessagesIndividualInbox = connect(
             );
           })}
         </table>
-        {formattedMessages.length === 0 && <div>There are no messages.</div>}
+        {!hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
