@@ -43,7 +43,7 @@
   }
 }
 
-.usa-checkbox__input + .usa-checkbox__label {
+.usa-checkbox__input:disabled + .usa-checkbox__label {
   color: #1b1b1b;
 }
 
