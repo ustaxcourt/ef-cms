@@ -42,6 +42,9 @@ const PARTY_VIEW_TABS = {
 };
 
 const ALLOWLIST_FEATURE_FLAGS = {
+  CHIEF_JUDGE_NAME: {
+    key: 'chief-judge-name',
+  },
   CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES: {
     disabledMessage:
       'Docket entries are not being duplicated across consolidated cases temporarily.',
