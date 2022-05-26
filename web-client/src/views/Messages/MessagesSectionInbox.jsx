@@ -13,16 +13,17 @@ import React from 'react';
 
 export const MessagesSectionInbox = connect(
   {
-    formattedMessages: state.formattedMessages.messages,
+    messages: state.formattedMessages.messages,
     showSortableHeaders: state.showSortableHeaders,
     sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
   },
   function MessagesSectionInbox({
-    formattedMessages,
+    messages,
     showSortableHeaders,
     sortSectionMessagesSequence,
   }) {
-    const hasMessages = formattedMessages.length > 0;
+    const hasMessages = messages.length > 0;
+
     return (
       <>
         <table className="usa-table ustc-table subsection">
@@ -81,49 +82,63 @@ export const MessagesSectionInbox = connect(
               <th className="small">Section</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => {
-            return (
-              <tbody key={message.messageId}>
-                <tr key={message.messageId}>
-                  <td aria-hidden="true" className="focus-toggle" />
-                  <td className="message-queue-row small">
-                    {message.docketNumberWithSuffix}
-                  </td>
-                  <td className="message-queue-row small">
-                    <span className="no-wrap">
-                      {message.createdAtFormatted}
-                    </span>
-                  </td>
-                  <td className="message-queue-row message-subject">
-                    <div className="message-document-title">
-                      <Button
-                        link
-                        className="padding-0"
-                        href={message.messageDetailLink}
-                      >
-                        {message.subject}
-                      </Button>
-                    </div>
-                    <div className="message-document-detail">
-                      {message.message}
-                    </div>
-                  </td>
-                  <td className="message-queue-row max-width-25">
-                    {message.caseTitle}
-                  </td>
-                  <td className="message-queue-row">{message.caseStatus}</td>
-                  <td className="message-queue-row to">{message.to}</td>
-                  <td className="message-queue-row from">{message.from}</td>
-                  <td className="message-queue-row small">
-                    {message.fromSection}
-                  </td>
-                </tr>
-              </tbody>
-            );
-          })}
+          {messages.map(message => (
+            <MessageInboxRow
+              caseStatus={message.caseStatus}
+              caseTitle={message.caseTitle}
+              createdAtFormatted={message.createdAtFormatted}
+              docketNumberWithSuffix={message.docketNumberWithSuffix}
+              from={message.from}
+              fromSection={message.fromSection}
+              key={message.messageId}
+              message={message.message}
+              messageDetailLink={message.messageDetailLink}
+              messageId={message.messageId}
+              subject={message.subject}
+              to={message.to}
+            />
+          ))}
         </table>
-        {formattedMessages.length === 0 && <div>There are no messages.</div>}
+        {!hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
 );
+
+const MessageInboxRow = React.memo(function MessageInboxRow({
+  caseStatus,
+  caseTitle,
+  createdAtFormatted,
+  docketNumberWithSuffix,
+  from,
+  fromSection,
+  message,
+  messageDetailLink,
+  subject,
+  to,
+}) {
+  return (
+    <tbody>
+      <tr>
+        <td aria-hidden="true" className="focus-toggle" />
+        <td className="message-queue-row small">{docketNumberWithSuffix}</td>
+        <td className="message-queue-row small">
+          <span className="no-wrap">{createdAtFormatted}</span>
+        </td>
+        <td className="message-queue-row message-subject">
+          <div className="message-document-title">
+            <Button link className="padding-0" href={messageDetailLink}>
+              {subject}
+            </Button>
+          </div>
+          <div className="message-document-detail">{message}</div>
+        </td>
+        <td className="message-queue-row max-width-25">{caseTitle}</td>
+        <td className="message-queue-row">{caseStatus}</td>
+        <td className="message-queue-row to">{to}</td>
+        <td className="message-queue-row from">{from}</td>
+        <td className="message-queue-row small">{fromSection}</td>
+      </tr>
+    </tbody>
+  );
+});
