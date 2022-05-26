@@ -48,7 +48,48 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { consolidatedCaseIds, docketEntryId } = documentMeta;
+  const { consolidatedCaseIds, docketEntryId, leadCaseDocketNumber } =
+    documentMeta;
+
+  const leadCaseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      leadCaseDocketNumber,
+    });
+
+  let leadCaseEntity = new Case(leadCaseToUpdate, { applicationContext });
+
+  const leadDocketEntry = leadCaseEntity.getDocketEntryById({
+    docketEntryId,
+  });
+
+  const leadDocketEntryEntityForServiceStampOnly = new DocketEntry(
+    {
+      ...omit(leadDocketEntry, 'filedBy'),
+      documentTitle: documentMeta.generatedDocumentTitle,
+      documentType: documentMeta.documentType,
+      eventCode: documentMeta.eventCode,
+      servedAt: documentMeta.servedAt,
+      serviceStamp: documentMeta.serviceStamp,
+    },
+    { applicationContext },
+  );
+
+  if (!leadDocketEntry) {
+    throw new NotFoundError('Docket entry not found');
+  }
+  if (leadDocketEntry.servedAt) {
+    throw new Error('Docket entry has already been served');
+  }
+  if (leadDocketEntry.isPendingService) {
+    throw new Error('Docket entry is already being served');
+  }
+
+  await stampAndPersistDocument(
+    applicationContext,
+    leadDocketEntryEntityForServiceStampOnly,
+  );
 
   const servingDocumentPromises = consolidatedCaseIds.map(
     consolidatedDocketNumber =>
@@ -61,6 +102,51 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       ),
   );
   await Promise.all(servingDocumentPromises);
+};
+
+const stampAndPersistDocument = async (
+  applicationContext,
+  leadDocketEntryEntityForServiceStampOnly,
+) => {
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: leadDocketEntryEntityForServiceStampOnly.docketEntryId,
+    })
+    .promise();
+
+  let serviceStampType = 'Served';
+
+  if (
+    leadDocketEntryEntityForServiceStampOnly.documentType ===
+    GENERIC_ORDER_DOCUMENT_TYPE
+  ) {
+    serviceStampType = leadDocketEntryEntityForServiceStampOnly.serviceStamp;
+  } else if (
+    ENTERED_AND_SERVED_EVENT_CODES.includes(
+      leadDocketEntryEntityForServiceStampOnly.eventCode,
+    )
+  ) {
+    serviceStampType = 'Entered and Served';
+  }
+
+  const serviceStampDate = formatDateString(
+    leadDocketEntryEntityForServiceStampOnly.servedAt,
+    'MMDDYY',
+  );
+
+  const newPdfData = await addServedStampToDocument({
+    applicationContext,
+    pdfData,
+    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
+  });
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: newPdfData,
+    key: leadDocketEntryEntityForServiceStampOnly.docketEntryId,
+  });
 };
 
 const fileAndServeDocumentOnOneCase = async (
@@ -187,41 +273,6 @@ const fileAndServeDocumentOnOneCase = async (
       section: user.section,
       userId: user.userId,
       workItem: docketEntryEntity.workItem.validate().toRawObject(),
-    });
-
-    const { Body: pdfData } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: docketEntryId,
-      })
-      .promise();
-
-    let serviceStampType = 'Served';
-
-    if (docketEntryEntity.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-      serviceStampType = docketEntryEntity.serviceStamp;
-    } else if (
-      ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)
-    ) {
-      serviceStampType = 'Entered and Served';
-    }
-
-    const serviceStampDate = formatDateString(
-      docketEntryEntity.servedAt,
-      'MMDDYY',
-    );
-
-    const newPdfData = await addServedStampToDocument({
-      applicationContext,
-      pdfData,
-      serviceStampText: `${serviceStampType} ${serviceStampDate}`,
-    });
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: newPdfData,
-      key: docketEntryId,
     });
 
     caseEntity = await applicationContext
