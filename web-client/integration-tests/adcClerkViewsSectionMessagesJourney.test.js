@@ -156,13 +156,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     validateMessageOrdering(outboxMessages, expected);
   });
 
-  it('go to section completed', async () => {
-    await cerebralTest.runSequence('gotoMessagesSequence', {
-      box: 'completed',
-      queue: 'section',
-    });
-  });
-
   loginAs(cerebralTest, 'docketclerk@example.com');
   let message6SubjectFromState = '';
   let message7SubjectFromState = '';

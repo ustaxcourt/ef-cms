@@ -56,21 +56,13 @@ export const createNewMessageOnCase = (
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    if (subject) {
-      cerebralTest.testMessageSubject = subject;
+    cerebralTest.testMessageSubject =
+      subject || `what kind of bear is best? ${Date.now()}`;
 
-      await cerebralTest.runSequence('updateModalFormValueSequence', {
-        key: 'subject',
-        value: subject,
-      });
-    } else {
-      cerebralTest.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
-
-      await cerebralTest.runSequence('updateModalFormValueSequence', {
-        key: 'subject',
-        value: cerebralTest.testMessageSubject,
-      });
-    }
+    await cerebralTest.runSequence('updateModalFormValueSequence', {
+      key: 'subject',
+      value: cerebralTest.testMessageSubject,
+    });
 
     await cerebralTest.runSequence('createMessageSequence');
 
