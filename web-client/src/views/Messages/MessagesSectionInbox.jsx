@@ -6,14 +6,16 @@ import React from 'react';
 
 export const MessagesSectionInbox = connect(
   {
-    completedByUsers: state.formattedMessages.completedByUsers,
+    caseStatuses: state.formattedMessages.caseStatuses,
+    // completedByUsers: state.formattedMessages.completedByUsers,
     formattedMessages: state.formattedMessages.messages,
-    sections: state.formattedMessages.sections,
+    // fromUsers: state.formattedMessages.fromUsers,
+    // sections: state.formattedMessages.sections,
   },
   function MessagesSectionInbox({
-    completedByUsers,
+    // completedByUsers,
+    caseStatuses,
     formattedMessages,
-    sections,
   }) {
     return (
       <>
@@ -22,38 +24,9 @@ export const MessagesSectionInbox = connect(
             <div className="grid-col-1 padding-top-05 margin-right-3">
               <h3 id="filterHeading">Filter by</h3>
             </div>
-            <div className="grid-row grid-col-10 grid-gap padding-left-2">
-              <div className="grid-col-3">
-                <BindedSelect
-                  aria-label="completed by"
-                  bind="screenMetadata.filters.completedBy"
-                  id="completedByFilter"
-                  name="completedBy"
-                >
-                  <option value="">-Completed By-</option>
-                  {Object.values(completedByUsers).map(completedByUser => (
-                    <option key={completedByUser} value={completedByUser}>
-                      {completedByUser}
-                    </option>
-                  ))}
-                </BindedSelect>
-              </div>
-              <div className="grid-col-3">
-                <BindedSelect
-                  aria-label="section"
-                  bind="screenMetadata.filters.section"
-                  id="sectionFilter"
-                  name="section"
-                >
-                  <option value="">-Section-</option>
-                  {Object.values(sections).map(section => (
-                    <option key={section} value={section}>
-                      {section}
-                    </option>
-                  ))}
-                </BindedSelect>
-              </div>
-            </div>
+            <TableFilters
+              filters={[{ key: 'caseStatus', options: caseStatuses }]}
+            ></TableFilters>
           </div>
         </div>
         <table className="usa-table ustc-table subsection">
@@ -117,3 +90,29 @@ export const MessagesSectionInbox = connect(
     );
   },
 );
+
+const TableFilters = ({ filters }) => {
+  return (
+    <div className="grid-row grid-col-10 grid-gap padding-left-2">
+      {filters.map(({ key, options }) => {
+        return (
+          <div className="grid-col-3" key={key}>
+            <BindedSelect
+              aria-label="from"
+              bind="screenMetadata.filters.from"
+              id="fromFilter"
+              name="from"
+            >
+              <option value="">-From-</option>
+              {options.map(from => (
+                <option key={from} value={from}>
+                  {from}
+                </option>
+              ))}
+            </BindedSelect>
+          </div>
+        );
+      })}
+    </div>
+  );
+};
