@@ -28,19 +28,6 @@ describe('TrialSession entity', () => {
     expect(() => new TrialSession({}, {})).toThrow();
   });
 
-  describe('constructor', () => {
-    it('should default the calendaredCases to an empty array if undefined', () => {
-      const trialSession = new TrialSession(
-        { ...VALID_TRIAL_SESSION, calendaredCases: null },
-        {
-          applicationContext,
-        },
-      );
-
-      expect(trialSession.calendaredCases).toEqual([]);
-    });
-  });
-
   describe('isValid', () => {
     it('should be true when a valid trial session is provided', () => {
       const trialSession = new TrialSession(VALID_TRIAL_SESSION, {
