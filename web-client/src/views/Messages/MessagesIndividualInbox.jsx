@@ -1,17 +1,19 @@
-import {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-} from './sortConstants';
 import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
+
+const {
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+} = applicationContext.getConstants();
 
 export const MessagesIndividualInbox = connect(
   {

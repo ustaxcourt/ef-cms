@@ -1254,6 +1254,11 @@ const DOCKET_ENTRY_SEALED_TO_TYPES = {
   PUBLIC: 'Public', // associated privatePractitioners, irsPractitioner, petitioner can still view the docket entry if they are associated
 };
 
+const CHRONOLOGICALLY_ASCENDING = 'Oldest to newest';
+const CHRONOLOGICALLY_DESCENDING = 'Newest to oldest';
+const ALPHABETICALLY_ASCENDING = 'In A-Z ascending order';
+const ALPHABETICALLY_DESCENDING = 'In Z-A descending order';
+
 module.exports = deepFreeze({
   AMENDED_PETITION_FORM_NAME,
   ADC_SECTION,
@@ -1265,6 +1270,8 @@ module.exports = deepFreeze({
   ALL_DOCUMENT_TYPES,
   ALL_DOCUMENT_TYPES_MAP,
   ALL_EVENT_CODES,
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
   ANSWER_CUTOFF_AMOUNT_IN_DAYS,
   ANSWER_CUTOFF_UNIT,
   ANSWER_DOCUMENT_CODES,
@@ -1286,6 +1293,8 @@ module.exports = deepFreeze({
   CASE_TYPES_MAP,
   CHAMBERS_SECTION,
   CHIEF_JUDGE,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
   CLERK_OF_COURT_SECTION,
   CONFIGURATION_ITEM_KEYS,
   CONTACT_CHANGE_DOCUMENT_TYPES,

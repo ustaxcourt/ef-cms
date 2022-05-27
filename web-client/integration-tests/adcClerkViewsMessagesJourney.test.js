@@ -37,20 +37,32 @@ describe('ADC Clerk Views Messages Journey', () => {
   MESSAGE_QUEUE_TYPES.forEach(messageQueue => {
     const testAdcId = '6805d1ab-18d0-43ec-bafb-654e83405416';
     const petitionsClerkId = '4805d1ab-18d0-43ec-bafb-654e83405416';
-    let beforeInboxMessageCount = 0;
-    let beforeOutboxMessageCount = 0;
-    let beforeCompletedMessageCount = 0;
+    let beforeInboxMessagesCount = 0;
+    let beforeOutboxMessagesCount = 0;
+    let beforeCompletedMessagesCount = 0;
 
     loginAs(cerebralTest, 'adc@example.com');
     it('get before counts for all section message boxes', async () => {
-      await getUserMessageCount(cerebralTest, 'inbox', messageQueue);
-      beforeInboxMessageCount = cerebralTest.getState('messages').length;
+      const { messages: beforeInboxMessages } = await getUserMessageCount(
+        cerebralTest,
+        'inbox',
+        messageQueue,
+      );
+      beforeInboxMessagesCount = beforeInboxMessages.length;
 
-      await getUserMessageCount(cerebralTest, 'outbox', messageQueue);
-      beforeOutboxMessageCount = cerebralTest.getState('messages').length;
+      const { messages: beforeOutboxMessages } = await getUserMessageCount(
+        cerebralTest,
+        'outbox',
+        messageQueue,
+      );
+      beforeOutboxMessagesCount = beforeOutboxMessages.length;
 
-      await getUserMessageCount(cerebralTest, 'completed', messageQueue);
-      beforeCompletedMessageCount = cerebralTest.getState('messages').length;
+      const { messages: beforeCompletedMessages } = await getUserMessageCount(
+        cerebralTest,
+        'completed',
+        messageQueue,
+      );
+      beforeCompletedMessagesCount = beforeCompletedMessages.length;
     });
 
     loginAs(cerebralTest, 'petitioner@example.com');
@@ -140,12 +152,12 @@ describe('ADC Clerk Views Messages Journey', () => {
         messageQueue,
       );
 
-      let afterInboxMessageCount = cerebralTest.getState('messages').length;
+      const afterInboxMessageCount = inboxMessages.length;
 
       const expected = [message1Id, message2Id, message3Id];
 
       expect(afterInboxMessageCount).toEqual(
-        expected.length + beforeInboxMessageCount,
+        expected.length + beforeInboxMessagesCount,
       );
 
       validateMessageOrdering(inboxMessages, expected);
@@ -165,12 +177,12 @@ describe('ADC Clerk Views Messages Journey', () => {
         messageQueue,
       );
 
-      let afterOutboxMessageCount = cerebralTest.getState('messages').length;
+      const afterOutboxMessageCount = outboxMessages.length;
 
       const expected = [message5Id, message4Id];
 
       expect(afterOutboxMessageCount).toEqual(
-        expected.length + beforeOutboxMessageCount,
+        expected.length + beforeOutboxMessagesCount,
       );
 
       validateMessageOrdering(outboxMessages, expected);
@@ -226,12 +238,12 @@ describe('ADC Clerk Views Messages Journey', () => {
         messageQueue,
       );
 
-      let afterCompletedMessageCount = cerebralTest.getState('messages').length;
+      let afterCompletedMessageCount = completedMessages.length;
 
       const expected = [message7Id, message6Id];
 
       expect(afterCompletedMessageCount).toEqual(
-        expected.length + beforeCompletedMessageCount,
+        expected.length + beforeCompletedMessagesCount,
       );
 
       validateMessageOrdering(completedMessages, expected);
