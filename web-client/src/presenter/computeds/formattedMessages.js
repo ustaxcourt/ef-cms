@@ -43,6 +43,8 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   const completedByUsers = uniq(map(messages, 'completedBy'));
+  const fromUsers = uniq(map(messages, 'from'));
+
   const sections = uniq(map(messages, 'section'));
 
   const currentMessageBox = get(state.messageBoxToDisplay.box);
@@ -54,6 +56,7 @@ export const formattedMessages = (get, applicationContext) => {
   return {
     completedByUsers,
     completedMessages,
+    fromUsers,
     messages,
     sections,
   };
