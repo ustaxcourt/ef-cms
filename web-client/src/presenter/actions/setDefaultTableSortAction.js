@@ -16,7 +16,6 @@ export const setDefaultTableSortAction = ({ get, props, store }) => {
     return;
   }
 
-  // different tables require different default sorting
   if (props.box === 'inbox') {
     store.set(state.tableSort.sortField, 'createdAt');
     store.set(state.tableSort.sortOrder, ASCENDING);

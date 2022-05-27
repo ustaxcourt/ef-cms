@@ -32,20 +32,32 @@ describe('ADC Clerk Views Messages Journey', () => {
   MESSAGE_QUEUE_TYPES.forEach(messageQueue => {
     const testAdcId = '6805d1ab-18d0-43ec-bafb-654e83405416';
     const petitionsClerkId = '4805d1ab-18d0-43ec-bafb-654e83405416';
-    let beforeInboxMessageCount = 0;
-    let beforeOutboxMessageCount = 0;
-    let beforeCompletedMessageCount = 0;
+    let beforeInboxMessagesCount = 0;
+    let beforeOutboxMessagesCount = 0;
+    let beforeCompletedMessagesCount = 0;
 
     loginAs(cerebralTest, 'adc@example.com');
     it('get before counts for all section message boxes', async () => {
-      await getUserMessageCount(cerebralTest, 'inbox', messageQueue);
-      beforeInboxMessageCount = cerebralTest.getState('messages').length;
+      const { messages: beforeInboxMessages } = await getUserMessageCount(
+        cerebralTest,
+        'inbox',
+        messageQueue,
+      );
+      beforeInboxMessagesCount = beforeInboxMessages.length;
 
-      await getUserMessageCount(cerebralTest, 'outbox', messageQueue);
-      beforeOutboxMessageCount = cerebralTest.getState('messages').length;
+      const { messages: beforeOutboxMessages } = await getUserMessageCount(
+        cerebralTest,
+        'outbox',
+        messageQueue,
+      );
+      beforeOutboxMessagesCount = beforeOutboxMessages.length;
 
-      await getUserMessageCount(cerebralTest, 'completed', messageQueue);
-      beforeCompletedMessageCount = cerebralTest.getState('messages').length;
+      const { messages: beforeCompletedMessages } = await getUserMessageCount(
+        cerebralTest,
+        'completed',
+        messageQueue,
+      );
+      beforeCompletedMessagesCount = beforeCompletedMessages.length;
     });
 
     loginAs(cerebralTest, 'petitioner@example.com');
@@ -78,7 +90,6 @@ describe('ADC Clerk Views Messages Journey', () => {
       toUserId: testAdcId,
     });
 
-    loginAs(cerebralTest, 'docketclerk@example.com');
     createNewMessageOnCase(cerebralTest, {
       subject: message3Subject,
       toSection: 'adc',
@@ -117,7 +128,7 @@ describe('ADC Clerk Views Messages Journey', () => {
       const expected = [message1Subject, message2Subject, message3Subject];
 
       expect(afterInboxMessageCount).toEqual(
-        expected.length + beforeInboxMessageCount,
+        expected.length + beforeInboxMessagesCount,
       );
 
       validateMessageOrdering(inboxMessages, expected);
@@ -142,7 +153,7 @@ describe('ADC Clerk Views Messages Journey', () => {
       const expected = [message5Subject, message4Subject];
 
       expect(afterOutboxMessageCount).toEqual(
-        expected.length + beforeOutboxMessageCount,
+        expected.length + beforeOutboxMessagesCount,
       );
 
       validateMessageOrdering(outboxMessages, expected);
@@ -156,25 +167,18 @@ describe('ADC Clerk Views Messages Journey', () => {
     });
 
     loginAs(cerebralTest, 'docketclerk@example.com');
-    let message6SubjectFromState = '';
-    let message7SubjectFromState = '';
+    // let message6SubjectFromState = '';
 
     createNewMessageOnCase(cerebralTest, {
       subject: message6Subject,
       toSection: 'adc',
       toUserId: testAdcId,
     });
-    it('get message6SubjectFromState', () => {
-      message6SubjectFromState = cerebralTest.testMessageSubject;
-    });
 
     createNewMessageOnCase(cerebralTest, {
       subject: message7Subject,
       toSection: 'adc',
       toUserId: testAdcId,
-    });
-    it('get message7SubjectFromState', () => {
-      message7SubjectFromState = cerebralTest.testMessageSubject;
     });
 
     loginAs(cerebralTest, 'adc@example.com');
@@ -186,19 +190,9 @@ describe('ADC Clerk Views Messages Journey', () => {
 
       const messages = cerebralTest.getState('messages');
 
-      await markMessageAsComplete(
-        cerebralTest,
-        messages,
-        message6Subject,
-        message6SubjectFromState,
-      );
+      await markMessageAsComplete(cerebralTest, messages, message6Subject);
 
-      await markMessageAsComplete(
-        cerebralTest,
-        messages,
-        message7Subject,
-        message7SubjectFromState,
-      );
+      await markMessageAsComplete(cerebralTest, messages, message7Subject);
 
       await refreshElasticsearchIndex();
     });
@@ -212,10 +206,10 @@ describe('ADC Clerk Views Messages Journey', () => {
 
       let afterCompletedMessageCount = cerebralTest.getState('messages').length;
 
-      const expected = [message7SubjectFromState, message6SubjectFromState];
+      const expected = [message7Subject, message6Subject];
 
       expect(afterCompletedMessageCount).toEqual(
-        expected.length + beforeCompletedMessageCount,
+        expected.length + beforeCompletedMessagesCount,
       );
 
       validateMessageOrdering(completedMessages, expected);
@@ -274,10 +268,9 @@ const markMessageAsComplete = async (
   context,
   messages,
   messageCompletedSubject,
-  completedMessageSubject,
 ) => {
   const foundMessage = messages.find(
-    message => message.subject === completedMessageSubject,
+    message => message.subject === messageCompletedSubject,
   );
 
   await context.runSequence('gotoMessageDetailSequence', {

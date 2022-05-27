@@ -70,7 +70,7 @@ describe('setDefaultTableSortAction', () => {
     expect(state.tableSort.sortOrder).toEqual(DESCENDING);
   });
 
-  it('the completed should be sorted by createdAt DESCENDING for adc user', async () => {
+  it('the completed should be sorted by completedAt DESCENDING for adc user', async () => {
     const { state } = await runAction(setDefaultTableSortAction, {
       modules: {
         presenter,
@@ -98,6 +98,10 @@ describe('setDefaultTableSortAction', () => {
         box: 'inbox',
       },
       state: {
+        tableSort: {
+          sortField: 'createdAt',
+          sortOrder: 'asc',
+        },
         user: {
           role: 'docketclerk',
         },
