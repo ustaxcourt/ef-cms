@@ -1,7 +1,7 @@
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  externals: ['aws-sdk', 'chrome-aws-lambda', 'pug'],
+  externals: ['aws-sdk', '@sparticuz/chrome-aws-lambda', 'pug'],
   mode: 'production',
   module: {
     rules: [
