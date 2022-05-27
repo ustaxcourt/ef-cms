@@ -1,13 +1,32 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
 
 export const MessagesSectionInbox = connect(
-  { formattedMessages: state.formattedMessages.messages },
-  function MessagesSectionInbox({ formattedMessages }) {
+  {
+    completedByUsers: state.formattedMessages.completedByUsers,
+    formattedMessages: state.formattedMessages.messages,
+  },
+  function MessagesSectionInbox({ completedByUsers, formattedMessages }) {
     return (
       <>
+        <div className="grid-col-3">
+          <BindedSelect
+            aria-label="completed by"
+            bind="screenMetadata.filters.completedBy"
+            id="completedByFilter"
+            name="completedBy"
+          >
+            <option value="">-Completed By-</option>
+            {Object.values(completedByUsers).map(completedByUser => (
+              <option key={completedByUser} value={completedByUser}>
+                {completedByUser}
+              </option>
+            ))}
+          </BindedSelect>
+        </div>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
