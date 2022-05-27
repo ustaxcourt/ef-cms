@@ -1,8 +1,10 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { getConstants } from '../../getConstants';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDefaultTableSortAction } from './setDefaultTableSortAction';
+
+const { ASCENDING, DESCENDING } = getConstants();
 
 describe('setDefaultTableSortAction', () => {
   beforeAll(() => {
@@ -20,7 +22,7 @@ describe('setDefaultTableSortAction', () => {
       state: {
         tableSort: {
           sortField: 'createdAt',
-          sortOrder: 'asc',
+          sortOrder: ASCENDING,
         },
         user: {
           role: 'adc',

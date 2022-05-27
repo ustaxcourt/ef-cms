@@ -1,5 +1,6 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
+import { getConstants } from '../../getConstants';
 import { state } from 'cerebral';
+const { ASCENDING, DESCENDING } = getConstants();
 
 /**
  * sets the default sort based on the section picked.

@@ -1,10 +1,12 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { DESCENDING } from '../../presenter/presenterConstants';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
+import { getConstants } from '../../getConstants';
 import { state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
+
+const { DESCENDING } = getConstants();
 
 export const SortableColumnHeaderButton = connect(
   {

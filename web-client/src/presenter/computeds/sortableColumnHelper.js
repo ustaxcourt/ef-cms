@@ -1,5 +1,6 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
+import { getConstants } from '../../getConstants';
 
+const { ASCENDING, DESCENDING } = getConstants();
 /**
  * Provides two functions for use with SortableColumnHeaderButton.
  * getSortIndicatorConfiguration provides information for choosing the FontAwesome icon.

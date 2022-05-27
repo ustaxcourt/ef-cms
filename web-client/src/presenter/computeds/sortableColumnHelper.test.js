@@ -1,6 +1,8 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
+import { getConstants } from '../../getConstants';
 import { runCompute } from 'cerebral/test';
 import { sortableColumnHelper } from './sortableColumnHelper';
+
+const { ASCENDING, DESCENDING } = getConstants();
 
 describe('sortableColumnHelper', () => {
   describe('getSortIndicatorConfiguration', () => {
