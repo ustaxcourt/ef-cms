@@ -42,10 +42,10 @@ export const formattedMessages = (get, applicationContext) => {
     messages: get(state.messages) || [],
   });
 
-  const completedByUsers = uniq(map(messages, 'completedBy'));
+  const caseStatuses = uniq(map(messages, 'caseStatus'));
+  const toUsers = uniq(map(messages, 'to'));
   const fromUsers = uniq(map(messages, 'from'));
-
-  const sections = uniq(map(messages, 'section'));
+  const fromSections = uniq(map(messages, 'fromSection'));
 
   const currentMessageBox = get(state.messageBoxToDisplay.box);
 
@@ -54,10 +54,11 @@ export const formattedMessages = (get, applicationContext) => {
   }
 
   return {
-    completedByUsers,
+    caseStatuses,
     completedMessages,
+    fromSections,
     fromUsers,
     messages,
-    sections,
+    toUsers,
   };
 };

@@ -1,21 +1,24 @@
-import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const MessagesSectionInbox = connect(
   {
     caseStatuses: state.formattedMessages.caseStatuses,
-    // completedByUsers: state.formattedMessages.completedByUsers,
     formattedMessages: state.formattedMessages.messages,
-    // fromUsers: state.formattedMessages.fromUsers,
-    // sections: state.formattedMessages.sections,
+    fromSections: state.formattedMessages.fromSections,
+    fromUsers: state.formattedMessages.fromUsers,
+    toUsers: state.formattedMessages.toUsers,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionInbox({
-    // completedByUsers,
     caseStatuses,
     formattedMessages,
+    fromSections,
+    fromUsers,
+    toUsers,
+    updateScreenMetadataSequence,
   }) {
     return (
       <>
@@ -25,7 +28,29 @@ export const MessagesSectionInbox = connect(
               <h3 id="filterHeading">Filter by</h3>
             </div>
             <TableFilters
-              filters={[{ key: 'caseStatus', options: caseStatuses }]}
+              filters={[
+                {
+                  key: 'caseStatus',
+                  label: 'Case Status',
+                  options: caseStatuses,
+                },
+                {
+                  key: 'toUser',
+                  label: 'To',
+                  options: toUsers,
+                },
+                {
+                  key: 'fromUser',
+                  label: 'From',
+                  options: fromUsers,
+                },
+                {
+                  key: 'section',
+                  label: 'Section',
+                  options: fromSections,
+                },
+              ]}
+              onSelect={updateScreenMetadataSequence}
             ></TableFilters>
           </div>
         </div>
@@ -91,25 +116,33 @@ export const MessagesSectionInbox = connect(
   },
 );
 
-const TableFilters = ({ filters }) => {
+const TableFilters = ({ filters, onSelect }) => {
   return (
     <div className="grid-row grid-col-10 grid-gap padding-left-2">
-      {filters.map(({ key, options }) => {
+      {filters.map(({ key, label, options }) => {
         return (
           <div className="grid-col-3" key={key}>
-            <BindedSelect
-              aria-label="from"
-              bind="screenMetadata.filters.from"
-              id="fromFilter"
-              name="from"
+            <select
+              aria-label={key}
+              bind={`screenMetadata.${key}`}
+              className="usa-select"
+              id={`${key}Filter`}
+              name={key}
+              value={filters[key]}
+              onChange={e => {
+                onSelect({
+                  key,
+                  value: e.target.value,
+                });
+              }}
             >
-              <option value="">-From-</option>
+              <option value="">-{label}-</option>
               {options.map(from => (
                 <option key={from} value={from}>
                   {from}
                 </option>
               ))}
-            </BindedSelect>
+            </select>
           </div>
         );
       })}

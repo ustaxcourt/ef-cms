@@ -1,5 +1,6 @@
 import { chooseMessageBoxAction } from '../actions/chooseMessageBoxAction';
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
+import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { fetchUserNotificationsSequence } from './fetchUserNotificationsSequence';
 import { getCompletedMessagesForSectionAction } from '../actions/getCompletedMessagesForSectionAction';
@@ -18,6 +19,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 const goToMessages = startWebSocketConnectionSequenceDecorator([
   setCurrentPageAction('Interstitial'),
   closeMobileMenuAction,
+  clearScreenMetadataAction,
   clearErrorAlertsAction,
   fetchUserNotificationsSequence,
   setMessageCountsAction,
