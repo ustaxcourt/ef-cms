@@ -64,18 +64,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     docketEntryId,
   });
 
-  const leadDocketEntryEntityForServiceStampOnly = new DocketEntry(
-    {
-      ...omit(leadDocketEntry, 'filedBy'),
-      documentTitle: documentMeta.generatedDocumentTitle,
-      documentType: documentMeta.documentType,
-      eventCode: documentMeta.eventCode,
-      servedAt: documentMeta.servedAt,
-      serviceStamp: documentMeta.serviceStamp,
-    },
-    { applicationContext },
-  );
-
   if (!leadDocketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
@@ -88,26 +76,41 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 
   await stampAndPersistDocument(
     applicationContext,
-    leadDocketEntryEntityForServiceStampOnly,
+    leadDocketEntry,
+    documentMeta,
   );
 
   const servingDocumentPromises = consolidatedCaseIds.map(
     consolidatedDocketNumber =>
-      fileAndServeDocumentOnOneCase(
+      fileAndServeDocumentOnOneCase({
         applicationContext,
         authorizedUser,
         consolidatedDocketNumber,
         docketEntryId,
         documentMeta,
-      ),
+        leadDocketEntry,
+      }),
   );
   await Promise.all(servingDocumentPromises);
 };
 
 const stampAndPersistDocument = async (
   applicationContext,
-  leadDocketEntryEntityForServiceStampOnly,
+  leadDocketEntry,
+  documentMeta,
 ) => {
+  const leadDocketEntryEntityForServiceStampOnly = new DocketEntry(
+    {
+      ...omit(leadDocketEntry, 'filedBy'),
+      documentTitle: documentMeta.generatedDocumentTitle,
+      documentType: documentMeta.documentType,
+      eventCode: documentMeta.eventCode,
+      servedAt: documentMeta.servedAt,
+      serviceStamp: documentMeta.serviceStamp,
+    },
+    { applicationContext },
+  );
+
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
@@ -149,13 +152,14 @@ const stampAndPersistDocument = async (
   });
 };
 
-const fileAndServeDocumentOnOneCase = async (
+const fileAndServeDocumentOnOneCase = async ({
   applicationContext,
   authorizedUser,
-  docketNumber,
+  consolidatedDocketNumber: docketNumber,
   docketEntryId,
   documentMeta,
-) => {
+  leadDocketEntry,
+}) => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -165,20 +169,20 @@ const fileAndServeDocumentOnOneCase = async (
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const docketEntry = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
-
-  if (!docketEntry) {
-    throw new NotFoundError('Docket entry not found');
-  }
-  if (docketEntry.servedAt) {
-    throw new Error('Docket entry has already been served');
-  }
-
-  if (docketEntry.isPendingService) {
-    throw new Error('Docket entry is already being served');
-  }
+  // const docketEntry = caseEntity.getDocketEntryById({
+  //   docketEntryId,
+  // });
+  //
+  // if (!docketEntry) {
+  //   throw new NotFoundError('Docket entry not found');
+  // }
+  // if (docketEntry.servedAt) {
+  //   throw new Error('Docket entry has already been served');
+  // }
+  //
+  // if (docketEntry.isPendingService) {
+  //   throw new Error('Docket entry is already being served');
+  // }
 
   await applicationContext
     .getPersistenceGateway()
@@ -197,6 +201,8 @@ const fileAndServeDocumentOnOneCase = async (
     const numberOfPages = await applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument({ applicationContext, docketEntryId });
+
+    //TODO: This is where we need to split away from the lead case's docket entry
 
     // Serve on all parties
     const servedParties = aggregatePartiesForService(caseEntity);
