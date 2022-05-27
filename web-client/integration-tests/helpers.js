@@ -800,12 +800,14 @@ export const setupTest = ({ useCases = {}, constantsOverrides = {} } = {}) => {
   cerebralTest.closeSocket = stopSocket;
 
   const originalUseCases = applicationContext.getUseCases();
+  const allUseCases = {
+    ...originalUseCases,
+    ...useCases,
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  };
+
   presenter.providers.applicationContext.getUseCases = () => {
-    return {
-      ...originalUseCases,
-      ...useCases,
-      loadPDFForSigningInteractor: () => Promise.resolve(null),
-    };
+    return allUseCases;
   };
 
   const originalConstants = applicationContext.getConstants();
