@@ -1,4 +1,5 @@
 import { formatDateIfToday } from './formattedWorkQueue';
+import { map, uniq } from 'lodash';
 import { state } from 'cerebral';
 
 export const getFormattedMessages = ({ applicationContext, messages }) => {
@@ -41,6 +42,8 @@ export const formattedMessages = (get, applicationContext) => {
     messages: get(state.messages) || [],
   });
 
+  const completedByUsers = uniq(map(messages, 'completedBy'));
+
   const currentMessageBox = get(state.messageBoxToDisplay.box);
 
   if (currentMessageBox === 'outbox') {
@@ -48,6 +51,7 @@ export const formattedMessages = (get, applicationContext) => {
   }
 
   return {
+    completedByUsers,
     completedMessages,
     messages,
   };
