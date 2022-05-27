@@ -48,8 +48,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { consolidatedCaseIds, docketEntryId, leadCaseDocketNumber } =
-    documentMeta;
+  const { docketEntryId, docketNumbers, leadCaseDocketNumber } = documentMeta;
 
   const leadCaseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -60,45 +59,79 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 
   let leadCaseEntity = new Case(leadCaseToUpdate, { applicationContext });
 
-  const leadDocketEntry = leadCaseEntity.getDocketEntryById({
+  const leadDocketEntryOld = leadCaseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!leadDocketEntry) {
+  if (!leadDocketEntryOld) {
     throw new NotFoundError('Docket entry not found');
   }
-  if (leadDocketEntry.servedAt) {
+  if (leadDocketEntryOld.servedAt) {
     throw new Error('Docket entry has already been served');
   }
-  if (leadDocketEntry.isPendingService) {
+  if (leadDocketEntryOld.isPendingService) {
     throw new Error('Docket entry is already being served');
   }
 
-  await stampAndPersistDocument(
+  createDocketEntriesForConsolidatedCases({
     applicationContext,
-    leadDocketEntry,
-    documentMeta,
-  );
+    docketNumbers,
+    leadCaseDocketNumber,
+    leadDocketEntryOld,
+  });
 
-  const servingDocumentPromises = consolidatedCaseIds.map(
-    consolidatedDocketNumber =>
-      fileAndServeDocumentOnOneCase({
-        applicationContext,
-        authorizedUser,
-        consolidatedDocketNumber,
-        docketEntryId,
-        documentMeta,
-        leadDocketEntry,
-      }),
+  await stampAndPersistDocument({
+    applicationContext,
+    documentMeta,
+    leadDocketEntryOld,
+  });
+
+  const servingDocumentPromises = docketNumbers.map(consolidatedDocketNumber =>
+    fileAndServeDocumentOnOneCase({
+      applicationContext,
+      authorizedUser,
+      consolidatedDocketNumber,
+      docketEntryId,
+      documentMeta,
+      leadDocketEntryOld,
+    }),
   );
   await Promise.all(servingDocumentPromises);
 };
 
-const stampAndPersistDocument = async (
+const createDocketEntriesForConsolidatedCases = async ({
   applicationContext,
-  leadDocketEntry,
+  docketNumbers,
+  leadCaseDocketNumber,
+  leadDocketEntryOld,
+}) => {
+  docketNumbers.forEach(async docketNumber => {
+    if (docketNumber === leadCaseDocketNumber) {
+      return;
+    }
+    // create docket entry for each consolidated case (as a direct and un-updated copy of the original lead docket entry)
+    const caseToUpdate = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
+    const caseEntity = new Case(caseToUpdate, { applicationContext });
+
+    const docketEntryEntity = new DocketEntry(
+      {
+        ...leadDocketEntry,
+      },
+      { applicationContext },
+    );
+  });
+};
+
+const stampAndPersistDocument = async ({
+  applicationContext,
   documentMeta,
-) => {
+  leadDocketEntry,
+}) => {
   const leadDocketEntryEntityForServiceStampOnly = new DocketEntry(
     {
       ...omit(leadDocketEntry, 'filedBy'),
@@ -160,6 +193,11 @@ const fileAndServeDocumentOnOneCase = async ({
   documentMeta,
   leadDocketEntry,
 }) => {
+  // TODO:
+  // Create new docket entries for each consolidated case, but only update the docket entry for the lead case
+  // Refactor paper service receipt to account for multiple cases being served at once
+  //
+
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
