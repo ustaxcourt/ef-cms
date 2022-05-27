@@ -1,5 +1,7 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
+import { getConstants } from '../../getConstants';
 import { state } from 'cerebral';
+
+const { ASCENDING, DESCENDING } = getConstants();
 
 /**
  * toggle the sort for the clicked sortable table button

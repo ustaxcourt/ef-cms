@@ -1,6 +1,8 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
+import { getConstants } from '../../getConstants';
+
 import { runAction } from 'cerebral/test';
 import { setTableSortConfigurationAction } from './setTableSortConfigurationAction';
+const { ASCENDING, DESCENDING } = getConstants();
 
 describe('setTableSortConfigurationAction', () => {
   it('should return default sortOrder', async () => {
