@@ -8,24 +8,53 @@ export const MessagesSectionInbox = connect(
   {
     completedByUsers: state.formattedMessages.completedByUsers,
     formattedMessages: state.formattedMessages.messages,
+    sections: state.formattedMessages.sections,
   },
-  function MessagesSectionInbox({ completedByUsers, formattedMessages }) {
+  function MessagesSectionInbox({
+    completedByUsers,
+    formattedMessages,
+    sections,
+  }) {
     return (
       <>
-        <div className="grid-col-3">
-          <BindedSelect
-            aria-label="completed by"
-            bind="screenMetadata.filters.completedBy"
-            id="completedByFilter"
-            name="completedBy"
-          >
-            <option value="">-Completed By-</option>
-            {Object.values(completedByUsers).map(completedByUser => (
-              <option key={completedByUser} value={completedByUser}>
-                {completedByUser}
-              </option>
-            ))}
-          </BindedSelect>
+        <div className="grid-row margin-bottom-3">
+          <div className="grid-row grid-col-10">
+            <div className="grid-col-1 padding-top-05 margin-right-3">
+              <h3 id="filterHeading">Filter by</h3>
+            </div>
+            <div className="grid-row grid-col-10 grid-gap padding-left-2">
+              <div className="grid-col-3">
+                <BindedSelect
+                  aria-label="completed by"
+                  bind="screenMetadata.filters.completedBy"
+                  id="completedByFilter"
+                  name="completedBy"
+                >
+                  <option value="">-Completed By-</option>
+                  {Object.values(completedByUsers).map(completedByUser => (
+                    <option key={completedByUser} value={completedByUser}>
+                      {completedByUser}
+                    </option>
+                  ))}
+                </BindedSelect>
+              </div>
+              <div className="grid-col-3">
+                <BindedSelect
+                  aria-label="section"
+                  bind="screenMetadata.filters.section"
+                  id="sectionFilter"
+                  name="section"
+                >
+                  <option value="">-Section-</option>
+                  {Object.values(sections).map(section => (
+                    <option key={section} value={section}>
+                      {section}
+                    </option>
+                  ))}
+                </BindedSelect>
+              </div>
+            </div>
+          </div>
         </div>
         <table className="usa-table ustc-table subsection">
           <thead>
