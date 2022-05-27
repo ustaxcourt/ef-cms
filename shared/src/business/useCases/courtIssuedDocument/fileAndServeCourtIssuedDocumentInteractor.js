@@ -17,6 +17,7 @@ const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
+const { log } = require('winston');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -54,7 +55,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      leadCaseDocketNumber,
+      docketNumber: leadCaseDocketNumber,
     });
 
   let leadCaseEntity = new Case(leadCaseToUpdate, { applicationContext });
@@ -93,39 +94,65 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       consolidatedDocketNumber,
       docketEntryId,
       documentMeta,
+      leadCaseDocketNumber,
       leadDocketEntryOld,
     }),
   );
   await Promise.all(servingDocumentPromises);
 };
 
-const createDocketEntriesForConsolidatedCases = async ({
-  applicationContext,
-  docketNumbers,
-  leadCaseDocketNumber,
-  leadDocketEntryOld,
-}) => {
-  docketNumbers.forEach(async docketNumber => {
-    if (docketNumber === leadCaseDocketNumber) {
-      return;
-    }
-    // create docket entry for each consolidated case (as a direct and un-updated copy of the original lead docket entry)
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-    const caseEntity = new Case(caseToUpdate, { applicationContext });
+// const createDocketEntriesForConsolidatedCases = async ({
+//   applicationContext,
+//   docketNumbers,
+//   leadCaseDocketNumber,
+//   leadDocketEntryOld,
+// }) => {
+//   docketNumbers.forEach(async docketNumber => {
+//     if (docketNumber === leadCaseDocketNumber) {
+//       return;
+//     }
+//     // create docket entry for each consolidated case (as a direct and un-updated copy of the original lead docket entry)
+//     const caseToUpdate = await applicationContext
+//       .getPersistenceGateway()
+//       .getCaseByDocketNumber({
+//         applicationContext,
+//         docketNumber,
+//       });
+//     const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-    const docketEntryEntity = new DocketEntry(
-      {
-        ...leadDocketEntry,
-      },
-      { applicationContext },
-    );
-  });
-};
+//     console.log('***caseEntity***', caseEntity);
+
+//     // TODO: docketEntryId equates to S3 key, requires more investigation
+
+//     /**
+//      * **documentMeta**  {
+//   eventCode: 'O',
+//   documentType: 'Order',
+//   documentTitle: '[Anything]',
+//   scenario: 'Type A',
+//   isOrder: true,
+//   requiresSignature: true,
+//   attachments: false,
+//   freeText: 'Lunch Order',
+//   date: null,
+//   generatedDocumentTitle: 'Lunch Order',
+//   serviceStamp: 'Served',
+//   docketEntryId: '41052161-a258-485e-b2e4-6b3e0a295818',
+//   docketNumbers: [ '103-22', '104-22', '105-22' ],
+//   leadCaseDocketNumber: '103-22'
+// }
+//      */
+
+//     const docketEntryEntity = new DocketEntry(
+//       {
+//         ...leadDocketEntryOld,
+//       },
+//       { applicationContext },
+//     );
+
+//     console.log('***docketEntryEntity***', docketEntryEntity);
+//   });
+// };
 
 const stampAndPersistDocument = async ({
   applicationContext,
@@ -191,7 +218,8 @@ const fileAndServeDocumentOnOneCase = async ({
   consolidatedDocketNumber: docketNumber,
   docketEntryId,
   documentMeta,
-  leadDocketEntry,
+  leadCaseDocketNumber,
+  leadDocketEntryOld,
 }) => {
   // TODO:
   // Create new docket entries for each consolidated case, but only update the docket entry for the lead case
@@ -222,14 +250,16 @@ const fileAndServeDocumentOnOneCase = async ({
   //   throw new Error('Docket entry is already being served');
   // }
 
-  await applicationContext
-    .getPersistenceGateway()
-    .updateDocketEntryPendingServiceStatus({
-      applicationContext,
-      docketEntryId: docketEntry.docketEntryId,
-      docketNumber: caseToUpdate.docketNumber,
-      status: true,
-    });
+  if (leadCaseDocketNumber === caseToUpdate.docketNumber) {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId: leadDocketEntryOld.docketEntryId,
+        docketNumber: leadCaseDocketNumber,
+        status: true,
+      });
+  }
 
   try {
     const user = await applicationContext
@@ -247,9 +277,10 @@ const fileAndServeDocumentOnOneCase = async ({
 
     const docketEntryEntity = new DocketEntry(
       {
-        ...omit(docketEntry, 'filedBy'),
+        ...omit(leadDocketEntry, 'filedBy'),
         attachments: documentMeta.attachments,
         date: documentMeta.date,
+        docketNumber: caseToUpdate.docketNumber,
         documentTitle: documentMeta.generatedDocumentTitle,
         documentType: documentMeta.documentType,
         draftOrderState: null,
