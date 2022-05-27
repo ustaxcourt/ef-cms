@@ -39,6 +39,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
         TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
       updatedTrialSessionEntity.proceedingType ===
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+      updatedTrialSessionEntity.isCalendared &&
       caseEntity.status !== CASE_STATUS_TYPES.closed;
 
     if (shouldSetNoticeOfChangeToRemoteProceeding) {

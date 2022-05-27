@@ -75,7 +75,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     ).rejects.toThrow('The case is already part of this trial session.');
   });
 
-  it('returns the expected case with new trial session info', async () => {
+  it('should return the expected case with new trial session information', async () => {
     mockTrialSession = {
       ...MOCK_TRIAL_REMOTE,
       caseOrder: [{ docketNumber: '123-45' }],
@@ -86,7 +86,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+        trialSessionId: mockTrialSession.trialSessionId,
       },
     );
 
@@ -95,7 +95,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       status: CASE_STATUS_TYPES.calendared,
       trialDate: '2025-12-01T00:00:00.000Z',
       trialLocation: 'Birmingham, Alabama',
-      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+      trialSessionId: mockTrialSession.trialSessionId,
       trialTime: '10:00',
     });
   });
