@@ -1,13 +1,57 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const MessagesSectionOutbox = connect(
-  { formattedMessages: state.formattedMessages.messages },
-  function MessagesSectionOutbox({ formattedMessages }) {
+  {
+    caseStatuses: state.formattedMessages.caseStatuses,
+    formattedMessages: state.formattedMessages.messages,
+    fromSections: state.formattedMessages.fromSections,
+    fromUsers: state.formattedMessages.fromUsers,
+    showFilters: state.formattedMessages.showFilters,
+    toUsers: state.formattedMessages.toUsers,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+  },
+  function MessagesSectionOutbox({
+    caseStatuses,
+    formattedMessages,
+    fromSections,
+    fromUsers,
+    showFilters,
+    toUsers,
+    updateScreenMetadataSequence,
+  }) {
     return (
       <>
+        {showFilters && (
+          <TableFilters
+            filters={[
+              {
+                key: 'caseStatus',
+                label: 'Case Status',
+                options: caseStatuses,
+              },
+              {
+                key: 'toUser',
+                label: 'To',
+                options: toUsers,
+              },
+              {
+                key: 'fromUser',
+                label: 'From',
+                options: fromUsers,
+              },
+              {
+                key: 'section',
+                label: 'Section',
+                options: fromSections,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
