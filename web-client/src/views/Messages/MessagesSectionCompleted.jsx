@@ -1,13 +1,44 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const MessagesSectionCompleted = connect(
-  { formattedMessages: state.formattedMessages.completedMessages },
-  function MessagesSectionCompleted({ formattedMessages }) {
+  {
+    completedByUsers: state.formattedMessages.completedByUsers,
+    formattedMessages: state.formattedMessages.completedMessages,
+    fromSections: state.formattedMessages.fromSections,
+    showFilters: state.formattedMessages.showFilters,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
+  },
+  function MessagesSectionCompleted({
+    completedByUsers,
+    formattedMessages,
+    fromSections,
+    showFilters,
+    updateScreenMetadataSequence,
+  }) {
     return (
       <>
+        {showFilters && (
+          <TableFilters
+            filters={[
+              {
+                key: 'completedBy',
+                label: 'Completed By',
+                options: completedByUsers,
+              },
+              {
+                key: 'section',
+                label: 'Section',
+                options: fromSections,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
+
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>

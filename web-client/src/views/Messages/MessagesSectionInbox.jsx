@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -9,6 +10,7 @@ export const MessagesSectionInbox = connect(
     formattedMessages: state.formattedMessages.messages,
     fromSections: state.formattedMessages.fromSections,
     fromUsers: state.formattedMessages.fromUsers,
+    showFilters: state.formattedMessages.showFilters,
     toUsers: state.formattedMessages.toUsers,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
@@ -17,43 +19,39 @@ export const MessagesSectionInbox = connect(
     formattedMessages,
     fromSections,
     fromUsers,
+    showFilters,
     toUsers,
     updateScreenMetadataSequence,
   }) {
     return (
       <>
-        <div className="grid-row margin-bottom-3">
-          <div className="grid-row grid-col-10">
-            <div className="grid-col-1 padding-top-05 margin-right-3">
-              <h3 id="filterHeading">Filter by</h3>
-            </div>
-            <TableFilters
-              filters={[
-                {
-                  key: 'caseStatus',
-                  label: 'Case Status',
-                  options: caseStatuses,
-                },
-                {
-                  key: 'toUser',
-                  label: 'To',
-                  options: toUsers,
-                },
-                {
-                  key: 'fromUser',
-                  label: 'From',
-                  options: fromUsers,
-                },
-                {
-                  key: 'section',
-                  label: 'Section',
-                  options: fromSections,
-                },
-              ]}
-              onSelect={updateScreenMetadataSequence}
-            ></TableFilters>
-          </div>
-        </div>
+        {showFilters && (
+          <TableFilters
+            filters={[
+              {
+                key: 'caseStatus',
+                label: 'Case Status',
+                options: caseStatuses,
+              },
+              {
+                key: 'toUser',
+                label: 'To',
+                options: toUsers,
+              },
+              {
+                key: 'fromUser',
+                label: 'From',
+                options: fromUsers,
+              },
+              {
+                key: 'section',
+                label: 'Section',
+                options: fromSections,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
@@ -115,37 +113,3 @@ export const MessagesSectionInbox = connect(
     );
   },
 );
-
-const TableFilters = ({ filters, onSelect }) => {
-  return (
-    <div className="grid-row grid-col-10 grid-gap padding-left-2">
-      {filters.map(({ key, label, options }) => {
-        return (
-          <div className="grid-col-3" key={key}>
-            <select
-              aria-label={key}
-              bind={`screenMetadata.${key}`}
-              className="usa-select"
-              id={`${key}Filter`}
-              name={key}
-              value={filters[key]}
-              onChange={e => {
-                onSelect({
-                  key,
-                  value: e.target.value,
-                });
-              }}
-            >
-              <option value="">-{label}-</option>
-              {options.map(from => (
-                <option key={from} value={from}>
-                  {from}
-                </option>
-              ))}
-            </select>
-          </div>
-        );
-      })}
-    </div>
-  );
-};
