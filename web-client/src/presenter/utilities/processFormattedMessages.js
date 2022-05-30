@@ -7,8 +7,8 @@ export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
     if (!tableSort) {
       sortNumber = a.createdAt.localeCompare(b.createdAt);
     } else if (
-      // 'createdAt' = Recieved Column on Inbox Tab and Sent Column on Sent Tab (Outbox)
-      // 'completedAt' = Completed COlumn on Completed Tab
+      // 'createdAt' = Received Column on Inbox Tab and Sent Column on Sent Tab (Outbox)
+      // 'completedAt' = Completed Column on Completed Tab
 
       ['createdAt', 'completedAt', 'subject'].includes(tableSort.sortField)
     ) {
