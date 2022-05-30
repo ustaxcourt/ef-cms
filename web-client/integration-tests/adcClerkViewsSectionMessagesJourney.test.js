@@ -1,8 +1,8 @@
 import { applicationContext } from '../src/applicationContext';
 import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
 import { formattedMessages } from '../src/presenter/computeds/formattedMessages';
-import { getUserMessageCount } from './journey/getUserMessageCount';
 import {
+  getUserMessageCount,
   loginAs,
   refreshElasticsearchIndex,
   setupTest,
@@ -129,13 +129,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     validateMessageOrdering(inboxMessages, expected);
   });
 
-  it('go to section outbox', async () => {
-    await cerebralTest.runSequence('gotoMessagesSequence', {
-      box: 'outbox',
-      queue: 'section',
-    });
-  });
-
   it('verify default sorting of section outbox createdAt sort field, descending', async () => {
     let afterOutboxMessageCount = await getUserMessageCount(
       cerebralTest,
@@ -154,13 +147,6 @@ describe('ADC Clerk Views Section Messages Journey', () => {
     );
 
     validateMessageOrdering(outboxMessages, expected);
-  });
-
-  it('go to section completed', async () => {
-    await cerebralTest.runSequence('gotoMessagesSequence', {
-      box: 'completed',
-      queue: 'section',
-    });
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
