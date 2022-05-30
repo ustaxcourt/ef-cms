@@ -87,13 +87,14 @@ describe('petitions clerk sets a remote trial session calendar', () => {
   describe('petitions clerk views the trial session', () => {
     petitionsClerkViewsOpenTrialSession(cerebralTest);
 
-    it('the trial session should be open and have 1 manually added cases on it', async () => {
+    it('the trial session should be open and have 1 manually added cases on it', () => {
       const trialSessionFormatted = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {
           state: cerebralTest.getState(),
         },
       );
+
       expect(trialSessionFormatted.openCases.length).toEqual(1);
     });
   });
