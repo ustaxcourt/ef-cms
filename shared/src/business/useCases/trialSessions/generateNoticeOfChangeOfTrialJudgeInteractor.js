@@ -25,7 +25,7 @@ exports.generateNoticeOfChangeOfTrialJudgeInteractor = async (
     trialSessionInformation.sessionScope ===
     TRIAL_SESSION_SCOPE_TYPES.standaloneRemote
   ) {
-    trialLocationAndProceedingType = 'remote';
+    trialLocationAndProceedingType = 'standalone remote';
   }
 
   const trialInfo = {
