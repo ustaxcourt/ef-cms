@@ -881,32 +881,32 @@ workflows:
 
   build-and-deploy:
     jobs:
-      - build-client-integration:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y-public:
-          <<: *build-and-deploy-defaults
-      - e2e-pa11y-public-search:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-smoketests-local:
-          <<: *build-and-deploy-defaults
-      - e2e-cypress-public:
-          <<: *build-and-deploy-defaults
-      - verify-pdfs:
-          <<: *build-and-deploy-defaults
+      # - build-client-integration:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y-public:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-pa11y-public-search:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-smoketests-local:
+      #     <<: *build-and-deploy-defaults
+      # - e2e-cypress-public:
+      #     <<: *build-and-deploy-defaults
+      # - verify-pdfs:
+      #     <<: *build-and-deploy-defaults
       - deploy:
-          requires:
-            - build-client-integration
-            - e2e-pa11y
-            - e2e-pa11y-public
-            - e2e-pa11y-public-search
-            - e2e-cypress
-            - e2e-cypress-smoketests-local
-            - e2e-cypress-public
-            - verify-pdfs
+          # requires:
+          #   - build-client-integration
+          #   - e2e-pa11y
+          #   - e2e-pa11y-public
+          #   - e2e-pa11y-public-search
+          #   - e2e-cypress
+          #   - e2e-cypress-smoketests-local
+          #   - e2e-cypress-public
+          #   - verify-pdfs
           filters:
             branches:
               only:
@@ -920,67 +920,67 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - reindex:
-          requires:
-            - deploy
-      - migrate:
-          requires:
-            - reindex
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
-      - wait-for-reindex:
-          type: approval
-          requires:
-            - migrate
-      - disable-reindex-cron:
-          requires:
-            - wait-for-reindex
-      - smoketests:
-          requires:
-            - disable-reindex-cron
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
-      - smoketests-readonly:
-          requires:
-            - smoketests
-          filters:
-            branches:
-              only:
-                - develop
-                - irs
-                - staging
-                - test
-                - experimental1
-                - experimental2
-                - experimental3
-                - experimental4
-                - experimental5
-                - migration
+      # - reindex:
+      #     requires:
+      #       - deploy
+      # - migrate:
+      #     requires:
+      #       - reindex
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
+      # - wait-for-reindex:
+      #     type: approval
+      #     requires:
+      #       - migrate
+      # - disable-reindex-cron:
+      #     requires:
+      #       - wait-for-reindex
+      # - smoketests:
+      #     requires:
+      #       - disable-reindex-cron
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
+      # - smoketests-readonly:
+      #     requires:
+      #       - smoketests
+      #     filters:
+      #       branches:
+      #         only:
+      #           - develop
+      #           - irs
+      #           - staging
+      #           - test
+      #           - experimental1
+      #           - experimental2
+      #           - experimental3
+      #           - experimental4
+      #           - experimental5
+      #           - migration
       - switch-colors:
           requires:
-            - smoketests-readonly
+            - deploy
           filters:
             branches:
               only:
