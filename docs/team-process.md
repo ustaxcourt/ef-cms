@@ -157,10 +157,11 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - `pdfjs-dist`: temporarily locked to 2.12.313 as v2.13.216 causes issues with pdf rendering in cypress tests
 
-#### Validating Updates
--  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
-    - Be sure the deploy [runs a migration](./additional-resources/blue-green-migration.md#manual-migration-steps) to verify the updates do not affect the migration workflow.
 - `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages: 
     - `@fortawesome/free-solid-svg-icons`
     - `@fortawesome/free-regular-svg-icons`
     - `@fortawesome/fontawesome-svg-core` 
+    
+#### Validating Updates
+-  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
+    - Be sure the deploy [runs a migration](./additional-resources/blue-green-migration.md#manual-migration-steps) to verify the updates do not affect the migration workflow.
