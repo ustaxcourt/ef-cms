@@ -1,4 +1,8 @@
 const {
+  CASE_STATUS_TYPES,
+  TRIAL_SESSION_PROCEEDING_TYPES,
+} = require('../../entities/EntityConstants');
+const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
@@ -9,6 +13,115 @@ const { Case } = require('../../entities/cases/Case');
 const { get } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
+
+const updateAssociatedCaseAndSetNoticeOfChange = async ({
+  applicationContext,
+  currentTrialSession,
+  docketNumber,
+  paperServicePdfsCombined,
+  updatedTrialSessionEntity,
+}) => {
+  const caseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const caseEntity = new Case(caseToUpdate, { applicationContext });
+  if (
+    caseToUpdate.trialSessionId === updatedTrialSessionEntity.trialSessionId
+  ) {
+    const shouldSetNoticeOfChangeToRemoteProceeding =
+      currentTrialSession.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+      updatedTrialSessionEntity.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+      updatedTrialSessionEntity.isCalendared &&
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+    if (shouldSetNoticeOfChangeToRemoteProceeding) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeToRemoteProceeding(applicationContext, {
+          caseEntity,
+          currentTrialSession,
+          newPdfDoc: paperServicePdfsCombined,
+          newTrialSessionEntity: updatedTrialSessionEntity,
+          user: applicationContext.getCurrentUser(),
+        });
+    }
+
+    const shouldSetNoticeOfChangeToInPersonProceeding =
+      currentTrialSession.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+      updatedTrialSessionEntity.proceedingType ===
+        TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
+      updatedTrialSessionEntity.isCalendared &&
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+    if (shouldSetNoticeOfChangeToInPersonProceeding) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeToInPersonProceeding(applicationContext, {
+          caseEntity,
+          currentTrialSession,
+          newPdfDoc: paperServicePdfsCombined,
+          newTrialSessionEntity: updatedTrialSessionEntity,
+          user: applicationContext.getCurrentUser(),
+        });
+    }
+
+    await applicationContext
+      .getUseCaseHelpers()
+      .setNoticeOfChangeOfTrialJudge(applicationContext, {
+        caseEntity,
+        currentTrialSession,
+        newPdfDoc: paperServicePdfsCombined,
+        newTrialSessionEntity: updatedTrialSessionEntity,
+        user: applicationContext.getCurrentUser(),
+      });
+
+    caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
+
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
+  }
+
+  const matchingHearing = caseToUpdate.hearings.find(
+    hearing =>
+      hearing.trialSessionId == updatedTrialSessionEntity.trialSessionId,
+  );
+  if (matchingHearing) {
+    applicationContext.getPersistenceGateway().updateCaseHearing({
+      applicationContext,
+      docketNumber,
+      hearingToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
+    });
+  }
+};
+
+const createWorkingCopyForNewUserOnSession = async ({
+  applicationContext,
+  trialSessionId,
+  userId,
+}) => {
+  const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
+    trialSessionId,
+    userId,
+  });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .createTrialSessionWorkingCopy({
+      applicationContext,
+      trialSessionWorkingCopy: trialSessionWorkingCopyEntity
+        .validate()
+        .toRawObject(),
+    });
+};
 
 /**
  * updateTrialSessionInteractor
@@ -69,118 +182,62 @@ exports.updateTrialSessionInteractor = async (
     trialLocation: trialSession.trialLocation,
   };
 
-  const newTrialSessionEntity = new TrialSession(
+  const updatedTrialSessionEntity = new TrialSession(
     { ...currentTrialSession, ...editableFields },
     {
       applicationContext,
     },
   );
 
-  if (
+  const shouldCreateWorkingCopyForNewJudge =
     (!get(currentTrialSession, 'judge.userId') &&
-      get(newTrialSessionEntity, 'judge.userId')) ||
+      get(updatedTrialSessionEntity, 'judge.userId')) ||
     (currentTrialSession.judge &&
-      newTrialSessionEntity.judge &&
-      currentTrialSession.judge.userId !== newTrialSessionEntity.judge.userId)
-  ) {
-    //create a working copy for the new judge
-    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
-      trialSessionId: newTrialSessionEntity.trialSessionId,
-      userId: newTrialSessionEntity.judge.userId,
-    });
+      updatedTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !==
+        updatedTrialSessionEntity.judge.userId);
 
-    await applicationContext
-      .getPersistenceGateway()
-      .createTrialSessionWorkingCopy({
-        applicationContext,
-        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
-          .validate()
-          .toRawObject(),
-      });
+  if (shouldCreateWorkingCopyForNewJudge) {
+    await createWorkingCopyForNewUserOnSession({
+      applicationContext,
+      trialSessionId: updatedTrialSessionEntity.trialSessionId,
+      userId: updatedTrialSessionEntity.judge.userId,
+    });
   }
 
-  if (
+  const shouldCreateWorkingCopyForNewTrialClerk =
     (!get(currentTrialSession, 'trialClerk.userId') &&
-      get(newTrialSessionEntity, 'trialClerk.userId')) ||
+      get(updatedTrialSessionEntity, 'trialClerk.userId')) ||
     (currentTrialSession.trialClerk &&
-      newTrialSessionEntity.trialClerk &&
+      updatedTrialSessionEntity.trialClerk &&
       currentTrialSession.trialClerk.userId !==
-        newTrialSessionEntity.trialClerk.userId)
-  ) {
-    //create a working copy for the new trial clerk
-    const trialSessionWorkingCopyEntity = new TrialSessionWorkingCopy({
-      trialSessionId: newTrialSessionEntity.trialSessionId,
-      userId: newTrialSessionEntity.trialClerk.userId,
-    });
+        updatedTrialSessionEntity.trialClerk.userId);
 
-    await applicationContext
-      .getPersistenceGateway()
-      .createTrialSessionWorkingCopy({
-        applicationContext,
-        trialSessionWorkingCopy: trialSessionWorkingCopyEntity
-          .validate()
-          .toRawObject(),
-      });
+  if (shouldCreateWorkingCopyForNewTrialClerk) {
+    await createWorkingCopyForNewUserOnSession({
+      applicationContext,
+      trialSessionId: updatedTrialSessionEntity.trialSessionId,
+      userId: updatedTrialSessionEntity.trialClerk.userId,
+    });
   }
 
   let pdfUrl = null;
   let serviceInfo = null;
   if (currentTrialSession.caseOrder && currentTrialSession.caseOrder.length) {
-    const calendaredCases = currentTrialSession.caseOrder;
+    const calendaredCases = currentTrialSession.caseOrder.filter(
+      c => !c.removedFromTrial,
+    );
     const { PDFDocument } = await applicationContext.getPdfLib();
     const paperServicePdfsCombined = await PDFDocument.create();
 
     for (let calendaredCase of calendaredCases) {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber: calendaredCase.docketNumber,
-        });
-
-      const caseEntity = new Case(caseToUpdate, { applicationContext });
-      if (
-        caseToUpdate.trialSessionId === newTrialSessionEntity.trialSessionId
-      ) {
-        await applicationContext
-          .getUseCaseHelpers()
-          .setNoticeOfChangeToRemoteProceeding(applicationContext, {
-            caseEntity,
-            currentTrialSession,
-            newPdfDoc: paperServicePdfsCombined,
-            newTrialSessionEntity,
-            user,
-          });
-
-        await applicationContext
-          .getUseCaseHelpers()
-          .setNoticeOfChangeOfTrialJudge(applicationContext, {
-            caseEntity,
-            currentTrialSession,
-            newPdfDoc: paperServicePdfsCombined,
-            newTrialSessionEntity,
-            user,
-          });
-
-        caseEntity.updateTrialSessionInformation(newTrialSessionEntity);
-
-        await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-          applicationContext,
-          caseToUpdate: caseEntity,
-        });
-      }
-
-      const matchingHearing = caseToUpdate.hearings.find(
-        hearing =>
-          hearing.trialSessionId == newTrialSessionEntity.trialSessionId,
-      );
-      if (matchingHearing) {
-        applicationContext.getPersistenceGateway().updateCaseHearing({
-          applicationContext,
-          docketNumber: calendaredCase.docketNumber,
-          hearingToUpdate: newTrialSessionEntity.validate().toRawObject(),
-        });
-      }
+      await updateAssociatedCaseAndSetNoticeOfChange({
+        applicationContext,
+        currentTrialSession,
+        docketNumber: calendaredCase.docketNumber,
+        paperServicePdfsCombined,
+        updatedTrialSessionEntity,
+      });
     }
 
     serviceInfo = await applicationContext
@@ -193,12 +250,12 @@ exports.updateTrialSessionInteractor = async (
   }
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
-    newTrialSessionEntity.setAsSwingSession(trialSession.swingSessionId);
+    updatedTrialSessionEntity.setAsSwingSession(trialSession.swingSessionId);
   }
 
   await applicationContext.getPersistenceGateway().updateTrialSession({
     applicationContext,
-    trialSessionToUpdate: newTrialSessionEntity.validate().toRawObject(),
+    trialSessionToUpdate: updatedTrialSessionEntity.validate().toRawObject(),
   });
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({

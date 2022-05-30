@@ -4,13 +4,13 @@ import {
 } from '../../../shared/src/business/entities/EntityConstants';
 import { TrialSession } from '../../../shared/src/business/entities/trialSessions/TrialSession';
 
-const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
-
 export const docketClerkCreatesARemoteTrialSession = (
   cerebralTest,
   overrides = {},
 ) => {
   return it('Docket clerk starts a remote trial session', async () => {
+    const errorMessages = TrialSession.VALIDATION_ERROR_MESSAGES;
+
     await cerebralTest.runSequence('gotoAddTrialSessionSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
@@ -114,5 +114,6 @@ export const docketClerkCreatesARemoteTrialSession = (
     expect(lastCreatedTrialSessionId).toBeDefined();
 
     cerebralTest.lastCreatedTrialSessionId = lastCreatedTrialSessionId;
+    cerebralTest.trialSessionId = cerebralTest.lastCreatedTrialSessionId;
   });
 };
