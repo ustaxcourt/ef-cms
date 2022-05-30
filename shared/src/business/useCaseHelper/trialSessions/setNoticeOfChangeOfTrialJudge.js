@@ -1,5 +1,4 @@
 const {
-  CASE_STATUS_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
@@ -19,51 +18,43 @@ exports.setNoticeOfChangeOfTrialJudge = async (
   applicationContext,
   { caseEntity, currentTrialSession, newPdfDoc, newTrialSessionEntity, userId },
 ) => {
-  const shouldIssueNoticeOfChangeOfTrialJudge =
-    currentTrialSession.isCalendared &&
-    currentTrialSession.judge?.userId !== newTrialSessionEntity.judge?.userId &&
-    caseEntity.status !== CASE_STATUS_TYPES.closed;
+  const priorJudgeTitleWithFullName = await getJudgeWithTitle({
+    applicationContext,
+    judgeUserName: currentTrialSession.judge.name,
+    useFullName: true,
+  });
 
-  if (shouldIssueNoticeOfChangeOfTrialJudge) {
-    const priorJudgeTitleWithFullName = await getJudgeWithTitle({
-      applicationContext,
-      judgeUserName: currentTrialSession.judge.name,
-      useFullName: true,
+  const updatedJudgeTitleWithFullName = await getJudgeWithTitle({
+    applicationContext,
+    judgeUserName: newTrialSessionEntity.judge.name,
+    useFullName: true,
+  });
+
+  const trialSessionInformation = {
+    caseProcedureType: caseEntity.procedureType,
+    chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
+    priorJudgeTitleWithFullName,
+    proceedingType: newTrialSessionEntity.proceedingType,
+    sessionScope: newTrialSessionEntity.sessionScope,
+    startDate: newTrialSessionEntity.startDate,
+    trialLocation: newTrialSessionEntity.trialLocation,
+    updatedJudgeTitleWithFullName,
+  };
+
+  const noticePdf = await applicationContext
+    .getUseCases()
+    .generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
+      docketNumber: caseEntity.docketNumber,
+      trialSessionInformation,
     });
 
-    const updatedJudgeTitleWithFullName = await getJudgeWithTitle({
-      applicationContext,
-      judgeUserName: newTrialSessionEntity.judge.name,
-      useFullName: true,
+  await applicationContext
+    .getUseCaseHelpers()
+    .createAndServeNoticeDocketEntry(applicationContext, {
+      caseEntity,
+      documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
+      newPdfDoc,
+      noticePdf,
+      userId,
     });
-
-    const trialSessionInformation = {
-      caseProcedureType: caseEntity.procedureType,
-      chambersPhoneNumber: newTrialSessionEntity.chambersPhoneNumber,
-      priorJudgeTitleWithFullName,
-      proceedingType: newTrialSessionEntity.proceedingType,
-      sessionScope: newTrialSessionEntity.sessionScope,
-      startDate: newTrialSessionEntity.startDate,
-      trialLocation: newTrialSessionEntity.trialLocation,
-      updatedJudgeTitleWithFullName,
-    };
-
-    const noticePdf = await applicationContext
-      .getUseCases()
-      .generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
-        docketNumber: caseEntity.docketNumber,
-        trialSessionInformation,
-      });
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .createAndServeNoticeDocketEntry(applicationContext, {
-        caseEntity,
-        documentInfo:
-          SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
-        newPdfDoc,
-        noticePdf,
-        userId,
-      });
-  }
 };
