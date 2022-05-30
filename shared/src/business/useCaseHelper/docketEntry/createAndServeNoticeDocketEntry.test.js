@@ -83,21 +83,7 @@ describe('createAndServeDocketEntry', () => {
     });
   });
 
-  it('should send service emails to the appropriate parties', async () => {
-    await createAndServeNoticeDocketEntry(applicationContext, {
-      caseEntity: mockCaseEntity,
-      documentInfo: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfChangeOfTrialJudge,
-      newPdfDoc: getFakeFile,
-      noticePdf: getFakeFile,
-      userId: mockUserId,
-    });
-
-    expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
-  });
-
-  it('should send generate an address page for paper service when the case has at least one served party with paper service', async () => {
+  it('should make a call to serveGeneratedNoticesOnCase', async () => {
     const mockCaseWithPaperService = new Case(
       {
         ...mockCaseEntity,
@@ -121,10 +107,7 @@ describe('createAndServeDocketEntry', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+      applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase,
     ).toHaveBeenCalled();
   });
 });

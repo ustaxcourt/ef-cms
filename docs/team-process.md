@@ -156,13 +156,12 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
 
 - `pdfjs-dist`: temporarily locked to 2.12.313 as v2.13.216 causes issues with pdf rendering in cypress tests
-- `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
 
-  - `@fortawesome/free-solid-svg-icons`
-  - `@fortawesome/free-regular-svg-icons`
-  - `@fortawesome/fontawesome-svg-core` 
-
+- `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages: 
+    - `@fortawesome/free-solid-svg-icons`
+    - `@fortawesome/free-regular-svg-icons`
+    - `@fortawesome/fontawesome-svg-core` 
+    
 #### Validating Updates
-
-- After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
-  - Be sure the deploy [runs a migration](./additional-resources/blue-green-migration.md#manual-migration-steps) to verify the updates do not affect the migration workflow.
+-  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
+    - Be sure the deploy [runs a migration](./additional-resources/blue-green-migration.md#manual-migration-steps) to verify the updates do not affect the migration workflow.

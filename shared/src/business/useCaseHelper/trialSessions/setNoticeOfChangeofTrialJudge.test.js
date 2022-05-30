@@ -2,13 +2,11 @@ const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
 const {
-  CASE_STATUS_TYPES,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-  TRIAL_SESSION_SCOPE_TYPES,
-} = require('../../entities/EntityConstants');
-const {
   setNoticeOfChangeOfTrialJudge,
 } = require('./setNoticeOfChangeOfTrialJudge');
+const {
+  SYSTEM_GENERATED_DOCUMENT_TYPES,
+} = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { getFakeFile } = require('../../test/getFakeFile');
 const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
@@ -54,18 +52,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
     { applicationContext },
   );
 
-  const mockClosedCase = new Case(
-    {
-      ...MOCK_CASE,
-      closedDate: '2020-03-01T21:42:29.073Z',
-      docketNumber: '999-99',
-      status: CASE_STATUS_TYPES.closed,
-      trialDate: '2019-03-01T21:42:29.073Z',
-      trialSessionId,
-    },
-    { applicationContext },
-  );
-
   beforeEach(() => {
     applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf =
       jest.fn();
@@ -75,78 +61,6 @@ describe('setNoticeOfChangeOfTrialJudge', () => {
       .generateNoticeOfChangeToRemoteProceedingInteractor.mockReturnValue(
         getFakeFile,
       );
-  });
-
-  it('should generate an NOT when the trial judge has been changed on a calendared trial session, and the case is not closed', async () => {
-    const mockSessionScope = TRIAL_SESSION_SCOPE_TYPES.standaloneRemote;
-
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: {
-        ...updatedTrialSession,
-        sessionScope: mockSessionScope,
-      },
-      userId,
-    });
-
-    expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeOfTrialJudgeInteractor.mock.calls[0][1]
-        .trialSessionInformation,
-    ).toMatchObject({
-      sessionScope: mockSessionScope,
-    });
-  });
-
-  it('should not generate an NOT when the trial judge has been changed on an uncalendared trial session, and the case is not closed', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession: { ...currentTrialSession, isCalendared: false },
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-      userId,
-    });
-
-    expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeOfTrialJudgeInteractor,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should not generate an NOT when the trial judge has been changed but the case is closed', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockClosedCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: updatedTrialSession,
-      userId,
-    });
-
-    expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeOfTrialJudgeInteractor,
-    ).not.toHaveBeenCalled();
-  });
-
-  it('should not generate an NOT when the trial judge has not been changed and the case is open', async () => {
-    await setNoticeOfChangeOfTrialJudge(applicationContext, {
-      PDFDocument: mockPdfDocument,
-      caseEntity: mockOpenCase,
-      currentTrialSession,
-      newPdfDoc: getFakeFile,
-      newTrialSessionEntity: currentTrialSession,
-      userId,
-    });
-
-    expect(
-      applicationContext.getUseCases()
-        .generateNoticeOfChangeOfTrialJudgeInteractor,
-    ).not.toHaveBeenCalled();
   });
 
   it('should retrieve the judge title and fullname for the current and new judges', async () => {
