@@ -23,5 +23,6 @@ export const formattedMessages = (get, applicationContext) => {
   return {
     completedMessages,
     messages,
+    showSortableHeaders: role === USER_ROLES.adc,
   };
 };

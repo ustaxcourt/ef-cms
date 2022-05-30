@@ -149,6 +149,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
     See [here](ci-cd.md#docker) for the documentation to create and push the updated docker container for use in CircleCI.
 
 6. Check through the list of caveats to see if any of the documented issues have been resolved.
+7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 #### Caveats
 
@@ -159,3 +160,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 #### Validating Updates
 -  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
     - Be sure the deploy [runs a migration](./additional-resources/blue-green-migration.md#manual-migration-steps) to verify the updates do not affect the migration workflow.
+- `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages: 
+    - `@fortawesome/free-solid-svg-icons`
+    - `@fortawesome/free-regular-svg-icons`
+    - `@fortawesome/fontawesome-svg-core` 

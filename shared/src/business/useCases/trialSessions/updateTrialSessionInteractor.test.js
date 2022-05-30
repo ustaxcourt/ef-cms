@@ -648,29 +648,36 @@ describe('updateTrialSessionInteractor', () => {
         ).toHaveBeenCalled();
       });
     });
-  });
 
-  it('should call setNoticeOfChangeOfTrialJudge for each case on the trial session', async () => {
-    const mockCalendaredCase = new Case(
-      {
-        ...MOCK_CASE,
-        docketNumber: '123-45',
-        hearings: [],
-        trialDate: '2025-12-02T00:00:00.000Z',
-        trialSessionId: MOCK_TRIAL_ID_4,
-      },
-      { applicationContext },
-    );
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(mockCalendaredCase);
+    describe('Change of Trial Judge', () => {
+      it('should generate a NOT when the trial judge changes, the case status is not closed, and the trial session is calendared', async () => {
+        const mockRemoteCalendaredTrialSession = {
+          ...mockTrialsById[MOCK_TRIAL_ID_7],
+          judge: {
+            userId: '12345',
+          },
+        };
 
-    await updateTrialSessionInteractor(applicationContext, {
-      trialSession: mockTrialsById[MOCK_TRIAL_ID_4],
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValueOnce({
+            ...MOCK_CASE,
+            trialSessionId: MOCK_TRIAL_ID_7,
+          });
+
+        await updateTrialSessionInteractor(applicationContext, {
+          trialSession: {
+            ...mockRemoteCalendaredTrialSession,
+            judge: {
+              userId: '5555',
+            },
+          },
+        });
+
+        expect(
+          applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
+        ).toHaveBeenCalled();
+      });
     });
-
-    expect(
-      applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
-    ).toHaveBeenCalledTimes(1);
   });
 });
