@@ -20,7 +20,7 @@ exports.MOCK_TRIAL_REMOTE = {
   term: 'Fall',
   termYear: '2025',
   trialLocation: 'Birmingham, Alabama',
-  trialSessionId: '50ab64a0-0ac5-4a8a-9a5d-45621b05c12a',
+  trialSessionId: '48287e71-3754-4017-850d-476a663d1a8e',
 };
 
 exports.MOCK_TRIAL_REGULAR = {

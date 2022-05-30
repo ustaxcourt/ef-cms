@@ -93,7 +93,7 @@ describe('setForHearingInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('successfully adds the trial session hearing', async () => {
+  it('should add the trial session hearing', async () => {
     mockCase = {
       ...MOCK_CASE_WITH_TRIAL_SESSION,
     };
@@ -121,7 +121,7 @@ describe('setForHearingInteractor', () => {
     );
   });
 
-  it('successfully adds the trial session hearing with calendarNotes', async () => {
+  it('should add the trial session hearing with calendarNotes', async () => {
     mockCase = {
       ...MOCK_CASE_WITH_TRIAL_SESSION,
     };

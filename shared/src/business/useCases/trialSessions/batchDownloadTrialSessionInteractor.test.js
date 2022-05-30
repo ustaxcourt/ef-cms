@@ -132,66 +132,11 @@ describe('batchDownloadTrialSessionInteractor', () => {
         '9de27a7d-7c6b-434b-803b-7655f82d5e07',
         '25ae8e71-9dc4-40c6-bece-89acb974a82e',
       ],
-      uploadToTempBucket: true,
       zipName: 'September_26_2019-Birmingham.zip',
     });
   });
 
-  it('checks that the files to be zipped exist in persistence when verifyFiles param is true', async () => {
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-      verifyFiles: true,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().isFileExists,
-    ).toHaveBeenCalledTimes(2);
-  });
-
-  it('throws an error if a file to be zipped does not exist in persistence when verifyFiles param is true', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .isFileExists.mockResolvedValue(false);
-
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-      verifyFiles: true,
-    });
-
-    const errorCall =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0];
-
-    expect(
-      applicationContext.getPersistenceGateway().isFileExists,
-    ).toHaveBeenCalled();
-    expect(errorCall).toBeTruthy();
-    expect(errorCall[0].message.error.message).toEqual(
-      `Batch Download Error: File ${mockCase.docketEntries[0].docketEntryId} for case ${mockCase.docketNumber} does not exist!`,
-    );
-  });
-
-  it('does not check for missing files or throw an associated error if a file to be zipped does not exist in persistence when verifyFiles param is false', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .isFileExists.mockResolvedValue(false);
-
-    await batchDownloadTrialSessionInteractor(applicationContext, {
-      trialSessionId: '123',
-      verifyFiles: false,
-    });
-
-    const errorCall =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0];
-
-    expect(
-      applicationContext.getPersistenceGateway().isFileExists,
-    ).not.toHaveBeenCalled();
-    expect(errorCall[0].message.error).toBeUndefined();
-  });
-
-  it('does not check for missing files or throw an associated error if a file to be zipped does not exist in persistence when verifyFiles param is undefined', async () => {
+  it('does not check for missing files or throw an associated error if a file to be zipped does not exist in persistence', async () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(false);
@@ -311,7 +256,6 @@ describe('batchDownloadTrialSessionInteractor', () => {
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [],
-      uploadToTempBucket: true,
       zipName: 'September_26_2019-Birmingham.zip',
     });
   });
@@ -349,7 +293,6 @@ describe('batchDownloadTrialSessionInteractor', () => {
       onProgress: expect.anything(),
       onUploadStart: expect.anything(),
       s3Ids: [],
-      uploadToTempBucket: true,
       zipName: 'September_26_2019-Birmingham.zip',
     });
   });
