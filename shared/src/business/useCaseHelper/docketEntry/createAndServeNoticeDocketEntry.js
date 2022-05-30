@@ -10,39 +10,6 @@ const {
 } = require('../../entities/EntityConstants');
 const { createISODateString } = require('../../utilities/DateHandler');
 
-const serveNoticesForCase = async (
-  applicationContext,
-  {
-    caseEntity,
-    newPdfDoc,
-    noticeDocketEntryEntity,
-    noticeDocumentPdfData,
-    servedParties,
-  },
-) => {
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: noticeDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
-
-  if (servedParties.paper.length > 0) {
-    const { PDFDocument } = await applicationContext.getPdfLib();
-    const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: noticeDocumentPdf,
-        servedParties,
-      });
-  }
-};
-
 /**
  * createAndServeNoticeDocketEntry
  *
@@ -56,7 +23,14 @@ const serveNoticesForCase = async (
  */
 exports.createAndServeNoticeDocketEntry = async (
   applicationContext,
-  { caseEntity, documentInfo, newPdfDoc, noticePdf, userId },
+  {
+    caseEntity,
+    documentInfo,
+    newPdfDoc,
+    noticePdf,
+    userId,
+    additionalDocketEntryInfo = {},
+  },
 ) => {
   const docketEntryId = applicationContext.getUniqueId();
 
@@ -75,7 +49,7 @@ exports.createAndServeNoticeDocketEntry = async (
       docketEntryId,
     });
 
-  const noticeOfChangeOfTrialJudgeDocketEntry = new DocketEntry(
+  const noticeDocketEntry = new DocketEntry(
     {
       docketEntryId,
       documentTitle: documentInfo.documentTitle,
@@ -90,16 +64,18 @@ exports.createAndServeNoticeDocketEntry = async (
       servedParties: servedParties.all,
       servedPartiesCode: getServedPartiesCode(servedParties.all),
       userId,
+      ...additionalDocketEntryInfo,
     },
     { applicationContext },
   );
 
-  caseEntity.addDocketEntry(noticeOfChangeOfTrialJudgeDocketEntry);
+  caseEntity.addDocketEntry(noticeDocketEntry);
 
-  await serveNoticesForCase(applicationContext, {
+  await applicationContext.getUseCaseHelpers().serveGeneratedNoticesOnCase({
+    applicationContext,
     caseEntity,
     newPdfDoc,
-    noticeDocketEntryEntity: noticeOfChangeOfTrialJudgeDocketEntry,
+    noticeDocketEntryEntity: noticeDocketEntry,
     noticeDocumentPdfData: noticePdf,
     servedParties,
   });
