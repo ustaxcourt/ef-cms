@@ -53,6 +53,25 @@ exports.processCaseEntries = async ({
             S: caseNewImage.pk.S,
           },
           sk: {
+            S: `${caseNewImage.sk.S}`,
+          },
+        },
+        NewImage: {
+          ...marshalledCase,
+          case_relations: { name: 'case' },
+          entityName: { S: 'CaseMessageMapping' },
+        }, // Create a mapping record on the message index for parent-child relationships
+      },
+      eventName: 'MODIFY',
+    });
+
+    caseRecords.push({
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: caseNewImage.pk.S,
+          },
+          sk: {
             S: caseNewImage.sk.S,
           },
         },
