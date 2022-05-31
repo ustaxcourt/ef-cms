@@ -81,13 +81,9 @@ export const formattedMessages = (get, applicationContext) => {
       )
       .filter(message => (toUserFilter ? message.to === toUserFilter : true));
 
-    filteredCompletedMessages = completedMessages
-      .filter(message =>
-        caseStatusFilter ? message.caseStatus === caseStatusFilter : true,
-      )
-      .filter(message =>
-        completedByFilter ? message.completedBy === completedByFilter : true,
-      );
+    filteredCompletedMessages = completedMessages.filter(message =>
+      completedByFilter ? message.completedBy === completedByFilter : true,
+    );
   }
 
   const caseStatuses = uniq(map(filteredMessages, 'caseStatus'));
@@ -96,15 +92,11 @@ export const formattedMessages = (get, applicationContext) => {
   const fromSections = uniq(map(filteredMessages, 'fromSection'));
   const toSections = uniq(map(filteredMessages, 'toSection'));
 
-  const completedFromSections = uniq(
-    map(filteredCompletedMessages, 'fromSection'),
-  );
   const completedByUsers = uniq(map(filteredCompletedMessages, 'completedBy'));
 
   return {
     caseStatuses,
     completedByUsers,
-    completedFromSections,
     completedMessages: filteredCompletedMessages,
     fromSections,
     fromUsers,

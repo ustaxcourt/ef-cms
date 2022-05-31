@@ -495,7 +495,6 @@ describe('formattedMessages', () => {
 
     expect(result).toMatchObject({
       completedByUsers: expect.arrayContaining(['Test User', 'Other']),
-      completedFromSections: expect.arrayContaining(['adc', 'petitionsclerk']),
     });
   });
 
@@ -624,7 +623,6 @@ describe('formattedMessages', () => {
     );
     expect(result).toMatchObject({
       completedByUsers: expect.arrayContaining(['bob']),
-      completedFromSections: expect.arrayContaining(['petitionsclerk']),
     });
   });
 
