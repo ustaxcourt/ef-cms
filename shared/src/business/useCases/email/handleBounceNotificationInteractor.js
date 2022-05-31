@@ -3,6 +3,24 @@ const {
 } = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
 
 /**
+ * Helper function to easily parse the information we need from the Notification about the bounce
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.bounce information pertaining the the bounce event
+ * @param {object} providers.mail information pertaining to the email that bounced
+ * @returns {object} only the information we need about the bounce
+ */
+exports.parseBounceNotification = ({ bounce, mail }) => {
+  return {
+    bounceRecipient: bounce.bouncedRecipients[0].emailAddress,
+    bounceSubType: bounce.bounceSubType,
+    bounceType: bounce.bounceType,
+    errorMessage: bounce.bouncedRecipients[0].diagnosticCode,
+    subject: mail.commonHeaders.subject,
+  };
+};
+
+/**
  * handleBounceNotificationInteractor
  *
  * @param {object} applicationContext the application context
@@ -12,46 +30,50 @@ const {
  */
 exports.handleBounceNotificationInteractor = async (
   applicationContext,
-  { bounce },
+  notification,
 ) => {
-  if (bounce?.bounceType !== 'Permanent') {
+  const { bounceRecipient, bounceSubType, bounceType, errorMessage, subject } =
+    exports.parseBounceNotification(notification);
+
+  if (bounceType !== 'Permanent') {
     return;
   }
 
   const IRS_SUPERUSER_EMAIL = applicationContext.getIrsSuperuserEmail();
-  const isIrsSuperUser = bounce?.bouncedRecipients?.some(
-    recipient => recipient.emailAddress === IRS_SUPERUSER_EMAIL,
-  );
-  if (!isIrsSuperUser) {
+  if (bounceRecipient !== IRS_SUPERUSER_EMAIL) {
     return;
   }
 
-  const destinations = applicationContext.getBounceAlertRecipients();
-  if (destinations) {
+  const environmentName = applicationContext.getEnvironment().stage;
+  const alertRecipients = applicationContext.getBounceAlertRecipients();
+
+  if (alertRecipients) {
     await applicationContext.getDispatchers().sendBulkTemplatedEmail({
       applicationContext,
       defaultTemplateData: {
         emailContent: reactTemplateGenerator({
           componentName: 'BouncedEmailAlert',
           data: {
-            ...bounce,
-            bouncedRecipients: bounce.bouncedRecipients
-              .map(recipient => recipient.emailAddress)
-              .join(', '),
+            bounceRecipient,
+            bounceSubType,
+            bounceType,
             currentDate: applicationContext
               .getUtilities()
               .formatNow('DATE_TIME_TZ'),
+            environmentName,
+            errorMessage,
+            subject,
           },
         }),
       },
-      destinations: destinations.map(email => ({ email })),
+      destinations: alertRecipients.map(email => ({ email })),
       templateName: process.env.BOUNCE_ALERT_TEMPLATE,
     });
   }
 
   await applicationContext.getDispatchers().sendSlackNotification({
     applicationContext,
-    text: `:warning: An Email to the IRS Super User (${IRS_SUPERUSER_EMAIL}) has triggered a ${bounce.bounceType} bounce (${bounce.bounceSubType})`,
+    text: `:warning: (${environmentName} environment) An Email to the IRS Super User (${IRS_SUPERUSER_EMAIL}) has triggered a ${bounceType} bounce (${bounceSubType})`,
     topic: 'bounce-notification',
   });
 };
