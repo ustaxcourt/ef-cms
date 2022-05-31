@@ -5,7 +5,7 @@ exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
     has_parent: {
       inner_hits: {
         _source: {
-          includes: ['leadDocketNmber'],
+          includes: ['leadDocketNmber', 'docketNumber'],
         },
         name: 'case-mappings',
       },
