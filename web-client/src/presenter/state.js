@@ -86,6 +86,8 @@ import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
+import { showSortableHeaders } from './computeds/showSortableHeaders';
+import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
@@ -194,6 +196,8 @@ const helpers = {
   scanHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
+  showSortableHeaders,
+  sortableColumnHelper,
   startCaseHelper,
   startCaseInternalContactsHelper,
   startCaseInternalHelper,
@@ -330,6 +334,10 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   showValidation: false,
+  tableSort: {
+    sortField: 'createdAt',
+    sortOrder: 'asc',
+  },
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},

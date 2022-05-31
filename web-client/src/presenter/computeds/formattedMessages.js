@@ -1,50 +1,23 @@
-import { formatDateIfToday } from './formattedWorkQueue';
+import { getFormattedMessages } from '../utilities/processFormattedMessages';
 import { map, uniq } from 'lodash';
 import { state } from 'cerebral';
 
-export const getFormattedMessages = ({ applicationContext, messages }) => {
-  const formattedCaseMessages = messages
-    .map(message => ({
-      ...message,
-      completedAtFormatted: formatDateIfToday(
-        message.completedAt,
-        applicationContext,
-      ),
-      createdAtFormatted: formatDateIfToday(
-        message.createdAt,
-        applicationContext,
-      ),
-      messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
-    }))
-    .sort((a, b) => {
-      return a.createdAt.localeCompare(b.createdAt);
-    });
-
-  const inProgressMessages = formattedCaseMessages.filter(
-    message => !message.isRepliedTo && !message.isCompleted,
-  );
-  const completedMessages = formattedCaseMessages.filter(
-    message => message.isCompleted,
-  );
-
-  completedMessages.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
-
-  return {
-    completedMessages,
-    inProgressMessages,
-    messages: formattedCaseMessages,
-  };
-};
-
 export const formattedMessages = (get, applicationContext) => {
+  const tableSort = get(state.tableSort);
+
   const { completedMessages, messages } = getFormattedMessages({
     applicationContext,
+    cacheKey: get(state.messageCacheKey),
     messages: get(state.messages) || [],
+    tableSort,
   });
 
-  const currentMessageBox = get(state.messageBoxToDisplay.box);
+  const { box, section } = get(state.messageBoxToDisplay);
+  const { role } = get(state.user);
 
-  if (currentMessageBox === 'outbox') {
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  if (box === 'outbox' && section === 'section' && role !== USER_ROLES.adc) {
     messages.reverse();
   }
 
@@ -56,9 +29,6 @@ export const formattedMessages = (get, applicationContext) => {
     toSection: toSectionFilter,
     toUser: toUserFilter,
   } = get(state.screenMetadata);
-
-  const { USER_ROLES } = applicationContext.getConstants();
-  const { role } = get(state.user);
 
   let filteredMessages = messages;
   let showFilters = false;
