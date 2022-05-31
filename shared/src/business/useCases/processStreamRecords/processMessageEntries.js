@@ -29,6 +29,8 @@ exports.processMessageEntries = async ({
         const marshalledMessage =
           AWS.DynamoDB.Converter.marshall(latestMessageData);
 
+        const caseMessageMappingRecordId = `${messageNewImage.pk}_${messageNewImage.pk}|mapping`;
+
         return {
           dynamodb: {
             Keys: {
@@ -39,7 +41,13 @@ exports.processMessageEntries = async ({
                 S: messageNewImage.sk.S,
               },
             },
-            NewImage: marshalledMessage,
+            NewImage: {
+              ...marshalledMessage,
+              case_relations: {
+                name: 'message',
+                parent: caseMessageMappingRecordId,
+              },
+            },
           },
           eventName: 'MODIFY',
         };

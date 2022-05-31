@@ -24,7 +24,7 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
             if (doc.entityName.S === 'DocketEntry') {
               routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
             }
-
+            // messageNewImage -- need to do?
             if (doc.entityName.S === 'CaseDocketEntryMapping') {
               id += '|mapping';
             }
