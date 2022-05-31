@@ -507,4 +507,20 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       addServedStampToDocument.mock.calls[0][0].serviceStampText,
     ).toContain('Entered and Served');
   });
+
+  describe('consolidated cases', () => {
+    it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
+      caseRecord.petitioners[0].serviceIndicator =
+        SERVICE_INDICATOR_TYPES.SI_PAPER;
+
+      const result = await fileAndServeCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          documentMeta: caseRecord.docketEntries[0],
+        },
+      );
+
+      expect(result.pdfUrl).toBe(mockPdfUrl);
+    });
+  });
 });

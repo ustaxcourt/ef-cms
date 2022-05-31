@@ -74,12 +74,12 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     throw new Error('Docket entry is already being served');
   }
 
-  createDocketEntriesForConsolidatedCases({
-    applicationContext,
-    docketNumbers,
-    leadCaseDocketNumber,
-    leadDocketEntryOld,
-  });
+  // createDocketEntriesForConsolidatedCases({
+  //   applicationContext,
+  //   docketNumbers,
+  //   leadCaseDocketNumber,
+  //   leadDocketEntryOld,
+  // });
 
   await stampAndPersistDocument({
     applicationContext,
@@ -277,7 +277,7 @@ const fileAndServeDocumentOnOneCase = async ({
 
     const docketEntryEntity = new DocketEntry(
       {
-        ...omit(leadDocketEntry, 'filedBy'),
+        ...omit(leadDocketEntryOld, 'filedBy'),
         attachments: documentMeta.attachments,
         date: documentMeta.date,
         docketNumber: caseToUpdate.docketNumber,
