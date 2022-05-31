@@ -42,12 +42,6 @@ export const formattedMessages = (get, applicationContext) => {
     messages: get(state.messages) || [],
   });
 
-  const caseStatuses = uniq(map(messages, 'caseStatus'));
-  const toUsers = uniq(map(messages, 'to'));
-  const fromUsers = uniq(map(messages, 'from'));
-  const fromSections = uniq(map(messages, 'fromSection'));
-  const completedByUsers = uniq(map(completedMessages, 'completedBy'));
-
   const currentMessageBox = get(state.messageBoxToDisplay.box);
 
   if (currentMessageBox === 'outbox') {
@@ -57,8 +51,8 @@ export const formattedMessages = (get, applicationContext) => {
   const {
     caseStatus: caseStatusFilter,
     completedBy: completedByFilter,
+    fromSection: fromSectionFilter,
     fromUser: fromUserFilter,
-    section: sectionFilter,
     toUser: toUserFilter,
   } = get(state.screenMetadata);
 
@@ -79,7 +73,7 @@ export const formattedMessages = (get, applicationContext) => {
         fromUserFilter ? message.from === fromUserFilter : true,
       )
       .filter(message =>
-        sectionFilter ? message.fromSection === sectionFilter : true,
+        fromSectionFilter ? message.fromSection === fromSectionFilter : true,
       )
       .filter(message => (toUserFilter ? message.to === toUserFilter : true));
 
@@ -92,9 +86,20 @@ export const formattedMessages = (get, applicationContext) => {
       );
   }
 
+  const caseStatuses = uniq(map(filteredMessages, 'caseStatus'));
+  const toUsers = uniq(map(filteredMessages, 'to'));
+  const fromUsers = uniq(map(filteredMessages, 'from'));
+  const fromSections = uniq(map(filteredMessages, 'fromSection'));
+
+  const completedFromSections = uniq(
+    map(filteredCompletedMessages, 'fromSection'),
+  );
+  const completedByUsers = uniq(map(filteredCompletedMessages, 'completedBy'));
+
   return {
     caseStatuses,
     completedByUsers,
+    completedFromSections,
     completedMessages: filteredCompletedMessages,
     fromSections,
     fromUsers,

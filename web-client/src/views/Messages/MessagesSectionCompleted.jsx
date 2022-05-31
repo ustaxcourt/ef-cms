@@ -8,7 +8,7 @@ export const MessagesSectionCompleted = connect(
   {
     completedByUsers: state.formattedMessages.completedByUsers,
     formattedMessages: state.formattedMessages.completedMessages,
-    fromSections: state.formattedMessages.fromSections,
+    fromSections: state.formattedMessages.completedFromSections,
     showFilters: state.formattedMessages.showFilters,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },

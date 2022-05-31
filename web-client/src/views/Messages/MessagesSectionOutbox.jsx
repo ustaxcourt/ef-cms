@@ -8,18 +8,18 @@ export const MessagesSectionOutbox = connect(
   {
     caseStatuses: state.formattedMessages.caseStatuses,
     formattedMessages: state.formattedMessages.messages,
-    fromSections: state.formattedMessages.fromSections,
     fromUsers: state.formattedMessages.fromUsers,
     showFilters: state.formattedMessages.showFilters,
+    toSections: state.formattedMessages.toSections,
     toUsers: state.formattedMessages.toUsers,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionOutbox({
     caseStatuses,
     formattedMessages,
-    fromSections,
     fromUsers,
     showFilters,
+    toSections,
     toUsers,
     updateScreenMetadataSequence,
   }) {
@@ -44,9 +44,9 @@ export const MessagesSectionOutbox = connect(
                 options: fromUsers,
               },
               {
-                key: 'section',
+                key: 'toSection',
                 label: 'Section',
-                options: fromSections,
+                options: toSections,
               },
             ]}
             onSelect={updateScreenMetadataSequence}
