@@ -17,7 +17,6 @@ const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { log } = require('winston');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -414,18 +413,19 @@ const fileAndServeDocumentOnOneCase = async ({
       .getPersistenceGateway()
       .updateDocketEntryPendingServiceStatus({
         applicationContext,
-        docketEntryId: docketEntry.docketEntryId,
+        docketEntryId: leadDocketEntryOld.docketEntryId,
         docketNumber: caseToUpdate.docketNumber,
         status: false,
       });
 
     return serviceResults;
   } catch (e) {
+    console.log('error****', e);
     await applicationContext
       .getPersistenceGateway()
       .updateDocketEntryPendingServiceStatus({
         applicationContext,
-        docketEntryId: docketEntry.docketEntryId,
+        docketEntryId: leadDocketEntryOld.docketEntryId,
         docketNumber: caseToUpdate.docketNumber,
         status: false,
       });
