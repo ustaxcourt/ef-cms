@@ -1203,39 +1203,51 @@ hr.lighter {
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='10px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='10px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='10px']::before {
   content: '10px';
   font-size: 10px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='12px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='12px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='12px']::before {
   content: '12px';
   font-size: 12px !important;
 }
 
 /* default */
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='14px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='14px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='14px']::before {
   content: '14px';
   font-size: 14px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='16px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='16px']::before,
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='16px']::before,
 .ql-snow .ql-picker.ql-size .ql-picker-label:not(.ql-active)::before {
   content: '16px';
   font-size: 16px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='18px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='18px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='18px']::before {
   content: '18px';
   font-size: 18px !important;
 }
 
 .ql-snow .ql-picker.ql-size .ql-picker-item[data-value='20px']::before,
-.ql-snow .ql-picker.ql-size .ql-picker-label.ql-active[data-value='20px']::before {
+.ql-snow
+  .ql-picker.ql-size
+  .ql-picker-label.ql-active[data-value='20px']::before {
   content: '20px';
   font-size: 20px !important;
 }
@@ -1976,4 +1988,11 @@ button.change-scanner-button {
 
 .docket-number-header {
   margin-bottom: 0.5rem !important;
+}
+
+.usa-select.filter-selected {
+  outline: 2px solid #005ea2;
+  background-image: url(data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIiB2ZXJzaW9uPSIxLjEiIHdpZHRoPSIyNTYiIGhlaWdodD0iMjU2IiB2aWV3Qm94PSIwIDAgMjU2IDI1NiIgeG1sOnNwYWNlPSJwcmVzZXJ2ZSI+CjxkZXNjPkNyZWF0ZWQgd2l0aCBGYWJyaWMuanMgMS43LjIyPC9kZXNjPgo8ZGVmcz4KPC9kZWZzPgo8ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgxMjggMTI4KSBzY2FsZSgwLjcyIDAuNzIpIiBzdHlsZT0iIj4KCTxnIHN0eWxlPSJzdHJva2U6IG5vbmU7IHN0cm9rZS13aWR0aDogMDsgc3Ryb2tlLWRhc2hhcnJheTogbm9uZTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS1saW5lam9pbjogbWl0ZXI7IHN0cm9rZS1taXRlcmxpbWl0OiAxMDsgZmlsbDogbm9uZTsgZmlsbC1ydWxlOiBub256ZXJvOyBvcGFjaXR5OiAxOyIgdHJhbnNmb3JtPSJ0cmFuc2xhdGUoLTE3NS4wNSAtMTc1LjA1MDAwMDAwMDAwMDA0KSBzY2FsZSgzLjg5IDMuODkpIiA+Cgk8cGF0aCBkPSJNIDggOTAgYyAtMi4wNDcgMCAtNC4wOTUgLTAuNzgxIC01LjY1NyAtMi4zNDMgYyAtMy4xMjUgLTMuMTI1IC0zLjEyNSAtOC4xODkgMCAtMTEuMzE0IGwgNzQgLTc0IGMgMy4xMjUgLTMuMTI0IDguMTg5IC0zLjEyNCAxMS4zMTQgMCBjIDMuMTI0IDMuMTI0IDMuMTI0IDguMTg5IDAgMTEuMzEzIGwgLTc0IDc0IEMgMTIuMDk1IDg5LjIxOSAxMC4wNDcgOTAgOCA5MCB6IiBzdHlsZT0ic3Ryb2tlOiBub25lOyBzdHJva2Utd2lkdGg6IDE7IHN0cm9rZS1kYXNoYXJyYXk6IG5vbmU7IHN0cm9rZS1saW5lY2FwOiBidXR0OyBzdHJva2UtbGluZWpvaW46IG1pdGVyOyBzdHJva2UtbWl0ZXJsaW1pdDogMTA7IGZpbGw6IHJnYigwLDAsMCk7IGZpbGwtcnVsZTogbm9uemVybzsgb3BhY2l0eTogMTsiIHRyYW5zZm9ybT0iIG1hdHJpeCgxIDAgMCAxIDAgMCkgIiBzdHJva2UtbGluZWNhcD0icm91bmQiIC8+Cgk8cGF0aCBkPSJNIDgyIDkwIGMgLTIuMDQ4IDAgLTQuMDk1IC0wLjc4MSAtNS42NTcgLTIuMzQzIGwgLTc0IC03NCBjIC0zLjEyNSAtMy4xMjQgLTMuMTI1IC04LjE4OSAwIC0xMS4zMTMgYyAzLjEyNCAtMy4xMjQgOC4xODkgLTMuMTI0IDExLjMxMyAwIGwgNzQgNzQgYyAzLjEyNCAzLjEyNSAzLjEyNCA4LjE4OSAwIDExLjMxNCBDIDg2LjA5NSA4OS4yMTkgODQuMDQ4IDkwIDgyIDkwIHoiIHN0eWxlPSJzdHJva2U6IG5vbmU7IHN0cm9rZS13aWR0aDogMTsgc3Ryb2tlLWRhc2hhcnJheTogbm9uZTsgc3Ryb2tlLWxpbmVjYXA6IGJ1dHQ7IHN0cm9rZS1saW5lam9pbjogbWl0ZXI7IHN0cm9rZS1taXRlcmxpbWl0OiAxMDsgZmlsbDogcmdiKDAsMCwwKTsgZmlsbC1ydWxlOiBub256ZXJvOyBvcGFjaXR5OiAxOyIgdHJhbnNmb3JtPSIgbWF0cml4KDEgMCAwIDEgMCAwKSAiIHN0cm9rZS1saW5lY2FwPSJyb3VuZCIgLz4KPC9nPgo8L2c+Cjwvc3ZnPg==);
+  background-size: 30% 30%;
+  background-position: 155px;
 }
