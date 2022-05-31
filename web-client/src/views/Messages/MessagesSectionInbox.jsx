@@ -44,7 +44,7 @@ export const MessagesSectionInbox = connect(
                 options: fromUsers,
               },
               {
-                key: 'section',
+                key: 'fromSection',
                 label: 'Section',
                 options: fromSections,
               },
