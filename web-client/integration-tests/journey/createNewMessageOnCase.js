@@ -5,7 +5,16 @@ import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const createNewMessageOnCase = cerebralTest => {
+const petitionsClerk1User = '4805d1ab-18d0-43ec-bafb-654e83405416';
+
+export const createNewMessageOnCase = (
+  cerebralTest,
+  {
+    subject,
+    toSection = PETITIONS_SECTION,
+    toUserId = petitionsClerk1User,
+  } = {},
+) => {
   const messageModalHelper = withAppContextDecorator(
     messageModalHelperComputed,
   );
@@ -27,13 +36,13 @@ export const createNewMessageOnCase = cerebralTest => {
       'updateSectionInCreateMessageModalSequence',
       {
         key: 'toSection',
-        value: PETITIONS_SECTION,
+        value: toSection,
       },
     );
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
-      value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
+      value: toUserId,
     });
 
     const messageDocument = getHelper().documents[0];
@@ -47,7 +56,8 @@ export const createNewMessageOnCase = cerebralTest => {
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    cerebralTest.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+    cerebralTest.testMessageSubject =
+      subject || `what kind of bear is best? ${Date.now()}`;
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'subject',
