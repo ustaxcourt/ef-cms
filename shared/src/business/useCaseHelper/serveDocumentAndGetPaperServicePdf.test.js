@@ -111,9 +111,13 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       { applicationContext },
     );
 
+    const secondCaseEntity = new Case(MOCK_LEAD_CASE_WITH_PAPER_SERVICE, {
+      applicationContext,
+    });
+
     const result = await serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      caseEntities: [caseEntity, MOCK_LEAD_CASE_WITH_PAPER_SERVICE],
+      caseEntities: [caseEntity, secondCaseEntity],
       docketEntryId: caseEntity.docketEntries[0].docketEntryId,
     });
 
