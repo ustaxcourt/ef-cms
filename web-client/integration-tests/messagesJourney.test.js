@@ -32,11 +32,17 @@ import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsRe
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 
 const cerebralTest = setupTest();
+
 const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
 describe('messages journey', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
+
+    jest.spyOn(
+      cerebralTest.applicationContext.getUseCases(),
+      'createMessageInteractor',
+    );
   });
 
   afterAll(() => {
