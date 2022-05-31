@@ -125,6 +125,9 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).toBeCalledTimes(2);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toBeCalledTimes(2);
     expect(result).toEqual({ pdfUrl: mockPdfUrl });
   });
 });
