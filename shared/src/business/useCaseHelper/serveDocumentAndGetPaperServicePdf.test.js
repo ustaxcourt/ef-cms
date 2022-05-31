@@ -3,10 +3,13 @@ const {
   testPdfDoc,
 } = require('../test/createTestApplicationContext');
 const {
+  MOCK_CASE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} = require('../../test/mockCase');
+const {
   serveDocumentAndGetPaperServicePdf,
 } = require('./serveDocumentAndGetPaperServicePdf');
 const { Case, getContactPrimary } = require('../entities/cases/Case');
-const { MOCK_CASE } = require('../../test/mockCase');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
@@ -32,7 +35,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   it('should call sendServedPartiesEmails with the case entity, docket entry id, and aggregated served parties from the case', async () => {
     await serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      caseEntity,
+      caseEntities: [caseEntity],
       docketEntryId: mockDocketEntryId,
     });
 
@@ -53,7 +56,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
 
     await serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      caseEntity,
+      caseEntities: [caseEntity],
       docketEntryId: mockDocketEntryId,
     });
 
@@ -79,7 +82,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
 
     const result = await serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      caseEntity,
+      caseEntities: [caseEntity],
       docketEntryId: mockDocketEntryId,
     });
 
@@ -87,6 +90,37 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
     ).toBeCalled();
+    expect(result).toEqual({ pdfUrl: mockPdfUrl });
+  });
+
+  it('should serve electronic and paper service parties for all consolidated cases', async () => {
+    caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+      },
+      { applicationContext },
+    );
+
+    const result = await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity, MOCK_LEAD_CASE_WITH_PAPER_SERVICE],
+      docketEntryId: caseEntity.docketEntries[0].docketEntryId,
+    });
+
+    expect(applicationContext.getStorageClient().getObject).toBeCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toBeCalledTimes(2);
     expect(result).toEqual({ pdfUrl: mockPdfUrl });
   });
 });
