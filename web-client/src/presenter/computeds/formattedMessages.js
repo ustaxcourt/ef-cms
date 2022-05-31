@@ -53,6 +53,7 @@ export const formattedMessages = (get, applicationContext) => {
     completedBy: completedByFilter,
     fromSection: fromSectionFilter,
     fromUser: fromUserFilter,
+    toSection: toSectionFilter,
     toUser: toUserFilter,
   } = get(state.screenMetadata);
 
@@ -73,6 +74,9 @@ export const formattedMessages = (get, applicationContext) => {
         fromUserFilter ? message.from === fromUserFilter : true,
       )
       .filter(message =>
+        toSectionFilter ? message.toSection === toSectionFilter : true,
+      )
+      .filter(message =>
         fromSectionFilter ? message.fromSection === fromSectionFilter : true,
       )
       .filter(message => (toUserFilter ? message.to === toUserFilter : true));
@@ -90,6 +94,7 @@ export const formattedMessages = (get, applicationContext) => {
   const toUsers = uniq(map(filteredMessages, 'to'));
   const fromUsers = uniq(map(filteredMessages, 'from'));
   const fromSections = uniq(map(filteredMessages, 'fromSection'));
+  const toSections = uniq(map(filteredMessages, 'toSection'));
 
   const completedFromSections = uniq(
     map(filteredCompletedMessages, 'fromSection'),
@@ -105,6 +110,7 @@ export const formattedMessages = (get, applicationContext) => {
     fromUsers,
     messages: filteredMessages,
     showFilters,
+    toSections,
     toUsers,
   };
 };

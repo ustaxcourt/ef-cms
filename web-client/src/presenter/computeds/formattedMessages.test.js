@@ -531,6 +531,7 @@ describe('formattedMessages', () => {
           caseStatus: 'Open',
           fromSection: 'petitionsclerk',
           fromUser: 'petitionsclerk',
+          toSection: 'petitionsclerk',
           toUser: 'petitionsclerk',
         },
         user: {
@@ -558,6 +559,7 @@ describe('formattedMessages', () => {
       fromSections: expect.arrayContaining(['petitionsclerk']),
       fromUsers: expect.arrayContaining(['petitionsclerk']),
       showFilters: true,
+      toSections: expect.arrayContaining(['petitionsclerk']),
       toUsers: expect.arrayContaining(['petitionsclerk']),
     });
   });
