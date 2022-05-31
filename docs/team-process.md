@@ -158,6 +158,8 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - `@babel/core`: temporarily locked to ^7.17.12. With ^7.18.2, memory usage is exceeding the large Docker resource. Some performance updates noted in [devex-1068](https://trello.com/c/wCW5emlA/1068-reduce-memory-usage-on-deploying-web-client-s3), which helped some, but not consistently passing the client build. 
 
+- `@faker-js/faker`: temporarily locked to ^6.3.1 as updating to ^7.x.x is causing Webpack compilation errors on running cypress. Cypress [open issue](https://github.com/cypress-io/cypress/issues/21874), Faker [release notes](https://github.com/faker-js/faker/releases#:~:text=Compare-,v7.1.0,-Latest)
+
 #### Validating Updates
 -  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
     - Be sure the deploy [runs a migration](./additional-resources/blue-green-migration.md#manual-migration-steps) to verify the updates do not affect the migration workflow.
