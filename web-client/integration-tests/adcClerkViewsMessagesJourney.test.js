@@ -20,14 +20,14 @@ const formattedMessagesComputed = withAppContextDecorator(
 
 const cerebralTest = setupTest();
 
+jest.spyOn(
+  cerebralTest.applicationContext.getUseCases(),
+  'createMessageInteractor',
+);
+
 describe('ADC Clerk Views Messages Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-
-    jest.spyOn(
-      cerebralTest.applicationContext.getUseCases(),
-      'createMessageInteractor',
-    );
   });
 
   afterAll(() => {
