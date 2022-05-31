@@ -23,7 +23,6 @@ const cerebralTest = setupTest();
 describe('ADC Clerk Views Messages Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
-
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',

@@ -30,15 +30,13 @@ import { petitionsClerkViewsInProgressMessagesOnCaseDetail } from './journey/pet
 import { petitionsClerkViewsRepliesAndCompletesMessageInInbox } from './journey/petitionsClerkViewsRepliesAndCompletesMessageInInbox';
 import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsReplyInInbox';
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
+const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
 const cerebralTest = setupTest();
-
-const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
 describe('messages journey', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
-
     jest.spyOn(
       cerebralTest.applicationContext.getUseCases(),
       'createMessageInteractor',
