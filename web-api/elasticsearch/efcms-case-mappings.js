@@ -50,7 +50,7 @@ module.exports = {
     },
     'isSealed.BOOL': { type: 'boolean' },
     'leadDocketNumber.BOOL': {
-      type: 'boolean',
+      type: 'keyword',
     },
     'petitioners.L.M.contactId.S': {
       type: 'text',
