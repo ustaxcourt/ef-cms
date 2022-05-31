@@ -14,50 +14,53 @@ const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
  */
 exports.serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
-  caseEntity,
+  // TODO: refactor all calls toserveDocumentAndGetPaperServicePdf
+  caseEntities,
   docketEntryId,
 }) => {
-  const servedParties = aggregatePartiesForService(caseEntity);
+  const { PDFDocument } = await applicationContext.getPdfLib();
 
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId,
-    servedParties,
-  });
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: docketEntryId,
+    })
+    .promise();
 
-  if (servedParties.paper.length > 0) {
-    const { PDFDocument } = await applicationContext.getPdfLib();
+  const originalPdfDoc = await PDFDocument.load(pdfData);
 
-    const { Body: pdfData } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: docketEntryId,
-      })
-      .promise();
+  let newPdfDoc = await PDFDocument.create();
 
-    const originalPdfDoc = await PDFDocument.load(pdfData);
+  caseEntities.forEach(async caseEntity => {
+    const servedParties = aggregatePartiesForService(caseEntity);
 
-    let newPdfDoc = await PDFDocument.create();
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: originalPdfDoc,
-        servedParties,
-      });
-
-    const paperServicePdfData = await newPdfDoc.save();
-    const { url } = await saveFileAndGenerateUrl({
+    await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,
-      file: paperServicePdfData,
-      useTempBucket: true,
+      caseEntity,
+      docketEntryId,
+      servedParties,
     });
 
-    return { pdfUrl: url };
-  }
+    if (servedParties.paper.length > 0) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .appendPaperServiceAddressPageToPdf({
+          applicationContext,
+          caseEntity,
+          newPdfDoc,
+          noticeDoc: originalPdfDoc,
+          servedParties,
+        });
+    }
+  });
+
+  const paperServicePdfData = await newPdfDoc.save();
+  const { url } = await saveFileAndGenerateUrl({
+    applicationContext,
+    file: paperServicePdfData,
+    useTempBucket: true,
+  });
+
+  return { pdfUrl: url };
 };
