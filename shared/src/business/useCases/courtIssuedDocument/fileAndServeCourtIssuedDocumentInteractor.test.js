@@ -517,15 +517,19 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockImplementationOnce(
-          () => MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-        );
+        .getCaseByDocketNumber.mockImplementationOnce(() => {
+          return {
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+            docketEntries: caseRecord.docketEntries,
+          };
+        });
 
       const result = await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         {
           documentMeta: {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0],
+            ...caseRecord.docketEntries[0],
+            docketEntryId: caseRecord.docketEntries[0].docketEntryId,
             docketNumbers: [
               MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
               MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
