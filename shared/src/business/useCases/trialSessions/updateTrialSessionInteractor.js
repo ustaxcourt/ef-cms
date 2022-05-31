@@ -29,6 +29,8 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const user = applicationContext.getCurrentUser();
+
   if (
     caseToUpdate.trialSessionId === updatedTrialSessionEntity.trialSessionId
   ) {
@@ -48,7 +50,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          user: applicationContext.getCurrentUser(),
+          user,
         });
     }
 
@@ -68,7 +70,25 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          user: applicationContext.getCurrentUser(),
+          user,
+        });
+    }
+
+    const shouldIssueNoticeOfChangeOfTrialJudge =
+      currentTrialSession.isCalendared &&
+      currentTrialSession.judge?.userId !==
+        updatedTrialSessionEntity.judge?.userId &&
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+    if (shouldIssueNoticeOfChangeOfTrialJudge) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeOfTrialJudge(applicationContext, {
+          caseEntity,
+          currentTrialSession,
+          newPdfDoc: paperServicePdfsCombined,
+          newTrialSessionEntity: updatedTrialSessionEntity,
+          user,
         });
     }
 

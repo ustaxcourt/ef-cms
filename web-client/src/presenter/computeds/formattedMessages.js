@@ -72,6 +72,7 @@ export const formattedMessages = (get, applicationContext) => {
     fromUsers,
     messages: filteredMessages,
     showFilters,
+    showSortableHeaders: role === USER_ROLES.adc,
     toSections,
     toUsers,
   };
