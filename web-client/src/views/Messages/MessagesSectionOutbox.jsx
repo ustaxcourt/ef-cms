@@ -9,6 +9,7 @@ export const MessagesSectionOutbox = connect(
     caseStatuses: state.formattedMessages.caseStatuses,
     formattedMessages: state.formattedMessages.messages,
     fromUsers: state.formattedMessages.fromUsers,
+    screenMetadata: state.screenMetadata,
     showFilters: state.formattedMessages.showFilters,
     toSections: state.formattedMessages.toSections,
     toUsers: state.formattedMessages.toUsers,
@@ -18,6 +19,7 @@ export const MessagesSectionOutbox = connect(
     caseStatuses,
     formattedMessages,
     fromUsers,
+    screenMetadata,
     showFilters,
     toSections,
     toUsers,
@@ -29,21 +31,25 @@ export const MessagesSectionOutbox = connect(
           <TableFilters
             filters={[
               {
+                isSelected: screenMetadata.caseStatus,
                 key: 'caseStatus',
                 label: 'Case Status',
                 options: caseStatuses,
               },
               {
+                isSelected: screenMetadata.toUser,
                 key: 'toUser',
                 label: 'To',
                 options: toUsers,
               },
               {
+                isSelected: screenMetadata.fromUser,
                 key: 'fromUser',
                 label: 'From',
                 options: fromUsers,
               },
               {
+                isSelected: screenMetadata.toSection,
                 key: 'toSection',
                 label: 'Section',
                 options: toSections,
