@@ -1,4 +1,3 @@
-import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
@@ -11,8 +10,10 @@ import classNames from 'classnames';
 const {
   ALPHABETICALLY_ASCENDING,
   ALPHABETICALLY_DESCENDING,
+  ASCENDING,
   CHRONOLOGICALLY_ASCENDING,
   CHRONOLOGICALLY_DESCENDING,
+  DESCENDING,
 } = applicationContext.getConstants();
 
 export const MessagesIndividualInbox = connect(

@@ -1,14 +1,16 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { getConstants } from '../../getConstants';
 import {
   getFormattedMessages,
   sortCompletedMessages,
   sortFormattedMessages,
 } from './processFormattedMessages';
+
+const { ASCENDING, DESCENDING } = getConstants();
 
 describe('processFormattedMessages', () => {
   const DOCKET_NUMBER_1 = '101-19';

@@ -20,14 +20,14 @@ const formattedMessagesComputed = withAppContextDecorator(
 
 const cerebralTest = setupTest();
 
-jest.spyOn(
-  cerebralTest.applicationContext.getUseCases(),
-  'createMessageInteractor',
-);
-
 describe('ADC Clerk Views Messages Journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+
+    jest.spyOn(
+      cerebralTest.applicationContext.getUseCases(),
+      'createMessageInteractor',
+    );
   });
 
   afterAll(() => {
@@ -151,7 +151,7 @@ describe('ADC Clerk Views Messages Journey', () => {
         messageQueue,
       );
 
-      let afterInboxMessageCount = cerebralTest.getState('messages').length;
+      const afterInboxMessageCount = inboxMessages.length;
 
       const expected = [message1Id, message2Id, message3Id];
 
@@ -176,7 +176,7 @@ describe('ADC Clerk Views Messages Journey', () => {
         messageQueue,
       );
 
-      let afterOutboxMessageCount = cerebralTest.getState('messages').length;
+      const afterOutboxMessageCount = outboxMessages.length;
 
       const expected = [message5Id, message4Id];
 
@@ -237,7 +237,7 @@ describe('ADC Clerk Views Messages Journey', () => {
         messageQueue,
       );
 
-      let afterCompletedMessageCount = cerebralTest.getState('messages').length;
+      let afterCompletedMessageCount = completedMessages.length;
 
       const expected = [message7Id, message6Id];
 
