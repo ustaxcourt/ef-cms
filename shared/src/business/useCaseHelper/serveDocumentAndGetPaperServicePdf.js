@@ -20,15 +20,7 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
 }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: docketEntryId,
-    })
-    .promise();
-
-  const originalPdfDoc = await PDFDocument.load(pdfData);
+  let originalPdfDoc;
 
   let newPdfDoc = await PDFDocument.create();
 
@@ -43,6 +35,16 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
     });
 
     if (servedParties.paper.length > 0) {
+      if (!originalPdfDoc) {
+        const pdfData = await applicationContext
+          .getStorageClient()
+          .getObject({
+            Bucket: applicationContext.environment.documentsBucketName,
+            Key: docketEntryId,
+          })
+          .promise().Body;
+        originalPdfDoc = await PDFDocument.load(pdfData);
+      }
       await applicationContext
         .getUseCaseHelpers()
         .appendPaperServiceAddressPageToPdf({
