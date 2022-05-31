@@ -28,7 +28,7 @@ exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
             {
               match: { 'isCompleted.BOOL': false },
             },
-            // hasParentParam,
+            hasParentParam,
           ],
         },
       },

@@ -49,6 +49,9 @@ module.exports = {
       type: 'keyword',
     },
     'isSealed.BOOL': { type: 'boolean' },
+    'leadDocketNumber.BOOL': {
+      type: 'boolean',
+    },
     'petitioners.L.M.contactId.S': {
       type: 'text',
     },

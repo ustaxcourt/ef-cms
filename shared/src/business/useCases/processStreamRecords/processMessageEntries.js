@@ -29,7 +29,7 @@ exports.processMessageEntries = async ({
         const marshalledMessage =
           AWS.DynamoDB.Converter.marshall(latestMessageData);
 
-        const caseMessageMappingRecordId = `${messageNewImage.pk}_${messageNewImage.pk}|mapping`;
+        const caseMessageMappingRecordId = `${messageNewImage.pk.S}_${messageNewImage.pk.S}|mapping`;
 
         return {
           dynamodb: {
