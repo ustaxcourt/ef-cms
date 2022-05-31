@@ -9,6 +9,7 @@ export const MessagesSectionCompleted = connect(
     completedByUsers: state.formattedMessages.completedByUsers,
     formattedMessages: state.formattedMessages.completedMessages,
     fromSections: state.formattedMessages.completedFromSections,
+    screenMetadata: state.screenMetadata,
     showFilters: state.formattedMessages.showFilters,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
@@ -16,6 +17,7 @@ export const MessagesSectionCompleted = connect(
     completedByUsers,
     formattedMessages,
     fromSections,
+    screenMetadata,
     showFilters,
     updateScreenMetadataSequence,
   }) {
@@ -25,12 +27,14 @@ export const MessagesSectionCompleted = connect(
           <TableFilters
             filters={[
               {
+                isSelected: screenMetadata.completedBy,
                 key: 'completedBy',
                 label: 'Completed By',
                 options: completedByUsers,
               },
               {
-                key: 'section',
+                isSelected: screenMetadata.toSection,
+                key: 'toSection',
                 label: 'Section',
                 options: fromSections,
               },
