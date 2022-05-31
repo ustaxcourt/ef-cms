@@ -21,7 +21,7 @@ module.exports = {
       './web-api/terraform/template/lambdas/websocket-authorizer.js',
     websockets: './web-api/terraform/template/lambdas/websockets.js',
   },
-  externals: ['aws-sdk', 'chrome-aws-lambda'],
+  externals: ['aws-sdk', '@sparticuz/chrome-aws-lambda'],
   output: {
     clean: true,
     libraryTarget: 'umd',

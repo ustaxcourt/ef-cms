@@ -22,7 +22,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   //get an array of strings of the trial statuses that are set to true
   const trueFilters = Object.keys(pickBy(filters));
 
-  let formattedCases = trialSession.calendaredCases
+  let formattedCases = (trialSession.calendaredCases || [])
     .slice()
     .filter(
       calendaredCase =>
@@ -54,7 +54,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     formattedCases.reverse();
   }
 
-  Object.keys(userNotes).forEach(docketNumber => {
+  Object.keys(userNotes || {}).forEach(docketNumber => {
     const caseToUpdate = formattedCases.find(
       aCase => aCase.docketNumber === docketNumber,
     );

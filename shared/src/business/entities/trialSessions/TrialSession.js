@@ -51,7 +51,6 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.createdAt = rawSession.createdAt || createISODateString();
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
-  this.calendaredCases = rawSession.calendaredCases || [];
   this.joinPhoneNumber = rawSession.joinPhoneNumber;
   this.maxCases = rawSession.maxCases;
   this.meetingId = rawSession.meetingId;
