@@ -39,6 +39,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
         TRIAL_SESSION_PROCEEDING_TYPES.inPerson &&
       updatedTrialSessionEntity.proceedingType ===
         TRIAL_SESSION_PROCEEDING_TYPES.remote &&
+      updatedTrialSessionEntity.isCalendared &&
       caseEntity.status !== CASE_STATUS_TYPES.closed;
 
     if (shouldSetNoticeOfChangeToRemoteProceeding) {
@@ -73,15 +74,23 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
         });
     }
 
-    await applicationContext
-      .getUseCaseHelpers()
-      .setNoticeOfChangeOfTrialJudge(applicationContext, {
-        caseEntity,
-        currentTrialSession,
-        newPdfDoc: paperServicePdfsCombined,
-        newTrialSessionEntity: updatedTrialSessionEntity,
-        user,
-      });
+    const shouldIssueNoticeOfChangeOfTrialJudge =
+      currentTrialSession.isCalendared &&
+      currentTrialSession.judge?.userId !==
+        updatedTrialSessionEntity.judge?.userId &&
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+    if (shouldIssueNoticeOfChangeOfTrialJudge) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeOfTrialJudge(applicationContext, {
+          caseEntity,
+          currentTrialSession,
+          newPdfDoc: paperServicePdfsCombined,
+          newTrialSessionEntity: updatedTrialSessionEntity,
+          user,
+        });
+    }
 
     caseEntity.updateTrialSessionInformation(updatedTrialSessionEntity);
 

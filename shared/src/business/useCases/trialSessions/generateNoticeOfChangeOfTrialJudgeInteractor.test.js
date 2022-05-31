@@ -84,7 +84,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
     });
   });
 
-  it('should set trialLocationAndProceedingType to "remote" when the trial session scope is "Standalone Remote"', async () => {
+  it('should set trialLocationAndProceedingType to "standalone remote" when the trial session scope is "Standalone Remote"', async () => {
     await generateNoticeOfChangeOfTrialJudgeInteractor(applicationContext, {
       docketNumber: '234-56',
       trialSessionInformation: {
@@ -102,7 +102,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
     ).toMatchObject({
       data: {
         trialInfo: {
-          trialLocationAndProceedingType: 'remote',
+          trialLocationAndProceedingType: 'standalone remote',
         },
       },
     });

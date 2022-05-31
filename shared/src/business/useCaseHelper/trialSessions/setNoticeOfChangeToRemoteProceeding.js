@@ -8,7 +8,6 @@ const {
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.caseEntity the case data
- * @param {object} providers.currentTrialSession the old trial session data
  * @param {object} providers.newPdfDoc the new PDF contents to be appended
  * @param {object} providers.newTrialSessionEntity the new trial session data
  * @param {object} providers.userId the user ID
