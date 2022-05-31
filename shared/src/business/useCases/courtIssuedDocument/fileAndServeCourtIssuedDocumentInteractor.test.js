@@ -16,11 +16,16 @@ const {
 const {
   fileAndServeCourtIssuedDocumentInteractor,
 } = require('../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
+const {
+  MOCK_CASE,
+  MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+  MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} = require('../../../test/mockCase');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { docketClerkUser } = require('../../../test/mockUsers');
-const { MOCK_CASE } = require('../../../test/mockCase');
 const { v4: uuidv4 } = require('uuid');
 
 jest.mock('./addServedStampToDocument', () => ({
@@ -510,13 +515,23 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   describe('consolidated cases', () => {
     it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
-      caseRecord.petitioners[0].serviceIndicator =
-        SERVICE_INDICATOR_TYPES.SI_PAPER;
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementationOnce(
+          () => MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+        );
 
       const result = await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         {
-          documentMeta: caseRecord.docketEntries[0],
+          documentMeta: {
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries[0],
+            docketNumbers: [
+              MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+              MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+              MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+            ],
+          },
         },
       );
 
