@@ -539,6 +539,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         },
       );
 
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf,
+      ).toHaveBeenCalled();
       expect(result.pdfUrl).toBe(mockPdfUrl);
     });
   });
