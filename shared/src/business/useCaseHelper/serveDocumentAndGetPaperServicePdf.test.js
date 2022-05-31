@@ -128,6 +128,22 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toBeCalledTimes(2);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0],
+    ).toMatchObject({
+      caseEntity: expect.objectContaining({
+        docketNumber: caseEntity.docketNumber,
+      }),
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[1][0],
+    ).toMatchObject({
+      caseEntity: expect.objectContaining({
+        docketNumber: secondCaseEntity.docketNumber,
+      }),
+    });
     expect(result).toEqual({ pdfUrl: mockPdfUrl });
   });
 });
