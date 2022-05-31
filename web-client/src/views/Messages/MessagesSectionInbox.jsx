@@ -10,6 +10,7 @@ export const MessagesSectionInbox = connect(
     formattedMessages: state.formattedMessages.messages,
     fromSections: state.formattedMessages.fromSections,
     fromUsers: state.formattedMessages.fromUsers,
+    screenMetadata: state.screenMetadata,
     showFilters: state.formattedMessages.showFilters,
     toUsers: state.formattedMessages.toUsers,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -19,6 +20,7 @@ export const MessagesSectionInbox = connect(
     formattedMessages,
     fromSections,
     fromUsers,
+    screenMetadata,
     showFilters,
     toUsers,
     updateScreenMetadataSequence,
@@ -29,21 +31,25 @@ export const MessagesSectionInbox = connect(
           <TableFilters
             filters={[
               {
+                isSelected: screenMetadata.caseStatus,
                 key: 'caseStatus',
                 label: 'Case Status',
                 options: caseStatuses,
               },
               {
+                isSelected: screenMetadata.toUser,
                 key: 'toUser',
                 label: 'To',
                 options: toUsers,
               },
               {
+                isSelected: screenMetadata.fromUser,
                 key: 'fromUser',
                 label: 'From',
                 options: fromUsers,
               },
               {
+                isSelected: screenMetadata.fromSection,
                 key: 'fromSection',
                 label: 'Section',
                 options: fromSections,
