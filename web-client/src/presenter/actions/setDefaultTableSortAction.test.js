@@ -100,6 +100,10 @@ describe('setDefaultTableSortAction', () => {
         box: 'inbox',
       },
       state: {
+        tableSort: {
+          sortField: 'createdAt',
+          sortOrder: 'asc',
+        },
         user: {
           role: 'docketclerk',
         },
