@@ -2,10 +2,13 @@ import { EmailHeader } from '../components/EmailHeader';
 import React from 'react';
 
 export const BouncedEmailAlert = ({
-  bouncedRecipients,
+  bounceRecipient,
   bounceSubType,
   bounceType,
   currentDate,
+  environmentName,
+  errorMessage,
+  subject,
 }) => {
   return (
     <>
@@ -16,13 +19,12 @@ export const BouncedEmailAlert = ({
       <p>This Email is an alert that a service Email has bounced.</p>
 
       <div id="diagnostic-information">
+        <div>Environment Name: {environmentName}</div>
         <div>Bounce Type: {bounceType}</div>
         <div>Bounce Sub Type: {bounceSubType}</div>
-      </div>
-      <br />
-
-      <div id="recipient-information">
-        <div>{bouncedRecipients}</div>
+        <div>Error Message: {errorMessage}</div>
+        <div>Email Subject: {subject}</div>
+        <div>Email Recipient(s): {bounceRecipient}</div>
       </div>
       <br />
 
