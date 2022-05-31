@@ -24,7 +24,7 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
 
   let newPdfDoc = await PDFDocument.create();
 
-  caseEntities.forEach(async caseEntity => {
+  for (const caseEntity of caseEntities) {
     const servedParties = aggregatePartiesForService(caseEntity);
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
@@ -55,7 +55,7 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
           servedParties,
         });
     }
-  });
+  }
 
   const paperServicePdfData = await newPdfDoc.save();
   const { url } = await saveFileAndGenerateUrl({
