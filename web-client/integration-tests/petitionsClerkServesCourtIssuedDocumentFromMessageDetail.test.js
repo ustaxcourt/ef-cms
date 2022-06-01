@@ -10,7 +10,13 @@ import { petitionsClerk1ViewsMessageInbox } from './journey/petitionsClerk1Views
 import { petitionsClerkClicksCaseDetailTabFromMessageDetail } from './journey/petitionsClerkClicksCaseDetailTabFromMessageDetail';
 
 const cerebralTest = setupTest();
+
 cerebralTest.draftOrders = [];
+
+jest.spyOn(
+  cerebralTest.applicationContext.getUseCases(),
+  'createMessageInteractor',
+);
 
 describe('Petitions Clerk Serves Court Issued Document From Message Detail', () => {
   beforeAll(() => {
