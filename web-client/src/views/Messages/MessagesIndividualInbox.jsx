@@ -14,7 +14,7 @@ export const MessagesIndividualInbox = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              <th aria-hidden="true" className="icon-column"></th>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number" className="small">
                 Docket No.
               </th>
@@ -33,11 +33,8 @@ export const MessagesIndividualInbox = connect(
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
-                  <td className="icon-column">
-                    <FontAwesomeIcon
-                      className="margin-right-1 icon-consolidated"
-                      icon="copy"
-                    />
+                  <td className="consolidated-case-column">
+                    <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
                   </td>
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
