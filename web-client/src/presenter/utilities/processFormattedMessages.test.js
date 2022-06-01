@@ -456,7 +456,7 @@ describe('processFormattedMessages', () => {
   });
 
   describe('applyFiltersToCompletedMessages', () => {
-    it('returns formatted date strings', () => {
+    it('returns the filteredValues and expected filtered completed messages', () => {
       const result = applyFiltersToCompletedMessages({
         completedMessages: [
           {
