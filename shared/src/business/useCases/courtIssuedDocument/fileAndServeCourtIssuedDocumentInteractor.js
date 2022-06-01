@@ -88,18 +88,43 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     leadDocketEntryOld,
   });
 
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
   const servingDocumentPromises = docketNumbers.map(consolidatedDocketNumber =>
     fileAndServeDocumentOnOneCase({
       applicationContext,
-      authorizedUser,
       consolidatedDocketNumber,
       docketEntryId,
       documentMeta,
-      leadCaseDocketNumber,
       leadDocketEntryOld,
+      user,
     }),
   );
-  await Promise.all(servingDocumentPromises);
+
+  const caseEntities = await Promise.all(servingDocumentPromises);
+
+  const serviceResults = await applicationContext
+    .getUseCaseHelpers()
+    .serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities,
+      docketEntryId: leadDocketEntryOld.docketEntryId,
+    });
+
+  for (const caseEntity of caseEntities) {
+    await applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus({
+        applicationContext,
+        docketEntryId: leadDocketEntryOld.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+        status: false,
+      });
+  }
+
+  return serviceResults;
 };
 
 const stampAndPersistDocument = async ({
@@ -162,12 +187,11 @@ const stampAndPersistDocument = async ({
 
 const fileAndServeDocumentOnOneCase = async ({
   applicationContext,
-  authorizedUser,
   consolidatedDocketNumber: docketNumber,
   docketEntryId,
   documentMeta,
-  // leadCaseDocketNumber,
   leadDocketEntryOld,
+  user,
 }) => {
   // TODO:
   // Refactor paper service receipt to account for multiple cases being served at once
@@ -182,16 +206,10 @@ const fileAndServeDocumentOnOneCase = async ({
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
   try {
-    const user = await applicationContext
-      .getPersistenceGateway()
-      .getUserById({ applicationContext, userId: authorizedUser.userId });
-
     // numberOfPages shouldn't need to be recalculated for each docket entry, despite not yet being updated????
     const numberOfPages = await applicationContext
       .getUseCaseHelpers()
       .countPagesInDocument({ applicationContext, docketEntryId });
-
-    //TODO: This is where we need to split away from the lead case's docket entry
 
     // Serve on all parties
     const servedParties = aggregatePartiesForService(caseEntity);
@@ -228,15 +246,15 @@ const fileAndServeDocumentOnOneCase = async ({
         {
           assigneeId: null,
           assigneeName: null,
-          associatedJudge: caseToUpdate.associatedJudge,
-          caseStatus: caseToUpdate.status,
+          associatedJudge: caseEntity.associatedJudge,
+          caseStatus: caseEntity.status,
           caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
           docketEntry: {
             ...docketEntryEntity.toRawObject(),
             createdAt: docketEntryEntity.createdAt,
           },
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           hideFromPendingMessages: true,
           inProgress: true,
           section: DOCKET_SECTION,
@@ -263,6 +281,8 @@ const fileAndServeDocumentOnOneCase = async ({
     } else {
       caseEntity.updateDocketEntry(docketEntryEntity);
     }
+
+    //TODO: this might fail on a sub-case because the docket entry on the sub-case isn't created in DynamoDB yet
     await applicationContext.getPersistenceGateway().saveWorkItem({
       applicationContext,
       workItem: docketEntryEntity.workItem.validate().toRawObject(),
@@ -282,6 +302,9 @@ const fileAndServeDocumentOnOneCase = async ({
         caseEntity,
       });
 
+    //TODO: can we close all the passed in cases when just the lead case is closed?
+    //TODO: Chris Holly is investigating
+    //TODO: Answer is no, it shouldn't close all of them.  Chris Holly states that they would prefer that we prevent them from being able to select other cases for these decisions, but they are also willing to just know to not select other cases for these decisions.
     if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
       caseEntity.closeCase();
 
@@ -322,29 +345,14 @@ const fileAndServeDocumentOnOneCase = async ({
       }
     }
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity,
-    });
-
-    const serviceResults = await applicationContext
+    const validRawCaseEntity = await applicationContext
       .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
+      .updateCaseAndAssociations({
         applicationContext,
-        caseEntity,
-        docketEntryId: docketEntryEntity.docketEntryId,
+        caseToUpdate: caseEntity,
       });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
-        applicationContext,
-        docketEntryId: leadDocketEntryOld.docketEntryId,
-        docketNumber: caseToUpdate.docketNumber,
-        status: false,
-      });
-
-    return serviceResults;
+    return new Case(validRawCaseEntity, { applicationContext });
   } catch (e) {
     console.log('error****', e);
     await applicationContext
