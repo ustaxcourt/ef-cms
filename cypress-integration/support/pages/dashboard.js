@@ -1,3 +1,5 @@
+const { DAWSON_GLOBAL_DISABLED_AXE_ERRORS } = require('../axe');
+
 exports.navigateTo = username => {
   cy.login(username, '/');
 
@@ -8,6 +10,7 @@ exports.navigateTo = username => {
     rules: {
       //disabling this because app.jsx > AppComponent > CurrentPage components have headings
       'page-has-heading-one': { enabled: false },
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
     },
   });
 };
