@@ -1,19 +1,7 @@
+const { GET_MESSAGE_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
-  const hasParentParam = {
-    has_parent: {
-      inner_hits: {
-        _source: {
-          includes: ['leadDocketNmber', 'docketNumber'],
-        },
-        name: 'case-mappings',
-      },
-      parent_type: 'case',
-      query: { match_all: {} },
-    },
-  };
-
   const query = {
     body: {
       query: {
@@ -28,7 +16,7 @@ exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
             {
               match: { 'isCompleted.BOOL': false },
             },
-            hasParentParam,
+            GET_MESSAGE_PARENT_CASE,
           ],
         },
       },
@@ -41,8 +29,6 @@ exports.getSectionInboxMessages = async ({ applicationContext, section }) => {
     applicationContext,
     searchParameters: query,
   });
-
-  console.log('111111', results);
 
   return results;
 };
