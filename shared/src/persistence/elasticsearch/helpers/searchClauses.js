@@ -32,7 +32,7 @@ const GET_MESSAGE_PARENT_CASE = {
   has_parent: {
     inner_hits: {
       _source: {
-        includes: ['leadDocketNmber', 'docketNumber'],
+        includes: ['leadDocketNumber', 'docketNumber'],
       },
       name: 'case-mappings',
     },

@@ -93,11 +93,6 @@ exports.search = async ({ applicationContext, searchParameters }) => {
 
   const total = get(body, 'hits.total.value', 0);
 
-  console.log(
-    '&&&&&&&&&&',
-    JSON.stringify(get(body, 'hits.hits', []), null, 2),
-  );
-
   const results = get(body, 'hits.hits', []).map(formatHit);
 
   return {
