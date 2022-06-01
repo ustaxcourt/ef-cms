@@ -1,11 +1,14 @@
-import { getFormattedMessages } from '../utilities/processFormattedMessages';
-import { map, uniq } from 'lodash';
+import {
+  applyFiltersToCompletedMessages,
+  applyFiltersToMessages,
+  getFormattedMessages,
+} from '../utilities/processFormattedMessages';
 import { state } from 'cerebral';
 
 export const formattedMessages = (get, applicationContext) => {
   const tableSort = get(state.tableSort);
 
-  const { completedMessages, messages } = getFormattedMessages({
+  let { completedMessages, messages } = getFormattedMessages({
     applicationContext,
     cacheKey: get(state.messageCacheKey),
     messages: get(state.messages) || [],
@@ -13,71 +16,46 @@ export const formattedMessages = (get, applicationContext) => {
   });
 
   const { box } = get(state.messageBoxToDisplay);
-
   const { role } = get(state.user);
-
   const { USER_ROLES } = applicationContext.getConstants();
 
   if (box === 'outbox' && role !== USER_ROLES.adc) {
     messages.reverse();
   }
-
-  const {
-    caseStatus: caseStatusFilter,
-    completedBy: completedByFilter,
-    fromSection: fromSectionFilter,
-    fromUser: fromUserFilter,
-    toSection: toSectionFilter,
-    toUser: toUserFilter,
-  } = get(state.screenMetadata);
-
-  let filteredMessages = messages;
-  let showFilters = false;
-  let filteredCompletedMessages = completedMessages;
-
-  if (role === USER_ROLES.adc) {
-    showFilters = true;
-    filteredMessages = messages
-      .filter(message =>
-        caseStatusFilter ? message.caseStatus === caseStatusFilter : true,
-      )
-      .filter(message =>
-        fromUserFilter ? message.from === fromUserFilter : true,
-      )
-      .filter(message =>
-        toSectionFilter ? message.toSection === toSectionFilter : true,
-      )
-      .filter(message =>
-        fromSectionFilter ? message.fromSection === fromSectionFilter : true,
-      )
-      .filter(message => (toUserFilter ? message.to === toUserFilter : true));
-
-    filteredCompletedMessages = completedMessages.filter(message =>
-      completedByFilter ? message.completedBy === completedByFilter : true,
-    );
-  }
-
-  const caseStatuses = uniq(map(filteredMessages, 'caseStatus'));
-  const toUsers = uniq(map(filteredMessages, 'to'));
-  const fromUsers = uniq(map(filteredMessages, 'from'));
-  const fromSections = uniq(map(filteredMessages, 'fromSection'));
-  const toSections = uniq(map(filteredMessages, 'toSection'));
-
-  const completedByUsers = uniq(map(filteredCompletedMessages, 'completedBy'));
-
   const hasMessages = messages.length > 0;
 
-  return {
-    caseStatuses,
-    completedByUsers,
-    completedMessages: filteredCompletedMessages,
-    fromSections,
-    fromUsers,
+  let showFilters = role === USER_ROLES.adc;
+
+  let sharedComputedResult = {
+    completedMessages,
     hasMessages,
-    messages: filteredMessages,
+    messages,
     showFilters,
-    showSortableHeaders: role === USER_ROLES.adc,
-    toSections,
-    toUsers,
+    showSortableHeaders: false,
   };
+
+  if (showFilters) {
+    const messageFilterResults = applyFiltersToMessages({
+      messages,
+      screenMetadata: get(state.screenMetadata),
+    });
+
+    const completedMessageFilterResults = applyFiltersToCompletedMessages({
+      completedMessages,
+      screenMetadata: get(state.screenMetadata),
+    });
+
+    sharedComputedResult = {
+      ...sharedComputedResult,
+      ...messageFilterResults.filterValues,
+      ...completedMessageFilterResults.filterValues,
+      completedMessages:
+        completedMessageFilterResults.filteredCompletedMessages,
+      messages: messageFilterResults.filteredMessages,
+      showFilters: true,
+      showSortableHeaders: true,
+    };
+  }
+
+  return sharedComputedResult;
 };

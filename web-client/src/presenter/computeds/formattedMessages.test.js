@@ -151,7 +151,7 @@ describe('formattedMessages', () => {
     });
   });
 
-  it('the filter dropdown values should be set correct for the messages data', () => {
+  it('the filter dropdown values should be set correctly for the messages data', () => {
     const result = runCompute(formattedMessages, {
       state: {
         messageBoxToDisplay: {
@@ -195,7 +195,9 @@ describe('formattedMessages', () => {
           },
         ],
         screenMetadata: {},
-        user: {},
+        user: {
+          role: 'adc',
+        },
       },
     });
 
@@ -242,7 +244,9 @@ describe('formattedMessages', () => {
           },
         ],
         screenMetadata: {},
-        user: {},
+        user: {
+          role: 'adc',
+        },
       },
     });
 
