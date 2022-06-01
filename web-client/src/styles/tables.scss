@@ -150,6 +150,12 @@ table,
     }
   }
 
+  th.consolidated-case-column,
+  td.consolidated-case-column {
+    width: 20px;
+    padding-right: 1px;
+  }
+
   th.message-unread-column,
   td.message-unread-column {
     width: 20px;
