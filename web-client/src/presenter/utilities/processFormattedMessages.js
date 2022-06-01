@@ -87,6 +87,7 @@ export const getFormattedMessages = ({
         now,
         yesterday,
       ),
+      inConsolidatedGroup: !!message.leadDocketNumber,
       messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
     }));
     messageCache = formattedMessages;
