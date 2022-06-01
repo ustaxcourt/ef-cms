@@ -18,11 +18,7 @@ exports.goToStartCreatePetition = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html', {
-    rules: {
-      region: { enabled: false },
-    },
-  });
+  cy.checkA11y('html');
 };
 
 exports.goToWizardStep1 = () => {
@@ -32,11 +28,7 @@ exports.goToWizardStep1 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html', {
-    rules: {
-      region: { enabled: false },
-    },
-  });
+  cy.checkA11y('html');
 };
 
 exports.goToWizardStep2 = () => {
@@ -46,11 +38,7 @@ exports.goToWizardStep2 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html', {
-    rules: {
-      region: { enabled: false },
-    },
-  });
+  cy.checkA11y('html');
 };
 
 exports.goToWizardStep3 = () => {
@@ -60,11 +48,7 @@ exports.goToWizardStep3 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html', {
-    rules: {
-      region: { enabled: false },
-    },
-  });
+  cy.checkA11y('html');
 };
 
 exports.goToWizardStep4 = () => {
@@ -74,11 +58,7 @@ exports.goToWizardStep4 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html', {
-    rules: {
-      region: { enabled: false },
-    },
-  });
+  cy.checkA11y('html');
 };
 
 exports.goToWizardStep5 = () => {
@@ -88,11 +68,7 @@ exports.goToWizardStep5 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html', {
-    rules: {
-      region: { enabled: false },
-    },
-  });
+  cy.checkA11y('html');
 };
 
 exports.submitPetition = testData => {
@@ -122,7 +98,6 @@ exports.goToDashboard = () => {
     rules: {
       'color-contrast': { enabled: false },
       'nested-interactive': { enabled: false },
-      region: { enabled: false },
     },
   });
 };
