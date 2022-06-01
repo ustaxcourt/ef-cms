@@ -51,6 +51,7 @@ describe('Petitioner', () => {
       completeWizardStep1();
     });
 
+    // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
     });
@@ -75,6 +76,7 @@ describe('Petitioner', () => {
       completeWizardStep1();
     });
 
+    // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
     });

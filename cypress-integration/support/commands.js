@@ -55,7 +55,7 @@ Cypress.Commands.add('waitUntilSettled', (maxTries = 20) => {
   });
 
   /**
-   *
+   * Determines if the DOM has changed
    */
   function waitAndSee(iteration) {
     didDOMChange = false;
