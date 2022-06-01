@@ -50,6 +50,7 @@ describe('formattedMessages', () => {
           message: 'This is a test message',
         },
       ],
+      hasMessages: true,
       messages: [
         {
           createdAt: '2019-01-01T16:29:13.122Z',
@@ -75,9 +76,9 @@ describe('formattedMessages', () => {
   it('returns filtered messages sorted newest to oldest when messageBoxToDisplay.box is outbox', () => {
     const result = runCompute(formattedMessages, {
       state: {
+        hasMessages: true,
         messageBoxToDisplay: {
           box: 'outbox',
-          section: 'section',
         },
         messages: [
           {
@@ -135,7 +136,6 @@ describe('formattedMessages', () => {
       state: {
         messageBoxToDisplay: {
           box: 'inbox',
-          section: 'section',
         },
         screenMetadata: {},
         user: {
@@ -146,6 +146,7 @@ describe('formattedMessages', () => {
 
     expect(result).toMatchObject({
       completedMessages: [],
+      hasMessages: false,
       messages: [],
     });
   });

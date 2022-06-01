@@ -12,12 +12,13 @@ export const formattedMessages = (get, applicationContext) => {
     tableSort,
   });
 
-  const { box, section } = get(state.messageBoxToDisplay);
+  const { box } = get(state.messageBoxToDisplay);
+
   const { role } = get(state.user);
 
   const { USER_ROLES } = applicationContext.getConstants();
 
-  if (box === 'outbox' && section === 'section' && role !== USER_ROLES.adc) {
+  if (box === 'outbox' && role !== USER_ROLES.adc) {
     messages.reverse();
   }
 
@@ -64,12 +65,15 @@ export const formattedMessages = (get, applicationContext) => {
 
   const completedByUsers = uniq(map(filteredCompletedMessages, 'completedBy'));
 
+  const hasMessages = messages.length > 0;
+
   return {
     caseStatuses,
     completedByUsers,
     completedMessages: filteredCompletedMessages,
     fromSections,
     fromUsers,
+    hasMessages,
     messages: filteredMessages,
     showFilters,
     showSortableHeaders: role === USER_ROLES.adc,
