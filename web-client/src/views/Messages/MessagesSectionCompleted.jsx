@@ -6,6 +6,7 @@ import {
 } from './sortConstants';
 import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -28,6 +29,7 @@ export const MessagesSectionCompleted = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
@@ -112,7 +114,11 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   return (
     <tbody>
       <tr>
-        <td aria-hidden="true" className="focus-toggle" />
+        <td className="consolidated-case-column">
+          {message.inConsolidatedGroup && (
+            <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
+          )}
+        </td>
         <td className="message-queue-row small">{docketNumberWithSuffix}</td>
         <td className="message-queue-row small">
           <span className="no-wrap">{completedAtFormatted}</span>

@@ -94,6 +94,31 @@ describe('Message', () => {
       );
     });
 
+    it('should populate leadDocketNumber', () => {
+      const message = new Message(
+        {
+          caseStatus: CASE_STATUS_TYPES.generalDocket,
+          caseTitle: 'Test Petitioner',
+          createdAt: '2019-01-01T17:29:13.122Z',
+          docketNumber: '123-45',
+          docketNumberWithSuffix: '123-45S',
+          from: 'gg',
+          fromSection: PETITIONS_SECTION,
+          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          isCompleted: true,
+          leadDocketNumber: '999-99',
+          message: 'hello world',
+          subject: 'hey!',
+          to: 'bob',
+          toSection: PETITIONS_SECTION,
+          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        },
+        { applicationContext },
+      );
+
+      expect(message.leadDocketNumber).toEqual('999-99');
+    });
+
     it('creates an invalid Message with isCompleted true and without completedBy fields', () => {
       const message = new Message(
         {
