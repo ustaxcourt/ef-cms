@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   applicationContext,
   testPdfDoc,
@@ -539,6 +540,56 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         },
       );
 
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf,
+      ).toHaveBeenCalled();
+      expect(result.pdfUrl).toBe(mockPdfUrl);
+    });
+
+    it('should handle errors in the try block well', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementationOnce(() => {
+          return {
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+            docketEntries: caseRecord.docketEntries,
+          };
+        })
+        .mockImplementationOnce(() => {
+          return MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE;
+        })
+        .mockImplementationOnce(() => {
+          return MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE;
+        });
+
+      applicationContext
+        .getPersistenceGateway()
+        .saveWorkItem.mockImplementation(({ workItem }) => {
+          if (
+            workItem.docketNumber ===
+            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber
+          ) {
+            throw new Error('unexpected error');
+          }
+        });
+
+      const result = await fileAndServeCourtIssuedDocumentInteractor(
+        applicationContext,
+        {
+          documentMeta: {
+            ...caseRecord.docketEntries[0],
+            docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+            docketNumbers: [
+              MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+              MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+              MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+            ],
+          },
+        },
+      );
+
+      // TODO: write real expectations that validate what we want
       expect(
         applicationContext.getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf,

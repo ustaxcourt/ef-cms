@@ -96,16 +96,17 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  let caseEntities = docketNumbers.map(async consolidatedDocketNumber => {
+  let caseEntities = [];
+  for (const docketNumber of docketNumbers) {
     const caseToUpdate = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
-        consolidatedDocketNumber,
+        docketNumber,
       });
 
-    return new Case(caseToUpdate, { applicationContext });
-  });
+    caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+  }
 
   let serviceResults;
   try {
