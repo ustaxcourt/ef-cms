@@ -12,12 +12,12 @@ exports.fileAndServeCourtIssuedDocumentInteractor = (
   applicationContext,
   { documentMeta },
 ) => {
-  const { docketNumber } = documentMeta;
+  const { leadCaseDocketNumber } = documentMeta;
   return post({
     applicationContext,
     body: {
       documentMeta,
     },
-    endpoint: `/case-documents/${docketNumber}/file-and-serve-court-issued-docket-entry`,
+    endpoint: `/case-documents/${leadCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
   });
 };
