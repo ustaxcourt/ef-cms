@@ -48,7 +48,11 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  //TODO: rename variables with 'lead' in the name to avoid confusion when dealing with a single case
   const { docketEntryId, docketNumbers, leadCaseDocketNumber } = documentMeta;
+
+  // flag to indicate whether we are updating a single case or an array of consolidated cases
+  const singleCaseOperation = docketNumbers.length === 1;
 
   const leadCaseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -112,6 +116,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
         docketEntryId,
         documentMeta,
         leadDocketEntryOld,
+        singleCaseOperation,
         user,
       }),
     );
@@ -204,9 +209,10 @@ const fileDocumentOnOneCase = async ({
   docketEntryId,
   documentMeta,
   leadDocketEntryOld,
+  singleCaseOperation,
   user,
 }) => {
-  // numberOfPages shouldn't need to be recalculated for each docket entry, despite not yet being updated????
+  // numberOfPages shouldn't need to be recalculated for each docket entry, despite not yet being updated, right????
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({ applicationContext, docketEntryId });
@@ -283,6 +289,7 @@ const fileDocumentOnOneCase = async ({
   }
 
   //TODO: this might fail on a sub-case because the docket entry on the sub-case isn't created in DynamoDB yet
+
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
     workItem: docketEntryEntity.workItem.validate().toRawObject(),
@@ -302,10 +309,11 @@ const fileDocumentOnOneCase = async ({
       caseEntity,
     });
 
-  //TODO: can we close all the passed in cases when just the lead case is closed?
-  //TODO: Chris Holly is investigating
-  //TODO: Answer is no, it shouldn't close all of them.  Chris Holly states that they would prefer that we prevent them from being able to select other cases for these decisions, but they are also willing to just know to not select other cases for these decisions.
-  if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
+  // will only execute if single case is being updated
+  if (
+    singleCaseOperation &&
+    ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)
+  ) {
     caseEntity.closeCase();
 
     await applicationContext
