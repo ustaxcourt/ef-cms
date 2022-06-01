@@ -88,6 +88,7 @@ export const MessagesSectionCompleted = connect(
               completedBySection={message.completedBySection}
               completedMessage={message.completedMessage}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
+              inConsolidatedGroup={message.inConsolidatedGroup}
               key={message.messageId}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
@@ -107,6 +108,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   completedBySection,
   completedMessage,
   docketNumberWithSuffix,
+  inConsolidatedGroup,
   message,
   messageDetailLink,
   subject,
@@ -115,7 +117,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
     <tbody>
       <tr>
         <td className="consolidated-case-column">
-          {message.inConsolidatedGroup && (
+          {inConsolidatedGroup && (
             <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
           )}
         </td>

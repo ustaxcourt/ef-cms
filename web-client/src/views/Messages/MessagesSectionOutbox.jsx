@@ -90,6 +90,7 @@ export const MessagesSectionOutbox = connect(
               createdAtFormatted={message.createdAtFormatted}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
+              inConsolidatedGroup={message.inConsolidatedGroup}
               key={message.messageId}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
@@ -112,6 +113,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
   createdAtFormatted,
   docketNumberWithSuffix,
   from,
+  inConsolidatedGroup,
   message,
   messageDetailLink,
   subject,
@@ -123,7 +125,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
       <tr>
         {/* what abt focus-toggle class */}
         <td className="consolidated-case-column">
-          {message.inConsolidatedGroup && (
+          {inConsolidatedGroup && (
             <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
           )}
         </td>
