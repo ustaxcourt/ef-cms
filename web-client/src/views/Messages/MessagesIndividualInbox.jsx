@@ -34,7 +34,6 @@ export const MessagesIndividualInbox = connect(
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
                   <td className="consolidated-case-column">
-                    {console.log(message)}
                     {message.inConsolidatedGroup && (
                       <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
                     )}

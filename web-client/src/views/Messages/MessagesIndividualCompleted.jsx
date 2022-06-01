@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -11,6 +12,7 @@ export const MessagesIndividualCompleted = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number" className="small" colSpan="2">
                 Docket No.
               </th>
@@ -24,7 +26,11 @@ export const MessagesIndividualCompleted = connect(
             return (
               <tbody key={`message-individual-${message.messageId}`}>
                 <tr>
-                  <td aria-hidden="true" className="focus-toggle" />
+                  <td className="consolidated-case-column">
+                    {message.inConsolidatedGroup && (
+                      <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
+                    )}
+                  </td>
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
                   </td>

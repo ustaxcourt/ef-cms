@@ -6,6 +6,7 @@ import {
 } from './sortConstants';
 import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -29,6 +30,7 @@ export const MessagesSectionInbox = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
@@ -90,6 +92,7 @@ export const MessagesSectionInbox = connect(
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
               fromSection={message.fromSection}
+              inConsolidatedGroup={message.inConsolidatedGroup}
               key={message.messageId}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
@@ -112,6 +115,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
   docketNumberWithSuffix,
   from,
   fromSection,
+  inConsolidatedGroup,
   message,
   messageDetailLink,
   subject,
@@ -120,7 +124,11 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
   return (
     <tbody>
       <tr>
-        <td aria-hidden="true" className="focus-toggle" />
+        <td className="consolidated-case-column">
+          {inConsolidatedGroup && (
+            <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
+          )}
+        </td>
         <td className="message-queue-row small">{docketNumberWithSuffix}</td>
         <td className="message-queue-row small">
           <span className="no-wrap">{createdAtFormatted}</span>
