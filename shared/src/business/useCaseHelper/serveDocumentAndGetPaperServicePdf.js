@@ -8,7 +8,7 @@ const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
- * @param {object} providers.caseEntity the case entity containing the docket entry to serve
+ * @param {array} providers.caseEntities the list of case entities containing the docket entry to serve
  * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {Promise<*>} the updated case entity
  */
