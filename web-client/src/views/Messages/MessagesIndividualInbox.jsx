@@ -34,7 +34,10 @@ export const MessagesIndividualInbox = connect(
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
                   <td className="consolidated-case-column">
-                    <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
+                    {console.log(message)}
+                    {message.inConsolidatedGroup && (
+                      <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
+                    )}
                   </td>
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
