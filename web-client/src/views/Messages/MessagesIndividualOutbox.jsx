@@ -30,7 +30,18 @@ export const MessagesIndividualOutbox = connect(
                 <tr>
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
-                      <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
+                      <span className="fa-stack">
+                        <FontAwesomeIcon
+                          className="fa-icon-blue fa-stack-1x"
+                          icon="copy"
+                        />
+                        {message.inLeadCase && (
+                          <FontAwesomeIcon
+                            className="fa-icon-white-no-margin fa-stack-2x"
+                            icon="l"
+                          />
+                        )}
+                      </span>
                     )}
                   </td>
                   <td className="message-queue-row small">

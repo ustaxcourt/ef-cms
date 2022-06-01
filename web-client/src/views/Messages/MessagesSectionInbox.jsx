@@ -93,6 +93,7 @@ export const MessagesSectionInbox = connect(
               from={message.from}
               fromSection={message.fromSection}
               inConsolidatedGroup={message.inConsolidatedGroup}
+              inLeadCase={message.inLeadCase}
               key={message.messageId}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
@@ -116,6 +117,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
   from,
   fromSection,
   inConsolidatedGroup,
+  inLeadCase,
   message,
   messageDetailLink,
   subject,
@@ -126,7 +128,18 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
       <tr>
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
-            <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
+            <span className="fa-stack">
+              <FontAwesomeIcon
+                className="fa-icon-blue fa-stack-1x"
+                icon="copy"
+              />
+              {inLeadCase && (
+                <FontAwesomeIcon
+                  className="fa-icon-white-no-margin fa-stack-2x"
+                  icon="l"
+                />
+              )}
+            </span>
           )}
         </td>
         <td className="message-queue-row small">{docketNumberWithSuffix}</td>

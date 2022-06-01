@@ -91,6 +91,7 @@ export const MessagesSectionOutbox = connect(
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
               inConsolidatedGroup={message.inConsolidatedGroup}
+              inLeadCase={message.inLeadCase}
               key={message.messageId}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
@@ -114,6 +115,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
   docketNumberWithSuffix,
   from,
   inConsolidatedGroup,
+  inLeadCase,
   message,
   messageDetailLink,
   subject,
@@ -126,7 +128,18 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
         {/* what abt focus-toggle class */}
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
-            <FontAwesomeIcon className="fa-icon-blue" icon="copy" />
+            <span className="fa-stack">
+              <FontAwesomeIcon
+                className="fa-icon-blue fa-stack-1x"
+                icon="copy"
+              />
+              {inLeadCase && (
+                <FontAwesomeIcon
+                  className="fa-icon-white-no-margin fa-stack-2x"
+                  icon="l"
+                />
+              )}
+            </span>
           )}
         </td>
         <td className="message-queue-row small">{docketNumberWithSuffix}</td>

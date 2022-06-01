@@ -78,6 +78,10 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   color: color($theme-color-primary-vivid);
 }
 
+.fa-icon-white-no-margin {
+  color: $color-white;
+}
+
 .fa-icon-black {
   color: color($theme-color-base-darkest);
 }
