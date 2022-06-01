@@ -1,3 +1,6 @@
+const {
+  DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+} = require('../../../cypress-integration/support/axe');
 const { faker } = require('@faker-js/faker');
 
 exports.hasIrsNotice = {
@@ -18,7 +21,11 @@ exports.goToStartCreatePetition = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html');
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep1 = () => {
@@ -28,7 +35,11 @@ exports.goToWizardStep1 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html');
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep2 = () => {
@@ -38,7 +49,11 @@ exports.goToWizardStep2 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html');
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep3 = () => {
@@ -48,7 +63,11 @@ exports.goToWizardStep3 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html');
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep4 = () => {
@@ -58,7 +77,11 @@ exports.goToWizardStep4 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html');
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep5 = () => {
@@ -68,7 +91,11 @@ exports.goToWizardStep5 = () => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
-  cy.checkA11y('html');
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.submitPetition = testData => {
@@ -98,6 +125,7 @@ exports.goToDashboard = () => {
     rules: {
       'color-contrast': { enabled: false },
       'nested-interactive': { enabled: false },
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
     },
   });
 };
