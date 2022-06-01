@@ -82,7 +82,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       status: true,
     });
 
-  await stampAndPersistDocument({
+  const stampedPdf = await stampDocument({
     applicationContext,
     documentMeta,
     leadDocketEntryOld,
@@ -92,42 +92,61 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const servingDocumentPromises = docketNumbers.map(consolidatedDocketNumber =>
-    fileAndServeDocumentOnOneCase({
-      applicationContext,
-      consolidatedDocketNumber,
-      docketEntryId,
-      documentMeta,
-      leadDocketEntryOld,
-      user,
-    }),
-  );
-
-  const caseEntities = await Promise.all(servingDocumentPromises);
-
-  const serviceResults = await applicationContext
-    .getUseCaseHelpers()
-    .serveDocumentAndGetPaperServicePdf({
-      applicationContext,
-      caseEntities,
-      docketEntryId: leadDocketEntryOld.docketEntryId,
-    });
-
-  for (const caseEntity of caseEntities) {
-    await applicationContext
+  let caseEntities = docketNumbers.map(async consolidatedDocketNumber => {
+    const caseToUpdate = await applicationContext
       .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
+      .getCaseByDocketNumber({
         applicationContext,
-        docketEntryId: leadDocketEntryOld.docketEntryId,
-        docketNumber: caseEntity.docketNumber,
-        status: false,
+        consolidatedDocketNumber,
       });
+
+    return new Case(caseToUpdate, { applicationContext });
+  });
+
+  let serviceResults;
+  try {
+    const filedDocumentPromises = caseEntities.map(caseEntity =>
+      fileDocumentOnOneCase({
+        applicationContext,
+        caseEntity,
+        docketEntryId,
+        documentMeta,
+        leadDocketEntryOld,
+        user,
+      }),
+    );
+    caseEntities = await Promise.all(filedDocumentPromises);
+
+    serviceResults = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
+        applicationContext,
+        caseEntities,
+        docketEntryId: leadDocketEntryOld.docketEntryId,
+      });
+  } finally {
+    for (const caseEntity of caseEntities) {
+      await applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus({
+          applicationContext,
+          docketEntryId: leadDocketEntryOld.docketEntryId,
+          docketNumber: caseEntity.docketNumber,
+          status: false,
+        });
+    }
   }
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: stampedPdf,
+    key: leadDocketEntryOld.docketEntryId,
+  });
 
   return serviceResults;
 };
 
-const stampAndPersistDocument = async ({
+const stampDocument = async ({
   applicationContext,
   documentMeta,
   leadDocketEntry,
@@ -172,198 +191,166 @@ const stampAndPersistDocument = async ({
     'MMDDYY',
   );
 
-  const newPdfData = await addServedStampToDocument({
+  return await addServedStampToDocument({
     applicationContext,
     pdfData,
     serviceStampText: `${serviceStampType} ${serviceStampDate}`,
   });
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: newPdfData,
-    key: leadDocketEntryEntityForServiceStampOnly.docketEntryId,
-  });
 };
 
-const fileAndServeDocumentOnOneCase = async ({
+const fileDocumentOnOneCase = async ({
   applicationContext,
-  consolidatedDocketNumber: docketNumber,
+  caseEntity,
   docketEntryId,
   documentMeta,
   leadDocketEntryOld,
   user,
 }) => {
-  // TODO:
-  // Refactor paper service receipt to account for multiple cases being served at once
+  // numberOfPages shouldn't need to be recalculated for each docket entry, despite not yet being updated????
+  const numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({ applicationContext, docketEntryId });
 
-  const caseToUpdate = await applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber,
-    });
+  // Serve on all parties
+  const servedParties = aggregatePartiesForService(caseEntity);
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  const docketEntryEntity = new DocketEntry(
+    {
+      ...omit(leadDocketEntryOld, 'filedBy'),
+      attachments: documentMeta.attachments,
+      date: documentMeta.date,
+      docketNumber: caseEntity.docketNumber,
+      documentTitle: documentMeta.generatedDocumentTitle,
+      documentType: documentMeta.documentType,
+      draftOrderState: null,
+      editState: JSON.stringify(documentMeta),
+      eventCode: documentMeta.eventCode,
+      filingDate: createISODateString(),
+      freeText: documentMeta.freeText,
+      isDraft: false,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      judge: documentMeta.judge,
+      numberOfPages,
+      scenario: documentMeta.scenario,
+      serviceStamp: documentMeta.serviceStamp,
+      userId: user.userId,
+    },
+    { applicationContext },
+  );
 
-  try {
-    // numberOfPages shouldn't need to be recalculated for each docket entry, despite not yet being updated????
-    const numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({ applicationContext, docketEntryId });
+  docketEntryEntity.setAsServed(servedParties.all).validate();
 
-    // Serve on all parties
-    const servedParties = aggregatePartiesForService(caseEntity);
-
-    const docketEntryEntity = new DocketEntry(
+  if (!docketEntryEntity.workItem) {
+    docketEntryEntity.workItem = new WorkItem(
       {
-        ...omit(leadDocketEntryOld, 'filedBy'),
-        attachments: documentMeta.attachments,
-        date: documentMeta.date,
+        assigneeId: null,
+        assigneeName: null,
+        associatedJudge: caseEntity.associatedJudge,
+        caseStatus: caseEntity.status,
+        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
+        },
         docketNumber: caseEntity.docketNumber,
-        documentTitle: documentMeta.generatedDocumentTitle,
-        documentType: documentMeta.documentType,
-        draftOrderState: null,
-        editState: JSON.stringify(documentMeta),
-        eventCode: documentMeta.eventCode,
-        filingDate: createISODateString(),
-        freeText: documentMeta.freeText,
-        isDraft: false,
-        isFileAttached: true,
-        isOnDocketRecord: true,
-        judge: documentMeta.judge,
-        numberOfPages,
-        scenario: documentMeta.scenario,
-        serviceStamp: documentMeta.serviceStamp,
-        userId: user.userId,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+        hideFromPendingMessages: true,
+        inProgress: true,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
       },
       { applicationContext },
     );
+  }
 
-    docketEntryEntity.setAsServed(servedParties.all).validate();
+  docketEntryEntity.workItem.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section,
+    sentBy: user.name,
+    sentBySection: user.section,
+    sentByUserId: user.userId,
+  });
 
-    if (!docketEntryEntity.workItem) {
-      docketEntryEntity.workItem = new WorkItem(
-        {
-          assigneeId: null,
-          assigneeName: null,
-          associatedJudge: caseEntity.associatedJudge,
-          caseStatus: caseEntity.status,
-          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-          docketEntry: {
-            ...docketEntryEntity.toRawObject(),
-            createdAt: docketEntryEntity.createdAt,
-          },
-          docketNumber: caseEntity.docketNumber,
-          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-          hideFromPendingMessages: true,
-          inProgress: true,
-          section: DOCKET_SECTION,
-          sentBy: user.name,
-          sentByUserId: user.userId,
-        },
-        { applicationContext },
-      );
-    }
+  docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
 
-    docketEntryEntity.workItem.assignToUser({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    });
+  if (caseEntity.docketNumber !== caseEntity.leadDocketNumber) {
+    caseEntity.addDocketEntry(docketEntryEntity);
+  } else {
+    caseEntity.updateDocketEntry(docketEntryEntity);
+  }
 
-    docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
+  //TODO: this might fail on a sub-case because the docket entry on the sub-case isn't created in DynamoDB yet
+  await applicationContext.getPersistenceGateway().saveWorkItem({
+    applicationContext,
+    workItem: docketEntryEntity.workItem.validate().toRawObject(),
+  });
 
-    if (caseEntity.docketNumber !== caseEntity.leadDocketNumber) {
-      caseEntity.addDocketEntry(docketEntryEntity);
-    } else {
-      caseEntity.updateDocketEntry(docketEntryEntity);
-    }
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+    applicationContext,
+    section: user.section,
+    userId: user.userId,
+    workItem: docketEntryEntity.workItem.validate().toRawObject(),
+  });
 
-    //TODO: this might fail on a sub-case because the docket entry on the sub-case isn't created in DynamoDB yet
-    await applicationContext.getPersistenceGateway().saveWorkItem({
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
       applicationContext,
-      workItem: docketEntryEntity.workItem.validate().toRawObject(),
+      caseEntity,
     });
 
-    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-      applicationContext,
-      section: user.section,
-      userId: user.userId,
-      workItem: docketEntryEntity.workItem.validate().toRawObject(),
-    });
+  //TODO: can we close all the passed in cases when just the lead case is closed?
+  //TODO: Chris Holly is investigating
+  //TODO: Answer is no, it shouldn't close all of them.  Chris Holly states that they would prefer that we prevent them from being able to select other cases for these decisions, but they are also willing to just know to not select other cases for these decisions.
+  if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
+    caseEntity.closeCase();
 
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({
-        applicationContext,
-        caseEntity,
-      });
-
-    //TODO: can we close all the passed in cases when just the lead case is closed?
-    //TODO: Chris Holly is investigating
-    //TODO: Answer is no, it shouldn't close all of them.  Chris Holly states that they would prefer that we prevent them from being able to select other cases for these decisions, but they are also willing to just know to not select other cases for these decisions.
-    if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
-      caseEntity.closeCase();
-
-      await applicationContext
-        .getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords({
-          applicationContext,
-          docketNumber: caseEntity.docketNumber,
-        });
-
-      if (caseEntity.trialSessionId) {
-        const trialSession = await applicationContext
-          .getPersistenceGateway()
-          .getTrialSessionById({
-            applicationContext,
-            trialSessionId: caseEntity.trialSessionId,
-          });
-
-        const trialSessionEntity = new TrialSession(trialSession, {
-          applicationContext,
-        });
-
-        if (trialSessionEntity.isCalendared) {
-          trialSessionEntity.removeCaseFromCalendar({
-            disposition: 'Status was changed to Closed',
-            docketNumber,
-          });
-        } else {
-          trialSessionEntity.deleteCaseFromCalendar({
-            docketNumber: caseEntity.docketNumber,
-          });
-        }
-
-        await applicationContext.getPersistenceGateway().updateTrialSession({
-          applicationContext,
-          trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-        });
-      }
-    }
-
-    const validRawCaseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate: caseEntity,
-      });
-
-    return new Case(validRawCaseEntity, { applicationContext });
-  } catch (e) {
-    console.log('error****', e);
     await applicationContext
       .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
+      .deleteCaseTrialSortMappingRecords({
         applicationContext,
-        docketEntryId: leadDocketEntryOld.docketEntryId,
-        docketNumber: caseToUpdate.docketNumber,
-        status: false,
+        docketNumber: caseEntity.docketNumber,
       });
 
-    throw e;
+    if (caseEntity.trialSessionId) {
+      const trialSession = await applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionById({
+          applicationContext,
+          trialSessionId: caseEntity.trialSessionId,
+        });
+
+      const trialSessionEntity = new TrialSession(trialSession, {
+        applicationContext,
+      });
+
+      if (trialSessionEntity.isCalendared) {
+        trialSessionEntity.removeCaseFromCalendar({
+          disposition: 'Status was changed to Closed',
+          docketNumber: caseEntity.docketNumber,
+        });
+      } else {
+        trialSessionEntity.deleteCaseFromCalendar({
+          docketNumber: caseEntity.docketNumber,
+        });
+      }
+
+      await applicationContext.getPersistenceGateway().updateTrialSession({
+        applicationContext,
+        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+      });
+    }
   }
+
+  const validRawCaseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
+
+  return new Case(validRawCaseEntity, { applicationContext });
 };
