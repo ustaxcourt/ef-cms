@@ -234,22 +234,21 @@ const fileAndServeDocumentOnOneCase = async ({
 
   let caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  // const docketEntry = caseEntity.getDocketEntryById({
-  //   docketEntryId,
-  // });
-  //
-  // if (!docketEntry) {
-  //   throw new NotFoundError('Docket entry not found');
-  // }
-  // if (docketEntry.servedAt) {
-  //   throw new Error('Docket entry has already been served');
-  // }
-  //
-  // if (docketEntry.isPendingService) {
-  //   throw new Error('Docket entry is already being served');
-  // }
-
   if (leadCaseDocketNumber === caseToUpdate.docketNumber) {
+    const docketEntry = caseEntity.getDocketEntryById({
+      docketEntryId,
+    });
+
+    if (!docketEntry) {
+      throw new NotFoundError('Docket entry not found');
+    }
+    if (docketEntry.servedAt) {
+      throw new Error('Docket entry has already been served');
+    }
+
+    if (docketEntry.isPendingService) {
+      throw new Error('Docket entry is already being served');
+    }
     await applicationContext
       .getPersistenceGateway()
       .updateDocketEntryPendingServiceStatus({
@@ -257,6 +256,26 @@ const fileAndServeDocumentOnOneCase = async ({
         docketEntryId: leadDocketEntryOld.docketEntryId,
         docketNumber: leadCaseDocketNumber,
         status: true,
+      });
+  } else {
+    // create docket entry for each consolidated case (as a direct and un-updated copy of the original lead docket entry)
+    const docketEntryEntity = new DocketEntry(
+      {
+        ...leadDocketEntryOld,
+        docketNumber: caseEntity.docketNumber,
+        // TODO: need to validate indexing
+        index: caseEntity.docketEntries.length,
+      },
+      { applicationContext },
+    );
+
+    caseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .createDocketEntryInteractor({
+        applicationContext,
+        docketEntry: docketEntryEntity,
+        docketNumber: caseEntity.docketNumber,
+        userId: authorizedUser.userId,
       });
   }
 
