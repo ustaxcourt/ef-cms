@@ -3,7 +3,6 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const MessagesIndividualCompleted = connect(
   { formattedMessages: state.formattedMessages.completedMessages },
@@ -29,13 +28,18 @@ export const MessagesIndividualCompleted = connect(
                 <tr>
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
-                      <FontAwesomeIcon
-                        className={classNames(
-                          'fa-icon-blue',
-                          message.inLeadCase && 'lead-case-icon',
+                      <span className="fa-stack">
+                        <FontAwesomeIcon
+                          className="fa-icon-blue fa-stack-1x"
+                          icon="copy"
+                        />
+                        {message.inLeadCase && (
+                          <FontAwesomeIcon
+                            className="fa-icon-white-no-margin fa-stack-2x"
+                            icon="l"
+                          />
                         )}
-                        icon="copy"
-                      />
+                      </span>
                     )}
                   </td>
                   <td className="message-queue-row small">
