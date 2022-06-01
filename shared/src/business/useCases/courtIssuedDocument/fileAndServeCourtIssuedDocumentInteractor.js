@@ -131,6 +131,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       });
   } finally {
     for (const caseEntity of caseEntities) {
+      // updated to conditional update to avoid creating record if it does not already exist
       await applicationContext
         .getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus({
