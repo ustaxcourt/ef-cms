@@ -311,48 +311,16 @@ const fileDocumentOnOneCase = async ({
       caseEntity,
     });
 
-  // will only execute if single case is being updated
-  if (
+  // only allow closing the case if a `Entered and Served` document is being filed on ONE case
+  const shouldCloseCase =
     singleCaseOperation &&
-    ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)
-  ) {
-    caseEntity.closeCase();
+    ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode);
 
-    await applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords({
-        applicationContext,
-        docketNumber: caseEntity.docketNumber,
-      });
-
-    if (caseEntity.trialSessionId) {
-      const trialSession = await applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById({
-          applicationContext,
-          trialSessionId: caseEntity.trialSessionId,
-        });
-
-      const trialSessionEntity = new TrialSession(trialSession, {
-        applicationContext,
-      });
-
-      if (trialSessionEntity.isCalendared) {
-        trialSessionEntity.removeCaseFromCalendar({
-          disposition: 'Status was changed to Closed',
-          docketNumber: caseEntity.docketNumber,
-        });
-      } else {
-        trialSessionEntity.deleteCaseFromCalendar({
-          docketNumber: caseEntity.docketNumber,
-        });
-      }
-
-      await applicationContext.getPersistenceGateway().updateTrialSession({
-        applicationContext,
-        trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-      });
-    }
+  if (shouldCloseCase) {
+    closeCaseAndUpdatedTrialSessionForEnteredAndServedDocuments({
+      applicationContext,
+      caseEntity,
+    });
   }
 
   const validRawCaseEntity = await applicationContext
@@ -363,4 +331,47 @@ const fileDocumentOnOneCase = async ({
     });
 
   return new Case(validRawCaseEntity, { applicationContext });
+};
+
+const closeCaseAndUpdatedTrialSessionForEnteredAndServedDocuments = async ({
+  applicationContext,
+  caseEntity,
+}) => {
+  caseEntity.closeCase();
+
+  await applicationContext
+    .getPersistenceGateway()
+    .deleteCaseTrialSortMappingRecords({
+      applicationContext,
+      docketNumber: caseEntity.docketNumber,
+    });
+
+  if (caseEntity.trialSessionId) {
+    const trialSession = await applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById({
+        applicationContext,
+        trialSessionId: caseEntity.trialSessionId,
+      });
+
+    const trialSessionEntity = new TrialSession(trialSession, {
+      applicationContext,
+    });
+
+    if (trialSessionEntity.isCalendared) {
+      trialSessionEntity.removeCaseFromCalendar({
+        disposition: 'Status was changed to Closed',
+        docketNumber: caseEntity.docketNumber,
+      });
+    } else {
+      trialSessionEntity.deleteCaseFromCalendar({
+        docketNumber: caseEntity.docketNumber,
+      });
+    }
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
+  }
 };
