@@ -121,7 +121,7 @@ describe('Petitioner', () => {
 
   describe(`should create a case for ${secondCasePetitionerName}`, () => {
     it('should complete wizard step 1', () => {
-      cy.login('petitioner3');
+      cy.login('petitioner');
       goToStartCreatePetition();
       checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
@@ -156,11 +156,8 @@ describe('Petitioner', () => {
       goToDashboard();
       checkA11y({
         ignoredErrors: {
-          'aria-hidden-focus': { enabled: false },
           'color-contrast': { enabled: false },
-          'landmark-one-main': { enabled: false },
           'nested-interactive': { enabled: false },
-          'page-has-heading-one': { enabled: false },
           ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
         },
       });
