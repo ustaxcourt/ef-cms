@@ -1,3 +1,6 @@
+const {
+  DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+} = require('../../../cypress-integration/support/axe');
 const { faker } = require('@faker-js/faker');
 
 exports.hasIrsNotice = {
@@ -14,31 +17,85 @@ exports.filingTypes = {
 
 exports.goToStartCreatePetition = () => {
   cy.get('a#file-a-petition').click();
+
+  cy.waitUntilSettled();
+
+  cy.injectAxe();
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep1 = () => {
   cy.get('a[href*="file-a-petition/step-1"]').click();
   cy.url().should('contain', '/file-a-petition/step-1');
+
+  cy.waitUntilSettled();
+
+  cy.injectAxe();
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep2 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-2');
+
+  cy.waitUntilSettled();
+
+  cy.injectAxe();
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep3 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-3');
+
+  cy.waitUntilSettled();
+
+  cy.injectAxe();
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep4 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-4');
+
+  cy.waitUntilSettled();
+
+  cy.injectAxe();
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.goToWizardStep5 = () => {
   cy.get('button#submit-case').click();
   cy.url().should('contain', '/file-a-petition/step-5');
+
+  cy.waitUntilSettled();
+
+  cy.injectAxe();
+  cy.checkA11y('html', {
+    rules: {
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.submitPetition = testData => {
@@ -60,6 +117,17 @@ exports.submitPetition = testData => {
 
 exports.goToDashboard = () => {
   cy.get('a#button-back-to-dashboard').click();
+
+  cy.waitUntilSettled();
+
+  cy.injectAxe();
+  cy.checkA11y('html', {
+    rules: {
+      'color-contrast': { enabled: false },
+      'nested-interactive': { enabled: false },
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.completeWizardStep1 = () => {
@@ -67,7 +135,6 @@ exports.completeWizardStep1 = () => {
 };
 
 exports.completeWizardStep2 = (hasIrsNotice, caseType) => {
-  cy.screenshot();
   cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get(`label#hasIrsNotice-${hasIrsNotice}`).click();
