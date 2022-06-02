@@ -12,13 +12,33 @@ import { uniqBy } from 'lodash';
  * view options
  */
 export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
-  const { CONTACT_TYPE_TITLES, SERVICE_INDICATOR_TYPES } =
-    applicationContext.getConstants();
+  const {
+    CONTACT_TYPE_TITLES,
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+    ENTERED_AND_SERVED_EVENT_CODES,
+    SERVICE_INDICATOR_TYPES,
+  } = applicationContext.getConstants();
 
   const formattedCaseDetail = get(state.formattedCaseDetail);
 
+  const form = get(state.form);
+
+  const eventCodesNotCompatibleWithConsolidation = [
+    ...ENTERED_AND_SERVED_EVENT_CODES,
+    ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  ];
+
+  const hasConsolidatedCases =
+    formattedCaseDetail.consolidatedCases &&
+    formattedCaseDetail.consolidatedCases.length > 0;
+
+  const showConsolidatedCasesFlag =
+    formattedCaseDetail.isLeadCase &&
+    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
+    hasConsolidatedCases;
+
   let parties;
-  if (formattedCaseDetail.consolidatedCases) {
+  if (showConsolidatedCasesFlag) {
     parties = formattedCaseDetail.consolidatedCases.reduce(
       (aggregatedParties, aCase) => {
         if (!aCase.checked) {
@@ -82,7 +102,8 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   if (
     formattedCaseDetail.isLeadCase &&
-    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1
+    formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1 &&
+    showConsolidatedCasesFlag
   ) {
     caseOrGroup = 'group';
   }
@@ -90,6 +111,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   return {
     caseOrGroup,
     contactsNeedingPaperService,
+    showConsolidatedCasesFlag,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };
 };

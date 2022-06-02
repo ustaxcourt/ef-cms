@@ -77,7 +77,7 @@ export const ConfirmInitiateServiceModal = connect(
             )}
           </Hint>
         )}
-        {formattedCaseDetail.isLeadCase && (
+        {confirmInitiateServiceModalHelper.showConsolidatedCasesFlag && (
           <div className="usa-checkbox">
             <input
               checked={consolidatedCaseAllCheckbox}
@@ -100,7 +100,7 @@ export const ConfirmInitiateServiceModal = connect(
             </label>
           </div>
         )}
-        {formattedCaseDetail.isLeadCase &&
+        {confirmInitiateServiceModalHelper.showConsolidatedCasesFlag &&
           formattedCaseDetail.consolidatedCases.map(consolidatedCase => (
             <div
               className="usa-checkbox"
