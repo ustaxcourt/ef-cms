@@ -1,30 +1,33 @@
-import {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-} from './sortConstants';
-import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const {
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
+  ASCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+  DESCENDING,
+} = applicationContext.getConstants();
+
 export const MessagesSectionInbox = connect(
   {
-    messages: state.formattedMessages.messages,
+    formattedMessages: state.formattedMessages.messages,
+    hasMessages: state.formattedMessages.hasMessages,
     showSortableHeaders: state.showSortableHeaders,
-    sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
+    sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesSectionInbox({
-    messages,
+    formattedMessages,
+    hasMessages,
     showSortableHeaders,
-    sortSectionMessagesSequence,
+    sortMessagesSequence,
   }) {
-    const hasMessages = messages.length > 0;
-
     return (
       <>
         <table className="usa-table ustc-table subsection">
@@ -40,7 +43,7 @@ export const MessagesSectionInbox = connect(
                     hasRows={hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -58,7 +61,7 @@ export const MessagesSectionInbox = connect(
                     hasRows={hasMessages}
                     sortField="createdAt"
                     title="Received"
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -72,7 +75,7 @@ export const MessagesSectionInbox = connect(
                     hasRows={hasMessages}
                     sortField="subject"
                     title="Message"
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -84,7 +87,7 @@ export const MessagesSectionInbox = connect(
               <th className="small">Section</th>
             </tr>
           </thead>
-          {messages.map(message => (
+          {formattedMessages.map(message => (
             <MessageInboxRow
               caseStatus={message.caseStatus}
               caseTitle={message.caseTitle}

@@ -1,12 +1,37 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { getConstants } from '../../getConstants';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDefaultTableSortAction } from './setDefaultTableSortAction';
 
+const { ASCENDING, DESCENDING } = getConstants();
+
 describe('setDefaultTableSortAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
+  });
+
+  it('should keep the default values of tableSort for adc user with invalid box value', async () => {
+    const { state } = await runAction(setDefaultTableSortAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        box: 'invalid',
+      },
+      state: {
+        tableSort: {
+          sortField: 'createdAt',
+          sortOrder: ASCENDING,
+        },
+        user: {
+          role: 'adc',
+        },
+      },
+    });
+
+    expect(state.tableSort.sortField).toEqual('createdAt');
+    expect(state.tableSort.sortOrder).toEqual(ASCENDING);
   });
 
   it('the inbox should be sorted by createdAt ascending for adc user', async () => {
@@ -16,7 +41,6 @@ describe('setDefaultTableSortAction', () => {
       },
       props: {
         box: 'inbox',
-        queue: 'section',
       },
       state: {
         user: {
@@ -36,7 +60,6 @@ describe('setDefaultTableSortAction', () => {
       },
       props: {
         box: 'outbox',
-        queue: 'section',
       },
       state: {
         user: {
@@ -56,7 +79,6 @@ describe('setDefaultTableSortAction', () => {
       },
       props: {
         box: 'completed',
-        queue: 'section',
       },
       state: {
         user: {
@@ -76,30 +98,14 @@ describe('setDefaultTableSortAction', () => {
       },
       props: {
         box: 'inbox',
-        queue: 'section',
       },
       state: {
+        tableSort: {
+          sortField: 'createdAt',
+          sortOrder: 'asc',
+        },
         user: {
           role: 'docketclerk',
-        },
-      },
-    });
-
-    expect(state.tableSort).toBeUndefined();
-  });
-
-  it('should not set the tableSort if queue is not section', async () => {
-    const { state } = await runAction(setDefaultTableSortAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        box: 'inbox',
-        queue: 'my',
-      },
-      state: {
-        user: {
-          role: 'adc',
         },
       },
     });
