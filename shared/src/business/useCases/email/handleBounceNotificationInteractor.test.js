@@ -97,7 +97,7 @@ describe('parseBounceNotification', () => {
     expect(parsedNotification.errorMessage).toEqual(
       BOUNCE_NOTIFICATION.bounce.bouncedRecipients[0].diagnosticCode,
     );
-    expect(parsedNotification.recipient).toEqual(
+    expect(parsedNotification.bounceRecipient).toEqual(
       BOUNCE_NOTIFICATION.bounce.bouncedRecipients[0].emailAddress,
     );
     expect(parsedNotification.subject).toEqual(
