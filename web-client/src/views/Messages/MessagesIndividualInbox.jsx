@@ -3,17 +3,17 @@ import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
-import { getConstants } from '../../getConstants';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const { ASCENDING, DESCENDING } = getConstants();
 const {
   ALPHABETICALLY_ASCENDING,
   ALPHABETICALLY_DESCENDING,
+  ASCENDING,
   CHRONOLOGICALLY_ASCENDING,
   CHRONOLOGICALLY_DESCENDING,
+  DESCENDING,
 } = applicationContext.getConstants();
 
 export const MessagesIndividualInbox = connect(
