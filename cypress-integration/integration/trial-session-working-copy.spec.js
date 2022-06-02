@@ -62,7 +62,10 @@ describe('Petitioner', () => {
     // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+      checkA11y({
+        ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+        options: { skipFailures: true },
+      });
     });
 
     it('should complete the form and submit the petition', () => {
@@ -105,7 +108,10 @@ describe('Petitioner', () => {
     // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+      checkA11y({
+        ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+        options: { skipFailures: true },
+      });
     });
 
     it('should complete the form and submit the petition', () => {

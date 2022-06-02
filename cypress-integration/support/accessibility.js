@@ -2,7 +2,7 @@ export const DAWSON_GLOBAL_DISABLED_AXE_ERRORS = {
   region: { enabled: false },
 };
 
-exports.checkA11y = ({ ignoredErrors }) => {
+exports.checkA11y = ({ ignoredErrors, options }) => {
   cy.waitUntilSettled();
 
   cy.injectAxe();
@@ -10,5 +10,6 @@ exports.checkA11y = ({ ignoredErrors }) => {
     rules: {
       ...ignoredErrors,
     },
+    ...options,
   });
 };
