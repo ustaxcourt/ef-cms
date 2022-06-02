@@ -440,6 +440,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
     noticeOfChangeToInPersonProceeding: jest
       .fn()
       .mockImplementation(getFakeFile),

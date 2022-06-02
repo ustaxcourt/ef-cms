@@ -54,7 +54,7 @@ exports.getMetadataLines = info => {
     level: undefined,
     message: undefined,
   });
-  // `util.inspect`ing to avoid stringifying circular request/response error objects
+  // util.inspecting to avoid stringifying circular request/response error objects
   const stringified = util.inspect(metadata, {
     compact: false,
     maxStringLength: null,

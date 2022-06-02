@@ -374,6 +374,7 @@ module.exports = {
           'stin',
           'stip',
           'stringified',
+          'stringifying',
           'submenu',
           'tabbable',
           'tabindex',
