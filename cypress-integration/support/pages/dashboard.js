@@ -1,4 +1,4 @@
-const { DAWSON_GLOBAL_DISABLED_AXE_ERRORS } = require('../axe');
+const { DAWSON_GLOBAL_DISABLED_AXE_ERRORS } = require('../accessibility');
 
 exports.navigateTo = username => {
   cy.login(username, '/');
