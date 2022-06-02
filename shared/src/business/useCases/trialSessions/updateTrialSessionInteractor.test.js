@@ -849,7 +849,7 @@ describe('updateTrialSessionInteractor', () => {
 
         expect(
           applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
-        ).toHaveBeenCalled();
+        ).toHaveBeenCalledTimes(1);
       });
     });
   });
