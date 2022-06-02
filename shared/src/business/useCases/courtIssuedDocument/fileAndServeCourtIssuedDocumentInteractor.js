@@ -158,48 +158,26 @@ const stampDocument = async ({
   documentMeta,
   leadDocketEntryOld,
 }) => {
-  //TODO: try to avoid using this temporary entity
-  const leadDocketEntryEntityForServiceStampOnly = new DocketEntry(
-    {
-      ...omit(leadDocketEntryOld, 'filedBy'),
-      documentTitle: documentMeta.generatedDocumentTitle,
-      documentType: documentMeta.documentType,
-      eventCode: documentMeta.eventCode,
-      serviceStamp: documentMeta.serviceStamp,
-    },
-    { applicationContext },
-  );
-
   // this was previously handled by the `setAsServed` prototype method, as it now is in `fileDocumentOnOneCase`
-  leadDocketEntryEntityForServiceStampOnly.servedAt = createISODateString();
+  const servedAt = createISODateString();
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
-      Key: leadDocketEntryEntityForServiceStampOnly.docketEntryId,
+      Key: leadDocketEntryOld.docketEntryId,
     })
     .promise();
 
   let serviceStampType = 'Served';
 
-  if (
-    leadDocketEntryEntityForServiceStampOnly.documentType ===
-    GENERIC_ORDER_DOCUMENT_TYPE
-  ) {
-    serviceStampType = leadDocketEntryEntityForServiceStampOnly.serviceStamp;
-  } else if (
-    ENTERED_AND_SERVED_EVENT_CODES.includes(
-      leadDocketEntryEntityForServiceStampOnly.eventCode,
-    )
-  ) {
+  if (documentMeta.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
+    serviceStampType = documentMeta.serviceStamp;
+  } else if (ENTERED_AND_SERVED_EVENT_CODES.includes(documentMeta.eventCode)) {
     serviceStampType = 'Entered and Served';
   }
 
-  const serviceStampDate = formatDateString(
-    leadDocketEntryEntityForServiceStampOnly.servedAt,
-    'MMDDYY',
-  );
+  const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
 
   return await addServedStampToDocument({
     applicationContext,
