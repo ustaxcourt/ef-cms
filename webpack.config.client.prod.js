@@ -11,7 +11,7 @@ config.plugins.push(
 
 module.exports = {
   ...config,
-  devtool: 'source-map',
+  devtool: false,
   entry: {
     index: './web-client/src/index.prod.js',
   },
