@@ -8,6 +8,10 @@ const {
   setTrialSessionAsCalendared,
 } = require('../../cypress-smoketests/support/pages/trial-sessions');
 const {
+  checkA11y,
+  DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+} = require('../support/accessibility');
+const {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -47,24 +51,42 @@ describe('Petitioner', () => {
     it('should complete wizard step 1', () => {
       cy.login('petitioner');
       goToStartCreatePetition();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       goToWizardStep1();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep1();
     });
 
     // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
     });
 
     it('should complete the form and submit the petition', () => {
       completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
       goToWizardStep3();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep3(filingTypes.INDIVIDUAL, firstCasePetitionerName);
       goToWizardStep4();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep4();
       goToWizardStep5();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       submitPetition(testData);
       goToDashboard();
+      checkA11y({
+        ignoredErrors: {
+          'color-contrast': { enabled: false },
+          'nested-interactive': { enabled: false },
+          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+        },
+      });
     });
   });
 
@@ -72,24 +94,42 @@ describe('Petitioner', () => {
     it('should complete wizard step 1', () => {
       cy.login('petitioner');
       goToStartCreatePetition();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       goToWizardStep1();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep1();
     });
 
     // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
     });
 
     it('should complete the form and submit the petition', () => {
       completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
       goToWizardStep3();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep3(filingTypes.INDIVIDUAL, secondCasePetitionerName);
       goToWizardStep4();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep4();
       goToWizardStep5();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       submitPetition(testData);
       goToDashboard();
+      checkA11y({
+        ignoredErrors: {
+          'color-contrast': { enabled: false },
+          'nested-interactive': { enabled: false },
+          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+        },
+      });
     });
   });
 });
