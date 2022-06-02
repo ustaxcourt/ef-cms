@@ -90,15 +90,13 @@ export const MessagesIndividualInbox = connect(
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
                       <span className="fa-stack">
-                        <FontAwesomeIcon
-                          className="fa-icon-blue fa-stack-1x"
+                        <Icon
+                          aria-label="consolidated case"
+                          className="fa-icon-blue"
                           icon="copy"
                         />
                         {message.inLeadCase && (
-                          <FontAwesomeIcon
-                            className="fa-icon-white-no-margin fa-stack-2x fa-solid fa-l"
-                            icon="fa-solid fa-l"
-                          />
+                          <span className="lead-case-icon-text">L</span>
                         )}
                       </span>
                     )}

@@ -135,6 +135,16 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   }
 }
 
+.lead-case-icon-text {
+  position: absolute;
+  top: 30%;
+  color: $color-white;
+  left: 22%;
+  font-size: 14px;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
+}
+
 .icon-sortable-header {
   transform: rotate(0.25turn) scale(0.95) translate(15%, 10%);
 }
