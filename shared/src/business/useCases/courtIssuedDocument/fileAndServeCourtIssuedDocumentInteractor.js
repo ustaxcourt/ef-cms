@@ -129,6 +129,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
         applicationContext,
         caseEntities,
         docketEntryId: leadDocketEntryOld.docketEntryId,
+        stampedPdf,
       });
   } finally {
     for (const caseEntity of caseEntities) {

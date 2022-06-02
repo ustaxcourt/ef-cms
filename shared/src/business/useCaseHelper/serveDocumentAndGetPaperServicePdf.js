@@ -16,6 +16,7 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
   caseEntities,
   docketEntryId,
+  stampedPdf,
 }) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -35,16 +36,20 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
 
     if (servedParties.paper.length > 0) {
       if (!originalPdfDoc) {
-        let pdfData = await applicationContext
-          .getStorageClient()
-          .getObject({
-            Bucket: applicationContext.environment.documentsBucketName,
-            Key: docketEntryId,
-          })
-          .promise();
-        pdfData = pdfData.Body;
-
-        originalPdfDoc = await PDFDocument.load(pdfData);
+        let pdfData;
+        if (stampedPdf) {
+          originalPdfDoc = await PDFDocument.load(stampedPdf);
+        } else {
+          pdfData = await applicationContext
+            .getStorageClient()
+            .getObject({
+              Bucket: applicationContext.environment.documentsBucketName,
+              Key: docketEntryId,
+            })
+            .promise();
+          pdfData = pdfData.Body;
+          originalPdfDoc = await PDFDocument.load(pdfData);
+        }
       }
       await applicationContext
         .getUseCaseHelpers()
