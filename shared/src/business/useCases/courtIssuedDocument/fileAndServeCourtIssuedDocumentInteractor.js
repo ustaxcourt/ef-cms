@@ -165,11 +165,13 @@ const stampDocument = async ({
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
       eventCode: documentMeta.eventCode,
-      servedAt: documentMeta.servedAt,
       serviceStamp: documentMeta.serviceStamp,
     },
     { applicationContext },
   );
+
+  // this was previously handled by the `setAsServed` prototype method, as it now is in `fileDocumentOnOneCase`
+  leadDocketEntryEntityForServiceStampOnly.servedAt = createISODateString();
 
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
