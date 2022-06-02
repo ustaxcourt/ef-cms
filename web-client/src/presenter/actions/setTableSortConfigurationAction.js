@@ -1,5 +1,7 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
+import { getConstants } from '../../getConstants';
 import { state } from 'cerebral';
+
+const { ASCENDING, DESCENDING } = getConstants();
 
 /**
  * toggle the sort for the clicked sortable table button
@@ -9,7 +11,7 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  * @param {object} providers.get the cerebral get function
  */
-export const setSectionMessagesSortAction = ({ get, props, store }) => {
+export const setTableSortConfigurationAction = ({ get, props, store }) => {
   const { defaultSort, sortField } = props;
   const fromSortOrder = get(state.tableSort.sortOrder);
   if (get(state.tableSort.sortField) !== sortField) {
