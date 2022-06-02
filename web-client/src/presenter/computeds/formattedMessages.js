@@ -31,7 +31,6 @@ export const formattedMessages = (get, applicationContext) => {
     hasMessages,
     messages,
     showFilters,
-    showSortableHeaders: false,
   };
 
   if (showFilters) {
@@ -53,7 +52,6 @@ export const formattedMessages = (get, applicationContext) => {
         completedMessageFilterResults.filteredCompletedMessages,
       messages: messageFilterResults.filteredMessages,
       showFilters: true,
-      showSortableHeaders: true,
     };
   }
 
