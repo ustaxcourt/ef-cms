@@ -64,7 +64,6 @@ describe('Petitioner', () => {
       goToWizardStep2();
       checkA11y({
         ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
-        options: { skipFailures: true },
       });
     });
 
@@ -85,8 +84,11 @@ describe('Petitioner', () => {
       goToDashboard();
       checkA11y({
         ignoredErrors: {
+          'aria-hidden-focus': { enabled: false },
           'color-contrast': { enabled: false },
+          'landmark-one-main': { enabled: false },
           'nested-interactive': { enabled: false },
+          'page-has-heading-one': { enabled: false },
           ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
         },
       });
@@ -95,7 +97,7 @@ describe('Petitioner', () => {
 
   describe(`should create a case for ${secondCasePetitionerName}`, () => {
     it('should complete wizard step 1', () => {
-      cy.login('petitioner');
+      cy.login('petitioner3');
       goToStartCreatePetition();
       checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
@@ -131,8 +133,11 @@ describe('Petitioner', () => {
       goToDashboard();
       checkA11y({
         ignoredErrors: {
+          'aria-hidden-focus': { enabled: false },
           'color-contrast': { enabled: false },
+          'landmark-one-main': { enabled: false },
           'nested-interactive': { enabled: false },
+          'page-has-heading-one': { enabled: false },
           ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
         },
       });
