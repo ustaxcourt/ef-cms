@@ -77,6 +77,12 @@ export const createNewMessageOnCase = (
 
     await cerebralTest.runSequence('createMessageSequence');
 
+    await cerebralTest.applicationContext
+      .getUseCases()
+      .createMessageInteractor.mock.results[0].value.then(message => {
+        cerebralTest.lastCreatedMessage = message;
+      });
+
     expect(cerebralTest.getState('modal.form')).toBeDefined();
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});

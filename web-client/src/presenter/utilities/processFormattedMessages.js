@@ -1,5 +1,7 @@
-import { DESCENDING } from '../presenterConstants';
 import { formatDateIfToday } from '../computeds/formattedWorkQueue';
+import { getConstants } from '../../getConstants';
+
+const { DESCENDING } = getConstants();
 
 export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
   const sortedFormattedMessages = formattedCaseMessages.sort((a, b) => {
@@ -7,9 +9,6 @@ export const sortFormattedMessages = (formattedCaseMessages, tableSort) => {
     if (!tableSort) {
       sortNumber = a.createdAt.localeCompare(b.createdAt);
     } else if (
-      // 'createdAt' = Recieved Column on Inbox Tab and Sent Column on Sent Tab (Outbox)
-      // 'completedAt' = Completed COlumn on Completed Tab
-
       ['createdAt', 'completedAt', 'subject'].includes(tableSort.sortField)
     ) {
       sortNumber = a[tableSort.sortField].localeCompare(b[tableSort.sortField]);

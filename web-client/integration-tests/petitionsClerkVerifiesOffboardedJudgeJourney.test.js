@@ -78,7 +78,7 @@ describe('Petitions clerk verifies offboarded judge journey', () => {
       expect(cerebralTest.getState('judges')).not.toContain(judgeName);
     });
 
-    it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, async () => {
+    it(`petitions clerk verifies judge ${judgeName} does not appear in the Create Message screen as a recipient`, () => {
       const workQueueSection = withAppContextDecorator(
         workQueueSectionHelperComputed,
       );
