@@ -3,7 +3,7 @@ export const DAWSON_GLOBAL_DISABLED_AXE_ERRORS = {
 };
 
 exports.checkA11y = ({ ignoredErrors, terminalLog }) => {
-  cy.waitUntilSettled();
+  cy.waitUntilSettled(50);
 
   cy.injectAxe();
   cy.checkA11y(

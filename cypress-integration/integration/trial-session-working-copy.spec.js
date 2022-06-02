@@ -83,7 +83,10 @@ describe('Petitioner', () => {
     it('should go to wizard step 2', () => {
       goToWizardStep2();
       checkA11y({
-        ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+        ignoredErrors: {
+          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+          'heading-order': { enabled: false },
+        },
         terminalLog,
       });
     });
