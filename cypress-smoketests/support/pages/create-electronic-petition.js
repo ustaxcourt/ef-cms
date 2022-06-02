@@ -53,6 +53,7 @@ exports.goToWizardStep2 = () => {
     rules: {
       ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
     },
+    skipFailures: true,
   });
 };
 
