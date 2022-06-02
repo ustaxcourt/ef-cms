@@ -12,7 +12,7 @@ exports.authenticateUserInteractor = (applicationContext, { code }) => {
   return post({
     applicationContext,
     body: { code },
-    endpoint: process.env.IS_LOCAL ? '/auth/login' : '/auth/auth/login',
+    endpoint: '/auth/login',
     options: {
       withCredentials: true,
     },
