@@ -48,6 +48,10 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
+
   //TODO: rename variables with 'lead' in the name to avoid confusion when dealing with a single case
   const { docketEntryId, docketNumbers, leadCaseDocketNumber } = documentMeta;
 
@@ -76,6 +80,11 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   if (leadDocketEntryOld.isPendingService) {
     throw new Error('Docket entry is already being served');
   }
+  const stampedPdf = await stampDocument({
+    applicationContext,
+    documentMeta,
+    leadDocketEntryOld,
+  });
 
   await applicationContext
     .getPersistenceGateway()
@@ -86,30 +95,21 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       status: true,
     });
 
-  const stampedPdf = await stampDocument({
-    applicationContext,
-    documentMeta,
-    leadDocketEntryOld,
-  });
-
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
-
   let caseEntities = [];
-  for (const docketNumber of docketNumbers) {
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-
-    caseEntities.push(new Case(caseToUpdate, { applicationContext }));
-  }
-
   let serviceResults;
+
   try {
+    for (const docketNumber of docketNumbers) {
+      const caseToUpdate = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber,
+        });
+
+      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+    }
+
     const filedDocumentPromises = caseEntities.map(caseEntity =>
       fileDocumentOnOneCase({
         applicationContext,
@@ -156,11 +156,12 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 const stampDocument = async ({
   applicationContext,
   documentMeta,
-  leadDocketEntry,
+  leadDocketEntryOld,
 }) => {
+  //TODO: try to avoid using this temporary entity
   const leadDocketEntryEntityForServiceStampOnly = new DocketEntry(
     {
-      ...omit(leadDocketEntry, 'filedBy'),
+      ...omit(leadDocketEntryOld, 'filedBy'),
       documentTitle: documentMeta.generatedDocumentTitle,
       documentType: documentMeta.documentType,
       eventCode: documentMeta.eventCode,

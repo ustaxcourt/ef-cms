@@ -36,13 +36,15 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
 
     if (servedParties.paper.length > 0) {
       if (!originalPdfDoc) {
-        const pdfData = await applicationContext
+        let pdfData = await applicationContext
           .getStorageClient()
           .getObject({
             Bucket: applicationContext.environment.documentsBucketName,
             Key: docketEntryId,
           })
-          .promise().Body;
+          .promise();
+        pdfData = pdfData.Body;
+
         originalPdfDoc = await PDFDocument.load(pdfData);
       }
       await applicationContext
