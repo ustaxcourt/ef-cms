@@ -3,17 +3,17 @@ const {
 } = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
 const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
-const noticeOfTrialIssuedInPerson = async ({ applicationContext, data }) => {
+const noticeOfChangeOfTrialJudge = async ({ applicationContext, data }) => {
   const { docketNumberWithSuffix } = data;
 
-  const noticeOfTrialIssuedInPersonTemplate = reactTemplateGenerator({
-    componentName: 'NoticeOfTrialIssuedInPerson',
+  const noticeOfChangeOfTrialJudgeTemplate = reactTemplateGenerator({
+    componentName: 'NoticeOfChangeOfTrialJudge',
     data,
   });
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
-    content: noticeOfTrialIssuedInPersonTemplate,
+    content: noticeOfChangeOfTrialJudgeTemplate,
   });
 
   const footerHtml = reactTemplateGenerator({
@@ -36,5 +36,5 @@ const noticeOfTrialIssuedInPerson = async ({ applicationContext, data }) => {
 };
 
 module.exports = {
-  noticeOfTrialIssuedInPerson,
+  noticeOfChangeOfTrialJudge,
 };
