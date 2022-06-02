@@ -14,7 +14,6 @@ const { saveFileAndGenerateUrl } = require('./saveFileAndGenerateUrl');
  */
 exports.serveDocumentAndGetPaperServicePdf = async ({
   applicationContext,
-  // TODO: refactor all calls toserveDocumentAndGetPaperServicePdf
   caseEntities,
   docketEntryId,
 }) => {
