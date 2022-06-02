@@ -12,6 +12,11 @@ module.exports = (on, config) => {
     getEmailVerificationToken({ userId }) {
       return getEmailVerificationToken({ userId });
     },
+    log(message) {
+      console.log('Axe failures:', message);
+
+      return null;
+    },
     modifyDeployedDateTextFile(deployedDate) {
       fs.writeFileSync(
         path.join(__dirname, '../../web-client/src/deployed-date.txt'),

@@ -46,6 +46,26 @@ const testData = {
 const firstCasePetitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
 const secondCasePetitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
 
+const terminalLog = violations => {
+  cy.task(
+    'log',
+    `${violations.length} accessibility violation${
+      violations.length === 1 ? '' : 's'
+    } ${violations.length === 1 ? 'was' : 'were'} detected`,
+  );
+  // pluck specific keys to keep the table readable
+  const violationData = violations.map(
+    ({ description, id, impact, nodes }) => ({
+      description,
+      id,
+      impact,
+      nodes: nodes.length,
+    }),
+  );
+
+  cy.task('table', violationData);
+};
+
 describe('Petitioner', () => {
   describe(`should create a case for ${firstCasePetitionerName}`, () => {
     it('should complete wizard step 1', () => {
@@ -64,6 +84,7 @@ describe('Petitioner', () => {
       goToWizardStep2();
       checkA11y({
         ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+        terminalLog,
       });
     });
 
@@ -112,7 +133,6 @@ describe('Petitioner', () => {
       goToWizardStep2();
       checkA11y({
         ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
-        options: { skipFailures: true },
       });
     });
 
