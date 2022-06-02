@@ -18,7 +18,7 @@ const HEALTH_CHECK_IDS = [
 ];
 
 const assertHealthCheckPassed = id => {
-  cy.get(`#${id} svg[data-icon="circle-check"]`).should('exist');
+  cy.get(`#${id} svg[data-icon="check-circle"]`).should('exist');
 };
 
 describe('Health check', () => {

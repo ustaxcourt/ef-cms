@@ -29,6 +29,7 @@ import {
 } from '../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
+import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
@@ -60,6 +61,7 @@ import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCa
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
+
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
 import axios from 'axios';
@@ -81,6 +83,7 @@ const formattedCaseMessages = withAppContextDecorator(
   formattedCaseMessagesComputed,
 );
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
+const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
 Object.assign(applicationContext, {
   getDocumentClient: () => {
@@ -330,6 +333,34 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
   });
 };
 
+export const setChiefJudgeNameFlagValue = newJudgeName => {
+  return client.put({
+    Item: {
+      current: newJudgeName,
+      pk: 'chief-judge-name',
+      sk: 'chief-judge-name',
+    },
+    applicationContext,
+  });
+};
+
+export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
+  return client.update({
+    ExpressionAttributeNames: {
+      '#judgeTitle': 'judgeTitle',
+    },
+    ExpressionAttributeValues: {
+      ':judgeTitle': newJudgeTitle,
+    },
+    Key: {
+      pk: `user|${judgeUserId}`,
+      sk: `user|${judgeUserId}`,
+    },
+    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
+    applicationContext,
+  });
+};
+
 export const setOrderSearchEnabled = (isEnabled, keyPrefix) => {
   return client.put({
     Item: {
@@ -357,6 +388,17 @@ export const getFormattedDocumentQCMyOutbox = async cerebralTest => {
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
+    state: cerebralTest.getState(),
+  });
+};
+
+export const getUserMessageCount = async (cerebralTest, box, queue) => {
+  await cerebralTest.runSequence('gotoMessagesSequence', {
+    box,
+    queue,
+  });
+
+  return runCompute(formattedMessages, {
     state: cerebralTest.getState(),
   });
 };
@@ -758,12 +800,14 @@ export const setupTest = ({ useCases = {}, constantsOverrides = {} } = {}) => {
   cerebralTest.closeSocket = stopSocket;
 
   const originalUseCases = applicationContext.getUseCases();
+  const allUseCases = {
+    ...originalUseCases,
+    ...useCases,
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
+  };
+
   presenter.providers.applicationContext.getUseCases = () => {
-    return {
-      ...originalUseCases,
-      ...useCases,
-      loadPDFForSigningInteractor: () => Promise.resolve(null),
-    };
+    return allUseCases;
   };
 
   const originalConstants = applicationContext.getConstants();
