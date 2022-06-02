@@ -30,5 +30,10 @@ module.exports = (on, config) => {
     setAllowedTerminalIpAddresses(ipAddresses) {
       return setAllowedTerminalIpAddresses(ipAddresses);
     },
+    table(message) {
+      console.log('Accessibility violations:', message);
+
+      return null;
+    },
   });
 };
