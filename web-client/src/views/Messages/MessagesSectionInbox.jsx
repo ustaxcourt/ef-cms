@@ -1,28 +1,20 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
-import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  ASCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-  DESCENDING,
-} = applicationContext.getConstants();
-
 export const MessagesSectionInbox = connect(
   {
+    constants: state.constants,
     formattedMessages: state.formattedMessages.messages,
     hasMessages: state.formattedMessages.hasMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesSectionInbox({
+    constants,
     formattedMessages,
     hasMessages,
     showSortableHeaders,
@@ -37,9 +29,9 @@ export const MessagesSectionInbox = connect(
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={DESCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
@@ -55,9 +47,9 @@ export const MessagesSectionInbox = connect(
               {showSortableHeaders && (
                 <th className="medium">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="createdAt"
                     title="Received"
@@ -69,9 +61,9 @@ export const MessagesSectionInbox = connect(
               {showSortableHeaders && (
                 <th>
                   <SortableColumnHeaderButton
-                    ascText={ALPHABETICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={ALPHABETICALLY_DESCENDING}
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="subject"
                     title="Message"
@@ -131,16 +123,14 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
       <tr>
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
-            <span className="fa-stack">
-              <FontAwesomeIcon
-                className="fa-icon-blue fa-stack-1x"
+            <span className="fa-layers fa-fw">
+              <Icon
+                aria-label="consolidated case"
+                className="fa-icon-blue"
                 icon="copy"
               />
               {inLeadCase && (
-                <FontAwesomeIcon
-                  className="fa-icon-white-no-margin fa-stack-2x"
-                  icon="l"
-                />
+                <span className="fa-inverse lead-case-icon-text">L</span>
               )}
             </span>
           )}

@@ -1,5 +1,4 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
@@ -82,21 +81,21 @@ export const MessagesIndividualInbox = connect(
             </tr>
           </thead>
           {formattedMessages.map(message => {
-            const unreadClass = message.isRead ? '' : 'text-bold';
-
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
-                      <span className="fa-stack">
+                      <span className="fa-layers fa-fw">
                         <Icon
                           aria-label="consolidated case"
                           className="fa-icon-blue"
                           icon="copy"
                         />
                         {message.inLeadCase && (
-                          <span className="lead-case-icon-text">L</span>
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
                         )}
                       </span>
                     )}
@@ -123,7 +122,10 @@ export const MessagesIndividualInbox = connect(
                     <div className="message-document-title">
                       <Button
                         link
-                        className={classNames('padding-0', unreadClass)}
+                        className={classNames(
+                          'padding-0',
+                          message.isRead ? '' : 'text-bold',
+                        )}
                         href={message.messageDetailLink}
                       >
                         {message.subject}
