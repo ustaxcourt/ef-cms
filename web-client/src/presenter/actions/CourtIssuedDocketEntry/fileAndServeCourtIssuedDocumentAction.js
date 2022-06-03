@@ -13,20 +13,41 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   get,
 }) => {
   const docketEntryId = get(state.docketEntryId);
-  const { docketNumber: leadCaseDocketNumber } = get(state.caseDetail);
+  const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const {
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+    ENTERED_AND_SERVED_EVENT_CODES,
+  } = applicationContext.getConstants();
+
+  const eventCodesNotCompatibleWithConsolidation = [
+    ...ENTERED_AND_SERVED_EVENT_CODES,
+    ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  ];
+
+  const currentDocketEntryCompatibleWithConsolidation =
+    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode);
+
+  // const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
+
   const consolidatedCases =
     get(state.formattedCaseDetail.consolidatedCases) || [];
-  const docketNumbers = consolidatedCases
+  let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumber);
+
+  if (
+    docketNumbers.length === 0 ||
+    !currentDocketEntryCompatibleWithConsolidation
+  ) {
+    docketNumbers = [caseDetail.docketNumber];
+  }
 
   const documentMeta = {
     ...form,
     docketEntryId,
-    docketNumbers:
-      docketNumbers.length > 0 ? docketNumbers : [leadCaseDocketNumber],
-    leadCaseDocketNumber,
+    docketNumbers,
+    leadCaseDocketNumber: caseDetail.docketNumber,
   };
 
   const result = await applicationContext
