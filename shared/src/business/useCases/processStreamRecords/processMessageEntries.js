@@ -14,6 +14,15 @@ exports.processMessageEntries = async ({
   const indexMessageEntry = async messageRecord => {
     const messageNewImage = messageRecord.dynamodb.NewImage;
 
+    const caseMessageMappingRecordId = `${messageNewImage.pk.S}_${messageNewImage.pk.S}|mapping`;
+
+    const caseMessageMappingRecord = {
+      case_relations: {
+        name: 'message',
+        parent: caseMessageMappingRecordId,
+      },
+    };
+
     // go get the latest message if we're indexing a message with isRepliedTo set to false - it might
     // have been updated in dynamo since this record was created to be processed
     if (!messageNewImage.isRepliedTo.BOOL) {
@@ -29,8 +38,6 @@ exports.processMessageEntries = async ({
         const marshalledMessage =
           AWS.DynamoDB.Converter.marshall(latestMessageData);
 
-        const caseMessageMappingRecordId = `${messageNewImage.pk.S}_${messageNewImage.pk.S}|mapping`;
-
         return {
           dynamodb: {
             Keys: {
@@ -43,17 +50,30 @@ exports.processMessageEntries = async ({
             },
             NewImage: {
               ...marshalledMessage,
-              case_relations: {
-                name: 'message',
-                parent: caseMessageMappingRecordId,
-              },
+              ...caseMessageMappingRecord,
             },
           },
           eventName: 'MODIFY',
         };
       }
     } else {
-      return messageRecord;
+      return {
+        dynamodb: {
+          Keys: {
+            pk: {
+              S: messageNewImage.pk.S,
+            },
+            sk: {
+              S: messageNewImage.sk.S,
+            },
+          },
+          NewImage: {
+            ...messageNewImage,
+            ...caseMessageMappingRecord,
+          },
+        },
+        eventName: 'MODIFY',
+      };
     }
   };
 
