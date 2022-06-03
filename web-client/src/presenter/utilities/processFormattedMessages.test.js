@@ -3,14 +3,11 @@ import {
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getConstants } from '../../getConstants';
 import {
   getFormattedMessages,
   sortCompletedMessages,
   sortFormattedMessages,
 } from './processFormattedMessages';
-
-const { ASCENDING, DESCENDING } = getConstants();
 
 describe('processFormattedMessages', () => {
   const DOCKET_NUMBER_1 = '101-19';
@@ -18,9 +15,31 @@ describe('processFormattedMessages', () => {
   const DOCKET_NUMBER_3 = '105-20';
   const PARENT_MESSAGE_ID = '078ffe53-23ed-4386-9cc5-d7a175f5c948';
 
-  describe('sortFormattedMessages', () => {
-    let messages;
+  const QUALIFIED_SORT_FIELDS = ['createdAt', 'completedAt', 'subject'];
 
+  const { ASCENDING, DESCENDING } = applicationContext.getConstants();
+
+  const mockMessage = {
+    caseStatus: 'Ready for trial',
+    completedAt: '2019-05-01T17:29:13.122Z',
+    createdAt: '2019-01-01T17:29:13.122Z',
+    docketNumber: '123-45',
+    docketNumberSuffix: '',
+    from: 'Test Sender',
+    fromSection: DOCKET_SECTION,
+    fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+    message: 'This is a test message',
+    messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+    parentMessageId: PARENT_MESSAGE_ID,
+    subject: 'Test subject...',
+    to: 'Test Recipient',
+    toSection: PETITIONS_SECTION,
+    toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+  };
+
+  let messages;
+
+  describe('sortFormattedMessages', () => {
     beforeEach(() => {
       messages = [
         {
@@ -49,8 +68,6 @@ describe('processFormattedMessages', () => {
         },
       ];
     });
-
-    const QUALIFIED_SORT_FIELDS = ['createdAt', 'completedAt', 'subject'];
 
     it('should not sort the messages if sortField is not a qualified sortable field', () => {
       const result = sortFormattedMessages(messages, {
@@ -278,32 +295,10 @@ describe('processFormattedMessages', () => {
   });
 
   describe('getFormattedMessages', () => {
-    let validMessage;
-
-    beforeEach(() => {
-      validMessage = {
-        caseStatus: 'Ready for trial',
-        completedAt: '2019-05-01T17:29:13.122Z',
-        createdAt: '2019-01-01T17:29:13.122Z',
-        docketNumber: '123-45',
-        docketNumberSuffix: '',
-        from: 'Test Sender',
-        fromSection: DOCKET_SECTION,
-        fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
-        message: 'This is a test message',
-        messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
-        parentMessageId: PARENT_MESSAGE_ID,
-        subject: 'Test subject...',
-        to: 'Test Recipient',
-        toSection: PETITIONS_SECTION,
-        toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
-      };
-    });
-
     it('returns formatted date strings', () => {
       const result = getFormattedMessages({
         applicationContext,
-        messages: [validMessage],
+        messages: [mockMessage],
       });
 
       expect(result.messages[0].createdAtFormatted).toEqual('01/01/19');
@@ -455,31 +450,13 @@ describe('processFormattedMessages', () => {
       ]);
     });
 
-    describe('consolidation status', () => {
-      const baseMessage = {
-        caseStatus: 'Ready for trial',
-        completedAt: '2019-05-01T17:29:13.122Z',
-        createdAt: '2019-01-01T17:29:13.122Z',
-        docketNumber: '123-45',
-        docketNumberSuffix: '',
-        from: 'Test Sender',
-        fromSection: DOCKET_SECTION,
-        fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
-        message: 'This is a test message',
-        messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
-        parentMessageId: PARENT_MESSAGE_ID,
-        subject: 'Test subject...',
-        to: 'Test Recipient',
-        toSection: PETITIONS_SECTION,
-        toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
-      };
-
-      it('returns inConsolidatedGroup true when message.leadDocketNumber is defined', () => {
+    describe('inConsolidatedGroup', () => {
+      it('should be true when message.leadDocketNumber is defined', () => {
         const result = getFormattedMessages({
           applicationContext,
           messages: [
             {
-              ...baseMessage,
+              ...mockMessage,
               leadDocketNumber: '123-45',
             },
           ],
@@ -488,21 +465,23 @@ describe('processFormattedMessages', () => {
         expect(result.messages[0].inConsolidatedGroup).toBeTruthy();
       });
 
-      it('returns inConsolidatedGroup false when message.leadDocketNumber is undefined', () => {
+      it('should be false when message.leadDocketNumber is undefined', () => {
         const result = getFormattedMessages({
           applicationContext,
-          messages: [{ ...baseMessage, leadDocketNumber: undefined }],
+          messages: [{ ...mockMessage, leadDocketNumber: undefined }],
         });
 
         expect(result.messages[0].inConsolidatedGroup).toBeFalsy();
       });
+    });
 
+    describe('inLeadCase', () => {
       it('returns inLeadCase true when message.leadDocketNumber is the same as message.docketNumber', () => {
         const result = getFormattedMessages({
           applicationContext,
           messages: [
             {
-              ...baseMessage,
+              ...mockMessage,
               docketNumber: '123-45',
               leadDocketNumber: '123-45',
             },
@@ -517,7 +496,7 @@ describe('processFormattedMessages', () => {
           applicationContext,
           messages: [
             {
-              ...baseMessage,
+              ...mockMessage,
               docketNumber: '123-45',
               leadDocketNumber: '999-99',
             },
