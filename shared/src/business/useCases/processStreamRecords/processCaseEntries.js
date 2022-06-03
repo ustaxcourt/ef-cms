@@ -41,7 +41,7 @@ exports.processCaseEntries = async ({
           ...marshalledCase,
           case_relations: { name: 'case' },
           entityName: { S: 'CaseDocketEntryMapping' },
-        }, // Create a mapping record on the docket-entry index for parent-child relationships
+        },
       },
       eventName: 'MODIFY',
     });
@@ -60,7 +60,7 @@ exports.processCaseEntries = async ({
           ...marshalledCase,
           case_relations: { name: 'case' },
           entityName: { S: 'CaseMessageMapping' },
-        }, // Create a mapping record on the message index for parent-child relationships
+        },
       },
       eventName: 'MODIFY',
     });
