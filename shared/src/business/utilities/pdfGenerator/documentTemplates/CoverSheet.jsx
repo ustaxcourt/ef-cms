@@ -13,6 +13,18 @@ export const CoverSheet = ({
   index,
   mailingDate,
 }) => {
+  const consolidatedCases = [
+    // TODO: temp remove me
+    {
+      docketNumber: '24929-17',
+      documentNumber: '4',
+    },
+    {
+      docketNumber: '1140-21',
+      documentNumber: null,
+    },
+  ];
+
   return (
     <div id="document-cover-sheet">
       <div>
@@ -54,9 +66,22 @@ export const CoverSheet = ({
         <div id="docket-number">
           {electronicallyFiled && <div>Electronically Filed</div>}
           {mailingDate && <div>{mailingDate}</div>}
-          <div>Docket No. {docketNumberWithSuffix}</div>
-          <div>Document No. {index}</div>
+
+          {consolidatedCases ? (
+            consolidatedCases.map(({ docketNumber, documentNumber }) => (
+              <div key={docketNumber}>
+                Docket No. {docketNumber}
+                {documentNumber && ` Document No. ${documentNumber}`}
+              </div>
+            ))
+          ) : (
+            <>
+              <div>Docket No. {docketNumberWithSuffix}</div>
+              <div>Document No. {index}</div>
+            </>
+          )}
         </div>
+
         <div className="clear"></div>
       </div>
 
