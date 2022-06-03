@@ -155,7 +155,7 @@ describe('formattedMessages', () => {
     });
   });
 
-  it('the filter dropdown values should be set correctly for the messages data', () => {
+  it('the filter dropdown values are set based on the set of unique values found in the messages', () => {
     const result = runCompute(formattedMessages, {
       state: {
         messageBoxToDisplay: {

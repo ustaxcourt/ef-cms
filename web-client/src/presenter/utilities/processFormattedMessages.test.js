@@ -456,7 +456,7 @@ describe('processFormattedMessages', () => {
   });
 
   describe('applyFiltersToCompletedMessages', () => {
-    it('returns the filteredValues and expected filtered completed messages', () => {
+    it('returns only messages for the rick user when filtering by completedBy "rick"', () => {
       const result = applyFiltersToCompletedMessages({
         completedMessages: [
           {
@@ -507,7 +507,7 @@ describe('processFormattedMessages', () => {
   });
 
   describe('applyFiltersToMessages', () => {
-    it('returns the expected filterValues and filtered messages', () => {
+    it('should return the one message that matches all of the selected filters set on screenMetadata', () => {
       const result = applyFiltersToMessages({
         messages: [
           {

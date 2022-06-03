@@ -51,7 +51,6 @@ export const formattedMessages = (get, applicationContext) => {
       completedMessages:
         completedMessageFilterResults.filteredCompletedMessages,
       messages: messageFilterResults.filteredMessages,
-      showFilters: true,
     };
   }
 
