@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -84,16 +84,16 @@ export const MessagesIndividualOutbox = connect(
                 <tr>
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
-                      <span className="fa-stack">
-                        <FontAwesomeIcon
-                          className="fa-icon-blue fa-stack-1x"
+                      <span className="fa-layers fa-fw">
+                        <Icon
+                          aria-label="consolidated case"
+                          className="fa-icon-blue"
                           icon="copy"
                         />
                         {message.inLeadCase && (
-                          <FontAwesomeIcon
-                            className="fa-icon-white-no-margin fa-stack-2x"
-                            icon="l"
-                          />
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
                         )}
                       </span>
                     )}
