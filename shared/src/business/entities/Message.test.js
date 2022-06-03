@@ -1,55 +1,117 @@
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { CASE_STATUS_TYPES, PETITIONS_SECTION } = require('./EntityConstants');
+const { createISODateString } = require('../utilities/DateHandler');
 const { getTextByCount } = require('../utilities/getTextByCount');
 const { Message } = require('./Message');
 
+jest.mock('../utilities/DateHandler', () => {
+  const originalModule = jest.requireActual('../utilities/DateHandler');
+  return {
+    __esModule: true,
+    ...originalModule,
+    createISODateString: jest.fn(),
+    formatNow: jest.fn().mockReturnValue('1999'),
+  };
+});
+
 describe('Message', () => {
+  const mockCreatedAt = '2019-03-01T22:54:06.000Z';
+
+  const mockMessage = {
+    caseStatus: CASE_STATUS_TYPES.generalDocket,
+    caseTitle: 'The Land Before Time',
+    createdAt: '2019-03-01T21:40:46.415Z',
+    docketNumber: '123-20',
+    docketNumberWithSuffix: '123-45S',
+    from: 'Test Petitionsclerk',
+    fromSection: PETITIONS_SECTION,
+    fromUserId: '4791e892-14ee-4ab1-8468-0c942ec379d2',
+    isCompleted: false,
+    isRead: false,
+    isRepliedTo: false,
+    message: 'hey there',
+    messageId: 'a10d6855-f3ee-4c11-861c-c7f11cba4dff',
+    parentMessageId: '31687a1e-3640-42cd-8e7e-a8e6df39ce9a',
+    subject: 'hello',
+    to: 'Test Petitionsclerk2',
+    toSection: PETITIONS_SECTION,
+    toUserId: '449b916e-3362-4a5d-bf56-b2b94ba29c12',
+  };
+
+  createISODateString.mockReturnValue(mockCreatedAt);
+
+  it('should populate leadDocketNumber when it is provided to the constructor', () => {
+    const mockLeadDocketNumber = '999-99';
+
+    const message = new Message(
+      {
+        ...mockMessage,
+        leadDocketNumber: mockLeadDocketNumber,
+      },
+      { applicationContext },
+    );
+
+    expect(message.leadDocketNumber).toEqual(mockLeadDocketNumber);
+  });
+
+  it('should set createdAt to now when createdAt is not provided', () => {
+    const message = new Message(
+      {
+        ...mockMessage,
+        createdAt: undefined,
+      },
+      { applicationContext },
+    );
+
+    expect(message.createdAt).toEqual(mockCreatedAt);
+  });
+
+  it('should set parentMessageId to messageId when parentMessageId is not provided', () => {
+    const message = new Message(
+      {
+        ...mockMessage,
+        parentMessageId: undefined,
+      },
+      { applicationContext },
+    );
+
+    expect(message.parentMessageId).toEqual(mockMessage.messageId);
+  });
+
   describe('isValid', () => {
-    it('should throw an error if app context is not passed in', () => {
+    it('should throw an error when applicationContext is not provided', () => {
       expect(() => new Message({}, {})).toThrow();
     });
 
-    it('creates a valid Message without messageId (defaults to new uuid)', () => {
+    it('should be true when messageId is not provided', () => {
       const message = new Message(
         {
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'hello world',
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          ...mockMessage,
+          messageId: undefined,
         },
         { applicationContext },
       );
+
       expect(message.isValid()).toBeTruthy();
     });
 
-    it('creates an invalid Message with no message', () => {
+    it('should be false when no message is provided', () => {
       const message = new Message(
         {
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          subject: 'hey!',
+          ...mockMessage,
+          message: undefined,
         },
         { applicationContext },
       );
+
       expect(message.isValid()).toBeFalsy();
     });
 
-    it('creates an invalid Message with no subject', () => {
+    it('should be false when no subject is provided', () => {
       const message = new Message(
         {
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          ...mockMessage,
+          subject: undefined,
         },
         { applicationContext },
       );
@@ -60,12 +122,10 @@ describe('Message', () => {
       );
     });
 
-    it('creates an invalid Message with an empty subject', () => {
+    it('should be false when subject is an empty string', () => {
       const message = new Message(
         {
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          ...mockMessage,
           subject: ' ',
         },
         { applicationContext },
@@ -77,68 +137,35 @@ describe('Message', () => {
       );
     });
 
-    it('creates an invalid Message with a subject that is too long', () => {
+    it('should be false when a subject is provided that is too long', () => {
       const message = new Message(
         {
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          ...mockMessage,
           subject:
             'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Mauris nec fringilla diam. Donec molestie metus eu purus posuere, eu porta ex aliquet. Sed metus justo, sodales sit amet vehicula a, elementum a dolor. Aliquam matis mi eget erat scelerisque ph.', // 250 chars
         },
         { applicationContext },
       );
+
       expect(message.isValid()).toBeFalsy();
       expect(message.getFormattedValidationErrors().subject).toEqual(
         'Limit is 250 characters. Enter 250 or fewer characters.',
       );
     });
 
-    it('should populate leadDocketNumber', () => {
+    it('should be false when isCompleted is true but other required completedBy fields are not provided', () => {
       const message = new Message(
         {
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          ...mockMessage,
+          completedAt: undefined,
+          completedBy: undefined,
+          completedBySection: undefined,
+          completedByUserId: undefined,
           isCompleted: true,
-          leadDocketNumber: '999-99',
-          message: 'hello world',
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
         { applicationContext },
       );
 
-      expect(message.leadDocketNumber).toEqual('999-99');
-    });
-
-    it('creates an invalid Message with isCompleted true and without completedBy fields', () => {
-      const message = new Message(
-        {
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          isCompleted: true,
-          message: 'hello world',
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        { applicationContext },
-      );
       expect(message.isValid()).toBeFalsy();
       expect(Object.keys(message.getFormattedValidationErrors())).toEqual([
         'completedAt',
@@ -148,9 +175,10 @@ describe('Message', () => {
       ]);
     });
 
-    it('creates a valid Message with attachments', () => {
+    it('should be true when valid attachments are provided', () => {
       const message = new Message(
         {
+          ...mockMessage,
           attachments: [
             {
               documentId: 'b5533197-01c7-40e6-abf2-1a705fd6ed27',
@@ -159,22 +187,10 @@ describe('Message', () => {
               eventCode: 'P',
             },
           ],
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'hello world',
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
         { applicationContext },
       );
+
       expect(message.isValid()).toBeTruthy();
       expect(message.attachments).toEqual([
         {
@@ -183,53 +199,32 @@ describe('Message', () => {
       ]);
     });
 
-    it('creates an invalid Message with invalid attachments', () => {
+    it('should be false when attachements are provided that are missing required fields', () => {
       const message = new Message(
         {
+          ...mockMessage,
           attachments: [
             {
               documentType: 'Petition',
               eventCode: 'P',
             },
           ],
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'hello world',
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
         { applicationContext },
       );
+
       expect(message.isValid()).toBeFalsy();
+      expect(Object.keys(message.getFormattedValidationErrors())).toEqual([
+        'documentId',
+      ]);
     });
   });
 
   describe('markAsCompleted', () => {
-    it('should mark the message as completed and replied to with a message and user', () => {
+    it('should mark the message as replied to and completed by the provided user', () => {
       const message = new Message(
         {
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          isRepliedTo: false,
-          message: 'hello world',
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          ...mockMessage,
         },
         { applicationContext },
       );
@@ -255,26 +250,8 @@ describe('Message', () => {
       });
     });
 
-    it('should not error out if message is a blank string', () => {
-      const message = new Message(
-        {
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          isRepliedTo: false,
-          message: 'hello world',
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        { applicationContext },
-      );
+    it('should not throw an error when the completed message is a blank string', () => {
+      const message = new Message(mockMessage, { applicationContext });
 
       message.markAsCompleted({
         message: '',
@@ -299,25 +276,8 @@ describe('Message', () => {
   });
 
   describe('addAttachment', () => {
-    it('should add the passed in attachment to the attachments array', () => {
-      const message = new Message(
-        {
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-          message: 'hello world',
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
-        { applicationContext },
-      );
+    it('should add the provided attachment to the attachments array', () => {
+      const message = new Message(mockMessage, { applicationContext });
 
       message.addAttachment({
         documentId: '1f63acc7-d3f1-4115-9310-0570559a023a',
@@ -334,26 +294,16 @@ describe('Message', () => {
     });
   });
 
-  describe('validation message', () => {
-    it('displays a message when the message is over 700 characters long', () => {
+  describe('validation messages', () => {
+    it('should return a message when the message is over 700 characters long', () => {
       const message = new Message(
         {
-          caseStatus: CASE_STATUS_TYPES.generalDocket,
-          caseTitle: 'Test Petitioner',
-          createdAt: '2019-01-01T17:29:13.122Z',
-          docketNumber: '123-45',
-          docketNumberWithSuffix: '123-45S',
-          from: 'gg',
-          fromSection: PETITIONS_SECTION,
-          fromUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+          ...mockMessage,
           message: getTextByCount(1001),
-          subject: 'hey!',
-          to: 'bob',
-          toSection: PETITIONS_SECTION,
-          toUserId: '6805d1ab-18d0-43ec-bafb-654e83405416',
         },
         { applicationContext },
       );
+
       expect(message.getFormattedValidationErrors()).toEqual({
         message: Message.VALIDATION_ERROR_MESSAGES.message[1].message,
       });
