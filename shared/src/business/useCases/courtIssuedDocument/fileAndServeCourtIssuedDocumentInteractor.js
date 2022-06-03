@@ -134,14 +134,21 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   } finally {
     for (const caseEntity of caseEntities) {
       // updated to conditional update to avoid creating record if it does not already exist
-      await applicationContext
-        .getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus({
-          applicationContext,
-          docketEntryId: leadDocketEntryOld.docketEntryId,
-          docketNumber: caseEntity.docketNumber,
-          status: false,
-        });
+      try {
+        await applicationContext
+          .getPersistenceGateway()
+          .updateDocketEntryPendingServiceStatus({
+            applicationContext,
+            docketEntryId: leadDocketEntryOld.docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+            status: false,
+          });
+      } catch (e) {
+        applicationContext.logger.error(
+          `Encountered an exception trying to reset isPendingService on Docket Number ${caseEntity.docketNumber}.`,
+          e,
+        );
+      }
     }
   }
 
