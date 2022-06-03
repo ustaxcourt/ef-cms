@@ -8,6 +8,10 @@ const {
   setTrialSessionAsCalendared,
 } = require('../../cypress-smoketests/support/pages/trial-sessions');
 const {
+  checkA11y,
+  DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+} = require('../support/accessibility');
+const {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -39,116 +43,176 @@ const testData = {
   trialSessionIds: [],
 };
 
-describe.skip('Petitioner', () => {
-  describe('should be able to create the first case', () => {
+const firstCasePetitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
+const secondCasePetitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
+
+const terminalLog = violations => {
+  cy.task(
+    'log',
+    `${violations.length} accessibility violation${
+      violations.length === 1 ? '' : 's'
+    } ${violations.length === 1 ? 'was' : 'were'} detected`,
+  );
+  // pluck specific keys to keep the table readable
+  const violationData = violations.map(
+    ({ description, id, impact, nodes }) => ({
+      description,
+      id,
+      impact,
+      nodes: nodes.length,
+    }),
+  );
+
+  cy.task('table', violationData);
+};
+
+describe('Petitioner', () => {
+  describe(`should create a case for ${firstCasePetitionerName}`, () => {
     it('should complete wizard step 1', () => {
       cy.login('petitioner');
       goToStartCreatePetition();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       goToWizardStep1();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep1();
     });
 
     // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
+      checkA11y({
+        ignoredErrors: {
+          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+          'heading-order': { enabled: false },
+        },
+        terminalLog,
+      });
     });
 
     it('should complete the form and submit the petition', () => {
       completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
       goToWizardStep3();
-      completeWizardStep3(
-        filingTypes.INDIVIDUAL,
-        `${faker.name.firstName()} ${faker.name.lastName()}`,
-      );
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
+      completeWizardStep3(filingTypes.INDIVIDUAL, firstCasePetitionerName);
       goToWizardStep4();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep4();
       goToWizardStep5();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       submitPetition(testData);
       goToDashboard();
+      checkA11y({
+        ignoredErrors: {
+          'aria-hidden-focus': { enabled: false },
+          'color-contrast': { enabled: false },
+          'landmark-one-main': { enabled: false },
+          'nested-interactive': { enabled: false },
+          'page-has-heading-one': { enabled: false },
+          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+        },
+      });
     });
   });
 
-  describe('should be able to create the second case', () => {
+  describe(`should create a case for ${secondCasePetitionerName}`, () => {
     it('should complete wizard step 1', () => {
+      cy.login('petitioner');
       goToStartCreatePetition();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       goToWizardStep1();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep1();
     });
 
     // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
+      checkA11y({
+        ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+      });
     });
 
     it('should complete the form and submit the petition', () => {
       completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
       goToWizardStep3();
-      completeWizardStep3(
-        filingTypes.INDIVIDUAL,
-        `${faker.name.firstName()} ${faker.name.lastName()}`,
-      );
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
+      completeWizardStep3(filingTypes.INDIVIDUAL, secondCasePetitionerName);
       goToWizardStep4();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       completeWizardStep4();
       goToWizardStep5();
+      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
+
       submitPetition(testData);
       goToDashboard();
+      checkA11y({
+        ignoredErrors: {
+          'color-contrast': { enabled: false },
+          'nested-interactive': { enabled: false },
+          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+        },
+      });
     });
   });
 });
 
-// eslint-disable-next-line no-unused-vars
-let judgeUserId;
-describe.skip('Petitions Clerk', () => {
-  describe('should create and set a trial session', () => {
-    beforeEach(() => {
-      cy.intercept({ method: 'POST', url: '/trial-sessions' }).as(
-        'postTrialSession',
-      );
-    });
+describe('Petitions Clerk', () => {
+  beforeEach(() => {
+    cy.intercept({ method: 'POST', url: '/trial-sessions' }).as(
+      'postTrialSession',
+    );
+  });
 
-    it('creates a trial session', () => {
-      cy.login('petitionsclerk');
-      createTrialSession(testData);
-    });
+  it('creates a trial session', () => {
+    cy.login('petitionsclerk', '/add-a-trial-session');
+    createTrialSession(testData);
+  });
 
-    it('manually adds first case to trial session', () => {
-      goToCaseOverview(testData.docketNumbers[0]);
-      manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
-    });
+  it(`manually adds ${firstCasePetitionerName}'s case to trial session`, () => {
+    goToCaseOverview(testData.docketNumbers[0]);
+    manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
+  });
 
-    it('manually adds second case to trial session', () => {
-      goToCaseOverview(testData.docketNumbers[1]);
-      manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
-    });
+  it(`manually adds ${secondCasePetitionerName}'s case to trial session`, () => {
+    goToCaseOverview(testData.docketNumbers[1]);
+    manuallyAddCaseToNewTrialSession(testData.trialSessionIds[0]);
+  });
 
-    it('sets the trial session as calendared', () => {
-      goToTrialSession(testData.trialSessionIds[0]);
-      markCaseAsQcCompleteForTrial(testData.docketNumbers[0]);
-      markCaseAsQcCompleteForTrial(testData.docketNumbers[1]);
-      setTrialSessionAsCalendared(testData.trialSessionIds[0]);
-    });
+  it('sets the trial session as calendared', () => {
+    goToTrialSession(testData.trialSessionIds[0]);
+    markCaseAsQcCompleteForTrial(testData.docketNumbers[0]);
+    markCaseAsQcCompleteForTrial(testData.docketNumbers[1]);
+    setTrialSessionAsCalendared(testData.trialSessionIds[0]);
   });
 });
 
-describe.skip('Judge', () => {
-  it('should be able to login', () => {
-    cy.login('judgeCohen');
-  });
-
+describe('Judge', () => {
   it('views trial session working copy', () => {
-    cy.goToRoute(`/trial-session-working-copy/${testData.trialSessionIds[0]}`);
+    cy.login(
+      'judgeCohen',
+      `/trial-session-working-copy/${testData.trialSessionIds[0]}`,
+    );
   });
 
-  it('clicks show all', () => {
+  it('views all cases on the trial session', () => {
     cy.get('label[for="filters.showAll"]').click();
     cy.get('label[for="filters.showAll"]').click();
   });
 
-  it('edits trial session working copy case trial status', () => {
+  it('changes the trial status of the first case on the trial session', () => {
     changeCaseTrialStatus(testData.docketNumbers[0]);
   });
 
-  it('edits trial session working copy filters', () => {
+  it('filters cases by trial status "Set for Trial"', () => {
     filterWorkingCopyByStatus({
       docketNumberShouldExist: testData.docketNumbers[1],
       docketNumberShouldNotExist: testData.docketNumbers[0],
@@ -156,29 +220,28 @@ describe.skip('Judge', () => {
     });
   });
 
-  it('edits trial session working copy case notes', () => {
+  it('adds a case note for the second case on the trial session', () => {
     addCaseNote(testData.docketNumbers[1], 'Judge case note');
   });
 });
 
-describe.skip('Judge Chambers', () => {
-  it('should be able to login', () => {
-    cy.login('cohensChambers');
-  });
-
+describe('Judge Chambers', () => {
   it('views trial session working copy', () => {
-    cy.goToRoute(`/trial-session-working-copy/${testData.trialSessionIds[0]}`);
+    cy.login(
+      'cohensChambers',
+      `/trial-session-working-copy/${testData.trialSessionIds[0]}`,
+    );
   });
 
-  it('clicks show all', () => {
+  it('views all cases on the trial session', () => {
     cy.get('label[for="filters.showAll"]').click();
   });
 
-  it('edits trial session working copy case trial status', () => {
+  it('changes the trial status of the second case on the trial session', () => {
     changeCaseTrialStatus(testData.docketNumbers[1], 'Continued');
   });
 
-  it('edits trial session working copy filters', () => {
+  it('filters cases by trial status "Continued"', () => {
     filterWorkingCopyByStatus({
       docketNumberShouldExist: testData.docketNumbers[0],
       docketNumberShouldNotExist: testData.docketNumbers[1],
@@ -186,7 +249,7 @@ describe.skip('Judge Chambers', () => {
     });
   });
 
-  it('edits trial session working copy case notes', () => {
+  it('adds a case note for the first case on the trial session', () => {
     addCaseNote(testData.docketNumbers[0], 'Chambers case note');
   });
 });

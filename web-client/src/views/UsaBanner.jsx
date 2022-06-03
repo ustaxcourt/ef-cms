@@ -12,12 +12,11 @@ export const UsaBanner = connect(
   },
   function UsaBanner({ showUsaBannerDetails, toggleUsaBannerDetailsSequence }) {
     return (
-      <section className="site-banner usa-banner">
+      <div className="site-banner usa-banner">
         <div className="usa-accordion">
           <header className="usa-banner__header">
             <div className="grid-container usa-banner__inner">
               <div className="grid-col-auto">
-                {' '}
                 <img
                   alt="U.S. flag"
                   className="usa-banner__header-flag"
@@ -88,7 +87,7 @@ export const UsaBanner = connect(
             </div>
           )}
         </div>
-      </section>
+      </div>
     );
   },
 );

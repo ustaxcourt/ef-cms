@@ -14,6 +14,8 @@ exports.login = email => {
   cy.visit(`/log-in?code=${email}`);
   cy.get('.progress-indicator').should('not.exist');
   cy.get('.big-blue-header').should('exist');
+
+  cy.waitUntilSettled();
 };
 
 exports.getRestApi = async () => {

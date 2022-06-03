@@ -58,7 +58,7 @@ const getDynamsoftStatus = async ({ applicationContext }) => {
         `${scannerResourceUri}/dynamsoft.webtwain.initiate.js`,
         `${scannerResourceUri}/dynamsoft.webtwain.config.js`,
         `${scannerResourceUri}/dynamsoft.webtwain.install.js`,
-        `${scannerResourceUri}/dynamsoft.webtwain.css`,
+        `${scannerResourceUri}/src/dynamsoft.webtwain.css`,
       ].map(url => {
         return axios.get(url, { cancelToken: source.token, timeout: 1000 });
       }),
