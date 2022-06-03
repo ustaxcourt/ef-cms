@@ -4,7 +4,8 @@
   "reporterOptions": {
     "toConsole": true
   },
-  "video": false,
+  "video": true,
+  "videoUploadOnPasses": false,
   "fixturesFolder": "cypress-smoketests/fixtures",
   "integrationFolder": "cypress-smoketests/integration",
   "pluginsFile": "cypress-smoketests/plugins/index.js",
@@ -16,5 +17,6 @@
   "viewportWidth": 1200,
   "viewportHeight": 900,
   "retries": 3,
-  "chromeWebSecurity": false
+  "chromeWebSecurity": false,
+  "videoCompression": 10
 }

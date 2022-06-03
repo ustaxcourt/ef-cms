@@ -1,26 +1,30 @@
-import {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-} from './sortConstants';
-import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
+import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
+
+const {
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
+  ASCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+  DESCENDING,
+} = applicationContext.getConstants();
 
 export const MessagesSectionOutbox = connect(
   {
     caseStatuses: state.formattedMessages.caseStatuses,
     formattedMessages: state.formattedMessages.messages,
     fromUsers: state.formattedMessages.fromUsers,
+    hasMessages: state.formattedMessages.hasMessages,
     screenMetadata: state.screenMetadata,
     showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
-    sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
+    sortMessagesSequence: sequences.sortMessagesSequence,
     toSections: state.formattedMessages.toSections,
     toUsers: state.formattedMessages.toUsers,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
@@ -29,15 +33,15 @@ export const MessagesSectionOutbox = connect(
     caseStatuses,
     formattedMessages,
     fromUsers,
+    hasMessages,
     screenMetadata,
     showFilters,
     showSortableHeaders,
-    sortSectionMessagesSequence,
+    sortMessagesSequence,
     toSections,
     toUsers,
     updateScreenMetadataSequence,
   }) {
-    const hasMessages = formattedMessages.length > 0;
     return (
       <>
         {showFilters && (
@@ -83,7 +87,7 @@ export const MessagesSectionOutbox = connect(
                     hasRows={hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -101,7 +105,7 @@ export const MessagesSectionOutbox = connect(
                     hasRows={hasMessages}
                     sortField="createdAt"
                     title="Sent"
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -115,7 +119,7 @@ export const MessagesSectionOutbox = connect(
                     hasRows={hasMessages}
                     sortField="subject"
                     title="Message"
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}

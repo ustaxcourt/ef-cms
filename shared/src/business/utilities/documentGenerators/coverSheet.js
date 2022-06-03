@@ -12,10 +12,6 @@ const coverSheet = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: coverSheetTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Cover Sheet',
-    },
   });
 
   let footerHtml = '';
