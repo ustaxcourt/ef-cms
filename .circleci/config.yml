@@ -417,7 +417,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large # medium+ makes the webpack build very slow
+    resource_class: xlarge # medium+ makes the webpack build very slow
     steps:
       - git-shallow-clone/checkout
       - npm-install
