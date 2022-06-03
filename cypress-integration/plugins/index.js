@@ -12,6 +12,11 @@ module.exports = (on, config) => {
     getEmailVerificationToken({ userId }) {
       return getEmailVerificationToken({ userId });
     },
+    log(message) {
+      console.log('Axe failures:', message);
+
+      return null;
+    },
     modifyDeployedDateTextFile(deployedDate) {
       fs.writeFileSync(
         path.join(__dirname, '../../web-client/src/deployed-date.txt'),
@@ -24,6 +29,11 @@ module.exports = (on, config) => {
     },
     setAllowedTerminalIpAddresses(ipAddresses) {
       return setAllowedTerminalIpAddresses(ipAddresses);
+    },
+    table(message) {
+      console.log('Accessibility violations:', message);
+
+      return null;
     },
   });
 };

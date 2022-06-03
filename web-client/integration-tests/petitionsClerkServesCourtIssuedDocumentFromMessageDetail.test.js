@@ -13,14 +13,14 @@ const cerebralTest = setupTest();
 
 cerebralTest.draftOrders = [];
 
+jest.spyOn(
+  cerebralTest.applicationContext.getUseCases(),
+  'createMessageInteractor',
+);
+
 describe('Petitions Clerk Serves Court Issued Document From Message Detail', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
-
-    jest.spyOn(
-      cerebralTest.applicationContext.getUseCases(),
-      'createMessageInteractor',
-    );
   });
 
   afterAll(() => {

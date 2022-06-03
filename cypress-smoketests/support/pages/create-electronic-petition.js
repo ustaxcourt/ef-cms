@@ -67,7 +67,6 @@ exports.completeWizardStep1 = () => {
 };
 
 exports.completeWizardStep2 = (hasIrsNotice, caseType) => {
-  cy.screenshot();
   cy.get('input#petition-file').attachFile('../fixtures/w3-dummy.pdf');
   cy.get('#irs-notice-radios').scrollIntoView();
   cy.get(`label#hasIrsNotice-${hasIrsNotice}`).click();

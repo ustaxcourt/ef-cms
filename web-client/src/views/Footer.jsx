@@ -11,7 +11,7 @@ const ScrollToTopButton = () => {
   return (
     <Button
       link
-      className="usa-footer__primary-link inline-block text-left margin-top-1"
+      className="usa-footer__primary-link inline-block text-left"
       overrideMargin={true}
       onClick={e => {
         e.preventDefault();
