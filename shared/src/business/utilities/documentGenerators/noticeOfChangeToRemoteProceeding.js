@@ -17,10 +17,6 @@ const noticeOfChangeToRemoteProceeding = async ({
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: noticeOfChangeToRemoteProceedingTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Notice of Change to Remote Proceeding',
-    },
   });
 
   const footerHtml = reactTemplateGenerator({

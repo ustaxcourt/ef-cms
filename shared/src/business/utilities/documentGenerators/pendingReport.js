@@ -17,10 +17,6 @@ const pendingReport = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: pendingReportTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Pending Report',
-    },
   });
 
   const headerHtml = reactTemplateGenerator({
