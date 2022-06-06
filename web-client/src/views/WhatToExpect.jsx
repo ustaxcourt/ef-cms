@@ -1,9 +1,35 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { Icon } from '../ustc-ui/Icon/Icon';
 import React from 'react';
 
 export const WhatToExpect = () => (
   <>
+    <div className="card gray">
+      <div className="card-content padding-3">
+        <h3 className="display-flex">
+          <Icon
+            aria-label="high priority"
+            className="iconHighPriority margin-right-1 margin-top-1"
+            icon={['fas', 'exclamation-circle']}
+            size="2x"
+          />{' '}
+          Have you Already Filed a Petitioner by Mail? Are you Interested in
+          Electronic Access to your Existing Case?
+        </h3>
+
+        <div>
+          Do <b>NOT</b> start a new case. For more information about gaining
+          electronic service for your existing case, email{' '}
+          <a href="mailto:dawson.support@ustaxcourt.gov">
+            dawson.support@ustaxcourt.gov
+          </a>
+          . Include the docket number (e.g. 12345-67) of your case in your
+          email.
+        </div>
+      </div>
+    </div>
+
     <h2>What to Expect When Filing a Case Online</h2>
     <p>
       To start a case with the Tax Court, you’ll need to file a Petition and
