@@ -108,7 +108,6 @@ describe('ADC Clerk Views Messages Journey', () => {
       message2Id = cerebralTest.lastCreatedMessage.messageId;
     });
 
-    loginAs(cerebralTest, 'docketclerk@example.com');
     createNewMessageOnCase(cerebralTest, {
       subject: message3Subject,
       toSection: 'adc',
