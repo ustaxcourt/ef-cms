@@ -44,17 +44,13 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     docketNumbers = [caseDetail.docketNumber];
   }
 
-  const documentMeta = {
-    ...form,
-    docketEntryId,
-    docketNumbers,
-    subjectCaseDocketNumber: caseDetail.docketNumber,
-  };
-
   const result = await applicationContext
     .getUseCases()
     .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta,
+      docketEntryId,
+      docketNumbers,
+      form,
+      subjectCaseDocketNumber: caseDetail.docketNumber,
     });
 
   return {

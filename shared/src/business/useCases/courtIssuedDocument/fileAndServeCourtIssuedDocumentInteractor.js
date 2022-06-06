@@ -32,7 +32,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  { documentMeta },
+  { docketEntryId, docketNumbers, form, subjectCaseDocketNumber },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -51,9 +51,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-
-  const { docketEntryId, docketNumbers, subjectCaseDocketNumber } =
-    documentMeta;
 
   const singleCaseOperation = docketNumbers.length === 1;
 
@@ -90,7 +87,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 
   const stampedPdf = await stampDocument({
     applicationContext,
-    documentMeta,
+    form,
     pdfData,
   });
 
@@ -130,7 +127,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       fileDocumentOnOneCase({
         applicationContext,
         caseEntity,
-        documentMeta,
+        form,
         numberOfPages,
         originalSubjectDocketEntry,
         singleCaseOperation,
@@ -176,14 +173,14 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   return serviceResults;
 };
 
-const stampDocument = async ({ applicationContext, documentMeta, pdfData }) => {
+const stampDocument = async ({ applicationContext, form, pdfData }) => {
   const servedAt = createISODateString();
 
   let serviceStampType = 'Served';
 
-  if (documentMeta.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-    serviceStampType = documentMeta.serviceStamp;
-  } else if (ENTERED_AND_SERVED_EVENT_CODES.includes(documentMeta.eventCode)) {
+  if (form.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
+    serviceStampType = form.serviceStamp;
+  } else if (ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode)) {
     serviceStampType = 'Entered and Served';
   }
 
@@ -199,7 +196,7 @@ const stampDocument = async ({ applicationContext, documentMeta, pdfData }) => {
 const fileDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
-  documentMeta,
+  form,
   numberOfPages,
   originalSubjectDocketEntry,
   singleCaseOperation,
@@ -211,23 +208,27 @@ const fileDocumentOnOneCase = async ({
   const docketEntryEntity = new DocketEntry(
     {
       ...omit(originalSubjectDocketEntry, 'filedBy'),
-      attachments: documentMeta.attachments,
-      date: documentMeta.date,
+      attachments: form.attachments,
+      date: form.date,
       docketNumber: caseEntity.docketNumber,
-      documentTitle: documentMeta.generatedDocumentTitle,
-      documentType: documentMeta.documentType,
+      documentTitle: form.generatedDocumentTitle,
+      documentType: form.documentType,
       draftOrderState: null,
-      editState: JSON.stringify(documentMeta),
-      eventCode: documentMeta.eventCode,
+      editState: JSON.stringify({
+        ...form,
+        docketEntryId: originalSubjectDocketEntry.docketEntryId,
+        docketNumber: caseEntity.docketNumber,
+      }),
+      eventCode: form.eventCode,
       filingDate: createISODateString(),
-      freeText: documentMeta.freeText,
+      freeText: form.freeText,
       isDraft: false,
       isFileAttached: true,
       isOnDocketRecord: true,
-      judge: documentMeta.judge,
+      judge: form.judge,
       numberOfPages,
-      scenario: documentMeta.scenario,
-      serviceStamp: documentMeta.serviceStamp,
+      scenario: form.scenario,
+      serviceStamp: form.serviceStamp,
       userId: user.userId,
     },
     { applicationContext },

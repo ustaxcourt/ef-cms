@@ -10,14 +10,14 @@ const { post } = require('../requests');
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = (
   applicationContext,
-  { documentMeta },
+  documentMeta,
 ) => {
-  const { leadCaseDocketNumber } = documentMeta;
+  const { subjectCaseDocketNumber } = documentMeta;
   return post({
     applicationContext,
     body: {
-      documentMeta,
+      ...documentMeta,
     },
-    endpoint: `/case-documents/${leadCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
+    endpoint: `/case-documents/${subjectCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
   });
 };
