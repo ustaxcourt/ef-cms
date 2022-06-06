@@ -97,7 +97,7 @@ describe('formatDocketEntryResult', () => {
           hits: [
             {
               _id: 'case|312-21_case|312-21|mapping',
-              _index: 'efcms-message',
+              _index: 'efcms-docket-entry',
               _score: 1,
               _source: {
                 docketNumber: {
@@ -214,7 +214,7 @@ describe('formatDocketEntryResult', () => {
             hits: [
               {
                 _id: 'case|312-21_case|312-21|mapping',
-                _index: 'efcms-message',
+                _index: 'efcms-docket-entry',
                 _score: 1,
                 _source: {
                   docketNumber: {
