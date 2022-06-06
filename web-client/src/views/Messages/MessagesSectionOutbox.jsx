@@ -167,7 +167,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
   return (
     <tbody>
       <tr>
-        {/* what abt focus-toggle class */}
+        <td aria-hidden="true" className="focus-toggle" />
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
             <span className="fa-layers fa-fw">

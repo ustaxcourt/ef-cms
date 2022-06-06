@@ -122,6 +122,7 @@ export const MessagesIndividualInbox = connect(
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
+                  <td aria-hidden="true" className="focus-toggle" />
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
                       <span className="fa-layers fa-fw">

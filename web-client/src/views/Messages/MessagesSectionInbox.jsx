@@ -167,6 +167,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
   return (
     <tbody>
       <tr>
+        <td aria-hidden="true" className="focus-toggle" />
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
             <span className="fa-layers fa-fw">
