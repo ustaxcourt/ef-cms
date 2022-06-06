@@ -27,8 +27,11 @@ const { WorkItem } = require('../../entities/WorkItem');
  *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
- * @param {String} providers.documentMeta the document metadata
- * @returns {Object} the url of the document that was served
+ * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
+ * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
+ * @param {Object} providers.form the form from the front end that has last minute modifications to the docket entry
+ * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
+ * @returns {Object} the URL of the document that was served
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
