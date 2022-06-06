@@ -55,7 +55,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   const { docketEntryId, docketNumbers, subjectCaseDocketNumber } =
     documentMeta;
 
-  // flag to indicate whether we are updating a single case or an array of consolidated cases
   const singleCaseOperation = docketNumbers.length === 1;
 
   const subjectCase = await applicationContext
@@ -80,11 +79,28 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   if (originalSubjectDocketEntry.isPendingService) {
     throw new Error('Docket entry is already being served');
   }
+
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: originalSubjectDocketEntry.docketEntryId,
+    })
+    .promise();
+
   const stampedPdf = await stampDocument({
     applicationContext,
     documentMeta,
-    originalSubjectDocketEntry,
+    pdfData,
   });
+
+  const numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      docketEntryId,
+      documentBytes: pdfData,
+    });
 
   await applicationContext
     .getPersistenceGateway()
@@ -114,8 +130,8 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       fileDocumentOnOneCase({
         applicationContext,
         caseEntity,
-        docketEntryId,
         documentMeta,
+        numberOfPages,
         originalSubjectDocketEntry,
         singleCaseOperation,
         user,
@@ -133,7 +149,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       });
   } finally {
     for (const caseEntity of caseEntities) {
-      // updated to conditional update to avoid creating record if it does not already exist
       try {
         await applicationContext
           .getPersistenceGateway()
@@ -161,21 +176,8 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   return serviceResults;
 };
 
-const stampDocument = async ({
-  applicationContext,
-  documentMeta,
-  originalSubjectDocketEntry,
-}) => {
-  // this was previously handled by the `setAsServed` prototype method, as it now is in `fileDocumentOnOneCase`
+const stampDocument = async ({ applicationContext, documentMeta, pdfData }) => {
   const servedAt = createISODateString();
-
-  const { Body: pdfData } = await applicationContext
-    .getStorageClient()
-    .getObject({
-      Bucket: applicationContext.environment.documentsBucketName,
-      Key: originalSubjectDocketEntry.docketEntryId,
-    })
-    .promise();
 
   let serviceStampType = 'Served';
 
@@ -197,17 +199,12 @@ const stampDocument = async ({
 const fileDocumentOnOneCase = async ({
   applicationContext,
   caseEntity,
-  docketEntryId,
   documentMeta,
+  numberOfPages,
   originalSubjectDocketEntry,
   singleCaseOperation,
   user,
 }) => {
-  // numberOfPages shouldn't need to be recalculated for each docket entry, despite not yet being updated, right????
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({ applicationContext, docketEntryId });
-
   // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
 

@@ -7,9 +7,8 @@ exports.updateDocketEntryPendingServiceStatus = async ({
   status,
 }) => {
   try {
-    // updated to conditional update since this function should never create a docket entry record if it does not already exist
     await client.update({
-      ConditionExpression: 'attribute_exists(docketEntryId)',
+      ConditionExpression: 'attribute_exists(docketEntryId)', //this function should never create a docket entry record if it does not already exist
       ExpressionAttributeNames: {
         '#isPendingService': 'isPendingService',
       },
