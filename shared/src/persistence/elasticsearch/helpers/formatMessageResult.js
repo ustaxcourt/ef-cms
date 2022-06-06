@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 
-export const formatMessageResult = ({ caseMap, hit, sourceUnmarshalled }) => {
+exports.formatMessageResult = ({ caseMap, hit, sourceUnmarshalled }) => {
   const casePk = hit['_id'].split('_')[0];
   const docketNumber = casePk.replace('case|', '');
 
