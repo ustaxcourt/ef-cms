@@ -187,12 +187,12 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   it('should throw an error if the document is not found on the case', async () => {
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        documentMeta: {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-          docketNumbers: [caseRecord.docketNumber],
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
+        docketNumbers: [caseRecord.docketNumber],
+        form: {
           documentType: 'Order',
-          subjectCaseDocketNumber: caseRecord.docketNumber,
         },
+        subjectCaseDocketNumber: caseRecord.docketNumber,
       }),
     ).rejects.toThrow('Docket entry not found');
   });
@@ -202,19 +202,22 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        documentMeta: {
-          docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumbers: [caseRecord.docketNumber],
+        docketEntryId: caseRecord.docketEntries[1].docketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        form: {
           documentType: 'Order',
-          leadCaseDocketNumber: caseRecord.docketNumber,
         },
+        subjectCaseDocketNumber: caseRecord.docketNumber,
       }),
     ).rejects.toThrow('Docket entry has already been served');
   });
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: caseRecord.docketEntries[0],
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: caseRecord.docketEntries[0],
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     const updatedCase =
@@ -528,18 +531,17 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           };
         });
 
+      //TODO: pass in subjectCaseDocketNumber?
       const result = await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         {
-          documentMeta: {
-            ...caseRecord.docketEntries[0],
-            docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-            docketNumbers: [
-              MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-              MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-              MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-            ],
-          },
+          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+          docketNumbers: [
+            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+          ],
+          form: caseRecord.docketEntries[0],
         },
       );
 
@@ -577,18 +579,17 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           }
         });
 
+      //TODO: pass in subjectCaseDocketNumber?
       const result = await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         {
-          documentMeta: {
-            ...caseRecord.docketEntries[0],
-            docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-            docketNumbers: [
-              MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-              MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-              MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-            ],
-          },
+          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+          docketNumbers: [
+            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+          ],
+          form: caseRecord.docketEntries[0],
         },
       );
 
