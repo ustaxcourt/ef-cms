@@ -19,6 +19,7 @@ exports.MOCK_CASE = {
   docketNumberWithSuffix: '101-18',
   entityName: 'Case',
   filingType: 'Myself',
+  hearings: [],
   irsNoticeDate: '2018-03-01T00:00:00.000Z',
   partyType: PARTY_TYPES.petitioner,
   petitioners: [

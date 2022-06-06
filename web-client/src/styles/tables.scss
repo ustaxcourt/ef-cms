@@ -1,5 +1,9 @@
 table,
 .usa-table {
+  * {
+    animation: none;
+  }
+
   width: 100%;
   margin: 0 0 2em 0;
 
@@ -67,6 +71,10 @@ table,
 
     &.small {
       max-width: $table-column-width-small;
+    }
+
+    &.medium {
+      width: 160px;
     }
   }
 
@@ -281,7 +289,7 @@ table,
   }
 
   /* little screens */
-  @media only screen and (max-width: $medium-screen - 1px) {
+  @media only screen and (max-width: ($medium-screen - 1px)) {
     line-height: 1.4em;
 
     .hide-on-mobile {
@@ -372,7 +380,7 @@ table.dashboard {
   }
 
   /* small only */
-  @media only screen and (max-width: $medium-screen - 1px) {
+  @media only screen and (max-width: ($medium-screen - 1px)) {
     margin-bottom: 20px;
 
     td {
@@ -406,7 +414,7 @@ table.messages .message-document-title a.usa-button.ustc-button--unstyled {
   text-align: left;
 }
 
-@media only screen and (max-width: $medium-screen - 1px) {
+@media only screen and (max-width: ($medium-screen - 1px)) {
   .scrollable-table-container-mobile {
     margin-top: 300px;
     overflow-x: scroll;
@@ -463,14 +471,14 @@ table.case-list tbody tr:nth-child(even) td {
     }
   }
 
-  @media only screen and (max-width: $medium-screen - 1px) {
+  @media only screen and (max-width: ($medium-screen - 1px)) {
     .hide-on-mobile {
       display: none;
     }
   }
 }
 
-@media only screen and (max-width: $medium-screen - 1px) {
+@media only screen and (max-width: ($medium-screen - 1px)) {
   .responsive-table {
     display: block;
 

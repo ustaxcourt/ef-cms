@@ -23,10 +23,6 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
   const pdfContentHtmlWithHeader = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactStandingPretrialOrderTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Standing Pretrial Order',
-    },
   });
 
   const headerHtml = reactTemplateGenerator({
