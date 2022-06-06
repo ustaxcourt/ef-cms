@@ -1,7 +1,17 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
+const {
+  formatDocketEntryResult,
+} = require('./helpers/formatDocketEntryResult');
+const { formatMessageResult } = require('./helpers/formatMessageResult');
 const { search } = require('./searchClient');
+jest.mock('./helpers/formatMessageResult', () => ({
+  formatMessageResult: jest.fn(),
+}));
+jest.mock('./helpers/formatDocketEntryResult', () => ({
+  formatDocketEntryResult: jest.fn(),
+}));
 
 describe('searchClient', () => {
   const emptyResults = {
@@ -118,7 +128,7 @@ describe('searchClient', () => {
     took: 7,
   };
 
-  const advancedSearchResults = {
+  const mockDocketEntrySearchResult = {
     _shards: {
       failed: 0,
       skipped: 0,
@@ -270,20 +280,6 @@ describe('searchClient', () => {
     took: 5,
   };
 
-  it('should return an empty list with total 0 when no search results are found', async () => {
-    applicationContext.getSearchClient().search.mockReturnValue(emptyResults);
-
-    const results = await search({
-      applicationContext,
-      searchParameters: {},
-    });
-
-    expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
-      1,
-    );
-    expect(results).toMatchObject({ results: [], total: 0 });
-  });
-
   it('should throw and log an error when a query exception is thrown by elasticsearch', async () => {
     applicationContext
       .getSearchClient()
@@ -304,8 +300,9 @@ describe('searchClient', () => {
     expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
   });
 
-  it('should format and return the list of results when they are found', async () => {
-    applicationContext.getSearchClient().search.mockReturnValue(matchesResults);
+  it('should return an empty list with total 0 when no search results are found', async () => {
+    applicationContext.getSearchClient().search.mockReturnValue(emptyResults);
+
     const results = await search({
       applicationContext,
       searchParameters: {},
@@ -314,85 +311,103 @@ describe('searchClient', () => {
     expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
       1,
     );
-    expect(results).toMatchObject({
-      results: [
-        {
-          _score: expect.anything(),
-          caseCaption: 'Eve Brewer, Petitioner',
-          contactPrimary: {
-            address1: '67 Oak Parkway',
-            city: 'Nashville',
-            contactId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-            countryType: 'domestic',
-            email: 'petitioner@example.com',
-            name: 'Eve Brewer',
-            phone: '+1 (477) 640-5087',
-            postalCode: '36042',
-            state: 'TN',
-          },
-          contactSecondary: {},
-          docketNumber: '102-20',
-          docketNumberSuffix: 'S',
-          docketNumberWithSuffix: '102-20S',
-          irsPractitioners: [
-            {
-              barNumber: 'RT6789',
-              contact: {
-                address1: '234 Main St',
-                address2: 'Apartment 4',
-                address3: 'Under the stairs',
-                city: 'Chicago',
-                countryType: 'domestic',
-                phone: '+1 (555) 555-5555',
-                postalCode: '61234',
-                state: 'IL',
-              },
-              email: 'irsPractitioner@example.com',
-              name: 'Test IRS Practitioner',
-              pk: 'case|102-20',
-              role: 'irsPractitioner',
-              section: 'irsPractitioner',
-              serviceIndicator: 'Electronic',
-              sk: 'irsPractitioner|5805d1ab-18d0-43ec-bafb-654e83405416',
-              userId: '5805d1ab-18d0-43ec-bafb-654e83405416',
-            },
-          ],
-          privatePractitioners: [
-            {
-              barNumber: 'PT5432',
-              contact: {
-                address1: '234 Main St',
-                address2: 'Apartment 4',
-                address3: 'Under the stairs',
-                city: 'Chicago',
-                countryType: 'domestic',
-                phone: '+1 (555) 555-5555',
-                postalCode: '61234',
-                state: 'IL',
-              },
-              email: 'privatePractitioner1@example.com',
-              name: 'Test Private Practitioner',
-              pk: 'case|102-20',
-              representingPrimary: true,
-              role: 'privatePractitioner',
-              section: 'privatePractitioner',
-              serviceIndicator: 'Electronic',
-              sk: 'privatePractitioner|ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-              userId: 'ad07b846-8933-4778-9fe2-b5d8ac8ad728',
-            },
-          ],
-          receivedAt: '2020-01-21T16:41:39.474Z',
-          sealedDate: '2020-01-21T16:48:28.364Z',
-        },
-      ],
-      total: 1,
+    expect(results).toMatchObject({ results: [], total: 0 });
+  });
+
+  it('should format and return the list of results when the results are docket entry entities', async () => {
+    applicationContext.getSearchClient().search.mockReturnValue(matchesResults);
+
+    const results = await search({
+      applicationContext,
+      searchParameters: {},
     });
+
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
+      1,
+    );
+    expect(formatDocketEntryResult).toHaveBeenCalledTimes(1);
+  });
+
+  it('should format and return the list of results when they are message search results', async () => {
+    const mockMessageSearchResult = {
+      _shards: {
+        failed: 0,
+        skipped: 0,
+        successful: 1,
+        total: 1,
+      },
+      hits: {
+        hits: [
+          {
+            _id: 'case|312-21_message|25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+            _index: 'efcms-message',
+            _routing: 'case|312-21_case|312-21|mapping',
+            _score: null,
+            _source: {
+              messageId: {
+                S: '25100ec6-eeeb-4e88-872f-c99fad1fe6c7',
+                docketNumber: {
+                  S: '312-21',
+                },
+              },
+            },
+            _type: '_doc',
+            inner_hits: {
+              'case-mappings': {
+                hits: {
+                  hits: [
+                    {
+                      _id: 'case|312-21_case|312-21|mapping',
+                      _index: 'efcms-message',
+                      _score: 1,
+                      _source: {
+                        leadDocketNumber: {
+                          S: '312-21',
+                        },
+                      },
+                      _type: '_doc',
+                    },
+                  ],
+                  max_score: 1,
+                  total: {
+                    relation: 'eq',
+                    value: 1,
+                  },
+                },
+              },
+            },
+            sort: [1629483399420],
+          },
+        ],
+        max_score: null,
+        total: {
+          relation: 'eq',
+          value: 1,
+        },
+      },
+      timed_out: false,
+      took: 5,
+    };
+
+    applicationContext
+      .getSearchClient()
+      .search.mockReturnValue(mockMessageSearchResult);
+
+    await search({
+      applicationContext,
+      searchParameters: {},
+    });
+
+    expect(applicationContext.getSearchClient().search).toHaveBeenCalledTimes(
+      1,
+    );
+    expect(formatMessageResult).toHaveBeenCalledTimes(1);
   });
 
   it('should unmarshall the case when it is not found in the caseMap', async () => {
     applicationContext
       .getSearchClient()
-      .search.mockReturnValue(advancedSearchResults);
+      .search.mockReturnValue(mockDocketEntrySearchResult);
 
     const results = await search({
       applicationContext,
