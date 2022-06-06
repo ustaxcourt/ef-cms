@@ -48,7 +48,7 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     ...form,
     docketEntryId,
     docketNumbers,
-    leadCaseDocketNumber: caseDetail.docketNumber,
+    subjectCaseDocketNumber: caseDetail.docketNumber,
   };
 
   const result = await applicationContext

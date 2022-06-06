@@ -52,46 +52,46 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  //TODO: rename variables with 'lead' in the name to avoid confusion when dealing with a single case
-  const { docketEntryId, docketNumbers, leadCaseDocketNumber } = documentMeta;
+  const { docketEntryId, docketNumbers, subjectCaseDocketNumber } =
+    documentMeta;
 
   // flag to indicate whether we are updating a single case or an array of consolidated cases
   const singleCaseOperation = docketNumbers.length === 1;
 
-  const leadCaseToUpdate = await applicationContext
+  const subjectCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      docketNumber: leadCaseDocketNumber,
+      docketNumber: subjectCaseDocketNumber,
     });
 
-  let leadCaseEntity = new Case(leadCaseToUpdate, { applicationContext });
+  let subjectCaseEntity = new Case(subjectCase, { applicationContext });
 
-  const leadDocketEntryOld = leadCaseEntity.getDocketEntryById({
+  const originalSubjectDocketEntry = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  if (!leadDocketEntryOld) {
+  if (!originalSubjectDocketEntry) {
     throw new NotFoundError('Docket entry not found');
   }
-  if (leadDocketEntryOld.servedAt) {
+  if (originalSubjectDocketEntry.servedAt) {
     throw new Error('Docket entry has already been served');
   }
-  if (leadDocketEntryOld.isPendingService) {
+  if (originalSubjectDocketEntry.isPendingService) {
     throw new Error('Docket entry is already being served');
   }
   const stampedPdf = await stampDocument({
     applicationContext,
     documentMeta,
-    leadDocketEntryOld,
+    originalSubjectDocketEntry,
   });
 
   await applicationContext
     .getPersistenceGateway()
     .updateDocketEntryPendingServiceStatus({
       applicationContext,
-      docketEntryId: leadDocketEntryOld.docketEntryId,
-      docketNumber: leadCaseDocketNumber,
+      docketEntryId: originalSubjectDocketEntry.docketEntryId,
+      docketNumber: subjectCaseDocketNumber,
       status: true,
     });
 
@@ -116,7 +116,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
         caseEntity,
         docketEntryId,
         documentMeta,
-        leadDocketEntryOld,
+        originalSubjectDocketEntry,
         singleCaseOperation,
         user,
       }),
@@ -128,7 +128,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
         caseEntities,
-        docketEntryId: leadDocketEntryOld.docketEntryId,
+        docketEntryId: originalSubjectDocketEntry.docketEntryId,
         stampedPdf,
       });
   } finally {
@@ -139,7 +139,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
           .getPersistenceGateway()
           .updateDocketEntryPendingServiceStatus({
             applicationContext,
-            docketEntryId: leadDocketEntryOld.docketEntryId,
+            docketEntryId: originalSubjectDocketEntry.docketEntryId,
             docketNumber: caseEntity.docketNumber,
             status: false,
           });
@@ -155,7 +155,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: stampedPdf,
-    key: leadDocketEntryOld.docketEntryId,
+    key: originalSubjectDocketEntry.docketEntryId,
   });
 
   return serviceResults;
@@ -164,7 +164,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 const stampDocument = async ({
   applicationContext,
   documentMeta,
-  leadDocketEntryOld,
+  originalSubjectDocketEntry,
 }) => {
   // this was previously handled by the `setAsServed` prototype method, as it now is in `fileDocumentOnOneCase`
   const servedAt = createISODateString();
@@ -173,7 +173,7 @@ const stampDocument = async ({
     .getStorageClient()
     .getObject({
       Bucket: applicationContext.environment.documentsBucketName,
-      Key: leadDocketEntryOld.docketEntryId,
+      Key: originalSubjectDocketEntry.docketEntryId,
     })
     .promise();
 
@@ -199,7 +199,7 @@ const fileDocumentOnOneCase = async ({
   caseEntity,
   docketEntryId,
   documentMeta,
-  leadDocketEntryOld,
+  originalSubjectDocketEntry,
   singleCaseOperation,
   user,
 }) => {
@@ -213,7 +213,7 @@ const fileDocumentOnOneCase = async ({
 
   const docketEntryEntity = new DocketEntry(
     {
-      ...omit(leadDocketEntryOld, 'filedBy'),
+      ...omit(originalSubjectDocketEntry, 'filedBy'),
       attachments: documentMeta.attachments,
       date: documentMeta.date,
       docketNumber: caseEntity.docketNumber,
