@@ -273,7 +273,10 @@ const fileDocumentOnOneCase = async ({
 
   docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
 
-  if (caseEntity.docketNumber !== caseEntity.leadDocketNumber) {
+  if (
+    caseEntity.leadDocketNumber &&
+    caseEntity.docketNumber !== caseEntity.leadDocketNumber
+  ) {
     caseEntity.addDocketEntry(docketEntryEntity);
   } else {
     caseEntity.updateDocketEntry(docketEntryEntity);
