@@ -75,6 +75,20 @@ export const getFormattedMessages = ({
     const formattedMessages = messages.map(message => {
       const inConsolidatedGroup = !!message.leadDocketNumber;
 
+      const inLeadCase =
+        inConsolidatedGroup &&
+        message.leadDocketNumber === message.docketNumber;
+
+      let consolidatedIconTooltipText;
+
+      if (inConsolidatedGroup) {
+        if (inLeadCase) {
+          consolidatedIconTooltipText = 'Lead case';
+        } else {
+          consolidatedIconTooltipText = 'Consolidated case';
+        }
+      }
+
       return {
         ...message,
         completedAtFormatted: formatDateIfToday(
@@ -83,6 +97,7 @@ export const getFormattedMessages = ({
           now,
           yesterday,
         ),
+        consolidatedIconTooltipText,
         createdAtFormatted: formatDateIfToday(
           message.createdAt,
           applicationContext,
@@ -90,9 +105,7 @@ export const getFormattedMessages = ({
           yesterday,
         ),
         inConsolidatedGroup,
-        inLeadCase:
-          inConsolidatedGroup &&
-          message.leadDocketNumber === message.docketNumber,
+        inLeadCase,
         messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
       };
     });
