@@ -1,6 +1,8 @@
 const AWS = require('aws-sdk');
-import { formatDocketEntryResult } from './helpers/formatDocketEntryResult';
-import { formatMessageResult } from './helpers/formatMessageResult';
+const {
+  formatDocketEntryResult,
+} = require('./helpers/formatDocketEntryResult');
+const { formatMessageResult } = require('./helpers/formatMessageResult');
 const { get } = require('lodash');
 
 exports.search = async ({ applicationContext, searchParameters }) => {
