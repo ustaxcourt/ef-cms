@@ -9,16 +9,14 @@ const CaselessNotification = () => {
   return (
     isDisplayed && (
       <div className="card gray">
-        <div className="card-content padding-3">
-          <div className="text-right">
-            <Button
-              link
-              className="width-0 margin-bottom-1 no-underline padding-0"
-              icon="times-circle"
-              iconRight={true}
-              onClick={() => setIsDisplayed(false)}
-            ></Button>
-          </div>
+        <div className="card-content padding-3 position-relative">
+          <Button
+            link
+            className="dismiss-btn margin-bottom-1 no-underline padding-0"
+            icon="times-circle"
+            iconRight={true}
+            onClick={() => setIsDisplayed(false)}
+          ></Button>
 
           <h3 className="display-flex">
             <Icon
