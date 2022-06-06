@@ -178,7 +178,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
           docketNumbers: [caseRecord.docketNumber],
           documentType: 'Memorandum in Support',
-          leadCaseDocketNumber: caseRecord.docketNumber,
+          subjectCaseDocketNumber: caseRecord.docketNumber,
         },
       }),
     ).rejects.toThrow('Unauthorized');
@@ -191,7 +191,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
           docketNumbers: [caseRecord.docketNumber],
           documentType: 'Order',
-          leadCaseDocketNumber: caseRecord.docketNumber,
+          subjectCaseDocketNumber: caseRecord.docketNumber,
         },
       }),
     ).rejects.toThrow('Docket entry not found');
