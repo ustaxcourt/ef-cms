@@ -306,7 +306,7 @@ const fileDocumentOnOneCase = async ({
     ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode);
 
   if (shouldCloseCase) {
-    closeCaseAndUpdatedTrialSessionForEnteredAndServedDocuments({
+    await closeCaseAndUpdatedTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity,
     });
@@ -335,32 +335,34 @@ const closeCaseAndUpdatedTrialSessionForEnteredAndServedDocuments = async ({
       docketNumber: caseEntity.docketNumber,
     });
 
-  if (caseEntity.trialSessionId) {
-    const trialSession = await applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById({
-        applicationContext,
-        trialSessionId: caseEntity.trialSessionId,
-      });
+  if (!caseEntity.trialSessionId) {
+    return;
+  }
 
-    const trialSessionEntity = new TrialSession(trialSession, {
+  const trialSession = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionById({
       applicationContext,
+      trialSessionId: caseEntity.trialSessionId,
     });
 
-    if (trialSessionEntity.isCalendared) {
-      trialSessionEntity.removeCaseFromCalendar({
-        disposition: 'Status was changed to Closed',
-        docketNumber: caseEntity.docketNumber,
-      });
-    } else {
-      trialSessionEntity.deleteCaseFromCalendar({
-        docketNumber: caseEntity.docketNumber,
-      });
-    }
+  const trialSessionEntity = new TrialSession(trialSession, {
+    applicationContext,
+  });
 
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  if (trialSessionEntity.isCalendared) {
+    trialSessionEntity.removeCaseFromCalendar({
+      disposition: 'Status was changed to Closed',
+      docketNumber: caseEntity.docketNumber,
+    });
+  } else {
+    trialSessionEntity.deleteCaseFromCalendar({
+      docketNumber: caseEntity.docketNumber,
     });
   }
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
 };
