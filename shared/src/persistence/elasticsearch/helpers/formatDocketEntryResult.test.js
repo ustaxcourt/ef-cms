@@ -233,31 +233,30 @@ describe('formatDocketEntryResult', () => {
         },
       },
     };
+    const mockSourceUnmarshalled = { marigold: false };
 
     const results = await formatDocketEntryResult({
       caseMap: {},
       hit: mockDocketEntryUnMatchingResult,
-      sourceUnmarshalled: { marigold: false },
+      sourceUnmarshalled: mockSourceUnmarshalled,
     });
 
-    expect(results).toEqual({ marigold: false });
+    expect(results).toEqual(mockSourceUnmarshalled);
   });
 
   it('should add the case to the caseMap and unmarshall when one is not found', async () => {
-    const mockCaseUnmarshalled = {
-      docketNumber: '312-21',
-      isCaseSealed: false,
-      isDocketEntrySealed: true,
-      isSealed: undefined,
-    };
-
     const results = await formatDocketEntryResult({
       caseMap: {},
       hit: mockDocketEntryResult,
       sourceUnmarshalled: { isSealed: true },
     });
 
-    expect(results).toEqual(mockCaseUnmarshalled);
+    expect(results).toEqual({
+      docketNumber: '312-21',
+      isCaseSealed: false,
+      isDocketEntrySealed: true,
+      isSealed: undefined,
+    });
   });
 
   it('should unmarshall the case found in caseMap when one is found and populate sealed properties', async () => {
