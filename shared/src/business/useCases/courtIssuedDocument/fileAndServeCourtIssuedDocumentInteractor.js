@@ -281,8 +281,6 @@ const fileDocumentOnOneCase = async ({
     caseEntity.addDocketEntry(docketEntryEntity);
   }
 
-  //TODO: this might fail on a sub-case because the docket entry on the sub-case isn't created in DynamoDB yet
-
   await applicationContext.getPersistenceGateway().saveWorkItem({
     applicationContext,
     workItem: docketEntryEntity.workItem.validate().toRawObject(),
