@@ -28,7 +28,7 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   const currentDocketEntryCompatibleWithConsolidation =
     !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode);
 
-  // const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
+  const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
 
   const consolidatedCases =
     get(state.formattedCaseDetail.consolidatedCases) || [];
@@ -37,6 +37,7 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     .map(consolidatedCase => consolidatedCase.docketNumber);
 
   if (
+    !isLeadCase ||
     docketNumbers.length === 0 ||
     !currentDocketEntryCompatibleWithConsolidation
   ) {

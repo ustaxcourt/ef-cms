@@ -274,12 +274,14 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
 
   if (
-    caseEntity.leadDocketNumber &&
-    caseEntity.docketNumber !== caseEntity.leadDocketNumber
+    caseEntity.docketEntries.some(
+      docketEntry =>
+        docketEntry.docketEntryId === docketEntryEntity.docketEntryId,
+    )
   ) {
-    caseEntity.addDocketEntry(docketEntryEntity);
-  } else {
     caseEntity.updateDocketEntry(docketEntryEntity);
+  } else {
+    caseEntity.addDocketEntry(docketEntryEntity);
   }
 
   //TODO: this might fail on a sub-case because the docket entry on the sub-case isn't created in DynamoDB yet
