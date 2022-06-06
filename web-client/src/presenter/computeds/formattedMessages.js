@@ -1,54 +1,31 @@
-import { formatDateIfToday } from './formattedWorkQueue';
+import { getFormattedMessages } from '../utilities/processFormattedMessages';
 import { state } from 'cerebral';
 
-export const getFormattedMessages = ({ applicationContext, messages }) => {
-  const formattedCaseMessages = messages
-    .map(message => ({
-      ...message,
-      completedAtFormatted: formatDateIfToday(
-        message.completedAt,
-        applicationContext,
-      ),
-      createdAtFormatted: formatDateIfToday(
-        message.createdAt,
-        applicationContext,
-      ),
-      messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
-    }))
-    .sort((a, b) => {
-      return a.createdAt.localeCompare(b.createdAt);
-    });
-
-  const inProgressMessages = formattedCaseMessages.filter(
-    message => !message.isRepliedTo && !message.isCompleted,
-  );
-  const completedMessages = formattedCaseMessages.filter(
-    message => message.isCompleted,
-  );
-
-  completedMessages.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
-
-  return {
-    completedMessages,
-    inProgressMessages,
-    messages: formattedCaseMessages,
-  };
-};
-
 export const formattedMessages = (get, applicationContext) => {
+  const tableSort = get(state.tableSort);
+
   const { completedMessages, messages } = getFormattedMessages({
     applicationContext,
+    cacheKey: get(state.messageCacheKey),
     messages: get(state.messages) || [],
+    tableSort,
   });
 
-  const currentMessageBox = get(state.messageBoxToDisplay.box);
+  const { box } = get(state.messageBoxToDisplay);
 
-  if (currentMessageBox === 'outbox') {
+  const { role } = get(state.user);
+
+  const { USER_ROLES } = applicationContext.getConstants();
+
+  if (box === 'outbox' && role !== USER_ROLES.adc) {
     messages.reverse();
   }
 
+  const hasMessages = messages.length > 0;
+
   return {
     completedMessages,
+    hasMessages,
     messages,
   };
 };
