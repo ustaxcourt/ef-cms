@@ -176,8 +176,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumber: caseRecord.docketNumber,
+          docketNumbers: [caseRecord.docketNumber],
           documentType: 'Memorandum in Support',
+          leadCaseDocketNumber: caseRecord.docketNumber,
         },
       }),
     ).rejects.toThrow('Unauthorized');
@@ -188,8 +189,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-          docketNumber: caseRecord.docketNumber,
+          docketNumbers: [caseRecord.docketNumber],
           documentType: 'Order',
+          leadCaseDocketNumber: caseRecord.docketNumber,
         },
       }),
     ).rejects.toThrow('Docket entry not found');
@@ -202,8 +204,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumber: caseRecord.docketNumber,
+          docketNumbers: [caseRecord.docketNumber],
           documentType: 'Order',
+          leadCaseDocketNumber: caseRecord.docketNumber,
         },
       }),
     ).rejects.toThrow('Docket entry has already been served');
