@@ -114,6 +114,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   return (
     <tbody>
       <tr>
+        <td aria-hidden="true" className="focus-toggle" />
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
             <span className="fa-layers fa-fw">
