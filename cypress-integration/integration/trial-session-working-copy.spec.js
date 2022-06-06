@@ -8,10 +8,6 @@ const {
   setTrialSessionAsCalendared,
 } = require('../../cypress-smoketests/support/pages/trial-sessions');
 const {
-  checkA11y,
-  DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
-} = require('../support/accessibility');
-const {
   completeWizardStep1,
   completeWizardStep2,
   completeWizardStep3,
@@ -46,35 +42,13 @@ const testData = {
 const firstCasePetitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
 const secondCasePetitionerName = `${faker.name.firstName()} ${faker.name.lastName()}`;
 
-const terminalLog = violations => {
-  cy.task(
-    'log',
-    `${violations.length} accessibility violation${
-      violations.length === 1 ? '' : 's'
-    } ${violations.length === 1 ? 'was' : 'were'} detected`,
-  );
-  // pluck specific keys to keep the table readable
-  const violationData = violations.map(
-    ({ description, id, impact, nodes }) => ({
-      description,
-      id,
-      impact,
-      nodes: nodes.length,
-    }),
-  );
-
-  cy.task('table', violationData);
-};
-
 describe('Petitioner', () => {
   describe(`should create a case for ${firstCasePetitionerName}`, () => {
     it('should complete wizard step 1', () => {
       cy.login('petitioner');
       goToStartCreatePetition();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       goToWizardStep1();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       completeWizardStep1();
     });
@@ -82,40 +56,20 @@ describe('Petitioner', () => {
     // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
-      checkA11y({
-        ignoredErrors: {
-          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
-          'heading-order': { enabled: false },
-        },
-        terminalLog,
-      });
     });
 
     it('should complete the form and submit the petition', () => {
       completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
       goToWizardStep3();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       completeWizardStep3(filingTypes.INDIVIDUAL, firstCasePetitionerName);
       goToWizardStep4();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       completeWizardStep4();
       goToWizardStep5();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       submitPetition(testData);
       goToDashboard();
-      checkA11y({
-        ignoredErrors: {
-          'aria-hidden-focus': { enabled: false },
-          'color-contrast': { enabled: false },
-          'landmark-one-main': { enabled: false },
-          'nested-interactive': { enabled: false },
-          'page-has-heading-one': { enabled: false },
-          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
-        },
-      });
     });
   });
 
@@ -123,10 +77,8 @@ describe('Petitioner', () => {
     it('should complete wizard step 1', () => {
       cy.login('petitioner');
       goToStartCreatePetition();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       goToWizardStep1();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       completeWizardStep1();
     });
@@ -134,33 +86,20 @@ describe('Petitioner', () => {
     // this is in its own step because sometimes the click fails, and if it's in its own step it will retry properly
     it('should go to wizard step 2', () => {
       goToWizardStep2();
-      checkA11y({
-        ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
-      });
     });
 
     it('should complete the form and submit the petition', () => {
       completeWizardStep2(hasIrsNotice.NO, 'Innocent Spouse');
       goToWizardStep3();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       completeWizardStep3(filingTypes.INDIVIDUAL, secondCasePetitionerName);
       goToWizardStep4();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       completeWizardStep4();
       goToWizardStep5();
-      checkA11y({ ignoredErrors: DAWSON_GLOBAL_DISABLED_AXE_ERRORS });
 
       submitPetition(testData);
       goToDashboard();
-      checkA11y({
-        ignoredErrors: {
-          'color-contrast': { enabled: false },
-          'nested-interactive': { enabled: false },
-          ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
-        },
-      });
     });
   });
 });
