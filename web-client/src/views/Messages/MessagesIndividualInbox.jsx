@@ -89,7 +89,7 @@ export const MessagesIndividualInbox = connect(
                     {message.inConsolidatedGroup && (
                       <span className="fa-layers fa-fw">
                         <Icon
-                          aria-label="consolidated case"
+                          aria-label={message.consolidatedIconTooltipText}
                           className="fa-icon-blue"
                           icon="copy"
                         />
