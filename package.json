@@ -45,7 +45,7 @@
     "pug": "^3.0.2",
     "puppeteer": "^14.1.2",
     "puppeteer-core": "^14.1.2",
-    "qs": "^6.10.3",
+    "qs": "^6.10.4",
     "quill-delta-to-html": "^0.12.1",
     "react": "^18.1.0",
     "react-dom": "^18.1.0",
@@ -57,7 +57,7 @@
     "riot-route": "^3.1.4",
     "s3-files": "^2.0.3",
     "sanitize-filename": "^1.6.3",
-    "sass": "^1.52.1",
+    "sass": "^1.52.2",
     "tmp": "^0.2.1",
     "uswds": "^2.13.3",
     "util": "^0.12.4",
@@ -306,8 +306,8 @@
     "stylelint-config-standard": "^25.0.0",
     "stylelint-config-standard-scss": "^4.0.0",
     "swagger-cli": "^4.0.4",
-    "webpack": "^5.72.1",
+    "webpack": "^5.73.0",
     "webpack-cli": "^4.9.2",
-    "webpack-dev-server": "^4.9.0"
+    "webpack-dev-server": "^4.9.2"
   }
 }
