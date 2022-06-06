@@ -95,6 +95,15 @@ describe('updates the contact on a case', () => {
     const changeOfAddressDocument = updatedCase.docketEntries.find(
       d => d.documentType === 'Notice of Change of Address',
     );
+    expect(
+      applicationContext.getDocumentGenerators().coverSheet,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          index: 2,
+        }),
+      }),
+    );
     expect(getContactPrimary(updatedCase)).toMatchObject({
       address1: '453 Electric Ave',
       city: 'Philadelphia',
