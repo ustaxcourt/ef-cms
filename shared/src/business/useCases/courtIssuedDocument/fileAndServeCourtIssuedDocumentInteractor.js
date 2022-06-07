@@ -2,6 +2,10 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_SECTION,
+} = require('../../entities/EntityConstants');
+const {
   createISODateString,
   formatDateString,
 } = require('../../utilities/DateHandler');
@@ -15,7 +19,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
@@ -55,7 +58,20 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const singleCaseOperation = docketNumbers.length === 1;
+  const eventCodeCanOnlyBeServedOnSubjectCase =
+    ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode);
+  const consolidateCaseDuplicateDocketEntries = applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag:
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES.key,
+    });
+  if (
+    eventCodeCanOnlyBeServedOnSubjectCase ||
+    !consolidateCaseDuplicateDocketEntries
+  ) {
+    docketNumbers = [subjectCaseDocketNumber];
+  }
 
   const subjectCase = await applicationContext
     .getPersistenceGateway()
@@ -133,7 +149,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
         form,
         numberOfPages,
         originalSubjectDocketEntry,
-        singleCaseOperation,
         user,
       }),
     );
@@ -202,7 +217,6 @@ const fileDocumentOnOneCase = async ({
   form,
   numberOfPages,
   originalSubjectDocketEntry,
-  singleCaseOperation,
   user,
 }) => {
   // Serve on all parties
@@ -304,12 +318,7 @@ const fileDocumentOnOneCase = async ({
       caseEntity,
     });
 
-  // only allow closing the case if a `Entered and Served` document is being filed on ONE case
-  const shouldCloseCase =
-    singleCaseOperation &&
-    ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode);
-
-  if (shouldCloseCase) {
+  if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
     await closeCaseAndUpdatedTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity,

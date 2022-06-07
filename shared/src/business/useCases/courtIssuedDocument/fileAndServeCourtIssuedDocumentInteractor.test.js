@@ -598,6 +598,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           .serveDocumentAndGetPaperServicePdf,
       ).toHaveBeenCalled();
       expect(result.pdfUrl).toBe(mockPdfUrl);
+      //TODO: expect that the docket entry was added to all the cases (e.g. a mock was called)
+      //TODO: expect that each docket entry has the correct docketNumber and the correct index
+      //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case for success
     });
 
     it('should handle errors in the try block well', async () => {
@@ -649,4 +652,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       expect(result.pdfUrl).toBe(mockPdfUrl);
     });
   });
+
+  //TODO: pass in an ODJ with multiple cases, confirm that some close case function is only called once (for the lead case only) and (that the non-lead cases don't have that docket entry, maybe?)
+  //TODO: confirm that "add work item"/"add to outbox" was called for each case
+  //TODO: assert that the "save PDF to S3" only being called once (make sure the it description describes why we care)
+  //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case when there is an exception
+  //TODO: assert that we only process one case when we pass in multiple cases and use an "enter and served" event code
+  //TODO: assert that we only process one case when the feature flag is disabled
 });
