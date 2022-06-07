@@ -46,7 +46,7 @@ describe('processMessageEntries', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should retrieve the latest message when the message has not been replied to', async () => {
+  it('should retrieve the latest message from persistence when the message has not been replied to', async () => {
     applicationContext
       .getPersistenceGateway()
       .getMessageById.mockReturnValue(mockRepliedToMessageRecord);
@@ -76,7 +76,7 @@ describe('processMessageEntries', () => {
     });
   });
 
-  it('should not retrieve the latest message when the messageNewImage.isRepliedTo is true', async () => {
+  it('should not retrieve the latest message from persistence when the message has been replied to', async () => {
     await processMessageEntries({
       applicationContext,
       messageRecords: [mockRepliedToMessageRecord],
@@ -87,7 +87,7 @@ describe('processMessageEntries', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should not return any data to be indexed when the messageNewImage.isRepliedTo is false and the message from dynamo has isRepliedTo = true', async () => {
+  it('should index the message when messageNewImage.isRepliedTo is false and the message from dynamo has isRepliedTo = true', async () => {
     applicationContext.getPersistenceGateway().getMessageById.mockReturnValue({
       isRepliedTo: true,
     });
@@ -157,7 +157,7 @@ describe('processMessageEntries', () => {
     );
   });
 
-  it('should index the provided message record', async () => {
+  it('should index the provided message record with a mapping to the case it belongs to when the messageNewImage has repliedTo=true', async () => {
     await processMessageEntries({
       applicationContext,
       messageRecords: [mockRepliedToMessageRecord],
@@ -166,7 +166,29 @@ describe('processMessageEntries', () => {
     expect(
       applicationContext.getPersistenceGateway().bulkIndexRecords.mock
         .calls[0][0].records,
-    ).toEqual([mockRepliedToMessageRecord]);
+    ).toEqual([
+      {
+        dynamodb: {
+          ...mockRepliedToMessageRecord.dynamodb,
+          Keys: {
+            pk: {
+              S: 'case|123-45',
+            },
+            sk: {
+              S: 'message|229f79aa-22d1-426e-98e2-5d9f2af472b6',
+            },
+          },
+          NewImage: {
+            ...mockRepliedToMessageRecord.dynamodb.NewImage,
+            case_relations: {
+              name: 'message',
+              parent: 'case|123-45_case|123-45|mapping',
+            },
+          },
+        },
+        eventName: 'MODIFY',
+      },
+    ]);
   });
 
   it('should log an error and throw an exception when bulk index returns failed records', async () => {

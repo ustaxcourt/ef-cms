@@ -1,23 +1,15 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
-import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  ASCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-  DESCENDING,
-} = applicationContext.getConstants();
-
 export const MessagesIndividualOutbox = connect(
   {
     caseStatuses: state.formattedMessages.caseStatuses,
+    constants: state.constants,
     formattedMessages: state.formattedMessages.messages,
     hasMessages: state.formattedMessages.hasMessages,
     screenMetadata: state.screenMetadata,
@@ -30,6 +22,7 @@ export const MessagesIndividualOutbox = connect(
   },
   function MessagesIndividualOutbox({
     caseStatuses,
+    constants,
     formattedMessages,
     hasMessages,
     screenMetadata,
@@ -70,12 +63,13 @@ export const MessagesIndividualOutbox = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={DESCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
@@ -91,9 +85,9 @@ export const MessagesIndividualOutbox = connect(
               {showSortableHeaders && (
                 <th className="small">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={DESCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="createdAt"
                     title="Sent"
@@ -105,9 +99,9 @@ export const MessagesIndividualOutbox = connect(
               {showSortableHeaders && (
                 <th>
                   <SortableColumnHeaderButton
-                    ascText={ALPHABETICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={ALPHABETICALLY_DESCENDING}
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="subject"
                     title="Message"
@@ -127,6 +121,22 @@ export const MessagesIndividualOutbox = connect(
               <tbody key={`message-${message.messageId}`}>
                 <tr>
                   <td aria-hidden="true" className="focus-toggle" />
+                  <td className="consolidated-case-column">
+                    {message.inConsolidatedGroup && (
+                      <span className="fa-layers fa-fw">
+                        <Icon
+                          aria-label={message.consolidatedIconTooltipText}
+                          className="fa-icon-blue"
+                          icon="copy"
+                        />
+                        {message.inLeadCase && (
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </td>
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
                   </td>

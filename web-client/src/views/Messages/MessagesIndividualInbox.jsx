@@ -2,24 +2,15 @@ import { Button } from '../../ustc-ui/Button/Button';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
-import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
-const {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  ASCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-  DESCENDING,
-} = applicationContext.getConstants();
-
 export const MessagesIndividualInbox = connect(
   {
     caseStatuses: state.formattedMessages.caseStatuses,
+    constants: state.constants,
     formattedMessages: state.formattedMessages.messages,
     fromSections: state.formattedMessages.fromSections,
     fromUsers: state.formattedMessages.fromUsers,
@@ -32,6 +23,7 @@ export const MessagesIndividualInbox = connect(
   },
   function MessagesIndividualInbox({
     caseStatuses,
+    constants,
     formattedMessages,
     fromSections,
     fromUsers,
@@ -72,12 +64,13 @@ export const MessagesIndividualInbox = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={DESCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
@@ -93,9 +86,9 @@ export const MessagesIndividualInbox = connect(
               {showSortableHeaders && (
                 <th className="medium">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="createdAt"
                     title="Received"
@@ -108,9 +101,9 @@ export const MessagesIndividualInbox = connect(
               {showSortableHeaders && (
                 <th>
                   <SortableColumnHeaderButton
-                    ascText={ALPHABETICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={ALPHABETICALLY_DESCENDING}
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
                     hasRows={hasMessages}
                     sortField="subject"
                     title="Message"
@@ -126,12 +119,26 @@ export const MessagesIndividualInbox = connect(
             </tr>
           </thead>
           {formattedMessages.map(message => {
-            const unreadClass = message.isRead ? '' : 'text-bold';
-
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
                   <td aria-hidden="true" className="focus-toggle" />
+                  <td className="consolidated-case-column">
+                    {message.inConsolidatedGroup && (
+                      <span className="fa-layers fa-fw">
+                        <Icon
+                          aria-label={message.consolidatedIconTooltipText}
+                          className="fa-icon-blue"
+                          icon="copy"
+                        />
+                        {message.inLeadCase && (
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </td>
                   <td className="message-queue-row small">
                     {message.docketNumberWithSuffix}
                   </td>
@@ -154,7 +161,10 @@ export const MessagesIndividualInbox = connect(
                     <div className="message-document-title">
                       <Button
                         link
-                        className={classNames('padding-0', unreadClass)}
+                        className={classNames(
+                          'padding-0',
+                          message.isRead ? '' : 'text-bold',
+                        )}
                         href={message.messageDetailLink}
                       >
                         {message.subject}
