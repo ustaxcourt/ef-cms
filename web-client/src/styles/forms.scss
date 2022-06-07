@@ -548,3 +548,8 @@ label.ustc-upload {
     margin-bottom: 0;
   }
 }
+
+.usa-input.grey-placeholder::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: gray;
+  opacity: 1; /* Firefox */
+}
