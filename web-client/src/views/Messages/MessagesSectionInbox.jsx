@@ -83,6 +83,7 @@ export const MessagesSectionInbox = connect(
             <MessageInboxRow
               caseStatus={message.caseStatus}
               caseTitle={message.caseTitle}
+              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               createdAtFormatted={message.createdAtFormatted}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
@@ -107,6 +108,7 @@ export const MessagesSectionInbox = connect(
 const MessageInboxRow = React.memo(function MessageInboxRow({
   caseStatus,
   caseTitle,
+  consolidatedIconTooltipText,
   createdAtFormatted,
   docketNumberWithSuffix,
   from,
@@ -126,7 +128,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
           {inConsolidatedGroup && (
             <span className="fa-layers fa-fw">
               <Icon
-                aria-label="consolidated case"
+                aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
                 icon="copy"
               />
