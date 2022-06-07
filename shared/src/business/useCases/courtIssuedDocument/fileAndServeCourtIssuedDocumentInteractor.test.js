@@ -167,6 +167,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         Body: testPdfDoc,
       }),
     });
+
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockReturnValue(true);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -579,7 +583,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           };
         });
 
-      //TODO: pass in subjectCaseDocketNumber?
       const result = await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         {
@@ -590,6 +593,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
             MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
           ],
           form: caseRecord.docketEntries[0],
+          subjectCaseDocketNumber:
+            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
         },
       );
 
@@ -599,6 +604,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       ).toHaveBeenCalled();
       expect(result.pdfUrl).toBe(mockPdfUrl);
       //TODO: expect that the docket entry was added to all the cases (e.g. a mock was called)
+      const updatedCaseEntities =
+        applicationContext.getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf.mock.calls[0][0].caseEntities;
+      expect(updatedCaseEntities.length).toEqual(3);
       //TODO: expect that each docket entry has the correct docketNumber and the correct index
       //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case for success
     });
