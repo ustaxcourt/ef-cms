@@ -2,7 +2,7 @@ const AWS = require('aws-sdk');
 
 exports.formatDocketEntryResult = ({ caseMap, hit, sourceUnmarshalled }) => {
   const casePk = hit['_id'].split('_')[0];
-  const docketNumber = casePk.replace('case|', ''); // TODO figure out why docket number isn't always on a DocketEntry
+  const docketNumber = casePk.replace('case|', '');
 
   let foundCase = caseMap[docketNumber];
 
