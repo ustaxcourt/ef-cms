@@ -80,6 +80,7 @@ export const SessionInformationForm = connect(
             }
             id="start-date"
             label="Start date"
+            titleHintText="(MM/DD/YYYY)"
             values={form}
             onBlur={validateTrialSessionSequence}
             onChange={updateTrialSessionFormDataSequence}
@@ -172,6 +173,21 @@ export const SessionInformationForm = connect(
               </fieldset>
             </FormGroup>
           )}
+
+          <DateInput
+            errorText={validationErrors.estimatedEndDate}
+            hintText={
+              addTrialSessionInformationHelper.isStandaloneSession
+                ? 'All standalone remote sessions begin at 1 p.m. ET.'
+                : undefined
+            }
+            id="estimated-end-date"
+            label="Estimated End Date"
+            optional="true"
+            values={form}
+            onBlur={validateTrialSessionSequence}
+            onChange={updateTrialSessionFormDataSequence}
+          />
 
           {formattedTrialSessions.showSwingSessionOption &&
             !addTrialSessionInformationHelper.isStandaloneSession && (
