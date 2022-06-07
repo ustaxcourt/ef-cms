@@ -28,6 +28,7 @@ const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { docketClerkUser } = require('../../../test/mockUsers');
 const { v4: uuidv4 } = require('uuid');
+const {MOCK_DOCUMENTS} = require("../../../test/mockDocuments");
 
 jest.mock('./addServedStampToDocument', () => ({
   addServedStampToDocument: jest.fn(),
@@ -575,6 +576,14 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   describe('consolidated cases', () => {
     it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
       const { docketEntries } = caseRecord;
+      const consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
+        return {
+          ...docketEntry,
+          docketNumber:
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          docketEntryId: uuidv4(),
+        };
+      });
       const updateDocketEntrySpy = jest.spyOn(
         Case.prototype,
         'updateDocketEntry',
@@ -591,13 +600,13 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         .mockImplementationOnce(() => {
           return {
             ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-            docketEntries: [...docketEntries],
+            docketEntries: consolidatedCase1DocketEntries,
           };
         })
         .mockImplementationOnce(() => {
           return {
             ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
-            docketEntries: [...docketEntries],
+            docketEntries: [],
           };
         });
 
@@ -630,22 +639,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         secondDocketEntry,
         thirdDocketEntry,
       ];
-      console.log('savedDocketEntries', savedDocketEntries);
-      const updatedCaseEntities =
-        applicationContext.getUseCaseHelpers()
-          .serveDocumentAndGetPaperServicePdf.mock.calls[0][0].caseEntities;
-
-      const leadCaseEntity = updatedCaseEntities.find(
-        caseEntity =>
-          caseEntity.docketNumber ===
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      );
-      console.log('leadCaseEntity', leadCaseEntity);
-      const newlyServedDocketEntry = leadCaseEntity.docketEntries.find(
-        docketEntry =>
-          docketEntry.docketEntryId ===
-          caseRecord.docketEntries[0].docketEntryId,
-      );
 
       expect(newlyServedDocketEntry).toEqual(
         expect.objectContaining({
