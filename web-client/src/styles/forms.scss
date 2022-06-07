@@ -23,11 +23,8 @@
 }
 
 .ustc-time-of-day--am-pm {
-  position: absolute;
-  bottom: 0;
-  width: 9em;
-  margin-right: 1rem;
-  margin-bottom: 0;
+  position: relative;
+  top: 10px;
 }
 
 label.usa-label-display {

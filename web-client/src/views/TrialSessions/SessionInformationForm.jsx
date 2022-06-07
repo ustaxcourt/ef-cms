@@ -72,7 +72,7 @@ export const SessionInformationForm = connect(
             )}
 
           <div className="grid-row grid-gap-6">
-            <div className="grid-col-4">
+            <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
               <DateInput
                 errorText={validationErrors.startDate}
                 hintText={
@@ -82,6 +82,8 @@ export const SessionInformationForm = connect(
                 }
                 id="start-date"
                 label="Start date"
+                placeholder="MM/DD/YYYY"
+                showDateHint={false}
                 titleHintText="(MM/DD/YYYY)"
                 values={form}
                 onBlur={validateTrialSessionSequence}
@@ -90,54 +92,52 @@ export const SessionInformationForm = connect(
             </div>
 
             {!addTrialSessionInformationHelper.isStandaloneSession && (
-              <div className="grid-col-4">
+              <div className="grid-col-12 tablet:grid-col-9">
                 <FormGroup errorText={validationErrors.startTime}>
                   <fieldset className="start-time usa-fieldset margin-bottom-0">
                     <legend className="usa-legend" id="start-time-legend">
                       Time <span className="usa-hint">(optional)</span>
                     </legend>
-                    <div className="grid-row grid-gap-6">
-                      <div className="grid-col-3 ustc-time-of-day">
-                        <div className="usa-form-group ustc-time-of-day--hour">
-                          <input
-                            aria-describedby="start-time-legend"
-                            aria-label="hour"
-                            className="usa-input usa-input-inline"
-                            id="start-time-hours"
-                            max="12"
-                            min="1"
-                            name="startTimeHours"
-                            type="number"
-                            value={form.startTimeHours || ''}
-                            onChange={e => {
-                              updateTrialSessionFormDataSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                        </div>
-                        <div className="usa-form-group ustc-time-of-day--minute">
-                          <input
-                            aria-describedby="start-time-legend"
-                            aria-label="minutes"
-                            className="usa-input usa-input-inline"
-                            id="start-time-minutes"
-                            max="59"
-                            min="0"
-                            name="startTimeMinutes"
-                            type="number"
-                            value={form.startTimeMinutes || ''}
-                            onChange={e => {
-                              updateTrialSessionFormDataSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                        </div>
+                    <div className="ustc-time-of-day">
+                      <div className="usa-form-group ustc-time-of-day--hour">
+                        <input
+                          aria-describedby="start-time-legend"
+                          aria-label="hour"
+                          className="usa-input usa-input-inline"
+                          id="start-time-hours"
+                          max="12"
+                          min="1"
+                          name="startTimeHours"
+                          type="number"
+                          value={form.startTimeHours || ''}
+                          onChange={e => {
+                            updateTrialSessionFormDataSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        />
                       </div>
-                      <div className="grid-col-6 ustc-time-of-day">
+                      <div className="usa-form-group ustc-time-of-day--minute">
+                        <input
+                          aria-describedby="start-time-legend"
+                          aria-label="minutes"
+                          className="usa-input usa-input-inline"
+                          id="start-time-minutes"
+                          max="59"
+                          min="0"
+                          name="startTimeMinutes"
+                          type="number"
+                          value={form.startTimeMinutes || ''}
+                          onChange={e => {
+                            updateTrialSessionFormDataSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                      </div>
+                      <div className="ustc-time-of-day">
                         <div className="ustc-time-of-day--am-pm margin-left-2">
                           {['am', 'pm'].map(option => (
                             <div
@@ -180,20 +180,26 @@ export const SessionInformationForm = connect(
             )}
           </div>
 
-          <DateInput
-            errorText={validationErrors.estimatedEndDate}
-            hintText={
-              addTrialSessionInformationHelper.isStandaloneSession
-                ? 'All standalone remote sessions begin at 1 p.m. ET.'
-                : undefined
-            }
-            id="estimated-end-date"
-            label="Estimated End Date"
-            optional="true"
-            values={form}
-            onBlur={validateTrialSessionSequence}
-            onChange={updateTrialSessionFormDataSequence}
-          />
+          <div className="grid-row grid-gap-6">
+            <div className="grid-col-12 tablet:grid-col-6 desktop:grid-col-3">
+              <DateInput
+                errorText={validationErrors.estimatedEndDate}
+                hintText={
+                  addTrialSessionInformationHelper.isStandaloneSession
+                    ? 'All standalone remote sessions begin at 1 p.m. ET.'
+                    : undefined
+                }
+                id="estimated-end-date"
+                label="Estimated End Date"
+                optional="true"
+                placeholder="MM/DD/YYYY"
+                showDateHint={false}
+                values={form}
+                onBlur={validateTrialSessionSequence}
+                onChange={updateTrialSessionFormDataSequence}
+              />
+            </div>
+          </div>
 
           {formattedTrialSessions.showSwingSessionOption &&
             !addTrialSessionInformationHelper.isStandaloneSession && (

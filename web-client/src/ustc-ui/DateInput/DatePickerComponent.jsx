@@ -6,7 +6,6 @@ import datePicker from '../../../../node_modules/uswds/src/js/components/date-pi
 export const DatePickerComponent = ({
   className,
   errorText,
-  hideDateHint = true,
   hideLegend,
   hintText,
   label,
@@ -15,6 +14,8 @@ export const DatePickerComponent = ({
   onBlur,
   onChange,
   optional,
+  placeholder,
+  showDateHint = true,
   titleHintText,
   values,
 }) => {
@@ -99,7 +100,7 @@ export const DatePickerComponent = ({
         {label} {optional && <span className="usa-hint">(optional)</span>}
         {titleHintText && <span className="usa-hint">{titleHintText}</span>}
       </label>
-      {!hideDateHint && (
+      {showDateHint && (
         <div className="usa-hint" id={`${name}-date-hint`}>
           MM/DD/YYYY
         </div>
@@ -110,7 +111,7 @@ export const DatePickerComponent = ({
           className="usa-input grey-placeholder"
           id={`${name}-date`}
           name={`${name}-date`}
-          placeholder="MM/DD/YYYY"
+          placeholder={placeholder}
           ref={inputRef}
           type="text"
         />
