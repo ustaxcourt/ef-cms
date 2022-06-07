@@ -8,61 +8,49 @@ import React from 'react';
 
 export const MessagesSectionOutbox = connect(
   {
-    caseStatuses: state.formattedMessages.caseStatuses,
     constants: state.constants,
-    formattedMessages: state.formattedMessages.messages,
-    fromUsers: state.formattedMessages.fromUsers,
-    hasMessages: state.formattedMessages.hasMessages,
+    formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
-    toSections: state.formattedMessages.toSections,
-    toUsers: state.formattedMessages.toUsers,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionOutbox({
-    caseStatuses,
     constants,
     formattedMessages,
-    fromUsers,
-    hasMessages,
     screenMetadata,
-    showFilters,
     showSortableHeaders,
     sortMessagesSequence,
-    toSections,
-    toUsers,
     updateScreenMetadataSequence,
   }) {
     return (
       <>
-        {showFilters && (
+        {formattedMessages.showFilters && (
           <TableFilters
             filters={[
               {
                 isSelected: screenMetadata.caseStatus,
                 key: 'caseStatus',
                 label: 'Case Status',
-                options: caseStatuses,
+                options: formattedMessages.caseStatuses,
               },
               {
                 isSelected: screenMetadata.toUser,
                 key: 'toUser',
                 label: 'To',
-                options: toUsers,
+                options: formattedMessages.toUsers,
               },
               {
                 isSelected: screenMetadata.fromUser,
                 key: 'fromUser',
                 label: 'From',
-                options: fromUsers,
+                options: formattedMessages.fromUsers,
               },
               {
                 isSelected: screenMetadata.toSection,
                 key: 'toSection',
                 label: 'Section',
-                options: toSections,
+                options: formattedMessages.toSections,
               },
             ]}
             onSelect={updateScreenMetadataSequence}
@@ -78,7 +66,7 @@ export const MessagesSectionOutbox = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -96,7 +84,7 @@ export const MessagesSectionOutbox = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
                     title="Sent"
                     onClickSequence={sortMessagesSequence}
@@ -110,7 +98,7 @@ export const MessagesSectionOutbox = connect(
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Message"
                     onClickSequence={sortMessagesSequence}
@@ -125,10 +113,11 @@ export const MessagesSectionOutbox = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => (
+          {formattedMessages.messages.map(message => (
             <MessageOutboxRow
               caseStatus={message.caseStatus}
               caseTitle={message.caseTitle}
+              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               createdAtFormatted={message.createdAtFormatted}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
@@ -144,7 +133,7 @@ export const MessagesSectionOutbox = connect(
             />
           ))}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
@@ -153,6 +142,7 @@ export const MessagesSectionOutbox = connect(
 const MessageOutboxRow = React.memo(function MessageOutboxRow({
   caseStatus,
   caseTitle,
+  consolidatedIconTooltipText,
   createdAtFormatted,
   docketNumberWithSuffix,
   from,
@@ -172,7 +162,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
           {inConsolidatedGroup && (
             <span className="fa-layers fa-fw">
               <Icon
-                aria-label="consolidated case"
+                aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
                 icon="copy"
               />

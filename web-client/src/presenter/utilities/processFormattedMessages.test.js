@@ -509,6 +509,42 @@ describe('processFormattedMessages', () => {
         expect(result.messages[0].inLeadCase).toBeFalsy();
       });
     });
+
+    describe('consolidatedIconTooltipText', () => {
+      it('should be set to "Lead case" when it is the lead case in a consolidated group', () => {
+        const result = getFormattedMessages({
+          applicationContext,
+          messages: [
+            {
+              ...mockMessage,
+              docketNumber: '123-45',
+              leadDocketNumber: '123-45',
+            },
+          ],
+        });
+
+        expect(result.messages[0].consolidatedIconTooltipText).toEqual(
+          'Lead case',
+        );
+      });
+
+      it('should be set to "Consolidated case" when it is in a consolidated group', () => {
+        const result = getFormattedMessages({
+          applicationContext,
+          messages: [
+            {
+              ...mockMessage,
+              docketNumber: '123-45',
+              leadDocketNumber: '443-45',
+            },
+          ],
+        });
+
+        expect(result.messages[0].consolidatedIconTooltipText).toEqual(
+          'Consolidated case',
+        );
+      });
+    });
   });
 
   describe('applyFiltersToCompletedMessages', () => {

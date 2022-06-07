@@ -8,37 +8,31 @@ import React from 'react';
 
 export const MessagesSectionCompleted = connect(
   {
-    completedByUsers: state.formattedMessages.completedByUsers,
-    completedMessages: state.formattedMessages.completedMessages,
     constants: state.constants,
-    hasMessages: state.formattedMessages.hasMessages,
+    formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionCompleted({
-    completedByUsers,
-    completedMessages,
     constants,
-    hasMessages,
+    formattedMessages,
     screenMetadata,
-    showFilters,
     showSortableHeaders,
     sortMessagesSequence,
     updateScreenMetadataSequence,
   }) {
     return (
       <>
-        {showFilters && (
+        {formattedMessages.showFilters && (
           <TableFilters
             filters={[
               {
                 isSelected: screenMetadata.completedBy,
                 key: 'completedBy',
                 label: 'Completed By',
-                options: completedByUsers,
+                options: formattedMessages.completedByUsers,
               },
             ]}
             onSelect={updateScreenMetadataSequence}
@@ -54,7 +48,7 @@ export const MessagesSectionCompleted = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -72,7 +66,7 @@ export const MessagesSectionCompleted = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="completedAt"
                     title="Completed"
                     onClickSequence={sortMessagesSequence}
@@ -86,7 +80,7 @@ export const MessagesSectionCompleted = connect(
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Last Message"
                     onClickSequence={sortMessagesSequence}
@@ -99,12 +93,13 @@ export const MessagesSectionCompleted = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {completedMessages.map(message => (
+          {formattedMessages.completedMessages.map(message => (
             <CompletedMessageRow
               completedAtFormatted={message.completedAtFormatted}
               completedBy={message.completedBy}
               completedBySection={message.completedBySection}
               completedMessage={message.completedMessage}
+              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               inConsolidatedGroup={message.inConsolidatedGroup}
               inLeadCase={message.inLeadCase}
@@ -115,7 +110,7 @@ export const MessagesSectionCompleted = connect(
             />
           ))}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
@@ -126,6 +121,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   completedBy,
   completedBySection,
   completedMessage,
+  consolidatedIconTooltipText,
   docketNumberWithSuffix,
   inConsolidatedGroup,
   inLeadCase,
@@ -141,7 +137,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
           {inConsolidatedGroup && (
             <span className="fa-layers fa-fw">
               <Icon
-                aria-label="consolidated case"
+                aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
                 icon="copy"
               />
