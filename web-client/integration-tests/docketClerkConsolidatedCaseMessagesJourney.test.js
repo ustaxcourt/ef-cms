@@ -27,20 +27,22 @@ import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsRe
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
-describe('messages journey', () => {
+describe('Docket clerk consolidated case messages journey', () => {
   const cerebralTest = setupTest();
 
   beforeAll(() => {
     jest.setTimeout(40000);
-    jest.spyOn(
-      cerebralTest.applicationContext.getUseCases(),
-      'createMessageInteractor',
-    );
   });
 
   afterAll(() => {
     cerebralTest.closeSocket();
   });
+
+  // create message on 111-19
+  // create message on 112-19
+
+  // verify icon on 111-19 message inbox
+  // verify icon on 112-19 message inbox
 
   loginAs(cerebralTest, 'petitioner@example.com');
   it('Create test case to send messages', async () => {
