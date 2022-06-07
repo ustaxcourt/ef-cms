@@ -27,8 +27,8 @@ const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { docketClerkUser } = require('../../../test/mockUsers');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { v4: uuidv4 } = require('uuid');
-const {MOCK_DOCUMENTS} = require("../../../test/mockDocuments");
 
 jest.mock('./addServedStampToDocument', () => ({
   addServedStampToDocument: jest.fn(),
@@ -579,9 +579,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       const consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
         return {
           ...docketEntry,
+          docketEntryId: uuidv4(),
           docketNumber:
             MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          docketEntryId: uuidv4(),
         };
       });
       const updateDocketEntrySpy = jest.spyOn(
