@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -8,20 +9,53 @@ import React from 'react';
 export const MessagesSectionOutbox = connect(
   {
     constants: state.constants,
-    formattedMessages: state.formattedMessages.messages,
-    hasMessages: state.formattedMessages.hasMessages,
+    formattedMessages: state.formattedMessages,
+    screenMetadata: state.screenMetadata,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionOutbox({
     constants,
     formattedMessages,
-    hasMessages,
+    screenMetadata,
     showSortableHeaders,
     sortMessagesSequence,
+    updateScreenMetadataSequence,
   }) {
     return (
       <>
+        {formattedMessages.showFilters && (
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.caseStatus,
+                key: 'caseStatus',
+                label: 'Case Status',
+                options: formattedMessages.caseStatuses,
+              },
+              {
+                isSelected: screenMetadata.toUser,
+                key: 'toUser',
+                label: 'To',
+                options: formattedMessages.toUsers,
+              },
+              {
+                isSelected: screenMetadata.fromUser,
+                key: 'fromUser',
+                label: 'From',
+                options: formattedMessages.fromUsers,
+              },
+              {
+                isSelected: screenMetadata.toSection,
+                key: 'toSection',
+                label: 'Section',
+                options: formattedMessages.toSections,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
@@ -32,7 +66,7 @@ export const MessagesSectionOutbox = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -50,7 +84,7 @@ export const MessagesSectionOutbox = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
                     title="Sent"
                     onClickSequence={sortMessagesSequence}
@@ -64,7 +98,7 @@ export const MessagesSectionOutbox = connect(
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Message"
                     onClickSequence={sortMessagesSequence}
@@ -79,7 +113,7 @@ export const MessagesSectionOutbox = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => (
+          {formattedMessages.messages.map(message => (
             <MessageOutboxRow
               caseStatus={message.caseStatus}
               caseTitle={message.caseTitle}
@@ -99,7 +133,7 @@ export const MessagesSectionOutbox = connect(
             />
           ))}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },

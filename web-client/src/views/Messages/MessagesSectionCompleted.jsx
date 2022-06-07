@@ -1,27 +1,44 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const MessagesSectionCompleted = connect(
   {
-    completedMessages: state.formattedMessages.completedMessages,
     constants: state.constants,
-    hasMessages: state.formattedMessages.hasMessages,
+    formattedMessages: state.formattedMessages,
+    screenMetadata: state.screenMetadata,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionCompleted({
-    completedMessages,
     constants,
-    hasMessages,
+    formattedMessages,
+    screenMetadata,
     showSortableHeaders,
     sortMessagesSequence,
+    updateScreenMetadataSequence,
   }) {
     return (
       <>
+        {formattedMessages.showFilters && (
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.completedBy,
+                key: 'completedBy',
+                label: 'Completed By',
+                options: formattedMessages.completedByUsers,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
+
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
@@ -32,7 +49,7 @@ export const MessagesSectionCompleted = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -50,7 +67,7 @@ export const MessagesSectionCompleted = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="completedAt"
                     title="Completed"
                     onClickSequence={sortMessagesSequence}
@@ -64,7 +81,7 @@ export const MessagesSectionCompleted = connect(
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Last Message"
                     onClickSequence={sortMessagesSequence}
@@ -77,7 +94,7 @@ export const MessagesSectionCompleted = connect(
               <th>Section</th>
             </tr>
           </thead>
-          {completedMessages.map(message => (
+          {formattedMessages.completedMessages.map(message => (
             <CompletedMessageRow
               completedAtFormatted={message.completedAtFormatted}
               completedBy={message.completedBy}
@@ -94,7 +111,7 @@ export const MessagesSectionCompleted = connect(
             />
           ))}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
