@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -16,19 +17,41 @@ const {
 
 export const MessagesSectionCompleted = connect(
   {
+    completedByUsers: state.formattedMessages.completedByUsers,
     completedMessages: state.formattedMessages.completedMessages,
     hasMessages: state.formattedMessages.hasMessages,
+    screenMetadata: state.screenMetadata,
+    showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionCompleted({
+    completedByUsers,
     completedMessages,
     hasMessages,
+    screenMetadata,
+    showFilters,
     showSortableHeaders,
     sortMessagesSequence,
+    updateScreenMetadataSequence,
   }) {
     return (
       <>
+        {showFilters && (
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.completedBy,
+                key: 'completedBy',
+                label: 'Completed By',
+                options: completedByUsers,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
+
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
