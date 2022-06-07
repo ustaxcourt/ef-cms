@@ -607,7 +607,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       const updatedCaseEntities =
         applicationContext.getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf.mock.calls[0][0].caseEntities;
-      expect(updatedCaseEntities.length).toEqual(3);
+      expect(updatedCaseEntities[0]).toMatchObject(expect.objectContaining({docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber, index:MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries.length}));
       //TODO: expect that each docket entry has the correct docketNumber and the correct index
       //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case for success
     });
