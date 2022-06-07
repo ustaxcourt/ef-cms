@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -16,19 +17,64 @@ const {
 
 export const MessagesSectionOutbox = connect(
   {
+    caseStatuses: state.formattedMessages.caseStatuses,
     formattedMessages: state.formattedMessages.messages,
+    fromUsers: state.formattedMessages.fromUsers,
     hasMessages: state.formattedMessages.hasMessages,
+    screenMetadata: state.screenMetadata,
+    showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
+    toSections: state.formattedMessages.toSections,
+    toUsers: state.formattedMessages.toUsers,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionOutbox({
+    caseStatuses,
     formattedMessages,
+    fromUsers,
     hasMessages,
+    screenMetadata,
+    showFilters,
     showSortableHeaders,
     sortMessagesSequence,
+    toSections,
+    toUsers,
+    updateScreenMetadataSequence,
   }) {
     return (
       <>
+        {showFilters && (
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.caseStatus,
+                key: 'caseStatus',
+                label: 'Case Status',
+                options: caseStatuses,
+              },
+              {
+                isSelected: screenMetadata.toUser,
+                key: 'toUser',
+                label: 'To',
+                options: toUsers,
+              },
+              {
+                isSelected: screenMetadata.fromUser,
+                key: 'fromUser',
+                label: 'From',
+                options: fromUsers,
+              },
+              {
+                isSelected: screenMetadata.toSection,
+                key: 'toSection',
+                label: 'Section',
+                options: toSections,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
