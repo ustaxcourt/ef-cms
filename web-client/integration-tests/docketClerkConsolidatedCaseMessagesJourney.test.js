@@ -22,9 +22,8 @@ describe('Docket clerk consolidated case messages journey', () => {
     docketNumber: leadCaseDocketNumber,
   });
 
-  cerebralTest.docketNumber = consolidatedCaseDocketNumber;
   createNewMessageOnCase(cerebralTest, {
-    docketNumber: leadCaseDocketNumber,
+    docketNumber: consolidatedCaseDocketNumber,
     preserveCreatedMessage: false,
   });
   petitionsClerkVerifiesConsolidatedCaseIndicatorSentMessagesBox(cerebralTest, {
