@@ -575,7 +575,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   describe('consolidated cases', () => {
     it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
-      const { docketEntries } = caseRecord;
       const consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
         return {
           ...docketEntry,
@@ -584,6 +583,16 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
             MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         };
       });
+
+      const leadCaseDocketEntries = caseRecord.docketEntries.map(
+        docketEntry => {
+          return {
+            ...docketEntry,
+            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          };
+        },
+      );
+
       const updateDocketEntrySpy = jest.spyOn(
         Case.prototype,
         'updateDocketEntry',
@@ -594,7 +603,13 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         .getCaseByDocketNumber.mockImplementationOnce(() => {
           return {
             ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            docketEntries: [...docketEntries],
+            docketEntries: leadCaseDocketEntries,
+          };
+        })
+        .mockImplementationOnce(() => {
+          return {
+            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+            docketEntries: leadCaseDocketEntries,
           };
         })
         .mockImplementationOnce(() => {
@@ -613,13 +628,13 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       const result = await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         {
-          docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+          docketEntryId: leadCaseDocketEntries[0].docketEntryId,
           docketNumbers: [
             MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
             MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
             MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
           ],
-          form: caseRecord.docketEntries[0],
+          form: leadCaseDocketEntries[0],
           subjectCaseDocketNumber:
             MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
         },
@@ -630,23 +645,26 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           .serveDocumentAndGetPaperServicePdf,
       ).toHaveBeenCalled();
       expect(result.pdfUrl).toBe(mockPdfUrl);
-      //TODO: expect that the docket entry was added to all the cases (e.g. a mock was called)
+
+      expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
+      expect(addDocketEntrySpy).toHaveBeenCalledTimes(2);
+
       const firstDocketEntry = updateDocketEntrySpy.mock.calls[0][0];
       const secondDocketEntry = addDocketEntrySpy.mock.calls[0][0];
       const thirdDocketEntry = addDocketEntrySpy.mock.calls[1][0];
-      const savedDocketEntries = [
-        firstDocketEntry,
-        secondDocketEntry,
-        thirdDocketEntry,
-      ];
 
-      expect(newlyServedDocketEntry).toEqual(
-        expect.objectContaining({
-          docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          index: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketEntries.length,
-        }),
+      expect(firstDocketEntry.docketNumber).toEqual(
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       );
-      //TODO: expect that each docket entry has the correct docketNumber and the correct index
+
+      expect(secondDocketEntry.docketNumber).toEqual(
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+      );
+
+      expect(thirdDocketEntry.docketNumber).toEqual(
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      );
+
       //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case for success
     });
 
