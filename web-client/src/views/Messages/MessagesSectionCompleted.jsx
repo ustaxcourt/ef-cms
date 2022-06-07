@@ -83,6 +83,7 @@ export const MessagesSectionCompleted = connect(
               completedBy={message.completedBy}
               completedBySection={message.completedBySection}
               completedMessage={message.completedMessage}
+              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               inConsolidatedGroup={message.inConsolidatedGroup}
               inLeadCase={message.inLeadCase}
@@ -104,6 +105,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   completedBy,
   completedBySection,
   completedMessage,
+  consolidatedIconTooltipText,
   docketNumberWithSuffix,
   inConsolidatedGroup,
   inLeadCase,
@@ -119,7 +121,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
           {inConsolidatedGroup && (
             <span className="fa-layers fa-fw">
               <Icon
-                aria-label="consolidated case"
+                aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
                 icon="copy"
               />
