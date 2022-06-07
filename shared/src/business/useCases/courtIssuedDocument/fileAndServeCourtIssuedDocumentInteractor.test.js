@@ -240,7 +240,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should set the number of pages present in the document to be served', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: caseRecord.docketEntries[0],
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: caseRecord.docketEntries[0],
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     const updatedCase =
@@ -262,7 +265,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: caseRecord.docketEntries[1],
+      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: caseRecord.docketEntries[1],
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     const updatedCase =
@@ -288,7 +294,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     expect(
@@ -304,7 +313,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     expect(
@@ -317,7 +329,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords if the order document has an event code that should close the case', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     expect(
@@ -336,7 +351,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     const result = await fileAndServeCourtIssuedDocumentInteractor(
       applicationContext,
       {
-        documentMeta: caseRecord.docketEntries[0],
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        form: caseRecord.docketEntries[0],
+        subjectCaseDocketNumber: caseRecord.docketNumber,
       },
     );
 
@@ -345,7 +363,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: caseRecord.docketEntries[1],
+      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: caseRecord.docketEntries[1],
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     expect(
@@ -364,7 +385,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: caseRecord.docketEntries[2],
+      docketEntryId: caseRecord.docketEntries[2].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: caseRecord.docketEntries[2],
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     const newlyFiledDocument =
@@ -378,7 +402,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should update the work item and set as completed when a work item previously existed on the docket entry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: mockDocketEntryWithWorkItem,
+      docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
+      docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
+      form: mockDocketEntryWithWorkItem,
+      subjectCaseDocketNumber: mockDocketEntryWithWorkItem.docketNumber,
     });
 
     expect(
@@ -390,13 +417,16 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should delete the draftOrderState from the docketEntry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: {
+      docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
+      docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
+      form: {
         ...mockDocketEntryWithWorkItem,
         draftOrderState: {
           documentContents: 'Some content',
           richText: 'some content',
         },
       },
+      subjectCaseDocketNumber: mockDocketEntryWithWorkItem.docketNumber,
     });
 
     const docketEntryToUpdate = applicationContext
@@ -411,10 +441,13 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        documentMeta: {
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        form: {
           ...caseRecord.docketEntries[0],
           eventCode: docketEntry.eventCode,
         },
+        subjectCaseDocketNumber: caseRecord.docketNumber,
       });
 
       const updatedCase =
@@ -431,7 +464,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should use original case caption to create case title when creating work item', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: caseRecord.docketEntries[1],
+      docketEntryId: caseRecord.docketEntries[1].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: caseRecord.docketEntries[1],
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     expect(
@@ -457,7 +493,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        documentMeta: caseRecord.docketEntries[0],
+        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        form: caseRecord.docketEntries[0],
+        subjectCaseDocketNumber: caseRecord.docketNumber,
       }),
     ).rejects.toThrow("servedPartiesCode' is not allowed to be empty");
   });
@@ -468,7 +507,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        documentMeta: docketEntry,
+        docketEntryId: docketEntry.docketEntryId,
+        docketNumbers: [docketEntry.docketNumber],
+        form: docketEntry,
+        subjectCaseDocketNumber: docketEntry.docketNumber,
       }),
     ).rejects.toThrow('Docket entry is already being served');
 
@@ -482,7 +524,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     docketEntry.isPendingService = false;
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: docketEntry,
+      docketEntryId: docketEntry.docketEntryId,
+      docketNumbers: [docketEntry.docketNumber],
+      form: docketEntry,
+      subjectCaseDocketNumber: docketEntry.docketNumber,
     });
 
     expect(
@@ -508,11 +553,14 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should include `Entered and Served` in the serviceStampType when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta: {
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: {
         ...caseRecord.docketEntries[0],
         documentType: 'Notice',
         eventCode: 'ODJ',
       },
+      subjectCaseDocketNumber: caseRecord.docketNumber,
     });
 
     expect(
