@@ -242,7 +242,7 @@ const fileDocumentOnOneCase = async ({
       isDraft: false,
       isFileAttached: true,
       isOnDocketRecord: true,
-      judge: form.judge,
+      judge: form.judge, //TODO: should this judge come from the caseEntity or the form?
       numberOfPages,
       scenario: form.scenario,
       serviceStamp: form.serviceStamp,
@@ -258,7 +258,7 @@ const fileDocumentOnOneCase = async ({
       {
         assigneeId: null,
         assigneeName: null,
-        associatedJudge: caseEntity.associatedJudge,
+        associatedJudge: caseEntity.associatedJudge, //TODO: should this associatedJudge come from the caseEntity or the form?
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
