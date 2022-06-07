@@ -574,12 +574,30 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   describe('consolidated cases', () => {
     it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
+      const { docketEntries } = caseRecord;
+      const updateDocketEntrySpy = jest.spyOn(
+        Case.prototype,
+        'updateDocketEntry',
+      );
+      const addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockImplementationOnce(() => {
           return {
             ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            docketEntries: caseRecord.docketEntries,
+            docketEntries: [...docketEntries],
+          };
+        })
+        .mockImplementationOnce(() => {
+          return {
+            ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+            docketEntries: [...docketEntries],
+          };
+        })
+        .mockImplementationOnce(() => {
+          return {
+            ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+            docketEntries: [...docketEntries],
           };
         });
 
@@ -604,6 +622,15 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       ).toHaveBeenCalled();
       expect(result.pdfUrl).toBe(mockPdfUrl);
       //TODO: expect that the docket entry was added to all the cases (e.g. a mock was called)
+      const firstDocketEntry = updateDocketEntrySpy.mock.calls[0][0];
+      const secondDocketEntry = addDocketEntrySpy.mock.calls[0][0];
+      const thirdDocketEntry = addDocketEntrySpy.mock.calls[1][0];
+      const savedDocketEntries = [
+        firstDocketEntry,
+        secondDocketEntry,
+        thirdDocketEntry,
+      ];
+      console.log('savedDocketEntries', savedDocketEntries);
       const updatedCaseEntities =
         applicationContext.getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf.mock.calls[0][0].caseEntities;
