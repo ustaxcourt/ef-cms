@@ -22,7 +22,6 @@ exports.formatMessageResult = ({ caseMap, hit, sourceUnmarshalled }) => {
     const foundCaseUnmarshalled = AWS.DynamoDB.Converter.unmarshall(foundCase);
 
     return {
-      leadDocketNumber: foundCaseUnmarshalled.leadDocketNumber,
       ...foundCaseUnmarshalled,
       ...sourceUnmarshalled,
     };

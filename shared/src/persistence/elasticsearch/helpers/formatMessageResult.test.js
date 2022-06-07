@@ -92,7 +92,7 @@ describe('formatMessageResult', () => {
     });
   });
 
-  it('should unmarshall the case found in caseMap when one is found and populate the leadDocketEntry on the result', async () => {
+  it('should unmarshall the case found in caseMap when one is found and return it as part of the formatted search result', async () => {
     const mockSourceUnmarshalled = {
       daisy: true,
     };
