@@ -8,12 +8,7 @@ import { docketClerkRemovesSignatureFromMessage } from './journey/docketClerkRem
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkViewsCompletedMessagesOnCaseDetail } from './journey/docketClerkViewsCompletedMessagesOnCaseDetail';
 import { docketClerkViewsForwardedMessageInInbox } from './journey/docketClerkViewsForwardedMessageInInbox';
-import {
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-  uploadPetition,
-} from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { petitionsClerk1CreatesNoticeFromMessageDetail } from './journey/petitionsClerk1CreatesNoticeFromMessageDetail';
 import { petitionsClerk1RepliesToMessage } from './journey/petitionsClerk1RepliesToMessage';
 import { petitionsClerk1VerifiesCaseStatusOnMessage } from './journey/petitionsClerk1VerifiesCaseStatusOnMessage';
@@ -32,9 +27,9 @@ import { petitionsClerkViewsReplyInInbox } from './journey/petitionsClerkViewsRe
 import { petitionsClerkViewsSentMessagesBox } from './journey/petitionsClerkViewsSentMessagesBox';
 const { PETITIONS_SECTION, STATUS_TYPES } = applicationContext.getConstants();
 
-const cerebralTest = setupTest();
-
 describe('messages journey', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(40000);
     jest.spyOn(
@@ -109,9 +104,6 @@ describe('messages journey', () => {
   petitionsClerkViewsRepliesAndCompletesMessageInInbox(cerebralTest);
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
-  it('wait for ES index', async () => {
-    await refreshElasticsearchIndex();
-  });
   petitionsClerkVerifiesCompletedMessageNotInInbox(cerebralTest);
   petitionsClerkVerifiesCompletedMessageNotInSection(cerebralTest);
 
