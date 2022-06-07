@@ -656,15 +656,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       expect(leadCaseDocketEntry).toEqual(
         expect.objectContaining({
           docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          workItem: expect.objectContaining({
-            caseStatus: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.status,
-            caseTitle: Case.getCaseTitle(
-              MOCK_LEAD_CASE_WITH_PAPER_SERVICE.caseCaption,
-            ),
-            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-            docketNumberWithSuffix:
-              MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumberWithSuffix,
-          }),
+          workItem: expect.objectContaining(
+            mockDocketEntryWithWorkItem.workItem,
+          ),
         }),
       );
 
@@ -679,8 +673,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
             ),
             docketNumber:
               MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-            docketNumberWithSuffix:
-              MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumberWithSuffix,
           }),
         }),
       );
@@ -696,8 +688,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
             ),
             docketNumber:
               MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-            docketNumberWithSuffix:
-              MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumberWithSuffix,
           }),
         }),
       );
