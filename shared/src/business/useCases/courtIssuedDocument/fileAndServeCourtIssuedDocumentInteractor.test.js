@@ -574,8 +574,19 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   describe('consolidated cases', () => {
-    it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
-      const consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
+    let updateDocketEntrySpy;
+    let addDocketEntrySpy;
+    let leadCaseDocketEntries;
+    let consolidatedCase1DocketEntries;
+
+    beforeEach(() => {
+      leadCaseDocketEntries = caseRecord.docketEntries.map(docketEntry => {
+        return {
+          ...docketEntry,
+          docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        };
+      });
+      consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
         return {
           ...docketEntry,
           docketEntryId: uuidv4(),
@@ -583,21 +594,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
             MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         };
       });
-
-      const leadCaseDocketEntries = caseRecord.docketEntries.map(
-        docketEntry => {
-          return {
-            ...docketEntry,
-            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          };
-        },
-      );
-
-      const updateDocketEntrySpy = jest.spyOn(
-        Case.prototype,
-        'updateDocketEntry',
-      );
-      const addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
+      updateDocketEntrySpy = jest.spyOn(Case.prototype, 'updateDocketEntry');
+      addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockImplementationOnce(() => {
@@ -624,7 +622,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
             docketEntries: [],
           };
         });
+    });
 
+    it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
       const result = await fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
         {
@@ -694,6 +694,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
       const initialCall = 1;
       const finallyBlockCalls = 3;
+
       expect(
         applicationContext.getPersistenceGateway()
           .updateDocketEntryPendingServiceStatus,
@@ -723,6 +724,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         });
 
       const expectedErrorString = 'expected error';
+
       applicationContext
         .getPersistenceGateway()
         .saveWorkItem.mockImplementation(({ workItem }) => {
@@ -750,6 +752,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
       const initialCall = 1;
       const finallyBlockCalls = 3;
+
       expect(
         applicationContext.getPersistenceGateway()
           .updateDocketEntryPendingServiceStatus,
@@ -758,6 +761,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     it('should log the failure to call updateDocketEntryPendingServiceStatus in the finally block', async () => {
       const expectedErrorString = 'expected error';
+
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReset(); //TODO: investigate why this is necessary
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockImplementationOnce(() => {
@@ -777,6 +784,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         });
 
       const innerError = new Error('something else');
+
       applicationContext
         .getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus.mockImplementationOnce(() => {})
@@ -803,12 +811,39 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         innerError,
       );
     });
-  });
 
-  //TODO: pass in an ODJ with multiple cases, confirm that some close case function is only called once (for the lead case only) and (that the non-lead cases don't have that docket entry, maybe?)
-  //TODO: confirm that "add work item"/"add to outbox" was called for each case
-  //TODO: assert that the "save PDF to S3" only being called once (make sure the it description describes why we care)
-  //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case when there is an exception
-  //TODO: assert that we only process one case when we pass in multiple cases and use an "enter and served" event code
-  //TODO: assert that we only process one case when the feature flag is disabled
+    it('should only close and serve the lead case when serving ENTERED_AND_SERVED_EVENT_CODES', async () => {
+      leadCaseDocketEntries[0].eventCode = ENTERED_AND_SERVED_EVENT_CODES[0];
+
+      await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: leadCaseDocketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway()
+          .deleteCaseTrialSortMappingRecords,
+      ).toHaveBeenCalledTimes(1);
+
+      expect(
+        applicationContext.getPersistenceGateway()
+          .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
+      ).toEqual(MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber);
+
+      expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
+      expect(addDocketEntrySpy).toHaveBeenCalledTimes(0);
+    });
+
+    //TODO: confirm that "add work item"/"add to outbox" was called for each case
+    //TODO: assert that the "save PDF to S3" only being called once (make sure the it description describes why we care)
+    //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case when there is an exception
+    //TODO: assert that we only process one case when we pass in multiple cases and use an "enter and served" event code
+    //TODO: assert that we only process one case when the feature flag is disabled
+  });
 });
