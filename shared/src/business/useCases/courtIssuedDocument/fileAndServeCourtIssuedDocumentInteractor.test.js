@@ -649,20 +649,57 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
       expect(addDocketEntrySpy).toHaveBeenCalledTimes(2);
 
-      const firstDocketEntry = updateDocketEntrySpy.mock.calls[0][0];
-      const secondDocketEntry = addDocketEntrySpy.mock.calls[0][0];
-      const thirdDocketEntry = addDocketEntrySpy.mock.calls[1][0];
+      const leadCaseDocketEntry = updateDocketEntrySpy.mock.calls[0][0];
+      const consolidatedCase1DocketEntry = addDocketEntrySpy.mock.calls[0][0];
+      const consolidatedCase2DocketEntry = addDocketEntrySpy.mock.calls[1][0];
 
-      expect(firstDocketEntry.docketNumber).toEqual(
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      expect(leadCaseDocketEntry).toEqual(
+        expect.objectContaining({
+          docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          workItem: expect.objectContaining({
+            caseStatus: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.status,
+            caseTitle: Case.getCaseTitle(
+              MOCK_LEAD_CASE_WITH_PAPER_SERVICE.caseCaption,
+            ),
+            docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+            docketNumberWithSuffix:
+              MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumberWithSuffix,
+          }),
+        }),
       );
 
-      expect(secondDocketEntry.docketNumber).toEqual(
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+      expect(consolidatedCase1DocketEntry).toEqual(
+        expect.objectContaining({
+          docketNumber:
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          workItem: expect.objectContaining({
+            caseStatus: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.status,
+            caseTitle: Case.getCaseTitle(
+              MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.caseCaption,
+            ),
+            docketNumber:
+              MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+            docketNumberWithSuffix:
+              MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumberWithSuffix,
+          }),
+        }),
       );
 
-      expect(thirdDocketEntry.docketNumber).toEqual(
-        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      expect(consolidatedCase2DocketEntry).toEqual(
+        expect.objectContaining({
+          docketNumber:
+            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+          workItem: expect.objectContaining({
+            caseStatus: MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.status,
+            caseTitle: Case.getCaseTitle(
+              MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.caseCaption,
+            ),
+            docketNumber:
+              MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+            docketNumberWithSuffix:
+              MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumberWithSuffix,
+          }),
+        }),
       );
 
       //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case for success

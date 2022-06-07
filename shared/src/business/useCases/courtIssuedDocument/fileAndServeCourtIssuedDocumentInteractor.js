@@ -253,7 +253,10 @@ const fileDocumentOnOneCase = async ({
 
   docketEntryEntity.setAsServed(servedParties.all).validate();
 
-  if (!docketEntryEntity.workItem) {
+  const isSubjectCase =
+    originalSubjectDocketEntry.docketNumber === caseEntity.docketNumber;
+
+  if (!docketEntryEntity.workItem || !isSubjectCase) {
     docketEntryEntity.workItem = new WorkItem(
       {
         assigneeId: null,
