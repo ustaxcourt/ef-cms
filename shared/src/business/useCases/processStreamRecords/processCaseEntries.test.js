@@ -72,7 +72,7 @@ describe('processCaseEntries', () => {
     expect(caseRecord).toEqual('Case');
   });
 
-  it('should index a case docket entry mapping record in order to create a parent-child relatioship between a case and a docket entry', async () => {
+  it('should index a case docket entry mapping record in order to create a parent-child relationship between a case and a docket entry', async () => {
     await processCaseEntries({
       applicationContext,
       caseEntityRecords: [mockCaseRecord],
