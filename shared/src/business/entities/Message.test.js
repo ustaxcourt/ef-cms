@@ -122,11 +122,26 @@ describe('Message', () => {
       );
     });
 
+    it('should be false when subject contains no characters other than spaces', () => {
+      const message = new Message(
+        {
+          ...mockMessage,
+          subject: '   ',
+        },
+        { applicationContext },
+      );
+
+      expect(message.isValid()).toBeFalsy();
+      expect(message.getFormattedValidationErrors().subject).toEqual(
+        'Enter a subject line',
+      );
+    });
+
     it('should be false when subject is an empty string', () => {
       const message = new Message(
         {
           ...mockMessage,
-          subject: ' ',
+          subject: '',
         },
         { applicationContext },
       );
