@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/bash -e
 
 # Getting the account-wide deployment settings and injecting them into the shell environment
 TEMP_ENV=${ENV}
@@ -19,6 +19,16 @@ if [ -z "$ES_LOGS_INSTANCE_COUNT" ]; then
   exit 1
 fi
 
+if [ -z "$ES_LOGS_INSTANCE_TYPE" ]; then
+  echo "Please export the ES_LOGS_INSTANCE_TYPE variable in your shell"
+  exit 1
+fi
+
+if [ -z "$ES_LOGS_EBS_VOLUME_SIZE_GB" ]; then
+  echo "Please export the ES_LOGS_EBS_VOLUME_SIZE_GB variable in your shell"
+  exit 1
+fi
+
 if [ -z "$COGNITO_SUFFIX" ]; then
   echo "Please export the COGNITO_SUFFIX variable in your shell"
   exit 1
@@ -29,13 +39,14 @@ if [ -z "$NUM_DAYS_TO_KEEP_LOGS" ]; then
   exit 1
 fi
 
+../../../../scripts/verify-terraform-version.sh
+
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="permissions-account.tfstate"
 LOCK_TABLE=efcms-terraform-lock
 REGION=us-east-1
 
 rm -rf .terraform
-echo "Initiating provisioning for environment [${ENVIRONMENT}] in AWS region [${REGION}]"
 sh ../bin/create-bucket.sh "${BUCKET}" "${KEY}" "${REGION}"
 
 echo "checking for the dynamodb lock table..."
@@ -55,10 +66,11 @@ export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
 export TF_VAR_zone_name="${ZONE_NAME}"
 export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
+export TF_VAR_es_logs_instance_type="${ES_LOGS_INSTANCE_TYPE}"
+export TF_VAR_es_logs_ebs_volume_size_gb="${ES_LOGS_EBS_VOLUME_SIZE_GB}"
 export TF_VAR_cognito_suffix="${COGNITO_SUFFIX}"
 export TF_VAR_number_of_days_to_keep_info_logs="${NUM_DAYS_TO_KEEP_LOGS}"
-
-if [ -z "${LOG_GROUP_ENVIRONMENTS}" ]; then
+if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
 fi
 
