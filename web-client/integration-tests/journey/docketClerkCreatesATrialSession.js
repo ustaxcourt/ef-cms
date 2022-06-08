@@ -39,17 +39,17 @@ export const docketClerkCreatesATrialSession = (
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'month',
+      key: 'startDateMonth',
       value: '13',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'day',
+      key: 'startDateDay',
       value: '12',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'year',
+      key: 'startDateYear',
       value: overrides.trialYear || '2025',
     });
 
@@ -102,7 +102,7 @@ export const docketClerkCreatesATrialSession = (
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'month',
+      key: 'startDateMonth',
       value: '12',
     });
 
