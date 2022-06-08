@@ -7,7 +7,6 @@ const {
   DOCKET_SECTION,
 
   TRANSCRIPT_EVENT_CODE,
-  TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
 const {
   ENTERED_AND_SERVED_EVENT_CODES,
@@ -33,7 +32,6 @@ jest.mock('./addServedStampToDocument', () => ({
 describe('consolidated cases', () => {
   // old code from previous describe
 
-  let mockTrialSession;
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -76,37 +74,6 @@ describe('consolidated cases', () => {
       .getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    mockTrialSession = {
-      caseOrder: [
-        {
-          docketNumber: '101-20',
-        },
-      ],
-      createdAt: '2019-10-27T05:00:00.000Z',
-      gsi1pk: 'trial-session-catalog',
-      isCalendared: true,
-      judge: {
-        name: 'Judge Colvin',
-        userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
-      },
-      maxCases: 100,
-      pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-      proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
-      sessionType: 'Regular',
-      sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-      startDate: '2019-11-27T05:00:00.000Z',
-      startTime: '10:00',
-      swingSession: true,
-      swingSessionId: '208a959f-9526-4db5-b262-e58c476a4604',
-      term: 'Fall',
-      termYear: '2019',
-      trialLocation: 'Houston, Texas',
-      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
-    };
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(mockTrialSession);
 
     applicationContext
       .getUseCaseHelpers()
@@ -276,27 +243,6 @@ describe('consolidated cases', () => {
   });
 
   it('should call updateDocketEntryPendingServiceStatus on error', async () => {
-    // applicationContext
-    //   .getPersistenceGateway()
-    //   .getCaseByDocketNumber.mockImplementationOnce(() => {
-    //     return {
-    //       ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-    //       docketEntries: caseRecord.docketEntries,
-    //     };
-    //   })
-    //   .mockImplementationOnce(() => {
-    //     return {
-    //       ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-    //       docketEntries: caseRecord.docketEntries,
-    //     };
-    //   })
-    //   .mockImplementationOnce(() => {
-    //     return MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE;
-    //   })
-    //   .mockImplementationOnce(() => {
-    //     return MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE;
-    //   });
-
     const expectedErrorString = 'expected error';
 
     applicationContext
