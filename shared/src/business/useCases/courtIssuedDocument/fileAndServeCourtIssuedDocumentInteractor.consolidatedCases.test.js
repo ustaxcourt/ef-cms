@@ -33,11 +33,10 @@ jest.mock('./addServedStampToDocument', () => ({
 describe('consolidated cases', () => {
   // old code from previous describe
 
-  let caseRecord;
   let mockTrialSession;
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
-    docketNumber: MOCK_CASE.docketNumber,
+    docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     section: DOCKET_SECTION,
     sentBy: docketClerkUser.name,
     sentByUserId: docketClerkUser.userId,
@@ -46,7 +45,7 @@ describe('consolidated cases', () => {
 
   const mockDocketEntryWithWorkItem = {
     docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335ba',
-    docketNumber: MOCK_CASE.docketNumber,
+    docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     documentTitle: 'Order',
     documentType: 'Order',
     eventCode: 'O',
@@ -57,25 +56,15 @@ describe('consolidated cases', () => {
     workItem: mockWorkItem,
   };
 
-  // const docketEntriesWithCaseClosingEventCodes =
-  //   ENTERED_AND_SERVED_EVENT_CODES.map(eventCode => {
-  //     const eventCodeMap = COURT_ISSUED_EVENT_CODES.find(
-  //       entry => entry.eventCode === eventCode,
-  //     );
-
-  //     return {
-  //       docketEntryId: uuidv4(),
-  //       documentType: eventCodeMap.documentType,
-  //       eventCode,
-  //       signedAt: createISODateString(),
-  //       signedByUserId: uuidv4(),
-  //       signedJudgeName: 'Chief Judge',
-  //       userId: '2474e5c0-f741-4120-befa-b77378ac8bf0',
-  //       workItem: mockWorkItem,
-  //     };
-  //   });
+  //new
+  let updateDocketEntrySpy;
+  let addDocketEntrySpy;
+  let leadCaseDocketEntries;
+  let consolidatedCase1DocketEntries;
 
   beforeEach(() => {
+    // from other file
+
     applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf.mockReturnValue({
@@ -87,32 +76,6 @@ describe('consolidated cases', () => {
       .getUserById.mockReturnValue(docketClerkUser);
 
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    caseRecord = {
-      ...MOCK_CASE,
-      docketEntries: [
-        mockDocketEntryWithWorkItem,
-        {
-          docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-          docketNumber: MOCK_CASE.docketNumber,
-          documentTitle: 'Order to Show Cause',
-          documentType: 'Order to Show Cause',
-          eventCode: 'OSC',
-          signedAt: '2019-03-01T21:40:46.415Z',
-          signedByUserId: docketClerkUser.userId,
-          signedJudgeName: 'Dredd',
-          userId: docketClerkUser.userId,
-        },
-        {
-          docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
-          docketNumber: MOCK_CASE.docketNumber,
-          documentTitle: 'Transcript of [anything] on [date]',
-          documentType: 'Transcript',
-          eventCode: TRANSCRIPT_EVENT_CODE,
-          userId: docketClerkUser.userId,
-        },
-      ],
-    };
 
     mockTrialSession = {
       caseOrder: [
@@ -149,10 +112,6 @@ describe('consolidated cases', () => {
       .getUseCaseHelpers()
       .countPagesInDocument.mockReturnValue(1);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => caseRecord);
-
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
         Body: testPdfDoc,
@@ -162,25 +121,45 @@ describe('consolidated cases', () => {
     applicationContext
       .getUseCases()
       .getFeatureFlagValueInteractor.mockReturnValue(true);
-  });
-  //new
-  let updateDocketEntrySpy;
-  let addDocketEntrySpy;
-  let leadCaseDocketEntries;
-  let consolidatedCase1DocketEntries;
 
-  beforeEach(() => {
-    leadCaseDocketEntries = caseRecord.docketEntries.map(docketEntry => {
-      return {
-        ...docketEntry,
+    mockDocketEntryWithWorkItem.eventCode = 'O';
+    leadCaseDocketEntries = [
+      mockDocketEntryWithWorkItem,
+      {
+        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
         docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      };
-    });
+        documentTitle: 'Order to Show Cause',
+        documentType: 'Order to Show Cause',
+        eventCode: 'OSC',
+        signedAt: '2019-03-01T21:40:46.415Z',
+        signedByUserId: docketClerkUser.userId,
+        signedJudgeName: 'Dredd',
+        userId: docketClerkUser.userId,
+      },
+      {
+        docketEntryId: '7f61161c-ede8-43ba-8fab-69e15d057012',
+        docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        documentTitle: 'Transcript of [anything] on [date]',
+        documentType: 'Transcript',
+        eventCode: TRANSCRIPT_EVENT_CODE,
+        userId: docketClerkUser.userId,
+      },
+    ];
+
+    // consolidated case specific
     consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
       return {
         ...docketEntry,
         docketEntryId: uuidv4(),
         docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+      };
+    });
+
+    const mockCaseDocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
+      return {
+        ...docketEntry,
+        docketEntryId: uuidv4(),
+        docketNumber: MOCK_CASE.docketNumber,
       };
     });
 
@@ -212,7 +191,11 @@ describe('consolidated cases', () => {
             docketEntries: [],
           };
         } else {
-          return caseRecord;
+          //TODO: come back here and see if we can get rid of this fallback, or at least rid us of the dependency on MOCK_CASE
+          return {
+            ...MOCK_CASE,
+            docketEntries: mockCaseDocketEntries,
+          };
         }
       });
 
@@ -293,26 +276,26 @@ describe('consolidated cases', () => {
   });
 
   it('should call updateDocketEntryPendingServiceStatus on error', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: caseRecord.docketEntries,
-        };
-      })
-      .mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: caseRecord.docketEntries,
-        };
-      })
-      .mockImplementationOnce(() => {
-        return MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE;
-      })
-      .mockImplementationOnce(() => {
-        return MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE;
-      });
+    // applicationContext
+    //   .getPersistenceGateway()
+    //   .getCaseByDocketNumber.mockImplementationOnce(() => {
+    //     return {
+    //       ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+    //       docketEntries: caseRecord.docketEntries,
+    //     };
+    //   })
+    //   .mockImplementationOnce(() => {
+    //     return {
+    //       ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+    //       docketEntries: caseRecord.docketEntries,
+    //     };
+    //   })
+    //   .mockImplementationOnce(() => {
+    //     return MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE;
+    //   })
+    //   .mockImplementationOnce(() => {
+    //     return MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE;
+    //   });
 
     const expectedErrorString = 'expected error';
 
@@ -329,13 +312,13 @@ describe('consolidated cases', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
         docketNumbers: [
           MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
         ],
-        form: caseRecord.docketEntries[0],
+        form: leadCaseDocketEntries[0],
         subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       }),
     ).rejects.toThrow(expectedErrorString);
@@ -357,13 +340,13 @@ describe('consolidated cases', () => {
       .getCaseByDocketNumber.mockImplementationOnce(() => {
         return {
           ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: caseRecord.docketEntries,
+          docketEntries: leadCaseDocketEntries,
         };
       })
       .mockImplementationOnce(() => {
         return {
           ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: caseRecord.docketEntries,
+          docketEntries: leadCaseDocketEntries,
         };
       })
       .mockRejectedValueOnce(new Error(expectedErrorString));
@@ -377,13 +360,13 @@ describe('consolidated cases', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
         docketNumbers: [
           MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
           MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
         ],
-        form: caseRecord.docketEntries[0],
+        form: leadCaseDocketEntries[0],
         subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
       }),
     ).rejects.toThrow(expectedErrorString);
@@ -395,16 +378,33 @@ describe('consolidated cases', () => {
   });
 
   it('should only close and serve the lead case when serving ENTERED_AND_SERVED_EVENT_CODES', async () => {
-    leadCaseDocketEntries[0].eventCode = ENTERED_AND_SERVED_EVENT_CODES[0];
+    const customLeadCaseDocketEntries = [...leadCaseDocketEntries];
+    customLeadCaseDocketEntries[0].eventCode =
+      ENTERED_AND_SERVED_EVENT_CODES[0];
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockImplementationOnce(() => {
+        return {
+          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+          docketEntries: customLeadCaseDocketEntries,
+        };
+      })
+      .mockImplementationOnce(() => {
+        return {
+          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+          docketEntries: customLeadCaseDocketEntries,
+        };
+      });
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+      docketEntryId: customLeadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
       ],
-      form: leadCaseDocketEntries[0],
+      form: customLeadCaseDocketEntries[0],
       subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
     });
 
