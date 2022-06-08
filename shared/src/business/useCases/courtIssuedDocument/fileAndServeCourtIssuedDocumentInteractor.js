@@ -17,7 +17,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
@@ -204,7 +203,7 @@ const stampDocument = async ({ applicationContext, form, pdfData }) => {
 
   const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
 
-  return await addServedStampToDocument({
+  return await applicationContext.getUseCaseHelpers().addServedStampToDocument({
     applicationContext,
     pdfData,
     serviceStampText: `${serviceStampType} ${serviceStampDate}`,

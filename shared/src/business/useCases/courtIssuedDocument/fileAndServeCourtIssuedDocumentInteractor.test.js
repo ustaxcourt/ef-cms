@@ -24,10 +24,6 @@ const { docketClerkUser } = require('../../../test/mockUsers');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { v4: uuidv4 } = require('uuid');
 
-jest.mock('./addServedStampToDocument', () => ({
-  addServedStampToDocument: jest.fn(),
-}));
-
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
   let mockTrialSession;

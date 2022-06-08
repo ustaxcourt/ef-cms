@@ -25,10 +25,6 @@ const { docketClerkUser } = require('../../../test/mockUsers');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { v4: uuidv4 } = require('uuid');
 
-jest.mock('./addServedStampToDocument', () => ({
-  addServedStampToDocument: jest.fn(),
-}));
-
 describe('consolidated cases', () => {
   // old code from previous describe
 
@@ -414,5 +410,27 @@ describe('consolidated cases', () => {
     ).toBeCalledTimes(1);
   });
 
-  //TODO: assert that we only process one case when the feature flag is disabled
+  it('should only process the subject case when the feature flag is disabled and there are other consolidated cases', async () => {
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockReturnValueOnce(false);
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+      docketNumbers: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ],
+      form: leadCaseDocketEntries[0],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(1);
+
+    expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
+    expect(addDocketEntrySpy).toHaveBeenCalledTimes(0);
+  });
 });
