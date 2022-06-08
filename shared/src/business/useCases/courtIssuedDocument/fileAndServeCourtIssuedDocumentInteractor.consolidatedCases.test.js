@@ -165,6 +165,7 @@ describe('consolidated cases', () => {
         }
       });
 
+    //TODO: why is this needed?
     applicationContext
       .getPersistenceGateway()
       .saveWorkItem.mockImplementation(() => {});
@@ -382,7 +383,7 @@ describe('consolidated cases', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem.docketNumber,
-    ).toEqual(mockWorkItem.docketNumber);
+    ).toEqual(MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber);
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[1][0]
         .workItem.docketNumber,
