@@ -162,7 +162,6 @@ exports.updateContactInteractor = async (
           assigneeId: null,
           assigneeName: null,
           associatedJudge: caseEntity.associatedJudge,
-          caseIsInProgress: caseEntity.inProgress,
           caseStatus: caseEntity.status,
           caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
           docketEntry: {
@@ -186,6 +185,8 @@ exports.updateContactInteractor = async (
       });
     }
 
+    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
     const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
       applicationContext,
       caseEntity,
@@ -199,8 +200,6 @@ exports.updateContactInteractor = async (
         applicationContext,
         documentBytes: changeOfAddressPdfWithCover,
       });
-
-    caseEntity.addDocketEntry(changeOfAddressDocketEntry);
 
     await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
       applicationContext,

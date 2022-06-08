@@ -1,21 +1,83 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const {
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
+  ASCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+  DESCENDING,
+} = applicationContext.getConstants();
+
 export const MessagesIndividualOutbox = connect(
-  { formattedMessages: state.formattedMessages.messages },
-  function MessagesIndividualOutbox({ formattedMessages }) {
+  {
+    formattedMessages: state.formattedMessages.messages,
+    hasMessages: state.formattedMessages.hasMessages,
+    showSortableHeaders: state.showSortableHeaders,
+    sortMessagesSequence: sequences.sortMessagesSequence,
+  },
+  function MessagesIndividualOutbox({
+    formattedMessages,
+    hasMessages,
+    showSortableHeaders,
+    sortMessagesSequence,
+  }) {
     return (
       <>
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
-              <th aria-label="Docket Number" className="small" colSpan="2">
-                Docket No.
-              </th>
-              <th className="small">Sent</th>
-              <th>Message</th>
+              {showSortableHeaders && (
+                <th aria-label="Docket Number" className="small" colSpan="2">
+                  <SortableColumnHeaderButton
+                    ascText={CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={DESCENDING}
+                    descText={CHRONOLOGICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="docketNumber"
+                    title="Docket No."
+                    onClickSequence={sortMessagesSequence}
+                  />
+                </th>
+              )}
+              {!showSortableHeaders && (
+                <th aria-label="Docket Number" className="small" colSpan="2">
+                  Docket No.
+                </th>
+              )}
+              {showSortableHeaders && (
+                <th className="small">
+                  <SortableColumnHeaderButton
+                    ascText={CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={DESCENDING}
+                    descText={CHRONOLOGICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="createdAt"
+                    title="Sent"
+                    onClickSequence={sortMessagesSequence}
+                  />
+                </th>
+              )}
+              {!showSortableHeaders && <th className="small">Sent</th>}
+              {showSortableHeaders && (
+                <th>
+                  <SortableColumnHeaderButton
+                    ascText={ALPHABETICALLY_ASCENDING}
+                    defaultSort={ASCENDING}
+                    descText={ALPHABETICALLY_DESCENDING}
+                    hasRows={hasMessages}
+                    sortField="subject"
+                    title="Message"
+                    onClickSequence={sortMessagesSequence}
+                  />
+                </th>
+              )}
+              {!showSortableHeaders && <th>Message</th>}
               <th>Case Title</th>
               <th>Case Status</th>
               <th>To</th>
@@ -63,7 +125,7 @@ export const MessagesIndividualOutbox = connect(
             );
           })}
         </table>
-        {formattedMessages.length === 0 && <div>There are no messages.</div>}
+        {!hasMessages && <div>There are no messages.</div>}
       </>
     );
   },

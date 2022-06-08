@@ -1,4 +1,4 @@
-const baseConfig = require('../jest.config');
+const baseConfig = require('../jest-browser.config');
 
 module.exports = {
   ...baseConfig,
@@ -16,6 +16,7 @@ module.exports = {
     '!src/**/*_.js',
     '!src/persistence/sqs/deleteMessage.js',
     '!src/persistence/sqs/getMessages.js',
+    '!src/persistence/dynamo/**/*.js',
   ],
   coverageThreshold: {
     global: {

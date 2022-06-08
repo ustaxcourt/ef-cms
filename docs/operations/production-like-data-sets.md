@@ -1,6 +1,6 @@
 # Maintaining production-like data sets for test environments
 
-From time to time the team feels that it makes sense to perform a glue job to refresh the information in `mig` or `test`. It is recommended to do this in advance of any final testing of a batch of stories, a significant bugfix, or a bugfix/story that has a Blue/Green Migration.
+From time to time the team feels that it makes sense to perform a glue job to refresh the information in `court/staging`, `court/test`, or `court/hotfix`. It is recommended to do this in advance of any important story, a significant bugfix, or a bugfix/story that has a Blue/Green Migration.
 
 In order to do this, you need to have an empty DDB table in the environment to which you are sending the Glue Job. You may need to delete a table (east & west) and then re-deploy in order to get an empty DDB table to send information. I usually delete the table that is not the current source or destination table in the `efcms-deploy-{ENV}` table so that the environment can continue to function on the current table. Deleting a table in one region causes a replication event to happen to the other, so if you have trouble deleting the second regional table, wait a few minutes and try again.
 
@@ -15,5 +15,5 @@ In order to do this, you need to have an empty DDB table in the environment to w
 4. After the blue/green migration completes, you will need to recreate the test users for that environment as they are not included in the production data.
 
     ```bash
-    node shared/admin-tools/users/setup-test-users.js
+    . ./shared/admin-tools/users/setup-test-users.sh "${ENV}"
     ```

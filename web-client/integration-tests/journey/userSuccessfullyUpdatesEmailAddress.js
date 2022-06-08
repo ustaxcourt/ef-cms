@@ -1,5 +1,6 @@
 import { headerHelper as headerHelperComputed } from '../../src/presenter/computeds/headerHelper';
 import { runCompute } from 'cerebral/test';
+import { waitForLoadingComponentToHide } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const headerHelper = withAppContextDecorator(headerHelperComputed);
@@ -25,6 +26,8 @@ export const userSuccessfullyUpdatesEmailAddress = (
     await cerebralTest.runSequence('submitChangeLoginAndServiceEmailSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('modal.showModal')).toEqual(
       'VerifyNewEmailModal',

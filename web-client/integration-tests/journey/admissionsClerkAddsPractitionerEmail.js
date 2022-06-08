@@ -1,9 +1,12 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { practitionerDetailHelper } from '../../src/presenter/computeds/practitionerDetailHelper';
-import { refreshElasticsearchIndex } from '../helpers';
+import {
+  refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
-import faker from 'faker';
+const { faker } = require('@faker-js/faker');
 
 export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
   const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
@@ -27,6 +30,8 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
     });
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
@@ -79,9 +84,15 @@ export const admissionsClerkAddsPractitionerEmail = cerebralTest => {
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
 
+    await waitForLoadingComponentToHide({ cerebralTest });
+
     await refreshElasticsearchIndex();
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    await cerebralTest.runSequence(
+      'closeVerifyEmailModalAndNavigateToPractitionerDetailSequence',
+    );
 
     practitionerDetailHelperComputed = runCompute(
       withAppContextDecorator(practitionerDetailHelper),

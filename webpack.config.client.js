@@ -2,6 +2,7 @@
 
 const CopyPlugin = require('copy-webpack-plugin');
 const HtmlWebpackPugPlugin = require('html-webpack-pug-plugin');
+const path = require('path');
 const webpack = require('webpack');
 
 module.exports = {
@@ -10,23 +11,33 @@ module.exports = {
     rules: [
       {
         exclude: /node_modules/,
+        include: path.resolve(__dirname, 'web-client/src'),
         test: /\.(js|jsx)$/,
         use: ['babel-loader'],
       },
-
       {
+        include: [
+          path.resolve(__dirname, 'web-client/src'),
+          path.resolve(__dirname, 'node_modules'),
+        ],
         test: /\.(png|svg|jpg|jpeg|gif|pdf|woff|woff2|ttf)$/i,
         type: 'asset',
       },
       {
+        include: [
+          path.resolve(__dirname, 'web-client/src'),
+          path.resolve(__dirname, 'node_modules'),
+        ],
         test: /\.css$/i,
         use: ['style-loader', 'css-loader', 'postcss-loader'],
       },
       {
+        include: path.resolve(__dirname, 'web-client/src'),
         test: /\.s[ac]ss$/i,
         use: ['style-loader', 'css-loader', 'postcss-loader', 'sass-loader'],
       },
       {
+        include: path.resolve(__dirname, 'web-client/src'),
         test: /\.pug$/i,
         use: ['pug-loader'],
       },
@@ -39,6 +50,7 @@ module.exports = {
     }),
     new webpack.EnvironmentPlugin({
       API_URL: null,
+      CHECK_DEPLOY_DATE_INTERVAL: null,
       CI: null,
       CIRCLE_SHA1: null,
       COGNITO: null,
@@ -72,6 +84,8 @@ module.exports = {
         { from: 'node_modules/pdf-lib/dist', to: '.' },
         { from: 'web-client/src/favicons', to: '.' },
         { from: 'web-client/src/site.webmanifest', to: '.' },
+        { from: 'web-client/src/deployed-date.txt', to: '.' },
+
         {
           from: './node_modules/@pdftron/pdfjs-express-viewer/public',
           to: './pdfjsexpress',

@@ -51,7 +51,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'P',
-        index: 1,
         showNotServed: true,
         showServed: false,
       },
@@ -59,7 +58,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
   });
 
   petitionsClerkSubmitsCaseToIrs(cerebralTest);
-  it('verifies docket entries exist for petition, APW, DISC and RQT for a served case', async () => {
+  it('verifies docket entries exist for petition, APW, DISC, RQT, and NOTR for a served case', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
@@ -67,28 +66,36 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'P',
-        index: 1,
         showNotServed: false,
         showServed: true,
       },
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'APW',
-        index: 2,
         showNotServed: false,
         showServed: true,
       },
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'DISC',
-        index: 3,
         showNotServed: false,
         showServed: true,
       },
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'RQT',
-        index: 4,
+        showNotServed: false,
+        showServed: true,
+      },
+      {
+        createdAtFormatted: expect.anything(),
+        eventCode: 'FEE',
+        showNotServed: false,
+        showServed: false,
+      },
+      {
+        createdAtFormatted: expect.anything(),
+        eventCode: 'NOTR',
         showNotServed: false,
         showServed: true,
       },
@@ -184,7 +191,7 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       await getFormattedDocketEntriesForTest(cerebralTest);
 
     //4654- docket entries for initial (un-served and served) filing type documents are created when case has been served
-    expect(formattedDocketEntriesOnDocketRecord[4]).toMatchObject({
+    expect(formattedDocketEntriesOnDocketRecord[5]).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'RQT',
       showNotServed: true,
@@ -236,7 +243,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expect(feeEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'FEE',
-      index: 6,
     });
   });
 
@@ -267,7 +273,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expect(docketEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'HEAR',
-      index: 7,
       servedAtFormatted: undefined,
       showNotServed: false,
       showServed: false,
@@ -288,7 +293,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const orderEntry = formattedDocketEntriesOnDocketRecord[8];
+    const orderEntry = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.documentTitle === 'Order to do something',
+    );
 
     expect(orderEntry.index).toBeUndefined();
     expect(orderEntry).toMatchObject({
@@ -314,15 +321,16 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const orderEntry = formattedDocketEntriesOnDocketRecord[8];
-
-    expect(orderEntry).toMatchObject({
-      createdAtFormatted: expect.anything(),
-      eventCode: 'O',
-      index: 8,
-      servedAtFormatted: expect.anything(),
-      showNotServed: false,
-    });
+    expect(formattedDocketEntriesOnDocketRecord).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          createdAtFormatted: expect.anything(),
+          eventCode: 'O',
+          servedAtFormatted: expect.anything(),
+          showNotServed: false,
+        }),
+      ]),
+    );
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -380,7 +388,9 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const entry = formattedDocketEntriesOnDocketRecord[6];
+    const entry = formattedDocketEntriesOnDocketRecord.find(
+      docketEntry => docketEntry.eventCode === 'A',
+    );
 
     cerebralTest.docketEntryId = entry.docketEntryId;
 
@@ -416,7 +426,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expect(servedEntry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'A',
-      index: 9,
       showNotServed: false,
       showServed: true,
     });
@@ -435,19 +444,16 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'P',
-        index: 1,
         showNotServed: true,
         showServed: false,
       },
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'RQT',
-        index: 2,
       },
       {
         createdAtFormatted: expect.anything(),
         eventCode: 'DISC',
-        index: 3,
         showNotServed: true,
         showServed: false,
       },
@@ -466,15 +472,17 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     dateReceivedMonth: todayMonth,
     dateReceivedYear: todayYear,
   });
+
   it('verifies the docket record after filing a paper document without a file', async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    expect(formattedDocketEntriesOnDocketRecord.length).toEqual(4);
-    const entry = formattedDocketEntriesOnDocketRecord[3];
+    const entryWithoutFile = formattedDocketEntriesOnDocketRecord.find(
+      entry => entry.eventCode === 'ADMR',
+    );
 
-    expect(entry.index).toBeUndefined();
-    expect(entry).toMatchObject({
+    expect(entryWithoutFile.index).toBeUndefined();
+    expect(entryWithoutFile).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'ADMR',
       isInProgress: true,
@@ -489,15 +497,16 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
-    const entry = formattedDocketEntriesOnDocketRecord[3];
-
-    expect(entry).toMatchObject({
-      createdAtFormatted: expect.anything(),
-      eventCode: 'CIVP',
-      index: 4,
-      showNotServed: false,
-      showServed: true,
-    });
+    expect(formattedDocketEntriesOnDocketRecord).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          createdAtFormatted: expect.anything(),
+          eventCode: 'CIVP',
+          showNotServed: false,
+          showServed: true,
+        }),
+      ]),
+    );
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -513,7 +522,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expect(entry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'APPL',
-      index: 5,
       pending: true,
     });
   });
@@ -537,7 +545,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
     expect(entry).toMatchObject({
       createdAtFormatted: expect.anything(),
       eventCode: 'APPL',
-      index: 5,
       pending: true,
     });
   });

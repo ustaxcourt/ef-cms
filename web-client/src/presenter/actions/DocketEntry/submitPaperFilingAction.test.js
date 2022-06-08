@@ -3,12 +3,12 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitPaperFilingAction } from './submitPaperFilingAction';
 
-presenter.providers.applicationContext = applicationContext;
-
 describe('submitPaperFilingAction', () => {
   let caseDetail;
 
   beforeAll(() => {
+    presenter.providers.applicationContext = applicationContext;
+
     caseDetail = {
       docketEntries: [],
       docketNumber: '123-45',
@@ -45,7 +45,6 @@ describe('submitPaperFilingAction', () => {
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();
-    expect(applicationContext.getUseCases().sanitizePdfInteractor).toBeCalled();
 
     expect(
       applicationContext.getUseCases().getStatusOfVirusScanInteractor,

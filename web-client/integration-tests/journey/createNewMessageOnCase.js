@@ -1,15 +1,24 @@
 import { NewMessage } from '../../../shared/src/business/entities/NewMessage';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business//test/createTestApplicationContext';
+import { PETITIONS_SECTION } from '../../../shared/src/business/entities/EntityConstants';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const { PETITIONS_SECTION } = applicationContext.getConstants();
+const petitionsClerk1User = '4805d1ab-18d0-43ec-bafb-654e83405416';
 
-const messageModalHelper = withAppContextDecorator(messageModalHelperComputed);
+export const createNewMessageOnCase = (
+  cerebralTest,
+  {
+    subject,
+    toSection = PETITIONS_SECTION,
+    toUserId = petitionsClerk1User,
+  } = {},
+) => {
+  const messageModalHelper = withAppContextDecorator(
+    messageModalHelperComputed,
+  );
 
-export const createNewMessageOnCase = cerebralTest => {
   const getHelper = () => {
     return runCompute(messageModalHelper, {
       state: cerebralTest.getState(),
@@ -27,13 +36,13 @@ export const createNewMessageOnCase = cerebralTest => {
       'updateSectionInCreateMessageModalSequence',
       {
         key: 'toSection',
-        value: PETITIONS_SECTION,
+        value: toSection,
       },
     );
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
-      value: '4805d1ab-18d0-43ec-bafb-654e83405416', //petitionsclerk1
+      value: toUserId,
     });
 
     const messageDocument = getHelper().documents[0];
@@ -47,7 +56,8 @@ export const createNewMessageOnCase = cerebralTest => {
       messageDocument.documentTitle || messageDocument.documentType,
     );
 
-    cerebralTest.testMessageSubject = `what kind of bear is best? ${Date.now()}`;
+    cerebralTest.testMessageSubject =
+      subject || `what kind of bear is best? ${Date.now()}`;
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'subject',
@@ -66,6 +76,14 @@ export const createNewMessageOnCase = cerebralTest => {
     });
 
     await cerebralTest.runSequence('createMessageSequence');
+
+    await cerebralTest.applicationContext
+      .getUseCases()
+      .createMessageInteractor.mock.results[0].value.then(message => {
+        cerebralTest.lastCreatedMessage = message;
+      });
+
+    expect(cerebralTest.getState('modal.form')).toBeDefined();
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 

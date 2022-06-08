@@ -1,3 +1,4 @@
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -35,16 +36,33 @@ export const CaseDetailSubnavTabs = connect(
                   caseDetailSubnavHelper.showTrackedItemsNotification &&
                     'tracked-items-padding-right',
                 )}
-                id="tab-tracked-items"
-                showNotificationIcon={
-                  caseDetailSubnavHelper.showTrackedItemsNotification
+                icon={
+                  caseDetailSubnavHelper.showTrackedItemsNotification && (
+                    <div className="icon-tab-notification">
+                      <div className="icon-tab-notification-exclamation">!</div>
+                    </div>
+                  )
                 }
+                id="tab-tracked-items"
                 tabName="trackedItems"
                 title="Tracked Items"
               />
             )}
             {caseDetailSubnavHelper.showDraftsTab && (
-              <Tab id="tab-drafts" tabName="drafts" title="Drafts" />
+              <Tab
+                icon={
+                  caseDetailSubnavHelper.draftDocketEntryCount !== 0 && (
+                    <div className="icon-tab-unread-messages">
+                      <div className="icon-tab-unread-messages-count">
+                        {caseDetailSubnavHelper.draftDocketEntryCount}
+                      </div>
+                    </div>
+                  )
+                }
+                id="tab-drafts"
+                tabName="drafts"
+                title="Drafts"
+              />
             )}
             {caseDetailSubnavHelper.showCorrespondenceTab && (
               <Tab
@@ -69,11 +87,16 @@ export const CaseDetailSubnavTabs = connect(
             )}
             {caseDetailSubnavHelper.showNotesTab && (
               <Tab
-                icon="sticky-note"
-                iconClass="icon-case-notes"
-                iconColor="#ffbe2e"
+                icon={
+                  caseDetailSubnavHelper.showNotesIcon && (
+                    <FontAwesomeIcon
+                      className="icon-case-notes"
+                      color="#ffbe2e"
+                      icon="sticky-note"
+                    />
+                  )
+                }
                 id="tab-notes"
-                showIcon={caseDetailSubnavHelper.showNotesIcon}
                 tabName="notes"
                 title="Notes"
               />

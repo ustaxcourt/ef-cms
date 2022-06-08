@@ -25,6 +25,9 @@ const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
+  addDocketEntryForSystemGeneratedOrder,
+} = require('../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder');
+const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
@@ -42,6 +45,9 @@ const {
 const {
   advancedDocumentSearch,
 } = require('../../shared/src/persistence/elasticsearch/advancedDocumentSearch');
+const {
+  appendAmendedPetitionFormInteractor,
+} = require('../../shared/src/business/useCases/courtIssuedOrder/appendAmendedPetitionFormInteractor');
 const {
   appendPaperServiceAddressPageToPdf,
 } = require('../../shared/src/business/useCaseHelper/service/appendPaperServiceAddressPageToPdf');
@@ -91,6 +97,7 @@ const {
 } = require('../../shared/src/business/utilities/DateHandler');
 const {
   CASE_STATUS_TYPES,
+  CONFIGURATION_ITEM_KEYS,
   MAX_SEARCH_CLIENT_RESULTS,
   MAX_SEARCH_RESULTS,
   SESSION_STATUS_GROUPS,
@@ -123,8 +130,16 @@ const {
   checkForReadyForTrialCasesInteractor,
 } = require('../../shared/src/business/useCases/checkForReadyForTrialCasesInteractor');
 const {
+  clerkOfCourtNameForSigning,
+  getEnvironment,
+  getUniqueId,
+} = require('../../shared/src/sharedAppContext');
+const {
   closeTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/closeTrialSessionInteractor');
+const {
+  combineTwoPdfs,
+} = require('../../shared/src/business/utilities/documentGenerators/combineTwoPdfs');
 const {
   compareCasesByDocketNumber,
   formatCase: formatCaseForTrialSession,
@@ -155,6 +170,9 @@ const {
 const {
   coverSheet,
 } = require('../../shared/src/business/utilities/documentGenerators/coverSheet');
+const {
+  createAndServeNoticeDocketEntry,
+} = require('../../shared/src/business/useCaseHelper/docketEntry/createAndServeNoticeDocketEntry');
 const {
   createCase,
 } = require('../../shared/src/persistence/dynamo/cases/createCase');
@@ -342,6 +360,15 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generateNoticeOfChangeOfTrialJudgeInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor');
+const {
+  generateNoticeOfChangeToInPersonProceeding,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/generateNoticeOfChangeToInPersonProceeding');
+const {
+  generateNoticeOfChangeToRemoteProceedingInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeToRemoteProceedingInteractor');
+const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
 const {
@@ -440,14 +467,14 @@ const {
   getCasesForUser,
 } = require('../../shared/src/persistence/dynamo/users/getCasesForUser');
 const {
+  getCasesForUserInteractor,
+} = require('../../shared/src/business/useCases/getCasesForUserInteractor');
+const {
   getChromiumBrowser,
 } = require('../../shared/src/business/utilities/getChromiumBrowser');
 const {
   getClientId,
 } = require('../../shared/src/persistence/cognito/getClientId');
-const {
-  getClosedCasesInteractor,
-} = require('../../shared/src/business/useCases/getClosedCasesInteractor');
 const {
   getCognitoUserIdByEmail,
 } = require('../../shared/src/persistence/cognito/getCognitoUserIdByEmail');
@@ -463,6 +490,9 @@ const {
 const {
   getCompletedUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getCompletedUserInboxMessages');
+const {
+  getConfigurationItemValue,
+} = require('../../shared/src/persistence/dynamo/deployTable/getConfigurationItemValue');
 const {
   getConsolidatedCasesByCaseInteractor,
 } = require('../../shared/src/business/useCases/getConsolidatedCasesByCaseInteractor');
@@ -525,10 +555,6 @@ const {
   getEligibleCasesForTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getEligibleCasesForTrialSessionInteractor');
 const {
-  getEnvironment,
-  getUniqueId,
-} = require('../../shared/src/sharedAppContext.js');
-const {
   getFeatureFlagValue,
 } = require('../../shared/src/persistence/dynamo/deployTable/getFeatureFlagValue');
 const {
@@ -559,8 +585,11 @@ const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
 const {
-  getJudgeForUserChambersInteractor,
-} = require('../../shared/src/business/useCases/users/getJudgeForUserChambersInteractor');
+  getJudgeInSectionHelper,
+} = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
+const {
+  getJudgeInSectionInteractor,
+} = require('../../shared/src/business/useCases/users/getJudgeInSectionInteractor');
 const {
   getJudgesForPublicSearchInteractor,
 } = require('../../shared/src/business/useCases/public/getJudgesForPublicSearchInteractor');
@@ -588,9 +617,6 @@ const {
 const {
   getNotificationsInteractor,
 } = require('../../shared/src/business/useCases/getNotificationsInteractor');
-const {
-  getOpenConsolidatedCasesInteractor,
-} = require('../../shared/src/business/useCases/getOpenConsolidatedCasesInteractor');
 const {
   getOutboxMessagesForSectionInteractor,
 } = require('../../shared/src/business/useCases/messages/getOutboxMessagesForSectionInteractor');
@@ -706,6 +732,9 @@ const {
   getUserCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/getUserCaseNoteInteractor');
 const {
+  getUserIdForNote,
+} = require('../../shared/src/business/useCaseHelper/getUserIdForNote');
+const {
   getUserInboxMessages,
 } = require('../../shared/src/persistence/elasticsearch/messages/getUserInboxMessages');
 const {
@@ -771,6 +800,15 @@ const {
 const {
   markMessageThreadRepliedTo,
 } = require('../../shared/src/persistence/dynamo/messages/markMessageThreadRepliedTo');
+const {
+  noticeOfChangeOfTrialJudge,
+} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeOfTrialJudge');
+const {
+  noticeOfChangeToInPersonProceeding,
+} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeToInPersonProceeding');
+const {
+  noticeOfChangeToRemoteProceeding,
+} = require('../../shared/src/business/utilities/documentGenerators/noticeOfChangeToRemoteProceeding');
 const {
   noticeOfDocketChange,
 } = require('../../shared/src/business/utilities/documentGenerators/noticeOfDocketChange');
@@ -890,9 +928,6 @@ const {
   runTrialSessionPlanningReportInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/runTrialSessionPlanningReportInteractor');
 const {
-  sanitizePdfInteractor,
-} = require('../../shared/src/business/useCases/pdf/sanitizePdfInteractor');
-const {
   saveCalendarNoteInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/saveCalendarNoteInteractor');
 const {
@@ -907,6 +942,9 @@ const {
 const {
   saveFileAndGenerateUrl,
 } = require('../../shared/src/business/useCaseHelper/saveFileAndGenerateUrl');
+const {
+  savePaperServicePdf,
+} = require('../../shared/src/business/useCaseHelper/pdf/savePaperServicePdf');
 const {
   saveSignedDocumentInteractor,
 } = require('../../shared/src/business/useCases/saveSignedDocumentInteractor');
@@ -928,6 +966,9 @@ const {
 const {
   sealCaseInteractor,
 } = require('../../shared/src/business/useCases/sealCaseInteractor');
+const {
+  sealDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/sealDocketEntryInteractor');
 const {
   sealInLowerEnvironment,
 } = require('../../shared/src/business/useCaseHelper/sealInLowerEnvironment');
@@ -974,6 +1015,9 @@ const {
   serveExternallyFiledDocumentInteractor,
 } = require('../../shared/src/business/useCases/document/serveExternallyFiledDocumentInteractor');
 const {
+  serveGeneratedNoticesOnCase,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase');
+const {
   setForHearingInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
 const {
@@ -982,6 +1026,15 @@ const {
 const {
   setMessageAsReadInteractor,
 } = require('../../shared/src/business/useCases/messages/setMessageAsReadInteractor');
+const {
+  setNoticeOfChangeOfTrialJudge,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeOfTrialJudge');
+const {
+  setNoticeOfChangeToInPersonProceeding,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToInPersonProceeding');
+const {
+  setNoticeOfChangeToRemoteProceeding,
+} = require('../../shared/src/business/useCaseHelper/trialSessions/setNoticeOfChangeToRemoteProceeding');
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
@@ -1045,6 +1098,9 @@ const {
 const {
   unsealCaseInteractor,
 } = require('../../shared/src/business/useCases/unsealCaseInteractor');
+const {
+  unsealDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/docketEntry/unsealDocketEntryInteractor');
 const {
   updateAssociatedJudgeOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateAssociatedJudgeOnWorkItems');
@@ -1263,7 +1319,7 @@ const environment = {
   elasticsearchEndpoint:
     process.env.ELASTICSEARCH_ENDPOINT || 'http://localhost:9200',
   masterDynamoDbEndpoint:
-    process.env.MASTER_DYNAMODB_ENDPOINT || 'dynamodb.us-east-1.amazonaws.com',
+    process.env.MASTER_DYNAMODB_ENDPOINT || 'http://localhost:8000',
   masterRegion: process.env.MASTER_REGION || 'us-east-1',
   quarantineBucketName: process.env.QUARANTINE_BUCKET_NAME || '',
   region: process.env.AWS_REGION || 'us-east-1',
@@ -1406,6 +1462,7 @@ const gatewayMethods = {
     createTrialSessionWorkingCopy,
     deleteKeyCount,
     fetchPendingItems,
+    getConfigurationItemValue,
     getFeatureFlagValue,
     getMaintenanceMode,
     getSesStatus,
@@ -1583,6 +1640,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
+    getClerkOfCourtNameForSigning: () => {
+      return clerkOfCourtNameForSigning;
+    },
     getCognito: () => {
       if (environment.stage === 'local') {
         return {
@@ -1641,6 +1701,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       CASE_INVENTORY_MAX_PAGE_SIZE: 20000,
       // the Chief Judge will have ~15k records, so setting to 20k to be safe
       CASE_STATUSES: Object.values(CASE_STATUS_TYPES),
+      CONFIGURATION_ITEM_KEYS,
       MAX_SEARCH_CLIENT_RESULTS,
       MAX_SEARCH_RESULTS,
       MAX_SES_RETRIES: 6,
@@ -1666,6 +1727,9 @@ module.exports = (appContextUser, logger = createLogger()) => {
       changeOfAddress,
       coverSheet,
       docketRecord,
+      noticeOfChangeOfTrialJudge,
+      noticeOfChangeToInPersonProceeding,
+      noticeOfChangeToRemoteProceeding,
       noticeOfDocketChange,
       noticeOfReceiptOfPetition,
       noticeOfTrialIssued,
@@ -1780,7 +1844,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
       } else {
         notificationServiceCache = new AWS.SNS({});
       }
-
       return notificationServiceCache;
     },
     getPdfJs: () => {
@@ -1819,7 +1882,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
               credentials: new EnvironmentCredentials('AWS'),
               region: environment.region,
             },
-            apiVersion: '7.4',
+            apiVersion: '7.7',
             awsConfig: new AWS.Config({ region: 'us-east-1' }),
             connectionClass,
             host: environment.elasticsearchEndpoint,
@@ -1847,10 +1910,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        addDocketEntryForSystemGeneratedOrder,
         addExistingUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
         countPagesInDocument,
+        createAndServeNoticeDocketEntry,
         createCaseAndAssociations,
         createTrialSessionAndWorkingCopy,
         createUserForContact,
@@ -1859,19 +1924,27 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formatAndSortConsolidatedCases,
         generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
+        generateNoticeOfChangeToInPersonProceeding,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
+        getJudgeInSectionHelper,
         getUnassociatedLeadCase,
+        getUserIdForNote,
         parseAndScrapePdfContents,
         processUserAssociatedCases,
         removeCounselFromRemovedPetitioner,
         removeCoversheet,
         saveFileAndGenerateUrl,
+        savePaperServicePdf,
         sealInLowerEnvironment,
         sendEmailVerificationLink,
         sendIrsSuperuserPetitionEmail,
         sendServedPartiesEmails,
         serveDocumentAndGetPaperServicePdf,
+        serveGeneratedNoticesOnCase,
+        setNoticeOfChangeOfTrialJudge,
+        setNoticeOfChangeToInPersonProceeding,
+        setNoticeOfChangeToRemoteProceeding,
         setPdfFormFields,
         updateAssociatedJudgeOnWorkItems,
         updateCaseAndAssociations,
@@ -1892,6 +1965,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addDeficiencyStatisticInteractor,
         addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
+        appendAmendedPetitionFormInteractor,
         archiveCorrespondenceDocumentInteractor,
         archiveDraftDocumentInteractor,
         assignWorkItemsInteractor,
@@ -1933,6 +2007,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fileExternalDocumentInteractor,
         forwardMessageInteractor,
         generateDocketRecordPdfInteractor,
+        generateNoticeOfChangeOfTrialJudgeInteractor,
+        generateNoticeOfChangeToRemoteProceedingInteractor,
         generateNoticeOfTrialIssuedInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
@@ -1951,7 +2027,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getCaseForPublicDocketSearchInteractor,
         getCaseInteractor,
         getCaseInventoryReportInteractor,
-        getClosedCasesInteractor,
+        getCasesForUserInteractor,
         getCompletedMessagesForSectionInteractor,
         getCompletedMessagesForUserInteractor,
         getConsolidatedCasesByCaseInteractor,
@@ -1968,13 +2044,12 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getInboxMessagesForUserInteractor,
         getInternalUsersInteractor,
         getIrsPractitionersBySearchKeyInteractor,
-        getJudgeForUserChambersInteractor,
+        getJudgeInSectionInteractor,
         getJudgesForPublicSearchInteractor,
         getMaintenanceModeInteractor,
         getMessageThreadInteractor,
         getMessagesForCaseInteractor,
         getNotificationsInteractor,
-        getOpenConsolidatedCasesInteractor,
         getOutboxMessagesForSectionInteractor,
         getOutboxMessagesForUserInteractor,
         getPractitionerByBarNumberInteractor,
@@ -2016,13 +2091,13 @@ module.exports = (appContextUser, logger = createLogger()) => {
         removeSignatureFromDocumentInteractor,
         replyToMessageInteractor,
         runTrialSessionPlanningReportInteractor,
-        sanitizePdfInteractor,
         saveCalendarNoteInteractor,
         saveCaseDetailInternalEditInteractor,
         saveCaseNoteInteractor,
         saveSignedDocumentInteractor,
         sealCaseContactAddressInteractor,
         sealCaseInteractor,
+        sealDocketEntryInteractor,
         sendMaintenanceNotificationsInteractor,
         serveCaseToIrsInteractor,
         serveCourtIssuedDocumentInteractor,
@@ -2040,6 +2115,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         unblockCaseFromTrialInteractor,
         unprioritizeCaseInteractor,
         unsealCaseInteractor,
+        unsealDocketEntryInteractor,
         updateCaseContextInteractor,
         updateCaseDeadlineInteractor,
         updateCaseDetailsInteractor,
@@ -2074,6 +2150,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       return {
         calculateDifferenceInDays,
         calculateISODate,
+        combineTwoPdfs,
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,
@@ -2106,6 +2183,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       debug: logger.debug.bind(logger),
       error: logger.error.bind(logger),
       info: logger.info.bind(logger),
+      warn: logger.warn.bind(logger),
     },
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);

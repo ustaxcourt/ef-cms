@@ -1,4 +1,4 @@
-FROM cypress/base:14.16.0
+FROM cypress/base:14.19.0
 
 WORKDIR /home/app
 
@@ -10,28 +10,20 @@ RUN apt-get install -y -t stretch-backports openjdk-11-jdk=11.0.6+10-1~bpo9+1 -V
 RUN apt-get install -yq less=487-0.1+b1 python python-dev python-pip jq=1.5+dfsg-2+b1
 ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.3.6.zip" -o "awscliv2.zip"
-RUN unzip awscliv2.zip
-RUN ./aws/install
-RUN rm awscliv2.zip
+RUN apt-get install -y zip
+
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.6.1.zip" -o "awscliv2.zip" && \
+  unzip awscliv2.zip && \
+  ./aws/install && \
+  rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
 
-RUN wget -q -O terraform_1.0.11_linux_amd64.zip https://releases.hashicorp.com/terraform/1.0.11/terraform_1.0.11_linux_amd64.zip && \
-  unzip -o terraform_1.0.11_linux_amd64.zip terraform && \
-  cp terraform /usr/local/bin/ && \
-  CI=true npm install cypress
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.2.1/terraform_1.2.1_linux_amd64.zip && \
+  unzip -o terraform.zip terraform && \
+  rm terraform.zip && \
+  cp terraform /usr/local/bin/
 
-COPY package.json /home/app/package.json
-COPY package-lock.json /home/app/package-lock.json
-RUN npm set progress=false && \
-  npm config set puppeteer_skip_chromium_download true && \
-  npm ci
-
-COPY . /home/app
-
-RUN mkdir -p /home/app/web-client/cypress-integration/screenshots && \
-  mkdir -p /home/app/web-client/cypress-integration/videos && \
-  mkdir -p /home/app/web-client/cypress-smoketests/videos
+RUN apt-get install -y graphicsmagick=1.4+really1.3.35-1~deb10u1 ghostscript=9.27~dfsg-2+deb10u5
 
 CMD echo "🔥"

@@ -10,7 +10,6 @@ if [[ -z "$CIRCLECI" ]]; then
   echo "starting dynamo"
   ./web-api/start-dynamo.sh &
   DYNAMO_PID=$!
-  URL=http://localhost:8000/shell ./wait-until.sh
 
   echo "killing elasticsearch if already running"
   pkill -f elasticsearch
@@ -18,13 +17,19 @@ if [[ -z "$CIRCLECI" ]]; then
   echo "starting elasticsearch"
   ./web-api/start-elasticsearch.sh &
   ESEARCH_PID=$!
-  URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
 fi
+
+URL=http://localhost:8000/shell ./wait-until.sh
+URL=http://localhost:9200/ ./wait-until.sh
 
 npm run build:assets
 
 # these exported values expire when script terminates
+# shellcheck disable=SC1091
 . ./setup-local-env.sh
+
+echo "creating elasticsearch index"
+npm run seed:elasticsearch
 
 echo "killing s3rver if already running"
 pkill -f s3rver
@@ -33,18 +38,16 @@ echo "starting s3rver"
 rm -rf ./web-api/storage/s3/*
 npm run start:s3rver &
 S3RVER_PID=$!
-URL=http://localhost:9000/ CHECK_CODE=200 ./wait-until.sh
+URL=http://localhost:9000/ ./wait-until.sh
 npm run seed:s3
 
-if [ ! -z "$RESUME" ]; then
+if [ -n "${RESUME}" ]; then
   echo "Resuming operation with previous s3 and dynamo data"
 else
   echo "creating & seeding dynamo tables"
   npm run seed:db
 fi
 
-echo "creating elasticsearch index"
-npm run seed:elasticsearch
 
 if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"

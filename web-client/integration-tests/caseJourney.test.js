@@ -16,7 +16,7 @@ import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCase
 import { petitionsClerkViewsWorkQueue } from './journey/petitionsClerkViewsWorkQueue';
 import { petitionsClerkViewsWorkQueueAfterReassign } from './journey/petitionsClerkViewsWorkQueueAfterReassign';
 import { respondentAddsAnswer } from './journey/respondentAddsAnswer';
-import { respondentAddsMotion } from './journey/respondentAddsMotion';
+import { respondentAddsMotionWithBrief } from './journey/respondentAddsMotionWithBrief';
 import { respondentAddsStipulatedDecision } from './journey/respondentAddsStipulatedDecision';
 import { respondentViewsDashboard } from './journey/respondentViewsDashboard';
 
@@ -59,9 +59,16 @@ describe('Case journey', () => {
 
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   respondentViewsDashboard(cerebralTest);
-  respondentAddsAnswer(cerebralTest, fakeFile);
-  respondentAddsStipulatedDecision(cerebralTest, fakeFile);
-  respondentAddsMotion(cerebralTest, fakeFile);
+  const documentCountPreStipDecision = 6;
+  respondentAddsAnswer(cerebralTest, fakeFile, {
+    documentCount: documentCountPreStipDecision,
+  });
+  respondentAddsStipulatedDecision(cerebralTest, fakeFile, {
+    documentCount: documentCountPreStipDecision + 1,
+  });
+  respondentAddsMotionWithBrief(cerebralTest, fakeFile, {
+    documentCount: documentCountPreStipDecision + 3,
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkViewsCaseDetail(cerebralTest);

@@ -12,10 +12,6 @@ const coverSheet = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: coverSheetTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Cover Sheet',
-    },
   });
 
   let footerHtml = '';
@@ -36,7 +32,6 @@ const coverSheet = async ({ applicationContext, data }) => {
       docketNumber: data.docketNumberWithSuffix,
       footerHtml,
       headerHtml: '',
-      overwriteHeader: true,
     });
 
   return pdf;

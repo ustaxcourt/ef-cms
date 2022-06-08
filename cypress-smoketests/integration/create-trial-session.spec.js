@@ -1,4 +1,3 @@
-const faker = require('faker');
 const {
   blockCaseFromTrial,
   goToCaseOverview,
@@ -27,7 +26,9 @@ const {
 } = require('../support/pages/create-electronic-petition');
 const {
   createTrialSession,
+  goToCreateTrialSession,
   goToTrialSession,
+  goToTrialSessions,
   markCaseAsQcCompleteForTrial,
   setTrialSessionAsCalendared,
   verifyOpenCaseOnTrialSession,
@@ -39,6 +40,7 @@ const {
   runTrialSessionPlanningReport,
   viewBlockedCaseOnBlockedReport,
 } = require('../support/pages/reports');
+const { faker } = require('@faker-js/faker');
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');
 
@@ -158,8 +160,19 @@ describe('Petitions Clerk', () => {
       login(petitionsClerkToken);
     });
 
-    it('creates two trial sessions', () => {
-      createTrialSession(testData);
+    it('creates a trial session with an offboarded judge', () => {
+      const overrides = {
+        offboardedJudge: 'Guy',
+      };
+
+      goToTrialSessions();
+      goToCreateTrialSession();
+      createTrialSession(testData, overrides);
+    });
+
+    it('creates a trial session with an existing judge', () => {
+      goToTrialSessions();
+      goToCreateTrialSession();
       createTrialSession(testData);
     });
 
@@ -207,6 +220,7 @@ describe('Petitions Clerk', () => {
       // enough time has elapsed since we blocked second case. look for it on blocked cases report
       // warning: if there are elasticsearch delays, this test might be brittle...
       // view blocked report
+      cy.waitForElasticsearch();
       viewBlockedCaseOnBlockedReport({
         ...testData,
         docketNumber: secondDocketNumber,

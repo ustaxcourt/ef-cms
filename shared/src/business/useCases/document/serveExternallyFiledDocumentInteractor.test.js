@@ -62,6 +62,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
           documentType: 'Answer',
           eventCode: 'A',
           filedBy: 'Test Petitioner',
+          isOnDocketRecord: true,
           userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         },
       ],
@@ -130,13 +131,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
   });
 
-  it('should add a coversheet to the document', async () => {
+  it('should add a coversheet to the document with the docket entry index passed in', async () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumber: DOCKET_NUMBER,
     });
 
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
+    const docketEntryIndex =
+      addCoverToPdf.mock.calls[0][0].docketEntryEntity.index;
+    expect(docketEntryIndex).toBeDefined();
   });
 
   it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {

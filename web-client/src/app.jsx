@@ -30,6 +30,7 @@ import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
 
 //if you see a console error saying could not get icon, make sure the prefix matches the import (eg fas should be imported from free-solid-svg-icons)
+import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftSolid } from '@fortawesome/free-solid-svg-icons/faArrowAltCircleLeft';
 import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
 import { faCalculator } from '@fortawesome/free-solid-svg-icons/faCalculator';
@@ -53,6 +54,7 @@ import { faDollarSign } from '@fortawesome/free-solid-svg-icons/faDollarSign';
 import { faEdit as faEditSolid } from '@fortawesome/free-solid-svg-icons/faEdit';
 import { faEnvelopeOpen } from '@fortawesome/free-solid-svg-icons/faEnvelopeOpen';
 import { faEnvelope as faEnvelopeSolid } from '@fortawesome/free-solid-svg-icons/faEnvelope';
+import { faExchangeAlt } from '@fortawesome/free-solid-svg-icons/faExchangeAlt';
 import { faExclamation } from '@fortawesome/free-solid-svg-icons/faExclamation';
 import { faExclamationCircle } from '@fortawesome/free-solid-svg-icons/faExclamationCircle';
 import { faExclamationTriangle } from '@fortawesome/free-solid-svg-icons/faExclamationTriangle';
@@ -70,6 +72,7 @@ import { faLaptop } from '@fortawesome/free-solid-svg-icons/faLaptop';
 import { faLink } from '@fortawesome/free-solid-svg-icons/faLink';
 import { faListUl } from '@fortawesome/free-solid-svg-icons/faListUl';
 import { faLock } from '@fortawesome/free-solid-svg-icons/faLock';
+import { faLongArrowAltDown } from '@fortawesome/free-solid-svg-icons/faLongArrowAltDown';
 import { faLongArrowAltUp } from '@fortawesome/free-solid-svg-icons/faLongArrowAltUp';
 import { faMailBulk } from '@fortawesome/free-solid-svg-icons/faMailBulk';
 import { faMinus } from '@fortawesome/free-solid-svg-icons/faMinus';
@@ -104,8 +107,6 @@ import { faUnlock } from '@fortawesome/free-solid-svg-icons/faUnlock';
 import { faUserCheck } from '@fortawesome/free-solid-svg-icons/faUserCheck';
 import { faUserFriends } from '@fortawesome/free-solid-svg-icons/faUserFriends';
 import { faWrench } from '@fortawesome/free-solid-svg-icons/faWrench';
-
-import { config, library } from '@fortawesome/fontawesome-svg-core';
 import { isFunction, mapValues } from 'lodash';
 import { isOnMockLogin } from './utilities/isOnMockLogin';
 import { presenter } from './presenter/presenter';
@@ -115,9 +116,9 @@ import { wasAppLoadedFromACognitoLogin } from './utilities/wasAppLoadedFromACogn
 import { wasLoginUsingTokenInUrl } from './utilities/wasLoginUsingTokenInUrl';
 import { withAppContextDecorator } from './withAppContext';
 
+import { createRoot } from 'react-dom/client';
 import App from 'cerebral';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 /**
  * Instantiates the Cerebral app with React
@@ -203,6 +204,7 @@ const app = {
       faArrowAltCircleLeftRegular,
       faArrowAltCircleLeftSolid,
       faAddressCard,
+      faExchangeAlt,
       faCalculator,
       faCalendarAlt,
       faCalendarCheck,
@@ -250,6 +252,7 @@ const app = {
       faLink,
       faListUl,
       faLock,
+      faLongArrowAltDown,
       faLongArrowAltUp,
       faMailBulk,
       faMinus,
@@ -312,9 +315,30 @@ const app = {
     }
 
     initializeSocketProvider(cerebralApp, applicationContext);
-    router.initialize(cerebralApp, route);
 
-    ReactDOM.render(
+    /*
+    This is a decorated added to fix race conditions in our UI related to changing routes.
+    We use riot-router and it works by using an event listener to the window object when
+    the push state occurs, which can cause two of our routes to run in parallel.
+    This causes our UI to get into bad states where the url in the browser says /case-detail, but
+    we are actually viewing the trial-session page.  These race conditions also cause our integration tests
+    and smoke tests to become very flaky.
+    */
+    let processQueue = Promise.resolve();
+    const wrappedRoute = (path, cb) => {
+      route(path, function () {
+        return (processQueue = processQueue.then(() => {
+          // eslint-disable-next-line promise/no-callback-in-promise
+          return cb(...arguments);
+        }));
+      });
+    };
+    router.initialize(cerebralApp, wrappedRoute);
+
+    const container = window.document.querySelector('#app');
+    const root = createRoot(container);
+
+    root.render(
       <Container app={cerebralApp}>
         {!process.env.CI && (
           <>
@@ -324,9 +348,9 @@ const app = {
         )}
 
         <AppComponent />
+
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      window.document.querySelector('#app'),
     );
   },
 };

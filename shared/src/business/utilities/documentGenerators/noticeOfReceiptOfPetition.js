@@ -12,17 +12,6 @@ const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactNoticeReceiptPetitionTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Notice of Receipt of Petition',
-    },
-  });
-
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
-      docketNumber: data.docketNumberWithSuffix,
-    },
   });
 
   const pdf = await applicationContext
@@ -31,7 +20,6 @@ const noticeOfReceiptOfPetition = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: data.docketNumberWithSuffix,
-      headerHtml,
     });
 
   return pdf;

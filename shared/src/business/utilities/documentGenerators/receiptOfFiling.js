@@ -36,17 +36,6 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactReceiptOfFilingTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Receipt of Filing',
-    },
-  });
-
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
-      docketNumber: docketNumberWithSuffix,
-    },
   });
 
   const pdf = await applicationContext
@@ -55,8 +44,6 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
-      headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;

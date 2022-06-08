@@ -1,5 +1,9 @@
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed } from './reviewSavedPetitionHelper';
+import {
+  ordersAndNoticesInDraftsCodes,
+  ordersAndNoticesNeededCodes,
+  reviewSavedPetitionHelper as reviewSavedPetitionHelperComputed,
+} from './reviewSavedPetitionHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -12,7 +16,7 @@ const reviewSavedPetitionHelper = withAppContextDecorator(
 );
 
 describe('reviewSavedPetitionHelper', () => {
-  it('returns defaults when there is no form', () => {
+  it('should return the default form values if there are no changes to the form', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {},
@@ -20,8 +24,8 @@ describe('reviewSavedPetitionHelper', () => {
     });
     expect(result).toMatchObject({
       hasIrsNoticeFormatted: 'No',
-      hasOrders: false,
       irsNoticeDateFormatted: undefined,
+      ordersAndNoticesNeeded: [],
       ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
@@ -33,7 +37,7 @@ describe('reviewSavedPetitionHelper', () => {
     });
   });
 
-  it('returns defaults when the are values', () => {
+  it('return an empty array for ordersAndNoticesNeeded if any orders or notices were not captured but other form data were', () => {
     const result = runCompute(reviewSavedPetitionHelper, {
       state: {
         form: {
@@ -56,7 +60,6 @@ describe('reviewSavedPetitionHelper', () => {
           ],
           hasVerifiedIrsNotice: true,
           irsNoticeDate: '2020-01-05T03:30:45.007Z',
-          orderForAmendedPetitionAndFilingFee: true,
           petitionPaymentDate: '2020-03-14T14:02:04.007Z',
           petitionPaymentMethod: 'pay.gov',
           petitionPaymentStatus: PAYMENT_STATUS.PAID,
@@ -71,8 +74,8 @@ describe('reviewSavedPetitionHelper', () => {
           INITIAL_DOCUMENT_TYPES.applicationForWaiverOfFilingFee.documentType,
       },
       hasIrsNoticeFormatted: 'Yes',
-      hasOrders: true,
       irsNoticeDateFormatted: '01/04/20',
+      ordersAndNoticesNeeded: [],
       ownershipDisclosureFile: {
         documentType: INITIAL_DOCUMENT_TYPES.ownershipDisclosure.documentType,
       },
@@ -140,8 +143,8 @@ describe('reviewSavedPetitionHelper', () => {
 
     expect(result).toMatchObject({
       hasIrsNoticeFormatted: 'No',
-      hasOrders: false,
       irsNoticeDateFormatted: undefined,
+      ordersAndNoticesNeeded: [],
       ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
@@ -165,8 +168,8 @@ describe('reviewSavedPetitionHelper', () => {
 
     expect(result).toMatchObject({
       hasIrsNoticeFormatted: 'No',
-      hasOrders: false,
       irsNoticeDateFormatted: undefined,
+      ordersAndNoticesNeeded: [],
       ownershipDisclosureFile: undefined,
       petitionFile: undefined,
       petitionPaymentStatusFormatted: PAYMENT_STATUS.UNPAID,
@@ -178,27 +181,36 @@ describe('reviewSavedPetitionHelper', () => {
     });
   });
 
-  [
-    'orderForAmendedPetition',
-    'orderForAmendedPetitionAndFilingFee',
-    'orderForFilingFee',
-    'orderForOds',
-    'orderForRatification',
-    'orderToShowCause',
-    'noticeOfAttachments',
-    'orderDesignatingPlaceOfTrial',
-  ].forEach(order => {
-    it(`verify hasOrders is true if ${order} is set`, () => {
+  Object.keys(ordersAndNoticesNeededCodes).forEach(orderOrNotice => {
+    it(`should verify ordersAndNoticesNeeded is populated with ${orderOrNotice}`, () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
-            [order]: true,
+            [orderOrNotice]: true,
           },
         },
       });
 
       expect(result).toMatchObject({
-        hasOrders: true,
+        ordersAndNoticesNeeded: [ordersAndNoticesNeededCodes[orderOrNotice]],
+      });
+    });
+  });
+
+  Object.keys(ordersAndNoticesInDraftsCodes).forEach(orderOrNoticeInDraft => {
+    it(`should verify ordersAndNoticesInDraft is populated with ${orderOrNoticeInDraft}`, () => {
+      const result = runCompute(reviewSavedPetitionHelper, {
+        state: {
+          form: {
+            [orderOrNoticeInDraft]: true,
+          },
+        },
+      });
+
+      expect(result).toMatchObject({
+        ordersAndNoticesInDraft: [
+          ordersAndNoticesInDraftsCodes[orderOrNoticeInDraft],
+        ],
       });
     });
   });
@@ -266,6 +278,30 @@ describe('reviewSavedPetitionHelper', () => {
         formattedIrsDeficiencyAmount: '$0.00',
         formattedIrsTotalPenalties: '$21.00',
       },
+    ]);
+  });
+
+  it('adds the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is true', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { orderForAmendedPetition: true },
+      },
+    });
+
+    expect(result.ordersAndNoticesInDraft).toEqual([
+      'Order for Amended Petition',
+    ]);
+  });
+
+  it('does not add the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is false', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { orderForAmendedPetition: false },
+      },
+    });
+
+    expect(result.ordersAndNoticesInDraft).not.toBe([
+      'Order for Amended Petition',
     ]);
   });
 });

@@ -1,7 +1,7 @@
-const faker = require('faker');
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
+const { faker } = require('@faker-js/faker');
 const { updateTrialDateOnWorkItems } = require('./updateTrialDateOnWorkItems');
 
 describe('updateTrialDateOnWorkItems', () => {

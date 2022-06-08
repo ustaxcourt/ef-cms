@@ -18,10 +18,6 @@ const trialSessionPlanningReport = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: trialSessionPlanningReportTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Trial Session Planning Report',
-    },
   });
 
   const headerHtml = reactTemplateGenerator({
@@ -45,7 +41,6 @@ const trialSessionPlanningReport = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       footerHtml,
       headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;

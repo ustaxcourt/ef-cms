@@ -137,60 +137,6 @@ describe('Case entity', () => {
     expect(myCase.petitioners[0].additionalName).toBeDefined();
   });
 
-  describe('assignDocketEntries', () => {
-    it('should set hasSealedDocuments to true when it has a docket entry with isLegacySealed true', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          docketEntries: [
-            { ...MOCK_CASE.docketEntries[0], isLegacySealed: true },
-          ],
-          partyType: PARTY_TYPES.estate,
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.hasSealedDocuments).toBeTruthy();
-    });
-
-    it('should set hasSealedDocuments to true when it has a docket entry with isSealed true', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          docketEntries: [{ ...MOCK_CASE.docketEntries[0], isSealed: true }],
-          partyType: PARTY_TYPES.estate,
-
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.hasSealedDocuments).toBeTruthy();
-    });
-
-    it('should set hasSealedDocuments to false when it has no docket entries with isSealed or isLegacySealed true', () => {
-      const myCase = new Case(
-        {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              ...MOCK_CASE.docketEntries[0],
-              isLegacySealed: false,
-              isSealed: false,
-            },
-          ],
-          partyType: PARTY_TYPES.estate,
-
-          status: CASE_STATUS_TYPES.generalDocket,
-        },
-        { applicationContext },
-      );
-
-      expect(myCase.hasSealedDocuments).toBeFalsy();
-    });
-  });
-
   describe('hearings', () => {
     it('sets associated hearings on the case hearings array, and make sure they are sorted by created date', () => {
       const mockhearing1 = {
@@ -400,7 +346,7 @@ describe('Case entity', () => {
           docketEntries: [
             {
               createdAt: '2018-11-21T20:49:28.192Z',
-              docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+              docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
               docketNumber: '101-18',
               documentTitle: 'Petition',
               documentType: 'Petition',

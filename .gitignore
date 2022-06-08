@@ -10,6 +10,7 @@
 .terraform/
 .vscode
 **/*_.js
+shared/src/business/utilities/htmlGenerator/index.scss
 /policy.json
 artillery/private-app-report.json
 artillery/tokens.csv
@@ -48,6 +49,7 @@ web-api/runtimes/clamav/lib
 web-api/storage/s3/*
 web-api/terraform/main/new-policy.json
 web-api/terraform/template/lambdas/*.zip
+web-api/storage/fixtures/efcms-export.json
 web-client/.cache/
 web-client/coverage-e2e
 web-client/coverage-integration/*
@@ -58,3 +60,4 @@ web-client/terraform/common/cloudfront-edge/header-security-lambda.js.zip
 web-client/terraform/common/cloudfront-edge/strip-basepath-lambda.js.zip
 web-client/tests_output/
 bulk-import-log.txt
+**/.env

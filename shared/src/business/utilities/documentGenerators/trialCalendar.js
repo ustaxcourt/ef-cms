@@ -17,10 +17,6 @@ const trialCalendar = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: trialCalendarTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Trial Calendar',
-    },
   });
 
   const headerHtml = reactTemplateGenerator({
@@ -44,7 +40,6 @@ const trialCalendar = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       footerHtml,
       headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;

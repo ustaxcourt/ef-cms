@@ -29,16 +29,15 @@ import { faSync } from '@fortawesome/free-solid-svg-icons/faSync';
 import { faTimesCircle } from '@fortawesome/free-solid-svg-icons/faTimesCircle';
 
 // Icons - Regular
+import { createRoot } from 'react-dom/client';
 import { faArrowAltCircleLeft as faArrowAltCircleLeftRegular } from '@fortawesome/free-regular-svg-icons/faArrowAltCircleLeft';
 import { faTimesCircle as faTimesCircleRegular } from '@fortawesome/free-regular-svg-icons/faTimesCircle';
 import { faUser } from '@fortawesome/free-regular-svg-icons/faUser';
-
 import { isFunction, mapValues } from 'lodash';
 import { library } from '@fortawesome/fontawesome-svg-core';
 import { presenter } from './presenter/presenter-public';
 import App from 'cerebral';
 import React from 'react';
-import ReactDOM from 'react-dom';
 
 /**
  * Instantiates the Cerebral app with React
@@ -81,6 +80,32 @@ const appPublic = {
 
     presenter.state.constants = applicationContext.getConstants();
 
+    const advancedSearchTab = applicationContext
+      .getUseCases()
+      .getItemInteractor(applicationContext, { key: 'advancedSearchTab' });
+
+    if (advancedSearchTab) {
+      presenter.state.advancedSearchTab = advancedSearchTab;
+      applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, {
+          key: 'advancedSearchTab',
+        });
+    }
+
+    const advancedSearchForm = applicationContext
+      .getUseCases()
+      .getItemInteractor(applicationContext, { key: 'advancedSearchForm' });
+
+    if (advancedSearchForm) {
+      presenter.state.advancedSearchForm = advancedSearchForm;
+      applicationContext
+        .getUseCases()
+        .removeItemInteractor(applicationContext, {
+          key: 'advancedSearchForm',
+        });
+    }
+
     presenter.providers.router = {
       back,
       createObjectURL,
@@ -91,14 +116,30 @@ const appPublic = {
 
     const cerebralApp = App(presenter, debugTools);
 
+    applicationContext
+      .getUseCases()
+      .getCurrentVersionInteractor(applicationContext)
+      .then(version => {
+        setInterval(async () => {
+          const currentVersion = await applicationContext
+            .getUseCases()
+            .getCurrentVersionInteractor(applicationContext);
+          if (currentVersion !== version) {
+            await cerebralApp.getSequence('persistFormsOnReloadSequence')();
+          }
+        }, process.env.CHECK_DEPLOY_DATE_INTERVAL || 60000);
+      });
+
     router.initialize(cerebralApp);
 
-    ReactDOM.render(
+    const container = window.document.querySelector('#app-public');
+    const root = createRoot(container);
+
+    root.render(
       <Container app={cerebralApp}>
         <AppComponentPublic />
         {process.env.CI && <div id="ci-environment">CI Test Environment</div>}
       </Container>,
-      window.document.querySelector('#app-public'),
     );
   },
 };

@@ -1,5 +1,9 @@
 import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '../../src/presenter/computeds/formattedTrialSessionDetails';
 import { runCompute } from 'cerebral/test';
+import {
+  waitForExpectedItem,
+  waitForLoadingComponentToHide,
+} from '../helpers.js';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedTrialSessionDetails = withAppContextDecorator(
@@ -23,16 +27,22 @@ export const docketClerkEditsTrialSession = (cerebralTest, overrides = {}) => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
+    await waitForLoadingComponentToHide({ cerebralTest });
+    await waitForExpectedItem({
+      cerebralTest,
+      currentItem: 'currentPage',
+      expectedItem: 'PrintPaperTrialNotices',
+    });
     expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
 
     const formatted = runCompute(formattedTrialSessionDetails, {
       state: cerebralTest.getState(),
     });
 
-    const expectedUpdatedValue =
+    const receivedUpdatedValue =
       formatted[overrides.fieldToUpdate] || formatted.notes;
-    const receivedUpdatedValue = overrides.valueToUpdate || mockNote;
+    const expectedUpdatedValue = overrides.valueToUpdate || mockNote;
 
-    expect(expectedUpdatedValue).toEqual(receivedUpdatedValue);
+    expect(receivedUpdatedValue).toEqual(expectedUpdatedValue);
   });
 };

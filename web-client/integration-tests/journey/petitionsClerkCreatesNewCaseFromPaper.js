@@ -14,13 +14,15 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
   cerebralTest,
   fakeFile,
   trialLocation = 'Birmingham, Alabama',
+  procedureType = 'Small',
+  formOrdersAndNotices = {},
 ) => {
   const primaryContactName = {
     key: 'contactPrimary.name',
     value: 'Shawn Johnson',
   };
 
-  const formValues = [
+  let formValues = [
     {
       key: 'receivedAtMonth',
       value: '01',
@@ -83,7 +85,7 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
     },
     {
       key: 'procedureType',
-      value: 'Small',
+      value: procedureType,
     },
     {
       key: 'caseType',
@@ -147,6 +149,13 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       value: true,
     },
   ];
+
+  formValues =
+    formOrdersAndNotices &&
+    formOrdersAndNotices.key &&
+    formOrdersAndNotices.value
+      ? [...formValues, formOrdersAndNotices]
+      : formValues;
 
   it('should default to parties tab when creating a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
@@ -251,13 +260,16 @@ export const petitionsClerkCreatesNewCaseFromPaper = (
       state: cerebralTest.getState(),
     });
 
-    expect(helper).toMatchObject({
+    let expectedObject = {
       hasIrsNoticeFormatted: 'No',
-      hasOrders: true,
+      ordersAndNoticesInDraft: ['Order Designating Place of Trial'],
+      ordersAndNoticesNeeded: ['Order for Ratification of Petition'],
       petitionPaymentStatusFormatted: 'Waived 05/05/05',
       receivedAtFormatted: '01/01/01',
       shouldShowIrsNoticeDate: false,
-    });
+    };
+
+    expect(helper).toMatchObject(expectedObject);
 
     expect(cerebralTest.getState('caseDetail')).toMatchObject({
       caseCaption: updatedCaseCaption,

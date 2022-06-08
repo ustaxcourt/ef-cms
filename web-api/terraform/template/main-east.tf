@@ -7,6 +7,12 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
   }
 }
 
+resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
+  bucket     = aws_s3_bucket.documents_us_east_1.id
+  key        = "amended-petition-form.pdf"
+  source     = "${path.module}/lambdas/dist/amended-petition-form.pdf"
+}
+
 data "archive_file" "zip_api" {
   type        = "zip"
   output_path = "${path.module}/../template/lambdas/api.js.zip"
@@ -428,6 +434,7 @@ module "api-east-green" {
   environment               = var.environment
   dns_domain                = var.dns_domain
   authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+  websocket_authorizer_uri  = aws_lambda_function.websocket_authorizer_lambda.invoke_arn
   public_authorizer_uri     = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
@@ -482,6 +489,7 @@ module "api-east-blue" {
   environment               = var.environment
   dns_domain                = var.dns_domain
   authorizer_uri            = aws_lambda_function.cognito_authorizer_lambda.invoke_arn
+  websocket_authorizer_uri  = aws_lambda_function.websocket_authorizer_lambda.invoke_arn
   public_authorizer_uri     = aws_lambda_function.public_api_authorizer_lambda.invoke_arn
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id

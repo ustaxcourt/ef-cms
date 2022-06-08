@@ -32,17 +32,6 @@ const docketRecord = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: docketRecordTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Printable Docket Record',
-    },
-  });
-
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
-      docketNumber: data.docketNumberWithSuffix,
-    },
   });
 
   const footerHtml = reactTemplateGenerator({
@@ -61,8 +50,6 @@ const docketRecord = async ({ applicationContext, data }) => {
       displayHeaderFooter: true,
       docketNumber,
       footerHtml,
-      headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;

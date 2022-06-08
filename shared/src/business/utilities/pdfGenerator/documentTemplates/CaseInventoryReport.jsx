@@ -10,7 +10,7 @@ export const CaseInventoryReport = ({
   showStatusColumn,
 }) => {
   return (
-    <div className="page-container">
+    <div>
       <PrimaryHeader />
       <ReportsHeader subtitle={reportTitle} title="Case Inventory Report" />
 
