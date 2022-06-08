@@ -835,7 +835,45 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       expect(addDocketEntrySpy).toHaveBeenCalledTimes(0);
     });
 
-    //TODO: confirm that "add work item"/"add to outbox" was called for each case
+    it('should create a work item and add it to the outbox for each case', async () => {
+      await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: leadCaseDocketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+          .workItem.docketNumber,
+      ).toEqual(mockWorkItem.docketNumber);
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[1][0]
+          .workItem.docketNumber,
+      ).toEqual(MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber);
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[2][0]
+          .workItem.docketNumber,
+      ).toEqual(MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber);
+
+      expect(
+        applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+          .calls[0][0].workItem.docketNumber,
+      ).toEqual(mockWorkItem.docketNumber);
+      expect(
+        applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+          .calls[1][0].workItem.docketNumber,
+      ).toEqual(MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber);
+      expect(
+        applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+          .calls[2][0].workItem.docketNumber,
+      ).toEqual(MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber);
+    });
+
     //TODO: assert that the "save PDF to S3" only being called once (make sure the it description describes why we care)
     //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case when there is an exception
     //TODO: assert that we only process one case when we pass in multiple cases and use an "enter and served" event code
