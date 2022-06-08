@@ -164,11 +164,6 @@ describe('consolidated cases', () => {
           };
         }
       });
-
-    //TODO: why is this needed?
-    applicationContext
-      .getPersistenceGateway()
-      .saveWorkItem.mockImplementation(() => {});
   });
 
   it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
@@ -247,14 +242,9 @@ describe('consolidated cases', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .saveWorkItem.mockImplementation(({ workItem }) => {
-        if (
-          workItem.docketNumber ===
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber
-        ) {
-          throw new Error(expectedErrorString);
-        }
-      });
+      .saveWorkItem.mockImplementationOnce(() => {})
+      .mockImplementationOnce(() => {})
+      .mockRejectedValueOnce(new Error(expectedErrorString));
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
