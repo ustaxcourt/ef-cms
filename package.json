@@ -6,6 +6,11 @@
   "repository": "https://github.com/ustaxcourt/ef-cms",
   "dependencies": {
     "@18f/us-federal-holidays": "^2.1.1",
+    "@aws-crypto/sha256-browser": "^2.0.1",
+    "@aws-sdk/credential-provider-node": "^3.45.0",
+    "@aws-sdk/node-http-handler": "^3.40.0",
+    "@aws-sdk/protocol-http": "^3.40.0",
+    "@aws-sdk/signature-v4": "^3.40.0",
     "@cerebral/react": "4.2.1",
     "@fortawesome/fontawesome-svg-core": "~1.2.36",
     "@fortawesome/free-regular-svg-icons": "^5.15.4",
