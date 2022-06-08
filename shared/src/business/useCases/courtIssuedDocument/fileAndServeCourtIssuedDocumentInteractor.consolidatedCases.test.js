@@ -5,7 +5,6 @@ const {
 } = require('../../test/createTestApplicationContext');
 const {
   DOCKET_SECTION,
-
   TRANSCRIPT_EVENT_CODE,
 } = require('../../entities/EntityConstants');
 const {
@@ -21,6 +20,7 @@ const {
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
+const { cloneDeep } = require('lodash');
 const { docketClerkUser } = require('../../../test/mockUsers');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { v4: uuidv4 } = require('uuid');
@@ -89,7 +89,6 @@ describe('consolidated cases', () => {
       .getUseCases()
       .getFeatureFlagValueInteractor.mockReturnValue(true);
 
-    mockDocketEntryWithWorkItem.eventCode = 'O';
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
       {
@@ -324,7 +323,7 @@ describe('consolidated cases', () => {
   });
 
   it('should only close and serve the lead case when serving ENTERED_AND_SERVED_EVENT_CODES', async () => {
-    const customLeadCaseDocketEntries = [...leadCaseDocketEntries];
+    const customLeadCaseDocketEntries = cloneDeep(leadCaseDocketEntries);
     customLeadCaseDocketEntries[0].eventCode =
       ENTERED_AND_SERVED_EVENT_CODES[0];
 
