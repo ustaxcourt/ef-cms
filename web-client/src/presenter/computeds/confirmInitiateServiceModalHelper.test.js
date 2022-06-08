@@ -4,7 +4,10 @@ import {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import {
+  MOCK_CASE,
+  MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
+} from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { confirmInitiateServiceModalHelper as confirmInitiateServiceModalHelperComputed } from './confirmInitiateServiceModalHelper';
 import { runCompute } from 'cerebral/test';
@@ -152,11 +155,28 @@ describe('confirmInitiateServiceModalHelper', () => {
     const THIRD_CASE = {
       ...MOCK_CASE,
       docketNumber: customizedDocketNumberTwo,
+      irsPractitioners: [
+        {
+          ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+      ],
       leadDocketNumber: MOCK_CASE.docketNumber,
       petitioners: [
         {
           ...MOCK_CASE.petitioners[0],
           contactId: 'really, I want this to be unique from the above',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+        },
+        {
+          ...MOCK_CASE.petitioners[0],
+          contactId: 'really!',
+          serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
+        },
+      ],
+      privatePractitioners: [
+        {
+          ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
@@ -203,7 +223,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.contactsNeedingPaperService.length).toEqual(2);
+      expect(result.contactsNeedingPaperService.length).toEqual(4);
       expect(result.caseOrGroup).toEqual('group');
     });
 
@@ -211,20 +231,44 @@ describe('confirmInitiateServiceModalHelper', () => {
       const firstNonLeadCase = {
         ...SECOND_CASE,
         checked: false,
+        irsPractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
         petitioners: [
           {
             ...SECOND_CASE.petitioners[0],
             contactId: LEAD_CASE.petitioners[0].contactId, //have the same contactId as the lead case
           },
         ],
+        privatePractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
       };
       const secondNonLeadCase = {
         ...THIRD_CASE,
         checked: true,
+        irsPractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
         petitioners: [
           {
             ...THIRD_CASE.petitioners[0],
             contactId: LEAD_CASE.petitioners[0].contactId, //have the same contactId as the lead case
+          },
+        ],
+        privatePractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
       };
@@ -241,7 +285,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.contactsNeedingPaperService.length).toEqual(1);
+      expect(result.contactsNeedingPaperService.length).toEqual(3);
     });
   });
 });

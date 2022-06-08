@@ -52,7 +52,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
             aCase.privatePractitioners,
           );
         aggregatedParties.respondent = aggregatedParties.respondent.concat(
-          aCase.respondent,
+          aCase.irsPractitioners,
         );
 
         return aggregatedParties;
@@ -62,9 +62,9 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     parties.petitioner = uniqBy(parties.petitioner, 'contactId');
     parties.privatePractitioners = uniqBy(
       parties.privatePractitioners,
-      'contactId',
+      'userId',
     );
-    parties.respondent = uniqBy(parties.respondent, 'contactId');
+    parties.respondent = uniqBy(parties.respondent, 'userId');
   } else {
     parties = {
       petitioner: formattedCaseDetail.petitioners,
