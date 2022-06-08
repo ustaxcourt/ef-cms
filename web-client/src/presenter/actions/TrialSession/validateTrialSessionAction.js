@@ -19,14 +19,21 @@ export const validateTrialSessionAction = ({
   const startDate = // AAAA-BB-CC
     applicationContext
       .getUtilities()
-      .prepareDateFromString(props.computedDate)
+      .prepareDateFromString(props.computedStartDate)
       ?.toISOString() || null;
 
   const trialSession = omit(
     {
       ...get(state.form),
     },
-    ['year', 'month', 'day'],
+    [
+      'startDateYear',
+      'startDateMonth',
+      'startDateDay',
+      'estimatedEndDateDay',
+      'estimatedEndDateMonth',
+      'estimatedEndDateYear',
+    ],
   );
 
   const errors = applicationContext

@@ -82,10 +82,19 @@ export const SessionInformationForm = connect(
                 }
                 id="start-date"
                 label="Start date"
+                names={{
+                  day: 'startDateDay',
+                  month: 'startDateMonth',
+                  year: 'startDateYear',
+                }}
                 placeholder="MM/DD/YYYY"
                 showDateHint={false}
                 titleHintText="(MM/DD/YYYY)"
-                values={form}
+                values={{
+                  day: form.startDateDay,
+                  month: form.startDateMonth,
+                  year: form.startDateYear,
+                }}
                 onBlur={validateTrialSessionSequence}
                 onChange={updateTrialSessionFormDataSequence}
               />
@@ -191,10 +200,19 @@ export const SessionInformationForm = connect(
                 }
                 id="estimated-end-date"
                 label="Estimated End Date"
+                names={{
+                  day: 'estimatedEndDateDay',
+                  month: 'estimatedEndDateMonth',
+                  year: 'estimatedEndDateYear',
+                }}
                 optional="true"
                 placeholder="MM/DD/YYYY"
                 showDateHint={false}
-                values={form}
+                values={{
+                  day: form.estimatedEndDateDay,
+                  month: form.estimatedEndDateMonth,
+                  year: form.estimatedEndDateYear,
+                }}
                 onBlur={validateTrialSessionSequence}
                 onChange={updateTrialSessionFormDataSequence}
               />
