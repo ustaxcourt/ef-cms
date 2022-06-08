@@ -42,6 +42,7 @@ export const validateTrialSessionAction = ({
     const errorDisplayOrder = [
       'startDate',
       'startTime',
+      'estimatedEndDate',
       'swingSessionId',
       'sessionType',
       'maxCases',

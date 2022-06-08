@@ -49,6 +49,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.courtReporter = rawSession.courtReporter;
   this.courthouseName = rawSession.courthouseName;
   this.createdAt = rawSession.createdAt || createISODateString();
+  this.estimatedEndDate = rawSession.estimatedEndDate || null;
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
   this.joinPhoneNumber = rawSession.joinPhoneNumber;
