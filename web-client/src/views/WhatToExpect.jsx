@@ -25,8 +25,8 @@ const CaselessNotification = () => {
               icon={['fas', 'exclamation-circle']}
               size="2x"
             />{' '}
-            Have you Already Filed a Petition by Mail? Are you Interested in
-            Electronic Access to your Existing Case?
+            Have you already filed a petition by mail? Are you interested in
+            electronic access to your existing case?
           </h3>
 
           <div>
