@@ -119,7 +119,7 @@ export const TrialSessionsTable = connect(
             <React.Fragment key={trialDate.startOfWeekSortable}>
               <tbody>
                 <tr className="trial-date">
-                  <td colSpan={6 + trialSessionsHelper.additionalColumnsShown}>
+                  <td colSpan={7 + trialSessionsHelper.additionalColumnsShown}>
                     <h4 className="margin-bottom-0">
                       {trialDate.dateFormatted}
                     </h4>
