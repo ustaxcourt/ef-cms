@@ -23,6 +23,10 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const form = get(state.form);
 
+  const consolidatedCaseDuplicateDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCaseDuplicateDocketEntries,
+  );
+
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
     ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
@@ -34,6 +38,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const showConsolidatedCasesFlag =
     formattedCaseDetail.isLeadCase &&
+    consolidatedCaseDuplicateDocketEntriesFlag &&
     !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
     hasConsolidatedCases;
 
@@ -44,32 +49,31 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
         if (!aCase.checked) {
           return aggregatedParties;
         }
-        aggregatedParties.petitioner = aggregatedParties.petitioner.concat(
+        aggregatedParties.petitioners = aggregatedParties.petitioners.concat(
           aCase.petitioners,
         );
         aggregatedParties.privatePractitioners =
           aggregatedParties.privatePractitioners.concat(
             aCase.privatePractitioners,
           );
-        aggregatedParties.respondent = aggregatedParties.respondent.concat(
-          aCase.irsPractitioners,
-        );
+        aggregatedParties.irsPractitioners =
+          aggregatedParties.irsPractitioners.concat(aCase.irsPractitioners);
 
         return aggregatedParties;
       },
-      { petitioner: [], privatePractitioners: [], respondent: [] },
+      { irsPractitioners: [], petitioners: [], privatePractitioners: [] },
     );
-    parties.petitioner = uniqBy(parties.petitioner, 'contactId');
+    parties.petitioners = uniqBy(parties.petitioners, 'contactId');
     parties.privatePractitioners = uniqBy(
       parties.privatePractitioners,
       'userId',
     );
-    parties.respondent = uniqBy(parties.respondent, 'userId');
+    parties.irsPractitioners = uniqBy(parties.irsPractitioners, 'userId');
   } else {
     parties = {
-      petitioner: formattedCaseDetail.petitioners,
+      irsPractitioners: formattedCaseDetail.irsPractitioners,
+      petitioners: formattedCaseDetail.petitioners,
       privatePractitioners: formattedCaseDetail.privatePractitioners,
-      respondent: formattedCaseDetail.irsPractitioners,
     };
   }
 
