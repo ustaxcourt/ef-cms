@@ -7,7 +7,11 @@ import { state } from 'cerebral';
  * @param {boolean} toIsoString cast the computedDate as an ISO string
  * @returns {Function} the primed action
  */
-export const getComputedFormDateFactoryAction = (prefix, toIsoString) => {
+export const getComputedFormDateFactoryAction = (
+  prefix,
+  toIsoString,
+  stateKey = 'computedDate',
+) => {
   /**
    * computes the date given either a prefix or the default of day, month, year props on the form
    *
@@ -53,7 +57,7 @@ export const getComputedFormDateFactoryAction = (prefix, toIsoString) => {
         });
     }
 
-    return { computedDate };
+    return { [stateKey]: computedDate };
   };
 
   return computeFormDateAction;
