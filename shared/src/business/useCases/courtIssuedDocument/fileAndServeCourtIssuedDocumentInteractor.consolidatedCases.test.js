@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 const {
   applicationContext,
   testPdfDoc,
@@ -14,7 +13,6 @@ const {
   fileAndServeCourtIssuedDocumentInteractor,
 } = require('./fileAndServeCourtIssuedDocumentInteractor');
 const {
-  MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
@@ -26,8 +24,6 @@ const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 const { v4: uuidv4 } = require('uuid');
 
 describe('consolidated cases', () => {
-  // old code from previous describe
-
   const mockPdfUrl = 'www.example.com';
   const mockWorkItem = {
     docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -50,15 +46,12 @@ describe('consolidated cases', () => {
     workItem: mockWorkItem,
   };
 
-  //new
   let updateDocketEntrySpy;
   let addDocketEntrySpy;
   let leadCaseDocketEntries;
   let consolidatedCase1DocketEntries;
 
   beforeEach(() => {
-    // from other file
-
     applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf.mockReturnValue({
@@ -108,20 +101,11 @@ describe('consolidated cases', () => {
       },
     ];
 
-    // consolidated case specific
     consolidatedCase1DocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
       return {
         ...docketEntry,
         docketEntryId: uuidv4(),
         docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-      };
-    });
-
-    const mockCaseDocketEntries = MOCK_DOCUMENTS.map(docketEntry => {
-      return {
-        ...docketEntry,
-        docketEntryId: uuidv4(),
-        docketNumber: MOCK_CASE.docketNumber,
       };
     });
 
@@ -131,33 +115,22 @@ describe('consolidated cases', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
-        if (docketNumber === MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber) {
-          return {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            docketEntries: leadCaseDocketEntries,
-          };
-        } else if (
-          docketNumber ===
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber
-        ) {
-          return {
-            ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-            docketEntries: consolidatedCase1DocketEntries,
-          };
-        } else if (
-          docketNumber ===
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber
-        ) {
-          return {
-            ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
-            docketEntries: [],
-          };
-        } else {
-          //TODO: come back here and see if we can get rid of this fallback, or at least rid us of the dependency on MOCK_CASE
-          return {
-            ...MOCK_CASE,
-            docketEntries: mockCaseDocketEntries,
-          };
+        switch (docketNumber) {
+          case MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber:
+            return {
+              ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+              docketEntries: leadCaseDocketEntries,
+            };
+          case MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber:
+            return {
+              ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+              docketEntries: consolidatedCase1DocketEntries,
+            };
+          default:
+            return {
+              ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+              docketEntries: [],
+            };
         }
       });
   });
