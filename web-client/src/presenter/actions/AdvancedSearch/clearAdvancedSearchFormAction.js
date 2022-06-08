@@ -13,24 +13,28 @@ export const clearAdvancedSearchFormAction = ({
   props,
   store,
 }) => {
-  const { ADVANCED_SEARCH_OPINION_TYPES, COUNTRY_TYPES } =
-    applicationContext.getConstants();
+  const {
+    ADVANCED_SEARCH_OPINION_TYPES,
+    COUNTRY_TYPES,
+    DATE_RANGE_SEARCH_OPTIONS,
+  } = applicationContext.getConstants();
 
   const { formType } = props;
-  const emptyForm = {};
+  const defaultForm = {};
   if (formType === 'caseSearchByName') {
-    emptyForm.countryType = COUNTRY_TYPES.DOMESTIC;
+    defaultForm.countryType = COUNTRY_TYPES.DOMESTIC;
   }
   if (formType === 'orderSearch' || formType === 'opinionSearch') {
-    emptyForm.keyword = '';
+    defaultForm.keyword = '';
+    defaultForm.dateRange = DATE_RANGE_SEARCH_OPTIONS.ALL_DATES;
   }
   if (formType === 'opinionSearch') {
-    emptyForm.opinionTypes = {
+    defaultForm.opinionTypes = {
       [ADVANCED_SEARCH_OPINION_TYPES.Memorandum]: true,
       [ADVANCED_SEARCH_OPINION_TYPES.Summary]: true,
       [ADVANCED_SEARCH_OPINION_TYPES.Bench]: true,
       [ADVANCED_SEARCH_OPINION_TYPES['T.C.']]: true,
     };
   }
-  store.set(state.advancedSearchForm[formType], emptyForm);
+  store.set(state.advancedSearchForm[formType], defaultForm);
 };

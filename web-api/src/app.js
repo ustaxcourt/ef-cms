@@ -17,14 +17,14 @@ const allowAccessOriginFunction = (origin, callback) => {
     return;
   }
 
-  //if the backend is running locally or if an official deployed frontend called the backend, parrot out the Origin
+  //if the backend is running locally or if an official deployed front-end called the backend, parrot out the Origin
   //this is required for the browser to support receiving and sending cookies
   if (process.env.IS_LOCAL || origin.includes(process.env.EFCMS_DOMAIN)) {
     callback(null, origin);
     return;
   }
 
-  //some unknown frontend called us
+  //some unknown front-end called us
   callback(null, '*');
 };
 
@@ -72,6 +72,9 @@ const {
   addPetitionerToCaseLambda,
 } = require('./cases/addPetitionerToCaseLambda');
 const {
+  appendAmendedPetitionFormLambda,
+} = require('./courtIssuedOrder/appendAmendedPetitionFormLambda');
+const {
   archiveCorrespondenceDocumentLambda,
 } = require('./correspondence/archiveCorrespondenceDocumentLambda');
 const {
@@ -95,6 +98,9 @@ const {
 const {
   checkEmailAvailabilityLambda,
 } = require('./users/checkEmailAvailabilityLambda');
+const {
+  checkForReadyForTrialCasesLambda,
+} = require('./cases/checkForReadyForTrialCasesLambda');
 const {
   closeTrialSessionLambda,
 } = require('./trialSessions/closeTrialSessionLambda');
@@ -243,9 +249,6 @@ const {
   getMessagesForCaseLambda,
 } = require('./messages/getMessagesForCaseLambda');
 const {
-  getOpenConsolidatedCasesLambda,
-} = require('./cases/getOpenConsolidatedCasesLambda');
-const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
 const {
@@ -357,6 +360,9 @@ const {
   unblockCaseFromTrialLambda,
 } = require('./cases/unblockCaseFromTrialLambda');
 const {
+  unsealDocketEntryLambda,
+} = require('./documents/unsealDocketEntryLambda');
+const {
   updateCaseDeadlineLambda,
 } = require('./caseDeadline/updateCaseDeadlineLambda');
 const {
@@ -431,8 +437,9 @@ const { getCaseExistsLambda } = require('./cases/getCaseExistsLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
 const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
-const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
+const { getCasesForUserLambda } = require('./cases/getCasesForUserLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
+const { getJudgeInSectionLambda } = require('./users/getJudgeInSectionLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
@@ -445,9 +452,9 @@ const { ipLimiter } = require('./middleware/ipLimiter');
 const { prioritizeCaseLambda } = require('./cases/prioritizeCaseLambda');
 const { refreshAuthTokenLambda } = require('./auth/refreshAuthTokenLambda');
 const { replyToMessageLambda } = require('./messages/replyToMessageLambda');
-const { sanitizePdfLambda } = require('./documents/sanitizePdfLambda');
 const { saveCaseNoteLambda } = require('./caseNote/saveCaseNoteLambda');
 const { sealCaseLambda } = require('./cases/sealCaseLambda');
+const { sealDocketEntryLambda } = require('./documents/sealDocketEntryLambda');
 const { serveCaseToIrsLambda } = require('./cases/serveCaseToIrsLambda');
 const { setForHearingLambda } = require('./trialSessions/setForHearingLambda');
 const { setMessageAsReadLambda } = require('./messages/setMessageAsReadLambda');
@@ -559,6 +566,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   // POST
   app.post(
+    '/case-documents/:docketEntryId/append-pdf',
+    lambdaWrapper(appendAmendedPetitionFormLambda),
+  );
+  app.post(
     '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
     lambdaWrapper(serveCourtIssuedDocumentLambda),
   );
@@ -644,6 +655,15 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     '/case-documents/:docketNumber/:docketEntryId/strike',
     lambdaWrapper(strikeDocketEntryLambda),
   );
+  app.put(
+    '/case-documents/:docketNumber/:docketEntryId/seal',
+    lambdaWrapper(sealDocketEntryLambda),
+  );
+  app.put(
+    '/case-documents/:docketNumber/:docketEntryId/unseal',
+    lambdaWrapper(unsealDocketEntryLambda),
+  );
+
   // DELETE
   app.delete(
     '/case-documents/:docketNumber/correspondence/:correspondenceId',
@@ -781,10 +801,9 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  * cases
  */
 {
-  app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
+  app.get('/cases', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
-  app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
@@ -810,7 +829,6 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  */
 {
   app.post('/documents/:key/validate', lambdaWrapper(validatePdfLambda));
-  app.put('/documents/:key/sanitize', lambdaWrapper(sanitizePdfLambda));
   app.get(
     '/documents/:key/upload-policy',
     lambdaWrapper(getUploadPolicyLambda),
@@ -885,7 +903,7 @@ app.get(
   );
   app.put(
     '/async/practitioners/:barNumber',
-    lambdaWrapper(updatePractitionerUserLambda),
+    lambdaWrapper(updatePractitionerUserLambda, { isAsync: true }),
   );
   app.get(
     '/practitioners/:userId/printable-case-list',
@@ -938,6 +956,7 @@ app.get(
   '/sections/:section/document-qc/inbox',
   lambdaWrapper(getDocumentQCInboxForSectionLambda),
 );
+app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
 
 /**
  * trial-sessions
@@ -945,7 +964,7 @@ app.get(
 {
   app.post(
     '/async/trial-sessions/:trialSessionId/generate-notices',
-    lambdaWrapper(setNoticesForCalendaredTrialSessionLambda),
+    lambdaWrapper(setNoticesForCalendaredTrialSessionLambda, { isAsync: true }),
   );
   app.post(
     '/trial-sessions/:trialSessionId/set-swing-session',
@@ -973,7 +992,7 @@ app.get(
   );
   app.get(
     '/async/trial-sessions/:trialSessionId/batch-download',
-    lambdaWrapper(batchDownloadTrialSessionLambda),
+    lambdaWrapper(batchDownloadTrialSessionLambda, { isAsync: true }),
   );
   app.put(
     '/trial-sessions/:trialSessionId/remove-case/:docketNumber',
@@ -997,7 +1016,10 @@ app.get(
   );
   app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
   app.post('/trial-sessions', lambdaWrapper(createTrialSessionLambda));
-  app.put('/trial-sessions', lambdaWrapper(updateTrialSessionLambda));
+  app.put(
+    '/async/trial-sessions',
+    lambdaWrapper(updateTrialSessionLambda, { isAsync: true }),
+  );
   app.post(
     '/trial-sessions/:trialSessionId/set-hearing/:docketNumber',
     lambdaWrapper(setForHearingLambda),
@@ -1034,7 +1056,7 @@ app.get(
 );
 app.put(
   '/async/users/:userId/contact-info',
-  lambdaWrapper(updateUserContactInformationLambda),
+  lambdaWrapper(updateUserContactInformationLambda, { isAsync: true }),
 );
 app.get(
   '/users/:userId/pending-email',
@@ -1048,7 +1070,7 @@ app.get(
 app.put('/users/pending-email', lambdaWrapper(updateUserPendingEmailLambda));
 app.put(
   '/async/users/verify-email',
-  lambdaWrapper(verifyUserPendingEmailLambda),
+  lambdaWrapper(verifyUserPendingEmailLambda, { isAsync: true }),
 );
 app.get(
   '/users/email-availability',
@@ -1122,5 +1144,14 @@ app
   .post(lambdaWrapper(authenticateUserLambda))
   .delete(lambdaWrapper(deleteAuthCookieLambda));
 app.post('/auth/refresh', lambdaWrapper(refreshAuthTokenLambda));
+
+// This endpoint is used for testing purpose only which exposes the
+// CRON lambda which runs nightly to update cases to be ready for trial.
+if (process.env.IS_LOCAL) {
+  app.get(
+    '/run-check-ready-for-trial',
+    lambdaWrapper(checkForReadyForTrialCasesLambda),
+  );
+}
 
 exports.app = app;

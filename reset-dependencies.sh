@@ -13,7 +13,7 @@ rm -rf \
 npx jest --clearCache
 
 # if *not* CLEAN_ONLY, do this
-if [ -z "$CLEAN_ONLY" ]; then
+if [ -z "${CLEAN_ONLY}" ]; then
   # removes all modules, reinstalls
   rm -rf node_modules
   npm update

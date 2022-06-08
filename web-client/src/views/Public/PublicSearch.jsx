@@ -46,7 +46,6 @@ export const PublicSearch = connect(
           <Tabs
             bind="advancedSearchTab"
             className="classic-horizontal-header3 tab-border"
-            defaultActiveTab="case"
             headingLevel="2"
             onSelect={() => {
               advancedSearchTabChangeSequence();

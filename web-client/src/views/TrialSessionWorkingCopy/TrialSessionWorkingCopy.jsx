@@ -46,21 +46,24 @@ export const TrialSessionWorkingCopy = connect(
               </h2>
             </div>
 
-            <div className="grid-col-3 text-right padding-top-2">
-              <Button
-                link
-                aria-label="Download batch of documents in a trial session"
-                onClick={() =>
-                  batchDownloadTrialSessionSequence({
-                    allowRetry: true,
-                    trialSessionId: formattedTrialSessionDetails.trialSessionId,
-                  })
-                }
-              >
-                <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />
-                Download All Cases
-              </Button>
-            </div>
+            {trialSessionHeaderHelper.showBatchDownloadButton && (
+              <div className="grid-col-3 text-right padding-top-2">
+                <Button
+                  link
+                  aria-label="Download batch of documents in a trial session"
+                  onClick={() =>
+                    batchDownloadTrialSessionSequence({
+                      allowRetry: true,
+                      trialSessionId:
+                        formattedTrialSessionDetails.trialSessionId,
+                    })
+                  }
+                >
+                  <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />
+                  Download All Cases
+                </Button>
+              </div>
+            )}
           </div>
           <SuccessNotification />
           <ErrorNotification />

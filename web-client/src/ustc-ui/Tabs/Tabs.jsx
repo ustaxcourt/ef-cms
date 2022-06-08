@@ -9,17 +9,6 @@ import { props, sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 import classNames from 'classnames';
 
-let FontAwesomeIcon;
-
-if (process.env.NODE_ENV === 'test') {
-  // eslint-disable-next-line no-shadow
-  FontAwesomeIcon = function FontAwesomeIcon() {
-    return <i className="fa" />;
-  };
-} else {
-  ({ FontAwesomeIcon } = require('@fortawesome/react-fontawesome'));
-}
-
 const renderTabFactory = ({
   activeKey,
   asSwitch,
@@ -33,11 +22,7 @@ const renderTabFactory = ({
       className: childClassName,
       disabled,
       icon,
-      iconClass,
-      iconColor,
       id: tabId,
-      showIcon,
-      showNotificationIcon,
       tabName,
       title,
     } = child.props;
@@ -76,18 +61,7 @@ const renderTabFactory = ({
       <li {...tabProps}>
         <button {...buttonProps}>
           <HeadingElement className="button-text">{title}</HeadingElement>{' '}
-          {showIcon && (
-            <FontAwesomeIcon
-              className={iconClass}
-              color={iconColor || null}
-              icon={icon}
-            />
-          )}
-          {showNotificationIcon && (
-            <div className="icon-tab-notification">
-              <div className="icon-tab-notification-exclamation">!</div>
-            </div>
-          )}
+          {icon}
         </button>
       </li>
     );

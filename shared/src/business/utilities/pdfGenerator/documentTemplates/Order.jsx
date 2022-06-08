@@ -1,16 +1,16 @@
 const React = require('react');
-const { DocketHeader } = require('../components/DocketHeader.jsx');
-const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
+const { OrderDocketHeader } = require('../components/OrderDocketHeader.jsx');
+const { OrderPrimaryHeader } = require('../components/OrderPrimaryHeader.jsx');
 
 export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
   return (
-    <>
-      <PrimaryHeader />
-      <DocketHeader
+    <div className="order-pdf">
+      <OrderPrimaryHeader />
+      <OrderDocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
-        caseTitle={options.caseTitle}
+        caseTitle={options.caseTitle.toUpperCase()}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3={orderTitle}
+        orderTitle={orderTitle}
       />
       <div
         dangerouslySetInnerHTML={{ __html: orderContent }}
@@ -25,6 +25,6 @@ export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
           </p>
         </div>
       )}
-    </>
+    </div>
   );
 };

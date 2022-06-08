@@ -1,4 +1,4 @@
-const faker = require('faker');
+const { faker } = require('@faker-js/faker');
 
 faker.seed(faker.datatype.number());
 
@@ -22,37 +22,37 @@ exports.goToOpinionSearch = () => {
 };
 
 exports.searchByPetitionerName = petitionerName => {
-  cy.get('input#petitioner-name').type(petitionerName);
+  cy.get('input#petitioner-name').clear().type(petitionerName);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
 
 exports.searchByDocketNumber = docketNumber => {
-  cy.get('input#docket-number').type(docketNumber);
+  cy.get('input#docket-number').clear().type(docketNumber);
   cy.get('button#docket-search-button').click();
   cy.url().should('contain', docketNumber);
 };
 
 exports.searchByPractitionerName = () => {
-  cy.get('input#practitioner-name').type('test');
+  cy.get('input#practitioner-name').clear().type('test');
   cy.get('button#practitioner-search-by-name-button').click();
   cy.get('table.search-results').should('exist');
 };
 
 exports.searchByPractitionerbarNumber = barNumber => {
-  cy.get('input#bar-number').type(barNumber);
+  cy.get('input#bar-number').clear().type(barNumber);
   cy.get('button.advanced-search__button').eq(1).click();
   cy.url().should('contain', barNumber);
 };
 
 exports.searchOrderByKeyword = keyword => {
-  cy.get('input#keyword-search').type(keyword);
+  cy.get('input#keyword-search').clear().type(keyword);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };
 
 exports.searchOpinionByKeyword = keyword => {
-  cy.get('input#keyword-search').type(keyword);
+  cy.get('input#keyword-search').clear().type(keyword);
   cy.get('button#advanced-search-button').click();
   cy.get('table.search-results').should('exist');
 };

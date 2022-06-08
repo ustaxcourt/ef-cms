@@ -2,13 +2,10 @@ const AWS = require('aws-sdk');
 const createApplicationContext = require('../../../src/applicationContext');
 const promiseRetry = require('promise-retry');
 const {
-  migrateItems: migration0003,
-} = require('./migrations/0003-case-has-sealed-documents');
-const {
   migrateItems: validationMigration,
 } = require('./migrations/0000-validate-all-items');
 const { chunk } = require('lodash');
-
+const { migrationsToRun } = require('./migrationsToRun');
 const MAX_DYNAMO_WRITE_SIZE = 25;
 const applicationContext = createApplicationContext({});
 const dynamodb = new AWS.DynamoDB({
@@ -32,9 +29,11 @@ const migrateRecords = async ({
   // eslint-disable-next-line no-unused-vars
   ranMigrations = {},
 }) => {
-  if (!ranMigrations['0003-case-has-sealed-documents.js']) {
-    applicationContext.logger.debug('about to run migration 0003');
-    items = await migration0003(items, documentClient);
+  for (let { key, script } of migrationsToRun) {
+    if (!ranMigrations[key]) {
+      applicationContext.logger.debug(`about to run migration ${key}`);
+      items = await script(items, documentClient);
+    }
   }
 
   applicationContext.logger.debug('about to run validation migration');
@@ -68,7 +67,7 @@ const processItems = async ({ documentClient, items, ranMigrations }) => {
             .promise()
             .catch(e => {
               if (e.message.includes('The conditional request failed')) {
-                console.log(
+                applicationContext.logger.info(
                   `The item of ${item.pk} ${item.sk} alread existed in the destination table, probably due to a live migration.  Skipping migration for this item.`,
                 );
               } else {
@@ -136,10 +135,10 @@ exports.handler = async event => {
   applicationContext.logger.info(
     `about to process ${segment} of ${totalSegments}`,
   );
-
-  const ranMigrations = {
-    ...(await hasMigrationRan('0003-case-has-sealed-documents.js')),
-  };
+  const ranMigrations = {};
+  for (let { key } of migrationsToRun) {
+    Object.assign(ranMigrations, await hasMigrationRan(key));
+  }
 
   await scanTableSegment(segment, totalSegments, ranMigrations);
   applicationContext.logger.info(`finishing ${segment} of ${totalSegments}`);

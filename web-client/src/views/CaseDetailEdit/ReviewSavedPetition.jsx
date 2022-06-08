@@ -58,8 +58,8 @@ export const ReviewSavedPetition = connect(
             </h1>
           </Focus>
 
-          {reviewSavedPetitionHelper.hasOrders && (
-            <OrdersNeededSummary caseInformation={form} />
+          {reviewSavedPetitionHelper.renderOrderSummary && (
+            <OrdersNeededSummary />
           )}
 
           <div className="grid-container padding-x-0 create-case-review">
@@ -132,6 +132,7 @@ export const ReviewSavedPetition = connect(
                         className="margin-right-0 margin-top-1 padding-0 float-right"
                         href={`/case-detail/${form.docketNumber}/petition-qc?tab=caseInfo`}
                         icon="edit"
+                        id="case-information-edit-button"
                       >
                         Edit
                       </Button>

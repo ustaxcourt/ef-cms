@@ -1,3 +1,4 @@
+import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAction';
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getUploadCorrespondenceDocumentAlertSuccessAction } from '../actions/CorrespondenceDocument/getUploadCorrespondenceDocumentAlertSuccessAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -10,6 +11,7 @@ import { setCaseDetailPageTabFrozenAction } from '../actions/CaseDetail/setCaseD
 import { setCorrespondenceIdToDisplayAction } from '../actions/CorrespondenceDocument/setCorrespondenceIdToDisplayAction';
 import { setDocumentTitleFromFormAction } from '../actions/CorrespondenceDocument/setDocumentTitleFromFormAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
@@ -21,32 +23,38 @@ import { validateUploadCorrespondenceDocumentAction } from '../actions/Correspon
 
 export const uploadCorrespondenceDocumentSequence = [
   startShowValidationAction,
-  validateUploadCorrespondenceDocumentAction,
+  checkForActiveBatchesAction,
   {
-    error: [
-      setAlertErrorAction,
-      setValidationErrorsAction,
-      setValidationAlertErrorsAction,
-    ],
-    success: showProgressSequenceDecorator([
-      stopShowValidationAction,
-      clearAlertsAction,
-      uploadCorrespondenceFileAction,
+    hasActiveBatches: [setShowModalFactoryAction('UnfinishedScansModal')],
+    noActiveBatches: [
+      validateUploadCorrespondenceDocumentAction,
       {
-        error: [openFileUploadErrorModal],
-        success: [
-          setDocumentTitleFromFormAction,
-          submitCorrespondenceAction,
-          setCorrespondenceIdToDisplayAction,
-          setCaseAction,
-          getUploadCorrespondenceDocumentAlertSuccessAction,
-          setAlertSuccessAction,
-          setSaveAlertsForNavigationAction,
-          setCaseDetailPageTabActionGenerator(),
-          setCaseDetailPageTabFrozenAction,
-          navigateToCaseDetailAction,
+        error: [
+          setAlertErrorAction,
+          setValidationErrorsAction,
+          setValidationAlertErrorsAction,
         ],
+        success: showProgressSequenceDecorator([
+          stopShowValidationAction,
+          clearAlertsAction,
+          uploadCorrespondenceFileAction,
+          {
+            error: [openFileUploadErrorModal],
+            success: [
+              setDocumentTitleFromFormAction,
+              submitCorrespondenceAction,
+              setCorrespondenceIdToDisplayAction,
+              setCaseAction,
+              getUploadCorrespondenceDocumentAlertSuccessAction,
+              setAlertSuccessAction,
+              setSaveAlertsForNavigationAction,
+              setCaseDetailPageTabActionGenerator(),
+              setCaseDetailPageTabFrozenAction,
+              navigateToCaseDetailAction,
+            ],
+          },
+        ]),
       },
-    ]),
+    ],
   },
 ];

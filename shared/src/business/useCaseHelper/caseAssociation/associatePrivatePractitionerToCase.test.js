@@ -35,7 +35,7 @@ describe('associatePrivatePractitionerToCase', () => {
       docketEntries: [
         {
           createdAt: '2018-11-21T20:49:28.192Z',
-          docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+          docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
           docketNumber: '123-19',
           documentTitle: 'Petition',
           documentType: 'Petition',
@@ -200,5 +200,60 @@ describe('associatePrivatePractitionerToCase', () => {
     expect(getContactPrimary(updatedCase)).toMatchObject({
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
     });
+  });
+
+  it('BUG 9323: should create log if practitioner is already associated with case but does not appear in the privatePractitioners array', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockResolvedValueOnce(true);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        privatePractitioners: [],
+      });
+
+    await associatePrivatePractitionerToCase({
+      applicationContext,
+      docketNumber: caseRecord.docketNumber,
+      representing: [],
+      user: practitionerUser,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).not.toHaveBeenCalled();
+
+    expect(applicationContext.logger.error).toHaveBeenCalled();
+    expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(
+      `BUG 9323: Private Practitioner with userId: ${practitionerUser.userId} was already associated with case ${caseRecord.docketNumber} but did not appear in the privatePractitioners array.`,
+    );
+  });
+
+  it('BUG 9323: should create NO log if practitioner is already associated with case and DOES appear in the privatePractitioners array', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .verifyCaseForUser.mockResolvedValueOnce(true);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...caseRecord,
+        privatePractitioners: [{ userId: practitionerUser.userId }],
+      });
+
+    await associatePrivatePractitionerToCase({
+      applicationContext,
+      docketNumber: caseRecord.docketNumber,
+      representing: [caseRecord.petitioners[0].contactId],
+      user: practitionerUser,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().associateUserWithCase,
+    ).not.toHaveBeenCalled();
+
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
   });
 });

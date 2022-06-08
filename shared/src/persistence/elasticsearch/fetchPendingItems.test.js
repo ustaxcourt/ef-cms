@@ -86,4 +86,24 @@ describe('fetchPendingItems', () => {
     expect(search.mock.calls[0][0].searchParameters.body.from).toBe(4);
     expect(search.mock.calls[0][0].searchParameters.body.size).toBe(2);
   });
+
+  it('returns results sorted by receivedAt date', async () => {
+    search.mockReturnValue({ results: ['some', 'matches'], total: 2 });
+
+    await fetchPendingItems({
+      applicationContext,
+    });
+
+    expect(search).toHaveBeenCalledTimes(1);
+    const searchQuery = search.mock.calls[0][0].searchParameters.body.sort;
+
+    expect(searchQuery).toBeDefined();
+
+    expect(searchQuery[0]).toMatchObject({
+      'receivedAt.S': { order: 'asc' },
+    });
+    expect(searchQuery[1]).toMatchObject({
+      'docketEntryId.S': { order: 'asc' },
+    });
+  });
 });

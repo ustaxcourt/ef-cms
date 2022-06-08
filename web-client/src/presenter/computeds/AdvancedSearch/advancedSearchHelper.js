@@ -23,14 +23,14 @@ export const formatSearchResultRecord = (result, { applicationContext }) => {
 
 export const advancedSearchHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
-  const permissions = get(state.permissions) || {};
+  const permissions = get(state.permissions);
   const countryType = get(
     state.advancedSearchForm.caseSearchByName.countryType,
   );
   const { CASE_SEARCH_PAGE_SIZE, COUNTRY_TYPES } =
     applicationContext.getConstants();
 
-  const advancedSearchTab = get(state.advancedSearchTab) || 'case'; // 'case' is default tab, but sometimes undefined in state.
+  const advancedSearchTab = get(state.advancedSearchTab);
   const searchResults = get(state.searchResults[advancedSearchTab]);
   const currentPage = get(state.advancedSearchForm.currentPage);
 
@@ -41,7 +41,7 @@ export const advancedSearchHelper = (get, applicationContext) => {
   const result = {
     feedBackUrl: 'https://forms.office.com/r/J1AHm7d3BE',
     showFeedbackButton,
-    showPractitionerSearch: permissions.MANAGE_PRACTITIONER_USERS,
+    showPractitionerSearch: permissions?.MANAGE_PRACTITIONER_USERS,
     showStateSelect: countryType === COUNTRY_TYPES.DOMESTIC,
   };
 

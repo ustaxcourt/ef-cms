@@ -1,22 +1,27 @@
 import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
 import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
+  docketClerkLoadsPendingReportOnChiefJudgeSelection,
   fakeFile,
   loginAs,
-  refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
   uploadProposedStipulatedDecision,
+  verifySortedReceivedAtDateOfPendingItems,
   viewCaseDetail,
 } from './helpers';
-import { formatDateString } from '../../shared/src/business/utilities/DateHandler';
+import {
+  formatDateString,
+  subtractISODates,
+} from '../../shared/src/business/utilities/DateHandler';
 import { formattedCaseDetail as formattedCaseDetailComputed } from '../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-describe('a docket clerk uploads a pending item and sees that it is pending', () => {
+describe('docket clerk interacts with pending items', () => {
   let caseDetail;
   let pendingItemsCount;
+  let pendingItems;
 
   const formattedCaseDetail = withAppContextDecorator(
     formattedCaseDetailComputed,
@@ -53,11 +58,9 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     const formatted = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
-
-    await cerebralTest.runSequence('gotoPendingReportSequence');
-
-    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
-      judge: 'Chief Judge',
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
+      cerebralTest,
+      shouldLoadMore: true,
     });
 
     pendingItemsCount = (
@@ -69,22 +72,14 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
 
   docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(cerebralTest);
   it('docket clerk checks pending items count has not increased for a docket entry saved for later', async () => {
-    await viewCaseDetail({
-      cerebralTest,
-      docketNumber: caseDetail.docketNumber,
-    });
     const formatted = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(0);
-
-    await refreshElasticsearchIndex();
-
-    await cerebralTest.runSequence('gotoPendingReportSequence');
-
-    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
-      judge: 'Chief Judge',
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
+      cerebralTest,
+      shouldLoadMore: true,
     });
 
     const currentPendingItemsCount = (
@@ -94,13 +89,19 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     expect(currentPendingItemsCount).toEqual(pendingItemsCount);
   });
 
+  let yearBeforeEarliestPendingItem = '';
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   it('respondent uploads a proposed stipulated decision', async () => {
-    await viewCaseDetail({
-      cerebralTest,
-      docketNumber: caseDetail.docketNumber,
+    pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    const firstPendingItemDate = pendingItems[0].receivedAt;
+
+    yearBeforeEarliestPendingItem = subtractISODates(firstPendingItemDate, {
+      years: 1,
     });
-    await uploadProposedStipulatedDecision(cerebralTest);
+
+    await uploadProposedStipulatedDecision(cerebralTest, {
+      receivedAt: yearBeforeEarliestPendingItem,
+    });
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -109,18 +110,16 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
       cerebralTest,
       docketNumber: caseDetail.docketNumber,
     });
+
     const formatted = runCompute(formattedCaseDetail, {
       state: cerebralTest.getState(),
     });
 
     expect(formatted.pendingItemsDocketEntries.length).toEqual(1);
 
-    await refreshElasticsearchIndex();
-
-    await cerebralTest.runSequence('gotoPendingReportSequence');
-
-    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
-      judge: 'Chief Judge',
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
+      cerebralTest,
+      shouldLoadMore: true,
     });
 
     const currentPendingItemsCount = (
@@ -128,9 +127,10 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     ).length;
 
     const caseReceivedAtDate = cerebralTest.getState('caseDetail.receivedAt');
-    const firstPendingItemReceivedAtDate = cerebralTest.getState(
-      'pendingReports.pendingItems[0].receivedAt',
-    );
+
+    pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    const firstPendingItemReceivedAtDate = pendingItems[0].receivedAt;
+
     expect(caseReceivedAtDate).not.toEqual(firstPendingItemReceivedAtDate);
 
     expect(currentPendingItemsCount).toBeGreaterThan(pendingItemsCount);
@@ -150,23 +150,33 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
     ).toEqual('documentView');
   });
 
+  it('docket clerk confirms that the proposed decision with the earliest date appears as the first pending item', async () => {
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
+      cerebralTest,
+    });
+
+    pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    const firstPendingItemReceivedAtDate = pendingItems[0].receivedAt;
+
+    expect(firstPendingItemReceivedAtDate).toEqual(
+      yearBeforeEarliestPendingItem,
+    );
+  });
+
   docketClerkAddsPaperFiledPendingDocketEntryAndServes(
     cerebralTest,
     fakeFile,
     'EVID',
   );
 
-  it('docket clerk views pending report items', async () => {
-    await refreshElasticsearchIndex();
-
-    await cerebralTest.runSequence('gotoPendingReportSequence');
-
-    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
-      judge: 'Chief Judge',
+  it('docket clerk views a pending report item and confirms the correct receivedAt date format', async () => {
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
+      cerebralTest,
+      shouldLoadMore: true,
     });
 
     const caseReceivedAtDate = cerebralTest.getState('caseDetail.receivedAt');
-    const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    pendingItems = cerebralTest.getState('pendingReports.pendingItems');
     const pendingItem = pendingItems.find(
       item => item.docketEntryId === cerebralTest.docketEntryId,
     );
@@ -195,19 +205,28 @@ describe('a docket clerk uploads a pending item and sees that it is pending', ()
   );
 
   it('docket clerk views pending motion to proceed remotely', async () => {
-    await refreshElasticsearchIndex();
-
-    await cerebralTest.runSequence('gotoPendingReportSequence');
-
-    await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
-      judge: 'Chief Judge',
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
+      cerebralTest,
     });
 
-    const pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    pendingItems = cerebralTest.getState('pendingReports.pendingItems');
     const pendingMOTRItem = pendingItems.find(
       item => item.docketEntryId === cerebralTest.docketEntryId,
     );
 
     expect(pendingMOTRItem).toBeDefined();
+  });
+
+  it('docket clerk checks that pendingItems are sorted chronologically by receivedAt dates', async () => {
+    await docketClerkLoadsPendingReportOnChiefJudgeSelection({
+      cerebralTest,
+      shouldLoadMore: true,
+    });
+
+    pendingItems = cerebralTest.getState('pendingReports.pendingItems');
+    const sortedReceivedAtDates =
+      verifySortedReceivedAtDateOfPendingItems(pendingItems);
+
+    expect(sortedReceivedAtDates).toEqual(true);
   });
 });

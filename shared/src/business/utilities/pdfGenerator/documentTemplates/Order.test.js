@@ -21,7 +21,9 @@ describe('Order', () => {
   it('renders a document header with case information', () => {
     const wrapper = mount(<Order options={options} />);
 
-    expect(wrapper.find('#caption-title').text()).toEqual(options.caseTitle);
+    expect(wrapper.find('#caption-title').text()).toEqual(
+      `${options.caseTitle.toUpperCase()},`,
+    );
     expect(wrapper.find('#caption-extension').text()).toEqual(
       options.caseCaptionExtension,
     );
@@ -33,7 +35,7 @@ describe('Order', () => {
   it('renders a document title', () => {
     const wrapper = mount(<Order options={options} orderTitle={orderTitle} />);
 
-    expect(wrapper.find('.case-information h3').text()).toEqual(orderTitle);
+    expect(wrapper.find('.order-docket-header h3').text()).toEqual(orderTitle);
   });
 
   it('renders the order content', () => {

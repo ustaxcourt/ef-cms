@@ -138,6 +138,13 @@ describe('Unauthed user searches for an order by docket number and does not see 
 
     expect(
       cerebralTest.getState(`searchResults.${ADVANCED_SEARCH_TABS.ORDER}`),
-    ).toEqual([]);
+    ).not.toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: cerebralTest.docketNumber,
+          documentTitle: 'Sealed Order',
+        }),
+      ]),
+    );
   });
 });

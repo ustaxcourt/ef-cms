@@ -1,4 +1,10 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { createNewMessageOnCase } from './journey/createNewMessageOnCase';
+import {
+  getCaseMessagesForCase,
+  loginAs,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionsClerkCreatesACaseDeadline } from './journey/petitionsClerkCreatesACaseDeadline';
 import { petitionsClerkDeletesCaseDeadline } from './journey/petitionsClerkDeletesCaseDeadline';
 import { petitionsClerkEditsCaseDeadline } from './journey/petitionsClerkEditsCaseDeadline';
@@ -6,7 +12,11 @@ import { petitionsClerkViewCaseDeadline } from './journey/petitionsClerkViewCase
 import { petitionsClerkViewsCaseWithNoDeadlines } from './journey/petitionsClerkViewsCaseWithNoDeadlines';
 import { petitionsClerkViewsDeadlineReportForSingleCase } from './journey/petitionsClerkViewsDeadlineReportForSingleCase';
 
-const cerebralTest = setupTest();
+const cerebralTest = setupTest({
+  constantsOverrides: {
+    DEADLINE_REPORT_PAGE_SIZE: 1,
+  },
+});
 
 describe('View and manage the deadlines of a case', () => {
   const randomDay = `0${Math.floor(Math.random() * 9) + 1}`;
@@ -21,6 +31,10 @@ describe('View and manage the deadlines of a case', () => {
 
   beforeAll(() => {
     jest.setTimeout(30000);
+    jest.spyOn(
+      cerebralTest.applicationContext.getUseCases(),
+      'createMessageInteractor',
+    );
   });
 
   afterAll(() => {
@@ -43,8 +57,15 @@ describe('View and manage the deadlines of a case', () => {
 
   describe('Create 2 case deadlines', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
+    createNewMessageOnCase(cerebralTest);
+
     petitionsClerkCreatesACaseDeadline(cerebralTest, overrides);
     petitionsClerkCreatesACaseDeadline(cerebralTest, overrides);
+
+    it('should see case messages on case detail', async () => {
+      const caseMessages = await getCaseMessagesForCase(cerebralTest);
+      expect(caseMessages.inProgressMessages.length).toBeGreaterThan(0);
+    });
   });
 
   describe('View case deadline list on case', () => {
@@ -60,12 +81,22 @@ describe('View and manage the deadlines of a case', () => {
   describe('Edit a case deadline on case', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkEditsCaseDeadline(cerebralTest);
+
+    it('should see case messages on case detail', async () => {
+      const caseMessages = await getCaseMessagesForCase(cerebralTest);
+      expect(caseMessages.inProgressMessages.length).toBeGreaterThan(0);
+    });
   });
 
   describe('Delete case deadlines on case', () => {
     loginAs(cerebralTest, 'petitionsclerk@example.com');
     petitionsClerkDeletesCaseDeadline(cerebralTest);
     petitionsClerkDeletesCaseDeadline(cerebralTest);
+
+    it('should see case messages on case detail', async () => {
+      const caseMessages = await getCaseMessagesForCase(cerebralTest);
+      expect(caseMessages.inProgressMessages.length).toBeGreaterThan(0);
+    });
   });
 
   describe('View a case with no deadlines', () => {

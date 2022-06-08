@@ -136,7 +136,7 @@ export const addToTrialSessionModalHelper = (get, applicationContext) => {
       trialSession.computedStatus,
     );
 
-  const hearings = get(state.caseDetail.hearings) || [];
+  const hearings = get(state.caseDetail.hearings);
   const hearingSessionIds = hearings.map(hearing => hearing.trialSessionId);
 
   let { trialSessionsFormatted, ...helperProps } = trialSessionsModalHelper({

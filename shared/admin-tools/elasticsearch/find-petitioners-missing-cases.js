@@ -25,7 +25,7 @@ const esClient = new elasticsearch.Client({
     credentials: new EnvironmentCredentials('AWS'),
     region: 'us-east-1',
   },
-  apiVersion: '7.4',
+  apiVersion: '7.7',
   awsConfig: new AWS.Config({ region: 'us-east-1' }),
   connectionClass,
   host: esEndpoint,

@@ -31,6 +31,7 @@ exports.generatePrintablePendingReportInteractor = async (
       .getUseCaseHelpers()
       .fetchPendingItemsByDocketNumber({ applicationContext, docketNumber });
   } else {
+    //depends on fetchPendingItems returning a list already sorted by receivedAt
     pendingDocuments = (
       await applicationContext.getPersistenceGateway().fetchPendingItems({
         applicationContext,

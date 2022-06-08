@@ -1,0 +1,14 @@
+body {
+  margin: 35px 50px;
+  font-family: 'nimbus_roman', sans-serif;
+}
+
+@page {
+  margin: 1.5cm 1cm 2cm 1cm;
+  size: 8.5in 11in;
+}
+
+@page :first {
+  margin-top: 0;
+  margin-bottom: 2.5cm;
+}

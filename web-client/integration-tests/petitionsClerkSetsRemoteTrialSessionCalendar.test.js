@@ -1,16 +1,13 @@
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCreatesARemoteTrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
-import { docketClerkViewsNewTrialSession } from './journey/docketClerkViewsNewTrialSession';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
-import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
+import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
-import { petitionsClerkSetsARemoteTrialSessionsSchedule } from './journey/petitionsClerkSetsARemoteTrialSessionsSchedule';
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs.js';
-import { petitionsClerkViewsNewTrialSession } from './journey/petitionsClerkViewsNewTrialSession';
+import { petitionsClerkViewsOpenTrialSession } from './journey/petitionsClerkViewsOpenTrialSession';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -38,7 +35,21 @@ describe('petitions clerk sets a remote trial session calendar', () => {
     loginAs(cerebralTest, 'docketclerk@example.com');
     docketClerkCreatesARemoteTrialSession(cerebralTest, overrides);
     docketClerkViewsTrialSessionList(cerebralTest);
-    docketClerkViewsNewTrialSession(cerebralTest);
+  });
+
+  it('status of remote trial sessions should be open', async () => {
+    await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
+      trialSessionId: cerebralTest.trialSessionId,
+    });
+
+    const trialSessionFormatted = runCompute(
+      withAppContextDecorator(formattedTrialSessionDetails),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    expect(trialSessionFormatted.computedStatus).toEqual('Open');
   });
 
   describe('Create cases', () => {
@@ -69,27 +80,14 @@ describe('petitions clerk sets a remote trial session calendar', () => {
       loginAs(cerebralTest, 'petitionsclerk@example.com');
       cerebralTest.casesReadyForTrial = [];
       petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
-      petitionsClerkManuallyAddsCaseToTrial(cerebralTest);
+      manuallyAddCaseToTrial(cerebralTest);
     });
   });
 
-  describe('petitions clerk sets calendar for trial session', () => {
-    petitionsClerkViewsNewTrialSession(cerebralTest);
-    markAllCasesAsQCed(cerebralTest, () => [cerebralTest.docketNumber]);
+  describe('petitions clerk views the trial session', () => {
+    petitionsClerkViewsOpenTrialSession(cerebralTest);
 
-    petitionsClerkSetsARemoteTrialSessionsSchedule(cerebralTest);
-
-    it('petitions clerk should be redirected to print paper service for the trial session', () => {
-      expect(cerebralTest.getState('currentPage')).toEqual(
-        'PrintPaperTrialNotices',
-      );
-    });
-
-    it('petitions clerk verifies that both cases were set on the trial session', async () => {
-      await cerebralTest.runSequence('gotoTrialSessionDetailSequence', {
-        trialSessionId: cerebralTest.trialSessionId,
-      });
-
+    it('the trial session should be open and have 1 manually added cases on it', () => {
       const trialSessionFormatted = runCompute(
         withAppContextDecorator(formattedTrialSessionDetails),
         {

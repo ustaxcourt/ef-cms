@@ -17,6 +17,7 @@ export const Button = props => {
     overrideMargin = false,
     secondary,
     shouldWrapText = false,
+    tooltip,
     ...remainingProps
   } = props;
 
@@ -29,6 +30,7 @@ export const Button = props => {
   const classes = classNames(
     className,
     'usa-button',
+    tooltip && 'usa-tooltip',
     !overrideMargin && `margin-${marginDirection}-205`,
     overrideMargin,
     icon && !shouldWrapText && 'no-wrap',
@@ -42,7 +44,7 @@ export const Button = props => {
   );
 
   return (
-    <Element className={classes} {...remainingProps}>
+    <Element className={classes} {...remainingProps} title={tooltip}>
       {icon && !iconRight && (
         <FontAwesomeIcon className={iconClasses} icon={icon} size={iconSize} />
       )}

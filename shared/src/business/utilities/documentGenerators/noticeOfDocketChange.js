@@ -30,10 +30,6 @@ const noticeOfDocketChange = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: NoticeOfDocketChangeTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Notice of Docket Change',
-    },
   });
 
   const pdf = await applicationContext

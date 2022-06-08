@@ -66,6 +66,7 @@ export const admissionsClerkSearchesForPractitionersByName = cerebralTest => {
         `searchResults.${ADVANCED_SEARCH_TABS.PRACTITIONER}`,
       ).length,
     ).toBeGreaterThan(0);
+
     let helper = runCompute(withAppContextDecorator(advancedSearchHelper), {
       state: cerebralTest.getState(),
     });

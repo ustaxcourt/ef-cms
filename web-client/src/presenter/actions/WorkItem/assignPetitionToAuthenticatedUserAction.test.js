@@ -21,6 +21,11 @@ describe('assignPetitionToAuthenticatedUserAction', () => {
       modules: {
         presenter,
       },
+      state: {
+        caseDetail: {
+          docketEntries: [],
+        },
+      },
     });
 
     expect(assignWorkItemsInteractor).not.toHaveBeenCalled();

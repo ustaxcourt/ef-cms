@@ -1,7 +1,7 @@
-const faker = require('faker');
 const {
   CASE_STATUS_TYPES,
 } = require('../../../shared/src/business/entities/EntityConstants');
+const { faker } = require('@faker-js/faker');
 
 faker.seed(faker.datatype.number());
 
@@ -20,6 +20,8 @@ exports.goToCaseOverview = docketNumber => {
   // will not reload
   cy.goToRoute('/');
   cy.get('.message-unread-column').should('exist');
+  // eslint-disable-next-line cypress/no-unnecessary-waiting
+  cy.wait(1000);
   cy.goToRoute(`/case-detail/${docketNumber}`);
   cy.get(`.big-blue-header h1 a:contains("${docketNumber}")`).should('exist');
   cy.get('#tab-case-information').click();

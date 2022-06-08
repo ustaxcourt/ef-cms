@@ -1,6 +1,10 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
 
-export const respondentAddsStipulatedDecision = (cerebralTest, fakeFile) => {
+export const respondentAddsStipulatedDecision = (
+  cerebralTest,
+  fakeFile,
+  overrides,
+) => {
   return it('Respondent adds stipulated decision', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -98,6 +102,8 @@ export const respondentAddsStipulatedDecision = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('submitExternalDocumentSequence');
 
-    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(5);
+    expect(cerebralTest.getState('caseDetail.docketEntries').length).toEqual(
+      overrides.documentCount,
+    );
   });
 };

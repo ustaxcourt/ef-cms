@@ -4,10 +4,10 @@ export const CompressedDocketHeader = ({
   caseCaptionExtension,
   caseTitle,
   docketNumberWithSuffix,
-  h3,
+  documentTitle,
 }) => {
   return (
-    <>
+    <div id="compressed-header">
       <div className="case-information">
         <div id="caption">
           {caseTitle}, {caseCaptionExtension} v. Commissioner of Internal
@@ -17,8 +17,8 @@ export const CompressedDocketHeader = ({
           Docket No. {docketNumberWithSuffix}
         </div>
         <div className="clear"></div>
-        {h3 && <h3>{h3}</h3>}
+        {documentTitle && <h3 className="document-title">{documentTitle}</h3>}
       </div>
-    </>
+    </div>
   );
 };

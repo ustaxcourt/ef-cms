@@ -14,15 +14,4 @@ describe('setAdvancedSearchResultsAction', () => {
       { barNumber: '1111' },
     ]);
   });
-
-  it('should use default advancedSearchTab case to set state.searchResults', async () => {
-    const result = await runAction(setAdvancedSearchResultsAction, {
-      props: { searchResults: [{ docketNumber: '1111-11' }] },
-      state: {},
-    });
-
-    expect(result.state.searchResults.case).toEqual([
-      { docketNumber: '1111-11' },
-    ]);
-  });
 });

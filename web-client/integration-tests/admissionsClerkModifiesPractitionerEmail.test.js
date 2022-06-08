@@ -4,12 +4,13 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
+  waitForLoadingComponentToHide,
 } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { petitionsClerkViewsCaseDetail } from './journey/petitionsClerkViewsCaseDetail';
 import { userLogsInAndChecksVerifiedEmailAddress } from './journey/userLogsInAndChecksVerifiedEmailAddress';
 import { userVerifiesUpdatedEmailAddress } from './journey/userVerifiesUpdatedEmailAddress';
-import faker from 'faker';
+const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 
@@ -97,6 +98,8 @@ describe('admissions clerk practitioner journey', () => {
     });
 
     await cerebralTest.runSequence('submitUpdatePractitionerUserSequence');
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'EmailVerificationModal',

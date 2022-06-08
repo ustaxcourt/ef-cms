@@ -29,14 +29,18 @@ exports.associatePrivatePractitionerToCase = async ({
       userId: user.userId,
     });
 
-  if (!isAssociated) {
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
+  const caseToUpdate = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
 
+  const isPrivatePractitionerOnCase = caseToUpdate.privatePractitioners?.some(
+    practitioner => practitioner.userId === user.userId,
+  );
+
+  if (!isAssociated) {
     const userCaseEntity = new UserCase(caseToUpdate);
 
     await applicationContext.getPersistenceGateway().associateUserWithCase({
@@ -70,5 +74,9 @@ exports.associatePrivatePractitionerToCase = async ({
     });
 
     return caseEntity.toRawObject();
+  } else if (!isPrivatePractitionerOnCase) {
+    applicationContext.logger.error(
+      `BUG 9323: Private Practitioner with userId: ${user.userId} was already associated with case ${docketNumber} but did not appear in the privatePractitioners array.`,
+    );
   }
 };

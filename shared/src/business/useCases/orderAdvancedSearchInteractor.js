@@ -16,6 +16,7 @@ const { caseSearchFilter } = require('../utilities/caseFilter');
 const { formatNow, FORMATS } = require('../../business/utilities/DateHandler');
 const { omit } = require('lodash');
 const { UnauthorizedError } = require('../../errors/errors');
+const { User } = require('../entities/User');
 /**
  * orderAdvancedSearchInteractor
  *
@@ -69,6 +70,7 @@ exports.orderAdvancedSearchInteractor = async (
       documentEventCodes: ORDER_EVENT_CODES,
       omitSealed: false,
       ...rawSearch,
+      isExternalUser: User.isExternalUser(authorizedUser.role),
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);

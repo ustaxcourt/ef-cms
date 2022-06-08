@@ -18,7 +18,6 @@ describe('updateCase', () => {
       docketEntries: [],
       docketNumberSuffix: null,
       hearings: [],
-      inProgress: false,
       irsPractitioners: [],
       pk: 'case|101-18',
       privatePractitioners: [],

@@ -30,6 +30,15 @@ const {
   GettingReadyForTrialChecklist,
 } = require('../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist.jsx');
 const {
+  NoticeOfChangeOfTrialJudge,
+} = require('../pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge.jsx');
+const {
+  NoticeOfChangeToInPersonProceeding,
+} = require('../pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding');
+const {
+  NoticeOfChangeToRemoteProceeding,
+} = require('../pdfGenerator/documentTemplates/NoticeOfChangeToRemoteProceeding.jsx');
+const {
   NoticeOfDocketChange,
 } = require('../pdfGenerator/documentTemplates/NoticeOfDocketChange.jsx');
 const {
@@ -94,6 +103,9 @@ const components = {
   DocketRecord,
   DocumentService,
   GettingReadyForTrialChecklist,
+  NoticeOfChangeOfTrialJudge,
+  NoticeOfChangeToInPersonProceeding,
+  NoticeOfChangeToRemoteProceeding,
   NoticeOfDocketChange,
   NoticeOfReceiptOfPetition,
   NoticeOfTrialIssued,

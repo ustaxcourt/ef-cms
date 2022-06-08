@@ -5,7 +5,7 @@ import {
   setupTest,
 } from './helpers';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
-import faker from 'faker';
+const { faker } = require('@faker-js/faker');
 
 const cerebralTest = setupTest();
 

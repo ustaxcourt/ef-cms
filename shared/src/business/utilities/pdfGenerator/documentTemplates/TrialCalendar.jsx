@@ -4,7 +4,7 @@ const { ReportsHeader } = require('../components/ReportsHeader.jsx');
 
 export const TrialCalendar = ({ cases = [], sessionDetail }) => {
   return (
-    <>
+    <div id="trial-calendar">
       <PrimaryHeader />
       <ReportsHeader
         subtitle={`${sessionDetail.startDate} ${sessionDetail.sessionType}`}
@@ -123,6 +123,6 @@ export const TrialCalendar = ({ cases = [], sessionDetail }) => {
           ))}
         </tbody>
       </table>
-    </>
+    </div>
   );
 };

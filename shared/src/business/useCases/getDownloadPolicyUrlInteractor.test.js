@@ -1,7 +1,16 @@
+/* eslint-disable max-lines */
 const {
   calculateISODate,
   createISODateString,
 } = require('../utilities/DateHandler');
+const {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+  INITIAL_DOCUMENT_TYPES,
+  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
+  ROLES,
+  STIPULATED_DECISION_EVENT_CODE,
+  TRANSCRIPT_EVENT_CODE,
+} = require('../entities/EntityConstants');
 const {
   docketClerkUser,
   irsPractitionerUser,
@@ -13,13 +22,6 @@ const {
 const {
   getDownloadPolicyUrlInteractor,
 } = require('./getDownloadPolicyUrlInteractor');
-const {
-  INITIAL_DOCUMENT_TYPES,
-  NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
-  ROLES,
-  STIPULATED_DECISION_EVENT_CODE,
-  TRANSCRIPT_EVENT_CODE,
-} = require('../entities/EntityConstants');
 const { applicationContext } = require('../test/createTestApplicationContext');
 const { cloneDeep } = require('lodash');
 const { MOCK_CASE } = require('../../test/mockCase');
@@ -44,7 +46,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       .getDownloadPolicyUrl.mockReturnValue('localhost');
   });
 
-  it('throw unauthorized error on invalid role', async () => {
+  it('should throw unauthorized error when the users role is invalid', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.admin,
       userId: 'b5724655-1791-4a99-b0f6-f9bbe99c1db5',
@@ -58,7 +60,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  describe('petitioner not associated with case', () => {
+  describe('when the user is a petitioner not associated with case', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
       applicationContext
@@ -66,7 +68,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .verifyCaseForUser.mockReturnValue(false);
     });
 
-    it('throw unauthorized error if user is not associated with case', async () => {
+    it('should throw an unauthorized error', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: MOCK_CASE.docketNumber,
@@ -75,7 +77,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized');
     });
 
-    it('throw unauthorized error for a petitioner who is not associated with the case and attempting to view case confirmation pdf', async () => {
+    it('should throw an unauthorized error when the document being viewed is the case confirmation pdf', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: MOCK_CASE.docketNumber,
@@ -84,7 +86,31 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized');
     });
 
-    it('returns the expected policy url for a petitioner who is NOT associated with the case and viewing a court issued document', async () => {
+    it('should throw an unauthorized error when the document is sealed to the public', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser.mockReturnValue(false);
+
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        createdAt: '2018-01-21T20:49:28.192Z',
+        date: '2200-01-21T20:49:28.192Z',
+        documentTitle: 'Order of [anything] on [date]',
+        documentType: 'Order',
+        eventCode: 'O',
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+      };
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time');
+    });
+
+    it('should return the policy url when the document being viewed is a court issued document', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: 'Order that case is assigned',
@@ -100,7 +126,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should throw an error when the user is a petitioner and is attempting to view a stricken document', async () => {
+    it('should throw an error when the document being viewed is a stricken document', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentTitle: 'Notice of Trial',
@@ -116,9 +142,18 @@ describe('getDownloadPolicyUrlInteractor', () => {
         }),
       ).rejects.toThrow('Unauthorized to view document at this time.');
     });
+
+    it('should throw an Unauthorized error for a petitioner attempting to access an case confirmation pdf for a different case', async () => {
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber, //docket number is 101-18
+          key: 'case-101-20-confirmation.pdf',
+        }),
+      ).rejects.toThrow('Unauthorized');
+    });
   });
 
-  describe('petitioner associated with case', () => {
+  describe('when the user is a petitioner associated with case', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
       applicationContext
@@ -126,7 +161,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .verifyCaseForUser.mockReturnValue(true);
     });
 
-    it('throw unauthorized error if user is associated with the case but the document is not available for viewing at this time', async () => {
+    it('should throw an unauthorized error when the document is not available for viewing at this time', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         createdAt: '2018-01-21T20:49:28.192Z',
@@ -144,7 +179,45 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
-    it('returns the expected policy url for a petitioner who is associated with the case and viewing an available document', async () => {
+    it('should NOT receive the policy url when the document being viewed is a document that has been sealed to all external users', async () => {
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        documentType: 'Order',
+        eventCode: 'O',
+        isOnDocketRecord: true,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+        servedAt: applicationContext.getUtilities().createISODateString(),
+      };
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time');
+    });
+
+    it('should NOT receive the policy url when the Non-Court issued document being viewed is sealed to all external users', async () => {
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        documentType: 'Answer',
+        eventCode: 'A',
+        isOnDocketRecord: true,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+        servedAt: applicationContext.getUtilities().createISODateString(),
+      };
+
+      await expect(
+        getDownloadPolicyUrlInteractor(applicationContext, {
+          docketNumber: MOCK_CASE.docketNumber,
+          key: baseDocketEntry.docketEntryId,
+        }),
+      ).rejects.toThrow('Unauthorized to view document at this time');
+    });
+
+    it('should return the policy url when the doucument requested is an available document', async () => {
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         key: baseDocketEntry.docketEntryId,
@@ -152,7 +225,53 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('throws a not found error for a petitioner who is associated with the case and viewing a document that is not on the docket record', async () => {
+    it('should return the policy url when the document requested is a document that has been sealed to the public', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser.mockReturnValue(true);
+
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        createdAt: '2018-01-21T20:49:28.192Z',
+        date: '2200-01-21T20:49:28.192Z',
+        documentTitle: 'Order of [anything] on [date]',
+        documentType: 'Order',
+        eventCode: 'O',
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+      };
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: baseDocketEntry.docketEntryId,
+      });
+      expect(url).toEqual('localhost');
+    });
+
+    it('should return the policy url when the doucument requested is an Answer that has been sealed to the public', async () => {
+      applicationContext
+        .getPersistenceGateway()
+        .verifyCaseForUser.mockReturnValue(true);
+
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        createdAt: '2018-01-21T20:49:28.192Z',
+        date: '2200-01-21T20:49:28.192Z',
+        documentTitle: 'Answer of [anything] on [date]',
+        documentType: 'Answer',
+        eventCode: 'A',
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+      };
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: baseDocketEntry.docketEntryId,
+      });
+      expect(url).toEqual('localhost');
+    });
+
+    it('should throw a not found error when the document requested is a document that is not on the docket record', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: MOCK_CASE.docketNumber,
@@ -163,7 +282,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       );
     });
 
-    it('throws a not found error for a petitioner who is associated with the case and viewing a document that does not have a file attached', async () => {
+    it('should throw a not found error when the document requested is a document that does not have a file attached', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         isFileAttached: false,
@@ -179,7 +298,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       );
     });
 
-    it('throws a not found error for a case that is not found', async () => {
+    it('should throw a not found error when the case the document belonds to is not found', async () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue({ docketEntries: [] });
@@ -192,7 +311,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Case 123-20 was not found.');
     });
 
-    it('throws an error for a petitioner who is associated with the case and viewing an unserved court issued document', async () => {
+    it('should throw an error when the document requested is an unserved court issued document', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: 'Order that case is assigned',
@@ -208,25 +327,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
-    it('throws an error for a petitioner who is associated with the case and is viewing a isLegacySealed document', async () => {
-      mockCase.docketEntries[0] = {
-        ...baseDocketEntry,
-        documentType: 'Order', // This is from courtIssuedEventCodes.json
-        eventCode: 'O',
-        isLegacySealed: true,
-        isOnDocketRecord: true,
-        servedAt: applicationContext.getUtilities().createISODateString(),
-      };
-
-      await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber,
-          key: baseDocketEntry.docketEntryId,
-        }),
-      ).rejects.toThrow('Unauthorized to view document at this time');
-    });
-
-    it('returns the expected policy url for a petitioner who is associated with the case and viewing a served Stipulated Decision', async () => {
+    it('should return the policy url when the document requested is a served Stipulated Decision', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: 'Stipulated Decision',
@@ -243,7 +344,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('returns the expected policy url for a petitioner who is associated with the case and viewing a case confirmation pdf', async () => {
+    it('should return the policy url when the document requested is a case confirmation pdf', async () => {
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         key: 'case-101-18-confirmation.pdf',
@@ -252,16 +353,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('throws an Unauthorized error for a petitioner attempting to access an case confirmation pdf for a different case', async () => {
-      await expect(
-        getDownloadPolicyUrlInteractor(applicationContext, {
-          docketNumber: MOCK_CASE.docketNumber, //docket number is 101-18
-          key: 'case-101-20-confirmation.pdf',
-        }),
-      ).rejects.toThrow('Unauthorized');
-    });
-
-    it('should throw an error when the user is a petitioner and is attempting to view the stin document', async () => {
+    it('should throw an error when the document requested is a STIN', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: MOCK_CASE.docketNumber,
@@ -271,7 +363,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
   });
 
-  describe('private practitioner not associated with case', () => {
+  describe('when the user is a private practitioner not associated with case', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(
         privatePractitionerUser,
@@ -281,7 +373,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .verifyCaseForUser.mockReturnValue(false);
     });
 
-    it('throws an error for a privatePractitioner who is not associated with the case and viewing an unserved court issued document', async () => {
+    it('should throw an error when the document being viewed is an unserved court issued document', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: 'Order that case is assigned',
@@ -296,7 +388,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
-    it('does NOT throw an error for a privatePractitioner who is not associated with the case and viewing a legacy served court issued document', async () => {
+    it('should NOT throw an error when the document being viewed is a legacy served court issued document', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: 'Order that case is assigned',
@@ -313,7 +405,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).resolves.toBeDefined();
     });
 
-    it('throws an error for a privatePractitioner who is NOT associated with the case and viewing a served Stipulated Decision', async () => {
+    it('should throw an error when the document being viewed is a served Stipulated Decision', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: 'Stipulated Decision',
@@ -331,7 +423,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
   });
 
-  describe('private practitioner associated with case', () => {
+  describe('when the user is a private practitioner associated with case', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(
         privatePractitionerUser,
@@ -341,13 +433,33 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .verifyCaseForUser.mockReturnValue(true);
     });
 
-    it('throws an error for a privatePractitioner who is associated with the case and is viewing a isLegacySealed document', async () => {
+    it('should receive the policy url when the document being viewed is a document that has been sealed to the public', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].documentType,
         eventCode: NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP[0].eventCode,
-        isLegacySealed: true,
         isOnDocketRecord: true,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
+        servedAt: applicationContext.getUtilities().createISODateString(),
+      };
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: baseDocketEntry.docketEntryId,
+      });
+
+      expect(url).toEqual('localhost');
+    });
+
+    it('should NOT receive the policy url when the document being viewed is a document that has been sealed to all external users', async () => {
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        documentType: 'Order',
+        eventCode: 'O',
+        isOnDocketRecord: true,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
         servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
@@ -359,7 +471,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view document at this time');
     });
 
-    it('returns the expected policy url for a privatePractitioner who is associated with the case and viewing a served Stipulated Decision', async () => {
+    it('should receive the policy url when the document being viewed is a served Stipulated Decision', async () => {
       mockCase.docketEntries[0] = {
         ...baseDocketEntry,
         documentType: 'Stipulated Decision',
@@ -377,7 +489,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
   });
 
-  describe('petitions clerk', () => {
+  describe('when the user is a petitions clerk', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
       applicationContext
@@ -385,7 +497,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
         .verifyCaseForUser.mockReturnValue(false);
     });
 
-    it('returns the url for an internal user role even if verifyCaseForUser returns false', async () => {
+    it('should return the policy url for an internal user role even when verifyCaseForUser returns false', async () => {
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         key: baseDocketEntry.docketEntryId,
@@ -394,7 +506,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should return the url when the user is a petitionsClerk, the case has not been served and is attempting to view the stin document', async () => {
+    it('should return the policy url when the case has not been served and the requested document is a STIN', async () => {
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
         key: stinDocketEntry.docketEntryId,
@@ -403,7 +515,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       expect(url).toEqual('localhost');
     });
 
-    it('should throw an error when the user is a petitionsClerk, the case has been served and is attempting to view the stin document', async () => {
+    it('should throw an error when the case has been served and is attempting to view the stin document', async () => {
       mockCase.docketEntries[0].servedAt = '2019-08-25T05:00:00.000Z';
 
       await expect(
@@ -415,12 +527,12 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
   });
 
-  describe('docket clerk', () => {
+  describe('when the user is a docket clerk', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
     });
 
-    it('should throw an error when the user is a docketClerk and is attempting to view the stin document', async () => {
+    it('should throw an error when the requested document is a STIN', async () => {
       await expect(
         getDownloadPolicyUrlInteractor(applicationContext, {
           docketNumber: MOCK_CASE.docketNumber,
@@ -429,7 +541,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
       ).rejects.toThrow('Unauthorized to view case documents at this time.');
     });
 
-    it('should return the url when the user is a docketClerk and is attempting to view a correspondence document', async () => {
+    it('should return the policy url when the requested document is a correspondence', async () => {
       const mockCorrespondenceId = applicationContext.getUniqueId();
       mockCase.correspondence = [
         {
@@ -446,12 +558,12 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
   });
 
-  describe('irs superuser', () => {
+  describe('when the user is a irs superuser', () => {
     beforeAll(() => {
       applicationContext.getCurrentUser.mockReturnValue(irsSuperuserUser);
     });
 
-    it('throws an error if the user role is irsSuperuser and the petition document on the case is not served', async () => {
+    it('should throw an error when the petition document on the case is not served', async () => {
       mockCase.docketEntries[0] = {
         documentType: 'Petition',
       };
@@ -466,12 +578,51 @@ describe('getDownloadPolicyUrlInteractor', () => {
       );
     });
 
-    it('returns the url if the user role is irsSuperuser and the petition document on the case is served', async () => {
+    it('should return the policy url when requested document is a petition on a served case', async () => {
       mockCase.docketEntries[0] = {
         docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
         documentType: 'Petition',
         isFileAttached: true,
         servedAt: '2019-03-01T21:40:46.415Z',
+      };
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+      });
+
+      expect(url).toEqual('localhost');
+    });
+
+    it('returns the url if the user role is irsSuperuser and the order is sealed', async () => {
+      mockCase.docketEntries[0] = {
+        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        documentType: 'Order',
+        eventCode: 'O',
+        isFileAttached: true,
+        isSealed: true,
+        sealedTo: 'Public',
+        servedAt: '2019-03-01T21:40:46.415Z',
+      };
+
+      const url = await getDownloadPolicyUrlInteractor(applicationContext, {
+        docketNumber: MOCK_CASE.docketNumber,
+        key: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+      });
+
+      expect(url).toEqual('localhost');
+    });
+
+    it('should receive the policy url when the document being viewed is a document that has been sealed to all external users', async () => {
+      mockCase.docketEntries[0] = {
+        ...baseDocketEntry,
+        docketEntryId: '60814ae9-cd39-454a-9dc7-f5595a39988f',
+        documentType: 'Order',
+        eventCode: 'O',
+        isOnDocketRecord: true,
+        isSealed: true,
+        sealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.EXTERNAL,
+        servedAt: applicationContext.getUtilities().createISODateString(),
       };
 
       const url = await getDownloadPolicyUrlInteractor(applicationContext, {
@@ -514,7 +665,7 @@ describe('getDownloadPolicyUrlInteractor', () => {
     });
   });
 
-  describe('irs practitioner associated with the case', () => {
+  describe('when the user is a irs practitioner associated with the case', () => {
     const aShortTimeAgo = calculateISODate({
       dateString: createISODateString(),
       howMuch: -12,

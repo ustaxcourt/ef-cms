@@ -1,0 +1,25 @@
+table {
+  width: 100%;
+  border: 1px solid #ccc;
+  -webkit-border-horizontal-spacing: 0;
+  border-spacing: 0;
+  -webkit-border-vertical-spacing: 0;
+  font-family: 'nimbus_sans_l', sans-serif;
+  font-size: 12px;
+}
+
+th,
+td {
+  padding: 8px;
+  border-bottom: 1px solid #ccc;
+  font-family: 'nimbus_roman', serif;
+  font-size: 14px;
+  text-align: left;
+  vertical-align: top;
+}
+
+th {
+  background-color: #f0f0f0;
+  font-weight: 600;
+  white-space: nowrap;
+}

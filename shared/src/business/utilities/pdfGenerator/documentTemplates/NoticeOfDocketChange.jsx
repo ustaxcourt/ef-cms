@@ -15,13 +15,13 @@ export const NoticeOfDocketChange = ({
     filingParties && filingParties.before !== filingParties.after;
 
   return (
-    <>
+    <div id="notice-of-docket-change">
       <PrimaryHeader />
       <DocketHeader
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3="Notice of Docket Change"
+        documentTitle="Notice of Docket Change"
       />
 
       <div className="card margin-top-80">
@@ -55,6 +55,6 @@ export const NoticeOfDocketChange = ({
         <br />
         Clerk of the Court
       </p>
-    </>
+    </div>
   );
 };

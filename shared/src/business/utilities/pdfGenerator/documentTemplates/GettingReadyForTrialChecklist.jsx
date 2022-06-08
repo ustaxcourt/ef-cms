@@ -4,7 +4,7 @@ const { PrimaryHeader } = require('../components/PrimaryHeader.jsx');
 
 export const GettingReadyForTrialChecklist = ({ trialInfo }) => {
   return (
-    <div className="standing-pretrial-order-small-case">
+    <div id="getting-ready-checklist">
       <PrimaryHeader />
 
       <h2>

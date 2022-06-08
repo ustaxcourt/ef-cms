@@ -134,7 +134,7 @@ createAccount() {
       --client-id "${CLIENT_ID}" \
       --region "${REGION}" \
       --challenge-name NEW_PASSWORD_REQUIRED \
-      --challenge-responses NEW_PASSWORD=${DEFAULT_ACCOUNT_PASS},USERNAME=${email} \
+      --challenge-responses "NEW_PASSWORD=${DEFAULT_ACCOUNT_PASS},USERNAME=${email}" \
       --session="${session}")
   fi
 }

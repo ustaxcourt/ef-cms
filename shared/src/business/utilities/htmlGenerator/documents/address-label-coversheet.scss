@@ -1,0 +1,17 @@
+#address-label-cover-sheet {
+  font-family: 'nimbus_roman', serif;
+  font-size: 12px;
+
+  .docket {
+    position: absolute;
+    top: 1cm;
+    left: 0;
+    padding-left: 0.6in;
+  }
+
+  .address-label {
+    position: absolute;
+    bottom: 0;
+    left: 0.5in;
+  }
+}

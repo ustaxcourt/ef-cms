@@ -37,7 +37,7 @@ The user story must:
 
 Process: Flexion developers and designers will test if the story meets acceptance criteria and test cases in Flexion dev and staging environments (“standard testing”). If additional acceptance criteria or testing scenarios are discovered while the story is in progress, a new story should be created, added to the backlog and prioritized by the product owner. 
 
-## Definition of Done (Updated 10-6-21)
+## Definition of Done (Updated 5-19-22)
 **Product Owner**
  - [ ]  Acceptance criteria have been met and validated on the Court's migration environment
  - [ ] Add scenario to testing document, if applicable (https://docs.google.com/spreadsheets/d/1FUHKC_YrT-PosaWD5gRVmsDzI1HS_U-8CyMIb-qX9EA/edit?usp=sharing)
@@ -49,7 +49,7 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] Story has been tested on a mobile device (for external users only)
 
 **Engineering**
- - [ ] Automated test scripts have been written
+ - [ ] Automated test scripts have been written, including visual tests for newly added PDFs
  - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning
  - [ ] Verify that language for docket record for internal users and external users is identical
  - [ ] New screens have been added to pa11y scripts
@@ -60,5 +60,8 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] Code refactored for clarity and to remove any known technical debt
  - [ ] Acceptance criteria for the story has been met
  - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story
- - [ ] Deployed to any Flexion environment for Engineering Review
- - [ ] Deployed to the Court's migration environment
+ - [ ] Test cases reviewed by an engineer on a deployed environment for Engineering Review.
+ - [ ] Reviewed by UX on a deployed environment.
+ - [ ] Reviewed by PO on a deployed environment. Can be deployed to the Court's `test` environment if prod-like data is required. Otherwise deployed to any `experimental` environment.
+ - [ ] Deployed to the Court's `staging` environment.
+

@@ -7,8 +7,9 @@
 
 set -e
 
-ENVIRONMENTS=$@
-if [[ -z "${ENVIRONMENTS}" ]]; then
+ENVIRONMENTS=("$@")
+
+if [[ -z "${ENVIRONMENTS[0]}" ]]; then
   echo "Pass environment list as space-separated arguments."
   echo
   echo "Example: "
@@ -46,7 +47,7 @@ process_group () {
 echo
 echo "Checking for expected log groups…"
 
-for ENV in $ENVIRONMENTS; do
+for ENV in "${ENVIRONMENTS[@]}"; do
   for COLOR in blue green; do
     process_group "/aws/lambda/api_${ENV}_${COLOR}"
     process_group "/aws/lambda/api_public_${ENV}_${COLOR}"
@@ -78,11 +79,11 @@ if [[ "$TOTAL_TO_ADD" == "0" ]]; then
 fi
 
 echo "These ${TOTAL_TO_ADD} log groups are missing:"
-for GROUP in ${EAST_GROUPS_TO_CREATE[@]}; do
+for GROUP in "${EAST_GROUPS_TO_CREATE[@]}"; do
   echo "  - $GROUP (us-east-1)"
 done
 
-for GROUP in ${WEST_GROUPS_TO_CREATE[@]}; do
+for GROUP in "${WEST_GROUPS_TO_CREATE[@]}"; do
   echo "  - $GROUP (us-west-1)"
 done
 
@@ -93,10 +94,10 @@ read -p "Create these log groups? (y/N) " -r
 echo
 set -x
 
-for GROUP in ${EAST_GROUPS_TO_CREATE[@]}; do
+for GROUP in "${EAST_GROUPS_TO_CREATE[@]}"; do
   aws logs create-log-group --log-group-name="$GROUP" --region="us-east-1"
 done
 
-for GROUP in ${WEST_GROUPS_TO_CREATE[@]}; do
+for GROUP in "${WEST_GROUPS_TO_CREATE[@]}"; do
   aws logs create-log-group --log-group-name="$GROUP" --region="us-west-1"
 done

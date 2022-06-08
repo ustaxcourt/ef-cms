@@ -371,17 +371,6 @@ label.validated::after {
   @media only screen and (min-width: $medium-screen) {
     max-width: units('desktop');
   }
-
-  .contact-group {
-    input,
-    select {
-      max-width: units('mobile') + 5;
-    }
-
-    .grid-row.grid-gap.state-and-city {
-      max-width: units('mobile') + 7;
-    }
-  }
 }
 
 .clear-both {

@@ -9,7 +9,8 @@ describe('setAllAndCurrentJudgesAction', () => {
   beforeAll(() => {
     presenter.providers.applicationContext = applicationContext;
   });
-  it('populates state.legacyAndCurrentJudges with all users.props whose role is "judge" or "legacyJudge"', async () => {
+
+  it('should populate state.legacyAndCurrentJudges with all users.props whose role is "judge" or "legacyJudge"', async () => {
     const result = await runAction(setAllAndCurrentJudgesAction, {
       modules: { presenter },
       props: {
@@ -23,7 +24,7 @@ describe('setAllAndCurrentJudgesAction', () => {
     expect(result.state.legacyAndCurrentJudges.length).toBe(2);
   });
 
-  it('populates state.judges with all users.props whose role is "judge"', async () => {
+  it('should populate state.judges with all users.props whose role is "judge"', async () => {
     const result = await runAction(setAllAndCurrentJudgesAction, {
       modules: { presenter },
       props: {

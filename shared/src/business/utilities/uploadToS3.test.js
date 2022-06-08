@@ -25,7 +25,7 @@ describe('uploadToS3', () => {
       }),
     );
 
-    let mockCaseConfirmationPdfName = 'pdf name';
+    let mockPdfName = 'pdf name';
 
     applicationContext.getStorageClient.mockReturnValue({
       getObject: getObjectMock,
@@ -35,7 +35,7 @@ describe('uploadToS3', () => {
     await expect(
       uploadToS3({
         applicationContext,
-        mockCaseConfirmationPdfName,
+        pdfName: mockPdfName,
         testPdfDoc,
       }),
     ).rejects.toEqual('there was an error uploading');
@@ -57,7 +57,7 @@ describe('uploadToS3', () => {
       }),
     );
 
-    let mockCaseConfirmationPdfName = 'pdf name';
+    let mockPdfName = 'pdf name';
 
     applicationContext.getStorageClient.mockReturnValue({
       getObject: getObjectMock,
@@ -66,7 +66,7 @@ describe('uploadToS3', () => {
 
     await uploadToS3({
       applicationContext,
-      mockCaseConfirmationPdfName,
+      pdfName: mockPdfName,
       testPdfDoc,
     });
     expect(applicationContext.logger.error).not.toHaveBeenCalled();

@@ -1,7 +1,22 @@
+// eslint-disable-next-line spellcheck/spell-checker
 /*
+
 This is an example script for setting up MFA for the irs super user.
 
-This script isn't actually used in any manual or automated deploy process.
+First, create a user with a temporary password and name in the irs cognito pool.
+
+Modify this script's ClientId, password, and email to match your setup.
+
+We recommend installing the oathtool for generating the MFA code (brew install oathtool).
+When running this script for the first time, you'll be asked for an MFA code twice.
+You'll be given a private key the first time you run the script which you can use here:
+
+oathtool -b --totp 'private_key'
+
+This will generate a MFA code which lasts for 60 seconds, so you need to input it before it expires.
+
+If everything is successful, you'll get back a ID Token which is the JWT you should use to validate your requests.
+
 */
 
 const readline = require('readline');

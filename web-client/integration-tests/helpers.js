@@ -29,6 +29,7 @@ import {
 } from '../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseMessages as formattedCaseMessagesComputed } from '../src/presenter/computeds/formattedCaseMessages';
 import { formattedDocketEntries as formattedDocketEntriesComputed } from '../src/presenter/computeds/formattedDocketEntries';
+import { formattedMessages as formattedMessagesComputed } from '../src/presenter/computeds/formattedMessages';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../src/presenter/computeds/formattedWorkQueue';
 import { generateAndServeDocketEntry } from '../../shared/src/business/useCaseHelper/service/createChangeItems';
 import { generatePdfFromHtmlInteractor } from '../../shared/src/business/useCases/generatePdfFromHtmlInteractor';
@@ -60,6 +61,7 @@ import { updatePetitionerCasesInteractor } from '../../shared/src/business/useCa
 import { updateUser } from '../../shared/src/persistence/dynamo/users/updateUser';
 import { userMap } from '../../shared/src/test/mockUserTokenMap';
 import { withAppContextDecorator } from '../src/withAppContext';
+
 import { workQueueHelper as workQueueHelperComputed } from '../src/presenter/computeds/workQueueHelper';
 import FormDataHelper from 'form-data';
 import axios from 'axios';
@@ -81,6 +83,7 @@ const formattedCaseMessages = withAppContextDecorator(
   formattedCaseMessagesComputed,
 );
 const workQueueHelper = withAppContextDecorator(workQueueHelperComputed);
+const formattedMessages = withAppContextDecorator(formattedMessagesComputed);
 
 Object.assign(applicationContext, {
   getDocumentClient: () => {
@@ -274,10 +277,7 @@ export const contactSecondaryFromState = cerebralTest => {
   return cerebralTest.getState('caseDetail.petitioners.1');
 };
 
-export const getCaseMessagesForCase = async cerebralTest => {
-  await cerebralTest.runSequence('gotoCaseDetailSequence', {
-    docketNumber: cerebralTest.docketNumber,
-  });
+export const getCaseMessagesForCase = cerebralTest => {
   return runCompute(formattedCaseMessages, {
     state: cerebralTest.getState(),
   });
@@ -320,17 +320,6 @@ export const getUserRecordById = userId => {
   });
 };
 
-export const setWhitelistIps = ips => {
-  return client.put({
-    Item: {
-      ips,
-      pk: 'allowed-terminal-ips',
-      sk: 'allowed-terminal-ips',
-    },
-    applicationContext,
-  });
-};
-
 export const describeif = condition => (condition ? describe : describe.skip);
 
 export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
@@ -340,6 +329,34 @@ export const setOpinionSearchEnabled = (isEnabled, keyPrefix) => {
       pk: `${keyPrefix}-opinion-search-enabled`,
       sk: `${keyPrefix}-opinion-search-enabled`,
     },
+    applicationContext,
+  });
+};
+
+export const setChiefJudgeNameFlagValue = newJudgeName => {
+  return client.put({
+    Item: {
+      current: newJudgeName,
+      pk: 'chief-judge-name',
+      sk: 'chief-judge-name',
+    },
+    applicationContext,
+  });
+};
+
+export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
+  return client.update({
+    ExpressionAttributeNames: {
+      '#judgeTitle': 'judgeTitle',
+    },
+    ExpressionAttributeValues: {
+      ':judgeTitle': newJudgeTitle,
+    },
+    Key: {
+      pk: `user|${judgeUserId}`,
+      sk: `user|${judgeUserId}`,
+    },
+    UpdateExpression: 'SET #judgeTitle = :judgeTitle',
     applicationContext,
   });
 };
@@ -371,6 +388,17 @@ export const getFormattedDocumentQCMyOutbox = async cerebralTest => {
     queue: 'my',
   });
   return runCompute(formattedWorkQueue, {
+    state: cerebralTest.getState(),
+  });
+};
+
+export const getUserMessageCount = async (cerebralTest, box, queue) => {
+  await cerebralTest.runSequence('gotoMessagesSequence', {
+    box,
+    queue,
+  });
+
+  return runCompute(formattedMessages, {
     state: cerebralTest.getState(),
   });
 };
@@ -575,8 +603,11 @@ export const uploadExternalRatificationDocument = async cerebralTest => {
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
 
-export const uploadProposedStipulatedDecision = async cerebralTest => {
-  cerebralTest.setState('form', {
+export const uploadProposedStipulatedDecision = async (
+  cerebralTest,
+  configObject,
+) => {
+  const defaultForm = {
     attachments: false,
     category: 'Decision',
     certificateOfService: false,
@@ -592,6 +623,11 @@ export const uploadProposedStipulatedDecision = async cerebralTest => {
     privatePractitioners: [],
     scenario: 'Standard',
     searchError: false,
+  };
+
+  cerebralTest.setState('form', {
+    ...defaultForm,
+    ...configObject,
   });
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
@@ -676,7 +712,7 @@ export const loginAs = (cerebralTest, user) =>
     expect(cerebralTest.getState('user.email')).toBeDefined();
   });
 
-export const setupTest = ({ useCases = {} } = {}) => {
+export const setupTest = ({ useCases = {}, constantsOverrides = {} } = {}) => {
   let cerebralTest;
   global.FormData = FormDataHelper;
   global.Blob = () => {
@@ -764,18 +800,16 @@ export const setupTest = ({ useCases = {} } = {}) => {
   cerebralTest.closeSocket = stopSocket;
 
   const originalUseCases = applicationContext.getUseCases();
-  presenter.providers.applicationContext.getUseCases = () => {
-    return {
-      ...originalUseCases,
-      ...useCases,
-      loadPDFForSigningInteractor: () => Promise.resolve(null),
-    };
+  const allUseCases = {
+    ...originalUseCases,
+    ...useCases,
+    loadPDFForSigningInteractor: () => Promise.resolve(null),
   };
 
-  const constantsOverrides = {
-    CASE_SEARCH_PAGE_SIZE: 1,
-    DEADLINE_REPORT_PAGE_SIZE: 1,
+  presenter.providers.applicationContext.getUseCases = () => {
+    return allUseCases;
   };
+
   const originalConstants = applicationContext.getConstants();
   presenter.providers.applicationContext.getConstants = () => {
     return {
@@ -856,6 +890,38 @@ export const wait = time => {
   return new Promise(resolve => {
     setTimeout(resolve, time);
   });
+};
+
+export const waitForLoadingComponentToHide = async ({
+  cerebralTest,
+  component = 'progressIndicator.waitingForResponse',
+  maxWait = 30000,
+  refreshInterval = 500,
+}) => {
+  let waitTime = 0;
+
+  while (cerebralTest.getState(component) && waitTime < maxWait) {
+    waitTime += refreshInterval;
+    await wait(refreshInterval);
+  }
+  console.log(`Waited ${waitTime}ms for the ${component} to hide`);
+};
+
+export const waitForExpectedItem = async ({
+  cerebralTest,
+  currentItem,
+  expectedItem,
+  maxWait = 10000,
+}) => {
+  let waitTime = 0;
+  while (
+    cerebralTest.getState(currentItem) != expectedItem &&
+    waitTime < maxWait
+  ) {
+    waitTime += 500;
+    await wait(500);
+  }
+  console.log(`Waited ${waitTime}ms for ${expectedItem}`);
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
@@ -944,4 +1010,26 @@ export const updateOrderForm = async (cerebralTest, formValues) => {
     formValues,
     'updateAdvancedOrderSearchFormValueSequence',
   );
+};
+
+export const verifySortedReceivedAtDateOfPendingItems = pendingItems => {
+  return pendingItems.every((elm, i, arr) =>
+    i === 0 ? true : arr[i - 1].receivedAt <= arr[i].receivedAt,
+  );
+};
+
+export const docketClerkLoadsPendingReportOnChiefJudgeSelection = async ({
+  cerebralTest,
+  shouldLoadMore = false,
+}) => {
+  await refreshElasticsearchIndex();
+
+  await cerebralTest.runSequence('gotoPendingReportSequence');
+
+  await cerebralTest.runSequence('setPendingReportSelectedJudgeSequence', {
+    judge: 'Chief Judge',
+  });
+
+  shouldLoadMore &&
+    (await cerebralTest.runSequence('loadMorePendingItemsSequence'));
 };

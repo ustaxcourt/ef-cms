@@ -8,6 +8,7 @@ import { setAlertWarningAction } from '../actions/setAlertWarningAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
+import { setPrintPaperDoneUrlAction } from '../actions/TrialSession/setPrintPaperDoneUrlAction';
 import { setTrialSessionCalendarAlertWarningAction } from '../actions/TrialSession/setTrialSessionCalendarAlertWarningAction';
 import { shouldRefreshCaseAction } from '../actions/shouldRefreshCaseAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
@@ -29,6 +30,7 @@ export const noticeGenerationCompleteSequence = [
     ],
     paper: [
       setPdfPreviewUrlSequence,
+      setPrintPaperDoneUrlAction,
       setCurrentPageAction('PrintPaperTrialNotices'),
       setTrialSessionCalendarAlertWarningAction,
       setAlertWarningAction,

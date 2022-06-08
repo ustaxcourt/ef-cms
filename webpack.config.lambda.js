@@ -1,7 +1,7 @@
 const CopyPlugin = require('copy-webpack-plugin');
 
 module.exports = {
-  externals: ['aws-sdk', 'chrome-aws-lambda', 'pug'],
+  externals: ['aws-sdk', '@sparticuz/chrome-aws-lambda', 'pug'],
   mode: 'production',
   module: {
     rules: [
@@ -26,6 +26,7 @@ module.exports = {
       patterns: [
         { from: 'node_modules/pdfjs-dist/legacy/build', to: '.' },
         { from: 'node_modules/pdf-lib/dist', to: '.' },
+        { from: 'shared/static/pdfs/amended-petition-form.pdf', to: '.' },
       ],
     }),
   ],

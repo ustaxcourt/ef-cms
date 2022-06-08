@@ -3,6 +3,7 @@ const combine = require('logform/combine');
 const errors = require('logform/errors');
 const json = require('logform/json');
 const printf = require('logform/printf');
+const util = require('util');
 const {
   config,
   createLogger: createWinstonLogger,
@@ -35,14 +36,7 @@ exports.createLogger = (opts = {}) => {
       ...formatters,
       colorize(),
       printf(info => {
-        const metadata = Object.assign({}, info, {
-          level: undefined,
-          message: undefined,
-        });
-
-        const stringified = JSON.stringify(metadata, null, 2);
-        const lines = stringified === '{}' ? [] : stringified.split('\n');
-
+        const lines = exports.getMetadataLines(info);
         return [`${info.level}:\t${info.message}`, ...lines].join('\n  ');
       }),
     );
@@ -53,4 +47,23 @@ exports.createLogger = (opts = {}) => {
   // alias Winston's "warning" to "warn".
   logger.warn = logger.warning;
   return logger;
+};
+
+exports.getMetadataLines = info => {
+  const metadata = Object.assign({}, info, {
+    level: undefined,
+    message: undefined,
+  });
+  // util.inspecting to avoid stringifying circular request/response error objects
+  const stringified = util.inspect(metadata, {
+    compact: false,
+    maxStringLength: null,
+  });
+  const undefinedPropertyMatcher = /.+: undefined,*/gm;
+  const stripped = stringified.replace(undefinedPropertyMatcher, '');
+  const emptyObjectMatcher = /{\s*}/gm;
+  if (stripped.match(emptyObjectMatcher)) {
+    return [];
+  }
+  return stripped.trim().split('\n');
 };

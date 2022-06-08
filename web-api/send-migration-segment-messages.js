@@ -41,7 +41,7 @@ let sent = 0;
 (async () => {
   const itemCount = await getItemCount();
 
-  const totalSegments = Math.ceil(itemCount / SEGMENT_SIZE);
+  const totalSegments = Math.max(1, Math.ceil(itemCount / SEGMENT_SIZE));
 
   const segments = shuffle(
     new Array(totalSegments).fill(null).map((v, i) => ({

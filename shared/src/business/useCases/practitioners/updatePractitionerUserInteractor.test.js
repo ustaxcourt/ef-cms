@@ -78,37 +78,35 @@ describe('updatePractitionerUserInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
     };
 
-    const updatedUser = await updatePractitionerUserInteractor(
-      applicationContext,
-      {
-        barNumber: 'AB1111',
-        user: {
-          ...mockPractitioner,
-          barNumber: 'AB2222',
-          confirmEmail: 'bc@example.com',
-          updatedEmail: 'bc@example.com',
-        },
+    await updatePractitionerUserInteractor(applicationContext, {
+      barNumber: 'AB1111',
+      user: {
+        ...mockPractitioner,
+        barNumber: 'AB2222',
+        confirmEmail: 'bc@example.com',
+        updatedEmail: 'bc@example.com',
       },
-    );
+    });
 
-    expect(updatedUser.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_PAPER);
+    expect(
+      applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
+        .calls[0][0].user,
+    ).toMatchObject({
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+    });
   });
 
   it('updates the practitioner user and does NOT override a bar number or email when the original user had an email', async () => {
-    const updatedUser = await updatePractitionerUserInteractor(
-      applicationContext,
-      {
-        barNumber: 'AB1111',
-        user: {
-          ...mockPractitioner,
-          barNumber: 'AB2222',
-          confirmEmail: 'bc@example.com',
-          updatedEmail: 'bc@example.com',
-        },
+    await updatePractitionerUserInteractor(applicationContext, {
+      barNumber: 'AB1111',
+      user: {
+        ...mockPractitioner,
+        barNumber: 'AB2222',
+        confirmEmail: 'bc@example.com',
+        updatedEmail: 'bc@example.com',
       },
-    );
+    });
 
-    expect(updatedUser).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().updatePractitionerUser,
     ).toBeCalled();
@@ -126,19 +124,15 @@ describe('updatePractitionerUserInteractor', () => {
         email: undefined,
       });
 
-    const updatedUser = await updatePractitionerUserInteractor(
-      applicationContext,
-      {
-        barNumber: 'AB1111',
-        user: {
-          ...mockPractitioner,
-          confirmEmail: 'admissionsclerk@example.com',
-          updatedEmail: 'admissionsclerk@example.com',
-        },
+    await updatePractitionerUserInteractor(applicationContext, {
+      barNumber: 'AB1111',
+      user: {
+        ...mockPractitioner,
+        confirmEmail: 'admissionsclerk@example.com',
+        updatedEmail: 'admissionsclerk@example.com',
       },
-    );
+    });
 
-    expect(updatedUser).toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().createNewPractitionerUser,
     ).toBeCalled();

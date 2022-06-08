@@ -28,16 +28,13 @@ const standingPretrialOrderForSmallCase = async ({
   const pdfContentHtmlWithHeader = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactStandingPretrialOrderForSmallCaseTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Standing Pre-trial Order',
-    },
   });
 
   const headerHtml = reactTemplateGenerator({
     componentName: 'PageMetaHeaderDocket',
     data: {
       docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
     },
   });
 
@@ -48,7 +45,6 @@ const standingPretrialOrderForSmallCase = async ({
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
-      overwriteHeader: true,
     });
 
   const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
@@ -74,13 +70,12 @@ const standingPretrialOrderForSmallCase = async ({
       contentHtml: pdfContentHtmlWithoutHeader,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
-      overwriteHeader: false,
     });
 
   return await combineTwoPdfs({
     applicationContext,
-    firstPdf: pdfWithHeader,
-    secondPdf: pdfWithoutHeader,
+    firstPdf: new Uint8Array(pdfWithHeader),
+    secondPdf: new Uint8Array(pdfWithoutHeader),
   });
 };
 

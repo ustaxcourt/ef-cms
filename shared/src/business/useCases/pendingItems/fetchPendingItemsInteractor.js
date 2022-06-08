@@ -28,6 +28,7 @@ exports.fetchPendingItemsInteractor = async (
     throw new Error('judge is required');
   }
 
+  //depends on fetchPendingItems returning a list already sorted by receivedAt
   return await applicationContext.getPersistenceGateway().fetchPendingItems({
     applicationContext,
     judge,

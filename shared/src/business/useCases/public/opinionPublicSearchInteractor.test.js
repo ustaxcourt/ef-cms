@@ -37,6 +37,7 @@ describe('opinionPublicSearchInteractor', () => {
     await opinionPublicSearchInteractor(applicationContext, {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
+      opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       startDate: '01/01/2001',
     });
 

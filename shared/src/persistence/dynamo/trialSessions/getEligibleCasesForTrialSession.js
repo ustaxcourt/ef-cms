@@ -19,9 +19,17 @@ exports.getEligibleCasesForTrialSession = async ({
     applicationContext,
   });
 
-  const docketNumbers = [
-    ...new Set(mappings.map(metadata => metadata.docketNumber)),
-  ];
+  let docketNumbers = [];
+  mappings.map(metadata => {
+    const { docketNumber } = metadata;
+    if (docketNumbers.includes(docketNumber)) {
+      applicationContext.logger.warn(
+        `Encountered duplicate eligible-for-trial-case-catalog mapping for case ${docketNumber}.`,
+      );
+    } else {
+      docketNumbers.push(docketNumber);
+    }
+  });
 
   const results = await client.batchGet({
     applicationContext,
@@ -31,21 +39,21 @@ exports.getEligibleCasesForTrialSession = async ({
     })),
   });
 
-  const aggregatedResults = [];
+  const aggregatedResults = await Promise.all(
+    results.map(async result => {
+      const caseItems = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber: result.docketNumber,
+        });
 
-  for (let result of results) {
-    const caseItems = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: result.docketNumber,
-      });
-
-    aggregatedResults.push({
-      ...result,
-      ...caseItems,
-    });
-  }
+      return {
+        ...result,
+        ...caseItems,
+      };
+    }),
+  );
 
   const afterMapping = docketNumbers.map(docketNumber => ({
     ...aggregatedResults.find(r => docketNumber === r.docketNumber),

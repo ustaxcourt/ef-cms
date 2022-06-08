@@ -7,6 +7,7 @@ import {
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
   DATE_RANGE_SEARCH_OPTIONS,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EVENT_CODES_VISIBLE_TO_PUBLIC,
@@ -49,19 +50,27 @@ import {
 } from '../../shared/src/business/utilities/getFormattedCaseDetail';
 import { generatePublicDocketRecordPdfInteractor } from '../../shared/src/proxies/public/generatePublicDocketRecordPdfProxy';
 import { getCaseForPublicDocketSearchInteractor } from '../../shared/src/proxies/public/getCaseForPublicDocketNumberSearchProxy';
+import { getCurrentVersionInteractor } from '../../shared/src/proxies/getCurrentVersionProxy';
 import { getDocumentDownloadUrlInteractor } from '../../shared/src/proxies/getDocumentDownloadUrlProxy';
 import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureFlag/getFeatureFlagValueProxy';
 import { getHealthCheckInteractor } from '../../shared/src/proxies/health/getHealthCheckProxy';
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
+import { getItem } from '../../shared/src/persistence/localStorage/getItem';
+import { getItemInteractor } from '../../shared/src/business/useCases/getItemInteractor';
 import { getJudgeLastName } from '../../shared/src/business/utilities/getFormattedJudgeName';
 import { getMaintenanceModePublicInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModePublicProxy';
 import { getPublicCaseExistsInteractor } from '../../shared/src/proxies/getPublicCaseExistsProxy';
 import { getPublicCaseInteractor } from '../../shared/src/proxies/getPublicCaseProxy';
 import { getPublicJudgesInteractor } from '../../shared/src/proxies/public/getPublicJudgesProxy';
+import { getSealedDocketEntryTooltip } from '../../shared/src/business/utilities/getSealedDocketEntryTooltip';
 import { getTodaysOpinionsInteractor } from '../../shared/src/proxies/public/getTodaysOpinionsProxy';
 import { getTodaysOrdersInteractor } from '../../shared/src/proxies/public/getTodaysOrdersProxy';
 import { opinionPublicSearchInteractor } from '../../shared/src/proxies/opinionPublicSearchProxy';
 import { orderPublicSearchInteractor } from '../../shared/src/proxies/orderPublicSearchProxy';
+import { removeItem } from '../../shared/src/persistence/localStorage/removeItem';
+import { removeItemInteractor } from '../../shared/src/business/useCases/removeItemInteractor';
+import { setItem } from '../../shared/src/persistence/localStorage/setItem';
+import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
 import { tryCatchDecorator } from './tryCatchDecorator';
 import { validateCaseAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateCaseAdvancedSearchInteractor';
 import { validateOpinionAdvancedSearchInteractor } from '../../shared/src/business/useCases/validateOpinionAdvancedSearchInteractor';
@@ -80,15 +89,19 @@ const allUseCases = {
   getCaseExistsInteractor: getPublicCaseExistsInteractor,
   getCaseForPublicDocketSearchInteractor,
   getCaseInteractor: getPublicCaseInteractor,
+  getCurrentVersionInteractor,
   getDocumentDownloadUrlInteractor,
   getFeatureFlagValueInteractor,
   getHealthCheckInteractor,
+  getItemInteractor,
   getMaintenanceModePublicInteractor,
   getPublicJudgesInteractor,
   getTodaysOpinionsInteractor,
   getTodaysOrdersInteractor,
   opinionPublicSearchInteractor,
   orderPublicSearchInteractor,
+  removeItemInteractor,
+  setItemInteractor,
   validateCaseAdvancedSearchInteractor,
   validateOpinionAdvancedSearchInteractor,
   validateOrderAdvancedSearchInteractor,
@@ -105,6 +118,7 @@ const frozenConstants = deepFreeze({
   CASE_SEARCH_PAGE_SIZE,
   COUNTRY_TYPES,
   DATE_RANGE_SEARCH_OPTIONS,
+  DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   ERROR_MAP_429,
@@ -156,6 +170,13 @@ const applicationContextPublic = {
       console.timeEnd(key);
     },
   }),
+  getPersistenceGateway: () => {
+    return {
+      getItem,
+      removeItem,
+      setItem,
+    };
+  },
   getPublicSiteUrl,
   getUseCases: () => allUseCases,
   getUtilities: () => {
@@ -167,6 +188,7 @@ const applicationContextPublic = {
       getContactPrimary,
       getContactSecondary,
       getJudgeLastName,
+      getSealedDocketEntryTooltip,
       isExternalUser: User.isExternalUser,
       isInternalUser: User.isInternalUser,
       sortDocketEntries,

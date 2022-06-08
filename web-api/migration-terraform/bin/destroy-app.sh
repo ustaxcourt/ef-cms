@@ -29,8 +29,12 @@ else
   echo "dynamodb lock table already exists"
 fi
 
+npm run build:assets
+
 set -eo pipefail
 npm run build:lambda:migration
+
+STREAM_ARN=$(aws dynamodbstreams list-streams --region us-east-1 --query "Streams[?TableName=='${SOURCE_TABLE}'].StreamArn | [0]" --output text)
 
 export TF_VAR_destination_table=$DESTINATION_TABLE
 export TF_VAR_documents_bucket_name=$DOCUMENTS_BUCKET_NAME

@@ -47,6 +47,7 @@ const getSealedCase = ({
       .toRawObject();
   } else {
     caseRecord = caseSealedFormatter(caseRecord);
+
     return new PublicCase(caseRecord, {
       applicationContext,
     })

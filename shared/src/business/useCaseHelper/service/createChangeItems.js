@@ -84,6 +84,8 @@ const createDocketEntryForChange = async ({
     { applicationContext },
   );
 
+  caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
   const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
     applicationContext,
     caseEntity,
@@ -97,9 +99,8 @@ const createDocketEntryForChange = async ({
       applicationContext,
       documentBytes: changeOfAddressPdfWithCover,
     });
-
-  caseEntity.addDocketEntry(changeOfAddressDocketEntry);
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
+
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: changeOfAddressPdfWithCover,
@@ -131,7 +132,6 @@ const createWorkItemForChange = async ({
       assigneeId: null,
       assigneeName: null,
       associatedJudge: caseEntity.associatedJudge,
-      caseIsInProgress: caseEntity.inProgress,
       caseStatus: caseEntity.status,
       caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
       docketEntry: {

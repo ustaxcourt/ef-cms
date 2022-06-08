@@ -80,7 +80,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
         docketEntries: [
           {
             createdAt: '2018-11-21T20:49:28.192Z',
-            docketEntryId: 'c6b81f4d-1e47-423a-8caf-6d2fdc3d3859',
+            docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
             documentType: 'Petition',
             processingStatus: 'pending',
             userId: 'petitioner',
@@ -118,16 +118,24 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     applicationContext.getPersistenceGateway().updateCase.mockReturnValue({});
 
-    mockCasesReadyForTrial = [{ docketNumber: '101-20' }];
+    mockCasesReadyForTrial = [
+      { docketNumber: '101-20' },
+      { docketNumber: '320-21' },
+    ];
     applicationContext
       .getPersistenceGateway()
-      .getReadyForTrialCases.mockReturnValue([{ docketNumber: '101-20' }]);
+      .getReadyForTrialCases.mockReturnValue([
+        { docketNumber: '101-20' },
+        { docketNumber: '320-21' },
+      ]);
 
     await expect(
       checkForReadyForTrialCasesInteractor(applicationContext),
     ).resolves.not.toThrow();
 
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toBeCalledTimes(2);
   });
 
   it('should not call createCaseTrialSortMappingRecords if case has no trial city', async () => {

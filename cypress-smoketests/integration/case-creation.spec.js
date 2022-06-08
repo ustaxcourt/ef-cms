@@ -1,4 +1,3 @@
-const faker = require('faker');
 const {
   completeWizardStep1,
   completeWizardStep2,
@@ -27,6 +26,7 @@ const {
   saveCaseForLater,
   serveCaseToIrs,
 } = require('../support/pages/create-paper-case');
+const { faker } = require('@faker-js/faker');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 const DEFAULT_ACCOUNT_PASS = Cypress.env('DEFAULT_ACCOUNT_PASS');

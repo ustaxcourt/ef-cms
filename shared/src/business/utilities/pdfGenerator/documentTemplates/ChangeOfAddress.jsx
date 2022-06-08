@@ -48,7 +48,7 @@ export const ChangeOfAddress = ({ name, newData, oldData, options }) => {
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
-        h3={options.h3}
+        documentTitle={options.h3}
       />
 
       <p className="please-change">

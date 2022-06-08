@@ -238,7 +238,6 @@ exports.updatePractitionerCases = updatePractitionerCases;
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.pendingEmail the pending email
- * @returns {Promise} the updated user object
  */
 exports.verifyUserPendingEmailInteractor = async (
   applicationContext,

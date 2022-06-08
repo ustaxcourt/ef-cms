@@ -23,6 +23,12 @@ export const userEditsCorrespondence = (cerebralTest, user) =>
     });
 
     await cerebralTest.runSequence('clearExistingDocumentSequence');
+
+    expect(cerebralTest.getState('form.primaryDocumentFile')).toBe(undefined);
+    expect(
+      cerebralTest.getState('currentViewMetadata.documentUploadMode'),
+    ).toBe('scan');
+
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'primaryDocumentFile',
       value: fakeFile1,

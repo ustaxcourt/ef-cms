@@ -29,18 +29,6 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
       key: 'irsYear',
       value: '2050',
     });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateYear',
-      value: '2018',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateMonth',
-      value: '12',
-    });
-    await cerebralTest.runSequence('updateFormValueSequence', {
-      key: 'paymentDateDay',
-      value: '24',
-    });
 
     await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
     expect(cerebralTest.getState('validationErrors')).toEqual({
@@ -71,7 +59,7 @@ export const petitionsClerkSubmitsCaseToIrs = cerebralTest => {
     //check that documents were served
     const documents = cerebralTest.getState('caseDetail.docketEntries');
     for (const document of documents) {
-      if (!document.isMinuteEntry) {
+      if (!document.isMinuteEntry && !document.isDraft) {
         expect(document.servedAt).toBeDefined();
       }
     }

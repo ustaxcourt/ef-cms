@@ -1,4 +1,5 @@
 import { AccessibilityStatement } from './Accessibility/AccessibilityStatement';
+import { AddCorrespondenceDocument } from './Correspondence/AddCorrespondenceDocument';
 import { AddDeficiencyStatistics } from './CaseDetail/AddDeficiencyStatistics';
 import { AddOtherStatistics } from './CaseDetail/AddOtherStatistics';
 import { AddPetitionerToCase } from './AddPetitionerToCase/AddPetitionerToCase';
@@ -78,7 +79,6 @@ import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
 import { TrialSessionWorkingCopy } from './TrialSessionWorkingCopy/TrialSessionWorkingCopy';
 import { TrialSessions } from './TrialSessions/TrialSessions';
-import { UploadCorrespondenceDocument } from './Correspondence/UploadCorrespondenceDocument';
 import { UploadCourtIssuedDocument } from './UploadCourtIssuedDocument/UploadCourtIssuedDocument';
 import { UsaBanner } from './UsaBanner';
 import { UserContactEdit } from './UserContactEdit';
@@ -91,6 +91,7 @@ import React, { useEffect } from 'react';
 
 const pages = {
   AccessibilityStatement,
+  AddCorrespondenceDocument,
   AddDeficiencyStatistics,
   AddOtherStatistics,
   AddPetitionerToCase,
@@ -163,7 +164,6 @@ const pages = {
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
   TrialSessions,
-  UploadCorrespondenceDocument,
   UploadCourtIssuedDocument,
   UserContactEdit,
   UserContactEditProgress,

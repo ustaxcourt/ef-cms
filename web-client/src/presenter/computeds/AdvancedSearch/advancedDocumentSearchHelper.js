@@ -86,7 +86,7 @@ export const formatDocumentSearchResultRecord = (
   result.caseTitle = applicationContext.getCaseTitle(result.caseCaption || '');
 
   result.showSealedIcon =
-    (result.isSealed || result.hasSealedDocuments) &&
+    (result.isCaseSealed || result.isDocketEntrySealed) &&
     advancedSearchTab === ADVANCED_SEARCH_TABS.ORDER;
 
   result.numberOfPagesFormatted = result.numberOfPages ?? 'n/a';

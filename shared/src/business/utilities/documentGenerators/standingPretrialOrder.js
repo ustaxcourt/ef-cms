@@ -23,27 +23,23 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
   const pdfContentHtmlWithHeader = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactStandingPretrialOrderTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Standing Pretrial Order',
-    },
   });
 
   const headerHtml = reactTemplateGenerator({
     componentName: 'PageMetaHeaderDocket',
     data: {
       docketNumber: docketNumberWithSuffix,
+      useCenturySchoolbookFont: true,
     },
   });
 
-  const pdfWithHeader = await applicationContext
+  const pretrialOrderPdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
       contentHtml: pdfContentHtmlWithHeader,
       displayHeaderFooter: true,
       docketNumber: docketNumberWithSuffix,
       headerHtml,
-      overwriteHeader: true,
     });
 
   const reactGettingReadyForTrialChecklistTemplate = reactTemplateGenerator({
@@ -58,24 +54,23 @@ const standingPretrialOrder = async ({ applicationContext, data }) => {
     },
   });
 
-  const pdfContentHtmlWithoutHeader = await generateHTMLTemplateForPDF({
+  const checklistContent = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactGettingReadyForTrialChecklistTemplate,
   });
 
-  const pdfWithoutHeader = await applicationContext
+  const checklistPdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
-      contentHtml: pdfContentHtmlWithoutHeader,
+      contentHtml: checklistContent,
       displayHeaderFooter: false,
       docketNumber: docketNumberWithSuffix,
-      overwriteHeader: false,
     });
 
   return await combineTwoPdfs({
     applicationContext,
-    firstPdf: pdfWithHeader,
-    secondPdf: pdfWithoutHeader,
+    firstPdf: new Uint8Array(pretrialOrderPdf),
+    secondPdf: new Uint8Array(checklistPdf),
   });
 };
 

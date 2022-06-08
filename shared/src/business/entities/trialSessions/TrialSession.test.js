@@ -551,6 +551,7 @@ describe('TrialSession entity', () => {
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           trialLocation: mockTrialLocation,
         },
+        // eslint-disable-next-line max-lines
         {
           applicationContext,
         },

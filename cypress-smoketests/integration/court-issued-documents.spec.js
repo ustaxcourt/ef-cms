@@ -1,4 +1,3 @@
-const faker = require('faker');
 const {
   addDocketEntryForOrderAndSaveForLater,
   addDocketEntryForOrderAndServePaper,
@@ -39,6 +38,7 @@ const {
   goToReviewCase,
   serveCaseToIrs,
 } = require('../support/pages/create-paper-case');
+const { faker } = require('@faker-js/faker');
 const { goToMyDocumentQC } = require('../support/pages/document-qc');
 
 let token = null;

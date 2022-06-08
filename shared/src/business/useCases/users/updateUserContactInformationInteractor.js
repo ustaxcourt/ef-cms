@@ -129,7 +129,6 @@ const updateUserContactInformationHelper = async (
  * @param {object} providers the providers object
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
- * @returns {Promise} an object is successful
  */
 exports.updateUserContactInformationInteractor = async (
   applicationContext,

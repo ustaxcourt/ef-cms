@@ -2,7 +2,7 @@ const { get } = require('lodash');
 const { getCurrentInvoke } = require('@vendia/serverless-express');
 
 exports.headerOverride = {
-  'Access-Control-Expose-Headers': "['X-Terminal-User']",
+  'Access-Control-Expose-Headers': 'X-Terminal-User',
   'Cache-Control': 'max-age=0, private, no-cache, no-store, must-revalidate',
   'Content-Type': 'application/json',
   Pragma: 'no-cache',
@@ -10,8 +10,15 @@ exports.headerOverride = {
   'X-Content-Type-Options': 'nosniff',
 };
 
-exports.lambdaWrapper = lambda => {
+exports.lambdaWrapper = (lambda, options = {}) => {
   return async (req, res) => {
+    // This flag was added because when invoking async endpoints on API gateway, the api gateway will return
+    // a 204 response with no body immediately.  This was causing discrepancies between how these endpoints
+    // ran locally and how they ran when deployed to an AWS environment.  We now turn this flag on
+    // whenever we are not deployed in AWS to mimic how API gateway async endpoints work.
+    const shouldMimicApiGatewayAyncEndpoint =
+      options.isAsync && process.env.NODE_ENV != 'production';
+
     // If you'd like to test the terminal user functionality locally, make this boolean true
     const currentInvoke = getCurrentInvoke();
     let isTerminalUser =
@@ -26,11 +33,23 @@ exports.lambdaWrapper = lambda => {
       queryStringParameters: req.query,
     };
 
+    if (shouldMimicApiGatewayAyncEndpoint) {
+      // we return immediately before we try running the lambda because that is how
+      // the api gateway works with async endpoints.
+      res.status(204).send('');
+    }
+
     const response = await lambda({
       ...event,
       body: JSON.stringify(req.body),
       logger: req.locals.logger,
     });
+
+    if (shouldMimicApiGatewayAyncEndpoint) {
+      // api gateway async endpoints do not care about the headers returned after we
+      // run the lambda; therefore, we do nothing here.
+      return;
+    }
 
     res.status(response.statusCode);
 

@@ -55,7 +55,6 @@ const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
  * @param {object} providers the providers object
  * @param {object} providers.barNumber the barNumber of the user to update
  * @param {object} providers.user the user data
- * @returns {Promise} the promise of the createUser call
  */
 exports.updatePractitionerUserInteractor = async (
   applicationContext,
@@ -174,8 +173,4 @@ exports.updatePractitionerUserInteractor = async (
     },
     userId: requestUser.userId,
   });
-
-  return new Practitioner(updatedUser, { applicationContext })
-    .validate()
-    .toRawObject();
 };

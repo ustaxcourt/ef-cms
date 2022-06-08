@@ -1,0 +1,16 @@
+FROM cypress/base:14.19.0
+
+WORKDIR /home/app
+
+# TODO: find out what else this image doesn't need
+RUN sh -c 'echo "deb [check-valid-until=no] http://ftp.debian.org/debian stretch-backports main" > /etc/apt/sources.list.d/stretch-backports.list'
+RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/apt/sources.list
+RUN apt-get -o Acquire::Check-Valid-Until=false update
+
+RUN apt-get install -y \
+  graphicsmagick=1.4+really1.3.35-1~deb10u1 \
+  ghostscript=9.27~dfsg-2+deb10u5
+
+COPY . /home/app/efcms
+
+CMD echo "🔥"

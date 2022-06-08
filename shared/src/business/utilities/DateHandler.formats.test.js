@@ -13,6 +13,7 @@ describe('DateHandler', () => {
     const FORMATS_EXPECTED_OUTPUT = {
       DATE_TIME: '07/02/18 03:56 am',
       DATE_TIME_TZ: '07/02/18 3:56 am ET',
+      DAY_OF_WEEK: '1',
       FILENAME_DATE: 'July_2_2018',
       ISO: '2018-07-02T03:56:47.007-04:00',
       LOG_TIMESTAMP: '2018/07/02 03:56:47.007 ET',

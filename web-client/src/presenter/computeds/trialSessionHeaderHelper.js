@@ -1,19 +1,15 @@
+import { isEmpty } from 'lodash';
 import { state } from 'cerebral';
 
 export const trialSessionHeaderHelper = (get, applicationContext) => {
-  const currentUser = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
 
+  const currentUser = applicationContext.getCurrentUser();
+
   const trialSession = get(state.trialSession);
-  if (!trialSession) return {};
   const judgeUser = get(state.judgeUser);
-  const isTrialClerk = currentUser.role === USER_ROLES.trialClerk;
 
-  const isJudgeAssignedToSession =
-    judgeUser && trialSession.judge?.userId === judgeUser.userId;
-
-  const isTrialClerkAssignedToSession =
-    isTrialClerk && trialSession.trialClerk?.userId === currentUser.userId;
+  if (!trialSession) return {};
 
   const formattedTrialSession = applicationContext
     .getUtilities()
@@ -22,12 +18,11 @@ export const trialSessionHeaderHelper = (get, applicationContext) => {
       trialSession: get(state.trialSession),
     });
 
-  let nameToDisplay = formattedTrialSession.formattedJudge;
-
-  if (isTrialClerk) {
-    nameToDisplay = currentUser.name;
-  }
-
+  const isTrialClerk = currentUser.role === USER_ROLES.trialClerk;
+  const isJudgeAssignedToSession =
+    judgeUser && trialSession.judge?.userId === judgeUser.userId;
+  const isTrialClerkAssignedToSession =
+    isTrialClerk && trialSession.trialClerk?.userId === currentUser.userId;
   const isAssigned = isJudgeAssignedToSession || isTrialClerkAssignedToSession;
 
   const showSwitchToSessionDetail =
@@ -35,13 +30,14 @@ export const trialSessionHeaderHelper = (get, applicationContext) => {
   const showSwitchToWorkingCopy =
     isAssigned && 'TrialSessionDetail'.includes(get(state.currentPage));
 
-  const isStandaloneSession = applicationContext
-    .getUtilities()
-    .isStandaloneRemoteSession(formattedTrialSession.sessionScope);
-
   return {
-    isStandaloneSession,
-    nameToDisplay,
+    isStandaloneSession: applicationContext
+      .getUtilities()
+      .isStandaloneRemoteSession(formattedTrialSession.sessionScope),
+    nameToDisplay: isTrialClerk
+      ? currentUser.name
+      : formattedTrialSession.formattedJudge,
+    showBatchDownloadButton: !isEmpty(formattedTrialSession.allCases),
     showSwitchToSessionDetail,
     showSwitchToWorkingCopy,
     title: 'Session Working Copy',

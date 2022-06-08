@@ -14,6 +14,7 @@ export const setAllAndCurrentJudgesAction = ({
   store,
 }) => {
   const { USER_ROLES } = applicationContext.getConstants();
+
   const currentJudges = props.users.filter(
     judge => judge.role === USER_ROLES.judge,
   );

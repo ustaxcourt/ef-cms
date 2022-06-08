@@ -13,10 +13,6 @@ const practitionerCaseList = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: template,
-    options: {
-      overwriteMain: true,
-      title: '',
-    },
   });
 
   const footerHtml = reactTemplateGenerator({
@@ -32,7 +28,7 @@ const practitionerCaseList = async ({ applicationContext, data }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       footerHtml,
-      overwriteHeader: true,
+      headerHtml: '',
     });
 
   return pdf;

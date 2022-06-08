@@ -26,6 +26,7 @@ describe('removeScannedPdfAction', () => {
     });
     expect(state.form.petition).toBeUndefined();
     expect(state.form.petitionSize).toBeUndefined();
+    expect(state.form.primaryDocumentFile).toBeUndefined();
   });
 
   it('should return the documentUploadMode and documentType', async () => {

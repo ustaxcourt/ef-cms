@@ -1,5 +1,4 @@
 const axios = require('axios');
-const faker = require('faker');
 const jwt = require('jsonwebtoken');
 const {
   CASE_TYPES,
@@ -8,6 +7,7 @@ const {
   PROCEDURE_TYPES,
   TRIAL_CITIES,
 } = require('../../../shared/src/business/entities/EntityConstants');
+const { faker } = require('@faker-js/faker');
 const { userMap } = require('../../../shared/src/test/mockUserTokenMap');
 
 const USAGE = `

@@ -46,3 +46,8 @@ variable "statuspage_dns_record" {
   type = string
   default = ""
 }
+
+variable "enable_health_checks" {
+  type = string
+  default = "1"
+}

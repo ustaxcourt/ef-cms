@@ -95,6 +95,10 @@ resource "aws_cognito_user_pool" "pool" {
 
   lifecycle {
     prevent_destroy = true
+
+    # the lambda_config isn't specified in this block because we only want to change its configuration during the color-change step of a deployment
+    # but we also don't want the lambda_config to be deleted, so we need to ignore its configuration
+    ignore_changes = [lambda_config]
   }
 }
 
@@ -217,6 +221,13 @@ resource "aws_cognito_user_pool" "irs_pool" {
     require_numbers                  = true
     require_symbols                  = true
     temporary_password_validity_days = 7
+  }
+
+  account_recovery_setting {
+    recovery_mechanism {
+      name     = "admin_only"
+      priority = 1
+    }
   }
 
   lifecycle {

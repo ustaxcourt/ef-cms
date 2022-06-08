@@ -304,10 +304,6 @@ const assignDocketEntries = ({
   } else {
     obj.docketEntries = [];
   }
-
-  obj.hasSealedDocuments = obj.docketEntries.some(
-    docketEntry => docketEntry.isSealed || docketEntry.isLegacySealed,
-  );
 };
 
 const assignHearings = ({ applicationContext, obj, rawCase }) => {
@@ -526,7 +522,6 @@ Case.VALIDATION_RULES = {
     ...FILING_TYPES[ROLES.privatePractitioner],
   ).optional(),
   hasPendingItems: joi.boolean().optional(),
-  hasSealedDocuments: joi.boolean().required(),
   hasVerifiedIrsNotice: joi
     .boolean()
     .optional()
@@ -1715,6 +1710,19 @@ const getOtherFilers = function (rawCase) {
 };
 
 /**
+ * Checks if the provided userId is a private practitioner or irs practitioner on the case.
+ *
+ * @param {string} userId the userId of the user to check
+ * @returns  {boolean} if the userId is a private practitioner or irs practitioner on the case
+ */
+Case.prototype.isPractitioner = function (userId) {
+  return (
+    this.privatePractitioners.some(p => p.userId === userId) ||
+    this.irsPractitioners.some(p => p.userId === userId)
+  );
+};
+
+/**
  * Returns the secondary contact on the case
  *
  * @returns {Object} the secondary contact object on the case
@@ -2312,8 +2320,7 @@ Case.prototype.getShouldHaveTrialSortMappingRecords = function () {
   );
 };
 
-const isSealedCase = rawCase =>
-  rawCase.isSealed || !!rawCase.sealedDate || rawCase.hasSealedDocuments;
+const isSealedCase = rawCase => rawCase.isSealed || !!rawCase.sealedDate;
 
 const caseHasServedDocketEntries = rawCase => {
   return !!rawCase.docketEntries.some(docketEntry => isServed(docketEntry));

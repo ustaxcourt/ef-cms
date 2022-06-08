@@ -52,6 +52,7 @@ describe('Create and serve a case to search for', () => {
     fillInCreateCaseFromPaperForm(testData);
     goToReviewCase(testData);
     serveCaseToIrs();
+    cy.waitForElasticsearch();
   });
 });
 
@@ -120,6 +121,7 @@ describe('Opinion Search', () => {
     goToCaseDetail(testData.createdPaperDocketNumber);
     createOpinion();
     addDocketEntryAndServeOpinion(testData);
+    cy.waitForElasticsearch();
   });
 
   it('should be able to search for an opinion by keyword', () => {

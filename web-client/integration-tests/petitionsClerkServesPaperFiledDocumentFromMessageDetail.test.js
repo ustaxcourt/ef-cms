@@ -11,6 +11,11 @@ cerebralTest.draftOrders = [];
 describe('Petitions Clerk Serves Paper Filed Document From Message Detail', () => {
   beforeAll(() => {
     jest.setTimeout(40000);
+
+    jest.spyOn(
+      cerebralTest.applicationContext.getUseCases(),
+      'createMessageInteractor',
+    );
   });
 
   afterAll(() => {

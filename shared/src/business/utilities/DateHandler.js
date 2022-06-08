@@ -1,8 +1,10 @@
+const fedHolidays = require('@18f/us-federal-holidays');
 const { DateTime } = require('luxon');
 
 const FORMATS = {
   DATE_TIME: 'MM/dd/yy hh:mm a',
   DATE_TIME_TZ: "MM/dd/yy h:mm a 'ET'",
+  DAY_OF_WEEK: 'c',
   FILENAME_DATE: 'MMMM_d_yyyy',
   ISO: "yyyy-MM-dd'T'HH:mm:ss.SSSZZ",
   LOG_TIMESTAMP: "yyyy/MM/dd HH:mm:ss.SSS 'ET'",
@@ -432,6 +434,58 @@ const validateDateAndCreateISO = date => {
   }
 };
 
+/**
+ * Subtracts a specified amount of time from passed in ISO date
+ *
+ * @param {string} date the ISO date
+ * @param {object} dateConfig time
+ * @returns {string} a formatted ISO date string if date object is valid
+ */
+const subtractISODates = (date, dateConfig) => {
+  return DateTime.fromISO(date).minus(dateConfig).setZone('UTC').toISO();
+};
+
+/**
+ * Returns startDate plus n numberOfDays
+ * but if the return date results on a Saturday, Sunday, or Federal holiday,
+ * it will be moved forward to the next business day
+ *
+ * @param {string} startDate the date to add days to
+ * @param {number} numberOfDays number of days to add to startDate
+ * @returns {string} a formatted MONTH_DAY_YEAR string if date object is valid
+ */
+const getBusinessDateInFuture = ({
+  numberOfDays,
+  startDate,
+  units = 'days',
+}) => {
+  let laterDate = prepareDateFromString(startDate).plus({
+    [units]: numberOfDays,
+  });
+
+  let isAHoliday = fedHolidays.isAHoliday(
+    laterDate.toFormat(FORMATS.MONTH_DAY_YEAR),
+  );
+
+  let dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
+  const saturday = '6';
+  const sunday = '7';
+
+  let isAWeekend = dayOfWeek === saturday || dayOfWeek === sunday;
+
+  while (isAHoliday || isAWeekend) {
+    laterDate = laterDate.plus({ days: 1 });
+    dayOfWeek = laterDate.toFormat(FORMATS.DAY_OF_WEEK);
+    isAWeekend = dayOfWeek === saturday || dayOfWeek === sunday;
+
+    isAHoliday = fedHolidays.isAHoliday(
+      laterDate.toFormat(FORMATS.MONTH_DAY_YEAR),
+    );
+  }
+
+  return laterDate.toFormat(FORMATS.MONTH_DAY_YEAR);
+};
+
 module.exports = {
   FORMATS,
   PATTERNS,
@@ -450,10 +504,12 @@ module.exports = {
   deconstructDate,
   formatDateString,
   formatNow,
+  getBusinessDateInFuture,
   getMonthDayYearInETObj,
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromEST,
   prepareDateFromString,
+  subtractISODates,
   validateDateAndCreateISO,
 };

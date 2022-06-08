@@ -51,7 +51,9 @@ exports.updateCourtIssuedOrderInteractor = async (
     throw new NotFoundError('Document not found');
   }
 
-  const orderTypeEventCodes = Object.values(ORDER_TYPES).map(d => d.eventCode);
+  const orderTypeEventCodes = Object.values(ORDER_TYPES)
+    .filter(orderType => orderType.overrideFreeText)
+    .map(d => d.eventCode);
 
   if (orderTypeEventCodes.includes(documentMetadata.eventCode)) {
     documentMetadata.freeText = documentMetadata.documentTitle;

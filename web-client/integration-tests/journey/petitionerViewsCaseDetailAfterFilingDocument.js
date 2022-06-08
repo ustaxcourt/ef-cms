@@ -40,7 +40,7 @@ export const petitionerViewsCaseDetailAfterFilingDocument = (
     // verify that the user was given a link to their receipt
     expect(cerebralTest.getState('alertSuccess.linkUrl')).toBeDefined();
 
-    expect(caseDetail.docketEntries.length).toEqual(6);
+    expect(caseDetail.docketEntries.length).toEqual(overrides.documentCount);
 
     //verify that the documents were added and served
     expect(caseDetail.docketEntries).toEqual(

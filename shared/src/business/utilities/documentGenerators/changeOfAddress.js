@@ -43,20 +43,9 @@ const changeOfAddress = async ({ applicationContext, content }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: changeOfAddressTemplate,
-    options: {
-      overwriteMain: true,
-      title: content.documentType.title,
-    },
   });
 
   const { docketNumber } = content;
-
-  const headerHtml = reactTemplateGenerator({
-    componentName: 'PageMetaHeaderDocket',
-    data: {
-      docketNumber,
-    },
-  });
 
   const pdf = await applicationContext
     .getUseCases()
@@ -64,8 +53,6 @@ const changeOfAddress = async ({ applicationContext, content }) => {
       contentHtml: pdfContentHtml,
       displayHeaderFooter: true,
       docketNumber,
-      headerHtml,
-      overwriteHeader: true,
     });
 
   return pdf;

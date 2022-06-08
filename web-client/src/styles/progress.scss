@@ -14,6 +14,13 @@
 }
 
 .progress-indicator {
+  &.show-wait-text {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 160px;
+  }
+
   .spinner {
     position: absolute;
     top: 50%;

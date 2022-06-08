@@ -1,17 +1,10 @@
-const {
-  calculateISODate,
-  createISODateAtStartOfDayEST,
-} = require('../../../business/utilities/DateHandler');
 const { queryFull } = require('../../dynamodbClientService');
 
-exports.getDocumentQCServedForSection = ({ applicationContext, section }) => {
-  const startOfDay = createISODateAtStartOfDayEST();
-  const afterDate = calculateISODate({
-    dateString: startOfDay,
-    howMuch: -7,
-    units: 'days',
-  });
-
+exports.getDocumentQCServedForSection = ({
+  afterDate,
+  applicationContext,
+  section,
+}) => {
   return queryFull({
     ExpressionAttributeNames: {
       '#pk': 'pk',

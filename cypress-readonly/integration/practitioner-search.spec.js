@@ -25,7 +25,7 @@ describe('Practitioner Search', () => {
   });
 
   it('should do a practitioner search by name', () => {
-    cy.get('a').contains('Advanced').click();
+    cy.get('.advanced').contains('Advanced').click();
 
     cy.get('button#tab-practitioner').click();
 

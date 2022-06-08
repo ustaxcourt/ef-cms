@@ -101,7 +101,6 @@ exports.createCaseFromPaperInteractor = async (
     {
       docketNumber,
       ...petitionEntity.toRawObject(),
-      inProgress: petitionMetadata.inProgress,
       isPaper: true,
       status: petitionMetadata.status || null,
       userId: user.userId,
@@ -177,12 +176,11 @@ exports.createCaseFromPaperInteractor = async (
 
   if (requestForPlaceOfTrialFileId) {
     let { documentTitle } = INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial;
-    if (caseToAdd.preferredTrialCity) {
-      documentTitle = replaceBracketed(
-        documentTitle,
-        caseToAdd.preferredTrialCity,
-      );
-    }
+
+    documentTitle = replaceBracketed(
+      documentTitle,
+      caseToAdd.preferredTrialCity,
+    );
 
     const requestForPlaceOfTrialDocketEntryEntity = new DocketEntry(
       {

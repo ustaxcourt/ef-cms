@@ -9,14 +9,14 @@ export const NoticeOfTrialIssuedInPerson = ({
   trialInfo,
 }) => {
   return (
-    <>
+    <div id="notice-of-trial-pdf">
       <PrimaryHeader />
       <DocketHeader
         caseCaptionExtension={caseCaptionExtension}
         caseTitle={caseTitle}
         docketNumberWithSuffix={docketNumberWithSuffix}
+        documentTitle={'Notice Setting Case For Trial'}
       />
-      <h3>Notice Setting Case For Trial</h3>
       <div>
         <div className="info-box info-box-trial" id="trial-info">
           <div className="info-box-header">Trial At</div>
@@ -76,6 +76,6 @@ export const NoticeOfTrialIssuedInPerson = ({
           Clerk of the Court
         </p>
       </div>
-    </>
+    </div>
   );
 };

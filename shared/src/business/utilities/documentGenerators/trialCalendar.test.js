@@ -47,12 +47,14 @@ describe('documentGenerators', () => {
             {
               caseTitle: 'Paul Simon',
               docketNumber: '123-45S',
+              docketNumberWithSuffix: '123-45S',
               petitionerCounsel: ['Ben Matlock', 'Atticus Finch'],
               respondentCounsel: ['Sonny Crockett', 'Ricardo Tubbs'],
             },
             {
               caseTitle: 'Art Garfunkel',
               docketNumber: '234-56',
+              docketNumberWithSuffix: '234-56',
               petitionerCounsel: ['Mick Haller'],
               respondentCounsel: ['Joy Falotico'],
             },
