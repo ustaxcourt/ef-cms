@@ -4,7 +4,7 @@ module.exports = defineConfig({
   browser: 'edge',
   defaultCommandTimeout: 20000,
   e2e: {
-    specPattern: 'cypress-readonly/integration/*.spec.js',
+    specPattern: 'cypress-readonly/integration/*.cy.js',
     supportFile: 'cypress-readonly/support/index.js',
   },
   fixturesFolder: 'cypress-readonly/fixtures',
