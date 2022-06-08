@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 const {
   applicationContext,
   testPdfDoc,
@@ -17,7 +16,6 @@ const {
 const {
   fileAndServeCourtIssuedDocumentInteractor,
 } = require('../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
-const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
 const { createISODateString } = require('../../utilities/DateHandler');
 const { docketClerkUser } = require('../../../test/mockUsers');
@@ -559,7 +557,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     });
 
     expect(
-      addServedStampToDocument.mock.calls[0][0].serviceStampText,
+      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
+        .calls[0][0].serviceStampText,
     ).toContain('Entered and Served');
   });
 });
