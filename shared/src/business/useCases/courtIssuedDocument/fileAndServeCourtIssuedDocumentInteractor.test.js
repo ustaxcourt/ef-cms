@@ -897,8 +897,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       ).toBeCalledTimes(1);
     });
 
-    //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case when there is an exception
-    //TODO: assert that we only process one case when we pass in multiple cases and use an "enter and served" event code
     //TODO: assert that we only process one case when the feature flag is disabled
   });
 });
