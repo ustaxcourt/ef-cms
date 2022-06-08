@@ -594,8 +594,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
             MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
         };
       });
+
       updateDocketEntrySpy = jest.spyOn(Case.prototype, 'updateDocketEntry');
       addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
+
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
@@ -604,8 +606,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
               ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
               docketEntries: leadCaseDocketEntries,
             };
-          }
-          if (
+          } else if (
             docketNumber ===
             MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber
           ) {
@@ -613,8 +614,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
               ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
               docketEntries: consolidatedCase1DocketEntries,
             };
-          }
-          if (
+          } else if (
             docketNumber ===
             MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber
           ) {
@@ -622,8 +622,14 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
               ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
               docketEntries: [],
             };
+          } else {
+            return caseRecord;
           }
         });
+
+      applicationContext
+        .getPersistenceGateway()
+        .saveWorkItem.mockImplementation(() => {});
     });
 
     it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
