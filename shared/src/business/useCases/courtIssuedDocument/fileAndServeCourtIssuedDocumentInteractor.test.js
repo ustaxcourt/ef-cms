@@ -874,7 +874,23 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       ).toEqual(MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber);
     });
 
-    //TODO: assert that the "save PDF to S3" only being called once (make sure the it description describes why we care)
+    it('should create a single source of truth for the document by saving only one copy', async () => {
+      await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: leadCaseDocketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+      ).toBeCalledTimes(1);
+    });
+
     //TODO: assert that updateDocketEntryPendingServiceStatus is called for each case when there is an exception
     //TODO: assert that we only process one case when we pass in multiple cases and use an "enter and served" event code
     //TODO: assert that we only process one case when the feature flag is disabled
