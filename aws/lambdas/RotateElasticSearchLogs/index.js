@@ -45,11 +45,9 @@ exports.handler = async context => {
     }
   }
 
-  if (anyError) {
-    return context.fail(JSON.stringify(responses));
-  } else {
-    return context.success(JSON.stringify(responses));
-  }
+  return anyError
+    ? context.fail(JSON.stringify(responses))
+    : context.success(JSON.stringify(responses));
 };
 
 /**
