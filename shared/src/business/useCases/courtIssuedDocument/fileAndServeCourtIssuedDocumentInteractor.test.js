@@ -598,29 +598,31 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       addDocketEntrySpy = jest.spyOn(Case.prototype, 'addDocketEntry');
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockImplementationOnce(() => {
-          return {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            docketEntries: leadCaseDocketEntries,
-          };
-        })
-        .mockImplementationOnce(() => {
-          return {
-            ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-            docketEntries: leadCaseDocketEntries,
-          };
-        })
-        .mockImplementationOnce(() => {
-          return {
-            ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
-            docketEntries: consolidatedCase1DocketEntries,
-          };
-        })
-        .mockImplementationOnce(() => {
-          return {
-            ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
-            docketEntries: [],
-          };
+        .getCaseByDocketNumber.mockImplementation(({ docketNumber }) => {
+          if (docketNumber === MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber) {
+            return {
+              ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+              docketEntries: leadCaseDocketEntries,
+            };
+          }
+          if (
+            docketNumber ===
+            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber
+          ) {
+            return {
+              ...MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+              docketEntries: consolidatedCase1DocketEntries,
+            };
+          }
+          if (
+            docketNumber ===
+            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber
+          ) {
+            return {
+              ...MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+              docketEntries: [],
+            };
+          }
         });
     });
 
@@ -764,9 +766,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
       applicationContext
         .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReset(); //TODO: investigate why this is necessary
-      applicationContext
-        .getPersistenceGateway()
         .getCaseByDocketNumber.mockImplementationOnce(() => {
           return {
             ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
@@ -779,18 +778,14 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
             docketEntries: caseRecord.docketEntries,
           };
         })
-        .mockImplementationOnce(() => {
-          throw new Error(expectedErrorString);
-        });
+        .mockRejectedValueOnce(new Error(expectedErrorString));
 
       const innerError = new Error('something else');
 
       applicationContext
         .getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus.mockImplementationOnce(() => {})
-        .mockImplementationOnce(() => {
-          throw innerError;
-        });
+        .mockRejectedValueOnce(innerError);
 
       await expect(
         fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
