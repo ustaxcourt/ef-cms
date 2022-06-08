@@ -1,5 +1,14 @@
 #!/bin/bash
 
+# Getting the account-wide deployment settings and injecting them into the shell environment
+TEMP_ENV=${ENV}
+export ENV=account
+pushd ../../../../
+# shellcheck disable=SC1091
+. ./scripts/load-environment-from-secrets.sh
+popd
+export ENV=${TEMP_ENV}
+
 if [ -z "$ZONE_NAME" ]; then
   echo "Please export the ZONE_NAME variable in your shell"
   exit 1
@@ -49,8 +58,8 @@ export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
 export TF_VAR_cognito_suffix="${COGNITO_SUFFIX}"
 export TF_VAR_number_of_days_to_keep_info_logs="${NUM_DAYS_TO_KEEP_LOGS}"
 
-# if [ -z "${LOG_GROUP_ENVIRONMENTS}" ]; then
-#   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
-# fi
+if [ -z "${LOG_GROUP_ENVIRONMENTS}" ]; then
+  export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
+fi
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"
