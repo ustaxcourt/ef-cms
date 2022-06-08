@@ -10,6 +10,12 @@ export const featureFlagHelper = (get, applicationContext) => {
     state.featureFlags[ALLOWLIST_FEATURE_FLAGS.PDFJS_EXPRESS_VIEWER.key],
   );
 
+  const consolidatedCaseDuplicateDocketEntries = get(
+    state.featureFlags[
+      ALLOWLIST_FEATURE_FLAGS.CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES.key
+    ],
+  );
+
   let isOrderSearchEnabledForRole = false;
   if (role && isUserInternal) {
     const isInternalOrderSearchEnabled = get(
@@ -35,6 +41,7 @@ export const featureFlagHelper = (get, applicationContext) => {
   }
 
   return {
+    consolidatedCaseDuplicateDocketEntries,
     isOpinionSearchEnabledForRole,
     isOrderSearchEnabledForRole,
     isPdfJsEnabled,

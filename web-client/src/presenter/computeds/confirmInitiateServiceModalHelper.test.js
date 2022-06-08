@@ -76,12 +76,12 @@ describe('confirmInitiateServiceModalHelper', () => {
     expect(result).toEqual({
       caseOrGroup: 'case',
       contactsNeedingPaperService: [
+        {
+          name: 'Ms. Respondent Counsel, Respondent Counsel',
+        },
         { name: 'Chelsea Hogan, Petitioner' },
         {
           name: 'Ms. Private Counsel, Petitioner Counsel',
-        },
-        {
-          name: 'Ms. Respondent Counsel, Respondent Counsel',
         },
       ],
       showPaperAlert: true,
