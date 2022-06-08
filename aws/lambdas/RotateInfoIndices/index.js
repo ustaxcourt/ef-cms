@@ -5,7 +5,7 @@ const { NodeHttpHandler } = require('@aws-sdk/node-http-handler');
 const { Sha256 } = require('@aws-crypto/sha256-browser');
 const { SignatureV4 } = require('@aws-sdk/signature-v4');
 
-const EXPIRATION = 90; // days
+const EXPIRATION = process.env.expiration; // days
 
 exports.handler = async context => {
   const responses = { createSnapshot: [], deleteIndices: [] };

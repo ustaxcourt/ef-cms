@@ -34,6 +34,11 @@ if [ -z "$COGNITO_SUFFIX" ]; then
   exit 1
 fi
 
+if [ -z "$NUM_DAYS_TO_KEEP_LOGS" ]; then
+  echo "Please export the NUM_DAYS_TO_KEEP_LOGS variable in your shell"
+  exit 1
+fi
+
 ../../../../scripts/verify-terraform-version.sh
 
 BUCKET="${ZONE_NAME}.terraform.deploys"
@@ -64,6 +69,7 @@ export TF_VAR_es_logs_instance_count="${ES_LOGS_INSTANCE_COUNT}"
 export TF_VAR_es_logs_instance_type="${ES_LOGS_INSTANCE_TYPE}"
 export TF_VAR_es_logs_ebs_volume_size_gb="${ES_LOGS_EBS_VOLUME_SIZE_GB}"
 export TF_VAR_cognito_suffix="${COGNITO_SUFFIX}"
+export TF_VAR_number_of_days_to_keep_info_logs="${NUM_DAYS_TO_KEEP_LOGS}"
 if [ -n "${LOG_GROUP_ENVIRONMENTS}" ]; then
   export TF_VAR_log_group_environments="${LOG_GROUP_ENVIRONMENTS}"
 fi
