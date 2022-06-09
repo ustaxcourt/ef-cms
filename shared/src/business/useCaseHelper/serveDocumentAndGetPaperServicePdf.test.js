@@ -67,6 +67,14 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   });
 
   it('should call getObject and appendPaperServiceAddressPageToPdf and return the pdf url if there are paper service parties on the case', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf.mockImplementationOnce(
+        ({ newPdfDoc }) => {
+          newPdfDoc.addPage();
+        },
+      );
+
     caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -94,6 +102,14 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   });
 
   it('should serve parties for all consolidated cases', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf.mockImplementationOnce(
+        ({ newPdfDoc }) => {
+          newPdfDoc.addPage();
+        },
+      );
+
     caseEntity = new Case(
       {
         ...MOCK_CASE,
