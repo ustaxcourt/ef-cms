@@ -25,7 +25,7 @@ export const validateTrialSessionAction = ({
   const estimatedEndDate =
     applicationContext
       .getUtilities()
-      .prepareDateFromString(props.computedEstimatedEndDate)
+      .prepareDateFromString(props.computedEstimatedEndDate || null)
       ?.toISOString() || null;
 
   const trialSession = omit(
