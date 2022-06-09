@@ -106,8 +106,6 @@ export const docketClerkCreatesATrialSession = (
       value: '12',
     });
 
-    await cerebralTest.runSequence('validateTrialSessionSequence');
-
     expect(cerebralTest.getState('form.term')).toEqual('Fall');
     expect(cerebralTest.getState('form.termYear')).toEqual(
       overrides.trialYear || '2025',
