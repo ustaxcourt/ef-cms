@@ -74,13 +74,13 @@ export const MessagesIndividualCompleted = connect(
               {!showSortableHeaders && <th>Message</th>}
               <th>Comment</th>
               <th>Case Title</th>
+              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.map(message => {
             return (
               <tbody key={`message-individual-${message.messageId}`}>
                 <tr>
-                  <td aria-hidden="true" className="focus-toggle" />
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
                       <span className="fa-layers fa-fw">
@@ -97,7 +97,7 @@ export const MessagesIndividualCompleted = connect(
                       </span>
                     )}
                   </td>
-                  <td className="message-queue-row small">
+                  <td className="message-queue-row small" colSpan="2">
                     {message.docketNumberWithSuffix}
                   </td>
                   <td className="message-queue-row small">
@@ -123,6 +123,7 @@ export const MessagesIndividualCompleted = connect(
                     {message.completedMessage}
                   </td>
                   <td className="message-queue-row">{message.caseTitle}</td>
+                  <td aria-hidden="true" />
                 </tr>
               </tbody>
             );

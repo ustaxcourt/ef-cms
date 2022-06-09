@@ -92,6 +92,7 @@ export const MessagesSectionCompleted = connect(
               <th>Comment</th>
               <th>Completed by</th>
               <th>Section</th>
+              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.completedMessages.map(message => (
@@ -133,7 +134,6 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   return (
     <tbody>
       <tr>
-        <td aria-hidden="true" className="focus-toggle" />
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
             <span className="fa-layers fa-fw">
@@ -148,7 +148,9 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
             </span>
           )}
         </td>
-        <td className="message-queue-row small">{docketNumberWithSuffix}</td>
+        <td className="message-queue-row small" colSpan="2">
+          {docketNumberWithSuffix}
+        </td>
         <td className="message-queue-row small">
           <span className="no-wrap">{completedAtFormatted}</span>
         </td>
@@ -164,6 +166,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
         <td className="message-queue-row">{completedMessage}</td>
         <td className="message-queue-row">{completedBy}</td>
         <td className="message-queue-row">{completedBySection}</td>
+        <td aria-hidden="true" />
       </tr>
     </tbody>
   );
