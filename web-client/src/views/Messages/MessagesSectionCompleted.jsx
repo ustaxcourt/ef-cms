@@ -1,30 +1,57 @@
-import {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-} from './sortConstants';
-import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
+import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const {
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
+  ASCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+  DESCENDING,
+} = applicationContext.getConstants();
+
 export const MessagesSectionCompleted = connect(
   {
+    completedByUsers: state.formattedMessages.completedByUsers,
     completedMessages: state.formattedMessages.completedMessages,
+    hasMessages: state.formattedMessages.hasMessages,
+    screenMetadata: state.screenMetadata,
+    showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
-    sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
+    sortMessagesSequence: sequences.sortMessagesSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionCompleted({
+    completedByUsers,
     completedMessages,
+    hasMessages,
+    screenMetadata,
+    showFilters,
     showSortableHeaders,
-    sortSectionMessagesSequence,
+    sortMessagesSequence,
+    updateScreenMetadataSequence,
   }) {
-    const hasMessages = completedMessages.length > 0;
     return (
       <>
+        {showFilters && (
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.completedBy,
+                key: 'completedBy',
+                label: 'Completed By',
+                options: completedByUsers,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
+
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
@@ -37,7 +64,7 @@ export const MessagesSectionCompleted = connect(
                     hasRows={hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -55,7 +82,7 @@ export const MessagesSectionCompleted = connect(
                     hasRows={hasMessages}
                     sortField="completedAt"
                     title="Completed"
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -69,7 +96,7 @@ export const MessagesSectionCompleted = connect(
                     hasRows={hasMessages}
                     sortField="subject"
                     title="Last Message"
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
