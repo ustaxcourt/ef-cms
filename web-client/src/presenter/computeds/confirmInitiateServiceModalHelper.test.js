@@ -14,6 +14,10 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('confirmInitiateServiceModalHelper', () => {
+  // CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES
+  const featureFlagHelperState = {
+    consolidatedCaseDuplicateDocketEntries: true,
+  };
   const mockContactId = 'f6847fdb-3669-4ad7-8f82-c4ac3b945523';
 
   const confirmInitiateServiceModalHelper = withAppContextDecorator(
@@ -68,6 +72,7 @@ describe('confirmInitiateServiceModalHelper', () => {
   it('returns the expected contacts needed if someone needs paper without consolidated cases', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
+        featureFlagHelper: featureFlagHelperState,
         form: {},
         formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
       },
@@ -91,6 +96,7 @@ describe('confirmInitiateServiceModalHelper', () => {
   it('returns the expected values if no contacts need paper service', () => {
     const result = runCompute(confirmInitiateServiceModalHelper, {
       state: {
+        featureFlagHelper: featureFlagHelperState,
         form: {},
         formattedCaseDetail: {
           irsPractitioners: [],
@@ -122,11 +128,11 @@ describe('confirmInitiateServiceModalHelper', () => {
   });
 
   describe('should handle consolidated cases', () => {
-    const formattedCaseDetail = { ...FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES };
     const LEAD_CASE = {
       ...MOCK_CASE,
       checkboxDisabled: true,
       checked: true,
+      irsPractitioners: [],
       leadDocketNumber: MOCK_CASE.docketNumber,
       petitioners: [
         {
@@ -134,12 +140,15 @@ describe('confirmInitiateServiceModalHelper', () => {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
+      privatePractitioners: [],
     };
 
     const customizedDocketNumberOne = '1337-42';
     const SECOND_CASE = {
       ...MOCK_CASE,
+      checked: true,
       docketNumber: customizedDocketNumberOne,
+      irsPractitioners: [],
       leadDocketNumber: MOCK_CASE.docketNumber,
       petitioners: [
         {
@@ -148,12 +157,13 @@ describe('confirmInitiateServiceModalHelper', () => {
           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
         },
       ],
+      privatePractitioners: [],
     };
-    formattedCaseDetail.isLeadCase = true;
 
     const customizedDocketNumberTwo = '1234-42';
     const THIRD_CASE = {
       ...MOCK_CASE,
+      checked: true,
       docketNumber: customizedDocketNumberTwo,
       irsPractitioners: [
         {
@@ -181,18 +191,20 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       ],
     };
-    formattedCaseDetail.isLeadCase = true;
 
     it('should say case if only lead case is checked & have only one contact', () => {
       const nonLeadCase = {
         ...SECOND_CASE,
         checked: false,
       };
-      formattedCaseDetail.consolidatedCases = [LEAD_CASE, nonLeadCase];
-
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, nonLeadCase],
+        isLeadCase: true,
+      };
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          form: {},
+          featureFlagHelper: featureFlagHelperState,
+          form: { eventCode: 'O' },
           formattedCaseDetail,
         },
       });
@@ -208,17 +220,17 @@ describe('confirmInitiateServiceModalHelper', () => {
       };
       const secondNonLeadCase = {
         ...THIRD_CASE,
-        checked: true,
       };
-      formattedCaseDetail.consolidatedCases = [
-        LEAD_CASE,
-        firstNonLeadCase,
-        secondNonLeadCase,
-      ];
+
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, firstNonLeadCase, secondNonLeadCase],
+        isLeadCase: true,
+      };
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          form: {},
+          featureFlagHelper: featureFlagHelperState,
+          form: { eventCode: 'OSC' },
           formattedCaseDetail,
         },
       });
@@ -252,40 +264,47 @@ describe('confirmInitiateServiceModalHelper', () => {
       };
       const secondNonLeadCase = {
         ...THIRD_CASE,
-        checked: true,
-        irsPractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
         petitioners: [
           {
             ...THIRD_CASE.petitioners[0],
             contactId: LEAD_CASE.petitioners[0].contactId, //have the same contactId as the lead case
           },
         ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
       };
-      formattedCaseDetail.consolidatedCases = [
-        LEAD_CASE,
-        firstNonLeadCase,
-        secondNonLeadCase,
-      ];
+
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, firstNonLeadCase, secondNonLeadCase],
+        isLeadCase: true,
+      };
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          form: {},
+          featureFlagHelper: featureFlagHelperState,
+          form: { eventCode: 'OSC' },
           formattedCaseDetail,
         },
       });
 
       expect(result.contactsNeedingPaperService.length).toEqual(3);
+    });
+
+    it('should preserve non-consolidated functionality if the CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES is false', () => {
+      const formattedCaseDetail = {
+        ...LEAD_CASE,
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        isLeadCase: true,
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: { consolidatedCaseDuplicateDocketEntries: false },
+          form: { eventCode: 'OSC' },
+          formattedCaseDetail,
+        },
+      });
+
+      expect(result.contactsNeedingPaperService.length).toEqual(1);
+      expect(result.caseOrGroup).toEqual('case');
     });
   });
 });
