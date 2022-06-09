@@ -82,12 +82,12 @@ describe('submitCourtIssuedDocketEntryAction', () => {
   });
 
   describe('consolidated cases', () => {
-    it('should pass the docket number for each checked case', async () => {
+    it('should pass the docket number for each checked case, the correct success message is returned, and overwritable is false', async () => {
       const leadDocketNumber = '123-20';
       const checkedDocketNumber1 = 'DogCow';
       const checkedDocketNumber2 = 'Moof';
 
-      await runAction(fileAndServeCourtIssuedDocumentAction, {
+      const result = await runAction(fileAndServeCourtIssuedDocumentAction, {
         modules: {
           presenter,
         },
@@ -127,6 +127,11 @@ describe('submitCourtIssuedDocketEntryAction', () => {
           .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
           .docketNumbers,
       ).toEqual([leadDocketNumber, checkedDocketNumber1, checkedDocketNumber2]);
+
+      expect(result.output.alertSuccess).toEqual({
+        message: 'Document served to selected cases in group. ',
+        overwritable: false,
+      });
     });
 
     it("should pass only one docket number if this isn't lead case", async () => {
