@@ -38,11 +38,11 @@ describe('submitCourtIssuedDocketEntryAction', () => {
 
     expect(
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
-        .mock.calls[0][1].documentMeta.docketNumbers,
+        .mock.calls[0][1].docketNumbers,
     ).toEqual([thisDocketNumber]);
   });
 
-  it('should return a pdfUrl when one is generated', async () => {
+  it('should return a pdfUrl when one is generated, the success message is set for unconsolidated cases, and overwritable is false', async () => {
     const mockPdfUrl = 'www.example.com';
     applicationContext
       .getUseCases()
@@ -75,6 +75,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     expect(result.output).toEqual({
       alertSuccess: {
         message: 'Document served. ',
+        overwritable: false,
       },
       pdfUrl: mockPdfUrl,
     });
@@ -124,7 +125,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       expect(
         applicationContext.getUseCases()
           .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
-          .documentMeta.docketNumbers,
+          .docketNumbers,
       ).toEqual([leadDocketNumber, checkedDocketNumber1, checkedDocketNumber2]);
     });
 
@@ -171,7 +172,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       expect(
         applicationContext.getUseCases()
           .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
-          .documentMeta.docketNumbers,
+          .docketNumbers,
       ).toEqual([thisDocketNumber]);
     });
 
@@ -227,7 +228,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         expect(
           applicationContext.getUseCases()
             .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
-            .documentMeta.docketNumbers,
+            .docketNumbers,
         ).toEqual([leadDocketNumber]);
       });
     });
