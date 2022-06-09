@@ -16,10 +16,16 @@ export const validateTrialSessionAction = ({
   path,
   props,
 }) => {
-  const startDate = // AAAA-BB-CC
+  const startDate =
     applicationContext
       .getUtilities()
       .prepareDateFromString(props.computedStartDate)
+      ?.toISOString() || null;
+
+  const estimatedEndDate =
+    applicationContext
+      .getUtilities()
+      .prepareDateFromString(props.computedEstimatedEndDate)
       ?.toISOString() || null;
 
   const trialSession = omit(
@@ -39,7 +45,7 @@ export const validateTrialSessionAction = ({
   const errors = applicationContext
     .getUseCases()
     .validateTrialSessionInteractor(applicationContext, {
-      trialSession: { ...trialSession, startDate },
+      trialSession: { ...trialSession, estimatedEndDate, startDate },
     });
 
   if (!errors) {
