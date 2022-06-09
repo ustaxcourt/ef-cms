@@ -75,6 +75,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         featureFlagHelper: featureFlagHelperState,
         form: {},
         formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
+        modal: { showModal: 'ConfirmInitiateServiceModal' },
       },
     });
 
@@ -117,6 +118,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           ],
           privatePractitioners: [],
         },
+        modal: { showModal: 'ConfirmInitiateServiceModal' },
       },
     });
 
@@ -206,6 +208,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           featureFlagHelper: featureFlagHelperState,
           form: { eventCode: 'O' },
           formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
       });
 
@@ -232,6 +235,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           featureFlagHelper: featureFlagHelperState,
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
       });
 
@@ -282,6 +286,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           featureFlagHelper: featureFlagHelperState,
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
       });
 
@@ -300,11 +305,34 @@ describe('confirmInitiateServiceModalHelper', () => {
           featureFlagHelper: { consolidatedCaseDuplicateDocketEntries: false },
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
         },
       });
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('case');
+    });
+
+    it('should not process consolidated cases when not on confirmInitiateServiceModal', () => {
+      const formattedCaseDetail = {
+        ...LEAD_CASE,
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        isLeadCase: true,
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: { consolidatedCaseDuplicateDocketEntries: true },
+          form: { eventCode: 'OSC' },
+          formattedCaseDetail,
+          modal: {
+            showModal: 'ConfirmInitiateCourtIssuedDocumentServiceModal',
+          },
+        },
+      });
+
+      expect(result.contactsNeedingPaperService.length).toEqual(1);
+      expect(result.showConsolidatedCasesFlag).toEqual(false);
     });
   });
 });
