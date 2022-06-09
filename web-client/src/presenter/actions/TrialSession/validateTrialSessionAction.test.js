@@ -90,7 +90,7 @@ describe('validateTrialSessionAction', () => {
         presenter,
       },
       props: {
-        computedEstimatedEndDate: '2019-12-01T00:00:00.000Z',
+        computedEstimatedEndDate: undefined,
       },
       state: {
         form: { ...MOCK_TRIAL, term: 'Summer' },
@@ -102,7 +102,7 @@ describe('validateTrialSessionAction', () => {
         .calls[0][1],
     ).toMatchObject({
       trialSession: {
-        estimatedEndDate: '2019-12-01T00:00:00.000Z',
+        estimatedEndDate: null,
       },
     });
   });
