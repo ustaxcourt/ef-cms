@@ -59,6 +59,7 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   return {
     alertSuccess: {
       message: successMessage,
+      overwritable: false,
     },
     pdfUrl: result ? result.pdfUrl : undefined,
   };
