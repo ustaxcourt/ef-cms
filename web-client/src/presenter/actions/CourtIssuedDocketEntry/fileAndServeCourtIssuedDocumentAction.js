@@ -36,12 +36,15 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumber);
 
+  let successMessage = 'Document served to selected cases in group. ';
+
   if (
     !isLeadCase ||
     docketNumbers.length === 0 ||
     !currentDocketEntryCompatibleWithConsolidation
   ) {
     docketNumbers = [caseDetail.docketNumber];
+    successMessage = 'Document served. ';
   }
 
   const result = await applicationContext
@@ -55,7 +58,7 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
 
   return {
     alertSuccess: {
-      message: 'Document served. ',
+      message: successMessage,
     },
     pdfUrl: result ? result.pdfUrl : undefined,
   };
