@@ -63,12 +63,14 @@ exports.serveDocumentAndGetPaperServicePdf = async ({
     }
   }
 
-  const paperServicePdfData = await newPdfDoc.save();
-  const { url } = await saveFileAndGenerateUrl({
-    applicationContext,
-    file: paperServicePdfData,
-    useTempBucket: true,
-  });
+  if (newPdfDoc.getPageCount() > 0) {
+    const paperServicePdfData = await newPdfDoc.save();
+    const { url } = await saveFileAndGenerateUrl({
+      applicationContext,
+      file: paperServicePdfData,
+      useTempBucket: true,
+    });
 
-  return { pdfUrl: url };
+    return { pdfUrl: url };
+  }
 };
