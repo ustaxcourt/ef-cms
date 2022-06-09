@@ -116,13 +116,13 @@ export const MessagesIndividualInbox = connect(
               <th>Case Status</th>
               <th>From</th>
               <th className="small">Section</th>
+              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.map(message => {
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
-                  <td aria-hidden="true" className="focus-toggle" />
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
                       <span className="fa-layers fa-fw">
@@ -139,7 +139,7 @@ export const MessagesIndividualInbox = connect(
                       </span>
                     )}
                   </td>
-                  <td className="message-queue-row small">
+                  <td className="message-queue-row small" colSpan="2">
                     {message.docketNumberWithSuffix}
                   </td>
                   <td className="message-queue-row small">
@@ -183,6 +183,7 @@ export const MessagesIndividualInbox = connect(
                   <td className="message-queue-row small">
                     {message.fromSection}
                   </td>
+                  <td aria-hidden="true" />
                 </tr>
               </tbody>
             );
