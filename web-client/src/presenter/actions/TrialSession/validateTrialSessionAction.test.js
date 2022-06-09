@@ -79,4 +79,31 @@ describe('validateTrialSessionAction', () => {
 
     expect(errorStub.mock.calls.length).toEqual(1);
   });
+
+  it('should pass the expected estimatedEndDate from props into the validation functino', async () => {
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue(null);
+
+    await runAction(validateTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        computedEstimatedEndDate: '2019-12-01T00:00:00.000Z',
+      },
+      state: {
+        form: { ...MOCK_TRIAL, term: 'Summer' },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateTrialSessionInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      trialSession: {
+        estimatedEndDate: '2019-12-01T00:00:00.000Z',
+      },
+    });
+  });
 });
