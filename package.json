@@ -13,7 +13,7 @@
     "@fortawesome/react-fontawesome": "^0.1.18",
     "@hapi/joi-date": "^2.0.1",
     "@pdftron/pdfjs-express-viewer": "^8.4.0",
-    "@sparticuz/chrome-aws-lambda": "^14.1.1",
+    "@sparticuz/chrome-aws-lambda": "^14.3.0",
     "archiver": "^5.3.1",
     "aws-sdk": "^2.1152.0",
     "broadcast-channel": "^4.12.0",
