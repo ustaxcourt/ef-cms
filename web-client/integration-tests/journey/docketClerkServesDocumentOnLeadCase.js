@@ -56,12 +56,12 @@ export const docketClerkServesDocumentOnLeadCase = (
 
     await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
 
-    // checking/unchecking checboxes in the modal
-    // uncheck consolidatedCaseAllCheckbox
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
 
-    // TODO: check another box on a non-lead case
+    await cerebralTest.runSequence('updateCaseCheckboxSequence', {
+      docketNumber: caseDetail.consolidatedCases[1].docketNumber,
+    });
 
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',

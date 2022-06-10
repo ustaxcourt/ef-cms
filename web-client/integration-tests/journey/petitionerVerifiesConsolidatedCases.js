@@ -22,6 +22,7 @@ export const petitionerVerifiesConsolidatedCases = (
       dashboardViewConsolidatedCases,
     );
 
+    cerebralTest.docketNumber = aLeadCase.docketNumber;
     cerebralTest.leadDocketNumber = aLeadCase.docketNumber;
   });
 };
