@@ -171,8 +171,13 @@ resource "aws_iam_role_policy" "lambda_policy" {
             "Effect": "Allow"
         },
         {
-            "Action": "SNS:Publish",
+            "Action": "sns:Publish",
             "Resource": "arn:aws:sns:us-east-1:${data.aws_caller_identity.current.account_id}:seal_notifier",
+            "Effect": "Allow"
+        },
+        {
+            "Action": "sns:Subscribe",
+            "Resource": "arn:aws:sns:us-east-1:${data.aws_caller_identity.current.account_id}:bounced_service_emails_${var.environment}",
             "Effect": "Allow"
         }
     ]

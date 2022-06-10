@@ -84,6 +84,9 @@ const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
 
 // Emails
 const {
+  BouncedEmailAlert,
+} = require('../emailGenerator/emailTemplates/BouncedEmailAlert');
+const {
   DocumentService,
 } = require('../emailGenerator/emailTemplates/DocumentService');
 const {
@@ -95,6 +98,7 @@ const ReactDOM = require('react-dom/server');
 
 const components = {
   AddressLabelCoverSheet,
+  BouncedEmailAlert,
   CaseInventoryReport,
   ChangeOfAddress,
   CoverSheet,
