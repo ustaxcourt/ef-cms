@@ -214,6 +214,7 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('case');
+      expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
     it('should say group if any non-lead case is checked & have the correct number of contacts', () => {
@@ -241,6 +242,7 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       expect(result.contactsNeedingPaperService.length).toEqual(4);
       expect(result.caseOrGroup).toEqual('group');
+      expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
     it('should remove duplicated paper contacts', () => {
@@ -311,6 +313,7 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('case');
+      expect(result.showConsolidatedCasesFlag).toEqual(false);
     });
 
     it('should not process consolidated cases when not on confirmInitiateServiceModal', () => {
