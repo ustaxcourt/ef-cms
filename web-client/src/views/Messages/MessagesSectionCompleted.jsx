@@ -135,7 +135,10 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
       <tr>
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
-            <span className="fa-layers fa-fw">
+            <span
+              className="fa-layers fa-fw"
+              title={consolidatedIconTooltipText}
+            >
               <Icon
                 aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
