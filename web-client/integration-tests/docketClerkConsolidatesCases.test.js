@@ -7,6 +7,8 @@ import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketCle
 import { docketClerkUnconsolidatesCase } from './journey/docketClerkUnconsolidatesCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 // petitioner
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServesDocumentOnLeadCase';
 import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
@@ -72,7 +74,17 @@ describe('Case Consolidation Journey', () => {
   petitionerViewsDashboard(cerebralTest);
   petitionerVerifiesConsolidatedCases(cerebralTest);
 
+  //docket clerk serves court issued document on lead case and so on
+
   loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentTitle: 'Order to do something',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkServesDocumentOnLeadCase(cerebralTest, 0);
+
+  //check that document is served on lead case AND any checked consolidated cases
   docketClerkUnconsolidatesCase(cerebralTest);
 
   loginAs(cerebralTest, 'petitioner@example.com');
