@@ -27,7 +27,9 @@ export const TableFilters = ({ filters, onSelect }) => {
             return (
               <div className="grid-col-3" key={key}>
                 <select
-                  aria-label={key}
+                  aria-label={
+                    isSelected ? 'reset filter' : `${label} filter drop down`
+                  }
                   bind={`screenMetadata.${key}`}
                   className={classNames(
                     'usa-select',
