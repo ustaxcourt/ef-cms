@@ -10,18 +10,20 @@ import { state } from 'cerebral';
 export const setupConsolidatedCasesAction = ({ get, store }) => {
   let consolidatedCases = get(state.caseDetail.consolidatedCases);
 
-  consolidatedCases = consolidatedCases.map(consolidatedCase => {
-    return {
-      ...consolidatedCase,
-      checkboxDisabled: true,
-      checked: true,
-      formattedPetitioners: consolidatedCase.petitioners
-        .map(ptr => ptr.name)
-        .join(' & '),
-      tooltip: '',
-    };
-  });
+  if (consolidatedCases) {
+    consolidatedCases = consolidatedCases.map(consolidatedCase => {
+      return {
+        ...consolidatedCase,
+        checkboxDisabled: true,
+        checked: true,
+        formattedPetitioners: consolidatedCase.petitioners
+          .map(ptr => ptr.name)
+          .join(' & '),
+        tooltip: '',
+      };
+    });
 
-  store.set(state.consolidatedCaseAllCheckbox, true);
-  store.set(state.caseDetail.consolidatedCases, consolidatedCases);
+    store.set(state.consolidatedCaseAllCheckbox, true);
+    store.set(state.caseDetail.consolidatedCases, consolidatedCases);
+  }
 };
