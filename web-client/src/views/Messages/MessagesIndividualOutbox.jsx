@@ -76,7 +76,6 @@ export const MessagesIndividualOutbox = connect(
               <th>Case Status</th>
               <th>To</th>
               <th className="small">Section</th>
-              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.map(message => {
@@ -130,7 +129,6 @@ export const MessagesIndividualOutbox = connect(
                   <td className="message-queue-row small">
                     {message.toSection}
                   </td>
-                  <td aria-hidden="true" />
                 </tr>
               </tbody>
             );
