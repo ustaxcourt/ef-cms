@@ -1,4 +1,7 @@
-export const petitionerVerifiesConsolidatedCases = cerebralTest => {
+export const petitionerVerifiesConsolidatedCases = (
+  cerebralTest,
+  expectedNumberOfConsolidatedCases,
+) => {
   return it('Petitioner verifies there are consolidated cases', () => {
     const cases = cerebralTest.getState('openCases');
 
@@ -12,6 +15,13 @@ export const petitionerVerifiesConsolidatedCases = cerebralTest => {
         caseDetail.leadDocketNumber ===
         casesWithConsolidation[0].leadDocketNumber,
     );
-    expect(aLeadCase.consolidatedCases.length).toBeGreaterThan(0);
+    // The dashboard excludes the lead case from consolidatedCases
+    const dashboardViewConsolidatedCases =
+      expectedNumberOfConsolidatedCases - 1;
+    expect(aLeadCase.consolidatedCases.length).toEqual(
+      dashboardViewConsolidatedCases,
+    );
+
+    cerebralTest.leadDocketNumber = aLeadCase.docketNumber;
   });
 };

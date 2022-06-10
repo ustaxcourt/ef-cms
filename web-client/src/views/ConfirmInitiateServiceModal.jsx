@@ -86,11 +86,7 @@ export const ConfirmInitiateServiceModal = connect(
               name="consolidated-case"
               type="checkbox"
               value="consolidated-case-checkbox-all"
-              onChange={event =>
-                consolidatedCaseCheckboxAllChange({
-                  checked: event.target.checked,
-                })
-              }
+              onChange={() => consolidatedCaseCheckboxAllChange()}
             />
             <label
               className="usa-checkbox__label"
