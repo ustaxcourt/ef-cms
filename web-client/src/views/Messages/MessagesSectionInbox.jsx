@@ -111,7 +111,6 @@ export const MessagesSectionInbox = connect(
               <th>To</th>
               <th>From</th>
               <th className="small">Section</th>
-              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.messages.map(message => (
@@ -160,7 +159,10 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
       <tr>
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
-            <span className="fa-layers fa-fw">
+            <span
+              className="fa-layers fa-fw"
+              title={consolidatedIconTooltipText}
+            >
               <Icon
                 aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
@@ -191,7 +193,6 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
         <td className="message-queue-row to">{to}</td>
         <td className="message-queue-row from">{from}</td>
         <td className="message-queue-row small">{fromSection}</td>
-        <td aria-hidden="true" />
       </tr>
     </tbody>
   );

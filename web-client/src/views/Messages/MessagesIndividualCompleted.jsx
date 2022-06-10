@@ -74,7 +74,6 @@ export const MessagesIndividualCompleted = connect(
               {!showSortableHeaders && <th>Message</th>}
               <th>Comment</th>
               <th>Case Title</th>
-              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.map(message => {
@@ -83,7 +82,10 @@ export const MessagesIndividualCompleted = connect(
                 <tr>
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
-                      <span className="fa-layers fa-fw">
+                      <span
+                        className="fa-layers fa-fw"
+                        title={message.consolidatedIconTooltipText}
+                      >
                         <Icon
                           aria-label={message.consolidatedIconTooltipText}
                           className="fa-icon-blue"
@@ -123,7 +125,6 @@ export const MessagesIndividualCompleted = connect(
                     {message.completedMessage}
                   </td>
                   <td className="message-queue-row">{message.caseTitle}</td>
-                  <td aria-hidden="true" />
                 </tr>
               </tbody>
             );

@@ -92,7 +92,6 @@ export const MessagesSectionCompleted = connect(
               <th>Comment</th>
               <th>Completed by</th>
               <th>Section</th>
-              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.completedMessages.map(message => (
@@ -136,7 +135,10 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
       <tr>
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
-            <span className="fa-layers fa-fw">
+            <span
+              className="fa-layers fa-fw"
+              title={consolidatedIconTooltipText}
+            >
               <Icon
                 aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
@@ -166,7 +168,6 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
         <td className="message-queue-row">{completedMessage}</td>
         <td className="message-queue-row">{completedBy}</td>
         <td className="message-queue-row">{completedBySection}</td>
-        <td aria-hidden="true" />
       </tr>
     </tbody>
   );
