@@ -14,6 +14,7 @@ shared/src/business/utilities/htmlGenerator/index.scss
 /policy.json
 artillery/private-app-report.json
 artillery/tokens.csv
+artillery/token-ids.csv
 artillery/private-advanced-order.json
 aws.json
 aws/lambdas/*.zip
