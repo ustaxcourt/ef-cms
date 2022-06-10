@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -9,20 +10,47 @@ import classNames from 'classnames';
 export const MessagesIndividualInbox = connect(
   {
     constants: state.constants,
-    formattedMessages: state.formattedMessages.messages,
-    hasMessages: state.formattedMessages.hasMessages,
+    formattedMessages: state.formattedMessages,
+    screenMetadata: state.screenMetadata,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesIndividualInbox({
     constants,
     formattedMessages,
-    hasMessages,
+    screenMetadata,
     showSortableHeaders,
     sortMessagesSequence,
+    updateScreenMetadataSequence,
   }) {
     return (
       <>
+        {formattedMessages.showFilters && (
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.caseStatus,
+                key: 'caseStatus',
+                label: 'Case Status',
+                options: formattedMessages.caseStatuses,
+              },
+              {
+                isSelected: screenMetadata.fromUser,
+                key: 'fromUser',
+                label: 'From',
+                options: formattedMessages.fromUsers,
+              },
+              {
+                isSelected: screenMetadata.fromSection,
+                key: 'fromSection',
+                label: 'Section',
+                options: formattedMessages.fromSections,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
@@ -33,7 +61,7 @@ export const MessagesIndividualInbox = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -51,7 +79,7 @@ export const MessagesIndividualInbox = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
                     title="Received"
                     onClickSequence={sortMessagesSequence}
@@ -66,7 +94,7 @@ export const MessagesIndividualInbox = connect(
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Message"
                     onClickSequence={sortMessagesSequence}
@@ -81,7 +109,7 @@ export const MessagesIndividualInbox = connect(
               <th aria-hidden="true" />
             </tr>
           </thead>
-          {formattedMessages.map(message => {
+          {formattedMessages.messages.map(message => {
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
@@ -151,7 +179,7 @@ export const MessagesIndividualInbox = connect(
             );
           })}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
