@@ -111,7 +111,6 @@ export const MessagesSectionOutbox = connect(
               <th>To</th>
               <th>From</th>
               <th>Section</th>
-              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.messages.map(message => (
@@ -160,7 +159,10 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
       <tr>
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
-            <span className="fa-layers fa-fw">
+            <span
+              className="fa-layers fa-fw"
+              title={consolidatedIconTooltipText}
+            >
               <Icon
                 aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
@@ -192,7 +194,6 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
         <td className="message-queue-row to">{to}</td>
         <td className="message-queue-row from">{from}</td>
         <td className="message-queue-row small">{toSection}</td>
-        <td aria-hidden="true" />
       </tr>
     </tbody>
   );
