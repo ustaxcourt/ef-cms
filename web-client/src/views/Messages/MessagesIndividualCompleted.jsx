@@ -8,15 +8,13 @@ import React from 'react';
 export const MessagesIndividualCompleted = connect(
   {
     constants: state.constants,
-    formattedMessages: state.formattedMessages.completedMessages,
-    hasMessages: state.formattedMessages.hasMessages,
+    formattedMessages: state.formattedMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesIndividualCompleted({
     constants,
     formattedMessages,
-    hasMessages,
     showSortableHeaders,
     sortMessagesSequence,
   }) {
@@ -32,7 +30,7 @@ export const MessagesIndividualCompleted = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -50,7 +48,7 @@ export const MessagesIndividualCompleted = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="completedAt"
                     title="Completed"
                     onClickSequence={sortMessagesSequence}
@@ -64,7 +62,7 @@ export const MessagesIndividualCompleted = connect(
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Last Message"
                     onClickSequence={sortMessagesSequence}
@@ -76,7 +74,7 @@ export const MessagesIndividualCompleted = connect(
               <th>Case Title</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => {
+          {formattedMessages.completedMessages.map(message => {
             return (
               <tbody key={`message-individual-${message.messageId}`}>
                 <tr>
@@ -130,7 +128,7 @@ export const MessagesIndividualCompleted = connect(
             );
           })}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
