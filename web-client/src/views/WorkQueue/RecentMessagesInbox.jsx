@@ -38,7 +38,10 @@ export const RecentMessagesInbox = connect(
                 <tr>
                   <td className="consolidated-case-column">
                     {item.inConsolidatedGroup && (
-                      <span className="fa-layers fa-fw">
+                      <span
+                        className="fa-layers fa-fw"
+                        title={item.consolidatedIconTooltipText}
+                      >
                         <Icon
                           aria-label={item.consolidatedIconTooltipText}
                           className="fa-icon-blue"
