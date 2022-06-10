@@ -10,6 +10,8 @@ module.exports = {
     'cognito-triggers':
       './web-api/terraform/template/lambdas/cognito-triggers.js',
     cron: './web-api/terraform/template/lambdas/cron.js',
+    'handle-bounced-service-email':
+      './web-api/terraform/template/lambdas/handle-bounced-service-email.js',
     'maintenance-notify':
       './web-api/terraform/template/lambdas/maintenance-notify.js',
     'public-api-authorizer':
