@@ -55,16 +55,13 @@ export const docketClerkServesDocumentOnLeadCase = (
     cerebralTest.docketRecordEntry = servedDocketEntry;
 
     await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
-    // checking/unchecking checboxes in the modal
-    console.log('cerebralTest.getState', cerebralTest.getState());
-    it('should uncheck consolidatedCaseAllCheckbox and select some consolidated cases', () => {
-      //uncheck consolidatedCaseAllCheckbox
-      cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
 
-      expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(
-        false,
-      );
-    });
+    // checking/unchecking checboxes in the modal
+    // uncheck consolidatedCaseAllCheckbox
+    await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
+    expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
+
+    // TODO: check another box on a non-lead case
 
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
