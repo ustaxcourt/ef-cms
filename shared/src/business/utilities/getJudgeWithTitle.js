@@ -1,4 +1,8 @@
-const getJudgeWithTitle = async ({ applicationContext, judgeUserName }) => {
+const getJudgeWithTitle = async ({
+  applicationContext,
+  judgeUserName,
+  useFullName = false,
+}) => {
   const judges = await applicationContext
     .getPersistenceGateway()
     .getUsersInSection({
@@ -12,7 +16,9 @@ const getJudgeWithTitle = async ({ applicationContext, judgeUserName }) => {
     throw new Error(`Judge ${judgeUserName} was not found`);
   }
 
-  return `${foundJudge.judgeTitle} ${foundJudge.name}`;
+  const judgeName = useFullName ? foundJudge.judgeFullName : foundJudge.name;
+
+  return `${foundJudge.judgeTitle} ${judgeName}`;
 };
 
 module.exports = {
