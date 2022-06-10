@@ -24,4 +24,12 @@ Perhaps we want to record somewhere in the Docket Entry what users received the 
 
 ## Manual Steps
 
-The environment specific terraform needs to be run in order to enable permissions for the Lambda to subscribe to the Topic.
+Developers need to perform two manual steps in order to deploy this code:
+
+* The environment specific terraform needs to be run in order to enable permissions for the Lambda to subscribe to the Topic.
+
+    ```bash
+    npm run deploy:environment-specific <ENV>
+    ```
+
+* Run the `setup-bounce-handler-deploy-file.sh` after the first deploy fails in order to copy the deploy file so that the next build can complete.
