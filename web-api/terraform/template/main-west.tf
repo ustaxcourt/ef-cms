@@ -322,6 +322,11 @@ module "api-west-green" {
   create_seal_in_lower           = 0
   lower_env_account_id           = var.lower_env_account_id
   prod_env_account_id            = var.prod_env_account_id
+
+  # lambda to handle bounced service email notifications
+  bounce_handler_object          = ""
+  bounce_handler_object_hash     = ""
+  create_bounce_handler          = 0
 }
 
 module "api-west-blue" {
@@ -377,4 +382,9 @@ module "api-west-blue" {
   create_seal_in_lower           = 0
   lower_env_account_id           = var.lower_env_account_id
   prod_env_account_id            = var.prod_env_account_id
+
+  # lambda to handle bounced service email notifications
+  bounce_handler_object          = ""
+  bounce_handler_object_hash     = ""
+  create_bounce_handler          = 0 
 }

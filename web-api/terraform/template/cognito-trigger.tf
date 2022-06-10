@@ -48,6 +48,9 @@ resource "aws_lambda_function" "cognito_post_confirmation_lambda" {
       STAGE                              = var.environment
       NODE_ENV                           = "production"
       BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
+      BOUNCE_ALERT_TEMPLATE              = "bounce_alert_${var.environment}"
+      BOUNCE_ALERT_RECIPIENTS            = var.bounce_alert_recipients
+      SLACK_WEBHOOK_URL                  = var.slack_webhook_url
       EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
       EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
       EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
@@ -86,6 +89,9 @@ resource "aws_lambda_function" "cognito_post_authentication_lambda" {
       STAGE                              = var.environment
       NODE_ENV                           = "production"
       BOUNCED_EMAIL_RECIPIENT            = var.bounced_email_recipient
+      BOUNCE_ALERT_TEMPLATE              = "bounce_alert_${var.environment}"
+      BOUNCE_ALERT_RECIPIENTS            = var.bounce_alert_recipients
+      SLACK_WEBHOOK_URL                  = var.slack_webhook_url
       EMAIL_SOURCE                       = "noreply@${var.dns_domain}"
       EMAIL_CHANGE_VERIFICATION_TEMPLATE = "email_change_verification_${var.environment}"
       EMAIL_DOCUMENT_SERVED_TEMPLATE     = "document_served_${var.environment}"
