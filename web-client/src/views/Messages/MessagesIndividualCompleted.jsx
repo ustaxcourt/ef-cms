@@ -82,7 +82,10 @@ export const MessagesIndividualCompleted = connect(
                 <tr>
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
-                      <span className="fa-layers fa-fw">
+                      <span
+                        className="fa-layers fa-fw"
+                        title={message.consolidatedIconTooltipText}
+                      >
                         <Icon
                           aria-label={message.consolidatedIconTooltipText}
                           className="fa-icon-blue"

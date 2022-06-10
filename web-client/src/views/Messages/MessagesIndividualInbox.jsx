@@ -114,7 +114,10 @@ export const MessagesIndividualInbox = connect(
                 <tr key={message.messageId}>
                   <td className="consolidated-case-column">
                     {message.inConsolidatedGroup && (
-                      <span className="fa-layers fa-fw">
+                      <span
+                        className="fa-layers fa-fw"
+                        title={message.consolidatedIconTooltipText}
+                      >
                         <Icon
                           aria-label={message.consolidatedIconTooltipText}
                           className="fa-icon-blue"
