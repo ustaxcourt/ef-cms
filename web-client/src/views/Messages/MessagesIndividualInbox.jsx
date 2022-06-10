@@ -9,53 +9,43 @@ import classNames from 'classnames';
 
 export const MessagesIndividualInbox = connect(
   {
-    caseStatuses: state.formattedMessages.caseStatuses,
     constants: state.constants,
-    formattedMessages: state.formattedMessages.messages,
-    fromSections: state.formattedMessages.fromSections,
-    fromUsers: state.formattedMessages.fromUsers,
-    hasMessages: state.formattedMessages.hasMessages,
+    formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesIndividualInbox({
-    caseStatuses,
     constants,
     formattedMessages,
-    fromSections,
-    fromUsers,
-    hasMessages,
     screenMetadata,
-    showFilters,
     showSortableHeaders,
     sortMessagesSequence,
     updateScreenMetadataSequence,
   }) {
     return (
       <>
-        {showFilters && (
+        {formattedMessages.showFilters && (
           <TableFilters
             filters={[
               {
                 isSelected: screenMetadata.caseStatus,
                 key: 'caseStatus',
                 label: 'Case Status',
-                options: caseStatuses,
+                options: formattedMessages.caseStatuses,
               },
               {
                 isSelected: screenMetadata.fromUser,
                 key: 'fromUser',
                 label: 'From',
-                options: fromUsers,
+                options: formattedMessages.fromUsers,
               },
               {
                 isSelected: screenMetadata.fromSection,
                 key: 'fromSection',
                 label: 'Section',
-                options: fromSections,
+                options: formattedMessages.fromSections,
               },
             ]}
             onSelect={updateScreenMetadataSequence}
@@ -71,7 +61,7 @@ export const MessagesIndividualInbox = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.DESCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -89,7 +79,7 @@ export const MessagesIndividualInbox = connect(
                     ascText={constants.CHRONOLOGICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
                     title="Received"
                     onClickSequence={sortMessagesSequence}
@@ -104,7 +94,7 @@ export const MessagesIndividualInbox = connect(
                     ascText={constants.ALPHABETICALLY_ASCENDING}
                     defaultSort={constants.ASCENDING}
                     descText={constants.ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Message"
                     onClickSequence={sortMessagesSequence}
@@ -116,10 +106,9 @@ export const MessagesIndividualInbox = connect(
               <th>Case Status</th>
               <th>From</th>
               <th className="small">Section</th>
-              <th aria-hidden="true" />
             </tr>
           </thead>
-          {formattedMessages.map(message => {
+          {formattedMessages.messages.map(message => {
             return (
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
@@ -183,13 +172,12 @@ export const MessagesIndividualInbox = connect(
                   <td className="message-queue-row small">
                     {message.fromSection}
                   </td>
-                  <td aria-hidden="true" />
                 </tr>
               </tbody>
             );
           })}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },

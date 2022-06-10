@@ -91,7 +91,6 @@ export const MessagesSectionCompleted = connect(
               <th>Comment</th>
               <th>Completed by</th>
               <th>Section</th>
-              <th aria-hidden="true" />
             </tr>
           </thead>
           {formattedMessages.completedMessages.map(message => (
@@ -165,7 +164,6 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
         <td className="message-queue-row">{completedMessage}</td>
         <td className="message-queue-row">{completedBy}</td>
         <td className="message-queue-row">{completedBySection}</td>
-        <td aria-hidden="true" />
       </tr>
     </tbody>
   );
