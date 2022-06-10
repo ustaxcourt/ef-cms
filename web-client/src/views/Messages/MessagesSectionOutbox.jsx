@@ -157,10 +157,12 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
   return (
     <tbody>
       <tr>
-        <td aria-hidden="true" className="focus-toggle" />
         <td className="consolidated-case-column">
           {inConsolidatedGroup && (
-            <span className="fa-layers fa-fw">
+            <span
+              className="fa-layers fa-fw"
+              title={consolidatedIconTooltipText}
+            >
               <Icon
                 aria-label={consolidatedIconTooltipText}
                 className="fa-icon-blue"
@@ -172,7 +174,9 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
             </span>
           )}
         </td>
-        <td className="message-queue-row small">{docketNumberWithSuffix}</td>
+        <td className="message-queue-row small" colSpan="2">
+          {docketNumberWithSuffix}
+        </td>
         <td className="message-queue-row small">
           <span className="no-wrap">{createdAtFormatted}</span>
         </td>
