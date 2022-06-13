@@ -100,11 +100,13 @@ describe('Case Consolidation Journey', () => {
       'caseDetail.consolidatedCases',
     );
 
-    for (let consolidatedCase in consolidatedCases) {
+    for (let consolidatedCase of consolidatedCases) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: consolidatedCase.docketNumber,
       });
-      const { docketEntryId } = cerebralTest.docketEntryId;
+
+      const { docketEntryId } = cerebralTest.docketRecordEntry;
+      console.log('docketEntryId', docketEntryId);
 
       const documents = cerebralTest.getState('caseDetail.docketEntries');
       const orderDocument = documents.find(
@@ -117,6 +119,8 @@ describe('Case Consolidation Journey', () => {
         )
       ) {
         expect(orderDocument.servedAt).toBeDefined();
+        console.log('orderDocument', orderDocument);
+        // expect(orderDocument.workItem).toEqual():
       } else {
         expect(orderDocument).toBeUndefined();
       }
