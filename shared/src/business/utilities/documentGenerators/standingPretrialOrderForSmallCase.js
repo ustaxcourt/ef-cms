@@ -28,10 +28,6 @@ const standingPretrialOrderForSmallCase = async ({
   const pdfContentHtmlWithHeader = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactStandingPretrialOrderForSmallCaseTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Standing Pre-trial Order',
-    },
   });
 
   const headerHtml = reactTemplateGenerator({

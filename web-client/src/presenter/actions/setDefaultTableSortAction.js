@@ -1,5 +1,6 @@
-import { ASCENDING, DESCENDING } from '../presenterConstants';
+import { getConstants } from '../../getConstants';
 import { state } from 'cerebral';
+const { ASCENDING, DESCENDING } = getConstants();
 
 /**
  * sets the default sort based on the section picked.
@@ -11,12 +12,12 @@ import { state } from 'cerebral';
  */
 export const setDefaultTableSortAction = ({ get, props, store }) => {
   const userRole = get(state.user.role);
-  if (props.queue !== 'section' || userRole !== 'adc') {
+  if (userRole !== 'adc') {
     store.unset(state.tableSort);
     return;
   }
 
-  // different tables require different sorting
+  // different tables require different default sorting
   if (props.box === 'inbox') {
     store.set(state.tableSort.sortField, 'createdAt');
     store.set(state.tableSort.sortOrder, ASCENDING);
