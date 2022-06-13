@@ -65,7 +65,7 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'estimatedEndDateYear',
-      value: '2030',
+      value: '1995',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
@@ -129,6 +129,17 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
       value: overrides.trialLocation || 'Seattle, Washington',
+    });
+
+    await cerebralTest.runSequence('validateTrialSessionSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      estimatedEndDate: errorMessages.estimatedEndDate[1],
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'estimatedEndDateYear',
+      value: '2050',
     });
 
     await cerebralTest.runSequence('validateTrialSessionSequence');
