@@ -1,5 +1,18 @@
+const { DAWSON_GLOBAL_DISABLED_AXE_ERRORS } = require('../accessibility');
+
 exports.navigateTo = username => {
   cy.login(username, '/');
+
+  cy.waitUntilSettled();
+
+  cy.injectAxe();
+  cy.checkA11y('html', {
+    rules: {
+      //disabling this because app.jsx > AppComponent > CurrentPage components have headings
+      'page-has-heading-one': { enabled: false },
+      ...DAWSON_GLOBAL_DISABLED_AXE_ERRORS,
+    },
+  });
 };
 
 exports.viewMyOutbox = () => {

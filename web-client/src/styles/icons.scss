@@ -78,6 +78,10 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   color: color($theme-color-primary-vivid);
 }
 
+.fa-icon-white-no-margin {
+  color: $color-white;
+}
+
 .fa-icon-black {
   color: color($theme-color-base-darkest);
 }
@@ -129,6 +133,16 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
     font-size: 17px;
     vertical-align: middle;
   }
+}
+
+.lead-case-icon-text {
+  position: absolute;
+  top: 42%;
+  left: 58%;
+  cursor: default;
+  font-size: 14px;
+  transform: translate(-50%, -50%);
+  transform-origin: center center;
 }
 
 .icon-sortable-header {

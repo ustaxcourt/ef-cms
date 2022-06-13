@@ -20,6 +20,7 @@ export const Loading = connect(
           className={classNames('loading-overlay', 'progress-indicator', {
             'show-wait-text': waitText,
           })}
+          role="progressbar"
         >
           <FontAwesomeIcon className="fa-spin spinner" icon="sync" size="6x" />
           {waitText && <div>{waitText}</div>}
