@@ -25,8 +25,8 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const form = get(state.form);
 
-  const consolidatedCaseDuplicateDocketEntriesFlag = get(
-    state.featureFlagHelper.consolidatedCaseDuplicateDocketEntries,
+  const consolidatedCasesPropagateDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
   );
 
   const eventCodesNotCompatibleWithConsolidation = [
@@ -43,7 +43,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const showConsolidatedCasesFlag =
     formattedCaseDetail.isLeadCase &&
     isSavedAndServed &&
-    consolidatedCaseDuplicateDocketEntriesFlag &&
+    consolidatedCasesPropagateDocketEntriesFlag &&
     !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
     hasConsolidatedCases;
 

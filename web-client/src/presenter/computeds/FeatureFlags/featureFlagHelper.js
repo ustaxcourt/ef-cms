@@ -41,8 +41,7 @@ export const featureFlagHelper = (get, applicationContext) => {
   }
 
   return {
-    consolidatedCaseDuplicateDocketEntries:
-      consolidatedCasesPropagateDocketEntries,
+    consolidatedCasesPropagateDocketEntries,
     isOpinionSearchEnabledForRole,
     isOrderSearchEnabledForRole,
     isPdfJsEnabled,
