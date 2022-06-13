@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 import {
   FORMATS,
   formatNow,
@@ -121,6 +122,17 @@ describe('formattedTrialSessions', () => {
         term: 'Spring',
         trialLocation: 'Jacksonville, FL',
       },
+      {
+        caseOrder: [],
+        estimatedEndDate: '2045-02-17T15:00:00.000Z',
+        judge: { name: '6', userId: '6' },
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+        sessionType: TRIAL_SESSION_TYPES.regular,
+        startDate: `${nextYear}-02-17T15:00:00.000Z`,
+        swingSession: false,
+        term: 'Spring',
+        trialLocation: 'Jacksonville, FL',
+      },
     ];
   });
 
@@ -147,6 +159,17 @@ describe('formattedTrialSessions', () => {
       judge: { name: '3', userId: '3' },
       startDate: '2019-11-27T15:00:00.000Z',
       startOfWeek: 'November 25, 2019',
+    });
+  });
+
+  it('formats trial sessions correctly selecting startOfWeek and formatting start date with an estimatedEndDate', () => {
+    const result = formatSession(TRIAL_SESSIONS_LIST[6], applicationContext);
+    expect(result).toMatchObject({
+      formattedEstimatedEndDate: '02/17/45',
+      formattedStartDate: '02/17/23',
+      judge: { name: '6', userId: '6' },
+      startDate: '2023-02-17T15:00:00.000Z',
+      startOfWeek: 'February 13, 2023',
     });
   });
 
@@ -198,7 +221,7 @@ describe('formattedTrialSessions', () => {
     const flattenedSessions = result.formattedSessions.flatMap(
       week => week.sessions,
     );
-    expect(flattenedSessions.length).toBe(3);
+    expect(flattenedSessions.length).toBe(4);
   });
 
   it('returns all trial sessions if judge userId trial session filter is an empty string', () => {
@@ -368,6 +391,10 @@ describe('formattedTrialSessions', () => {
             judge: { name: '6', userId: '6' },
             userIsAssignedToSession: false,
           },
+          {
+            judge: { name: '6', userId: '6' },
+            userIsAssignedToSession: false,
+          },
         ],
       },
     ]);
@@ -412,6 +439,10 @@ describe('formattedTrialSessions', () => {
           result.formattedSessions[1].sessions[0].startDate,
         ),
         sessions: [
+          {
+            judge: { name: '6', userId: '6' },
+            userIsAssignedToSession: false,
+          },
           {
             judge: { name: '6', userId: '6' },
             userIsAssignedToSession: false,
@@ -462,6 +493,10 @@ describe('formattedTrialSessions', () => {
           result.formattedSessions[1].sessions[0].startDate,
         ),
         sessions: [
+          {
+            judge: { name: '6', userId: '6' },
+            userIsAssignedToSession: false,
+          },
           {
             judge: { name: '6', userId: '6' },
             userIsAssignedToSession: false,
