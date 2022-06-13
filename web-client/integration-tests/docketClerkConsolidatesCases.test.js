@@ -106,7 +106,6 @@ describe('Case Consolidation Journey', () => {
       });
 
       const { docketEntryId } = cerebralTest.docketRecordEntry;
-      console.log('docketEntryId', docketEntryId);
 
       const documents = cerebralTest.getState('caseDetail.docketEntries');
       const orderDocument = documents.find(
@@ -119,8 +118,7 @@ describe('Case Consolidation Journey', () => {
         )
       ) {
         expect(orderDocument.servedAt).toBeDefined();
-        console.log('orderDocument', orderDocument);
-        // expect(orderDocument.workItem).toEqual():
+        // TODO: expect(orderDocument.workItem).toEqual():
       } else {
         expect(orderDocument).toBeUndefined();
       }
