@@ -16,7 +16,7 @@
     "@sparticuz/chrome-aws-lambda": "^14.3.0",
     "archiver": "^5.3.1",
     "aws-sdk": "^2.1152.0",
-    "broadcast-channel": "^4.12.0",
+    "broadcast-channel": "^4.13.0",
     "canvas": "^2.9.1",
     "cerebral": "5.2.1",
     "classnames": "^2.3.1",
