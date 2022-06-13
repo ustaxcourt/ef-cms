@@ -28,7 +28,6 @@ export const docketClerkServesDocumentOnLeadCase = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    // default
     expect(cerebralTest.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );
@@ -59,7 +58,7 @@ export const docketClerkServesDocumentOnLeadCase = (
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
 
-    // verify that doc is served on lead case and THIS case
+    // verify that doc is served on lead case and first consolidated case
     await cerebralTest.runSequence('updateCaseCheckboxSequence', {
       docketNumber: caseDetail.consolidatedCases[1].docketNumber,
     });

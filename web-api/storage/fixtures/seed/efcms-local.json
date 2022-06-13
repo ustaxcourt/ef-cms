@@ -4662,8 +4662,8 @@
     "pk": "internal-opinion-search-enabled"
   },
   {
-    "pk": "consolidated-case-with-duplicating-docket-entries",
-    "sk": "consolidated-case-with-duplicating-docket-entries",
+    "pk": "consolidated-cases-propagate-docket-entries",
+    "sk": "consolidated-cases-propagate-docket-entries",
     "current": true
   },
   {
