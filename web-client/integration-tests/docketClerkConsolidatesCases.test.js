@@ -123,6 +123,10 @@ describe('Case Consolidation Journey', () => {
         expect(orderDocument.workItem.docketNumber).toEqual(
           consolidatedCase.docketNumber,
         );
+        expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
+        expect(orderDocument.workItem.completedMessage).toEqual('completed');
+        expect(orderDocument.workItem.completedAt).toBeDefined();
+        expect(orderDocument.workItem.inProgress).toBeUndefined();
       } else {
         expect(orderDocument).toBeUndefined();
       }
