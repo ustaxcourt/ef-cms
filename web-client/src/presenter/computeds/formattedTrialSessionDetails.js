@@ -24,7 +24,6 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
     }
 
-    // TODO: maybe remove this if statement since startDate is always required?
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext
         .getUtilities()

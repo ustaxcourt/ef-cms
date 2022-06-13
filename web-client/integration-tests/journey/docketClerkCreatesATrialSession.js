@@ -54,6 +54,21 @@ export const docketClerkCreatesATrialSession = (
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'estimatedEndDateMonth',
+      value: '01',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'estimatedEndDateDay',
+      value: '12',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'estimatedEndDateYear',
+      value: overrides.trialYear || '2026',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'address1',
       value: '123 Flavor Ave',
     });
