@@ -1,8 +1,7 @@
-import { Accordion, AccordionItem } from '../../ustc-ui/Accordion/Accordion';
 import { BigHeader } from '../BigHeader';
-import { Button } from '../../ustc-ui/Button/Button';
 import { CaseListPetitioner } from '../CaseListPetitioner';
 import { ErrorNotification } from '../ErrorNotification';
+import { FilingFeeOptions } from './FilingFeeOptions';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { SuccessNotification } from '../SuccessNotification';
 import { WhatToExpect } from '../WhatToExpect';
@@ -69,6 +68,9 @@ export const DashboardPetitioner = connect(
                   </p>
                 </div>
               </div>
+
+              {dashboardExternalHelper.showWhatToExpect && <FilingFeeOptions />}
+
               <div className="card">
                 <div className="content-wrapper gray">
                   <h3>Free Taxpayer Help</h3>
@@ -89,10 +91,12 @@ export const DashboardPetitioner = connect(
                   </p>
                 </div>
               </div>
-              <div className="card">
-                {dashboardExternalHelper.showWhatToExpect && (
+
+              {dashboardExternalHelper.showWhatToExpect && (
+                <div className="card">
                   <div className="content-wrapper gray">
                     <h3>Other Filing Options</h3>
+
                     <hr />
                     <p>
                       <strong>To file by mail:</strong>
@@ -118,64 +122,10 @@ export const DashboardPetitioner = connect(
                       Washington, DC 20217
                     </p>
                   </div>
-                )}
+                </div>
+              )}
 
-                {dashboardExternalHelper.showCaseList && (
-                  <div className="content-wrapper gray">
-                    <h3>Filing Fee Options</h3>
-                    <hr />
-                    <p>
-                      <strong>Pay by debit/credit card</strong>
-                      <br />
-                      Copy your docket number(s) and pay online.
-                      <br />
-                      <Button
-                        className="margin-bottom-3 margin-top-2"
-                        href="https://pay.gov/public/form/start/60485840"
-                        id="pay_filing_fee"
-                        target="_blank"
-                      >
-                        Pay now
-                      </Button>
-                    </p>
-                    <hr />
-
-                    <Accordion gray headingLevel="3">
-                      <AccordionItem
-                        customClassName="payment-options"
-                        key={'other-options accordion-icon'}
-                        title={'Other options'}
-                      >
-                        <hr />
-                        <strong>Mail-in payment</strong>
-                        <br />
-                        Make checks/money orders payable to:
-                        <br />
-                        Clerk, United States Tax Court
-                        <br />
-                        400 Second Street, NW
-                        <br />
-                        Washington, DC 20217
-                        <br />
-                        <br />
-                        <strong>Can’t afford to pay the filing fee?</strong>
-                        <Button
-                          link
-                          className="usa-link--external text-left"
-                          href="https://www.ustaxcourt.gov/resources/forms/Application_for_Waiver_of_Filing_Fee.pdf"
-                          icon="file-pdf"
-                          iconColor="blue"
-                          rel="noopener noreferrer"
-                          shouldWrapText={true}
-                          target="_blank"
-                        >
-                          Download Application For Waiver of Filing Fee
-                        </Button>
-                      </AccordionItem>
-                    </Accordion>
-                  </div>
-                )}
-              </div>
+              {dashboardExternalHelper.showCaseList && <FilingFeeOptions />}
             </div>
           </div>
         </section>

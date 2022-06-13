@@ -20,6 +20,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
   docketNumber,
   paperServicePdfsCombined,
   updatedTrialSessionEntity,
+  userId,
 }) => {
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -69,6 +70,24 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
           user: applicationContext.getCurrentUser(),
+        });
+    }
+
+    const shouldIssueNoticeOfChangeOfTrialJudge =
+      currentTrialSession.isCalendared &&
+      currentTrialSession.judge?.userId !==
+        updatedTrialSessionEntity.judge?.userId &&
+      caseEntity.status !== CASE_STATUS_TYPES.closed;
+
+    if (shouldIssueNoticeOfChangeOfTrialJudge) {
+      await applicationContext
+        .getUseCaseHelpers()
+        .setNoticeOfChangeOfTrialJudge(applicationContext, {
+          caseEntity,
+          currentTrialSession,
+          newPdfDoc: paperServicePdfsCombined,
+          newTrialSessionEntity: updatedTrialSessionEntity,
+          userId,
         });
     }
 
@@ -228,6 +247,7 @@ exports.updateTrialSessionInteractor = async (
         docketNumber: calendaredCase.docketNumber,
         paperServicePdfsCombined,
         updatedTrialSessionEntity,
+        userId: user.userId,
       });
     }
 

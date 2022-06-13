@@ -30,6 +30,9 @@ const {
   GettingReadyForTrialChecklist,
 } = require('../pdfGenerator/documentTemplates/GettingReadyForTrialChecklist.jsx');
 const {
+  NoticeOfChangeOfTrialJudge,
+} = require('../pdfGenerator/documentTemplates/NoticeOfChangeOfTrialJudge.jsx');
+const {
   NoticeOfChangeToInPersonProceeding,
 } = require('../pdfGenerator/documentTemplates/NoticeOfChangeToInPersonProceeding');
 const {
@@ -81,6 +84,9 @@ const { Order } = require('../pdfGenerator/documentTemplates/Order.jsx');
 
 // Emails
 const {
+  BouncedEmailAlert,
+} = require('../emailGenerator/emailTemplates/BouncedEmailAlert');
+const {
   DocumentService,
 } = require('../emailGenerator/emailTemplates/DocumentService');
 const {
@@ -92,6 +98,7 @@ const ReactDOM = require('react-dom/server');
 
 const components = {
   AddressLabelCoverSheet,
+  BouncedEmailAlert,
   CaseInventoryReport,
   ChangeOfAddress,
   CoverSheet,
@@ -100,6 +107,7 @@ const components = {
   DocketRecord,
   DocumentService,
   GettingReadyForTrialChecklist,
+  NoticeOfChangeOfTrialJudge,
   NoticeOfChangeToInPersonProceeding,
   NoticeOfChangeToRemoteProceeding,
   NoticeOfDocketChange,

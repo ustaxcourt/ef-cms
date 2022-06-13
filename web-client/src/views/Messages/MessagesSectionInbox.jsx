@@ -1,31 +1,80 @@
-import {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-} from './sortConstants';
-import { ASCENDING, DESCENDING } from '../../presenter/presenterConstants';
 import { Button } from '../../ustc-ui/Button/Button';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
+import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
+const {
+  ALPHABETICALLY_ASCENDING,
+  ALPHABETICALLY_DESCENDING,
+  ASCENDING,
+  CHRONOLOGICALLY_ASCENDING,
+  CHRONOLOGICALLY_DESCENDING,
+  DESCENDING,
+} = applicationContext.getConstants();
+
 export const MessagesSectionInbox = connect(
   {
-    messages: state.formattedMessages.messages,
+    caseStatuses: state.formattedMessages.caseStatuses,
+    formattedMessages: state.formattedMessages.messages,
+    fromSections: state.formattedMessages.fromSections,
+    fromUsers: state.formattedMessages.fromUsers,
+    hasMessages: state.formattedMessages.hasMessages,
+    screenMetadata: state.screenMetadata,
+    showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
-    sortSectionMessagesSequence: sequences.sortSectionMessagesSequence,
+    sortMessagesSequence: sequences.sortMessagesSequence,
+    toUsers: state.formattedMessages.toUsers,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionInbox({
-    messages,
+    caseStatuses,
+    formattedMessages,
+    fromSections,
+    fromUsers,
+    hasMessages,
+    screenMetadata,
+    showFilters,
     showSortableHeaders,
-    sortSectionMessagesSequence,
+    sortMessagesSequence,
+    toUsers,
+    updateScreenMetadataSequence,
   }) {
-    const hasMessages = messages.length > 0;
-
     return (
       <>
+        {showFilters && (
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.caseStatus,
+                key: 'caseStatus',
+                label: 'Case Status',
+                options: caseStatuses,
+              },
+              {
+                isSelected: screenMetadata.toUser,
+                key: 'toUser',
+                label: 'To',
+                options: toUsers,
+              },
+              {
+                isSelected: screenMetadata.fromUser,
+                key: 'fromUser',
+                label: 'From',
+                options: fromUsers,
+              },
+              {
+                isSelected: screenMetadata.fromSection,
+                key: 'fromSection',
+                label: 'Section',
+                options: fromSections,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
@@ -38,7 +87,7 @@ export const MessagesSectionInbox = connect(
                     hasRows={hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -56,7 +105,7 @@ export const MessagesSectionInbox = connect(
                     hasRows={hasMessages}
                     sortField="createdAt"
                     title="Received"
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -70,7 +119,7 @@ export const MessagesSectionInbox = connect(
                     hasRows={hasMessages}
                     sortField="subject"
                     title="Message"
-                    onClickSequence={sortSectionMessagesSequence}
+                    onClickSequence={sortMessagesSequence}
                   />
                 </th>
               )}
@@ -82,7 +131,7 @@ export const MessagesSectionInbox = connect(
               <th className="small">Section</th>
             </tr>
           </thead>
-          {messages.map(message => (
+          {formattedMessages.map(message => (
             <MessageInboxRow
               caseStatus={message.caseStatus}
               caseTitle={message.caseTitle}
