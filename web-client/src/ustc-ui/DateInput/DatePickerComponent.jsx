@@ -17,6 +17,7 @@ export const DatePickerComponent = ({
   placeholder,
   showDateHint = true,
   titleHintText,
+  useHintNoWrap,
   values,
 }) => {
   const datePickerRef = useRef();
@@ -116,7 +117,15 @@ export const DatePickerComponent = ({
           type="text"
         />
       </div>
-      {hintText && <span className="usa-hint margin-top-2">{hintText}</span>}
+      {hintText && (
+        <span
+          className={classNames('usa-hint', 'margin-top-2', {
+            'no-wrap': useHintNoWrap,
+          })}
+        >
+          {hintText}
+        </span>
+      )}
     </FormGroup>
   );
 };
