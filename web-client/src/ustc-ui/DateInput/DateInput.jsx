@@ -12,6 +12,7 @@ export const DateInput = props => {
     placeholder,
     hideLegend,
     hintText,
+    useHintNoWrap,
     showDateHint,
     titleHintText,
     optional,
@@ -36,6 +37,7 @@ export const DateInput = props => {
       placeholder={placeholder}
       showDateHint={showDateHint}
       titleHintText={titleHintText}
+      useHintNoWrap={useHintNoWrap}
       values={values}
       onBlur={onBlur}
       onChange={onChange}
