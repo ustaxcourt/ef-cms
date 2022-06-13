@@ -90,6 +90,7 @@ export const SessionInformationForm = connect(
                 placeholder="MM/DD/YYYY"
                 showDateHint={false}
                 titleHintText="(MM/DD/YYYY)"
+                useHintNoWrap={true}
                 values={{
                   day: form.startDateDay,
                   month: form.startDateMonth,
@@ -208,6 +209,7 @@ export const SessionInformationForm = connect(
                 optional="true"
                 placeholder="MM/DD/YYYY"
                 showDateHint={false}
+                useHintNoWrap={true}
                 values={{
                   day: form.estimatedEndDateDay,
                   month: form.estimatedEndDateMonth,
