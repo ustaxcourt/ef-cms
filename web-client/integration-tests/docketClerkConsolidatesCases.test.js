@@ -94,7 +94,6 @@ describe('Case Consolidation Journey', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkServesDocumentOnLeadCase(cerebralTest, 0);
 
-  // TODO: check that completed workitems exist for all checked consolidated cases (including lead)
   it('should verify that document is served on all checked consolidated cases', async () => {
     const consolidatedCases = cerebralTest.getState(
       'caseDetail.consolidatedCases',
@@ -118,7 +117,12 @@ describe('Case Consolidation Journey', () => {
         )
       ) {
         expect(orderDocument.servedAt).toBeDefined();
-        // TODO: expect(orderDocument.workItem).toEqual():
+        expect(orderDocument.workItem.docketEntry.docketEntryId).toEqual(
+          orderDocument.docketEntryId,
+        );
+        expect(orderDocument.workItem.docketNumber).toEqual(
+          consolidatedCase.docketNumber,
+        );
       } else {
         expect(orderDocument).toBeUndefined();
       }
