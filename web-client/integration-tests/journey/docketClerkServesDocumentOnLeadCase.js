@@ -59,9 +59,16 @@ export const docketClerkServesDocumentOnLeadCase = (
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
 
+    // verify that doc is served on lead case and THIS case
     await cerebralTest.runSequence('updateCaseCheckboxSequence', {
       docketNumber: caseDetail.consolidatedCases[1].docketNumber,
     });
+    cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
+      cerebralTest.leadDocketNumber,
+    );
+    cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
+      caseDetail.consolidatedCases[1].docketNumber,
+    );
 
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',

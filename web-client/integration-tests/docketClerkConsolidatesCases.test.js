@@ -14,6 +14,7 @@ import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const cerebralTest = setupTest();
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
+cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
 const overrides = {
   preferredTrialCity: trialLocation,
@@ -93,7 +94,34 @@ describe('Case Consolidation Journey', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkServesDocumentOnLeadCase(cerebralTest, 0);
 
-  // TODO: check that document is served on lead case AND any checked consolidated cases
+  // TODO: check that completed workitems exist for all checked consolidated cases (including lead)
+  it('should verify that document is served on all checked consolidated cases', async () => {
+    const consolidatedCases = cerebralTest.getState(
+      'caseDetail.consolidatedCases',
+    );
+
+    for (let consolidatedCase in consolidatedCases) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: consolidatedCase.docketNumber,
+      });
+      const { docketEntryId } = cerebralTest.docketEntryId;
+
+      const documents = cerebralTest.getState('caseDetail.docketEntries');
+      const orderDocument = documents.find(
+        doc => doc.docketEntryId === docketEntryId,
+      );
+
+      if (
+        cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.includes(
+          consolidatedCase.docketNumber,
+        )
+      ) {
+        expect(orderDocument.servedAt).toBeDefined();
+      } else {
+        expect(orderDocument).toBeUndefined();
+      }
+    }
+  });
 
   docketClerkUnconsolidatesLeadCase(cerebralTest);
   loginAs(cerebralTest, 'petitioner@example.com');
