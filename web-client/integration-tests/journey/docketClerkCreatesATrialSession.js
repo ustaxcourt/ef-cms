@@ -60,12 +60,12 @@ export const docketClerkCreatesATrialSession = (
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'estimatedEndDateDay',
-      value: '12',
+      value: '01',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'estimatedEndDateYear',
-      value: overrides.trialYear || '2026',
+      value: '2030',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
