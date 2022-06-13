@@ -12,6 +12,11 @@ export const validateTrialSessionSequence = [
     ignore: [],
     validate: [
       getComputedFormDateFactoryAction('startDate', null, 'computedStartDate'),
+      getComputedFormDateFactoryAction(
+        'estimatedEndDate',
+        null,
+        'computedEstimatedEndDate',
+      ),
       validateTrialSessionAction,
       {
         error: [setValidationErrorsAction],
