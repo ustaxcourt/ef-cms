@@ -19,7 +19,7 @@ export const openConfirmInitiateServiceModalSequence = [
       clearModalStateAction,
       getFeatureFlagValueFactoryAction(
         getConstants().ALLOWLIST_FEATURE_FLAGS
-          .CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES,
+          .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
         true,
       ),
       setupConsolidatedCasesAction,

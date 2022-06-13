@@ -63,7 +63,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
       featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES.key,
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
     });
   if (
     eventCodeCanOnlyBeServedOnSubjectCase ||

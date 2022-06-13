@@ -83,8 +83,6 @@ describe('Case Consolidation Journey', () => {
   petitionerViewsDashboard(cerebralTest);
   petitionerVerifiesConsolidatedCases(cerebralTest, 3);
 
-  //docket clerk serves court issued document on lead case and so on
-
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
