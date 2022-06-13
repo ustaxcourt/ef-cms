@@ -80,7 +80,7 @@ describe('validateTrialSessionAction', () => {
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 
-  it('should pass the expected estimatedEndDate from props into the validation functino', async () => {
+  it('should pass the expected estimatedEndDate from props into the validation function', async () => {
     applicationContext
       .getUseCases()
       .validateTrialSessionInteractor.mockReturnValue(null);
