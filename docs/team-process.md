@@ -169,3 +169,5 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 -`puppeteer` and `puppeteer-core`: temporily locked to ^14.1.2. The minor update to 14.3.0 causes jest timeout issues. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35766/workflows/4f92d2a3-b923-4f9b-8e22-e4c54d69f95b/jobs/228023).
 
+-`broadcast-channel`: temporily locked to ^4.12.0. The minor update to ^4.13.0 introduces a breaking change to how esbrowser function processes the browser alias of process module. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35774/workflows/ea7e7274-b979-4ee4-b7ff-edee692117f2/jobs/228087) for more information about memory leakage in cypress as well.
+
