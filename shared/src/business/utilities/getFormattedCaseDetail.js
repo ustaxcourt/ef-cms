@@ -333,38 +333,16 @@ const formatCase = (applicationContext, caseDetail) => {
     });
   }
 
-  const formatCounsel = counsel => {
-    let formattedName = counsel.name;
-
-    if (counsel.barNumber) {
-      formattedName += ` (${counsel.barNumber})`;
-    }
-    counsel.formattedName = formattedName;
-
-    if (counsel.representing) {
-      counsel.representingFormatted = [];
-
-      caseDetail.petitioners.forEach(p => {
-        if (counsel.representing.includes(p.contactId)) {
-          counsel.representingFormatted.push({
-            name: p.name,
-            secondaryName: p.secondaryName,
-            title: p.title,
-          });
-        }
-      });
-    }
-
-    return counsel;
-  };
-
   if (result.irsPractitioners) {
-    result.irsPractitioners = result.irsPractitioners.map(formatCounsel);
+    result.irsPractitioners = result.irsPractitioners.map(counsel => {
+      return formatCounsel({ caseDetail, counsel });
+    });
   }
 
   if (result.privatePractitioners) {
-    result.privatePractitioners =
-      result.privatePractitioners.map(formatCounsel);
+    result.privatePractitioners = result.privatePractitioners.map(counsel => {
+      return formatCounsel({ caseDetail, counsel });
+    });
   }
 
   result.createdAtFormatted = applicationContext
@@ -457,6 +435,31 @@ const getDocketRecordSortFunc = sortByString => {
     default:
       return byDate;
   }
+};
+
+const formatCounsel = ({ caseDetail, counsel }) => {
+  let formattedName = counsel.name;
+
+  if (counsel.barNumber) {
+    formattedName += ` (${counsel.barNumber})`;
+  }
+  counsel.formattedName = formattedName;
+
+  if (counsel.representing) {
+    counsel.representingFormatted = [];
+
+    caseDetail.petitioners.forEach(p => {
+      if (counsel.representing.includes(p.contactId)) {
+        counsel.representingFormatted.push({
+          name: p.name,
+          secondaryName: p.secondaryName,
+          title: p.title,
+        });
+      }
+    });
+  }
+
+  return counsel;
 };
 
 // sort items that do not display a filingDate (based on createdAtFormatted) at the bottom
