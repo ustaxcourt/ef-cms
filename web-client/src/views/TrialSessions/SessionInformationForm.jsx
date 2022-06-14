@@ -200,7 +200,7 @@ export const SessionInformationForm = connect(
                     : undefined
                 }
                 id="estimated-end-date"
-                label="Estimated End Date"
+                label="Estimated end date"
                 names={{
                   day: 'estimatedEndDateDay',
                   month: 'estimatedEndDateMonth',
