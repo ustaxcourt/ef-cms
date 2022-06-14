@@ -1,4 +1,5 @@
 import { omit } from 'lodash';
+import { preparedDateToISOString } from '../../../utilities/preparedDateToISOString';
 import { state } from 'cerebral';
 
 /**
@@ -16,21 +17,15 @@ export const createTrialSessionAction = async ({
   path,
   props,
 }) => {
-  const startDate =
-    (props.computedStartDate &&
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString(props.computedStartDate)
-        .toISOString()) ||
-    null;
+  const startDate = preparedDateToISOString(
+    applicationContext,
+    props.computedStartDate,
+  );
 
-  const estimatedEndDate =
-    (props.computedEstimatedEndDate &&
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString(props.computedEstimatedEndDate)
-        .toISOString()) ||
-    null;
+  const estimatedEndDate = preparedDateToISOString(
+    applicationContext,
+    props.computedEstimatedEndDate,
+  );
 
   const trialSession = omit(
     {
