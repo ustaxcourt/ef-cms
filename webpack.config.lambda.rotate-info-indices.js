@@ -1,7 +1,11 @@
 module.exports = {
   devtool: false,
   entry: './aws/lambdas/RotateInfoIndices/src/index.js',
+  externals: ['aws-sdk'],
   mode: 'production',
+  optimization: {
+    minimize: false,
+  },
   output: {
     clean: true,
     filename: 'index.js',
