@@ -1,5 +1,6 @@
 import { formatDateIfToday } from '../computeds/formattedWorkQueue';
 import { getConstants } from '../../getConstants';
+import { map, uniq } from 'lodash';
 
 const { DESCENDING } = getConstants();
 
@@ -104,5 +105,67 @@ export const getFormattedMessages = ({
     completedMessages,
     inProgressMessages,
     messages: sortedMessages,
+  };
+};
+
+export const applyFiltersToMessages = ({ messages, screenMetadata }) => {
+  const {
+    caseStatus: caseStatusFilter,
+    fromSection: fromSectionFilter,
+    fromUser: fromUserFilter,
+    toSection: toSectionFilter,
+    toUser: toUserFilter,
+  } = screenMetadata;
+
+  const filteredMessages = messages
+    .filter(message =>
+      caseStatusFilter ? message.caseStatus === caseStatusFilter : true,
+    )
+    .filter(message =>
+      fromUserFilter ? message.from === fromUserFilter : true,
+    )
+    .filter(message =>
+      toSectionFilter ? message.toSection === toSectionFilter : true,
+    )
+    .filter(message =>
+      fromSectionFilter ? message.fromSection === fromSectionFilter : true,
+    )
+    .filter(message => (toUserFilter ? message.to === toUserFilter : true));
+
+  const caseStatuses = uniq(map(filteredMessages, 'caseStatus'));
+  const toUsers = uniq(map(filteredMessages, 'to'));
+  const fromUsers = uniq(map(filteredMessages, 'from'));
+  const fromSections = uniq(map(filteredMessages, 'fromSection'));
+  const toSections = uniq(map(filteredMessages, 'toSection'));
+
+  return {
+    filterValues: {
+      caseStatuses,
+      fromSections,
+      fromUsers,
+      toSections,
+      toUsers,
+    },
+    filteredMessages,
+  };
+};
+
+export const applyFiltersToCompletedMessages = ({
+  completedMessages,
+  screenMetadata,
+}) => {
+  const { completedBy: completedByFilter } = screenMetadata;
+
+  const filteredCompletedMessages = completedMessages.filter(message =>
+    completedByFilter ? message.completedBy === completedByFilter : true,
+  );
+
+  const completedByUsers = uniq(map(filteredCompletedMessages, 'completedBy'));
+
+  return {
+    filterValues: {
+      completedByUsers,
+    },
+    filteredCompletedMessages,
   };
 };
