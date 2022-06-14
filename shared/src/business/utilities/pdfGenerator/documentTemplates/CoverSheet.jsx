@@ -4,6 +4,7 @@ export const CoverSheet = ({
   caseCaptionExtension,
   caseTitle,
   certificateOfService,
+  consolidatedCases,
   dateFiledLodged,
   dateFiledLodgedLabel,
   dateReceived,
@@ -13,18 +14,6 @@ export const CoverSheet = ({
   index,
   mailingDate,
 }) => {
-  const consolidatedCases = [
-    // TODO: temp remove me
-    {
-      docketNumber: '24929-17',
-      documentNumber: '4',
-    },
-    {
-      docketNumber: '1140-21',
-      documentNumber: null,
-    },
-  ];
-
   return (
     <div id="document-cover-sheet">
       <div>
