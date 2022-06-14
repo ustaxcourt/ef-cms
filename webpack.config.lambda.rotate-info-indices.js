@@ -9,6 +9,7 @@ module.exports = {
   output: {
     clean: true,
     filename: 'index.js',
+    libraryTarget: 'umd',
     path: __dirname + '/aws/lambdas/RotateInfoIndices/dist',
   },
   target: 'node',
