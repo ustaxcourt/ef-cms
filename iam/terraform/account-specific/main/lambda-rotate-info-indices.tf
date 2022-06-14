@@ -1,7 +1,7 @@
 data "archive_file" "zip_rotate_info_indices_lambda" {
   type        = "zip"
   output_path = "${path.cwd}/../../../../aws/lambdas/RotateInfoIndices.zip"
-  source_dir = "${path.cwd}/../../../../aws/lambdas/RotateInfoIndices/dist"
+  source_file = "${path.cwd}/../../../../aws/lambdas/RotateInfoIndices/dist/index.js"
 }
 
 resource "aws_lambda_function" "rotate_info_indices" {

@@ -97,7 +97,7 @@
     "build:lambda:api": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.api.js",
     "build:lambda:migration": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.migration.js",
     "build:lambda:migration-cron": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.migration-cron.js",
-    "build:lambda:rotate-info-indices": "node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.rotate-info-indices.js",
+    "build:lambda:rotate-info-indices": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.rotate-info-indices.js",
     "build:public": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --env PUBLIC_SITE_URL=$PUBLIC_SITE_URL --config webpack.config.client.public.prod.js",
     "clean:public": "rm -rf dist-public/",
     "clean": "./reset-dependencies.sh CLEAN_ONLY",
