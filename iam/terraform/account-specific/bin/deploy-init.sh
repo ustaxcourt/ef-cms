@@ -62,6 +62,8 @@ fi
 # exit on any failure
 set -eo pipefail
 
+npm run build:lambda:rotate-info-indices
+
 export TF_VAR_my_s3_state_bucket="${BUCKET}"
 export TF_VAR_my_s3_state_key="${KEY}"
 export TF_VAR_zone_name="${ZONE_NAME}"

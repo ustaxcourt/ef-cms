@@ -1,4 +1,4 @@
-const rotateLogs = require('./index');
+const rotateLogs = require('../src/index.js');
 
 /**
  * Returns a mocked response containing a snapshot for the given index name
