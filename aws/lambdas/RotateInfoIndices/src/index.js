@@ -180,43 +180,39 @@ exports.req = async (verb, path, body) => {
   const client = new NodeHttpHandler();
   const { response } = await client.handle(signedRequest);
   let responseBody = '';
-  return new Promise(
-    resolve => {
-      response.body.on('data', chunk => {
-        responseBody += chunk;
-      });
-      response.body.on('end', () => {
-        const { statusCode } = response;
 
-        const requestInfo = {
-          domain: process.env.es_endpoint,
-          path,
-          payload: body,
-          type: verb,
-        };
-        console.log(`Request: ${JSON.stringify({ requestInfo })}`);
-        console.log(`Response: ${JSON.stringify({ statusCode })}`);
+  return new Promise(resolve => {
+    response.body.on('data', chunk => {
+      responseBody += chunk;
+    });
+    response.body.on('end', () => {
+      const { statusCode } = response;
 
-        if (statusCode >= 300) {
-          console.error(`Failure: ${JSON.stringify(responseBody)}`);
-        } else {
-          console.log(`Success: ${JSON.stringify(responseBody)}`);
-        }
-        try {
-          responseBody = JSON.parse(responseBody);
-        } catch (e) {
-          // do nothing
-        }
-        resolve({
-          responseBody,
-          statusCode,
-        });
+      const requestInfo = {
+        domain: process.env.es_endpoint,
+        path,
+        payload: body,
+        type: verb,
+      };
+      console.log(`Request: ${JSON.stringify({ requestInfo })}`);
+      console.log(`Response: ${JSON.stringify({ statusCode })}`);
+
+      if (statusCode >= 300) {
+        console.error(`Failure: ${JSON.stringify(responseBody)}`);
+      } else {
+        console.log(`Success: ${JSON.stringify(responseBody)}`);
+      }
+      try {
+        responseBody = JSON.parse(responseBody);
+      } catch (e) {
+        // do nothing
+      }
+      resolve({
+        responseBody,
+        statusCode,
       });
-    },
-    error => {
-      console.log(`Error: ${error}`);
-    },
-  );
+    });
+  });
 };
 
 /**
