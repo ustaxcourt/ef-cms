@@ -83,8 +83,6 @@ describe('Case Consolidation Journey', () => {
   petitionerViewsDashboard(cerebralTest);
   petitionerVerifiesConsolidatedCases(cerebralTest, 3);
 
-  //docket clerk serves court issued document on lead case and so on
-
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something',
@@ -94,17 +92,17 @@ describe('Case Consolidation Journey', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkServesDocumentOnLeadCase(cerebralTest, 0);
 
-  // TODO: check that completed workitems exist for all checked consolidated cases (including lead)
   it('should verify that document is served on all checked consolidated cases', async () => {
     const consolidatedCases = cerebralTest.getState(
       'caseDetail.consolidatedCases',
     );
 
-    for (let consolidatedCase in consolidatedCases) {
+    for (let consolidatedCase of consolidatedCases) {
       await cerebralTest.runSequence('gotoCaseDetailSequence', {
         docketNumber: consolidatedCase.docketNumber,
       });
-      const { docketEntryId } = cerebralTest.docketEntryId;
+
+      const { docketEntryId } = cerebralTest.docketRecordEntry;
 
       const documents = cerebralTest.getState('caseDetail.docketEntries');
       const orderDocument = documents.find(
@@ -117,6 +115,16 @@ describe('Case Consolidation Journey', () => {
         )
       ) {
         expect(orderDocument.servedAt).toBeDefined();
+        expect(orderDocument.workItem.docketEntry.docketEntryId).toEqual(
+          orderDocument.docketEntryId,
+        );
+        expect(orderDocument.workItem.docketNumber).toEqual(
+          consolidatedCase.docketNumber,
+        );
+        expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
+        expect(orderDocument.workItem.completedMessage).toEqual('completed');
+        expect(orderDocument.workItem.completedAt).toBeDefined();
+        expect(orderDocument.workItem.inProgress).toBeUndefined();
       } else {
         expect(orderDocument).toBeUndefined();
       }

@@ -30,8 +30,8 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
 
   const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
 
-  const consolidatedCases =
-    get(state.formattedCaseDetail.consolidatedCases) || [];
+  const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
+
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumber);

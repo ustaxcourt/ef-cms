@@ -45,10 +45,10 @@ const ALLOWLIST_FEATURE_FLAGS = {
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
   },
-  CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES: {
+  CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES: {
     disabledMessage:
       'Docket entries are not being duplicated across consolidated cases temporarily.',
-    key: 'consolidated-case-with-duplicating-docket-entries',
+    key: 'consolidated-cases-propagate-docket-entries',
   },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:

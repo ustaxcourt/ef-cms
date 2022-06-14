@@ -14,9 +14,9 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('confirmInitiateServiceModalHelper', () => {
-  // CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES
+  // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
   const featureFlagHelperState = {
-    consolidatedCaseDuplicateDocketEntries: true,
+    consolidatedCasesPropagateDocketEntries: true,
   };
   const mockContactId = 'f6847fdb-3669-4ad7-8f82-c4ac3b945523';
 
@@ -295,7 +295,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.contactsNeedingPaperService.length).toEqual(3);
     });
 
-    it('should preserve non-consolidated functionality if the CONSOLIDATE_CASE_DUPLICATE_DOCKET_ENTRIES is false', () => {
+    it('should preserve non-consolidated functionality if the CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES is false', () => {
       const formattedCaseDetail = {
         ...LEAD_CASE,
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
@@ -304,7 +304,7 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          featureFlagHelper: { consolidatedCaseDuplicateDocketEntries: false },
+          featureFlagHelper: { consolidatedCasesPropagateDocketEntries: false },
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
@@ -325,7 +325,9 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
-          featureFlagHelper: { consolidatedCaseDuplicateDocketEntries: true },
+          featureFlagHelper: {
+            consolidatedCasesPropagateDocketEntriesFlag: true,
+          },
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: {
