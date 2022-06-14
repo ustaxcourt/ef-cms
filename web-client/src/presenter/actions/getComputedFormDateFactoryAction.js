@@ -5,6 +5,7 @@ import { state } from 'cerebral';
  *
  * @param {string} prefix prefix for form state date field keys
  * @param {boolean} toIsoString cast the computedDate as an ISO string
+ * @param {string} stateKey the key for computedDate value
  * @returns {Function} the primed action
  */
 export const getComputedFormDateFactoryAction = (
