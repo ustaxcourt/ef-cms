@@ -133,7 +133,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
 
     docketEntryEntity.setWorkItem(workItem);
     if (!docketEntry) {
-      docketEntryEntity.docketEntryId = applicationContext.getUniqueId();
       caseEntity.addDocketEntry(docketEntryEntity);
     } else {
       caseEntity.updateDocketEntry(docketEntryEntity);
