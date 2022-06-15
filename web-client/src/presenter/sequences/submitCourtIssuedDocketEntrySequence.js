@@ -1,4 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearModalAction } from '../actions/clearModalAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
@@ -40,7 +41,10 @@ export const submitCourtIssuedDocketEntrySequence = [
           shouldSaveToConsolidatedGroupAction,
           {
             no: [submitCourtIssuedDocketEntryAction],
-            yes: [submitCourtIssuedDocketEntryToConsolidatedGroupAction],
+            yes: [
+              submitCourtIssuedDocketEntryToConsolidatedGroupAction,
+              clearModalAction,
+            ],
           },
         ],
         yes: [updateCourtIssuedDocketEntryAction],

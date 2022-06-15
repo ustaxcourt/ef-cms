@@ -35,7 +35,7 @@ export const ConfirmInitiateSaveModal = connect(
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
         className="confirm-initiate-service-modal"
-        confirmLabel="Yes, Serve"
+        confirmLabel="Yes, Save"
         confirmSequence={() => {
           setIsSubmitting(true);
           submitCourtIssuedDocketEntrySequence();
