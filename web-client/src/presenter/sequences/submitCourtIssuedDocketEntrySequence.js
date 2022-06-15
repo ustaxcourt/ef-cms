@@ -5,6 +5,7 @@ import { followRedirectAction } from '../actions/followRedirectAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getConstants } from '../../getConstants';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
+import { getDocketEntryAlertSuccessForConsolidatedGroupAction } from '../actions/CaseConsolidation/getDocketEntryAlertSuccessForConsolidatedGroupAction';
 import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -39,28 +40,39 @@ export const submitCourtIssuedDocketEntrySequence = [
       clearAlertsAction,
       isEditingDocketEntryAction,
       {
+        getDocketEntryAlertSuccessAction,
         no: [
           getFeatureFlagValueFactoryAction(
             getConstants().ALLOWLIST_FEATURE_FLAGS
               .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
           ),
           {
-            no: [submitCourtIssuedDocketEntryAction],
+            no: [
+              submitCourtIssuedDocketEntryAction,
+              getDocketEntryAlertSuccessAction,
+            ],
             yes: [
               shouldSaveToConsolidatedGroupAction,
               {
-                no: [submitCourtIssuedDocketEntryAction],
+                no: [
+                  submitCourtIssuedDocketEntryAction,
+                  getDocketEntryAlertSuccessAction,
+                ],
                 yes: [
                   submitCourtIssuedDocketEntryToConsolidatedGroupAction,
+                  getDocketEntryAlertSuccessForConsolidatedGroupAction,
                   clearModalAction,
                 ],
               },
             ],
           },
         ],
-        yes: [updateCourtIssuedDocketEntryAction],
+        yes: [
+          updateCourtIssuedDocketEntryAction,
+          getDocketEntryAlertSuccessAction,
+        ],
       },
-      getDocketEntryAlertSuccessAction,
+
       setAlertSuccessAction,
       setSaveAlertsForNavigationAction,
       followRedirectAction,
