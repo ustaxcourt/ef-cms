@@ -257,11 +257,6 @@ export const CourtIssuedDocketEntry = connect(
                     id="save-entry-button"
                     onClick={() => {
                       preSubmitCourtIssuedDocketEntrySequence();
-                      // if (unServable && partOfConsolidatedCase) {
-
-                      // } else {
-                      //   submitCourtIssuedDocketEntrySequence()
-                      // }
                     }}
                   >
                     Save Entry
