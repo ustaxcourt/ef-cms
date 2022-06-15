@@ -209,7 +209,6 @@
     "verify-private-elasticsearch": "./scripts/verify-private-elasticsearch.sh",
     "verify-private-s3-buckets": "./scripts/verify-private-s3-buckets.sh",
     "verify-cognito-lambda-triggers": "./scripts/verify-cognito-lambda-triggers.sh",
-    "verify-ustc-admin-user-disabled": "./scripts/verify-ustc-admin-user-disabled.sh",
     "watch": "nodemon -e yml --exec sls offline start"
   },
   "resolutions": {
