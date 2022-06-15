@@ -77,7 +77,7 @@ const deactivateAdminAccount = async () => {
 };
 
 /**
- * This verifies that the ustc admin user is disabled in Cognito
+ * This verifies that the USTC admin user is disabled in Cognito
  */
 const verifyAdminUserDisabled = async () => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
@@ -91,10 +91,10 @@ const verifyAdminUserDisabled = async () => {
       })
       .promise();
     if (result && result.Enabled === false) {
-      console.log('USTC Admin user is disabled');
+      console.log('USTC Admin user is disabled.');
       return;
     } else {
-      console.error('USTC Admin user NOT disabled.');
+      console.error('USTC Admin user is NOT disabled as expected.');
       process.exit(1);
     }
   } catch (err) {
