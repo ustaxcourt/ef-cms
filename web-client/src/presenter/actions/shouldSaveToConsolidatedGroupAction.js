@@ -8,8 +8,8 @@ export const isUnservableDocketEntryOnLeadCase = ({
   const form = get(state.form);
   const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(form.eventCode);
-  const isLeadCase = docketNumber === leadDocketNumber;
   const { docketNumber, leadDocketNumber } = caseDetail;
+  const isLeadCase = docketNumber === leadDocketNumber;
   return isLeadCase && isUnservable;
 };
 
