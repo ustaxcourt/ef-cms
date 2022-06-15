@@ -1,4 +1,4 @@
-import { state } from 'cerebral';
+import { isUnservableDocketEntryOnLeadCase } from './shouldSaveToConsolidatedGroupAction';
 
 /**
  * changes the path based on if the case is a lead case and docket entry being saved is unservable
@@ -7,10 +7,12 @@ import { state } from 'cerebral';
  * @returns {Function} the primed action
  */
 // TODO: CS Test this action
-export const shouldOpenInitiateServiceModalAction = ({ get, path }) => {
-  const caseDetail = get(state.caseDetail);
-  const { docketNumber, leadDocketNumber } = caseDetail;
-  if (docketNumber === leadDocketNumber) {
+export const shouldOpenInitiateSaveModalAction = ({
+  applicationContext,
+  get,
+  path,
+}) => {
+  if (isUnservableDocketEntryOnLeadCase({ applicationContext, get })) {
     return path.openModal();
   } else {
     return path.submit();

@@ -10,10 +10,12 @@ import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { shouldSaveToConsolidatedGroupAction } from '../actions/shouldSaveToConsolidatedGroupAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/submitCourtIssuedDocketEntryAction';
+import { submitCourtIssuedDocketEntryToConsolidatedGroupAction } from '../actions/CourtIssuedDocketEntry/submitCourtIssuedDocketEntryToConsolidatedGroupAction';
 import { updateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/updateCourtIssuedDocketEntryAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
@@ -34,7 +36,13 @@ export const submitCourtIssuedDocketEntrySequence = [
       clearAlertsAction,
       isEditingDocketEntryAction,
       {
-        no: [submitCourtIssuedDocketEntryAction],
+        no: [
+          shouldSaveToConsolidatedGroupAction,
+          {
+            no: [submitCourtIssuedDocketEntryAction],
+            yes: [submitCourtIssuedDocketEntryToConsolidatedGroupAction],
+          },
+        ],
         yes: [updateCourtIssuedDocketEntryAction],
       },
       getDocketEntryAlertSuccessAction,
