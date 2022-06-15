@@ -1,4 +1,5 @@
 const {
+  ALLOWLIST_FEATURE_FLAGS,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
@@ -99,7 +100,16 @@ exports.generateCoverSheetData = async ({
     ]);
 
     const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
-    if (isLeadCase) {
+    const { current: isFeatureFlagEnabled } = await applicationContext
+      .getPersistenceGateway()
+      .getFeatureFlagValue({
+        applicationContext,
+        featureFlag:
+          ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
+            .key,
+      });
+
+    if (isLeadCase && isFeatureFlagEnabled) {
       const consolidatedCases = await applicationContext
         .getPersistenceGateway()
         .getCasesByLeadDocketNumber({

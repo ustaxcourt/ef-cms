@@ -3,7 +3,9 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { computeFilingFormDateAction } from '../actions/FileDocument/computeFilingFormDateAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { getConstants } from '../../getConstants';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
+import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
@@ -38,12 +40,21 @@ export const submitCourtIssuedDocketEntrySequence = [
       isEditingDocketEntryAction,
       {
         no: [
-          shouldSaveToConsolidatedGroupAction,
+          getFeatureFlagValueFactoryAction(
+            getConstants().ALLOWLIST_FEATURE_FLAGS
+              .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
+          ),
           {
             no: [submitCourtIssuedDocketEntryAction],
             yes: [
-              submitCourtIssuedDocketEntryToConsolidatedGroupAction,
-              clearModalAction,
+              shouldSaveToConsolidatedGroupAction,
+              {
+                no: [submitCourtIssuedDocketEntryAction],
+                yes: [
+                  submitCourtIssuedDocketEntryToConsolidatedGroupAction,
+                  clearModalAction,
+                ],
+              },
             ],
           },
         ],
