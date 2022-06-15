@@ -1,5 +1,30 @@
+const {
+  ROLES,
+  SERVED_PARTIES_CODES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} = require('../entities/EntityConstants');
 const { compact, isEmpty, isEqual, partition } = require('lodash');
-const { TRIAL_SESSION_SCOPE_TYPES } = require('../entities/EntityConstants');
+
+const determinePtmFiler = docketEntries => {
+  let ptmFiler;
+
+  const caseHasPtm = docketEntries.find(d => d.eventCode === 'PMT');
+
+  if (caseHasPtm) {
+    switch (caseHasPtm.filers) {
+      case ROLES.petitioner:
+        ptmFiler = SERVED_PARTIES_CODES.PETITIONER;
+        break;
+      case ROLES.RESPONDENT:
+        ptmFiler = SERVED_PARTIES_CODES.RESPONDENT;
+        break;
+      case 'both':
+        ptmFiler = SERVED_PARTIES_CODES.BOTH;
+        break;
+    }
+    return ptmFiler;
+  }
+};
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.caseTitle = applicationContext.getCaseTitle(
@@ -19,6 +44,8 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.isDocketSuffixHighPriority = highPrioritySuffixes.includes(
     caseItem.docketNumberSuffix,
   );
+
+  caseItem.ptmStatus = determinePtmFiler(caseItem.docketEntries);
   return caseItem;
 };
 
