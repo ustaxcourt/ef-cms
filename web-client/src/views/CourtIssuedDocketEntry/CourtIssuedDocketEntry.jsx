@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { ConfirmInitiateSaveModal } from '../ConfirmInitiateSaveModal';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
@@ -284,6 +285,13 @@ export const CourtIssuedDocketEntry = connect(
         </section>
         {showModal === 'ConfirmInitiateServiceModal' && (
           <ConfirmInitiateServiceModal
+            documentTitle={
+              addCourtIssuedDocketEntryHelper.formattedDocumentTitle
+            }
+          />
+        )}
+        {showModal === 'ConfirmInitiateSaveModal' && (
+          <ConfirmInitiateSaveModal
             documentTitle={
               addCourtIssuedDocketEntryHelper.formattedDocumentTitle
             }

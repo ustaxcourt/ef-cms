@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {object} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const submitCourtIssuedDocketEntryAction = async ({
+export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
   applicationContext,
   get,
 }) => {
@@ -19,10 +19,16 @@ export const submitCourtIssuedDocketEntryAction = async ({
   const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
     applicationContext.getConstants();
 
+  const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
+
+  let docketNumbers = consolidatedCases
+    .filter(consolidatedCase => consolidatedCase.checked)
+    .map(consolidatedCase => consolidatedCase.docketNumber);
+
   const documentMeta = {
     ...form,
     docketEntryId,
-    docketNumbers: [docketNumber],
+    docketNumbers,
     subjectDocketNumber: docketNumber,
   };
 
@@ -38,6 +44,7 @@ export const submitCourtIssuedDocketEntryAction = async ({
       documentMeta.eventCode,
     )
   ) {
+    // TODO: CS loop over every docket number in the checked consolidated cases
     await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {
