@@ -542,7 +542,11 @@ jobs:
       - run:
           name: 'Deploy - Verify USTC Admin User Disabled'
           command: |
-            npm run verify-ustc-admin-user-disabled -- $ENV
+            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+              node shared/admin-tools/user/verify-ustc-admin-user-disabled.js
+            else
+              echo "Skipping verify admin user disabled step on prod"
+            fi
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
       - run:
