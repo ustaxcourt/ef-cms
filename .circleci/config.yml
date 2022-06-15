@@ -539,6 +539,10 @@ jobs:
           name: 'Deploy - Verify Cognito Lambda Triggers'
           command: |
             npm run verify-cognito-lambda-triggers -- $ENV
+      - run:
+          name: 'Deploy - Verify USTC Admin User Disabled'
+          command: |
+            npm run verify-ustc-admin-user-disabled -- $ENV
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
       - run:
