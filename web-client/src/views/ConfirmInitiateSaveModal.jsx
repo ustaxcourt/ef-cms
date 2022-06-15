@@ -41,7 +41,7 @@ export const ConfirmInitiateSaveModal = connect(
           submitCourtIssuedDocketEntrySequence();
         }}
         disableSubmit={isSubmitting}
-        title="Are You Ready to Save this Document to the Docket Record?"
+        title="Are You Ready to Save This Document to the Docket Record?"
       >
         <p className="margin-bottom-1">
           The following document will be saved to selected cases:
