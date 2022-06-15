@@ -1,35 +1,23 @@
 import { state } from 'cerebral';
 
-/**
- * creates a docket entry with the given court-issued document
- *
- * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
- * @param {object} providers.get the cerebral get function
- * @returns {Promise} async action
- */
-export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
+export const submitCourtIssuedDocketEntryActionHelper = async ({
   applicationContext,
   get,
+  getDocketNumbers,
+  subjectDocketNumber,
 }) => {
   const docketEntryId = get(state.docketEntryId);
-  const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
+  const docketNumbers = getDocketNumbers();
 
   const { COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET } =
     applicationContext.getConstants();
-
-  const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
-
-  let docketNumbers = consolidatedCases
-    .filter(consolidatedCase => consolidatedCase.checked)
-    .map(consolidatedCase => consolidatedCase.docketNumber);
 
   const documentMeta = {
     ...form,
     docketEntryId,
     docketNumbers,
-    subjectDocketNumber: docketNumber,
+    subjectDocketNumber,
   };
 
   await applicationContext
@@ -44,12 +32,36 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
       documentMeta.eventCode,
     )
   ) {
-    // TODO: CS loop over every docket number in the checked consolidated cases
     await applicationContext
       .getUseCases()
       .addCoversheetInteractor(applicationContext, {
         docketEntryId,
-        docketNumber,
+        docketNumber: subjectDocketNumber,
       });
   }
+};
+
+/**
+ * creates a docket entry with the given court-issued document
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.applicationContext the application context
+ * @param {object} providers.get the cerebral get function
+ * @returns {Promise} async action
+ */
+export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
+  applicationContext,
+  get,
+}) => {
+  await submitCourtIssuedDocketEntryActionHelper({
+    applicationContext,
+    get,
+    getDocketNumbers: () => {
+      const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
+      return consolidatedCases
+        .filter(consolidatedCase => consolidatedCase.checked)
+        .map(consolidatedCase => consolidatedCase.docketNumber);
+    },
+    subjectDocketNumber: get(state.caseDetail.docketNumber),
+  });
 };

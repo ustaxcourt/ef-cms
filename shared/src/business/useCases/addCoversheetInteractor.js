@@ -22,7 +22,7 @@ const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
  * @param {boolean} options.useInitialData whether to use the initial docket record suffix and case caption
  * @returns {object} the key/value pairs of computed strings
  */
-exports.generateCoverSheetData = ({
+exports.generateCoverSheetData = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
@@ -97,10 +97,32 @@ exports.generateCoverSheetData = ({
       'electronicallyFiled',
       'dateServed',
     ]);
+
+    const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
+    if (isLeadCase) {
+      const consolidatedCases = await applicationContext
+        .getPersistenceGateway()
+        .getCasesByLeadDocketNumber({
+          applicationContext,
+          leadDocketNumber: caseEntity.docketNumber,
+        });
+      coverSheetData.consolidatedCases = consolidatedCases.map(
+        consolidatedCase => ({
+          docketNumber: consolidatedCase.docketNumber,
+          documentNumber: (
+            consolidatedCase.docketEntries.find(
+              docketEntry =>
+                docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
+            ) || {}
+          ).index,
+        }),
+      );
+    }
   }
 
   return coverSheetData;
 };
+
 /**
  * a helper function which creates a coversheet, prepends it to a pdf, and returns the new pdf
  *
@@ -120,7 +142,7 @@ exports.addCoverToPdf = async ({
   replaceCoversheet = false,
   useInitialData,
 }) => {
-  const coverSheetData = exports.generateCoverSheetData({
+  const coverSheetData = await exports.generateCoverSheetData({
     applicationContext,
     caseEntity,
     docketEntryEntity,
