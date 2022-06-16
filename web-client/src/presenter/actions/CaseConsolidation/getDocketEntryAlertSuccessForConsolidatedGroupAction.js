@@ -1,6 +1,5 @@
 /**
- * returns the alertSuccess object to display an alert message based
- * on the next step the user chose
+ * returns the expected success alert for saving a docket entry to consolidated group
  *
  * @param {object} providers the providers object
  * @returns {object} the alertSuccess object with default strings
