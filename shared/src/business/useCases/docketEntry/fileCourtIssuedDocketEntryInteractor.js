@@ -22,7 +22,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
   { documentMeta },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
-  debugger;
+
   const hasPermission =
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
     isAuthorized(authorizedUser, ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY);
@@ -32,8 +32,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
   }
 
   const { docketEntryId, docketNumbers, subjectDocketNumber } = documentMeta;
-  console.log('documentMeta***', documentMeta);
-  console.log('docketEntryId***', docketEntryId);
 
   const subjectCaseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -81,8 +79,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
     const docketEntry = caseEntity.getDocketEntryById({
       docketEntryId,
     });
-
-    console.log('docketEntry*** ', docketEntry);
 
     const docketEntryEntity = new DocketEntry(
       {
@@ -137,7 +133,6 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
 
     docketEntryEntity.setWorkItem(workItem);
     if (!docketEntry) {
-      console.log('I am in here!');
       caseEntity.addDocketEntry(docketEntryEntity);
     } else {
       caseEntity.updateDocketEntry(docketEntryEntity);

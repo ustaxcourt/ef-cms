@@ -237,11 +237,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     });
   });
 
-  it.only('should add docketEntry to caseEntity when not already on caseEntity', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReset();
-
+  it('should add docketEntry to caseEntity when not already on caseEntity', async () => {
     const LEAD_CASE = {
       ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
       docketEntries: [
@@ -273,16 +269,21 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       documentMeta: {
         docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
         docketNumbers: [
-          LEAD_CASE.docketNumber,
           MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          LEAD_CASE.docketNumber,
         ],
         documentType: 'Trial Exhibits',
+        eventCode: 'TE',
         subjectDocketNumber: '109-19',
       },
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations[0][1],
-    ).toEqual(LEAD_CASE);
+      applicationContext
+        .getUseCaseHelpers()
+        .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+          docketEntry => docketEntry.eventCode === 'TE',
+        ),
+    ).toBeDefined();
   });
 });
