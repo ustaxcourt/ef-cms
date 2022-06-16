@@ -9,8 +9,12 @@ const {
 const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('./fileCourtIssuedDocketEntryInteractor');
+const {
+  MOCK_CASE,
+  MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -113,7 +117,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
+        docketNumbers: [caseRecord.docketNumber],
         documentTitle: 'Order',
         documentType: 'Order',
         eventCode: 'O',
@@ -133,7 +137,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
+        docketNumbers: [caseRecord.docketNumber],
         documentTitle: 'Order to Show Cause',
         documentType: 'Order to Show Cause',
         eventCode: 'OSC',
@@ -162,7 +166,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: caseRecord.docketEntries[2].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
+        docketNumbers: [caseRecord.docketNumber],
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,
@@ -190,7 +194,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       documentMeta: {
         docketEntryId: docketEntryToUpdate.docketEntryId,
-        docketNumber: caseRecord.docketNumber,
+        docketNumbers: [caseRecord.docketNumber],
         documentTitle: docketEntryToUpdate.documentTitle,
         documentType: docketEntryToUpdate.documentType,
         draftOrderState: {
@@ -215,7 +219,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
+        docketNumbers: [caseRecord.docketNumber],
         documentTitle: 'Order',
         documentType: 'Order',
         eventCode: 'O',
@@ -231,5 +235,54 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
     ).toMatchObject({
       caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
     });
+  });
+
+  it.only('should add docketEntry to caseEntity when not already on caseEntity', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReset();
+
+    const LEAD_CASE = {
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      docketEntries: [
+        {
+          docketEntryId: 'b01afa63-931e-4999-99f0-c892c51292d6',
+          docketNumber: '109-19',
+          documentTitle: 'Some Title',
+          documentType: 'Trial Exhibits',
+          eventCode: 'TE',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
+        },
+      ],
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+      );
+
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      documentMeta: {
+        docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
+        docketNumbers: [
+          LEAD_CASE.docketNumber,
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        documentType: 'Trial Exhibits',
+        subjectDocketNumber: '109-19',
+      },
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations[0][1],
+    ).toEqual(LEAD_CASE);
   });
 });
