@@ -13,14 +13,14 @@ export const isUnservableDocketEntryOnLeadCase = ({
   return isLeadCase && isUnservable;
 };
 
-// TODO: CS JS DOCS
 /**
- * changes the path based on if the case is a lead case and docket entry being saved is unservable
+ * checks if we are trying to save an unservable docket entry and returns different paths if so
  *
- * @param {string } showModal the value to set the modal to
- * @returns {Function} the primed action
+ * @param {object} applicationContext the applicationContext
+ * @param {Function} path cerebral path function
+ * @param {Function} get the cerebral state getter function
+ * @returns {Function} the path to take for the sequence
  */
-// TODO: CS DRY UP THIS CODE WITH THE shouldOpenInitiateSaveModalAction
 export const shouldSaveToConsolidatedGroupAction = ({
   applicationContext,
   get,

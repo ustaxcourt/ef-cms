@@ -3,10 +3,11 @@ import { isUnservableDocketEntryOnLeadCase } from './shouldSaveToConsolidatedGro
 /**
  * changes the path based on if the case is a lead case and docket entry being saved is unservable
  *
- * @param {string } showModal the value to set the modal to
- * @returns {Function} the primed action
+ * @param {object} applicationContext the applicationContext
+ * @param {Function} path cerebral path function
+ * @param {Function} get the cerebral state getter function
+ * @returns {Function} the path to take for the sequence
  */
-// TODO: CS Test this action
 export const shouldOpenInitiateSaveModalAction = ({
   applicationContext,
   get,

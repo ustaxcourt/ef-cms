@@ -4,7 +4,6 @@ import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
 import React, { useState } from 'react';
 
-// TODO: CS this was copy + pasted from ConfirmInitiateServiceModal, find ways to dry this up
 export const ConfirmInitiateSaveModal = connect(
   {
     cancelSequence: sequences.dismissModalSequence,
