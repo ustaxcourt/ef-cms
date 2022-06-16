@@ -31,8 +31,8 @@ export const CourtIssuedDocketEntry = connect(
       sequences.openCancelDraftDocumentModalSequence,
     openConfirmInitiateServiceModalSequence:
       sequences.openConfirmInitiateServiceModalSequence,
-    preSubmitCourtIssuedDocketEntrySequence:
-      sequences.preSubmitCourtIssuedDocketEntrySequence,
+    saveCourtIssuedDocketEntrySequence:
+      sequences.saveCourtIssuedDocketEntrySequence,
     showModal: state.modal.showModal,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
@@ -47,7 +47,7 @@ export const CourtIssuedDocketEntry = connect(
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
     openConfirmInitiateServiceModalSequence,
-    preSubmitCourtIssuedDocketEntrySequence,
+    saveCourtIssuedDocketEntrySequence,
     showModal,
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
@@ -256,7 +256,7 @@ export const CourtIssuedDocketEntry = connect(
                     secondary
                     id="save-entry-button"
                     onClick={() => {
-                      preSubmitCourtIssuedDocketEntrySequence();
+                      saveCourtIssuedDocketEntrySequence();
                     }}
                   >
                     Save Entry

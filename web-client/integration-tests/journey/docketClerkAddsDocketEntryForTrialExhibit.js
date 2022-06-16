@@ -59,7 +59,7 @@ export const docketClerkAddsDocketEntryForTrialExhibit = (
       },
     );
 
-    await cerebralTest.runSequence('preSubmitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
