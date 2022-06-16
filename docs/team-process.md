@@ -167,6 +167,7 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - It'd be good to keep an eye on `s3rver` for when it exceeds 3.7.1. We have a patch in place for called `s3rver+3.7.1.patch` in order to address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible.
 
-#### Validating Updates
--  After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
-    - Be sure the deploy [runs a migration](./additional-resources/blue-green-migration.md#manual-migration-steps) to verify the updates do not affect the migration workflow.
+-`puppeteer` and `puppeteer-core`: temporily locked to 14.1.x and its respective patches. The minor update to 14.3.0 causes jest timeout issues. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35766/workflows/4f92d2a3-b923-4f9b-8e22-e4c54d69f95b/jobs/228023).
+
+-`broadcast-channel`: temporily locked to 4.12.0. The minor update to 4.13.0 introduces a breaking change to how esbrowser function processes the browser alias of process module. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35774/workflows/ea7e7274-b979-4ee4-b7ff-edee692117f2/jobs/228087) for more information about memory leakage in cypress as well.
+
