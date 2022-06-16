@@ -45,7 +45,10 @@ export const CoverSheet = ({
 
       <div className="case-information margin-top-40">
         <div className="border-none" id="caption">
-          <div id="caption-title">{caseTitle}</div>
+          <div id="caption-title">
+            {caseTitle}
+            {consolidatedCases && ' et al.,'}
+          </div>
           <div id="caption-extension">{caseCaptionExtension}</div>
           <div id="caption-v">v.</div>
           <div id="caption-commissioner">Commissioner of Internal Revenue</div>
