@@ -18,10 +18,3 @@ CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
 if [ -n "${1}" ]; then
   export DEPLOYING_COLOR="${CURRENT_COLOR}"
 fi
-
-if [ -z "${CI}" ]; then
-  export AWS_ACCESS_KEY_ID="${CIRCLE_AWS_ACCESS_KEY_ID}"
-  export AWS_ACCOUNT_ID="${CIRCLE_AWS_ACCOUNT_ID}"
-  export AWS_SECRET_ACCESS_KEY="${CIRCLE_AWS_SECRET_ACCESS_KEY}"
-  unset AWS_SESSION_TOKEN
-fi
