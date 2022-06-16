@@ -9,7 +9,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupConsolidatedCasesAction } from '../actions/CaseConsolidation/setupConsolidatedCasesAction';
-import { shouldOpenInitiateSaveModalAction } from '../actions/shouldOpenInitiateSaveModalAction';
+import { shouldSaveToConsolidatedGroupAction } from '../actions/shouldSaveToConsolidatedGroupAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { submitCourtIssuedDocketEntrySequence } from './submitCourtIssuedDocketEntrySequence';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
@@ -22,9 +22,10 @@ export const saveCourtIssuedDocketEntrySequence = [
   {
     no: [submitCourtIssuedDocketEntrySequence],
     yes: [
-      shouldOpenInitiateSaveModalAction,
+      shouldSaveToConsolidatedGroupAction,
       {
-        openModal: [
+        no: [submitCourtIssuedDocketEntrySequence],
+        yes: [
           clearAlertsAction,
           startShowValidationAction,
           getComputedFormDateFactoryAction(null),
@@ -43,7 +44,6 @@ export const saveCourtIssuedDocketEntrySequence = [
             ],
           },
         ],
-        submit: [submitCourtIssuedDocketEntrySequence],
       },
     ],
   },
