@@ -19,6 +19,9 @@ if [ -n "${1}" ]; then
   export DEPLOYING_COLOR="${CURRENT_COLOR}"
 fi
 
+if [ -z "${CI}" ]; then
+  unset AWS_SESSION_TOKEN
+fi
 export AWS_ACCESS_KEY_ID="${CIRCLE_AWS_ACCESS_KEY_ID}"
 export AWS_ACCOUNT_ID="${CIRCLE_AWS_ACCOUNT_ID}"
 export AWS_SECRET_ACCESS_KEY="${CIRCLE_AWS_SECRET_ACCESS_KEY}"
