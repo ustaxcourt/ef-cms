@@ -59,7 +59,7 @@ export const docketClerkAddsDocketEntryForHearingExhibitsFromDraftOnLeadCase = (
       },
     );
 
-    await cerebralTest.runSequence('preSubmitCourtIssuedDocketEntrySequence');
+    await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
 
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
 
