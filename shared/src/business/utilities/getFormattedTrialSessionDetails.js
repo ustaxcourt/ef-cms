@@ -4,12 +4,19 @@ const {
 } = require('../entities/EntityConstants');
 const { compact, isEmpty, isEqual, partition } = require('lodash');
 
-exports.setPretrialMemorandumFiler = caseItem => {
+exports.setPretrialMemorandumFiler = ({ applicationContext, caseItem }) => {
   let filingPartiesCode;
   let numberOfPetitionerFilers = 0;
   let numberOfRespondentFilers = 0;
 
-  const pretrialMemorandumDocketEntry = caseItem.docketEntries.find(
+  const caseRecord = applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber: caseItem.docketNumber,
+    });
+
+  const pretrialMemorandumDocketEntry = caseRecord.docketEntries?.find(
     d => d.eventCode === 'PMT',
   );
 
@@ -56,7 +63,10 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
     caseItem.docketNumberSuffix,
   );
 
-  caseItem.filingPartiesCode = exports.setPretrialMemorandumFiler(caseItem);
+  caseItem.filingPartiesCode = exports.setPretrialMemorandumFiler({
+    applicationContext,
+    caseItem,
+  });
   return caseItem;
 };
 
