@@ -5,25 +5,33 @@ const {
 } = require('../entities/EntityConstants');
 const { compact, isEmpty, isEqual, partition } = require('lodash');
 
-const determinePtmFiler = docketEntries => {
+exports.setPretrialMemorandumFiler = docketEntries => {
   let ptmFiler;
 
-  const caseHasPtm = docketEntries.find(d => d.eventCode === 'PMT');
+  const pretrialMemorandumDocketEntry = docketEntries.find(
+    d => d.eventCode === 'PMT',
+  );
 
-  if (caseHasPtm) {
-    switch (caseHasPtm.filers) {
-      case ROLES.petitioner:
-        ptmFiler = SERVED_PARTIES_CODES.PETITIONER;
-        break;
-      case ROLES.RESPONDENT:
-        ptmFiler = SERVED_PARTIES_CODES.RESPONDENT;
-        break;
-      case 'both':
-        ptmFiler = SERVED_PARTIES_CODES.BOTH;
-        break;
-    }
-    return ptmFiler;
-  }
+  pretrialMemorandumDocketEntry.filers.forEach(filerId => {});
+
+  //go through the IDs in filers array
+  //for each one, check if it matches in case.petitioners or case.irsPractitioner
+  //based on match determine filed parties code
+
+  // if (caseHasPtm) {
+  //   switch (caseHasPtm.filers) {
+  //     case ROLES.petitioner:
+  //       ptmFiler = SERVED_PARTIES_CODES.PETITIONER;
+  //       break;
+  //     case ROLES.RESPONDENT:
+  //       ptmFiler = SERVED_PARTIES_CODES.RESPONDENT;
+  //       break;
+  //     case 'both':
+  //       ptmFiler = SERVED_PARTIES_CODES.BOTH;
+  //       break;
+  //   }
+  //   return ptmFiler;
+  // }
 };
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
@@ -45,7 +53,7 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
     caseItem.docketNumberSuffix,
   );
 
-  caseItem.ptmStatus = determinePtmFiler(caseItem.docketEntries);
+  caseItem.ptmStatus = setPretrialMemorandumFiler(caseItem.docketEntries);
   return caseItem;
 };
 
