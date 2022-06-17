@@ -61,7 +61,7 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
   docketClerkOpensCaseConsolidateModal(cerebralTest);
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest);
+  docketClerkConsolidatesCases(cerebralTest, 2);
 
   docketClerkSealsCase(cerebralTest);
   docketClerkVerifiesConsolidatedCases(cerebralTest);
