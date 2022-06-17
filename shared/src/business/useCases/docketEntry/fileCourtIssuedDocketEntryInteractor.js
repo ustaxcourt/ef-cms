@@ -66,115 +66,118 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
 
   const isUnservable = UNSERVABLE_EVENT_CODES.includes(documentMeta.eventCode);
 
-  for (let docketNumber of docketNumbers) {
-    const caseToUpdate = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber,
+  await Promise.all(
+    docketNumbers.map(async docketNumber => {
+      const caseToUpdate = await applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber({
+          applicationContext,
+          docketNumber,
+        });
+
+      let caseEntity = new Case(caseToUpdate, { applicationContext });
+
+      const docketEntryEntity = new DocketEntry(
+        {
+          ...omit(subjectDocketEntry, 'filedBy'),
+          attachments: documentMeta.attachments,
+          date: documentMeta.date,
+          documentTitle: documentMeta.generatedDocumentTitle,
+          documentType: documentMeta.documentType,
+          draftOrderState: null,
+          editState: JSON.stringify(documentMeta),
+          eventCode: documentMeta.eventCode,
+          filingDate: documentMeta.filingDate,
+          freeText: documentMeta.freeText,
+          isDraft: false,
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          judge: documentMeta.judge,
+          numberOfPages,
+          scenario: documentMeta.scenario,
+          serviceStamp: documentMeta.serviceStamp,
+          trialLocation: documentMeta.trialLocation,
+          userId: user.userId,
+        },
+        { applicationContext },
+      );
+
+      const workItem = new WorkItem(
+        {
+          assigneeId: null,
+          assigneeName: null,
+          associatedJudge: caseToUpdate.associatedJudge,
+          caseStatus: caseToUpdate.status,
+          caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+          docketEntry: {
+            ...docketEntryEntity.toRawObject(),
+            createdAt: docketEntryEntity.createdAt,
+          },
+          docketNumber: caseToUpdate.docketNumber,
+          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+          hideFromPendingMessages: true,
+          inProgress: true,
+          section: DOCKET_SECTION,
+          sentBy: user.name,
+          sentByUserId: user.userId,
+        },
+        { applicationContext },
+      );
+
+      if (isUnservable) {
+        workItem.setAsCompleted({ message: 'completed', user });
+      }
+
+      docketEntryEntity.setWorkItem(workItem);
+
+      const isDocketEntryAlreadyOnCase = !!caseEntity.getDocketEntryById({
+        docketEntryId,
       });
 
-    let caseEntity = new Case(caseToUpdate, { applicationContext });
+      if (!isDocketEntryAlreadyOnCase) {
+        caseEntity.addDocketEntry(docketEntryEntity);
+      } else {
+        caseEntity.updateDocketEntry(docketEntryEntity);
+      }
 
-    const docketEntry = caseEntity.getDocketEntryById({
-      docketEntryId,
-    });
-
-    const docketEntryEntity = new DocketEntry(
-      {
-        ...omit(subjectDocketEntry, 'filedBy'),
-        attachments: documentMeta.attachments,
-        date: documentMeta.date,
-        documentTitle: documentMeta.generatedDocumentTitle,
-        documentType: documentMeta.documentType,
-        draftOrderState: null,
-        editState: JSON.stringify(documentMeta),
-        eventCode: documentMeta.eventCode,
-        filingDate: documentMeta.filingDate,
-        freeText: documentMeta.freeText,
-        isDraft: false,
-        isFileAttached: true,
-        isOnDocketRecord: true,
-        judge: documentMeta.judge,
-        numberOfPages,
-        scenario: documentMeta.scenario,
-        serviceStamp: documentMeta.serviceStamp,
-        trialLocation: documentMeta.trialLocation,
-        userId: user.userId,
-      },
-      { applicationContext },
-    );
-
-    const workItem = new WorkItem(
-      {
-        assigneeId: null,
-        assigneeName: null,
-        associatedJudge: caseToUpdate.associatedJudge,
-        caseStatus: caseToUpdate.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseToUpdate.docketNumber,
-        docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-        hideFromPendingMessages: true,
-        inProgress: true,
-        section: DOCKET_SECTION,
+      workItem.assignToUser({
+        assigneeId: user.userId,
+        assigneeName: user.name,
+        section: user.section,
         sentBy: user.name,
+        sentBySection: user.section,
         sentByUserId: user.userId,
-      },
-      { applicationContext },
-    );
+      });
 
-    if (isUnservable) {
-      workItem.setAsCompleted({ message: 'completed', user });
-    }
-
-    docketEntryEntity.setWorkItem(workItem);
-    if (!docketEntry) {
-      caseEntity.addDocketEntry(docketEntryEntity);
-    } else {
-      caseEntity.updateDocketEntry(docketEntryEntity);
-    }
-
-    workItem.assignToUser({
-      assigneeId: user.userId,
-      assigneeName: user.name,
-      section: user.section,
-      sentBy: user.name,
-      sentBySection: user.section,
-      sentByUserId: user.userId,
-    });
-
-    const saveItems = [
-      applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-        applicationContext,
-        caseToUpdate: caseEntity,
-      }),
-    ];
-
-    const rawValidWorkItem = workItem.validate().toRawObject();
-    if (isUnservable) {
-      saveItems.push(
-        applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+      const saveItems = [
+        applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
           applicationContext,
-          section: user.section,
-          userId: user.userId,
-          workItem: rawValidWorkItem,
+          caseToUpdate: caseEntity,
         }),
-      );
-    } else {
-      saveItems.push(
-        applicationContext.getPersistenceGateway().saveWorkItem({
-          applicationContext,
-          workItem: rawValidWorkItem,
-        }),
-      );
-    }
+      ];
 
-    await Promise.all(saveItems);
-  }
+      const rawValidWorkItem = workItem.validate().toRawObject();
+      if (isUnservable) {
+        saveItems.push(
+          applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+            applicationContext,
+            section: user.section,
+            userId: user.userId,
+            workItem: rawValidWorkItem,
+          }),
+        );
+      } else {
+        saveItems.push(
+          applicationContext.getPersistenceGateway().saveWorkItem({
+            applicationContext,
+            workItem: rawValidWorkItem,
+          }),
+        );
+      }
+
+      return Promise.all(saveItems);
+    }),
+  );
 
   const rawSubjectCase = await applicationContext
     .getPersistenceGateway()

@@ -18,12 +18,11 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
     applicationContext,
     docketEntryId: get(state.docketEntryId),
     form: get(state.form),
-    getDocketNumbers: () => {
-      return flow(
+    getDocketNumbers: () =>
+      flow(
         filter('checked'),
         map('docketNumber'),
-      )(get(state.caseDetail.consolidatedCases));
-    },
+      )(get(state.caseDetail.consolidatedCases)),
     subjectDocketNumber: get(state.caseDetail.docketNumber),
   });
 };
