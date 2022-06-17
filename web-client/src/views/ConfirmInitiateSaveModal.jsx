@@ -1,4 +1,4 @@
-import { ConsolidatedCasesCheckboxes } from './ConfirmInitiateSaveModal';
+import { ConsolidatedCasesCheckboxes } from './ConfirmInitiateServiceModal';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
