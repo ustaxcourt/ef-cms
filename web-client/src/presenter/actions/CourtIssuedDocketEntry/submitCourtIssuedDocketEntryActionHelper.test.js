@@ -44,7 +44,7 @@ describe('submitCourtIssuedDocketEntryActionHelper', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should NOT create a coversheet if the eventCode is a coversheet required document', async () => {
+  it('should NOT create a coversheet if the eventCode is not a coversheet required document', async () => {
     await submitCourtIssuedDocketEntryActionHelper({
       applicationContext,
       form: {

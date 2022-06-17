@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 const {
   applicationContext,
   testPdfDoc,
@@ -438,7 +437,7 @@ describe('generateCoverSheetData', () => {
     expect(result.documentTitle).toBe(mockDocumentType);
   });
 
-  it('should use documentType as documentTitle if documentTitle is undefined', async () => {
+  it('should add the consolidatedCases array to the coversheet data if we are saving a unservable document on a lead case', async () => {
     const mockDocumentType = 'Hearing Exhibits';
 
     applicationContext
