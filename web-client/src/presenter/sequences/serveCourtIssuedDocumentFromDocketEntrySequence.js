@@ -33,6 +33,7 @@ export const serveCourtIssuedDocumentFromDocketEntrySequence = [
       getComputedFormDateFactoryAction(null),
       generateCourtIssuedDocumentTitleAction,
       fileAndServeCourtIssuedDocumentAction,
+      // don't call unset waiting for response action, waiting for websocket response
     ],
   },
 ];

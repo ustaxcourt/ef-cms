@@ -192,7 +192,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     applicationContext,
     message: {
       action: 'file_and_serve_court_issued_document_complete',
-      pdfUrl: serviceResults.pdfUrl,
+      pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
     },
     userId: user.userId,
   });
