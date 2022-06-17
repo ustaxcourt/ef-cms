@@ -80,7 +80,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumber: caseRecord.docketNumber,
+          docketNumbers: [caseRecord.docketNumber],
           documentType: 'Memorandum in Support',
         },
       }),
@@ -92,7 +92,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-          docketNumber: caseRecord.docketNumber,
+          docketNumbers: [caseRecord.docketNumber],
           documentType: 'Order',
         },
       }),
@@ -106,7 +106,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumber: caseRecord.docketNumber,
+          docketNumbers: [caseRecord.docketNumber],
           documentType: 'Order',
         },
       }),
