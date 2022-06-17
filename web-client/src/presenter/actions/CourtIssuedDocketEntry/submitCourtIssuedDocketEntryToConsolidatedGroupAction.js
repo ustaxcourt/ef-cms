@@ -16,7 +16,8 @@ export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
 }) => {
   await submitCourtIssuedDocketEntryActionHelper({
     applicationContext,
-    get,
+    docketEntryId: get(state.docketEntryId),
+    form: get(state.form),
     getDocketNumbers: () => {
       return flow(
         filter('checked'),
