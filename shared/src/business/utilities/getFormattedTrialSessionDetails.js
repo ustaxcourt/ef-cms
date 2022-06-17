@@ -14,6 +14,8 @@ exports.setPretrialMemorandumFiler = ({ caseItem }) => {
   );
 
   if (pretrialMemorandumDocketEntry) {
+    //seems like filers array does not have respondents userId (regardless of if u file as respondent or check checkbox for Resp as docketclerk)
+    console.log(pretrialMemorandumDocketEntry.filers, '------');
     pretrialMemorandumDocketEntry.filers.forEach(filerId => {
       if (caseItem.petitioners.some(p => p.contactId === filerId)) {
         numberOfPetitionerFilers++;
