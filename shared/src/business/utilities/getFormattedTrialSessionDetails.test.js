@@ -1,13 +1,11 @@
 /* eslint-disable max-lines */
 import {
   DOCKET_NUMBER_SUFFIXES,
-  INITIAL_DOCUMENT_TYPES,
   SERVED_PARTIES_CODES,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { MOCK_DOCUMENTS } from '../../test/mockDocuments';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
   compareTrialSessionEligibleCases,
@@ -552,7 +550,7 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  describe.only('setPretrialMemorandumFiler', () => {
+  describe('setPretrialMemorandumFiler', () => {
     const mockIrsPractitionerId = 'a72d1fb3-d0e4-4b8e-9d1d-5d541aa730e3';
 
     const mockPretrialMemorandumDocketEntry = {
@@ -599,17 +597,17 @@ describe('formattedTrialSessionDetails', () => {
       expect(result).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
     });
 
-    it.only('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
+    it('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
+      mockPretrialMemorandumDocketEntry.filers = [
+        mockIrsPractitionerId,
+        MOCK_CASE.petitioners[0].contactId,
+      ];
+
       const mockCase = {
         ...MOCK_CASE,
         docketEntries: [mockPretrialMemorandumDocketEntry],
         irsPractitioners: [{ name: 'Bob', userId: mockIrsPractitionerId }],
       };
-
-      mockPretrialMemorandumDocketEntry.filers = [
-        mockIrsPractitionerId,
-        MOCK_CASE.petitioners[0].contactId,
-      ];
 
       const result = setPretrialMemorandumFiler(mockCase);
 
