@@ -187,7 +187,15 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     key: originalSubjectDocketEntry.docketEntryId,
   });
 
-  return serviceResults;
+  // return serviceResults;
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    message: {
+      action: 'file_and_serve_court_issued_document_complete',
+      pdfUrl: serviceResults.pdfUrl,
+    },
+    userId: user.userId,
+  });
 };
 
 const stampDocument = async ({ applicationContext, form, pdfData }) => {
