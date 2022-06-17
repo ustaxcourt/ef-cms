@@ -145,7 +145,7 @@ export const WorkingCopySessionList = connect(
                       <div key={respondent.userId}>{respondent.name}</div>
                     ))}
                   </td>
-                  <td className="minw-10">{item.ptmStatus}</td>
+                  <td className="minw-10">{item.pretrialMemorandumStatus}</td>
                   <td className="minw-30">
                     <BindedSelect
                       aria-label="trial status"

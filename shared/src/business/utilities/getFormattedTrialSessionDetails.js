@@ -53,7 +53,9 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
     caseItem.docketNumberSuffix,
   );
 
-  caseItem.ptmStatus = setPretrialMemorandumFiler(caseItem.docketEntries);
+  caseItem.pretrialMemorandumStatus = exports.setPretrialMemorandumFiler(
+    caseItem.docketEntries,
+  );
   return caseItem;
 };
 

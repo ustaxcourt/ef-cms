@@ -5,12 +5,14 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { MOCK_DOCUMENTS } from '../../test/mockDocuments';
 import { applicationContext } from '../../../../web-client/src/applicationContext';
 import {
   compareTrialSessionEligibleCases,
   formatCase,
   formattedTrialSessionDetails,
   getTrialSessionStatus,
+  setPretrialMemorandumFiler,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
 
@@ -545,6 +547,28 @@ describe('formattedTrialSessionDetails', () => {
       const results = getTrialSessionStatus({ applicationContext, session });
 
       expect(results).toEqual(SESSION_STATUS_GROUPS.new);
+    });
+  });
+
+  describe('setPretrialMemorandumFiler', () => {
+    it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
+      const mockDocketEntry = {
+        createdAt: '2018-11-21T20:49:28.192Z',
+        docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+        docketNumber: '101-18',
+        documentTitle: 'Petition',
+        documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
+        eventCode: 'PMT',
+        filedBy: 'Test Petitioner',
+        filingDate: '2018-03-01T05:00:00.000Z',
+        index: 1,
+        isFileAttached: true,
+        isOnDocketRecord: true,
+        processingStatus: 'complete',
+        receivedAt: '2018-03-01T05:00:00.000Z',
+        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      };
+      const result = setPretrialMemorandumFiler([mockDocketEntry]);
     });
   });
 });
