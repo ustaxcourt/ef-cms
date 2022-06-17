@@ -4,19 +4,12 @@ const {
 } = require('../entities/EntityConstants');
 const { compact, isEmpty, isEqual, partition } = require('lodash');
 
-exports.setPretrialMemorandumFiler = ({ applicationContext, caseItem }) => {
+exports.setPretrialMemorandumFiler = ({ caseItem }) => {
   let filingPartiesCode;
   let numberOfPetitionerFilers = 0;
   let numberOfRespondentFilers = 0;
 
-  const caseRecord = applicationContext
-    .getPersistenceGateway()
-    .getCaseByDocketNumber({
-      applicationContext,
-      docketNumber: caseItem.docketNumber,
-    });
-
-  const pretrialMemorandumDocketEntry = caseRecord.docketEntries?.find(
+  const pretrialMemorandumDocketEntry = caseItem.docketEntries.find(
     d => d.eventCode === 'PMT',
   );
 
@@ -44,7 +37,11 @@ exports.setPretrialMemorandumFiler = ({ applicationContext, caseItem }) => {
   return filingPartiesCode;
 };
 
-exports.formatCase = ({ applicationContext, caseItem }) => {
+exports.formatCase = ({
+  applicationContext,
+  caseItem,
+  setFilingPartiesCode = false,
+}) => {
   caseItem.caseTitle = applicationContext.getCaseTitle(
     caseItem.caseCaption || '',
   );
@@ -63,10 +60,11 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
     caseItem.docketNumberSuffix,
   );
 
-  caseItem.filingPartiesCode = exports.setPretrialMemorandumFiler({
-    applicationContext,
-    caseItem,
-  });
+  if (setFilingPartiesCode) {
+    caseItem.filingPartiesCode = exports.setPretrialMemorandumFiler({
+      caseItem,
+    });
+  }
   return caseItem;
 };
 
@@ -115,7 +113,13 @@ exports.formattedTrialSessionDetails = ({
     .sort(exports.compareTrialSessionEligibleCases);
 
   trialSession.allCases = (trialSession.calendaredCases || [])
-    .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
+    .map(caseItem =>
+      exports.formatCase({
+        applicationContext,
+        caseItem,
+        setFilingPartiesCode: true,
+      }),
+    )
     .sort(exports.compareCasesByDocketNumber);
 
   [trialSession.inactiveCases, trialSession.openCases] = partition(
