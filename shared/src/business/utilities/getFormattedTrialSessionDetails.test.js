@@ -1,6 +1,8 @@
 /* eslint-disable max-lines */
 import {
   DOCKET_NUMBER_SUFFIXES,
+  INITIAL_DOCUMENT_TYPES,
+  SERVED_PARTIES_CODES,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
@@ -550,25 +552,75 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
-  describe('setPretrialMemorandumFiler', () => {
+  describe.only('setPretrialMemorandumFiler', () => {
+    const mockIrsPractitionerId = 'a72d1fb3-d0e4-4b8e-9d1d-5d541aa730e3';
+
+    const mockPretrialMemorandumDocketEntry = {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+      docketNumber: '101-18',
+      documentTitle: 'Pretrial Memorandum',
+      documentType: 'Pretrial Memorandum',
+      eventCode: 'PMT',
+      filedBy: 'Test Petitioner',
+      filers: [MOCK_CASE.petitioners[0].userId],
+      filingDate: '2018-03-01T05:00:00.000Z',
+      index: 5,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T05:00:00.000Z',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    };
+
     it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
-      const mockDocketEntry = {
-        createdAt: '2018-11-21T20:49:28.192Z',
-        docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-        docketNumber: '101-18',
-        documentTitle: 'Petition',
-        documentType: INITIAL_DOCUMENT_TYPES.petition.documentType,
-        eventCode: 'PMT',
-        filedBy: 'Test Petitioner',
-        filingDate: '2018-03-01T05:00:00.000Z',
-        index: 1,
-        isFileAttached: true,
-        isOnDocketRecord: true,
-        processingStatus: 'complete',
-        receivedAt: '2018-03-01T05:00:00.000Z',
-        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [mockPretrialMemorandumDocketEntry],
+        irsPractitioners: [],
       };
-      const result = setPretrialMemorandumFiler([mockDocketEntry]);
+
+      const result = setPretrialMemorandumFiler(mockCase);
+
+      expect(result).toEqual(SERVED_PARTIES_CODES.PETITIONER);
+    });
+
+    it('should set the pretrialMemorandumStatus to "R" when the filer is the respondent', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [mockPretrialMemorandumDocketEntry],
+        irsPractitioners: [{ name: 'Bob', userId: mockIrsPractitionerId }],
+      };
+
+      mockPretrialMemorandumDocketEntry.filers = [mockIrsPractitionerId];
+
+      const result = setPretrialMemorandumFiler(mockCase);
+
+      expect(result).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
+    });
+
+    it('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
+      const mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [mockPretrialMemorandumDocketEntry],
+        irsPractitioners: [{ name: 'Bob', userId: mockIrsPractitionerId }],
+      };
+
+      mockPretrialMemorandumDocketEntry.filers = [
+        mockIrsPractitionerId,
+        MOCK_CASE.petitioners[0].userId,
+        MOCK_CASE.petitioners[1].userId,
+      ];
+
+      const result = setPretrialMemorandumFiler(mockCase);
+
+      expect(result).toEqual(SERVED_PARTIES_CODES.BOTH);
+    });
+
+    it('should set the pretrialMemorandumStatus to undefined when there is no pretrial memorandum on the case', () => {
+      const result = setPretrialMemorandumFiler(MOCK_CASE);
+
+      expect(result).toBeUndefined();
     });
   });
 });
