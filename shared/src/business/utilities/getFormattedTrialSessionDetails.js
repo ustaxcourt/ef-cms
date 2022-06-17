@@ -1,14 +1,13 @@
 const {
-  ROLES,
   SERVED_PARTIES_CODES,
   TRIAL_SESSION_SCOPE_TYPES,
 } = require('../entities/EntityConstants');
 const { compact, isEmpty, isEqual, partition } = require('lodash');
 
 exports.setPretrialMemorandumFiler = caseItem => {
-  let ptmFiler;
-  let filedByPetitioner;
-  let filedByRespondent;
+  let filingPartiesCode;
+  let numberOfPetitionerFilers = 0;
+  let numberOfRespondentFilers = 0;
 
   const pretrialMemorandumDocketEntry = caseItem.docketEntries.find(
     d => d.eventCode === 'PMT',
@@ -16,26 +15,26 @@ exports.setPretrialMemorandumFiler = caseItem => {
 
   if (pretrialMemorandumDocketEntry) {
     pretrialMemorandumDocketEntry.filers.forEach(filerId => {
-      filedByPetitioner = caseItem.petitioners.some(
-        p => p.contactId === filerId,
-      );
-      filedByRespondent = caseItem.irsPractitioners.some(
-        p => p.userId === filerId,
-      );
-
-      if (filedByPetitioner && filedByRespondent) {
-        ptmFiler = SERVED_PARTIES_CODES.BOTH;
-      } else if (filedByPetitioner) {
-        ptmFiler = SERVED_PARTIES_CODES.PETITIONER;
-      } else if (filedByRespondent) {
-        ptmFiler = SERVED_PARTIES_CODES.RESPONDENT;
+      if (caseItem.petitioners.some(p => p.contactId === filerId)) {
+        numberOfPetitionerFilers++;
+      }
+      if (caseItem.irsPractitioners.some(p => p.userId === filerId)) {
+        numberOfRespondentFilers++;
       }
     });
+
+    if (numberOfPetitionerFilers > 0 && numberOfRespondentFilers > 0) {
+      filingPartiesCode = SERVED_PARTIES_CODES.BOTH;
+    } else if (numberOfPetitionerFilers > 0) {
+      filingPartiesCode = SERVED_PARTIES_CODES.PETITIONER;
+    } else if (numberOfRespondentFilers > 0) {
+      filingPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
+    }
   } else {
-    ptmFiler = undefined;
+    filingPartiesCode = undefined;
   }
 
-  return ptmFiler;
+  return filingPartiesCode;
 };
 
 exports.formatCase = ({ applicationContext, caseItem }) => {
@@ -57,8 +56,7 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
     caseItem.docketNumberSuffix,
   );
 
-  caseItem.pretrialMemorandumStatus =
-    exports.setPretrialMemorandumFiler(caseItem);
+  caseItem.filingPartiesCode = exports.setPretrialMemorandumFiler(caseItem);
   return caseItem;
 };
 
