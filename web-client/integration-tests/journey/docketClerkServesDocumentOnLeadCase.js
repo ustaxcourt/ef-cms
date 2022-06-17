@@ -1,5 +1,8 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { refreshElasticsearchIndex } from '../helpers';
+import {
+  refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -72,6 +75,9 @@ export const docketClerkServesDocumentOnLeadCase = (
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+
     await refreshElasticsearchIndex();
   });
 };
