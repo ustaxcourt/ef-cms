@@ -1,4 +1,4 @@
-import { updateForm } from '../helpers';
+import { updateForm, waitForLoadingComponentToHide } from '../helpers';
 
 export const docketClerkAddsOpiniontoDocketyEntry = (
   cerebralTest,
@@ -36,5 +36,7 @@ export const docketClerkAddsOpiniontoDocketyEntry = (
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
+
+    await waitForLoadingComponentToHide({ cerebralTest });
   });
 };

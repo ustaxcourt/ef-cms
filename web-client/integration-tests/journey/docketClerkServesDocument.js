@@ -1,6 +1,7 @@
 import {
   getFormattedDocketEntriesForTest,
   refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
 } from '../helpers';
 
 export const docketClerkServesDocument = (cerebralTest, docketRecordIndex) => {
@@ -30,6 +31,8 @@ export const docketClerkServesDocument = (cerebralTest, docketRecordIndex) => {
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     await refreshElasticsearchIndex();
   });
