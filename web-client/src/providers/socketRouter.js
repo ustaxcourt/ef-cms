@@ -83,6 +83,11 @@ export const socketRouter = (app, onMessageCallbackFn) => {
           path: '/',
         });
         break;
+      case 'file_and_serve_court_issued_document_complete':
+        await app.getSequence('serveCourtIssuedDocumentCompleteSequence')({
+          ...message,
+        });
+        break;
     }
 
     (onMessageCallbackFn || noop)(message);
