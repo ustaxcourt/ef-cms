@@ -7,10 +7,10 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v19-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v20-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v19-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v20-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -32,18 +32,18 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v19-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v20-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v19-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v20-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v19-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v20-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -56,7 +56,7 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v19-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v20-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
@@ -417,7 +417,7 @@ jobs:
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large # medium+ makes the webpack build very slow
+    resource_class: xlarge # this should be temporary until we improve memory usage of 'Deploy - Web Client - S3'
     steps:
       - git-shallow-clone/checkout
       - npm-install

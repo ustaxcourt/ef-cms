@@ -6,7 +6,7 @@ export const FilingFeeOptions = function () {
   return (
     <div className="card">
       <div className="content-wrapper gray">
-        <h3>Filing Fee Options</h3>
+        <h2>Filing Fee Options</h2>
 
         <p className="margin-bottom-2">
           To pay the filing fee, you must have an existing case. Your assigned

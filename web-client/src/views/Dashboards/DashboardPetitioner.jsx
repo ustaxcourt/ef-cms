@@ -29,7 +29,7 @@ export const DashboardPetitioner = connect(
             <div className="tablet:grid-col-4">
               <div className="card">
                 <div className="content-wrapper gray">
-                  <h3>Taxpayer Tools</h3>
+                  <h2>Taxpayer Tools</h2>
                   <hr />
                   <p>
                     <FontAwesomeIcon
@@ -73,7 +73,7 @@ export const DashboardPetitioner = connect(
 
               <div className="card">
                 <div className="content-wrapper gray">
-                  <h3>Free Taxpayer Help</h3>
+                  <h2>Free Taxpayer Help</h2>
                   <hr />
                   <p>
                     You may be eligible for additional assistance and advice

@@ -294,6 +294,7 @@ describe('updateTrialSessionInteractor', () => {
       city: 'Somewhere',
       courtReporter: 'Someone Reporter',
       courthouseName: 'The Courthouse',
+      estimatedEndDate: '2025-12-03T00:00:00.000Z',
       irsCalendarAdministrator: 'Admin',
       joinPhoneNumber: '22222',
       judge: {
@@ -685,172 +686,172 @@ describe('updateTrialSessionInteractor', () => {
         ).toHaveBeenCalled();
       });
     });
-  });
 
-  describe('Change of Trial Judge', () => {
-    it('should NOT generate a NOT when the trial judge has not changed, the case status is not closed, and the trial session is calendared', async () => {
-      const remoteCalendaredTrialSession = {
-        ...MOCK_TRIAL_REMOTE,
-        caseOrder: [
-          {
-            docketNumber: MOCK_CASE.docketNumber,
-          },
-        ],
-        isCalendared: true,
-      };
-      const mockJudge = {
-        name: 'Mock Judge',
-        userId: '544a2727-d5ee-4108-9689-69cecad86018',
-      };
-
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockReturnValue({
-          ...remoteCalendaredTrialSession,
+    describe('Change of Trial Judge', () => {
+      it('should NOT generate a NOT when the trial judge has not changed, the case status is not closed, and the trial session is calendared', async () => {
+        const remoteCalendaredTrialSession = {
+          ...MOCK_TRIAL_REMOTE,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
           isCalendared: true,
-          judge: mockJudge,
+        };
+        const mockJudge = {
+          name: 'Mock Judge',
+          userId: '544a2727-d5ee-4108-9689-69cecad86018',
+        };
+
+        applicationContext
+          .getPersistenceGateway()
+          .getTrialSessionById.mockReturnValue({
+            ...remoteCalendaredTrialSession,
+            isCalendared: true,
+            judge: mockJudge,
+          });
+
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
+            ...MOCK_CASE,
+            trialDate: MOCK_TRIAL_REMOTE.startDate,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+          });
+
+        await updateTrialSessionInteractor(applicationContext, {
+          trialSession: {
+            ...remoteCalendaredTrialSession,
+            judge: mockJudge,
+          },
         });
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          trialDate: MOCK_TRIAL_REMOTE.startDate,
-          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
-        });
-
-      await updateTrialSessionInteractor(applicationContext, {
-        trialSession: {
-          ...remoteCalendaredTrialSession,
-          judge: mockJudge,
-        },
+        expect(
+          applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
+        ).not.toHaveBeenCalled();
       });
 
-      expect(
-        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should NOT generate a NOT when the trial judge changes, the case status is closed, and the trial session is calendared', async () => {
-      const remoteCalendaredTrialSession = {
-        ...MOCK_TRIAL_REMOTE,
-        caseOrder: [
-          {
-            docketNumber: MOCK_CASE.docketNumber,
-          },
-        ],
-        isCalendared: true,
-      };
-
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockReturnValue({
-          ...remoteCalendaredTrialSession,
+      it('should NOT generate a NOT when the trial judge changes, the case status is closed, and the trial session is calendared', async () => {
+        const remoteCalendaredTrialSession = {
+          ...MOCK_TRIAL_REMOTE,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
           isCalendared: true,
-        });
+        };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          closedDate: '2019-03-01T21:42:29.073Z',
-          status: CASE_STATUS_TYPES.closed,
-          trialDate: MOCK_TRIAL_REMOTE.startDate,
-          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
-        });
+        applicationContext
+          .getPersistenceGateway()
+          .getTrialSessionById.mockReturnValue({
+            ...remoteCalendaredTrialSession,
+            isCalendared: true,
+          });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        trialSession: {
-          ...remoteCalendaredTrialSession,
-          judge: {
-            userId: '5555',
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
+            ...MOCK_CASE,
+            closedDate: '2019-03-01T21:42:29.073Z',
+            status: CASE_STATUS_TYPES.closed,
+            trialDate: MOCK_TRIAL_REMOTE.startDate,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+          });
+
+        await updateTrialSessionInteractor(applicationContext, {
+          trialSession: {
+            ...remoteCalendaredTrialSession,
+            judge: {
+              userId: '5555',
+            },
           },
-        },
+        });
+
+        expect(
+          applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
+        ).not.toHaveBeenCalled();
       });
 
-      expect(
-        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should NOT generate a NOT when the trial judge changes, the case status is not closed, but the trial session is NOT calendared', async () => {
-      const remoteCalendaredTrialSession = {
-        ...MOCK_TRIAL_REMOTE,
-        caseOrder: [
-          {
-            docketNumber: MOCK_CASE.docketNumber,
-          },
-        ],
-        isCalendared: false,
-      };
-
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockReturnValue({
-          ...remoteCalendaredTrialSession,
+      it('should NOT generate a NOT when the trial judge changes, the case status is not closed, but the trial session is NOT calendared', async () => {
+        const remoteCalendaredTrialSession = {
+          ...MOCK_TRIAL_REMOTE,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
           isCalendared: false,
-        });
+        };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          trialDate: MOCK_TRIAL_REMOTE.startDate,
-          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
-        });
+        applicationContext
+          .getPersistenceGateway()
+          .getTrialSessionById.mockReturnValue({
+            ...remoteCalendaredTrialSession,
+            isCalendared: false,
+          });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        trialSession: {
-          ...remoteCalendaredTrialSession,
-          judge: {
-            userId: '5555',
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
+            ...MOCK_CASE,
+            trialDate: MOCK_TRIAL_REMOTE.startDate,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+          });
+
+        await updateTrialSessionInteractor(applicationContext, {
+          trialSession: {
+            ...remoteCalendaredTrialSession,
+            judge: {
+              userId: '5555',
+            },
           },
-        },
+        });
+
+        expect(
+          applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
+        ).not.toHaveBeenCalled();
       });
 
-      expect(
-        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should generate a NOT when the trial judge changes, the case status is not closed, and the trial session is calendared', async () => {
-      const remoteCalendaredTrialSession = {
-        ...MOCK_TRIAL_REMOTE,
-        caseOrder: [
-          {
-            docketNumber: MOCK_CASE.docketNumber,
-          },
-        ],
-        isCalendared: true,
-      };
-
-      applicationContext
-        .getPersistenceGateway()
-        .getTrialSessionById.mockReturnValue({
-          ...remoteCalendaredTrialSession,
+      it('should generate a NOT when the trial judge changes, the case status is not closed, and the trial session is calendared', async () => {
+        const remoteCalendaredTrialSession = {
+          ...MOCK_TRIAL_REMOTE,
+          caseOrder: [
+            {
+              docketNumber: MOCK_CASE.docketNumber,
+            },
+          ],
           isCalendared: true,
-        });
+        };
 
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue({
-          ...MOCK_CASE,
-          trialDate: MOCK_TRIAL_REMOTE.startDate,
-          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
-        });
+        applicationContext
+          .getPersistenceGateway()
+          .getTrialSessionById.mockReturnValue({
+            ...remoteCalendaredTrialSession,
+            isCalendared: true,
+          });
 
-      await updateTrialSessionInteractor(applicationContext, {
-        trialSession: {
-          ...remoteCalendaredTrialSession,
-          judge: {
-            userId: '5555',
+        applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber.mockReturnValue({
+            ...MOCK_CASE,
+            trialDate: MOCK_TRIAL_REMOTE.startDate,
+            trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
+          });
+
+        await updateTrialSessionInteractor(applicationContext, {
+          trialSession: {
+            ...remoteCalendaredTrialSession,
+            judge: {
+              userId: '5555',
+            },
           },
-        },
-      });
+        });
 
-      expect(
-        applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
-      ).toHaveBeenCalledTimes(1);
+        expect(
+          applicationContext.getUseCaseHelpers().setNoticeOfChangeOfTrialJudge,
+        ).toHaveBeenCalledTimes(1);
+      });
     });
   });
 });

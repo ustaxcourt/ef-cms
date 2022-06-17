@@ -30,6 +30,8 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
     });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
+  const user = applicationContext.getCurrentUser();
+
   if (
     caseToUpdate.trialSessionId === updatedTrialSessionEntity.trialSessionId
   ) {
@@ -49,7 +51,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          user: applicationContext.getCurrentUser(),
+          user,
         });
     }
 
@@ -69,7 +71,7 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
           currentTrialSession,
           newPdfDoc: paperServicePdfsCombined,
           newTrialSessionEntity: updatedTrialSessionEntity,
-          user: applicationContext.getCurrentUser(),
+          user,
         });
     }
 
@@ -170,6 +172,7 @@ exports.updateTrialSessionInteractor = async (
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
+    estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
     joinPhoneNumber: trialSession.joinPhoneNumber,
     judge: trialSession.judge,
