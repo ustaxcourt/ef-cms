@@ -1,5 +1,5 @@
 import { state } from 'cerebral';
-import { submitCourtIssuedDocketEntryActionHelper } from './submitCourtIssuedDocketEntryToConsolidatedGroupAction';
+import { submitCourtIssuedDocketEntryActionHelper } from './submitCourtIssuedDocketEntryActionHelper';
 
 /**
  * creates a docket entry with the given court-issued document
@@ -16,7 +16,8 @@ export const submitCourtIssuedDocketEntryAction = async ({
   const { docketNumber } = get(state.caseDetail);
   await submitCourtIssuedDocketEntryActionHelper({
     applicationContext,
-    get,
+    docketEntryId: get(state.docketEntryId),
+    form: get(state.form),
     getDocketNumbers: () => {
       return [docketNumber];
     },
