@@ -6,7 +6,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
+const { applicationContext } = require('../test/createTestApplicationContext');
 import {
   compareTrialSessionEligibleCases,
   formatCase,
@@ -571,20 +571,31 @@ describe('formattedTrialSessionDetails', () => {
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
     };
 
+    let mockCase;
+
+    beforeEach(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    });
+
     it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
-      const mockCase = {
+      mockCase = {
         ...MOCK_CASE,
         docketEntries: [mockPretrialMemorandumDocketEntry],
         irsPractitioners: [],
       };
 
-      const result = setPretrialMemorandumFiler(mockCase);
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
 
       expect(result).toEqual(SERVED_PARTIES_CODES.PETITIONER);
     });
 
     it('should set the pretrialMemorandumStatus to "R" when the filer is the respondent', () => {
-      const mockCase = {
+      mockCase = {
         ...MOCK_CASE,
         docketEntries: [mockPretrialMemorandumDocketEntry],
         irsPractitioners: [{ name: 'Bob', userId: mockIrsPractitionerId }],
@@ -592,7 +603,10 @@ describe('formattedTrialSessionDetails', () => {
 
       mockPretrialMemorandumDocketEntry.filers = [mockIrsPractitionerId];
 
-      const result = setPretrialMemorandumFiler(mockCase);
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
 
       expect(result).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
     });
@@ -603,19 +617,29 @@ describe('formattedTrialSessionDetails', () => {
         MOCK_CASE.petitioners[0].contactId,
       ];
 
-      const mockCase = {
+      mockCase = {
         ...MOCK_CASE,
         docketEntries: [mockPretrialMemorandumDocketEntry],
         irsPractitioners: [{ name: 'Bob', userId: mockIrsPractitionerId }],
       };
 
-      const result = setPretrialMemorandumFiler(mockCase);
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
 
       expect(result).toEqual(SERVED_PARTIES_CODES.BOTH);
     });
 
     it('should set the pretrialMemorandumStatus to undefined when there is no pretrial memorandum on the case', () => {
-      const result = setPretrialMemorandumFiler(MOCK_CASE);
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: MOCK_CASE,
+      });
 
       expect(result).toBeUndefined();
     });
