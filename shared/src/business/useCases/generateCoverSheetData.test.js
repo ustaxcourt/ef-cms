@@ -84,6 +84,23 @@ describe('generateCoverSheetData', () => {
     expect(result.dateFiledLodged).toEqual('04/19/19');
   });
 
+  it('should append the correct additionalInfo if addToCoversheet is set', async () => {
+    const expectedAdditionalInfo = 'abc';
+
+    const result = await generateCoverSheetData({
+      applicationContext,
+      caseEntity: testingCaseData,
+      docketEntryEntity: {
+        ...testingCaseData.docketEntries[0],
+        addToCoversheet: true,
+        additionalInfo: expectedAdditionalInfo,
+        filingDate: '2019-04-19T14:45:15.595Z',
+      },
+    });
+
+    expect(result.documentTitle).toEqual(`Petition ${expectedAdditionalInfo}`);
+  });
+
   it('shows does not show the filing date if the document does not have a valid filingDate', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
