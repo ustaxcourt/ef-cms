@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 const {
   applicationContext,
   testPdfDoc,
