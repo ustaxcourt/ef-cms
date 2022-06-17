@@ -1,4 +1,4 @@
-import { ConsolidatedCasesCheckboxes } from './ConfirmInitiateServiceModal';
+import { ConsolidatedCasesCheckboxes } from './ConfirmInitiateSaveModal';
 import { ModalDialog } from './ModalDialog';
 import { connect } from '@cerebral/react';
 import { props, sequences, state } from 'cerebral';
@@ -19,7 +19,7 @@ export const ConfirmInitiateSaveModal = connect(
     updateCaseCheckbox: sequences.updateCaseCheckboxSequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
-  function ConfirmInitiateServiceModal({
+  function ConfirmInitiateSaveModal({
     cancelSequence,
     consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange,
@@ -33,7 +33,7 @@ export const ConfirmInitiateSaveModal = connect(
       <ModalDialog
         cancelLabel="No, Take Me Back"
         cancelSequence={cancelSequence}
-        className="confirm-initiate-service-modal"
+        className="confirm-initiate-save-modal"
         confirmLabel="Yes, Save"
         confirmSequence={() => {
           setIsSubmitting(true);

@@ -18,9 +18,7 @@ export const submitCourtIssuedDocketEntryAction = async ({
     applicationContext,
     docketEntryId: get(state.docketEntryId),
     form: get(state.form),
-    getDocketNumbers: () => {
-      return [docketNumber];
-    },
+    getDocketNumbers: () => [docketNumber],
     subjectDocketNumber: docketNumber,
   });
 };
