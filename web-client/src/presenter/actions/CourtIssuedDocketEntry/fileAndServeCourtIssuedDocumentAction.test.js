@@ -93,13 +93,6 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         },
         state: {
           caseDetail: {
-            docketNumber: leadDocketNumber,
-            leadDocketNumber,
-          },
-          form: {
-            eventCode: 'O',
-          },
-          formattedCaseDetail: {
             consolidatedCases: [
               {
                 checked: true,
@@ -118,6 +111,11 @@ describe('submitCourtIssuedDocketEntryAction', () => {
                 docketNumber: checkedDocketNumber2,
               },
             ],
+            docketNumber: leadDocketNumber,
+            leadDocketNumber,
+          },
+          form: {
+            eventCode: 'O',
           },
         },
       });
