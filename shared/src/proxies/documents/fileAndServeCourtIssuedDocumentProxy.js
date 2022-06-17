@@ -17,6 +17,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = (
     body: {
       ...documentMeta,
     },
-    endpoint: `/case-documents/${subjectCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
+    endpoint: `/async/case-documents/${subjectCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
   });
 };
