@@ -563,7 +563,7 @@ describe('formattedTrialSessionDetails', () => {
       documentType: 'Pretrial Memorandum',
       eventCode: 'PMT',
       filedBy: 'Test Petitioner',
-      filers: [MOCK_CASE.petitioners[0].userId],
+      filers: [MOCK_CASE.petitioners[0].contactId],
       filingDate: '2018-03-01T05:00:00.000Z',
       index: 5,
       isFileAttached: true,
@@ -599,7 +599,7 @@ describe('formattedTrialSessionDetails', () => {
       expect(result).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
     });
 
-    it('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
+    it.only('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
       const mockCase = {
         ...MOCK_CASE,
         docketEntries: [mockPretrialMemorandumDocketEntry],
@@ -608,8 +608,7 @@ describe('formattedTrialSessionDetails', () => {
 
       mockPretrialMemorandumDocketEntry.filers = [
         mockIrsPractitionerId,
-        MOCK_CASE.petitioners[0].userId,
-        MOCK_CASE.petitioners[1].userId,
+        MOCK_CASE.petitioners[0].contactId,
       ];
 
       const result = setPretrialMemorandumFiler(mockCase);

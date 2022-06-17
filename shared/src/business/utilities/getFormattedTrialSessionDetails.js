@@ -16,11 +16,19 @@ exports.setPretrialMemorandumFiler = caseItem => {
 
   if (pretrialMemorandumDocketEntry) {
     pretrialMemorandumDocketEntry.filers.forEach(filerId => {
-      if (caseItem.petitioners.some(p => p.userId === filerId)) {
-        // ptmFiler = SERVED_PARTIES_CODES.PETITIONER;
-      }
-      if (caseItem.irsPractitioners.some(p => p.userId === filerId)) {
-        // ptmFiler = SERVED_PARTIES_CODES.RESPONDENT;
+      filedByPetitioner = caseItem.petitioners.some(
+        p => p.contactId === filerId,
+      );
+      filedByRespondent = caseItem.irsPractitioners.some(
+        p => p.userId === filerId,
+      );
+
+      if (filedByPetitioner && filedByRespondent) {
+        ptmFiler = SERVED_PARTIES_CODES.BOTH;
+      } else if (filedByPetitioner) {
+        ptmFiler = SERVED_PARTIES_CODES.PETITIONER;
+      } else if (filedByRespondent) {
+        ptmFiler = SERVED_PARTIES_CODES.RESPONDENT;
       }
     });
   } else {
