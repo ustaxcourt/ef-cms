@@ -187,16 +187,16 @@ data "aws_s3_bucket_object" "puppeteer_green_west_object" {
 
 data "aws_elasticsearch_domain" "green_west_elasticsearch_domain" {
   depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
+    module.elasticsearch_alpha[0],
+    module.elasticsearch_beta[0],
   ]
   domain_name = var.green_elasticsearch_domain
 }
 
 data "aws_elasticsearch_domain" "blue_west_elasticsearch_domain" {
   depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
+    module.elasticsearch_alpha[0],
+    module.elasticsearch_beta[0],
   ]
   domain_name = var.blue_elasticsearch_domain
 }

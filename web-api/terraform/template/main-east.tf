@@ -359,16 +359,16 @@ data "aws_s3_bucket_object" "bounce_handler_green_east_object" {
 
 data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
   depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
+    module.elasticsearch_alpha[0],
+    module.elasticsearch_beta[0],
   ]
   domain_name = var.green_elasticsearch_domain
 }
 
 data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
   depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
+    module.elasticsearch_alpha[0],
+    module.elasticsearch_beta[0],
   ]
   domain_name = var.blue_elasticsearch_domain
 }
