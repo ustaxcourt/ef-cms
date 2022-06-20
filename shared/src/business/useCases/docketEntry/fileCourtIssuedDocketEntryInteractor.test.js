@@ -70,7 +70,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -264,6 +264,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       .getCaseByDocketNumber.mockResolvedValueOnce(
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
       );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
 
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
       docketNumbers: [
@@ -275,16 +278,29 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
         documentType: 'Trial Exhibits',
         eventCode: 'TE',
+        freeText: 'free text testing',
+        subjectDocketNumber: LEAD_CASE.docketNumber,
       },
       subjectDocketNumber: '109-19',
     });
 
-    expect(
-      applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
-          docketEntry => docketEntry.eventCode === 'TE',
-        ),
-    ).toBeDefined();
+    const docketEntryOnNonLead = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'TE',
+      );
+    expect(docketEntryOnNonLead).toMatchObject({
+      docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+      freeText: 'free text testing',
+    });
+    const docketEntryOnLead = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[1][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'TE',
+      );
+    expect(docketEntryOnLead).toMatchObject({
+      docketNumber: LEAD_CASE.docketNumber,
+      freeText: 'free text testing',
+    });
   });
 });
