@@ -7,29 +7,26 @@ const { compact, isEmpty, isEqual, partition } = require('lodash');
 exports.setPretrialMemorandumFiler = ({ caseItem }) => {
   let filingPartiesCode;
   let numberOfPetitionerFilers = 0;
-  let numberOfRespondentFilers = 0;
 
   const pretrialMemorandumDocketEntry = caseItem.docketEntries.find(
     d => d.eventCode === 'PMT',
   );
 
   if (pretrialMemorandumDocketEntry) {
-    //seems like filers array does not have respondents userId (regardless of if u file as respondent or check checkbox for Resp as docketclerk)
-    console.log(pretrialMemorandumDocketEntry.filers, '------');
     pretrialMemorandumDocketEntry.filers.forEach(filerId => {
       if (caseItem.petitioners.some(p => p.contactId === filerId)) {
         numberOfPetitionerFilers++;
       }
-      if (caseItem.irsPractitioners.some(p => p.userId === filerId)) {
-        numberOfRespondentFilers++;
-      }
     });
 
-    if (numberOfPetitionerFilers > 0 && numberOfRespondentFilers > 0) {
+    if (
+      numberOfPetitionerFilers > 0 &&
+      pretrialMemorandumDocketEntry.partyIrsPractitioner
+    ) {
       filingPartiesCode = SERVED_PARTIES_CODES.BOTH;
     } else if (numberOfPetitionerFilers > 0) {
       filingPartiesCode = SERVED_PARTIES_CODES.PETITIONER;
-    } else if (numberOfRespondentFilers > 0) {
+    } else if (pretrialMemorandumDocketEntry.partyIrsPractitioner) {
       filingPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
     }
   } else {
