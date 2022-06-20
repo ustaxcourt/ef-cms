@@ -134,6 +134,20 @@ module.exports = [
   },
   {
     actions: [
+      'wait for element .select-react-element__input to be visible',
+      'click .select-react-element__input',
+      'click #react-select-4-option-60',
+      'set field #free-text to Anything',
+      'set field #date-received-date to 01/01/2022',
+      'click element #save-entry-button',
+      'wait for .confirm-initiate-save-modal to be visible',
+    ],
+    notes: 'checks a11y of confirm-initiate-save-modal dialog',
+    only: true,
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/111-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry&info=initiate-save-modal',
+  },
+  {
+    actions: [
       'wait for #tab-order to be visible',
       'click element #tab-order',
       'wait for #keyword-search to be visible',
