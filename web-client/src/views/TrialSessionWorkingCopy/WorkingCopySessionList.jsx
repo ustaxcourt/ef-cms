@@ -113,7 +113,7 @@ export const WorkingCopySessionList = connect(
                 </Button>
               </th>
               <th>Respondent Counsel</th>
-              <th colSpan="2">PTM</th>
+              <th>PTM</th>
               <th colSpan="2">Trial Status</th>
             </tr>
           </thead>
