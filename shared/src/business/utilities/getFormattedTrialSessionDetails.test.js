@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import {
   DOCKET_NUMBER_SUFFIXES,
-  SERVED_PARTIES_CODES,
+  PARTIES_CODES,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
@@ -591,7 +591,7 @@ describe('formattedTrialSessionDetails', () => {
         caseItem: mockCase,
       });
 
-      expect(result).toEqual(SERVED_PARTIES_CODES.PETITIONER);
+      expect(result).toEqual(PARTIES_CODES.PETITIONER);
     });
 
     it('should set the pretrialMemorandumStatus to "R" when the filer is the respondent', () => {
@@ -608,7 +608,7 @@ describe('formattedTrialSessionDetails', () => {
         caseItem: mockCase,
       });
 
-      expect(result).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
+      expect(result).toEqual(PARTIES_CODES.RESPONDENT);
     });
 
     it('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
@@ -628,7 +628,7 @@ describe('formattedTrialSessionDetails', () => {
         caseItem: mockCase,
       });
 
-      expect(result).toEqual(SERVED_PARTIES_CODES.BOTH);
+      expect(result).toEqual(PARTIES_CODES.BOTH);
     });
 
     it('should set the pretrialMemorandumStatus to undefined when there is no pretrial memorandum on the case', () => {
