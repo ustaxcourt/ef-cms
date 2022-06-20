@@ -23,8 +23,6 @@ ENV=$1
 MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
-echo "${MIGRATE_FLAG} ${DESTINATION_DOMAIN} *****"
-
 pushd ./web-api/terraform/main
 ../bin/deploy-init.sh "${1}"
 
