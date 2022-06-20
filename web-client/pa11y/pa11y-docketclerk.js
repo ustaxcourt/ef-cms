@@ -134,11 +134,12 @@ module.exports = [
   },
   {
     actions: [
-      'wait for element .select-react-element__input to be visible',
-      'click .select-react-element__input',
-      'click #react-select-4-option-60',
+      'wait for element #document-type to be visible',
       'set field #free-text to Anything',
+      'check field #free-text',
       'set field #date-received-date to 01/01/2022',
+      'check field #date-received-date',
+      'wait for #save-entry-button to be visible',
       'click element #save-entry-button',
       'wait for .confirm-initiate-save-modal to be visible',
     ],
