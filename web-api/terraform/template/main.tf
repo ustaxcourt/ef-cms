@@ -29,7 +29,7 @@ module "dynamo_table_beta" {
 module "elasticsearch_alpha" {
   source = "./elasticsearch"
 
-  count = 1
+  count = var.should_es_alpha_exist ? 1 : 0
 
   environment         = var.environment
   domain_name         = "efcms-search-${var.environment}-alpha"
@@ -46,7 +46,7 @@ module "elasticsearch_alpha" {
 module "elasticsearch_beta" {
   source = "./elasticsearch"
 
-  count = 0
+  count = var.should_es_beta_exist ? 1 : 0 
 
   environment         = var.environment
   domain_name         = "efcms-search-${var.environment}-beta"
