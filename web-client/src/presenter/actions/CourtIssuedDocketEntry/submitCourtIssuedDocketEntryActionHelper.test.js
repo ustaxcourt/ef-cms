@@ -20,12 +20,12 @@ describe('submitCourtIssuedDocketEntryActionHelper', () => {
       applicationContext.getUseCases().fileCourtIssuedDocketEntryInteractor.mock
         .calls[0][1],
     ).toEqual({
+      docketNumbers: ['101-20'],
       documentMeta: {
         docketEntryId: '123',
-        docketNumbers: ['101-20'],
         eventCode: 'TE',
-        subjectDocketNumber: '101-20',
       },
+      subjectDocketNumber: '101-20',
     });
   });
 
