@@ -19,7 +19,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileCourtIssuedDocketEntryInteractor = async (
   applicationContext,
-  { documentMeta },
+  { docketNumbers, documentMeta, subjectDocketNumber },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -31,7 +31,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumbers, subjectDocketNumber } = documentMeta;
+  const { docketEntryId } = documentMeta;
 
   const subjectCaseToUpdate = await applicationContext
     .getPersistenceGateway()
