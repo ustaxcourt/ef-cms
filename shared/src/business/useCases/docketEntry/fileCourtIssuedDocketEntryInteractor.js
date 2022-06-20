@@ -19,7 +19,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileCourtIssuedDocketEntryInteractor = async (
   applicationContext,
-  { documentMeta },
+  { docketNumbers, documentMeta, subjectDocketNumber },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -31,7 +31,7 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumbers, subjectDocketNumber } = documentMeta;
+  const { docketEntryId } = documentMeta;
 
   const subjectCaseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -82,10 +82,11 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
           ...omit(subjectDocketEntry, 'filedBy'),
           attachments: documentMeta.attachments,
           date: documentMeta.date,
+          docketNumber: caseEntity.docketNumber,
           documentTitle: documentMeta.generatedDocumentTitle,
           documentType: documentMeta.documentType,
           draftOrderState: null,
-          editState: JSON.stringify(documentMeta),
+          editState: JSON.stringify({ ...documentMeta, docketNumber }),
           eventCode: documentMeta.eventCode,
           filingDate: documentMeta.filingDate,
           freeText: documentMeta.freeText,
@@ -106,15 +107,15 @@ exports.fileCourtIssuedDocketEntryInteractor = async (
         {
           assigneeId: null,
           assigneeName: null,
-          associatedJudge: caseToUpdate.associatedJudge,
-          caseStatus: caseToUpdate.status,
+          associatedJudge: caseEntity.associatedJudge,
+          caseStatus: caseEntity.status,
           caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
           docketEntry: {
             ...docketEntryEntity.toRawObject(),
             createdAt: docketEntryEntity.createdAt,
           },
-          docketNumber: caseToUpdate.docketNumber,
-          docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+          docketNumber: caseEntity.docketNumber,
+          docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
           hideFromPendingMessages: true,
           inProgress: true,
           section: DOCKET_SECTION,

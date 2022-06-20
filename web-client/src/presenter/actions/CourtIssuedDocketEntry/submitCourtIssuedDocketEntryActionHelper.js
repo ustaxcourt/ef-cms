@@ -13,14 +13,14 @@ export const submitCourtIssuedDocketEntryActionHelper = async ({
   const documentMeta = {
     ...form,
     docketEntryId,
-    docketNumbers,
-    subjectDocketNumber,
   };
 
   await applicationContext
     .getUseCases()
     .fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers,
       documentMeta,
+      subjectDocketNumber,
     });
 
   if (
