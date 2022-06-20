@@ -57,7 +57,8 @@ export const ConfirmInitiateServiceModal = connect(
         title="Are You Ready to Initiate Service?"
       >
         <p className="margin-bottom-1">
-          The following document will be served on all parties:
+          The following document will be served on all parties in selected
+          cases:
         </p>
         <p className="margin-top-0 margin-bottom-2">
           <strong>{documentTitle}</strong>
