@@ -467,6 +467,7 @@ describe('formattedTrialSessionDetails', () => {
         ...TRIAL_SESSION,
         calendaredCases: [
           {
+            docketEntries: [],
             docketNumber: MOCK_CASE.docketNumber,
           },
         ],
@@ -551,8 +552,6 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   describe('setPretrialMemorandumFiler', () => {
-    const mockIrsPractitionerId = 'a72d1fb3-d0e4-4b8e-9d1d-5d541aa730e3';
-
     const mockPretrialMemorandumDocketEntry = {
       createdAt: '2018-11-21T20:49:28.192Z',
       docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
@@ -566,6 +565,7 @@ describe('formattedTrialSessionDetails', () => {
       index: 5,
       isFileAttached: true,
       isOnDocketRecord: true,
+      partyIrsPractitioner: false,
       processingStatus: 'complete',
       receivedAt: '2018-03-01T05:00:00.000Z',
       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
@@ -597,11 +597,14 @@ describe('formattedTrialSessionDetails', () => {
     it('should set the pretrialMemorandumStatus to "R" when the filer is the respondent', () => {
       mockCase = {
         ...MOCK_CASE,
-        docketEntries: [mockPretrialMemorandumDocketEntry],
-        irsPractitioners: [{ name: 'Bob', userId: mockIrsPractitionerId }],
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [],
+            partyIrsPractitioner: true,
+          },
+        ],
       };
-
-      mockPretrialMemorandumDocketEntry.filers = [mockIrsPractitionerId];
 
       const result = setPretrialMemorandumFiler({
         applicationContext,
@@ -612,15 +615,15 @@ describe('formattedTrialSessionDetails', () => {
     });
 
     it('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
-      mockPretrialMemorandumDocketEntry.filers = [
-        mockIrsPractitionerId,
-        MOCK_CASE.petitioners[0].contactId,
-      ];
-
       mockCase = {
         ...MOCK_CASE,
-        docketEntries: [mockPretrialMemorandumDocketEntry],
-        irsPractitioners: [{ name: 'Bob', userId: mockIrsPractitionerId }],
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [MOCK_CASE.petitioners[0].contactId],
+            partyIrsPractitioner: true,
+          },
+        ],
       };
 
       const result = setPretrialMemorandumFiler({
