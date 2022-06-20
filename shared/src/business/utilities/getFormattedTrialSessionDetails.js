@@ -12,7 +12,10 @@ exports.setPretrialMemorandumFiler = ({ caseItem }) => {
     d => d.eventCode === 'PMT',
   );
 
-  if (pretrialMemorandumDocketEntry) {
+  if (
+    pretrialMemorandumDocketEntry &&
+    !pretrialMemorandumDocketEntry.isStricken
+  ) {
     pretrialMemorandumDocketEntry.filers.forEach(filerId => {
       if (caseItem.petitioners.some(p => p.contactId === filerId)) {
         numberOfPetitionerFilers++;

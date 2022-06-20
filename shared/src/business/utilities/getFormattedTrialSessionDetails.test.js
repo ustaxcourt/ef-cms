@@ -565,6 +565,7 @@ describe('formattedTrialSessionDetails', () => {
       index: 5,
       isFileAttached: true,
       isOnDocketRecord: true,
+      isStricken: false,
       partyIrsPractitioner: false,
       processingStatus: 'complete',
       receivedAt: '2018-03-01T05:00:00.000Z',
@@ -638,6 +639,25 @@ describe('formattedTrialSessionDetails', () => {
       applicationContext
         .getPersistenceGateway()
         .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: MOCK_CASE,
+      });
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should set the pretrialMemorandumStatus to undefined when there is a pretrial memorandum on the case but it is stricken', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            isStricken: true,
+          },
+        ],
+      };
 
       const result = setPretrialMemorandumFiler({
         applicationContext,
