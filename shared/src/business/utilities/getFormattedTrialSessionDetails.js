@@ -1,5 +1,5 @@
 const {
-  SERVED_PARTIES_CODES,
+  PARTIES_CODES,
   TRIAL_SESSION_SCOPE_TYPES,
 } = require('../entities/EntityConstants');
 const { compact, isEmpty, isEqual, partition } = require('lodash');
@@ -23,11 +23,11 @@ exports.setPretrialMemorandumFiler = ({ caseItem }) => {
       numberOfPetitionerFilers > 0 &&
       pretrialMemorandumDocketEntry.partyIrsPractitioner
     ) {
-      filingPartiesCode = SERVED_PARTIES_CODES.BOTH;
+      filingPartiesCode = PARTIES_CODES.BOTH;
     } else if (numberOfPetitionerFilers > 0) {
-      filingPartiesCode = SERVED_PARTIES_CODES.PETITIONER;
+      filingPartiesCode = PARTIES_CODES.PETITIONER;
     } else if (pretrialMemorandumDocketEntry.partyIrsPractitioner) {
-      filingPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
+      filingPartiesCode = PARTIES_CODES.RESPONDENT;
     }
   } else {
     filingPartiesCode = undefined;
