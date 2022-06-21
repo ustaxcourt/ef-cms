@@ -40,12 +40,12 @@ describe('submitCourtIssuedDocketEntryToConsolidatedGroupAction', () => {
       applicationContext.getUseCases().fileCourtIssuedDocketEntryInteractor.mock
         .calls[0][1],
     ).toEqual({
+      docketNumbers: ['103-20', '123-20'],
       documentMeta: {
         docketEntryId: 'abc',
-        docketNumbers: ['103-20', '123-20'],
         eventCode: 'O',
-        subjectDocketNumber: '123-45',
       },
+      subjectDocketNumber: '123-45',
     });
   });
 });
