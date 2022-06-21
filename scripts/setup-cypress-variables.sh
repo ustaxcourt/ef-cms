@@ -1,6 +1,6 @@
 #!/bin/bash -e
 
-# Creates all missing feature flag items in the dynamo deploy table
+# Sets up environment variables for Cypress based on Secrets Manager and Dynamo deploy table
 
 # Usage
 #   ./scripts/setup-cypress-variables.sh
