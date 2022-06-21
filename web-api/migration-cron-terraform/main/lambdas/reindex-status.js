@@ -14,6 +14,7 @@ exports.handler = async () => {
     );
     const environmentName = process.env.ENVIRONMENT;
     const isReindexFinished = await isReindexComplete(environmentName);
+
     if (!isReindexFinished) {
       console.log('Reindex is not complete');
       return;
