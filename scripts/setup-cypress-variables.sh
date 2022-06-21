@@ -5,10 +5,6 @@
 # Usage
 #   ./scripts/setup-cypress-variables.sh
 
-#if [ -z "${ENV}" ]; then
-#  ENV=$1
-#fi
-
 # shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 
