@@ -635,6 +635,57 @@ describe('formattedTrialSessionDetails', () => {
       expect(result).toEqual(PARTIES_CODES.BOTH);
     });
 
+    it('should set the pretrialMemorandumStatus to "B" when there are 2 PMTs, one filed by petitioner and one filed by respondent', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [MOCK_CASE.petitioners[0].contactId],
+            partyIrsPractitioner: false,
+          },
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [],
+            partyIrsPractitioner: true,
+          },
+        ],
+      };
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
+
+      expect(result).toEqual(PARTIES_CODES.BOTH);
+    });
+
+    it('should set the pretrialMemorandumStatus to "R" when there are 2 PMTs, one stricken one filed by petitioner and one filed by respondent', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [MOCK_CASE.petitioners[0].contactId],
+            isStricken: true,
+            partyIrsPractitioner: false,
+          },
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [],
+            partyIrsPractitioner: true,
+          },
+        ],
+      };
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
+
+      expect(result).toEqual(PARTIES_CODES.RESPONDENT);
+    });
+
     it('should set the pretrialMemorandumStatus to undefined when there is no pretrial memorandum on the case', () => {
       applicationContext
         .getPersistenceGateway()

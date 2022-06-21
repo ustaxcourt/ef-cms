@@ -8,28 +8,29 @@ exports.setPretrialMemorandumFiler = ({ caseItem }) => {
   let filingPartiesCode;
   let numberOfPetitionerFilers = 0;
 
-  const pretrialMemorandumDocketEntry = caseItem.docketEntries.find(
-    d => d.eventCode === 'PMT',
+  const pretrialMemorandumDocketEntries = caseItem.docketEntries.filter(
+    d => d.eventCode === 'PMT' && !d.isStricken,
   );
 
-  if (
-    pretrialMemorandumDocketEntry &&
-    !pretrialMemorandumDocketEntry.isStricken
-  ) {
-    pretrialMemorandumDocketEntry.filers.forEach(filerId => {
-      if (caseItem.petitioners.some(p => p.contactId === filerId)) {
-        numberOfPetitionerFilers++;
-      }
+  if (pretrialMemorandumDocketEntries.length > 0) {
+    pretrialMemorandumDocketEntries.forEach(docketEntry => {
+      docketEntry.filers.forEach(filerId => {
+        if (caseItem.petitioners.some(p => p.contactId === filerId)) {
+          numberOfPetitionerFilers++;
+        }
+      });
     });
 
     if (
       numberOfPetitionerFilers > 0 &&
-      pretrialMemorandumDocketEntry.partyIrsPractitioner
+      pretrialMemorandumDocketEntries.some(d => d.partyIrsPractitioner)
     ) {
       filingPartiesCode = PARTIES_CODES.BOTH;
     } else if (numberOfPetitionerFilers > 0) {
       filingPartiesCode = PARTIES_CODES.PETITIONER;
-    } else if (pretrialMemorandumDocketEntry.partyIrsPractitioner) {
+    } else if (
+      pretrialMemorandumDocketEntries.some(d => d.partyIrsPractitioner)
+    ) {
       filingPartiesCode = PARTIES_CODES.RESPONDENT;
     }
   } else {
