@@ -660,7 +660,7 @@ describe('formattedTrialSessionDetails', () => {
       expect(result).toEqual(PARTIES_CODES.BOTH);
     });
 
-    it('should set the pretrialMemorandumStatus to "R" when there are 2 PMTs, one stricken one filed by petitioner and one filed by respondent', () => {
+    it('should set the pretrialMemorandumStatus to "R" when there are 2 PMTs, one stricken and filed by petitioner and one filed by respondent', () => {
       mockCase = {
         ...MOCK_CASE,
         docketEntries: [
