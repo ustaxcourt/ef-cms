@@ -279,9 +279,8 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         documentType: 'Trial Exhibits',
         eventCode: 'TE',
         freeText: 'free text testing',
-        subjectDocketNumber: LEAD_CASE.docketNumber,
       },
-      subjectDocketNumber: '109-19',
+      subjectDocketNumber: LEAD_CASE.docketNumber,
     });
 
     const docketEntryOnNonLead = applicationContext
