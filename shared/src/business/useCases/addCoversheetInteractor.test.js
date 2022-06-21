@@ -69,12 +69,6 @@ describe('addCoversheetInteractor', () => {
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
-    applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue.mockResolvedValue({
-        current: true,
-      });
-
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
         Body: testPdfDoc,
