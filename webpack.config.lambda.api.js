@@ -10,6 +10,8 @@ module.exports = {
     'cognito-triggers':
       './web-api/terraform/template/lambdas/cognito-triggers.js',
     cron: './web-api/terraform/template/lambdas/cron.js',
+    'handle-bounced-service-email':
+      './web-api/terraform/template/lambdas/handle-bounced-service-email.js',
     'maintenance-notify':
       './web-api/terraform/template/lambdas/maintenance-notify.js',
     'public-api-authorizer':
@@ -21,7 +23,7 @@ module.exports = {
       './web-api/terraform/template/lambdas/websocket-authorizer.js',
     websockets: './web-api/terraform/template/lambdas/websockets.js',
   },
-  externals: ['aws-sdk', 'chrome-aws-lambda'],
+  externals: ['aws-sdk', '@sparticuz/chrome-aws-lambda'],
   output: {
     clean: true,
     libraryTarget: 'umd',

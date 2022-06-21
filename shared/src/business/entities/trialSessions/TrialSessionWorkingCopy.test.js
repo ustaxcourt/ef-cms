@@ -6,16 +6,6 @@ const VALID_TRIAL_SESSION_WORKING_COPY = {
 };
 
 describe('TrialSessionWorkingCopy entity', () => {
-  describe('constructor', () => {
-    it('should default the userNotes to an empty object if not defined', () => {
-      const workingCopy = new TrialSessionWorkingCopy({
-        ...VALID_TRIAL_SESSION_WORKING_COPY,
-        userNotes: undefined,
-      });
-      expect(workingCopy.userNotes).toEqual({});
-    });
-  });
-
   describe('isValid', () => {
     it('creates a valid trial session working copy with only required values', () => {
       const workingCopy = new TrialSessionWorkingCopy(
