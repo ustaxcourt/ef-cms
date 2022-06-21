@@ -23,8 +23,6 @@ ENV=$1
 MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
 DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
 
-echo "${MIGRATE_FLAG} ${DESTINATION_DOMAIN} *****"
-
 pushd ./web-api/terraform/main
 ../bin/deploy-init.sh "${1}"
 
@@ -34,7 +32,7 @@ if [ "${MIGRATE_FLAG}" == 'false' ]; then
 
     ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA%\"}"
     ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA#\"}"
-  else 
+  else
     ELASTICSEARCH_ENDPOINT_BETA="$(terraform output elasticsearch_endpoint_beta)"
 
     ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA%\"}"
@@ -50,8 +48,10 @@ fi
 
 popd
 
-if [-z "${ELASTICSEARCH_ENDPOINT_ALPHA}"]
+if [[ -n "${ELASTICSEARCH_ENDPOINT_ALPHA}" ]]; then
   node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_ALPHA}"
+fi
 
-if [-z "${ELASTICSEARCH_ENDPOINT_BETA}"]
+if [[ -n "${ELASTICSEARCH_ENDPOINT_BETA}" ]]; then
   node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_BETA}"
+fi
