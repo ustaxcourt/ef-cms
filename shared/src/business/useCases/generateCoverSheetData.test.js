@@ -33,9 +33,9 @@ describe('generateCoverSheetData', () => {
       .getCaseByDocketNumber.mockReturnValue(testingCaseData);
 
     applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue.mockResolvedValue({
-        current: true,
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockResolvedValue({
+        isFeatureFlagEnabled: true,
       });
 
     applicationContext.getStorageClient().getObject.mockReturnValue({

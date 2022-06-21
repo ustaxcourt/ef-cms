@@ -100,10 +100,9 @@ exports.generateCoverSheetData = async ({
     ]);
 
     const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
-    const { current: isFeatureFlagEnabled } = await applicationContext
-      .getPersistenceGateway()
-      .getFeatureFlagValue({
-        applicationContext,
+    const isFeatureFlagEnabled = await applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor(applicationContext, {
         featureFlag:
           ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
             .key,
