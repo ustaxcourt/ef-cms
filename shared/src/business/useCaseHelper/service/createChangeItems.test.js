@@ -191,6 +191,39 @@ describe('generateAndServeDocketEntry', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should pass the correct index to the coverSheet', async () => {
+    await generateAndServeDocketEntry({
+      ...testArguments,
+      caseEntity: new Case(
+        {
+          ...testCaseEntity,
+          petitioners: [
+            {
+              ...testCaseEntity.petitioners[0],
+              serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+            },
+          ],
+        },
+        { applicationContext },
+      ),
+      user: {
+        ...testUser,
+        role: ROLES.privatePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().coverSheet,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({
+          index: 2,
+        }),
+      }),
+    );
+  });
+
   it('does not throw an error if docketMeta is undefined', async () => {
     await expect(
       generateAndServeDocketEntry({

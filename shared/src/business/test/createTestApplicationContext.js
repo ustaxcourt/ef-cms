@@ -8,9 +8,6 @@ const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
 const {
-  appendPaperServiceAddressPageToPdf,
-} = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
-const {
   bulkDeleteRecords,
 } = require('../../persistence/elasticsearch/bulkDeleteRecords');
 const {
@@ -416,9 +413,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     addDocketEntryForSystemGeneratedOrder: jest
       .fn()
       .mockImplementation(addDocketEntryForSystemGeneratedOrder),
-    appendPaperServiceAddressPageToPdf: jest
-      .fn()
-      .mockImplementation(appendPaperServiceAddressPageToPdf),
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
@@ -446,6 +440,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeToInPersonProceeding: jest
+      .fn()
+      .mockImplementation(getFakeFile),
     noticeOfChangeToRemoteProceeding: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
@@ -506,6 +504,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChambersSectionsLabels: jest
       .fn()
       .mockImplementation(getChambersSectionsLabels),
+    getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest
       .fn()
@@ -541,6 +540,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
+    saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setExpiresAt: jest.fn(),
@@ -599,6 +599,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
+    getBounceAlertRecipients: jest.fn(),
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
@@ -638,6 +639,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
+      sendSlackNotification: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
@@ -646,7 +648,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
-    getEnvironment: jest.fn(),
+    getEnvironment: jest.fn().mockReturnValue({
+      stage: 'local',
+    }),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
@@ -672,6 +676,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: emptyAppContextProxy,
+    getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
