@@ -141,7 +141,7 @@ describe('consolidated cases', () => {
       });
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url to `sendNotificationToUser`', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser`', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
@@ -163,6 +163,10 @@ describe('consolidated cases', () => {
     ).toMatchObject({
       message: expect.objectContaining({
         action: 'file_and_serve_court_issued_document_complete',
+        alertSuccess: {
+          message: 'Document served to selected cases in group. ',
+          overwritable: false,
+        },
         pdfUrl: mockPdfUrl,
       }),
     });
