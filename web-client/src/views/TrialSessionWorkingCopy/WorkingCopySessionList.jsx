@@ -189,7 +189,7 @@ export const WorkingCopySessionList = connect(
                   <tr className="notes-row">
                     <td></td>
                     <td></td>
-                    <td className="font-body-2xs" colSpan="4">
+                    <td className="font-body-2xs" colSpan="5">
                       <span className="text-bold margin-right-1">
                         Calendar notes:
                       </span>
@@ -202,7 +202,7 @@ export const WorkingCopySessionList = connect(
                   <tr className="notes-row">
                     <td></td>
                     <td></td>
-                    <td className="font-body-2xs" colSpan="3">
+                    <td className="font-body-2xs" colSpan="4">
                       <span className="text-bold margin-right-1">Notes:</span>
                       <TextView
                         bind={`trialSessionWorkingCopy.userNotes.${item.docketNumber}.notes`}
