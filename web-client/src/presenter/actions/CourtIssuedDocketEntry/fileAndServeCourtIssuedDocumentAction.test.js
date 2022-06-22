@@ -59,6 +59,9 @@ describe('submitCourtIssuedDocketEntryAction', () => {
           docketNumber: '123-20',
         },
         docketEntryId: 'abc',
+        featureFlagHelper: {
+          consolidatedCasesPropagateDocketEntries: true,
+        },
         form: {
           attachments: false,
           date: '2019-01-01T00:00:00.000Z',
@@ -82,6 +85,16 @@ describe('submitCourtIssuedDocketEntryAction', () => {
   });
 
   describe('consolidated cases', () => {
+    const {
+      COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+      ENTERED_AND_SERVED_EVENT_CODES,
+    } = applicationContext.getConstants();
+
+    const eventCodesNotCompatibleWithConsolidation = [
+      ...ENTERED_AND_SERVED_EVENT_CODES,
+      ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+    ];
+
     it('should pass the docket number for each checked case, the correct success message is returned, and overwritable is false', async () => {
       const leadDocketNumber = '123-20';
       const checkedDocketNumber1 = 'DogCow';
@@ -114,6 +127,9 @@ describe('submitCourtIssuedDocketEntryAction', () => {
             docketNumber: leadDocketNumber,
             leadDocketNumber,
           },
+          featureFlagHelper: {
+            consolidatedCasesPropagateDocketEntries: true,
+          },
           form: {
             eventCode: 'O',
           },
@@ -142,13 +158,6 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         },
         state: {
           caseDetail: {
-            docketNumber: thisDocketNumber,
-            leadDocketNumber,
-          },
-          form: {
-            eventCode: 'O',
-          },
-          formattedCaseDetail: {
             consolidatedCases: [
               {
                 checked: true,
@@ -168,6 +177,14 @@ describe('submitCourtIssuedDocketEntryAction', () => {
                 docketNumber: 'Moof',
               },
             ],
+            docketNumber: thisDocketNumber,
+            leadDocketNumber,
+          },
+          featureFlagHelper: {
+            consolidatedCasesPropagateDocketEntries: true,
+          },
+          form: {
+            eventCode: 'O',
           },
         },
       });
@@ -179,15 +196,53 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       ).toEqual([thisDocketNumber]);
     });
 
-    const {
-      COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-      ENTERED_AND_SERVED_EVENT_CODES,
-    } = applicationContext.getConstants();
+    // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
+    it('should pass only one docket number if the consolidatedCasesPropagateDocketEntries flag is false', async () => {
+      const leadDocketNumber = '123-20';
 
-    const eventCodesNotCompatibleWithConsolidation = [
-      ...ENTERED_AND_SERVED_EVENT_CODES,
-      ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-    ];
+      await runAction(fileAndServeCourtIssuedDocumentAction, {
+        modules: {
+          presenter,
+        },
+        state: {
+          caseDetail: {
+            consolidatedCases: [
+              {
+                checked: true,
+                docketNumber: leadDocketNumber,
+              },
+              { checked: true, docketNumber: '123-22' },
+              {
+                checked: true,
+                docketNumber: 'DogCow',
+              },
+              {
+                checked: false,
+                docketNumber: 'Clarus',
+              },
+              {
+                checked: true,
+                docketNumber: 'Moof',
+              },
+            ],
+            docketNumber: leadDocketNumber,
+            leadDocketNumber,
+          },
+          featureFlagHelper: {
+            consolidatedCasesPropagateDocketEntries: false,
+          },
+          form: {
+            eventCode: 'O',
+          },
+        },
+      });
+
+      expect(
+        applicationContext.getUseCases()
+          .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
+          .docketNumbers,
+      ).toEqual([leadDocketNumber]);
+    });
 
     eventCodesNotCompatibleWithConsolidation.forEach(notCompatibleEventCode => {
       it(`should pass only one docket number since the ${notCompatibleEventCode} event code isn't compatible with consolidation`, async () => {
@@ -199,13 +254,6 @@ describe('submitCourtIssuedDocketEntryAction', () => {
           },
           state: {
             caseDetail: {
-              docketNumber: leadDocketNumber,
-              leadDocketNumber,
-            },
-            form: {
-              eventCode: notCompatibleEventCode,
-            },
-            formattedCaseDetail: {
               consolidatedCases: [
                 {
                   checked: true,
@@ -224,6 +272,14 @@ describe('submitCourtIssuedDocketEntryAction', () => {
                   docketNumber: 'Moof',
                 },
               ],
+              docketNumber: leadDocketNumber,
+              leadDocketNumber,
+            },
+            featureFlagHelper: {
+              consolidatedCasesPropagateDocketEntries: true,
+            },
+            form: {
+              eventCode: notCompatibleEventCode,
             },
           },
         });

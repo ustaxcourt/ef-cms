@@ -82,7 +82,7 @@ describe('consolidated cases', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(true);
+      .getFeatureFlagValueInteractor.mockReturnValue(Promise.resolve(true));
 
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
@@ -398,7 +398,9 @@ describe('consolidated cases', () => {
   it('should only process the subject case when the feature flag is disabled and there are other consolidated cases', async () => {
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValueOnce(false);
+      .getFeatureFlagValueInteractor.mockReturnValueOnce(
+        Promise.resolve(false),
+      );
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
