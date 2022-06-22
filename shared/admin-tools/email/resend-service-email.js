@@ -1,7 +1,7 @@
 if (!process.argv[2] || !process.argv[3]) {
-  console.log('please specify a docketNumber and a docketEntryId');
+  console.log('please specify start and end timestamps in ISO-8601 format');
   console.log('');
-  console.log('$ node resend-service-email.js [docketNumber] [docketEntryId]');
+  console.log('$ node resend-service-email.js [startTimestamp] [endTimestamp]');
   process.exit();
 }
 
@@ -17,6 +17,20 @@ const {
 } = require('../../src/business/useCaseHelper/service/sendServedPartiesEmails');
 const { Case } = require('../../src/business/entities/cases/Case');
 
+const getDocketEntriesServedWithinTimeframe = async (
+  applicationContext,
+  { endTimestamp, startTimestamp },
+) => {
+  const docketEntriesServedWithinTimeframe = await applicationContext
+    .getPersistenceGateway()
+    .getDocketEntriesServedWithinTimeframe({
+      applicationContext,
+      endTimestamp,
+      startTimestamp,
+    });
+
+  return docketEntriesServedWithinTimeframe;
+};
 const getCase = async (applicationContext, { docketNumber }) => {
   const caseToBatch = await applicationContext
     .getPersistenceGateway()
@@ -56,8 +70,18 @@ const resendServiceEmail = async (
 
 (async () => {
   const applicationContext = createApplicationContext({});
-  await resendServiceEmail(applicationContext, {
-    docketEntryId: process.argv[3],
-    docketNumber: process.argv[2],
-  });
+  const docketEntriesToReServe = await getDocketEntriesServedWithinTimeframe(
+    applicationContext,
+    {
+      endTimestamp: process.argv[3],
+      startTimestamp: process.argv[2],
+    },
+  );
+  console.log(docketEntriesToReServe);
+  for (const docketEntryToReServe of docketEntriesToReServe) {
+    await resendServiceEmail(applicationContext, {
+      docketEntryId: docketEntryToReServe.docketEntryId,
+      docketNumber: docketEntryToReServe.docketNumber,
+    });
+  }
 })();
