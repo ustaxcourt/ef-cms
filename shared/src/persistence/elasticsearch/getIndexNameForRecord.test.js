@@ -49,7 +49,7 @@ describe('getIndexNameForRecord', () => {
     expect(result).toEqual('efcms-docket-entry');
   });
 
-  it('returns efcms-docket-entry for CaseMessageMapping records', () => {
+  it('returns efcms-message for CaseMessageMapping records', () => {
     const record = {
       entityName: {
         S: 'CaseMessageMapping',
