@@ -188,11 +188,20 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     key: originalSubjectDocketEntry.docketEntryId,
   });
 
+  const successMessage =
+    docketNumbers.length > 1
+      ? 'Document served to selected cases in group. '
+      : 'Document served. ';
+
   // return serviceResults;
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
       action: 'file_and_serve_court_issued_document_complete',
+      alertSuccess: {
+        message: successMessage,
+        overwritable: false,
+      },
       pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
     },
     userId: user.userId,

@@ -40,8 +40,6 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumber);
 
-  let successMessage = 'Document served to selected cases in group. ';
-
   if (
     !isLeadCase ||
     !consolidatedCasesPropagateDocketEntriesFlag ||
@@ -49,10 +47,17 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     !currentDocketEntryCompatibleWithConsolidation
   ) {
     docketNumbers = [caseDetail.docketNumber];
-    successMessage = 'Document served. ';
   }
 
-  const result = await applicationContext
+  console.log(
+    'fileAndServeCourtIssuedDocumentAction docketNumbers::',
+    docketNumbers,
+  );
+  console.log(
+    'fileAndServeCourtIssuedDocumentAction subjectCase::',
+    caseDetail.docketNumber,
+  );
+  await applicationContext
     .getUseCases()
     .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId,
@@ -60,12 +65,4 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
       form,
       subjectCaseDocketNumber: caseDetail.docketNumber,
     });
-
-  return {
-    alertSuccess: {
-      message: successMessage,
-      overwritable: false,
-    },
-    pdfUrl: result ? result.pdfUrl : undefined,
-  };
 };
