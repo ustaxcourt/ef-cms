@@ -3,7 +3,6 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB, S3 } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -73,7 +72,12 @@ import qs from 'qs';
 import riotRoute from 'riot-route';
 import sass from 'sass';
 
-const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
+const {
+  ALLOWLIST_FEATURE_FLAGS,
+  CASE_TYPES_MAP,
+  PARTY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = applicationContext.getConstants();
 
 const formattedDocketEntries = withAppContextDecorator(
   formattedDocketEntriesComputed,
@@ -361,12 +365,23 @@ export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
   });
 };
 
-export const setOrderSearchEnabled = (isEnabled, keyPrefix) => {
-  return client.put({
+export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
+  return await setFeatureFlag(isEnabled, `${keyPrefix}-order-search-enabled`);
+};
+
+export const setConsolidatedCasesPropagateEntriesFlag = async isEnabled => {
+  return await setFeatureFlag(
+    isEnabled,
+    ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+  );
+};
+
+export const setFeatureFlag = async (isEnabled, key) => {
+  return await client.put({
     Item: {
       current: isEnabled,
-      pk: `${keyPrefix}-order-search-enabled`,
-      sk: `${keyPrefix}-order-search-enabled`,
+      pk: key,
+      sk: key,
     },
     applicationContext,
   });
