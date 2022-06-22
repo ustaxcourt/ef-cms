@@ -49,7 +49,6 @@ const resendServiceEmail = async (
   const caseEntity = await getCase(applicationContext, { docketNumber });
   const docketEntryEntity = caseEntity.getDocketEntryById({ docketEntryId });
 
-  console.log(docketEntryEntity.eventCode);
   if (
     docketEntryEntity.eventCode === INITIAL_DOCUMENT_TYPES.petition.eventCode
   ) {
@@ -77,11 +76,7 @@ const resendServiceEmail = async (
       startTimestamp: process.argv[2],
     },
   );
-  console.log(docketEntriesToReServe);
   for (const docketEntryToReServe of docketEntriesToReServe) {
-    await resendServiceEmail(applicationContext, {
-      docketEntryId: docketEntryToReServe.docketEntryId,
-      docketNumber: docketEntryToReServe.docketNumber,
-    });
+    await resendServiceEmail(applicationContext, docketEntryToReServe);
   }
 })();
