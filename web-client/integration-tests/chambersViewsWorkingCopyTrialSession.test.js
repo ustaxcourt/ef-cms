@@ -54,6 +54,8 @@ describe('Chambers dashboard', () => {
       docketNumber: cerebralTest.docketNumber1,
     });
 
+    console.log(cerebralTest.docketNumber1, '1....');
+
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: cerebralTest.docketNumber1,
     });
@@ -112,11 +114,6 @@ describe('Chambers dashboard', () => {
     );
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(cerebralTest.getState('form')).toEqual({});
-
-    cerebralTest.docketEntryId = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(doc => doc.eventCode === 'PMT').docketEntryId;
   });
 
   it('docket clerk adds pretrial memorandum to case 2 filed by respondent', async () => {
@@ -127,6 +124,8 @@ describe('Chambers dashboard', () => {
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: cerebralTest.docketNumber2,
     });
+
+    console.log(cerebralTest.docketNumber2, '2....');
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
@@ -177,11 +176,6 @@ describe('Chambers dashboard', () => {
     );
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(cerebralTest.getState('form')).toEqual({});
-
-    cerebralTest.docketEntryId = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(doc => doc.eventCode === 'PMT').docketEntryId;
   });
 
   it('docket clerk adds pretrial memorandum to case 3 filed by petitioner and respondent', async () => {
@@ -192,6 +186,8 @@ describe('Chambers dashboard', () => {
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: cerebralTest.docketNumber3,
     });
+
+    console.log(cerebralTest.docketNumber3, '3....');
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
@@ -273,17 +269,22 @@ describe('Chambers dashboard', () => {
       state: cerebralTest.getState(),
     });
 
+    console.log(
+      workingCopyHelper.formattedCases,
+      '..././.././../../././../././...//../././',
+    );
+
     const caseWithPtmFiledByPetitioner = workingCopyHelper.formattedCases.find(
       c => c.docketNumber === cerebralTest.docketNumber1,
     );
     const caseWithPtmFiledByRespondent = workingCopyHelper.formattedCases.find(
-      c => c.docketNumber === cerebralTest.docketNumber1,
+      c => c.docketNumber === cerebralTest.docketNumber2,
     );
     const caseWithPtmFiledByBoth = workingCopyHelper.formattedCases.find(
-      c => c.docketNumber === cerebralTest.docketNumber1,
+      c => c.docketNumber === cerebralTest.docketNumber3,
     );
     const caseWithoutPtm = workingCopyHelper.formattedCases.find(
-      c => c.docketNumber === cerebralTest.docketNumber1,
+      c => c.docketNumber === cerebralTest.docketNumber4,
     );
 
     expect(caseWithPtmFiledByPetitioner.filingPartiesCode).toBe(
