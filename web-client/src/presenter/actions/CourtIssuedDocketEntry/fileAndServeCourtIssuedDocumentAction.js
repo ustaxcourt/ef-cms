@@ -49,14 +49,6 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     docketNumbers = [caseDetail.docketNumber];
   }
 
-  console.log(
-    'fileAndServeCourtIssuedDocumentAction docketNumbers::',
-    docketNumbers,
-  );
-  console.log(
-    'fileAndServeCourtIssuedDocumentAction subjectCase::',
-    caseDetail.docketNumber,
-  );
   await applicationContext
     .getUseCases()
     .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {

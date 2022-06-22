@@ -2,6 +2,7 @@ import { addCourtIssuedDocketEntryHelper } from '../../src/presenter/computeds/a
 import { addCourtIssuedDocketEntryNonstandardHelper } from '../../src/presenter/computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
+import { waitForLoadingComponentToHide } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsAndServesDocketEntryFromOrder = (
@@ -233,5 +234,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
     cerebralTest.draftOrders.shift();
+
+    await waitForLoadingComponentToHide({ cerebralTest });
   });
 };

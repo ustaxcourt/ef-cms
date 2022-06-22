@@ -171,7 +171,6 @@ describe('Case Consolidation Journey', () => {
       );
 
       if (cerebralTest.leadDocketNumber === consolidatedCase.docketNumber) {
-        console.log('orderDocument::', orderDocument);
         expect(orderDocument.servedAt).toBeDefined();
         expect(orderDocument.workItem.docketEntry.docketEntryId).toEqual(
           orderDocument.docketEntryId,
