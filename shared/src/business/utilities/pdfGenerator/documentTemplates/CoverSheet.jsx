@@ -1,3 +1,4 @@
+const classNames = require('classnames');
 const React = require('react');
 
 export const CoverSheet = ({
@@ -14,6 +15,9 @@ export const CoverSheet = ({
   index,
   mailingDate,
 }) => {
+  const reduceMarginTopOnTitle =
+    consolidatedCases && consolidatedCases.length > 10;
+
   return (
     <div id="document-cover-sheet">
       <div>
@@ -60,12 +64,14 @@ export const CoverSheet = ({
           {mailingDate && <div>{mailingDate}</div>}
 
           {consolidatedCases ? (
-            consolidatedCases.map(({ docketNumber, documentNumber }) => (
-              <div key={docketNumber}>
-                Docket No. {docketNumber}
-                {documentNumber && ` Document No. ${documentNumber}`}
-              </div>
-            ))
+            <div className="consolidated-cases">
+              {consolidatedCases.map(({ docketNumber, documentNumber }) => (
+                <div key={docketNumber}>
+                  Docket No. {docketNumber}
+                  {documentNumber && ` Document No. ${documentNumber}`}
+                </div>
+              ))}
+            </div>
           ) : (
             <>
               <div>Docket No. {docketNumberWithSuffix}</div>
@@ -77,7 +83,12 @@ export const CoverSheet = ({
         <div className="clear"></div>
       </div>
 
-      <h2 className="margin-top-200 text-center" id="document-title">
+      <h2
+        className={classNames('text-center', {
+          'reduce-margin': reduceMarginTopOnTitle,
+        })}
+        id="document-title"
+      >
         {documentTitle}
       </h2>
 

@@ -103,16 +103,10 @@ describe('documentGenerators', () => {
         data: {
           caseCaptionExtension: PARTY_TYPES.petitioner,
           caseTitle: 'Test Person',
-          consolidatedCases: [
-            {
-              docketNumber: '24929-17',
-              documentNumber: '4',
-            },
-            {
-              docketNumber: '1140-21',
-              documentNumber: null,
-            },
-          ],
+          consolidatedCases: new Array(38).fill(null).map((v, i) => ({
+            docketNumber: '24929-17',
+            documentNumber: i + 101,
+          })),
           dateFiledLodged: '01/01/20',
           dateFiledLodgedLabel: 'Filed',
           docketNumberWithSuffix: '123-45S',
@@ -122,7 +116,7 @@ describe('documentGenerators', () => {
 
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
-        writePdfFile('CoverSheetForConsolidatedCases', pdf);
+        writePdfFile('Cover_Sheet_For_Consolidated_Cases', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
