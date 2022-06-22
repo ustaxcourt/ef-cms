@@ -11,7 +11,7 @@ const {
 const { search } = require('../searchClient');
 
 describe('getCompletedSectionInboxMessages', () => {
-  it('returns results from the search client', async () => {
+  it('should return results from the search client', async () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
 
     const results = await getCompletedSectionInboxMessages({
