@@ -11,15 +11,12 @@ import {
   uploadPetition,
 } from './helpers';
 import { docketClerkCreatesARemoteTrialSession } from './journey/docketClerkCreatesARemoteTrialSession';
+import { formattedTrialSessionDetails } from '../src/presenter/computeds/formattedTrialSessionDetails';
 import { manuallyAddCaseToTrial } from './utils/manuallyAddCaseToTrial';
 import { runCompute } from 'cerebral/test';
-import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from '../src/presenter/computeds/trialSessionWorkingCopyHelper';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 const cerebralTest = setupTest();
-const trialSessionWorkingCopyHelper = withAppContextDecorator(
-  trialSessionWorkingCopyHelperComputed,
-);
 
 describe('Chambers dashboard', () => {
   beforeAll(() => {
@@ -53,8 +50,6 @@ describe('Chambers dashboard', () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber1,
     });
-
-    console.log(cerebralTest.docketNumber1, '1....');
 
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: cerebralTest.docketNumber1,
@@ -125,8 +120,6 @@ describe('Chambers dashboard', () => {
       docketNumber: cerebralTest.docketNumber2,
     });
 
-    console.log(cerebralTest.docketNumber2, '2....');
-
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
       value: 4,
@@ -186,8 +179,6 @@ describe('Chambers dashboard', () => {
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
       docketNumber: cerebralTest.docketNumber3,
     });
-
-    console.log(cerebralTest.docketNumber3, '3....');
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'dateReceivedMonth',
@@ -265,25 +256,23 @@ describe('Chambers dashboard', () => {
       'TrialSessionWorkingCopy',
     );
 
-    let workingCopyHelper = runCompute(trialSessionWorkingCopyHelper, {
-      state: cerebralTest.getState(),
-    });
-
-    console.log(
-      workingCopyHelper.formattedCases,
-      '..././.././../../././../././...//../././',
+    const trialSessionFormatted = runCompute(
+      withAppContextDecorator(formattedTrialSessionDetails),
+      {
+        state: cerebralTest.getState(),
+      },
     );
 
-    const caseWithPtmFiledByPetitioner = workingCopyHelper.formattedCases.find(
+    const caseWithPtmFiledByPetitioner = trialSessionFormatted.allCases.find(
       c => c.docketNumber === cerebralTest.docketNumber1,
     );
-    const caseWithPtmFiledByRespondent = workingCopyHelper.formattedCases.find(
+    const caseWithPtmFiledByRespondent = trialSessionFormatted.allCases.find(
       c => c.docketNumber === cerebralTest.docketNumber2,
     );
-    const caseWithPtmFiledByBoth = workingCopyHelper.formattedCases.find(
+    const caseWithPtmFiledByBoth = trialSessionFormatted.allCases.find(
       c => c.docketNumber === cerebralTest.docketNumber3,
     );
-    const caseWithoutPtm = workingCopyHelper.formattedCases.find(
+    const caseWithoutPtm = trialSessionFormatted.allCases.find(
       c => c.docketNumber === cerebralTest.docketNumber4,
     );
 
