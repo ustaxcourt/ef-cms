@@ -99,6 +99,15 @@ describe('Case Consolidation Journey', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkServesDocumentOnLeadCase(cerebralTest, 0);
 
+  it('should have a success message that mentions serving multiple cases', async () => {
+    const alertSuccess = cerebralTest.getState('alertSuccess');
+
+    expect(alertSuccess.message).toEqual(
+      'Document served to selected cases in group. ',
+    );
+    expect(alertSuccess.overwritable).toEqual(false);
+  });
+
   it('should verify that document is served on all checked consolidated cases', async () => {
     const consolidatedCases = cerebralTest.getState(
       'caseDetail.consolidatedCases',
@@ -151,6 +160,13 @@ describe('Case Consolidation Journey', () => {
   });
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkAddsAndServesDocketEntryFromOrder(cerebralTest, 0, false);
+
+  it('should have a success message that mentions the document was served (and not on multiple cases)', async () => {
+    const alertSuccess = cerebralTest.getState('alertSuccess');
+
+    expect(alertSuccess.message).toEqual('Document served. ');
+    expect(alertSuccess.overwritable).toEqual(false);
+  });
 
   //   verify no new docket entry on non-lead cases
   it('should verify that document is served on only the lead case when the feature flag is disabled', async () => {
