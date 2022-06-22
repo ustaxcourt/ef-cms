@@ -212,15 +212,16 @@
   },
   "resolutions": {
     "ansi-regex": "^5.0.1",
+    "async": "2.6.4",
     "bl": "^4.0.3",
     "busboy": "^1.0.0",
     "dot-prop": "5.1.1",
+    "got": "11.8.5",
     "lodash": "^4.17.21",
     "minimist": "^1.2.5",
     "node-fetch": "^2.6.1",
     "node-forge": "^1.2.1",
-    "underscore": "^1.13.1",
-    "async": "2.6.4"
+    "underscore": "^1.13.1"
   },
   "devDependencies": {
     "@babel/cli": "^7.17.10",
