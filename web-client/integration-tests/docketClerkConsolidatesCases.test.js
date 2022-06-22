@@ -151,8 +151,6 @@ describe('Case Consolidation Journey', () => {
     await setConsolidatedCasesPropagateEntriesFlag(false);
   });
 
-  // TODO: duplicate appropriate steps from above
-  //   create new docket entry on lead case
   docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order to do something only on the lead case',
     eventCode: 'O',
@@ -168,7 +166,6 @@ describe('Case Consolidation Journey', () => {
     expect(alertSuccess.overwritable).toEqual(false);
   });
 
-  //   verify no new docket entry on non-lead cases
   it('should verify that document is served on only the lead case when the feature flag is disabled', async () => {
     const consolidatedCases = cerebralTest.getState(
       'caseDetail.consolidatedCases',
