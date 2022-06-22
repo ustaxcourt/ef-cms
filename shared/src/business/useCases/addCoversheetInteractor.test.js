@@ -1,3 +1,4 @@
+const addCoversheetModule = require('./addCoversheetInteractor');
 const {
   applicationContext,
   testPdfDoc,
@@ -7,7 +8,7 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
-const { addCoversheetInteractor } = require('./addCoversheetInteractor');
+const { addCoversheetInteractor } = addCoversheetModule;
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 
@@ -182,5 +183,99 @@ describe('addCoversheetInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).not.toHaveBeenCalled();
+  });
+
+  it('updates only the page numbers for the docket entires existing in the consolidated group case docket record', async () => {
+    jest.spyOn(addCoversheetModule, 'addCoverToPdf').mockResolvedValue({
+      consolidatedCases: [
+        {
+          docketNumber: '101-19',
+          documentNumber: null,
+        },
+        {
+          docketNumber: '102-20',
+          documentNumber: 2,
+        },
+        {
+          docketNumber: '103-20',
+          documentNumber: 5,
+        },
+      ],
+      numberOfPages: 5,
+      pdfData: 'gg',
+    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...testingCaseData,
+        docketNumber: '102-20',
+      })
+      .mockResolvedValueOnce({
+        ...testingCaseData,
+        docketNumber: '103-20',
+      });
+
+    await addCoversheetInteractor(applicationContext, {
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry,
+    ).toHaveBeenCalledTimes(2);
+
+    const calls = applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntry.mock.calls.map(call => ({
+        docketNumber: call[0].docketNumber,
+        numberOfPages: call[0].document.numberOfPages,
+      }));
+
+    const firstCase = calls.find(call => call.docketNumber === '102-20');
+    const secondCase = calls.find(call => call.docketNumber === '103-20');
+
+    expect(firstCase).toMatchObject({
+      docketNumber: '102-20',
+      numberOfPages: 5,
+    });
+
+    expect(secondCase).toMatchObject({
+      docketNumber: '103-20',
+      numberOfPages: 5,
+    });
+  });
+
+  it('works as expected when feature flag is off and consolidated cases returns null', async () => {
+    jest.spyOn(addCoversheetModule, 'addCoverToPdf').mockResolvedValue({
+      consolidatedCases: null,
+      numberOfPages: 5,
+      pdfData: 'gg',
+    });
+
+    await addCoversheetInteractor(applicationContext, {
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry,
+    ).toHaveBeenCalledTimes(1);
+
+    const calls = applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntry.mock.calls.map(call => ({
+        docketNumber: call[0].docketNumber,
+        numberOfPages: call[0].document.numberOfPages,
+      }));
+
+    const firstCase = calls.find(
+      call => call.docketNumber === MOCK_CASE.docketNumber,
+    );
+
+    expect(firstCase).toMatchObject({
+      docketNumber: MOCK_CASE.docketNumber,
+      numberOfPages: 5,
+    });
   });
 });
