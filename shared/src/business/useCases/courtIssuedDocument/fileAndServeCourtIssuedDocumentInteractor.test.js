@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   applicationContext,
   testPdfDoc,
@@ -336,7 +337,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toBeCalled();
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url to `sendNotificationToUser`', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser`', async () => {
     caseRecord.petitioners[0].serviceIndicator =
       SERVICE_INDICATOR_TYPES.SI_PAPER;
 
@@ -353,6 +354,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toMatchObject({
       message: expect.objectContaining({
         action: 'file_and_serve_court_issued_document_complete',
+        alertSuccess: {
+          message: 'Document served. ',
+          overwritable: false,
+        },
         pdfUrl: mockPdfUrl,
       }),
     });
