@@ -442,6 +442,7 @@ export const serveDocument = async ({
   await cerebralTest.runSequence(
     'serveCourtIssuedDocumentFromDocketEntrySequence',
   );
+  await waitForLoadingComponentToHide({ cerebralTest });
 };
 
 export const createCourtIssuedDocketEntry = async ({
