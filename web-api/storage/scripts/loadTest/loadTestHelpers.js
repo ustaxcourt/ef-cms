@@ -44,7 +44,7 @@ const createTrialSession = async ({ applicationContext }) => {
     term = 'Fall';
   }
 
-  let trialLocation = faker.random.arrayElement(TRIAL_CITY_STRINGS);
+  let trialLocation = faker.helpers.arrayElement(TRIAL_CITY_STRINGS);
 
   return await applicationContext
     .getUseCases()
@@ -110,7 +110,7 @@ const createCase = async ({
       petitionMetadata: {
         caseCaption: petitionerName,
         caseType: CASE_TYPES_MAP.cdp,
-        filingType: faker.random.arrayElement(FILING_TYPES[ROLES.petitioner]),
+        filingType: faker.helpers.arrayElement(FILING_TYPES[ROLES.petitioner]),
         hasIrsNotice: false,
         partyType: PARTY_TYPES.petitioner,
         petitioners: [
@@ -128,8 +128,8 @@ const createCase = async ({
             state: faker.address.stateAbbr(),
           },
         ],
-        preferredTrialCity: faker.random.arrayElement(TRIAL_CITY_STRINGS),
-        procedureType: faker.random.arrayElement(PROCEDURE_TYPES),
+        preferredTrialCity: faker.helpers.arrayElement(TRIAL_CITY_STRINGS),
+        procedureType: faker.helpers.arrayElement(PROCEDURE_TYPES),
       },
       stinFileId,
     });
