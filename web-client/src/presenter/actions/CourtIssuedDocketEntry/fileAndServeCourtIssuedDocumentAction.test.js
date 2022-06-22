@@ -42,48 +42,6 @@ describe('submitCourtIssuedDocketEntryAction', () => {
     ).toEqual([thisDocketNumber]);
   });
 
-  it('should return a pdfUrl when one is generated, the success message is set for unconsolidated cases, and overwritable is false', async () => {
-    const mockPdfUrl = 'www.example.com';
-    applicationContext
-      .getUseCases()
-      .fileAndServeCourtIssuedDocumentInteractor.mockReturnValue({
-        pdfUrl: mockPdfUrl,
-      });
-
-    const result = await runAction(fileAndServeCourtIssuedDocumentAction, {
-      modules: {
-        presenter,
-      },
-      state: {
-        caseDetail: {
-          docketNumber: '123-20',
-        },
-        docketEntryId: 'abc',
-        featureFlagHelper: {
-          consolidatedCasesPropagateDocketEntries: true,
-        },
-        form: {
-          attachments: false,
-          date: '2019-01-01T00:00:00.000Z',
-          documentTitle: '[Anything]',
-          documentType: 'Order',
-          eventCode: 'O',
-          freeText: 'Testing',
-          generatedDocumentTitle: 'Order F',
-          scenario: 'Type A',
-        },
-      },
-    });
-
-    expect(result.output).toEqual({
-      alertSuccess: {
-        message: 'Document served. ',
-        overwritable: false,
-      },
-      pdfUrl: mockPdfUrl,
-    });
-  });
-
   describe('consolidated cases', () => {
     const {
       COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
@@ -95,12 +53,12 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ];
 
-    it('should pass the docket number for each checked case, the correct success message is returned, and overwritable is false', async () => {
+    it('should pass the docket number for each checked case', async () => {
       const leadDocketNumber = '123-20';
       const checkedDocketNumber1 = 'DogCow';
       const checkedDocketNumber2 = 'Moof';
 
-      const result = await runAction(fileAndServeCourtIssuedDocumentAction, {
+      await runAction(fileAndServeCourtIssuedDocumentAction, {
         modules: {
           presenter,
         },
@@ -141,11 +99,6 @@ describe('submitCourtIssuedDocketEntryAction', () => {
           .fileAndServeCourtIssuedDocumentInteractor.mock.calls[0][1]
           .docketNumbers,
       ).toEqual([leadDocketNumber, checkedDocketNumber1, checkedDocketNumber2]);
-
-      expect(result.output.alertSuccess).toEqual({
-        message: 'Document served to selected cases in group. ',
-        overwritable: false,
-      });
     });
 
     it("should pass only one docket number if this isn't lead case", async () => {
