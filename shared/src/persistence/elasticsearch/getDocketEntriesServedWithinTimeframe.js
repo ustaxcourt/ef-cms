@@ -32,7 +32,7 @@ exports.getDocketEntriesServedWithinTimeframe = async ({
             ],
           },
         },
-        size: 5000,
+        size: 10000,
       },
       index: 'efcms-docket-entry',
     },
