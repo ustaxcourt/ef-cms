@@ -59,12 +59,13 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 
   const eventCodeCanOnlyBeServedOnSubjectCase =
     ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode);
-  const consolidateCaseDuplicateDocketEntries = applicationContext
+  const consolidateCaseDuplicateDocketEntries = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
       featureFlag:
         ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
     });
+
   if (
     eventCodeCanOnlyBeServedOnSubjectCase ||
     !consolidateCaseDuplicateDocketEntries
