@@ -29,8 +29,8 @@ const getAllItems = async () => {
             {
               range: {
                 'receivedAt.S': {
-                  gte: computeDate({ day: 1, month: 1, year: 2021 }),
-                  lte: computeDate({ day: 1, month: 1, year: 2022 }),
+                  gte: computeDate({ day: 1, month: 1, year: 2022 }),
+                  lte: computeDate({ day: 1, month: 1, year: 2023 }),
                 },
               },
             },
@@ -132,7 +132,7 @@ const getCounts = async ({ gte, isPaper, lte, showCases = false }) => {
 (async () => {
   const results = {};
 
-  const start = DateTime.fromISO('2021-01-01');
+  const start = DateTime.fromISO('2022-01-01');
 
   for (let month = 0; month < 12; month++) {
     const [gte, lte] = [
