@@ -513,6 +513,7 @@ const EVENT_CODES_VISIBLE_TO_PUBLIC = [
   'DEC',
   'ODL',
   'SPTN',
+  'OCS',
 ];
 
 const SYSTEM_GENERATED_DOCUMENT_TYPES = {
