@@ -1,4 +1,4 @@
-export const manuallyAddCaseToTrial = (cerebralTest, { index }) => {
+export const manuallyAddCaseToTrial = (cerebralTest, index = '') => {
   return it('manually add a case to a trial session', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest[`docketNumber${index}`],
