@@ -32,6 +32,7 @@ Message.prototype.init = function init(rawMessage, { applicationContext }) {
   this.completedByUserId = rawMessage.completedByUserId;
   this.completedMessage = rawMessage.completedMessage;
   this.createdAt = rawMessage.createdAt || createISODateString();
+  this.leadDocketNumber = rawMessage.leadDocketNumber;
   this.docketNumber = rawMessage.docketNumber;
   this.docketNumberWithSuffix = rawMessage.docketNumberWithSuffix;
   this.from = rawMessage.from;
@@ -142,6 +143,7 @@ Message.VALIDATION_RULES = {
     .boolean()
     .required()
     .description('Whether the message has been replied to or forwarded.'),
+  leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
   message: JoiValidationConstants.STRING.max(700)
     .required()
     .description('The message text.'),
