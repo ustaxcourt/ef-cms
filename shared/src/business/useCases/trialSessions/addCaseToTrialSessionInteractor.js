@@ -47,7 +47,7 @@ exports.addCaseToTrialSessionInteractor = async (
   });
 
   if (caseEntity.isCalendared()) {
-    throw new Error(`The case is already calendared${caseEntity.docketNumber}`);
+    throw new Error('The case is already calendared');
   }
 
   if (trialSessionEntity.isCaseAlreadyCalendared(caseEntity)) {
