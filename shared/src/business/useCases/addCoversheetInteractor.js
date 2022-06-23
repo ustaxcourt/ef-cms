@@ -59,6 +59,7 @@ exports.addCoverToPdf = async ({
   const numberOfPages = pdfDoc.getPages().length;
 
   return {
+    consolidatedCases: coverSheetData.consolidatedCases,
     numberOfPages,
     pdfData: newPdfData,
   };
@@ -98,10 +99,6 @@ exports.addCoversheetInteractor = async (
     caseEntity = new Case(caseRecord, { applicationContext });
   }
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
-
   let pdfData;
   try {
     const { Body } = await applicationContext
@@ -117,7 +114,15 @@ exports.addCoversheetInteractor = async (
     throw err;
   }
 
-  const { numberOfPages, pdfData: newPdfData } = await exports.addCoverToPdf({
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
+
+  const {
+    consolidatedCases, // if feature flag is off, this will always be null
+    numberOfPages,
+    pdfData: newPdfData,
+  } = await exports.addCoverToPdf({
     applicationContext,
     caseEntity,
     docketEntryEntity,
@@ -127,23 +132,61 @@ exports.addCoversheetInteractor = async (
     useInitialData,
   });
 
-  docketEntryEntity.setAsProcessingStatusAsCompleted();
-  docketEntryEntity.setNumberOfPages(numberOfPages);
-
-  const updatedDocketEntryEntity = docketEntryEntity.validate();
-
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber: caseEntity.docketNumber,
-    document: updatedDocketEntryEntity.toRawObject(),
-  });
-
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
     key: docketEntryId,
   });
 
-  return updatedDocketEntryEntity;
+  let docketNumbersToUpdate = [docketNumber];
+
+  if (consolidatedCases) {
+    docketNumbersToUpdate = consolidatedCases
+      .filter(consolidatedCase => consolidatedCase.documentNumber)
+      .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
+  }
+
+  const updatedDocketEntries = await Promise.all(
+    docketNumbersToUpdate.map(async caseDocketNumber => {
+      // in one instance, we pass in the caseEntity which we don't want to refetch
+      let consolidatedCaseEntity = caseEntity;
+      if (caseEntity && caseDocketNumber !== docketNumber) {
+        const caseRecord = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber: caseDocketNumber,
+          });
+        consolidatedCaseEntity = new Case(caseRecord, {
+          applicationContext,
+        });
+      }
+
+      const consolidatedCaseDocketEntryEntity =
+        consolidatedCaseEntity.getDocketEntryById({
+          docketEntryId,
+        });
+
+      if (consolidatedCaseDocketEntryEntity) {
+        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
+
+        const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
+          .validate()
+          .toRawObject();
+
+        await applicationContext.getPersistenceGateway().updateDocketEntry({
+          applicationContext,
+          docketEntryId,
+          docketNumber: caseDocketNumber,
+          document: updateConsolidatedDocketEntry,
+        });
+        return updateConsolidatedDocketEntry;
+      }
+    }),
+  );
+
+  return updatedDocketEntries
+    .filter(Boolean)
+    .find(entry => entry.docketNumber === docketNumber);
 };
