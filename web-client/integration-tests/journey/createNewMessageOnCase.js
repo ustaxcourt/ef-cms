@@ -10,9 +10,11 @@ const petitionsClerk1User = '4805d1ab-18d0-43ec-bafb-654e83405416';
 export const createNewMessageOnCase = (
   cerebralTest,
   {
+    docketNumber,
     subject,
     toSection = PETITIONS_SECTION,
     toUserId = petitionsClerk1User,
+    preserveCreatedMessage = true,
   } = {},
 ) => {
   const messageModalHelper = withAppContextDecorator(
@@ -27,7 +29,7 @@ export const createNewMessageOnCase = (
 
   return it('user creates new message on a case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
+      docketNumber: docketNumber || cerebralTest.docketNumber,
     });
 
     await cerebralTest.runSequence('openCreateMessageModalSequence');
@@ -77,11 +79,13 @@ export const createNewMessageOnCase = (
 
     await cerebralTest.runSequence('createMessageSequence');
 
-    await cerebralTest.applicationContext
-      .getUseCases()
-      .createMessageInteractor.mock.results[0].value.then(message => {
-        cerebralTest.lastCreatedMessage = message;
-      });
+    if (preserveCreatedMessage) {
+      await cerebralTest.applicationContext
+        .getUseCases()
+        .createMessageInteractor.mock.results[0].value.then(message => {
+          cerebralTest.lastCreatedMessage = message;
+        });
+    }
 
     expect(cerebralTest.getState('modal.form')).toBeDefined();
 
