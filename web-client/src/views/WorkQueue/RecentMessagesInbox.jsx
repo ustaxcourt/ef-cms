@@ -19,6 +19,7 @@ export const RecentMessagesInbox = connect(
         >
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number" className="small">
                 <span className="padding-left-2px">Docket Number</span>
               </th>
@@ -32,11 +33,28 @@ export const RecentMessagesInbox = connect(
             </tr>
           </thead>
           {recentMessagesHelper.recentMessages.map(item => {
-            const unreadClass = item.isRead ? '' : 'text-bold';
-
             return (
               <tbody key={item.messageId}>
                 <tr>
+                  <td className="consolidated-case-column">
+                    {item.inConsolidatedGroup && (
+                      <span
+                        className="fa-layers fa-fw"
+                        title={item.consolidatedIconTooltipText}
+                      >
+                        <Icon
+                          aria-label={item.consolidatedIconTooltipText}
+                          className="fa-icon-blue"
+                          icon="copy"
+                        />
+                        {item.inLeadCase && (
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </td>
                   <td className="message-queue-row small">
                     {item.docketNumberWithSuffix}
                   </td>
@@ -55,7 +73,10 @@ export const RecentMessagesInbox = connect(
                     <div className="message-document-title">
                       <Button
                         link
-                        className={classNames('padding-0', unreadClass)}
+                        className={classNames(
+                          'padding-0',
+                          item.isRead ? '' : 'text-bold',
+                        )}
                         href={item.messageDetailLink}
                       >
                         {item.subject}
