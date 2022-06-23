@@ -33,7 +33,7 @@ export const SectionWorkQueueOutbox = connect(
           {formattedWorkQueue.map(item => (
             <tbody key={item.workItemId}>
               <tr>
-                <td aria-hidden="true" className="focus-toggle" />
+                <td aria-hidden="true" />
                 <td className="message-queue-row">
                   <CaseLink formattedCase={item} />
                 </td>
