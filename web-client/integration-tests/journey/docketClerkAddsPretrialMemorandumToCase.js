@@ -39,24 +39,20 @@ export const docketClerkAddsPretrialMemorandumToCase = (
       value: 100,
     });
 
-    if (filedByPetitioner) {
-      const contactPrimary = contactPrimaryFromState(cerebralTest);
+    const contactPrimary = contactPrimaryFromState(cerebralTest);
 
-      await cerebralTest.runSequence(
-        'updateFileDocumentWizardFormValueSequence',
-        {
-          key: `filersMap.${contactPrimary.contactId}`,
-          value: true,
-        },
-      );
-    }
+    await cerebralTest.runSequence(
+      'updateFileDocumentWizardFormValueSequence',
+      {
+        key: `filersMap.${contactPrimary.contactId}`,
+        value: filedByPetitioner,
+      },
+    );
 
-    if (filedByPractitioner) {
-      await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-        key: 'partyIrsPractitioner',
-        value: true,
-      });
-    }
+    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+      key: 'partyIrsPractitioner',
+      value: filedByPractitioner,
+    });
 
     await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
       key: 'eventCode',
