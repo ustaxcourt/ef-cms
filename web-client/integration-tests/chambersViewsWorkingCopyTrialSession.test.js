@@ -35,7 +35,7 @@ describe('Chambers dashboard', () => {
     });
 
     loginAs(cerebralTest, 'docketclerk@example.com');
-    manuallyAddCaseToTrial(cerebralTest, { index: i });
+    manuallyAddCaseToTrial(cerebralTest, i);
   }
 
   docketClerkAddsPretrialMemorandumToCase(cerebralTest, {
