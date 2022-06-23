@@ -171,6 +171,10 @@ export const getFormattedDocketEntry = ({
       .getDocumentTitleWithAdditionalInfo({ docketEntry: entry });
   }
 
+  if (entry.eventCode === 'OCS' && formattedResult.freeText) {
+    formattedResult.descriptionDisplay = `${formattedResult.freeText} - ${formattedResult.descriptionDisplay}`;
+  }
+
   formattedResult.showDocumentProcessing =
     !permissions.UPDATE_CASE &&
     entry.processingStatus !== DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
