@@ -293,7 +293,14 @@ jobs:
           name: Cypress
           environment:
             CI: true
-            ENV: $ENV
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
             npx --no-install run-p start:api:ci start:client:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
@@ -331,10 +338,15 @@ jobs:
           name: Cypress
           environment:
             CI: true
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
           command: |
-            export ENV=$ENV
-            cat "./scripts/load-environment-from-secrets.sh" >> $BASH_ENV
-            source $BASH_ENV
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -375,6 +387,15 @@ jobs:
           name: Cypress
           environment:
             CI: true
+            SKIP_CACHE_INVALIDATION: true
+            TEMP_DOCUMENTS_BUCKET_NAME: noop-temp-documents-local-us-east-1
+            QUARANTINE_BUCKET_NAME: noop-quarantine-local-us-east-1
+            DOCUMENTS_BUCKET_NAME: noop-documents-local-us-east-1
+            S3_ENDPOINT: http://localhost:9000
+            MASTER_DYNAMODB_ENDPOINT: http://localhost:8000
+            AWS_ACCESS_KEY_ID: S3RVER
+            AWS_SECRET_ACCESS_KEY: S3RVER
+            CHECK_DEPLOY_DATE_INTERVAL: 5000
           command: |
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
