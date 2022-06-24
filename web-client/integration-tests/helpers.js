@@ -924,6 +924,19 @@ export const waitForExpectedItem = async ({
   console.log(`Waited ${waitTime}ms for ${expectedItem}`);
 };
 
+export const waitForExpectedItemToExist = async ({
+  cerebralTest,
+  currentItem,
+  maxWait = 10000,
+}) => {
+  let waitTime = 0;
+  while (!cerebralTest.getState(currentItem) && waitTime < maxWait) {
+    waitTime += 500;
+    await wait(500);
+  }
+  console.log(`Waited ${waitTime}ms for ${currentItem} to exist`);
+};
+
 export const refreshElasticsearchIndex = async (time = 2000) => {
   // refresh all ES indices:
   // https://www.elastic.co/guide/en/elasticsearch/reference/current/indices-refresh.html#refresh-api-all-ex
