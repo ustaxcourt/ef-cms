@@ -13,12 +13,27 @@ export const setTrialSessionDetailsOnFormAction = ({
   props,
   store,
 }) => {
+  const startDateValues = parseDateToMonthDayYear({
+    applicationContext,
+    dateString: props.trialSession.startDate,
+  });
+  const estimatedEndDateValues = parseDateToMonthDayYear({
+    applicationContext,
+    dateString: props.trialSession.estimatedEndDate,
+  });
+
   store.set(state.form, {
     ...props.trialSession,
-    ...parseDateToMonthDayYear({
-      applicationContext,
-      dateString: props.trialSession.startDate,
-    }),
+    ...{
+      startDateDay: startDateValues.day,
+      startDateMonth: startDateValues.month,
+      startDateYear: startDateValues.year,
+    },
+    ...{
+      estimatedEndDateDay: estimatedEndDateValues.day,
+      estimatedEndDateMonth: estimatedEndDateValues.month,
+      estimatedEndDateYear: estimatedEndDateValues.year,
+    },
     judgeId: props.trialSession.judge && props.trialSession.judge.userId,
     trialClerkId:
       props.trialSession.trialClerk && props.trialSession.trialClerk.userId,
