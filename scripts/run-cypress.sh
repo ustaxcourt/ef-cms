@@ -92,7 +92,7 @@ if [ -n "${INTEGRATION}" ]; then
 else
   if [ -z "${ENV}" ]; then
     echo "Please export the environment name as a variable named ENV."
-    exit;
+    exit 1;
   fi
 
   . ./scripts/setup-cypress-variables.sh
