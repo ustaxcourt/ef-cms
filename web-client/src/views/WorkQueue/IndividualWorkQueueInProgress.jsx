@@ -36,7 +36,7 @@ export const IndividualWorkQueueInProgress = connect(
             return (
               <tbody key={item.workItemId}>
                 <tr>
-                  <td aria-hidden="true" className="focus-toggle" />
+                  <td aria-hidden="true" />
                   <td className="message-queue-row">
                     <CaseLink formattedCase={item} />
                   </td>
