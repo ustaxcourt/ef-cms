@@ -3,7 +3,7 @@
 # sets up environment variables if needed and runs cypress
 
 # Usage
-#   ./run-cypress.sh
+#   ./scripts/run-cypress.sh
 
 ## Arguments
 ##   - $1 - the environment to check {env}
