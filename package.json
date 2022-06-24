@@ -214,7 +214,6 @@
   },
   "resolutions": {
     "ansi-regex": "^5.0.1",
-    "async": "2.6.4",
     "bl": "^4.0.3",
     "busboy": "^1.0.0",
     "dot-prop": "5.1.1",
