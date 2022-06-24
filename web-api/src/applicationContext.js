@@ -509,6 +509,9 @@ const {
   getDispatchNotification,
 } = require('../../shared/src/persistence/dynamo/notifications/getDispatchNotification');
 const {
+  getDocketEntriesServedWithinTimeframe,
+} = require('../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe');
+const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
@@ -1560,6 +1563,7 @@ const gatewayMethods = {
   getCompletedUserInboxMessages,
   getDeployTableStatus,
   getDispatchNotification,
+  getDocketEntriesServedWithinTimeframe,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
