@@ -89,6 +89,8 @@ if [ -n "${INTEGRATION}" ]; then
   export SLS_DEPLOYMENT_BUCKET=noop
   export AWS_ACCESS_KEY_ID=S3RVER
   export AWS_SECRET_ACCESS_KEY=S3RVER
+  export SKIP_CACHE_INVALIDATION=true
+  export CHECK_DEPLOY_DATE_INTERVAL=5000
 else
   if [ -z "${ENV}" ]; then
     echo "Please export the environment name as a variable named ENV."
