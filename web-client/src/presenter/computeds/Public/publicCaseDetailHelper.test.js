@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
-  SERVED_PARTIES_CODES,
+  PARTIES_CODES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
 import {
@@ -502,7 +502,7 @@ describe('publicCaseDetailHelper', () => {
         index: 4,
         openInSameTab: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
-        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+        servedPartiesCode: PARTIES_CODES.RESPONDENT,
       },
     ];
 
@@ -520,7 +520,7 @@ describe('publicCaseDetailHelper', () => {
           ' additionalInfo! (Attachment(s)) additional info 2!',
         index: 4,
         servedAtFormatted: undefined,
-        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+        servedPartiesCode: PARTIES_CODES.RESPONDENT,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: true,
