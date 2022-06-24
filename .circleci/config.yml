@@ -331,8 +331,10 @@ jobs:
           name: Cypress
           environment:
             CI: true
-            ENV: $ENV
           command: |
+            export ENV=$ENV
+            cat "./scripts/load-environment-from-secrets.sh" >> $BASH_ENV
+            source $BASH_ENV
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
               ./node_modules/.bin/cypress install
@@ -373,7 +375,6 @@ jobs:
           name: Cypress
           environment:
             CI: true
-            ENV: $ENV
           command: |
             CYPRESS_VERSION=`./node_modules/.bin/cypress --version | awk -F' ' '{print $4; exit}'`
             if [ ! -e "/root/.cache/Cypress/${CYPRESS_VERSION}/Cypress/Cypress" ]; then
