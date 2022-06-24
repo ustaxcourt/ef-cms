@@ -4,9 +4,9 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   EXTERNAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
+  PARTIES_CODES,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES,
   ROLES,
-  SERVED_PARTIES_CODES,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
   UNSERVABLE_EVENT_CODES,
 } = require('./EntityConstants');
@@ -453,9 +453,9 @@ const getServedPartiesCode = servedParties => {
       servedParties.length === 1 &&
       servedParties[0].role === ROLES.irsSuperuser
     ) {
-      servedPartiesCode = SERVED_PARTIES_CODES.RESPONDENT;
+      servedPartiesCode = PARTIES_CODES.RESPONDENT;
     } else {
-      servedPartiesCode = SERVED_PARTIES_CODES.BOTH;
+      servedPartiesCode = PARTIES_CODES.BOTH;
     }
   }
   return servedPartiesCode;
