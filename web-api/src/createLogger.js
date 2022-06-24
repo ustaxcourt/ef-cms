@@ -14,7 +14,11 @@ const { cloneDeep, unset } = require('lodash');
 
 const redact = format(logEntry => {
   const copy = cloneDeep(logEntry);
-  ['user.token', 'request.headers.authorization'].forEach(k => unset(copy, k));
+  [
+    'user.token',
+    'request.headers.authorization',
+    'request.headers.Authorization',
+  ].forEach(k => unset(copy, k));
   return copy;
 });
 
