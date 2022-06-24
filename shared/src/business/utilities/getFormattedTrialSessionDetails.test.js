@@ -161,6 +161,33 @@ describe('formattedTrialSessionDetails', () => {
       });
     });
   });
+  describe('formats trial session estimated end date', () => {
+    it('does not format trial session estimated end date when estimatedEndDate is an invalid DateTime', () => {
+      const result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          estimatedEndDate: 'Am I an ISO8601 date string?',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedEstimatedEndDate: 'Invalid DateTime',
+      });
+    });
+
+    it('formats trial session estimated end date', () => {
+      const result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          estimatedEndDate: '2040-11-25T15:00:00.000Z',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedEstimatedEndDate: '11/25/40',
+      });
+    });
+  });
 
   it('displays swing session area if session is a swing session', () => {
     const result = formattedTrialSessionDetails({
