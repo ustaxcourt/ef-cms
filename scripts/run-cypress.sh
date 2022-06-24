@@ -49,7 +49,7 @@ while getopts ":chloprs" option; do
          ;;
       h) # display Help
          Help
-         ;;
+         exit;;
       l) # local
          export SMOKETESTS_LOCAL=true
          ;;
@@ -75,7 +75,12 @@ while getopts ":chloprs" option; do
    esac
 done
 
-echo "Executing ${0}. For information about available options, run this script again with the -h option for help."
+if [ -n "${CI}" ]; then
+  echo "Executing ${0}."
+else
+  echo "Executing ${0}. For information about available options, run this script again with the -h option for help."
+fi
+
 CONFIG_FILE="cypress${SMOKETESTS}${READONLY}${PUBLIC}.config.js"
 echo "${CONFIG_FILE}"
 
