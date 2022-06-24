@@ -32,7 +32,10 @@ describe('Judge downloads all cases from trial session', () => {
       cerebralTest,
       currentItem: 'batchTrialSessionAllCasesDownloadUrl',
     });
+
     const url = cerebralTest.getState('batchTrialSessionAllCasesDownloadUrl');
+    expect(url).toBeDefined();
+
     cerebralTest.url = url;
   });
 
