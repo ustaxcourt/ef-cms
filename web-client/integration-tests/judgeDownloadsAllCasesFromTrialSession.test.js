@@ -3,6 +3,10 @@ import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSess
 import { loginAs, setupTest, waitForExpectedItemToExist } from './helpers';
 
 const cerebralTest = setupTest();
+const checksum = require('checksum');
+const fs = require('fs');
+
+const axios = require('axios');
 
 describe('Judge downloads all cases from trial session', () => {
   beforeAll(() => {
@@ -29,6 +33,18 @@ describe('Judge downloads all cases from trial session', () => {
       currentItem: 'batchTrialSessionAllCasesDownloadUrl',
     });
     const url = cerebralTest.getState('batchTrialSessionAllCasesDownloadUrl');
-    console.log(`batchTrialSessionAllCasesDownloadUrl ${url}`);
+    cerebralTest.url = url;
+  });
+
+  it('verifies the zip contains the exjpected files', async () => {
+    const EXPECTED_HASH_FOR_SEED_DATA_ZIP =
+      'b9d18a44dcdab0e1908156f5e5464d54b8303b0d';
+    console.log('cerebralTest.url', cerebralTest.url);
+    const { data } = await axios.get(cerebralTest.url, {
+      responseType: 'blob',
+    });
+    const hash = checksum(data);
+    fs.writeFileSync('my-zip.zip', data, 'binary');
+    expect(hash).toEqual(EXPECTED_HASH_FOR_SEED_DATA_ZIP);
   });
 });
