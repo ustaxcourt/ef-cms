@@ -1,7 +1,50 @@
+const {
+  PARTIES_CODES,
+  TRIAL_SESSION_SCOPE_TYPES,
+} = require('../entities/EntityConstants');
 const { compact, isEmpty, isEqual, partition } = require('lodash');
-const { TRIAL_SESSION_SCOPE_TYPES } = require('../entities/EntityConstants');
 
-exports.formatCase = ({ applicationContext, caseItem }) => {
+exports.setPretrialMemorandumFiler = ({ caseItem }) => {
+  let filingPartiesCode;
+  let numberOfPetitionerFilers = 0;
+
+  const pretrialMemorandumDocketEntries = caseItem.docketEntries.filter(
+    d => d.eventCode === 'PMT' && !d.isStricken,
+  );
+
+  if (pretrialMemorandumDocketEntries.length > 0) {
+    pretrialMemorandumDocketEntries.forEach(docketEntry => {
+      docketEntry.filers.forEach(filerId => {
+        if (caseItem.petitioners.some(p => p.contactId === filerId)) {
+          numberOfPetitionerFilers++;
+        }
+      });
+    });
+
+    if (
+      numberOfPetitionerFilers > 0 &&
+      pretrialMemorandumDocketEntries.some(d => d.partyIrsPractitioner)
+    ) {
+      filingPartiesCode = PARTIES_CODES.BOTH;
+    } else if (numberOfPetitionerFilers > 0) {
+      filingPartiesCode = PARTIES_CODES.PETITIONER;
+    } else if (
+      pretrialMemorandumDocketEntries.some(d => d.partyIrsPractitioner)
+    ) {
+      filingPartiesCode = PARTIES_CODES.RESPONDENT;
+    }
+  } else {
+    filingPartiesCode = undefined;
+  }
+
+  return filingPartiesCode;
+};
+
+exports.formatCase = ({
+  applicationContext,
+  caseItem,
+  setFilingPartiesCode = false,
+}) => {
   caseItem.caseTitle = applicationContext.getCaseTitle(
     caseItem.caseCaption || '',
   );
@@ -19,6 +62,12 @@ exports.formatCase = ({ applicationContext, caseItem }) => {
   caseItem.isDocketSuffixHighPriority = highPrioritySuffixes.includes(
     caseItem.docketNumberSuffix,
   );
+
+  if (setFilingPartiesCode) {
+    caseItem.filingPartiesCode = exports.setPretrialMemorandumFiler({
+      caseItem,
+    });
+  }
   return caseItem;
 };
 
@@ -67,7 +116,13 @@ exports.formattedTrialSessionDetails = ({
     .sort(exports.compareTrialSessionEligibleCases);
 
   trialSession.allCases = (trialSession.calendaredCases || [])
-    .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
+    .map(caseItem =>
+      exports.formatCase({
+        applicationContext,
+        caseItem,
+        setFilingPartiesCode: true,
+      }),
+    )
     .sort(exports.compareCasesByDocketNumber);
 
   [trialSession.inactiveCases, trialSession.openCases] = partition(
