@@ -1,54 +1,11 @@
 const AWS = require('aws-sdk');
+const {
+  formatDocketEntryResult,
+} = require('./helpers/formatDocketEntryResult');
+const { formatMessageResult } = require('./helpers/formatMessageResult');
 const { get } = require('lodash');
 
 exports.search = async ({ applicationContext, searchParameters }) => {
-  const caseMap = {};
-  const formatHit = hit => {
-    const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
-      hit['_source'],
-    );
-    sourceUnmarshalled['_score'] = hit['_score'];
-
-    if (
-      hit['_index'] === 'efcms-docket-entry' &&
-      hit.inner_hits &&
-      hit.inner_hits['case-mappings']
-    ) {
-      const casePk = hit['_id'].split('_')[0];
-      const docketNumber = casePk.replace('case|', ''); // TODO figure out why docket number isn't always on a DocketEntry
-
-      let foundCase = caseMap[docketNumber];
-
-      if (!foundCase) {
-        hit.inner_hits['case-mappings'].hits.hits.some(innerHit => {
-          const innerHitDocketNumber = innerHit['_source'].docketNumber.S;
-          caseMap[innerHitDocketNumber] = innerHit['_source'];
-
-          if (innerHitDocketNumber === docketNumber) {
-            foundCase = innerHit['_source'];
-            return true;
-          }
-        });
-      }
-
-      if (foundCase) {
-        const foundCaseUnmarshalled =
-          AWS.DynamoDB.Converter.unmarshall(foundCase);
-        return {
-          isCaseSealed: !!foundCaseUnmarshalled.isSealed,
-          isDocketEntrySealed: !!sourceUnmarshalled.isSealed,
-          ...foundCaseUnmarshalled,
-          ...sourceUnmarshalled,
-          isSealed: undefined,
-        };
-      } else {
-        return sourceUnmarshalled;
-      }
-    } else {
-      return sourceUnmarshalled;
-    }
-  };
-
   let body;
   try {
     body = await applicationContext.getSearchClient().search(searchParameters);
@@ -58,7 +15,31 @@ exports.search = async ({ applicationContext, searchParameters }) => {
   }
 
   const total = get(body, 'hits.total.value', 0);
-  const results = get(body, 'hits.hits', []).map(formatHit);
+
+  let caseMap = {};
+  const results = get(body, 'hits.hits', []).map(hit => {
+    const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
+      hit['_source'],
+    );
+    sourceUnmarshalled['_score'] = hit['_score'];
+
+    const isDocketEntryResultWithParentCaseMapping =
+      hit['_index'] === 'efcms-docket-entry' &&
+      hit.inner_hits &&
+      hit.inner_hits['case-mappings'];
+    const isMessageResultWithParentCaseMapping =
+      hit['_index'] === 'efcms-message' &&
+      hit.inner_hits &&
+      hit.inner_hits['case-mappings'];
+
+    if (isDocketEntryResultWithParentCaseMapping) {
+      return formatDocketEntryResult({ caseMap, hit, sourceUnmarshalled });
+    } else if (isMessageResultWithParentCaseMapping) {
+      return formatMessageResult({ caseMap, hit, sourceUnmarshalled });
+    } else {
+      return sourceUnmarshalled;
+    }
+  });
 
   return {
     results,
