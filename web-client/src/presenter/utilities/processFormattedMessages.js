@@ -73,22 +73,43 @@ export const getFormattedMessages = ({
       }),
       'MMDDYY',
     );
-    const formattedMessages = messages.map(message => ({
-      ...message,
-      completedAtFormatted: formatDateIfToday(
-        message.completedAt,
-        applicationContext,
-        now,
-        yesterday,
-      ),
-      createdAtFormatted: formatDateIfToday(
-        message.createdAt,
-        applicationContext,
-        now,
-        yesterday,
-      ),
-      messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
-    }));
+    const formattedMessages = messages.map(message => {
+      const inConsolidatedGroup = !!message.leadDocketNumber;
+
+      const inLeadCase =
+        inConsolidatedGroup &&
+        message.leadDocketNumber === message.docketNumber;
+
+      let consolidatedIconTooltipText;
+
+      if (inConsolidatedGroup) {
+        if (inLeadCase) {
+          consolidatedIconTooltipText = 'Lead case';
+        } else {
+          consolidatedIconTooltipText = 'Consolidated case';
+        }
+      }
+
+      return {
+        ...message,
+        completedAtFormatted: formatDateIfToday(
+          message.completedAt,
+          applicationContext,
+          now,
+          yesterday,
+        ),
+        consolidatedIconTooltipText,
+        createdAtFormatted: formatDateIfToday(
+          message.createdAt,
+          applicationContext,
+          now,
+          yesterday,
+        ),
+        inConsolidatedGroup,
+        inLeadCase,
+        messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
+      };
+    });
     messageCache = formattedMessages;
     lastCacheKey = cacheKey;
   }
