@@ -7,11 +7,11 @@ describe('computeTrialSessionFormDataAction', () => {
 
   beforeEach(() => {
     form = {
-      month: '12',
+      startDateMonth: '12',
+      startDateYear: '2019',
       startTimeExtension: 'am',
       startTimeHours: '11',
       startTimeMinutes: '00',
-      year: '2019',
     };
   });
 
@@ -27,7 +27,7 @@ describe('computeTrialSessionFormDataAction', () => {
       termYear: '2019',
     });
 
-    form.month = '5';
+    form.startDateMonth = '5';
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
     });
@@ -35,7 +35,7 @@ describe('computeTrialSessionFormDataAction', () => {
       term: 'Spring',
     });
 
-    form.month = '7';
+    form.startDateMonth = '7';
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
     });
@@ -43,7 +43,7 @@ describe('computeTrialSessionFormDataAction', () => {
       term: 'Summer',
     });
 
-    form.month = '2';
+    form.startDateMonth = '2';
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
     });
@@ -55,15 +55,15 @@ describe('computeTrialSessionFormDataAction', () => {
   it('should store empty term and termYear if month is invalid or year is empty', async () => {
     let result;
 
-    form.month = 'June';
+    form.startDateMonth = 'June';
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
     });
     expect(result.state.form.term).toBeUndefined();
     expect(result.state.form.termYear).toBeUndefined();
 
-    form.month = '13';
-    form.year = '2019';
+    form.startDateMonth = '13';
+    form.startDateYear = '2019';
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
     });
@@ -72,8 +72,8 @@ describe('computeTrialSessionFormDataAction', () => {
     });
     expect(result.state.form.term).toBeUndefined();
 
-    form.month = '5';
-    form.year = '';
+    form.startDateMonth = '5';
+    form.startDateYear = '';
     result = await runAction(computeTrialSessionFormDataAction, {
       state: { form },
     });
