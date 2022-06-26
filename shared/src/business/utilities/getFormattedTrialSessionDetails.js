@@ -143,6 +143,10 @@ exports.formattedTrialSessionDetails = ({
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MMDDYY');
 
+  trialSession.formattedEstimatedEndDate = applicationContext
+    .getUtilities()
+    .formatDateString(trialSession.estimatedEndDate, 'MMDDYY');
+
   trialSession.formattedStartDateFull = applicationContext
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MONTH_DAY_YEAR');
