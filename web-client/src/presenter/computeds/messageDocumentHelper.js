@@ -17,6 +17,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -143,8 +144,8 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   const showApplyStampButton =
     permissions.STAMP_MOTION &&
-    (caseDocument.eventCode === 'M006' ||
-      formattedDocument?.eventCode === 'M006');
+    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
 
   return {
     addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,

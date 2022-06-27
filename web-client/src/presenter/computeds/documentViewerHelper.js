@@ -5,6 +5,7 @@ export const documentViewerHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -89,7 +90,8 @@ export const documentViewerHelper = (get, applicationContext) => {
     permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
 
   const showApplyStampButton =
-    permissions.STAMP_MOTION && formattedDocumentToDisplay.eventCode === 'M006';
+    permissions.STAMP_MOTION &&
+    STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
 
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,

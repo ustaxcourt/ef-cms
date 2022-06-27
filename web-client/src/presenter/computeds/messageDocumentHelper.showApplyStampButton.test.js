@@ -50,7 +50,7 @@ describe('messageDocumentHelper', () => {
     expect(showApplyStampButton).toBe(false);
   });
 
-  it('should be false when the selected message document is NOT a Motion for Continuance', () => {
+  it('should be false when the selected message document is NOT a document that can be stamped', () => {
     applicationContext
       .getUtilities()
       .getAttachmentDocumentById.mockReturnValue({
@@ -72,7 +72,7 @@ describe('messageDocumentHelper', () => {
     expect(showApplyStampButton).toBe(false);
   });
 
-  it('should be true when the selected message document is not a draft and is a Motion for Continuance and the user has the STAMP_MOTION permission', () => {
+  it('should be true when the selected message document is not a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
       state: {
         caseDetail: {
@@ -88,7 +88,7 @@ describe('messageDocumentHelper', () => {
     expect(showApplyStampButton).toBe(true);
   });
 
-  it('should be true when the selected message document is a draft and is a Motion for Continuance and the user has the STAMP_MOTION permission', () => {
+  it('should be true when the selected message document is a draft and is a document that can be stamped and the user has the STAMP_MOTION permission', () => {
     applicationContext
       .getUtilities()
       .getAttachmentDocumentById.mockReturnValue([]);
