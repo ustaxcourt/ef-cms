@@ -141,6 +141,11 @@ export const messageDocumentHelper = (get, applicationContext) => {
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
+  const showApplyStampButton =
+    permissions.STAMP_MOTION &&
+    (caseDocument.eventCode === 'M006' ||
+      formattedDocument?.eventCode === 'M006');
+
   return {
     addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
     archived: documentIsArchived,
@@ -152,6 +157,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
+    showApplyStampButton,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
       showEditButtonForRole &&
