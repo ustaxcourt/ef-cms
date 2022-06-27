@@ -84,7 +84,7 @@ import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
-import { sealedCaseDetailHeaderHelper } from './computeds/sealedCaseDetailHeaderHelper';
+import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
@@ -195,7 +195,7 @@ const helpers = {
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
-  sealedCaseDetailHeaderHelper,
+  sealedCaseDetailHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   showSortableHeaders,
