@@ -2,7 +2,6 @@ import { caseExistsAction } from '../actions/caseExistsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
-import { getPublicCaseAction } from '../actions/Public/getPublicCaseAction';
 import { navigateToCaseDetailWithDocketNumberAction } from '../actions/navigateToCaseDetailWithDocketNumberAction';
 import { navigateToCaseSearchNoMatchesAction } from '../actions/navigateToCaseSearchNoMatchesAction';
 import { setCaseAction } from '../actions/setCaseAction';
@@ -23,11 +22,7 @@ export const submitCaseSearchSequence = showProgressSequenceDecorator([
       showSealedToPublicCaseAction,
       {
         no: [navigateToCaseDetailWithDocketNumberAction, clearSearchTermAction],
-        yes: [
-          getPublicCaseAction,
-          setCurrentPageAction('SealedCaseDetail'),
-          clearSearchTermAction,
-        ],
+        yes: [setCurrentPageAction('SealedCaseDetail'), clearSearchTermAction],
       },
     ],
   },
