@@ -158,6 +158,34 @@ describe('publicCaseDetailHelper', () => {
       });
     });
 
+    it('formats descriptionDisplay for `OCS` type documents correctly and makes it visible to public users', () => {
+      state.caseDetail.docketEntries = [
+        {
+          docketEntryId: 'd-1-2-3',
+          documentTitle: 'Online Cited Source',
+          documentType: 'Online Cited Source',
+          eventCode: 'OCS',
+          freeText: 'Test site viewed on 09/09/22',
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          isUnservable: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, { state });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          descriptionDisplay:
+            'Test site viewed on 09/09/22 - Online Cited Source',
+          docketEntryId: 'd-1-2-3',
+          eventCode: 'OCS',
+          showLinkToDocument: true,
+        },
+      ]);
+    });
+
     it('should not display a link for the PMT event code', () => {
       state.caseDetail.docketEntries = [
         {
