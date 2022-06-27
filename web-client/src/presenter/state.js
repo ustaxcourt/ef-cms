@@ -78,6 +78,8 @@ import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
+import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
+import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
@@ -188,6 +190,8 @@ const helpers = {
   practitionerDetailHelper,
   practitionerSearchFormHelper,
   printPaperServiceHelper,
+  publicCaseDetailHeaderHelper,
+  publicCaseDetailHelper,
   recentMessagesHelper,
   removeFromTrialSessionModalHelper,
   requestAccessHelper,
