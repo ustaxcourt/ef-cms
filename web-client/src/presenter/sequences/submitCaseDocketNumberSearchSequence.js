@@ -39,10 +39,7 @@ export const submitCaseDocketNumberSearchSequence = [
           showSealedToPublicCaseAction,
           {
             no: [navigateToCaseDetailAction],
-            yes: [
-              setCurrentPageAction('SealedCaseDetail'),
-              clearSearchTermAction,
-            ],
+            yes: [setCurrentPageAction('SealedCaseDetail')],
           },
         ],
       },
