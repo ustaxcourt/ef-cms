@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const sealedCaseDetailHeaderHelper = get => {
+export const sealedCaseDetailHelper = get => {
   const caseDetail = get(state.caseDetail);
 
   return {
