@@ -47,7 +47,7 @@ describe('documentViewerHelper.showApplyStampButton', () => {
     expect(showApplyStampButton).toBe(false);
   });
 
-  it('should be false when the selected document is not a Motion for Continuance', () => {
+  it('should be false when the selected document is not a document that can be stamped', () => {
     const { showApplyStampButton } = runCompute(documentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -61,7 +61,7 @@ describe('documentViewerHelper.showApplyStampButton', () => {
     expect(showApplyStampButton).toBe(false);
   });
 
-  it('should be true when the selected document is a Motion for Continuance and the user has STAMP_MOTION permissions', () => {
+  it('should be true when the selected document can be stamped and the user has STAMP_MOTION permissions', () => {
     const { showApplyStampButton } = runCompute(documentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
