@@ -25,7 +25,7 @@ export const submitCaseSearchSequence = showProgressSequenceDecorator([
         no: [navigateToCaseDetailWithDocketNumberAction, clearSearchTermAction],
         yes: [
           getPublicCaseAction,
-          setCurrentPageAction('PublicCaseDetail'),
+          setCurrentPageAction('SealedCaseDetail'),
           clearSearchTermAction,
         ],
       },
