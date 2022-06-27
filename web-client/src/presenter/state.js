@@ -78,14 +78,13 @@ import { petitionQcHelper } from './computeds/petitionQcHelper';
 import { practitionerDetailHelper } from './computeds/practitionerDetailHelper';
 import { practitionerSearchFormHelper } from './computeds/practitionerSearchFormHelper';
 import { printPaperServiceHelper } from './computeds/printPaperServiceHelper';
-import { publicCaseDetailHeaderHelper } from './computeds/public/publicCaseDetailHeaderHelper';
-import { publicCaseDetailHelper } from './computeds/public/publicCaseDetailHelper';
 import { recentMessagesHelper } from './computeds/recentMessagesHelper';
 import { removeFromTrialSessionModalHelper } from './computeds/removeFromTrialSessionModalHelper';
 import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
+import { sealedCaseDetailHeaderHelper } from './computeds/sealedCaseDetailHeaderHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
@@ -190,14 +189,13 @@ const helpers = {
   practitionerDetailHelper,
   practitionerSearchFormHelper,
   printPaperServiceHelper,
-  publicCaseDetailHeaderHelper,
-  publicCaseDetailHelper,
   recentMessagesHelper,
   removeFromTrialSessionModalHelper,
   requestAccessHelper,
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
+  sealedCaseDetailHeaderHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   showSortableHeaders,

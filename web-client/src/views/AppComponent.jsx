@@ -69,6 +69,8 @@ import { Privacy } from './Privacy';
 import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
+import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
+import { SealedCaseDetailHeader } from './CaseDetail/SealedCaseDetailHeader';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
@@ -156,6 +158,8 @@ const pages = {
   PublicCaseDetail,
   RequestAccessWizard,
   ReviewSavedPetition,
+  SealedCaseDetail,
+  SealedCaseDetailHeader,
   SelectDocumentType,
   SignOrder,
   SimplePdfPreviewPage,
