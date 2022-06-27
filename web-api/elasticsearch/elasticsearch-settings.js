@@ -11,11 +11,7 @@ module.exports = {
   settings: ({ environment, overriddenNumberOfReplicasIfNonProd }) => {
     let actualNumberOfReplicas = 2;
     if (environment && environment !== 'prod') {
-      actualNumberOfReplicas = 0;
-
-      if (overriddenNumberOfReplicasIfNonProd) {
-        actualNumberOfReplicas = overriddenNumberOfReplicasIfNonProd;
-      }
+      actualNumberOfReplicas = overriddenNumberOfReplicasIfNonProd || 0;
     }
 
     console.log(
