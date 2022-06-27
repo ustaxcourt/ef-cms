@@ -17,7 +17,7 @@ export const SearchBoilerplateText = connect(
             <>
               {' '}
               Any online sourced citations in opinions filed after July 11, 2022
-              can be viewed directly from the associated docket record
+              can be viewed directly from the associated docket record.
             </>
           )}
         </p>
