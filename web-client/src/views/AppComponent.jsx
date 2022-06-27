@@ -66,7 +66,6 @@ import { PrintableCaseInventoryReport } from './CaseInventoryReport/PrintableCas
 import { PrintableDocketRecord } from './DocketRecord/PrintableDocketRecord';
 import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalendar';
 import { Privacy } from './Privacy';
-import { PublicCaseDetail } from './Public/PublicCaseDetail';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
 import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
@@ -154,7 +153,6 @@ const pages = {
   PrintableDocketRecord,
   PrintableTrialCalendar,
   Privacy,
-  PublicCaseDetail,
   RequestAccessWizard,
   ReviewSavedPetition,
   SealedCaseDetail,
