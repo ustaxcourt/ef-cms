@@ -12,7 +12,7 @@ const {
 } = require('winston');
 const { cloneDeep, unset } = require('lodash');
 
-const redact = format(logEntry => {
+exports.redact = format(logEntry => {
   const copy = cloneDeep(logEntry);
   [
     'user.token',
@@ -31,7 +31,7 @@ exports.createLogger = (opts = {}) => {
     ...opts,
   };
 
-  const formatters = [errors({ stack: true }), redact()];
+  const formatters = [errors({ stack: true }), exports.redact()];
 
   if (process.env.NODE_ENV === 'production') {
     options.format = combine(...formatters, json());
