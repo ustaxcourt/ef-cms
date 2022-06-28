@@ -14,6 +14,10 @@ export const DatePickerComponent = ({
   onBlur,
   onChange,
   optional,
+  placeholder,
+  showDateHint = true,
+  titleHintText,
+  useHintNoWrap,
   values,
 }) => {
   const datePickerRef = useRef();
@@ -95,21 +99,33 @@ export const DatePickerComponent = ({
         id={`${name}-date-label`}
       >
         {label} {optional && <span className="usa-hint">(optional)</span>}
+        {titleHintText && <span className="usa-hint">{titleHintText}</span>}
       </label>
-      <div className="usa-hint" id={`${name}-date-hint`}>
-        MM/DD/YYYY
-      </div>
+      {showDateHint && (
+        <div className="usa-hint" id={`${name}-date-hint`}>
+          MM/DD/YYYY
+        </div>
+      )}
       <div className="usa-date-picker" data-default-value={defaultValue}>
         <input
           aria-describedby={`${name}-date-label ${name}-date-hint`}
-          className="usa-input"
+          className="usa-input grey-placeholder"
           id={`${name}-date`}
           name={`${name}-date`}
+          placeholder={placeholder}
           ref={inputRef}
           type="text"
         />
       </div>
-      {hintText && <span className="usa-hint margin-top-2">{hintText}</span>}
+      {hintText && (
+        <span
+          className={classNames('usa-hint', 'margin-top-2', {
+            'no-wrap': useHintNoWrap,
+          })}
+        >
+          {hintText}
+        </span>
+      )}
     </FormGroup>
   );
 };
