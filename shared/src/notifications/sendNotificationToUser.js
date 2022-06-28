@@ -9,7 +9,7 @@
  */
 exports.sendNotificationToUser = async ({
   applicationContext,
-  connectionId,
+  clientConnectionId,
   message,
   userId,
 }) => {
@@ -20,9 +20,9 @@ exports.sendNotificationToUser = async ({
       userId,
     });
 
-  if (connectionId) {
+  if (clientConnectionId) {
     connections = connections.filter(connection => {
-      return connection.connectionId === connectionId;
+      return connection.clientConnectionId === clientConnectionId;
     });
   }
 

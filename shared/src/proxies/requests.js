@@ -12,7 +12,7 @@ const moize = require('moize').default;
  */
 exports.head = async ({
   applicationContext,
-  connectionId,
+  clientConnectionId,
   endpoint,
   params,
 }) => {
@@ -21,7 +21,7 @@ exports.head = async ({
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
       headers: getDefaultHeaders(
         applicationContext.getCurrentUserToken(),
-        connectionId,
+        clientConnectionId,
       ),
       params,
     })
@@ -38,10 +38,15 @@ exports.head = async ({
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response body data
  */
-const get = async ({ applicationContext, connectionId, endpoint, params }) => {
+const get = async ({
+  applicationContext,
+  clientConnectionId,
+  endpoint,
+  params,
+}) => {
   const response = await getResponse({
     applicationContext,
-    connectionId,
+    clientConnectionId,
     endpoint,
     params,
   });
@@ -60,7 +65,7 @@ const get = async ({ applicationContext, connectionId, endpoint, params }) => {
  */
 const getResponse = ({
   applicationContext,
-  connectionId,
+  clientConnectionId,
   endpoint,
   params,
 }) => {
@@ -69,7 +74,7 @@ const getResponse = ({
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
       headers: getDefaultHeaders(
         applicationContext.getCurrentUserToken(),
-        connectionId,
+        clientConnectionId,
       ),
       params,
     });
@@ -105,7 +110,7 @@ exports.post = async ({
   endpoint,
   headers = {},
   options = {},
-  connectionId,
+  clientConnectionId,
 }) => {
   getMemoized.clear();
   return await applicationContext
@@ -114,7 +119,7 @@ exports.post = async ({
       headers: {
         ...getDefaultHeaders(
           applicationContext.getCurrentUserToken(),
-          connectionId,
+          clientConnectionId,
         ),
         ...headers,
       },
@@ -133,14 +138,19 @@ exports.post = async ({
  * @param {string} providers.endpoint the endpoint to call
  * @returns {Promise<*>} the response data
  */
-exports.put = async ({ applicationContext, body, connectionId, endpoint }) => {
+exports.put = async ({
+  applicationContext,
+  body,
+  clientConnectionId,
+  endpoint,
+}) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
     .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
       headers: getDefaultHeaders(
         applicationContext.getCurrentUserToken(),
-        connectionId,
+        clientConnectionId,
       ),
     })
     .then(response => response.data);
@@ -161,7 +171,7 @@ exports.remove = async ({
   endpoint,
   params,
   options = {},
-  connectionId,
+  clientConnectionId,
 }) => {
   getMemoized.clear();
   return await applicationContext
@@ -169,7 +179,7 @@ exports.remove = async ({
     .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
       headers: getDefaultHeaders(
         applicationContext.getCurrentUserToken(),
-        connectionId,
+        clientConnectionId,
       ),
       params,
       ...options,
@@ -177,10 +187,18 @@ exports.remove = async ({
     .then(response => response.data);
 };
 
-const getDefaultHeaders = (userToken, connectionId) => {
+const getDefaultHeaders = (userToken, clientConnectionId) => {
   const authorization = userToken ? `Bearer ${userToken}` : undefined;
-  return {
-    Authorization: authorization,
-    'X-Connection-Id': connectionId,
+
+  let authorizationHeaderObject = {
+    'X-Connection-Id': clientConnectionId,
   };
+  if (authorization) {
+    authorizationHeaderObject = {
+      ...authorizationHeaderObject,
+      Authorization: authorization,
+    };
+  }
+
+  return authorizationHeaderObject;
 };
