@@ -1,4 +1,4 @@
-const createWebSocketClient = (token, tabId) => {
+const createWebSocketClient = ({ tabId, token }) => {
   const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
   const connectionUrl = `${notificationsUrl}?token=${token}&tabId=${tabId}`;
   const socket = new WebSocket(

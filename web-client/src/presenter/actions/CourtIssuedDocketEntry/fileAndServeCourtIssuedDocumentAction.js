@@ -49,6 +49,8 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     docketNumbers = [caseDetail.docketNumber];
   }
 
+  const tabId = get(state.tabId);
+
   await applicationContext
     .getUseCases()
     .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
@@ -56,5 +58,6 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
       docketNumbers,
       form,
       subjectCaseDocketNumber: caseDetail.docketNumber,
+      tabId,
     });
 };

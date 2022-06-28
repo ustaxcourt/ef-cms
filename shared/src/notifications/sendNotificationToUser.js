@@ -9,17 +9,22 @@
  */
 exports.sendNotificationToUser = async ({
   applicationContext,
+  connectionId,
   message,
-  tabId,
   userId,
 }) => {
-  // TODO: handle specific tab
-  const connections = await applicationContext
+  let connections = await applicationContext
     .getPersistenceGateway()
     .getWebSocketConnectionsByUserId({
       applicationContext,
       userId,
     });
+
+  if (connectionId) {
+    connections = connections.filter(connection => {
+      return connection.connectionId === connectionId;
+    });
+  }
 
   const messageStringified = JSON.stringify(message);
 

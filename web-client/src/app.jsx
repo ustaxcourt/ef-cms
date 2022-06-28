@@ -194,6 +194,8 @@ const app = {
       };
     }
 
+    presenter.state.tabId = applicationContext.getUniqueId();
+
     const userPermissions = applicationContext.getCurrentUserPermissions();
     if (userPermissions) {
       presenter.state.permissions = userPermissions;

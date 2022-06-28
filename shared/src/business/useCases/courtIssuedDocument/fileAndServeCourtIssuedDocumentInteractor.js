@@ -37,7 +37,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  { docketEntryId, docketNumbers, form, subjectCaseDocketNumber },
+  { connectionId, docketEntryId, docketNumbers, form, subjectCaseDocketNumber },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -196,6 +196,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
   // TODO: handle specific tab
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    connectionId,
     message: {
       action: 'file_and_serve_court_issued_document_complete',
       alertSuccess: {
