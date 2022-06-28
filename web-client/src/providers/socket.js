@@ -1,6 +1,6 @@
-const createWebSocketClient = token => {
+const createWebSocketClient = (token, tabId) => {
   const notificationsUrl = process.env.WS_URL || 'ws://localhost:3011';
-  const connectionUrl = `${notificationsUrl}?token=${token}`;
+  const connectionUrl = `${notificationsUrl}?token=${token}&tabId=${tabId}`;
   const socket = new WebSocket(
     connectionUrl,
     connectionUrl.indexOf('localhost') !== -1 ? 'echo-protocol' : undefined,
@@ -26,10 +26,11 @@ export const socketProvider = ({ socketRouter }) => {
 
   const start = () => {
     const token = app.getState('token');
+    const tabId = app.getState('tabId');
     if (!socket) {
       return new Promise((resolve, reject) => {
         try {
-          socket = createWebSocketClient(token);
+          socket = createWebSocketClient({ tabId, token });
 
           socket.onmessage = socketRouter(app);
 
