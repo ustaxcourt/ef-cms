@@ -1,5 +1,8 @@
 const createApplicationContext = require('./applicationContext');
-const { getUserFromAuthHeader } = require('./middleware/apiGatewayHelper');
+const {
+  getConnectionIdFromEvent,
+  getUserFromAuthHeader,
+} = require('./middleware/apiGatewayHelper');
 const { handle } = require('./middleware/apiGatewayHelper');
 
 exports.dataSecurityFilter = (data, { applicationContext }) => {
@@ -59,6 +62,7 @@ exports.checkMaintenanceMode = checkMaintenanceMode;
 exports.genericHandler = (awsEvent, cb, options = {}) => {
   return handle(awsEvent, async () => {
     //TODO: grab the connectionId/tabId in a similar fashion as the auth user is (query string or header)
+    const connectionId = getConnectionIdFromHeader(awsEvent);
     const user = options.user || getUserFromAuthHeader(awsEvent);
     const applicationContext =
       options.applicationContext ||
