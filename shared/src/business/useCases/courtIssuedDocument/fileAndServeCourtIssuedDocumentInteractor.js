@@ -193,7 +193,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       ? 'Document served to selected cases in group. '
       : 'Document served. ';
 
-  // return serviceResults;
+  // TODO: handle specific tab
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {

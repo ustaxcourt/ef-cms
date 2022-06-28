@@ -11,6 +11,7 @@ const moize = require('moize').default;
  * @returns {Promise<*>} the response data
  */
 exports.head = async ({ applicationContext, endpoint, params }) => {
+  // TODO: add tabId header
   const token = applicationContext.getCurrentUserToken();
   return await applicationContext
     .getHttpClient()
@@ -34,6 +35,7 @@ exports.head = async ({ applicationContext, endpoint, params }) => {
  * @returns {Promise<*>} the response body data
  */
 const get = async ({ applicationContext, endpoint, params }) => {
+  // TODO: add tabId header
   const response = await getResponse({ applicationContext, endpoint, params });
   return response.data;
 };
@@ -49,6 +51,7 @@ const get = async ({ applicationContext, endpoint, params }) => {
  * @returns {Promise<*>} the complete http response
  */
 const getResponse = ({ applicationContext, endpoint, params }) => {
+  // TODO: add tabId header
   const token = applicationContext.getCurrentUserToken();
   return applicationContext
     .getHttpClient()
@@ -63,6 +66,7 @@ const getResponse = ({ applicationContext, endpoint, params }) => {
 exports.getResponse = getResponse;
 
 const getMemoized = moize({
+  // TODO: add tabId header
   equals(cacheKeyArgument, keyArgument) {
     return cacheKeyArgument.endpoint === keyArgument.endpoint;
   },
@@ -85,6 +89,7 @@ exports.get = process.env.CI ? get : getMemoized;
  * @returns {Promise<*>} the response data
  */
 exports.post = async ({
+  // TODO: add tabId header
   applicationContext,
   body,
   endpoint,
@@ -115,6 +120,7 @@ exports.post = async ({
  * @returns {Promise<*>} the response data
  */
 exports.put = async ({ applicationContext, body, endpoint }) => {
+  // TODO: add tabId header
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
@@ -137,6 +143,7 @@ exports.put = async ({ applicationContext, body, endpoint }) => {
  * @returns {Promise<*>} the response data
  */
 exports.remove = async ({
+  // TODO: add tabId header
   applicationContext,
   endpoint,
   params,
