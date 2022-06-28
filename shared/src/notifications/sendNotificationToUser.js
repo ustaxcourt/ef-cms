@@ -10,8 +10,10 @@
 exports.sendNotificationToUser = async ({
   applicationContext,
   message,
+  tabId,
   userId,
 }) => {
+  // TODO: handle specific tab
   const connections = await applicationContext
     .getPersistenceGateway()
     .getWebSocketConnectionsByUserId({
