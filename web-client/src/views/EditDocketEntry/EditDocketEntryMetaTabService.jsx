@@ -5,7 +5,7 @@ import React from 'react';
 
 export const EditDocketEntryMetaTabService = connect(
   {
-    SERVED_PARTIES_CODES: state.constants.SERVED_PARTIES_CODES,
+    PARTIES_CODES: state.constants.PARTIES_CODES,
     form: state.form,
     updateDocketEntryMetaDocumentFormValueSequence:
       sequences.updateDocketEntryMetaDocumentFormValueSequence,
@@ -14,7 +14,7 @@ export const EditDocketEntryMetaTabService = connect(
   },
   function EditDocketEntryMetaTabService({
     form,
-    SERVED_PARTIES_CODES,
+    PARTIES_CODES,
     updateDocketEntryMetaDocumentFormValueSequence,
     validationErrors,
     validationSequence,
@@ -30,9 +30,7 @@ export const EditDocketEntryMetaTabService = connect(
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={
-                  form.servedPartiesCode === SERVED_PARTIES_CODES.PETITIONER
-                }
+                checked={form.servedPartiesCode === PARTIES_CODES.PETITIONER}
                 className="usa-radio__input"
                 id="served-parties-p"
                 name="servedPartiesCode"
@@ -57,9 +55,7 @@ export const EditDocketEntryMetaTabService = connect(
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={
-                  form.servedPartiesCode === SERVED_PARTIES_CODES.RESPONDENT
-                }
+                checked={form.servedPartiesCode === PARTIES_CODES.RESPONDENT}
                 className="usa-radio__input"
                 id="served-parties-r"
                 name="servedPartiesCode"
@@ -84,7 +80,7 @@ export const EditDocketEntryMetaTabService = connect(
             <div className="usa-radio">
               <input
                 aria-describedby="served-parties-radios"
-                checked={form.servedPartiesCode === SERVED_PARTIES_CODES.BOTH}
+                checked={form.servedPartiesCode === PARTIES_CODES.BOTH}
                 className="usa-radio__input"
                 id="served-parties-b"
                 name="servedPartiesCode"
