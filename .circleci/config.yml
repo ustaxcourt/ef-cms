@@ -462,6 +462,7 @@ jobs:
       - run:
           name: Setup Elasticsearch Index Settings
           command: |
+            . ./scripts/load-environment-from-secrets.sh
             ./web-api/setup-elasticsearch-index.sh $ENV
       - run:
           name: Admin User Setup
