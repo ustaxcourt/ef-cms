@@ -745,8 +745,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  * case-notes
  */
 {
-  app.get(
-    '/case-notes/batch-cases/:docketNumbers/user-notes',
+  app.post(
+    '/case-notes/batch-cases/user-notes',
     lambdaWrapper(getUserCaseNoteForCasesLambda),
   );
   app.get(
