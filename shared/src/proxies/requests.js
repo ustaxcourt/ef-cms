@@ -10,15 +10,19 @@ const moize = require('moize').default;
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-exports.head = async ({ applicationContext, endpoint, params }) => {
-  // TODO: add tabId header
-  const token = applicationContext.getCurrentUserToken();
+exports.head = async ({
+  applicationContext,
+  connectionId,
+  endpoint,
+  params,
+}) => {
   return await applicationContext
     .getHttpClient()
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
+      headers: getDefaultHeaders(
+        applicationContext.getCurrentUserToken(),
+        connectionId,
+      ),
       params,
     })
     .then(response => response.data);
@@ -34,9 +38,13 @@ exports.head = async ({ applicationContext, endpoint, params }) => {
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response body data
  */
-const get = async ({ applicationContext, endpoint, params }) => {
-  // TODO: add tabId header
-  const response = await getResponse({ applicationContext, endpoint, params });
+const get = async ({ applicationContext, connectionId, endpoint, params }) => {
+  const response = await getResponse({
+    applicationContext,
+    connectionId,
+    endpoint,
+    params,
+  });
   return response.data;
 };
 
@@ -50,15 +58,19 @@ const get = async ({ applicationContext, endpoint, params }) => {
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the complete http response
  */
-const getResponse = ({ applicationContext, endpoint, params }) => {
-  // TODO: add tabId header
-  const token = applicationContext.getCurrentUserToken();
+const getResponse = ({
+  applicationContext,
+  connectionId,
+  endpoint,
+  params,
+}) => {
   return applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
+      headers: getDefaultHeaders(
+        applicationContext.getCurrentUserToken(),
+        connectionId,
+      ),
       params,
     });
 };
@@ -66,7 +78,6 @@ const getResponse = ({ applicationContext, endpoint, params }) => {
 exports.getResponse = getResponse;
 
 const getMemoized = moize({
-  // TODO: add tabId header
   equals(cacheKeyArgument, keyArgument) {
     return cacheKeyArgument.endpoint === keyArgument.endpoint;
   },
@@ -89,19 +100,22 @@ exports.get = process.env.CI ? get : getMemoized;
  * @returns {Promise<*>} the response data
  */
 exports.post = async ({
-  // TODO: add tabId header
   applicationContext,
   body,
   endpoint,
   headers = {},
   options = {},
+  connectionId,
 }) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
     .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
       headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        ...getDefaultHeaders(
+          applicationContext.getCurrentUserToken(),
+          connectionId,
+        ),
         ...headers,
       },
       ...options,
@@ -119,15 +133,15 @@ exports.post = async ({
  * @param {string} providers.endpoint the endpoint to call
  * @returns {Promise<*>} the response data
  */
-exports.put = async ({ applicationContext, body, endpoint }) => {
-  // TODO: add tabId header
+exports.put = async ({ applicationContext, body, connectionId, endpoint }) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
     .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
+      headers: getDefaultHeaders(
+        applicationContext.getCurrentUserToken(),
+        connectionId,
+      ),
     })
     .then(response => response.data);
 };
@@ -143,21 +157,30 @@ exports.put = async ({ applicationContext, body, endpoint }) => {
  * @returns {Promise<*>} the response data
  */
 exports.remove = async ({
-  // TODO: add tabId header
   applicationContext,
   endpoint,
   params,
   options = {},
+  connectionId,
 }) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
     .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
+      headers: getDefaultHeaders(
+        applicationContext.getCurrentUserToken(),
+        connectionId,
+      ),
       params,
       ...options,
     })
     .then(response => response.data);
+};
+
+const getDefaultHeaders = (userToken, connectionId) => {
+  const authorization = userToken ? `Bearer ${userToken}` : undefined;
+  return {
+    Authorization: authorization,
+    'X-Connection-Id': connectionId,
+  };
 };
