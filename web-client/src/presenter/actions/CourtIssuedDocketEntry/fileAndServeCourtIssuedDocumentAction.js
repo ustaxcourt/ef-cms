@@ -49,15 +49,18 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     docketNumbers = [caseDetail.docketNumber];
   }
 
-  const tabId = get(state.tabId);
+  const clientConnectionId = get(state.clientConnectionId);
 
   await applicationContext
     .getUseCases()
-    .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      docketEntryId,
-      docketNumbers,
-      form,
-      subjectCaseDocketNumber: caseDetail.docketNumber,
-      tabId,
-    });
+    .fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      clientConnectionId,
+      {
+        docketEntryId,
+        docketNumbers,
+        form,
+        subjectCaseDocketNumber: caseDetail.docketNumber,
+      },
+    );
 };

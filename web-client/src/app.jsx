@@ -194,7 +194,7 @@ const app = {
       };
     }
 
-    presenter.state.tabId = applicationContext.getUniqueId();
+    presenter.state.clientConnectionId = applicationContext.getUniqueId();
 
     const userPermissions = applicationContext.getCurrentUserPermissions();
     if (userPermissions) {

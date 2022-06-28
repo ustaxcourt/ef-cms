@@ -37,13 +37,8 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  {
-    clientConnectionId,
-    docketEntryId,
-    docketNumbers,
-    form,
-    subjectCaseDocketNumber,
-  },
+  clientConnectionId,
+  { docketEntryId, docketNumbers, form, subjectCaseDocketNumber },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -199,7 +194,6 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       ? 'Document served to selected cases in group. '
       : 'Document served. ';
 
-  // TODO: handle specific tab
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     clientConnectionId,
