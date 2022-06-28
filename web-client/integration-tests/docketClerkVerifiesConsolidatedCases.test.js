@@ -109,7 +109,7 @@ describe('Docket Clerk verifies Consolidated Cases', () => {
 
   const updatedCaseCaption = 'I am the new case caption!';
   updateACaseCaption(cerebralTest, updatedCaseCaption);
-  it('docketClerk updates Case Caption', async () => {
+  it('docketClerk updates Case Caption', () => {
     const caseDetail = cerebralTest.getState('caseDetail');
     expect(caseDetail.caseCaption).toBeDefined();
     expect(caseDetail.caseCaption).toEqual(updatedCaseCaption);

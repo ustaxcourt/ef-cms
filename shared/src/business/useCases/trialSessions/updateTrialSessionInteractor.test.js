@@ -294,6 +294,7 @@ describe('updateTrialSessionInteractor', () => {
       city: 'Somewhere',
       courtReporter: 'Someone Reporter',
       courthouseName: 'The Courthouse',
+      estimatedEndDate: '2025-12-03T00:00:00.000Z',
       irsCalendarAdministrator: 'Admin',
       joinPhoneNumber: '22222',
       judge: {

@@ -33,7 +33,7 @@ exports.createTrialSession = (testData, overrides = {}) => {
     .type(faker.datatype.number({ max: 11, min: 6 }));
   cy.get('#start-time-minutes')
     .clear()
-    .type(faker.random.arrayElement(['00', '15', '30', '45']));
+    .type(faker.helpers.arrayElement(['00', '15', '30', '45']));
   cy.get('label[for="startTimeExtension-pm"]').click();
   cy.get('label[for="session-type-Hybrid"]').click();
   cy.get('#max-cases').type(faker.datatype.number({ max: 100, min: 10 }));

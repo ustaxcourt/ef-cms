@@ -1,16 +1,18 @@
 /* eslint-disable max-lines */
 import {
   DOCKET_NUMBER_SUFFIXES,
+  PARTIES_CODES,
   SESSION_STATUS_GROUPS,
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
+const { applicationContext } = require('../test/createTestApplicationContext');
 import {
   compareTrialSessionEligibleCases,
   formatCase,
   formattedTrialSessionDetails,
   getTrialSessionStatus,
+  setPretrialMemorandumFiler,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
 
@@ -156,6 +158,33 @@ describe('formattedTrialSessionDetails', () => {
       });
       expect(result).toMatchObject({
         formattedStartTime: '12:00 pm',
+      });
+    });
+  });
+  describe('formats trial session estimated end date', () => {
+    it('does not format trial session estimated end date when estimatedEndDate is an invalid DateTime', () => {
+      const result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          estimatedEndDate: 'Am I an ISO8601 date string?',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedEstimatedEndDate: 'Invalid DateTime',
+      });
+    });
+
+    it('formats trial session estimated end date', () => {
+      const result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          estimatedEndDate: '2040-11-25T15:00:00.000Z',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedEstimatedEndDate: '11/25/40',
       });
     });
   });
@@ -465,6 +494,7 @@ describe('formattedTrialSessionDetails', () => {
         ...TRIAL_SESSION,
         calendaredCases: [
           {
+            docketEntries: [],
             docketNumber: MOCK_CASE.docketNumber,
           },
         ],
@@ -545,6 +575,174 @@ describe('formattedTrialSessionDetails', () => {
       const results = getTrialSessionStatus({ applicationContext, session });
 
       expect(results).toEqual(SESSION_STATUS_GROUPS.new);
+    });
+  });
+
+  describe('setPretrialMemorandumFiler', () => {
+    const mockPretrialMemorandumDocketEntry = {
+      createdAt: '2018-11-21T20:49:28.192Z',
+      docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+      docketNumber: '101-18',
+      documentTitle: 'Pretrial Memorandum',
+      documentType: 'Pretrial Memorandum',
+      eventCode: 'PMT',
+      filedBy: 'Test Petitioner',
+      filers: [MOCK_CASE.petitioners[0].contactId],
+      filingDate: '2018-03-01T05:00:00.000Z',
+      index: 5,
+      isFileAttached: true,
+      isOnDocketRecord: true,
+      isStricken: false,
+      partyIrsPractitioner: false,
+      processingStatus: 'complete',
+      receivedAt: '2018-03-01T05:00:00.000Z',
+      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    };
+
+    let mockCase;
+
+    beforeEach(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    });
+
+    it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [mockPretrialMemorandumDocketEntry],
+        irsPractitioners: [],
+      };
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
+
+      expect(result).toEqual(PARTIES_CODES.PETITIONER);
+    });
+
+    it('should set the pretrialMemorandumStatus to "R" when the filer is the respondent', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [],
+            partyIrsPractitioner: true,
+          },
+        ],
+      };
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
+
+      expect(result).toEqual(PARTIES_CODES.RESPONDENT);
+    });
+
+    it('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [MOCK_CASE.petitioners[0].contactId],
+            partyIrsPractitioner: true,
+          },
+        ],
+      };
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
+
+      expect(result).toEqual(PARTIES_CODES.BOTH);
+    });
+
+    it('should set the pretrialMemorandumStatus to "B" when there are 2 PMTs, one filed by petitioner and one filed by respondent', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [MOCK_CASE.petitioners[0].contactId],
+            partyIrsPractitioner: false,
+          },
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [],
+            partyIrsPractitioner: true,
+          },
+        ],
+      };
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
+
+      expect(result).toEqual(PARTIES_CODES.BOTH);
+    });
+
+    it('should set the pretrialMemorandumStatus to "R" when there are 2 PMTs, one stricken and filed by petitioner and one filed by respondent', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [MOCK_CASE.petitioners[0].contactId],
+            isStricken: true,
+            partyIrsPractitioner: false,
+          },
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            filers: [],
+            partyIrsPractitioner: true,
+          },
+        ],
+      };
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: mockCase,
+      });
+
+      expect(result).toEqual(PARTIES_CODES.RESPONDENT);
+    });
+
+    it('should set the pretrialMemorandumStatus to undefined when there is no pretrial memorandum on the case', () => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: MOCK_CASE,
+      });
+
+      expect(result).toBeUndefined();
+    });
+
+    it('should set the pretrialMemorandumStatus to undefined when there is a pretrial memorandum on the case but it is stricken', () => {
+      mockCase = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockPretrialMemorandumDocketEntry,
+            isStricken: true,
+          },
+        ],
+      };
+
+      const result = setPretrialMemorandumFiler({
+        applicationContext,
+        caseItem: MOCK_CASE,
+      });
+
+      expect(result).toBeUndefined();
     });
   });
 });
