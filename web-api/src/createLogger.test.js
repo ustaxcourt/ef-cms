@@ -76,7 +76,9 @@ describe('redact', () => {
       'application/json',
     );
     expect(redactedLogEntry.request.method).toBe('PUT');
-    expect(redactedLogEntry.request.url).toBe('PUT');
+    expect(redactedLogEntry.request.url).toBe(
+      '/async/users/a1a0a206-what-isit-b725-61cd4e3aece2/contact-info',
+    );
     expect(redactedLogEntry.user.email).toBe(
       'privatePractitioner1@example.com',
     );
