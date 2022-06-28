@@ -1,12 +1,11 @@
 import { judgeViewsTrialSessionWorkingCopy } from './journey/judgeViewsTrialSessionWorkingCopy';
 
 import { loginAs, setupTest, waitForExpectedItemToExist } from './helpers';
+const AdmZip = require('adm-zip');
 
 const cerebralTest = setupTest();
-const checksum = require('checksum');
 const fs = require('fs');
-
-const axios = require('axios');
+const http = require('http');
 
 describe('Judge downloads all cases from trial session', () => {
   beforeAll(() => {
@@ -40,14 +39,41 @@ describe('Judge downloads all cases from trial session', () => {
   });
 
   it('verifies the zip contains the exjpected files', async () => {
-    const EXPECTED_HASH_FOR_SEED_DATA_ZIP =
-      'b9d18a44dcdab0e1908156f5e5464d54b8303b0d';
-    console.log('cerebralTest.url', cerebralTest.url);
-    const { data } = await axios.get(cerebralTest.url, {
-      responseType: 'blob',
+    const ZIP_PATH =
+      './web-client/integration-tests/test-output/trial-session.zip';
+    fs.mkdirSync('./web-client/integration-tests/test-output', {
+      recursive: true,
     });
-    const hash = checksum(data);
-    fs.writeFileSync('my-zip.zip', data, 'binary');
-    expect(hash).toEqual(EXPECTED_HASH_FOR_SEED_DATA_ZIP);
+    const expectedFiles = [
+      '108-19, Garrett Carpenter, Leslie Bullock, Trustee/0_Docket Record.pdf',
+      '101-20, Bill Burr/0_Docket Record.pdf',
+      '103-20, Reuben Blair/0_Docket Record.pdf',
+      '103-20, Reuben Blair/2020-01-23_0001_Petition.pdf',
+      '103-20, Reuben Blair/2020-01-23_0004_Administrative Record.pdf',
+      '103-20, Reuben Blair/2020-01-23_0003_Notice of Trial on 11272020 at Houston, Texa.pdf',
+      '101-20, Bill Burr/2020-01-02_0001_Petition.pdf',
+      '103-20, Reuben Blair/2020-09-21_0005_Notice of Election to Intervene.pdf',
+      '108-19, Garrett Carpenter, Leslie Bullock, Trustee/2019-08-16_0001_Petition.pdf',
+    ];
+
+    const writer = fs.createWriteStream(ZIP_PATH);
+    const response = await new Promise(resolve =>
+      http.get(cerebralTest.url, resolve),
+    );
+
+    const filesInDownloadedZip = await new Promise(resolve =>
+      response.pipe(writer).on('close', () => {
+        const zip = new AdmZip(ZIP_PATH);
+        const zipEntries = zip.getEntries();
+        const files = [];
+
+        zipEntries.forEach(zipEntry => {
+          files.push(zipEntry.entryName);
+        });
+        resolve(files);
+      }),
+    );
+
+    expect(filesInDownloadedZip).toEqual(expect.arrayContaining(expectedFiles));
   });
 });
