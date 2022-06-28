@@ -170,7 +170,7 @@ To run the performance tests, you can run one of the following:
 - `npm run test:performance` (runs the ./artillery/private-app.yml file)
 - `npm run test:performance:order` (runs the ./artillery/private-advanced-order.yml file)
 
-
+Each lower environment's ElasticSearch cluster indices' replica count is 0.  If you want to performance test these lower environments, set the `OVERRIDE_ES_NUMBER_OF_REPLICAS` to the production count in AWS Secrets Manager and redeploy the environment beforehand.
 
 ## Testing / Coverage Tips
 

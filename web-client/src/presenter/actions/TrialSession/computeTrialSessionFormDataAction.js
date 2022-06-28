@@ -68,8 +68,8 @@ export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
   const form = get(state.form);
 
   const { term, termYear } = computeTerm({
-    month: form.month,
-    year: form.year,
+    month: form.startDateMonth,
+    year: form.startDateYear,
   });
   store.set(state.form.term, term);
   store.set(state.form.termYear, termYear);
