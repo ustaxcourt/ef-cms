@@ -198,10 +198,16 @@ exports.getUserFromAuthHeader = event => {
  * @returns {string} the connectionId
  */
 exports.getConnectionIdFromEvent = event => {
-  // TODO: rename tabId?
-  if (event.queryStringParameters && event.queryStringParameters.tabId) {
-    return event.queryStringParameters.tabId;
+  if (
+    event.queryStringParameters &&
+    event.queryStringParameters.clientConnectionId
+  ) {
+    return event.queryStringParameters.clientConnectionId;
   }
 
-  return event.headers && event.headers['X-Connection-Id'];
+  const clientConnectionId =
+    event.headers &&
+    (event.headers['X-Connection-Id'] || event.headers['x-connection-id']);
+
+  return clientConnectionId;
 };
