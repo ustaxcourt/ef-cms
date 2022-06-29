@@ -1,9 +1,10 @@
+import { STAMPED_DOCUMENTS_ALLOWLIST } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { messageDocumentHelper as messageDocumentHelperComputed } from './messageDocumentHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
-describe('messageDocumentHelper', () => {
+describe('messageDocumentHelper.showApplyStampButton', () => {
   const mockDocketEntryId = '7de1dcbf-f6a6-4e5a-a02c-a54b13f61354';
 
   const messageDocumentHelper = withAppContextDecorator(
@@ -27,7 +28,7 @@ describe('messageDocumentHelper', () => {
     applicationContext
       .getUtilities()
       .getAttachmentDocumentById.mockReturnValue({
-        eventCode: 'M006',
+        eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0],
       });
 
     const { showApplyStampButton } = runCompute(messageDocumentHelper, {
@@ -36,7 +37,7 @@ describe('messageDocumentHelper', () => {
           docketEntries: [
             {
               docketEntryId: mockDocketEntryId,
-              eventCode: 'M006',
+              eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0],
             },
           ],
         },
@@ -96,7 +97,7 @@ describe('messageDocumentHelper', () => {
       draftDocuments: [
         {
           docketEntryId: mockDocketEntryId,
-          eventCode: 'M006',
+          eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0],
         },
       ],
     });

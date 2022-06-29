@@ -1,4 +1,7 @@
-import { INITIAL_DOCUMENT_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  INITIAL_DOCUMENT_TYPES,
+  STAMPED_DOCUMENTS_ALLOWLIST,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -38,7 +41,9 @@ describe('documentViewerHelper.showApplyStampButton', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
-          docketEntries: [{ ...baseDocketEntry, eventCode: 'M006' }],
+          docketEntries: [
+            { ...baseDocketEntry, eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0] },
+          ],
         },
         permissions: { STAMP_MOTION: false },
       },
@@ -66,7 +71,9 @@ describe('documentViewerHelper.showApplyStampButton', () => {
       state: {
         ...getBaseState(petitionsClerkUser),
         caseDetail: {
-          docketEntries: [{ ...baseDocketEntry, eventCode: 'M006' }],
+          docketEntries: [
+            { ...baseDocketEntry, eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0] },
+          ],
         },
         permissions: { STAMP_MOTION: true },
       },
