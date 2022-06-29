@@ -3,7 +3,7 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy, union, without } = require('lodash');
+const { flatten, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
@@ -127,8 +127,6 @@ const DOCKET_NUMBER_SUFFIXES = {
   SMALL_LIEN_LEVY: 'SL',
   WHISTLEBLOWER: 'W',
 };
-
-const STAMPED_DOCUMENTS_ALLOWLIST = ['M006'];
 
 const CASE_STATUS_TYPES = {
   assignedCase: 'Assigned - Case', // Case has been assigned to a judge
@@ -407,6 +405,12 @@ const TRACKED_DOCUMENT_TYPES = {
     eventCode: 'PSDE',
   },
 };
+
+const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter(doc => doc.category === 'Motion')
+    .map(x => x.eventCode),
+);
 
 const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES = EXTERNAL_DOCUMENTS_ARRAY.filter(
   doc =>
