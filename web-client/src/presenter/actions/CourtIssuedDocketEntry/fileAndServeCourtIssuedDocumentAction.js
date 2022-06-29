@@ -55,12 +55,12 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
     .getUseCases()
     .fileAndServeCourtIssuedDocumentInteractor(
       applicationContext,
-      clientConnectionId,
       {
         docketEntryId,
         docketNumbers,
         form,
         subjectCaseDocketNumber: caseDetail.docketNumber,
       },
+      clientConnectionId,
     );
 };
