@@ -61,10 +61,10 @@ export const caseDetailHelper = (get, applicationContext) => {
 
   //user can view case - condition
   // if not
-    // user sees sealed view
-    // or user sees 'file an entry of appearance" view
-  const userCanViewCase =
-    (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed;
+  // user sees sealed view
+  // or user sees 'file an entry of appearance" view
+
+  const isAssociatedExternalUser = isExternalUser && userAssociatedWithCase;
 
   return {
     caseDeadlines,
@@ -72,6 +72,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     hasConsolidatedCases,
     hasIrsPractitioners,
     hasPrivatePractitioners,
+    isAssociatedExternalUser,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
     showAddRemoveFromHearingButtons: permissions.SET_FOR_HEARING,
     showCaseDeadlinesExternal,
@@ -91,7 +92,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    userCanViewCase,
     userHasAccessToCase,
   };
 };
