@@ -164,6 +164,12 @@ export const MessageDocument = connect(
           </Button>
         )}
 
+        {messageDocumentHelper.showApplyStampButton && (
+          <Button link href={messageDocumentHelper.applyStampLink} icon="stamp">
+            Apply Stamp
+          </Button>
+        )}
+
         <Button
           link
           icon="file-pdf"

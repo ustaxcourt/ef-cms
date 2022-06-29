@@ -3,7 +3,7 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy, union, without } = require('lodash');
+const { flatten, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
@@ -111,6 +111,7 @@ const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
     title: 'Notice of Change of Email Address',
   },
 ];
+
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(n => n.eventCode);
 
@@ -404,6 +405,12 @@ const TRACKED_DOCUMENT_TYPES = {
     eventCode: 'PSDE',
   },
 };
+
+const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter(doc => doc.category === 'Motion')
+    .map(x => x.eventCode),
+);
 
 const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES = EXTERNAL_DOCUMENTS_ARRAY.filter(
   doc =>
@@ -1348,6 +1355,7 @@ module.exports = deepFreeze({
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_FILE_MAP,
+  STAMPED_DOCUMENTS_ALLOWLIST,
   INTERNAL_DOCUMENTS_ARRAY,
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
