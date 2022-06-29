@@ -557,13 +557,14 @@ describe('case detail computed', () => {
       expect(result.showAddRemoveFromHearingButtons).toEqual(true);
     });
 
-    describe.only('userCanViewCase', () => {
+    describe.only('isAssociatedExternalUser', () => {
       it('should be true for an external user associated with the case', () => {
         const privatePractitioner =
-          MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f']; // has SET_FOR_HEARING permission
+          MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
+
         const result = runCompute(caseDetailHelper, {
           state: {
-            ...getBaseState(privatePractitioner), // sets the permissions in state based on the user role
+            ...getBaseState(privatePractitioner),
             caseDetail: { docketEntries: [], privatePractitioners: [] },
             screenMetadata: {
               isAssociated: true,
@@ -571,25 +572,24 @@ describe('case detail computed', () => {
           },
         });
 
-        expect(result.userCanViewCase).toEqual(true);
+        expect(result.isAssociatedExternalUser).toEqual(true);
       });
 
       it('should be false for an external user NOT associated with the case', () => {
         const privatePractitioner =
-          MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f']; // has SET_FOR_HEARING permission
+          MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
         const result = runCompute(caseDetailHelper, {
           state: {
-            ...getBaseState(privatePractitioner), // sets the permissions in state based on the user role
+            ...getBaseState(privatePractitioner),
             caseDetail: { docketEntries: [], privatePractitioners: [] },
             screenMetadata: {
               isAssociated: false,
             },
           },
         });
-        expect(result.userCanViewCase).toEqual(false);
-      });
 
-      
+        expect(result.isAssociatedExternalUser).toEqual(false);
+      });
     });
   });
 });
