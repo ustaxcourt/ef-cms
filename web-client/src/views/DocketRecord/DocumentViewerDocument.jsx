@@ -151,6 +151,16 @@ export const DocumentViewerDocument = connect(
                 </Button>
               )}
 
+              {documentViewerHelper.showApplyStampButton && (
+                <Button
+                  link
+                  href={documentViewerLinksHelper.applyStampLink}
+                  icon="stamp"
+                >
+                  Apply Stamp
+                </Button>
+              )}
+
               <Button
                 link
                 icon="file-pdf"
