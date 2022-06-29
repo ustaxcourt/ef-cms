@@ -1,11 +1,8 @@
 import { caseExistsAction } from '../actions/caseExistsAction';
 import { clearSearchResultsAction } from '../actions/AdvancedSearch/clearSearchResultsAction';
 import { clearSearchTermAction } from '../actions/clearSearchTermAction';
-import { getCaseAction } from '../actions/getCaseAction';
-import { getCaseAssociationAction } from '../actions/getCaseAssociationAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
-import { setCaseAction } from '../actions/setCaseAction';
 import { setDocketNumberFromAdvancedSearchAction } from '../actions/AdvancedSearch/setDocketNumberFromAdvancedSearchAction';
 import { setNoMatchesCaseSearchAction } from '../actions/AdvancedSearch/setNoMatchesCaseSearchAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
@@ -30,12 +27,7 @@ export const submitCaseDocketNumberSearchSequence = [
       caseExistsAction,
       {
         error: [setNoMatchesCaseSearchAction],
-        success: [
-          getCaseAction,
-          setCaseAction,
-          getCaseAssociationAction,
-          navigateToCaseDetailAction,
-        ],
+        success: [navigateToCaseDetailAction],
       },
     ]),
   },

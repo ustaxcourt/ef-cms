@@ -1,4 +1,3 @@
-/* eslint-disable max-lines */
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import {
