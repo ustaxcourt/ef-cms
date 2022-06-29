@@ -386,7 +386,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       message: expect.objectContaining({
         action: 'file_and_serve_court_issued_document_complete',
         alertSuccess: {
-          message: 'Document served to selected cases in group. ',
+          message: 'Document served. ',
           overwritable: false,
         },
         pdfUrl: mockPdfUrl,
