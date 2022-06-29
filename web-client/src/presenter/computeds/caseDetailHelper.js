@@ -59,6 +59,13 @@ export const caseDetailHelper = (get, applicationContext) => {
   const hasIrsPractitioners =
     !!caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length;
 
+  //user can view case - condition
+  // if not
+    // user sees sealed view
+    // or user sees 'file an entry of appearance" view
+  const userCanViewCase =
+    (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed;
+
   return {
     caseDeadlines,
     documentDetailTab,
@@ -84,8 +91,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    userCanViewCase:
-      (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
+    userCanViewCase,
     userHasAccessToCase,
   };
 };
