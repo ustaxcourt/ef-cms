@@ -67,7 +67,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     user.role === USER_ROLES.privatePractitioner;
 
   const showSealedCaseView =
-    !userAssociatedWithCase && caseDetail.isSealed && isPractitioner;
+    isPractitioner && !!caseDetail.isSealed && !userAssociatedWithCase;
 
   return {
     caseDeadlines,
