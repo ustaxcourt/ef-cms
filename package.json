@@ -236,6 +236,7 @@
     "@miovision/eslint-plugin-disallow-date": "^2.0.0",
     "@vendia/serverless-express": "^4.8.2",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
+    "adm-zip": "^0.5.9",
     "artillery": "^2.0.0-18",
     "artillery-plugin-metrics-by-endpoint": "^1.0.2",
     "autoprefixer": "^10.4.7",
