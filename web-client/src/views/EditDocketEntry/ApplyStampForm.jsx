@@ -70,7 +70,7 @@ export const ApplyStampForm = connect(
                 ))}
               </fieldset>
             </FormGroup>
-
+            <hr />
             <FormGroup>
               <label className="usa-label" htmlFor="stricken-case-radio">
                 Select any that apply{' '}
@@ -97,17 +97,17 @@ export const ApplyStampForm = connect(
                 </label>
               </div>
             </FormGroup>
-
+            <hr />
             <FormGroup>
-              <label className="usa-label" htmlFor="jurisdiction">
+              {/* is it bad to remove label from this formgroup? */}
+              {/* <label className="usa-label" htmlFor="jurisdiction">
                 Select any that apply{' '}
                 <span className="usa-hint">(optional)</span>
-              </label>
-              <div className="usa-radio usa-radio__inline">
+              </label> */}
+              <div className="usa-radio">
                 <input
                   checked={true}
                   className="usa-radio__input"
-                  id="jurisdiction"
                   name="general-docket"
                   type="radio"
                   //   value={}
@@ -123,12 +123,11 @@ export const ApplyStampForm = connect(
                   The case is restored to the general docket
                 </label>
               </div>
-              {/* <div className="usa-radio usa-radio__inline">
+              <div className="usa-radio">
                 <input
                   checked={true}
                   className="usa-radio__input"
-                  id="jurisdiction"
-                  name="general-docket"
+                  name="undersigned"
                   type="radio"
                   //   value={}
                   //   onChange={e => {
@@ -139,10 +138,81 @@ export const ApplyStampForm = connect(
                   //     validateDocketEntrySequence();
                   //   }}
                 />
-                <label className="usa-radio__label" htmlFor={'general-docket'}>
-                  The case is restored to the general docket
+                <label className="usa-radio__label" htmlFor={'undersigned'}>
+                  Jurisdiction is retained by the undersigned
                 </label>
-              </div> */}
+              </div>
+            </FormGroup>
+            <hr />
+            <FormGroup>
+              <div className="usa-radio">
+                <input
+                  checked={true}
+                  className="usa-radio__input"
+                  name="status-report"
+                  type="radio"
+                  //   value={}
+                  //   onChange={e => {
+                  //     updateDocketEntryFormValueSequence({
+                  //       key: e.target.name,
+                  //       value: e.target.value === 'Lodge',
+                  //     });
+                  //     validateDocketEntrySequence();
+                  //   }}
+                />
+                <label className="usa-radio__label" htmlFor={'status-report'}>
+                  The parties shall file a status report by [DATE]
+                </label>
+              </div>
+              <div className="usa-radio">
+                <input
+                  checked={true}
+                  className="usa-radio__input"
+                  name="status-report-or-stip-decision"
+                  type="radio"
+                  //   value={}
+                  //   onChange={e => {
+                  //     updateDocketEntryFormValueSequence({
+                  //       key: e.target.name,
+                  //       value: e.target.value === 'Lodge',
+                  //     });
+                  //     validateDocketEntrySequence();
+                  //   }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor={'status-report-or-stip-decision'}
+                >
+                  The parties shall file a status report or proposed stipulated
+                  decision by [DATE]
+                </label>
+              </div>
+            </FormGroup>
+            <hr />
+            <FormGroup errorText={validationErrors.customOrderText}>
+              <div>
+                <label
+                  className="usa-label"
+                  htmlFor="custom-order-text"
+                  id="custom-order-text-label"
+                >
+                  Custom order text <span className="usa-hint">(optional)</span>
+                </label>
+                <input
+                  aria-describedby="custom-order-text-label"
+                  className="usa-input"
+                  id="custom-order-text"
+                  name="custom-order-text"
+                  type="text"
+                  value={form.customOrderText || ''}
+                  // onChange={e => {
+                  //   updateSequence({
+                  //     key: e.target.name,
+                  //     value: e.target.value,
+                  //   });
+                  // }}
+                />
+              </div>
             </FormGroup>
           </div>
         </section>
