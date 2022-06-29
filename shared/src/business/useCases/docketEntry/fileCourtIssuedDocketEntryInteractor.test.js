@@ -9,8 +9,12 @@ const {
 const {
   fileCourtIssuedDocketEntryInteractor,
 } = require('./fileCourtIssuedDocketEntryInteractor');
+const {
+  MOCK_CASE,
+  MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} = require('../../../test/mockCase');
 const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -66,7 +70,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(caseRecord);
+      .getCaseByDocketNumber.mockResolvedValue(caseRecord);
   });
 
   it('should throw an error if not authorized', async () => {
@@ -74,9 +78,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     await expect(
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
+        docketNumbers: [caseRecord.docketNumber],
         documentMeta: {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumber: caseRecord.docketNumber,
           documentType: 'Memorandum in Support',
         },
       }),
@@ -88,7 +92,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
         documentMeta: {
           docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
-          docketNumber: caseRecord.docketNumber,
+          docketNumbers: [caseRecord.docketNumber],
           documentType: 'Order',
         },
       }),
@@ -100,9 +104,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
     await expect(
       fileCourtIssuedDocketEntryInteractor(applicationContext, {
+        docketNumbers: [caseRecord.docketNumber],
         documentMeta: {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumber: caseRecord.docketNumber,
           documentType: 'Order',
         },
       }),
@@ -111,9 +115,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should call countPagesInDocument, updateCase, and saveWorkItem', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [caseRecord.docketNumber],
       documentMeta: {
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order',
         documentType: 'Order',
         eventCode: 'O',
@@ -131,9 +135,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [caseRecord.docketNumber],
       documentMeta: {
         docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order to Show Cause',
         documentType: 'Order to Show Cause',
         eventCode: 'OSC',
@@ -159,10 +163,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [caseRecord.docketNumber],
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: caseRecord.docketEntries[2].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Transcript of [anything] on [date]',
         documentType: 'Transcript',
         eventCode: TRANSCRIPT_EVENT_CODE,
@@ -188,9 +192,9 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
   it('should delete the draftOrderState from the docketEntry', async () => {
     const docketEntryToUpdate = caseRecord.docketEntries[2];
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [caseRecord.docketNumber],
       documentMeta: {
         docketEntryId: docketEntryToUpdate.docketEntryId,
-        docketNumber: caseRecord.docketNumber,
         documentTitle: docketEntryToUpdate.documentTitle,
         documentType: docketEntryToUpdate.documentType,
         draftOrderState: {
@@ -212,10 +216,10 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
 
   it('should use original case caption to create case title when creating work item', async () => {
     await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [caseRecord.docketNumber],
       documentMeta: {
         date: '2019-03-01T21:40:46.415Z',
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
         documentTitle: 'Order',
         documentType: 'Order',
         eventCode: 'O',
@@ -230,6 +234,72 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         .workItem,
     ).toMatchObject({
       caseTitle: Case.getCaseTitle(caseRecord.caseCaption),
+    });
+  });
+
+  it('should add docketEntry to caseEntity when not already on caseEntity', async () => {
+    const LEAD_CASE = {
+      ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+      docketEntries: [
+        {
+          docketEntryId: 'b01afa63-931e-4999-99f0-c892c51292d6',
+          docketNumber: '109-19',
+          documentTitle: 'Some Title',
+          documentType: 'Trial Exhibits',
+          eventCode: 'TE',
+          signedAt: '2019-03-01T21:40:46.415Z',
+          signedByUserId: mockUserId,
+          signedJudgeName: 'Dredd',
+          userId: mockUserId,
+        },
+      ],
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+      );
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce(LEAD_CASE);
+
+    await fileCourtIssuedDocketEntryInteractor(applicationContext, {
+      docketNumbers: [
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        LEAD_CASE.docketNumber,
+      ],
+      documentMeta: {
+        docketEntryId: LEAD_CASE.docketEntries[0].docketEntryId,
+
+        documentType: 'Trial Exhibits',
+        eventCode: 'TE',
+        freeText: 'free text testing',
+      },
+      subjectDocketNumber: LEAD_CASE.docketNumber,
+    });
+
+    const docketEntryOnNonLead = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'TE',
+      );
+    expect(docketEntryOnNonLead).toMatchObject({
+      docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+      freeText: 'free text testing',
+    });
+    const docketEntryOnLead = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[1][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'TE',
+      );
+    expect(docketEntryOnLead).toMatchObject({
+      docketNumber: LEAD_CASE.docketNumber,
+      freeText: 'free text testing',
     });
   });
 });

@@ -483,5 +483,12 @@
     "scenario": "Type A",
     "isUnservable": true,
     "requiresCoversheet": true
+  },
+  {
+    "eventCode": "OCS",
+    "documentType": "Online Cited Source",
+    "documentTitle": "Online Cited Source",
+    "scenario": "Type A",
+    "isUnservable": true
   }
 ]

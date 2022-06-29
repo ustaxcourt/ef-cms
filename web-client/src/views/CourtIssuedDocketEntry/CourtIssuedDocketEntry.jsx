@@ -1,6 +1,7 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CancelDraftDocumentModal } from '../CancelDraftDocumentModal';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { ConfirmInitiateSaveModal } from '../ConfirmInitiateSaveModal';
 import { ConfirmInitiateServiceModal } from '../ConfirmInitiateServiceModal';
 import { CourtIssuedNonstandardForm } from './CourtIssuedNonstandardForm';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
@@ -30,9 +31,9 @@ export const CourtIssuedDocketEntry = connect(
       sequences.openCancelDraftDocumentModalSequence,
     openConfirmInitiateServiceModalSequence:
       sequences.openConfirmInitiateServiceModalSequence,
+    saveCourtIssuedDocketEntrySequence:
+      sequences.saveCourtIssuedDocketEntrySequence,
     showModal: state.modal.showModal,
-    submitCourtIssuedDocketEntrySequence:
-      sequences.submitCourtIssuedDocketEntrySequence,
     updateCourtIssuedDocketEntryFormValueSequence:
       sequences.updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence:
@@ -46,8 +47,8 @@ export const CourtIssuedDocketEntry = connect(
     isEditingDocketEntry,
     openCancelDraftDocumentModalSequence,
     openConfirmInitiateServiceModalSequence,
+    saveCourtIssuedDocketEntrySequence,
     showModal,
-    submitCourtIssuedDocketEntrySequence,
     updateCourtIssuedDocketEntryFormValueSequence,
     validateCourtIssuedDocketEntrySequence,
     validationErrors,
@@ -254,7 +255,9 @@ export const CourtIssuedDocketEntry = connect(
                   <Button
                     secondary
                     id="save-entry-button"
-                    onClick={() => submitCourtIssuedDocketEntrySequence()}
+                    onClick={() => {
+                      saveCourtIssuedDocketEntrySequence();
+                    }}
                   >
                     Save Entry
                   </Button>
@@ -277,6 +280,13 @@ export const CourtIssuedDocketEntry = connect(
         </section>
         {showModal === 'ConfirmInitiateServiceModal' && (
           <ConfirmInitiateServiceModal
+            documentTitle={
+              addCourtIssuedDocketEntryHelper.formattedDocumentTitle
+            }
+          />
+        )}
+        {showModal === 'ConfirmInitiateSaveModal' && (
+          <ConfirmInitiateSaveModal
             documentTitle={
               addCourtIssuedDocketEntryHelper.formattedDocumentTitle
             }

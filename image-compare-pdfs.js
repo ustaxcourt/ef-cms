@@ -12,6 +12,7 @@ const pdfs = [
   'Change_Of_Address.pdf',
   'CourtIssuedDocumentCoverSheet.pdf',
   'CoverSheet.pdf',
+  'Cover_Sheet_For_Consolidated_Cases.pdf',
   'Docket_Record.pdf',
   'Notice_Of_Change_To_Remote_Proceeding.pdf',
   'Notice_Of_Change_Of_Trial_Judge.pdf',
