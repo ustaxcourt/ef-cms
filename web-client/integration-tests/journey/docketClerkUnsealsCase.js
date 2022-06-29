@@ -1,7 +1,7 @@
 import { refreshElasticsearchIndex } from '../helpers';
 
 export const docketClerkUnsealsCase = cerebralTest => {
-  return it('Docketclerk seals a case', async () => {
+  return it('Docketclerk unseals a case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });

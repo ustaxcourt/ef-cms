@@ -12,9 +12,13 @@ const {
 } = require('winston');
 const { cloneDeep, unset } = require('lodash');
 
-const redact = format(logEntry => {
+exports.redact = format(logEntry => {
   const copy = cloneDeep(logEntry);
-  ['user.token', 'request.headers.authorization'].forEach(k => unset(copy, k));
+  [
+    'user.token',
+    'request.headers.authorization',
+    'request.headers.Authorization',
+  ].forEach(k => unset(copy, k));
   return copy;
 });
 
@@ -27,7 +31,7 @@ exports.createLogger = (opts = {}) => {
     ...opts,
   };
 
-  const formatters = [errors({ stack: true }), redact()];
+  const formatters = [errors({ stack: true }), exports.redact()];
 
   if (process.env.NODE_ENV === 'production') {
     options.format = combine(...formatters, json());
