@@ -203,3 +203,10 @@ Solution:
     ```bash
     ENV=exp5 FILE_NAME=judge_users.csv ./scripts/bulk-import-judge-users.sh
     ```
+
+## AxiosError: Request failed with status code 403 on Test Users Setup
+Problem:
+- After an environment is torn down and it's being deployed again fresh, on running Test Users Setup, the url that axios posts to must include the DEPLOYING_COLOR. This is likely because the API gateway mapping record doesn't exist between the DEPLOYING_COLOR and the generic api record since `switch-colors` has not been run yet.
+
+Solution:
+- In `createDawsonUser`, make sure that the url that is passed to axios includes the DEPLOYING_COLOR. For example, `https://api-green.${EFCMS_DOMAIN}/users` instead of `https://api.${EFCMS_DOMAIN}/users`.
