@@ -2,8 +2,8 @@ const React = require('react');
 const {
   CONTACT_TYPES,
   COUNTRY_TYPES,
+  PARTIES_CODES,
   PARTY_TYPES,
-  SERVED_PARTIES_CODES,
 } = require('../../../entities/EntityConstants');
 const { DocketRecord } = require('./DocketRecord.jsx');
 const { mount } = require('enzyme');
@@ -79,7 +79,7 @@ describe('DocketRecord', () => {
         isNotServedDocument: false,
         isStatusServed: true,
         servedAtFormatted: '02/02/20',
-        servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
+        servedPartiesCode: PARTIES_CODES.BOTH,
       },
     ];
   });

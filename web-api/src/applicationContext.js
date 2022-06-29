@@ -506,6 +506,12 @@ const {
   getDeployTableStatus,
 } = require('../../shared/src/persistence/dynamo/getDeployTableStatus');
 const {
+  getDispatchNotification,
+} = require('../../shared/src/persistence/dynamo/notifications/getDispatchNotification');
+const {
+  getDocketEntriesServedWithinTimeframe,
+} = require('../../shared/src/persistence/elasticsearch/getDocketEntriesServedWithinTimeframe');
+const {
   getDocQcSectionForUser,
   getWorkQueueFilters,
 } = require('../../shared/src/business/utilities/getWorkQueueFilters');
@@ -780,6 +786,9 @@ const {
   getWorkItemsByWorkItemId,
 } = require('../../shared/src/persistence/dynamo/workitems/getWorkItemsByWorkItemId');
 const {
+  handleBounceNotificationInteractor,
+} = require('../../shared/src/business/useCases/email/handleBounceNotificationInteractor');
+const {
   incrementCounter,
 } = require('../../shared/src/persistence/dynamo/helpers/incrementCounter');
 const {
@@ -937,6 +946,9 @@ const {
   saveCaseNoteInteractor,
 } = require('../../shared/src/business/useCases/caseNote/saveCaseNoteInteractor');
 const {
+  saveDispatchNotification,
+} = require('../../shared/src/persistence/dynamo/notifications/saveDispatchNotification');
+const {
   saveDocumentFromLambda,
 } = require('../../shared/src/persistence/s3/saveDocumentFromLambda');
 const {
@@ -996,6 +1008,9 @@ const {
 const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
+const {
+  sendSlackNotification,
+} = require('../../shared/src/dispatchers/slack/sendSlackNotification');
 const {
   sendUpdatePetitionerCasesMessage,
 } = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
@@ -1547,6 +1562,8 @@ const gatewayMethods = {
   getCompletedSectionInboxMessages,
   getCompletedUserInboxMessages,
   getDeployTableStatus,
+  getDispatchNotification,
+  getDocketEntriesServedWithinTimeframe,
   getDocketNumbersByUser,
   getDocument,
   getDocumentIdFromSQSMessage,
@@ -1599,6 +1616,7 @@ const gatewayMethods = {
     : refreshToken,
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
+  saveDispatchNotification,
   updateCaseCorrespondence,
   updateUserCaseMapping,
   updateWorkItemAssociatedJudge,
@@ -1638,6 +1656,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getAppEndpoint: () => {
       return environment.appEndpoint;
     },
+    getBounceAlertRecipients: () =>
+      process.env.BOUNCE_ALERT_RECIPIENTS?.split(',') || [],
     getCaseTitle: Case.getCaseTitle,
     getChromiumBrowser,
     getClerkOfCourtNameForSigning: () => {
@@ -1719,6 +1739,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         process.env.PROD_ENV_ACCOUNT_ID === process.env.AWS_ACCOUNT_ID
           ? sendNotificationOfSealing
           : () => {},
+      sendSlackNotification,
     }),
     getDocumentClient,
     getDocumentGenerators: () => ({
@@ -1894,6 +1915,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       }
       return searchClientCache;
     },
+    getSlackWebhookUrl: () => process.env.SLACK_WEBHOOK_URL,
     getStorageClient: () => {
       if (!s3Cache) {
         s3Cache = new S3({
@@ -2074,6 +2096,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         getUsersInSectionInteractor,
         getUsersPendingEmailInteractor,
         getWorkItemInteractor,
+        handleBounceNotificationInteractor,
         onConnectInteractor,
         onDisconnectInteractor,
         opinionAdvancedSearchInteractor,
