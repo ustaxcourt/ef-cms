@@ -1,18 +1,16 @@
-/* eslint-disable max-lines */
 import {
   CASE_STATUS_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import {
-  MOCK_USERS,
   docketClerkUser,
   irsPractitionerUser,
   petitionerUser,
   petitionsClerkUser,
   privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -555,41 +553,6 @@ describe('case detail computed', () => {
       });
 
       expect(result.showAddRemoveFromHearingButtons).toEqual(true);
-    });
-
-    describe.only('isAssociatedExternalUser', () => {
-      it('should be true for an external user associated with the case', () => {
-        const privatePractitioner =
-          MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
-
-        const result = runCompute(caseDetailHelper, {
-          state: {
-            ...getBaseState(privatePractitioner),
-            caseDetail: { docketEntries: [], privatePractitioners: [] },
-            screenMetadata: {
-              isAssociated: true,
-            },
-          },
-        });
-
-        expect(result.isAssociatedExternalUser).toEqual(true);
-      });
-
-      it('should be false for an external user NOT associated with the case', () => {
-        const privatePractitioner =
-          MOCK_USERS['330d4b65-620a-489d-8414-6623653ebc4f'];
-        const result = runCompute(caseDetailHelper, {
-          state: {
-            ...getBaseState(privatePractitioner),
-            caseDetail: { docketEntries: [], privatePractitioners: [] },
-            screenMetadata: {
-              isAssociated: false,
-            },
-          },
-        });
-
-        expect(result.isAssociatedExternalUser).toEqual(false);
-      });
     });
   });
 });
