@@ -158,7 +158,7 @@ export const CaseDetail = connect(
           </>
         )}
 
-        {!caseDetailHelper.userCanViewCase && <SealedCaseDetail />}
+        {caseDetailHelper.showSealedCaseView && <SealedCaseDetail />}
       </>
     );
   },
