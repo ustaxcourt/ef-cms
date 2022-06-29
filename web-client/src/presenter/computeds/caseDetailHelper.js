@@ -59,12 +59,15 @@ export const caseDetailHelper = (get, applicationContext) => {
   const hasIrsPractitioners =
     !!caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length;
 
-  //user can view case - condition
-  // if not
-  // user sees sealed view
-  // or user sees 'file an entry of appearance" view
+  const userCanViewCase =
+    (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed;
 
-  const isAssociatedExternalUser = isExternalUser && userAssociatedWithCase;
+  const isPractitioner =
+    user.role === USER_ROLES.irsPractitioner ||
+    user.role === USER_ROLES.privatePractitioner;
+
+  const showSealedCaseView =
+    !userAssociatedWithCase && caseDetail.isSealed && isPractitioner;
 
   return {
     caseDeadlines,
@@ -72,7 +75,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     hasConsolidatedCases,
     hasIrsPractitioners,
     hasPrivatePractitioners,
-    isAssociatedExternalUser,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
     showAddRemoveFromHearingButtons: permissions.SET_FOR_HEARING,
     showCaseDeadlinesExternal,
@@ -92,6 +94,8 @@ export const caseDetailHelper = (get, applicationContext) => {
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
+    showSealedCaseView,
+    userCanViewCase,
     userHasAccessToCase,
   };
 };
