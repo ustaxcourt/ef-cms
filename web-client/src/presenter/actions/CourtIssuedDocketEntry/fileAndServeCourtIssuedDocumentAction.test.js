@@ -5,8 +5,9 @@ import { runAction } from 'cerebral/test';
 
 describe('submitCourtIssuedDocketEntryAction', () => {
   presenter.providers.applicationContext = applicationContext;
+  const clientConnectionId = 'ABC123';
 
-  it('should call the interactor for filing and serving court-issued documents', async () => {
+  it('should call the interactor for filing and serving court-issued documents and pass the current clientConnectId', async () => {
     const thisDocketNumber = '123-20';
 
     await runAction(fileAndServeCourtIssuedDocumentAction, {
@@ -17,6 +18,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
         caseDetail: {
           docketNumber: thisDocketNumber,
         },
+        clientConnectionId,
         docketEntryId: 'abc',
         form: {
           attachments: false,
@@ -40,6 +42,10 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
         .mock.calls[0][1].docketNumbers,
     ).toEqual([thisDocketNumber]);
+    expect(
+      applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
+        .mock.calls[0][2],
+    ).toEqual(clientConnectionId);
   });
 
   describe('consolidated cases', () => {
