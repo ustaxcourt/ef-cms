@@ -1,5 +1,6 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
 import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
 import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
@@ -28,6 +29,7 @@ export const ApplyStampForm = connect(
               Apply Stamp
             </h1>
           </div>
+
           <div className="grid-row grid-gap">
             <Button
               link
@@ -70,7 +72,9 @@ export const ApplyStampForm = connect(
                 ))}
               </fieldset>
             </FormGroup>
+
             <hr />
+
             <FormGroup>
               <label className="usa-label" htmlFor="stricken-case-radio">
                 Select any that apply{' '}
@@ -151,17 +155,25 @@ export const ApplyStampForm = connect(
                   className="usa-radio__input"
                   name="status-report"
                   type="radio"
-                  //   value={}
-                  //   onChange={e => {
-                  //     updateDocketEntryFormValueSequence({
-                  //       key: e.target.name,
-                  //       value: e.target.value === 'Lodge',
-                  //     });
-                  //     validateDocketEntrySequence();
-                  //   }}
                 />
                 <label className="usa-radio__label" htmlFor={'status-report'}>
-                  The parties shall file a status report by [DATE]
+                  The parties shall file a status report by{' '}
+                  <DateInput
+                    className="display-inline-block max-width-25"
+                    id="status-report-or-stip-decision-due-date"
+                    names={{
+                      day: 'lastDateOfPeriodDay',
+                      month: 'lastDateOfPeriodMonth',
+                      year: 'lastDateOfPeriodYear',
+                    }}
+                    placeholder={'MM/DD/YYYY'}
+                    showDateHint={false}
+                    values={{
+                      day: form.lastDateOfPeriodDay,
+                      month: form.lastDateOfPeriodMonth,
+                      year: form.lastDateOfPeriodYear,
+                    }}
+                  />
                 </label>
               </div>
               <div className="usa-radio">
@@ -170,21 +182,29 @@ export const ApplyStampForm = connect(
                   className="usa-radio__input"
                   name="status-report-or-stip-decision"
                   type="radio"
-                  //   value={}
-                  //   onChange={e => {
-                  //     updateDocketEntryFormValueSequence({
-                  //       key: e.target.name,
-                  //       value: e.target.value === 'Lodge',
-                  //     });
-                  //     validateDocketEntrySequence();
-                  //   }}
                 />
                 <label
                   className="usa-radio__label"
                   htmlFor={'status-report-or-stip-decision'}
                 >
                   The parties shall file a status report or proposed stipulated
-                  decision by [DATE]
+                  decision by{' '}
+                  <DateInput
+                    className="display-inline-block"
+                    id="status-report-or-stip-decision-due-date"
+                    names={{
+                      day: 'lastDateOfPeriodDay',
+                      month: 'lastDateOfPeriodMonth',
+                      year: 'lastDateOfPeriodYear',
+                    }}
+                    placeholder={'MM/DD/YYYY'}
+                    showDateHint={false}
+                    values={{
+                      day: form.lastDateOfPeriodDay,
+                      month: form.lastDateOfPeriodMonth,
+                      year: form.lastDateOfPeriodYear,
+                    }}
+                  />
                 </label>
               </div>
             </FormGroup>
@@ -198,20 +218,32 @@ export const ApplyStampForm = connect(
                 >
                   Custom order text <span className="usa-hint">(optional)</span>
                 </label>
-                <input
+                <textarea
                   aria-describedby="custom-order-text-label"
-                  className="usa-input"
+                  autoCapitalize="none"
+                  className="usa-textarea height-8 usa-character-count__field"
                   id="custom-order-text"
+                  maxLength="60"
                   name="custom-order-text"
                   type="text"
                   value={form.customOrderText || ''}
-                  // onChange={e => {
-                  //   updateSequence({
-                  //     key: e.target.name,
-                  //     value: e.target.value,
-                  //   });
-                  // }}
-                />
+                  //   onBlur={() => {
+                  //     validateDocumentSequence();
+                  //   }}
+                  //   onChange={e => {
+                  //     updateDocketEntryMetaDocumentFormValueSequence({
+                  //       key: e.target.name,
+                  //       value: e.target.value,
+                  //     });
+                  //   }}
+                ></textarea>
+                <span
+                  aria-live="polite"
+                  className="usa-hint usa-character-count__message"
+                  id="with-hint-textarea-info"
+                >
+                  You can enter up to 50 characters
+                </span>
               </div>
             </FormGroup>
           </div>
