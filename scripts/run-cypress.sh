@@ -39,7 +39,6 @@ Help()
 export COLOR=deploying
 INTEGRATION=true
 PORT=1234
-PROTOCOL=https
 NON_PUBLIC=app-
 
 # Get the options
@@ -106,6 +105,7 @@ else
     exit 1;
   fi
 
+  # shellcheck disable=SC1091
   . ./scripts/setup-cypress-variables.sh
   export CYPRESS_AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
   export CYPRESS_AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
