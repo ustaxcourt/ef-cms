@@ -7,7 +7,7 @@ const { SignatureV4 } = require('@aws-sdk/signature-v4');
 
 const EXPIRATION = process.env.expiration; // days
 
-exports.handler = async context => {
+exports.handler = async (input, context) => {
   const responses = { createSnapshot: [], deleteIndices: [] };
   let anyError = false;
 
