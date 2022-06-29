@@ -8,7 +8,7 @@ export const practitionerSearchesForUnassociatedSealedCase = cerebralTest => {
     cerebralTest.setState('header.searchTerm', sealedSeedCaseDocketNumber);
     await cerebralTest.runSequence('submitCaseSearchSequence', {});
 
-    expect(cerebralTest.getState('currentPage')).toEqual('SealedCaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
     expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
     expect(cerebralTest.getState('caseDetail.docketNumber')).toBeDefined();
