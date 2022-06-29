@@ -9,6 +9,7 @@ const {
 const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
 const { JoiValidationConstants } = require('../JoiValidationConstants');
 const { replaceBracketed } = require('../../utilities/replaceBracketed');
+const { TRIAL_SESSION_SCOPE_TYPES } = require('../EntityConstants');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 /**
@@ -24,6 +25,18 @@ CourtIssuedDocumentTypeG.prototype.init = function init(rawProps) {
 };
 
 CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function () {
+  if (this.trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
+    this.documentTitle = this.documentTitle.replace(
+      'at [Place]',
+      'in standalone remote session',
+    );
+
+    return replaceBracketed(
+      this.documentTitle,
+      formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
+    );
+  }
+
   return replaceBracketed(
     this.documentTitle,
     formatDateString(this.date, FORMATS.MMDDYYYY_DASHED),
