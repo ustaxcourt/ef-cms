@@ -40,6 +40,7 @@ export COLOR=deploying
 INTEGRATION=true
 PORT=1234
 PROTOCOL=https
+NON_PUBLIC=app-
 
 # Get the options
 while getopts ":chloprs" option; do
@@ -59,6 +60,7 @@ while getopts ":chloprs" option; do
       p) # run against the public client
          PORT=5678
          PUBLIC=-public
+         unset NON_PUBLIC
          ;;
       r) # run the readonly smoketests (this encompasses the -s option)
          unset INTEGRATION
@@ -113,11 +115,10 @@ else
   export CYPRESS_DISABLE_EMAILS=$DISABLE_EMAILS
   export CYPRESS_EFCMS_DOMAIN=$EFCMS_DOMAIN
   export CYPRESS_USTC_ADMIN_PASS=$USTC_ADMIN_PASS
-  export CYPRESS_BASE_URL="https://app-${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+  export CYPRESS_BASE_URL="https://${NON_PUBLIC}${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
 fi
 
 if [ -n "${OPEN}" ]; then
-  echo $CYPRESS_ENV
   cypress open -C "${CONFIG_FILE}" --env ENV="$ENV"
 else
   cypress run -C "${CONFIG_FILE}" --env ENV="$ENV"
