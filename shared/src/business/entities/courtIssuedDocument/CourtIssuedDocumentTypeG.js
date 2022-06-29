@@ -3,6 +3,9 @@ const {
   CourtIssuedDocumentDefault,
 } = require('./CourtIssuedDocumentDefault');
 const {
+  getStandaloneRemoteDocumentTitle,
+} = require('../../utilities/getStandaloneRemoteDocumentTitle');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('../JoiValidationDecorator');
@@ -26,10 +29,9 @@ CourtIssuedDocumentTypeG.prototype.init = function init(rawProps) {
 
 CourtIssuedDocumentTypeG.prototype.getDocumentTitle = function () {
   if (this.trialLocation === TRIAL_SESSION_SCOPE_TYPES.standaloneRemote) {
-    this.documentTitle = this.documentTitle.replace(
-      'at [Place]',
-      'in standalone remote session',
-    );
+    this.documentTitle = getStandaloneRemoteDocumentTitle({
+      documentTitle: this.documentTitle,
+    });
 
     return replaceBracketed(
       this.documentTitle,
