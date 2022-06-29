@@ -103,6 +103,7 @@ import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromS
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
+import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDeficiencyStatisticsSequence } from './sequences/gotoAddDeficiencyStatisticsSequence';
@@ -597,6 +598,7 @@ export const presenter = {
     getBlockedCasesByTrialLocationSequence,
     getCaseInventoryReportSequence,
     getUsersInSectionSequence,
+    goToApplyStampSequence,
     gotoAccessibilityStatementSequence,
     gotoAddCourtIssuedDocketEntrySequence,
     gotoAddDeficiencyStatisticsSequence,

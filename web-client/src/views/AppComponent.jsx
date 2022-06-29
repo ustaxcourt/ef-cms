@@ -7,6 +7,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { AppMaintenance } from './AppMaintenance';
 import { AppMaintenanceModal } from './AppMaintenanceModal';
+import { ApplyStampForm } from './EditDocketEntry/ApplyStampForm';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -98,6 +99,7 @@ const pages = {
   AddTrialSession,
   AdvancedSearch,
   AppMaintenance,
+  ApplyStampForm,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
