@@ -1,18 +1,10 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
-import { EditDocketEntryMetaDocketEntryPreview } from './EditDocketEntryMetaDocketEntryPreview';
-import { EditDocketEntryMetaFormCourtIssued } from './EditDocketEntryMetaFormCourtIssued';
-import { EditDocketEntryMetaFormDocument } from './EditDocketEntryMetaFormDocument';
-import { EditDocketEntryMetaFormNoDocument } from './EditDocketEntryMetaFormNoDocument';
-import { EditDocketEntryMetaTabAction } from './EditDocketEntryMetaTabAction';
-import { EditDocketEntryMetaTabService } from './EditDocketEntryMetaTabService';
 import { ErrorNotification } from '../ErrorNotification';
-import { FormCancelModalDialog } from '../FormCancelModalDialog';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const ApplyStampForm = connect(
@@ -54,13 +46,6 @@ export const ApplyStampForm = connect(
                       name="status"
                       type="radio"
                       value={option}
-                      //   onChange={e => {
-                      //     updateDocketEntryFormValueSequence({
-                      //       key: e.target.name,
-                      //       value: e.target.value === 'Lodge',
-                      //     });
-                      //     validateDocketEntrySequence();
-                      //   }}
                     />
                     <label
                       className="usa-radio__label"
@@ -87,14 +72,6 @@ export const ApplyStampForm = connect(
                   id="stricken-case-radio"
                   name="stricken-case"
                   type="radio"
-                  //   value={}
-                  //   onChange={e => {
-                  //     updateDocketEntryFormValueSequence({
-                  //       key: e.target.name,
-                  //       value: e.target.value === 'Lodge',
-                  //     });
-                  //     validateDocketEntrySequence();
-                  //   }}
                 />
                 <label className="usa-radio__label" htmlFor={'stricken-case'}>
                   This case is stricken from the trial session
@@ -114,14 +91,6 @@ export const ApplyStampForm = connect(
                   className="usa-radio__input"
                   name="general-docket"
                   type="radio"
-                  //   value={}
-                  //   onChange={e => {
-                  //     updateDocketEntryFormValueSequence({
-                  //       key: e.target.name,
-                  //       value: e.target.value === 'Lodge',
-                  //     });
-                  //     validateDocketEntrySequence();
-                  //   }}
                 />
                 <label className="usa-radio__label" htmlFor={'general-docket'}>
                   The case is restored to the general docket
@@ -133,14 +102,6 @@ export const ApplyStampForm = connect(
                   className="usa-radio__input"
                   name="undersigned"
                   type="radio"
-                  //   value={}
-                  //   onChange={e => {
-                  //     updateDocketEntryFormValueSequence({
-                  //       key: e.target.name,
-                  //       value: e.target.value === 'Lodge',
-                  //     });
-                  //     validateDocketEntrySequence();
-                  //   }}
                 />
                 <label className="usa-radio__label" htmlFor={'undersigned'}>
                   Jurisdiction is retained by the undersigned
@@ -159,7 +120,7 @@ export const ApplyStampForm = connect(
                 <label className="usa-radio__label" htmlFor={'status-report'}>
                   The parties shall file a status report by{' '}
                   <DateInput
-                    className="display-inline-block max-width-25"
+                    className="display-inline-block width-card"
                     id="status-report-or-stip-decision-due-date"
                     names={{
                       day: 'lastDateOfPeriodDay',
@@ -190,7 +151,7 @@ export const ApplyStampForm = connect(
                   The parties shall file a status report or proposed stipulated
                   decision by{' '}
                   <DateInput
-                    className="display-inline-block"
+                    className="display-inline-block width-card"
                     id="status-report-or-stip-decision-due-date"
                     names={{
                       day: 'lastDateOfPeriodDay',
@@ -227,22 +188,13 @@ export const ApplyStampForm = connect(
                   name="custom-order-text"
                   type="text"
                   value={form.customOrderText || ''}
-                  //   onBlur={() => {
-                  //     validateDocumentSequence();
-                  //   }}
-                  //   onChange={e => {
-                  //     updateDocketEntryMetaDocumentFormValueSequence({
-                  //       key: e.target.name,
-                  //       value: e.target.value,
-                  //     });
-                  //   }}
                 ></textarea>
                 <span
                   aria-live="polite"
                   className="usa-hint usa-character-count__message"
                   id="with-hint-textarea-info"
                 >
-                  You can enter up to 50 characters
+                  You can enter up to 60 characters
                 </span>
               </div>
             </FormGroup>
