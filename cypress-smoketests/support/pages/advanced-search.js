@@ -75,7 +75,7 @@ exports.addDocketEntryAndServeOpinion = testData => {
   cy.get('#judge').select('Foley');
 
   testData.documentDescription = faker.company.catchPhrase();
-  cy.get('#free-text').type(testData.documentDescription);
+  cy.get('#free-text').clear().type(testData.documentDescription);
 
   cy.get('#serve-to-parties-btn').click();
   cy.get('button').contains('Yes, Serve').click();
