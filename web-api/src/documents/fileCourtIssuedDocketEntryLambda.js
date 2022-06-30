@@ -10,8 +10,7 @@ exports.fileCourtIssuedDocketEntryLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .fileCourtIssuedDocketEntryInteractor(
-        applicationContext,
-        JSON.parse(event.body),
-      );
+      .fileCourtIssuedDocketEntryInteractor(applicationContext, {
+        ...JSON.parse(event.body),
+      });
   });

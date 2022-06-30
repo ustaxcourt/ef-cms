@@ -32,6 +32,7 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const subdomainsUrl = `https://*.${allowedDomainString}`;
   const cognitoUrl = 'https://*.auth.us-east-1.amazoncognito.com';
   const dynamsoftUrlStaging = 'https://dynamsoft-lib.stg.ef-cms.ustaxcourt.gov';
+  const dynamsoftUrlTest = 'https://dynamsoft-lib.test.ef-cms.ustaxcourt.gov';
   const dynamsoftUrlProd = 'https://dynamsoft-lib.dawson.ustaxcourt.gov';
   const websocketUrl = `wss://*.${allowedDomainString}`;
   const localUrl = 'https://127.0.0.1:*';
@@ -41,14 +42,14 @@ exports.handler = (awsEvent, handlerContext, callback) => {
   const pdfjsExpressUrl = 'https://*.pdfjs.express';
   const contentSecurityPolicy = [
     'base-uri resource://pdf.js',
-    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
+    `connect-src blob: ${subdomainsUrl} ${applicationUrl} ${cognitoUrl} ${s3Url} ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging} ${localUrl} ${websocketUrl} ${localWebsocketUrl} ${pdfjsExpressUrl}`,
     "default-src 'none'",
     "manifest-src 'self'",
     `form-action ${applicationUrl} ${subdomainsUrl}`,
     `object-src ${subdomainsUrl} ${applicationUrl} ${s3Url}`,
-    `script-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
+    `script-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging} ${statuspageUrl} resource://pdf.js`,
     `worker-src blob: ${subdomainsUrl}`,
-    `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlStaging}`,
+    `style-src 'self' 'unsafe-inline' ${dynamsoftUrlProd} ${dynamsoftUrlTest} ${dynamsoftUrlStaging}`,
     `img-src ${applicationUrl} ${subdomainsUrl} blob: data:`,
     `font-src ${applicationUrl} ${subdomainsUrl} data:`,
     `frame-src ${s3Url} ${subdomainsUrl} ${statuspageUrl} blob: data:`,

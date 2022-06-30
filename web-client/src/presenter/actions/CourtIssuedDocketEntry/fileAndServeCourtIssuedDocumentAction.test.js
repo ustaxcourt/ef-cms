@@ -42,6 +42,7 @@ describe('submitCourtIssuedDocketEntryAction', () => {
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
         .mock.calls[0][1].docketNumbers,
     ).toEqual([thisDocketNumber]);
+    
     expect(
       applicationContext.getUseCases().fileAndServeCourtIssuedDocumentInteractor
         .mock.calls[0][2],
