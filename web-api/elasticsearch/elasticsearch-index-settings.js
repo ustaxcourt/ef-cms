@@ -15,7 +15,7 @@
 
   // eslint-disable-next-line spellcheck/spell-checker
   /*
-    Supported versions can be found at 
+    Supported versions can be found at
     https://docs.aws.amazon.com/elasticsearch-service/latest/developerguide/what-is-amazon-elasticsearch-service.html#aes-choosing-version
     Changes to the API version ought to also be reflected in
     - elasticsearch.tf
@@ -33,7 +33,7 @@
       region: environment.region,
     },
     apiVersion: ELASTICSEARCH_API_VERSION,
-    connectionClass: connectionClass,
+    connectionClass,
     host: {
       host: environment.elasticsearchEndpoint,
       port: process.env.ELASTICSEARCH_PORT || 443,
@@ -42,13 +42,23 @@
     log: 'warning',
   });
 
+  const overriddenNumberOfReplicasIfNonProd =
+    process.env.OVERRIDE_ES_NUMBER_OF_REPLICAS;
+  const deployingEnvironment = process.env.ENV;
+
   await Promise.all(
     elasticsearchIndexes.map(async index => {
       try {
+        const esSettings = settings({
+          environment: deployingEnvironment,
+          overriddenNumberOfReplicasIfNonProd,
+        });
+
         const indexExists = await searchClientCache.indices.exists({
           body: {},
           index,
         });
+
         if (!indexExists) {
           searchClientCache.indices.create({
             body: {
@@ -56,7 +66,7 @@
                 dynamic: false,
                 ...mappings[index],
               },
-              settings,
+              settings: esSettings,
             },
             index,
           });
@@ -64,7 +74,8 @@
           searchClientCache.indices.putSettings({
             body: {
               index: {
-                max_result_window: settings.index.max_result_window,
+                max_result_window: esSettings.index.max_result_window,
+                number_of_replicas: esSettings.index.number_of_replicas,
               },
             },
             index,
