@@ -7,6 +7,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { AppMaintenance } from './AppMaintenance';
 import { AppMaintenanceModal } from './AppMaintenanceModal';
+import { ApplyStamp } from './ApplyStamp';
 import { ApplyStampForm } from './EditDocketEntry/ApplyStampForm';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
@@ -148,6 +149,7 @@ const pages = {
   PetitionQc,
   PractitionerDetail,
   PrintPaperPetitionReceipt,
+  ApplyStamp,
   PrintPaperService,
   PrintPaperTrialNotices,
   PrintableCaseInventoryReport,
