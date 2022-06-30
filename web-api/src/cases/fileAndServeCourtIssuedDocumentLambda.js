@@ -13,10 +13,10 @@ exports.fileAndServeCourtIssuedDocumentLambda = event => {
       .getUseCases()
       .fileAndServeCourtIssuedDocumentInteractor(
         applicationContext,
-        clientConnectionId,
         {
           ...JSON.parse(event.body),
         },
+        clientConnectionId,
       );
   });
 };

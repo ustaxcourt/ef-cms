@@ -190,14 +190,12 @@ exports.remove = async ({
 const getDefaultHeaders = (userToken, clientConnectionId) => {
   const authorization = userToken ? `Bearer ${userToken}` : undefined;
 
-  let authorizationHeaderObject = {
-    'X-Connection-Id': clientConnectionId,
-  };
+  let authorizationHeaderObject = {};
   if (authorization) {
-    authorizationHeaderObject = {
-      ...authorizationHeaderObject,
-      Authorization: authorization,
-    };
+    authorizationHeaderObject['Authorization'] = authorization;
+  }
+  if (clientConnectionId) {
+    authorizationHeaderObject['X-Connection-Id'] = clientConnectionId;
   }
 
   return authorizationHeaderObject;
