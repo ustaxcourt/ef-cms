@@ -357,22 +357,6 @@ data "aws_s3_bucket_object" "bounce_handler_green_east_object" {
   key        = "bounce_handler_green.js.zip"
 }
 
-data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.green_elasticsearch_domain
-}
-
-data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.blue_elasticsearch_domain
-}
-
 data "aws_dynamodb_table" "green_dynamo_table" {
   depends_on = [
     module.dynamo_table_alpha,
@@ -473,7 +457,7 @@ module "api-east-green" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_east_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-east-1"
   validate = 1
@@ -532,7 +516,7 @@ module "api-east-blue" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_east_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-east-1"
   validate = 1
