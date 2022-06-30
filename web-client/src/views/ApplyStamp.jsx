@@ -11,11 +11,8 @@ import React, { useEffect, useRef } from 'react';
 export const ApplyStamp = connect(
   {
     currentPageNumber: state.pdfForSigning.pageNumber,
-    docketEntryId: state.docketEntryId,
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
-    navigateToCaseDetailWithDraftDocumentSequence:
-      sequences.navigateToCaseDetailWithDraftDocumentSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
@@ -23,12 +20,10 @@ export const ApplyStamp = connect(
     setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
-    skipSigningOrderSequence: sequences.skipSigningOrderSequence,
     validationErrors: state.validationErrors,
   },
   function ApplyStamp({
     currentPageNumber,
-    docketEntryId,
     form,
     pdfForSigning,
     pdfObj,
@@ -37,7 +32,6 @@ export const ApplyStamp = connect(
     setSignatureData,
     signatureApplied,
     signatureData,
-    skipSigningOrderSequence,
     validationErrors,
   }) {
     const yLimitToPreventServedStampOverlay = 705;
@@ -167,14 +161,14 @@ export const ApplyStamp = connect(
         <CaseDetailHeader />
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            <div className="grid-col-5">
-              <ErrorNotification />
-              <div className="grid-row grid-gap">
-                <h1 className="heading-1" id="page-title">
-                  Apply Stamp
-                </h1>
-              </div>
+            <ErrorNotification />
 
+            <h1 className="heading-1" id="page-title">
+              Apply Stamp
+            </h1>
+          </div>
+          <div className="grid-row grid-gap">
+            <div className="grid-col-5">
               <div className="grid-row grid-gap">
                 <Button
                   link
