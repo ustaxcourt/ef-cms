@@ -404,15 +404,6 @@ export const ApplyStamp = connect(
                       </Button>
                     </>
                   )}
-                  {pdfSignerHelper.showSkipSignatureButton && (
-                    <Button
-                      className="margin-right-0"
-                      id="skip-signature-button"
-                      onClick={() => skipSigningOrderSequence()}
-                    >
-                      Skip Signature
-                    </Button>
-                  )}
                 </div>
               </div>
               <div className="grid-row">
@@ -423,6 +414,18 @@ export const ApplyStamp = connect(
                       id="signature"
                       ref={signatureRef}
                     >
+                      It is ORDERED as follows:
+                      <br />
+                      This motion is DENIED as moot without prejudice
+                      <hr className="narrow-hr" />
+                      - This case is stricken from the trial session -
+                      <br />
+                      - This case is restored to the general docket -
+                      <br />
+                      The parties shall file a status report or proposed
+                      stipulation decision by 12/30/2022 Stipulation of settled
+                      issued due by December 30, 2022
+                      <hr className="narrow-hr" />
                       (Signed) {pdfForSigning.nameForSigning}
                       <br />
                       {pdfForSigning.nameForSigningLine2}

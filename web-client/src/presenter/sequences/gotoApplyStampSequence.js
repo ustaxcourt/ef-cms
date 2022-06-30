@@ -1,4 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
+import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
 import { clearScansAction } from '../actions/clearScansAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { deconstructDatesToFormAction } from '../actions/EditDocketRecord/deconstructDatesToFormAction';
@@ -13,6 +14,7 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPDFForSigningAction } from '../actions/setPDFForSigningAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
 import { setQCWorkItemIdToMarkAsReadIfNeededAction } from '../actions/EditDocketRecord/setQCWorkItemIdToMarkAsReadIfNeededAction';
+import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
 import { setTabAction } from '../actions/setTabAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -30,6 +32,10 @@ export const goToApplyStampSequence = [
       // clearScreenMetadataAction,
       getCaseAction,
       setCaseAction,
+      setDocketEntryIdAction,
+      clearPDFSignatureDataAction,
+      clearFormAction,
+      setSignatureNameForPdfSigningAction,
       setPDFForSigningAction,
       setPDFPageForSigningAction,
       // setDocketEntryFormForDocketEditAction,
