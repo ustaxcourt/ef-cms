@@ -13,6 +13,13 @@ export const SearchBoilerplateText = connect(
         <p className="margin-top-0">
           Anyone can search for {formTypeText} in our system for cases filed{' '}
           <span className="text-semibold">on or after May 1, 1986</span>.
+          {isOpinion && (
+            <>
+              {' '}
+              Any online sourced citations in opinions filed after July 11, 2022
+              can be viewed directly from the associated docket record.
+            </>
+          )}
         </p>
         <ul>
           <li>
