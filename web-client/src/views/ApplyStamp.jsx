@@ -2,7 +2,6 @@ import { Button } from '../ustc-ui/Button/Button';
 import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
 import { DateInput } from '../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from './ErrorNotification';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
 import { PDFSignerPageButtons } from './PDFSignerPageButtons';
 import { connect } from '@cerebral/react';
@@ -31,7 +30,6 @@ export const ApplyStamp = connect(
     currentPageNumber,
     docketEntryId,
     form,
-    navigateToCaseDetailWithDraftDocumentSequence,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
@@ -387,33 +385,14 @@ export const ApplyStamp = connect(
             </div>
             <div className="grid-col-7">
               <div className="grid-row margin-bottom-1">
-                <div className="grid-col-12">
-                  <h1>Apply Signature</h1>
-                </div>
-              </div>
-              <div className="grid-row margin-bottom-1">
-                <div className="grid-col-4">
-                  <Button
-                    link
-                    onClick={() => {
-                      navigateToCaseDetailWithDraftDocumentSequence({
-                        primaryTab: 'draftDocuments',
-                        viewerDraftDocumentToDisplay: { docketEntryId },
-                      });
-                    }}
-                  >
-                    <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
-                    Back to Draft Document
-                  </Button>
-                </div>
-                <div className="grid-col-4 text-align-center sign-pdf-control">
+                <div className="grid-col-4 text-align-left sign-pdf-control">
                   <PDFSignerPageButtons />
                 </div>
-                <div className="grid-col-4 text-align-right">
+                <div className="grid-col-8 text-align-right">
                   {pdfSignerHelper.isPlaced && (
                     <>
                       <Button link icon="trash" onClick={() => restart()}>
-                        Delete Signature
+                        Remove Stamp
                       </Button>
 
                       <Button
@@ -421,7 +400,7 @@ export const ApplyStamp = connect(
                         id="save-signature-button"
                         onClick={() => saveDocumentSigningSequence()}
                       >
-                        Save Signature
+                        Save Stamp Order
                       </Button>
                     </>
                   )}
