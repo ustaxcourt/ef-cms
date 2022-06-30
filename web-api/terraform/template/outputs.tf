@@ -1,8 +1,8 @@
 
 output "elasticsearch_endpoint_alpha" {
-  value = module.elasticsearch_alpha.endpoint
+  value = length(module.elasticsearch_alpha) > 0 ? module.elasticsearch_alpha[0].endpoint : null
 }
 
 output "elasticsearch_endpoint_beta" {
-  value = module.elasticsearch_beta.endpoint
+  value = length(module.elasticsearch_beta) > 0 ? module.elasticsearch_beta[0].endpoint : null
 }

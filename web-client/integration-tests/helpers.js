@@ -892,18 +892,30 @@ export const wait = time => {
   });
 };
 
+export const waitFor = async ({
+  booleanExpression,
+  maxWait = 10000,
+  refreshInterval = 500,
+}) => {
+  let waitTime = 0;
+  while (booleanExpression() && waitTime < maxWait) {
+    waitTime += refreshInterval;
+    await wait(refreshInterval);
+  }
+  return waitTime;
+};
+
 export const waitForLoadingComponentToHide = async ({
   cerebralTest,
   component = 'progressIndicator.waitingForResponse',
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  let waitTime = 0;
-
-  while (cerebralTest.getState(component) && waitTime < maxWait) {
-    waitTime += refreshInterval;
-    await wait(refreshInterval);
-  }
+  const waitTime = await waitFor({
+    booleanExpression: () => cerebralTest.getState(component),
+    maxWait,
+    refreshInterval,
+  });
   console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
@@ -913,15 +925,23 @@ export const waitForExpectedItem = async ({
   expectedItem,
   maxWait = 10000,
 }) => {
-  let waitTime = 0;
-  while (
-    cerebralTest.getState(currentItem) != expectedItem &&
-    waitTime < maxWait
-  ) {
-    waitTime += 500;
-    await wait(500);
-  }
+  const waitTime = await waitFor({
+    booleanExpression: () => cerebralTest.getState(currentItem) != expectedItem,
+    maxWait,
+  });
   console.log(`Waited ${waitTime}ms for ${expectedItem}`);
+};
+
+export const waitForExpectedItemToExist = async ({
+  cerebralTest,
+  currentItem,
+  maxWait = 10000,
+}) => {
+  const waitTime = await waitFor({
+    booleanExpression: () => !cerebralTest.getState(currentItem),
+    maxWait,
+  });
+  console.log(`Waited ${waitTime}ms for ${currentItem}`);
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {
