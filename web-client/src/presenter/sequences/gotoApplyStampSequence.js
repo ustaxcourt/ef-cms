@@ -10,6 +10,8 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryFormForDocketEditAction } from '../actions/EditDocketRecord/setDocketEntryFormForDocketEditAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setPDFForSigningAction } from '../actions/setPDFForSigningAction';
+import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
 import { setQCWorkItemIdToMarkAsReadIfNeededAction } from '../actions/EditDocketRecord/setQCWorkItemIdToMarkAsReadIfNeededAction';
 import { setTabAction } from '../actions/setTabAction';
 import { setWorkItemAsReadAction } from '../actions/setWorkItemAsReadAction';
@@ -28,13 +30,15 @@ export const goToApplyStampSequence = [
       // clearScreenMetadataAction,
       getCaseAction,
       setCaseAction,
+      setPDFForSigningAction,
+      setPDFPageForSigningAction,
       // setDocketEntryFormForDocketEditAction,
       // deconstructDatesToFormAction,
       // updateDocketEntryWizardDataAction,
       // setDocketEntryIdAction,
       // setQCWorkItemIdToMarkAsReadIfNeededAction,
       // setTabAction('Document Info'),
-      setCurrentPageAction('ApplyStampForm'),
+      setCurrentPageAction('ApplyStamp'),
     ]),
     unauthorized: [redirectToCognitoAction],
   },
