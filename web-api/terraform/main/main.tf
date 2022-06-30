@@ -52,4 +52,6 @@ module "ef-cms_apis" {
   cognito_table_name         = var.cognito_table_name
   prod_env_account_id        = var.prod_env_account_id
   lower_env_account_id       = var.lower_env_account_id
+  should_es_alpha_exist      = var.should_es_alpha_exist
+  should_es_beta_exist       = var.should_es_beta_exist
 }
