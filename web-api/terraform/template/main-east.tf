@@ -182,6 +182,24 @@ resource "null_resource" "seal_in_lower_east_object" {
   }
 }
 
+data "archive_file" "zip_bounce_handler" {
+  type        = "zip"
+  output_path = "${path.module}/../template/lambdas/handle-bounced-service-email.js.zip"
+  source_file = "${path.module}/../template/lambdas/dist/handle-bounced-service-email.js"
+}
+
+resource "null_resource" "bounce_handler_east_object" {
+  depends_on = [aws_s3_bucket.api_lambdas_bucket_east]
+  provisioner "local-exec" {
+    command = "aws s3 cp ${data.archive_file.zip_bounce_handler.output_path} s3://${aws_s3_bucket.api_lambdas_bucket_east.id}/bounce_handler_${var.deploying_color}.js.zip"
+  }
+
+  triggers = {
+    always_run = timestamp()
+  }
+}
+
+
 resource "aws_acm_certificate" "api_gateway_cert_east" {
   domain_name       = "*.${var.dns_domain}"
   validation_method = "DNS"
@@ -327,20 +345,16 @@ data "aws_s3_bucket_object" "triggers_blue_east_object" {
   key        = "triggers_blue.js.zip"
 }
 
-data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.green_elasticsearch_domain
+data "aws_s3_bucket_object" "bounce_handler_blue_east_object" {
+  depends_on = [null_resource.bounce_handler_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "bounce_handler_blue.js.zip"
 }
 
-data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.blue_elasticsearch_domain
+data "aws_s3_bucket_object" "bounce_handler_green_east_object" {
+  depends_on = [null_resource.bounce_handler_east_object]
+  bucket     = aws_s3_bucket.api_lambdas_bucket_east.id
+  key        = "bounce_handler_green.js.zip"
 }
 
 data "aws_dynamodb_table" "green_dynamo_table" {
@@ -443,7 +457,7 @@ module "api-east-green" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_east_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-east-1"
   validate = 1
@@ -473,6 +487,11 @@ module "api-east-green" {
   create_seal_in_lower           = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
   lower_env_account_id           = var.lower_env_account_id
   prod_env_account_id            = var.prod_env_account_id
+
+  # lambda to handle bounced service email notifications
+  bounce_handler_object          = null_resource.bounce_handler_east_object
+  bounce_handler_object_hash     = data.aws_s3_bucket_object.bounce_handler_green_east_object.etag
+  create_bounce_handler          = 1
 }
 
 module "api-east-blue" {
@@ -497,7 +516,7 @@ module "api-east-blue" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_east_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-east-1"
   validate = 1
@@ -527,4 +546,9 @@ module "api-east-blue" {
   create_seal_in_lower           = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
   lower_env_account_id           = var.lower_env_account_id
   prod_env_account_id            = var.prod_env_account_id
+
+  # lambda to handle bounced service email notifications
+  bounce_handler_object          = null_resource.bounce_handler_east_object
+  bounce_handler_object_hash     = data.aws_s3_bucket_object.bounce_handler_blue_east_object.etag
+  create_bounce_handler          = 1
 }

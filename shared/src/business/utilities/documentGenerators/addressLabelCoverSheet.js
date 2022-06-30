@@ -12,10 +12,6 @@ const addressLabelCoverSheet = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: addressLabelCoverSheetTemplate,
-    options: {
-      overwriteMain: true,
-      title: '',
-    },
   });
 
   const pdf = await applicationContext

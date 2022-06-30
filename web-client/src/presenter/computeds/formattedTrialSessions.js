@@ -16,6 +16,9 @@ export const formatSession = (session, applicationContext) => {
   session.formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(session.startDate, DATE_FORMATS.MMDDYY);
+  session.formattedEstimatedEndDate = applicationContext
+    .getUtilities()
+    .formatDateString(session.estimatedEndDate, DATE_FORMATS.MMDDYY);
   session.formattedNoticeIssuedDate = applicationContext
     .getUtilities()
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);

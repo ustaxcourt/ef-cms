@@ -1,16 +1,16 @@
+/* eslint-disable max-lines */
 import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
-import { getConstants } from '../../getConstants';
 import {
+  applyFiltersToCompletedMessages,
+  applyFiltersToMessages,
   getFormattedMessages,
   sortCompletedMessages,
   sortFormattedMessages,
 } from './processFormattedMessages';
-
-const { ASCENDING, DESCENDING } = getConstants();
 
 describe('processFormattedMessages', () => {
   const DOCKET_NUMBER_1 = '101-19';
@@ -18,9 +18,31 @@ describe('processFormattedMessages', () => {
   const DOCKET_NUMBER_3 = '105-20';
   const PARENT_MESSAGE_ID = '078ffe53-23ed-4386-9cc5-d7a175f5c948';
 
-  describe('sortFormattedMessages', () => {
-    let messages;
+  const QUALIFIED_SORT_FIELDS = ['createdAt', 'completedAt', 'subject'];
 
+  const { ASCENDING, DESCENDING } = applicationContext.getConstants();
+
+  const mockMessage = {
+    caseStatus: 'Ready for trial',
+    completedAt: '2019-05-01T17:29:13.122Z',
+    createdAt: '2019-01-01T17:29:13.122Z',
+    docketNumber: '123-45',
+    docketNumberSuffix: '',
+    from: 'Test Sender',
+    fromSection: DOCKET_SECTION,
+    fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+    message: 'This is a test message',
+    messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+    parentMessageId: PARENT_MESSAGE_ID,
+    subject: 'Test subject...',
+    to: 'Test Recipient',
+    toSection: PETITIONS_SECTION,
+    toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+  };
+
+  let messages;
+
+  describe('sortFormattedMessages', () => {
     beforeEach(() => {
       messages = [
         {
@@ -49,8 +71,6 @@ describe('processFormattedMessages', () => {
         },
       ];
     });
-
-    const QUALIFIED_SORT_FIELDS = ['createdAt', 'completedAt', 'subject'];
 
     it('should not sort the messages if sortField is not a qualified sortable field', () => {
       const result = sortFormattedMessages(messages, {
@@ -278,32 +298,10 @@ describe('processFormattedMessages', () => {
   });
 
   describe('getFormattedMessages', () => {
-    let validMessage;
-
-    beforeEach(() => {
-      validMessage = {
-        caseStatus: 'Ready for trial',
-        completedAt: '2019-05-01T17:29:13.122Z',
-        createdAt: '2019-01-01T17:29:13.122Z',
-        docketNumber: '123-45',
-        docketNumberSuffix: '',
-        from: 'Test Sender',
-        fromSection: DOCKET_SECTION,
-        fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
-        message: 'This is a test message',
-        messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
-        parentMessageId: PARENT_MESSAGE_ID,
-        subject: 'Test subject...',
-        to: 'Test Recipient',
-        toSection: PETITIONS_SECTION,
-        toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
-      };
-    });
-
     it('returns formatted date strings', () => {
       const result = getFormattedMessages({
         applicationContext,
-        messages: [validMessage],
+        messages: [mockMessage],
       });
 
       expect(result.messages[0].createdAtFormatted).toEqual('01/01/19');
@@ -435,6 +433,8 @@ describe('processFormattedMessages', () => {
           createdAt: '2019-01-01T16:29:13.122Z',
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
+          inConsolidatedGroup: false,
+          inLeadCase: false,
           message: 'This is a test message one',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
@@ -444,11 +444,216 @@ describe('processFormattedMessages', () => {
           createdAt: '2019-01-01T17:29:13.122Z',
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
+          inConsolidatedGroup: false,
+          inLeadCase: false,
           message: 'This is a test message three',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
         },
       ]);
+    });
+
+    describe('inConsolidatedGroup', () => {
+      it('should be true when message.leadDocketNumber is defined', () => {
+        const result = getFormattedMessages({
+          applicationContext,
+          messages: [
+            {
+              ...mockMessage,
+              leadDocketNumber: '123-45',
+            },
+          ],
+        });
+
+        expect(result.messages[0].inConsolidatedGroup).toBeTruthy();
+      });
+
+      it('should be false when message.leadDocketNumber is undefined', () => {
+        const result = getFormattedMessages({
+          applicationContext,
+          messages: [{ ...mockMessage, leadDocketNumber: undefined }],
+        });
+
+        expect(result.messages[0].inConsolidatedGroup).toBeFalsy();
+      });
+    });
+
+    describe('inLeadCase', () => {
+      it('returns inLeadCase true when message.leadDocketNumber is the same as message.docketNumber', () => {
+        const result = getFormattedMessages({
+          applicationContext,
+          messages: [
+            {
+              ...mockMessage,
+              docketNumber: '123-45',
+              leadDocketNumber: '123-45',
+            },
+          ],
+        });
+
+        expect(result.messages[0].inLeadCase).toBeTruthy();
+      });
+
+      it('returns inLeadCase false when message.leadDocketNumber is NOT the same as message.docketNumber', () => {
+        const result = getFormattedMessages({
+          applicationContext,
+          messages: [
+            {
+              ...mockMessage,
+              docketNumber: '123-45',
+              leadDocketNumber: '999-99',
+            },
+          ],
+        });
+
+        expect(result.messages[0].inLeadCase).toBeFalsy();
+      });
+    });
+
+    describe('consolidatedIconTooltipText', () => {
+      it('should be set to "Lead case" when it is the lead case in a consolidated group', () => {
+        const result = getFormattedMessages({
+          applicationContext,
+          messages: [
+            {
+              ...mockMessage,
+              docketNumber: '123-45',
+              leadDocketNumber: '123-45',
+            },
+          ],
+        });
+
+        expect(result.messages[0].consolidatedIconTooltipText).toEqual(
+          'Lead case',
+        );
+      });
+
+      it('should be set to "Consolidated case" when it is in a consolidated group', () => {
+        const result = getFormattedMessages({
+          applicationContext,
+          messages: [
+            {
+              ...mockMessage,
+              docketNumber: '123-45',
+              leadDocketNumber: '443-45',
+            },
+          ],
+        });
+
+        expect(result.messages[0].consolidatedIconTooltipText).toEqual(
+          'Consolidated case',
+        );
+      });
+    });
+  });
+
+  describe('applyFiltersToCompletedMessages', () => {
+    it('returns only messages for the rick user when filtering by completedBy "rick"', () => {
+      const result = applyFiltersToCompletedMessages({
+        completedMessages: [
+          {
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            completedBy: 'rick',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+          {
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            completedBy: 'bob',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+        ],
+        screenMetadata: {
+          completedBy: 'rick',
+        },
+      });
+
+      expect(result.filteredCompletedMessages.length).toEqual(1);
+      expect(result.filterValues.completedByUsers).toEqual(['rick']);
+    });
+  });
+
+  describe('applyFiltersToMessages', () => {
+    it('should return the one message that matches all of the selected filters set on screenMetadata', () => {
+      const result = applyFiltersToMessages({
+        messages: [
+          {
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            completedBy: 'rick',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: PETITIONS_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'Test Recipient',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+          {
+            caseStatus: 'Ready for trial',
+            completedAt: '2019-05-01T17:29:13.122Z',
+            completedBy: 'bob',
+            createdAt: '2019-01-01T17:29:13.122Z',
+            docketNumber: '123-45',
+            docketNumberSuffix: '',
+            from: 'Test Sender',
+            fromSection: DOCKET_SECTION,
+            fromUserId: '11181f4d-1e47-423a-8caf-6d2fdc3d3859',
+            message: 'This is a test message',
+            messageId: '22281f4d-1e47-423a-8caf-6d2fdc3d3859',
+            parentMessageId: PARENT_MESSAGE_ID,
+            subject: 'Test subject...',
+            to: 'petitionsclerk',
+            toSection: PETITIONS_SECTION,
+            toUserId: '33331f4d-1e47-423a-8caf-6d2fdc3d3859',
+          },
+        ],
+        screenMetadata: {
+          caseStatus: 'Ready for trial',
+          fromSection: PETITIONS_SECTION,
+          fromUser: 'Test Sender',
+          toSection: PETITIONS_SECTION,
+          toUser: 'Test Recipient',
+        },
+      });
+
+      expect(result.filteredMessages.length).toEqual(1);
+      expect(result.filterValues.caseStatuses).toEqual(['Ready for trial']);
+      expect(result.filterValues.fromSections).toEqual([PETITIONS_SECTION]);
+      expect(result.filterValues.fromUsers).toEqual(['Test Sender']);
+      expect(result.filterValues.toSections).toEqual([PETITIONS_SECTION]);
+      expect(result.filterValues.toUsers).toEqual(['Test Recipient']);
     });
   });
 });

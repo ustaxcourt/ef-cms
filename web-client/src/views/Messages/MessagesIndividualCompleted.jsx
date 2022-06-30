@@ -1,29 +1,20 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
-import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  ASCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-  DESCENDING,
-} = applicationContext.getConstants();
-
 export const MessagesIndividualCompleted = connect(
   {
-    formattedMessages: state.formattedMessages.completedMessages,
-    hasMessages: state.formattedMessages.hasMessages,
+    constants: state.constants,
+    formattedMessages: state.formattedMessages,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
   },
   function MessagesIndividualCompleted({
+    constants,
     formattedMessages,
-    hasMessages,
     showSortableHeaders,
     sortMessagesSequence,
   }) {
@@ -32,13 +23,14 @@ export const MessagesIndividualCompleted = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={DESCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -53,10 +45,10 @@ export const MessagesIndividualCompleted = connect(
               {showSortableHeaders && (
                 <th className="medium">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="completedAt"
                     title="Completed"
                     onClickSequence={sortMessagesSequence}
@@ -67,10 +59,10 @@ export const MessagesIndividualCompleted = connect(
               {showSortableHeaders && (
                 <th>
                   <SortableColumnHeaderButton
-                    ascText={ALPHABETICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Last Message"
                     onClickSequence={sortMessagesSequence}
@@ -82,12 +74,30 @@ export const MessagesIndividualCompleted = connect(
               <th>Case Title</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => {
+          {formattedMessages.completedMessages.map(message => {
             return (
               <tbody key={`message-individual-${message.messageId}`}>
                 <tr>
-                  <td aria-hidden="true" className="focus-toggle" />
-                  <td className="message-queue-row small">
+                  <td className="consolidated-case-column">
+                    {message.inConsolidatedGroup && (
+                      <span
+                        className="fa-layers fa-fw"
+                        title={message.consolidatedIconTooltipText}
+                      >
+                        <Icon
+                          aria-label={message.consolidatedIconTooltipText}
+                          className="fa-icon-blue"
+                          icon="copy"
+                        />
+                        {message.inLeadCase && (
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </td>
+                  <td className="message-queue-row small" colSpan="2">
                     {message.docketNumberWithSuffix}
                   </td>
                   <td className="message-queue-row small">
@@ -118,7 +128,7 @@ export const MessagesIndividualCompleted = connect(
             );
           })}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },

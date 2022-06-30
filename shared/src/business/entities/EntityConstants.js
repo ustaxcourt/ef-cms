@@ -17,7 +17,7 @@ const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
-const SERVED_PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
+const PARTIES_CODES = { BOTH: 'B', PETITIONER: 'P', RESPONDENT: 'R' };
 
 const ORDER_JUDGE_FIELD = 'signedJudgeName';
 
@@ -620,6 +620,11 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentTitle: SPTO_DOCUMENT.documentTitle,
     documentType: SPTO_DOCUMENT.documentType,
     eventCode: SPTO_DOCUMENT.eventCode,
+  },
+  noticeOfChangeOfTrialJudge: {
+    documentTitle: 'Notice of Change of Trial Judge',
+    documentType: 'Notice of Change of Trial Judge',
+    eventCode: 'NOT',
   },
 };
 
@@ -1382,7 +1387,7 @@ module.exports = deepFreeze({
   SCAN_MODES,
   SCENARIOS,
   SECTIONS,
-  SERVED_PARTIES_CODES,
+  PARTIES_CODES,
   SERVICE_INDICATOR_TYPES,
   PROCEDURE_TYPES_MAP,
   SESSION_STATUS_GROUPS,

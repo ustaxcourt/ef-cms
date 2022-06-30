@@ -46,8 +46,12 @@ module "ef-cms_apis" {
   es_volume_size             = var.es_volume_size
   alert_sns_topic_arn        = data.aws_sns_topic.system_health_alarms.arn
   bounced_email_recipient    = var.bounced_email_recipient
+  bounce_alert_recipients    = var.bounce_alert_recipients
+  slack_webhook_url          = var.slack_webhook_url
   scanner_resource_uri       = var.scanner_resource_uri
   cognito_table_name         = var.cognito_table_name
   prod_env_account_id        = var.prod_env_account_id
   lower_env_account_id       = var.lower_env_account_id
+  should_es_alpha_exist      = var.should_es_alpha_exist
+  should_es_beta_exist       = var.should_es_beta_exist
 }
