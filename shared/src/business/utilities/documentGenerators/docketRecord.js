@@ -32,10 +32,6 @@ const docketRecord = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: docketRecordTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Printable Docket Record',
-    },
   });
 
   const footerHtml = reactTemplateGenerator({

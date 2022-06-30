@@ -74,6 +74,14 @@ variable "bounced_email_recipient" {
   type = string
 }
 
+variable "bounce_alert_recipients" {
+  type = string
+}
+
+variable "slack_webhook_url" {
+  type = string
+}
+
 variable "scanner_resource_uri" {
   type = string
 }
@@ -88,4 +96,12 @@ variable "prod_env_account_id" {
 
 variable "lower_env_account_id" {
   type = string
+}
+
+variable "should_es_alpha_exist" {
+  type = bool
+}
+
+variable "should_es_beta_exist" {
+  type = bool
 }

@@ -113,6 +113,7 @@ export const WorkingCopySessionList = connect(
                 </Button>
               </th>
               <th>Respondent Counsel</th>
+              <th>PTM</th>
               <th colSpan="2">Trial Status</th>
             </tr>
           </thead>
@@ -144,6 +145,7 @@ export const WorkingCopySessionList = connect(
                       <div key={respondent.userId}>{respondent.name}</div>
                     ))}
                   </td>
+                  <td className="minw-10">{item.filingPartiesCode}</td>
                   <td className="minw-30">
                     <BindedSelect
                       aria-label="trial status"
@@ -187,7 +189,7 @@ export const WorkingCopySessionList = connect(
                   <tr className="notes-row">
                     <td></td>
                     <td></td>
-                    <td className="font-body-2xs" colSpan="4">
+                    <td className="font-body-2xs" colSpan="5">
                       <span className="text-bold margin-right-1">
                         Calendar notes:
                       </span>
@@ -200,7 +202,7 @@ export const WorkingCopySessionList = connect(
                   <tr className="notes-row">
                     <td></td>
                     <td></td>
-                    <td className="font-body-2xs" colSpan="3">
+                    <td className="font-body-2xs" colSpan="4">
                       <span className="text-bold margin-right-1">Notes:</span>
                       <TextView
                         bind={`trialSessionWorkingCopy.userNotes.${item.docketNumber}.notes`}
@@ -220,6 +222,7 @@ export const WorkingCopySessionList = connect(
                         Delete Note
                       </Button>
                     </td>
+
                     <td className="no-wrap text-align-right">
                       <Button
                         link

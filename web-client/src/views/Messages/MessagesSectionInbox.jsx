@@ -1,44 +1,72 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
-import { applicationContext } from '../../applicationContext';
+import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  ASCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-  DESCENDING,
-} = applicationContext.getConstants();
-
 export const MessagesSectionInbox = connect(
   {
-    formattedMessages: state.formattedMessages.messages,
-    hasMessages: state.formattedMessages.hasMessages,
+    constants: state.constants,
+    formattedMessages: state.formattedMessages,
+    screenMetadata: state.screenMetadata,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
+    updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesSectionInbox({
+    constants,
     formattedMessages,
-    hasMessages,
+    screenMetadata,
     showSortableHeaders,
     sortMessagesSequence,
+    updateScreenMetadataSequence,
   }) {
     return (
       <>
+        {formattedMessages.showFilters && (
+          <TableFilters
+            filters={[
+              {
+                isSelected: screenMetadata.caseStatus,
+                key: 'caseStatus',
+                label: 'Case Status',
+                options: formattedMessages.caseStatuses,
+              },
+              {
+                isSelected: screenMetadata.toUser,
+                key: 'toUser',
+                label: 'To',
+                options: formattedMessages.toUsers,
+              },
+              {
+                isSelected: screenMetadata.fromUser,
+                key: 'fromUser',
+                label: 'From',
+                options: formattedMessages.fromUsers,
+              },
+              {
+                isSelected: screenMetadata.fromSection,
+                key: 'fromSection',
+                label: 'Section',
+                options: formattedMessages.fromSections,
+              },
+            ]}
+            onSelect={updateScreenMetadataSequence}
+          ></TableFilters>
+        )}
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={DESCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -53,10 +81,10 @@ export const MessagesSectionInbox = connect(
               {showSortableHeaders && (
                 <th className="medium">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
                     title="Received"
                     onClickSequence={sortMessagesSequence}
@@ -67,10 +95,10 @@ export const MessagesSectionInbox = connect(
               {showSortableHeaders && (
                 <th>
                   <SortableColumnHeaderButton
-                    ascText={ALPHABETICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Message"
                     onClickSequence={sortMessagesSequence}
@@ -85,14 +113,17 @@ export const MessagesSectionInbox = connect(
               <th className="small">Section</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => (
+          {formattedMessages.messages.map(message => (
             <MessageInboxRow
               caseStatus={message.caseStatus}
               caseTitle={message.caseTitle}
+              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               createdAtFormatted={message.createdAtFormatted}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
               fromSection={message.fromSection}
+              inConsolidatedGroup={message.inConsolidatedGroup}
+              inLeadCase={message.inLeadCase}
               key={message.messageId}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
@@ -102,7 +133,7 @@ export const MessagesSectionInbox = connect(
             />
           ))}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },
@@ -111,10 +142,13 @@ export const MessagesSectionInbox = connect(
 const MessageInboxRow = React.memo(function MessageInboxRow({
   caseStatus,
   caseTitle,
+  consolidatedIconTooltipText,
   createdAtFormatted,
   docketNumberWithSuffix,
   from,
   fromSection,
+  inConsolidatedGroup,
+  inLeadCase,
   message,
   messageDetailLink,
   subject,
@@ -123,8 +157,26 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
   return (
     <tbody>
       <tr>
-        <td aria-hidden="true" className="focus-toggle" />
-        <td className="message-queue-row small">{docketNumberWithSuffix}</td>
+        <td className="consolidated-case-column">
+          {inConsolidatedGroup && (
+            <span
+              className="fa-layers fa-fw"
+              title={consolidatedIconTooltipText}
+            >
+              <Icon
+                aria-label={consolidatedIconTooltipText}
+                className="fa-icon-blue"
+                icon="copy"
+              />
+              {inLeadCase && (
+                <span className="fa-inverse lead-case-icon-text">L</span>
+              )}
+            </span>
+          )}
+        </td>
+        <td className="message-queue-row small" colSpan="2">
+          {docketNumberWithSuffix}
+        </td>
         <td className="message-queue-row small">
           <span className="no-wrap">{createdAtFormatted}</span>
         </td>
