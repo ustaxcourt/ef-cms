@@ -22,6 +22,11 @@ export const TodaysOpinions = connect(
         <section className="usa-section grid-container todays-opinions">
           <h1>{todaysOpinionsHelper.formattedCurrentDate}</h1>
 
+          <p>
+            Any online sourced citations in these opinions can be viewed
+            directly from the associated docket record.
+          </p>
+
           {todaysOpinionsHelper.formattedOpinions.length === 0 && (
             <h3 className="maxw-tablet">
               Opinions are generally published at 3:00 PM. If you are receiving
