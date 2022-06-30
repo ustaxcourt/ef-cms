@@ -352,7 +352,7 @@ describe('consolidated cases', () => {
       },
       clientConnectionId,
     );
-    
+
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
