@@ -338,8 +338,6 @@ const setCurrentUserToken = newToken => {
   token = newToken;
 };
 
-// TODO: add function to get tabId
-
 const allUseCases = {
   addCaseToTrialSessionInteractor,
   addConsolidatedCaseInteractor,
