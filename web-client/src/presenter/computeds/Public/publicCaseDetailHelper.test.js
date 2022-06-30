@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
-  SERVED_PARTIES_CODES,
+  PARTIES_CODES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
 import {
@@ -156,6 +156,34 @@ describe('publicCaseDetailHelper', () => {
         description: 'Request for Place of Trial at Flavortown, TN',
         hasDocument: false,
       });
+    });
+
+    it('formats descriptionDisplay for `OCS` type documents correctly and makes it visible to public users', () => {
+      state.caseDetail.docketEntries = [
+        {
+          docketEntryId: 'd-1-2-3',
+          documentTitle: 'Online Cited Source',
+          documentType: 'Online Cited Source',
+          eventCode: 'OCS',
+          freeText: 'Test site viewed on 09/09/22',
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          isUnservable: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, { state });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          descriptionDisplay:
+            'Test site viewed on 09/09/22 - Online Cited Source',
+          docketEntryId: 'd-1-2-3',
+          eventCode: 'OCS',
+          showLinkToDocument: true,
+        },
+      ]);
     });
 
     it('should not display a link for the PMT event code', () => {
@@ -502,7 +530,7 @@ describe('publicCaseDetailHelper', () => {
         index: 4,
         openInSameTab: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
-        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+        servedPartiesCode: PARTIES_CODES.RESPONDENT,
       },
     ];
 
@@ -520,7 +548,7 @@ describe('publicCaseDetailHelper', () => {
           ' additionalInfo! (Attachment(s)) additional info 2!',
         index: 4,
         servedAtFormatted: undefined,
-        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+        servedPartiesCode: PARTIES_CODES.RESPONDENT,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: true,

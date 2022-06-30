@@ -128,6 +128,55 @@ describe('bulkIndexRecords', () => {
     });
   });
 
+  it('uses the routing parameter when the item is a Message', async () => {
+    applicationContext.getSearchClient.mockReturnValue({
+      bulk: jest.fn().mockReturnValue({
+        errors: false,
+        items: [{}],
+        took: 100,
+      }),
+    });
+
+    await bulkIndexRecords({
+      applicationContext,
+      records: [
+        {
+          dynamodb: {
+            NewImage: {
+              entityName: { S: 'Message' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'message|8675309' },
+            },
+          },
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalledWith({
+      body: [
+        {
+          index: {
+            _id: 'case|123-45_message|8675309',
+            _index: 'efcms-message',
+            routing: 'case|123-45_case|123-45|mapping',
+          },
+        },
+        {
+          entityName: {
+            S: 'Message',
+          },
+          pk: {
+            S: 'case|123-45',
+          },
+          sk: {
+            S: 'message|8675309',
+          },
+        },
+      ],
+      refresh: false,
+    });
+  });
+
   it('sets an altered _id if the item is a CaseDocketEntryMapping', async () => {
     applicationContext.getSearchClient.mockReturnValue({
       bulk: jest.fn().mockReturnValue({
@@ -164,6 +213,55 @@ describe('bulkIndexRecords', () => {
         {
           entityName: {
             S: 'CaseDocketEntryMapping',
+          },
+          pk: {
+            S: 'case|123-45',
+          },
+          sk: {
+            S: 'case|123-45',
+          },
+        },
+      ],
+      refresh: false,
+    });
+  });
+
+  it('sets an altered _id if the item is a CaseMessageMapping', async () => {
+    applicationContext.getSearchClient.mockReturnValue({
+      bulk: jest.fn().mockReturnValue({
+        errors: false,
+        items: [{}],
+        took: 100,
+      }),
+    });
+
+    await bulkIndexRecords({
+      applicationContext,
+      records: [
+        {
+          dynamodb: {
+            NewImage: {
+              entityName: { S: 'CaseMessageMapping' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'case|123-45' },
+            },
+          },
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalledWith({
+      body: [
+        {
+          index: {
+            _id: 'case|123-45_case|123-45|mapping',
+            _index: 'efcms-message',
+            routing: null,
+          },
+        },
+        {
+          entityName: {
+            S: 'CaseMessageMapping',
           },
           pk: {
             S: 'case|123-45',
