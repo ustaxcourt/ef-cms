@@ -405,24 +405,37 @@ export const ApplyStamp = connect(
                   <div className="sign-pdf-interface">
                     <span
                       className={pdfSignerHelper.signatureClass}
-                      id="signature"
+                      id="stamp"
                       ref={signatureRef}
                     >
-                      It is ORDERED as follows:
-                      <br />
-                      This motion is DENIED as moot without prejudice
+                      <span className="text-normal" id="stamp-text">
+                        It is ORDERED as follows:
+                        <br />
+                        <span className="font-sans-2xs">
+                          This motion is{' '}
+                          <span className="text-ls-1 text-bold font-sans-lg">
+                            DENIED
+                          </span>{' '}
+                          as moot without prejudice
+                        </span>
+                        <hr className="narrow-hr" />
+                        - This case is stricken from the trial session -
+                        <br />
+                        - This case is restored to the general docket -
+                        <br />
+                        <span className="text-semibold">
+                          The parties shall file a status report or proposed
+                          stipulation decision by 12/30/2022
+                          <br />
+                          Stipulation of settled issued due by December 30, 2022
+                        </span>
+                      </span>
                       <hr className="narrow-hr" />
-                      - This case is stricken from the trial session -
-                      <br />
-                      - This case is restored to the general docket -
-                      <br />
-                      The parties shall file a status report or proposed
-                      stipulation decision by 12/30/2022 Stipulation of settled
-                      issued due by December 30, 2022
-                      <hr className="narrow-hr" />
-                      (Signed) {pdfForSigning.nameForSigning}
-                      <br />
-                      {pdfForSigning.nameForSigningLine2}
+                      <span id="stamp-signature">
+                        (Signed) {pdfForSigning.nameForSigning}
+                        <br />
+                        {pdfForSigning.nameForSigningLine2}
+                      </span>
                     </span>
                     <canvas
                       className={

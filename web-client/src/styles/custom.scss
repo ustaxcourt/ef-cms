@@ -1184,6 +1184,24 @@ hr.lighter {
     text-align: center;
   }
 
+  #stamp {
+    position: absolute;
+    padding: 10px;
+    border: 1px solid black;
+    background-color: rgb(255 255 255 / 80%);
+    font-weight: $font-bold;
+    text-align: center;
+    max-width: 60%;
+    
+    #stamp-text {
+      font-family: 'Source Sans Pro', $font-source-sans;
+    }
+    
+    #stamp-signature {
+      font-family: 'Times New Roman', Times, serif;
+    }
+  }
+
   #sign-pdf-canvas {
     display: block;
     margin: auto;
@@ -1754,7 +1772,7 @@ button.change-scanner-button {
 
 .narrow-hr {
   width: 30%;
-  margin: 0 auto;
+  margin: 10px auto;
 }
 
 .margin-top-negative {
