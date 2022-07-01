@@ -10,32 +10,32 @@ import fs from 'fs';
 const watch = !!process.env.WATCH;
 
 const env = {
-  API_URL: null,
-  CHECK_DEPLOY_DATE_INTERVAL: null,
-  CI: null,
-  CIRCLE_SHA1: null,
-  COGNITO: null,
-  COGNITO_CLIENT_ID: null,
-  COGNITO_LOGIN_URL: null,
-  COGNITO_REDIRECT_URI: null,
-  COGNITO_SUFFIX: null,
-  COGNITO_TOKEN_URL: null,
-  DYNAMODB_TABLE_NAME: null,
-  ENV: null,
-  FILE_UPLOAD_MODAL_TIMEOUT: null,
-  IS_LOCAL: null,
-  NO_SCANNER: null,
-  NODE_DEBUG: null,
-  PDF_EXPRESS_LICENSE_KEY: null,
-  PUBLIC_SITE_URL: null,
-  SCANNER_RESOURCE_URI: null,
-  SESSION_MODAL_TIMEOUT: null,
-  SESSION_TIMEOUT: null,
-  SKIP_VIRUS_SCAN: null,
-  STAGE: null,
-  USTC_DEBUG: null,
-  USTC_ENV: null,
-  WS_URL: null,
+  API_URL: process.env.API_URL,
+  CHECK_DEPLOY_DATE_INTERVAL: process.env.CHECK_DEPLOY_DATE_INTERVAL,
+  CI: process.env.CI,
+  CIRCLE_SHA1: process.env.CIRCLE_SHA1,
+  COGNITO: process.env.COGNITO,
+  COGNITO_CLIENT_ID: process.env.COGNITO_CLIENT_ID,
+  COGNITO_LOGIN_URL: process.env.COGNITO_LOGIN_URL,
+  COGNITO_REDIRECT_URI: process.env.COGNITO_REDIRECT_URI,
+  COGNITO_SUFFIX: process.env.COGNITO_SUFFIX,
+  COGNITO_TOKEN_URL: process.env.COGNITO_TOKEN_URL,
+  DYNAMODB_TABLE_NAME: process.env.DYNAMODB_TABLE_NAME,
+  ENV: process.env.ENV,
+  FILE_UPLOAD_MODAL_TIMEOUT: process.env.FILE_UPLOAD_MODAL_TIMEOUT,
+  IS_LOCAL: process.env.IS_LOCAL,
+  NO_SCANNER: process.env.NO_SCANNER,
+  NODE_DEBUG: process.env.NODE_DEBUG,
+  PDF_EXPRESS_LICENSE_KEY: process.env.PDF_EXPRESS_LICENSE_KEY,
+  PUBLIC_SITE_URL: process.env.PUBLIC_SITE_URL,
+  SCANNER_RESOURCE_URI: process.env.SCANNER_RESOURCE_URI,
+  SESSION_MODAL_TIMEOUT: process.env.SESSION_MODAL_TIMEOUT,
+  SESSION_TIMEOUT: process.env.SESSION_TIMEOUT,
+  SKIP_VIRUS_SCAN: process.env.SKIP_VIRUS_SCAN,
+  STAGE: process.env.STAGE,
+  USTC_DEBUG: process.env.USTC_DEBUG,
+  USTC_ENV: process.env.USTC_ENV,
+  WS_URL: process.env.WS_URL,
 };
 
 esbuild
@@ -44,9 +44,8 @@ esbuild
     define: {
       global: 'window',
       'process.version': '""',
-      // 'process.env.NODE_ENV': '"production"',
-      ...Object.keys(env).reduce((acc, key) => {
-        acc[`process.env.${key}`] = '""';
+      ...Object.entries(env).reduce((acc, [key, value]) => {
+        acc[`process.env.${key}`] = value ? `"${value}"` : '""';
         return acc;
       }, {}),
     },

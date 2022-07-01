@@ -175,7 +175,7 @@
     "start:client:ci": "CI=true SKIP_VIRUS_SCAN=true NODE_ENV=production npm run start:client",
     "start:client:debug": "USTC_DEBUG=true npm run start:client",
     "start:client:no-scanner": "NO_SCANNER=true npm run start:client",
-    "start:client": "IS_LOCAL=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn webpack serve --config webpack.config.client.dev.js",
+    "start:client": "WATCH=true IS_LOCAL=true FILE_UPLOAD_MODAL_TIMEOUT=1 USTC_ENV=dev PDF_EXPRESS_LICENSE_KEY=OjkUB41bl1hJg6jvUEfn npm run start:client:esbuild & npm run start:client:host",
     "start:client:esbuild": "node esbuild.config.mjs",
     "start:client:host": "servor dist index.html 1234 --browse --editor --reload dist",
     "start:madge": "node ./graph-generators/index.js",
