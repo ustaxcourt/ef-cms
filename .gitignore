@@ -60,5 +60,6 @@ web-client/reports
 web-client/terraform/common/cloudfront-edge/header-security-lambda.js.zip
 web-client/terraform/common/cloudfront-edge/strip-basepath-lambda.js.zip
 web-client/tests_output/
+web-client/integration-tests/test-output/
 bulk-import-log.txt
 **/.env
