@@ -399,6 +399,12 @@ export const ApplyStamp = connect(
                       name="custom-order-text"
                       type="text"
                       value={form.customOrderText}
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
                     ></textarea>
                     <span
                       aria-live="polite"
@@ -472,7 +478,7 @@ export const ApplyStamp = connect(
                               <br />
                             </>
                           )}
-                          Stipulation of settled issued due by December 30, 2022
+                          {form.customOrderText}
                         </span>
                       </span>
                       <hr className="narrow-hr" />
