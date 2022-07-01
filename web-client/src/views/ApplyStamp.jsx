@@ -20,6 +20,7 @@ export const ApplyStamp = connect(
     setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
   function ApplyStamp({
@@ -32,6 +33,7 @@ export const ApplyStamp = connect(
     setSignatureData,
     signatureApplied,
     signatureData,
+    updateFormValueSequence,
     validationErrors,
   }) {
     const yLimitToPreventServedStampOverlay = 705;
@@ -187,12 +189,18 @@ export const ApplyStamp = connect(
                     {['Granted', 'Denied'].map(option => (
                       <div className="usa-radio" key={option}>
                         <input
-                          checked={form.lodged === (option === 'Granted')}
+                          checked={form.status === option}
                           className="usa-radio__input"
                           id={`motion-status-${option}`}
                           name="status"
                           type="radio"
                           value={option}
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
                         />
                         <label
                           className="usa-radio__label"
@@ -205,24 +213,50 @@ export const ApplyStamp = connect(
                   </fieldset>
                 </FormGroup>
                 <FormGroup>
-                  {['As moot', 'Without prejudice'].map(option => (
-                    <div className="display-inline-block" key={option}>
-                      <input
-                        checked={false}
-                        className="usa-checkbox__input"
-                        id={`denied-${option}`}
-                        name={`denied-${option}`}
-                        type="checkbox"
-                      />
-                      <label
-                        className="usa-checkbox__label"
-                        htmlFor={`denied-${option}`}
-                        id={`denied-${option}-label`}
-                      >
-                        {option}
-                      </label>
-                    </div>
-                  ))}
+                  <div className="display-inline-block">
+                    <input
+                      checked={form.deniedAsMoot || false}
+                      className="usa-checkbox__input"
+                      id="deniedAsMoot"
+                      name="deniedAsMoot"
+                      type="checkbox"
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      htmlFor="deniedAsMoot"
+                      id="denied-as-moot-label"
+                    >
+                      As moot
+                    </label>
+                  </div>
+                  <div className="display-inline-block">
+                    <input
+                      checked={form.deniedWithoutPrejudice || false}
+                      className="usa-checkbox__input"
+                      id="deniedWithoutPrejudice"
+                      name="deniedWithoutPrejudice"
+                      type="checkbox"
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.checked,
+                        });
+                      }}
+                    />
+                    <label
+                      className="usa-checkbox__label"
+                      htmlFor="deniedWithoutPrejudice"
+                      id="denied-without-prejudice-label"
+                    >
+                      Without prejudice
+                    </label>
+                  </div>
                 </FormGroup>
 
                 <hr />
@@ -234,15 +268,21 @@ export const ApplyStamp = connect(
                   </label>
                   <div className="usa-radio usa-radio__inline">
                     <input
-                      checked={true}
+                      checked={form.strickenCase}
                       className="usa-radio__input"
                       id="stricken-case-radio"
-                      name="stricken-case"
+                      name="strickenCase"
                       type="radio"
+                      onChange={e => {
+                        updateFormValueSequence({
+                          key: e.target.name,
+                          value: e.target.value,
+                        });
+                      }}
                     />
                     <label
                       className="usa-radio__label"
-                      htmlFor={'stricken-case'}
+                      htmlFor={'strickenCase'}
                     >
                       This case is stricken from the trial session
                     </label>
@@ -414,12 +454,14 @@ export const ApplyStamp = connect(
                         <span className="font-sans-2xs">
                           This motion is{' '}
                           <span className="text-ls-1 text-bold font-sans-lg">
-                            DENIED
+                            {form.status?.toUpperCase()}
                           </span>{' '}
-                          as moot without prejudice
+                          {form.deniedAsMoot && 'as moot '}
+                          {form.deniedWithoutPrejudice && 'without prejudice'}
                         </span>
                         <hr className="narrow-hr" />
-                        - This case is stricken from the trial session -
+                        {form.strickenCase &&
+                          '- This case is stricken from the trial session -'}
                         <br />
                         - This case is restored to the general docket -
                         <br />
