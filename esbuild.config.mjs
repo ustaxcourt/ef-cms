@@ -5,6 +5,10 @@ import babel from 'esbuild-plugin-babel';
 import esbuild from 'esbuild';
 import resolve from 'esbuild-plugin-resolve';
 import { copy } from 'esbuild-plugin-copy';
+import autoprefixer from 'autoprefixer';
+import postcss from 'postcss';
+import postcssPresetEnv from 'postcss-preset-env';
+
 import fs from 'fs';
 
 const watch = !!process.env.WATCH;
@@ -71,7 +75,15 @@ esbuild
         stream: 'stream-browserify',
         // util: 'util/',
       }),
-      sassPlugin(),
+      sassPlugin({
+        async transform(source) {
+          const { css } = await postcss([
+            autoprefixer,
+            postcssPresetEnv({ stage: 0 }),
+          ]).process(source, { from: undefined });
+          return css;
+        },
+      }),
       babel({
         config: {
           ignore: ['node_modules', 'shared', 'web-api'],
