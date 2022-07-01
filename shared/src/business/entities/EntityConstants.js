@@ -35,6 +35,11 @@ const TRIAL_SESSION_SCOPE_TYPES = {
   standaloneRemote: 'Standalone Remote',
 };
 
+const JURISDICTION_OPTIONS = {
+  restoredToDocket: 'The case is restored to the general docket',
+  undersigned: 'Jurisdiction is retained by the undersigned',
+};
+
 const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
   petitionersAndCounsel: 'Petitioner(s) & Counsel',
@@ -1361,6 +1366,7 @@ module.exports = deepFreeze({
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
+  JURISDICTION_OPTIONS,
   LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
   MAX_FILE_SIZE_BYTES,

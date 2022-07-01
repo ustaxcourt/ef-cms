@@ -10,6 +10,7 @@ import React, { useEffect, useRef } from 'react';
 
 export const ApplyStamp = connect(
   {
+    JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
@@ -26,6 +27,7 @@ export const ApplyStamp = connect(
   function ApplyStamp({
     currentPageNumber,
     form,
+    JURISDICTION_OPTIONS,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
@@ -290,36 +292,33 @@ export const ApplyStamp = connect(
                 </FormGroup>
                 <hr />
                 <FormGroup>
-                  {/* is it bad to remove label from this formgroup? */}
-                  {/* <label className="usa-label" htmlFor="jurisdiction">
-                Select any that apply{' '}
-                <span className="usa-hint">(optional)</span>
-              </label> */}
-                  <div className="usa-radio">
-                    <input
-                      checked={true}
-                      className="usa-radio__input"
-                      name="general-docket"
-                      type="radio"
-                    />
-                    <label
-                      className="usa-radio__label"
-                      htmlFor={'general-docket'}
-                    >
-                      The case is restored to the general docket
-                    </label>
-                  </div>
-                  <div className="usa-radio">
-                    <input
-                      checked={true}
-                      className="usa-radio__input"
-                      name="undersigned"
-                      type="radio"
-                    />
-                    <label className="usa-radio__label" htmlFor={'undersigned'}>
-                      Jurisdiction is retained by the undersigned
-                    </label>
-                  </div>
+                  {Object.entries(JURISDICTION_OPTIONS).map(([key, value]) => (
+                    <div className="usa-radio" key={key}>
+                      <input
+                        aria-describedby="jurisdiction"
+                        checked={form.jurisdiction === value}
+                        className="usa-radio__input"
+                        id={`jurisdiction-${key}`}
+                        name="jurisdiction"
+                        type="radio"
+                        value={value}
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        aria-label={value}
+                        className="usa-radio__label"
+                        htmlFor={`jurisdiction-${key}`}
+                        id={`jurisdiction-${key}-label`}
+                      >
+                        {value}
+                      </label>
+                    </div>
+                  ))}
                 </FormGroup>
                 <hr />
                 <FormGroup>
@@ -460,10 +459,15 @@ export const ApplyStamp = connect(
                           {form.deniedWithoutPrejudice && 'without prejudice'}
                         </span>
                         <hr className="narrow-hr" />
-                        {form.strickenCase &&
-                          '- This case is stricken from the trial session -'}
-                        <br />
-                        - This case is restored to the general docket -
+                        {form.strickenCase && (
+                          <>
+                            <p>
+                              - This case is stricken from the trial session -
+                            </p>
+                            <br />
+                          </>
+                        )}
+                        {form.jurisdiction && `- ${form.jurisdiction} -`}
                         <br />
                         <span className="text-semibold">
                           The parties shall file a status report or proposed
