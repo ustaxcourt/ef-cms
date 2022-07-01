@@ -214,55 +214,58 @@ export const ApplyStamp = connect(
                         </label>
                       </div>
                     ))}
+                    { form.status === 'Denied' && (
+                      <>
+                        <FormGroup>
+                          <div className="display-inline-block">
+                            <input
+                              checked={form.deniedAsMoot || false}
+                              className="usa-checkbox__input"
+                              id="deniedAsMoot"
+                              name="deniedAsMoot"
+                              type="checkbox"
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.checked,
+                                });
+                              }}
+                            />
+                            <label
+                              className="usa-checkbox__label"
+                              htmlFor="deniedAsMoot"
+                              id="denied-as-moot-label"
+                            >
+                              As moot
+                            </label>
+                          </div>
+                          <div className="display-inline-block">
+                            <input
+                              checked={form.deniedWithoutPrejudice || false}
+                              className="usa-checkbox__input"
+                              id="deniedWithoutPrejudice"
+                              name="deniedWithoutPrejudice"
+                              type="checkbox"
+                              onChange={e => {
+                                updateFormValueSequence({
+                                  key: e.target.name,
+                                  value: e.target.checked,
+                                });
+                              }}
+                            />
+                            <label
+                              className="usa-checkbox__label"
+                              htmlFor="deniedWithoutPrejudice"
+                              id="denied-without-prejudice-label"
+                            >
+                              Without prejudice
+                            </label>
+                          </div>
+                        </FormGroup>
+                      </>
+                    )}
                   </fieldset>
                 </FormGroup>
-                <FormGroup>
-                  <div className="display-inline-block">
-                    <input
-                      checked={form.deniedAsMoot || false}
-                      className="usa-checkbox__input"
-                      id="deniedAsMoot"
-                      name="deniedAsMoot"
-                      type="checkbox"
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                      }}
-                    />
-                    <label
-                      className="usa-checkbox__label"
-                      htmlFor="deniedAsMoot"
-                      id="denied-as-moot-label"
-                    >
-                      As moot
-                    </label>
-                  </div>
-                  <div className="display-inline-block">
-                    <input
-                      checked={form.deniedWithoutPrejudice || false}
-                      className="usa-checkbox__input"
-                      id="deniedWithoutPrejudice"
-                      name="deniedWithoutPrejudice"
-                      type="checkbox"
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.checked,
-                        });
-                      }}
-                    />
-                    <label
-                      className="usa-checkbox__label"
-                      htmlFor="deniedWithoutPrejudice"
-                      id="denied-without-prejudice-label"
-                    >
-                      Without prejudice
-                    </label>
-                  </div>
-                </FormGroup>
-
                 <hr />
 
                 <FormGroup>
@@ -396,7 +399,7 @@ export const ApplyStamp = connect(
                       className="usa-textarea height-8 usa-character-count__field"
                       id="custom-order-text"
                       maxLength="60"
-                      name="custom-order-text"
+                      name="customOrderText"
                       type="text"
                       value={form.customOrderText}
                       onChange={e => {
