@@ -11,6 +11,7 @@ import React, { useEffect, useRef } from 'react';
 export const ApplyStamp = connect(
   {
     JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
+    STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
@@ -35,6 +36,7 @@ export const ApplyStamp = connect(
     setSignatureData,
     signatureApplied,
     signatureData,
+    STRICKEN_CASE_MESSAGE,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -276,9 +278,9 @@ export const ApplyStamp = connect(
                   </label>
                   <div className="usa-radio usa-radio__inline">
                     <input
-                      checked={form.strickenCase}
+                      checked={form.strickenCase || false}
                       className="usa-radio__input"
-                      id="stricken-case-radio"
+                      id="stricken-case"
                       name="strickenCase"
                       type="radio"
                       onChange={e => {
@@ -290,9 +292,9 @@ export const ApplyStamp = connect(
                     />
                     <label
                       className="usa-radio__label"
-                      htmlFor={'strickenCase'}
+                      htmlFor={'stricken-case'}
                     >
-                      This case is stricken from the trial session
+                      {STRICKEN_CASE_MESSAGE}
                     </label>
                   </div>
                 </FormGroup>
@@ -330,9 +332,9 @@ export const ApplyStamp = connect(
                 <FormGroup>
                   {Object.entries({
                     statusReportDueDate:
-                      'The parties shall file a status report by',
+                      'The parties shall file a status report by ',
                     statusReportOrStipDecisionDueDate:
-                      'The parties shall file a status report or proposed stipulated decision by',
+                      'The parties shall file a status report or proposed stipulated decision by ',
                   }).map(([dueDateKey, dueDateValue]) => (
                     <div className="usa-radio" key={dueDateKey}>
                       <input
@@ -466,7 +468,7 @@ export const ApplyStamp = connect(
                         <hr className="narrow-hr" />
                         {form.strickenCase && (
                           <>
-                            - This case is stricken from the trial session -
+                            - {STRICKEN_CASE_MESSAGE} -
                             <br />
                           </>
                         )}
