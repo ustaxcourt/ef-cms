@@ -21,7 +21,6 @@ export const ApplyStamp = connect(
     setSignatureData: sequences.setPDFSignatureDataSequence,
     signatureApplied: state.pdfForSigning.signatureApplied,
     signatureData: state.pdfForSigning.signatureData,
-    statusDueDateChangeSequence: sequences.statusDueDateChangeSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -36,7 +35,6 @@ export const ApplyStamp = connect(
     setSignatureData,
     signatureApplied,
     signatureData,
-    statusDueDateChangeSequence,
     updateFormValueSequence,
     validationErrors,
   }) {
@@ -187,8 +185,11 @@ export const ApplyStamp = connect(
               </div>
 
               <div className="blue-container docket-entry-form">
-                <FormGroup errorText={validationErrors.status}>
-                  <fieldset className="usa-fieldset">
+                <FormGroup
+                  className="margin-bottom-0"
+                  errorText={validationErrors.status}
+                >
+                  <fieldset className="usa-fieldset margin-bottom-0">
                     <legend className="usa-legend">Stamp Order</legend>
                     {['Granted', 'Denied'].map(option => (
                       <div className="usa-radio" key={option}>
@@ -214,10 +215,10 @@ export const ApplyStamp = connect(
                         </label>
                       </div>
                     ))}
-                    { form.status === 'Denied' && (
+                    {form.status === 'Denied' && (
                       <>
-                        <FormGroup>
-                          <div className="display-inline-block">
+                        <FormGroup className="grid-container">
+                          <div className="display-inline-block grid-col-6">
                             <input
                               checked={form.deniedAsMoot || false}
                               className="usa-checkbox__input"
@@ -239,7 +240,7 @@ export const ApplyStamp = connect(
                               As moot
                             </label>
                           </div>
-                          <div className="display-inline-block">
+                          <div className="display-inline-block grid-col-auto">
                             <input
                               checked={form.deniedWithoutPrejudice || false}
                               className="usa-checkbox__input"
