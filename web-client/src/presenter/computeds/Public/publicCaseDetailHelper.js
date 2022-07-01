@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+
 import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
@@ -49,11 +51,17 @@ export const formatDocketEntryOnDocketRecord = (
       .getSealedDocketEntryTooltip(applicationContext, record);
   }
 
+  if (entry.eventCode === 'OCS' && record.freeText) {
+    record.descriptionDisplay = `${record.freeText} - ${record.descriptionDisplay}`;
+  } else {
+    record.descriptionDisplay = record.documentTitle || record.description;
+  }
+
   return {
     action: record.action,
     createdAtFormatted: record.createdAtFormatted,
     description: record.description,
-    descriptionDisplay: record.documentTitle || record.description,
+    descriptionDisplay: record.descriptionDisplay,
     docketEntryId: record.docketEntryId,
     eventCode: record.eventCode,
     filedBy: record.filedBy,
