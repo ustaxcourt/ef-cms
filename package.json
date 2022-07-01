@@ -107,8 +107,6 @@
     "cypress:smoketests:open:local": "./scripts/run-cypress.sh -sol",
     "cypress:smoketests:open": "./scripts/run-cypress.sh -so",
     "cypress:smoketests": "./scripts/run-cypress.sh -s",
-    "cypress:smoketests:current-color:open": "./scripts/run-cypress.sh -sco",
-    "cypress:smoketests:current-color": "./scripts/run-cypress.sh -sc",
     "delete:api-gateway-mappings": "./scripts/delete-api-gateway-mappings.sh",
     "delete:dynamo-table": "./scripts/dynamo/delete-dynamo-table.sh",
     "delete:elasticsearch-cluster": "./scripts/elasticsearch/delete-elasticsearch-cluster.sh",
