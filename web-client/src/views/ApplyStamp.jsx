@@ -194,7 +194,12 @@ export const ApplyStamp = connect(
                   <fieldset className="usa-fieldset margin-bottom-0">
                     <legend className="usa-legend">Stamp Order</legend>
                     {['Granted', 'Denied'].map(option => (
-                      <div className="usa-radio" key={option}>
+                      <div
+                        className={`usa-radio ${
+                          option === 'Denied' ? 'margin-bottom-0' : ''
+                        }`}
+                        key={option}
+                      >
                         <input
                           checked={form.status === option}
                           className="usa-radio__input"
@@ -217,56 +222,52 @@ export const ApplyStamp = connect(
                         </label>
                       </div>
                     ))}
-                    {form.status === 'Denied' && (
-                      <>
-                        <FormGroup className="grid-container">
-                          <div className="display-inline-block grid-col-6">
-                            <input
-                              checked={form.deniedAsMoot || false}
-                              className="usa-checkbox__input"
-                              id="deniedAsMoot"
-                              name="deniedAsMoot"
-                              type="checkbox"
-                              onChange={e => {
-                                updateFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.checked,
-                                });
-                              }}
-                            />
-                            <label
-                              className="usa-checkbox__label"
-                              htmlFor="deniedAsMoot"
-                              id="denied-as-moot-label"
-                            >
-                              As moot
-                            </label>
-                          </div>
-                          <div className="display-inline-block grid-col-auto">
-                            <input
-                              checked={form.deniedWithoutPrejudice || false}
-                              className="usa-checkbox__input"
-                              id="deniedWithoutPrejudice"
-                              name="deniedWithoutPrejudice"
-                              type="checkbox"
-                              onChange={e => {
-                                updateFormValueSequence({
-                                  key: e.target.name,
-                                  value: e.target.checked,
-                                });
-                              }}
-                            />
-                            <label
-                              className="usa-checkbox__label"
-                              htmlFor="deniedWithoutPrejudice"
-                              id="denied-without-prejudice-label"
-                            >
-                              Without prejudice
-                            </label>
-                          </div>
-                        </FormGroup>
-                      </>
-                    )}
+                    <FormGroup className="grid-container margin-bottom-0">
+                      <div className="display-inline-block grid-col-6">
+                        <input
+                          checked={form.deniedAsMoot || false}
+                          className="usa-checkbox__input"
+                          id="deniedAsMoot"
+                          name="deniedAsMoot"
+                          type="checkbox"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="deniedAsMoot"
+                          id="denied-as-moot-label"
+                        >
+                          As moot
+                        </label>
+                      </div>
+                      <div className="display-inline-block grid-col-auto">
+                        <input
+                          checked={form.deniedWithoutPrejudice || false}
+                          className="usa-checkbox__input"
+                          id="deniedWithoutPrejudice"
+                          name="deniedWithoutPrejudice"
+                          type="checkbox"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="deniedWithoutPrejudice"
+                          id="denied-without-prejudice-label"
+                        >
+                          Without prejudice
+                        </label>
+                      </div>
+                    </FormGroup>
                   </fieldset>
                 </FormGroup>
                 <hr />
@@ -363,16 +364,16 @@ export const ApplyStamp = connect(
                           className="display-inline-block width-card"
                           id="due-date-input"
                           names={{
-                            day: 'dueDateDay',
-                            month: 'dueDateMonth',
-                            year: 'dueDateYear',
+                            day: `dueDateDay-${dueDateKey}`,
+                            month: `dueDateMonth-${dueDateKey}`,
+                            year: `dueDateYear-${dueDateKey}`,
                           }}
                           placeholder={'MM/DD/YYYY'}
                           showDateHint={false}
                           values={{
-                            day: form.dueDateDay,
-                            month: form.dueDateMonth,
-                            year: form.dueDateYear,
+                            day: form[`dueDateDay-${dueDateKey}`],
+                            month: form[`dueDateMonth-${dueDateKey}`],
+                            year: form[`dueDateYear-${dueDateKey}`],
                           }}
                           onChange={({ key, value }) => {
                             updateFormValueSequence({
@@ -465,18 +466,25 @@ export const ApplyStamp = connect(
                           {form.deniedAsMoot && 'as moot '}
                           {form.deniedWithoutPrejudice && 'without prejudice'}
                         </span>
-                        <hr className="narrow-hr" />
+                        {(form.strickenCase ||
+                          form.jurisdiction ||
+                          (form.dueDateMessage && form.dueDateDay) ||
+                          form.customOrderText) && <hr className="narrow-hr" />}
                         {form.strickenCase && (
                           <>
                             - {STRICKEN_CASE_MESSAGE} -
                             <br />
                           </>
                         )}
-                        {form.jurisdiction && `- ${form.jurisdiction} -`}
-                        <br />
+                        {form.jurisdiction && (
+                          <>
+                            - {form.jurisdiction} -<br />
+                          </>
+                        )}
                         <span className="text-semibold">
                           {/* this should reset dueDateDay etc on the stamp if you change from
                            1 radio button w date filled in to the other instead */}
+
                           {form.dueDateMessage && form.dueDateDay && (
                             <>
                               {form.dueDateMessage} {form.dueDateMonth}/
