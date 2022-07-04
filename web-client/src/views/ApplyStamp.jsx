@@ -129,256 +129,262 @@ export const ApplyStamp = connect(
                 </Button>
               </div>
 
-              <div className="blue-container docket-entry-form">
-                <FormGroup
-                  className="margin-bottom-0"
-                  errorText={validationErrors.status}
-                >
-                  <fieldset className="usa-fieldset margin-bottom-0">
-                    <legend className="usa-legend">Stamp Order</legend>
-                    {['Granted', 'Denied'].map(option => (
-                      <div
-                        className={`usa-radio ${
-                          option === 'Denied' ? 'margin-bottom-0' : ''
-                        }`}
-                        key={option}
+              <div className="border border-base-lighter">
+                <div className="grid-header grid-row padding-left-205">
+                  Stamp Order
+                </div>
+                <div className="stamp-order-form">
+                  <FormGroup
+                    className="margin-bottom-0"
+                    errorText={validationErrors.status}
+                  >
+                    <fieldset className="usa-fieldset margin-bottom-0">
+                      {['Granted', 'Denied'].map(option => (
+                        <div
+                          className={`usa-radio ${
+                            option === 'Denied' ? 'margin-bottom-0' : ''
+                          }`}
+                          key={option}
+                        >
+                          <input
+                            checked={form.status === option}
+                            className="usa-radio__input"
+                            id={`motion-status-${option}`}
+                            name="status"
+                            type="radio"
+                            value={option}
+                            onChange={e => {
+                              applyStampFormChangeSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor={`motion-status-${option}`}
+                          >
+                            {option}
+                          </label>
+                        </div>
+                      ))}
+                      <FormGroup className="grid-container margin-bottom-0">
+                        <div className="display-inline-block grid-col-6">
+                          <input
+                            checked={form.deniedAsMoot || false}
+                            className="usa-checkbox__input"
+                            disabled={form.status !== 'Denied'}
+                            id="deniedAsMoot"
+                            name="deniedAsMoot"
+                            type="checkbox"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.checked,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-checkbox__label"
+                            htmlFor="deniedAsMoot"
+                            id="denied-as-moot-label"
+                          >
+                            As moot
+                          </label>
+                        </div>
+                        <div className="display-inline-block grid-col-auto">
+                          <input
+                            checked={form.deniedWithoutPrejudice || false}
+                            className="usa-checkbox__input"
+                            disabled={form.status !== 'Denied'}
+                            id="deniedWithoutPrejudice"
+                            name="deniedWithoutPrejudice"
+                            type="checkbox"
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.checked,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-checkbox__label"
+                            htmlFor="deniedWithoutPrejudice"
+                            id="denied-without-prejudice-label"
+                          >
+                            Without prejudice
+                          </label>
+                        </div>
+                      </FormGroup>
+                    </fieldset>
+                  </FormGroup>
+                  <hr className="border-top-2px border-base-lighter" />
+
+                  <FormGroup>
+                    <label className="usa-label" htmlFor="stricken-case-radio">
+                      Select any that apply{' '}
+                      <span className="usa-hint">(optional)</span>
+                    </label>
+                    <div className="usa-radio usa-radio__inline">
+                      <input
+                        checked={form.strickenCase || false}
+                        className="usa-radio__input"
+                        id="stricken-case"
+                        name="strickenCase"
+                        type="radio"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        className="usa-radio__label"
+                        htmlFor={'stricken-case'}
                       >
+                        {STRICKEN_CASE_MESSAGE}
+                      </label>
+                    </div>
+                  </FormGroup>
+                  <hr className="narrow-hr" />
+                  <FormGroup>
+                    {Object.entries(JURISDICTION_OPTIONS).map(
+                      ([key, value]) => (
+                        <div className="usa-radio" key={key}>
+                          <input
+                            aria-describedby="jurisdiction"
+                            checked={form.jurisdiction === value}
+                            className="usa-radio__input"
+                            id={`jurisdiction-${key}`}
+                            name="jurisdiction"
+                            type="radio"
+                            value={value}
+                            onChange={e => {
+                              updateFormValueSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            aria-label={value}
+                            className="usa-radio__label"
+                            htmlFor={`jurisdiction-${key}`}
+                            id={`jurisdiction-${key}-label`}
+                          >
+                            {value}
+                          </label>
+                        </div>
+                      ),
+                    )}
+                  </FormGroup>
+                  <hr className="narrow-hr" />
+                  <FormGroup className="margin-bottom-0">
+                    {Object.entries({
+                      statusReportDueDate:
+                        'The parties shall file a status report by ',
+                      statusReportOrStipDecisionDueDate:
+                        'The parties shall file a status report or proposed stipulated decision by ',
+                    }).map(([dueDateKey, dueDateValue]) => (
+                      <div className="usa-radio" key={dueDateKey}>
                         <input
-                          checked={form.status === option}
+                          aria-describedby="dueDateMessage"
+                          checked={form.dueDateMessage === dueDateValue}
                           className="usa-radio__input"
-                          id={`motion-status-${option}`}
-                          name="status"
+                          id={`dueDateMessage-${dueDateKey}`}
+                          name="dueDateMessage"
                           type="radio"
-                          value={option}
+                          value={dueDateValue}
                           onChange={e => {
-                            applyStampFormChangeSequence({
+                            updateFormValueSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
                           }}
                         />
                         <label
+                          aria-label={dueDateValue}
                           className="usa-radio__label"
-                          htmlFor={`motion-status-${option}`}
+                          htmlFor={`dueDateMessage-${dueDateKey}`}
+                          id={`dueDateMessage-${dueDateKey}-label`}
                         >
-                          {option}
+                          {dueDateValue}
+                          <DateInput
+                            className="display-inline-block width-full"
+                            id="due-date-input"
+                            names={{
+                              day: 'dueDateDay',
+                              month: 'dueDateMonth',
+                              year: 'dueDateYear',
+                            }}
+                            placeholder={'MM/DD/YYYY'}
+                            showDateHint={false}
+                            values={{
+                              day: form['dueDateDay'],
+                              month: form['dueDateMonth'],
+                              year: form['dueDateYear'],
+                            }}
+                            onChange={({ key, value }) => {
+                              updateFormValueSequence({
+                                key,
+                                value,
+                              });
+                            }}
+                          />
                         </label>
                       </div>
                     ))}
-                    <FormGroup className="grid-container margin-bottom-0">
-                      <div className="display-inline-block grid-col-6">
-                        <input
-                          checked={form.deniedAsMoot || false}
-                          className="usa-checkbox__input"
-                          disabled={form.status !== 'Denied'}
-                          id="deniedAsMoot"
-                          name="deniedAsMoot"
-                          type="checkbox"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor="deniedAsMoot"
-                          id="denied-as-moot-label"
-                        >
-                          As moot
-                        </label>
-                      </div>
-                      <div className="display-inline-block grid-col-auto">
-                        <input
-                          checked={form.deniedWithoutPrejudice || false}
-                          className="usa-checkbox__input"
-                          disabled={form.status !== 'Denied'}
-                          id="deniedWithoutPrejudice"
-                          name="deniedWithoutPrejudice"
-                          type="checkbox"
-                          onChange={e => {
-                            updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.checked,
-                            });
-                          }}
-                        />
-                        <label
-                          className="usa-checkbox__label"
-                          htmlFor="deniedWithoutPrejudice"
-                          id="denied-without-prejudice-label"
-                        >
-                          Without prejudice
-                        </label>
-                      </div>
-                    </FormGroup>
-                  </fieldset>
-                </FormGroup>
-                <hr />
-
-                <FormGroup>
-                  <label className="usa-label" htmlFor="stricken-case-radio">
-                    Select any that apply{' '}
-                    <span className="usa-hint">(optional)</span>
-                  </label>
-                  <div className="usa-radio usa-radio__inline">
-                    <input
-                      checked={form.strickenCase || false}
-                      className="usa-radio__input"
-                      id="stricken-case"
-                      name="strickenCase"
-                      type="radio"
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    />
-                    <label
-                      className="usa-radio__label"
-                      htmlFor={'stricken-case'}
-                    >
-                      {STRICKEN_CASE_MESSAGE}
-                    </label>
-                  </div>
-                </FormGroup>
-                <hr />
-                <FormGroup>
-                  {Object.entries(JURISDICTION_OPTIONS).map(([key, value]) => (
-                    <div className="usa-radio" key={key}>
-                      <input
-                        aria-describedby="jurisdiction"
-                        checked={form.jurisdiction === value}
-                        className="usa-radio__input"
-                        id={`jurisdiction-${key}`}
-                        name="jurisdiction"
-                        type="radio"
-                        value={value}
+                  </FormGroup>
+                  <Button
+                    link
+                    className="margin-left-205"
+                    id="clear-optional-fields"
+                    onClick={e => {
+                      e.preventDefault();
+                      clearOptionalFieldsStampFormSequence();
+                    }}
+                  >
+                    Clear Optional Fields
+                  </Button>
+                  <hr className="narrow-hr" />
+                  <FormGroup errorText={validationErrors.customOrderText}>
+                    <div>
+                      <label
+                        className="usa-label"
+                        htmlFor="custom-order-text"
+                        id="custom-order-text-label"
+                      >
+                        Custom order text{' '}
+                        <span className="usa-hint">(optional)</span>
+                      </label>
+                      <textarea
+                        aria-describedby="custom-order-text-label"
+                        autoCapitalize="none"
+                        className="usa-textarea height-8 usa-character-count__field"
+                        id="custom-order-text"
+                        maxLength="60"
+                        name="customOrderText"
+                        type="text"
+                        value={form.customOrderText}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
                           });
                         }}
-                      />
-                      <label
-                        aria-label={value}
-                        className="usa-radio__label"
-                        htmlFor={`jurisdiction-${key}`}
-                        id={`jurisdiction-${key}-label`}
+                      ></textarea>
+                      <span
+                        aria-live="polite"
+                        className="usa-hint usa-character-count__message"
+                        id="with-hint-textarea-info"
                       >
-                        {value}
-                      </label>
+                        {applyStampFormHelper.customOrderTextCharacterCount}{' '}
+                        characters remaining
+                      </span>
                     </div>
-                  ))}
-                </FormGroup>
-                <hr />
-                <FormGroup className="margin-bottom-0">
-                  {Object.entries({
-                    statusReportDueDate:
-                      'The parties shall file a status report by ',
-                    statusReportOrStipDecisionDueDate:
-                      'The parties shall file a status report or proposed stipulated decision by ',
-                  }).map(([dueDateKey, dueDateValue]) => (
-                    <div className="usa-radio" key={dueDateKey}>
-                      <input
-                        aria-describedby="dueDateMessage"
-                        checked={form.dueDateMessage === dueDateValue}
-                        className="usa-radio__input"
-                        id={`dueDateMessage-${dueDateKey}`}
-                        name="dueDateMessage"
-                        type="radio"
-                        value={dueDateValue}
-                        onChange={e => {
-                          updateFormValueSequence({
-                            key: e.target.name,
-                            value: e.target.value,
-                          });
-                        }}
-                      />
-                      <label
-                        aria-label={dueDateValue}
-                        className="usa-radio__label"
-                        htmlFor={`dueDateMessage-${dueDateKey}`}
-                        id={`dueDateMessage-${dueDateKey}-label`}
-                      >
-                        {dueDateValue}
-                        <DateInput
-                          className="display-inline-block width-card"
-                          id="due-date-input"
-                          names={{
-                            day: 'dueDateDay',
-                            month: 'dueDateMonth',
-                            year: 'dueDateYear',
-                          }}
-                          placeholder={'MM/DD/YYYY'}
-                          showDateHint={false}
-                          values={{
-                            day: form['dueDateDay'],
-                            month: form['dueDateMonth'],
-                            year: form['dueDateYear'],
-                          }}
-                          onChange={({ key, value }) => {
-                            updateFormValueSequence({
-                              key,
-                              value,
-                            });
-                          }}
-                        />
-                      </label>
-                    </div>
-                  ))}
-                </FormGroup>
-                <Button
-                  link
-                  className="padding-0"
-                  id="clear-optional-fields"
-                  onClick={e => {
-                    e.preventDefault();
-                    clearOptionalFieldsStampFormSequence();
-                  }}
-                >
-                  Clear Optional Fields
-                </Button>
-                <hr />
-                <FormGroup errorText={validationErrors.customOrderText}>
-                  <div>
-                    <label
-                      className="usa-label"
-                      htmlFor="custom-order-text"
-                      id="custom-order-text-label"
-                    >
-                      Custom order text{' '}
-                      <span className="usa-hint">(optional)</span>
-                    </label>
-                    <textarea
-                      aria-describedby="custom-order-text-label"
-                      autoCapitalize="none"
-                      className="usa-textarea height-8 usa-character-count__field"
-                      id="custom-order-text"
-                      maxLength="60"
-                      name="customOrderText"
-                      type="text"
-                      value={form.customOrderText}
-                      onChange={e => {
-                        updateFormValueSequence({
-                          key: e.target.name,
-                          value: e.target.value,
-                        });
-                      }}
-                    ></textarea>
-                    <span
-                      aria-live="polite"
-                      className="usa-hint usa-character-count__message"
-                      id="with-hint-textarea-info"
-                    >
-                      {applyStampFormHelper.customOrderTextCharacterCount}{' '}
-                      characters remaining
-                    </span>
-                  </div>
-                </FormGroup>
+                  </FormGroup>
+                </div>
               </div>
             </div>
             <div className="grid-col-7">
