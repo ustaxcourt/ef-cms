@@ -14,6 +14,8 @@ export const ApplyStamp = connect(
     STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
+    clearOptionalFieldsStampFormSequence:
+      sequences.clearOptionalFieldsStampFormSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
@@ -30,6 +32,7 @@ export const ApplyStamp = connect(
   function ApplyStamp({
     applyStampFormChangeSequence,
     applyStampFormHelper,
+    clearOptionalFieldsStampFormSequence,
     currentPageNumber,
     form,
     JURISDICTION_OPTIONS,
@@ -275,7 +278,7 @@ export const ApplyStamp = connect(
                   ))}
                 </FormGroup>
                 <hr />
-                <FormGroup>
+                <FormGroup className="margin-bottom-0">
                   {Object.entries({
                     statusReportDueDate:
                       'The parties shall file a status report by ',
@@ -331,6 +334,17 @@ export const ApplyStamp = connect(
                     </div>
                   ))}
                 </FormGroup>
+                <Button
+                  link
+                  className="padding-0"
+                  id="clear-optional-fields"
+                  onClick={e => {
+                    e.preventDefault();
+                    clearOptionalFieldsStampFormSequence();
+                  }}
+                >
+                  Clear Optional Fields
+                </Button>
                 <hr />
                 <FormGroup errorText={validationErrors.customOrderText}>
                   <div>
