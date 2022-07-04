@@ -17,15 +17,12 @@ export const ApplyStamp = connect(
     clearOptionalFieldsStampFormSequence:
       sequences.clearOptionalFieldsStampFormSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
-    docketNumber: state.caseDetail.docketNumber,
     form: state.form,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
     saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setSignatureData: sequences.setPDFSignatureDataSequence,
-    signatureApplied: state.pdfForSigning.signatureApplied,
-    signatureData: state.pdfForSigning.signatureData,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -442,9 +439,6 @@ export const ApplyStamp = connect(
                           </>
                         )}
                         <span className="text-semibold">
-                          {/* this should reset dueDateDay etc on the stamp if you change from
-                           1 radio button w date filled in to the other instead */}
-
                           {form.dueDateMessage && form.dueDateDay && (
                             <>
                               {form.dueDateMessage} {form.dueDateMonth}/
