@@ -3,7 +3,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { unsetDeniedOptionsOnStampFormAction } from './unsetDeniedOptionsOnStampFormAction';
 
-describe('removeCaseFromTrialAction', () => {
+describe('unsetDeniedOptionsOnStampFormAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should unset denied options on the form', async () => {

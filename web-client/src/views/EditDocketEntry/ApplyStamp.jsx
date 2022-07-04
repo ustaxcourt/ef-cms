@@ -1,9 +1,9 @@
-import { Button } from '../ustc-ui/Button/Button';
-import { CaseDetailHeader } from './CaseDetail/CaseDetailHeader';
-import { DateInput } from '../ustc-ui/DateInput/DateInput';
-import { ErrorNotification } from './ErrorNotification';
-import { FormGroup } from '../ustc-ui/FormGroup/FormGroup';
-import { PDFSignerPageButtons } from './PDFSignerPageButtons';
+import { Button } from '../../ustc-ui/Button/Button';
+import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
+import { DateInput } from '../../ustc-ui/DateInput/DateInput';
+import { ErrorNotification } from '../ErrorNotification';
+import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
+import { PDFSignerPageButtons } from '../PDFSignerPageButtons';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
