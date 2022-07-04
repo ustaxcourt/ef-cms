@@ -12,6 +12,7 @@ export const ApplyStamp = connect(
   {
     JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
     STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
+    applyStampFormHelper: state.applyStampFormHelper,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
     form: state.form,
@@ -26,6 +27,7 @@ export const ApplyStamp = connect(
     validationErrors: state.validationErrors,
   },
   function ApplyStamp({
+    applyStampFormHelper,
     currentPageNumber,
     form,
     JURISDICTION_OPTIONS,
@@ -359,7 +361,8 @@ export const ApplyStamp = connect(
                       className="usa-hint usa-character-count__message"
                       id="with-hint-textarea-info"
                     >
-                      60 characters remaining
+                      {applyStampFormHelper.customOrderTextCharacterCount}{' '}
+                      characters remaining
                     </span>
                   </div>
                 </FormGroup>

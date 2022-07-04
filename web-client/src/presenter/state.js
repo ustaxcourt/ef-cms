@@ -7,6 +7,7 @@ import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advance
 import { advancedSearchHelper } from './computeds/AdvancedSearch/advancedSearchHelper';
 import { alertHelper } from './computeds/alertHelper';
 import { appInstanceManagerHelper } from './computeds/appInstanceManagerHelper';
+import { applyStampFormHelper } from './computeds/applyStampFormHelper';
 import { batchDownloadHelper } from './computeds/batchDownloadHelper';
 import { blockedCasesReportHelper } from './computeds/blockedCasesReportHelper';
 import { caseDeadlineReportHelper } from './computeds/caseDeadlineReportHelper';
@@ -120,6 +121,7 @@ const helpers = {
   advancedSearchHelper,
   alertHelper,
   appInstanceManagerHelper,
+  applyStampFormHelper,
   batchDownloadHelper,
   blockedCasesReportHelper,
   caseDeadlineReportHelper,
