@@ -1,14 +1,14 @@
 import { state } from 'cerebral';
 
 /**
- * generates an action for completing document signing
+ * generates an action for completing motion stamping
  *
  * @param {object} providers the providers object
  * @param {string} providers.get the cerebral get function
  * @param {string} providers.applicationContext the applicationContext
- * @returns {Function} the action to complete the document signing
+ * @returns {Function} the action to complete the motion stamping
  */
-export const completeDocumentSigningAction = async ({
+export const completeMotionStampingAction = async ({
   applicationContext,
   get,
 }) => {

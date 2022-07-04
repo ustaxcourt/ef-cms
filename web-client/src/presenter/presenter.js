@@ -284,6 +284,7 @@ import { reviewExternalDocumentInformationSequence } from './sequences/reviewExt
 import { reviewRequestAccessInformationSequence } from './sequences/reviewRequestAccessInformationSequence';
 import { runTrialSessionPlanningReportSequence } from './sequences/runTrialSessionPlanningReportSequence';
 import { saveDocumentSigningSequence } from './sequences/saveDocumentSigningSequence';
+import { saveMotionStampingSequence } from './sequences/saveMotionStampingSequence';
 import { saveSavedCaseForLaterSequence } from './sequences/saveSavedCaseForLaterSequence';
 import { scannerStartupSequence } from './sequences/scannerStartupSequence';
 import { sealAddressSequence } from './sequences/sealAddressSequence';
@@ -778,6 +779,7 @@ export const presenter = {
     reviewRequestAccessInformationSequence,
     runTrialSessionPlanningReportSequence,
     saveDocumentSigningSequence,
+    saveMotionStampingSequence,
     saveSavedCaseForLaterSequence,
     scannerStartupSequence,
     sealAddressSequence,

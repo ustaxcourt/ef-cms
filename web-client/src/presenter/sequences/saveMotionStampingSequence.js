@@ -4,36 +4,26 @@ import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAct
 import { completeMotionStampingAction } from '../actions/completeMotionStampingAction';
 import { completeWorkItemForDocumentSigningAction } from '../actions/completeWorkItemForDocumentSigningAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
-import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
+import { navigateBackAction } from '../actions/navigateBackAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
-import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
-import { setDocumentDetailTabAction } from '../actions/setDocumentDetailTabAction';
-import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { setSuccessFromDocumentTitleAction } from '../actions/setSuccessFromDocumentTitleAction';
+import { setSuccessfulStampFromDocumentTitleAction } from '../actions/setSuccessfulStampFromDocumentTitleAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 
-export const saveDocumentSigningSequence = showProgressSequenceDecorator([
+export const saveMotionStampingSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   setSaveAlertsForNavigationAction,
-  setSuccessFromDocumentTitleAction,
-  completeMotionStampingAction,
-  setDefaultDraftDocumentIdAction,
-  setRedirectUrlAction,
-  // TODO: replace completeWorkItemForDocumentSigningAction
-  completeWorkItemForDocumentSigningAction,
-  setDocumentDetailTabAction,
-  // TODO: replace clearPDFSignatureDataAction
-  clearPDFSignatureDataAction,
+  setSuccessfulStampFromDocumentTitleAction,
+  // completeMotionStampingAction,
+  navigateBackAction,
+  // // TODO: replace completeWorkItemForDocumentSigningAction
+  // completeWorkItemForDocumentSigningAction,
+  // // TODO: replace clearPDFSignatureDataAction
+  // clearPDFSignatureDataAction,
   clearFormAction,
   setAlertSuccessAction,
   followRedirectAction,
   {
-    default: [
-      setCaseDetailPageTabActionGenerator('drafts'),
-      navigateToDraftDocumentsAction,
-    ],
-    success: [],
+    default: [],
   },
 ]);
