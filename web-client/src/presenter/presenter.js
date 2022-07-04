@@ -51,6 +51,7 @@ import { clearExistingDocumentSequence } from './sequences/clearExistingDocument
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
+import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalFieldsStampFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
@@ -548,6 +549,7 @@ export const presenter = {
     clearModalFormSequence,
     clearModalSequence,
     clearOpenClosedCasesCurrentPageSequence,
+    clearOptionalFieldsStampFormSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
     clearViewerDocumentToDisplaySequence,
