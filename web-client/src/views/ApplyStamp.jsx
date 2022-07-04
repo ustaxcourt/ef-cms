@@ -34,14 +34,10 @@ export const ApplyStamp = connect(
     pdfSignerHelper,
     saveDocumentSigningSequence,
     setSignatureData,
-    signatureApplied,
-    signatureData,
     STRICKEN_CASE_MESSAGE,
     updateFormValueSequence,
     validationErrors,
   }) {
-    const yLimitToPreventServedStampOverlay = 705;
-
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 
@@ -68,17 +64,16 @@ export const ApplyStamp = connect(
         });
     };
 
-    const moveSig = (sig, x, y) => {
-      sig.style.top = y + 'px';
-      sig.style.left = x + 'px';
-    };
-
     const clear = () => {
       setSignatureData({
         isPdfAlreadySigned: false,
         signatureApplied: false,
         signatureData: null,
       });
+      const sigEl = signatureRef.current;
+
+      sigEl.style.top = null;
+      sigEl.style.left = null;
     };
 
     const restart = () => {
@@ -86,71 +81,15 @@ export const ApplyStamp = connect(
       start();
     };
 
-    const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
-      setSignatureData({
-        signatureApplied: true,
-        signatureData: { scale, x, y },
-      });
-
-      canvasEl.onmousemove = null;
-      canvasEl.onmousedown = null;
-      sigEl.onmousemove = null;
-      sigEl.onmousedown = null;
-    };
-
     const start = () => {
       const sigEl = signatureRef.current;
-      const canvasEl = canvasRef.current;
-      let x;
-      let y;
 
       setSignatureData({
         signatureApplied: true,
-        signatureData: null,
+        signatureData: { scale: 1, x: 84, y: 590 },
       });
-
-      canvasEl.onmousemove = e => {
-        const { pageX, pageY } = e;
-        const canvasBounds = canvasEl.getBoundingClientRect();
-        const sigBox = sigEl.getBoundingClientRect();
-
-        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
-        const scrollYOffset = window.scrollY;
-
-        x = pageX - canvasBounds.x;
-        y = pageY - canvasBounds.y - scrollYOffset;
-
-        const uiPosX = pageX - sigParentBounds.x;
-        const uiPosY = y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
-
-        if (uiPosY < yLimitToPreventServedStampOverlay) {
-          moveSig(sigEl, uiPosX, uiPosY);
-        }
-      };
-
-      canvasEl.onmousedown = e => {
-        const { pageY } = e;
-        const canvasBounds = canvasEl.getBoundingClientRect();
-        const scrollYOffset = window.scrollY;
-        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
-        const sigBoxHeight = sigEl.getBoundingClientRect().height;
-        const uiPosY =
-          pageY -
-          canvasBounds.y -
-          scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y) -
-          sigBoxHeight;
-
-        if (uiPosY < yLimitToPreventServedStampOverlay) {
-          stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
-        }
-      };
-
-      // sometimes the cursor falls on top of the signature
-      // and catches these events
-
-      sigEl.onmousemove = canvasEl.onmousemove;
-      sigEl.onmousedown = canvasEl.onmousedown;
+      sigEl.style.top = '500px';
+      sigEl.style.left = '150px';
     };
 
     let hasStarted = false;
@@ -366,16 +305,16 @@ export const ApplyStamp = connect(
                           className="display-inline-block width-card"
                           id="due-date-input"
                           names={{
-                            day: `dueDateDay-${dueDateKey}`,
-                            month: `dueDateMonth-${dueDateKey}`,
-                            year: `dueDateYear-${dueDateKey}`,
+                            day: 'dueDateDay',
+                            month: 'dueDateMonth',
+                            year: 'dueDateYear',
                           }}
                           placeholder={'MM/DD/YYYY'}
                           showDateHint={false}
                           values={{
-                            day: form[`dueDateDay-${dueDateKey}`],
-                            month: form[`dueDateMonth-${dueDateKey}`],
-                            year: form[`dueDateYear-${dueDateKey}`],
+                            day: form['dueDateDay'],
+                            month: form['dueDateMonth'],
+                            year: form['dueDateYear'],
                           }}
                           onChange={({ key, value }) => {
                             updateFormValueSequence({
@@ -504,18 +443,7 @@ export const ApplyStamp = connect(
                         {pdfForSigning.nameForSigningLine2}
                       </span>
                     </span>
-                    <canvas
-                      className={
-                        !signatureData && signatureApplied
-                          ? 'cursor-grabbing'
-                          : 'cursor-grab'
-                      }
-                      id="sign-pdf-canvas"
-                      ref={canvasRef}
-                    ></canvas>
-                    <span id="signature-warning">
-                      You cannot apply a signature here.
-                    </span>
+                    <canvas id="sign-pdf-canvas" ref={canvasRef}></canvas>
                   </div>
                 </div>
               </div>
