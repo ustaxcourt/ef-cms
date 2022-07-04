@@ -14,6 +14,7 @@ import { adminContactUpdateCompleteSequence } from './sequences/adminContactUpda
 import { adminContactUpdateInitialUpdateCompleteSequence } from './sequences/adminContactUpdateInitialUpdateCompleteSequence';
 import { adminContactUpdateProgressSequence } from './sequences/adminContactUpdateProgressSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
+import { applyStampFormChangeSequence } from './sequences/applyStampFormChangeSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
 import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
@@ -510,6 +511,7 @@ export const presenter = {
     adminContactUpdateInitialUpdateCompleteSequence,
     adminContactUpdateProgressSequence,
     advancedSearchTabChangeSequence,
+    applyStampFormChangeSequence,
     archiveDraftDocumentModalSequence,
     archiveDraftDocumentSequence,
     assignSelectedWorkItemsSequence,
