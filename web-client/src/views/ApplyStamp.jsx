@@ -135,7 +135,7 @@ export const ApplyStamp = connect(
                 </div>
                 <div className="stamp-order-form">
                   <FormGroup
-                    className="margin-bottom-0"
+                    className="stamp-form-group"
                     errorText={validationErrors.status}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
@@ -168,7 +168,7 @@ export const ApplyStamp = connect(
                           </label>
                         </div>
                       ))}
-                      <FormGroup className="grid-container margin-bottom-0">
+                      <FormGroup className="grid-container stamp-form-group denied-checkboxes">
                         <div className="display-inline-block grid-col-6">
                           <input
                             checked={form.deniedAsMoot || false}
@@ -220,7 +220,7 @@ export const ApplyStamp = connect(
                   </FormGroup>
                   <hr className="border-top-2px border-base-lighter" />
 
-                  <FormGroup>
+                  <FormGroup className="stamp-form-group">
                     <label className="usa-label" htmlFor="stricken-case-radio">
                       Select any that apply{' '}
                       <span className="usa-hint">(optional)</span>
@@ -248,7 +248,7 @@ export const ApplyStamp = connect(
                     </div>
                   </FormGroup>
                   <hr className="narrow-hr" />
-                  <FormGroup>
+                  <FormGroup className="stamp-form-group">
                     {Object.entries(JURISDICTION_OPTIONS).map(
                       ([key, value]) => (
                         <div className="usa-radio" key={key}>
@@ -280,7 +280,7 @@ export const ApplyStamp = connect(
                     )}
                   </FormGroup>
                   <hr className="narrow-hr" />
-                  <FormGroup className="margin-bottom-0">
+                  <FormGroup className="stamp-form-group">
                     {Object.entries({
                       statusReportDueDate:
                         'The parties shall file a status report by ',
@@ -311,7 +311,7 @@ export const ApplyStamp = connect(
                         >
                           {dueDateValue}
                           <DateInput
-                            className="display-inline-block width-full"
+                            className="display-inline-block width-150 padding-0"
                             id="due-date-input"
                             names={{
                               day: 'dueDateDay',
@@ -348,7 +348,10 @@ export const ApplyStamp = connect(
                     Clear Optional Fields
                   </Button>
                   <hr className="narrow-hr" />
-                  <FormGroup errorText={validationErrors.customOrderText}>
+                  <FormGroup
+                    className="stamp-form-group"
+                    errorText={validationErrors.customOrderText}
+                  >
                     <div>
                       <label
                         className="usa-label"
