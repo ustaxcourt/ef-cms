@@ -514,8 +514,24 @@ label.ustc-upload {
 
 .stamp-order-form {
   .usa-form-group {
-    padding: 0px 20px;
-    margin-bottom: 0px;
+    max-width: 100%;
+    margin-bottom: 0;
+
+    &.stamp-form-group {
+      padding: 0 1rem;
+
+      &.denied-checkboxes {
+        padding: 0 2rem;
+      }
+    }
+
+    #due-date-input-date-label {
+      margin: 0;
+    }
+
+    .width-150 {
+      width: 150px;
+    }
   }
 
   .narrow-hr {
