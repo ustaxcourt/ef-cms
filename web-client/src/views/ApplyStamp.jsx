@@ -12,6 +12,7 @@ export const ApplyStamp = connect(
   {
     JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
     STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
+    applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
     currentPageNumber: state.pdfForSigning.pageNumber,
     docketNumber: state.caseDetail.docketNumber,
@@ -27,6 +28,7 @@ export const ApplyStamp = connect(
     validationErrors: state.validationErrors,
   },
   function ApplyStamp({
+    applyStampFormChangeSequence,
     applyStampFormHelper,
     currentPageNumber,
     form,
@@ -149,7 +151,7 @@ export const ApplyStamp = connect(
                           type="radio"
                           value={option}
                           onChange={e => {
-                            updateFormValueSequence({
+                            applyStampFormChangeSequence({
                               key: e.target.name,
                               value: e.target.value,
                             });
