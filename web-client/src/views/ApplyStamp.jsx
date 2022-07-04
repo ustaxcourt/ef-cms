@@ -227,6 +227,7 @@ export const ApplyStamp = connect(
                         <input
                           checked={form.deniedAsMoot || false}
                           className="usa-checkbox__input"
+                          disabled={form.status !== 'Denied'}
                           id="deniedAsMoot"
                           name="deniedAsMoot"
                           type="checkbox"
@@ -249,6 +250,7 @@ export const ApplyStamp = connect(
                         <input
                           checked={form.deniedWithoutPrejudice || false}
                           className="usa-checkbox__input"
+                          disabled={form.status !== 'Denied'}
                           id="deniedWithoutPrejudice"
                           name="deniedWithoutPrejudice"
                           type="checkbox"
