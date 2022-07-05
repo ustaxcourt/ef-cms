@@ -365,16 +365,16 @@ export const ApplyStamp = connect(
                           className="display-inline-block width-150 padding-0"
                           id="due-date-input-statusReportOrStipDecisionDueDate"
                           names={{
-                            day: 'dueDateDay',
-                            month: 'dueDateMonth',
-                            year: 'dueDateYear',
+                            day: 'dueDateDay-stipDecision',
+                            month: 'dueDateMonth-stipDecision',
+                            year: 'dueDateYear-stipDecision',
                           }}
                           placeholder={'MM/DD/YYYY'}
                           showDateHint={false}
                           values={{
-                            day: form['dueDateDay'],
-                            month: form['dueDateMonth'],
-                            year: form['dueDateYear'],
+                            day: form['dueDateDay-stipDecision'],
+                            month: form['dueDateMonth-stipDecision'],
+                            year: form['dueDateYear-stipDecision'],
                           }}
                           onChange={({ key, value }) => {
                             updateFormValueSequence({
@@ -498,10 +498,14 @@ export const ApplyStamp = connect(
                           </>
                         )}
                         <span className="text-semibold">
-                          {form.dueDateMessage && form.dueDateDay && (
+                          {form.dueDateMessage && (
                             <>
-                              {form.dueDateMessage} {form.dueDateMonth}/
-                              {form.dueDateDay}/{form.dueDateYear}
+                              {form.dueDateMessage} {form.dueDateMonth} ||{' '}
+                              {form['dueDateMonth-stipDecision']}/
+                              {form.dueDateDay} ||{' '}
+                              {form['dueDateDay-stipDecision']} /
+                              {form.dueDateYear} ||{' '}
+                              {form['dueDateYear-stipDecision']}
                               <br />
                             </>
                           )}
