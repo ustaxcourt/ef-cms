@@ -30,7 +30,7 @@ export const docketClerkAddsOpiniontoDocketyEntry = (
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to docket record.',
+      'Your entry has been added to the docket record.',
     );
 
     await cerebralTest.runSequence(
