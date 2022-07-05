@@ -90,7 +90,7 @@
     "backup:dynamo-table": "./scripts/dynamo/backup-dynamo-table.sh",
     "build:all": "npm run clean && npm run build:assets && npm run build:client",
     "build:assets": "node shared/createModule.js",
-    "build:client": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --env PUBLIC_SITE_URL=$PUBLIC_SITE_URL --config webpack.config.client.prod.js",
+    "build:client": "NODE_ENV=production USTC_ENV=prod PUBLIC_SITE_URL=$PUBLIC_SITE_URL node esbuild.config.mjs",
     "build:jsdoc": "jsdoc -c web-client/jsdoc.conf.json",
     "build:lambda:api": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.api.js",
     "build:lambda:migration": "USTC_ENV=prod node --max-old-space-size=8192 node_modules/webpack/bin/webpack.js --config webpack.config.lambda.migration.js",
