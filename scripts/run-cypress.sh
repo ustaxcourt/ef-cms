@@ -36,7 +36,6 @@ Help()
 ############################################################
 ############################################################
 
-export COLOR=deploying
 INTEGRATION=true
 PORT=1234
 NON_PUBLIC=app-
@@ -45,7 +44,7 @@ NON_PUBLIC=app-
 while getopts ":chloprs" option; do
    case $option in
       c) # run against currently deployed color
-         export COLOR=current
+         CURRENT=true
          ;;
       h) # display Help
          Help
@@ -111,11 +110,15 @@ else
   export CYPRESS_AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
   export CYPRESS_AWS_SESSION_TOKEN=$AWS_SESSION_TOKEN
   export CYPRESS_DEFAULT_ACCOUNT_PASS=$DEFAULT_ACCOUNT_PASS
-  export CYPRESS_DEPLOYING_COLOR=$DEPLOYING_COLOR
+  if [ -n "${CURRENT}" ]; then
+    export CYPRESS_DEPLOYING_COLOR=$CURRENT_COLOR
+  else
+    export CYPRESS_DEPLOYING_COLOR=$DEPLOYING_COLOR
+  fi
   export CYPRESS_DISABLE_EMAILS=$DISABLE_EMAILS
   export CYPRESS_EFCMS_DOMAIN=$EFCMS_DOMAIN
   export CYPRESS_USTC_ADMIN_PASS=$USTC_ADMIN_PASS
-  export CYPRESS_BASE_URL="https://${NON_PUBLIC}${DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
+  export CYPRESS_BASE_URL="https://${NON_PUBLIC}${CYPRESS_DEPLOYING_COLOR}.${EFCMS_DOMAIN}"
 fi
 
 if [ -n "${OPEN}" ]; then
