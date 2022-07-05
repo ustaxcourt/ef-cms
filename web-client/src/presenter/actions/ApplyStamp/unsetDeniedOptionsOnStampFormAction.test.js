@@ -6,8 +6,8 @@ import { unsetDeniedOptionsOnStampFormAction } from './unsetDeniedOptionsOnStamp
 describe('unsetDeniedOptionsOnStampFormAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('should unset denied options on the form', async () => {
-    const { state } = await runAction(unsetDeniedOptionsOnStampFormAction, {
+  it('should unset denied options on the form when stampOrderStatus is "Granted"', async () => {
+    const result = await runAction(unsetDeniedOptionsOnStampFormAction, {
       modules: {
         presenter,
       },
@@ -15,11 +15,30 @@ describe('unsetDeniedOptionsOnStampFormAction', () => {
         form: {
           deniedAsMoot: true,
           deniedWithoutPrejudice: true,
+          status: 'Granted',
         },
       },
     });
 
-    expect(state.form.deniedAsMoot).toBeUndefined();
-    expect(state.form.deniedWithoutPrejudice).toBeUndefined();
+    expect(result.state.form.deniedAsMoot).toBeUndefined();
+    expect(result.state.form.deniedWithoutPrejudice).toBeUndefined();
+  });
+
+  it('should not unset denied options on the form when stampOrderStatus is "Denied"', async () => {
+    const result = await runAction(unsetDeniedOptionsOnStampFormAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          deniedAsMoot: true,
+          deniedWithoutPrejudice: true,
+          status: 'Denied',
+        },
+      },
+    });
+
+    expect(result.state.form.deniedAsMoot).toBeDefined();
+    expect(result.state.form.deniedWithoutPrejudice).toBeDefined();
   });
 });
