@@ -3,7 +3,6 @@ import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { PDFSignerPageButtons } from '../PDFSignerPageButtons';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -32,7 +31,6 @@ export const ApplyStamp = connect(
     applyStampFormHelper,
     clearDueDateSequence,
     clearOptionalFieldsStampFormSequence,
-    currentPageNumber,
     form,
     JURISDICTION_OPTIONS,
     pdfForSigning,
@@ -100,12 +98,12 @@ export const ApplyStamp = connect(
 
     let hasStarted = false;
     useEffect(() => {
-      renderPDFPage(currentPageNumber);
+      renderPDFPage(1);
       if (!hasStarted) {
         start();
         hasStarted = true;
       }
-    }, [currentPageNumber]);
+    }, [1]);
 
     return (
       <>
@@ -445,27 +443,22 @@ export const ApplyStamp = connect(
               </div>
             </div>
             <div className="grid-col-7">
-              <div className="grid-row margin-bottom-1">
-                <div className="grid-col-4 text-align-left sign-pdf-control">
-                  <PDFSignerPageButtons />
-                </div>
-                <div className="grid-col-8 text-align-right">
-                  {pdfSignerHelper.isPlaced && (
-                    <>
-                      <Button link icon="trash" onClick={() => restart()}>
-                        Remove Stamp
-                      </Button>
+              <div className="margin-bottom-1 display-flex flex-justify-end">
+                {pdfSignerHelper.isPlaced && (
+                  <>
+                    <Button link icon="trash" onClick={() => restart()}>
+                      Remove Stamp
+                    </Button>
 
-                      <Button
-                        className="margin-right-0"
-                        id="save-signature-button"
-                        onClick={() => saveDocumentSigningSequence()}
-                      >
-                        Save Stamp Order
-                      </Button>
-                    </>
-                  )}
-                </div>
+                    <Button
+                      className="margin-right-0"
+                      id="save-signature-button"
+                      onClick={() => saveDocumentSigningSequence()}
+                    >
+                      Save Stamp Order
+                    </Button>
+                  </>
+                )}
               </div>
               <div className="grid-row">
                 <div className="grid-col-12">
