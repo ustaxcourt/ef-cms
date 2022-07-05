@@ -281,60 +281,110 @@ export const ApplyStamp = connect(
                   </FormGroup>
                   <hr className="narrow-hr" />
                   <FormGroup className="stamp-form-group">
-                    {Object.entries({
-                      statusReportDueDate:
-                        'The parties shall file a status report by ',
-                      statusReportOrStipDecisionDueDate:
-                        'The parties shall file a status report or proposed stipulated decision by ',
-                    }).map(([dueDateKey, dueDateValue]) => (
-                      <div className="usa-radio" key={dueDateKey}>
-                        <input
-                          aria-describedby="dueDateMessage"
-                          checked={form.dueDateMessage === dueDateValue}
-                          className="usa-radio__input"
-                          id={`dueDateMessage-${dueDateKey}`}
-                          name="dueDateMessage"
-                          type="radio"
-                          value={dueDateValue}
-                          onChange={e => {
+                    <div className="usa-radio" key="statusReportDueDate">
+                      <input
+                        aria-describedby="dueDateMessage"
+                        checked={
+                          form.dueDateMessage ===
+                          'The parties shall file a status report by'
+                        }
+                        className="usa-radio__input"
+                        id="dueDateMessage-statusReportDueDate"
+                        name="dueDateMessage"
+                        type="radio"
+                        value="The parties shall file a status report by"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        aria-label="statusReportDueDate"
+                        className="usa-radio__label"
+                        htmlFor="dueDateMessage-statusReportDueDate"
+                        id="dueDateMessage-statusReportDueDate-label"
+                      >
+                        The parties shall file a status report by{' '}
+                        <DateInput
+                          className="display-inline-block width-150 padding-0"
+                          id="due-date-input-statusReportDueDate"
+                          names={{
+                            day: 'dueDateDay',
+                            month: 'dueDateMonth',
+                            year: 'dueDateYear',
+                          }}
+                          placeholder={'MM/DD/YYYY'}
+                          showDateHint={false}
+                          values={{
+                            day: form['dueDateDay'],
+                            month: form['dueDateMonth'],
+                            year: form['dueDateYear'],
+                          }}
+                          onChange={({ key, value }) => {
                             updateFormValueSequence({
-                              key: e.target.name,
-                              value: e.target.value,
+                              key,
+                              value,
                             });
                           }}
                         />
-                        <label
-                          aria-label={dueDateKey}
-                          className="usa-radio__label"
-                          htmlFor={`dueDateMessage-${dueDateKey}`}
-                          id={`dueDateMessage-${dueDateKey}-label`}
-                        >
-                          {dueDateValue}
-                          <DateInput
-                            className="display-inline-block width-150 padding-0"
-                            id={`due-date-input-${dueDateKey}`}
-                            names={{
-                              day: 'dueDateDay',
-                              month: 'dueDateMonth',
-                              year: 'dueDateYear',
-                            }}
-                            placeholder={'MM/DD/YYYY'}
-                            showDateHint={false}
-                            values={{
-                              day: form['dueDateDay'],
-                              month: form['dueDateMonth'],
-                              year: form['dueDateYear'],
-                            }}
-                            onChange={({ key, value }) => {
-                              updateFormValueSequence({
-                                key,
-                                value,
-                              });
-                            }}
-                          />
-                        </label>
-                      </div>
-                    ))}
+                      </label>
+                    </div>
+                    <div
+                      className="usa-radio"
+                      key="statusReportOrStipDecisionDueDate"
+                    >
+                      <input
+                        aria-describedby="dueDateMessage"
+                        checked={
+                          form.dueDateMessage ===
+                          'The parties shall file a status report or proposed stipulated decision by'
+                        }
+                        className="usa-radio__input"
+                        id="dueDateMessage-statusReportOrStipDecisionDueDate"
+                        name="dueDateMessage"
+                        type="radio"
+                        value="The parties shall file a status report or proposed stipulated decision by"
+                        onChange={e => {
+                          updateFormValueSequence({
+                            key: e.target.name,
+                            value: e.target.value,
+                          });
+                        }}
+                      />
+                      <label
+                        aria-label="statusReportOrStipDecisionDueDate"
+                        className="usa-radio__label"
+                        htmlFor="dueDateMessage-statusReportOrStipDecisionDueDate"
+                        id="dueDateMessage-statusReportOrStipDecisionDueDate-label"
+                      >
+                        The parties shall file a status report or proposed
+                        stipulated decision by{' '}
+                        <DateInput
+                          className="display-inline-block width-150 padding-0"
+                          id="due-date-input-statusReportOrStipDecisionDueDate"
+                          names={{
+                            day: 'dueDateDay',
+                            month: 'dueDateMonth',
+                            year: 'dueDateYear',
+                          }}
+                          placeholder={'MM/DD/YYYY'}
+                          showDateHint={false}
+                          values={{
+                            day: form['dueDateDay'],
+                            month: form['dueDateMonth'],
+                            year: form['dueDateYear'],
+                          }}
+                          onChange={({ key, value }) => {
+                            updateFormValueSequence({
+                              key,
+                              value,
+                            });
+                          }}
+                        />
+                      </label>
+                    </div>
                   </FormGroup>
                   <Button
                     link
