@@ -3,6 +3,8 @@ import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper
 import {
   docketClerkUser,
   irsPractitionerUser,
+  petitionerUser,
+  petitionsClerkUser,
   privatePractitionerUser,
 } from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
@@ -46,7 +48,7 @@ describe('showSealedCaseView', () => {
     expect(result.showSealedCaseView).toEqual(true);
   });
 
-  it('should be false for a practitioner not associated with a unsealed case', () => {
+  it('should be false for a practitioner not associated with an unsealed case', () => {
     const result = runCompute(caseDetailHelper, {
       state: {
         ...getBaseState(irsPractitionerUser),
@@ -60,21 +62,29 @@ describe('showSealedCaseView', () => {
     expect(result.showSealedCaseView).toEqual(false);
   });
 
-  it('should be false for a non practitioner user', () => {
-    const result = runCompute(caseDetailHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [],
-          isSealed: true,
-          privatePractitioners: [],
-        },
-        screenMetadata: {
-          isAssociated: false,
-        },
-      },
-    });
+  const nonPractitionerUsers = [
+    docketClerkUser,
+    petitionerUser,
+    petitionsClerkUser,
+  ];
 
-    expect(result.showSealedCaseView).toEqual(false);
+  nonPractitionerUsers.forEach(user => {
+    it(`should be false for a non practitioner ${user} user`, () => {
+      const result = runCompute(caseDetailHelper, {
+        state: {
+          ...getBaseState(user),
+          caseDetail: {
+            docketEntries: [],
+            isSealed: true,
+            privatePractitioners: [],
+          },
+          screenMetadata: {
+            isAssociated: false,
+          },
+        },
+      });
+
+      expect(result.showSealedCaseView).toEqual(false);
+    });
   });
 });
