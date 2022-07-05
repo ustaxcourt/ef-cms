@@ -2,7 +2,7 @@
 import { createServer, request } from 'http';
 
 const clients = [];
-
+import { clean } from 'esbuild-plugin-clean';
 import { sassPlugin } from 'esbuild-sass-plugin';
 import babel from 'esbuild-plugin-babel-cached';
 import esbuild from 'esbuild';
@@ -13,6 +13,11 @@ import postcss from 'postcss';
 import postcssPresetEnv from 'postcss-preset-env';
 
 import fs from 'fs';
+
+// fs.rmdirSync('./dist', {
+//   force: true,
+//   recursive: true,
+// });
 
 const watch = !!process.env.WATCH;
 
@@ -47,6 +52,19 @@ const env = {
 
 const sassMap = new Map();
 
+const replaceHtmlFile = () => {
+  const indexFile = fs.readFileSync('./dist/index.html', 'utf8');
+  const files = fs.readdirSync('./dist');
+  const [jsFile] = files.filter(file => /^index\.[A-Z0-9]+\.js$/.test(file));
+  const [cssFile] = files.filter(file => /^index\.[A-Z0-9]+\.css$/.test(file));
+  const indexFileReplaced = indexFile
+    .replace(/src="\/index\.js"/, `src="/${jsFile}"`)
+    .replace(/href="\/index\.css"/, `href="/${cssFile}"`)
+    .replace(/src="\/index\.[A-Z0-9]+\.js"/, `src="/${jsFile}"`)
+    .replace(/href="\/index\.[A-Z0-9]+\.css"/, `href="/${cssFile}"`);
+  fs.writeFileSync('./dist/index.html', indexFileReplaced, 'utf8');
+};
+
 esbuild
   .build({
     bundle: true,
@@ -59,6 +77,7 @@ esbuild
       }, {}),
     },
     entryPoints: ['web-client/src/index.js'],
+    entryNames: '[name].[hash]',
     loader: {
       '.html': 'text',
       '.pdf': 'binary',
@@ -70,11 +89,14 @@ esbuild
     },
     metafile: true,
     logLevel: 'info',
-    minify: false,
+    minify: true,
     splitting: true,
     outdir: 'dist',
     format: 'esm',
     plugins: [
+      clean({
+        patterns: ['./dist/*'],
+      }),
       resolve({
         crypto: 'crypto-browserify',
         stream: 'stream-browserify',
@@ -150,9 +172,11 @@ esbuild
     watch: watch
       ? {
           onRebuild(error, result) {
+            console.log('on rebuild here');
+            replaceHtmlFile();
             clients.forEach(res => res.write('data: update\n\n'));
             clients.length = 0;
-            console.log(error ? error : '...');
+            error && console.error(error);
 
             fs.writeFileSync(
               'metadata.json',
@@ -162,60 +186,66 @@ esbuild
         }
       : false,
   })
-  .catch(() => process.exit(1));
+  .catch(() => process.exit(1))
 
-if (watch) {
-  // custom setup for live reload: https://github.com/evanw/esbuild/issues/802
-  esbuild.serve({ servedir: './dist', port: 5555 }, {}).then(() => {
-    createServer((req, res) => {
-      const { url, method, headers } = req;
+  .then(() => {
+    console.log('replacing html');
+    replaceHtmlFile();
 
-      if (req.url === '/esbuild') {
-        return clients.push(
-          res.writeHead(200, {
-            'Content-Type': 'text/event-stream',
-            'Cache-Control': 'no-cache',
-            Connection: 'keep-alive',
-          }),
-        );
-      }
+    if (watch) {
+      console.log('serving');
+      esbuild.serve({ servedir: './dist', port: 5555 }, {}).then(() => {
+        createServer((req, res) => {
+          const { url, method, headers } = req;
 
-      let pathWithouthQuery = url.includes('?') ? url.split('?')[0] : url;
-      const path = ~pathWithouthQuery.split('/').pop().indexOf('.')
-        ? url
-        : `/index.html`; //for PWA with router
+          if (req.url === '/esbuild') {
+            return clients.push(
+              res.writeHead(200, {
+                'Content-Type': 'text/event-stream',
+                'Cache-Control': 'no-cache',
+                Connection: 'keep-alive',
+              }),
+            );
+          }
 
-      req.pipe(
-        request(
-          {
-            hostname: 'localhost',
-            port: 5555,
-            path,
-            method,
-            headers,
-          },
-          prxRes => {
-            if (url === '/index.js') {
-              const jsReloadCode =
-                ' (() => new EventSource("/esbuild").onmessage = () => location.reload())();';
+          let pathWithouthQuery = url.includes('?') ? url.split('?')[0] : url;
+          const path = ~pathWithouthQuery.split('/').pop().indexOf('.')
+            ? url
+            : `/index.html`; //for PWA with router
 
-              const newHeaders = {
-                ...prxRes.headers,
-                'content-length':
-                  parseInt(prxRes.headers['content-length'], 10) +
-                  jsReloadCode.length,
-              };
+          req.pipe(
+            request(
+              {
+                hostname: 'localhost',
+                port: 5555,
+                path,
+                method,
+                headers,
+              },
+              prxRes => {
+                const jsRegex = /index\.[A-Z0-9]+\.js/;
+                if (jsRegex.test(url)) {
+                  const jsReloadCode =
+                    ' (() => new EventSource("/esbuild").onmessage = () => location.reload())();';
 
-              res.writeHead(prxRes.statusCode, newHeaders);
-              res.write(jsReloadCode);
-            } else {
-              res.writeHead(prxRes.statusCode, prxRes.headers);
-            }
-            prxRes.pipe(res, { end: true });
-          },
-        ),
-        { end: true },
-      );
-    }).listen(1234);
+                  const newHeaders = {
+                    ...prxRes.headers,
+                    'content-length':
+                      parseInt(prxRes.headers['content-length'], 10) +
+                      jsReloadCode.length,
+                  };
+
+                  res.writeHead(prxRes.statusCode, newHeaders);
+                  res.write(jsReloadCode);
+                } else {
+                  res.writeHead(prxRes.statusCode, prxRes.headers);
+                }
+                prxRes.pipe(res, { end: true });
+              },
+            ),
+            { end: true },
+          );
+        }).listen(1234);
+      });
+    }
   });
-}
