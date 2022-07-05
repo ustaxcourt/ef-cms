@@ -14,6 +14,7 @@ export const ApplyStamp = connect(
     STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
+    clearDueDateSequence: sequences.clearDueDateSequence,
     clearOptionalFieldsStampFormSequence:
       sequences.clearOptionalFieldsStampFormSequence,
     currentPageNumber: state.pdfForSigning.pageNumber,
@@ -29,6 +30,7 @@ export const ApplyStamp = connect(
   function ApplyStamp({
     applyStampFormChangeSequence,
     applyStampFormHelper,
+    clearDueDateSequence,
     clearOptionalFieldsStampFormSequence,
     currentPageNumber,
     form,
@@ -294,6 +296,7 @@ export const ApplyStamp = connect(
                         type="radio"
                         value="The parties shall file a status report by"
                         onChange={e => {
+                          clearDueDateSequence();
                           updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
@@ -311,16 +314,16 @@ export const ApplyStamp = connect(
                           className="display-inline-block width-150 padding-0"
                           id="due-date-input-statusReportDueDate"
                           names={{
-                            day: 'dueDateDay',
-                            month: 'dueDateMonth',
-                            year: 'dueDateYear',
+                            day: 'dueDateDay-statusReport',
+                            month: 'dueDateMonth-statusReport',
+                            year: 'dueDateYear-statusReport',
                           }}
                           placeholder={'MM/DD/YYYY'}
                           showDateHint={false}
                           values={{
-                            day: form['dueDateDay'],
-                            month: form['dueDateMonth'],
-                            year: form['dueDateYear'],
+                            day: form['dueDateDay-statusReport'],
+                            month: form['dueDateMonth-statusReport'],
+                            year: form['dueDateYear-statusReport'],
                           }}
                           onChange={({ key, value }) => {
                             updateFormValueSequence({
@@ -347,6 +350,7 @@ export const ApplyStamp = connect(
                         type="radio"
                         value="The parties shall file a status report or proposed stipulated decision by"
                         onChange={e => {
+                          clearDueDateSequence();
                           updateFormValueSequence({
                             key: e.target.name,
                             value: e.target.value,
@@ -484,7 +488,8 @@ export const ApplyStamp = connect(
                         </span>
                         {(form.strickenCase ||
                           form.jurisdiction ||
-                          (form.dueDateMessage && form.dueDateDay) ||
+                          (form.dueDateMessage &&
+                            form['dueDateDay-statusReport']) ||
                           form.customOrderText) && <hr className="narrow-hr" />}
                         {form.strickenCase && (
                           <>
@@ -498,15 +503,20 @@ export const ApplyStamp = connect(
                           </>
                         )}
                         <span className="text-semibold">
-                          {form.dueDateMessage && (
+                          {form['dueDateDay-statusReport'] && (
                             <>
-                              {form.dueDateMessage} {form.dueDateMonth} ||{' '}
+                              {form.dueDateMessage}{' '}
+                              {form['dueDateMonth-statusReport']}/
+                              {form['dueDateDay-statusReport']}/
+                              {form['dueDateYear-statusReport']}
+                            </>
+                          )}
+                          {form['dueDateDay-stipDecision'] && (
+                            <>
+                              {form.dueDateMessage}{' '}
                               {form['dueDateMonth-stipDecision']}/
-                              {form.dueDateDay} ||{' '}
-                              {form['dueDateDay-stipDecision']} /
-                              {form.dueDateYear} ||{' '}
+                              {form['dueDateDay-stipDecision']}/
                               {form['dueDateYear-stipDecision']}
-                              <br />
                             </>
                           )}
                           {form.customOrderText}
