@@ -509,21 +509,19 @@ export const ApplyStamp = connect(
             </div>
             <div className="grid-col-7">
               <div className="margin-bottom-1 display-flex flex-justify-end">
-                {pdfSignerHelper.isPlaced && (
-                  <>
-                    <Button link icon="trash" onClick={() => restart()}>
-                      Remove Stamp
-                    </Button>
+                <>
+                  <Button link icon="trash" onClick={() => restart()}>
+                    Remove Stamp
+                  </Button>
 
-                    <Button
-                      className="margin-right-0"
-                      id="save-signature-button"
-                      onClick={() => saveDocumentSigningSequence()}
-                    >
-                      Save Stamp Order
-                    </Button>
-                  </>
-                )}
+                  <Button
+                    className="margin-right-0"
+                    id="save-signature-button"
+                    onClick={() => saveDocumentSigningSequence()}
+                  >
+                    Save Stamp Order
+                  </Button>
+                </>
               </div>
               <div className="grid-row">
                 <div className="grid-col-12">
