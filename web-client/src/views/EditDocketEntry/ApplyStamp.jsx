@@ -16,7 +16,6 @@ export const ApplyStamp = connect(
     clearDueDateSequence: sequences.clearDueDateSequence,
     clearOptionalFieldsStampFormSequence:
       sequences.clearOptionalFieldsStampFormSequence,
-    currentPageNumber: state.pdfForSigning.pageNumber,
     form: state.form,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
@@ -38,8 +37,8 @@ export const ApplyStamp = connect(
     pdfSignerHelper,
     saveDocumentSigningSequence,
     setSignatureData,
-    signatureApplied,
-    signatureData,
+    signatureApplied: stampApplied,
+    signatureData: stampData,
     STRICKEN_CASE_MESSAGE,
     updateFormValueSequence,
     validationErrors,
@@ -49,12 +48,12 @@ export const ApplyStamp = connect(
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 
-    const renderPDFPage = pageNumber => {
+    const renderPDFPage = () => {
       const canvas = canvasRef.current;
       const canvasContext = canvas.getContext('2d');
 
       pdfObj
-        .getPage(pageNumber)
+        .getPage(1)
         .then(page => {
           const scale = 1;
           const viewport = page.getViewport({ scale });
@@ -163,12 +162,12 @@ export const ApplyStamp = connect(
 
     let hasStarted = false;
     useEffect(() => {
-      renderPDFPage(1);
+      renderPDFPage();
       if (!hasStarted) {
         start();
         hasStarted = true;
       }
-    }, [1]);
+    }, []);
 
     return (
       <>
@@ -587,7 +586,7 @@ export const ApplyStamp = connect(
                     </span>
                     <canvas
                       className={
-                        !signatureData && signatureApplied
+                        !stampData && stampApplied
                           ? 'cursor-grabbing'
                           : 'cursor-grab'
                       }
@@ -595,7 +594,7 @@ export const ApplyStamp = connect(
                       ref={canvasRef}
                     ></canvas>
                     <span id="signature-warning">
-                      You cannot apply a signature here.
+                      You cannot apply a stamp here.
                     </span>
                   </div>
                 </div>
