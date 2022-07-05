@@ -1,7 +1,10 @@
 #!/usr/bin/env node
+import { createServer, request } from 'http';
+
+const clients = [];
 
 import { sassPlugin } from 'esbuild-sass-plugin';
-import babel from 'esbuild-plugin-babel';
+import babel from 'esbuild-plugin-babel-cached';
 import esbuild from 'esbuild';
 import resolve from 'esbuild-plugin-resolve';
 import { copy } from 'esbuild-plugin-copy';
@@ -42,6 +45,8 @@ const env = {
   WS_URL: process.env.WS_URL,
 };
 
+const sassMap = new Map();
+
 esbuild
   .build({
     bundle: true,
@@ -49,7 +54,7 @@ esbuild
       global: 'window',
       'process.version': '""',
       ...Object.entries(env).reduce((acc, [key, value]) => {
-        acc[`process.env.${key}`] = value ? `"${value}"` : '""';
+        acc[`process.env.${key}`] = value ? JSON.stringify(value) : '""';
         return acc;
       }, {}),
     },
@@ -65,7 +70,7 @@ esbuild
     },
     metafile: true,
     logLevel: 'info',
-    minify: true,
+    minify: false,
     splitting: true,
     outdir: 'dist',
     format: 'esm',
@@ -76,12 +81,17 @@ esbuild
         // util: 'util/',
       }),
       sassPlugin({
-        async transform(source) {
-          const { css } = await postcss([
-            autoprefixer,
-            postcssPresetEnv({ stage: 0 }),
-          ]).process(source, { from: undefined });
-          return css;
+        async transform(source, resolveDir, filePath) {
+          let value = sassMap.get(filePath);
+          if (!value || value.source !== source) {
+            const { css } = await postcss([
+              autoprefixer,
+              postcssPresetEnv({ stage: 0 }),
+            ]).process(source, { from: undefined });
+            value = { source, css };
+            sassMap.set(filePath, value);
+          }
+          return value.css;
         },
       }),
       babel({
@@ -137,8 +147,72 @@ esbuild
         ],
       }),
     ],
-    watch,
+    watch: {
+      onRebuild(error, result) {
+        clients.forEach(res => res.write('data: update\n\n'));
+        clients.length = 0;
+        console.log(error ? error : '...');
+
+        fs.writeFileSync(
+          'metadata.json',
+          JSON.stringify(result.metafile, null, 2),
+        );
+      },
+    },
   })
-  .then(async result => {
-    fs.writeFileSync('metadata.json', JSON.stringify(result.metafile, null, 2));
-  });
+  .catch(() => process.exit(1));
+
+// custom setup for live reload: https://github.com/evanw/esbuild/issues/802
+esbuild.serve({ servedir: './dist', port: 5555 }, {}).then(() => {
+  createServer((req, res) => {
+    const { url, method, headers } = req;
+
+    if (req.url === '/esbuild') {
+      return clients.push(
+        res.writeHead(200, {
+          'Content-Type': 'text/event-stream',
+          'Cache-Control': 'no-cache',
+          Connection: 'keep-alive',
+        }),
+      );
+    }
+
+    let pathWithouthQuery = url.includes('?') ? url.split('?')[0] : url;
+    const path = ~pathWithouthQuery.split('/').pop().indexOf('.')
+      ? url
+      : `/index.html`; //for PWA with router
+
+    req.pipe(
+      request(
+        {
+          hostname: 'localhost',
+          port: 5555,
+          path,
+          method,
+          headers,
+        },
+        prxRes => {
+          console.log(url);
+          if (url === '/index.js') {
+            const jsReloadCode =
+              ' (() => new EventSource("/esbuild").onmessage = () => location.reload())();';
+
+            const newHeaders = {
+              ...prxRes.headers,
+              'content-length':
+                parseInt(prxRes.headers['content-length'], 10) +
+                jsReloadCode.length,
+            };
+
+            res.writeHead(prxRes.statusCode, newHeaders);
+            res.write(jsReloadCode);
+          } else {
+            res.writeHead(prxRes.statusCode, prxRes.headers);
+          }
+          prxRes.pipe(res, { end: true });
+        },
+      ),
+      { end: true },
+    );
+  }).listen(1234);
+});
