@@ -481,7 +481,7 @@ export const ApplyStamp = connect(
                       <textarea
                         aria-describedby="custom-order-text-label"
                         autoCapitalize="none"
-                        className="usa-textarea height-8 usa-character-count__field"
+                        className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="custom-order-text"
                         maxLength="60"
                         name="customOrderText"
