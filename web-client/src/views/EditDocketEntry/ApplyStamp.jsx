@@ -304,7 +304,7 @@ export const ApplyStamp = connect(
                           }}
                         />
                         <label
-                          aria-label={dueDateValue}
+                          aria-label={dueDateKey}
                           className="usa-radio__label"
                           htmlFor={`dueDateMessage-${dueDateKey}`}
                           id={`dueDateMessage-${dueDateKey}-label`}
@@ -312,7 +312,7 @@ export const ApplyStamp = connect(
                           {dueDateValue}
                           <DateInput
                             className="display-inline-block width-150 padding-0"
-                            id="due-date-input"
+                            id={`due-date-input-${dueDateKey}`}
                             names={{
                               day: 'dueDateDay',
                               month: 'dueDateMonth',
