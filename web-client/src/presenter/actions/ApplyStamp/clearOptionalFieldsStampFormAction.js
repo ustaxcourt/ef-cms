@@ -9,8 +9,13 @@ import { state } from 'cerebral';
 export const clearOptionalFieldsStampFormAction = ({ store }) => {
   store.unset(state.form.strickenCase);
   store.unset(state.form.jurisdiction);
+
   store.unset(state.form.dueDateMessage);
-  store.unset(state.form.dueDateDay);
-  store.unset(state.form.dueDateMonth);
-  store.unset(state.form.dueDateYear);
+  store.unset(state.form['dueDateDay-stipDecision']);
+  store.unset(state.form['dueDateMonth-stipDecision']);
+  store.unset(state.form['dueDateYear-stipDecision']);
+
+  store.unset(state.form['dueDateDay-statusReport']);
+  store.unset(state.form['dueDateMonth-statusReport']);
+  store.unset(state.form['dueDateYear-statusReport']);
 };
