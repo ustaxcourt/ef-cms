@@ -363,6 +363,17 @@ const router = {
     );
 
     registerRoute(
+      '/case-detail/*/documents/*/apply-stamp',
+      ifHasAccess({ app }, (docketNumber, docketEntryId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
+        return app.getSequence('goToApplyStampSequence')({
+          docketEntryId,
+          docketNumber,
+        });
+      }),
+    );
+
+    registerRoute(
       '/case-detail/*/docket-entry/*/edit-meta',
       ifHasAccess({ app }, (docketNumber, docketRecordIndex) => {
         setPageTitle(
