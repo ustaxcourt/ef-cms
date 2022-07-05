@@ -185,22 +185,6 @@ data "aws_s3_bucket_object" "puppeteer_green_west_object" {
   provider   = aws.us-west-1
 }
 
-data "aws_elasticsearch_domain" "green_west_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.green_elasticsearch_domain
-}
-
-data "aws_elasticsearch_domain" "blue_west_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.blue_elasticsearch_domain
-}
-
 resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
   depends_on               = [aws_acm_certificate.api_gateway_cert_west]
   regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
@@ -289,7 +273,7 @@ module "api-west-green" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_west_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-west-1"
   validate = 0
@@ -349,7 +333,7 @@ module "api-west-blue" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_west_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-west-1"
   validate = 0
