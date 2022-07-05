@@ -20,17 +20,41 @@
 
 ENV=$1
 
+MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh "${ENV}")
+DESTINATION_DOMAIN=$(./scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+
 pushd ./web-api/terraform/main
-  ../bin/deploy-init.sh "${1}"
+../bin/deploy-init.sh "${1}"
+
+if [ "${MIGRATE_FLAG}" == 'false' ]; then
+  if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
+    ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output elasticsearch_endpoint_alpha)"
+
+    ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA%\"}"
+    ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA#\"}"
+  else
+    ELASTICSEARCH_ENDPOINT_BETA="$(terraform output elasticsearch_endpoint_beta)"
+
+    ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA%\"}"
+    ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA#\"}"
+  fi
+else
   ELASTICSEARCH_ENDPOINT_ALPHA="$(terraform output elasticsearch_endpoint_alpha)"
   ELASTICSEARCH_ENDPOINT_BETA="$(terraform output elasticsearch_endpoint_beta)"
+
+  ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA%\"}"
+  ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA#\"}"
+
+  ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA%\"}"
+  ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA#\"}"
+fi
+
 popd
 
-ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA%\"}"
-ELASTICSEARCH_ENDPOINT_ALPHA="${ELASTICSEARCH_ENDPOINT_ALPHA#\"}"
+if [[ -n "${ELASTICSEARCH_ENDPOINT_ALPHA}" ]]; then
+  node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_ALPHA}"
+fi
 
-ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA%\"}"
-ELASTICSEARCH_ENDPOINT_BETA="${ELASTICSEARCH_ENDPOINT_BETA#\"}"
-
-node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_ALPHA}"
-node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_BETA}"
+if [[ -n "${ELASTICSEARCH_ENDPOINT_BETA}" ]]; then
+  node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_BETA}"
+fi
