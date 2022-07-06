@@ -10,26 +10,25 @@ import { state } from 'cerebral';
 export const applyStampFormHelper = get => {
   const form = get(state.form);
   const { customOrderText } = form;
+  const pdfForSigning = get(state.pdfForSigning);
+  const { isPdfAlreadySigned, stampApplied, stampData } = pdfForSigning;
 
   const CUSTOM_ORDER_MAX_LENGTH = 60;
   const customOrderTextCharacterCount = customOrderText?.length
     ? CUSTOM_ORDER_MAX_LENGTH - customOrderText?.length
     : CUSTOM_ORDER_MAX_LENGTH;
 
-  const canSaveStampOrder = !!(
-    form.status && get(state.pdfForSigning.stampApplied)
-  );
-
-  const pdfForSigning = get(state.pdfForSigning);
-  const { isPdfAlreadySigned, stampApplied, stampData } = pdfForSigning;
+  const canSaveStampOrder =
+    !!form.status && get(state.pdfForSigning.stampApplied);
   const cursorClass =
-    !stampData && stampApplied ? 'cursor-grabbing ' : 'cursor-grab ';
+    !stampData && stampApplied ? 'cursor-grabbing' : 'cursor-grab';
+
   const hideClass = stampApplied && !isPdfAlreadySigned ? '' : 'hide';
 
   return {
     canSaveStampOrder,
     cursorClass,
     customOrderTextCharacterCount,
-    stampClass: `${cursorClass} ${hideClass}`,
+    hideClass,
   };
 };
