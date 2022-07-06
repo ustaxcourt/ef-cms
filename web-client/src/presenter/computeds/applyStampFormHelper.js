@@ -11,7 +11,7 @@ export const applyStampFormHelper = get => {
   const form = get(state.form);
   const { customOrderText } = form;
   const pdfForSigning = get(state.pdfForSigning);
-  const { isPdfAlreadySigned, stampApplied, stampData } = pdfForSigning;
+  const { isPdfAlreadyStamped, stampApplied, stampData } = pdfForSigning;
 
   const CUSTOM_ORDER_MAX_LENGTH = 60;
   const customOrderTextCharacterCount = customOrderText?.length
@@ -23,7 +23,7 @@ export const applyStampFormHelper = get => {
   const cursorClass =
     !stampData && stampApplied ? 'cursor-grabbing' : 'cursor-grab';
 
-  const hideClass = stampApplied && !isPdfAlreadySigned ? '' : 'hide';
+  const hideClass = stampApplied && !isPdfAlreadyStamped ? '' : 'hide';
 
   return {
     canSaveStampOrder,

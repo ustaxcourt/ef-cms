@@ -76,7 +76,7 @@ export const ApplyStamp = connect(
 
     const clear = () => {
       setPDFStampDataSequence({
-        isPdfAlreadySigned: false,
+        isPdfAlreadyStamped: false,
         stampApplied: false,
         stampData: null,
       });
