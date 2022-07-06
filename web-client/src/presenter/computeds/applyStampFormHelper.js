@@ -16,6 +16,9 @@ export const applyStampFormHelper = get => {
     ? CUSTOM_ORDER_MAX_LENGTH - customOrderText?.length
     : CUSTOM_ORDER_MAX_LENGTH;
 
+  const canSaveStampOrder =
+    form.status && get(state.pdfForSigning.stampApplied);
+
   return {
     customOrderTextCharacterCount,
   };
