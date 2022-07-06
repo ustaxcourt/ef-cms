@@ -1,9 +1,11 @@
+const classNames = require('classnames');
 const React = require('react');
 
 export const CoverSheet = ({
   caseCaptionExtension,
   caseTitle,
   certificateOfService,
+  consolidatedCases,
   dateFiledLodged,
   dateFiledLodgedLabel,
   dateReceived,
@@ -13,6 +15,9 @@ export const CoverSheet = ({
   index,
   mailingDate,
 }) => {
+  const reduceMarginTopOnTitle =
+    consolidatedCases && consolidatedCases.length > 10;
+
   return (
     <div id="document-cover-sheet">
       <div>
@@ -44,7 +49,10 @@ export const CoverSheet = ({
 
       <div className="case-information margin-top-40">
         <div className="border-none" id="caption">
-          <div id="caption-title">{caseTitle}</div>
+          <div id="caption-title">
+            {caseTitle}
+            {consolidatedCases && ' et al.,'}
+          </div>
           <div id="caption-extension">{caseCaptionExtension}</div>
           <div id="caption-v">v.</div>
           <div id="caption-commissioner">Commissioner of Internal Revenue</div>
@@ -54,13 +62,33 @@ export const CoverSheet = ({
         <div id="docket-number">
           {electronicallyFiled && <div>Electronically Filed</div>}
           {mailingDate && <div>{mailingDate}</div>}
-          <div>Docket No. {docketNumberWithSuffix}</div>
-          <div>Document No. {index}</div>
+
+          {consolidatedCases ? (
+            <div className="consolidated-cases">
+              {consolidatedCases.map(({ docketNumber, documentNumber }) => (
+                <div key={docketNumber}>
+                  Docket No. {docketNumber}
+                  {documentNumber && ` Document No. ${documentNumber}`}
+                </div>
+              ))}
+            </div>
+          ) : (
+            <>
+              <div>Docket No. {docketNumberWithSuffix}</div>
+              <div>Document No. {index}</div>
+            </>
+          )}
         </div>
+
         <div className="clear"></div>
       </div>
 
-      <h2 className="margin-top-200 text-center" id="document-title">
+      <h2
+        className={classNames('text-center', {
+          'reduce-margin': reduceMarginTopOnTitle,
+        })}
+        id="document-title"
+      >
         {documentTitle}
       </h2>
 

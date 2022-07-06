@@ -8,9 +8,8 @@
 # shellcheck disable=SC1091
 . ./scripts/load-environment-from-secrets.sh
 
-export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
-CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
+DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
+export DEPLOYING_COLOR
 
-if [ -n "${1}" ]; then
-  export DEPLOYING_COLOR="${CURRENT_COLOR}"
-fi
+CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
+export CURRENT_COLOR
