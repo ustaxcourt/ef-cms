@@ -125,7 +125,7 @@ describe('applyStampFormHelper', () => {
             status: undefined,
           },
           pdfForSigning: {
-            isPdfAlreadySigned: false,
+            isPdfAlreadyStamped: false,
             stampApplied: true,
           },
         },
@@ -141,7 +141,7 @@ describe('applyStampFormHelper', () => {
             status: undefined,
           },
           pdfForSigning: {
-            isPdfAlreadySigned: true,
+            isPdfAlreadyStamped: true,
             stampApplied: false,
           },
         },
