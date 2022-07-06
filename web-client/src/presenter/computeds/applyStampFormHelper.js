@@ -7,7 +7,7 @@ import { state } from 'cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} apply stamp form helper fields
  */
-export const applyStampFormHelper = get => {
+export const applyStampFormHelper = (get, applicationContext) => {
   const form = get(state.form);
   const { customOrderText } = form;
   const pdfForSigning = get(state.pdfForSigning);
@@ -24,11 +24,14 @@ export const applyStampFormHelper = get => {
     !stampData && stampApplied ? 'cursor-grabbing' : 'cursor-grab';
 
   const hideClass = stampApplied && !isPdfAlreadyStamped ? '' : 'hide';
-
+  // const minDate = applicationContext.getUtilities().formatNow('YYYY-MM-DD');
+  let minDate = '2022-07-11';
+  console.log('minDate in helper', minDate);
   return {
     canSaveStampOrder,
     cursorClass,
     customOrderTextCharacterCount,
     hideClass,
+    minDate,
   };
 };

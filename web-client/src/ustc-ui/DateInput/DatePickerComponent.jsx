@@ -9,6 +9,7 @@ export const DatePickerComponent = ({
   hideLegend,
   hintText,
   label,
+  minDate,
   name,
   names,
   onBlur,
@@ -106,7 +107,11 @@ export const DatePickerComponent = ({
           MM/DD/YYYY
         </div>
       )}
-      <div className="usa-date-picker" data-default-value={defaultValue}>
+      <div
+        className="usa-date-picker"
+        data-default-value={defaultValue}
+        data-min-date={minDate}
+      >
         <input
           aria-describedby={`${name}-date-label ${name}-date-hint`}
           className="usa-input grey-placeholder"
