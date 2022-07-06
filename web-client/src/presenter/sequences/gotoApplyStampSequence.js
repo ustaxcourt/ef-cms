@@ -1,5 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { clearPDFSignatureDataAction } from '../actions/clearPDFSignatureDataAction';
+import { clearPDFStampDataAction } from '../actions/clearPDFStampDataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
@@ -19,7 +19,7 @@ export const goToApplyStampSequence = [
       getCaseAction,
       setCaseAction,
       setDocketEntryIdAction,
-      clearPDFSignatureDataAction,
+      clearPDFStampDataAction,
       clearFormAction,
       setSignatureNameForPdfSigningAction,
       setPDFForSigningAction,
