@@ -21,7 +21,7 @@ export const ApplyStamp = connect(
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
     saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
-    setSignatureData: sequences.setPDFSignatureDataSequence,
+    setPDFStampDataSequence: sequences.setPDFStampDataSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -36,9 +36,7 @@ export const ApplyStamp = connect(
     pdfObj,
     pdfSignerHelper,
     saveDocumentSigningSequence,
-    setSignatureData,
-    signatureApplied: stampApplied,
-    signatureData: stampData,
+    setPDFStampDataSequence,
     STRICKEN_CASE_MESSAGE,
     updateFormValueSequence,
     validationErrors,
@@ -77,10 +75,10 @@ export const ApplyStamp = connect(
     };
 
     const clear = () => {
-      setSignatureData({
-        isPdfAlreadySigned: false,
-        signatureApplied: false,
-        signatureData: null,
+      setPDFStampDataSequence({
+        isPdfAlreadyStamped: false,
+        stampApplied: false,
+        stampData: null,
       });
       const sigEl = signatureRef.current;
 
@@ -94,9 +92,9 @@ export const ApplyStamp = connect(
     };
 
     const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
-      setSignatureData({
-        signatureApplied: true,
-        signatureData: { scale, x, y },
+      setPDFStampDataSequence({
+        stampApplied: true,
+        stampData: { scale, x, y },
       });
 
       canvasEl.onmousemove = null;
@@ -111,9 +109,9 @@ export const ApplyStamp = connect(
       let x;
       let y;
 
-      setSignatureData({
-        signatureApplied: true,
-        signatureData: null,
+      setPDFStampDataSequence({
+        stampApplied: false,
+        stampData: null,
       });
 
       canvasEl.onmousemove = e => {
@@ -515,6 +513,7 @@ export const ApplyStamp = connect(
 
                   <Button
                     className="margin-right-0"
+                    disabled={!applyStampFormHelper.canSaveStampOrder}
                     id="save-signature-button"
                     onClick={() => saveDocumentSigningSequence()}
                   >
@@ -526,7 +525,7 @@ export const ApplyStamp = connect(
                 <div className="grid-col-12">
                   <div className="sign-pdf-interface">
                     <span
-                      className={pdfSignerHelper.signatureClass}
+                      className={`${pdfSignerHelper.cursorClass} ${pdfSignerHelper.hideClass}`}
                       id="stamp"
                       ref={signatureRef}
                     >
@@ -540,11 +539,14 @@ export const ApplyStamp = connect(
                           </span>{' '}
                           {form.deniedAsMoot && 'as moot '}
                           {form.deniedWithoutPrejudice && 'without prejudice'}
+                          <br />
                         </span>
                         {(form.strickenCase ||
                           form.jurisdiction ||
                           (form.dueDateMessage &&
                             form['dueDateDay-statusReport']) ||
+                          (form.dueDateMessage &&
+                            form['dueDateDay-stipDecision']) ||
                           form.customOrderText) && <hr className="narrow-hr" />}
                         {form.strickenCase && (
                           <>
@@ -564,6 +566,7 @@ export const ApplyStamp = connect(
                               {form['dueDateMonth-statusReport']}/
                               {form['dueDateDay-statusReport']}/
                               {form['dueDateYear-statusReport']}
+                              <br />
                             </>
                           )}
                           {form['dueDateDay-stipDecision'] && (
@@ -572,6 +575,7 @@ export const ApplyStamp = connect(
                               {form['dueDateMonth-stipDecision']}/
                               {form['dueDateDay-stipDecision']}/
                               {form['dueDateYear-stipDecision']}
+                              <br />
                             </>
                           )}
                           {form.customOrderText}
@@ -585,11 +589,7 @@ export const ApplyStamp = connect(
                       </span>
                     </span>
                     <canvas
-                      className={
-                        !stampData && stampApplied
-                          ? 'cursor-grabbing'
-                          : 'cursor-grab'
-                      }
+                      className={applyStampFormHelper.cursorClass}
                       id="sign-pdf-canvas"
                       ref={canvasRef}
                     ></canvas>

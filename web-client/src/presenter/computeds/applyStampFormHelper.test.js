@@ -4,29 +4,150 @@ import { runCompute } from 'cerebral/test';
 describe('applyStampFormHelper', () => {
   const CUSTOM_ORDER_MAX_LENGTH = 60;
 
-  it('should return CUSTOM_ORDER_MAX_LENGTH for customOrderTextCharacterCount if customOrderText is not set', () => {
-    const { customOrderTextCharacterCount } = runCompute(applyStampFormHelper, {
-      state: {
-        form: {
-          customOrderText: '',
+  describe('canSaveStampOrder', () => {
+    it('should be false when the form.status is not set to either "Denied" or "Granted"', () => {
+      const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {
+            status: undefined,
+          },
+          pdfForSigning: {},
         },
-      },
+      });
+
+      expect(canSaveStampOrder).toEqual(false);
     });
-    expect(customOrderTextCharacterCount).toEqual(CUSTOM_ORDER_MAX_LENGTH);
+
+    it('should be false when the stamp is not applied', () => {
+      const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {},
+          pdfForSigning: {
+            stampApplied: false,
+          },
+        },
+      });
+
+      expect(canSaveStampOrder).toEqual(false);
+    });
+
+    it('should be true when the form.status is set and stamp is applied', () => {
+      const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {
+            status: 'Granted',
+          },
+          pdfForSigning: {
+            stampApplied: true,
+          },
+        },
+      });
+
+      expect(canSaveStampOrder).toEqual(true);
+    });
   });
 
-  it('should set customOrderTextCharacterCount to the CUSTOM_ORDER_MAX_LENGTH - customOrderText.length', () => {
-    const fourLetterWord = 'cool';
-    const { customOrderTextCharacterCount } = runCompute(applyStampFormHelper, {
-      state: {
-        form: {
-          customOrderText: fourLetterWord,
+  describe('cursorClass', () => {
+    it('should be "cursor-grabbing" when the stamp has been applied and there is no stamp data', () => {
+      const { cursorClass } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {
+            status: undefined,
+          },
+          pdfForSigning: {
+            stampApplied: true,
+            stampData: undefined,
+          },
         },
-      },
+      });
+
+      expect(cursorClass).toEqual('cursor-grabbing');
     });
 
-    expect(customOrderTextCharacterCount).toEqual(
-      CUSTOM_ORDER_MAX_LENGTH - fourLetterWord.length,
-    );
+    it('should be "cursor-grab" when the stamp has NOT been applied and there is stamp data', () => {
+      const { cursorClass } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {
+            status: undefined,
+          },
+          pdfForSigning: {
+            stampApplied: false,
+            stampData: {},
+          },
+        },
+      });
+
+      expect(cursorClass).toEqual('cursor-grab');
+    });
+  });
+
+  describe('customOrderTextCharacterCount', () => {
+    it('should return CUSTOM_ORDER_MAX_LENGTH if customOrderText is not set', () => {
+      const { customOrderTextCharacterCount } = runCompute(
+        applyStampFormHelper,
+        {
+          state: {
+            form: {
+              customOrderText: '',
+            },
+            pdfForSigning: {},
+          },
+        },
+      );
+      expect(customOrderTextCharacterCount).toEqual(CUSTOM_ORDER_MAX_LENGTH);
+    });
+
+    it('should return the CUSTOM_ORDER_MAX_LENGTH - customOrderText.length if customOrderText is set', () => {
+      const fourLetterWord = 'cool';
+      const { customOrderTextCharacterCount } = runCompute(
+        applyStampFormHelper,
+        {
+          state: {
+            form: {
+              customOrderText: fourLetterWord,
+            },
+            pdfForSigning: {},
+          },
+        },
+      );
+
+      expect(customOrderTextCharacterCount).toEqual(
+        CUSTOM_ORDER_MAX_LENGTH - fourLetterWord.length,
+      );
+    });
+  });
+
+  describe('hideClass', () => {
+    it('should be empty when the stamp has been applied and the pdf has not already been stamped', () => {
+      const { hideClass } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {
+            status: undefined,
+          },
+          pdfForSigning: {
+            isPdfAlreadyStamped: false,
+            stampApplied: true,
+          },
+        },
+      });
+
+      expect(hideClass).toEqual('');
+    });
+
+    it('should be "hide" when the stamp has NOT been applied and the pdf has already been signed', () => {
+      const { hideClass } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {
+            status: undefined,
+          },
+          pdfForSigning: {
+            isPdfAlreadyStamped: true,
+            stampApplied: false,
+          },
+        },
+      });
+
+      expect(hideClass).toEqual('hide');
+    });
   });
 });
