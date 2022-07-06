@@ -525,7 +525,7 @@ export const ApplyStamp = connect(
                 <div className="grid-col-12">
                   <div className="sign-pdf-interface">
                     <span
-                      className={pdfSignerHelper.stampClass}
+                      className={`${pdfSignerHelper.cursorClass} ${pdfSignerHelper.hideClass}`}
                       id="stamp"
                       ref={signatureRef}
                     >
