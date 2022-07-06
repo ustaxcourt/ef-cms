@@ -319,6 +319,7 @@ import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
+import { setPDFStampDataSequence } from './sequences/setPDFStampDataSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
@@ -816,6 +817,7 @@ export const presenter = {
     setMessageDetailViewerDocumentToDisplaySequence,
     setPDFPageForSigningSequence,
     setPDFSignatureDataSequence,
+    setPDFStampDataSequence,
     setPdfPreviewUrlSequence,
     setPendingReportSelectedJudgeSequence,
     setSelectedAddressOnFormSequence,
