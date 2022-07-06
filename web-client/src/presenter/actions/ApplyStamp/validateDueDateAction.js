@@ -6,4 +6,8 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.store the cerebral store
  */
-export const validateDueDateAction = ({ store }) => {};
+export const validateDueDateAction = ({ get, store }) => {
+  const form = get(state.form);
+
+  console.log(JSON.stringify(form, null, 2));
+};

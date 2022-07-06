@@ -4,15 +4,15 @@ import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateDueDateAction } from '../actions/ApplyStamp/validateDueDateAction';
 
 export const validateDueDateSequence = [
-  shouldValidateAction,
+  // shouldValidateAction,
+  // {
+  //   ignore: [],
+  //   validate: [
+  validateDueDateAction,
   {
-    ignore: [],
-    validate: [
-      validateDueDateAction,
-      {
-        error: [setValidationErrorsAction],
-        success: [clearAlertsAction],
-      },
-    ],
+    error: [setValidationErrorsAction],
+    success: [clearAlertsAction],
   },
+  // ],
+  // },
 ];
