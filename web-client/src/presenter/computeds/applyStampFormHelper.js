@@ -20,8 +20,16 @@ export const applyStampFormHelper = get => {
     form.status && get(state.pdfForSigning.stampApplied)
   );
 
+  const pdfForSigning = get(state.pdfForSigning);
+  const { isPdfAlreadySigned, stampApplied, stampData } = pdfForSigning;
+  const cursorClass =
+    !stampData && stampApplied ? 'cursor-grabbing ' : 'cursor-grab ';
+  const hideClass = stampApplied && !isPdfAlreadySigned ? '' : 'hide';
+
   return {
     canSaveStampOrder,
+    cursorClass,
     customOrderTextCharacterCount,
+    stampClass: `${cursorClass} ${hideClass}`,
   };
 };
