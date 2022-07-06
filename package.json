@@ -15,7 +15,7 @@
     "@pdftron/pdfjs-express-viewer": "^8.4.0",
     "@sparticuz/chrome-aws-lambda": "^14.3.0",
     "archiver": "^5.3.1",
-    "aws-sdk": "^2.1152.0",
+    "aws-sdk": "^2.1168.0",
     "broadcast-channel": "4.12.0",
     "canvas": "^2.9.1",
     "cerebral": "5.2.1",
