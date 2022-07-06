@@ -1,8 +1,17 @@
-import { applyStampFormHelper } from './applyStampFormHelper';
+import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applyStampFormHelper as applyStampFormHelperComputed } from './applyStampFormHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
 
 describe('applyStampFormHelper', () => {
   const CUSTOM_ORDER_MAX_LENGTH = 60;
+
+  const { DATE_FORMATS } = applicationContext.getConstants();
+
+  const applyStampFormHelper = withAppContextDecorator(
+    applyStampFormHelperComputed,
+    applicationContext,
+  );
 
   describe('canSaveStampOrder', () => {
     it('should be false when the form.status is not set to either "Denied" or "Granted"', () => {
@@ -148,6 +157,25 @@ describe('applyStampFormHelper', () => {
       });
 
       expect(hideClass).toEqual('hide');
+    });
+  });
+
+  describe('minDate', () => {
+    it('should be set to todays date formatted as "YYYY-MM-DD"', () => {
+      const mockDate = '1765-09-23';
+      applicationContext.getUtilities().formatNow.mockReturnValue(mockDate);
+
+      const { minDate } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {},
+          pdfForSigning: {},
+        },
+      });
+
+      expect(minDate).toEqual(minDate);
+      expect(applicationContext.getUtilities().formatNow).toHaveBeenCalledWith(
+        DATE_FORMATS.YYYYMMDD,
+      );
     });
   });
 });
