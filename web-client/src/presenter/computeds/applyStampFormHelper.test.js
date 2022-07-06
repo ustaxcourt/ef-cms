@@ -4,32 +4,40 @@ import { runCompute } from 'cerebral/test';
 describe('applyStampFormHelper', () => {
   const CUSTOM_ORDER_MAX_LENGTH = 60;
 
-  it('should return CUSTOM_ORDER_MAX_LENGTH for customOrderTextCharacterCount if customOrderText is not set', () => {
-    const { customOrderTextCharacterCount } = runCompute(applyStampFormHelper, {
-      state: {
-        form: {
-          customOrderText: '',
+  describe('customOrderTextCharacterCount', () => {
+    it('should return CUSTOM_ORDER_MAX_LENGTH if customOrderText is not set', () => {
+      const { customOrderTextCharacterCount } = runCompute(
+        applyStampFormHelper,
+        {
+          state: {
+            form: {
+              customOrderText: '',
+            },
+            pdfForSigning: {},
+          },
         },
-        pdfForSigning: {},
-      },
-    });
-    expect(customOrderTextCharacterCount).toEqual(CUSTOM_ORDER_MAX_LENGTH);
-  });
-
-  it('should set customOrderTextCharacterCount to the CUSTOM_ORDER_MAX_LENGTH - customOrderText.length', () => {
-    const fourLetterWord = 'cool';
-    const { customOrderTextCharacterCount } = runCompute(applyStampFormHelper, {
-      state: {
-        form: {
-          customOrderText: fourLetterWord,
-        },
-        pdfForSigning: {},
-      },
+      );
+      expect(customOrderTextCharacterCount).toEqual(CUSTOM_ORDER_MAX_LENGTH);
     });
 
-    expect(customOrderTextCharacterCount).toEqual(
-      CUSTOM_ORDER_MAX_LENGTH - fourLetterWord.length,
-    );
+    it('should return the CUSTOM_ORDER_MAX_LENGTH - customOrderText.length if customOrderText is set', () => {
+      const fourLetterWord = 'cool';
+      const { customOrderTextCharacterCount } = runCompute(
+        applyStampFormHelper,
+        {
+          state: {
+            form: {
+              customOrderText: fourLetterWord,
+            },
+            pdfForSigning: {},
+          },
+        },
+      );
+
+      expect(customOrderTextCharacterCount).toEqual(
+        CUSTOM_ORDER_MAX_LENGTH - fourLetterWord.length,
+      );
+    });
   });
 
   describe('canSaveStampOrder', () => {
