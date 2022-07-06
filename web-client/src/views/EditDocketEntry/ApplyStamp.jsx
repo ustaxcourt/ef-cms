@@ -21,7 +21,7 @@ export const ApplyStamp = connect(
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
     saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
-    setSignatureData: sequences.setPDFSignatureDataSequence,
+    setPDFStampDataSequence: sequences.setPDFStampDataSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -36,9 +36,9 @@ export const ApplyStamp = connect(
     pdfObj,
     pdfSignerHelper,
     saveDocumentSigningSequence,
-    setSignatureData,
-    signatureApplied: stampApplied,
-    signatureData: stampData,
+    setPDFStampDataSequence,
+    stampApplied,
+    stampData,
     STRICKEN_CASE_MESSAGE,
     updateFormValueSequence,
     validationErrors,
@@ -77,10 +77,9 @@ export const ApplyStamp = connect(
     };
 
     const clear = () => {
-      setSignatureData({
-        isPdfAlreadySigned: false,
-        signatureApplied: false,
-        signatureData: null,
+      setPDFStampDataSequence({
+        stampApplied: false,
+        stampData: null,
       });
       const sigEl = signatureRef.current;
 
@@ -94,9 +93,9 @@ export const ApplyStamp = connect(
     };
 
     const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
-      setSignatureData({
-        signatureApplied: true,
-        signatureData: { scale, x, y },
+      setPDFStampDataSequence({
+        stampApplied: true,
+        stampData: { scale, x, y },
       });
 
       canvasEl.onmousemove = null;
@@ -111,9 +110,9 @@ export const ApplyStamp = connect(
       let x;
       let y;
 
-      setSignatureData({
-        signatureApplied: true,
-        signatureData: null,
+      setPDFStampDataSequence({
+        stampApplied: true,
+        stampData: null,
       });
 
       canvasEl.onmousemove = e => {
@@ -515,6 +514,7 @@ export const ApplyStamp = connect(
 
                   <Button
                     className="margin-right-0"
+                    disabled={!form.status}
                     id="save-signature-button"
                     onClick={() => saveDocumentSigningSequence()}
                   >
