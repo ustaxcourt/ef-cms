@@ -307,6 +307,8 @@ export const baseState = {
     pdfjsObj: null,
     signatureApplied: false,
     signatureData: null,
+    stampApplied: false,
+    stampData: null,
   },
   pendingReports: {},
   permissions: null,

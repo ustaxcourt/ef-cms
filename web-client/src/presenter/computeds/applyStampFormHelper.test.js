@@ -10,6 +10,7 @@ describe('applyStampFormHelper', () => {
         form: {
           customOrderText: '',
         },
+        pdfForSigning: {},
       },
     });
     expect(customOrderTextCharacterCount).toEqual(CUSTOM_ORDER_MAX_LENGTH);
@@ -22,6 +23,7 @@ describe('applyStampFormHelper', () => {
         form: {
           customOrderText: fourLetterWord,
         },
+        pdfForSigning: {},
       },
     });
 
@@ -30,43 +32,46 @@ describe('applyStampFormHelper', () => {
     );
   });
 
-  it('should set canSaveStampOrder to false when the form.status is not set to either "Denied" or "Granted"', () => {
-    const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
-      state: {
-        form: {
-          status: undefined,
+  describe('canSaveStampOrder', () => {
+    it('should be false when the form.status is not set to either "Denied" or "Granted"', () => {
+      const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {
+            status: undefined,
+          },
+          pdfForSigning: {},
         },
-      },
+      });
+
+      expect(canSaveStampOrder).toEqual(false);
     });
 
-    expect(canSaveStampOrder).toEqual(false);
-  });
-
-  it('should set canSaveStampOrder to false when the stamp is not applied', () => {
-    const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
-      state: {
-        form: {},
-        pdfForSigning: {
-          stampApplied: false,
+    it('should be false when the stamp is not applied', () => {
+      const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {},
+          pdfForSigning: {
+            stampApplied: false,
+          },
         },
-      },
+      });
+
+      expect(canSaveStampOrder).toEqual(false);
     });
 
-    expect(canSaveStampOrder).toEqual(false);
-  });
+    it('should be true when the form.status is set and stamp is applied', () => {
+      const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+        state: {
+          form: {
+            status: 'Granted',
+          },
+          pdfForSigning: {
+            stampApplied: true,
+          },
+        },
+      });
 
-  it('should set canSaveStampOrder to true when the form.status is set and stamp is applied', () => {
-    const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
-      state: {
-        form: {
-          status: 'Granted',
-        },
-        pdfForSigning: {
-          stampApplied: true,
-        },
-      },
+      expect(canSaveStampOrder).toEqual(true);
     });
-
-    expect(canSaveStampOrder).toEqual(true);
   });
 });

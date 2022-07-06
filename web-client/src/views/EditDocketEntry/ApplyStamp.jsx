@@ -22,8 +22,6 @@ export const ApplyStamp = connect(
     pdfSignerHelper: state.pdfSignerHelper,
     saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setPDFStampDataSequence: sequences.setPDFStampDataSequence,
-    stampApplied: state.pdfForSigning.stampApplied,
-    stampData: state.pdfForSigning.stampData,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -39,8 +37,6 @@ export const ApplyStamp = connect(
     pdfSignerHelper,
     saveDocumentSigningSequence,
     setPDFStampDataSequence,
-    stampApplied,
-    stampData,
     STRICKEN_CASE_MESSAGE,
     updateFormValueSequence,
     validationErrors,
@@ -529,7 +525,7 @@ export const ApplyStamp = connect(
                 <div className="grid-col-12">
                   <div className="sign-pdf-interface">
                     <span
-                      className={pdfSignerHelper.signatureClass}
+                      className={pdfSignerHelper.stampClass}
                       id="stamp"
                       ref={signatureRef}
                     >
@@ -588,11 +584,7 @@ export const ApplyStamp = connect(
                       </span>
                     </span>
                     <canvas
-                      className={
-                        !stampData && stampApplied
-                          ? 'cursor-grabbing'
-                          : 'cursor-grab'
-                      }
+                      className={applyStampFormHelper.cursorClass}
                       id="sign-pdf-canvas"
                       ref={canvasRef}
                     ></canvas>
