@@ -8,9 +8,11 @@ import { state } from 'cerebral';
  * @returns {object} apply stamp form helper fields
  */
 export const applyStampFormHelper = (get, applicationContext) => {
+  const { DATE_FORMATS } = applicationContext.getConstants();
   const form = get(state.form);
-  const { customOrderText } = form;
   const pdfForSigning = get(state.pdfForSigning);
+
+  const { customOrderText } = form;
   const { isPdfAlreadyStamped, stampApplied, stampData } = pdfForSigning;
 
   const CUSTOM_ORDER_MAX_LENGTH = 60;
@@ -24,9 +26,11 @@ export const applyStampFormHelper = (get, applicationContext) => {
     !stampData && stampApplied ? 'cursor-grabbing' : 'cursor-grab';
 
   const hideClass = stampApplied && !isPdfAlreadyStamped ? '' : 'hide';
-  // const minDate = applicationContext.getUtilities().formatNow('YYYY-MM-DD');
-  let minDate = '2022-07-11';
-  console.log('minDate in helper', minDate);
+
+  const minDate = applicationContext
+    .getUtilities()
+    .formatNow(DATE_FORMATS.YYYYMMDD);
+
   return {
     canSaveStampOrder,
     cursorClass,
