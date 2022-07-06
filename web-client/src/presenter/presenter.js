@@ -464,6 +464,7 @@ import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCour
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
+import { validateDueDateSequence } from './sequences/validateDueDateSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -961,6 +962,7 @@ export const presenter = {
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
     validateDocumentSequence,
+    validateDueDateSequence,
     validateEditPetitionerCounselSequence,
     validateEditRespondentCounselSequence,
     validateExternalDocumentInformationSequence,

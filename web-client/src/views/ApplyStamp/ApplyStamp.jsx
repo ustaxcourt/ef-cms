@@ -23,6 +23,7 @@ export const ApplyStamp = connect(
     saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setPDFStampDataSequence: sequences.setPDFStampDataSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateDueDateSequence: sequences.validateDueDateSequence,
     validationErrors: state.validationErrors,
   },
   function ApplyStamp({
@@ -39,6 +40,7 @@ export const ApplyStamp = connect(
     setPDFStampDataSequence,
     STRICKEN_CASE_MESSAGE,
     updateFormValueSequence,
+    validateDueDateSequence,
     validationErrors,
   }) {
     const yLimitToPreventServedStampOverlay = 705;
@@ -386,6 +388,7 @@ export const ApplyStamp = connect(
                             month: form['dueDateMonth-statusReport'],
                             year: form['dueDateYear-statusReport'],
                           }}
+                          onBlur={validateDueDateSequence}
                           onChange={({ key, value }) => {
                             updateFormValueSequence({
                               key,
@@ -442,6 +445,7 @@ export const ApplyStamp = connect(
                             month: form['dueDateMonth-stipDecision'],
                             year: form['dueDateYear-stipDecision'],
                           }}
+                          onBlur={validateDueDateSequence}
                           onChange={({ key, value }) => {
                             updateFormValueSequence({
                               key,
