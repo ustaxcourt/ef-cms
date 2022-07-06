@@ -3,14 +3,14 @@ import { createServer, request } from 'http';
 
 const clients = [];
 import { clean } from 'esbuild-plugin-clean';
+import { copy } from 'esbuild-plugin-copy';
 import { sassPlugin } from 'esbuild-sass-plugin';
+import autoprefixer from 'autoprefixer';
 import babel from 'esbuild-plugin-babel-cached';
 import esbuild from 'esbuild';
-import resolve from 'esbuild-plugin-resolve';
-import { copy } from 'esbuild-plugin-copy';
-import autoprefixer from 'autoprefixer';
 import postcss from 'postcss';
 import postcssPresetEnv from 'postcss-preset-env';
+import resolve from 'esbuild-plugin-resolve';
 
 import fs from 'fs';
 
@@ -71,8 +71,9 @@ esbuild
         return acc;
       }, {}),
     },
-    entryPoints: ['web-client/src/index.js'],
     entryNames: '[name].[hash]',
+    entryPoints: ['web-client/src/index.js'],
+    format: 'esm',
     loader: {
       '.html': 'text',
       '.pdf': 'binary',
@@ -82,12 +83,10 @@ esbuild
       '.woff': 'file',
       '.woff2': 'file',
     },
-    metafile: true,
     logLevel: 'info',
+    metafile: true,
     minify: true,
-    splitting: true,
     outdir: 'dist',
-    format: 'esm',
     plugins: [
       clean({
         patterns: ['./dist/*'],
@@ -105,7 +104,7 @@ esbuild
               autoprefixer,
               postcssPresetEnv({ stage: 0 }),
             ]).process(source, { from: undefined });
-            value = { source, css };
+            value = { css, source };
             sassMap.set(filePath, value);
           }
           return value.css;
@@ -143,27 +142,28 @@ esbuild
         assets: [
           {
             from: ['web-client/src/favicons'],
-            to: ['.'],
             keepStructure: true,
+            to: ['.'],
           },
           {
             from: ['web-client/src/site.webmanifest'],
-            to: ['.'],
             keepStructure: true,
+            to: ['.'],
           },
           {
             from: ['web-client/src/deployed-date.txt'],
-            to: ['.'],
             keepStructure: true,
+            to: ['.'],
           },
           {
             from: ['web-client/src/index.html'],
-            to: ['.'],
             keepStructure: true,
+            to: ['.'],
           },
         ],
       }),
     ],
+    splitting: true,
     watch: watch
       ? {
           onRebuild(error, result) {
@@ -186,16 +186,16 @@ esbuild
     replaceHtmlFile();
 
     if (watch) {
-      esbuild.serve({ servedir: './dist', port: 5555 }, {}).then(() => {
+      esbuild.serve({ port: 5555, servedir: './dist' }, {}).then(() => {
         createServer((req, res) => {
-          const { url, method, headers } = req;
+          const { headers, method, url } = req;
 
           if (req.url === '/esbuild') {
             return clients.push(
               res.writeHead(200, {
-                'Content-Type': 'text/event-stream',
                 'Cache-Control': 'no-cache',
                 Connection: 'keep-alive',
+                'Content-Type': 'text/event-stream',
               }),
             );
           }
@@ -203,16 +203,16 @@ esbuild
           let pathWithouthQuery = url.includes('?') ? url.split('?')[0] : url;
           const path = ~pathWithouthQuery.split('/').pop().indexOf('.')
             ? url
-            : `/index.html`; //for PWA with router
+            : '/index.html'; //for PWA with router
 
           req.pipe(
             request(
               {
-                hostname: 'localhost',
-                port: 5555,
-                path,
-                method,
                 headers,
+                hostname: 'localhost',
+                method,
+                path,
+                port: 5555,
               },
               prxRes => {
                 const jsRegex = /index\.[A-Z0-9]+\.js/;
