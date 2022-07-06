@@ -39,7 +39,7 @@
     "moize": "^6.1.1",
     "parse-full-name": "^1.2.6",
     "pdf-lib": "^1.17.1",
-    "pdfjs-dist": "2.12.313",
+    "pdfjs-dist": "^2.14.305",
     "process": "^0.11.10",
     "promise-retry": "^2.0.1",
     "pug": "^3.0.2",
