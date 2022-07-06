@@ -514,7 +514,7 @@ export const ApplyStamp = connect(
 
                   <Button
                     className="margin-right-0"
-                    disabled={!form.status}
+                    disabled={!applyStampFormHelper.canSaveStampOrder}
                     id="save-signature-button"
                     onClick={() => saveDocumentSigningSequence()}
                   >
