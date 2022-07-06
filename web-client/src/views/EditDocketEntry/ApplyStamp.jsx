@@ -22,6 +22,8 @@ export const ApplyStamp = connect(
     pdfSignerHelper: state.pdfSignerHelper,
     saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setPDFStampDataSequence: sequences.setPDFStampDataSequence,
+    stampApplied: state.pdfForSigning.stampApplied,
+    stampData: state.pdfForSigning.stampData,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validationErrors: state.validationErrors,
   },
@@ -78,6 +80,7 @@ export const ApplyStamp = connect(
 
     const clear = () => {
       setPDFStampDataSequence({
+        isPdfAlreadySigned: false,
         stampApplied: false,
         stampData: null,
       });

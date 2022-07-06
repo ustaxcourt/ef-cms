@@ -8,7 +8,8 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store used for setting state.pdfForSigning.signatureData
  */
 export const setPDFStampDataAction = ({ props, store }) => {
-  const { stampApplied, stampData } = props;
+  const { isPdfAlreadySigned, stampApplied, stampData } = props;
   store.set(state.pdfForSigning.stampData, stampData);
   store.set(state.pdfForSigning.stampApplied, stampApplied);
+  store.set(state.pdfForSigning.isPdfAlreadySigned, isPdfAlreadySigned);
 };
