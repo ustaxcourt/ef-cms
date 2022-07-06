@@ -3,7 +3,6 @@ import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { DateInput } from '../../ustc-ui/DateInput/DateInput';
 import { ErrorNotification } from '../ErrorNotification';
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
-import { PDFSignerPageButtons } from '../PDFSignerPageButtons';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
@@ -17,7 +16,6 @@ export const ApplyStamp = connect(
     clearDueDateSequence: sequences.clearDueDateSequence,
     clearOptionalFieldsStampFormSequence:
       sequences.clearOptionalFieldsStampFormSequence,
-    currentPageNumber: state.pdfForSigning.pageNumber,
     form: state.form,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
@@ -32,7 +30,6 @@ export const ApplyStamp = connect(
     applyStampFormHelper,
     clearDueDateSequence,
     clearOptionalFieldsStampFormSequence,
-    currentPageNumber,
     form,
     JURISDICTION_OPTIONS,
     pdfForSigning,
@@ -40,19 +37,23 @@ export const ApplyStamp = connect(
     pdfSignerHelper,
     saveDocumentSigningSequence,
     setSignatureData,
+    signatureApplied: stampApplied,
+    signatureData: stampData,
     STRICKEN_CASE_MESSAGE,
     updateFormValueSequence,
     validationErrors,
   }) {
+    const yLimitToPreventServedStampOverlay = 705;
+
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 
-    const renderPDFPage = pageNumber => {
+    const renderPDFPage = () => {
       const canvas = canvasRef.current;
       const canvasContext = canvas.getContext('2d');
 
       pdfObj
-        .getPage(pageNumber)
+        .getPage(1)
         .then(page => {
           const scale = 1;
           const viewport = page.getViewport({ scale });
@@ -68,6 +69,11 @@ export const ApplyStamp = connect(
         .catch(() => {
           /* no-op*/
         });
+    };
+
+    const moveSig = (sig, x, y) => {
+      sig.style.top = y + 'px';
+      sig.style.left = x + 'px';
     };
 
     const clear = () => {
@@ -87,25 +93,81 @@ export const ApplyStamp = connect(
       start();
     };
 
+    const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
+      setSignatureData({
+        signatureApplied: true,
+        signatureData: { scale, x, y },
+      });
+
+      canvasEl.onmousemove = null;
+      canvasEl.onmousedown = null;
+      sigEl.onmousemove = null;
+      sigEl.onmousedown = null;
+    };
+
     const start = () => {
       const sigEl = signatureRef.current;
+      const canvasEl = canvasRef.current;
+      let x;
+      let y;
 
       setSignatureData({
         signatureApplied: true,
-        signatureData: { scale: 1, x: 84, y: 590 },
+        signatureData: null,
       });
-      sigEl.style.top = '500px';
-      sigEl.style.left = '150px';
+
+      canvasEl.onmousemove = e => {
+        const { pageX, pageY } = e;
+        const canvasBounds = canvasEl.getBoundingClientRect();
+        const sigBox = sigEl.getBoundingClientRect();
+
+        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+        const scrollYOffset = window.scrollY;
+
+        x = pageX - canvasBounds.x;
+        y = pageY - canvasBounds.y - scrollYOffset;
+
+        const uiPosX = pageX - sigParentBounds.x;
+        const uiPosY = y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
+
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          moveSig(sigEl, uiPosX, uiPosY);
+        }
+      };
+
+      canvasEl.onmousedown = e => {
+        const { pageY } = e;
+        const canvasBounds = canvasEl.getBoundingClientRect();
+        const scrollYOffset = window.scrollY;
+        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
+        const sigBoxHeight = sigEl.getBoundingClientRect().height;
+        const uiPosY =
+          pageY -
+          canvasBounds.y -
+          scrollYOffset +
+          (canvasBounds.y - sigParentBounds.y) -
+          sigBoxHeight;
+
+        if (uiPosY < yLimitToPreventServedStampOverlay) {
+          stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
+        }
+      };
+
+      // sometimes the cursor falls on top of the signature
+      // and catches these events
+
+      sigEl.onmousemove = canvasEl.onmousemove;
+      sigEl.onmousedown = canvasEl.onmousedown;
     };
 
     let hasStarted = false;
     useEffect(() => {
-      renderPDFPage(currentPageNumber);
+      renderPDFPage();
       if (!hasStarted) {
         start();
         hasStarted = true;
       }
-    }, [currentPageNumber]);
+    }, []);
 
     return (
       <>
@@ -418,7 +480,7 @@ export const ApplyStamp = connect(
                       <textarea
                         aria-describedby="custom-order-text-label"
                         autoCapitalize="none"
-                        className="usa-textarea height-8 usa-character-count__field"
+                        className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="custom-order-text"
                         maxLength="60"
                         name="customOrderText"
@@ -445,27 +507,20 @@ export const ApplyStamp = connect(
               </div>
             </div>
             <div className="grid-col-7">
-              <div className="grid-row margin-bottom-1">
-                <div className="grid-col-4 text-align-left sign-pdf-control">
-                  <PDFSignerPageButtons />
-                </div>
-                <div className="grid-col-8 text-align-right">
-                  {pdfSignerHelper.isPlaced && (
-                    <>
-                      <Button link icon="trash" onClick={() => restart()}>
-                        Remove Stamp
-                      </Button>
+              <div className="margin-bottom-1 display-flex flex-justify-end">
+                <>
+                  <Button link icon="trash" onClick={() => restart()}>
+                    Remove Stamp
+                  </Button>
 
-                      <Button
-                        className="margin-right-0"
-                        id="save-signature-button"
-                        onClick={() => saveDocumentSigningSequence()}
-                      >
-                        Save Stamp Order
-                      </Button>
-                    </>
-                  )}
-                </div>
+                  <Button
+                    className="margin-right-0"
+                    id="save-signature-button"
+                    onClick={() => saveDocumentSigningSequence()}
+                  >
+                    Save Stamp Order
+                  </Button>
+                </>
               </div>
               <div className="grid-row">
                 <div className="grid-col-12">
@@ -529,7 +584,18 @@ export const ApplyStamp = connect(
                         {pdfForSigning.nameForSigningLine2}
                       </span>
                     </span>
-                    <canvas id="sign-pdf-canvas" ref={canvasRef}></canvas>
+                    <canvas
+                      className={
+                        !stampData && stampApplied
+                          ? 'cursor-grabbing'
+                          : 'cursor-grab'
+                      }
+                      id="sign-pdf-canvas"
+                      ref={canvasRef}
+                    ></canvas>
+                    <span id="signature-warning">
+                      You cannot apply a stamp here.
+                    </span>
                   </div>
                 </div>
               </div>
