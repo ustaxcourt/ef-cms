@@ -373,6 +373,7 @@ export const ApplyStamp = connect(
                         <DateInput
                           className="display-inline-block width-150 padding-0"
                           id="due-date-input-statusReportDueDate"
+                          minDate={applyStampFormHelper.minDate}
                           names={{
                             day: 'dueDateDay-statusReport',
                             month: 'dueDateMonth-statusReport',
@@ -428,6 +429,7 @@ export const ApplyStamp = connect(
                         <DateInput
                           className="display-inline-block width-150 padding-0"
                           id="due-date-input-statusReportOrStipDecisionDueDate"
+                          minDate={applyStampFormHelper.minDate}
                           names={{
                             day: 'dueDateDay-stipDecision',
                             month: 'dueDateMonth-stipDecision',
