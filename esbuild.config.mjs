@@ -76,7 +76,7 @@ esbuild
     format: 'esm',
     loader: {
       '.html': 'text',
-      '.pdf': 'binary',
+      '.pdf': 'file',
       '.png': 'dataurl',
       '.svg': 'dataurl',
       '.ttf': 'file',
