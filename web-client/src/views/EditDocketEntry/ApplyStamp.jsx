@@ -539,11 +539,14 @@ export const ApplyStamp = connect(
                           </span>{' '}
                           {form.deniedAsMoot && 'as moot '}
                           {form.deniedWithoutPrejudice && 'without prejudice'}
+                          <br />
                         </span>
                         {(form.strickenCase ||
                           form.jurisdiction ||
                           (form.dueDateMessage &&
                             form['dueDateDay-statusReport']) ||
+                          (form.dueDateMessage &&
+                            form['dueDateDay-stipDecision']) ||
                           form.customOrderText) && <hr className="narrow-hr" />}
                         {form.strickenCase && (
                           <>
@@ -563,6 +566,7 @@ export const ApplyStamp = connect(
                               {form['dueDateMonth-statusReport']}/
                               {form['dueDateDay-statusReport']}/
                               {form['dueDateYear-statusReport']}
+                              <br />
                             </>
                           )}
                           {form['dueDateDay-stipDecision'] && (
@@ -571,6 +575,7 @@ export const ApplyStamp = connect(
                               {form['dueDateMonth-stipDecision']}/
                               {form['dueDateDay-stipDecision']}/
                               {form['dueDateYear-stipDecision']}
+                              <br />
                             </>
                           )}
                           {form.customOrderText}
