@@ -29,4 +29,44 @@ describe('applyStampFormHelper', () => {
       CUSTOM_ORDER_MAX_LENGTH - fourLetterWord.length,
     );
   });
+
+  it('should set canSaveStampOrder to false when the form.status is not set to either "Denied" or "Granted"', () => {
+    const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+      state: {
+        form: {
+          status: undefined,
+        },
+      },
+    });
+
+    expect(canSaveStampOrder).toEqual(false);
+  });
+
+  it('should set canSaveStampOrder to false when the stamp is not applied', () => {
+    const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+      state: {
+        form: {},
+        pdfForSigning: {
+          stampApplied: false,
+        },
+      },
+    });
+
+    expect(canSaveStampOrder).toEqual(false);
+  });
+
+  it('should set canSaveStampOrder to true when the form.status is set and stamp is applied', () => {
+    const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
+      state: {
+        form: {
+          status: 'Granted',
+        },
+        pdfForSigning: {
+          stampApplied: true,
+        },
+      },
+    });
+
+    expect(canSaveStampOrder).toEqual(true);
+  });
 });
