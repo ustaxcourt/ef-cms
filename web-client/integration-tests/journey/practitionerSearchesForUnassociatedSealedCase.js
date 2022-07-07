@@ -1,3 +1,9 @@
+import { caseDetailHelper as caseDetailHelperComputed } from '../../src/presenter/computeds/caseDetailHelper';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../src/withAppContext';
+
+const caseDetailHelper = withAppContextDecorator(caseDetailHelperComputed);
+
 export const practitionerSearchesForUnassociatedSealedCase = cerebralTest => {
   return it('practitioner searches for unassociated sealed case', async () => {
     cerebralTest.setState('caseDetail', {});
@@ -8,8 +14,13 @@ export const practitionerSearchesForUnassociatedSealedCase = cerebralTest => {
     cerebralTest.setState('header.searchTerm', sealedSeedCaseDocketNumber);
     await cerebralTest.runSequence('submitCaseSearchSequence', {});
 
-    expect(cerebralTest.getState('currentPage')).toEqual('SealedCaseDetail');
+    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetail');
 
+    const helper = runCompute(caseDetailHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(helper.showSealedCaseView).toBeTruthy();
     expect(cerebralTest.getState('caseDetail.isSealed')).toBeTruthy();
     expect(cerebralTest.getState('caseDetail.docketNumber')).toBeDefined();
 
