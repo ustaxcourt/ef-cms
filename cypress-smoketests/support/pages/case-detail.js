@@ -74,7 +74,7 @@ exports.addDocketEntryForOrderAndServePaper = () => {
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
   cy.get('#serve-to-parties-btn').click();
-  cy.get('.modal-button-confirm').click();
+  cy.get('.modal-button-confirm', { timeout: 60000 }).click();
   cy.url().should('contain', '/print-paper-service');
   cy.get('#print-paper-service-done-button').click();
   cy.get('button:contains("Order to Show Cause")').click();
@@ -97,7 +97,7 @@ exports.addDocketEntryForUploadedPdfAndServePaper = () => {
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
   cy.get('#serve-to-parties-btn').click();
-  cy.get('.modal-button-confirm').click();
+  cy.get('.modal-button-confirm', { timeout: 60000 }).click();
   cy.url().should('contain', '/print-paper-service');
   cy.get('#print-paper-service-done-button').click();
   cy.url().should('not.contain', '/print-paper-service');
