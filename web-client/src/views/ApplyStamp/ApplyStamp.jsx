@@ -377,16 +377,16 @@ export const ApplyStamp = connect(
                           id="due-date-input-statusReportDueDate"
                           minDate={applyStampFormHelper.minDate}
                           names={{
-                            day: 'dueDateDay-statusReport',
-                            month: 'dueDateMonth-statusReport',
-                            year: 'dueDateYear-statusReport',
+                            day: 'day',
+                            month: 'month',
+                            year: 'year',
                           }}
                           placeholder={'MM/DD/YYYY'}
                           showDateHint={false}
                           values={{
-                            day: form['dueDateDay-statusReport'],
-                            month: form['dueDateMonth-statusReport'],
-                            year: form['dueDateYear-statusReport'],
+                            day: form.day,
+                            month: form.month,
+                            year: form.year,
                           }}
                           onBlur={validateDueDateSequence}
                           onChange={({ key, value }) => {
@@ -434,16 +434,16 @@ export const ApplyStamp = connect(
                           id="due-date-input-statusReportOrStipDecisionDueDate"
                           minDate={applyStampFormHelper.minDate}
                           names={{
-                            day: 'dueDateDay-stipDecision',
-                            month: 'dueDateMonth-stipDecision',
-                            year: 'dueDateYear-stipDecision',
+                            day: 'day',
+                            month: 'month',
+                            year: 'year',
                           }}
                           placeholder={'MM/DD/YYYY'}
                           showDateHint={false}
                           values={{
-                            day: form['dueDateDay-stipDecision'],
-                            month: form['dueDateMonth-stipDecision'],
-                            year: form['dueDateYear-stipDecision'],
+                            day: form.day,
+                            month: form.month,
+                            year: form.year,
                           }}
                           onBlur={validateDueDateSequence}
                           onChange={({ key, value }) => {
@@ -549,10 +549,7 @@ export const ApplyStamp = connect(
                         </span>
                         {(form.strickenCase ||
                           form.jurisdiction ||
-                          (form.dueDateMessage &&
-                            form['dueDateDay-statusReport']) ||
-                          (form.dueDateMessage &&
-                            form['dueDateDay-stipDecision']) ||
+                          (form.dueDateMessage && form.day) ||
                           form.customOrderText) && <hr className="narrow-hr" />}
                         {form.strickenCase && (
                           <>
@@ -566,21 +563,10 @@ export const ApplyStamp = connect(
                           </>
                         )}
                         <span className="text-semibold">
-                          {form['dueDateDay-statusReport'] && (
+                          {form.day && (
                             <>
-                              {form.dueDateMessage}{' '}
-                              {form['dueDateMonth-statusReport']}/
-                              {form['dueDateDay-statusReport']}/
-                              {form['dueDateYear-statusReport']}
-                              <br />
-                            </>
-                          )}
-                          {form['dueDateDay-stipDecision'] && (
-                            <>
-                              {form.dueDateMessage}{' '}
-                              {form['dueDateMonth-stipDecision']}/
-                              {form['dueDateDay-stipDecision']}/
-                              {form['dueDateYear-stipDecision']}
+                              {form.dueDateMessage} {form.month}/{form.day}/
+                              {form.year}
                               <br />
                             </>
                           )}
