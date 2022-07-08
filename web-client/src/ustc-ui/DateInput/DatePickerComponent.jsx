@@ -5,6 +5,7 @@ import datePicker from '../../../../node_modules/uswds/src/js/components/date-pi
 
 export const DatePickerComponent = ({
   className,
+  disabled = false,
   errorText,
   hideLegend,
   hintText,
@@ -32,6 +33,16 @@ export const DatePickerComponent = ({
       datePicker.on(datePickerRef.current);
     }
   }, [datePickerRef]);
+
+  useEffect(() => {
+    const input = datePickerRef.current.querySelector('.usa-date-picker');
+
+    if (disabled) {
+      datePicker.disable(input);
+    } else {
+      datePicker.enable(input);
+    }
+  });
 
   useEffect(() => {
     if (!datePickerRef.current) return;

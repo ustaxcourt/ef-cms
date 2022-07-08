@@ -374,6 +374,10 @@ export const ApplyStamp = connect(
                         The parties shall file a status report by{' '}
                         <DateInput
                           className="display-inline-block width-150 padding-0"
+                          disabled={
+                            form.dueDateMessage !==
+                            'The parties shall file a status report by'
+                          }
                           id="due-date-input-statusReportDueDate"
                           minDate={applyStampFormHelper.minDate}
                           names={{
@@ -431,6 +435,10 @@ export const ApplyStamp = connect(
                         stipulated decision by{' '}
                         <DateInput
                           className="display-inline-block width-150 padding-0"
+                          disabled={
+                            form.dueDateMessage !==
+                            'The parties shall file a status report or proposed stipulated decision by'
+                          }
                           id="due-date-input-statusReportOrStipDecisionDueDate"
                           minDate={applyStampFormHelper.minDate}
                           names={{
