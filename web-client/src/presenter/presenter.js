@@ -464,7 +464,6 @@ import { validateCourtIssuedDocketEntrySequence } from './sequences/validateCour
 import { validateCreateMessageInModalSequence } from './sequences/validateCreateMessageInModalSequence';
 import { validateDocketEntrySequence } from './sequences/validateDocketEntrySequence';
 import { validateDocumentSequence } from './sequences/validateDocumentSequence';
-import { validateDueDateSequence } from './sequences/validateDueDateSequence';
 import { validateEditPetitionerCounselSequence } from './sequences/CaseAssociation/validateEditPetitionerCounselSequence';
 import { validateEditRespondentCounselSequence } from './sequences/CaseAssociation/validateEditRespondentCounselSequence';
 import { validateExternalDocumentInformationSequence } from './sequences/validateExternalDocumentInformationSequence';
@@ -480,6 +479,7 @@ import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCa
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
+import { validateStampSequence } from './sequences/validateStampSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionHearingNoteSequence } from './sequences/validateTrialSessionHearingNoteSequence';
 import { validateTrialSessionNoteSequence } from './sequences/validateTrialSessionNoteSequence';
@@ -962,7 +962,6 @@ export const presenter = {
     validateCreateMessageInModalSequence,
     validateDocketEntrySequence,
     validateDocumentSequence,
-    validateDueDateSequence,
     validateEditPetitionerCounselSequence,
     validateEditRespondentCounselSequence,
     validateExternalDocumentInformationSequence,
@@ -978,6 +977,7 @@ export const presenter = {
     validateRemoveFromTrialSessionSequence,
     validateSelectDocumentTypeSequence,
     validateSetForHearingSequence,
+    validateStampSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionHearingNoteSequence,
     validateTrialSessionNoteSequence,
