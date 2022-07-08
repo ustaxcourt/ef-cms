@@ -6,6 +6,7 @@ export const DateInput = props => {
     minDate,
     errorText,
     id,
+    disabled,
     className,
     label,
     onBlur = () => {},
@@ -28,6 +29,7 @@ export const DateInput = props => {
   return (
     <DatePickerComponent
       className={className}
+      disabled={disabled}
       errorText={errorText}
       hideLegend={hideLegend}
       hintText={hintText}
