@@ -12,5 +12,6 @@ exports.validateStampInteractor = (applicationContext, { stampMotionForm }) => {
   const errors = new Stamp(stampMotionForm, {
     applicationContext,
   }).getFormattedValidationErrors();
+
   return errors || null;
 };
