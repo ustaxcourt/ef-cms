@@ -20,8 +20,8 @@ export const ApplyStamp = connect(
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
-    saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setPDFStampDataSequence: sequences.setPDFStampDataSequence,
+    submitStampMotionSequence: sequences.submitStampMotionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
     validateStampSequence: sequences.validateStampSequence,
     validationErrors: state.validationErrors,
@@ -36,9 +36,9 @@ export const ApplyStamp = connect(
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
-    saveDocumentSigningSequence,
     setPDFStampDataSequence,
     STRICKEN_CASE_MESSAGE,
+    submitStampMotionSequence,
     updateFormValueSequence,
     validateStampSequence,
     validationErrors,
@@ -529,8 +529,7 @@ export const ApplyStamp = connect(
                     className="margin-right-0"
                     disabled={!applyStampFormHelper.canSaveStampOrder}
                     id="save-signature-button"
-                    onClick={() => validateStampSequence()}
-                    // todo: instead of this, call the validateStampAction inside of a new save stamp sequence
+                    onClick={() => submitStampMotionSequence()}
                   >
                     Save Stamp Order
                   </Button>
