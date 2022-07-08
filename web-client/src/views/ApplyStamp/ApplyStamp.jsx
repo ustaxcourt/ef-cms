@@ -529,7 +529,8 @@ export const ApplyStamp = connect(
                     className="margin-right-0"
                     disabled={!applyStampFormHelper.canSaveStampOrder}
                     id="save-signature-button"
-                    onClick={() => saveDocumentSigningSequence()}
+                    onClick={() => validateStampSequence()}
+                    // todo: instead of this, call the validateStampAction inside of a new save stamp sequence
                   >
                     Save Stamp Order
                   </Button>
