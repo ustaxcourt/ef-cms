@@ -16,9 +16,9 @@ exports.fileAndServeCourtIssuedDocumentInteractor = (
   return post({
     applicationContext,
     body: {
+      clientConnectionId,
       ...documentMeta,
     },
-    clientConnectionId,
     endpoint: `/async/case-documents/${subjectCaseDocketNumber}/file-and-serve-court-issued-docket-entry`,
   });
 };

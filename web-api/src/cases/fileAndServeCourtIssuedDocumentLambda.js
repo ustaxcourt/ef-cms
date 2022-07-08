@@ -1,22 +1,15 @@
 const { genericHandler } = require('../genericHandler');
-const { getConnectionIdFromEvent } = require('../middleware/apiGatewayHelper');
 
 /**
  * File and serve court issued document
  *
  * @param {object} event the AWS event object
  */
-exports.fileAndServeCourtIssuedDocumentLambda = event => {
-  const clientConnectionId = getConnectionIdFromEvent(event);
+exports.fileAndServeCourtIssuedDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .fileAndServeCourtIssuedDocumentInteractor(
-        applicationContext,
-        {
-          ...JSON.parse(event.body),
-        },
-        clientConnectionId,
-      );
+      .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        ...JSON.parse(event.body),
+      });
   });
-};
