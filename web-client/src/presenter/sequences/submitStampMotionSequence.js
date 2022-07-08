@@ -2,21 +2,16 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { setFormDateAction } from '../actions/setFormDateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { shouldValidateAction } from '../actions/shouldValidateAction';
+import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateStampAction } from '../actions/ApplyStamp/validateStampAction';
 
-export const validateStampSequence = [
-  shouldValidateAction,
+export const submitStampMotionSequence = [
+  startShowValidationAction,
+  getComputedFormDateFactoryAction(null),
+  setFormDateAction,
+  validateStampAction,
   {
-    ignore: [],
-    validate: [
-      getComputedFormDateFactoryAction(null),
-      setFormDateAction,
-      validateStampAction,
-      {
-        error: [setValidationErrorsAction],
-        success: [clearAlertsAction],
-      },
-    ],
+    error: [setValidationErrorsAction],
+    success: [clearAlertsAction],
   },
 ];

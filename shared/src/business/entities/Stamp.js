@@ -20,6 +20,7 @@ function Stamp() {
 Stamp.prototype.init = function init(rawStamp) {
   this.date = rawStamp.date;
   this.status = rawStamp.status;
+  this.dueDateMessage = rawStamp.dueDateMessage;
 };
 
 Stamp.VALIDATION_ERROR_MESSAGES = {
@@ -33,12 +34,16 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
 };
 
 Stamp.schema = joi.object().keys({
-  date: JoiValidationConstants.DATE.min('now')
-    .optional()
-    .allow(null)
-    .description(
-      'The due date of the status report (or proposed stipulated decision) filing',
-    ),
+  date: joi.when('dueDateMessage', {
+    is: joi.exist().not(null),
+    otherwise: joi.optional().allow(null),
+    then: JoiValidationConstants.DATE.min('now')
+      .required()
+      .allow(null)
+      .description(
+        'The due date of the status report (or proposed stipulated decision) filing',
+      ),
+  }),
   status: JoiValidationConstants.STRING.required()
     .valid('Granted', 'Denied')
     .description('Approval status of the motion'),
