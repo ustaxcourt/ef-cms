@@ -4,6 +4,7 @@ const {
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
+
 /**
  * constructor
  *
@@ -18,6 +19,7 @@ function Stamp() {
 
 Stamp.prototype.init = function init(rawStamp) {
   this.dueDate = rawStamp.dueDate;
+  this.status = rawStamp.status;
 };
 
 Stamp.VALIDATION_ERROR_MESSAGES = {
@@ -27,6 +29,7 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
       message: 'Due date cannot be prior to today. Enter a valid date.',
     },
   ],
+  status: 'Status is required.',
 };
 
 Stamp.schema = joi.object().keys({
@@ -36,6 +39,9 @@ Stamp.schema = joi.object().keys({
     .description(
       'The due date of the status report (or proposed stipulated decision) filing',
     ),
+  status: JoiValidationConstants.STRING.required()
+    .valid('Granted', 'Denied')
+    .description('Approval status of the motion'),
 });
 
 joiValidationDecorator(Stamp, Stamp.schema, Stamp.VALIDATION_ERROR_MESSAGES);
