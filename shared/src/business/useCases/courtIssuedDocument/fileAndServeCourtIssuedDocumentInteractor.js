@@ -37,8 +37,13 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  { docketEntryId, docketNumbers, form, subjectCaseDocketNumber },
-  clientConnectionId,
+  {
+    clientConnectionId,
+    docketEntryId,
+    docketNumbers,
+    form,
+    subjectCaseDocketNumber,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
