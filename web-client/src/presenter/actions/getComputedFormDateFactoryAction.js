@@ -60,6 +60,5 @@ export const getComputedFormDateFactoryAction = (
 
     return { [stateKey]: computedDate };
   };
-
   return computeFormDateAction;
 };
