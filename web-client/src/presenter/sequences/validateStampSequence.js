@@ -6,11 +6,17 @@ import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateStampAction } from '../actions/ApplyStamp/validateStampAction';
 
 export const validateStampSequence = [
-  getComputedFormDateFactoryAction(),
-  setFormDateAction,
-  validateStampAction,
+  shouldValidateAction,
   {
-    error: [setValidationErrorsAction],
-    success: [clearAlertsAction],
+    ignore: [],
+    validate: [
+      getComputedFormDateFactoryAction(),
+      setFormDateAction,
+      validateStampAction,
+      {
+        error: [setValidationErrorsAction],
+        success: [clearAlertsAction],
+      },
+    ],
   },
 ];

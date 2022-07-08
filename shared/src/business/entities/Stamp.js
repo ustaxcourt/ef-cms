@@ -18,12 +18,12 @@ function Stamp() {
 }
 
 Stamp.prototype.init = function init(rawStamp) {
-  this.dueDate = rawStamp.dueDate;
+  this.date = rawStamp.date;
   this.status = rawStamp.status;
 };
 
 Stamp.VALIDATION_ERROR_MESSAGES = {
-  dueDate: [
+  date: [
     {
       contains: 'must be greater than or equal to',
       message: 'Due date cannot be prior to today. Enter a valid date.',
@@ -33,7 +33,7 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
 };
 
 Stamp.schema = joi.object().keys({
-  dueDate: JoiValidationConstants.DATE.min('now')
+  date: JoiValidationConstants.DATE.min('now')
     .optional()
     .allow(null)
     .description(
