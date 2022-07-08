@@ -3,16 +3,14 @@ import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDate
 import { setFormDateAction } from '../actions/setFormDateAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { shouldValidateAction } from '../actions/shouldValidateAction';
-import { validateDueDateAction } from '../actions/ApplyStamp/validateDueDateAction';
+import { validateStampAction } from '../actions/ApplyStamp/validateStampAction';
 
-export const validateDueDateSequence = [
+export const validateStampSequence = [
   getComputedFormDateFactoryAction(),
   setFormDateAction,
-  validateDueDateAction,
+  validateStampAction,
   {
     error: [setValidationErrorsAction],
     success: [clearAlertsAction],
   },
-  // ],
-  // },
 ];
