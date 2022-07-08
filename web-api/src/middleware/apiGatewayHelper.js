@@ -204,10 +204,4 @@ exports.getConnectionIdFromEvent = event => {
   ) {
     return event.queryStringParameters.clientConnectionId;
   }
-
-  const clientConnectionId =
-    event.headers &&
-    (event.headers['X-Connection-Id'] || event.headers['x-connection-id']);
-
-  return clientConnectionId;
 };

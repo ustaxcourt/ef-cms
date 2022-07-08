@@ -10,19 +10,11 @@ const moize = require('moize').default;
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response data
  */
-exports.head = async ({
-  applicationContext,
-  clientConnectionId,
-  endpoint,
-  params,
-}) => {
+exports.head = async ({ applicationContext, endpoint, params }) => {
   return await applicationContext
     .getHttpClient()
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: getDefaultHeaders(
-        applicationContext.getCurrentUserToken(),
-        clientConnectionId,
-      ),
+      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       params,
     })
     .then(response => response.data);
@@ -38,15 +30,9 @@ exports.head = async ({
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the response body data
  */
-const get = async ({
-  applicationContext,
-  clientConnectionId,
-  endpoint,
-  params,
-}) => {
+const get = async ({ applicationContext, endpoint, params }) => {
   const response = await getResponse({
     applicationContext,
-    clientConnectionId,
     endpoint,
     params,
   });
@@ -63,19 +49,11 @@ const get = async ({
  * @param {object} providers.params the params to send to the endpoint
  * @returns {Promise<*>} the complete http response
  */
-const getResponse = ({
-  applicationContext,
-  clientConnectionId,
-  endpoint,
-  params,
-}) => {
+const getResponse = ({ applicationContext, endpoint, params }) => {
   return applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: getDefaultHeaders(
-        applicationContext.getCurrentUserToken(),
-        clientConnectionId,
-      ),
+      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       params,
     });
 };
@@ -110,17 +88,13 @@ exports.post = async ({
   endpoint,
   headers = {},
   options = {},
-  clientConnectionId,
 }) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
     .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
       headers: {
-        ...getDefaultHeaders(
-          applicationContext.getCurrentUserToken(),
-          clientConnectionId,
-        ),
+        ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
         ...headers,
       },
       ...options,
@@ -138,20 +112,12 @@ exports.post = async ({
  * @param {string} providers.endpoint the endpoint to call
  * @returns {Promise<*>} the response data
  */
-exports.put = async ({
-  applicationContext,
-  body,
-  clientConnectionId,
-  endpoint,
-}) => {
+exports.put = async ({ applicationContext, body, endpoint }) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
     .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-      headers: getDefaultHeaders(
-        applicationContext.getCurrentUserToken(),
-        clientConnectionId,
-      ),
+      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
     })
     .then(response => response.data);
 };
@@ -171,31 +137,24 @@ exports.remove = async ({
   endpoint,
   params,
   options = {},
-  clientConnectionId,
 }) => {
   getMemoized.clear();
   return await applicationContext
     .getHttpClient()
     .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: getDefaultHeaders(
-        applicationContext.getCurrentUserToken(),
-        clientConnectionId,
-      ),
+      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       params,
       ...options,
     })
     .then(response => response.data);
 };
 
-const getDefaultHeaders = (userToken, clientConnectionId) => {
+const getDefaultHeaders = userToken => {
   const authorization = userToken ? `Bearer ${userToken}` : undefined;
 
   let authorizationHeaderObject = {};
   if (authorization) {
     authorizationHeaderObject['Authorization'] = authorization;
-  }
-  if (clientConnectionId) {
-    authorizationHeaderObject['X-Connection-Id'] = clientConnectionId;
   }
 
   return authorizationHeaderObject;

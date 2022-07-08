@@ -460,16 +460,4 @@ describe('getConnectionIdFromEvent', () => {
     });
     expect(response).toEqual('abc-123');
   });
-
-  it('should return clientConnectionId from headers if it exists', async () => {
-    let response = await getConnectionIdFromEvent({
-      headers: { 'X-Connection-Id': 'abc-456' },
-    });
-    expect(response).toEqual('abc-456');
-
-    response = await getConnectionIdFromEvent({
-      headers: { 'x-connection-id': 'abc-789' },
-    });
-    expect(response).toEqual('abc-789');
-  });
 });

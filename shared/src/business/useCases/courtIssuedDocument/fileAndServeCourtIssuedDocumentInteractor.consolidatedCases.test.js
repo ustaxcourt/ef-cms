@@ -145,20 +145,17 @@ describe('consolidated cases', () => {
   });
 
   it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser` along with the `clientConnectionId`', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(
-      applicationContext,
-      {
-        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-        docketNumbers: [
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        form: leadCaseDocketEntries[0],
-        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      },
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId,
-    );
+      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+      docketNumbers: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ],
+      form: leadCaseDocketEntries[0],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+    });
 
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
@@ -242,21 +239,17 @@ describe('consolidated cases', () => {
       .mockRejectedValueOnce(new Error(expectedErrorString));
 
     await expect(
-      fileAndServeCourtIssuedDocumentInteractor(
-        applicationContext,
-        {
-          docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-          docketNumbers: [
-            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-          ],
-          form: leadCaseDocketEntries[0],
-          subjectCaseDocketNumber:
-            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        },
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         clientConnectionId,
-      ),
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: leadCaseDocketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      }),
     ).rejects.toThrow(expectedErrorString);
 
     const initialCall = 1;
@@ -295,21 +288,17 @@ describe('consolidated cases', () => {
       .mockRejectedValueOnce(innerError);
 
     await expect(
-      fileAndServeCourtIssuedDocumentInteractor(
-        applicationContext,
-        {
-          docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-          docketNumbers: [
-            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-            MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-            MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-          ],
-          form: leadCaseDocketEntries[0],
-          subjectCaseDocketNumber:
-            MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        },
+      fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         clientConnectionId,
-      ),
+        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+        docketNumbers: [
+          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        ],
+        form: leadCaseDocketEntries[0],
+        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+      }),
     ).rejects.toThrow(expectedErrorString);
 
     expect(applicationContext.logger.error).toBeCalledTimes(1);
@@ -338,20 +327,17 @@ describe('consolidated cases', () => {
         };
       });
 
-    await fileAndServeCourtIssuedDocumentInteractor(
-      applicationContext,
-      {
-        docketEntryId: customLeadCaseDocketEntries[0].docketEntryId,
-        docketNumbers: [
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        form: customLeadCaseDocketEntries[0],
-        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      },
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId,
-    );
+      docketEntryId: customLeadCaseDocketEntries[0].docketEntryId,
+      docketNumbers: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ],
+      form: customLeadCaseDocketEntries[0],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+    });
 
     expect(
       applicationContext.getPersistenceGateway()
@@ -368,20 +354,17 @@ describe('consolidated cases', () => {
   });
 
   it('should create a work item and add it to the outbox for each case', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(
-      applicationContext,
-      {
-        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-        docketNumbers: [
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        form: leadCaseDocketEntries[0],
-        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      },
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId,
-    );
+      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+      docketNumbers: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ],
+      form: leadCaseDocketEntries[0],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
@@ -411,20 +394,17 @@ describe('consolidated cases', () => {
   });
 
   it('should create a single source of truth for the document by saving only one copy', async () => {
-    await fileAndServeCourtIssuedDocumentInteractor(
-      applicationContext,
-      {
-        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-        docketNumbers: [
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        form: leadCaseDocketEntries[0],
-        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      },
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId,
-    );
+      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+      docketNumbers: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ],
+      form: leadCaseDocketEntries[0],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+    });
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
@@ -439,20 +419,17 @@ describe('consolidated cases', () => {
         Promise.resolve(false),
       );
 
-    await fileAndServeCourtIssuedDocumentInteractor(
-      applicationContext,
-      {
-        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-        docketNumbers: [
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        form: leadCaseDocketEntries[0],
-        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      },
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId,
-    );
+      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+      docketNumbers: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ],
+      form: leadCaseDocketEntries[0],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+    });
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
