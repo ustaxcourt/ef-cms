@@ -12,6 +12,7 @@ export const CaseSearchForm = connect(
     advancedSearchForm,
     submitAdvancedSearchSequence,
     submitDocketNumberSearchSequence,
+    submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky,
   }) {
     return (
       <>
@@ -28,6 +29,9 @@ export const CaseSearchForm = connect(
           {advancedSearchForm.searchMode === 'byName' && (
             <CaseSearchByName
               submitAdvancedSearchSequence={submitAdvancedSearchSequence}
+              submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky={
+                submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky
+              }
             />
           )}
           {advancedSearchForm.searchMode === 'byDocketNumber' && (
@@ -44,6 +48,9 @@ export const CaseSearchForm = connect(
             <div className="grid-col-6 right-gray-border">
               <CaseSearchByName
                 submitAdvancedSearchSequence={submitAdvancedSearchSequence}
+                submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky={
+                  submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky
+                }
               />
             </div>
 

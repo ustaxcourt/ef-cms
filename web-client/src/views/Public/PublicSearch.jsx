@@ -19,6 +19,8 @@ export const PublicSearch = connect(
     featureFlagHelper: state.featureFlagHelper,
     submitPublicCaseAdvancedSearchSequence:
       sequences.submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky:
+      sequences.submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky,
     submitPublicCaseDocketNumberSearchSequence:
       sequences.submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence:
@@ -30,6 +32,7 @@ export const PublicSearch = connect(
     advancedSearchTabChangeSequence,
     featureFlagHelper,
     submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,
@@ -59,6 +62,9 @@ export const PublicSearch = connect(
                 }
                 submitDocketNumberSearchSequence={
                   submitPublicCaseDocketNumberSearchSequence
+                }
+                submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky={
+                  submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky
                 }
               />
               <SearchResults />

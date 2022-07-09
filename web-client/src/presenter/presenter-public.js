@@ -33,7 +33,10 @@ import { showMaintenancePageDecorator } from './utilities/showMaintenancePageDec
 import { showMoreResultsSequence } from './sequences/showMoreResultsSequence';
 import { sortTodaysOrdersSequence } from './sequences/Public/sortTodaysOrdersSequence';
 import { state } from './state-public';
-import { submitPublicCaseAdvancedSearchSequence } from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
+import {
+  submitPublicCaseAdvancedSearchSequence,
+  submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky,
+} from './sequences/Public/submitPublicCaseAdvancedSearchSequence';
 import { submitPublicCaseDocketNumberSearchSequence } from './sequences/Public/submitPublicCaseDocketNumberSearchSequence';
 import { submitPublicOpinionAdvancedSearchSequence } from './sequences/Public/submitPublicOpinionAdvancedSearchSequence';
 import { submitPublicOrderAdvancedSearchSequence } from './sequences/Public/submitPublicOrderAdvancedSearchSequence';
@@ -104,6 +107,7 @@ export const presenter = {
     showMoreResultsSequence,
     sortTodaysOrdersSequence,
     submitPublicCaseAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky,
     submitPublicCaseDocketNumberSearchSequence,
     submitPublicOpinionAdvancedSearchSequence,
     submitPublicOrderAdvancedSearchSequence,

@@ -5,7 +5,10 @@ import { setAdvancedSearchResultsAction } from '../../actions/AdvancedSearch/set
 import { setAlertErrorAction } from '../../actions/setAlertErrorAction';
 import { setValidationErrorsAction } from '../../actions/setValidationErrorsAction';
 import { showProgressSequenceDecorator } from '../../utilities/showProgressSequenceDecorator';
-import { submitPublicCaseAdvancedSearchAction } from '../../actions/Public/submitPublicCaseAdvancedSearchAction';
+import {
+  submitPublicCaseAdvancedSearchAction,
+  submitPublicCaseAdvancedSearchWhileFeelingLuckyAction,
+} from '../../actions/Public/submitPublicCaseAdvancedSearchAction';
 import { validateCaseAdvancedSearchAction } from '../../actions/AdvancedSearch/validateCaseAdvancedSearchAction';
 
 export const submitPublicCaseAdvancedSearchSequence = [
@@ -21,6 +24,22 @@ export const submitPublicCaseAdvancedSearchSequence = [
       clearAlertsAction,
       submitPublicCaseAdvancedSearchAction,
       setAdvancedSearchResultsAction,
+    ]),
+  },
+];
+
+export const submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky = [
+  clearSearchTermAction,
+  validateCaseAdvancedSearchAction,
+  {
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      clearSearchResultsAction,
+    ],
+    success: showProgressSequenceDecorator([
+      clearAlertsAction,
+      submitPublicCaseAdvancedSearchWhileFeelingLuckyAction,
     ]),
   },
 ];

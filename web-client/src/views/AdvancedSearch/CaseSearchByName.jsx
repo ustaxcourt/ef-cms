@@ -25,6 +25,7 @@ export const CaseSearchByName = connect(
     clearAdvancedSearchFormSequence,
     constants,
     submitAdvancedSearchSequence,
+    submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky,
     updateAdvancedSearchFormValueSequence,
     usStates,
     usStatesOther,
@@ -200,32 +201,41 @@ export const CaseSearchByName = connect(
             </div>
 
             <div className="grid-row">
-              <div className="tablet:grid-col-6">
-                <Button
-                  aria-describedby="case-search-by-name"
-                  className="advanced-search__button"
-                  id="advanced-search-button"
-                  onClick={e => {
-                    e.preventDefault();
-                    submitAdvancedSearchSequence();
-                  }}
-                >
-                  Search
-                </Button>
-                <Button
-                  link
-                  aria-describedby="case-search-by-name"
-                  className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
-                  onClick={e => {
-                    e.preventDefault();
-                    clearAdvancedSearchFormSequence({
-                      formType: 'caseSearchByName',
-                    });
-                  }}
-                >
-                  Clear Search
-                </Button>
-              </div>
+              <Button
+                aria-describedby="case-search-by-name"
+                className="advanced-search__button"
+                id="advanced-search-button"
+                onClick={e => {
+                  e.preventDefault();
+                  submitAdvancedSearchSequence();
+                }}
+              >
+                Search
+              </Button>
+              <Button
+                aria-describedby="case-search-by-name-im-feeling-lucky"
+                className="advanced-search__button"
+                id="im-feeling-lucky-button"
+                onClick={e => {
+                  e.preventDefault();
+                  submitPublicCaseAdvancedSearchSequenceWhileFeelinLucky();
+                }}
+              >
+                I&apos;m Feeling Lucky
+              </Button>
+              <Button
+                link
+                aria-describedby="case-search-by-name"
+                className="margin-left-1 tablet:margin-left-205 margin-right-0 padding-0 ustc-button--mobile-inline"
+                onClick={e => {
+                  e.preventDefault();
+                  clearAdvancedSearchFormSequence({
+                    formType: 'caseSearchByName',
+                  });
+                }}
+              >
+                Clear Search
+              </Button>
             </div>
           </form>
         </div>

@@ -1,3 +1,4 @@
+const { getCaseTitleContaining } = require('../../support/pages/case-detail');
 const {
   clickOnSearchTab,
   docketRecordTable,
@@ -13,6 +14,7 @@ const {
   searchForOrderByJudge,
   searchResultsTable,
   unselectOpinionTypesExceptBench,
+  imFeelinLucky,
 } = require('../../support/pages/public/advanced-search');
 
 describe('Advanced search', () => {
@@ -22,6 +24,12 @@ describe('Advanced search', () => {
       enterPetitionerName('Osborne');
       searchForCaseByPetitionerInformation();
       expect(searchResultsTable()).to.exist;
+    });
+    it('should route to case detail when a match is found and the user is feeling lucky', () => {
+      navigateToDashboard();
+      enterPetitionerName('Osborne');
+      imFeelinLucky();
+      expect(getCaseTitleContaining('Osborne')).to.exist;
     });
   });
 

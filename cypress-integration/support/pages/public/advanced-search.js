@@ -61,6 +61,10 @@ exports.searchForCaseByPetitionerInformation = () => {
   cy.get('button#advanced-search-button').click();
 };
 
+exports.imFeelinLucky = () => {
+  cy.get('button#im-feeling-lucky-button').click()
+}
+
 exports.searchForDocuments = () => {
   cy.get('button#advanced-search-button').click();
 };
