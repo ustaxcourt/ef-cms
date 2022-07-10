@@ -12,23 +12,26 @@
   "AWS_ACCESS_KEY_ID" \
   "AWS_SECRET_ACCESS_KEY"
 
-BUCKET_NAME="${EFCMS_DOMAIN}.efcms.${ENV}.us-east-1.lambdas"
+EAST_BUCKET_NAME="${EFCMS_DOMAIN}.efcms.${ENV}.us-east-1.lambdas"
+WEST_BUCKET_NAME="${EFCMS_DOMAIN}.efcms.${ENV}.us-west-1.lambdas"
 
-aws s3 cp "s3://${BUCKET_NAME}/api_blue.js.zip" "s3://${BUCKET_NAME}/api_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/api_public_blue.js.zip" "s3://${BUCKET_NAME}/api_public_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/websockets_blue.js.zip" "s3://${BUCKET_NAME}/websockets_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/blue_puppeteer_lambda_layer.zip" "s3://${BUCKET_NAME}/green_puppeteer_lambda_layer.zip"
+DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh "${ENV}")
+CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh "${ENV}")
+
+aws s3 cp "s3://${EAST_BUCKET_NAME}/api_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/api_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${EAST_BUCKET_NAME}/api_public_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/api_public_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${EAST_BUCKET_NAME}/websockets_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/websockets_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${EAST_BUCKET_NAME}/${DEPLOYING_COLOR}_puppeteer_lambda_layer.zip" "s3://${EAST_BUCKET_NAME}/${CURRENT_COLOR}_puppeteer_lambda_layer.zip"
 
 # streams & cron are ONLY on east
-aws s3 cp "s3://${BUCKET_NAME}/cron_blue.js.zip" "s3://${BUCKET_NAME}/cron_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/streams_blue.js.zip" "s3://${BUCKET_NAME}/streams_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/triggers_blue.js.zip" "s3://${BUCKET_NAME}/triggers_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/bounce_handler_blue.js.zip" "s3://${BUCKET_NAME}/bounce_handler_green.js.zip"
+aws s3 cp "s3://${EAST_BUCKET_NAME}/cron_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/cron_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${EAST_BUCKET_NAME}/streams_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/streams_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${EAST_BUCKET_NAME}/triggers_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/triggers_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${EAST_BUCKET_NAME}/bounce_handler_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/bounce_handler_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${EAST_BUCKET_NAME}/seal_in_lower_${DEPLOYING_COLOR}.js.zip" "s3://${EAST_BUCKET_NAME}/seal_in_lower_${CURRENT_COLOR}.js.zip"
 
 
-BUCKET_NAME="${EFCMS_DOMAIN}.efcms.${ENV}.us-west-1.lambdas"
-
-aws s3 cp "s3://${BUCKET_NAME}/api_blue.js.zip" "s3://${BUCKET_NAME}/api_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/api_public_blue.js.zip" "s3://${BUCKET_NAME}/api_public_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/websockets_blue.js.zip" "s3://${BUCKET_NAME}/websockets_green.js.zip"
-aws s3 cp "s3://${BUCKET_NAME}/blue_puppeteer_lambda_layer.zip" "s3://${BUCKET_NAME}/green_puppeteer_lambda_layer.zip"
+aws s3 cp "s3://${WEST_BUCKET_NAME}/api_${DEPLOYING_COLOR}.js.zip" "s3://${WEST_BUCKET_NAME}/api_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${WEST_BUCKET_NAME}/api_public_${DEPLOYING_COLOR}.js.zip" "s3://${WEST_BUCKET_NAME}/api_public_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${WEST_BUCKET_NAME}/websockets_${DEPLOYING_COLOR}.js.zip" "s3://${WEST_BUCKET_NAME}/websockets_${CURRENT_COLOR}.js.zip"
+aws s3 cp "s3://${WEST_BUCKET_NAME}/${DEPLOYING_COLOR}_puppeteer_lambda_layer.zip" "s3://${WEST_BUCKET_NAME}/${CURRENT_COLOR}_puppeteer_lambda_layer.zip"
