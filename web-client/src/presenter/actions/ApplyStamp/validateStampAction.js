@@ -18,8 +18,6 @@ export const validateStampAction = ({ applicationContext, get, path }) => {
       stampMotionForm,
     });
 
-  console.log('errors in validateStampAction', errors);
-
   if (!errors) {
     return path.success();
   } else {
