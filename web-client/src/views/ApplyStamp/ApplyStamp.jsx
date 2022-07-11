@@ -198,7 +198,11 @@ export const ApplyStamp = connect(
                 </div>
                 <div className="stamp-order-form">
                   <FormGroup
-                    className="stamp-form-group"
+                    className={
+                      !validationErrors.status
+                        ? 'stamp-form-group'
+                        : 'stamp-form-group-error'
+                    }
                     errorText={validationErrors.status}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
