@@ -40,6 +40,8 @@ const JURISDICTION_OPTIONS = {
   undersigned: 'Jurisdiction is retained by the undersigned',
 };
 
+const MOTION_STATUSES = { DENIED: 'Denied', GRANTED: 'Granted' };
+
 const STRICKEN_CASE_MESSAGE = 'This case is stricken from the trial session';
 
 const PARTY_VIEW_TABS = {
@@ -1377,6 +1379,7 @@ module.exports = deepFreeze({
   MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MESSAGE_QUEUE_TYPES,
   MINUTE_ENTRIES_MAP,
+  MOTION_STATUSES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,

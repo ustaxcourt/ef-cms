@@ -10,6 +10,7 @@ import React, { useEffect, useRef } from 'react';
 export const ApplyStamp = connect(
   {
     JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
+    MOTION_STATUSES: state.constants.MOTION_STATUSES,
     STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
@@ -33,6 +34,7 @@ export const ApplyStamp = connect(
     clearOptionalFieldsStampFormSequence,
     form,
     JURISDICTION_OPTIONS,
+    MOTION_STATUSES,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
@@ -206,41 +208,45 @@ export const ApplyStamp = connect(
                     errorText={validationErrors.status}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
-                      {['Granted', 'Denied'].map(option => (
-                        <div
-                          className={`usa-radio ${
-                            option === 'Denied' ? 'margin-bottom-0' : ''
-                          }`}
-                          key={option}
-                        >
-                          <input
-                            checked={form.status === option}
-                            className="usa-radio__input"
-                            id={`motion-status-${option}`}
-                            name="status"
-                            type="radio"
-                            value={option}
-                            onChange={e => {
-                              applyStampFormChangeSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={`motion-status-${option}`}
+                      {[MOTION_STATUSES.GRANTED, MOTION_STATUSES.DENIED].map(
+                        option => (
+                          <div
+                            className={`usa-radio ${
+                              option === MOTION_STATUSES.DENIED
+                                ? 'margin-bottom-0'
+                                : ''
+                            }`}
+                            key={option}
                           >
-                            {option}
-                          </label>
-                        </div>
-                      ))}
+                            <input
+                              checked={form.status === option}
+                              className="usa-radio__input"
+                              id={`motion-status-${option}`}
+                              name="status"
+                              type="radio"
+                              value={option}
+                              onChange={e => {
+                                applyStampFormChangeSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              className="usa-radio__label"
+                              htmlFor={`motion-status-${option}`}
+                            >
+                              {option}
+                            </label>
+                          </div>
+                        ),
+                      )}
                       <FormGroup className="grid-container stamp-form-group denied-checkboxes">
                         <div className="display-inline-block grid-col-6">
                           <input
                             checked={form.deniedAsMoot || false}
                             className="usa-checkbox__input"
-                            disabled={form.status !== 'Denied'}
+                            disabled={form.status !== MOTION_STATUSES.DENIED}
                             id="deniedAsMoot"
                             name="deniedAsMoot"
                             type="checkbox"
@@ -263,7 +269,7 @@ export const ApplyStamp = connect(
                           <input
                             checked={form.deniedWithoutPrejudice || false}
                             className="usa-checkbox__input"
-                            disabled={form.status !== 'Denied'}
+                            disabled={form.status !== MOTION_STATUSES.DENIED}
                             id="deniedWithoutPrejudice"
                             name="deniedWithoutPrejudice"
                             type="checkbox"
