@@ -14,7 +14,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { validateStampAction } from '../actions/ApplyStamp/validateStampAction';
 
 export const submitStampMotionSequence = [
-  // this is from the 9479-save-motion-stamping branch
+  // this is still WIP until the next PR
   startShowValidationAction,
   getComputedFormDateFactoryAction(null),
   setFormDateAction,
