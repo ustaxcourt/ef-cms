@@ -518,11 +518,15 @@ label.ustc-upload {
     margin-bottom: 0;
 
     &.stamp-form-group {
-      padding: 0 1rem;
+      margin: 0 1rem;
+    }
 
-      &.denied-checkboxes {
-        padding: 0 2rem;
-      }
+    &.stamp-form-group-error {
+      margin: 0;
+    }
+
+    &.denied-checkboxes {
+      padding: 0 2rem;
     }
 
     #due-date-input-date-label {
