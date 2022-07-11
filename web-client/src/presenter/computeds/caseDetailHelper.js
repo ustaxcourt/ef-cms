@@ -59,6 +59,16 @@ export const caseDetailHelper = (get, applicationContext) => {
   const hasIrsPractitioners =
     !!caseDetail.irsPractitioners && !!caseDetail.irsPractitioners.length;
 
+  const userCanViewCase =
+    (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed;
+
+  const isPractitioner =
+    user.role === USER_ROLES.irsPractitioner ||
+    user.role === USER_ROLES.privatePractitioner;
+
+  const showSealedCaseView =
+    isPractitioner && !!caseDetail.isSealed && !userAssociatedWithCase;
+
   return {
     caseDeadlines,
     documentDetailTab,
@@ -84,8 +94,8 @@ export const caseDetailHelper = (get, applicationContext) => {
     showPractitionerSection: !isExternalUser || hasPrivatePractitioners,
     showPreferredTrialCity: caseDetail.preferredTrialCity,
     showQcWorkItemsUntouchedState,
-    userCanViewCase:
-      (isExternalUser && userAssociatedWithCase) || !caseDetail.isSealed,
+    showSealedCaseView,
+    userCanViewCase,
     userHasAccessToCase,
   };
 };
