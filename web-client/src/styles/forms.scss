@@ -255,7 +255,7 @@ label.validated::after {
   height: 0.8rem;
   margin-right: -1.8rem;
   margin-left: 0.2rem;
-  background-image: url('./images/correct.svg');
+  background-image: url('images/correct.svg');
   background-position: 100%;
   background-repeat: no-repeat;
   content: ' ';
@@ -546,7 +546,8 @@ label.ustc-upload {
   }
 }
 
-.usa-input.grey-placeholder::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+.usa-input.grey-placeholder::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: gray;
   opacity: 1; /* Firefox */
 }
