@@ -1,4 +1,3 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
 const { Stamp } = require('./Stamp');
 
 const { VALIDATION_ERROR_MESSAGES } = Stamp;
@@ -6,10 +5,7 @@ const { VALIDATION_ERROR_MESSAGES } = Stamp;
 describe('Stamp entity', () => {
   describe('Validation', () => {
     it('should be invalid when status is undefined', () => {
-      const stamp = new Stamp({
-        applicationContext,
-        rawStamp: {},
-      });
+      const stamp = new Stamp({});
 
       expect(stamp.getFormattedValidationErrors()).toMatchObject({
         status: VALIDATION_ERROR_MESSAGES.status,
@@ -18,16 +14,13 @@ describe('Stamp entity', () => {
 
     it('should be invalid when date is in the past', () => {
       const stamp = new Stamp({
-        applicationContext,
-        rawStamp: {
-          date: '2019-12-05T00:00:00.000-05:00',
-          dueDateMessage: 'something',
-          status: 'Granted',
-        },
+        date: '2019-12-05T00:00:00.000-05:00',
+        dueDateMessage: 'something',
+        status: 'Granted',
       });
 
       expect(stamp.getFormattedValidationErrors()).toMatchObject({
-        date: '',
+        date: 'Due date cannot be prior to today. Enter a valid date.',
       });
     });
 
