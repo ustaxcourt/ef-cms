@@ -14,7 +14,7 @@ module.exports = defineConfig({
       on('task', {
         modifyDeployedDateTextFile(deployedDate) {
           fs.writeFileSync(
-            path.join(__dirname, './web-client/src/deployed-date.txt'),
+            path.join(__dirname, './dist-public/deployed-date.txt'),
             deployedDate,
           );
           return null;

@@ -3,7 +3,6 @@ import { Case } from '../../shared/src/business/entities/cases/Case';
 import { CerebralTest, runCompute } from 'cerebral/test';
 import { DynamoDB, S3 } from 'aws-sdk';
 import { JSDOM } from 'jsdom';
-import { SERVICE_INDICATOR_TYPES } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContext } from '../src/applicationContext';
 import {
   back,
@@ -73,7 +72,12 @@ import qs from 'qs';
 import riotRoute from 'riot-route';
 import sass from 'sass';
 
-const { CASE_TYPES_MAP, PARTY_TYPES } = applicationContext.getConstants();
+const {
+  ALLOWLIST_FEATURE_FLAGS,
+  CASE_TYPES_MAP,
+  PARTY_TYPES,
+  SERVICE_INDICATOR_TYPES,
+} = applicationContext.getConstants();
 
 const formattedDocketEntries = withAppContextDecorator(
   formattedDocketEntriesComputed,
@@ -361,12 +365,23 @@ export const setJudgeTitle = (judgeUserId, newJudgeTitle) => {
   });
 };
 
-export const setOrderSearchEnabled = (isEnabled, keyPrefix) => {
-  return client.put({
+export const setOrderSearchEnabled = async (isEnabled, keyPrefix) => {
+  return await setFeatureFlag(isEnabled, `${keyPrefix}-order-search-enabled`);
+};
+
+export const setConsolidatedCasesPropagateEntriesFlag = async isEnabled => {
+  return await setFeatureFlag(
+    isEnabled,
+    ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+  );
+};
+
+export const setFeatureFlag = async (isEnabled, key) => {
+  return await client.put({
     Item: {
       current: isEnabled,
-      pk: `${keyPrefix}-order-search-enabled`,
-      sk: `${keyPrefix}-order-search-enabled`,
+      pk: key,
+      sk: key,
     },
     applicationContext,
   });
@@ -427,6 +442,7 @@ export const serveDocument = async ({
   await cerebralTest.runSequence(
     'serveCourtIssuedDocumentFromDocketEntrySequence',
   );
+  await waitForLoadingComponentToHide({ cerebralTest });
 };
 
 export const createCourtIssuedDocketEntry = async ({
@@ -892,18 +908,30 @@ export const wait = time => {
   });
 };
 
+export const waitFor = async ({
+  booleanExpression,
+  maxWait = 10000,
+  refreshInterval = 500,
+}) => {
+  let waitTime = 0;
+  while (booleanExpression() && waitTime < maxWait) {
+    waitTime += refreshInterval;
+    await wait(refreshInterval);
+  }
+  return waitTime;
+};
+
 export const waitForLoadingComponentToHide = async ({
   cerebralTest,
   component = 'progressIndicator.waitingForResponse',
   maxWait = 30000,
   refreshInterval = 500,
 }) => {
-  let waitTime = 0;
-
-  while (cerebralTest.getState(component) && waitTime < maxWait) {
-    waitTime += refreshInterval;
-    await wait(refreshInterval);
-  }
+  const waitTime = await waitFor({
+    booleanExpression: () => cerebralTest.getState(component),
+    maxWait,
+    refreshInterval,
+  });
   console.log(`Waited ${waitTime}ms for the ${component} to hide`);
 };
 
@@ -913,15 +941,23 @@ export const waitForExpectedItem = async ({
   expectedItem,
   maxWait = 10000,
 }) => {
-  let waitTime = 0;
-  while (
-    cerebralTest.getState(currentItem) != expectedItem &&
-    waitTime < maxWait
-  ) {
-    waitTime += 500;
-    await wait(500);
-  }
+  const waitTime = await waitFor({
+    booleanExpression: () => cerebralTest.getState(currentItem) != expectedItem,
+    maxWait,
+  });
   console.log(`Waited ${waitTime}ms for ${expectedItem}`);
+};
+
+export const waitForExpectedItemToExist = async ({
+  cerebralTest,
+  currentItem,
+  maxWait = 10000,
+}) => {
+  const waitTime = await waitFor({
+    booleanExpression: () => !cerebralTest.getState(currentItem),
+    maxWait,
+  });
+  console.log(`Waited ${waitTime}ms for ${currentItem}`);
 };
 
 export const refreshElasticsearchIndex = async (time = 2000) => {

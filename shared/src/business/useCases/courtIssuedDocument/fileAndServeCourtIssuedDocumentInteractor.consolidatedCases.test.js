@@ -51,6 +51,12 @@ describe('consolidated cases', () => {
   let leadCaseDocketEntries;
   let consolidatedCase1DocketEntries;
 
+  beforeAll(() => {
+    applicationContext
+      .getNotificationGateway()
+      .sendNotificationToUser.mockReturnValue(null);
+  });
+
   beforeEach(() => {
     applicationContext
       .getUseCaseHelpers()
@@ -76,7 +82,7 @@ describe('consolidated cases', () => {
 
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValue(true);
+      .getFeatureFlagValueInteractor.mockReturnValue(Promise.resolve(true));
 
     leadCaseDocketEntries = [
       mockDocketEntryWithWorkItem,
@@ -135,25 +141,35 @@ describe('consolidated cases', () => {
       });
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
-    const result = await fileAndServeCourtIssuedDocumentInteractor(
-      applicationContext,
-      {
-        docketEntryId: leadCaseDocketEntries[0].docketEntryId,
-        docketNumbers: [
-          MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-          MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-        ],
-        form: leadCaseDocketEntries[0],
-        subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-      },
-    );
+  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser`', async () => {
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      docketEntryId: leadCaseDocketEntries[0].docketEntryId,
+      docketNumbers: [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ],
+      form: leadCaseDocketEntries[0],
+      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+    });
 
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
     ).toHaveBeenCalled();
-    expect(result.pdfUrl).toBe(mockPdfUrl);
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0],
+    ).toMatchObject({
+      message: expect.objectContaining({
+        action: 'file_and_serve_court_issued_document_complete',
+        alertSuccess: {
+          message: 'Document served to selected cases in group. ',
+          overwritable: false,
+        },
+        pdfUrl: mockPdfUrl,
+      }),
+    });
 
     expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
     expect(addDocketEntrySpy).toHaveBeenCalledTimes(2);
@@ -386,7 +402,9 @@ describe('consolidated cases', () => {
   it('should only process the subject case when the feature flag is disabled and there are other consolidated cases', async () => {
     applicationContext
       .getUseCases()
-      .getFeatureFlagValueInteractor.mockReturnValueOnce(false);
+      .getFeatureFlagValueInteractor.mockReturnValueOnce(
+        Promise.resolve(false),
+      );
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   applicationContext,
   testPdfDoc,
@@ -76,6 +77,10 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       .serveDocumentAndGetPaperServicePdf.mockReturnValue({
         pdfUrl: mockPdfUrl,
       });
+
+    applicationContext
+      .getNotificationGateway()
+      .sendNotificationToUser.mockReturnValue(null);
   });
 
   beforeEach(() => {
@@ -117,18 +122,14 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
           docketNumber: '101-20',
         },
       ],
-      createdAt: '2019-10-27T05:00:00.000Z',
-      gsi1pk: 'trial-session-catalog',
       isCalendared: true,
       judge: {
         name: 'Judge Colvin',
         userId: 'dabbad00-18d0-43ec-bafb-654e83405416',
       },
       maxCases: 100,
-      pk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       sessionType: 'Regular',
-      sk: 'trial-session|959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       startDate: '2019-11-27T05:00:00.000Z',
       startTime: '10:00',
       swingSession: true,
@@ -136,7 +137,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       term: 'Fall',
       termYear: '2019',
       trialLocation: 'Houston, Texas',
-      trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
     };
 
     applicationContext
@@ -337,21 +337,30 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toBeCalled();
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser`', async () => {
     caseRecord.petitioners[0].serviceIndicator =
       SERVICE_INDICATOR_TYPES.SI_PAPER;
 
-    const result = await fileAndServeCourtIssuedDocumentInteractor(
-      applicationContext,
-      {
-        docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        form: caseRecord.docketEntries[0],
-        subjectCaseDocketNumber: caseRecord.docketNumber,
-      },
-    );
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      docketEntryId: caseRecord.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      form: caseRecord.docketEntries[0],
+      subjectCaseDocketNumber: caseRecord.docketNumber,
+    });
 
-    expect(result.pdfUrl).toBe(mockPdfUrl);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0],
+    ).toMatchObject({
+      message: expect.objectContaining({
+        action: 'file_and_serve_court_issued_document_complete',
+        alertSuccess: {
+          message: 'Document served. ',
+          overwritable: false,
+        },
+        pdfUrl: mockPdfUrl,
+      }),
+    });
   });
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
