@@ -1,4 +1,5 @@
 const { formatNow } = require('../utilities/DateHandler');
+const { MOTION_STATUSES } = require('./EntityConstants');
 const { Stamp } = require('./Stamp');
 
 const { VALIDATION_ERROR_MESSAGES } = Stamp;
@@ -17,7 +18,7 @@ describe('Stamp entity', () => {
       const stamp = new Stamp({
         date: '2019-12-05T00:00:00.000-05:00',
         dueDateMessage: 'something',
-        status: 'Granted',
+        status: MOTION_STATUSES.GRANTED,
       });
 
       expect(stamp.getFormattedValidationErrors()).toMatchObject({
@@ -29,7 +30,7 @@ describe('Stamp entity', () => {
       const stamp = new Stamp({
         date: undefined,
         dueDateMessage: 'something',
-        status: 'Granted',
+        status: MOTION_STATUSES.GRANTED,
       });
 
       expect(stamp.getFormattedValidationErrors()).toMatchObject({
@@ -41,7 +42,7 @@ describe('Stamp entity', () => {
       const stamp = new Stamp({
         date: '2222-12-05T00:00:00.000-05:00',
         dueDateMessage: 'something',
-        status: 'Granted',
+        status: MOTION_STATUSES.GRANTED,
       });
 
       expect(stamp.getFormattedValidationErrors()).toBeNull();
@@ -53,7 +54,7 @@ describe('Stamp entity', () => {
       const stamp = new Stamp({
         date: mockToday,
         dueDateMessage: 'something',
-        status: 'Granted',
+        status: MOTION_STATUSES.GRANTED,
       });
 
       expect(stamp.getFormattedValidationErrors()).toBeNull();

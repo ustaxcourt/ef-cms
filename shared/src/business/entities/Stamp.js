@@ -10,6 +10,7 @@ const {
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
+const { MOTION_STATUSES } = require('./EntityConstants');
 
 const yesterdayISO = calculateISODate({ howMuch: -1, units: 'days' });
 const yesterdayFormatted = formatDateString(
@@ -56,7 +57,7 @@ Stamp.schema = joi.object().keys({
       ),
   }),
   dueDateMessage: joi.optional().allow(null),
-  status: JoiValidationConstants.STRING.valid('Granted', 'Denied')
+  status: JoiValidationConstants.STRING.valid(...Object.values(MOTION_STATUSES))
     .description('Approval status of the motion')
     .required(),
 });
