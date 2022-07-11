@@ -56,9 +56,9 @@ Stamp.schema = joi.object().keys({
       ),
   }),
   dueDateMessage: joi.optional().allow(null),
-  status: JoiValidationConstants.STRING.required()
-    .valid('Granted', 'Denied')
-    .description('Approval status of the motion'),
+  status: JoiValidationConstants.STRING.valid('Granted', 'Denied')
+    .description('Approval status of the motion')
+    .required(),
 });
 
 joiValidationDecorator(Stamp, Stamp.schema, Stamp.VALIDATION_ERROR_MESSAGES);
