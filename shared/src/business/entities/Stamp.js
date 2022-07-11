@@ -1,10 +1,21 @@
 const joi = require('joi');
 const {
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} = require('../utilities/DateHandler');
+const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 
+const yesterdayISO = calculateISODate({ howMuch: -1, units: 'days' });
+const yesterdayFormatted = formatDateString(
+  createISODateString(yesterdayISO),
+  FORMATS.MMDDYYYY,
+);
 /**
  * constructor
  *
@@ -38,7 +49,7 @@ Stamp.schema = joi.object().keys({
   date: joi.when('dueDateMessage', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
-    then: JoiValidationConstants.ISO_DATE.min('now')
+    then: JoiValidationConstants.ISO_DATE.min(yesterdayFormatted)
       .required()
       .description(
         'The due date of the status report (or proposed stipulated decision) filing',
