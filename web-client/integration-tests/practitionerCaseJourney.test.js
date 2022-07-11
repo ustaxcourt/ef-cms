@@ -24,6 +24,7 @@ import { practitionerRequestsAccessToCase } from './journey/practitionerRequests
 import { practitionerRequestsPendingAccessToCase } from './journey/practitionerRequestsPendingAccessToCase';
 import { practitionerSearchesForCase } from './journey/practitionerSearchesForCase';
 import { practitionerSearchesForNonexistentCase } from './journey/practitionerSearchesForNonexistentCase';
+import { practitionerSearchesForUnassociatedSealedCase } from './journey/practitionerSearchesForUnassociatedSealedCase';
 import { practitionerViewsCaseDetail } from './journey/practitionerViewsCaseDetail';
 import { practitionerViewsCaseDetailOfOwnedCase } from './journey/practitionerViewsCaseDetailOfOwnedCase';
 import { practitionerViewsCaseDetailOfPendingCase } from './journey/practitionerViewsCaseDetailOfPendingCase';
@@ -221,4 +222,7 @@ describe('Practitioner requests access to case', () => {
   docketClerkSealsCase(cerebralTest);
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   irsPractitionerViewsPetitionerInfoForUnassociatedCase(cerebralTest, true); // passing flag for isSealed
+
+  loginAs(cerebralTest, 'privatePractitioner3@example.com');
+  practitionerSearchesForUnassociatedSealedCase(cerebralTest);
 });
