@@ -81,6 +81,7 @@ describe('confirmInitiateServiceModalHelper', () => {
 
     expect(result).toEqual({
       caseOrGroup: 'case',
+      confirmationText: 'The following document will be served on all parties:',
       contactsNeedingPaperService: [
         {
           name: 'Ms. Respondent Counsel, Respondent Counsel',
@@ -124,6 +125,7 @@ describe('confirmInitiateServiceModalHelper', () => {
 
     expect(result).toEqual({
       caseOrGroup: 'case',
+      confirmationText: 'The following document will be served on all parties:',
       contactsNeedingPaperService: [],
       showPaperAlert: false,
     });
@@ -214,6 +216,9 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('case');
+      expect(result.confirmationText).toEqual(
+        'The following document will be served on all parties in selected cases:',
+      );
       expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
@@ -242,6 +247,9 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       expect(result.contactsNeedingPaperService.length).toEqual(4);
       expect(result.caseOrGroup).toEqual('group');
+      expect(result.confirmationText).toEqual(
+        'The following document will be served on all parties in selected cases:',
+      );
       expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
