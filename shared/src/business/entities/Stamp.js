@@ -29,21 +29,22 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
       contains: 'must be greater than or equal to',
       message: 'Due date cannot be prior to today. Enter a valid date.',
     },
+    'Enter a valid date',
   ],
-  status: 'Status is required.',
+  status: 'Enter a status',
 };
 
 Stamp.schema = joi.object().keys({
   date: joi.when('dueDateMessage', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
-    then: JoiValidationConstants.DATE.min('now')
+    then: JoiValidationConstants.ISO_DATE.min('now')
       .required()
-      .allow(null)
       .description(
         'The due date of the status report (or proposed stipulated decision) filing',
       ),
   }),
+  dueDateMessage: joi.optional().allow(null),
   status: JoiValidationConstants.STRING.required()
     .valid('Granted', 'Denied')
     .description('Approval status of the motion'),

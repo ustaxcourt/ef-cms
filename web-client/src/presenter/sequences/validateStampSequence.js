@@ -1,22 +1,21 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFormDateAction } from '../actions/setFormDateAction';
+import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { shouldValidateAction } from '../actions/shouldValidateAction';
 import { validateStampAction } from '../actions/ApplyStamp/validateStampAction';
 
 export const validateStampSequence = [
-  shouldValidateAction,
+  getComputedFormDateFactoryAction(null),
+  setFormDateAction,
+  validateStampAction,
   {
-    ignore: [],
-    validate: [
-      getComputedFormDateFactoryAction(null),
-      setFormDateAction,
-      validateStampAction,
-      {
-        error: [setValidationErrorsAction],
-        success: [clearAlertsAction],
-      },
+    error: [
+      setAlertErrorAction,
+      setValidationErrorsAction,
+      setValidationAlertErrorsAction,
     ],
+    success: [clearAlertsAction],
   },
 ];

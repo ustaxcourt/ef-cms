@@ -172,10 +172,9 @@ export const ApplyStamp = connect(
     return (
       <>
         <CaseDetailHeader />
+        <ErrorNotification />
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            <ErrorNotification />
-
             <h1 className="heading-1" id="page-title">
               Apply Stamp
             </h1>
@@ -378,6 +377,12 @@ export const ApplyStamp = connect(
                             form.dueDateMessage !==
                             'The parties shall file a status report by'
                           }
+                          errorText={
+                            form.dueDateMessage ===
+                            'The parties shall file a status report by'
+                              ? validationErrors.date
+                              : null
+                          }
                           id="due-date-input-statusReportDueDate"
                           minDate={applyStampFormHelper.minDate}
                           names={{
@@ -438,6 +443,12 @@ export const ApplyStamp = connect(
                           disabled={
                             form.dueDateMessage !==
                             'The parties shall file a status report or proposed stipulated decision by'
+                          }
+                          errorText={
+                            form.dueDateMessage ===
+                            'The parties shall file a status report or proposed stipulated decision by'
+                              ? validationErrors.date
+                              : null
                           }
                           id="due-date-input-statusReportOrStipDecisionDueDate"
                           minDate={applyStampFormHelper.minDate}
