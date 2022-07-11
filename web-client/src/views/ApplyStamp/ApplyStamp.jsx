@@ -172,8 +172,8 @@ export const ApplyStamp = connect(
     return (
       <>
         <CaseDetailHeader />
-        <ErrorNotification />
         <div className="grid-container">
+          <ErrorNotification />
           <div className="grid-row grid-gap">
             <h1 className="heading-1" id="page-title">
               Apply Stamp
