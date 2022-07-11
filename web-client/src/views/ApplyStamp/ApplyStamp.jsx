@@ -344,7 +344,16 @@ export const ApplyStamp = connect(
                   </FormGroup>
                   <hr className="narrow-hr" />
                   <FormGroup className="stamp-form-group">
-                    <div className="usa-radio" key="statusReportDueDate">
+                    <div
+                      className="usa-radio"
+                      errorText={
+                        form.dueDateMessage ===
+                        'The parties shall file a status report by'
+                          ? validationErrors.date
+                          : null
+                      }
+                      key="statusReportDueDate"
+                    >
                       <input
                         aria-describedby="dueDateMessage"
                         checked={
@@ -377,12 +386,6 @@ export const ApplyStamp = connect(
                             form.dueDateMessage !==
                             'The parties shall file a status report by'
                           }
-                          errorText={
-                            form.dueDateMessage ===
-                            'The parties shall file a status report by'
-                              ? validationErrors.date
-                              : null
-                          }
                           id="due-date-input-statusReportDueDate"
                           minDate={applyStampFormHelper.minDate}
                           names={{
@@ -409,6 +412,12 @@ export const ApplyStamp = connect(
                     </div>
                     <div
                       className="usa-radio"
+                      errorText={
+                        form.dueDateMessage ===
+                        'The parties shall file a status report or proposed stipulated decision by'
+                          ? validationErrors.date
+                          : null
+                      }
                       key="statusReportOrStipDecisionDueDate"
                     >
                       <input
@@ -443,12 +452,6 @@ export const ApplyStamp = connect(
                           disabled={
                             form.dueDateMessage !==
                             'The parties shall file a status report or proposed stipulated decision by'
-                          }
-                          errorText={
-                            form.dueDateMessage ===
-                            'The parties shall file a status report or proposed stipulated decision by'
-                              ? validationErrors.date
-                              : null
                           }
                           id="due-date-input-statusReportOrStipDecisionDueDate"
                           minDate={applyStampFormHelper.minDate}
