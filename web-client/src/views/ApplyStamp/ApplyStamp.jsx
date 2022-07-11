@@ -347,17 +347,15 @@ export const ApplyStamp = connect(
                     )}
                   </FormGroup>
                   <hr className="narrow-hr" />
-                  <FormGroup className="stamp-form-group">
-                    <div
-                      className="usa-radio"
-                      errorText={
-                        form.dueDateMessage ===
-                        'The parties shall file a status report by'
-                          ? validationErrors.date
-                          : null
-                      }
-                      key="statusReportDueDate"
-                    >
+                  <FormGroup
+                    className={
+                      !validationErrors.status
+                        ? 'stamp-form-group'
+                        : 'stamp-form-group-error'
+                    }
+                    errorText={validationErrors.date}
+                  >
+                    <div className="usa-radio" key="statusReportDueDate">
                       <input
                         aria-describedby="dueDateMessage"
                         checked={
@@ -416,12 +414,6 @@ export const ApplyStamp = connect(
                     </div>
                     <div
                       className="usa-radio"
-                      errorText={
-                        form.dueDateMessage ===
-                        'The parties shall file a status report or proposed stipulated decision by'
-                          ? validationErrors.date
-                          : null
-                      }
                       key="statusReportOrStipDecisionDueDate"
                     >
                       <input
