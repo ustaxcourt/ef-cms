@@ -43,9 +43,11 @@ resource "aws_s3_bucket_policy" "allow_access_for_glue_job" {
 
 data "aws_iam_policy_document" "allow_access_for_glue_job" {
   statement {
+    sid = "DelegateS3Access"
+
     principals {
       type        = "AWS"
-      identifiers = ["arn:aws:iam::${var.prod_env_account_id}:root"]
+      identifiers = ["arn:aws:iam::${var.lower_env_account_id}:root"]
     }
 
     actions = [
