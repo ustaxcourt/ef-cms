@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+const { post } = require('../requests');
 
 /**
  * getUserCaseNoteForCasesInteractor
@@ -12,8 +12,9 @@ exports.getUserCaseNoteForCasesInteractor = (
   applicationContext,
   { docketNumbers },
 ) => {
-  return get({
+  return post({
     applicationContext,
-    endpoint: `/case-notes/batch-cases/${docketNumbers.join(',')}/user-notes`,
+    body: docketNumbers,
+    endpoint: '/case-notes/batch-cases/user-notes',
   });
 };
