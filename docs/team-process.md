@@ -168,3 +168,4 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - `broadcast-channel`: temporily locked to 4.12.0. The minor update to 4.13.0 introduces a breaking change to how esbrowser function processes the browser alias of process module. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35774/workflows/ea7e7274-b979-4ee4-b7ff-edee692117f2/jobs/228087) for more information about memory leakage in cypress as well.
 
+- `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. ajv is a tranisitive dependeny of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/7286153454?check_suite_focus=true) to failing test on 07/04 dependency updates.
