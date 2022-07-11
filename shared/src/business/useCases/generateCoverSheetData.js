@@ -120,8 +120,8 @@ exports.generateCoverSheetData = async ({
           Case.getSortableDocketNumber(a.docketNumber) -
           Case.getSortableDocketNumber(b.docketNumber),
       );
-      coverSheetData.consolidatedCases = consolidatedCases.map(
-        consolidatedCase => ({
+      coverSheetData.consolidatedCases = consolidatedCases
+        .map(consolidatedCase => ({
           docketNumber: consolidatedCase.docketNumber,
           documentNumber: (
             consolidatedCase.docketEntries.find(
@@ -129,8 +129,10 @@ exports.generateCoverSheetData = async ({
                 docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
             ) || {}
           ).index,
-        }),
-      );
+        }))
+        .filter(
+          consolidatedCase => consolidatedCase.documentNumber !== undefined,
+        );
     }
   }
 
