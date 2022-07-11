@@ -28,6 +28,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let mockTrialSession;
 
   const mockPdfUrl = 'www.example.com';
+  const clientConnectionId = 'ABC123';
   const mockWorkItem = {
     docketNumber: MOCK_CASE.docketNumber,
     section: DOCKET_SECTION,
@@ -167,12 +168,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        documentMeta: {
-          docketEntryId: caseRecord.docketEntries[1].docketEntryId,
-          docketNumbers: [caseRecord.docketNumber],
-          documentType: 'Memorandum in Support',
-          subjectCaseDocketNumber: caseRecord.docketNumber,
-        },
+        clientConnectionId,
+        docketEntryId: caseRecord.docketEntries[1].docketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        documentType: 'Memorandum in Support',
+        subjectCaseDocketNumber: caseRecord.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -180,6 +180,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   it('should throw an error if the document is not found on the case', async () => {
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bd',
         docketNumbers: [caseRecord.docketNumber],
         form: {
@@ -195,6 +196,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId: caseRecord.docketEntries[1].docketEntryId,
         docketNumbers: [caseRecord.docketNumber],
         form: {
@@ -233,6 +235,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should set the number of pages present in the document to be served', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[0],
@@ -258,6 +261,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[1].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[1],
@@ -287,6 +291,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
@@ -306,6 +311,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     caseRecord.trialDate = '2019-03-01T21:40:46.415Z';
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
@@ -337,11 +343,12 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toBeCalled();
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser`', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser` along with the `clientConnectionId`', async () => {
     caseRecord.petitioners[0].serviceIndicator =
       SERVICE_INDICATOR_TYPES.SI_PAPER;
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[0],
@@ -351,7 +358,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0],
-    ).toMatchObject({
+    ).toEqual({
+      applicationContext: expect.anything(),
+      clientConnectionId,
       message: expect.objectContaining({
         action: 'file_and_serve_court_issued_document_complete',
         alertSuccess: {
@@ -360,11 +369,13 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         },
         pdfUrl: mockPdfUrl,
       }),
+      userId: docketClerkUser.userId,
     });
   });
 
   it('should call updateCase with the docket entry set as pending if the document is a tracked document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[1].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[1],
@@ -387,6 +398,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should set isDraft to false on a document when creating a court issued docket entry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[2].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[2],
@@ -404,6 +416,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should update the work item and set as completed when a work item previously existed on the docket entry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
       docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
       form: mockDocketEntryWithWorkItem,
@@ -443,6 +456,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   docketEntriesWithCaseClosingEventCodes.forEach(docketEntry => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumbers: [caseRecord.docketNumber],
         form: {
@@ -466,6 +480,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should use original case caption to create case title when creating work item', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[1].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[1],
@@ -495,6 +510,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumbers: [caseRecord.docketNumber],
         form: caseRecord.docketEntries[0],
@@ -526,6 +542,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     docketEntry.isPendingService = false;
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: docketEntry.docketEntryId,
       docketNumbers: [docketEntry.docketNumber],
       form: docketEntry,
@@ -555,6 +572,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should include `Entered and Served` in the serviceStampType when the eventCode is in ENTERED_AND_SERVED_EVENT_CODES', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: {

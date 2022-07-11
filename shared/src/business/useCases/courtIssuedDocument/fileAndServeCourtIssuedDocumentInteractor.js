@@ -37,7 +37,13 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  { docketEntryId, docketNumbers, form, subjectCaseDocketNumber },
+  {
+    clientConnectionId,
+    docketEntryId,
+    docketNumbers,
+    form,
+    subjectCaseDocketNumber,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -193,9 +199,9 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
       ? 'Document served to selected cases in group. '
       : 'Document served. ';
 
-  // return serviceResults;
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
+    clientConnectionId,
     message: {
       action: 'file_and_serve_court_issued_document_complete',
       alertSuccess: {

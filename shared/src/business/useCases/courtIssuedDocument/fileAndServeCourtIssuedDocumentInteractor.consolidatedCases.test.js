@@ -46,6 +46,8 @@ describe('consolidated cases', () => {
     workItem: mockWorkItem,
   };
 
+  const clientConnectionId = 'ABC123';
+
   let updateDocketEntrySpy;
   let addDocketEntrySpy;
   let leadCaseDocketEntries;
@@ -80,6 +82,7 @@ describe('consolidated cases', () => {
       }),
     });
 
+    // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
     applicationContext
       .getUseCases()
       .getFeatureFlagValueInteractor.mockReturnValue(Promise.resolve(true));
@@ -141,8 +144,9 @@ describe('consolidated cases', () => {
       });
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser`', async () => {
+  it('should call serveDocumentAndGetPaperServicePdf and pass the resulting url and success message to `sendNotificationToUser` along with the `clientConnectionId`', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -160,7 +164,9 @@ describe('consolidated cases', () => {
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0],
-    ).toMatchObject({
+    ).toEqual({
+      applicationContext: expect.anything(),
+      clientConnectionId,
       message: expect.objectContaining({
         action: 'file_and_serve_court_issued_document_complete',
         alertSuccess: {
@@ -169,6 +175,7 @@ describe('consolidated cases', () => {
         },
         pdfUrl: mockPdfUrl,
       }),
+      userId: docketClerkUser.userId,
     });
 
     expect(updateDocketEntrySpy).toHaveBeenCalledTimes(1);
@@ -233,6 +240,7 @@ describe('consolidated cases', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId: leadCaseDocketEntries[0].docketEntryId,
         docketNumbers: [
           MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -281,6 +289,7 @@ describe('consolidated cases', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId: leadCaseDocketEntries[0].docketEntryId,
         docketNumbers: [
           MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -319,6 +328,7 @@ describe('consolidated cases', () => {
       });
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: customLeadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -345,6 +355,7 @@ describe('consolidated cases', () => {
 
   it('should create a work item and add it to the outbox for each case', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -384,6 +395,7 @@ describe('consolidated cases', () => {
 
   it('should create a single source of truth for the document by saving only one copy', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -399,6 +411,7 @@ describe('consolidated cases', () => {
     ).toBeCalledTimes(1);
   });
 
+  // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
   it('should only process the subject case when the feature flag is disabled and there are other consolidated cases', async () => {
     applicationContext
       .getUseCases()
@@ -407,6 +420,7 @@ describe('consolidated cases', () => {
       );
 
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: leadCaseDocketEntries[0].docketEntryId,
       docketNumbers: [
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,

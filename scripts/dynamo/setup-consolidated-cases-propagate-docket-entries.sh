@@ -3,7 +3,7 @@
 # Sets the consolidated case docket entry duplication enabled flag to "false" in the dynamo deploy table
 
 # Usage
-#   ENV=dev ./setup-consolidated-cases-propagate-docket-entries.sh
+#   ENV=dev ./scripts/dynamo/setup-consolidated-cases-propagate-docket-entries.sh
 
 ./check-env-variables.sh \
   "ENV" \
