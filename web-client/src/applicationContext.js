@@ -53,6 +53,7 @@ import { getFeatureFlagValueInteractor } from '../../shared/src/proxies/featureF
 import { getIsFeatureEnabled } from '../../shared/src/business/utilities/getIsFeatureEnabled';
 import { getMaintenanceModeInteractor } from '../../shared/src/proxies/maintenance/getMaintenanceModeProxy';
 import { getStampBoxCoordinates } from '../../shared/src/business/utilities/getStampBoxCoordinates';
+import { getStandaloneRemoteDocumentTitle } from '../../shared/src/business/utilities/getStandaloneRemoteDocumentTitle';
 import { getUserPendingEmailStatusInteractor } from '../../shared/src/proxies/users/getUserPendingEmailStatusProxy';
 import { isStandaloneRemoteSession } from '../../shared/src/business/entities/trialSessions/TrialSession';
 import { setupPdfDocument } from '../../shared/src/business/utilities/setupPdfDocument';
@@ -712,6 +713,7 @@ const applicationContext = {
       getSealedDocketEntryTooltip,
       getServedPartiesCode,
       getStampBoxCoordinates,
+      getStandaloneRemoteDocumentTitle,
       getTrialSessionStatus,
       getWorkQueueFilters,
       hasPartyWithServiceType,
