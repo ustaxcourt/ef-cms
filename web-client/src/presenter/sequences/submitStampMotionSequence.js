@@ -11,7 +11,7 @@ import { setSuccessfulStampFromDocumentTitleAction } from '../actions/setSuccess
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
-import { validateStampAction } from '../actions/ApplyStamp/validateStampAction';
+import { validateStampAction } from '../actions/StampMotion/validateStampAction';
 
 export const submitStampMotionSequence = [
   // this is still WIP until the next PR
