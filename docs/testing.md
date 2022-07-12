@@ -127,27 +127,72 @@ describe('admissions clerk practitioner journey', () => {
 
 ?> Try to keep the journey functions small and reusable by other tests in the future if needed. 
 
+## Cypress Tests
 
-## Smoke Tests
+Cypress is a great tool for writing and running end-to-end tests against web interfaces. By default, Cypress leverages headless instances of browsers, meaning that they do not run in a visual window.
+
+### NPM Scripts
+
+The following is the complete list of commands useful in running the Cypress scripts we've defined:
+
+- `npm run cypress:integration:open`
+- `npm run cypress:integration:public`
+- `npm run cypress:integration`
+- `npm run cypress:readonly:open`
+- `npm run cypress:readonly:public:open`
+- `npm run cypress:readonly:public:open:local`
+- `npm run cypress:readonly:public`
+- `npm run cypress:readonly`
+- `npm run cypress:smoketests:local`
+- `npm run cypress:smoketests:open:local`
+- `npm run cypress:smoketests:open`
+- `npm run cypress:smoketests`
+
+?> NOTE:\
+?> The `ENV` environment variable and AWS Credentials must be exported in your shell to run many of these scripts successfully.
+
+?> NOTE:\
+?> Tests run against the deployed environment by default are run against the `DEPLOYING_COLOR` as these tests exist to ensure the CI process does not deploy broken code.
+
+#### Integration
+
+The scripts containing the word `integration` run tests that rely on no externally running resources. They do require local instances of the API and data stores, as well as the client under test. Refer to the [Integration Testing](#integration-testing) section for further details.
+
+#### Smoketests
 
 Testing all our functionality locally is a good way to catch bugs, but often when we deploy all our code to AWS, stuff is misconfigured which causes things to break.  For this reason, we have a variety of smoketests written in Cypress to make sure a user can at least click through the UI and run a couple of key pieces of functionality.
 
-The scripts we use for running smoketests include the following:
+The scripts containing the words `smoketests` run tests that rely on externally running resources, some of which may persist data or modify persisted data.
 
-- `npm run cypress:smoketests`
-- `npm run cypress:readonly:public`
-- `npm run cypress:readonly:public`
+#### Readonly
 
-### Cypress Information
+The scripts containing the word `readonly` run special smoketests that rely on externally running resources, but do not call any endpoints that persist data or modify persisted data.
 
-Cypress is a great tool for writing and running end-to-end tests against web interfaces.  The Cypress CLI runner also provides a useful `open` command which will load a chromium instance locally which developers can use to watch the smoketests click through the UI and rewind history.  You can try running the smoketests against a deployed environment or locally using the following commands:
+#### Open
 
-- `npm run cypress:integration:open`
-- `npm run cypress:readonly:open`
-- `npm run cypress:readonly:public:open`
-- `npm run cypress:smoketests:open:local`
+The Cypress CLI runner also provides a useful `open` command which will load a browser instance locally which developers can use to watch the tests click through the UI and rewind history.
 
+#### Public
 
+The scripts containing the word `public` run tests against the public client.
+
+#### Local
+
+Many of the Cypress tests may be run against the locally running resources. 
+
+?> NOTE:\
+?> This is not needed for `integration` tests because they only run against locally running resources.
+
+### Manual Runs
+
+Rather than running using the pre-defined NPM scripts, you may want to try a  different combination of options. This can be done by running `./scripts/run-cypress.sh` with options. There is a help function available to describe the options available. It can be run with the following command:
+
+```shell
+./scripts/run-cypress.sh -h
+```
+
+?> NOTE:\
+?> Not all options are compatible and no guarantee exists that any particular run of this shell script will represent a valid test. Care should be taken to ensure the options chosen are valid before defining a new NPM script intended to be run by CI. 
 
 ## Testing Matrix
 
@@ -170,7 +215,7 @@ To run the performance tests, you can run one of the following:
 - `npm run test:performance` (runs the ./artillery/private-app.yml file)
 - `npm run test:performance:order` (runs the ./artillery/private-advanced-order.yml file)
 
-
+Each lower environment's ElasticSearch cluster indices' replica count is 0.  If you want to performance test these lower environments, set the `OVERRIDE_ES_NUMBER_OF_REPLICAS` to the production count in AWS Secrets Manager and redeploy the environment beforehand.
 
 ## Testing / Coverage Tips
 

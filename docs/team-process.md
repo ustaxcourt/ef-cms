@@ -155,7 +155,6 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
 
-- `pdfjs-dist`: temporarily locked to 2.12.313 as v2.13.216 causes issues with pdf rendering in cypress tests
 - `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages: 
     - `@fortawesome/free-solid-svg-icons`
     - `@fortawesome/free-regular-svg-icons`
@@ -163,11 +162,10 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - `@babel/core`: temporarily locked to ^7.17.12. With ^7.18.2, memory usage is exceeding the large Docker resource. Some performance updates noted in [devex-1068](https://trello.com/c/wCW5emlA/1068-reduce-memory-usage-on-deploying-web-client-s3), which helped some, but not consistently passing the client build. 
 
-- `@faker-js/faker`: temporarily locked to ^6.3.1 as updating to ^7.x.x is causing Webpack compilation errors on running cypress. This is possibly because faker is now using mjs and webpack isn't supporting that out of the box. There's still a lot of active discussion on faker's [discord](https://discord.com/channels/929487054990110771/929544565348777984). Cypress [open issue](https://github.com/cypress-io/cypress/issues/21874), Faker [release notes](https://github.com/faker-js/faker/releases#:~:text=Compare-,v7.1.0,-Latest)
-
 - It'd be good to keep an eye on `s3rver` for when it exceeds 3.7.1. We have a patch in place for called `s3rver+3.7.1.patch` in order to address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible.
 
--`puppeteer` and `puppeteer-core`: temporily locked to 14.1.x and its respective patches. The minor update to 14.3.0 causes jest timeout issues. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35766/workflows/4f92d2a3-b923-4f9b-8e22-e4c54d69f95b/jobs/228023).
+-`puppeteer` and `puppeteer-core`: temporily locked to 14.1.x and its respective patches. The major update to 15.3.1 causes jest timeout issues as well as issues with prototype property using Chromium. Causes Cypress test failures as well. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/36266/workflows/bdd41d67-c752-40fd-b9ec-4ed36ae72853). 
 
--`broadcast-channel`: temporily locked to 4.12.0. The minor update to 4.13.0 introduces a breaking change to how esbrowser function processes the browser alias of process module. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35774/workflows/ea7e7274-b979-4ee4-b7ff-edee692117f2/jobs/228087) for more information about memory leakage in cypress as well.
+- `broadcast-channel`: temporily locked to 4.12.0. The minor update to 4.13.0 introduces a breaking change to how esbrowser function processes the browser alias of process module. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35774/workflows/ea7e7274-b979-4ee4-b7ff-edee692117f2/jobs/228087) for more information about memory leakage in cypress as well.
 
+- `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. ajv is a tranisitive dependeny of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/7286153454?check_suite_focus=true) to failing test on 07/04 dependency updates.
