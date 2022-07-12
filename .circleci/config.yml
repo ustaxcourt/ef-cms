@@ -7,10 +7,10 @@ commands:
     steps:
       - restore_cache:
           keys:
-            - v20-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v21-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - restore_cache:
           keys:
-            - v20-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v21-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -32,18 +32,18 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v20-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v21-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
       - save_cache:
-          key: v20-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v21-cypress-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - ~/.cache/Cypress
   npm-install:
     steps:
       - restore_cache:
           keys:
-            - v20-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+            - v21-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
       - run:
           name: Install node dependencies
           command: |
@@ -56,14 +56,14 @@ commands:
           name: Reset package-lock
           command: 'git checkout -- package-lock.json'
       - save_cache:
-          key: v20-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
+          key: v21-npm-{{ checksum "package.json" }}-{{ checksum "package-lock.json" }}
           paths:
             - node_modules
 
 jobs:
   build-client-integration:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -113,7 +113,7 @@ jobs:
 
   verify-pdfs:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -129,7 +129,7 @@ jobs:
 
   e2e-pa11y:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -179,7 +179,7 @@ jobs:
 
   e2e-pa11y-public:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -224,7 +224,7 @@ jobs:
 
   e2e-pa11y-public-search:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -269,7 +269,7 @@ jobs:
 
   e2e-cypress:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -314,7 +314,7 @@ jobs:
 
   e2e-cypress-smoketests-local:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -363,7 +363,7 @@ jobs:
 
   e2e-cypress-public:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -413,11 +413,11 @@ jobs:
 
   deploy:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
-    resource_class: large # medium+ makes the webpack build very slow
+    resource_class: xlarge # this should be temporary until we improve memory usage of 'Deploy - Web Client - S3'
     steps:
       - git-shallow-clone/checkout
       - npm-install
@@ -462,6 +462,7 @@ jobs:
       - run:
           name: Setup Elasticsearch Index Settings
           command: |
+            . ./scripts/load-environment-from-secrets.sh
             ./web-api/setup-elasticsearch-index.sh $ENV
       - run:
           name: Admin User Setup
@@ -547,7 +548,7 @@ jobs:
 
   reindex:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -583,7 +584,7 @@ jobs:
 
   migrate:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -597,6 +598,7 @@ jobs:
             cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+            echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
             echo "export SOURCE_TABLE=$(./scripts/dynamo/get-source-table.sh $ENV)" >> $BASH_ENV
@@ -648,7 +650,7 @@ jobs:
 
   disable-reindex-cron:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -669,7 +671,7 @@ jobs:
 
   smoketests:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -700,7 +702,7 @@ jobs:
 
   smoketests-readonly:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -741,7 +743,7 @@ jobs:
 
   switch-colors:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -763,7 +765,7 @@ jobs:
 
   backup-source-dynamo-table:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -787,7 +789,7 @@ jobs:
 
   delete-api-mappings:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
@@ -808,7 +810,7 @@ jobs:
 
   cleanup:
     docker:
-      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:1.6.0
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.0.0
         aws_auth:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
