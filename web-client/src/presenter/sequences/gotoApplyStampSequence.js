@@ -1,5 +1,5 @@
 import { clearFormAction } from '../actions/clearFormAction';
-import { clearPDFStampDataAction } from '../actions/ApplyStamp/clearPDFStampDataAction';
+import { clearPDFStampDataAction } from '../actions/StampMotion/clearPDFStampDataAction';
 import { getCaseAction } from '../actions/getCaseAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';

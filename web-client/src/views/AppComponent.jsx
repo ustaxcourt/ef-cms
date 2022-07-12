@@ -7,7 +7,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { AppMaintenance } from './AppMaintenance';
 import { AppMaintenanceModal } from './AppMaintenanceModal';
-import { ApplyStamp } from './ApplyStamp/ApplyStamp';
+import { ApplyStamp } from './StampMotion/ApplyStamp';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';

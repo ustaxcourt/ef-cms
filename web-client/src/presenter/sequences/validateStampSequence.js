@@ -4,7 +4,7 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setFormDateAction } from '../actions/setFormDateAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { validateStampAction } from '../actions/ApplyStamp/validateStampAction';
+import { validateStampAction } from '../actions/StampMotion/validateStampAction';
 
 export const validateStampSequence = [
   getComputedFormDateFactoryAction(null),

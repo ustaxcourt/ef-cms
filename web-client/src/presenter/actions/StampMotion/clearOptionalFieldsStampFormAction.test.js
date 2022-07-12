@@ -1,4 +1,4 @@
-import { clearOptionalFieldsStampFormAction } from '../ApplyStamp/clearOptionalFieldsStampFormAction';
+import { clearOptionalFieldsStampFormAction } from '../StampMotion/clearOptionalFieldsStampFormAction';
 import { runAction } from 'cerebral/test';
 
 describe('clearOptionalFieldsStampFormAction', () => {
