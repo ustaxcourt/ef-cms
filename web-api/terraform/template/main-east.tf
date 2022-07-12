@@ -38,6 +38,7 @@ data "archive_file" "zip_triggers" {
     "api-public.js",
     "websockets.js",
     "maintenance-notify.js",
+    "trial-session.js",
     "cron.js",
     "streams.js",
     "cognito-authorizer.js",
