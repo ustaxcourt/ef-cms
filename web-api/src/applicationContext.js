@@ -1870,7 +1870,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getPdfJs: () => {
       const pdfjsLib = require('pdfjs-dist/legacy/build/pdf');
       pdfjsLib.GlobalWorkerOptions.workerSrc = './pdf.worker.js';
-
       return pdfjsLib;
     },
     getPdfLib: () => {
