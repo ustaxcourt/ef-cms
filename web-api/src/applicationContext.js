@@ -1317,11 +1317,14 @@ const {
   CognitoIdentityServiceProvider,
   DynamoDB,
   EnvironmentCredentials,
+  Lambda,
   S3,
   SES,
   SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
+
+const lambda = new Lambda();
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -2198,6 +2201,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setupPdfDocument,
         uploadToS3,
       };
+    },
+    invokeLambda: (params, cb) => {
+      // TODO: maybe see if this has a .promise method
+      lambda.invoke(params, cb);
     },
     isAuthorized,
     isCurrentColorActive,

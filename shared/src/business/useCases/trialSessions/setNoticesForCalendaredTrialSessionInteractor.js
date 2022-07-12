@@ -421,34 +421,51 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
 
   const newPdfDoc = await PDFDocument.create();
 
-  let processedCases = 0;
+  // let processedCases = 0;
   for (let calendaredCase of calendaredCases) {
-    const latestVersionOfCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: calendaredCase.docketNumber,
-      });
-
-    await setNoticeForCase({
-      PDFDocument,
-      applicationContext,
-      caseRecord: latestVersionOfCase,
-      newPdfDoc,
-      trialSession,
-      trialSessionEntity,
-      user,
-    });
-    processedCases++;
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'notice_generation_update_progress',
-        processedCases,
-        totalCases: latestVersionOfCase.length,
+    // TODO: async invoke the lambda
+    // TODO: maybe see if we can do .promise on this
+    applicationContext.invokeLambda(
+      {
+        FunctionName: `set_trial_session_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+        InvocationType: 'Event',
+        Payload: JSON.stringify({
+          docketNumber: calendaredCase.docketNumber,
+          trialSessionId: trialSessionEntity.trialSessionId,
+        }),
       },
-      userId: user.userId,
-    });
+      (err, data) => {
+        if (err) console.log(err, err.stack); // an error occurred
+        else console.log(data); // successful response
+      },
+    );
+
+    // const latestVersionOfCase = await applicationContext
+    //   .getPersistenceGateway()
+    //   .getCaseByDocketNumber({
+    //     applicationContext,
+    //     docketNumber: calendaredCase.docketNumber,
+    //   });
+
+    // await setNoticeForCase({
+    //   PDFDocument,
+    //   applicationContext,
+    //   caseRecord: latestVersionOfCase,
+    //   newPdfDoc,
+    //   trialSession,
+    //   trialSessionEntity,
+    //   user,
+    // });
+    // processedCases++;
+    // await applicationContext.getNotificationGateway().sendNotificationToUser({
+    //   applicationContext,
+    //   message: {
+    //     action: 'notice_generation_update_progress',
+    //     processedCases,
+    //     totalCases: latestVersionOfCase.length,
+    //   },
+    //   userId: user.userId,
+    // });
   }
 
   // Prevent from being overwritten when generating notices for a manually-added
