@@ -19,7 +19,7 @@ describe('validateStampInteractor', () => {
   });
 
   it('returns null when there are no errors', () => {
-    const mockStatus = MOTION_STATUSES.Denied;
+    const mockStatus = MOTION_STATUSES.DENIED;
 
     const errors = validateStampInteractor(applicationContext, {
       stampMotionForm: { status: mockStatus },
