@@ -421,16 +421,17 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
 
   const newPdfDoc = await PDFDocument.create();
 
-  // let processedCases = 0;
+  // TODO: generate a unique jobId
+  // TODO: store an entry in dynamo to keep track of when the workers are done
+
   for (let calendaredCase of calendaredCases) {
-    // TODO: async invoke the lambda
-    // TODO: maybe see if we can do .promise on this
     applicationContext.invokeLambda(
       {
         FunctionName: `set_trial_session_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
         InvocationType: 'Event',
         Payload: JSON.stringify({
           docketNumber: calendaredCase.docketNumber,
+          jobId: 1,
           trialSessionId: trialSessionEntity.trialSessionId,
         }),
       },
@@ -467,6 +468,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     //   userId: user.userId,
     // });
   }
+
+  // TODO: poll every 5 seconds until all docketNumbers of this jobId are done processing
+
+  // TODO: fetch all individual PDFs from the temp bucket and combine into a single PDF
 
   // Prevent from being overwritten when generating notices for a manually-added
   // case, after the session has been set (see above)
