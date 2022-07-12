@@ -2204,7 +2204,14 @@ module.exports = (appContextUser, logger = createLogger()) => {
     },
     invokeLambda: (params, cb) => {
       // TODO: maybe see if this has a .promise method
-      lambda.invoke(params, cb);
+      if (process.env.IS_LOCAL) {
+        const {
+          handler,
+        } = require('../terraform/template/lambdas/trial-session');
+        handler(JSON.parse(params.Payload));
+      } else {
+        lambda.invoke(params, cb);
+      }
     },
     isAuthorized,
     isCurrentColorActive,

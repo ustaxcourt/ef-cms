@@ -430,9 +430,11 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
         FunctionName: `set_trial_session_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
         InvocationType: 'Event',
         Payload: JSON.stringify({
+          caseRecord: calendaredCase,
           docketNumber: calendaredCase.docketNumber,
           jobId: 1,
-          trialSessionId: trialSessionEntity.trialSessionId,
+          trialSession,
+          trialSessionEntity,
         }),
       },
       (err, data) => {
