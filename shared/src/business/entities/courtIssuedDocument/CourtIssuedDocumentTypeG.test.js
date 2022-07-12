@@ -1,4 +1,5 @@
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { TRIAL_SESSION_SCOPE_TYPES } = require('../EntityConstants');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeG', () => {
@@ -98,6 +99,20 @@ describe('CourtIssuedDocumentTypeG', () => {
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Notice of Trial on 04-10-2025 at Seattle, Washington',
+      );
+    });
+
+    it('should generate a title with "in standalone remote session" instead of "at [Place]" for Standalone Remote trial locations', () => {
+      const extDoc = CourtIssuedDocumentFactory({
+        attachments: false,
+        date: '2025-04-10T04:00:00.000Z',
+        documentTitle: 'Notice of Trial on [Date] at [Place]',
+        documentType: 'Notice of Trial',
+        scenario: 'Type G',
+        trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Notice of Trial on 04-10-2025 in standalone remote session',
       );
     });
   });

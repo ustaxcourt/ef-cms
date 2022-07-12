@@ -4,7 +4,6 @@ const {
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
-  browser: 'edge',
   chromeWebSecurity: false,
   defaultCommandTimeout: 20000,
   e2e: {
