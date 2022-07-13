@@ -5,6 +5,17 @@ const {
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const copyPagesFromPdf = async ({ copyFrom, copyInto }) => {
+  let pagesToCopy = await copyInto.copyPages(
+    copyFrom,
+    copyFrom.getPageIndices(),
+  );
+
+  pagesToCopy.forEach(page => {
+    copyInto.addPage(page);
+  });
+};
+
 /**
  * Generates notices for all calendared cases for the given trialSessionId
  *
@@ -129,6 +140,37 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
   // TODO: fetch every PDF from the temp bucket and combine them together into newPdfDoc
   // 1. loop through all the calendaredCases, and for get docketNumber, fetch the s3 by the key of
   // jobId-docketNumber from the temp bucket
+  for (let calendaredCase of calendaredCases) {
+    // const { Body: pdfData } = await applicationContext
+    //   .getStorageClient()
+    //   .getObject({
+    //     Bucket: applicationContext.environment.documentsBucketName,
+    //     Key: `${jobId}-${calendaredCase.docketNumber}`,
+    //   })
+    //   .promise();
+
+    const calendaredCasePdfData = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: `${jobId}-${calendaredCase.docketNumber}`,
+        protocol: 'S3',
+        useTempBucket: true,
+      });
+
+    const calendaredCasePdf = await PDFDocument.load(calendaredCasePdfData);
+
+    await copyPagesFromPdf({
+      copyFrom: calendaredCasePdf,
+      copyInto: newPdfDoc,
+    });
+
+    // newPdfDoc = await applicationContext.getUtilities().combineTwoPdfs({
+    //   applicationContext,
+    //   firstPdf: newPdfDoc,
+    //   secondPdf: calendaredCasePdf,
+    // });
+  }
   // 2. append the PDF into newPdfDoc
 
   let pdfUrl = null;
