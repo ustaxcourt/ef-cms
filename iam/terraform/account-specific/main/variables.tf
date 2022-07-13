@@ -26,3 +26,7 @@ variable "log_group_environments" {
 variable "cognito_suffix" {
   type = string
 }
+
+variable "number_of_days_to_keep_info_logs" {
+  type = number
+}
