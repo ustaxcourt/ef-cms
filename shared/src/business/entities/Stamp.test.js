@@ -3,6 +3,7 @@ const {
   createISODateString,
   formatDateString,
   FORMATS,
+  getStartOfDateFromIsoDateString,
 } = require('../utilities/DateHandler');
 const { formatNow } = require('../utilities/DateHandler');
 const { MOTION_STATUSES } = require('./EntityConstants');
@@ -20,8 +21,13 @@ describe('Stamp entity', () => {
       });
     });
 
-    it('should be invalid when date is in the past', () => {
-      const yesterdayIso = calculateISODate({ howMuch: -1, units: 'days' });
+    it('should be invalid when date is yesterday', () => {
+      let yesterdayIso = getStartOfDateFromIsoDateString();
+      yesterdayIso = calculateISODate({
+        dateString: yesterdayIso,
+        howMuch: -1,
+        units: 'days',
+      });
       const yesterdayFormatted = formatDateString(
         createISODateString(yesterdayIso),
         FORMATS.ISO,
