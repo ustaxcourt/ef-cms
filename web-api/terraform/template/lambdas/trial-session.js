@@ -383,9 +383,6 @@ exports.handler = async event => {
       docketNumber,
     });
 
-  // TODO: double check if this method changes the trial session at all...
-  // we might be eventually consistency issues if each work is modifying the same trial session
-
   await setNoticeForCase({
     applicationContext,
     caseRecord,
@@ -395,17 +392,6 @@ exports.handler = async event => {
     trialSessionEntity,
     userId,
   });
-
-  // TODO: delete this if we don't actually show a progress bar
-  // await applicationContext.getNotificationGateway().sendNotificationToUser({
-  //   applicationContext,
-  //   message: {
-  //     action: 'notice_generation_update_progress',
-  //     processedCases,
-  //     totalCases: latestVersionOfCase.length,
-  //   },
-  //   userId: user.userId,
-  // });
 
   await applicationContext.getPersistenceGateway().decrementJobCounter({
     applicationContext,
