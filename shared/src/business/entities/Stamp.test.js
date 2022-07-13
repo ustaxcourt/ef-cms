@@ -1,3 +1,9 @@
+const {
+  calculateISODate,
+  createISODateString,
+  formatDateString,
+  FORMATS,
+} = require('../utilities/DateHandler');
 const { formatNow } = require('../utilities/DateHandler');
 const { MOTION_STATUSES } = require('./EntityConstants');
 const { Stamp } = require('./Stamp');
@@ -15,8 +21,13 @@ describe('Stamp entity', () => {
     });
 
     it('should be invalid when date is in the past', () => {
+      const yesterdayIso = calculateISODate({ howMuch: -1, units: 'days' });
+      const yesterdayFormatted = formatDateString(
+        createISODateString(yesterdayIso),
+        FORMATS.ISO,
+      );
       const stamp = new Stamp({
-        date: '2019-12-05T00:00:00.000-05:00',
+        date: yesterdayFormatted,
         dueDateMessage: 'something',
         status: MOTION_STATUSES.GRANTED,
       });
