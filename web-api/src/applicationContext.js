@@ -198,6 +198,9 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
+  createJobStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/createJobStatus');
+const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
@@ -239,6 +242,9 @@ const {
 const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
+const {
+  decrementJobCounter,
+} = require('../../shared/src/persistence/dynamo/trialSessions/decrementJobCounter');
 const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
@@ -590,6 +596,9 @@ const {
 const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
+const {
+  getJobStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getJobStatus');
 const {
   getJudgeInSectionHelper,
 } = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
@@ -1482,6 +1491,7 @@ const gatewayMethods = {
     fetchPendingItems,
     getConfigurationItemValue,
     getFeatureFlagValue,
+    getJobStatus,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
@@ -1533,8 +1543,10 @@ const gatewayMethods = {
         };
       }
     : confirmAuthCode,
+  createJobStatus,
   createNewPetitionerUser,
   createNewPractitionerUser,
+  decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
