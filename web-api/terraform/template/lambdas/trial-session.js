@@ -1,30 +1,21 @@
-const Case = require('../../../../shared/src/business/entities/cases/Case');
-const DocketEntry = require('../../../../shared/src/business/entities/DocketEntry');
+const createApplicationContext = require('../../../src/applicationContext');
 const {
   aggregatePartiesForService,
 } = require('../../../../shared/src/business/utilities/aggregatePartiesForService');
 const {
+  DocketEntry,
+} = require('../../../../shared/src/business/entities/DocketEntry');
+const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../../../shared/src/business/entities/EntityConstants');
-
 const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
+  getClinicLetterKey,
+} = require('../../../../shared/src/business/utilities/getClinicLetterKey');
 const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
-const applicationContext = require('../../../src/applicationContext');
+  TrialSession,
+} = require('../../../../shared/src/business/entities/trialSessions/TrialSession');
+const { Case } = require('../../../../shared/src/business/entities/cases/Case');
 
 const copyPagesFromPdf = async ({ copyFrom, copyInto }) => {
   let pagesToCopy = await copyInto.copyPages(
@@ -180,17 +171,20 @@ const serveNoticesForCase = async ({
 const setNoticeForCase = async ({
   applicationContext,
   caseRecord,
-  newPdfDoc,
-  PDFDocument,
+  docketNumber,
+  jobId,
   trialSession,
   trialSessionEntity,
-  user,
+  userId,
 }) => {
+  const { PDFDocument } = await applicationContext.getPdfLib();
+  const newPdfDoc = await PDFDocument.create();
+
   const caseEntity = new Case(caseRecord, { applicationContext });
   const { procedureType } = caseRecord;
 
   // Notice of Trial Issued
-  let generatedPdf = await applicationContext
+  let noticeOfTrialIssuedFile = await applicationContext
     .getUseCases()
     .generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: caseEntity.docketNumber,
@@ -222,7 +216,7 @@ const setNoticeForCase = async ({
       .getUtilities()
       .combineTwoPdfs({
         applicationContext,
-        firstPdf: generatedPdf,
+        firstPdf: noticeOfTrialIssuedFile,
         secondPdf: clinicLetter,
       });
   }
@@ -253,7 +247,7 @@ const setNoticeForCase = async ({
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
       signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
       trialLocation: trialSessionEntity.trialLocation,
-      userId: user.userId,
+      userId,
     },
     { applicationContext },
   );
@@ -325,7 +319,7 @@ const setNoticeForCase = async ({
       signedAt: applicationContext.getUtilities().createISODateString(),
       signedByUserId: trialSessionEntity.judge.userId,
       signedJudgeName: trialSessionEntity.judge.name,
-      userId: user.userId,
+      userId,
     },
     { applicationContext },
   );
@@ -364,180 +358,57 @@ const setNoticeForCase = async ({
     caseToUpdate: caseEntity,
   });
 
-  return caseEntity.toRawObject();
+  const pdfData = await newPdfDoc.save();
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: pdfData,
+    key: `${jobId}-${docketNumber}`,
+    useTempBucket: true,
+  });
 };
 
-/**
- * Generates notices for all calendared cases for the given trialSessionId
- *
- * @param {object} applicationContext the applicationContext
- * @param {object} providers the providers object
- * @param {string} providers.trialSessionId the trial session id
- * @param {string} providers.docketNumber optional docketNumber to explicitly set the notice on the ONE specified case
- */
-exports.setNoticesForCalendaredTrialSessionInteractor = async (
-  applicationContext,
-  { docketNumber, trialSessionId },
-) => {
-  let shouldSetNoticesIssued = true;
-  const user = applicationContext.getCurrentUser();
-  const { PDFDocument } = await applicationContext.getPdfLib();
+exports.handler = async event => {
+  const applicationContext = createApplicationContext({});
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
-
-  let calendaredCases = await applicationContext
-    .getPersistenceGateway()
-    .getCalendaredCasesForTrialSession({
-      applicationContext,
-      trialSessionId,
-    });
-
-  // opting to pull from the set of calendared cases rather than load the
-  // case individually to add an additional layer of validation
-  if (docketNumber) {
-    // Do not set when sending notices for a single case
-    shouldSetNoticesIssued = false;
-
-    const singleCase = calendaredCases.find(
-      caseRecord => caseRecord.docketNumber === docketNumber,
-    );
-
-    calendaredCases = [singleCase];
-  }
-
-  if (calendaredCases.length === 0) {
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'notice_generation_complete',
-        hasPaper: false,
-      },
-      userId: user.userId,
-    });
-
-    return;
-  }
-
-  const trialSession = await applicationContext
-    .getPersistenceGateway()
-    .getTrialSessionById({
-      applicationContext,
-      trialSessionId,
-    });
+  const { docketNumber, jobId, trialSession, userId } = event;
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
   });
 
-  const newPdfDoc = await PDFDocument.create();
-
-  // TODO: generate a unique jobId
-  // TODO: store an entry in dynamo to keep track of when the workers are done
-
-  for (let calendaredCase of calendaredCases) {
-    applicationContext.invokeLambda(
-      {
-        FunctionName: `set_trial_session_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-        InvocationType: 'Event',
-        Payload: JSON.stringify({
-          docketNumber: calendaredCase.docketNumber,
-          jobId: 1,
-          trialSessionId: trialSessionEntity.trialSessionId,
-        }),
-      },
-      (err, data) => {
-        if (err) console.log(err, err.stack); // an error occurred
-        else console.log(data); // successful response
-      },
-    );
-
-    // const latestVersionOfCase = await applicationContext
-    //   .getPersistenceGateway()
-    //   .getCaseByDocketNumber({
-    //     applicationContext,
-    //     docketNumber: calendaredCase.docketNumber,
-    //   });
-
-    // await setNoticeForCase({
-    //   PDFDocument,
-    //   applicationContext,
-    //   caseRecord: latestVersionOfCase,
-    //   newPdfDoc,
-    //   trialSession,
-    //   trialSessionEntity,
-    //   user,
-    // });
-    // processedCases++;
-    // await applicationContext.getNotificationGateway().sendNotificationToUser({
-    //   applicationContext,
-    //   message: {
-    //     action: 'notice_generation_update_progress',
-    //     processedCases,
-    //     totalCases: latestVersionOfCase.length,
-    //   },
-    //   userId: user.userId,
-    // });
-  }
-
-  // TODO: poll every 5 seconds until all docketNumbers of this jobId are done processing
-
-  // TODO: fetch all individual PDFs from the temp bucket and combine into a single PDF
-
-  // Prevent from being overwritten when generating notices for a manually-added
-  // case, after the session has been set (see above)
-  if (shouldSetNoticesIssued) {
-    await trialSessionEntity.setNoticesIssued();
-
-    await applicationContext.getPersistenceGateway().updateTrialSession({
+  const caseRecord = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
       applicationContext,
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+      docketNumber,
     });
-  }
 
-  let pdfUrl = null;
-  const serviceInfo = await applicationContext
-    .getUseCaseHelpers()
-    .savePaperServicePdf({
-      applicationContext,
-      document: newPdfDoc,
-    });
-  pdfUrl = serviceInfo.url;
+  // TODO: double check if this method changes the trial session at all...
+  // we might be eventually consistency issues if each work is modifying the same trial session
 
-  await applicationContext.getNotificationGateway().sendNotificationToUser({
-    applicationContext,
-    message: {
-      action: 'notice_generation_complete',
-      docketEntryId: serviceInfo.docketEntryId,
-      hasPaper: serviceInfo.hasPaper,
-      pdfUrl,
-    },
-    userId: user.userId,
-  });
-};
-
-exports.handler = (event, context) => {
-  console.log('event', event);
-  console.log('context', context);
-  // TODO: read in event
-  const { docketNumber, jobId, trialSession, trialSessionEntity, caseRecord } =
-    event;
-
-  // run set notice interactor
-  setNoticeForCase({
+  await setNoticeForCase({
     applicationContext,
     caseRecord,
     docketNumber,
     jobId,
     trialSession,
     trialSessionEntity,
+    userId,
   });
 
-  // TODO: some how run the logic of setNoticeForCase found in: shared/src/business/useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor.js
-  // we could copy that code directly in here if we wanted
+  // TODO: delete this if we don't actually show a progress bar
+  // await applicationContext.getNotificationGateway().sendNotificationToUser({
+  //   applicationContext,
+  //   message: {
+  //     action: 'notice_generation_update_progress',
+  //     processedCases,
+  //     totalCases: latestVersionOfCase.length,
+  //   },
+  //   userId: user.userId,
+  // });
 
-  // TODO: save the PDF to s3 somewhere in temp bucket
-
-  // TODO: update dynamo's jobId entry when finished with this docketNumber
+  await applicationContext.getPersistenceGateway().decrementJobCounter({
+    applicationContext,
+    jobId,
+  });
 };
