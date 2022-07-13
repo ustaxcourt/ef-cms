@@ -1,6 +1,6 @@
 const React = require('react');
 const { BouncedEmailAlert } = require('./BouncedEmailAlert.jsx');
-const { shallow } = require('enzyme');
+const { render } = require('@testing-library/react');
 
 describe('BouncedEmailAlert', () => {
   const bounceDetail = {
@@ -14,7 +14,7 @@ describe('BouncedEmailAlert', () => {
   };
 
   it('renders bounce information', () => {
-    const wrapper = shallow(
+    const { getByTestId } = render(
       <BouncedEmailAlert
         bounceRecipient={bounceDetail.bounceRecipient}
         bounceSubType={bounceDetail.bounceSubType}
@@ -26,13 +26,23 @@ describe('BouncedEmailAlert', () => {
       />,
     );
 
-    const alertInfo = wrapper.find('#diagnostic-information');
-
-    expect(alertInfo.text()).toContain(bounceDetail.bounceRecipient);
-    expect(alertInfo.text()).toContain(bounceDetail.bounceSubType);
-    expect(alertInfo.text()).toContain(bounceDetail.bounceType);
-    expect(alertInfo.text()).toContain(bounceDetail.environmentName);
-    expect(alertInfo.text()).toContain(bounceDetail.errorMessage);
-    expect(alertInfo.text()).toContain(bounceDetail.subject);
+    expect(getByTestId('environment').textContent).toBe(
+      `Environment Name: ${bounceDetail.environmentName}`,
+    );
+    expect(getByTestId('bounce-type').textContent).toBe(
+      `Bounce Type: ${bounceDetail.bounceType}`,
+    );
+    expect(getByTestId('bounce-subtype').textContent).toBe(
+      `Bounce Sub Type: ${bounceDetail.bounceSubType}`,
+    );
+    expect(getByTestId('email-recipient').textContent).toBe(
+      `Email Recipient(s): ${bounceDetail.bounceRecipient}`,
+    );
+    expect(getByTestId('error-message').textContent).toBe(
+      `Error Message: ${bounceDetail.errorMessage}`,
+    );
+    expect(getByTestId('email-subject').textContent).toBe(
+      `Email Subject: ${bounceDetail.subject}`,
+    );
   });
 });
