@@ -371,6 +371,7 @@ exports.handler = async event => {
   const applicationContext = createApplicationContext({});
 
   const { docketNumber, jobId, trialSession, userId } = event;
+  console.log({ docketNumber, jobId, trialSession, userId });
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,

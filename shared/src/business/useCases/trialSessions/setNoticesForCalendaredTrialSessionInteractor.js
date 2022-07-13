@@ -137,18 +137,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
 
   const newPdfDoc = await PDFDocument.create();
 
-  // TODO: fetch every PDF from the temp bucket and combine them together into newPdfDoc
-  // 1. loop through all the calendaredCases, and for get docketNumber, fetch the s3 by the key of
-  // jobId-docketNumber from the temp bucket
   for (let calendaredCase of calendaredCases) {
-    // const { Body: pdfData } = await applicationContext
-    //   .getStorageClient()
-    //   .getObject({
-    //     Bucket: applicationContext.environment.documentsBucketName,
-    //     Key: `${jobId}-${calendaredCase.docketNumber}`,
-    //   })
-    //   .promise();
-
     const calendaredCasePdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
@@ -164,14 +153,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
       copyFrom: calendaredCasePdf,
       copyInto: newPdfDoc,
     });
-
-    // newPdfDoc = await applicationContext.getUtilities().combineTwoPdfs({
-    //   applicationContext,
-    //   firstPdf: newPdfDoc,
-    //   secondPdf: calendaredCasePdf,
-    // });
   }
-  // 2. append the PDF into newPdfDoc
 
   let pdfUrl = null;
   const serviceInfo = await applicationContext
