@@ -1,5 +1,8 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
-import { refreshElasticsearchIndex } from '../helpers';
+import {
+  refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -58,7 +61,6 @@ export const docketClerkServesDocumentOnLeadCase = (
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
 
-    // verify that doc is served on lead case and first consolidated case
     await cerebralTest.runSequence('updateCaseCheckboxSequence', {
       docketNumber: caseDetail.consolidatedCases[1].docketNumber,
     });
@@ -72,6 +74,10 @@ export const docketClerkServesDocumentOnLeadCase = (
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
+    cerebralTest.draftOrders.shift();
+
+    await waitForLoadingComponentToHide({ cerebralTest });
+
     await refreshElasticsearchIndex();
   });
 };

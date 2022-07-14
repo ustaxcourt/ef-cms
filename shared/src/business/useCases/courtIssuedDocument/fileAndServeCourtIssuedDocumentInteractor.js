@@ -37,7 +37,13 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.fileAndServeCourtIssuedDocumentInteractor = async (
   applicationContext,
-  { docketEntryId, docketNumbers, form, subjectCaseDocketNumber },
+  {
+    clientConnectionId,
+    docketEntryId,
+    docketNumbers,
+    form,
+    subjectCaseDocketNumber,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -59,12 +65,13 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 
   const eventCodeCanOnlyBeServedOnSubjectCase =
     ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode);
-  const consolidateCaseDuplicateDocketEntries = applicationContext
+  const consolidateCaseDuplicateDocketEntries = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
       featureFlag:
         ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
     });
+
   if (
     eventCodeCanOnlyBeServedOnSubjectCase ||
     !consolidateCaseDuplicateDocketEntries
@@ -187,7 +194,24 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     key: originalSubjectDocketEntry.docketEntryId,
   });
 
-  return serviceResults;
+  const successMessage =
+    docketNumbers.length > 1
+      ? 'Document served to selected cases in group. '
+      : 'Document served. ';
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'file_and_serve_court_issued_document_complete',
+      alertSuccess: {
+        message: successMessage,
+        overwritable: false,
+      },
+      pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
+    },
+    userId: user.userId,
+  });
 };
 
 const stampDocument = async ({ applicationContext, form, pdfData }) => {

@@ -47,6 +47,10 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
     hasConsolidatedCases;
 
+  const confirmationText = showConsolidatedCasesFlag
+    ? 'The following document will be served on all parties in selected cases:'
+    : 'The following document will be served on all parties:';
+
   let parties;
   if (showConsolidatedCasesFlag) {
     parties = formattedCaseDetail.consolidatedCases.reduce(
@@ -119,6 +123,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   return {
     caseOrGroup,
+    confirmationText,
     contactsNeedingPaperService,
     showConsolidatedCasesFlag,
     showPaperAlert: contactsNeedingPaperService.length > 0,
