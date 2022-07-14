@@ -520,6 +520,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
     getItem: jest.fn().mockImplementation(getItem),
+    getJobStatus: jest.fn(),
     getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getJudgesChambersWithLegacy: jest
       .fn()
@@ -683,6 +684,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
+    invokeLambda: jest.fn().mockImplementation((args, callback) => {
+      callback(null);
+    }),
     isFeatureEnabled: jest.fn(),
     logger: {
       debug: jest.fn(),
