@@ -141,6 +141,7 @@ export const ModalDialog = ({
                   className="modal-button-confirm"
                   disabled={disableSubmit}
                   href={confirmHref}
+                  id="modal-button-confirm"
                   target={confirmTarget}
                   onClick={runConfirmSequence}
                 >
