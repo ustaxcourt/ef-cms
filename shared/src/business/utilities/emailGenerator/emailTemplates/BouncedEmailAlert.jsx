@@ -19,14 +19,12 @@ export const BouncedEmailAlert = ({
       <p>This Email is an alert that a service Email has bounced.</p>
 
       <div id="diagnostic-information">
-        <div data-testid="environment">Environment Name: {environmentName}</div>
-        <div data-testid="bounce-type">Bounce Type: {bounceType}</div>
-        <div data-testid="bounce-subtype">Bounce Sub Type: {bounceSubType}</div>
-        <div data-testid="error-message">Error Message: {errorMessage}</div>
-        <div data-testid="email-subject">Email Subject: {subject}</div>
-        <div data-testid="email-recipient">
-          Email Recipient(s): {bounceRecipient}
-        </div>
+        <div>Environment Name: {environmentName}</div>
+        <div>Bounce Type: {bounceType}</div>
+        <div>Bounce Sub Type: {bounceSubType}</div>
+        <div>Error Message: {errorMessage}</div>
+        <div>Email Subject: {subject}</div>
+        <div>Email Recipient(s): {bounceRecipient}</div>
       </div>
       <br />
 
