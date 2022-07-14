@@ -154,12 +154,12 @@ const serveNoticesForCase = async ({
         copyInto: combinedDocumentsPdf,
       });
     }
-
-    await copyPagesFromPdf({
-      copyFrom: combinedDocumentsPdf,
-      copyInto: newPdfDoc,
-    });
   }
+
+  await copyPagesFromPdf({
+    copyFrom: combinedDocumentsPdf,
+    copyInto: newPdfDoc,
+  });
 };
 
 /**
@@ -358,11 +358,11 @@ const setNoticeForCase = async ({
     caseToUpdate: caseEntity,
   });
 
-  const pdfData = await newPdfDoc.save();
-
   const hasPages = newPdfDoc.getPages().length > 0;
 
   if (hasPages) {
+    const pdfData = await newPdfDoc.save();
+
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
       document: pdfData,
