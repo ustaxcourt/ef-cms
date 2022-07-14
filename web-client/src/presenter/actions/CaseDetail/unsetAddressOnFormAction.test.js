@@ -4,7 +4,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { unsetAddressOnFormAction } from './unsetAddressOnFormAction';
 
-describe('removeCaseFromTrialAction', () => {
+describe('unsetAddressOnFormAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
   it('should unset contact address info on the form', async () => {

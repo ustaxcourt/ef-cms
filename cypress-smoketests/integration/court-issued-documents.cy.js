@@ -132,9 +132,11 @@ describe('Docket Clerk', () => {
   });
 
   it('should be able to create an order on the electronically-filed case and serve it', () => {
+    // eslint-disable-next-line no-underscore-dangle
+    const attempt = cy.state('runnable')._currentRetry;
     createOrder(testData.createdDocketNumber);
     editAndSignOrder();
-    addDocketEntryForOrderAndSaveForLater();
+    addDocketEntryForOrderAndSaveForLater(attempt);
     serveCourtIssuedDocketEntry();
   });
 

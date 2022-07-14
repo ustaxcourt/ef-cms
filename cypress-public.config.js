@@ -6,7 +6,6 @@ const {
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
-  browser: 'chrome',
   defaultCommandTimeout: 20000,
   e2e: {
     baseUrl: 'http://localhost:5678',
@@ -14,7 +13,7 @@ module.exports = defineConfig({
       on('task', {
         modifyDeployedDateTextFile(deployedDate) {
           fs.writeFileSync(
-            path.join(__dirname, './web-client/src/deployed-date.txt'),
+            path.join(__dirname, './dist-public/deployed-date.txt'),
             deployedDate,
           );
           return null;
