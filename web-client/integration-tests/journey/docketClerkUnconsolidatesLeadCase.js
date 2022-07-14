@@ -1,4 +1,4 @@
-export const docketClerkUnconsolidatesCase = cerebralTest => {
+export const docketClerkUnconsolidatesLeadCase = cerebralTest => {
   it('Docket clerk unconsolidate a case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.leadDocketNumber,

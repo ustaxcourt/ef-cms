@@ -1,5 +1,8 @@
 import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
-import { getFormattedDocketEntriesForTest } from '../helpers';
+import {
+  getFormattedDocketEntriesForTest,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -42,9 +45,12 @@ export const docketClerkServesOrderWithPaperService = (
         name: 'Daenerys Stormborn, Petitioner',
       },
     ]);
+
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
     expect(cerebralTest.getState('pdfPreviewUrl')).toBeDefined();
