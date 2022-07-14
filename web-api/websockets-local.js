@@ -42,10 +42,16 @@ wsServer.on('request', function (request) {
   const connection = request.accept('echo-protocol', request.origin);
   const connectionId = uuid();
   connections[connectionId] = connection;
-  connectLambda({
-    queryStringParameters: {
-      token: request.resourceURL.query.token,
+  const queryStringParameters = Object.keys(request.resourceURL.query).reduce(
+    (aggregatedValue, key) => {
+      const value = request.resourceURL.query[key];
+      aggregatedValue[key] = value;
+      return aggregatedValue;
     },
+    {},
+  );
+  connectLambda({
+    queryStringParameters,
     requestContext: {
       connectionId,
       domainName: `ws://localhost:${PORT}`,

@@ -32,35 +32,35 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
 
   const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
 
+  const consolidatedCasesPropagateDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
+  );
+
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
     .map(consolidatedCase => consolidatedCase.docketNumber);
 
-  let successMessage = 'Document served to selected cases in group. ';
-
   if (
     !isLeadCase ||
+    !consolidatedCasesPropagateDocketEntriesFlag ||
     docketNumbers.length === 0 ||
     !currentDocketEntryCompatibleWithConsolidation
   ) {
     docketNumbers = [caseDetail.docketNumber];
-    successMessage = 'Document served. ';
   }
 
-  const result = await applicationContext
-    .getUseCases()
-    .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      docketEntryId,
-      docketNumbers,
-      form,
-      subjectCaseDocketNumber: caseDetail.docketNumber,
-    });
+  const clientConnectionId = get(state.clientConnectionId);
 
-  return {
-    alertSuccess: {
-      message: successMessage,
-      overwritable: false,
-    },
-    pdfUrl: result ? result.pdfUrl : undefined,
-  };
+  await applicationContext
+    .getUseCases()
+    .fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        docketEntryId,
+        docketNumbers,
+        form,
+        subjectCaseDocketNumber: caseDetail.docketNumber,
+      },
+      clientConnectionId,
+    );
 };
