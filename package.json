@@ -238,6 +238,7 @@
     "@babel/register": "^7.18.6",
     "@faker-js/faker": "^7.3.0",
     "@miovision/eslint-plugin-disallow-date": "^2.0.0",
+    "@testing-library/jest-dom": "^5.16.4",
     "@testing-library/react": "^13.3.0",
     "@vendia/serverless-express": "^4.9.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
