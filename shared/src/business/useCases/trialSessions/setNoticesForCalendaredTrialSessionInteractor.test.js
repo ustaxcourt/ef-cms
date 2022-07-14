@@ -8,8 +8,9 @@ const {
 const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
-const { getFakeFile } = require('../../test/getFakeFile');
+const { fakeData, getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
 const { User } = require('../../entities/User');
 
@@ -57,84 +58,24 @@ const case1 = {
 const fakeClinicLetter = getFakeFile(true, true);
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
-  beforeAll(() => {
-    applicationContext.getCurrentUser.mockReturnValue(user);
-    applicationContext
-      .getNotificationGateway()
-      .sendNotificationToUser.mockReturnValue(null);
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockImplementation(
-        () => calendaredCases,
-      );
-    applicationContext
-      .getPersistenceGateway()
-      .deleteCaseTrialSortMappingRecords.mockReturnValue(calendaredCases);
-    applicationContext
-      .getPersistenceGateway()
-      .getDownloadPolicyUrl.mockReturnValue('http://example.com');
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockImplementation(() => trialSession);
-    applicationContext
-      .getPersistenceGateway()
-      .updateTrialSession.mockImplementation(({ trialSessionToUpdate }) => {
-        trialSession = trialSessionToUpdate;
-      });
-    applicationContext.getPersistenceGateway().getJobStatus.mockResolvedValue({
-      unfinishedCases: 0,
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(({ caseToUpdate }) => {
-        calendaredCases.some((caseRecord, index) => {
-          if (caseRecord.docketNumber === caseToUpdate.docketNumber) {
-            calendaredCases[index] = caseToUpdate;
-            return true;
-          }
-        });
-      });
-
-    jest.spyOn(global, 'setInterval').mockImplementation(cb => cb());
-
-    applicationContext
-      .getUseCases()
-      .generateNoticeOfTrialIssuedInteractor.mockReturnValue(testPdfDoc);
-    applicationContext
-      .getUseCases()
-      .generateStandingPretrialOrderForSmallCaseInteractor.mockReturnValue(
-        testPdfDoc,
-      );
-    applicationContext
-      .getUseCases()
-      .generateStandingPretrialOrderInteractor.mockReturnValue(testPdfDoc);
-    applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf.mockReturnValue(serviceInfo);
-    applicationContext
-      .getPersistenceGateway()
-      .getDocument.mockResolvedValue(fakeClinicLetter);
-  });
-
   beforeEach(() => {
-    calendaredCases = [case0, case1];
-    trialSession = { ...MOCK_TRIAL };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValueOnce(case0)
-      .mockReturnValueOnce(case0)
-      .mockReturnValueOnce(case1)
-      .mockReturnValueOnce(case1);
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: PARTY_TYPES.petitioner,
+        role: ROLES.petitionsClerk,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
   });
 
-  it('Should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
-    const mockUser = new User({
-      name: PARTY_TYPES.petitioner,
-      role: ROLES.petitioner, // Petitioners do not have the TRIAL_SESSIONS role, per authorizationClientService.js
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext.getCurrentUser.mockReturnValueOnce(mockUser);
+  it('should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
+    applicationContext.getCurrentUser.mockReturnValue(
+      new User({
+        name: PARTY_TYPES.petitioner,
+        role: ROLES.petitioner,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      }),
+    );
     let error;
 
     try {
@@ -148,32 +89,64 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(error).toBeDefined();
   });
 
-  it('Should return immediately if there are no calendared cases to be set', async () => {
+  it('should do nothing and send a notification to the user when setting a calendar with no cases', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValueOnce([]); // returning no cases
+      .getCalendaredCasesForTrialSession.mockResolvedValue([]);
 
-    const result = await setNoticesForCalendaredTrialSessionInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    );
-
-    expect(
-      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).not.toHaveBeenCalled();
-    expect(result).toBeUndefined();
-  });
-
-  it('Should create a docket entry for each case', async () => {
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(applicationContext.invokeLambda).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalled();
+    expect(applicationContext.invokeLambda).not.toHaveBeenCalled();
+  });
+
+  it('should invoke the worker lambda 3 times when 3 cases are calendared on the session and a complete notification is sent back to the user when they all finish processing', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue({
+        ...MOCK_TRIAL_REGULAR,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      });
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockResolvedValue([
+        {
+          docketNumber: '101-20',
+        },
+        {
+          docketNumber: '102-20',
+        },
+        {
+          docketNumber: '103-20',
+        },
+      ]);
+    applicationContext.getPersistenceGateway().getJobStatus.mockResolvedValue({
+      unfinishedCases: 0,
+    });
+    applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf.mockResolvedValue({
+        url: 'http://example.com',
+      });
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(true);
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValue(fakeData);
+    jest.spyOn(global, 'setInterval').mockImplementation(cb => cb());
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(applicationContext.invokeLambda).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledTimes(1);
   });
 });
