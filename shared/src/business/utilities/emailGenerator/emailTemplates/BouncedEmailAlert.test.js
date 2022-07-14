@@ -1,6 +1,7 @@
 const React = require('react');
 const { BouncedEmailAlert } = require('./BouncedEmailAlert.jsx');
 const { render } = require('@testing-library/react');
+const { toBeInTheDocument } = require('@testing-library/jest-dom');
 
 describe('BouncedEmailAlert', () => {
   const bounceDetail = {
@@ -14,7 +15,7 @@ describe('BouncedEmailAlert', () => {
   };
 
   it('renders bounce information', () => {
-    const { getByTestId } = render(
+    const { queryByText } = render(
       <BouncedEmailAlert
         bounceRecipient={bounceDetail.bounceRecipient}
         bounceSubType={bounceDetail.bounceSubType}
@@ -25,24 +26,12 @@ describe('BouncedEmailAlert', () => {
         subject={bounceDetail.subject}
       />,
     );
-
-    expect(getByTestId('environment').textContent).toBe(
-      `Environment Name: ${bounceDetail.environmentName}`,
-    );
-    expect(getByTestId('bounce-type').textContent).toBe(
-      `Bounce Type: ${bounceDetail.bounceType}`,
-    );
-    expect(getByTestId('bounce-subtype').textContent).toBe(
-      `Bounce Sub Type: ${bounceDetail.bounceSubType}`,
-    );
-    expect(getByTestId('email-recipient').textContent).toBe(
-      `Email Recipient(s): ${bounceDetail.bounceRecipient}`,
-    );
-    expect(getByTestId('error-message').textContent).toBe(
-      `Error Message: ${bounceDetail.errorMessage}`,
-    );
-    expect(getByTestId('email-subject').textContent).toBe(
-      `Email Subject: ${bounceDetail.subject}`,
-    );
+    expect(queryByText(/someone@example.com/i)).toBeInTheDocument();
+    expect(queryByText(/Permanent/i)).toBeInTheDocument();
+    expect(queryByText(/OnSuppressionList/i)).toBeInTheDocument();
+    expect(queryByText(/2022-01-01/i)).toBeInTheDocument();
+    expect(queryByText(/local/i)).toBeInTheDocument();
+    expect(queryByText(/Message Undeliverable/i)).toBeInTheDocument();
+    expect(queryByText(/We are attempting to serve you/i)).toBeInTheDocument();
   });
 });
