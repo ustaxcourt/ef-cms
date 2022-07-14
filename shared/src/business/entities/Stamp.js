@@ -13,14 +13,13 @@ const { MOTION_STATUSES } = require('./EntityConstants');
 
 const todayFormatted = formatDateString(
   getStartOfDateFromIsoDateString(),
-  FORMATS.MMDDYYYY,
+  FORMATS.ISO,
 );
 
 /**
  * constructor
  *
  * @param {object} providers the providers object
- * @param {object} providers.applicationContext the application context
  * @param {object} providers.rawStamp the raw stamp data
  * @constructor
  */

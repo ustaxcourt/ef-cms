@@ -3,7 +3,7 @@ const {
   createISODateString,
   formatDateString,
   FORMATS,
-  getStartOfDateFromIsoDateString,
+  getMidnightIsoDateString,
 } = require('../utilities/DateHandler');
 const { formatNow } = require('../utilities/DateHandler');
 const { MOTION_STATUSES } = require('./EntityConstants');
@@ -22,7 +22,7 @@ describe('Stamp entity', () => {
     });
 
     it('should be invalid when date is yesterday', () => {
-      let yesterdayIso = getStartOfDateFromIsoDateString();
+      let yesterdayIso = getMidnightIsoDateString();
       yesterdayIso = calculateISODate({
         dateString: yesterdayIso,
         howMuch: -1,
