@@ -1,7 +1,6 @@
 const React = require('react');
 const { BouncedEmailAlert } = require('./BouncedEmailAlert.jsx');
 const { render } = require('@testing-library/react');
-const { toBeInTheDocument } = require('@testing-library/jest-dom');
 
 describe('BouncedEmailAlert', () => {
   const bounceDetail = {
