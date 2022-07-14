@@ -3,8 +3,10 @@ import React from 'react';
 
 export const DateInput = props => {
   const {
+    minDate,
     errorText,
     id,
+    disabled,
     className,
     label,
     onBlur = () => {},
@@ -27,10 +29,12 @@ export const DateInput = props => {
   return (
     <DatePickerComponent
       className={className}
+      disabled={disabled}
       errorText={errorText}
       hideLegend={hideLegend}
       hintText={hintText}
       label={label}
+      minDate={minDate}
       name={id}
       names={names}
       optional={optional}

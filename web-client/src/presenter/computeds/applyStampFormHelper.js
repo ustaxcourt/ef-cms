@@ -7,10 +7,12 @@ import { state } from 'cerebral';
  * @param {object} applicationContext the application context
  * @returns {object} apply stamp form helper fields
  */
-export const applyStampFormHelper = get => {
+export const applyStampFormHelper = (get, applicationContext) => {
+  const { DATE_FORMATS } = applicationContext.getConstants();
   const form = get(state.form);
-  const { customOrderText } = form;
   const pdfForSigning = get(state.pdfForSigning);
+
+  const { customOrderText } = form;
   const { isPdfAlreadyStamped, stampApplied, stampData } = pdfForSigning;
 
   const CUSTOM_ORDER_MAX_LENGTH = 60;
@@ -25,10 +27,26 @@ export const applyStampFormHelper = get => {
 
   const hideClass = stampApplied && !isPdfAlreadyStamped ? '' : 'hide';
 
+  const minDate = applicationContext
+    .getUtilities()
+    .formatNow(DATE_FORMATS.YYYYMMDD);
+
+  const validationErrors = get(state.validationErrors);
+  const dateErrorClass = !validationErrors.date
+    ? 'stamp-form-group'
+    : 'stamp-form-group-error';
+
+  const statusErrorClass = !validationErrors.status
+    ? 'stamp-form-group'
+    : 'stamp-form-group-error';
+
   return {
     canSaveStampOrder,
     cursorClass,
     customOrderTextCharacterCount,
+    dateErrorClass,
     hideClass,
+    minDate,
+    statusErrorClass,
   };
 };

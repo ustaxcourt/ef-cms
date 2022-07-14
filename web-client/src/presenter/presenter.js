@@ -376,6 +376,7 @@ import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromP
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
 import { submitPractitionerNameSearchSequence } from './sequences/submitPractitionerNameSearchSequence';
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
+import { submitStampMotionSequence } from './sequences/submitStampMotionSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
@@ -479,6 +480,7 @@ import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCa
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
+import { validateStampSequence } from './sequences/validateStampSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionHearingNoteSequence } from './sequences/validateTrialSessionHearingNoteSequence';
 import { validateTrialSessionNoteSequence } from './sequences/validateTrialSessionNoteSequence';
@@ -873,6 +875,7 @@ export const presenter = {
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
     submitRemoveConsolidatedCasesSequence,
+    submitStampMotionSequence,
     submitTrialSessionSequence,
     submitUpdateCaseModalSequence,
     submitUpdatePetitionerInformationFromModalSequence,
@@ -976,6 +979,7 @@ export const presenter = {
     validateRemoveFromTrialSessionSequence,
     validateSelectDocumentTypeSequence,
     validateSetForHearingSequence,
+    validateStampSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionHearingNoteSequence,
     validateTrialSessionNoteSequence,

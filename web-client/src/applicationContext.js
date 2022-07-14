@@ -308,6 +308,7 @@ import { validatePetitionerInformationFormInteractor } from '../../shared/src/bu
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
+import { validateStampInteractor } from '../../shared/src/business/useCases/stampMotion/validateStampInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
@@ -544,6 +545,7 @@ const allUseCases = {
   validatePetitionerInteractor,
   validatePractitionerInteractor,
   validateSearchDeadlinesInteractor,
+  validateStampInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   validateUpdateUserEmailInteractor,

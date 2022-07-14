@@ -10,6 +10,7 @@ import React, { useEffect, useRef } from 'react';
 export const ApplyStamp = connect(
   {
     JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
+    MOTION_STATUSES: state.constants.MOTION_STATUSES,
     STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
@@ -20,9 +21,10 @@ export const ApplyStamp = connect(
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
-    saveDocumentSigningSequence: sequences.saveDocumentSigningSequence,
     setPDFStampDataSequence: sequences.setPDFStampDataSequence,
+    submitStampMotionSequence: sequences.submitStampMotionSequence,
     updateFormValueSequence: sequences.updateFormValueSequence,
+    validateStampSequence: sequences.validateStampSequence,
     validationErrors: state.validationErrors,
   },
   function ApplyStamp({
@@ -32,13 +34,15 @@ export const ApplyStamp = connect(
     clearOptionalFieldsStampFormSequence,
     form,
     JURISDICTION_OPTIONS,
+    MOTION_STATUSES,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
-    saveDocumentSigningSequence,
     setPDFStampDataSequence,
     STRICKEN_CASE_MESSAGE,
+    submitStampMotionSequence,
     updateFormValueSequence,
+    validateStampSequence,
     validationErrors,
   }) {
     const yLimitToPreventServedStampOverlay = 705;
@@ -171,9 +175,8 @@ export const ApplyStamp = connect(
       <>
         <CaseDetailHeader />
         <div className="grid-container">
+          <ErrorNotification />
           <div className="grid-row grid-gap">
-            <ErrorNotification />
-
             <h1 className="heading-1" id="page-title">
               Apply Stamp
             </h1>
@@ -197,45 +200,49 @@ export const ApplyStamp = connect(
                 </div>
                 <div className="stamp-order-form">
                   <FormGroup
-                    className="stamp-form-group"
+                    className={applyStampFormHelper.statusErrorClass}
                     errorText={validationErrors.status}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
-                      {['Granted', 'Denied'].map(option => (
-                        <div
-                          className={`usa-radio ${
-                            option === 'Denied' ? 'margin-bottom-0' : ''
-                          }`}
-                          key={option}
-                        >
-                          <input
-                            checked={form.status === option}
-                            className="usa-radio__input"
-                            id={`motion-status-${option}`}
-                            name="status"
-                            type="radio"
-                            value={option}
-                            onChange={e => {
-                              applyStampFormChangeSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={`motion-status-${option}`}
+                      {[MOTION_STATUSES.GRANTED, MOTION_STATUSES.DENIED].map(
+                        option => (
+                          <div
+                            className={`usa-radio ${
+                              option === MOTION_STATUSES.DENIED
+                                ? 'margin-bottom-0'
+                                : ''
+                            }`}
+                            key={option}
                           >
-                            {option}
-                          </label>
-                        </div>
-                      ))}
+                            <input
+                              checked={form.status === option}
+                              className="usa-radio__input"
+                              id={`motion-status-${option}`}
+                              name="status"
+                              type="radio"
+                              value={option}
+                              onChange={e => {
+                                applyStampFormChangeSequence({
+                                  key: e.target.name,
+                                  value: e.target.value,
+                                });
+                              }}
+                            />
+                            <label
+                              className="usa-radio__label"
+                              htmlFor={`motion-status-${option}`}
+                            >
+                              {option}
+                            </label>
+                          </div>
+                        ),
+                      )}
                       <FormGroup className="grid-container stamp-form-group denied-checkboxes">
                         <div className="display-inline-block grid-col-6">
                           <input
                             checked={form.deniedAsMoot || false}
                             className="usa-checkbox__input"
-                            disabled={form.status !== 'Denied'}
+                            disabled={form.status !== MOTION_STATUSES.DENIED}
                             id="deniedAsMoot"
                             name="deniedAsMoot"
                             type="checkbox"
@@ -258,7 +265,7 @@ export const ApplyStamp = connect(
                           <input
                             checked={form.deniedWithoutPrejudice || false}
                             className="usa-checkbox__input"
-                            disabled={form.status !== 'Denied'}
+                            disabled={form.status !== MOTION_STATUSES.DENIED}
                             id="deniedWithoutPrejudice"
                             name="deniedWithoutPrejudice"
                             type="checkbox"
@@ -342,7 +349,10 @@ export const ApplyStamp = connect(
                     )}
                   </FormGroup>
                   <hr className="narrow-hr" />
-                  <FormGroup className="stamp-form-group">
+                  <FormGroup
+                    className={applyStampFormHelper.dateErrorClass}
+                    errorText={validationErrors.date}
+                  >
                     <div className="usa-radio" key="statusReportDueDate">
                       <input
                         aria-describedby="dueDateMessage"
@@ -372,19 +382,25 @@ export const ApplyStamp = connect(
                         The parties shall file a status report by{' '}
                         <DateInput
                           className="display-inline-block width-150 padding-0"
+                          disabled={
+                            form.dueDateMessage !==
+                            'The parties shall file a status report by'
+                          }
                           id="due-date-input-statusReportDueDate"
+                          minDate={applyStampFormHelper.minDate}
                           names={{
-                            day: 'dueDateDay-statusReport',
-                            month: 'dueDateMonth-statusReport',
-                            year: 'dueDateYear-statusReport',
+                            day: 'day',
+                            month: 'month',
+                            year: 'year',
                           }}
                           placeholder={'MM/DD/YYYY'}
                           showDateHint={false}
                           values={{
-                            day: form['dueDateDay-statusReport'],
-                            month: form['dueDateMonth-statusReport'],
-                            year: form['dueDateYear-statusReport'],
+                            day: form.day,
+                            month: form.month,
+                            year: form.year,
                           }}
+                          onBlur={validateStampSequence}
                           onChange={({ key, value }) => {
                             updateFormValueSequence({
                               key,
@@ -427,19 +443,25 @@ export const ApplyStamp = connect(
                         stipulated decision by{' '}
                         <DateInput
                           className="display-inline-block width-150 padding-0"
+                          disabled={
+                            form.dueDateMessage !==
+                            'The parties shall file a status report or proposed stipulated decision by'
+                          }
                           id="due-date-input-statusReportOrStipDecisionDueDate"
+                          minDate={applyStampFormHelper.minDate}
                           names={{
-                            day: 'dueDateDay-stipDecision',
-                            month: 'dueDateMonth-stipDecision',
-                            year: 'dueDateYear-stipDecision',
+                            day: 'day',
+                            month: 'month',
+                            year: 'year',
                           }}
                           placeholder={'MM/DD/YYYY'}
                           showDateHint={false}
                           values={{
-                            day: form['dueDateDay-stipDecision'],
-                            month: form['dueDateMonth-stipDecision'],
-                            year: form['dueDateYear-stipDecision'],
+                            day: form.day,
+                            month: form.month,
+                            year: form.year,
                           }}
+                          onBlur={validateStampSequence}
                           onChange={({ key, value }) => {
                             updateFormValueSequence({
                               key,
@@ -515,7 +537,7 @@ export const ApplyStamp = connect(
                     className="margin-right-0"
                     disabled={!applyStampFormHelper.canSaveStampOrder}
                     id="save-signature-button"
-                    onClick={() => saveDocumentSigningSequence()}
+                    onClick={() => submitStampMotionSequence()}
                   >
                     Save Stamp Order
                   </Button>
@@ -543,10 +565,7 @@ export const ApplyStamp = connect(
                         </span>
                         {(form.strickenCase ||
                           form.jurisdiction ||
-                          (form.dueDateMessage &&
-                            form['dueDateDay-statusReport']) ||
-                          (form.dueDateMessage &&
-                            form['dueDateDay-stipDecision']) ||
+                          (form.dueDateMessage && form.day) ||
                           form.customOrderText) && <hr className="narrow-hr" />}
                         {form.strickenCase && (
                           <>
@@ -560,21 +579,10 @@ export const ApplyStamp = connect(
                           </>
                         )}
                         <span className="text-semibold">
-                          {form['dueDateDay-statusReport'] && (
+                          {form.day && (
                             <>
-                              {form.dueDateMessage}{' '}
-                              {form['dueDateMonth-statusReport']}/
-                              {form['dueDateDay-statusReport']}/
-                              {form['dueDateYear-statusReport']}
-                              <br />
-                            </>
-                          )}
-                          {form['dueDateDay-stipDecision'] && (
-                            <>
-                              {form.dueDateMessage}{' '}
-                              {form['dueDateMonth-stipDecision']}/
-                              {form['dueDateDay-stipDecision']}/
-                              {form['dueDateYear-stipDecision']}
+                              {form.dueDateMessage} {form.month}/{form.day}/
+                              {form.year}
                               <br />
                             </>
                           )}
