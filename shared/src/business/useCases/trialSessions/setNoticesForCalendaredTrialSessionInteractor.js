@@ -26,7 +26,7 @@ const copyPagesFromPdf = async ({ copyFrom, copyInto }) => {
  */
 exports.setNoticesForCalendaredTrialSessionInteractor = async (
   applicationContext,
-  { docketNumber, trialSessionId },
+  { trialSessionId },
 ) => {
   let shouldSetNoticesIssued = true;
   const user = applicationContext.getCurrentUser();
@@ -42,19 +42,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
       applicationContext,
       trialSessionId,
     });
-
-  // opting to pull from the set of calendared cases rather than load the
-  // case individually to add an additional layer of validation
-  if (docketNumber) {
-    // Do not set when sending notices for a single case
-    shouldSetNoticesIssued = false;
-
-    const singleCase = calendaredCases.find(
-      caseRecord => caseRecord.docketNumber === docketNumber,
-    );
-
-    calendaredCases = [singleCase];
-  }
 
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
