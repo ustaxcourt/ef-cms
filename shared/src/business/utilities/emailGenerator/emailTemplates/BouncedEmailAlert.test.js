@@ -1,6 +1,6 @@
 const React = require('react');
 const { BouncedEmailAlert } = require('./BouncedEmailAlert.jsx');
-const { render } = require('@testing-library/react');
+const { queryByAttribute, render, within } = require('@testing-library/react');
 
 describe('BouncedEmailAlert', () => {
   const bounceDetail = {
@@ -13,8 +13,10 @@ describe('BouncedEmailAlert', () => {
     subject: 'We are attempting to serve you',
   };
 
+  const getById = queryByAttribute.bind(null, 'id');
+
   it('renders bounce information', () => {
-    const { queryByText } = render(
+    const { container } = render(
       <BouncedEmailAlert
         bounceRecipient={bounceDetail.bounceRecipient}
         bounceSubType={bounceDetail.bounceSubType}
@@ -25,26 +27,38 @@ describe('BouncedEmailAlert', () => {
         subject={bounceDetail.subject}
       />,
     );
+
+    const alertInfo = getById(container, 'diagnostic-information');
+
     expect(
-      queryByText(bounceDetail.bounceRecipient, { exact: false }),
+      within(alertInfo).getByText(bounceDetail.bounceRecipient, {
+        exact: false,
+      }),
     ).toBeInTheDocument();
     expect(
-      queryByText(bounceDetail.bounceSubType, { exact: false }),
+      within(alertInfo).getByText(bounceDetail.bounceSubType, {
+        exact: false,
+      }),
     ).toBeInTheDocument();
     expect(
-      queryByText(bounceDetail.bounceType, { exact: false }),
+      within(alertInfo).getByText(bounceDetail.bounceType, {
+        exact: false,
+      }),
     ).toBeInTheDocument();
     expect(
-      queryByText(bounceDetail.currentDate, { exact: false }),
+      within(alertInfo).getByText(bounceDetail.environmentName, {
+        exact: false,
+      }),
     ).toBeInTheDocument();
     expect(
-      queryByText(bounceDetail.environmentName, { exact: false }),
+      within(alertInfo).getByText(bounceDetail.errorMessage, {
+        exact: false,
+      }),
     ).toBeInTheDocument();
     expect(
-      queryByText(bounceDetail.errorMessage, { exact: false }),
-    ).toBeInTheDocument();
-    expect(
-      queryByText(bounceDetail.subject, { exact: false }),
+      within(alertInfo).getByText(bounceDetail.subject, {
+        exact: false,
+      }),
     ).toBeInTheDocument();
   });
 });
