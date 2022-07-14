@@ -31,8 +31,8 @@ NEW_JUDGE_NAME=$(aws dynamodb get-item \
   --query 'Item.judgeFullName.S')
 
 if [[ ${NEW_JUDGE_NAME} == "None" ]]; then
- echo "ERROR: Judge with userId: ${NEW_JUDGE_ID} has no dynamo record" 
- exit 1; 
+ echo "ERROR: Judge with userId: ${NEW_JUDGE_ID} has no dynamo record"
+ exit 1;
 fi
 
 # update the judge's signature in deploy table
@@ -87,10 +87,10 @@ aws cognito-idp admin-update-user-attributes \
     --user-pool-id ${USER_POOL_ID} \
     --region ${REGION} \
     --username ${OLD_JUDGE_ID} \
-    --user-attributes Name="name",Value="Judge ${OLD_JUDGE_NAME}" 
+    --user-attributes Name="name",Value="Judge ${OLD_JUDGE_NAME}"
 
 aws cognito-idp admin-update-user-attributes \
     --user-pool-id ${USER_POOL_ID} \
     --region ${REGION} \
     --username ${NEW_JUDGE_ID} \
-    --user-attributes Name="name",Value="Chief Judge ${NEW_JUDGE_NAME}" 
+    --user-attributes Name="name",Value="Chief Judge ${NEW_JUDGE_NAME}"
