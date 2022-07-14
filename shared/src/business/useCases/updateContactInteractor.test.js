@@ -258,7 +258,7 @@ describe('updates the contact on a case', () => {
     ).rejects.toThrow('Unauthorized for update case contact');
   });
 
-  it('throws an error if the user to update is not found one the case', async () => {
+  it('throws an error if the user to update is not found on the case', async () => {
     mockCase = { ...MOCK_CASE_WITH_SECONDARY_OTHERS, petitioners: [] };
 
     await expect(

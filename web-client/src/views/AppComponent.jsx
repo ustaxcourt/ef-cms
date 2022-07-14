@@ -69,6 +69,7 @@ import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalen
 import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
+import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
@@ -156,6 +157,7 @@ const pages = {
   Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
+  SealedCaseDetail,
   SelectDocumentType,
   SignOrder,
   SimplePdfPreviewPage,

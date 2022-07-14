@@ -125,6 +125,10 @@ table.ustc-table .ustc-button--unstyled {
   &.usa-button--unstyled:visited {
     color: $color-white;
   }
+
+  &.usa-button--unstyled:hover {
+    color: $color-primary-alt-lightest;
+  }
 }
 
 .recall-button-box {
