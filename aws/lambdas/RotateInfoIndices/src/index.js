@@ -47,7 +47,7 @@ exports.handler = async (input, context) => {
 
   return anyError
     ? context.fail(JSON.stringify(responses))
-    : context.success(JSON.stringify(responses));
+    : context.succeed(JSON.stringify(responses));
 };
 
 /**
