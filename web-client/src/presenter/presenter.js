@@ -73,6 +73,7 @@ import { completeMessageSequence } from './sequences/completeMessageSequence';
 import { completePrintPaperPetitionReceiptSequence } from './sequences/completePrintPaperPetitionReceiptSequence';
 import { completeStartCaseWizardStepSequence } from './sequences/completeStartCaseWizardStepSequence';
 import { confirmStayLoggedInSequence } from './sequences/confirmStayLoggedInSequence';
+import { consolidatedCaseCheckboxAllChangeSequence } from './sequences/consolidatedCaseCheckboxAllChangeSequence';
 import { contactPrimaryCountryTypeChangeSequence } from './sequences/contactPrimaryCountryTypeChangeSequence';
 import { convertHtml2PdfSequence } from './sequences/convertHtml2PdfSequence';
 import { copyPrimaryContactSequence } from './sequences/copyPrimaryContactSequence';
@@ -300,6 +301,7 @@ import { selectDocumentForScanSequence } from './sequences/selectDocumentForScan
 import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
+import { serveCourtIssuedDocumentCompleteSequence } from './sequences/serveCourtIssuedDocumentCompleteSequence';
 import { serveCourtIssuedDocumentFromDocketEntrySequence } from './sequences/serveCourtIssuedDocumentFromDocketEntrySequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
@@ -404,6 +406,7 @@ import { updateAdvancedSearchFormValueSequence } from './sequences/updateAdvance
 import { updateBatchDownloadProgressSequence } from './sequences/updateBatchDownloadProgressSequence';
 import { updateCalendarNoteSequence } from './sequences/updateCalendarNoteSequence';
 import { updateCaseAssociationFormValueSequence } from './sequences/updateCaseAssociationFormValueSequence';
+import { updateCaseCheckboxSequence } from './sequences/updateCaseCheckboxSequence';
 import { updateCaseDeadlineSequence } from './sequences/updateCaseDeadlineSequence';
 import { updateCaseDetailsSequence } from './sequences/updateCaseDetailsSequence';
 import { updateCaseNoteSequence } from './sequences/updateCaseNoteSequence';
@@ -575,6 +578,7 @@ export const presenter = {
     completePrintPaperPetitionReceiptSequence,
     completeStartCaseWizardStepSequence,
     confirmStayLoggedInSequence,
+    consolidatedCaseCheckboxAllChangeSequence,
     contactPrimaryCountryTypeChangeSequence,
     convertHtml2PdfSequence,
     copyPrimaryContactSequence,
@@ -801,6 +805,7 @@ export const presenter = {
     selectScannerSequence,
     selectWorkItemSequence,
     serveCaseToIrsSequence,
+    serveCourtIssuedDocumentCompleteSequence,
     serveCourtIssuedDocumentFromDocketEntrySequence,
     serveCourtIssuedDocumentSequence,
     servePaperFiledDocumentSequence,
@@ -903,6 +908,7 @@ export const presenter = {
     updateBatchDownloadProgressSequence,
     updateCalendarNoteSequence,
     updateCaseAssociationFormValueSequence,
+    updateCaseCheckboxSequence,
     updateCaseDeadlineSequence,
     updateCaseDetailsSequence,
     updateCaseNoteSequence,

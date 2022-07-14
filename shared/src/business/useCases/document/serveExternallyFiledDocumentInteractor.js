@@ -119,7 +119,7 @@ exports.serveExternallyFiledDocumentInteractor = async (
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        caseEntity,
+        caseEntities: [caseEntity],
         docketEntryId: currentDocketEntry.docketEntryId,
       });
 
