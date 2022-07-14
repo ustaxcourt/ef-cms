@@ -104,7 +104,7 @@ describe('documentGenerators', () => {
           caseCaptionExtension: PARTY_TYPES.petitioner,
           caseTitle: 'Test Person',
           consolidatedCases: new Array(38).fill(null).map((v, i) => ({
-            docketNumber: '24929-17',
+            docketNumber: `${24929 + i}-17`,
             documentNumber: i + 101,
           })),
           dateFiledLodged: '01/01/20',
