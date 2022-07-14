@@ -13,14 +13,17 @@ describe('applyStampFormHelper', () => {
     applicationContext,
   );
 
+  const baseState = {
+    form: {},
+    pdfForSigning: {},
+    validationErrors: {},
+  };
+
   describe('canSaveStampOrder', () => {
     it('should be false when the form.status is not set to either "Denied" or "Granted"', () => {
       const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
         state: {
-          form: {
-            status: undefined,
-          },
-          pdfForSigning: {},
+          ...baseState,
         },
       });
 
@@ -30,7 +33,7 @@ describe('applyStampFormHelper', () => {
     it('should be false when the stamp is not applied', () => {
       const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
         state: {
-          form: {},
+          ...baseState,
           pdfForSigning: {
             stampApplied: false,
           },
@@ -43,6 +46,7 @@ describe('applyStampFormHelper', () => {
     it('should be true when the form.status is set and stamp is applied', () => {
       const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
         state: {
+          ...baseState,
           form: {
             status: MOTION_STATUSES.GRANTED,
           },
@@ -60,9 +64,7 @@ describe('applyStampFormHelper', () => {
     it('should be "cursor-grabbing" when the stamp has been applied and there is no stamp data', () => {
       const { cursorClass } = runCompute(applyStampFormHelper, {
         state: {
-          form: {
-            status: undefined,
-          },
+          ...baseState,
           pdfForSigning: {
             stampApplied: true,
             stampData: undefined,
@@ -76,9 +78,7 @@ describe('applyStampFormHelper', () => {
     it('should be "cursor-grab" when the stamp has NOT been applied and there is stamp data', () => {
       const { cursorClass } = runCompute(applyStampFormHelper, {
         state: {
-          form: {
-            status: undefined,
-          },
+          ...baseState,
           pdfForSigning: {
             stampApplied: false,
             stampData: {},
@@ -96,10 +96,10 @@ describe('applyStampFormHelper', () => {
         applyStampFormHelper,
         {
           state: {
+            ...baseState,
             form: {
               customOrderText: '',
             },
-            pdfForSigning: {},
           },
         },
       );
@@ -112,10 +112,10 @@ describe('applyStampFormHelper', () => {
         applyStampFormHelper,
         {
           state: {
+            ...baseState,
             form: {
               customOrderText: fourLetterWord,
             },
-            pdfForSigning: {},
           },
         },
       );
@@ -130,9 +130,7 @@ describe('applyStampFormHelper', () => {
     it('should be empty when the stamp has been applied and the pdf has not already been stamped', () => {
       const { hideClass } = runCompute(applyStampFormHelper, {
         state: {
-          form: {
-            status: undefined,
-          },
+          ...baseState,
           pdfForSigning: {
             isPdfAlreadyStamped: false,
             stampApplied: true,
@@ -146,9 +144,7 @@ describe('applyStampFormHelper', () => {
     it('should be "hide" when the stamp has NOT been applied and the pdf has already been signed', () => {
       const { hideClass } = runCompute(applyStampFormHelper, {
         state: {
-          form: {
-            status: undefined,
-          },
+          ...baseState,
           pdfForSigning: {
             isPdfAlreadyStamped: true,
             stampApplied: false,
@@ -166,16 +162,59 @@ describe('applyStampFormHelper', () => {
       applicationContext.getUtilities().formatNow.mockReturnValue(mockDate);
 
       const { minDate } = runCompute(applyStampFormHelper, {
-        state: {
-          form: {},
-          pdfForSigning: {},
-        },
+        state: baseState,
       });
 
       expect(minDate).toEqual(minDate);
       expect(applicationContext.getUtilities().formatNow).toHaveBeenCalledWith(
         DATE_FORMATS.YYYYMMDD,
       );
+    });
+  });
+
+  describe('dateErrorClass', () => {
+    it('should be set to "stamp-form-group" if there are no validationErrors on date', () => {
+      const { dateErrorClass } = runCompute(applyStampFormHelper, {
+        state: baseState,
+      });
+
+      expect(dateErrorClass).toEqual('stamp-form-group');
+    });
+
+    it('should be set to "stamp-form-group-error" if there are validationErrors on date', () => {
+      const { dateErrorClass } = runCompute(applyStampFormHelper, {
+        state: {
+          ...baseState,
+          validationErrors: {
+            date: true,
+          },
+        },
+      });
+
+      expect(dateErrorClass).toEqual('stamp-form-group-error');
+    });
+  });
+
+  describe('statusErrorClass', () => {
+    it('should be set to "stamp-form-group" if there are no validationErrors on status', () => {
+      const { statusErrorClass } = runCompute(applyStampFormHelper, {
+        state: baseState,
+      });
+
+      expect(statusErrorClass).toEqual('stamp-form-group');
+    });
+
+    it('should be set to "stamp-form-group-error" if there are validationErrors on status', () => {
+      const { statusErrorClass } = runCompute(applyStampFormHelper, {
+        state: {
+          ...baseState,
+          validationErrors: {
+            status: true,
+          },
+        },
+      });
+
+      expect(statusErrorClass).toEqual('stamp-form-group-error');
     });
   });
 });
