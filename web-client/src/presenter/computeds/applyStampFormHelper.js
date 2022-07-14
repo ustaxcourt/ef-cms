@@ -31,11 +31,22 @@ export const applyStampFormHelper = (get, applicationContext) => {
     .getUtilities()
     .formatNow(DATE_FORMATS.YYYYMMDD);
 
+  const validationErrors = get(state.validationErrors);
+  const dateErrorClass = !validationErrors.date
+    ? 'stamp-form-group'
+    : 'stamp-form-group-error';
+
+  const statusErrorClass = !validationErrors.status
+    ? 'stamp-form-group'
+    : 'stamp-form-group-error';
+
   return {
     canSaveStampOrder,
     cursorClass,
     customOrderTextCharacterCount,
+    dateErrorClass,
     hideClass,
     minDate,
+    statusErrorClass,
   };
 };

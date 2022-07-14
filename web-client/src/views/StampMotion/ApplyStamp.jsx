@@ -200,11 +200,7 @@ export const ApplyStamp = connect(
                 </div>
                 <div className="stamp-order-form">
                   <FormGroup
-                    className={
-                      !validationErrors.status
-                        ? 'stamp-form-group'
-                        : 'stamp-form-group-error'
-                    }
+                    className={applyStampFormHelper.statusErrorClass}
                     errorText={validationErrors.status}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
@@ -354,11 +350,7 @@ export const ApplyStamp = connect(
                   </FormGroup>
                   <hr className="narrow-hr" />
                   <FormGroup
-                    className={
-                      !validationErrors.status
-                        ? 'stamp-form-group'
-                        : 'stamp-form-group-error'
-                    }
+                    className={applyStampFormHelper.dateErrorClass}
                     errorText={validationErrors.date}
                   >
                     <div className="usa-radio" key="statusReportDueDate">
