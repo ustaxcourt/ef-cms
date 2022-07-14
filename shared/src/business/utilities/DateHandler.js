@@ -119,20 +119,6 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
 };
 
 /**
- * getStartOfDateFromIsoDateString
- *
- * @param {string} dateString the date to be evaluated, defaults to now if not passed
- * @returns {string} the ISO formatted date set at midnight UTC for use in date comparisons w/o regard to time
- */
-const getStartOfDateFromIsoDateString = dateString => {
-  if (!dateString) {
-    dateString = DateTime.now().toISO();
-  }
-  const midnight = DateTime.fromISO(dateString).setZone('utc').startOf('days');
-  return midnight.toISO();
-};
-
-/**
  * getMidnightIsoDateString
  *
  * @returns {string} the ISO formatted date set at midnight UTC of today
@@ -531,7 +517,6 @@ module.exports = {
   getBusinessDateInFuture,
   getMidnightIsoDateString,
   getMonthDayYearInETObj,
-  getStartOfDateFromIsoDateString,
   isStringISOFormatted,
   isValidDateString,
   prepareDateFromEST,

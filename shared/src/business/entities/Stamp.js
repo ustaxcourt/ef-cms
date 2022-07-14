@@ -2,7 +2,7 @@ const joi = require('joi');
 const {
   formatDateString,
   FORMATS,
-  getStartOfDateFromIsoDateString,
+  getMidnightIsoDateString,
 } = require('../utilities/DateHandler');
 const {
   joiValidationDecorator,
@@ -12,7 +12,7 @@ const { JoiValidationConstants } = require('./JoiValidationConstants');
 const { MOTION_STATUSES } = require('./EntityConstants');
 
 const todayFormatted = formatDateString(
-  getStartOfDateFromIsoDateString(),
+  getMidnightIsoDateString(),
   FORMATS.ISO,
 );
 
