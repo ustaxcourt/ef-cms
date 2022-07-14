@@ -19,6 +19,7 @@ module.exports = {
     'seal-in-lower-environment':
       './web-api/terraform/template/lambdas/seal-in-lower-environment.js',
     streams: './web-api/terraform/template/lambdas/streams.js',
+    'trial-session': './web-api/terraform/template/lambdas/trial-session.js',
     'websocket-authorizer':
       './web-api/terraform/template/lambdas/websocket-authorizer.js',
     websockets: './web-api/terraform/template/lambdas/websockets.js',

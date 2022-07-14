@@ -198,6 +198,9 @@ const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
 const {
+  createJobStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/createJobStatus');
+const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
 const {
@@ -239,6 +242,9 @@ const {
 const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
+const {
+  decrementJobCounter,
+} = require('../../shared/src/persistence/dynamo/trialSessions/decrementJobCounter');
 const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
@@ -590,6 +596,9 @@ const {
 const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
+const {
+  getJobStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getJobStatus');
 const {
   getJudgeInSectionHelper,
 } = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
@@ -1317,11 +1326,14 @@ const {
   CognitoIdentityServiceProvider,
   DynamoDB,
   EnvironmentCredentials,
+  Lambda,
   S3,
   SES,
   SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
+
+const lambda = new Lambda();
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -1479,6 +1491,7 @@ const gatewayMethods = {
     fetchPendingItems,
     getConfigurationItemValue,
     getFeatureFlagValue,
+    getJobStatus,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
@@ -1530,8 +1543,10 @@ const gatewayMethods = {
         };
       }
     : confirmAuthCode,
+  createJobStatus,
   createNewPetitionerUser,
   createNewPractitionerUser,
+  decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
@@ -2198,6 +2213,17 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setupPdfDocument,
         uploadToS3,
       };
+    },
+    invokeLambda: (params, cb) => {
+      // TODO: maybe see if this has a .promise method
+      if (process.env.IS_LOCAL) {
+        const {
+          handler,
+        } = require('../terraform/template/lambdas/trial-session');
+        handler(JSON.parse(params.Payload));
+      } else {
+        lambda.invoke(params, cb);
+      }
     },
     isAuthorized,
     isCurrentColorActive,
