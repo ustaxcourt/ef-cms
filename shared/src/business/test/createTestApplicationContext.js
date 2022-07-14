@@ -354,6 +354,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getStampBoxCoordinates: jest
       .fn()
       .mockImplementation(getStampBoxCoordinates),
+    getStartOfDateFromIsoDateString: jest
+      .fn()
+      .mockImplementation(DateHandler.getStartOfDateFromIsoDateString),
     getTextByCount: jest.fn().mockImplementation(getTextByCount),
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
