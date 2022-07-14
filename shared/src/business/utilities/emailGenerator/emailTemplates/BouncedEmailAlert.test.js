@@ -26,12 +26,26 @@ describe('BouncedEmailAlert', () => {
         subject={bounceDetail.subject}
       />,
     );
-    expect(queryByText(/someone@example.com/i)).toBeInTheDocument();
-    expect(queryByText(/Permanent/i)).toBeInTheDocument();
-    expect(queryByText(/OnSuppressionList/i)).toBeInTheDocument();
-    expect(queryByText(/2022-01-01/i)).toBeInTheDocument();
-    expect(queryByText(/local/i)).toBeInTheDocument();
-    expect(queryByText(/Message Undeliverable/i)).toBeInTheDocument();
-    expect(queryByText(/We are attempting to serve you/i)).toBeInTheDocument();
+    expect(
+      queryByText(bounceDetail.bounceRecipient, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      queryByText(bounceDetail.bounceSubType, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      queryByText(bounceDetail.bounceType, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      queryByText(bounceDetail.currentDate, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      queryByText(bounceDetail.environmentName, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      queryByText(bounceDetail.errorMessage, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      queryByText(bounceDetail.subject, { exact: false }),
+    ).toBeInTheDocument();
   });
 });
