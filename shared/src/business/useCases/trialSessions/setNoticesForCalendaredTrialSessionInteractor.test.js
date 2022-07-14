@@ -3,6 +3,7 @@ const {
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
 const {
+  copyPagesFromPdf,
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
 const {
@@ -105,6 +106,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('should invoke the worker lambda 3 times when 3 cases are calendared on the session and a complete notification is sent back to the user when they all finish processing', async () => {
+    // const copyPagesFromPdfMock = jest.mock(copyPagesFromPdf);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue({
@@ -135,10 +137,15 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
+
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(fakeData);
     jest.spyOn(global, 'setInterval').mockImplementation(cb => cb());
+
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValueOnce(false);
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
@@ -148,5 +155,59 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
     ).toHaveBeenCalledTimes(1);
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledTimes(1);
+    // expect(copyPagesFromPdfMock).toHaveBeenCalled();
+  });
+
+  it.skip('should not generate a pdf if the file does not exist in s3', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockResolvedValue({
+        ...MOCK_TRIAL_REGULAR,
+        proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
+      });
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockResolvedValue([
+        {
+          docketNumber: '101-20',
+        },
+        {
+          docketNumber: '102-20',
+        },
+        {
+          docketNumber: '103-20',
+        },
+      ]);
+    applicationContext.getPersistenceGateway().getJobStatus.mockResolvedValue({
+      unfinishedCases: 0,
+    });
+    applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf.mockResolvedValue({
+        url: 'http://example.com',
+      });
+    applicationContext
+      .getPersistenceGateway()
+      .isFileExists.mockResolvedValue(false);
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValue(fakeData);
+    jest.spyOn(global, 'setInterval').mockImplementation(cb => cb());
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().isFileExists,
+    ).toHaveBeenCalledTimes(3);
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
   });
 });
