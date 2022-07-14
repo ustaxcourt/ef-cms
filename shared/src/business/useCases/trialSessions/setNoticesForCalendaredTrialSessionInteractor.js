@@ -138,6 +138,18 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
   const newPdfDoc = await PDFDocument.create();
 
   for (let calendaredCase of calendaredCases) {
+    const pdfExistsInS3 = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: `${jobId}-${calendaredCase.docketNumber}`,
+        useTempBucket: true,
+      });
+
+    if (!pdfExistsInS3) {
+      continue;
+    }
+
     const calendaredCasePdfData = await applicationContext
       .getPersistenceGateway()
       .getDocument({
