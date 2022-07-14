@@ -5,10 +5,12 @@ import datePicker from '../../../../node_modules/uswds/src/js/components/date-pi
 
 export const DatePickerComponent = ({
   className,
+  disabled = false,
   errorText,
   hideLegend,
   hintText,
   label,
+  minDate,
   name,
   names,
   onBlur,
@@ -31,6 +33,16 @@ export const DatePickerComponent = ({
       datePicker.on(datePickerRef.current);
     }
   }, [datePickerRef]);
+
+  useEffect(() => {
+    const input = datePickerRef.current.querySelector('.usa-date-picker');
+
+    if (disabled) {
+      datePicker.disable(input);
+    } else {
+      datePicker.enable(input);
+    }
+  });
 
   useEffect(() => {
     if (!datePickerRef.current) return;
@@ -106,7 +118,11 @@ export const DatePickerComponent = ({
           MM/DD/YYYY
         </div>
       )}
-      <div className="usa-date-picker" data-default-value={defaultValue}>
+      <div
+        className="usa-date-picker"
+        data-default-value={defaultValue}
+        data-min-date={minDate}
+      >
         <input
           aria-describedby={`${name}-date-label ${name}-date-hint`}
           className="usa-input grey-placeholder"
