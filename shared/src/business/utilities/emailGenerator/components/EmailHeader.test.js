@@ -4,15 +4,15 @@ const { render } = require('@testing-library/react');
 
 describe('EmailHeader', () => {
   it('renders a header with US Tax Court info', () => {
-    const { getByTestId } = render(<EmailHeader />);
+    const { queryByText } = render(<EmailHeader />);
 
-    expect(getByTestId('header').textContent).toBe('United States Tax Court');
-    expect(getByTestId('location').textContent).toBe('Washington, DC 20217');
+    expect(queryByText('United States Tax Court')).toBeInTheDocument();
+    expect(queryByText('Washington, DC 20217')).toBeInTheDocument();
   });
 
   it('renders the date from props if present', () => {
-    const { getByTestId } = render(<EmailHeader date={'May 14, 2020'} />);
+    const { queryByText } = render(<EmailHeader date={'May 14, 2020'} />);
 
-    expect(getByTestId('date').textContent).toBe('May 14, 2020');
+    expect(queryByText('May 14, 2020')).toBeInTheDocument();
   });
 });
