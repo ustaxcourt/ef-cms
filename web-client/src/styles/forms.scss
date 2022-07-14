@@ -255,7 +255,7 @@ label.validated::after {
   height: 0.8rem;
   margin-right: -1.8rem;
   margin-left: 0.2rem;
-  background-image: url('./images/correct.svg');
+  background-image: url('images/correct.svg');
   background-position: 100%;
   background-repeat: no-repeat;
   content: ' ';
@@ -512,6 +512,37 @@ label.ustc-upload {
   }
 }
 
+.stamp-order-form {
+  .usa-form-group {
+    max-width: 100%;
+    margin-bottom: 0;
+
+    &.stamp-form-group {
+      margin: 0 1rem;
+    }
+
+    &.stamp-form-group-error {
+      margin-left: -0.1rem;
+    }
+
+    &.denied-checkboxes {
+      padding: 0 2rem;
+    }
+
+    #due-date-input-date-label {
+      margin: 0;
+    }
+
+    .width-150 {
+      width: 150px;
+    }
+  }
+
+  .narrow-hr {
+    width: 90%;
+  }
+}
+
 .complete-document-type-section {
   :last-child {
     margin-bottom: 0;
@@ -546,7 +577,8 @@ label.ustc-upload {
   }
 }
 
-.usa-input.grey-placeholder::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+.usa-input.grey-placeholder::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
   color: gray;
   opacity: 1; /* Firefox */
 }

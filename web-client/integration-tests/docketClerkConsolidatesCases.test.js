@@ -1,18 +1,26 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
-// docketclerk
+import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
 import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
+import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import { docketClerkUnconsolidatesCase } from './journey/docketClerkUnconsolidatesCase';
+import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServesDocumentOnLeadCase';
+import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
+import { docketClerkUnconsolidatesLeadCase } from './journey/docketClerkUnconsolidatesLeadCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-// petitioner
+import {
+  loginAs,
+  setConsolidatedCasesPropagateEntriesFlag,
+  setupTest,
+  uploadPetition,
+} from './helpers';
 import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 
 const cerebralTest = setupTest();
 const trialLocation = `Boise, Idaho, ${Date.now()}`;
+cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
 
 const overrides = {
   preferredTrialCity: trialLocation,
@@ -24,11 +32,10 @@ describe('Case Consolidation Journey', () => {
     jest.setTimeout(30000);
   });
 
-  afterAll(() => {
+  afterAll(async () => {
+    await setConsolidatedCasesPropagateEntriesFlag(true);
     cerebralTest.closeSocket();
   });
-
-  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner and create the lead case', async () => {
     const caseDetail = await uploadPetition(cerebralTest, overrides);
@@ -39,8 +46,6 @@ describe('Case Consolidation Journey', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-
-  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner and create a case that cannot be consolidated with the lead case', async () => {
     //not passing in overrides to preferredTrialCity to ensure case cannot be consolidated
@@ -55,7 +60,7 @@ describe('Case Consolidation Journey', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCaseThatCannotBeConsolidated(cerebralTest);
 
-  it('login as a petitioner and create the case to consolidate with', async () => {
+  it('login as a petitioner and create a case to consolidate with', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
     const caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
@@ -66,15 +71,143 @@ describe('Case Consolidation Journey', () => {
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
   docketClerkOpensCaseConsolidateModal(cerebralTest);
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest);
+  docketClerkConsolidatesCases(cerebralTest, 2);
+
+  it('login as a petitioner and create another case to consolidate with', async () => {
+    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
+    const caseDetail = await uploadPetition(cerebralTest, overrides);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+  docketClerkOpensCaseConsolidateModal(cerebralTest);
+  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+  docketClerkConsolidatesCases(cerebralTest, 3);
 
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerViewsDashboard(cerebralTest);
-  petitionerVerifiesConsolidatedCases(cerebralTest);
+  petitionerVerifiesConsolidatedCases(cerebralTest, 3);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUnconsolidatesCase(cerebralTest);
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentTitle: 'Order to do something',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkServesDocumentOnLeadCase(cerebralTest, 0);
 
+  it('should have a success message that mentions serving multiple cases', async () => {
+    const alertSuccess = cerebralTest.getState('alertSuccess');
+
+    expect(alertSuccess.message).toEqual(
+      'Document served to selected cases in group. ',
+    );
+    expect(alertSuccess.overwritable).toEqual(false);
+  });
+
+  it('should verify that document is served on all checked consolidated cases', async () => {
+    const consolidatedCases = cerebralTest.getState(
+      'caseDetail.consolidatedCases',
+    );
+
+    for (let consolidatedCase of consolidatedCases) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: consolidatedCase.docketNumber,
+      });
+
+      const { docketEntryId } = cerebralTest.docketRecordEntry;
+
+      const documents = cerebralTest.getState('caseDetail.docketEntries');
+      const orderDocument = documents.find(
+        doc => doc.docketEntryId === docketEntryId,
+      );
+
+      if (
+        cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.includes(
+          consolidatedCase.docketNumber,
+        )
+      ) {
+        expect(orderDocument.servedAt).toBeDefined();
+        expect(orderDocument.workItem.docketEntry.docketEntryId).toEqual(
+          orderDocument.docketEntryId,
+        );
+        expect(orderDocument.workItem.docketNumber).toEqual(
+          consolidatedCase.docketNumber,
+        );
+        expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
+        expect(orderDocument.workItem.completedMessage).toEqual('completed');
+        expect(orderDocument.workItem.completedAt).toBeDefined();
+        expect(orderDocument.workItem.inProgress).toBeUndefined();
+      } else {
+        expect(orderDocument).toBeUndefined();
+      }
+    }
+  });
+
+  it('should set the feature flag to false', async () => {
+    await setConsolidatedCasesPropagateEntriesFlag(false);
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentTitle: 'Order to do something only on the lead case',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsAndServesDocketEntryFromOrder(cerebralTest, 0, false);
+
+  it('should have a success message that mentions the document was served (and not on multiple cases)', async () => {
+    const alertSuccess = cerebralTest.getState('alertSuccess');
+
+    expect(alertSuccess.message).toEqual('Document served. ');
+    expect(alertSuccess.overwritable).toEqual(false);
+  });
+
+  it('should verify that document is served on only the lead case when the feature flag is disabled', async () => {
+    const consolidatedCases = cerebralTest.getState(
+      'caseDetail.consolidatedCases',
+    );
+
+    for (let consolidatedCase of consolidatedCases) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: consolidatedCase.docketNumber,
+      });
+
+      const { docketEntryId } = cerebralTest.docketRecordEntry;
+
+      const documents = cerebralTest.getState('caseDetail.docketEntries');
+      const orderDocument = documents.find(
+        doc => doc.docketEntryId === docketEntryId,
+      );
+
+      if (cerebralTest.leadDocketNumber === consolidatedCase.docketNumber) {
+        expect(orderDocument.servedAt).toBeDefined();
+        expect(orderDocument.workItem.docketEntry.docketEntryId).toEqual(
+          orderDocument.docketEntryId,
+        );
+        expect(orderDocument.workItem.docketNumber).toEqual(
+          consolidatedCase.docketNumber,
+        );
+        expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
+        expect(orderDocument.workItem.completedMessage).toEqual('completed');
+        expect(orderDocument.workItem.completedAt).toBeDefined();
+        expect(orderDocument.workItem.inProgress).toBeUndefined();
+      } else {
+        expect(orderDocument).toBeUndefined();
+      }
+    }
+  });
+
+  docketClerkUnconsolidatesLeadCase(cerebralTest);
+  loginAs(cerebralTest, 'petitioner@example.com');
+  petitionerViewsDashboard(cerebralTest);
+  petitionerVerifiesConsolidatedCases(cerebralTest, 2);
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUnconsolidatesLeadCase(cerebralTest);
   loginAs(cerebralTest, 'petitioner@example.com');
   petitionerViewsDashboard(cerebralTest);
   petitionerVerifiesUnconsolidatedCases(cerebralTest);

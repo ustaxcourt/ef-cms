@@ -35,6 +35,15 @@ const TRIAL_SESSION_SCOPE_TYPES = {
   standaloneRemote: 'Standalone Remote',
 };
 
+const JURISDICTION_OPTIONS = {
+  restoredToDocket: 'The case is restored to the general docket',
+  undersigned: 'Jurisdiction is retained by the undersigned',
+};
+
+const MOTION_STATUSES = { DENIED: 'Denied', GRANTED: 'Granted' };
+
+const STRICKEN_CASE_MESSAGE = 'This case is stricken from the trial session';
+
 const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
   petitionersAndCounsel: 'Petitioner(s) & Counsel',
@@ -44,6 +53,11 @@ const PARTY_VIEW_TABS = {
 const ALLOWLIST_FEATURE_FLAGS = {
   CHIEF_JUDGE_NAME: {
     key: 'chief-judge-name',
+  },
+  CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES: {
+    disabledMessage:
+      'Docket entries are not being duplicated across consolidated cases temporarily.',
+    key: 'consolidated-cases-propagate-docket-entries',
   },
   EXTERNAL_OPINION_SEARCH: {
     disabledMessage:
@@ -1361,6 +1375,7 @@ module.exports = deepFreeze({
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
+  JURISDICTION_OPTIONS,
   LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
   MAX_FILE_SIZE_BYTES,
@@ -1369,6 +1384,7 @@ module.exports = deepFreeze({
   MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MESSAGE_QUEUE_TYPES,
   MINUTE_ENTRIES_MAP,
+  MOTION_STATUSES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
@@ -1407,6 +1423,7 @@ module.exports = deepFreeze({
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
+  STRICKEN_CASE_MESSAGE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TODAYS_ORDERS_PAGE_SIZE,
   TODAYS_ORDERS_SORT_DEFAULT,

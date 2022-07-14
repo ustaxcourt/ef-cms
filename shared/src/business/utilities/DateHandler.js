@@ -119,6 +119,16 @@ const calculateISODate = ({ dateString, howMuch = 0, units = 'days' }) => {
 };
 
 /**
+ * getMidnightIsoDateString
+ *
+ * @returns {string} the ISO formatted date set at midnight UTC of today
+ */
+const getMidnightIsoDateString = () => {
+  const midnight = DateTime.now().setZone('utc').startOf('days');
+  return midnight.toISO();
+};
+
+/**
  * @param {string} dateString a date string to be sent to persistence
  * @param {string} inputFormat optional parameter containing hints on how to parse dateString
  * @returns {string} a formatted ISO date string
@@ -505,6 +515,7 @@ module.exports = {
   formatDateString,
   formatNow,
   getBusinessDateInFuture,
+  getMidnightIsoDateString,
   getMonthDayYearInETObj,
   isStringISOFormatted,
   isValidDateString,
