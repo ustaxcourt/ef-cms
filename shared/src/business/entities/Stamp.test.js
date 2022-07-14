@@ -28,10 +28,14 @@ describe('Stamp entity', () => {
         howMuch: -1,
         units: 'days',
       });
+
+      console.log('***yesterdayIso', yesterdayIso);
       const yesterdayFormatted = formatDateString(
         createISODateString(yesterdayIso),
         FORMATS.ISO,
       );
+      console.log('***yesterdayFormatted', yesterdayFormatted);
+
       const stamp = new Stamp({
         date: yesterdayFormatted,
         dueDateMessage: 'something',
