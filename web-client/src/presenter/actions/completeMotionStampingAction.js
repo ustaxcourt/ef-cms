@@ -12,66 +12,69 @@ export const completeMotionStampingAction = async ({
   applicationContext,
   get,
 }) => {
-  const originalDocketEntryId = get(state.motionForStamping.docketEntryId);
+  const originalDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const parentMessageId = get(state.parentMessageId);
   let docketEntryId;
 
-  if (get(state.motionForStamping.signatureData.x)) {
-    // TODO: add motion stamp data
-    const {
-      nameForSigning,
-      nameForSigningLine2,
-      pageNumber,
-      signatureData: { scale, x, y },
-    } = get(state.motionForStamping);
+  console.log('state.pdfForSigning', get(state.pdfForSigning));
+  console.log('state.form', get(state.form));
 
-    const pdfjsObj = window.pdfjsObj || get(state.motionForStamping.pdfjsObj);
+  // if (get(state.pdfForSigning.stampData.x)) {
+  //   // TODO: add motion stamp data
+  //   const {
+  //     nameForSigning,
+  //     nameForSigningLine2,
+  //     pageNumber,
+  //     stampData: { scale, x, y },
+  //   } = get(state.pdfForSigning);
 
-    // generate signed document to bytes
-    const signedPdfBytes = await applicationContext
-      .getUseCases()
-      .generateSignedDocumentInteractor(applicationContext, {
-        pageIndex: pageNumber - 1,
-        // pdf.js starts at 1
-        pdfData: await pdfjsObj.getData(),
-        posX: x,
-        posY: y,
-        scale,
-        sigTextData: {
-          signatureName: `(Signed) ${nameForSigning}`,
-          signatureTitle: nameForSigningLine2,
-        },
-      });
+  //   const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
-    const documentFile = new File([signedPdfBytes], 'myfile.pdf', {
-      type: 'application/pdf',
-    });
+  //   // generate signed document to bytes
+  //   const signedPdfBytes = await applicationContext
+  //     .getUseCases()
+  //     .generateStampedDocumentInteractor(applicationContext, {
+  //       pageIndex: pageNumber - 1,
+  //       // pdf.js starts at 1
+  //       pdfData: await pdfjsObj.getData(),
+  //       posX: x,
+  //       posY: y,
+  //       scale,
+  //       sigTextData: {
+  //         signatureName: `(Signed) ${nameForSigning}`,
+  //         signatureTitle: nameForSigningLine2,
+  //       },
+  //     });
 
-    const signedDocumentFromUploadId = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocumentFromClient({
-        applicationContext,
-        document: documentFile,
-      });
+  //   const documentFile = new File([signedPdfBytes], 'myfile.pdf', {
+  //     type: 'application/pdf',
+  //   });
 
-    ({ signedDocketEntryId: docketEntryId } = await applicationContext
-      .getUseCases()
-      .saveSignedDocumentInteractor(applicationContext, {
-        docketNumber,
-        nameForSigning,
-        originalDocketEntryId,
-        parentMessageId,
-        signedDocketEntryId: signedDocumentFromUploadId,
-      }));
-  }
+  //   const signedDocumentFromUploadId = await applicationContext
+  //     .getPersistenceGateway()
+  //     .uploadDocumentFromClient({
+  //       applicationContext,
+  //       document: documentFile,
+  //     });
+
+  //   ({ signedDocketEntryId: docketEntryId } = await applicationContext
+  //     .getUseCases()
+  //     .saveSignedDocumentInteractor(applicationContext, {
+  //       docketNumber,
+  //       nameForSigning,
+  //       originalDocketEntryId,
+  //       parentMessageId,
+  //       signedDocketEntryId: signedDocumentFromUploadId,
+  //     }));
+  // }
 
   let redirectUrl;
 
   if (parentMessageId) {
-    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${docketEntryId}`;
+    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${originalDocketEntryId}`;
   } else {
-    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`;
+    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${originalDocketEntryId}`;
   }
 
   return {
