@@ -307,6 +307,7 @@ export const ApplyStamp = connect(
                         id="stricken-case"
                         name="strickenFromTrialSession"
                         type="radio"
+                        value={STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
