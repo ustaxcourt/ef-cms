@@ -378,6 +378,9 @@ const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
 const {
+  generateNoticesForCaseTrialSessionCalendarInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor');
+const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
 const {
@@ -2046,6 +2049,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateNoticeOfChangeOfTrialJudgeInteractor,
         generateNoticeOfChangeToRemoteProceedingInteractor,
         generateNoticeOfTrialIssuedInteractor,
+        generateNoticesForCaseTrialSessionCalendarInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
         generatePractitionerCaseListPdfInteractor,
