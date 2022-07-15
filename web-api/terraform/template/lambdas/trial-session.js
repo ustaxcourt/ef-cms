@@ -5,7 +5,7 @@ exports.handler = async event => {
   const { docketNumber, jobId, trialSession, userId } = event;
 
   await applicationContext
-    .getUserCases()
+    .getUseCases()
     .generateNoticesForCaseTrialSessionCalendarInteractor(applicationContext, {
       docketNumber,
       jobId,
