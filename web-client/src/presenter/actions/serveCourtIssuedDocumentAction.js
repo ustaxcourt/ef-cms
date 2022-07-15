@@ -14,13 +14,38 @@ export const serveCourtIssuedDocumentAction = async ({
   get,
 }) => {
   const docketEntryId = get(state.docketEntryId);
-  const docketNumber = get(state.caseDetail.docketNumber);
+  const caseDetail = get(state.caseDetail);
+  const consolidatedCases = caseDetail.consolidatedCases || [];
+  let docketNumbers = consolidatedCases
+    .filter(consolidatedCase => consolidatedCase.checked)
+    .map(consolidatedCase => consolidatedCase.docketNumber);
+
+  const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
+
+  const consolidatedCasesPropagateDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
+  );
+
+  /*
+  const currentDocketEntryCompatibleWithConsolidation =
+    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode);
+  */
+
+  if (
+    !isLeadCase ||
+    !consolidatedCasesPropagateDocketEntriesFlag ||
+    docketNumbers.length === 0 ||
+    !currentDocketEntryCompatibleWithConsolidation
+  ) {
+    docketNumbers = [caseDetail.docketNumber];
+  }
 
   const result = await applicationContext
     .getUseCases()
     .serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId,
-      docketNumber,
+      docketNumbers,
+      subjectCaseDocketNumber: caseDetail.docketNumber,
     });
 
   return {
