@@ -1,24 +1,28 @@
+import { filter, flow, map } from 'lodash/fp';
 import { state } from 'cerebral';
 import { submitCourtIssuedDocketEntryActionHelper } from './submitCourtIssuedDocketEntryActionHelper';
 
 /**
- * creates a docket entry with the given court-issued document
+ * saves the court issued docket entry on all of the checked consolidated cases of the group.
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.get the cerebral get function
  * @returns {Promise} async action
  */
-export const submitCourtIssuedDocketEntryAction = async ({
+export const submitCourtIssuedDocketEntryToConsolidatedGroupAction = async ({
   applicationContext,
   get,
 }) => {
-  const { docketNumber } = get(state.caseDetail);
   await submitCourtIssuedDocketEntryActionHelper({
     applicationContext,
     docketEntryId: get(state.docketEntryId),
     form: get(state.form),
-    getDocketNumbers: () => [docketNumber],
-    subjectDocketNumber: docketNumber,
+    getDocketNumbers: () =>
+      flow(
+        filter('checked'),
+        map('docketNumber'),
+      )(get(state.caseDetail.consolidatedCases)),
+    subjectDocketNumber: get(state.caseDetail.docketNumber),
   });
 };
