@@ -11,7 +11,7 @@ export const unsetDeniedOptionsOnStampFormAction = ({
   get,
   store,
 }) => {
-  const stampOrderStatus = get(state.form.status);
+  const stampOrderStatus = get(state.form.disposition);
   const { MOTION_DISPOSITIONS } = applicationContext.getConstants();
 
   if (stampOrderStatus === MOTION_DISPOSITIONS.GRANTED) {

@@ -33,7 +33,7 @@ function Stamp() {
 Stamp.prototype.init = function init(rawStamp) {
   this.date = rawStamp.date;
   //disposition === status
-  this.status = rawStamp.status;
+  this.disposition = rawStamp.disposition;
   this.deniedAsMoot = rawStamp.deniedAsMoot;
   this.deniedWithoutPrejudice = rawStamp.deniedWithoutPrejudice;
   //strickenFromTrialSession
@@ -54,7 +54,7 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter a valid date',
   ],
-  status: 'Enter a status',
+  disposition: 'Enter a disposition',
 };
 
 Stamp.schema = joi.object().keys({
@@ -70,15 +70,13 @@ Stamp.schema = joi.object().keys({
   }),
   deniedAsMoot: joi.boolean().optional().allow(null),
   deniedWithoutPrejudice: joi.boolean().optional().allow(null),
+  disposition: JoiValidationConstants.STRING.valid(
+    ...Object.values(MOTION_DISPOSITIONS),
+  ).required(),
   dueDateMessage: joi.optional().allow(null),
   jurisdictionOption: JoiValidationConstants.STRING.valid(
     ...Object.values(JURISDICTION_OPTIONS),
   ),
-  status: JoiValidationConstants.STRING.valid(
-    ...Object.values(MOTION_DISPOSITIONS),
-  )
-    .description('Approval status of the motion')
-    .required(),
   strickenCase: joi.boolean().optional().allow(null),
 });
 

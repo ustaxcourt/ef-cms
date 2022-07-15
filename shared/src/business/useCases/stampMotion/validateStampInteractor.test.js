@@ -14,15 +14,15 @@ describe('validateStampInteractor', () => {
     });
 
     expect(errors).toEqual({
-      status: Stamp.VALIDATION_ERROR_MESSAGES.status,
+      disposition: Stamp.VALIDATION_ERROR_MESSAGES.disposition,
     });
   });
 
   it('returns null when there are no errors', () => {
-    const mockStatus = MOTION_DISPOSITIONS.DENIED;
+    const mockDisposition = MOTION_DISPOSITIONS.DENIED;
 
     const errors = validateStampInteractor(applicationContext, {
-      stampMotionForm: { status: mockStatus },
+      stampMotionForm: { disposition: mockDisposition },
     });
 
     expect(errors).toEqual(null);

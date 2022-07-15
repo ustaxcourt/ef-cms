@@ -10,7 +10,7 @@ import React, { useEffect, useRef } from 'react';
 export const ApplyStamp = connect(
   {
     JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
-    MOTION_STATUSES: state.constants.MOTION_STATUSES,
+    MOTION_DISPOSITIONS: state.constants.MOTION_DISPOSITIONS,
     STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
@@ -34,7 +34,7 @@ export const ApplyStamp = connect(
     clearOptionalFieldsStampFormSequence,
     form,
     JURISDICTION_OPTIONS,
-    MOTION_STATUSES,
+    MOTION_DISPOSITIONS,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
@@ -200,49 +200,52 @@ export const ApplyStamp = connect(
                 </div>
                 <div className="stamp-order-form">
                   <FormGroup
-                    className={applyStampFormHelper.statusErrorClass}
-                    errorText={validationErrors.status}
+                    className={applyStampFormHelper.dispositionErrorClass}
+                    errorText={validationErrors.disposition}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
-                      {[MOTION_STATUSES.GRANTED, MOTION_STATUSES.DENIED].map(
-                        option => (
-                          <div
-                            className={`usa-radio ${
-                              option === MOTION_STATUSES.DENIED
-                                ? 'margin-bottom-0'
-                                : ''
-                            }`}
-                            key={option}
+                      {[
+                        MOTION_DISPOSITIONS.GRANTED,
+                        MOTION_DISPOSITIONS.DENIED,
+                      ].map(option => (
+                        <div
+                          className={`usa-radio ${
+                            option === MOTION_DISPOSITIONS.DENIED
+                              ? 'margin-bottom-0'
+                              : ''
+                          }`}
+                          key={option}
+                        >
+                          <input
+                            checked={form.disposition === option}
+                            className="usa-radio__input"
+                            id={`motion-disposition-${option}`}
+                            name="disposition"
+                            type="radio"
+                            value={option}
+                            onChange={e => {
+                              applyStampFormChangeSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor={`motion-disposition-${option}`}
                           >
-                            <input
-                              checked={form.status === option}
-                              className="usa-radio__input"
-                              id={`motion-status-${option}`}
-                              name="status"
-                              type="radio"
-                              value={option}
-                              onChange={e => {
-                                applyStampFormChangeSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                            />
-                            <label
-                              className="usa-radio__label"
-                              htmlFor={`motion-status-${option}`}
-                            >
-                              {option}
-                            </label>
-                          </div>
-                        ),
-                      )}
+                            {option}
+                          </label>
+                        </div>
+                      ))}
                       <FormGroup className="grid-container stamp-form-group denied-checkboxes">
                         <div className="display-inline-block grid-col-6">
                           <input
                             checked={form.deniedAsMoot || false}
                             className="usa-checkbox__input"
-                            disabled={form.status !== MOTION_STATUSES.DENIED}
+                            disabled={
+                              form.disposition !== MOTION_DISPOSITIONS.DENIED
+                            }
                             id="deniedAsMoot"
                             name="deniedAsMoot"
                             type="checkbox"
@@ -265,7 +268,9 @@ export const ApplyStamp = connect(
                           <input
                             checked={form.deniedWithoutPrejudice || false}
                             className="usa-checkbox__input"
-                            disabled={form.status !== MOTION_STATUSES.DENIED}
+                            disabled={
+                              form.disposition !== MOTION_DISPOSITIONS.DENIED
+                            }
                             id="deniedWithoutPrejudice"
                             name="deniedWithoutPrejudice"
                             type="checkbox"
@@ -557,7 +562,7 @@ export const ApplyStamp = connect(
                         <span className="font-sans-2xs">
                           This motion is{' '}
                           <span className="text-ls-1 text-bold font-sans-lg">
-                            {form.status?.toUpperCase()}
+                            {form.disposition?.toUpperCase()}
                           </span>{' '}
                           {form.deniedAsMoot && 'as moot '}
                           {form.deniedWithoutPrejudice && 'without prejudice'}
