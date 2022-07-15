@@ -1,5 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
+import { completeMotionStampingAction } from '../actions/completeMotionStampingAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { navigateBackAction } from '../actions/navigateBackAction';
@@ -29,7 +30,7 @@ export const submitStampMotionSequence = [
       clearAlertsAction,
       setSaveAlertsForNavigationAction,
       setSuccessfulStampFromDocumentTitleAction,
-      // completeMotionStampingAction,
+      completeMotionStampingAction,
       navigateBackAction,
       // // TODO: replace completeWorkItemForDocumentSigningAction
       // completeWorkItemForDocumentSigningAction,
