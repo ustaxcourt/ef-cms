@@ -50,9 +50,7 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
 };
 
 Stamp.schema = joi.object().keys({
-  customOrderText: JoiValidationConstants.STRING.max(60)
-    .description('what it?')
-    .optional(),
+  customOrderText: JoiValidationConstants.STRING.max(60).optional(),
   date: joi.when('dueDateMessage', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
@@ -62,15 +60,14 @@ Stamp.schema = joi.object().keys({
         'The due date of the status report (or proposed stipulated decision) filing',
       ),
   }),
-  //allow null or default to false?
   deniedAsMoot: joi.boolean().optional().allow(null),
   deniedWithoutPrejudice: joi.boolean().optional().allow(null),
   dueDateMessage: joi.optional().allow(null),
   jurisdictionOption: JoiValidationConstants.STRING.valid(
     ...Object.values(JURISDICTION_OPTIONS),
-  ).description('Approval status of the motion'),
+  ),
   status: JoiValidationConstants.STRING.valid(...Object.values(MOTION_STATUSES))
-    .description('what it?')
+    .description('Approval status of the motion')
     .required(),
   strickenCase: joi.boolean().optional().allow(null),
 });
