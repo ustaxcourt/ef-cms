@@ -5,7 +5,7 @@ import { unsetDeniedOptionsOnStampFormAction } from './unsetDeniedOptionsOnStamp
 
 describe('unsetDeniedOptionsOnStampFormAction', () => {
   presenter.providers.applicationContext = applicationContext;
-  const { MOTION_STATUSES } = applicationContext.getConstants();
+  const { MOTION_DISPOSITIONS } = applicationContext.getConstants();
 
   it('should unset denied options on the form when stampOrderStatus is "Granted"', async () => {
     const result = await runAction(unsetDeniedOptionsOnStampFormAction, {
@@ -16,7 +16,7 @@ describe('unsetDeniedOptionsOnStampFormAction', () => {
         form: {
           deniedAsMoot: true,
           deniedWithoutPrejudice: true,
-          status: MOTION_STATUSES.GRANTED,
+          status: MOTION_DISPOSITIONS.GRANTED,
         },
       },
     });
@@ -34,7 +34,7 @@ describe('unsetDeniedOptionsOnStampFormAction', () => {
         form: {
           deniedAsMoot: true,
           deniedWithoutPrejudice: true,
-          status: MOTION_STATUSES.DENIED,
+          status: MOTION_DISPOSITIONS.DENIED,
         },
       },
     });

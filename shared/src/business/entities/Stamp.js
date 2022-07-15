@@ -8,8 +8,11 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
+const {
+  JURISDICTION_OPTIONS,
+  MOTION_DISPOSITIONS,
+} = require('./EntityConstants');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
-const { JURISDICTION_OPTIONS, MOTION_STATUSES } = require('./EntityConstants');
 
 const todayFormatted = formatDateString(
   getMidnightIsoDateString(),
@@ -71,7 +74,9 @@ Stamp.schema = joi.object().keys({
   jurisdictionOption: JoiValidationConstants.STRING.valid(
     ...Object.values(JURISDICTION_OPTIONS),
   ),
-  status: JoiValidationConstants.STRING.valid(...Object.values(MOTION_STATUSES))
+  status: JoiValidationConstants.STRING.valid(
+    ...Object.values(MOTION_DISPOSITIONS),
+  )
     .description('Approval status of the motion')
     .required(),
   strickenCase: joi.boolean().optional().allow(null),

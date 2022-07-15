@@ -6,7 +6,7 @@ import { validateStampAction } from './validateStampAction';
 describe('validateStampAction', () => {
   let successMock;
   let errorMock;
-  const { MOTION_STATUSES } = applicationContext.getConstants();
+  const { MOTION_DISPOSITIONS } = applicationContext.getConstants();
 
   beforeAll(() => {
     successMock = jest.fn();
@@ -27,7 +27,7 @@ describe('validateStampAction', () => {
 
     await runAction(validateStampAction, {
       form: {
-        status: MOTION_STATUSES.GRANTED,
+        status: MOTION_DISPOSITIONS.GRANTED,
       },
       modules: {
         presenter,
