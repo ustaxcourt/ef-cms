@@ -5,58 +5,18 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
+const {
+  shouldAppendClinicLetter,
+} = require('../../utilities/shouldAppendClinicLetter');
 const { Case } = require('../../entities/cases/Case');
+const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
 const { DocketEntry } = require('../../entities/DocketEntry');
-const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-
-const copyPagesFromPdf = async ({ copyFrom, copyInto }) => {
-  let pagesToCopy = await copyInto.copyPages(
-    copyFrom,
-    copyFrom.getPageIndices(),
-  );
-
-  pagesToCopy.forEach(page => {
-    copyInto.addPage(page);
-  });
-};
 
 const removeLastPage = pdfDocumentData => {
   const totalPages = pdfDocumentData.getPageCount();
   const lastPageIndex = totalPages - 1;
   pdfDocumentData.removePage(lastPageIndex);
-};
-
-const shouldAppendClinicLetter = async ({
-  applicationContext,
-  caseEntity,
-  procedureType,
-  trialSession,
-}) => {
-  let appendClinicLetter = false;
-  let clinicLetterKey;
-
-  // add clinic letter for ANY pro se petitioner
-  for (let petitioner of caseEntity.petitioners) {
-    if (
-      !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
-    ) {
-      clinicLetterKey = getClinicLetterKey({
-        procedureType,
-        trialLocation: trialSession.trialLocation,
-      });
-      const doesClinicLetterExist = await applicationContext
-        .getPersistenceGateway()
-        .isFileExists({
-          applicationContext,
-          key: clinicLetterKey,
-        });
-      if (doesClinicLetterExist) {
-        appendClinicLetter = true;
-      }
-    }
-  }
-  return { appendClinicLetter, clinicLetterKey };
 };
 
 /**
@@ -186,7 +146,6 @@ const setNoticeForCase = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  // Do we need 203-210?
   const { appendClinicLetter, clinicLetterKey } =
     await shouldAppendClinicLetter({
       applicationContext,

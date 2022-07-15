@@ -4,11 +4,10 @@ const {
 const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('./setNoticesForCalendaredTrialSessionInteractor');
-const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
-
 const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
+const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
 const { fakeData } = require('../../test/getFakeFile');
 const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
