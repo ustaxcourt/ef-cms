@@ -27,7 +27,7 @@ describe('validateStampAction', () => {
 
     await runAction(validateStampAction, {
       form: {
-        status: MOTION_DISPOSITIONS.GRANTED,
+        disposition: MOTION_DISPOSITIONS.GRANTED,
       },
       modules: {
         presenter,
@@ -39,7 +39,7 @@ describe('validateStampAction', () => {
 
   it('should call the error path with an error message when form is invalid', async () => {
     applicationContext.getUseCases().validateStampInteractor.mockReturnValue({
-      status: 'Enter a status',
+      disposition: 'Enter a disposition',
     });
 
     await runAction(validateStampAction, {
@@ -53,7 +53,7 @@ describe('validateStampAction', () => {
       alertError: {
         title: 'Errors were found. Please correct your form and resubmit.',
       },
-      errors: { status: 'Enter a status' },
+      errors: { disposition: 'Enter a disposition' },
     });
   });
 });

@@ -21,7 +21,7 @@ export const applyStampFormHelper = (get, applicationContext) => {
     : CUSTOM_ORDER_MAX_LENGTH;
 
   const canSaveStampOrder =
-    !!form.status && get(state.pdfForSigning.stampApplied);
+    !!form.disposition && get(state.pdfForSigning.stampApplied);
   const cursorClass =
     !stampData && stampApplied ? 'cursor-grabbing' : 'cursor-grab';
 
@@ -36,7 +36,7 @@ export const applyStampFormHelper = (get, applicationContext) => {
     ? 'stamp-form-group'
     : 'stamp-form-group-error';
 
-  const statusErrorClass = !validationErrors.status
+  const dispositionErrorClass = !validationErrors.disposition
     ? 'stamp-form-group'
     : 'stamp-form-group-error';
 
@@ -45,8 +45,8 @@ export const applyStampFormHelper = (get, applicationContext) => {
     cursorClass,
     customOrderTextCharacterCount,
     dateErrorClass,
+    dispositionErrorClass,
     hideClass,
     minDate,
-    statusErrorClass,
   };
 };

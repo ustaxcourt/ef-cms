@@ -16,7 +16,7 @@ describe('unsetDeniedOptionsOnStampFormAction', () => {
         form: {
           deniedAsMoot: true,
           deniedWithoutPrejudice: true,
-          status: MOTION_DISPOSITIONS.GRANTED,
+          disposition: MOTION_DISPOSITIONS.GRANTED,
         },
       },
     });
@@ -34,7 +34,7 @@ describe('unsetDeniedOptionsOnStampFormAction', () => {
         form: {
           deniedAsMoot: true,
           deniedWithoutPrejudice: true,
-          status: MOTION_DISPOSITIONS.DENIED,
+          disposition: MOTION_DISPOSITIONS.DENIED,
         },
       },
     });
