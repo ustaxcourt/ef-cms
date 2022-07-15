@@ -12,9 +12,9 @@ export const unsetDeniedOptionsOnStampFormAction = ({
   store,
 }) => {
   const stampOrderStatus = get(state.form.status);
-  const { MOTION_STATUSES } = applicationContext.getConstants();
+  const { MOTION_DISPOSITIONS } = applicationContext.getConstants();
 
-  if (stampOrderStatus === MOTION_STATUSES.GRANTED) {
+  if (stampOrderStatus === MOTION_DISPOSITIONS.GRANTED) {
     store.unset(state.form.deniedWithoutPrejudice);
     store.unset(state.form.deniedAsMoot);
   }

@@ -6,7 +6,8 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('applyStampFormHelper', () => {
   const CUSTOM_ORDER_MAX_LENGTH = 60;
 
-  const { DATE_FORMATS, MOTION_STATUSES } = applicationContext.getConstants();
+  const { DATE_FORMATS, MOTION_DISPOSITIONS } =
+    applicationContext.getConstants();
 
   const applyStampFormHelper = withAppContextDecorator(
     applyStampFormHelperComputed,
@@ -48,7 +49,7 @@ describe('applyStampFormHelper', () => {
         state: {
           ...baseState,
           form: {
-            status: MOTION_STATUSES.GRANTED,
+            status: MOTION_DISPOSITIONS.GRANTED,
           },
           pdfForSigning: {
             stampApplied: true,
