@@ -12,12 +12,12 @@ export const applyStampFormHelper = (get, applicationContext) => {
   const form = get(state.form);
   const pdfForSigning = get(state.pdfForSigning);
 
-  const { customOrderText } = form;
+  const { customText } = form;
   const { isPdfAlreadyStamped, stampApplied, stampData } = pdfForSigning;
 
   const CUSTOM_ORDER_MAX_LENGTH = 60;
-  const customOrderTextCharacterCount = customOrderText?.length
-    ? CUSTOM_ORDER_MAX_LENGTH - customOrderText?.length
+  const customOrderTextCharacterCount = customText?.length
+    ? CUSTOM_ORDER_MAX_LENGTH - customText?.length
     : CUSTOM_ORDER_MAX_LENGTH;
 
   const canSaveStampOrder =

@@ -92,14 +92,14 @@ describe('applyStampFormHelper', () => {
   });
 
   describe('customOrderTextCharacterCount', () => {
-    it('should return CUSTOM_ORDER_MAX_LENGTH if customOrderText is not set', () => {
+    it('should return CUSTOM_ORDER_MAX_LENGTH if customText is not set', () => {
       const { customOrderTextCharacterCount } = runCompute(
         applyStampFormHelper,
         {
           state: {
             ...baseState,
             form: {
-              customOrderText: '',
+              customText: '',
             },
           },
         },
@@ -107,7 +107,7 @@ describe('applyStampFormHelper', () => {
       expect(customOrderTextCharacterCount).toEqual(CUSTOM_ORDER_MAX_LENGTH);
     });
 
-    it('should return the CUSTOM_ORDER_MAX_LENGTH - customOrderText.length if customOrderText is set', () => {
+    it('should return the CUSTOM_ORDER_MAX_LENGTH - customText.length if customText is set', () => {
       const fourLetterWord = 'cool';
       const { customOrderTextCharacterCount } = runCompute(
         applyStampFormHelper,
@@ -115,7 +115,7 @@ describe('applyStampFormHelper', () => {
           state: {
             ...baseState,
             form: {
-              customOrderText: fourLetterWord,
+              customText: fourLetterWord,
             },
           },
         },

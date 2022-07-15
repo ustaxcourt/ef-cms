@@ -9,7 +9,7 @@ const {
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const {
-  JURISDICTION_OPTIONS,
+  JURISDICTIONAL_OPTIONS,
   MOTION_DISPOSITIONS,
 } = require('./EntityConstants');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
@@ -32,18 +32,13 @@ function Stamp() {
 
 Stamp.prototype.init = function init(rawStamp) {
   this.date = rawStamp.date;
-  //disposition === status
   this.disposition = rawStamp.disposition;
   this.deniedAsMoot = rawStamp.deniedAsMoot;
   this.deniedWithoutPrejudice = rawStamp.deniedWithoutPrejudice;
-  //strickenFromTrialSession
-  this.strickenCase = rawStamp.strickenCase;
-  //jurisdictionalOption
-  this.jurisdictionOption = rawStamp.jurisdictionOption;
-  //statusReportNeeded/required
+  this.strickenFromTrialSession = rawStamp.strickenFromTrialSession;
+  this.jurisdictionalOption = rawStamp.jurisdictionalOption;
   this.dueDateMessage = rawStamp.dueDateMessage;
-  //customText
-  this.customOrderText = rawStamp.customOrderText;
+  this.customText = rawStamp.customText;
 };
 
 Stamp.VALIDATION_ERROR_MESSAGES = {
@@ -58,7 +53,7 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
 };
 
 Stamp.schema = joi.object().keys({
-  customOrderText: JoiValidationConstants.STRING.max(60).optional(),
+  customText: JoiValidationConstants.STRING.max(60).optional(),
   date: joi.when('dueDateMessage', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
@@ -74,10 +69,10 @@ Stamp.schema = joi.object().keys({
     ...Object.values(MOTION_DISPOSITIONS),
   ).required(),
   dueDateMessage: joi.optional().allow(null),
-  jurisdictionOption: JoiValidationConstants.STRING.valid(
-    ...Object.values(JURISDICTION_OPTIONS),
+  jurisdictionalOption: JoiValidationConstants.STRING.valid(
+    ...Object.values(JURISDICTIONAL_OPTIONS),
   ),
-  strickenCase: joi.boolean().optional().allow(null),
+  strickenFromTrialSession: joi.boolean().optional().allow(null),
 });
 
 joiValidationDecorator(Stamp, Stamp.schema, Stamp.VALIDATION_ERROR_MESSAGES);

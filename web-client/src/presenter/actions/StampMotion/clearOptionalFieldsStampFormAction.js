@@ -7,8 +7,8 @@ import { state } from 'cerebral';
  * @param {object} providers.store the cerebral store
  */
 export const clearOptionalFieldsStampFormAction = ({ store }) => {
-  store.unset(state.form.strickenCase);
-  store.unset(state.form.jurisdiction);
+  store.unset(state.form.strickenFromTrialSession);
+  store.unset(state.form.jurisdictionalOption);
 
   store.unset(state.form.dueDateMessage);
   store.unset(state.form['dueDateDay-stipDecision']);
