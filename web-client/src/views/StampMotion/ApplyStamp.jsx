@@ -9,9 +9,10 @@ import React, { useEffect, useRef } from 'react';
 
 export const ApplyStamp = connect(
   {
-    JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
+    JURISDICTIONAL_OPTIONS: state.constants.JURISDICTIONAL_OPTIONS,
     MOTION_DISPOSITIONS: state.constants.MOTION_DISPOSITIONS,
-    STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
+    STRICKEN_FROM_TRIAL_SESSION_MESSAGE:
+      state.constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
     clearDueDateSequence: sequences.clearDueDateSequence,
@@ -33,13 +34,13 @@ export const ApplyStamp = connect(
     clearDueDateSequence,
     clearOptionalFieldsStampFormSequence,
     form,
-    JURISDICTION_OPTIONS,
+    JURISDICTIONAL_OPTIONS,
     MOTION_DISPOSITIONS,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
     setPDFStampDataSequence,
-    STRICKEN_CASE_MESSAGE,
+    STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
     submitStampMotionSequence,
     updateFormValueSequence,
     validateStampSequence,
@@ -301,10 +302,10 @@ export const ApplyStamp = connect(
                     </label>
                     <div className="usa-radio usa-radio__inline">
                       <input
-                        checked={form.strickenCase || false}
+                        checked={form.strickenFromTrialSession || false}
                         className="usa-radio__input"
                         id="stricken-case"
-                        name="strickenCase"
+                        name="strickenFromTrialSession"
                         type="radio"
                         onChange={e => {
                           updateFormValueSequence({
@@ -317,21 +318,21 @@ export const ApplyStamp = connect(
                         className="usa-radio__label"
                         htmlFor={'stricken-case'}
                       >
-                        {STRICKEN_CASE_MESSAGE}
+                        {STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
                       </label>
                     </div>
                   </FormGroup>
                   <hr className="narrow-hr" />
                   <FormGroup className="stamp-form-group">
-                    {Object.entries(JURISDICTION_OPTIONS).map(
+                    {Object.entries(JURISDICTIONAL_OPTIONS).map(
                       ([key, value]) => (
                         <div className="usa-radio" key={key}>
                           <input
-                            aria-describedby="jurisdiction"
-                            checked={form.jurisdiction === value}
+                            aria-describedby="jurisdictionalOption"
+                            checked={form.jurisdictionalOption === value}
                             className="usa-radio__input"
-                            id={`jurisdiction-${key}`}
-                            name="jurisdiction"
+                            id={`jurisdictionalOption-${key}`}
+                            name="jurisdictionalOption"
                             type="radio"
                             value={value}
                             onChange={e => {
@@ -344,8 +345,8 @@ export const ApplyStamp = connect(
                           <label
                             aria-label={value}
                             className="usa-radio__label"
-                            htmlFor={`jurisdiction-${key}`}
-                            id={`jurisdiction-${key}-label`}
+                            htmlFor={`jurisdictionalOption-${key}`}
+                            id={`jurisdictionalOption-${key}-label`}
                           >
                             {value}
                           </label>
@@ -491,26 +492,26 @@ export const ApplyStamp = connect(
                   <hr className="narrow-hr" />
                   <FormGroup
                     className="stamp-form-group"
-                    errorText={validationErrors.customOrderText}
+                    errorText={validationErrors.customText}
                   >
                     <div>
                       <label
                         className="usa-label"
-                        htmlFor="custom-order-text"
-                        id="custom-order-text-label"
+                        htmlFor="custom-text"
+                        id="custom-text-label"
                       >
                         Custom order text{' '}
                         <span className="usa-hint">(optional)</span>
                       </label>
                       <textarea
-                        aria-describedby="custom-order-text-label"
+                        aria-describedby="custom-text-label"
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
-                        id="custom-order-text"
+                        id="custom-text"
                         maxLength="60"
-                        name="customOrderText"
+                        name="customText"
                         type="text"
-                        value={form.customOrderText}
+                        value={form.customText}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -568,19 +569,19 @@ export const ApplyStamp = connect(
                           {form.deniedWithoutPrejudice && 'without prejudice'}
                           <br />
                         </span>
-                        {(form.strickenCase ||
-                          form.jurisdiction ||
+                        {(form.strickenFromTrialSession ||
+                          form.jurisdictionalOption ||
                           (form.dueDateMessage && form.day) ||
-                          form.customOrderText) && <hr className="narrow-hr" />}
-                        {form.strickenCase && (
+                          form.customText) && <hr className="narrow-hr" />}
+                        {form.strickenFromTrialSession && (
                           <>
-                            - {STRICKEN_CASE_MESSAGE} -
+                            - {STRICKEN_FROM_TRIAL_SESSION_MESSAGE} -
                             <br />
                           </>
                         )}
-                        {form.jurisdiction && (
+                        {form.jurisdictionalOption && (
                           <>
-                            - {form.jurisdiction} -<br />
+                            - {form.jurisdictionalOption} -<br />
                           </>
                         )}
                         <span className="text-semibold">
@@ -591,7 +592,7 @@ export const ApplyStamp = connect(
                               <br />
                             </>
                           )}
-                          {form.customOrderText}
+                          {form.customText}
                         </span>
                       </span>
                       <hr className="narrow-hr" />

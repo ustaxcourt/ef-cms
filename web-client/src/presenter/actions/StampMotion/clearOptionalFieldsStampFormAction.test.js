@@ -13,14 +13,14 @@ describe('clearOptionalFieldsStampFormAction', () => {
           'dueDateMonth-stipDecision': '01',
           'dueDateYear-statusReport': '1999',
           'dueDateYear-stipDecision': '1999',
-          jurisdiction: 'as moot',
-          strickenCase: true,
+          jurisdictionalOption: 'as moot',
+          strickenFromTrialSession: true,
         },
       },
     });
 
-    expect(state.form.strickenCase).toBeUndefined();
-    expect(state.form.jurisdiction).toBeUndefined();
+    expect(state.form.strickenFromTrialSession).toBeUndefined();
+    expect(state.form.jurisdictionalOption).toBeUndefined();
 
     expect(state.form.dueDateMessage).toBeUndefined();
     expect(state.form['dueDateDay-stipDecision']).toBeUndefined();
