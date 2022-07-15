@@ -107,12 +107,11 @@ const serveNoticesForCase = async ({
         copyInto: combinedDocumentsPdf,
       });
     }
+    await copyPagesFromPdf({
+      copyFrom: combinedDocumentsPdf,
+      copyInto: newPdfDoc,
+    });
   }
-
-  await copyPagesFromPdf({
-    copyFrom: combinedDocumentsPdf,
-    copyInto: newPdfDoc,
-  });
 };
 
 /**
@@ -214,13 +213,11 @@ const setNoticeForCase = async ({
   caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
   caseEntity.setNoticeOfTrialDate();
 
-  // Standing Pretrial Notice/Order
   let standingPretrialFile;
   let standingPretrialDocumentTitle;
   let standingPretrialDocumentEventCode;
 
   if (procedureType === 'Small') {
-    // Generate Standing Pretrial Notice
     standingPretrialFile = await applicationContext
       .getUseCases()
       .generateStandingPretrialOrderForSmallCaseInteractor(applicationContext, {
@@ -235,7 +232,6 @@ const setNoticeForCase = async ({
       SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
         .eventCode;
   } else {
-    // Generate Standing Pretrial Order
     standingPretrialFile = await applicationContext
       .getUseCases()
       .generateStandingPretrialOrderInteractor(applicationContext, {

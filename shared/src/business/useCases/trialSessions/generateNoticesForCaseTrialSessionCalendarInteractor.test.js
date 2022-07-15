@@ -8,7 +8,7 @@ const {
 const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
-const { fakeData } = require('../../test/getFakeFile');
+const { fakeData, getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
 const { PDFDocument } = require('pdf-lib');
@@ -60,7 +60,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().decrementJobCounter,
     ).toHaveBeenCalled();
-    // expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
   });
 
   it('should combine the notice of trial issued letter to a clinic letter if a clinic letter is necessary', async () => {
@@ -100,6 +99,14 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should generate a standing pretrial order for proecedure types other than small', async () => {
+    const standingPretrialOrderPdf = getFakeFile();
+
+    applicationContext
+      .getUseCases()
+      .generateStandingPretrialOrderInteractor.mockResolvedValue(
+        standingPretrialOrderPdf,
+      );
+
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       {
@@ -116,7 +123,15 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext.getUseCases()
         .generateStandingPretrialOrderForSmallCaseInteractor,
     ).not.toHaveBeenCalled();
-    // expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        document: standingPretrialOrderPdf,
+      }),
+    );
   });
 
   it('should generate a standing pretrial for small cases if the procedure type is Small', async () => {
@@ -126,6 +141,13 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
         ...MOCK_CASE,
         procedureType: 'Small',
       });
+
+    applicationContext
+      .getUseCases()
+      .generateStandingPretrialOrderForSmallCaseInteractor.mockResolvedValue(
+        testPdfDoc,
+      );
+
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       {
@@ -138,9 +160,19 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     expect(
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
     ).not.toHaveBeenCalled();
+
     expect(
       applicationContext.getUseCases()
         .generateStandingPretrialOrderForSmallCaseInteractor,
     ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        document: testPdfDoc,
+      }),
+    );
   });
 });
