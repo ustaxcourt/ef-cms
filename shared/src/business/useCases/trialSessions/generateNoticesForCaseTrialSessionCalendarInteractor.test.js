@@ -98,4 +98,49 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
 
     expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
   });
+
+  it('should generate a standing pretrial order for proecedure types other than small', async () => {
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        trialSession,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    );
+    expect(
+      applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases()
+        .generateStandingPretrialOrderForSmallCaseInteractor,
+    ).not.toHaveBeenCalled();
+    // expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
+  });
+
+  it('should generate a standing pretrial for small cases if the procedure type is Small', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        procedureType: 'Small',
+      });
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        trialSession,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    );
+    expect(
+      applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases()
+        .generateStandingPretrialOrderForSmallCaseInteractor,
+    ).toHaveBeenCalled();
+  });
 });
