@@ -11,6 +11,7 @@ const {
 const {
   JURISDICTIONAL_OPTIONS,
   MOTION_DISPOSITIONS,
+  STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
 } = require('./EntityConstants');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 
@@ -72,7 +73,11 @@ Stamp.schema = joi.object().keys({
   jurisdictionalOption: JoiValidationConstants.STRING.valid(
     ...Object.values(JURISDICTIONAL_OPTIONS),
   ),
-  strickenFromTrialSession: joi.boolean().optional().allow(null),
+  strickenFromTrialSession: JoiValidationConstants.STRING.valid(
+    STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
+  )
+    .optional()
+    .allow(null),
 });
 
 joiValidationDecorator(Stamp, Stamp.schema, Stamp.VALIDATION_ERROR_MESSAGES);
