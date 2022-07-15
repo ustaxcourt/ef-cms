@@ -29,12 +29,17 @@ function Stamp() {
 
 Stamp.prototype.init = function init(rawStamp) {
   this.date = rawStamp.date;
+  //disposition === status
   this.status = rawStamp.status;
   this.deniedAsMoot = rawStamp.deniedAsMoot;
   this.deniedWithoutPrejudice = rawStamp.deniedWithoutPrejudice;
+  //strickenFromTrialSession
   this.strickenCase = rawStamp.strickenCase;
+  //jurisdictionalOption
   this.jurisdictionOption = rawStamp.jurisdictionOption;
+  //statusReportNeeded/required
   this.dueDateMessage = rawStamp.dueDateMessage;
+  //customText
   this.customOrderText = rawStamp.customOrderText;
 };
 
