@@ -2,19 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
-
-const copyPagesFromPdf = async ({ copyFrom, copyInto }) => {
-  let pagesToCopy = await copyInto.copyPages(
-    copyFrom,
-    copyFrom.getPageIndices(),
-  );
-
-  pagesToCopy.forEach(page => {
-    copyInto.addPage(page);
-  });
-};
 
 /**
  * Generates notices for all calendared cases for the given trialSessionId
@@ -188,5 +178,3 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     userId: user.userId,
   });
 };
-
-exports.copyPagesFromPdf = copyPagesFromPdf;
