@@ -9,7 +9,7 @@ const {
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
-const { MOTION_STATUSES } = require('./EntityConstants');
+const { JURISDICTION_OPTIONS, MOTION_STATUSES } = require('./EntityConstants');
 
 const todayFormatted = formatDateString(
   getMidnightIsoDateString(),
@@ -30,7 +30,12 @@ function Stamp() {
 Stamp.prototype.init = function init(rawStamp) {
   this.date = rawStamp.date;
   this.status = rawStamp.status;
+  this.deniedAsMoot = rawStamp.deniedAsMoot;
+  this.deniedWithoutPrejudice = rawStamp.deniedWithoutPrejudice;
+  this.strickenCase = rawStamp.strickenCase;
+  this.jurisdictionOption = rawStamp.jurisdictionOption;
   this.dueDateMessage = rawStamp.dueDateMessage;
+  this.customOrderText = rawStamp.customOrderText;
 };
 
 Stamp.VALIDATION_ERROR_MESSAGES = {
@@ -45,6 +50,9 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
 };
 
 Stamp.schema = joi.object().keys({
+  customOrderText: JoiValidationConstants.STRING.max(60)
+    .description('what it?')
+    .optional(),
   date: joi.when('dueDateMessage', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
@@ -54,10 +62,17 @@ Stamp.schema = joi.object().keys({
         'The due date of the status report (or proposed stipulated decision) filing',
       ),
   }),
+  //allow null or default to false?
+  deniedAsMoot: joi.boolean().optional().allow(null),
+  deniedWithoutPrejudice: joi.boolean().optional().allow(null),
   dueDateMessage: joi.optional().allow(null),
+  jurisdictionOption: JoiValidationConstants.STRING.valid(
+    ...Object.values(JURISDICTION_OPTIONS),
+  ).description('Approval status of the motion'),
   status: JoiValidationConstants.STRING.valid(...Object.values(MOTION_STATUSES))
-    .description('Approval status of the motion')
+    .description('what it?')
     .required(),
+  strickenCase: joi.boolean().optional().allow(null),
 });
 
 joiValidationDecorator(Stamp, Stamp.schema, Stamp.VALIDATION_ERROR_MESSAGES);
