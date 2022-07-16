@@ -15,7 +15,6 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { validateStampAction } from '../actions/StampMotion/validateStampAction';
 
 export const submitStampMotionSequence = [
-  // this is still WIP until the next PR
   startShowValidationAction,
   getComputedFormDateFactoryAction(null),
   setFormDateAction,

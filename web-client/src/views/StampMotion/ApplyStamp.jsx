@@ -296,7 +296,10 @@ export const ApplyStamp = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup className="stamp-form-group">
-                    <label className="usa-label" htmlFor="stricken-case-radio">
+                    <label
+                      className="usa-label"
+                      htmlFor="stricken-from-trial-session-radio"
+                    >
                       Select any that apply{' '}
                       <span className="usa-hint">(optional)</span>
                     </label>
@@ -304,7 +307,7 @@ export const ApplyStamp = connect(
                       <input
                         checked={form.strickenFromTrialSession || false}
                         className="usa-radio__input"
-                        id="stricken-case"
+                        id="stricken-from-trial-session"
                         name="strickenFromTrialSession"
                         type="radio"
                         value={STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
@@ -317,7 +320,7 @@ export const ApplyStamp = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor={'stricken-case'}
+                        htmlFor={'stricken-from-trial-session'}
                       >
                         {STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
                       </label>
