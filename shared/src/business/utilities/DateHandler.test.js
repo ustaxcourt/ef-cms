@@ -4,7 +4,7 @@ const { FORMATS, PATTERNS } = DateHandler;
 
 describe('DateHandler', () => {
   // Takes an ISO-8601 timestamp representing UTC and temporarily
-  //  mocks the system's current time by overriding global Date implementation
+  // mocks the system's current time by overriding global Date implementation
   const setupTeardownTestsForMockDate = isoTimestamp => {
     const originalDateImpl = Date.now.bind(global.Date);
     const dateNowMock = jest.fn();
@@ -523,18 +523,15 @@ describe('DateHandler', () => {
         },
       });
     });
+
     it('takes no arguments to create an object with keys month, day, and year according to Eastern Time with numeric strings', () => {
-      // mock the date implementation and returning original value upon test completion
-      const mockTimeValue = 1633566711621; // Thu, 07 Oct 2021 00:31:51 GMT
+      const mockTimeFunc = setupTeardownTestsForMockDate(
+        '2021-10-07T00:31:51.621Z',
+      );
 
-      const realDateNow = Date.now.bind(global.Date);
-      const dateNowStub = jest.fn().mockReturnValue(mockTimeValue);
-      global.Date.now = dateNowStub;
-
+      mockTimeFunc.setupDateMock();
       const result = DateHandler.getMonthDayYearInETObj();
-      expect(dateNowStub).toHaveBeenCalled();
-
-      global.Date.now = realDateNow;
+      mockTimeFunc.restoreDateMock();
 
       expect(result).toEqual({
         day: '6',
