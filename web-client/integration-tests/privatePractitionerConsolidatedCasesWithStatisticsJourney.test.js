@@ -47,7 +47,7 @@ describe('private practitioner views consolidated cases with statistics (cerebra
 
   docketClerkOpensCaseConsolidateModal(cerebralTest);
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest);
+  docketClerkConsolidatesCases(cerebralTest, 2);
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
   privatePractitionerViewsOpenConsolidatedCases(cerebralTest);

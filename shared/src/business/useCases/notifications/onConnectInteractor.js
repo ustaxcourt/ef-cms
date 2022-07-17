@@ -10,7 +10,7 @@
 
 exports.onConnectInteractor = async (
   applicationContext,
-  { connectionId, endpoint },
+  { clientConnectionId, connectionId, endpoint },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!authorizedUser) {
@@ -20,6 +20,7 @@ exports.onConnectInteractor = async (
 
   await applicationContext.getPersistenceGateway().saveUserConnection({
     applicationContext,
+    clientConnectionId,
     connectionId,
     endpoint,
     userId: authorizedUser.userId,

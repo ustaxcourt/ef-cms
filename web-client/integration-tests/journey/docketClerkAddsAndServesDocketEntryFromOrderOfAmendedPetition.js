@@ -1,5 +1,6 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { runCompute } from 'cerebral/test';
+import { waitForLoadingComponentToHide } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
@@ -96,5 +97,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
     await cerebralTest.runSequence(
       'serveCourtIssuedDocumentFromDocketEntrySequence',
     );
+
+    await waitForLoadingComponentToHide({ cerebralTest });
   });
 };

@@ -619,8 +619,9 @@ const applicationContext = {
     },
   }),
   getPdfJs: async () => {
-    const pdfjsLib = await import('pdfjs-dist');
-    const pdfjsWorker = await import('pdfjs-dist/build/pdf.worker.entry');
+    const pdfjsLib = (await import('pdfjs-dist')).default;
+    const pdfjsWorker = (await import('pdfjs-dist/build/pdf.worker.entry'))
+      .default;
     pdfjsLib.GlobalWorkerOptions.workerSrc = pdfjsWorker;
     return pdfjsLib;
   },
@@ -645,14 +646,18 @@ const applicationContext = {
   getReduceImageBlob: () => reduce,
   getScanner: async () => {
     if (process.env.NO_SCANNER) {
-      const scanner = await import(
-        '../../shared/src/persistence/dynamsoft/getScannerMockInterface'
-      );
+      const scanner = (
+        await import(
+          '../../shared/src/persistence/dynamsoft/getScannerMockInterface'
+        )
+      ).default;
       return scanner.getScannerInterface();
     } else {
-      const scanner = await import(
-        '../../shared/src/persistence/dynamsoft/getScannerInterface'
-      );
+      const scanner = (
+        await import(
+          '../../shared/src/persistence/dynamsoft/getScannerInterface'
+        )
+      ).default;
       return scanner.getScannerInterface();
     }
   },
