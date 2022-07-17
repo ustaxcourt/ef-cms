@@ -4662,6 +4662,11 @@
     "pk": "internal-opinion-search-enabled"
   },
   {
+    "pk": "consolidated-cases-propagate-docket-entries",
+    "sk": "consolidated-cases-propagate-docket-entries",
+    "current": true
+  },
+  {
     "sk": "user|5c43a30d-9c3d-41be-ad13-3b6d7cef54fc",
     "pk": "irsPractitioner|MS8888"
   },
@@ -12592,6 +12597,42 @@
     "pk": "case|111-19",
     "docketNumber": "111-19",
     "status": "Submitted"
+  },
+  {
+    "isStricken": false,
+    "documentType": "Trial Exhibits",
+    "filingDate": "2019-10-07T14:29:30.288Z",
+    "isMinuteEntry": false,
+    "pending": false,
+    "isDraft": true,
+    "receivedAt": "2019-10-07T14:29:30.288Z",
+    "isOnDocketRecord": false,
+    "createdAt": "2019-10-07T14:29:30.288Z",
+    "signedJudgeName": "Ronald L. Buch",
+    "numberOfPages": 1,
+    "entityName": "DocketEntry",
+    "filedBy": "Test Docketclerk",
+    "docketEntryId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "sk": "docket-entry|25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "documentTitle": "Trial Exhibits",
+    "relationship": "primaryDocument",
+    "draftOrderState": {
+      "eventCode": "TE",
+      "documentTitle": "Trial Exhibits",
+      "richText": "<p>Testing</p>",
+      "documentType": "Trial Exhibits",
+      "docketNumber": "111-19"
+    },
+    "isFileAttached": true,
+    "userId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "eventCode": "TE",
+    "processingStatus": "complete",
+    "filers": [],
+    "signedAt": "2019-10-07T14:29:30.288Z",
+    "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
+    "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
+    "pk": "case|111-19",
+    "docketNumber": "111-19"
   },
   {
     "servedParties": [

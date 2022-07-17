@@ -13,25 +13,54 @@ export const fileAndServeCourtIssuedDocumentAction = async ({
   get,
 }) => {
   const docketEntryId = get(state.docketEntryId);
-  const { docketNumber } = get(state.caseDetail);
+  const caseDetail = get(state.caseDetail);
   const form = get(state.form);
+  const {
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+    ENTERED_AND_SERVED_EVENT_CODES,
+  } = applicationContext.getConstants();
 
-  const documentMeta = {
-    ...form,
-    docketEntryId,
-    docketNumber,
-  };
+  const eventCodesNotCompatibleWithConsolidation = [
+    ...ENTERED_AND_SERVED_EVENT_CODES,
+    ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  ];
 
-  const result = await applicationContext
+  const currentDocketEntryCompatibleWithConsolidation =
+    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode);
+
+  const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
+
+  const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
+
+  const consolidatedCasesPropagateDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
+  );
+
+  let docketNumbers = consolidatedCases
+    .filter(consolidatedCase => consolidatedCase.checked)
+    .map(consolidatedCase => consolidatedCase.docketNumber);
+
+  if (
+    !isLeadCase ||
+    !consolidatedCasesPropagateDocketEntriesFlag ||
+    docketNumbers.length === 0 ||
+    !currentDocketEntryCompatibleWithConsolidation
+  ) {
+    docketNumbers = [caseDetail.docketNumber];
+  }
+
+  const clientConnectionId = get(state.clientConnectionId);
+
+  await applicationContext
     .getUseCases()
-    .fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-      documentMeta,
-    });
-
-  return {
-    alertSuccess: {
-      message: 'Document served. ',
-    },
-    pdfUrl: result ? result.pdfUrl : undefined,
-  };
+    .fileAndServeCourtIssuedDocumentInteractor(
+      applicationContext,
+      {
+        docketEntryId,
+        docketNumbers,
+        form,
+        subjectCaseDocketNumber: caseDetail.docketNumber,
+      },
+      clientConnectionId,
+    );
 };
