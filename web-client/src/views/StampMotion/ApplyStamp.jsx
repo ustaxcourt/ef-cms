@@ -151,6 +151,10 @@ export const ApplyStamp = connect(
           (canvasBounds.y - sigParentBounds.y) -
           sigBoxHeight;
 
+        console.log('x in the jsx', x);
+        console.log('y in the jsy', y);
+        // 80x, 620y looks ok-ish
+
         if (uiPosY < yLimitToPreventServedStampOverlay) {
           stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
         }
