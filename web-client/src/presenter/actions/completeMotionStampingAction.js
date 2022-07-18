@@ -1,5 +1,5 @@
+import { Stamp } from '../../../../shared/src/business/entities/Stamp';
 import { state } from 'cerebral';
-import Stamp from '../../../../shared/src/business/entities/Stamp';
 
 /**
  * generates an action for completing motion stamping
@@ -18,13 +18,6 @@ export const completeMotionStampingAction = async ({
   const stampFormData = get(state.form);
   const parentMessageId = get(state.parentMessageId);
   let docketEntryId;
-
-  await applicationContext
-    .getUseCases()
-    .generateDraftStampOrderInteractor(applicationContext, {
-      docketEntryId: motionDocketEntry,
-      docketNumber,
-    });
 
   //   docketEntryId: "9cbbc9c4-1451-4f53-893c-aa2d9bbb20c4"
   // isPdfAlreadySigned: true
@@ -56,8 +49,6 @@ export const completeMotionStampingAction = async ({
       nameForSigningLine2,
       stampData: { scale, x, y },
     } = get(state.pdfForSigning);
-    console.log('x in the complete action!!!!!', x); // matches what's x from ApplyStamp (80x; og x = 80)
-    console.log('y in the complete aaaaaction! yyyyyy', y); // subtracts height of the stamp ~ (492y; og y = 620)
 
     // const stampEntity = new Stamp(stampFormData);
 
@@ -92,6 +83,7 @@ export const completeMotionStampingAction = async ({
       .getUseCases()
       .saveSignedDocumentInteractor(applicationContext, {
         docketNumber,
+        isMotion: true,
         nameForSigning,
         originalDocketEntryId: motionDocketEntry,
         parentMessageId,
@@ -99,16 +91,13 @@ export const completeMotionStampingAction = async ({
       }));
   }
 
-  //generate draft stanmo order form motion coversheet
-
-  // let redirectUrl;
+  let redirectUrl;
   //verify if redirect
-  // if (parentMessageId) {
-  //   redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${originalDocketEntryId}`;
-  // } else {
-  //change to drafts later
-  let redirectUrl = `/case-detail/${docketNumber}`;
-  // }
+  if (parentMessageId) {
+    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${docketEntryId}`;
+  } else {
+    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`;
+  }
 
   return {
     docketEntryId,
