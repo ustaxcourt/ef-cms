@@ -61,10 +61,8 @@ exports.addDocketEntryForDraftStampOrder = async ({
 
   newDocketEntry.documentContentsId = documentContentsId;
 
-  return await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity,
-    });
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: caseEntity,
+  });
 };

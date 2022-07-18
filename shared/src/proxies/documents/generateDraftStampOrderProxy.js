@@ -1,7 +1,7 @@
 const { post } = require('../requests');
 
 /**
- * generateDraftStampOrderProxy
+ * generateDraftStampOrderInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -9,7 +9,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketEntryId the docket entry id
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generateDraftStampOrderProxy = (
+exports.generateDraftStampOrderInteractor = (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
