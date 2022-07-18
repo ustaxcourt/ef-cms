@@ -1949,7 +1949,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formatAndSortConsolidatedCases,
         generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
-        generateDocketRecordPdfInteractor,
         generateNoticeOfChangeToInPersonProceeding,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
