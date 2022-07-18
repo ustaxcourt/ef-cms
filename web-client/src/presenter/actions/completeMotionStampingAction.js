@@ -19,6 +19,11 @@ export const completeMotionStampingAction = async ({
   const parentMessageId = get(state.parentMessageId);
   let docketEntryId;
 
+  // todo: update this
+  await applicationContext
+    .getUseCases()
+    .generateDraftStampOrderInteractor(applicationContext, {});
+
   //   docketEntryId: "9cbbc9c4-1451-4f53-893c-aa2d9bbb20c4"
   // isPdfAlreadySigned: true
   // nameForSigning: "Mary Ann Cohen"
