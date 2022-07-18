@@ -8,12 +8,18 @@ const { replaceBracketed } = require('../../utilities/replaceBracketed');
  * @param {string[]} providers.replacements an ordered array of strings that replace bracketed placeholders in providers.document.content
  * @returns {Promise<void>} does not return anything, rather creates a document and associated docket entry
  */
-const generateDraftStampOrderInteractor = async ({
+const generateDraftStampOrderInteractor = async (
   applicationContext,
-  caseEntity,
-  document,
-  replacements,
-}) => {
+  { docketEntryId, docketNumber },
+) => {
+  //find moton from docket entries
+  //grab coversheet
+  //create draft docket entry for order
+  //use coversheet to create order document and save to s3
+  //add draft doc to case.docket entries
+  //save case
+
+  
   const content = replaceBracketed(document.content, ...replacements);
 
   //todo: do stuff here
