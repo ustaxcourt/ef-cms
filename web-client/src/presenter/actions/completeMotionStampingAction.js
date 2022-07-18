@@ -13,16 +13,18 @@ export const completeMotionStampingAction = async ({
   applicationContext,
   get,
 }) => {
-  const originalDocketEntryId = get(state.pdfForSigning.docketEntryId);
+  const motionDocketEntry = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const stampFormData = get(state.form);
   const parentMessageId = get(state.parentMessageId);
   let docketEntryId;
 
-  // todo: update this
   await applicationContext
     .getUseCases()
-    .generateDraftStampOrderInteractor(applicationContext, {});
+    .generateDraftStampOrderInteractor(applicationContext, {
+      docketEntryId: motionDocketEntry,
+      docketNumber,
+    });
 
   //   docketEntryId: "9cbbc9c4-1451-4f53-893c-aa2d9bbb20c4"
   // isPdfAlreadySigned: true
@@ -91,7 +93,7 @@ export const completeMotionStampingAction = async ({
       .saveSignedDocumentInteractor(applicationContext, {
         docketNumber,
         nameForSigning,
-        originalDocketEntryId,
+        originalDocketEntryId: motionDocketEntry,
         parentMessageId,
         signedDocketEntryId: signedDocumentFromUploadId,
       }));

@@ -360,6 +360,9 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generateDraftStampOrderInteractor,
+} = require('../../shared/src/business/useCases/stampMotion/generateDraftStampOrderInteractor');
+const {
   generateNoticeOfChangeOfTrialJudgeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor');
 const {
@@ -1945,6 +1948,8 @@ module.exports = (appContextUser, logger = createLogger()) => {
         formatAndSortConsolidatedCases,
         generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
+        generateDocketRecordPdfInteractor,
+        generateDraftStampOrderInteractor,
         generateNoticeOfChangeToInPersonProceeding,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,

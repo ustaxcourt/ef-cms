@@ -10,8 +10,7 @@ exports.generateDraftStampOrderLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .generateDraftStampOrderInteractor(
-        applicationContext,
-        JSON.parse(event.body),
-      );
+      .generateDraftStampOrderInteractor(applicationContext, {
+        ...JSON.parse(event.body),
+      });
   });
