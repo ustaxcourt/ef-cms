@@ -1048,6 +1048,9 @@ const {
   setForHearingInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
 const {
+  setJobAsProcessing,
+} = require('../../shared/src/persistence/dynamo/trialSessions/setJobAsProcessing');
+const {
   setMessageAsRead,
 } = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
 const {
@@ -1635,6 +1638,7 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   saveDispatchNotification,
+  setJobAsProcessing,
   updateCaseCorrespondence,
   updateUserCaseMapping,
   updateWorkItemAssociatedJudge,

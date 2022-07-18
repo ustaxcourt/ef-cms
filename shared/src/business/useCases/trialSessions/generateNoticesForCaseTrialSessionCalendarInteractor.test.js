@@ -47,6 +47,45 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     });
   });
 
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getJobStatus.mockResolvedValue({});
+  });
+
+  it('should return and do nothing if the job is already processing', async () => {
+    applicationContext.getPersistenceGateway().getJobStatus.mockResolvedValue({
+      [docketNumber]: 'processing',
+    });
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        trialSession,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    );
+    expect(
+      applicationContext.getPersistenceGateway().getCaseByDocketNumber,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should track the job status when processing begins', async () => {
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      {
+        docketNumber,
+        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        trialSession,
+        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      },
+    );
+    expect(
+      applicationContext.getPersistenceGateway().setJobAsProcessing,
+    ).toHaveBeenCalled();
+  });
+
   it('should decrement the job counter when a worker has processed a pdf file', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
