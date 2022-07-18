@@ -324,6 +324,23 @@ exports.generateNoticesForCaseTrialSessionCalendarInteractor = async (
   applicationContext,
   { docketNumber, jobId, trialSession, userId },
 ) => {
+  const jobStatus = await applicationContext
+    .getPersistenceGateway()
+    .getJobStatus({
+      applicationContext,
+      jobId,
+    });
+
+  if (jobStatus[docketNumber] === 'processing') {
+    return;
+  }
+
+  await applicationContext.getPersistenceGateway().setJobAsProcessing({
+    applicationContext,
+    docketNumber,
+    jobId,
+  });
+
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
   });
