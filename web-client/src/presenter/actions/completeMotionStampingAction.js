@@ -45,7 +45,6 @@ export const completeMotionStampingAction = async ({
   const {
     nameForSigning,
     nameForSigningLine2,
-    pageNumber,
     stampData: { scale, x, y },
   } = get(state.pdfForSigning);
 
@@ -56,7 +55,6 @@ export const completeMotionStampingAction = async ({
   const stampedPdfBytes = await applicationContext
     .getUseCases()
     .generateStampedDocumentInteractor(applicationContext, {
-      pageIndex: pageNumber - 1,
       pdfData: await pdfjsObj.getData(),
       posX: x,
       posY: y,
@@ -69,6 +67,7 @@ export const completeMotionStampingAction = async ({
     });
 
   //generate draft stanmo order form motion coversheet
+  
 
   let redirectUrl;
   //verify if redirect
