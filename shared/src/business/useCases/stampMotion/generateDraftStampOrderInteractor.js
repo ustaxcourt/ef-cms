@@ -1,4 +1,4 @@
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
+const { Case } = require('../../entities/cases/Case');
 
 /**
  * @param {object} providers the providers object containing applicationContext, caseEntity, document, replacements
@@ -29,15 +29,24 @@ const generateDraftStampOrderInteractor = async (
   const { PDFDocument } = await applicationContext.getPdfLib();
   const coversheet = await PDFDocument.load(pdfData).getPages()[0];
 
+  const caseDetail = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
+      applicationContext,
+      docketNumber,
+    });
+
+  const caseEntity = new Case(caseDetail, {
+    applicationContext,
+  });
+
   await applicationContext
     .getUseCaseHelpers()
     .addDocketEntryForDraftStampOrder({
       applicationContext,
       caseEntity,
-      draftStampOrder: {
-        ...document,
-        content,
-      },
+      docketNumber,
+      orderPdfData: coversheet,
     });
 };
 
