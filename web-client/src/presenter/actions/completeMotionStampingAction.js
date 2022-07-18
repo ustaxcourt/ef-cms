@@ -43,42 +43,65 @@ export const completeMotionStampingAction = async ({
   // strickenFromTrialSession: "This case is stricken from the trial session"
   // year: "2022"
 
-  // if (get(state.pdfForSigning.stampData.x)) {
-  const {
-    nameForSigning,
-    nameForSigningLine2,
-    stampData: { scale, x, y },
-  } = get(state.pdfForSigning);
-  console.log('x in the complete action!!!!!', x); // matches what's x from ApplyStamp (80x; og x = 80)
-  console.log('y in the complete aaaaaction! yyyyyy', y); // subtracts height of the stamp ~ (492y; og y = 620)
+  if (get(state.pdfForSigning.stampData.x)) {
+    const {
+      nameForSigning,
+      nameForSigningLine2,
+      stampData: { scale, x, y },
+    } = get(state.pdfForSigning);
+    console.log('x in the complete action!!!!!', x); // matches what's x from ApplyStamp (80x; og x = 80)
+    console.log('y in the complete aaaaaction! yyyyyy', y); // subtracts height of the stamp ~ (492y; og y = 620)
 
-  const stampEntity = new Stamp(stampFormData);
+    // const stampEntity = new Stamp(stampFormData);
 
-  const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
+    const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
-  const stampedPdfBytes = await applicationContext
-    .getUseCases()
-    .generateStampedDocumentInteractor(applicationContext, {
-      pdfData: await pdfjsObj.getData(),
-      posX: x,
-      posY: y,
-      scale,
-      sigTextData: {
-        signatureName: `(Signed) ${nameForSigning}`,
-        signatureTitle: nameForSigningLine2,
-      },
-      stampEntity,
+    const stampedPdfBytes = await applicationContext
+      .getUseCases()
+      .generateStampedDocumentInteractor(applicationContext, {
+        pdfData: await pdfjsObj.getData(),
+        posX: x,
+        posY: y,
+        scale,
+        sigTextData: {
+          signatureName: `(Signed) ${nameForSigning}`,
+          signatureTitle: nameForSigningLine2,
+        },
+        stampEntity: {},
+      });
+
+    const documentFile = new File([stampedPdfBytes], 'myfile.pdf', {
+      type: 'application/pdf',
     });
+
+    const signedDocumentFromUploadId = await applicationContext
+      .getPersistenceGateway()
+      .uploadDocumentFromClient({
+        applicationContext,
+        document: documentFile,
+      });
+
+    ({ signedDocketEntryId: docketEntryId } = await applicationContext
+      .getUseCases()
+      .saveSignedDocumentInteractor(applicationContext, {
+        docketNumber,
+        nameForSigning,
+        originalDocketEntryId,
+        parentMessageId,
+        signedDocketEntryId: signedDocumentFromUploadId,
+      }));
+  }
 
   //generate draft stanmo order form motion coversheet
 
-  let redirectUrl;
+  // let redirectUrl;
   //verify if redirect
-  if (parentMessageId) {
-    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${originalDocketEntryId}`;
-  } else {
-    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${originalDocketEntryId}`;
-  }
+  // if (parentMessageId) {
+  //   redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${originalDocketEntryId}`;
+  // } else {
+  //change to drafts later
+  let redirectUrl = `/case-detail/${docketNumber}`;
+  // }
 
   return {
     docketEntryId,
