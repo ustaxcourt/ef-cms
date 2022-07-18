@@ -22,6 +22,6 @@ exports.setJobAsProcessing = ({ applicationContext, docketNumber, jobId }) =>
       sk: `set-notices-for-trial-session-job-${jobId}`,
     },
     ReturnValues: 'UPDATED_NEW',
-    UpdateExpression: 'SET #docketNumber :value',
+    UpdateExpression: 'SET #docketNumber = :value',
     applicationContext,
   });
