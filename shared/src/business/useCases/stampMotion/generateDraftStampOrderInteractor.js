@@ -24,10 +24,12 @@ const generateDraftStampOrderInteractor = async (
       Key: docketEntryId,
     })
     .promise();
-  pdfData = pdfData.Body;
+  console.log('pdfData~~~~', pdfData);
 
+  pdfData = pdfData.Body;
   const { PDFDocument } = await applicationContext.getPdfLib();
-  const coversheet = await PDFDocument.load(pdfData).getPages()[0];
+  const pdfDoc = await PDFDocument.load(pdfData);
+  const coversheet = pdfDoc.getPages()[0];
 
   const caseDetail = await applicationContext
     .getPersistenceGateway()
@@ -35,11 +37,9 @@ const generateDraftStampOrderInteractor = async (
       applicationContext,
       docketNumber,
     });
-
   const caseEntity = new Case(caseDetail, {
     applicationContext,
   });
-
   await applicationContext
     .getUseCaseHelpers()
     .addDocketEntryForDraftStampOrder({

@@ -11,6 +11,6 @@ exports.generateDraftStampOrderLambda = event =>
     return await applicationContext
       .getUseCases()
       .generateDraftStampOrderInteractor(applicationContext, {
-        ...JSON.parse(event.body),
+        ...event.pathParameters,
       });
   });
