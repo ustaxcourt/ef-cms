@@ -15,7 +15,6 @@ exports.addDocketEntryForDraftStampOrder = async ({
   applicationContext,
   caseEntity,
   orderPdfData,
-  systemGeneratedDocument: draftStampOrder,
 }) => {
   const user = applicationContext.getCurrentUser();
 
@@ -26,11 +25,11 @@ exports.addDocketEntryForDraftStampOrder = async ({
   //make sure title is generated correctly
   const newDocketEntry = new DocketEntry(
     {
-      documentTitle: orderDocumentInfo.documentTitle,
+      documentTitle: 'Order',
       documentType: orderDocumentInfo.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
-        documentTitle: orderDocumentInfo.documentTitle,
+        documentTitle: 'Order',
         documentType: orderDocumentInfo.documentType,
         eventCode: orderDocumentInfo.eventCode,
       },
@@ -54,7 +53,7 @@ exports.addDocketEntryForDraftStampOrder = async ({
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     contentType: 'application/json',
-    document: orderPdfData,
+    document: Buffer.from(new Uint8Array(orderPdfData)),
     key: documentContentsId,
     useTempBucket: false,
   });
