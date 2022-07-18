@@ -12,13 +12,11 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} applicationContext the applicationContext
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the trial session id
- * @param {string} providers.docketNumber optional docketNumber to explicitly set the notice on the ONE specified case
  */
 exports.setNoticesForCalendaredTrialSessionInteractor = async (
   applicationContext,
-  { docketNumber, trialSessionId },
+  { trialSessionId },
 ) => {
-  let shouldSetNoticesIssued = true;
   const user = applicationContext.getCurrentUser();
   const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -32,20 +30,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
       applicationContext,
       trialSessionId,
     });
-
-  // opting to pull from the set of calendared cases rather than load the
-  // case individually to add an additional layer of validation
-  // TODO: check for the necessity of the extra validation
-  // if (docketNumber) {
-  //   Do not set when sending notices for a single case
-  //   shouldSetNoticesIssued = false;
-
-  //   const singleCase = calendaredCases.find(
-  //     caseRecord => caseRecord.docketNumber === docketNumber,
-  //   );
-
-  //   calendaredCases = [singleCase];
-  // }
 
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -115,16 +99,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     }, 5000);
   });
 
-  // Prevent from being overwritten when generating notices for a manually-added
-  // case, after the session has been set (see above)
-  if (shouldSetNoticesIssued) {
-    await trialSessionEntity.setNoticesIssued();
+  await trialSessionEntity.setNoticesIssued();
 
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-    });
-  }
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
 
   const newPdfDoc = await PDFDocument.create();
 
