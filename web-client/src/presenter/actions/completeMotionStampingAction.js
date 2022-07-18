@@ -29,6 +29,8 @@ export const completeMotionStampingAction = async ({
   // signatureData: null
   // stampApplied: true
   // stampData: {scale: 1, x: 81.796875, y: 485
+
+  // this is stamp entity
   //   customText: "acSDfbgnhnfbdsvca"
   // date: "2022-07-16T04:00:00.000Z"
   // day: "16"
@@ -47,6 +49,8 @@ export const completeMotionStampingAction = async ({
     nameForSigningLine2,
     stampData: { scale, x, y },
   } = get(state.pdfForSigning);
+  console.log('x in the complete action!!!!!', x); // matches what's x from ApplyStamp (80x; og x = 80)
+  console.log('y in the complete aaaaaction! yyyyyy', y); // subtracts height of the stamp ~ (492y; og y = 620)
 
   const stampEntity = new Stamp(stampFormData);
 
@@ -67,7 +71,6 @@ export const completeMotionStampingAction = async ({
     });
 
   //generate draft stanmo order form motion coversheet
-  
 
   let redirectUrl;
   //verify if redirect
