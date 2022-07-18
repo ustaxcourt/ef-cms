@@ -12,6 +12,7 @@ const generateDraftStampOrderInteractor = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
+  console.log('------', docketEntryId, docketNumber);
   //grab coversheet
   //create draft docket entry for order
   //use coversheet to create order document and save to s3
@@ -24,7 +25,6 @@ const generateDraftStampOrderInteractor = async (
       Key: docketEntryId,
     })
     .promise();
-  console.log('pdfData~~~~', pdfData);
 
   pdfData = pdfData.Body;
   const { PDFDocument } = await applicationContext.getPdfLib();
