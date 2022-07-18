@@ -336,9 +336,6 @@ const createTestApplicationContext = ({ user } = {}) => {
       .fn()
       .mockImplementation(getFormattedPartiesNameAndTitle),
     getJudgeLastName: jest.fn().mockImplementation(getJudgeLastName),
-    getMidnightIsoDateString: jest
-      .fn()
-      .mockImplementation(DateHandler.getMidnightIsoDateString),
     getMonthDayYearInETObj: jest
       .fn()
       .mockImplementation(DateHandler.getMonthDayYearInETObj),
