@@ -43,7 +43,7 @@
     "jwk-to-pem": "^2.0.5",
     "lodash": "^4.17.21",
     "logform": "^2.4.1",
-    "luxon": "^2.4.0",
+    "luxon": "^3.0.1",
     "moize": "^6.1.1",
     "parse-full-name": "^1.2.6",
     "pdf-lib": "^1.17.1",
