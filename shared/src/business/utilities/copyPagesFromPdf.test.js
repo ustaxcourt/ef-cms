@@ -1,10 +1,21 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
 const { copyPagesFromPdf } = require('./copyPagesFromPdf');
-const { ROLES } = require('../entities/EntityConstants');
+const { PDFDocument } = require('pdf-lib');
+const { testPdfDoc } = require('../test/getFakeFile');
 
 describe('copyPagesFromPdf', () => {
-  it('should generate a bar number and userId when they are not provided', async () => {
-    expect(result.barNumber).not.toBeUndefined();
-    expect(result.userId).not.toBeUndefined();
+  it('should copy the pages from the source pdf into the target pdf', async () => {
+    const sourcePdf = await PDFDocument.load(testPdfDoc);
+    const targetPdf = await PDFDocument.create();
+    const sourcePdfInitialPageCount = sourcePdf.getPages().length;
+    const targetPdfInitialPageCount = targetPdf.getPages().length;
+
+    await copyPagesFromPdf({
+      copyFrom: sourcePdf,
+      copyInto: targetPdf,
+    });
+
+    expect(targetPdf.getPages().length).toBe(
+      sourcePdfInitialPageCount + targetPdfInitialPageCount,
+    );
   });
 });
