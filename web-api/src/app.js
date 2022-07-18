@@ -168,9 +168,6 @@ const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
-  generateDraftStampOrderLambda,
-} = require('./documents/generateDraftStampOrderLambda');
-const {
   generatePractitionerCaseListPdfLambda,
 } = require('./cases/generatePractitionerCaseListPdfLambda');
 const {
@@ -603,10 +600,6 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.post(
     '/case-documents/consolidated/:leadDocketNumber/external-document',
     lambdaWrapper(fileExternalDocumentToConsolidatedCasesLambda),
-  );
-  app.post(
-    '/case-documents/:docketNumber/:docketEntryId/draft-stamp-order',
-    lambdaWrapper(generateDraftStampOrderLambda),
   );
   app.post(
     '/case-documents/:docketNumber/paper-filing',
