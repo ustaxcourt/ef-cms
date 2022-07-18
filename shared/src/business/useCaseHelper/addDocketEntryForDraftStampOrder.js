@@ -22,7 +22,6 @@ exports.addDocketEntryForDraftStampOrder = async ({
     doc => doc.eventCode === 'O',
   );
 
-  //make sure title is generated correctly
   const newDocketEntry = new DocketEntry(
     {
       documentTitle: 'Order',
