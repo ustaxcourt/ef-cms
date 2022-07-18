@@ -34,7 +34,7 @@ exports.addDocketEntryForDraftStampOrder = async ({
         documentType: orderDocumentInfo.documentType,
         eventCode: orderDocumentInfo.eventCode,
       },
-      eventCode: draftStampOrder.eventCode,
+      eventCode: orderDocumentInfo.eventCode,
       isDraft: true,
       userId: user.userId,
     },
@@ -45,16 +45,17 @@ exports.addDocketEntryForDraftStampOrder = async ({
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    pdfData: orderPdfData,
+    pdfData: Buffer.from(orderPdfData),
     pdfName: newDocketEntry.docketEntryId,
   });
 
   const documentContentsId = applicationContext.getUniqueId();
 
+  console.log('orderPdfData~~~~', orderPdfData);
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     contentType: 'application/json',
-    document: Buffer.from(JSON.stringify(orderPdfData)),
+    document: orderPdfData,
     key: documentContentsId,
     useTempBucket: false,
   });

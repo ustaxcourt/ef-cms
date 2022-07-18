@@ -25,6 +25,9 @@ const {
   addDeficiencyStatisticInteractor,
 } = require('../../shared/src/business/useCases/caseStatistics/addDeficiencyStatisticInteractor');
 const {
+  addDocketEntryForDraftStampOrder,
+} = require('../../shared/src/business/useCaseHelper/addDocketEntryForDraftStampOrder');
+const {
   addDocketEntryForSystemGeneratedOrder,
 } = require('../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder');
 const {
@@ -1934,6 +1937,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUniqueId,
     getUseCaseHelpers: () => {
       return {
+        addDocketEntryForDraftStampOrder,
         addDocketEntryForSystemGeneratedOrder,
         addExistingUserToCase,
         addServedStampToDocument,
