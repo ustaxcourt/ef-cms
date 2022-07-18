@@ -18,6 +18,7 @@ artillery/token-ids.csv
 artillery/private-advanced-order.json
 aws.json
 aws/lambdas/*.zip
+aws/lambdas/RotateInfoIndices/dist
 coverage/
 cypress-smoketests/screenshots
 cypress-smoketests/videos

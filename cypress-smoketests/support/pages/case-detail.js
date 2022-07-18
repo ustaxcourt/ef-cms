@@ -52,12 +52,13 @@ exports.editAndSignOrder = () => {
   cy.url().should('not.contain', '/sign');
 };
 
-exports.addDocketEntryForOrderAndSaveForLater = () => {
+exports.addDocketEntryForOrderAndSaveForLater = attempt => {
   cy.get('#add-court-issued-docket-entry-button').click();
   cy.url().should('contain', '/add-court-issued-docket-entry');
+  cy.get('#free-text').clear().type(` ${attempt}`);
   cy.get('#save-entry-button').click();
   cy.url().should('not.contain', '/add-court-issued-docket-entry');
-  cy.get('button:contains("Order to Show Cause")').click();
+  cy.get(`button:contains("Order to Show Cause ${attempt}")`).click();
   cy.get('h3:contains("Order to Show Cause")').should('exist');
   cy.get('span:contains("Not served")').should('exist');
 };
