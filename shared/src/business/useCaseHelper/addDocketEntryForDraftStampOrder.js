@@ -45,13 +45,12 @@ exports.addDocketEntryForDraftStampOrder = async ({
 
   await applicationContext.getUtilities().uploadToS3({
     applicationContext,
-    pdfData: Buffer.from(orderPdfData),
+    pdfData: Buffer.from(new Uint8Array(orderPdfData)),
     pdfName: newDocketEntry.docketEntryId,
   });
 
   const documentContentsId = applicationContext.getUniqueId();
 
-  console.log('orderPdfData~~~~', orderPdfData);
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     contentType: 'application/json',
