@@ -119,7 +119,7 @@ describe('flipConsolidatedCaseAllCheckboxAction', () => {
           ...LEAD_CASE,
           checkboxDisabled: true,
           checked: true,
-          tooltip: 'Lead case cannot be unselected',
+          tooltip: 'The lead case cannot be unselected',
         },
         {
           ...SECOND_CASE,
