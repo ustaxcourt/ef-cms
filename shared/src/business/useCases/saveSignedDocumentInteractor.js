@@ -1,4 +1,5 @@
 const {
+  COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
@@ -57,6 +58,7 @@ const replaceOriginalWithSignedDocument = async ({
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
+ * @param {string} providers.isMotion whether or not the document is a stamped motion
  * @param {string} providers.nameForSigning the name on the signature of the signed document
  * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
  * @param {string} providers.parentMessageId the id of the parent message to add the signed document to
@@ -67,6 +69,7 @@ exports.saveSignedDocumentInteractor = async (
   applicationContext,
   {
     docketNumber,
+    isMotion,
     nameForSigning,
     originalDocketEntryId,
     parentMessageId,
@@ -135,6 +138,37 @@ exports.saveSignedDocumentInteractor = async (
         message: messageEntity.validate().toRawObject(),
       });
     }
+  } else if (isMotion) {
+    const orderDocumentInfo = COURT_ISSUED_EVENT_CODES.find(
+      doc => doc.eventCode === 'O',
+    );
+
+    signedDocketEntryEntity = new DocketEntry(
+      {
+        createdAt: applicationContext.getUtilities().createISODateString(),
+        docketEntryId: signedDocketEntryId,
+        docketNumber: caseRecord.docketNumber,
+        documentTitle: 'Order',
+        documentType: orderDocumentInfo.documentType,
+        draftOrderState: {
+          docketNumber: caseEntity.docketNumber,
+          documentTitle: 'Order',
+          documentType: orderDocumentInfo.documentType,
+          eventCode: orderDocumentInfo.eventCode,
+        },
+        eventCode: orderDocumentInfo.eventCode,
+        filedBy: originalDocketEntryEntity.filedBy,
+        isDraft: true,
+        isPaper: false,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        userId: user.userId,
+      },
+      { applicationContext },
+    );
+
+    signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
+
+    caseEntity.addDocketEntry(signedDocketEntryEntity);
   } else {
     const documentIdBeforeSignature = await saveOriginalDocumentWithNewId({
       applicationContext,
