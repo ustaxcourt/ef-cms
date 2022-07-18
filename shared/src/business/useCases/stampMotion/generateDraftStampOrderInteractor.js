@@ -12,23 +12,29 @@ const generateDraftStampOrderInteractor = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
-  //find moton from docket entries
   //grab coversheet
   //create draft docket entry for order
   //use coversheet to create order document and save to s3
   //add draft doc to case.docket entries
   //save case
+  let pdfData = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: docketEntryId,
+    })
+    .promise();
+  pdfData = pdfData.Body;
 
-  
-  const content = replaceBracketed(document.content, ...replacements);
+  const { PDFDocument } = await applicationContext.getPdfLib();
+  const coversheet = await PDFDocument.load(pdfData).getPages()[0];
 
-  //todo: do stuff here
   await applicationContext
     .getUseCaseHelpers()
-    .addDocketEntryForSystemGeneratedOrder({
+    .addDocketEntryForDraftStampOrder({
       applicationContext,
       caseEntity,
-      systemGeneratedDocument: {
+      draftStampOrder: {
         ...document,
         content,
       },
