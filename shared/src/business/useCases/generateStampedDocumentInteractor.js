@@ -93,6 +93,8 @@ const generateStampedDocumentInteractor = async (
   applicationContext,
   { pdfData, posX, posY, scale = 1, sigTextData, stampEntity },
 ) => {
+  // todo: this will be where we gather all the stampEntity data and ensure
+  // the stamp looks correct on the saved pdf
   const { degrees, rgb } = await applicationContext.getPdfLib();
 
   const { pdfDoc, textFont } = await applicationContext

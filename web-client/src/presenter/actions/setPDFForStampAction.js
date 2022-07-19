@@ -17,21 +17,7 @@ export const setPDFForStampAction = async ({
 
   store.set(state.pdfForSigning.docketEntryId, docketEntryId);
 
-  let editingSignedStipulatedDecision = false;
-
-  if (caseDetail && Array.isArray(caseDetail.docketEntries)) {
-    // maybe remove this or rename this variable?
-    editingSignedStipulatedDecision = true;
-  }
-
-  let pdfObj = {};
-
-  // if we are looking at a signed stipulated decision, we need to display the clear signature button
-  if (editingSignedStipulatedDecision) {
-    store.set(state.pdfForSigning.isPdfAlreadySigned, true);
-  }
-
-  pdfObj = await applicationContext
+  let pdfObj = await applicationContext
     .getUseCases()
     .loadPDFForSigningInteractor(applicationContext, {
       docketEntryId,
