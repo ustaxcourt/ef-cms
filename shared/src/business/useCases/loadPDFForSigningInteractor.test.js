@@ -1,7 +1,10 @@
 const {
+  applicationContext,
+  testPdfDoc,
+} = require('../test/createTestApplicationContext');
+const {
   loadPDFForSigningInteractor,
 } = require('./loadPDFForSigningInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
 const { PDFDocument } = require('pdf-lib');
 
 const removePageMock = jest.fn();
@@ -41,6 +44,19 @@ describe('loadPDFForSigningInteractor', () => {
     });
 
     expect(removePageMock).toHaveBeenCalled();
+    expect(saveMock).toHaveBeenCalled();
+  });
+
+  it.only('should aremove all pages of the PDF except the coversheet if `onlyCover` is set to true', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockReturnValue(testPdfDoc);
+
+    await loadPDFForSigningInteractor(applicationContext, {
+      onlyCover: true,
+    });
+
+    expect(removePageMock).toHaveBeenCalledTimes();
     expect(saveMock).toHaveBeenCalled();
   });
 
