@@ -8,8 +8,12 @@ const {
   joiValidationDecorator,
   validEntityDecorator,
 } = require('./JoiValidationDecorator');
+const {
+  JURISDICTIONAL_OPTIONS,
+  MOTION_DISPOSITIONS,
+  STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
+} = require('./EntityConstants');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
-const { MOTION_STATUSES } = require('./EntityConstants');
 
 const todayFormatted = formatDateString(
   createISODateAtStartOfDayEST(),
@@ -29,8 +33,13 @@ function Stamp() {
 
 Stamp.prototype.init = function init(rawStamp) {
   this.date = rawStamp.date;
-  this.status = rawStamp.status;
+  this.disposition = rawStamp.disposition;
+  this.deniedAsMoot = rawStamp.deniedAsMoot;
+  this.deniedWithoutPrejudice = rawStamp.deniedWithoutPrejudice;
+  this.strickenFromTrialSession = rawStamp.strickenFromTrialSession;
+  this.jurisdictionalOption = rawStamp.jurisdictionalOption;
   this.dueDateMessage = rawStamp.dueDateMessage;
+  this.customText = rawStamp.customText;
 };
 
 Stamp.VALIDATION_ERROR_MESSAGES = {
@@ -41,10 +50,11 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
     },
     'Enter a valid date',
   ],
-  status: 'Enter a status',
+  disposition: 'Enter a disposition',
 };
 
 Stamp.schema = joi.object().keys({
+  customText: JoiValidationConstants.STRING.max(60).optional(),
   date: joi.when('dueDateMessage', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
@@ -54,10 +64,20 @@ Stamp.schema = joi.object().keys({
         'The due date of the status report (or proposed stipulated decision) filing',
       ),
   }),
+  deniedAsMoot: joi.boolean().optional().allow(null),
+  deniedWithoutPrejudice: joi.boolean().optional().allow(null),
+  disposition: JoiValidationConstants.STRING.valid(
+    ...Object.values(MOTION_DISPOSITIONS),
+  ).required(),
   dueDateMessage: joi.optional().allow(null),
-  status: JoiValidationConstants.STRING.valid(...Object.values(MOTION_STATUSES))
-    .description('Approval status of the motion')
-    .required(),
+  jurisdictionalOption: JoiValidationConstants.STRING.valid(
+    ...Object.values(JURISDICTIONAL_OPTIONS),
+  ),
+  strickenFromTrialSession: JoiValidationConstants.STRING.valid(
+    STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
+  )
+    .optional()
+    .allow(null),
 });
 
 joiValidationDecorator(Stamp, Stamp.schema, Stamp.VALIDATION_ERROR_MESSAGES);

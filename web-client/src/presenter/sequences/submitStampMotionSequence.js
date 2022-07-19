@@ -1,11 +1,15 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
+import { completeMotionStampingAction } from '../actions/completeMotionStampingAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
-import { navigateBackAction } from '../actions/navigateBackAction';
+import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setCaseDetailPageTabActionGenerator } from '../actions/setCaseDetailPageTabActionGenerator';
+import { setDefaultDraftDocumentIdAction } from '../actions/setDefaultDraftDocumentIdAction';
 import { setFormDateAction } from '../actions/setFormDateAction';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { setSuccessfulStampFromDocumentTitleAction } from '../actions/StampMotion/setSuccessfulStampFromDocumentTitleAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
@@ -14,7 +18,6 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { validateStampAction } from '../actions/StampMotion/validateStampAction';
 
 export const submitStampMotionSequence = [
-  // this is still WIP until the next PR
   startShowValidationAction,
   getComputedFormDateFactoryAction(null),
   setFormDateAction,
@@ -29,8 +32,9 @@ export const submitStampMotionSequence = [
       clearAlertsAction,
       setSaveAlertsForNavigationAction,
       setSuccessfulStampFromDocumentTitleAction,
-      // completeMotionStampingAction,
-      navigateBackAction,
+      completeMotionStampingAction,
+      setDefaultDraftDocumentIdAction,
+      setRedirectUrlAction,
       // // TODO: replace completeWorkItemForDocumentSigningAction
       // completeWorkItemForDocumentSigningAction,
       // // TODO: replace clearPDFSignatureDataAction
@@ -39,7 +43,11 @@ export const submitStampMotionSequence = [
       setAlertSuccessAction,
       followRedirectAction,
       {
-        default: [],
+        default: [
+          setCaseDetailPageTabActionGenerator('drafts'),
+          navigateToDraftDocumentsAction,
+        ],
+        success: [],
       },
     ],
   },

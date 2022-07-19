@@ -6,7 +6,7 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
-import { setPDFForSigningAction } from '../actions/setPDFForSigningAction';
+import { setPDFForStampAction } from '../actions/setPDFForStampAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
@@ -22,7 +22,7 @@ export const goToApplyStampSequence = [
       clearPDFStampDataAction,
       clearFormAction,
       setSignatureNameForPdfSigningAction,
-      setPDFForSigningAction,
+      setPDFForStampAction,
       setPDFPageForSigningAction,
       setCurrentPageAction('ApplyStamp'),
     ]),

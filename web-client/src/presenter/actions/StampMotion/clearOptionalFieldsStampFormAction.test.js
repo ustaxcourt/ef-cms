@@ -6,29 +6,23 @@ describe('clearOptionalFieldsStampFormAction', () => {
     const { state } = await runAction(clearOptionalFieldsStampFormAction, {
       state: {
         form: {
-          'dueDateDay-statusReport': '30',
-          'dueDateDay-stipDecision': '30',
+          day: '30',
           dueDateMessage: 'the end is nigh',
-          'dueDateMonth-statusReport': '01',
-          'dueDateMonth-stipDecision': '01',
-          'dueDateYear-statusReport': '1999',
-          'dueDateYear-stipDecision': '1999',
-          jurisdiction: 'as moot',
-          strickenCase: true,
+          jurisdictionalOption: 'as moot',
+          month: '30',
+          strickenFromTrialSession: true,
+          year: '1999',
         },
       },
     });
 
-    expect(state.form.strickenCase).toBeUndefined();
-    expect(state.form.jurisdiction).toBeUndefined();
+    expect(state.form.strickenFromTrialSession).toBeUndefined();
+    expect(state.form.jurisdictionalOption).toBeUndefined();
 
     expect(state.form.dueDateMessage).toBeUndefined();
-    expect(state.form['dueDateDay-stipDecision']).toBeUndefined();
-    expect(state.form['dueDateMonth-stipDecision']).toBeUndefined();
-    expect(state.form['dueDateYear-stipDecision']).toBeUndefined();
 
-    expect(state.form['dueDateDay-statusReport']).toBeUndefined();
+    expect(state.form['day']).toBeUndefined();
     expect(state.form['dueDateMonth-statusReport']).toBeUndefined();
-    expect(state.form['dueDateYear-statusReport']).toBeUndefined();
+    expect(state.form['year']).toBeUndefined();
   });
 });

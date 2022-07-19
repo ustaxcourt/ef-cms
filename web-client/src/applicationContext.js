@@ -152,6 +152,7 @@ import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useC
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
+import { generateStampedDocumentInteractor } from '../../shared/src/business/useCases/generateStampedDocumentInteractor';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
@@ -399,6 +400,7 @@ const allUseCases = {
   generatePrintableFilingReceiptInteractor,
   generatePrintablePendingReportInteractor,
   generateSignedDocumentInteractor,
+  generateStampedDocumentInteractor,
   generateTrialCalendarPdfInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,

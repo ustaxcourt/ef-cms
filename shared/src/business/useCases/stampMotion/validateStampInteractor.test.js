@@ -4,7 +4,7 @@ const {
 const {
   validateStampInteractor,
 } = require('../stampMotion/validateStampInteractor');
-const { MOTION_STATUSES } = require('../../entities/EntityConstants');
+const { MOTION_DISPOSITIONS } = require('../../entities/EntityConstants');
 const { Stamp } = require('../../entities/Stamp');
 
 describe('validateStampInteractor', () => {
@@ -14,15 +14,15 @@ describe('validateStampInteractor', () => {
     });
 
     expect(errors).toEqual({
-      status: Stamp.VALIDATION_ERROR_MESSAGES.status,
+      disposition: Stamp.VALIDATION_ERROR_MESSAGES.disposition,
     });
   });
 
   it('returns null when there are no errors', () => {
-    const mockStatus = MOTION_STATUSES.DENIED;
+    const mockDisposition = MOTION_DISPOSITIONS.DENIED;
 
     const errors = validateStampInteractor(applicationContext, {
-      stampMotionForm: { status: mockStatus },
+      stampMotionForm: { disposition: mockDisposition },
     });
 
     expect(errors).toEqual(null);
