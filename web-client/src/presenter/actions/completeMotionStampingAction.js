@@ -66,6 +66,8 @@ export const completeMotionStampingAction = async ({
         parentMessageId,
         signedDocketEntryId: signedDocumentFromUploadId,
       }));
+    // persist the stamp data since we'll have access to the generated order's docketEntryId
+    // other option would be storing stamp on DE, but would require a migration if non-optional
   }
 
   // todo: fix redirect to go drafts
