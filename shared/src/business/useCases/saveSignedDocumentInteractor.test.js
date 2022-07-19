@@ -1,5 +1,6 @@
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
+  ORDER_TYPES,
   PETITIONS_SECTION,
   SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
@@ -94,7 +95,7 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       {
         docketNumber: mockCase.docketNumber,
-        nameForSigning: 'Guy Fieri',
+        nameForSigning: mockSigningName,
         originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         signedDocketEntryId: mockSignedDocketEntryId,
       },
@@ -119,7 +120,7 @@ describe('saveSignedDocumentInteractor', () => {
       mockSignedDocketEntryId,
     );
     expect(signedDocketEntryEntity.isDraft).toEqual(true);
-    expect(signedDocketEntryEntity.signedJudgeName).toEqual('Guy Fieri');
+    expect(signedDocketEntryEntity.signedJudgeName).toEqual(mockSigningName);
     expect(signedDocketEntryEntity.documentType).toEqual('Stipulated Decision');
   });
 
@@ -164,7 +165,7 @@ describe('saveSignedDocumentInteractor', () => {
   it('should add the signed document to the latest message in the message thread if parentMessageId is included and the original document is a Proposed Stipulated Decision', async () => {
     await saveSignedDocumentInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
-      nameForSigning: 'Guy Fieri',
+      nameForSigning: mockSigningName,
       originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       parentMessageId: mockParentMessageId,
       signedDocketEntryId: mockSignedDocketEntryId,
@@ -183,6 +184,58 @@ describe('saveSignedDocumentInteractor', () => {
           documentTitle: 'Stipulated Decision',
         },
       ],
+    });
+  });
+
+  describe('stamp motions', () => {
+    it('should not replace the original, unsigned document with the signed document for stamp motions', async () => {
+      await saveSignedDocumentInteractor(applicationContext, {
+        docketNumber: mockCase.docketNumber,
+        isMotion: true,
+        nameForSigning: mockSigningName,
+        originalDocketEntryId: mockOriginalDocketEntryId,
+        signedDocketEntryId: mockSignedDocketEntryId,
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+      ).not.toHaveBeenCalled();
+    });
+
+    it('should add a draft order docket entry to the case', async () => {
+      const { caseEntity } = await saveSignedDocumentInteractor(
+        applicationContext,
+        {
+          docketNumber: mockCase.docketNumber,
+          isMotion: true,
+          nameForSigning: mockSigningName,
+          originalDocketEntryId: mockOriginalDocketEntryId,
+          signedDocketEntryId: mockSignedDocketEntryId,
+        },
+      );
+
+      expect(caseEntity.docketEntries.length).toEqual(
+        MOCK_DOCUMENTS.length + 1,
+      );
+      const draftOrder = caseEntity.docketEntries.find(
+        e => e.documentType === ORDER_TYPES[0].documentType,
+      );
+      expect(draftOrder.docketNumber).toEqual(caseEntity.docketNumber);
+
+      const draftDocketEntryEntity = caseEntity.docketEntries.find(
+        doc =>
+          doc.documentType === ORDER_TYPES[0].documentType &&
+          doc.docketEntryId === mockSignedDocketEntryId,
+      );
+
+      expect(draftDocketEntryEntity.docketEntryId).toEqual(
+        mockSignedDocketEntryId,
+      );
+      expect(draftDocketEntryEntity.isDraft).toEqual(true);
+      expect(draftDocketEntryEntity.signedJudgeName).toEqual(mockSigningName);
+      expect(draftDocketEntryEntity.documentType).toEqual(
+        ORDER_TYPES[0].documentType,
+      );
     });
   });
 });
