@@ -8,15 +8,17 @@ const {
 
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
+const caseEntity = new Case(MOCK_CASE, { applicationContext });
+const newDocketEntriesFromNewCaseCount = caseEntity.docketEntries.length + 1;
 
-//todo: update these
 describe('addDocketEntryForDraftStampOrder', () => {
-  const caseEntity = new Case(MOCK_CASE, { applicationContext });
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue(caseEntity);
+  });
 
-  it.only('should add a draft docket entry for a stamped order', async () => {
-    const newDocketEntriesFromNewCaseCount =
-      caseEntity.docketEntries.length + 1;
-
+  it('should add a draft docket entry for a stamped order', async () => {
     await addDocketEntryForDraftStampOrder({
       applicationContext,
       caseEntity,
@@ -35,38 +37,31 @@ describe('addDocketEntryForDraftStampOrder', () => {
   });
 
   it('should update the case to contain the draft order docket entry', async () => {
-    const newDocketEntriesFromNewCaseCount =
-      caseEntity.docketEntries.length + 1;
-
     await addDocketEntryForDraftStampOrder({
       applicationContext,
       caseEntity,
-      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+      orderPdfData: testPdfDoc,
     });
 
-    expect(caseEntity.docketEntries.length).toEqual(
-      newDocketEntriesFromNewCaseCount,
-    );
+    const draftStampOrder = applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAndAssociations.mock.calls[0][0].caseToUpdate.docketEntries.find(
+        entry => entry.eventCode === 'O',
+      );
 
-    const naneDocketEntry = caseEntity.docketEntries.find(
-      entry => entry.eventCode === 'NOT',
-    );
-    expect(naneDocketEntry.isDraft).toEqual(true);
-
-    const passedInNoticeTitle =
-      applicationContext.getDocumentGenerators().order.mock.calls[0][0].data
-        .orderTitle;
-
-    expect(passedInNoticeTitle).toEqual(passedInNoticeTitle.toUpperCase());
+    expect(draftStampOrder).toBeDefined();
   });
 
   it('should upload a generated pdf for the provided document', async () => {
     await addDocketEntryForDraftStampOrder({
       applicationContext,
       caseEntity,
-      systemGeneratedDocument: noticeOfAttachmentsInNatureOfEvidence,
+      orderPdfData: testPdfDoc,
     });
 
     expect(applicationContext.getUtilities().uploadToS3).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    ).toHaveBeenCalled();
   });
 });
