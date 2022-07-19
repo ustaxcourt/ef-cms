@@ -4,12 +4,12 @@ const { DocketEntry } = require('../entities/DocketEntry');
  *
  * Add docket entry for draft stamp order
  * generates the order and uploads to s3
- * saves documentContents and richText for editing the order
+ * saves documentContents
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {Case} providers.caseEntity the caseEntity
- * @param {string} providers.systemGeneratedDocument the systemGeneratedDocument
+ * @param {string} providers.orderPdfData the order pdf data
  */
 exports.addDocketEntryForDraftStampOrder = async ({
   applicationContext,
