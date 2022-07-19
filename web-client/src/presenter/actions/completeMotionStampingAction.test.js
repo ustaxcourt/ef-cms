@@ -145,6 +145,20 @@ describe('completeMotionStampingAction', () => {
     expect(output.docketEntryId).toBeDefined();
   });
 
+  it('should upload a stamped document', async () => {
+    await runAction(completeMotionStampingAction, {
+      modules: {
+        presenter,
+      },
+      state: mockState,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
+        .calls.length,
+    ).toBe(1);
+  });
+
   it('accesses pdfjsObj from state if not available on window', async () => {
     delete global.window.pdfjsObj;
     await runAction(completeMotionStampingAction, {
