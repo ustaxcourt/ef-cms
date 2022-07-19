@@ -49,7 +49,7 @@ export const completeMotionStampingAction = async ({
       type: 'application/pdf',
     });
 
-    const signedDocumentFromUploadId = await applicationContext
+    const stampedDocumentFromUploadId = await applicationContext
       .getPersistenceGateway()
       .uploadDocumentFromClient({
         applicationContext,
@@ -64,7 +64,7 @@ export const completeMotionStampingAction = async ({
         nameForSigning,
         originalDocketEntryId: motionDocketEntry,
         parentMessageId,
-        signedDocketEntryId: signedDocumentFromUploadId,
+        signedDocketEntryId: stampedDocumentFromUploadId,
       }));
     // persist the stamp data since we'll have access to the generated order's docketEntryId
     // other option would be storing stamp on DE, but would require a migration if non-optional
