@@ -1,17 +1,14 @@
-const {
-  addCoversheetInteractor,
-  generateCoverSheetData,
-} = require('./addCoversheetInteractor');
+const addCoversheetModule = require('./addCoversheetInteractor');
 const {
   applicationContext,
   testPdfDoc,
 } = require('../test/createTestApplicationContext');
 const {
   CONTACT_TYPES,
-  DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
+const { addCoversheetInteractor } = addCoversheetModule;
 const { Case } = require('../entities/cases/Case');
 const { MOCK_CASE } = require('../../test/mockCase');
 
@@ -188,380 +185,97 @@ describe('addCoversheetInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  describe('generateCoverSheetData', () => {
-    it('displays Certificate of Service when the document is filed with a certificate of service', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          certificateOfService: true,
+  it('updates only the page numbers for the docket entires existing in the consolidated group case docket record', async () => {
+    jest.spyOn(addCoversheetModule, 'addCoverToPdf').mockResolvedValue({
+      consolidatedCases: [
+        {
+          docketNumber: '101-19',
+          documentNumber: null,
         },
-      });
-
-      expect(result.certificateOfService).toEqual(true);
-    });
-
-    it('does NOT display Certificate of Service when the document is filed without a certificate of service', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          certificateOfService: false,
+        {
+          docketNumber: '102-20',
+          documentNumber: 2,
         },
-      });
-      expect(result.certificateOfService).toEqual(false);
-    });
-
-    it('generates correct filed date', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          filingDate: '2019-04-19T14:45:15.595Z',
+        {
+          docketNumber: '103-20',
+          documentNumber: 5,
         },
-      });
-
-      expect(result.dateFiledLodged).toEqual('04/19/19');
+      ],
+      numberOfPages: 5,
+      pdfData: 'gg',
     });
 
-    it('shows does not show the filing date if the document does not have a valid filingDate', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          filingDate: null,
-        },
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...testingCaseData,
+        docketNumber: '102-20',
+      })
+      .mockResolvedValueOnce({
+        ...testingCaseData,
+        docketNumber: '103-20',
       });
 
-      expect(result.dateFiledLodged).toEqual('');
+    await addCoversheetInteractor(applicationContext, {
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
-    it('returns a filing date label of Filed if the document was NOT lodged', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          lodged: false,
-        },
-      });
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry,
+    ).toHaveBeenCalledTimes(2);
 
-      expect(result.dateFiledLodgedLabel).toEqual('Filed');
+    const calls = applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntry.mock.calls.map(call => ({
+        docketNumber: call[0].docketNumber,
+        numberOfPages: call[0].document.numberOfPages,
+      }));
+
+    const firstCase = calls.find(call => call.docketNumber === '102-20');
+    const secondCase = calls.find(call => call.docketNumber === '103-20');
+
+    expect(firstCase).toMatchObject({
+      docketNumber: '102-20',
+      numberOfPages: 5,
     });
 
-    it('returns a filing date label of Lodged if the document was lodged', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          lodged: true,
-        },
-      });
+    expect(secondCase).toMatchObject({
+      docketNumber: '103-20',
+      numberOfPages: 5,
+    });
+  });
 
-      expect(result.dateFiledLodgedLabel).toEqual('Lodged');
+  it('works as expected when feature flag is off and consolidated cases returns null', async () => {
+    jest.spyOn(addCoversheetModule, 'addCoverToPdf').mockResolvedValue({
+      consolidatedCases: null,
+      numberOfPages: 5,
+      pdfData: 'gg',
     });
 
-    it('shows the received date WITH time if electronically filed', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          filingDate: '2019-04-19T14:45:15.595Z',
-          isPaper: false,
-        },
-        filingDateUpdated: false,
-      });
-
-      expect(result.dateReceived).toEqual('04/19/19 10:45 am');
+    await addCoversheetInteractor(applicationContext, {
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
     });
 
-    it('does not show the received date if the document does not have a valid createdAt and is electronically filed', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          createdAt: null,
-          isPaper: false,
-        },
-        filingDateUpdated: false,
-      });
+    expect(
+      applicationContext.getPersistenceGateway().updateDocketEntry,
+    ).toHaveBeenCalledTimes(1);
 
-      expect(result.dateReceived).toEqual('');
-    });
+    const calls = applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntry.mock.calls.map(call => ({
+        docketNumber: call[0].docketNumber,
+        numberOfPages: call[0].document.numberOfPages,
+      }));
 
-    it('shows the received date WITHOUT time if filed by paper', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          filingDate: '2019-04-19T14:45:15.595Z',
-          isPaper: true,
-        },
-      });
+    const firstCase = calls.find(
+      call => call.docketNumber === MOCK_CASE.docketNumber,
+    );
 
-      expect(result.dateReceived).toEqual('04/19/19');
-    });
-
-    it('shows does not show the received date if the document does not have a valid createdAt and is filed by paper', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          createdAt: null,
-          isPaper: true,
-        },
-      });
-
-      expect(result.dateReceived).toEqual('');
-    });
-
-    it('displays the date served if present in MMDDYYYY format', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          servedAt: '2019-04-20T14:45:15.595Z',
-        },
-      });
-
-      expect(result.dateServed).toEqual('04/20/19');
-    });
-
-    it('does not display the service date if servedAt is not present', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          servedAt: undefined,
-        },
-      });
-
-      expect(result.dateServed).toEqual('');
-    });
-
-    it('returns the docket number along with a Docket Number label', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: testingCaseData.docketEntries[0],
-      });
-
-      expect(result.docketNumberWithSuffix).toEqual(MOCK_CASE.docketNumber);
-    });
-
-    it('returns the docket number with suffix along with a Docket Number label', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: {
-          ...testingCaseData,
-          caseCaption: 'Janie Petitioner, Petitioner',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        },
-        docketEntryEntity: testingCaseData.docketEntries[0],
-      });
-
-      expect(result.docketNumberWithSuffix).toEqual(
-        `${MOCK_CASE.docketNumber}${DOCKET_NUMBER_SUFFIXES.SMALL}`,
-      );
-    });
-
-    it('displays Electronically Filed when the document is filed electronically', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          isPaper: false,
-        },
-      });
-
-      expect(result.electronicallyFiled).toEqual(true);
-    });
-
-    it('does NOT display Electronically Filed when the document is filed by paper', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          isPaper: true,
-        },
-      });
-
-      expect(result.electronicallyFiled).toEqual(false);
-    });
-
-    it('returns the mailing date if present', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          mailingDate: '04/16/2019',
-        },
-      });
-
-      expect(result.mailingDate).toEqual('04/16/2019');
-    });
-
-    it('returns the index of the docket entry as part of the coversheet data', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          mailingDate: '04/16/2019',
-        },
-      });
-
-      expect(result.index).toEqual(testingCaseData.docketEntries[0].index);
-    });
-
-    it('returns an empty string for the mailing date if NOT present', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          mailingDate: undefined,
-        },
-      });
-
-      expect(result.mailingDate).toEqual('');
-    });
-
-    it('generates cover sheet data appropriate for multiple petitioners', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: {
-          ...testingCaseData,
-          caseCaption: 'Janie Petitioner & Janie Petitioner, Petitioners',
-        },
-        docketEntryEntity: testingCaseData.docketEntries[0],
-      });
-
-      expect(result.caseCaptionExtension).toEqual('Petitioners');
-    });
-
-    it('generates cover sheet data appropriate for a single petitioner', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: testingCaseData.docketEntries[0],
-      });
-
-      expect(result.caseCaptionExtension).toEqual(PARTY_TYPES.petitioner);
-    });
-
-    it('generates empty string for caseCaptionExtension if the caseCaption is not in the proper format', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: {
-          ...testingCaseData,
-          caseCaption: 'Janie Petitioner',
-        },
-        docketEntryEntity: testingCaseData.docketEntries[0],
-      });
-
-      expect(result.caseCaptionExtension).toEqual('');
-    });
-
-    it('preserves the original case caption and docket number when the useInitialData is true', () => {
-      const mockInitialDocketNumberSuffix = 'Z';
-
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: {
-          ...testingCaseData,
-          caseCaption: 'Janie Petitioner, Petitioner',
-          docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-          initialCaption: 'Janie and Jackie Petitioner, Petitioners',
-          initialDocketNumberSuffix: mockInitialDocketNumberSuffix,
-        },
-        docketEntryEntity: testingCaseData.docketEntries[0],
-        useInitialData: true,
-      });
-
-      expect(result.docketNumberWithSuffix).toEqual(
-        `${MOCK_CASE.docketNumber}${mockInitialDocketNumberSuffix}`,
-      );
-      expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
-    });
-
-    it('does NOT display dateReceived, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          documentType: 'U.S.C.A',
-          eventCode: 'USCA',
-          lodged: true,
-          servedAt: '2019-04-20T14:45:15.595Z',
-        },
-      });
-
-      expect(result.dateReceived).toBeUndefined();
-      expect(result.electronicallyFiled).toBeUndefined();
-      expect(result.dateServed).toBeUndefined();
-    });
-
-    it('sets the dateReceived to dateFiledFormatted when the filingDate has been updated', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          filingDate: '2019-05-19T14:45:15.595Z',
-        },
-        filingDateUpdated: true,
-      });
-
-      expect(result.dateReceived).toBe('05/19/19');
-    });
-
-    it('sets the dateReceived to createdAt date when the filingDate has not been updated', () => {
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          createdAt: '2019-02-15T14:45:15.595Z',
-          filingDate: '2019-05-19T14:45:15.595Z',
-          isPaper: true,
-        },
-        filingDateUpdated: false,
-      });
-
-      expect(result.dateReceived).toBe('02/15/19');
-    });
-
-    it('should use documentType as documentTitle if documentTitle is undefined', () => {
-      const mockDocumentType = 'test doc type';
-
-      const result = generateCoverSheetData({
-        applicationContext,
-        caseEntity: testingCaseData,
-        docketEntryEntity: {
-          ...testingCaseData.docketEntries[0],
-          documentTitle: undefined,
-          documentType: mockDocumentType,
-        },
-        filingDateUpdated: false,
-      });
-
-      expect(result.documentTitle).toBe(mockDocumentType);
+    expect(firstCase).toMatchObject({
+      docketNumber: MOCK_CASE.docketNumber,
+      numberOfPages: 5,
     });
   });
 });
