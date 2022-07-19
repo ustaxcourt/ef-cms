@@ -70,7 +70,6 @@ export const completeMotionStampingAction = async ({
     // other option would be storing stamp on DE, but would require a migration if non-optional
   }
 
-  // todo: fix redirect to go drafts
   const redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`;
 
   return {
