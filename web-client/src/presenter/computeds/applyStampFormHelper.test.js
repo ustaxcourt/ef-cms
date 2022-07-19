@@ -6,7 +6,8 @@ import { withAppContextDecorator } from '../../withAppContext';
 describe('applyStampFormHelper', () => {
   const CUSTOM_ORDER_MAX_LENGTH = 60;
 
-  const { DATE_FORMATS, MOTION_STATUSES } = applicationContext.getConstants();
+  const { DATE_FORMATS, MOTION_DISPOSITIONS } =
+    applicationContext.getConstants();
 
   const applyStampFormHelper = withAppContextDecorator(
     applyStampFormHelperComputed,
@@ -20,7 +21,7 @@ describe('applyStampFormHelper', () => {
   };
 
   describe('canSaveStampOrder', () => {
-    it('should be false when the form.status is not set to either "Denied" or "Granted"', () => {
+    it('should be false when the form.disposition is not set to either "Denied" or "Granted"', () => {
       const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
         state: {
           ...baseState,
@@ -43,12 +44,12 @@ describe('applyStampFormHelper', () => {
       expect(canSaveStampOrder).toEqual(false);
     });
 
-    it('should be true when the form.status is set and stamp is applied', () => {
+    it('should be true when the form.disposition is set and stamp is applied', () => {
       const { canSaveStampOrder } = runCompute(applyStampFormHelper, {
         state: {
           ...baseState,
           form: {
-            status: MOTION_STATUSES.GRANTED,
+            disposition: MOTION_DISPOSITIONS.GRANTED,
           },
           pdfForSigning: {
             stampApplied: true,
@@ -91,14 +92,14 @@ describe('applyStampFormHelper', () => {
   });
 
   describe('customOrderTextCharacterCount', () => {
-    it('should return CUSTOM_ORDER_MAX_LENGTH if customOrderText is not set', () => {
+    it('should return CUSTOM_ORDER_MAX_LENGTH if customText is not set', () => {
       const { customOrderTextCharacterCount } = runCompute(
         applyStampFormHelper,
         {
           state: {
             ...baseState,
             form: {
-              customOrderText: '',
+              customText: '',
             },
           },
         },
@@ -106,7 +107,7 @@ describe('applyStampFormHelper', () => {
       expect(customOrderTextCharacterCount).toEqual(CUSTOM_ORDER_MAX_LENGTH);
     });
 
-    it('should return the CUSTOM_ORDER_MAX_LENGTH - customOrderText.length if customOrderText is set', () => {
+    it('should return the CUSTOM_ORDER_MAX_LENGTH - customText.length if customText is set', () => {
       const fourLetterWord = 'cool';
       const { customOrderTextCharacterCount } = runCompute(
         applyStampFormHelper,
@@ -114,7 +115,7 @@ describe('applyStampFormHelper', () => {
           state: {
             ...baseState,
             form: {
-              customOrderText: fourLetterWord,
+              customText: fourLetterWord,
             },
           },
         },
@@ -195,26 +196,26 @@ describe('applyStampFormHelper', () => {
     });
   });
 
-  describe('statusErrorClass', () => {
-    it('should be set to "stamp-form-group" if there are no validationErrors on status', () => {
-      const { statusErrorClass } = runCompute(applyStampFormHelper, {
+  describe('dispositionErrorClass', () => {
+    it('should be set to "stamp-form-group" if there are no validationErrors on disposition', () => {
+      const { dispositionErrorClass } = runCompute(applyStampFormHelper, {
         state: baseState,
       });
 
-      expect(statusErrorClass).toEqual('stamp-form-group');
+      expect(dispositionErrorClass).toEqual('stamp-form-group');
     });
 
-    it('should be set to "stamp-form-group-error" if there are validationErrors on status', () => {
-      const { statusErrorClass } = runCompute(applyStampFormHelper, {
+    it('should be set to "stamp-form-group-error" if there are validationErrors on disposition', () => {
+      const { dispositionErrorClass } = runCompute(applyStampFormHelper, {
         state: {
           ...baseState,
           validationErrors: {
-            status: true,
+            disposition: true,
           },
         },
       });
 
-      expect(statusErrorClass).toEqual('stamp-form-group-error');
+      expect(dispositionErrorClass).toEqual('stamp-form-group-error');
     });
   });
 });

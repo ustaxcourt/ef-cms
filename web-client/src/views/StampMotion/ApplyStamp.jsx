@@ -9,9 +9,10 @@ import React, { useEffect, useRef } from 'react';
 
 export const ApplyStamp = connect(
   {
-    JURISDICTION_OPTIONS: state.constants.JURISDICTION_OPTIONS,
-    MOTION_STATUSES: state.constants.MOTION_STATUSES,
-    STRICKEN_CASE_MESSAGE: state.constants.STRICKEN_CASE_MESSAGE,
+    JURISDICTIONAL_OPTIONS: state.constants.JURISDICTIONAL_OPTIONS,
+    MOTION_DISPOSITIONS: state.constants.MOTION_DISPOSITIONS,
+    STRICKEN_FROM_TRIAL_SESSION_MESSAGE:
+      state.constants.STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
     applyStampFormChangeSequence: sequences.applyStampFormChangeSequence,
     applyStampFormHelper: state.applyStampFormHelper,
     clearDueDateSequence: sequences.clearDueDateSequence,
@@ -33,13 +34,13 @@ export const ApplyStamp = connect(
     clearDueDateSequence,
     clearOptionalFieldsStampFormSequence,
     form,
-    JURISDICTION_OPTIONS,
-    MOTION_STATUSES,
+    JURISDICTIONAL_OPTIONS,
+    MOTION_DISPOSITIONS,
     pdfForSigning,
     pdfObj,
     pdfSignerHelper,
     setPDFStampDataSequence,
-    STRICKEN_CASE_MESSAGE,
+    STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
     submitStampMotionSequence,
     updateFormValueSequence,
     validateStampSequence,
@@ -200,49 +201,52 @@ export const ApplyStamp = connect(
                 </div>
                 <div className="stamp-order-form">
                   <FormGroup
-                    className={applyStampFormHelper.statusErrorClass}
-                    errorText={validationErrors.status}
+                    className={applyStampFormHelper.dispositionErrorClass}
+                    errorText={validationErrors.disposition}
                   >
                     <fieldset className="usa-fieldset margin-bottom-0">
-                      {[MOTION_STATUSES.GRANTED, MOTION_STATUSES.DENIED].map(
-                        option => (
-                          <div
-                            className={`usa-radio ${
-                              option === MOTION_STATUSES.DENIED
-                                ? 'margin-bottom-0'
-                                : ''
-                            }`}
-                            key={option}
+                      {[
+                        MOTION_DISPOSITIONS.GRANTED,
+                        MOTION_DISPOSITIONS.DENIED,
+                      ].map(option => (
+                        <div
+                          className={`usa-radio ${
+                            option === MOTION_DISPOSITIONS.DENIED
+                              ? 'margin-bottom-0'
+                              : ''
+                          }`}
+                          key={option}
+                        >
+                          <input
+                            checked={form.disposition === option}
+                            className="usa-radio__input"
+                            id={`motion-disposition-${option}`}
+                            name="disposition"
+                            type="radio"
+                            value={option}
+                            onChange={e => {
+                              applyStampFormChangeSequence({
+                                key: e.target.name,
+                                value: e.target.value,
+                              });
+                            }}
+                          />
+                          <label
+                            className="usa-radio__label"
+                            htmlFor={`motion-disposition-${option}`}
                           >
-                            <input
-                              checked={form.status === option}
-                              className="usa-radio__input"
-                              id={`motion-status-${option}`}
-                              name="status"
-                              type="radio"
-                              value={option}
-                              onChange={e => {
-                                applyStampFormChangeSequence({
-                                  key: e.target.name,
-                                  value: e.target.value,
-                                });
-                              }}
-                            />
-                            <label
-                              className="usa-radio__label"
-                              htmlFor={`motion-status-${option}`}
-                            >
-                              {option}
-                            </label>
-                          </div>
-                        ),
-                      )}
+                            {option}
+                          </label>
+                        </div>
+                      ))}
                       <FormGroup className="grid-container stamp-form-group denied-checkboxes">
                         <div className="display-inline-block grid-col-6">
                           <input
                             checked={form.deniedAsMoot || false}
                             className="usa-checkbox__input"
-                            disabled={form.status !== MOTION_STATUSES.DENIED}
+                            disabled={
+                              form.disposition !== MOTION_DISPOSITIONS.DENIED
+                            }
                             id="deniedAsMoot"
                             name="deniedAsMoot"
                             type="checkbox"
@@ -265,7 +269,9 @@ export const ApplyStamp = connect(
                           <input
                             checked={form.deniedWithoutPrejudice || false}
                             className="usa-checkbox__input"
-                            disabled={form.status !== MOTION_STATUSES.DENIED}
+                            disabled={
+                              form.disposition !== MOTION_DISPOSITIONS.DENIED
+                            }
                             id="deniedWithoutPrejudice"
                             name="deniedWithoutPrejudice"
                             type="checkbox"
@@ -290,17 +296,21 @@ export const ApplyStamp = connect(
                   <hr className="border-top-2px border-base-lighter" />
 
                   <FormGroup className="stamp-form-group">
-                    <label className="usa-label" htmlFor="stricken-case-radio">
+                    <label
+                      className="usa-label"
+                      htmlFor="stricken-from-trial-session-radio"
+                    >
                       Select any that apply{' '}
                       <span className="usa-hint">(optional)</span>
                     </label>
                     <div className="usa-radio usa-radio__inline">
                       <input
-                        checked={form.strickenCase || false}
+                        checked={form.strickenFromTrialSession || false}
                         className="usa-radio__input"
-                        id="stricken-case"
-                        name="strickenCase"
+                        id="stricken-from-trial-session"
+                        name="strickenFromTrialSession"
                         type="radio"
+                        value={STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -310,23 +320,23 @@ export const ApplyStamp = connect(
                       />
                       <label
                         className="usa-radio__label"
-                        htmlFor={'stricken-case'}
+                        htmlFor={'stricken-from-trial-session'}
                       >
-                        {STRICKEN_CASE_MESSAGE}
+                        {STRICKEN_FROM_TRIAL_SESSION_MESSAGE}
                       </label>
                     </div>
                   </FormGroup>
                   <hr className="narrow-hr" />
                   <FormGroup className="stamp-form-group">
-                    {Object.entries(JURISDICTION_OPTIONS).map(
+                    {Object.entries(JURISDICTIONAL_OPTIONS).map(
                       ([key, value]) => (
                         <div className="usa-radio" key={key}>
                           <input
-                            aria-describedby="jurisdiction"
-                            checked={form.jurisdiction === value}
+                            aria-describedby="jurisdictionalOption"
+                            checked={form.jurisdictionalOption === value}
                             className="usa-radio__input"
-                            id={`jurisdiction-${key}`}
-                            name="jurisdiction"
+                            id={`jurisdictionalOption-${key}`}
+                            name="jurisdictionalOption"
                             type="radio"
                             value={value}
                             onChange={e => {
@@ -339,8 +349,8 @@ export const ApplyStamp = connect(
                           <label
                             aria-label={value}
                             className="usa-radio__label"
-                            htmlFor={`jurisdiction-${key}`}
-                            id={`jurisdiction-${key}-label`}
+                            htmlFor={`jurisdictionalOption-${key}`}
+                            id={`jurisdictionalOption-${key}-label`}
                           >
                             {value}
                           </label>
@@ -486,26 +496,26 @@ export const ApplyStamp = connect(
                   <hr className="narrow-hr" />
                   <FormGroup
                     className="stamp-form-group"
-                    errorText={validationErrors.customOrderText}
+                    errorText={validationErrors.customText}
                   >
                     <div>
                       <label
                         className="usa-label"
-                        htmlFor="custom-order-text"
-                        id="custom-order-text-label"
+                        htmlFor="custom-text"
+                        id="custom-text-label"
                       >
                         Custom order text{' '}
                         <span className="usa-hint">(optional)</span>
                       </label>
                       <textarea
-                        aria-describedby="custom-order-text-label"
+                        aria-describedby="custom-text-label"
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
-                        id="custom-order-text"
+                        id="custom-text"
                         maxLength="60"
-                        name="customOrderText"
+                        name="customText"
                         type="text"
-                        value={form.customOrderText}
+                        value={form.customText}
                         onChange={e => {
                           updateFormValueSequence({
                             key: e.target.name,
@@ -557,25 +567,25 @@ export const ApplyStamp = connect(
                         <span className="font-sans-2xs">
                           This motion is{' '}
                           <span className="text-ls-1 text-bold font-sans-lg">
-                            {form.status?.toUpperCase()}
+                            {form.disposition?.toUpperCase()}
                           </span>{' '}
                           {form.deniedAsMoot && 'as moot '}
                           {form.deniedWithoutPrejudice && 'without prejudice'}
                           <br />
                         </span>
-                        {(form.strickenCase ||
-                          form.jurisdiction ||
+                        {(form.strickenFromTrialSession ||
+                          form.jurisdictionalOption ||
                           (form.dueDateMessage && form.day) ||
-                          form.customOrderText) && <hr className="narrow-hr" />}
-                        {form.strickenCase && (
+                          form.customText) && <hr className="narrow-hr" />}
+                        {form.strickenFromTrialSession && (
                           <>
-                            - {STRICKEN_CASE_MESSAGE} -
+                            - {STRICKEN_FROM_TRIAL_SESSION_MESSAGE} -
                             <br />
                           </>
                         )}
-                        {form.jurisdiction && (
+                        {form.jurisdictionalOption && (
                           <>
-                            - {form.jurisdiction} -<br />
+                            - {form.jurisdictionalOption} -<br />
                           </>
                         )}
                         <span className="text-semibold">
@@ -586,7 +596,7 @@ export const ApplyStamp = connect(
                               <br />
                             </>
                           )}
-                          {form.customOrderText}
+                          {form.customText}
                         </span>
                       </span>
                       <hr className="narrow-hr" />
