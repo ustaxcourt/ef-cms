@@ -242,7 +242,6 @@ const fileDocumentOnOneCase = async ({
   originalSubjectDocketEntry,
   user,
 }) => {
-  // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
 
   const docketEntryEntity = new DocketEntry(
