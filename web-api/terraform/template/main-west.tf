@@ -270,6 +270,7 @@ module "api-west-green" {
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
+    REGION                 = "us-west-1"
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name

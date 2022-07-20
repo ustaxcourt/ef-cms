@@ -455,6 +455,7 @@ module "api-east-green" {
   zone_id                   = data.aws_route53_zone.zone.id
   pool_arn                  = aws_cognito_user_pool.pool.arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
+    REGION                 = "us-east-1"
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name

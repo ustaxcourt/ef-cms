@@ -2,14 +2,9 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { chunk } = require('lodash');
 const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
-
-// Due to SES limits, this MUST be lower than 14, so 10 is hopefully a safe number
-const CHUNK_SIZE = 10;
-const TIME_BETWEEN_BATCHES = 1000;
 
 /**
  * Generates notices for all calendared cases for the given trialSessionId
@@ -71,39 +66,30 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
 
   // due to SES emails per second limits, we can't invoke lambdas at a quick
   // rate or else SES emails will begin to fail due to throttling.
-  const batches = chunk(calendaredCases, CHUNK_SIZE);
-  const requests = Promise.resolve();
+  // Create a FIFO queue. In tf?
+  // send a message to our queue instead of our invokeLambda function
+  const concurrencyLimit = 10;
 
-  for (const batch of batches) {
-    requests.then(
-      () =>
-        new Promise(resolve => {
-          batch.map(calendaredCase =>
-            applicationContext.invokeLambda(
-              {
-                FunctionName: `set_trial_session_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-                InvocationType: 'Event',
-                Payload: JSON.stringify({
-                  docketNumber: calendaredCase.docketNumber,
-                  jobId,
-                  trialSession,
-                  userId: user.userId,
-                }),
-              },
-              err => {
-                if (err) {
-                  // TODO: thing of error condition
-                  applicationContext.logger.error(err);
-                }
-              },
-            ),
-          );
-          setTimeout(resolve, TIME_BETWEEN_BATCHES);
+  const sqs = await applicationContext.getMessagingClient();
+  let groupId = 0;
+
+  for (let calendaredCase of calendaredCases) {
+    sqs
+      .sendMessage({
+        MessageBody: JSON.stringify({
+          docketNumber: calendaredCase.docketNumber,
+          jobId,
+          trialSession,
+          userId: user.userId,
         }),
-    );
-  }
+        MessageDeduplicationId: `${jobId}-${calendaredCase.docketNumber}`,
+        MessageGroupId: groupId % concurrencyLimit,
+        QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}.fifo`,
+      })
+      .promise();
 
-  await requests;
+    groupId++;
+  }
 
   await new Promise(resolve => {
     const interval = setInterval(async () => {
