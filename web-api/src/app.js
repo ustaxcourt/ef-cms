@@ -570,7 +570,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(appendAmendedPetitionFormLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
+    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
     lambdaWrapper(serveCourtIssuedDocumentLambda),
   );
   app.post(
@@ -610,7 +610,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(fileCourtIssuedDocketEntryLambda),
   );
   app.post(
-    '/async/case-documents/:docketNumber/file-and-serve-court-issued-docket-entry',
+    '/async/case-documents/:subjectCaseDocketNumber/file-and-serve-court-issued-docket-entry',
     lambdaWrapper(fileAndServeCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
