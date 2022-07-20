@@ -29,6 +29,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
+ * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
  * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {Object} providers.form the form from the front end that has last minute modifications to the docket entry
