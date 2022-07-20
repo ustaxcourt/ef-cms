@@ -2,6 +2,10 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_SECTION,
+} = require('../../entities/EntityConstants');
+const {
   createISODateString,
   formatDateString,
 } = require('../../utilities/DateHandler');
@@ -15,7 +19,6 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
@@ -61,8 +64,10 @@ const completeWorkItem = async ({
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case containing the document to serve
- * @param {string} providers.docketEntryId the id of the docket entry to serve
+ * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
+ * @param {string} providers.subjectCaseDocketNumber the docket number of the case containing the document to serve
+ * @param {String} providers.docketEntryId the ID of the docket entry being served
+ * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be served on
  * @returns {object} the updated case after the document was served
  */
 exports.serveCourtIssuedDocumentInteractor = async (
@@ -110,6 +115,22 @@ exports.serveCourtIssuedDocumentInteractor = async (
         docketNumber: subjectCaseEntity.docketNumber,
         status: true,
       });
+  }
+
+  const eventCodeCanOnlyBeServedOnSubjectCase =
+    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode);
+  const consolidateCaseDuplicateDocketEntries = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag:
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+    });
+
+  if (
+    eventCodeCanOnlyBeServedOnSubjectCase ||
+    !consolidateCaseDuplicateDocketEntries
+  ) {
+    docketNumbers = [subjectCaseDocketNumber];
   }
 
   courtIssuedDocument.numberOfPages = await applicationContext
