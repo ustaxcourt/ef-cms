@@ -1332,14 +1332,11 @@ const {
   CognitoIdentityServiceProvider,
   DynamoDB,
   EnvironmentCredentials,
-  Lambda,
   S3,
   SES,
   SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
-
-const lambda = new Lambda();
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -2221,17 +2218,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setupPdfDocument,
         uploadToS3,
       };
-    },
-    invokeLambda: (params, cb) => {
-      // TODO: maybe see if this has a .promise method
-      if (process.env.IS_LOCAL) {
-        const {
-          handler,
-        } = require('../terraform/template/lambdas/trial-session');
-        handler(JSON.parse(params.Payload));
-      } else {
-        lambda.invoke(params, cb);
-      }
     },
     isAuthorized,
     isCurrentColorActive,

@@ -685,9 +685,6 @@ const createTestApplicationContext = ({ user } = {}) => {
     getUseCaseHelpers: mockGetUseCaseHelpers,
     getUseCases: mockGetUseCases,
     getUtilities: mockGetUtilities,
-    invokeLambda: jest.fn().mockImplementation((args, callback) => {
-      callback(null);
-    }),
     isFeatureEnabled: jest.fn(),
     logger: {
       debug: jest.fn(),
