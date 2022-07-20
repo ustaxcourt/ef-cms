@@ -15,20 +15,32 @@ const {
 } = require('../../../authorization/authorizationClientService');
 const { addServedStampToDocument } = require('./addServedStampToDocument');
 const { Case } = require('../../entities/cases/Case');
+const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 const completeWorkItem = async ({
   applicationContext,
-  courtIssuedDocument,
+  docketEntryEntity,
   user,
   workItemToUpdate,
 }) => {
   Object.assign(workItemToUpdate, {
     docketEntry: {
-      ...courtIssuedDocument.validate().toRawObject(),
+      ...docketEntryEntity.validate().toRawObject(),
     },
+  });
+
+  console.log('user***', user);
+
+  workItemToUpdate.assignToUser({
+    assigneeId: user.userId,
+    assigneeName: user.name,
+    section: user.section ? user.section : DOCKET_SECTION,
+    sentBy: user.name,
+    sentBySection: user.section ? user.section : DOCKET_SECTION,
+    sentByUserId: user.userId,
   });
 
   workItemToUpdate.setAsCompleted({ message: 'completed', user });
@@ -63,20 +75,20 @@ exports.serveCourtIssuedDocumentInteractor = async (
     throw new UnauthorizedError('Unauthorized for document service');
   }
 
-  const subjectCaseToUpdate = await applicationContext
+  const subjectCase = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,
-      subjectCaseDocketNumber,
+      docketNumber: subjectCaseDocketNumber,
     });
 
-  if (!subjectCaseToUpdate) {
+  if (!subjectCase.docketNumber) {
     throw new NotFoundError(`Case ${subjectCaseDocketNumber} was not found.`);
   }
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let subjectCaseEntity = new Case(subjectCase, { applicationContext });
 
-  const courtIssuedDocument = caseEntity.getDocketEntryById({
+  const courtIssuedDocument = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
   });
 
@@ -95,12 +107,13 @@ exports.serveCourtIssuedDocumentInteractor = async (
       .updateDocketEntryPendingServiceStatus({
         applicationContext,
         docketEntryId: courtIssuedDocument.docketEntryId,
-        docketNumber: subjectCaseToUpdate.docketNumber,
+        docketNumber: subjectCaseEntity.docketNumber,
         status: true,
       });
   }
 
   let caseEntities = [];
+  let serviceResults;
 
   try {
     const { Body: pdfData } = await applicationContext
@@ -113,7 +126,7 @@ exports.serveCourtIssuedDocumentInteractor = async (
 
     let serviceStampType = 'Served';
 
-    if (docketEntry.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
+    if (courtIssuedDocument.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
       serviceStampType = courtIssuedDocument.serviceStamp;
     } else if (
       ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)
@@ -121,16 +134,21 @@ exports.serveCourtIssuedDocumentInteractor = async (
       serviceStampType = 'Entered and Served';
     }
 
-    const serviceStampDate = formatDateString(
-      courtIssuedDocument.servedAt,
-      'MMDDYY',
-    );
+    const servedAt = createISODateString();
+    const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
 
-    const newPdfData = await addServedStampToDocument({
+    const stampedPdf = await addServedStampToDocument({
       applicationContext,
       pdfData,
       serviceStampText: `${serviceStampType} ${serviceStampDate}`,
     });
+
+    courtIssuedDocument.numberOfPages = await applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument({
+        applicationContext,
+        docketEntryId,
+      });
 
     for (const docketNumber of docketNumbers) {
       const caseToUpdate = await applicationContext
@@ -143,148 +161,159 @@ exports.serveCourtIssuedDocumentInteractor = async (
       caseEntities.push(new Case(caseToUpdate, { applicationContext }));
     }
 
-    const servedDocumentPromises = caseEntities.map(caseEntity => {
-      let docketEntry = new DocketEntry(caseEntity.getDocketEntryById(docketEntryId));
-
-      if (!docketEntry) {
-        docketEntry = new DocketEntry(
-          { ...courtIssuedDocument, docketNumber: caseEntity.docketNumber },
-          { applicationContext },
-        );
-
-        caseEntity.addDocketEntry(courtIssuedDocumentEntity);
-      }
-
-      docketEntry.numberOfPages = await applicationContext
-        .getUseCaseHelpers()
-        .countPagesInDocument({
-          applicationContext,
-          docketEntryId,
-        });
-
-      // Serve on all parties
-      const servedParties = aggregatePartiesForService(caseEntity);
-
-      docketEntry.setAsServed(servedParties.all);
-
-      // TODO: Update work item for consolidated cases
-
-      const workItemToUpdate = courtIssuedDocument.workItem;
-
-      await completeWorkItem({
+    const servedDocumentPromises = caseEntities.map(caseEntity =>
+      serveDocumentOnOneCase({
         applicationContext,
+        caseEntity,
         courtIssuedDocument,
+        docketEntryId,
         user,
-        workItemToUpdate,
-      });
+      }),
+    );
 
-      const updatedDocketEntryEntity = new DocketEntry(
-        {
-          ...docketEntry,
-          filingDate: createISODateString(),
-          isOnDocketRecord: true,
-        },
-        { applicationContext },
-      );
+    caseEntities = await Promise.all(servedDocumentPromises);
 
-      updatedDocketEntryEntity.validate();
-
-      caseEntity.updateDocketEntry(updatedDocketEntryEntity);
-
-      caseEntity = await applicationContext
-        .getUseCaseHelpers()
-        .updateCaseAutomaticBlock({
-          applicationContext,
-          caseEntity,
-        });
-
-      if (
-        ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)
-      ) {
-        caseEntity.closeCase();
-
-        await applicationContext
-          .getPersistenceGateway()
-          .deleteCaseTrialSortMappingRecords({
-            applicationContext,
-            docketNumber: caseEntity.docketNumber,
-          });
-
-        if (caseEntity.trialSessionId) {
-          const trialSession = await applicationContext
-            .getPersistenceGateway()
-            .getTrialSessionById({
-              applicationContext,
-              trialSessionId: caseEntity.trialSessionId,
-            });
-
-          const trialSessionEntity = new TrialSession(trialSession, {
-            applicationContext,
-          });
-
-          if (trialSessionEntity.isCalendared) {
-            trialSessionEntity.removeCaseFromCalendar({
-              disposition: 'Status was changed to Closed',
-              docketNumber,
-            });
-          } else {
-            trialSessionEntity.deleteCaseFromCalendar({
-              docketNumber: caseEntity.docketNumber,
-            });
-          }
-
-          await applicationContext.getPersistenceGateway().updateTrialSession({
-            applicationContext,
-            trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
-          });
-        }
-      }
-
-      await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    serviceResults = await applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        caseToUpdate: caseEntity,
+        caseEntities,
+        docketEntryId,
+        stampedPdf,
       });
 
-      const serviceResults = await applicationContext
-        .getUseCaseHelpers()
-        .serveDocumentAndGetPaperServicePdf({
-          applicationContext,
-          caseEntities: [caseEntity],
-          docketEntryId: courtIssuedDocument.docketEntryId,
-        });
-
-      await applicationContext
-        .getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus({
-          applicationContext,
-          docketEntryId: courtIssuedDocument.docketEntryId,
-          docketNumber: caseToUpdate.docketNumber,
-          status: false,
-        });
-    });
-
-    await Promise.all(servedDocumentPromises);
     await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
       applicationContext,
-      document: newPdfData,
+      document: stampedPdf,
       key: docketEntryId,
     });
 
     return serviceResults;
-  } catch (e) {
-    await applicationContext
+  } finally {
+    for (const caseEntity of caseEntities) {
+      try {
+        await applicationContext
+          .getPersistenceGateway()
+          .updateDocketEntryPendingServiceStatus({
+            applicationContext,
+            docketEntryId,
+            docketNumber: caseEntity.docketNumber,
+            status: false,
+          });
+      } catch (e) {
+        applicationContext.logger.error(
+          `Encountered an exception trying to reset isPendingService on Docket Number ${caseEntity.docketNumber}.`,
+          e,
+        );
+      }
+    }
+  }
+};
+
+const serveDocumentOnOneCase = async ({
+  applicationContext,
+  caseEntity,
+  courtIssuedDocument,
+  docketEntryId,
+  user,
+}) => {
+  const docketEntry = caseEntity.getDocketEntryById({ docketEntryId });
+
+  if (!docketEntry) {
+    // updates docketNumber automatically
+    caseEntity.addDocketEntry({
+      ...courtIssuedDocument,
+      isOnDocketRecord: undefined,
+    });
+  }
+
+  const docketEntryEntity = new DocketEntry(courtIssuedDocument, {
+    applicationContext,
+  });
+
+  docketEntryEntity.filingDate = createISODateString();
+  docketEntryEntity.isOnDocketRecord = true;
+
+  const servedParties = aggregatePartiesForService(caseEntity);
+
+  docketEntryEntity.setAsServed(servedParties.all);
+
+  const workItemToUpdate = docketEntryEntity.workItem;
+
+  await completeWorkItem({
+    applicationContext,
+    docketEntryEntity,
+    user,
+    workItemToUpdate,
+  });
+
+  docketEntryEntity.validate();
+
+  caseEntity.updateDocketEntry(docketEntryEntity);
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
+    });
+
+  if (ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)) {
+    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
+      applicationContext,
+      caseEntity,
+    });
+  }
+
+  const validRawCaseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: caseEntity,
+    });
+
+  return new Case(validRawCaseEntity, { applicationContext });
+};
+
+const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
+  applicationContext,
+  caseEntity,
+}) => {
+  caseEntity.closeCase();
+
+  await applicationContext
+    .getPersistenceGateway()
+    .deleteCaseTrialSortMappingRecords({
+      applicationContext,
+      docketNumber: caseEntity.docketNumber,
+    });
+
+  if (caseEntity.trialSessionId) {
+    const trialSession = await applicationContext
       .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
+      .getTrialSessionById({
         applicationContext,
-        docketEntryId: courtIssuedDocument.docketEntryId,
-        docketNumber: caseToUpdate.docketNumber,
-        status: false,
+        trialSessionId: caseEntity.trialSessionId,
       });
 
-    applicationContext.logger.error(
-      'Error attempting to serve a Court Issued Document',
-      { err: e },
-    );
-    throw e;
+    const trialSessionEntity = new TrialSession(trialSession, {
+      applicationContext,
+    });
+
+    if (trialSessionEntity.isCalendared) {
+      trialSessionEntity.removeCaseFromCalendar({
+        disposition: 'Status was changed to Closed',
+        docketNumber: caseEntity.docketNumber,
+      });
+    } else {
+      trialSessionEntity.deleteCaseFromCalendar({
+        docketNumber: caseEntity.docketNumber,
+      });
+    }
+
+    await applicationContext.getPersistenceGateway().updateTrialSession({
+      applicationContext,
+      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    });
   }
 };
