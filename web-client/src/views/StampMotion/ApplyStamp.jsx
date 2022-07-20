@@ -381,7 +381,7 @@ export const ApplyStamp = connect(
                       >
                         The parties shall file a status report by{' '}
                         <DateInput
-                          className="display-inline-block width-150 padding-0"
+                          className="display-inline-block padding-0"
                           disabled={
                             form.dueDateMessage !==
                             'The parties shall file a status report by'
@@ -442,7 +442,7 @@ export const ApplyStamp = connect(
                         The parties shall file a status report or proposed
                         stipulated decision by{' '}
                         <DateInput
-                          className="display-inline-block width-150 padding-0"
+                          className="display-inline-block padding-0"
                           disabled={
                             form.dueDateMessage !==
                             'The parties shall file a status report or proposed stipulated decision by'
