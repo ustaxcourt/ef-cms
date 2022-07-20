@@ -35,8 +35,6 @@ const completeWorkItem = async ({
     },
   });
 
-  console.log('user***', user);
-
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
