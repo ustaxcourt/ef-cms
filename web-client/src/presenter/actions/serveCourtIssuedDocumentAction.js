@@ -51,18 +51,15 @@ export const serveCourtIssuedDocumentAction = async ({
     docketNumbers = [caseDetail.docketNumber];
   }
 
-  const result = await applicationContext
-    .getUseCases()
-    .serveCourtIssuedDocumentInteractor(applicationContext, {
+  const clientConnectionId = get(state.clientConnectionId);
+
+  await applicationContext.getUseCases().serveCourtIssuedDocumentInteractor(
+    applicationContext,
+    {
       docketEntryId,
       docketNumbers,
       subjectCaseDocketNumber: caseDetail.docketNumber,
-    });
-
-  return {
-    alertSuccess: {
-      message: 'Document served. ',
     },
-    pdfUrl: result?.pdfUrl,
-  };
+    clientConnectionId,
+  );
 };

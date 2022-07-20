@@ -4,6 +4,7 @@ import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrin
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
+import { setDocumentToDisplayFromDocumentIdAction } from '../actions/setDocumentToDisplayFromDocumentIdAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
@@ -20,7 +21,7 @@ export const serveCourtIssuedDocumentCompleteSequence = [
       followRedirectAction,
       {
         default: navigateToCaseDetailAction,
-        success: [],
+        success: [setDocumentToDisplayFromDocumentIdAction],
       },
     ],
     yes: [navigateToPrintPaperServiceAction],
