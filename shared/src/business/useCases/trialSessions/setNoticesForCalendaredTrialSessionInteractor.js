@@ -74,7 +74,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
   let groupId = 0;
 
   for (let calendaredCase of calendaredCases) {
-    sqs
+    await sqs
       .sendMessage({
         MessageBody: JSON.stringify({
           docketNumber: calendaredCase.docketNumber,
@@ -87,7 +87,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
         QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}.fifo`,
       })
       .promise();
-
     groupId++;
   }
 
