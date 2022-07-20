@@ -95,6 +95,7 @@ import { dismissModalSequence } from './sequences/dismissModalSequence';
 import { editCorrespondenceDocumentSequence } from './sequences/editCorrespondenceDocumentSequence';
 import { editUploadCourtIssuedDocumentSequence } from './sequences/editUploadCourtIssuedDocumentSequence';
 import { fetchUserNotificationsSequence } from './sequences/fetchUserNotificationsSequence';
+import { fileAndServeCourtIssuedDocumentFromDocketEntrySequence } from './sequences/fileAndServeCourtIssuedDocumentFromDocketEntrySequence';
 import { filterCaseDeadlinesByJudgeSequence } from './sequences/filterCaseDeadlinesByJudgeSequence';
 import { formCancelToggleCancelSequence } from './sequences/formCancelToggleCancelSequence';
 import { forwardMessageSequence } from './sequences/forwardMessageSequence';
@@ -299,7 +300,6 @@ import { selectScannerSequence } from './sequences/selectScannerSequence';
 import { selectWorkItemSequence } from './sequences/selectWorkItemSequence';
 import { serveCaseToIrsSequence } from './sequences/serveCaseToIrsSequence';
 import { serveCourtIssuedDocumentCompleteSequence } from './sequences/serveCourtIssuedDocumentCompleteSequence';
-import { serveCourtIssuedDocumentFromDocketEntrySequence } from './sequences/serveCourtIssuedDocumentFromDocketEntrySequence';
 import { serveCourtIssuedDocumentSequence } from './sequences/serveCourtIssuedDocumentSequence';
 import { servePaperFiledDocumentSequence } from './sequences/servePaperFiledDocumentSequence';
 import { setCaseDetailPageTabSequence } from './sequences/setCaseDetailPageTabSequence';
@@ -594,6 +594,7 @@ export const presenter = {
     editCorrespondenceDocumentSequence,
     editUploadCourtIssuedDocumentSequence,
     fetchUserNotificationsSequence,
+    fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     filterCaseDeadlinesByJudgeSequence,
     formCancelToggleCancelSequence,
     forwardMessageSequence,
@@ -797,7 +798,6 @@ export const presenter = {
     selectWorkItemSequence,
     serveCaseToIrsSequence,
     serveCourtIssuedDocumentCompleteSequence,
-    serveCourtIssuedDocumentFromDocketEntrySequence,
     serveCourtIssuedDocumentSequence,
     servePaperFiledDocumentSequence,
     setCaseDetailPageTabSequence,

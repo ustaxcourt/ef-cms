@@ -13,7 +13,7 @@ import { startShowValidationAction } from '../actions/startShowValidationAction'
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateCourtIssuedDocketEntryAction } from '../actions/CourtIssuedDocketEntry/validateCourtIssuedDocketEntryAction';
 
-export const serveCourtIssuedDocumentFromDocketEntrySequence = [
+export const fileAndServeCourtIssuedDocumentFromDocketEntrySequence = [
   clearAlertsAction,
   clearPdfPreviewUrlAction,
   startShowValidationAction,

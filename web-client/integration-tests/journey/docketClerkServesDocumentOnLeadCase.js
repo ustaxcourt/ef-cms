@@ -72,7 +72,7 @@ export const docketClerkServesDocumentOnLeadCase = (
     );
 
     await cerebralTest.runSequence(
-      'serveCourtIssuedDocumentFromDocketEntrySequence',
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
     cerebralTest.draftOrders.shift();
 

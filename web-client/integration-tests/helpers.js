@@ -440,7 +440,7 @@ export const serveDocument = async ({
 
   await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
   await cerebralTest.runSequence(
-    'serveCourtIssuedDocumentFromDocketEntrySequence',
+    'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
   );
   await waitForLoadingComponentToHide({ cerebralTest });
 };
