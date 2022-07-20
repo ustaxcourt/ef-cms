@@ -83,7 +83,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
           userId: user.userId,
         }),
         MessageDeduplicationId: `${jobId}-${calendaredCase.docketNumber}`,
-        MessageGroupId: groupId % concurrencyLimit,
+        MessageGroupId: `${groupId % concurrencyLimit}`,
         QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}.fifo`,
       })
       .promise();
