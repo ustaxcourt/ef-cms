@@ -67,7 +67,7 @@ const completeWorkItem = async ({
  */
 exports.serveCourtIssuedDocumentInteractor = async (
   applicationContext,
-  { docketEntryId, docketNumbers, subjectCaseDocketNumber },
+  { clientConnectionId, docketEntryId, docketNumbers, subjectCaseDocketNumber },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -112,44 +112,23 @@ exports.serveCourtIssuedDocumentInteractor = async (
       });
   }
 
+  courtIssuedDocument.numberOfPages = await applicationContext
+    .getUseCaseHelpers()
+    .countPagesInDocument({
+      applicationContext,
+      docketEntryId,
+    });
+
+  const stampedPdf = await retrieveAndStampDocument({
+    applicationContext,
+    courtIssuedDocument,
+    docketEntryId,
+  });
+
   let caseEntities = [];
   let serviceResults;
 
   try {
-    const { Body: pdfData } = await applicationContext
-      .getStorageClient()
-      .getObject({
-        Bucket: applicationContext.environment.documentsBucketName,
-        Key: docketEntryId,
-      })
-      .promise();
-
-    let serviceStampType = 'Served';
-
-    if (courtIssuedDocument.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
-      serviceStampType = courtIssuedDocument.serviceStamp;
-    } else if (
-      ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)
-    ) {
-      serviceStampType = 'Entered and Served';
-    }
-
-    const servedAt = createISODateString();
-    const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
-
-    const stampedPdf = await addServedStampToDocument({
-      applicationContext,
-      pdfData,
-      serviceStampText: `${serviceStampType} ${serviceStampDate}`,
-    });
-
-    courtIssuedDocument.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
-        applicationContext,
-        docketEntryId,
-      });
-
     for (const docketNumber of docketNumbers) {
       const caseToUpdate = await applicationContext
         .getPersistenceGateway()
@@ -181,14 +160,6 @@ exports.serveCourtIssuedDocumentInteractor = async (
         docketEntryId,
         stampedPdf,
       });
-
-    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-      applicationContext,
-      document: stampedPdf,
-      key: docketEntryId,
-    });
-
-    return serviceResults;
   } finally {
     for (const caseEntity of caseEntities) {
       try {
@@ -208,6 +179,31 @@ exports.serveCourtIssuedDocumentInteractor = async (
       }
     }
   }
+
+  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+    applicationContext,
+    document: stampedPdf,
+    key: docketEntryId,
+  });
+
+  const successMessage =
+    docketNumbers.length > 1
+      ? 'Document served to selected cases in group. '
+      : 'Document served. ';
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_court_issued_document_complete',
+      alertSuccess: {
+        message: successMessage,
+        overwritable: false,
+      },
+      pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
+    },
+    userId: user.userId,
+  });
 };
 
 const serveDocumentOnOneCase = async ({
@@ -273,6 +269,39 @@ const serveDocumentOnOneCase = async ({
     });
 
   return new Case(validRawCaseEntity, { applicationContext });
+};
+
+const retrieveAndStampDocument = async ({
+  applicationContext,
+  courtIssuedDocument,
+  docketEntryId,
+}) => {
+  const { Body: pdfData } = await applicationContext
+    .getStorageClient()
+    .getObject({
+      Bucket: applicationContext.environment.documentsBucketName,
+      Key: docketEntryId,
+    })
+    .promise();
+
+  let serviceStampType = 'Served';
+
+  if (courtIssuedDocument.documentType === GENERIC_ORDER_DOCUMENT_TYPE) {
+    serviceStampType = courtIssuedDocument.serviceStamp;
+  } else if (
+    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode)
+  ) {
+    serviceStampType = 'Entered and Served';
+  }
+
+  const servedAt = createISODateString();
+  const serviceStampDate = formatDateString(servedAt, 'MMDDYY');
+
+  return await addServedStampToDocument({
+    applicationContext,
+    pdfData,
+    serviceStampText: `${serviceStampType} ${serviceStampDate}`,
+  });
 };
 
 const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({

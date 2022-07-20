@@ -12,10 +12,11 @@ const { post } = require('./requests');
 exports.serveCourtIssuedDocumentInteractor = (
   applicationContext,
   { docketEntryId, docketNumbers, subjectCaseDocketNumber },
+  clientConnectionId,
 ) => {
   return post({
     applicationContext,
-    body: { docketNumbers },
+    body: { clientConnectionId, docketNumbers },
     endpoint: `/case-documents/${subjectCaseDocketNumber}/${docketEntryId}/serve-court-issued`,
   });
 };
