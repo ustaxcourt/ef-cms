@@ -30,6 +30,8 @@ exports.sendBulkTemplatedEmail = async ({
   templateName,
 }) => {
   try {
+    const sqs = await applicationContext.getMessagingClient();
+
     const params = {
       DefaultTemplateData: JSON.stringify(defaultTemplateData),
       Destinations: destinations.map(destination => ({
@@ -44,7 +46,23 @@ exports.sendBulkTemplatedEmail = async ({
       Template: templateName,
     };
 
-    await exports.sendWithRetry({ applicationContext, params });
+    // await exports.sendWithRetry({ applicationContext, params });
+    // send an event to sqs queue
+    // have a lambda process the queue (send email with the retries)
+
+    // run params object to
+    // object hash to generate unique identifier for the object to add
+
+    const concurrencyLimit =
+      applicationContext.getConstants().SES_CONCURRENCY_LIMIT;
+
+    await sqs
+      .sendMessage({
+        MessageBody: JSON.stringify(params),
+        MessageGroupId: `${parseInt(Math.random() * concurrencyLimit)}`,
+        QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/send_emails_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}.fifo`,
+      })
+      .promise();
   } catch (err) {
     applicationContext.logger.error(`Error sending email: ${err}`, err);
     throw err;
