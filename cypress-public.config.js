@@ -6,7 +6,6 @@ const {
 const { defineConfig } = require('cypress');
 
 module.exports = defineConfig({
-  browser: 'chrome',
   defaultCommandTimeout: 20000,
   e2e: {
     baseUrl: 'http://localhost:5678',
