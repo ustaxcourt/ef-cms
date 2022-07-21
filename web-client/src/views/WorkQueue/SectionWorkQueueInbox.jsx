@@ -43,17 +43,22 @@ const SectionWorkQueueTable = connect(
             {showAssignedToColumn && <th>Assigned To</th>}
           </tr>
         </thead>
-        {formattedWorkQueue.map(formattedWorkItem => (
-          <SectionWorkQueueTable.Row
-            hideFiledByColumn={hideFiledByColumn}
-            hideIconColumn={hideIconColumn}
-            item={formattedWorkItem}
-            key={formattedWorkItem.workItemId}
-            selectWorkItemSequence={selectWorkItemSequence}
-            showAssignedToColumn={showAssignedToColumn}
-            showSelectColumn={showSelectColumn}
-          />
-        ))}
+        {formattedWorkQueue.map(formattedWorkItem => {
+          // formattedWorkItem.inConsolidatedGroup = true;
+          // formattedWorkItem.inLeadCase = false;
+          // formattedWorkItem.consolidatedIconTooltipText = 'Soemthing';
+          return (
+            <SectionWorkQueueTable.Row
+              hideFiledByColumn={hideFiledByColumn}
+              hideIconColumn={hideIconColumn}
+              item={formattedWorkItem}
+              key={formattedWorkItem.workItemId}
+              selectWorkItemSequence={selectWorkItemSequence}
+              showAssignedToColumn={showAssignedToColumn}
+              showSelectColumn={showSelectColumn}
+            />
+          );
+        })}
       </table>
     );
   },
@@ -95,6 +100,24 @@ SectionWorkQueueTable.Row = React.memo(
               </td>
             </>
           )}
+          <td className="consolidated-case-column">
+            {item.inConsolidatedGroup && (
+              <span
+                className="fa-layers fa-fw"
+                title={item.consolidatedIconTooltipText}
+              >
+                <Icon
+                  aria-label={item.consolidatedIconTooltipText}
+                  className="fa-icon-blue"
+                  icon="copy"
+                />
+                {item.inLeadCase && (
+                  <span className="fa-inverse lead-case-icon-text">L</span>
+                )}
+              </span>
+            )}
+          </td>
+
           <td className="message-queue-row">
             <CaseLink formattedCase={item} />
           </td>
