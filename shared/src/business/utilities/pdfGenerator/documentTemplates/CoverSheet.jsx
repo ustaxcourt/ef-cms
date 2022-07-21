@@ -1,3 +1,5 @@
+import { STRICKEN_FROM_TRIAL_SESSION_MESSAGE } from '../../../entities/EntityConstants';
+
 const classNames = require('classnames');
 const React = require('react');
 
@@ -9,12 +11,12 @@ export const CoverSheet = ({
   dateFiledLodged,
   dateFiledLodgedLabel,
   dateReceived,
-  disposition,
   docketNumberWithSuffix,
   documentTitle,
   electronicallyFiled,
   index,
   mailingDate,
+  stamp,
 }) => {
   const reduceMarginTopOnTitle =
     consolidatedCases && consolidatedCases.length > 10;
@@ -90,8 +92,49 @@ export const CoverSheet = ({
         })}
         id="document-title"
       >
-        {documentTitle} {disposition} FUUUUUU
+        {documentTitle}
       </h2>
+
+      {/* //addd all css to utils.scss */}
+      {stamp && (
+        <div>
+          <span className="text-normal text-center" id="stamp-text">
+            It is ORDERED as follows:
+            <br />
+            <span className="font-sans-2xs">
+              This motion is{' '}
+              <span className="text-ls-1 text-bold font-sans-lg">
+                {stamp.disposition?.toUpperCase()}
+              </span>{' '}
+              {stamp.deniedAsMoot && 'as moot '}
+              {stamp.deniedWithoutPrejudice && 'without prejudice'}
+              <br />
+            </span>
+            {(stamp.strickenFromTrialSession ||
+              stamp.jurisdictionalOption ||
+              (stamp.dueDateMessage && stamp.date) ||
+              stamp.customText) && <hr className="narrow-hr" />}
+            {stamp.strickenFromTrialSession && (
+              <>
+                - {STRICKEN_FROM_TRIAL_SESSION_MESSAGE} -
+                <br />
+              </>
+            )}
+            {stamp.jurisdictionalOption && (
+              <>
+                - {stamp.jurisdictionalOption} -<br />
+              </>
+            )}
+            {stamp.dueDateMessage && (
+              <>
+                {stamp.dueDateMessage} {stamp.date}
+                <br />
+              </>
+            )}
+            {stamp.customText}
+          </span>
+        </div>
+      )}
 
       {certificateOfService && (
         <div id="certificate-of-service">Certificate of Service</div>
