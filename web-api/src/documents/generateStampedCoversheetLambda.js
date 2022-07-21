@@ -12,10 +12,10 @@ exports.generateStampedCoversheetLambda = event =>
     async ({ applicationContext }) => {
       await applicationContext
         .getUseCases()
-        .generateStampedCoversheetInteractor(
-          applicationContext,
-          event.pathParameters,
-        );
+        .generateStampedCoversheetInteractor(applicationContext, {
+          ...event.pathParameters,
+          ...JSON.parse(event.body),
+        });
     },
     { logResults: false },
   );

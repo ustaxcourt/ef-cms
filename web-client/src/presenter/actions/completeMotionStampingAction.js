@@ -43,13 +43,14 @@ export const completeMotionStampingAction = async ({
     // need stamp entity to populate docket entry stamp fields from form
     // need stamp entity to generate the coversheet PDF
 
+    // combine these two calls so we're only hitting one endpoint
     await applicationContext
       .getUseCases()
       .generateStampedCoversheetInteractor(applicationContext, {
         docketEntryId: motionDocketEntryID,
         docketNumber,
         stampData: stampEntity,
-        // pdfData: await pdfjsObj.getData(),
+        stampedDocketEntryId: newDocketEntryId,
       });
   }
 
