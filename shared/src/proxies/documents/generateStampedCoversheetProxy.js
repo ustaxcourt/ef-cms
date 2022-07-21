@@ -11,12 +11,13 @@ const { post } = require('../requests');
  */
 exports.generateStampedCoversheetInteractor = (
   applicationContext,
-  { docketEntryId, docketNumber, stampData },
+  { docketEntryId, docketNumber, stampData, stampedDocketEntryId },
 ) => {
   return post({
     applicationContext,
     body: {
       stampData,
+      stampedDocketEntryId,
     },
     endpoint: `/case-documents/${docketNumber}/${docketEntryId}/stamped-coversheet`,
   });

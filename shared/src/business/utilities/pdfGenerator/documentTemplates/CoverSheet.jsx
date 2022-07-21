@@ -9,12 +9,12 @@ export const CoverSheet = ({
   dateFiledLodged,
   dateFiledLodgedLabel,
   dateReceived,
+  disposition,
   docketNumberWithSuffix,
   documentTitle,
   electronicallyFiled,
   index,
   mailingDate,
-  stampData,
 }) => {
   const reduceMarginTopOnTitle =
     consolidatedCases && consolidatedCases.length > 10;
@@ -90,14 +90,12 @@ export const CoverSheet = ({
         })}
         id="document-title"
       >
-        {documentTitle}
+        {documentTitle} {disposition} FUUUUUU
       </h2>
 
       {certificateOfService && (
         <div id="certificate-of-service">Certificate of Service</div>
       )}
-
-      {stampData && <div>{stampData.disposition} FUUUUUU</div>}
     </div>
   );
 };

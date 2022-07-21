@@ -41,8 +41,7 @@ DocketEntry.prototype.initUnfilteredForInternalUsers =
   ) {
     this.editState = rawDocketEntry.editState;
     this.draftOrderState = rawDocketEntry.draftOrderState;
-    this.disposition = rawDocketEntry.disposition;
-    this.deniedAsMoot = rawDocketEntry.deniedAsMoot;
+    this.stampData = rawDocketEntry.stampData || {};
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
     this.judgeUserId = rawDocketEntry.judgeUserId;
@@ -322,8 +321,9 @@ DocketEntry.prototype.setSigned = function (signByUserId, signedJudgeName) {
  */
 DocketEntry.prototype.setStamped = function (stampData) {
   console.log('stampData in setStamped of DocketEntry.js', stampData);
-  this.disposition = stampData.disposition;
-  this.deniedAsMoot = stampData.deniedAsMoot;
+  this.stampData.disposition = stampData.disposition;
+  this.stampData.deniedAsMoot = stampData.deniedAsMoot;
+  // add joi validation?
 };
 
 /**

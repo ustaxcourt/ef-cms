@@ -15,28 +15,18 @@ exports.addCoverToPdf = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
-  pdfData,
-  replaceCoversheet = false,
+  stampData,
 }) => {
   const coverSheetData = await generateCoverSheetData({
     applicationContext,
     caseEntity,
     docketEntryEntity,
+    stampData,
   });
 
   console.log('coverSheetData after generateCoverSheetData', coverSheetData);
 
   const { PDFDocument } = await applicationContext.getPdfLib();
-
-  // you may not even need pdfData, actually
-  // this is used to update the whole docket entry's pdf
-  // to add in a coversheet at the start
-  // all you actually need is all the docket entry info
-  // in order to generate a new coversheet
-  // const pdfDoc = await PDFDocument.load(pdfData);
-
-  // allow GC to clear original loaded pdf data
-  // pdfData = null;
 
   const coverPagePdf = await applicationContext
     .getDocumentGenerators()
@@ -47,10 +37,6 @@ exports.addCoverToPdf = async ({
 
   const coverPageDocument = await PDFDocument.load(coverPagePdf);
   console.log('coverpage length', coverPageDocument.getPages().length);
-  // const coverPageDocumentPages = await pdfDoc.copyPages(
-  //   coverPageDocument,
-  //   coverPageDocument.getPageIndices(),
-  // );
 
   const newPdfData = await coverPageDocument.save();
 
@@ -73,7 +59,13 @@ exports.addCoverToPdf = async ({
  */
 exports.generateStampedCoversheetInteractor = async (
   applicationContext,
-  { caseEntity = null, docketEntryId, docketNumber, stampData },
+  {
+    caseEntity = null,
+    docketEntryId,
+    docketNumber,
+    stampData,
+    stampedDocketEntryId,
+  },
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -95,15 +87,9 @@ exports.generateStampedCoversheetInteractor = async (
     stampData,
   });
 
-  // return the pdf for the newDocketEntryId
-
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
-    key: docketEntryId,
+    key: stampedDocketEntryId,
   });
-
-  // return await pdfDoc.save({
-  //   useObjectStreams: false,
-  // });
 };

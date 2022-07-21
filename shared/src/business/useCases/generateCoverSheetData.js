@@ -28,6 +28,7 @@ exports.generateCoverSheetData = async ({
   caseEntity,
   docketEntryEntity,
   filingDateUpdated = false,
+  stampData,
   useInitialData = false,
 }) => {
   const isLodged = docketEntryEntity.lodged;
@@ -43,14 +44,9 @@ exports.generateCoverSheetData = async ({
     isPaper,
   });
 
-  console.log(
-    'docketEntryEntity stampData!!!!~~~~',
-    docketEntryEntity.disposition,
-    docketEntryEntity.deniedAsMoot,
-  );
+  console.log('docketEntryEntity stampData!!!!~~~~', stampData);
 
-  const { disposition } = docketEntryEntity;
-  const { deniedAsMoot } = docketEntryEntity;
+  const { deniedAsMoot, disposition } = stampData;
 
   const dateFiledFormatted = docketEntryEntity.filingDate
     ? formatDateString(docketEntryEntity.filingDate, FORMATS.MMDDYY)
