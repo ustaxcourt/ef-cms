@@ -31,6 +31,7 @@ const SectionWorkQueueTable = connect(
         <thead>
           <tr>
             {showSelectColumn && <th colSpan="2">&nbsp;</th>}
+            <th aria-hidden="true" className="consolidated-case-column"></th>
             <th aria-label="Docket Number">Docket No.</th>
             <th>Filed</th>
             <th>Case Title</th>
