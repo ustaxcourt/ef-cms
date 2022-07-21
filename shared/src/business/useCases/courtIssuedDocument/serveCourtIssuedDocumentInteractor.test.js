@@ -159,10 +159,6 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       .getPersistenceGateway()
       .saveDocumentFromLambda.mockImplementation(() => {});
 
-    applicationContext
-      .getPersistenceGateway()
-      .updateCase.mockImplementation(caseToUpdate => caseToUpdate);
-
     applicationContext.logger.error.mockImplementation(() => {});
 
     applicationContext
@@ -202,7 +198,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
             ...theCase,
             ...extendCase,
           };
-        }
+        } else return {};
       });
 
     mockTrialSession = {
@@ -254,12 +250,13 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should throw a Not Found error if the case can not be found', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(null);
+      .getCaseByDocketNumber.mockReturnValueOnce({});
 
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
-        docketNumber: '000-00',
+        docketNumbers: ['000-00'],
+        subjectCaseDocketNumber: '000-00',
       }),
     ).rejects.toThrow('Case 000-00 was not found');
   });
@@ -268,7 +265,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
-        docketNumber: mockCases[0].docketNumber,
+        docketNumbers: [mockCases[0].docketNumber],
+        subjectCaseDocketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('Docket entry 000 was not found');
   });
@@ -277,7 +275,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: mockServedDocketEntryId,
-        docketNumber: mockCases[0].docketNumber,
+        docketNumbers: [mockCases[0].docketNumber],
+        subjectCaseDocketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('Docket entry has already been served');
   });
@@ -285,7 +284,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumber: mockCases[0].docketNumber,
+      docketNumbers: [mockCases[0].docketNumber],
+      subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
     const updatedCase =
@@ -312,7 +312,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should set the number of pages present in the document to be served', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
-      docketNumber: mockCases[0].docketNumber,
+      docketNumbers: [mockCases[0].docketNumber],
+      subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
     const updatedCase =
@@ -332,7 +333,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   it('should set the document as served and update the case and work items for a non-generic order document', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
-      docketNumber: mockCases[0].docketNumber,
+      docketNumbers: [mockCases[0].docketNumber],
+      subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
     const updatedCase =
@@ -354,27 +356,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
-    const result = await serveCourtIssuedDocumentInteractor(
-      applicationContext,
-      {
-        docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-        docketNumber: mockCases[0].docketNumber,
-      },
-    );
-
-    expect(
-      applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toHaveBeenCalled();
-    expect(result).toEqual({
-      pdfUrl: mockPdfUrl,
-    });
-  });
-
   it('should call updateCaseAutomaticBlock and mark the case as automaticBlocked if the docket entry is pending', async () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
-      docketNumber: mockCases[1].docketNumber,
+      docketNumbers: [mockCases[1].docketNumber],
+      subjectCaseDocketNumber: mockCases[1].docketNumber,
     });
 
     expect(
@@ -400,7 +386,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
-      docketNumber: mockCases[0].docketNumber,
+      docketNumbers: [mockCases[0].docketNumber],
+      subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
     expect(
@@ -423,7 +410,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
-      docketNumber: mockCases[0].docketNumber,
+      docketNumbers: [mockCases[0].docketNumber],
+      subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
     expect(
@@ -440,7 +428,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     it(`should set the case status to closed for event code: ${docketEntry.eventCode}`, async () => {
       await serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: docketEntry.docketEntryId,
-        docketNumber: mockCases[0].docketNumber,
+        docketNumbers: [mockCases[0].docketNumber],
+        subjectCaseDocketNumber: mockCases[0].docketNumber,
       });
 
       const updatedCase =
@@ -461,7 +450,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
-        docketNumber: mockCases[0].docketNumber,
+        docketNumbers: [mockCases[0].docketNumber],
+        subjectCaseDocketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('Docket entry is already being served');
 
@@ -476,7 +466,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntry.docketEntryId,
-      docketNumber: mockCases[0].docketNumber,
+      docketNumbers: [mockCases[0].docketNumber],
+      subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
     expect(
@@ -513,7 +504,8 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: docketEntry.docketEntryId,
-        docketNumber: mockCases[0].docketNumber,
+        docketNumbers: [mockCases[0].docketNumber],
+        subjectCaseDocketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('whoops, that is an error!');
 
@@ -536,12 +528,5 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketNumber: mockCases[0].docketNumber,
       status: false,
     });
-
-    expect(applicationContext.logger.error).toHaveBeenCalledWith(
-      'Error attempting to serve a Court Issued Document',
-      {
-        err: new Error('whoops, that is an error!'),
-      },
-    );
   });
 });
