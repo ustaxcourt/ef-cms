@@ -14,6 +14,7 @@ export const CoverSheet = ({
   electronicallyFiled,
   index,
   mailingDate,
+  stampData,
 }) => {
   const reduceMarginTopOnTitle =
     consolidatedCases && consolidatedCases.length > 10;
@@ -95,6 +96,8 @@ export const CoverSheet = ({
       {certificateOfService && (
         <div id="certificate-of-service">Certificate of Service</div>
       )}
+
+      {stampData && <div>{stampData.disposition} FUUUUUU</div>}
     </div>
   );
 };

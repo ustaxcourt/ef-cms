@@ -41,6 +41,8 @@ DocketEntry.prototype.initUnfilteredForInternalUsers =
   ) {
     this.editState = rawDocketEntry.editState;
     this.draftOrderState = rawDocketEntry.draftOrderState;
+    this.disposition = rawDocketEntry.disposition;
+    this.deniedAsMoot = rawDocketEntry.deniedAsMoot;
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
     this.judgeUserId = rawDocketEntry.judgeUserId;
@@ -311,6 +313,17 @@ DocketEntry.prototype.setSigned = function (signByUserId, signedJudgeName) {
   this.signedByUserId = signByUserId;
   this.signedJudgeName = signedJudgeName;
   this.signedAt = createISODateString();
+};
+
+/**
+ * attaches a stamp to the document
+ *
+ * @param {Stamp} stampData the stamp data from the form
+ */
+DocketEntry.prototype.setStamped = function (stampData) {
+  console.log('stampData in setStamped of DocketEntry.js', stampData);
+  this.disposition = stampData.disposition;
+  this.deniedAsMoot = stampData.deniedAsMoot;
 };
 
 /**

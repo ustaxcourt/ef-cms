@@ -28,6 +28,9 @@ const {
   addDocketEntryForSystemGeneratedOrder,
 } = require('../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder');
 const {
+  addDraftStampOrderDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/addDraftStampOrderDocketEntryInteractor');
+const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
@@ -389,6 +392,9 @@ const {
 const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
+const {
+  generateStampedCoversheetInteractor,
+} = require('../../shared/src/business/useCases/generateStampedCoversheetInteractor');
 const {
   generateStandingPretrialOrderForSmallCaseInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor');
@@ -1984,6 +1990,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        addDraftStampOrderDocketEntryInteractor,
         addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
         appendAmendedPetitionFormInteractor,
@@ -2037,6 +2044,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
+        generateStampedCoversheetInteractor,
         generateStandingPretrialOrderForSmallCaseInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,

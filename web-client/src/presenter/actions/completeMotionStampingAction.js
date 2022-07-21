@@ -1,4 +1,4 @@
-// import { Stamp } from '../../../../shared/src/business/entities/Stamp';
+import { Stamp } from '../../../../shared/src/business/entities/Stamp';
 import { state } from 'cerebral';
 
 /**
@@ -13,64 +13,47 @@ export const completeMotionStampingAction = async ({
   applicationContext,
   get,
 }) => {
-  const motionDocketEntry = get(state.pdfForSigning.docketEntryId);
+  const motionDocketEntryID = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
-  // todo: add actual stamp data to save onto draft generated order
-  // const stampFormData = get(state.form);
-  const parentMessageId = get(state.parentMessageId);
+  const stampFormData = get(state.form);
   let docketEntryId;
-
+  let newDocketEntryId;
   if (get(state.pdfForSigning.stampData.x)) {
+    // make x, y of stamp static
     const {
       nameForSigning,
       nameForSigningLine2,
       stampData: { scale, x, y },
     } = get(state.pdfForSigning);
 
-    // const stampEntity = new Stamp(stampFormData);
-
+    const stampEntity = new Stamp(stampFormData);
     const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
-    const stampedPdfBytes = await applicationContext
+    newDocketEntryId = applicationContext.getUniqueId();
+
+    await applicationContext
       .getUseCases()
-      .generateStampedDocumentInteractor(applicationContext, {
-        pdfData: await pdfjsObj.getData(),
-        posX: x,
-        posY: y,
-        scale,
-        sigTextData: {
-          signatureName: `(Signed) ${nameForSigning}`,
-          signatureTitle: nameForSigningLine2,
-        },
-        stampEntity: {},
-      });
-
-    const documentFile = new File([stampedPdfBytes], 'myfile.pdf', {
-      type: 'application/pdf',
-    });
-
-    const stampedDocumentFromUploadId = await applicationContext
-      .getPersistenceGateway()
-      .uploadDocumentFromClient({
-        applicationContext,
-        document: documentFile,
-      });
-
-    ({ signedDocketEntryId: docketEntryId } = await applicationContext
-      .getUseCases()
-      .saveSignedDocumentInteractor(applicationContext, {
+      .addDraftStampOrderDocketEntryInteractor(applicationContext, {
         docketNumber,
-        isMotion: true,
-        nameForSigning,
-        originalDocketEntryId: motionDocketEntry,
-        parentMessageId,
-        signedDocketEntryId: stampedDocumentFromUploadId,
-      }));
-    // persist the stamp data since we'll have access to the generated order's docketEntryId
-    // other option would be storing stamp on DE, but would require a migration if non-optional
+        originalDocketEntryId: motionDocketEntryID,
+        signedDocketEntryId: newDocketEntryId,
+        stampData: stampEntity, // maybe not necessary until edit
+      });
+
+    // need stamp entity to populate docket entry stamp fields from form
+    // need stamp entity to generate the coversheet PDF
+
+    await applicationContext
+      .getUseCases()
+      .generateStampedCoversheetInteractor(applicationContext, {
+        docketEntryId: motionDocketEntryID,
+        docketNumber,
+        stampData: stampEntity,
+        // pdfData: await pdfjsObj.getData(),
+      });
   }
 
-  const redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${docketEntryId}`;
+  const redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
 
   return {
     docketEntryId,
