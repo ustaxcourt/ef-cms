@@ -59,10 +59,6 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     { applicationContext },
   );
 
-  console.log(
-    'stampData in addDraftStampOrderDocketEntryInteractor',
-    stampData,
-  );
   signedDocketEntryEntity.setStamped(stampData);
   // is this necessary to have this separate from stampData?
   // signedDocketEntryEntity.setSigned(user.userId, nameForSigning);

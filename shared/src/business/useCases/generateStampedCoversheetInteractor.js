@@ -24,8 +24,6 @@ exports.addCoverToPdf = async ({
     stampData,
   });
 
-  console.log('coverSheetData after generateCoverSheetData', coverSheetData);
-
   const { PDFDocument } = await applicationContext.getPdfLib();
 
   const coverPagePdf = await applicationContext

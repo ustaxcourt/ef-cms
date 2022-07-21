@@ -44,13 +44,13 @@ exports.generateCoverSheetData = async ({
     isPaper,
   });
 
-  console.log('docketEntryEntity stampData!!!!~~~~', stampData);
-
-  const { deniedAsMoot, disposition } = stampData;
-
   const dateFiledFormatted = docketEntryEntity.filingDate
     ? formatDateString(docketEntryEntity.filingDate, FORMATS.MMDDYY)
     : '';
+
+  if (stampData && stampData.date) {
+    stampData.date = formatDateString(stampData.date, FORMATS.MMDDYYYY);
+  }
 
   const caseCaption = useInitialData
     ? caseEntity.initialCaption

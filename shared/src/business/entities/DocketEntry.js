@@ -320,7 +320,6 @@ DocketEntry.prototype.setSigned = function (signByUserId, signedJudgeName) {
  * @param {Stamp} stampData the stamp data from the form
  */
 DocketEntry.prototype.setStamped = function (stampData) {
-  console.log('stampData in setStamped of DocketEntry.js', stampData);
   this.stampData.disposition = stampData.disposition;
   this.stampData.deniedAsMoot = stampData.deniedAsMoot;
   // add joi validation?
