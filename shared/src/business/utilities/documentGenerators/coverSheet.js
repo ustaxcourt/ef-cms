@@ -4,6 +4,7 @@ const {
 const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
 const coverSheet = async ({ applicationContext, data }) => {
+  console.log('data in coverSheet', data);
   const coverSheetTemplate = reactTemplateGenerator({
     componentName: 'CoverSheet',
     data,
@@ -22,6 +23,10 @@ const coverSheet = async ({ applicationContext, data }) => {
         dateServed: data.dateServed,
       },
     });
+  }
+
+  if (data.stampData) {
+    console.log('generate the stamp on the coversheet');
   }
 
   const pdf = await applicationContext
