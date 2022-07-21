@@ -64,15 +64,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     jobId,
   });
 
-  // due to SES emails per second limits, we can't invoke lambdas at a quick
-  // rate or else SES emails will begin to fail due to throttling.
-  // Create a FIFO queue. In tf?
-  // send a message to our queue instead of our invokeLambda function
-  const concurrencyLimit = 10;
-
   const sqs = await applicationContext.getMessagingClient();
-  let groupId = 0;
-
   for (let calendaredCase of calendaredCases) {
     await sqs
       .sendMessage({
@@ -82,12 +74,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
           trialSession,
           userId: user.userId,
         }),
-        MessageDeduplicationId: `${jobId}-${calendaredCase.docketNumber}`,
-        MessageGroupId: `${groupId % concurrencyLimit}`,
-        QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}.fifo`,
+        QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
       })
       .promise();
-    groupId++;
   }
 
   await new Promise(resolve => {
