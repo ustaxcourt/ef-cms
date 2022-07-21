@@ -153,7 +153,7 @@ import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useC
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
-import { generateStampedCoversheetInteractor } from '../../shared/src/business/useCases/generateStampedCoversheetInteractor';
+import { generateStampedCoversheetInteractor } from '../../shared/src/proxies/documents/generateStampedCoversheetProxy';
 import { generateStampedDocumentInteractor } from '../../shared/src/business/useCases/generateStampedDocumentInteractor';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';

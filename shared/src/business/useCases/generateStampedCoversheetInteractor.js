@@ -33,10 +33,10 @@ exports.addCoverToPdf = async ({
   // to add in a coversheet at the start
   // all you actually need is all the docket entry info
   // in order to generate a new coversheet
-  const pdfDoc = await PDFDocument.load(pdfData);
+  // const pdfDoc = await PDFDocument.load(pdfData);
 
   // allow GC to clear original loaded pdf data
-  pdfData = null;
+  // pdfData = null;
 
   const coverPagePdf = await applicationContext
     .getDocumentGenerators()
