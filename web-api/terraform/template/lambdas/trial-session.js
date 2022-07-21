@@ -18,7 +18,7 @@ exports.handler = async event => {
   const sqs = await applicationContext.getMessagingClient();
   await sqs
     .deleteMessage({
-      QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}.fifo`,
+      QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
       ReceiptHandle: receiptHandle,
     })
     .promise();
