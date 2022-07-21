@@ -1,4 +1,5 @@
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
 import React from 'react';
@@ -21,6 +22,7 @@ export const IndividualWorkQueueInProgress = connect(
         >
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number" colSpan="2">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
@@ -37,6 +39,25 @@ export const IndividualWorkQueueInProgress = connect(
               <tbody key={item.workItemId}>
                 <tr>
                   <td aria-hidden="true" />
+                  <td className="consolidated-case-column">
+                    {item.inConsolidatedGroup && (
+                      <span
+                        className="fa-layers fa-fw"
+                        title={item.consolidatedIconTooltipText}
+                      >
+                        <Icon
+                          aria-label={item.consolidatedIconTooltipText}
+                          className="fa-icon-blue"
+                          icon="copy"
+                        />
+                        {item.inLeadCase && (
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </td>
                   <td className="message-queue-row">
                     <CaseLink formattedCase={item} />
                   </td>
