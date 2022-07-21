@@ -90,6 +90,8 @@ exports.serveCourtIssuedDocumentInteractor = async (
   }
 
   let subjectCaseEntity = new Case(subjectCase, { applicationContext });
+  let caseEntities = [];
+  caseEntities.push(subjectCaseEntity);
 
   const courtIssuedDocument = subjectCaseEntity.getDocketEntryById({
     docketEntryId,
@@ -144,19 +146,20 @@ exports.serveCourtIssuedDocumentInteractor = async (
     docketEntryId,
   });
 
-  let caseEntities = [];
   let serviceResults;
 
   try {
     for (const docketNumber of docketNumbers) {
-      const caseToUpdate = await applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber({
-          applicationContext,
-          docketNumber,
-        });
+      if (docketNumber !== subjectCaseDocketNumber) {
+        const caseToUpdate = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber,
+          });
 
-      caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+        caseEntities.push(new Case(caseToUpdate, { applicationContext }));
+      }
     }
 
     const servedDocumentPromises = caseEntities.map(caseEntity =>
@@ -232,24 +235,19 @@ const serveDocumentOnOneCase = async ({
   docketEntryId,
   user,
 }) => {
-  const docketEntry = caseEntity.getDocketEntryById({ docketEntryId });
-
-  if (!docketEntry) {
+  if (!caseEntity.getDocketEntryById({ docketEntryId })) {
     // updates docketNumber automatically
-    caseEntity.addDocketEntry({
-      ...courtIssuedDocument,
-      isOnDocketRecord: undefined,
-    });
+    caseEntity.addDocketEntry(courtIssuedDocument);
   }
 
   const docketEntryEntity = new DocketEntry(courtIssuedDocument, {
     applicationContext,
   });
 
+  const servedParties = aggregatePartiesForService(caseEntity);
+
   docketEntryEntity.filingDate = createISODateString();
   docketEntryEntity.isOnDocketRecord = true;
-
-  const servedParties = aggregatePartiesForService(caseEntity);
 
   docketEntryEntity.setAsServed(servedParties.all);
 
