@@ -46,6 +46,12 @@ const serveNoticesForCase = async ({
   standingPretrialDocketEntryEntity,
   standingPretrialPdfData,
 }) => {
+  // set up queue for sending emails
+
+  // Potential spots for throtteling? emails
+  // possible add a flag for this specific implementation
+  // or add queue to handle sending of emails
+
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
     caseEntity,

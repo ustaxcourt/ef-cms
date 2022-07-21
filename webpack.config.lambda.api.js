@@ -18,6 +18,7 @@ module.exports = {
       './web-api/terraform/template/lambdas/public-api-authorizer.js',
     'seal-in-lower-environment':
       './web-api/terraform/template/lambdas/seal-in-lower-environment.js',
+    'send-emails': './web-api/terraform/template/lambdas/send-emails.js',
     streams: './web-api/terraform/template/lambdas/streams.js',
     'trial-session': './web-api/terraform/template/lambdas/trial-session.js',
     'websocket-authorizer':
