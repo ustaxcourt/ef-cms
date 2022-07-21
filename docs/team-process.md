@@ -9,7 +9,7 @@ Here are some few resources for documentation associated with onboarding:
 1. [Onboarding checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk)
 2. [Onboarding Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c)
 
-If you do not have permissions to view these documents, please reaach out to the scrum master.
+If you do not have permissions to view these documents, please reach out to the document owner.
 
 ## Working Agreement
 
