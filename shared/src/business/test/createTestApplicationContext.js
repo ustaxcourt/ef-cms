@@ -82,6 +82,9 @@ const {
   generateAndServeDocketEntry,
 } = require('../useCaseHelper/service/createChangeItems');
 const {
+  generateNoticesForCaseTrialSessionCalendarInteractor,
+} = require('../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor');
+const {
   getAddressPhoneDiff,
 } = require('../utilities/generateChangeOfAddressTemplate');
 const {
@@ -151,6 +154,9 @@ const {
 const {
   sealDocketEntryInteractor,
 } = require('../useCases/docketEntry/sealDocketEntryInteractor');
+const {
+  setNoticesForCalendaredTrialSessionInteractor,
+} = require('../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
@@ -397,10 +403,16 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCases = appContextProxy({
+    generateNoticesForCaseTrialSessionCalendarInteractor: jest
+      .fn()
+      .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
       .mockImplementation(sealDocketEntryInteractor),
+    setNoticesForCalendaredTrialSessionInteractor: jest
+      .fn()
+      .mockImplementation(setNoticesForCalendaredTrialSessionInteractor),
     unsealDocketEntryInteractor: jest
       .fn()
       .mockImplementation(unsealDocketEntryInteractor),
@@ -660,6 +672,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       error: jest.fn(),
     }),
     getMessageGateway: appContextProxy({
+      sendCalendarSessionEvent: jest.fn(),
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),

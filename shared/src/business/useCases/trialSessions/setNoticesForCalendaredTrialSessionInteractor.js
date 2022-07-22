@@ -64,19 +64,33 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     jobId,
   });
 
-  const sqs = await applicationContext.getMessagingClient();
+  // replace sqs with a persistence method.
+  // sendCalendarSessionEvent()
+
+  // const sendCalendarSessionEvent
+
   for (let calendaredCase of calendaredCases) {
-    await sqs
-      .sendMessage({
-        MessageBody: JSON.stringify({
-          docketNumber: calendaredCase.docketNumber,
-          jobId,
-          trialSession,
-          userId: user.userId,
-        }),
-        QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-      })
-      .promise();
+    await applicationContext.getMessageGateway().sendCalendarSessionEvent({
+      applicationContext,
+      payload: {
+        docketNumber: calendaredCase.docketNumber,
+        jobId,
+        trialSession,
+        userId: user.userId,
+      },
+    });
+
+    // await sqs
+    //   .sendMessage({
+    //     MessageBody: JSON.stringify({
+    //       docketNumber: calendaredCase.docketNumber,
+    //       jobId,
+    //       trialSession,
+    //       userId: user.userId,
+    //     }),
+    //     QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+    //   })
+    //   .promise();
   }
 
   await new Promise(resolve => {
