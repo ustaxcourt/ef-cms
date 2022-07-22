@@ -673,6 +673,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     }),
     getMessageGateway: appContextProxy({
       sendCalendarSessionEvent: jest.fn(),
+      sendEmailEventToQueue: jest.fn(),
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
