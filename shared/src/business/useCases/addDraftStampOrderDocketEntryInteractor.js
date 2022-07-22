@@ -17,7 +17,13 @@ const { DocketEntry } = require('../entities/DocketEntry');
  */
 exports.addDraftStampOrderDocketEntryInteractor = async (
   applicationContext,
-  { docketNumber, originalDocketEntryId, signedDocketEntryId, stampData },
+  {
+    docketNumber,
+    nameForSigning,
+    originalDocketEntryId,
+    signedDocketEntryId,
+    stampData,
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
   const caseRecord = await applicationContext
@@ -54,6 +60,8 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
       isDraft: true,
       isPaper: false,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      signedAt: applicationContext.getUtilities().createISODateString(),
+      signedJudgeName: nameForSigning,
       userId: user.userId,
     },
     { applicationContext },
