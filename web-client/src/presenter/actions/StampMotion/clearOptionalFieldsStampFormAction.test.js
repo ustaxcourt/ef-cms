@@ -20,9 +20,10 @@ describe('clearOptionalFieldsStampFormAction', () => {
     expect(state.form.jurisdictionalOption).toBeUndefined();
 
     expect(state.form.dueDateMessage).toBeUndefined();
-
     expect(state.form['day']).toBeUndefined();
-    expect(state.form['dueDateMonth-statusReport']).toBeUndefined();
+    expect(state.form['month']).toBeUndefined();
     expect(state.form['year']).toBeUndefined();
+
+    expect(state.form.customText).toBeUndefined();
   });
 });
