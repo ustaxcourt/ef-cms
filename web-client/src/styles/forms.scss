@@ -533,8 +533,23 @@ label.ustc-upload {
       margin: 0;
     }
 
-    .width-150 {
-      width: 150px;
+    .usa-date-picker__wrapper {
+      width: 350px;
+      justify-content: flex-end;
+      margin-left: -200px;
+    }
+
+    .usa-date-picker__external-input {
+      width: 110px;
+    }
+
+    .usa-date-picker__button {
+      width: 40px;
+    }
+
+    .usa-date-picker__calendar {
+      right: auto;
+      left: 200px;
     }
   }
 
