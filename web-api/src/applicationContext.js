@@ -1024,6 +1024,9 @@ const {
   sendSlackNotification,
 } = require('../../shared/src/dispatchers/slack/sendSlackNotification');
 const {
+  sendToCalendarSessionQueue,
+} = require('../../shared/src/persistence/messages/sendToCalendarSessionQueue');
+const {
   sendUpdatePetitionerCasesMessage,
 } = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
 const {
@@ -1827,6 +1830,30 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
+      sendCalendarSessionEvent: ({ applicationContext, payload }) => {
+        const { docketNumber, jobId, trialSession, userId } = payload;
+
+        if (environment.stage === 'local') {
+          console.log(
+            '!!!!!!-------------IN LOCAL!!!!!!---------------------!!!!!',
+          );
+          applicationContext
+            .getUseCases()
+            .generateNoticesForCaseTrialSessionCalendarInteractor(
+              applicationContext,
+              { docketNumber, jobId, trialSession, userId },
+            );
+        } else {
+          sendToCalendarSessionQueue({
+            applicationContext,
+            docketNumber,
+            jobId,
+            trialSession,
+            user,
+          });
+        }
+      },
+
       sendUpdatePetitionerCasesMessage: ({
         applicationContext: appContext,
         user: userToSendTo,
@@ -1844,7 +1871,11 @@ module.exports = (appContextUser, logger = createLogger()) => {
         }
       },
     }),
+
     getMessagingClient: () => {
+      // APPROACHES:
+      //1.
+
       if (!sqsCache) {
         sqsCache = new SQS({
           apiVersion: '2012-11-05',

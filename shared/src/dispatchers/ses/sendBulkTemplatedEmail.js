@@ -84,7 +84,7 @@ exports.sendWithRetry = async ({
 
   // parse response from AWS
   const needToRetry = response.Status.map((attempt, index) => {
-    // AWS returns 'Success' and helpful identifier upon successful send
+    // AWS returns 'Success' and helpful identifier upon successful delivery
     return attempt.Status !== 'Success' ? params.Destinations[index] : false;
   }).filter(Boolean);
 
