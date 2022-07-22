@@ -489,8 +489,6 @@ describe('draftDocumentViewerHelper', () => {
   });
 
   it('should return addDocketEntryLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -507,8 +505,6 @@ describe('draftDocumentViewerHelper', () => {
   });
 
   it('should return applySignatureLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
-
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -523,4 +519,59 @@ describe('draftDocumentViewerHelper', () => {
       `/case-detail/${mockDocketNumber}/edit-order/${mockDocketEntryId}/sign`,
     );
   });
+
+  it('should be false when the document is an order that is not stamped', () => {
+    const unstampedOrder = { ...baseDraftDocketEntry, stampData: {} };
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          docketEntries: [unstampedOrder],
+          docketNumber: mockDocketNumber,
+        },
+      },
+    });
+
+    expect(result.isDraftStampOrder).toBeFalsy();
+  });
+
+  it('should be false when the document is not an order', () => {
+    const unstampedMotion = {
+      ...baseDraftDocketEntry,
+      eventCode: 'MOTR',
+    };
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          docketEntries: [unstampedMotion],
+          docketNumber: mockDocketNumber,
+        },
+      },
+    });
+
+    expect(result.isDraftStampOrder).toBeFalsy();
+  });
+
+  'should be true when the document is an order that is stamped',
+    () => {
+      const stampedOrder = {
+        ...baseDraftDocketEntry,
+        stampData: { date: 'today' },
+      };
+
+      const result = runCompute(draftDocumentViewerHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            docketEntries: [stampedOrder],
+            docketNumber: mockDocketNumber,
+          },
+        },
+      });
+
+      expect(result.isDraftStampOrder).toBeTruthy();
+    };
 });

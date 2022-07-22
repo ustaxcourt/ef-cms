@@ -64,11 +64,16 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
   const showEditButtonForRole = isInternalUser;
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
+  const isDraftStampOrder =
+    formattedDocumentToDisplay.eventCode === 'O' &&
+    formattedDocumentToDisplay.stampData?.disposition;
+
   const showEditButtonSigned =
     showEditButtonForRole &&
     documentIsSigned &&
     !isNotice &&
-    !isStipulatedDecision;
+    !isStipulatedDecision &&
+    !isDraftStampOrder;
 
   const showAddDocketEntryButtonForDocument =
     documentIsSigned ||
@@ -88,6 +93,8 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     applySignatureLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplayDocketEntryId}/sign`,
     createdByLabel,
     documentTitle: formattedDocumentToDisplay.documentTitle,
+    //TODO might not need to export this. also need tests around hiding remove sig button
+    isDraftStampOrder,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
@@ -99,6 +106,7 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     showEditButtonSigned,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
-      showRemoveSignatureButtonForDocument,
+      showRemoveSignatureButtonForDocument &&
+      !isDraftStampOrder,
   };
 };
