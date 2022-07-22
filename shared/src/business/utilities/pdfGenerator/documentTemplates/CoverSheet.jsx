@@ -97,7 +97,7 @@ export const CoverSheet = ({
 
       {/* //addd all css to utils.scss */}
       {stamp && (
-        <div>
+        <div className="stamp-box">
           <span className="text-normal text-center" id="stamp-text">
             It is ORDERED as follows:
             <br />
@@ -127,7 +127,9 @@ export const CoverSheet = ({
             )}
             {stamp.dueDateMessage && (
               <>
-                {stamp.dueDateMessage} {stamp.date}
+                <span className="text-bold">
+                  {stamp.dueDateMessage} {stamp.date}
+                </span>
                 <br />
               </>
             )}
