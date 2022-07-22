@@ -1749,7 +1749,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
       PENDING_ITEMS_PAGE_SIZE: 100,
-      SES_CONCURRENCY_LIMIT: 7,
+      SES_CONCURRENCY_LIMIT: process.env.SES_CONCURRENCY_LIMIT || 6,
       SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
