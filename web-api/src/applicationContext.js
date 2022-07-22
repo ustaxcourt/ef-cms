@@ -1000,6 +1000,9 @@ const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
+  sendEmailEventToQueue,
+} = require('../../shared/src/persistence/messages/sendEmailEventToQueue');
+const {
   sendEmailVerificationLink,
 } = require('../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink');
 const {
@@ -1021,11 +1024,11 @@ const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
 const {
+  sendSetTrialSessionCalendarEvent,
+} = require('../../shared/src/persistence/messages/sendSetTrialSessionCalendarEvent');
+const {
   sendSlackNotification,
 } = require('../../shared/src/dispatchers/slack/sendSlackNotification');
-const {
-  sendToCalendarSessionQueue,
-} = require('../../shared/src/persistence/messages/sendToCalendarSessionQueue');
 const {
   sendUpdatePetitionerCasesMessage,
 } = require('../../shared/src/persistence/messages/sendUpdatePetitionerCasesMessage');
@@ -1830,30 +1833,29 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
-      sendCalendarSessionEvent: ({ applicationContext, payload }) => {
-        const { docketNumber, jobId, trialSession, userId } = payload;
-
+      sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
+        if (environment.stage !== 'local') {
+          await sendEmailEventToQueue({
+            applicationContext,
+            emailParams,
+          });
+        }
+      },
+      sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
         if (environment.stage === 'local') {
-          console.log(
-            '!!!!!!-------------IN LOCAL!!!!!!---------------------!!!!!',
-          );
           applicationContext
             .getUseCases()
             .generateNoticesForCaseTrialSessionCalendarInteractor(
               applicationContext,
-              { docketNumber, jobId, trialSession, userId },
+              payload,
             );
         } else {
-          sendToCalendarSessionQueue({
+          sendSetTrialSessionCalendarEvent({
             applicationContext,
-            docketNumber,
-            jobId,
-            trialSession,
-            user,
+            payload,
           });
         }
       },
-
       sendUpdatePetitionerCasesMessage: ({
         applicationContext: appContext,
         user: userToSendTo,
@@ -1873,9 +1875,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
     }),
 
     getMessagingClient: () => {
-      // APPROACHES:
-      //1.
-
       if (!sqsCache) {
         sqsCache = new SQS({
           apiVersion: '2012-11-05',

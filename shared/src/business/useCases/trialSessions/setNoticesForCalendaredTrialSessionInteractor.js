@@ -64,21 +64,18 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     jobId,
   });
 
-  // replace sqs with a persistence method.
-  // sendCalendarSessionEvent()
-
-  // const sendCalendarSessionEvent
-
   for (let calendaredCase of calendaredCases) {
-    await applicationContext.getMessageGateway().sendCalendarSessionEvent({
-      applicationContext,
-      payload: {
-        docketNumber: calendaredCase.docketNumber,
-        jobId,
-        trialSession,
-        userId: user.userId,
-      },
-    });
+    await applicationContext
+      .getMessageGateway()
+      .sendSetTrialSessionCalendarEvent({
+        applicationContext,
+        payload: {
+          docketNumber: calendaredCase.docketNumber,
+          jobId,
+          trialSession,
+          userId: user.userId,
+        },
+      });
 
     // await sqs
     //   .sendMessage({
