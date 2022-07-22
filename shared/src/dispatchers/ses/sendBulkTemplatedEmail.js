@@ -30,32 +30,22 @@ exports.sendBulkTemplatedEmail = async ({
   templateName,
 }) => {
   try {
-    const sqs = await applicationContext.getMessagingClient();
-
-    const params = {
-      DefaultTemplateData: JSON.stringify(defaultTemplateData),
-      Destinations: destinations.map(destination => ({
-        Destination: {
-          ToAddresses: [destination.email],
-        },
-        ReplacementTemplateData: JSON.stringify(destination.templateData),
-      })),
-      ReturnPath:
-        process.env.BOUNCED_EMAIL_RECIPIENT || process.env.EMAIL_SOURCE,
-      Source: process.env.EMAIL_SOURCE,
-      Template: templateName,
-    };
-
-    const concurrencyLimit =
-      applicationContext.getConstants().SES_CONCURRENCY_LIMIT;
-
-    await sqs
-      .sendMessage({
-        MessageBody: JSON.stringify(params),
-        MessageGroupId: `${parseInt(Math.random() * concurrencyLimit)}`,
-        QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/send_emails_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}.fifo`,
-      })
-      .promise();
+    await applicationContext.getMessageGateway().sendEmailEventToQueue({
+      applicationContext,
+      emailParams: {
+        DefaultTemplateData: JSON.stringify(defaultTemplateData),
+        Destinations: destinations.map(destination => ({
+          Destination: {
+            ToAddresses: [destination.email],
+          },
+          ReplacementTemplateData: JSON.stringify(destination.templateData),
+        })),
+        ReturnPath:
+          process.env.BOUNCED_EMAIL_RECIPIENT || process.env.EMAIL_SOURCE,
+        Source: process.env.EMAIL_SOURCE,
+        Template: templateName,
+      },
+    });
   } catch (err) {
     applicationContext.logger.error(`Error sending email: ${err}`, err);
     throw err;

@@ -1,20 +1,12 @@
-exports.sendToCalendarSessionQueue = async ({
+exports.sendSetTrialSessionCalendarEvent = async ({
   applicationContext,
-  docketNumber,
-  jobId,
-  trialSession,
-  userId,
+  payload,
 }) => {
   const sqs = await applicationContext.getMessagingClient();
 
   await sqs
     .sendMessage({
-      MessageBody: JSON.stringify({
-        docketNumber,
-        jobId,
-        trialSession,
-        userId,
-      }),
+      MessageBody: JSON.stringify(payload),
       QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
     })
     .promise();
