@@ -16,40 +16,39 @@ export const completeMotionStampingAction = async ({
   const motionDocketEntryID = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
   const stampFormData = get(state.form);
+
   let docketEntryId;
   let newDocketEntryId;
-  if (get(state.pdfForSigning.stampData.x)) {
-    // make x, y of stamp static
-    const { nameForSigning } = get(state.pdfForSigning);
 
-    const stampEntity = new Stamp(stampFormData);
+  const { nameForSigning } = get(state.pdfForSigning);
 
-    newDocketEntryId = applicationContext.getUniqueId();
+  const stampEntity = new Stamp(stampFormData);
 
-    await applicationContext
-      .getUseCases()
-      .addDraftStampOrderDocketEntryInteractor(applicationContext, {
-        docketNumber,
-        nameForSigning,
-        // maybe not necessary until edit
-        originalDocketEntryId: motionDocketEntryID,
-        signedDocketEntryId: newDocketEntryId,
-        stampData: stampEntity,
-      });
+  newDocketEntryId = applicationContext.getUniqueId();
 
-    // need stamp entity to populate docket entry stamp fields from form
-    // need stamp entity to generate the coversheet PDF
+  await applicationContext
+    .getUseCases()
+    .addDraftStampOrderDocketEntryInteractor(applicationContext, {
+      docketNumber,
+      nameForSigning,
+      originalDocketEntryId: motionDocketEntryID,
+      signedDocketEntryId: newDocketEntryId,
+      stampData: stampEntity,
+    });
 
-    // combine these two calls so we're only hitting one endpoint
-    await applicationContext
-      .getUseCases()
-      .generateStampedCoversheetInteractor(applicationContext, {
-        docketEntryId: motionDocketEntryID,
-        docketNumber,
-        stampData: stampEntity,
-        stampedDocketEntryId: newDocketEntryId,
-      });
-  }
+  // need stamp entity to populate docket entry stamp fields from form
+  // need stamp entity to generate the coversheet PDF
+
+  // combine these two calls so we're only hitting one endpoint
+  await applicationContext
+    .getUseCases()
+    .generateStampedCoversheetInteractor(applicationContext, {
+      docketEntryId: motionDocketEntryID,
+      docketNumber,
+      stampData: stampEntity,
+      stampedDocketEntryId: newDocketEntryId,
+    });
+  // }
 
   const redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
 
