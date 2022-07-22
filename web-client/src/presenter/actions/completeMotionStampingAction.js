@@ -20,14 +20,9 @@ export const completeMotionStampingAction = async ({
   let newDocketEntryId;
   if (get(state.pdfForSigning.stampData.x)) {
     // make x, y of stamp static
-    const {
-      nameForSigning,
-      nameForSigningLine2,
-      stampData: { scale, x, y },
-    } = get(state.pdfForSigning);
+    const { nameForSigning } = get(state.pdfForSigning);
 
     const stampEntity = new Stamp(stampFormData);
-    const pdfjsObj = window.pdfjsObj || get(state.pdfForSigning.pdfjsObj);
 
     newDocketEntryId = applicationContext.getUniqueId();
 
@@ -35,9 +30,11 @@ export const completeMotionStampingAction = async ({
       .getUseCases()
       .addDraftStampOrderDocketEntryInteractor(applicationContext, {
         docketNumber,
+        nameForSigning,
+        // maybe not necessary until edit
         originalDocketEntryId: motionDocketEntryID,
         signedDocketEntryId: newDocketEntryId,
-        stampData: stampEntity, // maybe not necessary until edit
+        stampData: stampEntity,
       });
 
     // need stamp entity to populate docket entry stamp fields from form
