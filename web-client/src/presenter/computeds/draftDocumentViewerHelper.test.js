@@ -555,23 +555,22 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.isDraftStampOrder).toBeFalsy();
   });
 
-  'should be true when the document is an order that is stamped',
-    () => {
-      const stampedOrder = {
-        ...baseDraftDocketEntry,
-        stampData: { date: 'today' },
-      };
-
-      const result = runCompute(draftDocumentViewerHelper, {
-        state: {
-          ...getBaseState(petitionsClerkUser),
-          caseDetail: {
-            docketEntries: [stampedOrder],
-            docketNumber: mockDocketNumber,
-          },
-        },
-      });
-
-      expect(result.isDraftStampOrder).toBeTruthy();
+  it('should be true when the document is an order that is stamped', () => {
+    const stampedOrder = {
+      ...baseDraftDocketEntry,
+      stampData: { disposition: 'today' },
     };
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          docketEntries: [stampedOrder],
+          docketNumber: mockDocketNumber,
+        },
+      },
+    });
+
+    expect(result.isDraftStampOrder).toBeTruthy();
+  });
 });
