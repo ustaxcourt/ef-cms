@@ -38,7 +38,6 @@ export const ApplyStamp = connect(
     MOTION_DISPOSITIONS,
     pdfForSigning,
     pdfObj,
-    pdfSignerHelper,
     setPDFStampDataSequence,
     STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
     submitStampMotionSequence,
@@ -72,32 +71,16 @@ export const ApplyStamp = connect(
         });
     };
 
-    const clear = () => {
-      setPDFStampDataSequence({
-        isPdfAlreadyStamped: false,
-        stampApplied: false,
-      });
-      const sigEl = signatureRef.current;
-
-      sigEl.style.top = null;
-      sigEl.style.left = null;
-    };
-
-    const restart = () => {
-      clear();
-      start();
-    };
-
     const start = () => {
       const sigEl = signatureRef.current;
 
       setPDFStampDataSequence({
-        stampApplied: false,
+        stampApplied: true,
         stampData: null,
       });
 
       sigEl.style.top = '500px';
-      sigEl.style.left = '150px';
+      sigEl.style.left = '158px';
     };
 
     let hasStarted = false;
@@ -475,29 +458,19 @@ export const ApplyStamp = connect(
             </div>
             <div className="grid-col-7">
               <div className="margin-bottom-1 display-flex flex-justify-end">
-                <>
-                  <Button link icon="trash" onClick={() => restart()}>
-                    Remove Stamp
-                  </Button>
-
-                  <Button
-                    className="margin-right-0"
-                    disabled={!applyStampFormHelper.canSaveStampOrder}
-                    id="save-signature-button"
-                    onClick={() => submitStampMotionSequence()}
-                  >
-                    Save Stamp Order
-                  </Button>
-                </>
+                <Button
+                  className="margin-right-0"
+                  disabled={!applyStampFormHelper.canSaveStampOrder}
+                  id="save-signature-button"
+                  onClick={() => submitStampMotionSequence()}
+                >
+                  Save Stamp Order
+                </Button>
               </div>
               <div className="grid-row">
                 <div className="grid-col-12">
                   <div className="sign-pdf-interface">
-                    <span
-                      className={`${pdfSignerHelper.cursorClass} ${pdfSignerHelper.hideClass}`}
-                      id="stamp"
-                      ref={signatureRef}
-                    >
+                    <span id="stamp" ref={signatureRef}>
                       <span className="text-normal" id="stamp-text">
                         It is ORDERED as follows:
                         <br />
@@ -548,9 +521,6 @@ export const ApplyStamp = connect(
                       id="sign-pdf-canvas"
                       ref={canvasRef}
                     ></canvas>
-                    <span id="signature-warning">
-                      You cannot apply a stamp here.
-                    </span>
                   </div>
                 </div>
               </div>
