@@ -11,15 +11,6 @@ exports.handler = async event => {
 
   await sendWithRetry({ applicationContext, params });
 
-  // await applicationContext
-  //   .getUseCases()
-  //   .generateNoticesForCaseTrialSessionCalendarInteractor(applicationContext, {
-  //     docketNumber,
-  //     jobId,
-  //     trialSession,
-  //     userId,
-  //   });
-
   const sqs = await applicationContext.getMessagingClient();
   await sqs
     .deleteMessage({
