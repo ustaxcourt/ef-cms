@@ -401,17 +401,6 @@ export const ApplyStamp = connect(
                       </label>
                     </div>
                   </FormGroup>
-                  <Button
-                    link
-                    className="margin-left-205"
-                    id="clear-optional-fields"
-                    onClick={e => {
-                      e.preventDefault();
-                      clearOptionalFieldsStampFormSequence();
-                    }}
-                  >
-                    Clear Optional Fields
-                  </Button>
                   <hr className="narrow-hr" />
                   <FormGroup
                     className="stamp-form-group"
@@ -452,6 +441,17 @@ export const ApplyStamp = connect(
                       </span>
                     </div>
                   </FormGroup>
+                  <Button
+                    link
+                    className="margin-left-205"
+                    id="clear-optional-fields"
+                    onClick={e => {
+                      e.preventDefault();
+                      clearOptionalFieldsStampFormSequence();
+                    }}
+                  >
+                    Clear Optional Fields
+                  </Button>
                 </div>
               </div>
             </div>
