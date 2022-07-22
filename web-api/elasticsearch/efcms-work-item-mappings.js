@@ -15,6 +15,9 @@ module.exports = {
     'docketNumber.S': {
       type: 'keyword',
     },
+    'docketNumberWithSuffix.S': {
+      type: 'keyword',
+    },
     'highPriority.BOOL': {
       type: 'boolean',
     },
@@ -26,6 +29,9 @@ module.exports = {
     },
     'isRead.BOOL': {
       type: 'boolean',
+    },
+    'leadDocketNumber.S': {
+      type: 'keyword',
     },
     'pk.S': {
       type: 'keyword',
