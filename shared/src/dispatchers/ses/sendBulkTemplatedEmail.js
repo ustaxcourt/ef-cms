@@ -46,13 +46,6 @@ exports.sendBulkTemplatedEmail = async ({
       Template: templateName,
     };
 
-    // await exports.sendWithRetry({ applicationContext, params });
-    // send an event to sqs queue
-    // have a lambda process the queue (send email with the retries)
-
-    // run params object to
-    // object hash to generate unique identifier for the object to add
-
     const concurrencyLimit =
       applicationContext.getConstants().SES_CONCURRENCY_LIMIT;
 
