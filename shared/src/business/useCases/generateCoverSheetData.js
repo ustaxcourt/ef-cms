@@ -86,13 +86,12 @@ exports.generateCoverSheetData = async ({
       ? dateFiledFormatted
       : dateReceivedFormatted,
     dateServed: dateServedFormatted,
-    deniedAsMoot,
-    disposition,
     docketNumberWithSuffix,
     documentTitle,
     electronicallyFiled: !docketEntryEntity.isPaper,
     index: docketEntryEntity.index,
     mailingDate: docketEntryEntity.mailingDate || '',
+    stamp: stampData,
   };
 
   if (
