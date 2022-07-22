@@ -14,10 +14,11 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { setSuccessfulStampFromDocumentTitleAction } from '../actions/StampMotion/setSuccessfulStampFromDocumentTitleAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
+import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { validateStampAction } from '../actions/StampMotion/validateStampAction';
 
-export const submitStampMotionSequence = [
+export const submitStampMotionSequence = showProgressSequenceDecorator([
   startShowValidationAction,
   getComputedFormDateFactoryAction(null),
   setFormDateAction,
@@ -51,4 +52,4 @@ export const submitStampMotionSequence = [
       },
     ],
   },
-];
+]);

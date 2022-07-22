@@ -76,11 +76,10 @@ export const ApplyStamp = connect(
 
       setPDFStampDataSequence({
         stampApplied: true,
-        stampData: null,
       });
 
       sigEl.style.top = '500px';
-      sigEl.style.left = '158px';
+      sigEl.style.left = '148px';
     };
 
     let hasStarted = false;
