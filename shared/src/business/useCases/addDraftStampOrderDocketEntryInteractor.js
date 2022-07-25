@@ -17,13 +17,7 @@ const { DocketEntry } = require('../entities/DocketEntry');
  */
 exports.addDraftStampOrderDocketEntryInteractor = async (
   applicationContext,
-  {
-    docketNumber,
-    nameForSigning,
-    originalDocketEntryId,
-    signedDocketEntryId,
-    stampData,
-  },
+  { docketNumber, originalDocketEntryId, signedDocketEntryId, stampData },
 ) => {
   const user = applicationContext.getCurrentUser();
   const caseRecord = await applicationContext
@@ -60,16 +54,13 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
       isDraft: true,
       isPaper: false,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      signedAt: applicationContext.getUtilities().createISODateString(),
-      signedJudgeName: nameForSigning,
       userId: user.userId,
     },
     { applicationContext },
   );
 
   signedDocketEntryEntity.setStamped(stampData);
-  // is this necessary to have this separate from stampData?
-  // signedDocketEntryEntity.setSigned(user.userId, nameForSigning);
+  signedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
 
   caseEntity.addDocketEntry(signedDocketEntryEntity);
 

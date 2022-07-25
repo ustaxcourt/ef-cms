@@ -20,9 +20,14 @@ export const completeMotionStampingAction = async ({
   let docketEntryId;
   let newDocketEntryId;
 
-  const { nameForSigning } = get(state.pdfForSigning);
+  const { nameForSigning, nameForSigningLine2 } = get(state.pdfForSigning);
 
   const stampEntity = new Stamp(stampFormData);
+  const stampData = {
+    ...stampEntity,
+    nameForSigning,
+    nameForSigningLine2,
+  };
 
   newDocketEntryId = applicationContext.getUniqueId();
 
@@ -30,10 +35,9 @@ export const completeMotionStampingAction = async ({
     .getUseCases()
     .addDraftStampOrderDocketEntryInteractor(applicationContext, {
       docketNumber,
-      nameForSigning,
       originalDocketEntryId: motionDocketEntryID,
       signedDocketEntryId: newDocketEntryId,
-      stampData: stampEntity,
+      stampData,
     });
 
   // need stamp entity to populate docket entry stamp fields from form
@@ -45,7 +49,7 @@ export const completeMotionStampingAction = async ({
     .generateStampedCoversheetInteractor(applicationContext, {
       docketEntryId: motionDocketEntryID,
       docketNumber,
-      stampData: stampEntity,
+      stampData,
       stampedDocketEntryId: newDocketEntryId,
     });
   // }

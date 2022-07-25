@@ -125,15 +125,21 @@ export const CoverSheet = ({
                 - {stamp.jurisdictionalOption} -<br />
               </>
             )}
-            {stamp.dueDateMessage && (
-              <>
-                <span className="text-bold">
+            <span className="text-bold">
+              {stamp.dueDateMessage && (
+                <>
                   {stamp.dueDateMessage} {stamp.date}
-                </span>
-                <br />
-              </>
-            )}
-            {stamp.customText}
+                  <br />
+                </>
+              )}
+              {stamp.customText}
+            </span>
+            <hr className="narrow-hr" />
+            <span className="text-bold" id="stamp-signature">
+              (Signed) {stamp.nameForSigning}
+              <br />
+              {stamp.nameForSigningLine2}
+            </span>
           </span>
         </div>
       )}
