@@ -67,7 +67,6 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
 import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
-import { sendEmailEventToQueue } from '../../shared/src/persistence/messages/sendEmailEventToQueue';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
@@ -170,17 +169,6 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     getIrsSuperuserEmail: () =>
       process.env.IRS_SUPERUSER_EMAIL || 'irssuperuser@example.com',
     getMessageGateway: () => ({
-      sendEmailEventToQueue: async ({
-        applicationContext: appContext,
-        emailParams,
-      }) => {
-        if (environment.stage !== 'local') {
-          await sendEmailEventToQueue({
-            applicationContext: appContext,
-            emailParams,
-          });
-        }
-      },
       sendUpdatePetitionerCasesMessage: ({
         applicationContext: appContext,
         user,

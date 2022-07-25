@@ -576,6 +576,7 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetMessagingClient = {
     deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
