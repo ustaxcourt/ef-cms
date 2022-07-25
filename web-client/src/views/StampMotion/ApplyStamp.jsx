@@ -6,6 +6,7 @@ import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React, { useEffect, useRef } from 'react';
+import classNames from 'classnames';
 
 export const ApplyStamp = connect(
   {
@@ -279,7 +280,10 @@ export const ApplyStamp = connect(
                   </FormGroup>
                   <hr className="narrow-hr" />
                   <FormGroup
-                    className={applyStampFormHelper.dateErrorClass}
+                    className={classNames(
+                      applyStampFormHelper.dateErrorClass,
+                      'radio-with-date-picker',
+                    )}
                     errorText={validationErrors.date}
                   >
                     <div className="usa-radio" key="statusReportDueDate">
@@ -308,35 +312,39 @@ export const ApplyStamp = connect(
                         htmlFor="dueDateMessage-statusReportDueDate"
                         id="dueDateMessage-statusReportDueDate-label"
                       >
-                        The parties shall file a status report by{' '}
-                        <DateInput
-                          className="display-inline-block padding-0"
-                          disabled={
-                            form.dueDateMessage !==
-                            'The parties shall file a status report by'
-                          }
-                          id="due-date-input-statusReportDueDate"
-                          minDate={applyStampFormHelper.minDate}
-                          names={{
-                            day: 'day',
-                            month: 'month',
-                            year: 'year',
-                          }}
-                          placeholder={'MM/DD/YYYY'}
-                          showDateHint={false}
-                          values={{
-                            day: form.day,
-                            month: form.month,
-                            year: form.year,
-                          }}
-                          onBlur={validateStampSequence}
-                          onChange={({ key, value }) => {
-                            updateFormValueSequence({
-                              key,
-                              value,
-                            });
-                          }}
-                        />
+                        <div className="label-text-with-date-picker">
+                          <span className="label-text">
+                            The parties shall file a status report by{' '}
+                          </span>
+                          <DateInput
+                            className="display-inline-block padding-0"
+                            disabled={
+                              form.dueDateMessage !==
+                              'The parties shall file a status report by'
+                            }
+                            id="due-date-input-statusReportDueDate"
+                            minDate={applyStampFormHelper.minDate}
+                            names={{
+                              day: 'day',
+                              month: 'month',
+                              year: 'year',
+                            }}
+                            placeholder={'MM/DD/YYYY'}
+                            showDateHint={false}
+                            values={{
+                              day: form.day,
+                              month: form.month,
+                              year: form.year,
+                            }}
+                            onBlur={validateStampSequence}
+                            onChange={({ key, value }) => {
+                              updateFormValueSequence({
+                                key,
+                                value,
+                              });
+                            }}
+                          />
+                        </div>
                       </label>
                     </div>
                     <div
@@ -368,36 +376,40 @@ export const ApplyStamp = connect(
                         htmlFor="dueDateMessage-statusReportOrStipDecisionDueDate"
                         id="dueDateMessage-statusReportOrStipDecisionDueDate-label"
                       >
-                        The parties shall file a status report or proposed
-                        stipulated decision by{' '}
-                        <DateInput
-                          className="display-inline-block padding-0"
-                          disabled={
-                            form.dueDateMessage !==
-                            'The parties shall file a status report or proposed stipulated decision by'
-                          }
-                          id="due-date-input-statusReportOrStipDecisionDueDate"
-                          minDate={applyStampFormHelper.minDate}
-                          names={{
-                            day: 'day',
-                            month: 'month',
-                            year: 'year',
-                          }}
-                          placeholder={'MM/DD/YYYY'}
-                          showDateHint={false}
-                          values={{
-                            day: form.day,
-                            month: form.month,
-                            year: form.year,
-                          }}
-                          onBlur={validateStampSequence}
-                          onChange={({ key, value }) => {
-                            updateFormValueSequence({
-                              key,
-                              value,
-                            });
-                          }}
-                        />
+                        <div className="label-text-with-date-picker">
+                          <span className="label-text">
+                            The parties shall file a status report or proposed
+                            stipulated decision by{' '}
+                          </span>
+                          <DateInput
+                            className="display-inline-block padding-0"
+                            disabled={
+                              form.dueDateMessage !==
+                              'The parties shall file a status report or proposed stipulated decision by'
+                            }
+                            id="due-date-input-statusReportOrStipDecisionDueDate"
+                            minDate={applyStampFormHelper.minDate}
+                            names={{
+                              day: 'day',
+                              month: 'month',
+                              year: 'year',
+                            }}
+                            placeholder={'MM/DD/YYYY'}
+                            showDateHint={false}
+                            values={{
+                              day: form.day,
+                              month: form.month,
+                              year: form.year,
+                            }}
+                            onBlur={validateStampSequence}
+                            onChange={({ key, value }) => {
+                              updateFormValueSequence({
+                                key,
+                                value,
+                              });
+                            }}
+                          />
+                        </div>
                       </label>
                     </div>
                   </FormGroup>
