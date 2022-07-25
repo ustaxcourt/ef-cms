@@ -2,16 +2,16 @@ const { Case } = require('../entities/cases/Case');
 const { generateCoverSheetData } = require('./generateCoverSheetData');
 
 /**
- * a helper function which creates a coversheet, prepends it to a pdf, and returns the new pdf
+ * a helper function which creates a coversheet with stampData on it, then returns the new coversheet pdf
  *
  * @param {object} options the providers object
  * @param {object} options.applicationContext the application context
  * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
  * @param {object} options.docketEntryEntity the docket entry entity we are creating the cover for
- * @param {object} options.pdfData the original document pdf data
- * @returns {object} the new pdf with a coversheet attached
+ * @param {object} options.stampData the stampData from the form to add to the coversheet pdf
+ * @returns {object} the new coversheet pdf
  */
-exports.addCoverToPdf = async ({
+exports.createStampedCoversheetPdf = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
@@ -34,7 +34,6 @@ exports.addCoverToPdf = async ({
     });
 
   const coverPageDocument = await PDFDocument.load(coverPagePdf);
-  console.log('coverpage length', coverPageDocument.getPages().length);
 
   const newPdfData = await coverPageDocument.save();
 
@@ -48,22 +47,15 @@ exports.addCoverToPdf = async ({
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.docketEntryId the docket entry id
+ * @param {string} providers.docketEntryId the docket entry id of the original motion
  * @param {string} providers.docketNumber the docket number of the case
- * @param {boolean} providers.filingDateUpdated flag that represents if the filing date was updated
- * @param {boolean} providers.replaceCoversheet flag that represents if the coversheet should be replaced
- * @param {boolean} providers.useInitialData flag that represents to use initial data
+ * @param {boolean} providers.stampData the stamp data from the form to be applied to the stamp order pdf
+ * @param {string} providers.stampedDocketEntryId the docket entry id of the new stamped order docket entry
  * @returns {Promise<*>} updated docket entry entity
  */
 exports.generateStampedCoversheetInteractor = async (
   applicationContext,
-  {
-    caseEntity = null,
-    docketEntryId,
-    docketNumber,
-    stampData,
-    stampedDocketEntryId,
-  },
+  { docketEntryId, docketNumber, stampData, stampedDocketEntryId },
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -72,13 +64,13 @@ exports.generateStampedCoversheetInteractor = async (
       docketNumber,
     });
 
-  caseEntity = new Case(caseRecord, { applicationContext });
+  const caseEntity = new Case(caseRecord, { applicationContext });
 
   const motionDocketEntryEntity = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
-  const { pdfData: newPdfData } = await exports.addCoverToPdf({
+  const { pdfData: newPdfData } = await exports.createStampedCoversheetPdf({
     applicationContext,
     caseEntity,
     docketEntryEntity: motionDocketEntryEntity,

@@ -95,7 +95,6 @@ export const CoverSheet = ({
         {documentTitle}
       </h2>
 
-      {/* //addd all css to utils.scss */}
       {stamp && (
         <div className="stamp-box margin-top-140 font-sans-xs">
           <span className="text-normal text-center" id="stamp-text">
