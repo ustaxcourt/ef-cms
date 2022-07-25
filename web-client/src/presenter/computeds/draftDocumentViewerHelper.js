@@ -93,8 +93,6 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     applySignatureLink: `/case-detail/${caseDetail.docketNumber}/edit-order/${viewerDraftDocumentToDisplayDocketEntryId}/sign`,
     createdByLabel,
     documentTitle: formattedDocumentToDisplay.documentTitle,
-    //TODO might not need to export this. also need tests around hiding remove sig button
-    isDraftStampOrder,
     showAddDocketEntryButton:
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:

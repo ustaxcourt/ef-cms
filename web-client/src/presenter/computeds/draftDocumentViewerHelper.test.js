@@ -115,97 +115,99 @@ describe('draftDocumentViewerHelper', () => {
     expect(result).toEqual({ createdByLabel: '', documentTitle: '' });
   });
 
-  it('return showAddDocketEntryButton true for user role of petitionsClerk', () => {
-    applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
+  describe('showAddDocketEntryButton', () => {
+    it('should return true for user role of petitionsClerk', () => {
+      applicationContext.getCurrentUser.mockReturnValue(petitionsClerkUser);
 
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: {
-          docketEntries: [
-            {
-              ...baseDraftDocketEntry,
-              signedAt: '2019-03-01T21:40:46.415Z',
-            },
-          ],
+      const result = runCompute(draftDocumentViewerHelper, {
+        state: {
+          ...getBaseState(petitionsClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDraftDocketEntry,
+                signedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
         },
-      },
+      });
+
+      expect(result.showAddDocketEntryButton).toEqual(true);
     });
 
-    expect(result.showAddDocketEntryButton).toEqual(true);
-  });
+    it('should return true for user role of clerkOfCourt', () => {
+      applicationContext.getCurrentUser.mockReturnValue(clerkOfCourtUser);
 
-  it('return showAddDocketEntryButton true for user role of clerkOfCourt', () => {
-    applicationContext.getCurrentUser.mockReturnValue(clerkOfCourtUser);
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(clerkOfCourtUser),
-        caseDetail: {
-          docketEntries: [
-            {
-              ...baseDraftDocketEntry,
-              signedAt: '2019-03-01T21:40:46.415Z',
-            },
-          ],
+      const result = runCompute(draftDocumentViewerHelper, {
+        state: {
+          ...getBaseState(clerkOfCourtUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDraftDocketEntry,
+                signedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
         },
-      },
+      });
+
+      expect(result.showAddDocketEntryButton).toEqual(true);
     });
 
-    expect(result.showAddDocketEntryButton).toEqual(true);
-  });
+    it('should return false for other internal user roles', () => {
+      applicationContext.getCurrentUser.mockReturnValue(judgeUser);
 
-  it('return showAddDocketEntryButton false for other internal user roles', () => {
-    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(judgeUser),
-        caseDetail: {
-          docketEntries: [baseDraftDocketEntry],
+      const result = runCompute(draftDocumentViewerHelper, {
+        state: {
+          ...getBaseState(judgeUser),
+          caseDetail: {
+            docketEntries: [baseDraftDocketEntry],
+          },
         },
-      },
+      });
+
+      expect(result.showAddDocketEntryButton).toEqual(false);
     });
 
-    expect(result.showAddDocketEntryButton).toEqual(false);
-  });
+    it('should return true for signed document', () => {
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
-  it('return showAddDocketEntryButton true for signed document', () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [
-            {
-              ...baseDraftDocketEntry,
-              signedAt: '2019-03-01T21:40:46.415Z',
-            },
-          ],
+      const result = runCompute(draftDocumentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [
+              {
+                ...baseDraftDocketEntry,
+                signedAt: '2019-03-01T21:40:46.415Z',
+              },
+            ],
+          },
         },
-      },
+      });
+
+      expect(result.showAddDocketEntryButton).toEqual(true);
     });
 
-    expect(result.showAddDocketEntryButton).toEqual(true);
-  });
+    it('should return false for unsigned document that requires signature', () => {
+      applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
-  it('return showAddDocketEntryButton false for unsigned document that requires signature', () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [baseDraftDocketEntry],
+      const result = runCompute(draftDocumentViewerHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            docketEntries: [baseDraftDocketEntry],
+          },
         },
-      },
-    });
+      });
 
-    expect(result.showAddDocketEntryButton).toEqual(false);
+      expect(result.showAddDocketEntryButton).toEqual(false);
+    });
   });
 
-  it('return showApplySignatureButton true and showRemoveSignatureButton false for an internal user and an unsigned document', () => {
+  it('should return showApplySignatureButton true and showRemoveSignatureButton false for an internal user and an unsigned document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -221,28 +223,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showRemoveSignatureButton true and showApplySignatureButton false for an internal user and a signed document', () => {
-    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(docketClerkUser),
-        caseDetail: {
-          docketEntries: [
-            {
-              ...baseDraftDocketEntry,
-              signedAt: '2020-06-25T20:49:28.192Z',
-            },
-          ],
-        },
-      },
-    });
-
-    expect(result.showRemoveSignatureButton).toEqual(true);
-    expect(result.showApplySignatureButton).toEqual(false);
-  });
-
-  it('return showApplySignatureButton false and showRemoveSignatureButton false for an external user', () => {
+  it('should return showApplySignatureButton false and showRemoveSignatureButton false for an external user', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -258,7 +239,29 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('returns showRemoveSignatureButton false for NOT document type and internal users', () => {
+  it('should return showRemoveSignatureButton true and showApplySignatureButton false for an internal user and a signed document that is not a draft stamp order', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...baseDraftDocketEntry,
+              signedAt: '2020-06-25T20:49:28.192Z',
+              stampData: undefined,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showRemoveSignatureButton).toEqual(true);
+    expect(result.showApplySignatureButton).toEqual(false);
+  });
+
+  it('should return showRemoveSignatureButton false for NOT document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -285,7 +288,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('returns showRemoveSignatureButton false for NTD document type and internal users', () => {
+  it('should return showRemoveSignatureButton false for NTD document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -312,7 +315,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('returns showRemoveSignatureButton false for SDEC document type and internal users', () => {
+  it('should return showRemoveSignatureButton false for SDEC document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -339,7 +342,27 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('return showEditButtonSigned true for an internal user and a document that is signed', () => {
+  it('should return showRemoveSignatureButton false for a draft stamp order', () => {
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...baseDraftDocketEntry,
+              stampData: { disposition: 'some disposition' },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showRemoveSignatureButton).toEqual(false);
+  });
+
+  it('should return showEditButtonSigned true for an internal user, a document that is signed, and is not a draft stamp order', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -350,6 +373,7 @@ describe('draftDocumentViewerHelper', () => {
             {
               ...baseDraftDocketEntry,
               signedAt: '2020-06-25T20:49:28.192Z',
+              stampData: undefined,
             },
           ],
         },
@@ -359,7 +383,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showEditButtonSigned).toEqual(true);
   });
 
-  it('return showEditButtonNotSigned true for an internal user and a document that is not signed', () => {
+  it('should return showEditButtonNotSigned true for an internal user and a document that is not signed', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -374,7 +398,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showEditButtonNotSigned).toEqual(true);
   });
 
-  it('return showEditButtonSigned false for an external user', () => {
+  it('should return showEditButtonSigned false for an external user', () => {
     applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -389,7 +413,27 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
-  it('return showEditButtonNotSigned true and showEditButtonSigned false for a Notice document', () => {
+  it('should return showEditButtonSigned false for a draft stamp order', () => {
+    applicationContext.getCurrentUser.mockReturnValue(petitionerUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(petitionerUser),
+        caseDetail: {
+          docketEntries: [
+            {
+              ...baseDraftDocketEntry,
+              stampData: { disposition: 'some disposition' },
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.showEditButtonSigned).toEqual(false);
+  });
+
+  it('should return showEditButtonNotSigned true and showEditButtonSigned false for a Notice document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -413,7 +457,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showEditButtonSigned).toEqual(false);
   });
 
-  it('return showEditButtonNotSigned false and showEditButtonSigned false for a Stipulated Decision document', () => {
+  it('should return showEditButtonNotSigned false and showEditButtonSigned false for a Stipulated Decision document', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
@@ -504,7 +548,7 @@ describe('draftDocumentViewerHelper', () => {
     );
   });
 
-  it('should return applySignatureLink with docketNumer and viewerDraftDocumentToDisplay.docketEntryId', () => {
+  it('should return applySignatureLink with docketNumber and viewerDraftDocumentToDisplay.docketEntryId', () => {
     const result = runCompute(draftDocumentViewerHelper, {
       state: {
         ...getBaseState(petitionsClerkUser),
@@ -518,59 +562,5 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.applySignatureLink).toEqual(
       `/case-detail/${mockDocketNumber}/edit-order/${mockDocketEntryId}/sign`,
     );
-  });
-
-  it('should be false when the document is an order that is not stamped', () => {
-    const unstampedOrder = { ...baseDraftDocketEntry, stampData: {} };
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: {
-          docketEntries: [unstampedOrder],
-          docketNumber: mockDocketNumber,
-        },
-      },
-    });
-
-    expect(result.isDraftStampOrder).toBeFalsy();
-  });
-
-  it('should be false when the document is not an order', () => {
-    const unstampedMotion = {
-      ...baseDraftDocketEntry,
-      eventCode: 'MOTR',
-    };
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: {
-          docketEntries: [unstampedMotion],
-          docketNumber: mockDocketNumber,
-        },
-      },
-    });
-
-    expect(result.isDraftStampOrder).toBeFalsy();
-  });
-
-  it('should be true when the document is an order that is stamped', () => {
-    const stampedOrder = {
-      ...baseDraftDocketEntry,
-      stampData: { disposition: 'today' },
-    };
-
-    const result = runCompute(draftDocumentViewerHelper, {
-      state: {
-        ...getBaseState(petitionsClerkUser),
-        caseDetail: {
-          docketEntries: [stampedOrder],
-          docketNumber: mockDocketNumber,
-        },
-      },
-    });
-
-    expect(result.isDraftStampOrder).toBeTruthy();
   });
 });
