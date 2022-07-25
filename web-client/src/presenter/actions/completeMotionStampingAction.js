@@ -5,8 +5,8 @@ import { state } from 'cerebral';
  * generates an action for completing motion stamping
  *
  * @param {object} providers the providers object
- * @param {string} providers.get the cerebral get function
  * @param {string} providers.applicationContext the applicationContext
+ * @param {string} providers.get the cerebral get function
  * @returns {Function} the action to complete the motion stamping
  */
 export const completeMotionStampingAction = async ({
@@ -40,10 +40,7 @@ export const completeMotionStampingAction = async ({
       stampData,
     });
 
-  // need stamp entity to populate docket entry stamp fields from form
-  // need stamp entity to generate the coversheet PDF
-
-  // combine these two calls so we're only hitting one endpoint
+  // todo: combine these two calls so we're only hitting one endpoint
   await applicationContext
     .getUseCases()
     .generateStampedCoversheetInteractor(applicationContext, {
@@ -52,7 +49,6 @@ export const completeMotionStampingAction = async ({
       stampData,
       stampedDocketEntryId: newDocketEntryId,
     });
-  // }
 
   const redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
 
