@@ -23,12 +23,17 @@ const { PDFDocument } = require('pdf-lib');
 jest.mock('../../utilities/shouldAppendClinicLetter');
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
-  let docketNumber, trialSession;
+  let docketNumber, trialSession, interactorParamObject;
+  const clinicLetterKey = 'I am a key';
+
   beforeAll(() => {
-    const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
-    shouldAppendClinicLetter.mockResolvedValue({ appendClinicLetter: true });
-    const pdfDocumentcreateMock = async () => await PDFDocument.create();
     docketNumber = '101-20';
+    const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
+    shouldAppendClinicLetter.mockResolvedValue({
+      appendClinicLetter: true,
+      clinicLetterKey,
+    });
+    const pdfDocumentcreateMock = async () => await PDFDocument.create();
     trialSession = {
       ...MOCK_TRIAL_REGULAR,
       proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
@@ -45,9 +50,18 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
         load: pdfDocumentLoadMock,
       },
     });
+    applicationContext
+      .getUseCases()
+      .generateNoticeOfTrialIssuedInteractor.mockResolvedValue(testPdfDoc);
   });
 
   beforeEach(() => {
+    interactorParamObject = {
+      docketNumber,
+      jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      trialSession,
+      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    };
     applicationContext
       .getPersistenceGateway()
       .getJobStatus.mockResolvedValue({});
@@ -59,12 +73,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+      interactorParamObject,
     );
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -74,12 +83,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should track the job status when processing begins', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+      interactorParamObject,
     );
     expect(
       applicationContext.getPersistenceGateway().setJobAsProcessing,
@@ -89,12 +93,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should decrement the job counter when a worker has processed a pdf file', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+      interactorParamObject,
     );
     expect(
       applicationContext.getPersistenceGateway().decrementJobCounter,
@@ -104,73 +103,46 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should combine the notice of trial issued letter to a clinic letter if a clinic letter is necessary', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+      interactorParamObject,
     );
 
     expect(
       applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith(expect.objectContaining({ key: clinicLetterKey }));
 
     expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
+
+    const pdfBlob =
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].document;
+    const pdf = await PDFDocument.load(pdfBlob);
+
+    expect(pdf.getPages().length).toBe(2);
   });
 
-  it('should NOT combine the notice of trial issued letter to a clinic letter if a clinic letter is necessary', async () => {
+  it('should not combine a clinic with a letter of notice of trial if a clinic letter is not needed', async () => {
+    shouldAppendClinicLetter.mockResolvedValueOnce({
+      appendClinicLetter: false,
+    });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+      interactorParamObject,
     );
 
     expect(
       applicationContext.getPersistenceGateway().getDocument,
-    ).toHaveBeenCalled();
-
-    expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
-  });
-
-  it('should generate a standing pretrial order for proecedure types other than small', async () => {
-    const standingPretrialOrderPdf = getFakeFile();
-
-    applicationContext
-      .getUseCases()
-      .generateStandingPretrialOrderInteractor.mockResolvedValue(
-        standingPretrialOrderPdf,
-      );
-
-    await generateNoticesForCaseTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    );
-    expect(
-      applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases()
-        .generateStandingPretrialOrderForSmallCaseInteractor,
     ).not.toHaveBeenCalled();
 
     expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        document: standingPretrialOrderPdf,
-      }),
-    );
+      applicationContext.getUtilities().combineTwoPdfs,
+    ).not.toHaveBeenCalled();
+
+    const pdfBlob =
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].document;
+    const pdf = await PDFDocument.load(pdfBlob);
+
+    expect(pdf.getPages().length).toBe(1);
   });
 
   it('should generate a standing pretrial for small cases if the procedure type is Small', async () => {
@@ -181,20 +153,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
         procedureType: 'Small',
       });
 
-    applicationContext
-      .getUseCases()
-      .generateStandingPretrialOrderForSmallCaseInteractor.mockResolvedValue(
-        testPdfDoc,
-      );
-
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+      interactorParamObject,
     );
     expect(
       applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
@@ -204,158 +165,164 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       applicationContext.getUseCases()
         .generateStandingPretrialOrderForSmallCaseInteractor,
     ).toHaveBeenCalled();
-
-    // expect(
-    //   applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    // ).toHaveBeenNthCalledWith(
-    //   2,
-    //   expect.objectContaining({
-    //     document: testPdfDoc,
-    //   }),
-    // );
-    const pdfBlob =
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[2][0].document;
-    const pdf = await PDFDocument.load(pdfBlob);
-
-    expect(pdf.getPages().length).toBe(2);
   });
 
-  it('should send out notifications emails for the notice docket entry and standing pretrial notice', async () => {
+  it('should generate a standing pretrial order for proecedure types other than small', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
         ...MOCK_CASE,
-        procedureType: 'Small',
+        procedureType: 'Regular',
       });
-
-    applicationContext
-      .getUseCases()
-      .generateStandingPretrialOrderForSmallCaseInteractor.mockResolvedValue(
-        testPdfDoc,
-      );
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+      interactorParamObject,
     );
-
     expect(
-      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toHaveBeenCalledTimes(2);
-  });
-
-  it('should not append clinic letter when creating notices for a case with a represented petitioner', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            representing: [MOCK_CASE.petitioners[0].contactId],
-          },
-        ],
-        procedureType: 'Small',
-      });
-
-    await generateNoticesForCaseTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    );
-
+      applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
+    ).toHaveBeenCalled();
     expect(
-      applicationContext.getDocumentGenerators().addressLabelCoverSheet,
-    ).toHaveBeenCalledTimes(1);
-
-    const pdfBlob =
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[2][0].document;
-    const pdf = await PDFDocument.load(pdfBlob);
-
-    expect(pdf.getPages().length).toBe(2);
+      applicationContext.getUseCases()
+        .generateStandingPretrialOrderForSmallCaseInteractor,
+    ).not.toHaveBeenCalled();
   });
 
-  it('should append the clinic letter for pro se petitioners', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        privatePractitioners: [],
-        procedureType: 'Small',
-      });
+  // it('should send out notifications emails for the notice docket entry and standing pretrial notice', async () => {
+  //   applicationContext
+  //     .getPersistenceGateway()
+  //     .getCaseByDocketNumber.mockReturnValue({
+  //       ...MOCK_CASE,
+  //       procedureType: 'Small',
+  //     });
 
-    await generateNoticesForCaseTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    );
+  //   applicationContext
+  //     .getUseCases()
+  //     .generateStandingPretrialOrderForSmallCaseInteractor.mockResolvedValue(
+  //       testPdfDoc,
+  //     );
 
-    const pdfBlob =
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[2][0].document;
-    const pdf = await PDFDocument.load(pdfBlob);
+  //   await generateNoticesForCaseTrialSessionCalendarInteractor(
+  //     applicationContext,
+  //     {
+  //       docketNumber,
+  //       jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  //       trialSession,
+  //       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  //     },
+  //   );
 
-    expect(pdf.getPages().length).toBe(3);
-  });
+  //   expect(
+  //     applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+  //   ).toHaveBeenCalledTimes(2);
+  // });
 
-  it('should not append clinic letter if the clinic letter is not in s3 for the trial location', async () => {
-    shouldAppendClinicLetter.mockResolvedValue({ appendClinicLetter: false });
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
-        ...MOCK_CASE,
-        petitioners: [
-          {
-            ...MOCK_CASE.petitioners[0],
-            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-          },
-        ],
-        privatePractitioners: [],
-        procedureType: 'Small',
-      });
+  // it('should not append clinic letter when creating notices for a case with a represented petitioner', async () => {
+  //   applicationContext
+  //     .getPersistenceGateway()
+  //     .getCaseByDocketNumber.mockReturnValue({
+  //       ...MOCK_CASE,
+  //       petitioners: [
+  //         {
+  //           ...MOCK_CASE.petitioners[0],
+  //           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  //         },
+  //       ],
+  //       privatePractitioners: [
+  //         {
+  //           ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+  //           representing: [MOCK_CASE.petitioners[0].contactId],
+  //         },
+  //       ],
+  //       procedureType: 'Small',
+  //     });
 
-    await generateNoticesForCaseTrialSessionCalendarInteractor(
-      applicationContext,
-      {
-        docketNumber,
-        jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        trialSession,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    );
+  //   await generateNoticesForCaseTrialSessionCalendarInteractor(
+  //     applicationContext,
+  //     {
+  //       docketNumber,
+  //       jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  //       trialSession,
+  //       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  //     },
+  //   );
 
-    const pdfBlob =
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-        .calls[2][0].document;
-    const pdf = await PDFDocument.load(pdfBlob);
+  //   expect(
+  //     applicationContext.getDocumentGenerators().addressLabelCoverSheet,
+  //   ).toHaveBeenCalledTimes(1);
 
-    expect(pdf.getPages().length).toBe(3);
-  });
+  //   const pdfBlob =
+  //     applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+  //       .calls[2][0].document;
+  //   const pdf = await PDFDocument.load(pdfBlob);
+
+  //   expect(pdf.getPages().length).toBe(2);
+  // });
+
+  // it('should append the clinic letter for pro se petitioners', async () => {
+  //   applicationContext
+  //     .getPersistenceGateway()
+  //     .getCaseByDocketNumber.mockReturnValue({
+  //       ...MOCK_CASE,
+  //       petitioners: [
+  //         {
+  //           ...MOCK_CASE.petitioners[0],
+  //           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  //         },
+  //       ],
+  //       privatePractitioners: [],
+  //       procedureType: 'Small',
+  //     });
+
+  //   await generateNoticesForCaseTrialSessionCalendarInteractor(
+  //     applicationContext,
+  //     {
+  //       docketNumber,
+  //       jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  //       trialSession,
+  //       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  //     },
+  //   );
+
+  //   const pdfBlob =
+  //     applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+  //       .calls[2][0].document;
+  //   const pdf = await PDFDocument.load(pdfBlob);
+
+  //   expect(pdf.getPages().length).toBe(3);
+  // });
+
+  // it('should not append clinic letter if the clinic letter is not in s3 for the trial location', async () => {
+  //   shouldAppendClinicLetter.mockResolvedValue({ appendClinicLetter: false });
+  //   applicationContext
+  //     .getPersistenceGateway()
+  //     .getCaseByDocketNumber.mockReturnValue({
+  //       ...MOCK_CASE,
+  //       petitioners: [
+  //         {
+  //           ...MOCK_CASE.petitioners[0],
+  //           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  //         },
+  //       ],
+  //       privatePractitioners: [],
+  //       procedureType: 'Small',
+  //     });
+
+  //   await generateNoticesForCaseTrialSessionCalendarInteractor(
+  //     applicationContext,
+  //     {
+  //       docketNumber,
+  //       jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  //       trialSession,
+  //       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  //     },
+  //   );
+
+  //   const pdfBlob =
+  //     applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+  //       .calls[2][0].document;
+  //   const pdf = await PDFDocument.load(pdfBlob);
+
+  //   expect(pdf.getPages().length).toBe(3);
+  // });
 });
