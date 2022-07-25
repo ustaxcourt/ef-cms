@@ -65,23 +65,29 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
   });
 
   for (let calendaredCase of calendaredCases) {
-    applicationContext.invokeLambda(
-      {
-        FunctionName: `set_trial_session_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-        InvocationType: 'Event',
-        Payload: JSON.stringify({
+    await applicationContext
+      .getMessageGateway()
+      .sendSetTrialSessionCalendarEvent({
+        applicationContext,
+        payload: {
           docketNumber: calendaredCase.docketNumber,
           jobId,
           trialSession,
           userId: user.userId,
-        }),
-      },
-      err => {
-        if (err) {
-          applicationContext.logger.error(err);
-        }
-      },
-    );
+        },
+      });
+
+    // await sqs
+    //   .sendMessage({
+    //     MessageBody: JSON.stringify({
+    //       docketNumber: calendaredCase.docketNumber,
+    //       jobId,
+    //       trialSession,
+    //       userId: user.userId,
+    //     }),
+    //     QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
+    //   })
+    //   .promise();
   }
 
   await new Promise(resolve => {

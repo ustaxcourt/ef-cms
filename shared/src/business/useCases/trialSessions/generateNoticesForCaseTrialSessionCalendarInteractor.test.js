@@ -205,14 +205,20 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
         .generateStandingPretrialOrderForSmallCaseInteractor,
     ).toHaveBeenCalled();
 
-    expect(
-      applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toHaveBeenNthCalledWith(
-      2,
-      expect.objectContaining({
-        document: testPdfDoc,
-      }),
-    );
+    // expect(
+    //   applicationContext.getPersistenceGateway().saveDocumentFromLambda,
+    // ).toHaveBeenNthCalledWith(
+    //   2,
+    //   expect.objectContaining({
+    //     document: testPdfDoc,
+    //   }),
+    // );
+    const pdfBlob =
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[2][0].document;
+    const pdf = await PDFDocument.load(pdfBlob);
+
+    expect(pdf.getPages().length).toBe(2);
   });
 
   it('should send out notifications emails for the notice docket entry and standing pretrial notice', async () => {

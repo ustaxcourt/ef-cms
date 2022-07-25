@@ -1000,6 +1000,9 @@ const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
+  sendEmailEventToQueue,
+} = require('../../shared/src/persistence/messages/sendEmailEventToQueue');
+const {
   sendEmailVerificationLink,
 } = require('../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink');
 const {
@@ -1020,6 +1023,9 @@ const {
 const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
+const {
+  sendSetTrialSessionCalendarEvent,
+} = require('../../shared/src/persistence/messages/sendSetTrialSessionCalendarEvent');
 const {
   sendSlackNotification,
 } = require('../../shared/src/dispatchers/slack/sendSlackNotification');
@@ -1332,14 +1338,11 @@ const {
   CognitoIdentityServiceProvider,
   DynamoDB,
   EnvironmentCredentials,
-  Lambda,
   S3,
   SES,
   SQS,
 } = AWS;
 const execPromise = util.promisify(exec);
-
-const lambda = new Lambda();
 
 const environment = {
   appEndpoint: process.env.EFCMS_DOMAIN
@@ -1752,6 +1755,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
       PENDING_ITEMS_PAGE_SIZE: 100,
+      SES_CONCURRENCY_LIMIT: process.env.SES_CONCURRENCY_LIMIT || 6,
       SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
@@ -1829,6 +1833,29 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
+      sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
+        if (environment.stage !== 'local') {
+          await sendEmailEventToQueue({
+            applicationContext,
+            emailParams,
+          });
+        }
+      },
+      sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
+        if (environment.stage === 'local') {
+          applicationContext
+            .getUseCases()
+            .generateNoticesForCaseTrialSessionCalendarInteractor(
+              applicationContext,
+              payload,
+            );
+        } else {
+          sendSetTrialSessionCalendarEvent({
+            applicationContext,
+            payload,
+          });
+        }
+      },
       sendUpdatePetitionerCasesMessage: ({
         applicationContext: appContext,
         user: userToSendTo,
@@ -1846,6 +1873,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         }
       },
     }),
+
     getMessagingClient: () => {
       if (!sqsCache) {
         sqsCache = new SQS({
@@ -2221,17 +2249,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         setupPdfDocument,
         uploadToS3,
       };
-    },
-    invokeLambda: (params, cb) => {
-      // TODO: maybe see if this has a .promise method
-      if (process.env.IS_LOCAL) {
-        const {
-          handler,
-        } = require('../terraform/template/lambdas/trial-session');
-        handler(JSON.parse(params.Payload));
-      } else {
-        lambda.invoke(params, cb);
-      }
     },
     isAuthorized,
     isCurrentColorActive,

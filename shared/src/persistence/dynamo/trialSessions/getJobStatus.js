@@ -10,6 +10,7 @@ const { get } = require('../../dynamodbClientService');
  */
 exports.getJobStatus = ({ applicationContext, jobId }) =>
   get({
+    ConsistentRead: true,
     Key: {
       pk: `set-notices-for-trial-session-job-${jobId}`,
       sk: `set-notices-for-trial-session-job-${jobId}`,
