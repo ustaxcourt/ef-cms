@@ -8,7 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
  * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
  * @param {string} providers.signedDocketEntryId the id of the signed document
- * @param {string} providers.nameForSigning name
+ * @param {string} providers.stampData the stampData from the form to add to the draft order
  * @returns {Promise<*>} the promise of the api call
  */
 exports.addDraftStampOrderDocketEntryInteractor = (
