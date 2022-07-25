@@ -22,6 +22,7 @@ const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+const { WorkItem } = require('../../entities/WorkItem');
 
 const completeWorkItem = async ({
   applicationContext,
@@ -51,8 +52,10 @@ const completeWorkItem = async ({
     workItem: workItemToUpdate.validate().toRawObject(),
   });
 
-  await applicationContext.getPersistenceGateway().putWorkItemInOutbox({
+  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
     applicationContext,
+    section: user.section,
+    userId: user.userId,
     workItem: workItemToUpdate.validate().toRawObject(),
   });
 };
@@ -168,6 +171,7 @@ exports.serveCourtIssuedDocumentInteractor = async (
         caseEntity,
         courtIssuedDocument,
         docketEntryId,
+        subjectCaseDocketNumber,
         user,
       }),
     );
@@ -233,13 +237,9 @@ const serveDocumentOnOneCase = async ({
   caseEntity,
   courtIssuedDocument,
   docketEntryId,
+  subjectCaseDocketNumber,
   user,
 }) => {
-  if (!caseEntity.getDocketEntryById({ docketEntryId })) {
-    // updates docketNumber automatically
-    caseEntity.addDocketEntry(courtIssuedDocument);
-  }
-
   const docketEntryEntity = new DocketEntry(courtIssuedDocument, {
     applicationContext,
   });
@@ -250,6 +250,37 @@ const serveDocumentOnOneCase = async ({
   docketEntryEntity.isOnDocketRecord = true;
 
   docketEntryEntity.setAsServed(servedParties.all);
+
+  const isSubjectCase = subjectCaseDocketNumber === caseEntity.docketNumber;
+
+  if (!docketEntryEntity.workItem || !isSubjectCase) {
+    docketEntryEntity.workItem = new WorkItem(
+      {
+        assigneeId: null,
+        assigneeName: null,
+        associatedJudge: caseEntity.associatedJudge,
+        caseStatus: caseEntity.status,
+        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
+        },
+        docketNumber: caseEntity.docketNumber,
+        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
+        hideFromPendingMessages: true,
+        inProgress: true,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      },
+      { applicationContext },
+    );
+  }
+
+  if (!caseEntity.getDocketEntryById({ docketEntryId })) {
+    // updates docketNumber automatically
+    caseEntity.addDocketEntry(docketEntryEntity);
+  }
 
   const workItemToUpdate = docketEntryEntity.workItem;
 
