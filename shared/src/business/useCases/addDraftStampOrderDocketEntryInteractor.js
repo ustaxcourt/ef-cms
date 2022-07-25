@@ -54,6 +54,7 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
       isDraft: true,
       isPaper: false,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+      stampData,
       userId: user.userId,
     },
     { applicationContext },
