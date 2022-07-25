@@ -40,7 +40,6 @@ export const completeMotionStampingAction = async ({
       stampData,
     });
 
-  // todo: combine these two calls so we're only hitting one endpoint
   await applicationContext
     .getUseCases()
     .generateStampedCoversheetInteractor(applicationContext, {
