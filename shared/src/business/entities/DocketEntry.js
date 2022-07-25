@@ -315,17 +315,6 @@ DocketEntry.prototype.setSigned = function (signByUserId, signedJudgeName) {
 };
 
 /**
- * attaches a stamp to the document
- *
- * @param {Stamp} stampData the stamp data from the form
- */
-DocketEntry.prototype.setStamped = function (stampData) {
-  this.stampData.disposition = stampData.disposition;
-  this.stampData.deniedAsMoot = stampData.deniedAsMoot;
-  // add joi validation?
-};
-
-/**
  * attaches a qc date and a user to the document
  *
  * @param {object} user the user completing QC process

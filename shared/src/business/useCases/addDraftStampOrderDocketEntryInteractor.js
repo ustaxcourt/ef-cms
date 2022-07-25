@@ -6,14 +6,14 @@ const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
 
 /**
- * saveStampedDocumentInteractor
+ * addDraftStampOrderDocketEntryInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
- * @param {string} providers.nameForSigning the name on the signature of the signed document
  * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
  * @param {string} providers.signedDocketEntryId the id of the signed document
+ * @param {string} providers.stampData the stampData from the form
  */
 exports.addDraftStampOrderDocketEntryInteractor = async (
   applicationContext,
@@ -59,7 +59,6 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     { applicationContext },
   );
 
-  signedDocketEntryEntity.setStamped(stampData);
   signedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
 
   caseEntity.addDocketEntry(signedDocketEntryEntity);

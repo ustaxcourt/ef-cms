@@ -38,8 +38,6 @@ export const submitStampMotionSequence = showProgressSequenceDecorator([
       setRedirectUrlAction,
       // // TODO: replace completeWorkItemForDocumentSigningAction
       // completeWorkItemForDocumentSigningAction,
-      // // TODO: replace clearPDFSignatureDataAction
-      // clearPDFSignatureDataAction,
       clearFormAction,
       setAlertSuccessAction,
       followRedirectAction,
