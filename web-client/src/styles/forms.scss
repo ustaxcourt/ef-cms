@@ -551,6 +551,27 @@ label.ustc-upload {
       right: auto;
       left: 200px;
     }
+
+    &.radio-with-date-picker {
+      .usa-radio {
+        display: flex;
+        align-items: center;
+
+        .usa-radio__label {
+          align-items: center;
+
+          .label-text-with-date-picker {
+            display: inline;
+            min-height: 40px;
+          }
+        }
+
+        .usa-label {
+          display: none;
+          height: 0;
+        }
+      }
+    }
   }
 
   .narrow-hr {
