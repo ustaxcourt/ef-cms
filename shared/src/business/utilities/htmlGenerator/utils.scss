@@ -50,6 +50,10 @@
   margin-top: 200px;
 }
 
+.margin-top-140 {
+  margin-top: 140px;
+}
+
 .margin-top-5 {
   margin-top: 5px;
 }
@@ -110,9 +114,25 @@ ol {
 }
 
 .stamp-box {
-  padding: 2em;
-  border: solid 2px black;
+  padding: 10px;
+  border: solid 1px black;
   text-align: center;
+}
+
+.font-sans-2xs {
+  font-size: 14.9px;
+}
+
+.font-sans-xs {
+  font-size: 16px;
+}
+
+.font-sans-lg {
+  font-size: 23.4px;
+}
+
+.text-ls-1 {
+  letter-spacing: 0.05em;
 }
 
 .narrow-hr {

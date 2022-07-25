@@ -97,11 +97,11 @@ export const CoverSheet = ({
 
       {/* //addd all css to utils.scss */}
       {stamp && (
-        <div className="stamp-box">
+        <div className="stamp-box margin-top-140 font-sans-xs">
           <span className="text-normal text-center" id="stamp-text">
             It is ORDERED as follows:
             <br />
-            <span className="font-sans-2xs">
+            <span>
               This motion is{' '}
               <span className="text-ls-1 text-bold font-sans-lg">
                 {stamp.disposition?.toUpperCase()}
