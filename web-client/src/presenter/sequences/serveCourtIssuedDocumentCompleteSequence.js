@@ -24,7 +24,7 @@ export const serveCourtIssuedDocumentCompleteSequence = [
       setCaseAction,
       followRedirectAction,
       {
-        default: navigateToCaseDetailAction,
+        default: [navigateToCaseDetailAction],
         success: [setDocumentToDisplayFromDocumentIdAction],
       },
     ],

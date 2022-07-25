@@ -1,3 +1,5 @@
+import { waitForLoadingComponentToHide } from '../helpers';
+
 export const petitionsClerk1ServesDocumentFromMessageDetail = cerebralTest => {
   return it('petitions clerk 1 serves document from message detail', async () => {
     await cerebralTest.runSequence(
@@ -22,6 +24,8 @@ export const petitionsClerk1ServesDocumentFromMessageDetail = cerebralTest => {
     await cerebralTest.setState('iframeSrc', undefined);
 
     await cerebralTest.runSequence('serveCourtIssuedDocumentSequence', {});
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     expect(cerebralTest.getState('alertSuccess')).toEqual({
       message: 'Document served. ',
