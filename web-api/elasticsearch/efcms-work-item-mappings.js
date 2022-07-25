@@ -6,6 +6,12 @@ module.exports = {
     'associatedJudge.S': {
       type: 'text',
     },
+    case_relations: {
+      relations: {
+        case: 'work-item',
+      },
+      type: 'join',
+    },
     'completedAt.S': {
       type: 'text',
     },
