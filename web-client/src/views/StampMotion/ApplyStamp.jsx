@@ -436,7 +436,7 @@ export const ApplyStamp = connect(
                         aria-describedby="dueDateMessage"
                         checked={
                           form.dueDateMessage ===
-                          'The parties shall file a status decision by'
+                          'The parties shall file a status report or proposed stipulated decision by'
                         }
                         className="usa-radio__input"
                         id="dueDateMessage-statusReportOrStipDecisionDueDate"
