@@ -67,6 +67,7 @@ import axios from 'axios';
 import jwt from 'jsonwebtoken';
 const pdfLib = require('pdf-lib');
 import { featureFlagHelper } from '../src/presenter/computeds/FeatureFlags/featureFlagHelper';
+import { sendEmailEventToQueue } from '../../shared/src/persistence/messages/sendEmailEventToQueue';
 import pug from 'pug';
 import qs from 'qs';
 import riotRoute from 'riot-route';
@@ -118,6 +119,7 @@ export const callCognitoTriggerForPendingEmail = async userId => {
   // mock application context similar to that in cognito-triggers.js
   const environment = {
     s3Endpoint: process.env.S3_ENDPOINT || 'http://localhost:9000',
+    stage: process.env.STAGE || 'local',
   };
   const apiApplicationContext = {
     getCaseTitle: Case.getCaseTitle,
@@ -169,6 +171,17 @@ export const callCognitoTriggerForPendingEmail = async userId => {
     getIrsSuperuserEmail: () =>
       process.env.IRS_SUPERUSER_EMAIL || 'irssuperuser@example.com',
     getMessageGateway: () => ({
+      sendEmailEventToQueue: async ({
+        applicationContext: appContext,
+        emailParams,
+      }) => {
+        if (environment.stage !== 'local') {
+          await sendEmailEventToQueue({
+            applicationContext: appContext,
+            emailParams,
+          });
+        }
+      },
       sendUpdatePetitionerCasesMessage: ({
         applicationContext: appContext,
         user,

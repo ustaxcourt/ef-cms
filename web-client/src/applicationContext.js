@@ -315,9 +315,7 @@ import { validateUpdateUserEmailInteractor } from '../../shared/src/business/use
 import { validateUserContactInteractor } from '../../shared/src/business/useCases/users/validateUserContactInteractor';
 import { verifyPendingCaseForUserInteractor } from '../../shared/src/proxies/verifyPendingCaseForUserProxy';
 import { verifyUserPendingEmailInteractor } from '../../shared/src/proxies/users/verifyUserPendingEmailProxy';
-const {
-  sendEmailEventToQueue,
-} = require('../../shared/src/persistence/messages/sendEmailEventToQueue');
+
 import axios from 'axios';
 import deepFreeze from 'deep-freeze';
 
@@ -325,10 +323,6 @@ import { getConstants } from './getConstants';
 
 let user;
 let broadcastChannel;
-
-const environment = {
-  stage: process.env.STAGE || 'local',
-};
 
 const getCurrentUser = () => {
   return user;
@@ -623,19 +617,6 @@ const applicationContext = {
     timeEnd: key => {
       // eslint-disable-next-line no-console
       console.timeEnd(key);
-    },
-  }),
-  getMessageGateway: () => ({
-    sendEmailEventToQueue: async ({
-      applicationContext: appContext,
-      emailParams,
-    }) => {
-      if (environment.stage !== 'local') {
-        await sendEmailEventToQueue({
-          applicationContext: appContext,
-          emailParams,
-        });
-      }
     },
   }),
   getPdfJs: async () => {
