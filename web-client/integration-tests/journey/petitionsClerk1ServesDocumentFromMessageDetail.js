@@ -25,6 +25,7 @@ export const petitionsClerk1ServesDocumentFromMessageDetail = cerebralTest => {
 
     expect(cerebralTest.getState('alertSuccess')).toEqual({
       message: 'Document served. ',
+      overwritable: false,
     });
     expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
 

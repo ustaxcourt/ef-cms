@@ -17,6 +17,7 @@ export const docketClerkServesDocumentFromCaseDetailDocumentView =
 
       expect(cerebralTest.getState('alertSuccess')).toEqual({
         message: 'Document served. ',
+        overwritable: false,
       });
 
       expect(
