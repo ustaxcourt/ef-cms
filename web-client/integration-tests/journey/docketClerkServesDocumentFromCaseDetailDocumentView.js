@@ -1,3 +1,5 @@
+import { waitForLoadingComponentToHide } from '../helpers';
+
 export const docketClerkServesDocumentFromCaseDetailDocumentView =
   cerebralTest => {
     return it('Docketclerk serves document from case detail document view', async () => {
@@ -14,6 +16,8 @@ export const docketClerkServesDocumentFromCaseDetailDocumentView =
       );
 
       await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
+
+      await waitForLoadingComponentToHide({ cerebralTest });
 
       expect(cerebralTest.getState('alertSuccess')).toEqual({
         message: 'Document served. ',

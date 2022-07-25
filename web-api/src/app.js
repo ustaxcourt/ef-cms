@@ -571,7 +571,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.post(
     '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
-    lambdaWrapper(serveCourtIssuedDocumentLambda),
+    lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/coversheet',
