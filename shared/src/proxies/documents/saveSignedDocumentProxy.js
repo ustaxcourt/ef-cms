@@ -15,7 +15,6 @@ exports.saveSignedDocumentInteractor = (
   applicationContext,
   {
     docketNumber,
-    isMotion,
     nameForSigning,
     originalDocketEntryId,
     parentMessageId,
@@ -25,7 +24,6 @@ exports.saveSignedDocumentInteractor = (
   return post({
     applicationContext,
     body: {
-      isMotion,
       nameForSigning,
       parentMessageId,
       signedDocketEntryId,
