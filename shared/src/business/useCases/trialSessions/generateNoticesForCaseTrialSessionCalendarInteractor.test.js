@@ -19,6 +19,7 @@ const {
 const {
   shouldAppendClinicLetter,
 } = require('../../utilities/shouldAppendClinicLetter');
+const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
 const { fakeData, getFakeFile } = require('../../test/getFakeFile');
 const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
 const { PDFDocument } = require('pdf-lib');
@@ -31,6 +32,12 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     interactorParamObject,
     mockCase,
     servedParties;
+  const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
+  const clinicLetterPdf = async () => await PDFDocument.load(testPdfDoc);
+  const noticeDocumentWithClinicLetter = async () =>
+    await PDFDocument.load(testPdfDoc).addPage(clinicLetterPdf);
+  const standingPretrialPdf = async () => await PDFDocument.load(testPdfDoc);
+  const addressPageDoc = async () => await PDFDocument.load(testPdfDoc);
 
   const clinicLetterKey = 'I am a key';
 
@@ -45,11 +52,14 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   beforeAll(() => {
     docketNumber = '101-20';
     // aggregatePartiesForService.mockResolvedValue([]);
-    const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
+
     shouldAppendClinicLetter.mockResolvedValue({
       appendClinicLetter: true,
       clinicLetterKey,
     });
+    applicationContext
+      .getUtilities()
+      .combineTwoPdfs.mockResolvedValue(noticeDocumentWithClinicLetter);
     const pdfDocumentcreateMock = async () => await PDFDocument.create();
     trialSession = {
       ...MOCK_TRIAL_REGULAR,
@@ -57,7 +67,13 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     };
     applicationContext
       .getPersistenceGateway()
-      .getDocument.mockResolvedValue(fakeData);
+      .getDocument.mockResolvedValue(testPdfDoc);
+    applicationContext
+      .getDocumentGenerators()
+      .addressLabelCoverSheet.mockResolvedValue(testPdfDoc);
+    applicationContext
+      .getUseCases()
+      .generateStandingPretrialOrderInteractor.mockResolvedValue(testPdfDoc);
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockResolvedValue(MOCK_CASE);
@@ -253,7 +269,77 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   //  2. confirm the "package" of combined pdfs === addressPdfPage + noticeDocumentPdfCopy + standingPretrialPdf
   //     // check for the length of the combined pdfs (3)??
 
-  it('should not append clinic letter when creating notices for a case with practitioners', async () => {
+  // it('should not append clinic letter when creating notices for a case with practitioners', async () => {
+  //   applicationContext
+  //     .getPersistenceGateway()
+  //     .getCaseByDocketNumber.mockReturnValue({
+  //       ...MOCK_CASE,
+  //       petitioners: [
+  //         {
+  //           ...MOCK_CASE.petitioners[0],
+  //           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+  //         },
+  //       ],
+  //       privatePractitioners: [
+  //         {
+  //           ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+  //           representing: [MOCK_CASE.petitioners[0].contactId],
+  //         },
+  //       ],
+  //     });
+
+  //   const combinedNoticeAndClinicLetter = await applicationContext
+  //     .getUtilities()
+  //     .combineTwoPdfs();
+
+  //   console.log(
+  //     'combinedNoticeAndClinicLetter length***',
+  //     combinedNoticeAndClinicLetter.length,
+  //   );
+
+  //   // await copyPagesFromPdf({
+  //   //   copyFrom: addressPageDoc,
+  //   //   copyInto: combinedDocumentsPdf,
+  //   // });
+
+  //   // await copyPagesFromPdf({
+  //   //   copyFrom: noticeDocumentPdf,
+  //   //   copyInto: combinedDocumentsPdf,
+  //   // });
+
+  //   // await copyPagesFromPdf({
+  //   //   copyFrom: standingPretrialPdf,
+  //   //   copyInto: combinedDocumentsPdf,
+  //   // });
+
+  //   // await generateNoticesForCaseTrialSessionCalendarInteractor(
+  //   //   applicationContext,
+  //   //   interactorParamObject,
+  //   // );
+
+  //   // await copyPagesFromPdf({
+  //   //   copyFrom: combinedDocumentsPdf,
+  //   //   copyInto: newPdfDoc,
+  //   // });
+
+  //   // mock/create a notice (with an additional page (clinic letter))
+  //   // mock appended letter
+
+  //   // expect(
+  //   //   applicationContext.getDocumentGenerators().addressLabelCoverSheet,
+  //   // ).toHaveBeenCalledTimes(1);
+
+  //   //   const pdfBlob =
+  //   //     applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+  //   //       .calls[2][0].document;
+  //   //   const pdf = await PDFDocument.load(pdfBlob);
+
+  //   //   expect(pdf.getPages().length).toBe(2);
+  // });
+
+  // C. Confirm the 3rd lambda call if there are multiple pages
+
+  it('should save the final pdf copy of notices, standing pretrial and the address page to S3', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue({
@@ -264,12 +350,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
             serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
           },
         ],
-        privatePractitioners: [
-          {
-            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-            representing: [MOCK_CASE.petitioners[0].contactId],
-          },
-        ],
       });
 
     await generateNoticesForCaseTrialSessionCalendarInteractor(
@@ -277,19 +357,17 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
 
-    // mock/create a notice (with an additional page (clinic letter))
-    // mock appended letter
+    const noticeDocumentWithClinicLetterLength =
+      noticeDocumentWithClinicLetter.length;
 
-    // expect(
-    //   applicationContext.getDocumentGenerators().addressLabelCoverSheet,
-    // ).toHaveBeenCalledTimes(1);
+    console.log('page length ***', noticeDocumentWithClinicLetterLength);
 
-    //   const pdfBlob =
-    //     applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-    //       .calls[2][0].document;
-    //   const pdf = await PDFDocument.load(pdfBlob);
+    const pdfBlob =
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[2][0].document;
+    const pdf = await PDFDocument.load(pdfBlob);
 
-    //   expect(pdf.getPages().length).toBe(2);
+    expect(pdf.getPages().length).toBe(4);
   });
 
   // it('should append the clinic letter for pro se petitioners', async () => {
