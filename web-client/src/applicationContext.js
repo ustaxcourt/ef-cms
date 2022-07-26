@@ -66,6 +66,7 @@ import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialS
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
+import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/proxies/documents/addDraftStampOrderDocketEntryProxy';
 import { addPaperFilingInteractor } from '../../shared/src/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '../../shared/src/proxies/addPetitionerToCaseProxy';
 import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
@@ -152,7 +153,7 @@ import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useC
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
-import { generateStampedDocumentInteractor } from '../../shared/src/business/useCases/generateStampedDocumentInteractor';
+import { generateStampedCoversheetInteractor } from '../../shared/src/proxies/documents/generateStampedCoversheetProxy';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
@@ -345,6 +346,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  addDraftStampOrderDocketEntryInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,
   appendAmendedPetitionFormInteractor,
@@ -400,7 +402,7 @@ const allUseCases = {
   generatePrintableFilingReceiptInteractor,
   generatePrintablePendingReportInteractor,
   generateSignedDocumentInteractor,
-  generateStampedDocumentInteractor,
+  generateStampedCoversheetInteractor,
   generateTrialCalendarPdfInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,

@@ -64,11 +64,16 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
   const showEditButtonForRole = isInternalUser;
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
+  const isDraftStampOrder =
+    formattedDocumentToDisplay.eventCode === 'O' &&
+    formattedDocumentToDisplay.stampData?.disposition;
+
   const showEditButtonSigned =
     showEditButtonForRole &&
     documentIsSigned &&
     !isNotice &&
-    !isStipulatedDecision;
+    !isStipulatedDecision &&
+    !isDraftStampOrder;
 
   const showAddDocketEntryButtonForDocument =
     documentIsSigned ||
@@ -99,6 +104,7 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
     showEditButtonSigned,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
-      showRemoveSignatureButtonForDocument,
+      showRemoveSignatureButtonForDocument &&
+      !isDraftStampOrder,
   };
 };
