@@ -19,7 +19,6 @@ export const completeMotionStampingAction = async ({
   const { docketNumber } = get(state.caseDetail);
   const stampFormData = get(state.form);
 
-  let docketEntryId;
   let newDocketEntryId;
 
   const { nameForSigning, nameForSigningLine2 } = get(state.pdfForSigning);
@@ -55,7 +54,7 @@ export const completeMotionStampingAction = async ({
   const redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
 
   return {
-    docketEntryId,
+    docketEntryId: newDocketEntryId,
     docketNumber,
     redirectUrl,
     tab: 'docketRecord',
