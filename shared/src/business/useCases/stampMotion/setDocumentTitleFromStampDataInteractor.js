@@ -56,7 +56,7 @@ exports.setDocumentTitleFromStampDataInteractor = ({ stampMotionForm }) => {
 
   if (customText) {
     formattedDraftDocumentTitle = formattedDraftDocumentTitle.concat(
-      ` ${customText}`,
+      ` - ${customText}`,
     );
   }
 
