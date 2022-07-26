@@ -13,11 +13,18 @@ const { post } = require('../requests');
  */
 exports.addDraftStampOrderDocketEntryInteractor = (
   applicationContext,
-  { docketNumber, originalDocketEntryId, signedDocketEntryId, stampData },
+  {
+    docketNumber,
+    formattedDraftDocumentTitle,
+    originalDocketEntryId,
+    signedDocketEntryId,
+    stampData,
+  },
 ) => {
   return post({
     applicationContext,
     body: {
+      formattedDraftDocumentTitle,
       signedDocketEntryId,
       stampData,
     },

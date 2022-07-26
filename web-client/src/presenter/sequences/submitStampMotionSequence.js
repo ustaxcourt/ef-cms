@@ -3,6 +3,7 @@ import { clearFormAction } from '../actions/clearFormAction';
 import { completeMotionStampingAction } from '../actions/completeMotionStampingAction';
 import { followRedirectAction } from '../actions/followRedirectAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
+import { getDraftDocumentTitleFromStampDataAction } from '../actions/StampMotion/getDraftDocumentTitleFromStampDataAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
@@ -33,6 +34,7 @@ export const submitStampMotionSequence = showProgressSequenceDecorator([
       clearAlertsAction,
       setSaveAlertsForNavigationAction,
       setSuccessfulStampFromDocumentTitleAction,
+      getDraftDocumentTitleFromStampDataAction,
       completeMotionStampingAction,
       setDefaultDraftDocumentIdAction,
       setRedirectUrlAction,
