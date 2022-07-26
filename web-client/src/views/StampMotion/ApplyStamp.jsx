@@ -20,6 +20,7 @@ export const ApplyStamp = connect(
     clearOptionalFieldsStampFormSequence:
       sequences.clearOptionalFieldsStampFormSequence,
     form: state.form,
+    navigateBackSequence: sequences.navigateBackSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
@@ -37,6 +38,7 @@ export const ApplyStamp = connect(
     form,
     JURISDICTIONAL_OPTIONS,
     MOTION_DISPOSITIONS,
+    navigateBackSequence,
     pdfForSigning,
     pdfObj,
     setPDFStampDataSequence,
@@ -108,10 +110,10 @@ export const ApplyStamp = connect(
                 <Button
                   link
                   className="margin-bottom-3"
-                  href="/trial-sessions"
                   icon={['fa', 'arrow-alt-circle-left']}
+                  onClick={() => navigateBackSequence()}
                 >
-                  Back to Document View
+                  Back
                 </Button>
               </div>
 
