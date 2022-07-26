@@ -36,7 +36,7 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
             if (doc.entityName.S === 'CaseMessageMapping') {
               id += '|mapping';
             }
-            if (doc.entityName.S === 'WorkItemMapping') {
+            if (doc.entityName.S === 'CaseWorkItemMapping') {
               id += '|mapping';
             }
 
