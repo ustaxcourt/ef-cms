@@ -39,7 +39,6 @@ export const ApplyStamp = connect(
     MOTION_DISPOSITIONS,
     pdfForSigning,
     pdfObj,
-    pdfSignerHelper,
     setPDFStampDataSequence,
     STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
     submitStampMotionSequence,
@@ -47,8 +46,6 @@ export const ApplyStamp = connect(
     validateStampSequence,
     validationErrors,
   }) {
-    const yLimitToPreventServedStampOverlay = 705;
-
     const canvasRef = useRef(null);
     const signatureRef = useRef(null);
 
@@ -75,93 +72,15 @@ export const ApplyStamp = connect(
         });
     };
 
-    const moveSig = (sig, x, y) => {
-      sig.style.top = y + 'px';
-      sig.style.left = x + 'px';
-    };
-
-    const clear = () => {
-      setPDFStampDataSequence({
-        isPdfAlreadyStamped: false,
-        stampApplied: false,
-        stampData: null,
-      });
-      const sigEl = signatureRef.current;
-
-      sigEl.style.top = null;
-      sigEl.style.left = null;
-    };
-
-    const restart = () => {
-      clear();
-      start();
-    };
-
-    const stopCanvasEvents = (canvasEl, sigEl, x, y, scale = 1) => {
-      setPDFStampDataSequence({
-        stampApplied: true,
-        stampData: { scale, x, y },
-      });
-
-      canvasEl.onmousemove = null;
-      canvasEl.onmousedown = null;
-      sigEl.onmousemove = null;
-      sigEl.onmousedown = null;
-    };
-
     const start = () => {
       const sigEl = signatureRef.current;
-      const canvasEl = canvasRef.current;
-      let x;
-      let y;
 
       setPDFStampDataSequence({
-        stampApplied: false,
-        stampData: null,
+        stampApplied: true,
       });
 
-      canvasEl.onmousemove = e => {
-        const { pageX, pageY } = e;
-        const canvasBounds = canvasEl.getBoundingClientRect();
-        const sigBox = sigEl.getBoundingClientRect();
-
-        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
-        const scrollYOffset = window.scrollY;
-
-        x = pageX - canvasBounds.x;
-        y = pageY - canvasBounds.y - scrollYOffset;
-
-        const uiPosX = pageX - sigParentBounds.x;
-        const uiPosY = y + (canvasBounds.y - sigParentBounds.y) - sigBox.height;
-
-        if (uiPosY < yLimitToPreventServedStampOverlay) {
-          moveSig(sigEl, uiPosX, uiPosY);
-        }
-      };
-
-      canvasEl.onmousedown = e => {
-        const { pageY } = e;
-        const canvasBounds = canvasEl.getBoundingClientRect();
-        const scrollYOffset = window.scrollY;
-        const sigParentBounds = sigEl.parentElement.getBoundingClientRect();
-        const sigBoxHeight = sigEl.getBoundingClientRect().height;
-        const uiPosY =
-          pageY -
-          canvasBounds.y -
-          scrollYOffset +
-          (canvasBounds.y - sigParentBounds.y) -
-          sigBoxHeight;
-
-        if (uiPosY < yLimitToPreventServedStampOverlay) {
-          stopCanvasEvents(canvasEl, sigEl, x, y - sigBoxHeight);
-        }
-      };
-
-      // sometimes the cursor falls on top of the signature
-      // and catches these events
-
-      sigEl.onmousemove = canvasEl.onmousemove;
-      sigEl.onmousedown = canvasEl.onmousedown;
+      sigEl.style.top = '500px';
+      sigEl.style.left = '148px';
     };
 
     let hasStarted = false;
@@ -494,17 +413,6 @@ export const ApplyStamp = connect(
                       </label>
                     </div>
                   </FormGroup>
-                  <Button
-                    link
-                    className="margin-left-205"
-                    id="clear-optional-fields"
-                    onClick={e => {
-                      e.preventDefault();
-                      clearOptionalFieldsStampFormSequence();
-                    }}
-                  >
-                    Clear Optional Fields
-                  </Button>
                   <hr className="narrow-hr" />
                   <FormGroup
                     className="stamp-form-group"
@@ -545,34 +453,35 @@ export const ApplyStamp = connect(
                       </span>
                     </div>
                   </FormGroup>
+                  <Button
+                    link
+                    className="margin-left-205"
+                    id="clear-optional-fields"
+                    onClick={e => {
+                      e.preventDefault();
+                      clearOptionalFieldsStampFormSequence();
+                    }}
+                  >
+                    Clear Optional Fields
+                  </Button>
                 </div>
               </div>
             </div>
             <div className="grid-col-7">
               <div className="margin-bottom-1 display-flex flex-justify-end">
-                <>
-                  <Button link icon="trash" onClick={() => restart()}>
-                    Remove Stamp
-                  </Button>
-
-                  <Button
-                    className="margin-right-0"
-                    disabled={!applyStampFormHelper.canSaveStampOrder}
-                    id="save-signature-button"
-                    onClick={() => submitStampMotionSequence()}
-                  >
-                    Save Stamp Order
-                  </Button>
-                </>
+                <Button
+                  className="margin-right-0"
+                  disabled={!applyStampFormHelper.canSaveStampOrder}
+                  id="save-signature-button"
+                  onClick={() => submitStampMotionSequence()}
+                >
+                  Save Stamp Order
+                </Button>
               </div>
               <div className="grid-row">
                 <div className="grid-col-12">
                   <div className="sign-pdf-interface">
-                    <span
-                      className={`${pdfSignerHelper.cursorClass} ${pdfSignerHelper.hideClass}`}
-                      id="stamp"
-                      ref={signatureRef}
-                    >
+                    <span id="stamp" ref={signatureRef}>
                       <span className="text-normal" id="stamp-text">
                         It is ORDERED as follows:
                         <br />
@@ -623,9 +532,6 @@ export const ApplyStamp = connect(
                       id="sign-pdf-canvas"
                       ref={canvasRef}
                     ></canvas>
-                    <span id="signature-warning">
-                      You cannot apply a stamp here.
-                    </span>
                   </div>
                 </div>
               </div>
