@@ -106,16 +106,13 @@ export const ApplyStamp = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
-              <div className="grid-row grid-gap">
-                <Button
-                  link
-                  className="margin-bottom-3"
-                  icon={['fa', 'arrow-alt-circle-left']}
-                  onClick={() => navigateBackSequence()}
-                >
-                  Back
-                </Button>
-              </div>
+              <Button
+                link
+                icon={['fa', 'arrow-alt-circle-left']}
+                onClick={() => navigateBackSequence()}
+              >
+                Back
+              </Button>
 
               <div className="border border-base-lighter">
                 <div className="grid-header grid-row padding-left-205">
