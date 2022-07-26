@@ -9,7 +9,7 @@ exports.getDocumentQCInboxForSection = async ({
     has_parent: {
       inner_hits: {
         _source: {
-          includes: ['leadDocketNmber'],
+          includes: ['leadDocketNmber', 'docketNumber'],
         },
         name: 'case-mappings',
       },
@@ -70,7 +70,7 @@ exports.getDocumentQCInboxForSection = async ({
     searchParameters: query,
   });
 
-  console.log('########Section Inbox##########', results); // case_relations undefined
+  // console.log('########Section Inbox##########', results); // case_relations undefined
 
   return results;
 };
