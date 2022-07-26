@@ -1,4 +1,7 @@
 const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
   applicationContext,
   testPdfDoc,
 } = require('../../test/createTestApplicationContext');
@@ -23,11 +26,25 @@ const { PDFDocument } = require('pdf-lib');
 jest.mock('../../utilities/shouldAppendClinicLetter');
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
-  let docketNumber, trialSession, interactorParamObject;
+  let docketNumber,
+    trialSession,
+    interactorParamObject,
+    mockCase,
+    servedParties;
+
   const clinicLetterKey = 'I am a key';
+
+  // const noticeDocketEntryEntity = {
+  //   docketEntryId: 'noticeDocketEntryId',
+  // };
+
+  // const standingPretrialDocketEntryEntity = {
+  //   docketEntryId: 'standingPretrialDocketEntryId',
+  // };
 
   beforeAll(() => {
     docketNumber = '101-20';
+    // aggregatePartiesForService.mockResolvedValue([]);
     const pdfDocumentLoadMock = async () => await PDFDocument.load(testPdfDoc);
     shouldAppendClinicLetter.mockResolvedValue({
       appendClinicLetter: true,
@@ -65,6 +82,8 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getJobStatus.mockResolvedValue({});
+
+    mockCase = MOCK_CASE;
   });
 
   it('should return and do nothing if the job is already processing', async () => {
@@ -188,76 +207,90 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  // it('should send out notifications emails for the notice docket entry and standing pretrial notice', async () => {
-  //   applicationContext
-  //     .getPersistenceGateway()
-  //     .getCaseByDocketNumber.mockReturnValue({
-  //       ...MOCK_CASE,
-  //       procedureType: 'Small',
-  //     });
+  // POSSIBLE TEST AREAS
+  // A. confirmation of sending of emails for standing pretrial and notice of trial to electronic users
 
-  //   applicationContext
-  //     .getUseCases()
-  //     .generateStandingPretrialOrderForSmallCaseInteractor.mockResolvedValue(
-  //       testPdfDoc,
-  //     );
+  // B. for parties with paper services,
+  //  1. if you're a practitioner, remove the appended clinic letter that was generated
+  // implementation: check for the number of pdfs
+  //  2. confirm the "package" of combined pdfs === addressPdfPage + noticeDocumentPdfCopy + standingPretrialPdf
+  //     // check for the length of the combined pdfs (3)??
 
-  //   await generateNoticesForCaseTrialSessionCalendarInteractor(
-  //     applicationContext,
-  //     {
-  //       docketNumber,
-  //       jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  //       trialSession,
-  //       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  //     },
-  //   );
+  // C. Confirm the 3rd lambda call if there are multiple pages
 
-  //   expect(
-  //     applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-  //   ).toHaveBeenCalledTimes(2);
-  // });
+  it('should send out notifications emails for the notice docket entry AND standing pretrial notice', async () => {
+    //
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalledTimes(2);
 
-  // it('should not append clinic letter when creating notices for a case with a represented petitioner', async () => {
-  //   applicationContext
-  //     .getPersistenceGateway()
-  //     .getCaseByDocketNumber.mockReturnValue({
-  //       ...MOCK_CASE,
-  //       petitioners: [
-  //         {
-  //           ...MOCK_CASE.petitioners[0],
-  //           serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
-  //         },
-  //       ],
-  //       privatePractitioners: [
-  //         {
-  //           ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
-  //           representing: [MOCK_CASE.petitioners[0].contactId],
-  //         },
-  //       ],
-  //       procedureType: 'Small',
-  //     });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenNthCalledWith(
+      1,
+      expect.objectContaining({
+        docketEntryId: expect.anything(),
+      }),
+    );
 
-  //   await generateNoticesForCaseTrialSessionCalendarInteractor(
-  //     applicationContext,
-  //     {
-  //       docketNumber,
-  //       jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  //       trialSession,
-  //       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-  //     },
-  //   );
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenNthCalledWith(
+      2,
+      expect.objectContaining({
+        docketEntryId: expect.anything(),
+      }),
+    );
+  });
 
-  //   expect(
-  //     applicationContext.getDocumentGenerators().addressLabelCoverSheet,
-  //   ).toHaveBeenCalledTimes(1);
+  // B. for parties with paper services,
+  //  1. if you're a practitioner, remove the appended clinic letter that was generated
+  // implementation: check for the number of pdfs
+  //  2. confirm the "package" of combined pdfs === addressPdfPage + noticeDocumentPdfCopy + standingPretrialPdf
+  //     // check for the length of the combined pdfs (3)??
 
-  //   const pdfBlob =
-  //     applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
-  //       .calls[2][0].document;
-  //   const pdf = await PDFDocument.load(pdfBlob);
+  it('should not append clinic letter when creating notices for a case with practitioners', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValue({
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...MOCK_CASE.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+        privatePractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+            representing: [MOCK_CASE.petitioners[0].contactId],
+          },
+        ],
+      });
 
-  //   expect(pdf.getPages().length).toBe(2);
-  // });
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    // mock/create a notice (with an additional page (clinic letter))
+    // mock appended letter
+
+    // expect(
+    //   applicationContext.getDocumentGenerators().addressLabelCoverSheet,
+    // ).toHaveBeenCalledTimes(1);
+
+    //   const pdfBlob =
+    //     applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+    //       .calls[2][0].document;
+    //   const pdf = await PDFDocument.load(pdfBlob);
+
+    //   expect(pdf.getPages().length).toBe(2);
+  });
 
   // it('should append the clinic letter for pro se petitioners', async () => {
   //   applicationContext
