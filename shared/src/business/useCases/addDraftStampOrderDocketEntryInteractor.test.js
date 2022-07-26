@@ -24,7 +24,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
         'some title with disposition and custom text',
       originalDocketEntryId: mockOriginalDocketEntryId,
       signedDocketEntryId: mockSignedDocketEntryId,
-      stampData: {},
+      stampData: { nameForSigning: mockSigningName },
     });
 
     const { caseToUpdate } =
@@ -49,9 +49,11 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       mockSignedDocketEntryId,
     );
     expect(draftDocketEntryEntity.isDraft).toEqual(true);
-    // prepend the documentType
+    const motionDocumentType = MOCK_CASE.docketEntries.find(
+      e => e.docketEntryId === mockOriginalDocketEntryId,
+    ).documentType;
     expect(draftDocketEntryEntity.freeText).toEqual(
-      'some title with disposition and custom text',
+      `${motionDocumentType} some title with disposition and custom text`,
     );
     expect(draftDocketEntryEntity.signedJudgeName).toEqual(mockSigningName);
     expect(draftDocketEntryEntity.documentType).toEqual(
