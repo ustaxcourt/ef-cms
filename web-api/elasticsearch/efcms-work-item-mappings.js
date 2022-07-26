@@ -8,7 +8,7 @@ module.exports = {
     },
     case_relations: {
       relations: {
-        case: 'work-item',
+        case: 'workItem',
       },
       type: 'join',
     },
