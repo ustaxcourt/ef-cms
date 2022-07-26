@@ -151,7 +151,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 #### Caveats
 
-Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
+Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 - `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
   - `@fortawesome/free-solid-svg-icons`
@@ -162,4 +162,4 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 -`puppeteer` and `puppeteer-core`: temporarily locked to 14.1.x and its respective patches. The major update to 15.3.1 causes jest timeout issues as well as issues with prototype property using Chromium. Causes Cypress test failures as well. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/36266/workflows/bdd41d67-c752-40fd-b9ec-4ed36ae72853).
 
-- `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. ajv is a tranisitive dependeny of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/7286153454?check_suite_focus=true) to failing test on 07/04 dependency updates.
+- `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. ajv is a transitive dependency of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/7286153454?check_suite_focus=true) to failing test on 07/04 dependency updates.
