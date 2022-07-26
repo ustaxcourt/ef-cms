@@ -173,7 +173,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .putWorkItemInOutbox.mockImplementation(() => {});
+      .putWorkItemInUsersOutbox.mockImplementation(() => {});
+
+    applicationContext
+      .getPersistenceGateway()
+      .saveWorkItem.mockImplementation(() => {});
 
     applicationContext
       .getUseCaseHelpers()
@@ -305,7 +309,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().putWorkItemInOutbox,
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
     ).toHaveBeenCalled();
   });
 
@@ -352,7 +356,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
     expect(
-      applicationContext.getPersistenceGateway().putWorkItemInOutbox,
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
     ).toHaveBeenCalled();
   });
 

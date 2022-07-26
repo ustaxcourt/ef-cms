@@ -20,7 +20,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
 
   const modalName = get(state.modal.showModal);
-  const shouldBeConsolidatible = [
+  const showConsolidatedOptions = [
     'ConfirmInitiateServiceModal',
     'ConfirmInitiateCourtIssuedDocumentServiceModal',
   ].includes(modalName);
@@ -44,7 +44,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
 
   const showConsolidatedCasesFlag =
     formattedCaseDetail.isLeadCase &&
-    shouldBeConsolidatible &&
+    showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&
     !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
     hasConsolidatedCases;
