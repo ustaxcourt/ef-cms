@@ -248,7 +248,6 @@
     "@vendia/serverless-express": "^4.10.0",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "adm-zip": "^0.5.9",
-    "ajv": "^8.11.0",
     "artillery": "^2.0.0-22",
     "artillery-plugin-metrics-by-endpoint": "^1.0.2",
     "autoprefixer": "^10.4.7",
