@@ -5,6 +5,18 @@ exports.getDocumentQCInboxForSection = async ({
   judgeUserName,
   section,
 }) => {
+  const hasParentParam = {
+    has_parent: {
+      inner_hits: {
+        _source: {
+          includes: ['leadDocketNmber'],
+        },
+        name: 'case-mappings',
+      },
+      parent_type: 'case',
+      query: { match_all: {} },
+    },
+  };
   const query = {
     body: {
       query: {
@@ -36,6 +48,7 @@ exports.getDocumentQCInboxForSection = async ({
                 },
               },
             },
+            hasParentParam,
           ],
         },
       },
@@ -56,6 +69,8 @@ exports.getDocumentQCInboxForSection = async ({
     applicationContext,
     searchParameters: query,
   });
+
+  console.log('########Section Inbox##########', results); // case_relations undefined
 
   return results;
 };
