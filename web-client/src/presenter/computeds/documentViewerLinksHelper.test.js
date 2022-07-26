@@ -41,6 +41,24 @@ describe('documentViewerLinksHelper', () => {
     );
   });
 
+  it('should return redirectUrl with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
+    const result = runCompute(documentViewerLinksHelper, {
+      state: {
+        caseDetail: {
+          docketEntries: [{ docketEntryId: mockDocketEntryId }],
+          docketNumber: mockDocketNumber,
+        },
+        viewerDocumentToDisplay: {
+          docketEntryId: mockDocketEntryId,
+        },
+      },
+    });
+
+    expect(result.redirectUrl).toEqual(
+      `/case-detail/${mockDocketNumber}/document-view?docketEntryId=${mockDocketEntryId}`,
+    );
+  });
+
   it('should return documentViewerLink with docketNumber and viewerDocumentToDisplay.docketEntryId', () => {
     const result = runCompute(documentViewerLinksHelper, {
       state: {
