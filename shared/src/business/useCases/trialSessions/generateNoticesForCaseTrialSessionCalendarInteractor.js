@@ -13,7 +13,9 @@ const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
-const removeLastPage = pdfDocumentData => {
+const removeAppendedClinicLetter = pdfDocumentData => {
+  // TODO: CONFIRM THE ACTUAL NUMBER OF PAGES FOR THE CLINIC LETTER
+  // TO MAKE SURE WE ARE REMOVING THE CORRECT NUMBER OF PAGES
   const totalPages = pdfDocumentData.getPageCount();
   const lastPageIndex = totalPages - 1;
   pdfDocumentData.removePage(lastPageIndex);
@@ -77,7 +79,7 @@ const serveNoticesForCase = async ({
           )) &&
         appendClinicLetter
       ) {
-        removeLastPage(noticeDocumentPdfCopy);
+        removeAppendedClinicLetter(noticeDocumentPdfCopy);
       }
 
       const addressPage = await applicationContext
@@ -115,6 +117,7 @@ const serveNoticesForCase = async ({
 };
 
 /**
+ * TODO: ADD MORE ARGS MAPPINGS FOR setNoticeForCase
  * generates a notice of trial session and adds to the case
  *
  * @param {object} caseRecord the case data
