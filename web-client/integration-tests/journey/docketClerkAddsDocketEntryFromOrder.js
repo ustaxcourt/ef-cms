@@ -239,5 +239,7 @@ export const docketClerkAddsDocketEntryFromOrder = (
 
     expect(newDocketEntry).toBeTruthy();
     expect(newDocketEntry.index).toBeFalsy();
+
+    cerebralTest.draftOrders.shift();
   });
 };

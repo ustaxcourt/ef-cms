@@ -2,7 +2,7 @@ import { waitForLoadingComponentToHide } from '../helpers';
 
 export const docketClerkServesDocumentFromCaseDetailDocumentView =
   cerebralTest => {
-    return it('Docketclerk serves document from case detail document view', async () => {
+    return it('Docket clerk serves document from case detail document view', async () => {
       await cerebralTest.runSequence(
         'openConfirmServeCourtIssuedDocumentSequence',
         {
