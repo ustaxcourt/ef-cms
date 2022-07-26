@@ -41,7 +41,7 @@ describe('setDocumentTitleFromStampDataInteractor', () => {
         customText: 'amazing custom text',
         disposition: MOTION_DISPOSITIONS.GRANTED,
       },
-      'GRANTED amazing custom text',
+      'GRANTED - amazing custom text',
     ],
     [
       {
@@ -53,12 +53,12 @@ describe('setDocumentTitleFromStampDataInteractor', () => {
       `GRANTED - the parties shall file a status report by ${formatDateString(
         getDateISO(),
         FORMATS.MMDDYYYY,
-      )} amazing custom text`,
+      )} - amazing custom text`,
     ],
   ];
 
   testCases.forEach(([input, output]) => {
-    it('should return ${output} as formattedDraftDocumentTitle', () => {
+    it(`should return ${output} as formattedDraftDocumentTitle`, () => {
       const formattedDraftDocumentTitle =
         setDocumentTitleFromStampDataInteractor({
           stampMotionForm: input,
