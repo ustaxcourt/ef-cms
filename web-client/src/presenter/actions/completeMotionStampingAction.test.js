@@ -98,4 +98,15 @@ describe('completeMotionStampingAction', () => {
       redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockStampedDocketEntryId}`,
     });
   });
+
+  it('should return the stamped document docket entry id as props', async () => {
+    const result = await runAction(completeMotionStampingAction, {
+      modules: {
+        presenter,
+      },
+      state: mockState,
+    });
+
+    expect(result.output.docketEntryId).toEqual(mockStampedDocketEntryId);
+  });
 });
