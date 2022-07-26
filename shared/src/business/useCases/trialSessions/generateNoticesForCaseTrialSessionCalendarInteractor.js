@@ -79,6 +79,7 @@ const serveNoticesForCase = async ({
           )) &&
         appendClinicLetter
       ) {
+        console.log('I AM IN HERE***');
         removeAppendedClinicLetter(noticeDocumentPdfCopy);
       }
 
@@ -158,6 +159,7 @@ const setNoticeForCase = async ({
     });
 
   if (appendClinicLetter) {
+    console.log('I AM IN HERE LETTER***');
     const clinicLetter = await applicationContext
       .getPersistenceGateway()
       .getDocument({
