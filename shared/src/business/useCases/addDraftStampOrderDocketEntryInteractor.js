@@ -17,7 +17,13 @@ const { DocketEntry } = require('../entities/DocketEntry');
  */
 exports.addDraftStampOrderDocketEntryInteractor = async (
   applicationContext,
-  { docketNumber, originalDocketEntryId, signedDocketEntryId, stampData },
+  {
+    docketNumber,
+    formattedDraftDocumentTitle,
+    originalDocketEntryId,
+    signedDocketEntryId,
+    stampData,
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
   const caseRecord = await applicationContext
@@ -41,11 +47,11 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: signedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
-      documentTitle: 'Order',
+      documentTitle: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       documentType: orderDocumentInfo.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
-        documentTitle: 'Order',
+        documentTitle: formattedDraftDocumentTitle,
         documentType: orderDocumentInfo.documentType,
         eventCode: orderDocumentInfo.eventCode,
       },
