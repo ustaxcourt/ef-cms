@@ -61,36 +61,6 @@ describe('applyStampFormHelper', () => {
     });
   });
 
-  describe('cursorClass', () => {
-    it('should be "cursor-grabbing" when the stamp has been applied and there is no stamp data', () => {
-      const { cursorClass } = runCompute(applyStampFormHelper, {
-        state: {
-          ...baseState,
-          pdfForSigning: {
-            stampApplied: true,
-            stampData: undefined,
-          },
-        },
-      });
-
-      expect(cursorClass).toEqual('cursor-grabbing');
-    });
-
-    it('should be "cursor-grab" when the stamp has NOT been applied and there is stamp data', () => {
-      const { cursorClass } = runCompute(applyStampFormHelper, {
-        state: {
-          ...baseState,
-          pdfForSigning: {
-            stampApplied: false,
-            stampData: {},
-          },
-        },
-      });
-
-      expect(cursorClass).toEqual('cursor-grab');
-    });
-  });
-
   describe('customOrderTextCharacterCount', () => {
     it('should return CUSTOM_ORDER_MAX_LENGTH if customText is not set', () => {
       const { customOrderTextCharacterCount } = runCompute(
