@@ -14,8 +14,6 @@ const { DocketEntry } = require('../../entities/DocketEntry');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
 const removeAppendedClinicLetter = pdfDocumentData => {
-  // TODO: CONFIRM THE ACTUAL NUMBER OF PAGES FOR THE CLINIC LETTER
-  // TO MAKE SURE WE ARE REMOVING THE CORRECT NUMBER OF PAGES
   const totalPages = pdfDocumentData.getPageCount();
   const lastPageIndex = totalPages - 1;
   pdfDocumentData.removePage(lastPageIndex);
@@ -66,11 +64,7 @@ const serveNoticesForCase = async ({
   const standingPretrialPdf = await PDFDocument.load(standingPretrialPdfData);
   const combinedDocumentsPdf = await PDFDocument.create();
 
-  console.log('caseEntity petitioners', caseEntity.petitioners);
-  console.log('caseEntity Practitioners', caseEntity.privatePractitioners);
-
   if (servedParties.paper.length > 0) {
-    console.log('SERVED PARTIES');
     for (let party of servedParties.paper) {
       let noticeDocumentPdfCopy = await noticeDocumentPdf.copy();
 
@@ -83,8 +77,11 @@ const serveNoticesForCase = async ({
           )) &&
         appendClinicLetter
       ) {
-        console.log('WE ARE A PRACTITIONER');
+        console.log('GOING TO REMOVE CLINIC LETTER');
         removeAppendedClinicLetter(noticeDocumentPdfCopy);
+      } else {
+        console.log('IN THE ELSE');
+        // CANT BE A PRACTITIONER AND NOT REPRESENTED, pro se practitioner
       }
 
       const addressPage = await applicationContext
@@ -99,30 +96,10 @@ const serveNoticesForCase = async ({
 
       const addressPageDoc = await PDFDocument.load(addressPage);
 
-      const pdf = await PDFDocument.load(noticeDocumentPdfCopy);
-
-      console.log('noticeDocumentPdfCopy LENGTH', pdf.getPages().length);
-
       await copyPagesFromPdf({
         copyFrom: addressPageDoc,
         copyInto: combinedDocumentsPdf,
       });
-
-      const addressPageDocMock = await PDFDocument.load(addressPageDoc);
-
-      console.log(
-        'addressPageDocMock LENGTH',
-        addressPageDocMock.getPages().length,
-      );
-
-      const combinedDocumentsPdfMock = await PDFDocument.load(
-        combinedDocumentsPdf,
-      );
-
-      console.log(
-        'combinedDocumentsPdfMock LENGTH',
-        combinedDocumentsPdfMock.getPages().length,
-      );
 
       await copyPagesFromPdf({
         copyFrom: noticeDocumentPdfCopy,
@@ -133,16 +110,8 @@ const serveNoticesForCase = async ({
         copyFrom: standingPretrialPdf,
         copyInto: combinedDocumentsPdf,
       });
-
-      // const combinedDocumentsPdfMock = await PDFDocument.load(
-      //   combinedDocumentsPdf,
-      // );
-
-      // console.log(
-      //   'combinedDocumentsPdfMock LENGTH',
-      //   combinedDocumentsPdfMock.getPages().length,
-      // );
     }
+
     await copyPagesFromPdf({
       copyFrom: combinedDocumentsPdf,
       copyInto: newPdfDoc,
@@ -192,7 +161,6 @@ const setNoticeForCase = async ({
     });
 
   if (appendClinicLetter) {
-    console.log('I AM IN HERE LETTER***');
     const clinicLetter = await applicationContext
       .getPersistenceGateway()
       .getDocument({

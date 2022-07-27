@@ -7,8 +7,6 @@ const copyPagesFromPdf = async ({ copyFrom, copyInto }) => {
   pagesToCopy.forEach(page => {
     copyInto.addPage(page);
   });
-
-  console.log('pagesToCopy', pagesToCopy);
 };
 
 module.exports = { copyPagesFromPdf };
