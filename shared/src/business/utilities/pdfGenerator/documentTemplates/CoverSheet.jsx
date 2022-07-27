@@ -1,3 +1,5 @@
+import { STRICKEN_FROM_TRIAL_SESSION_MESSAGE } from '../../../entities/EntityConstants';
+
 const classNames = require('classnames');
 const React = require('react');
 
@@ -14,6 +16,7 @@ export const CoverSheet = ({
   electronicallyFiled,
   index,
   mailingDate,
+  stamp,
 }) => {
   const reduceMarginTopOnTitle =
     consolidatedCases && consolidatedCases.length > 10;
@@ -91,6 +94,54 @@ export const CoverSheet = ({
       >
         {documentTitle}
       </h2>
+
+      {stamp && (
+        <div className="stamp-box margin-top-140 font-sans-xs">
+          <span className="text-normal text-center" id="stamp-text">
+            It is ORDERED as follows:
+            <br />
+            <span>
+              This motion is{' '}
+              <span className="text-ls-1 text-bold font-sans-lg">
+                {stamp.disposition?.toUpperCase()}
+              </span>{' '}
+              {stamp.deniedAsMoot && 'as moot '}
+              {stamp.deniedWithoutPrejudice && 'without prejudice'}
+              <br />
+            </span>
+            {(stamp.strickenFromTrialSession ||
+              stamp.jurisdictionalOption ||
+              (stamp.dueDateMessage && stamp.date) ||
+              stamp.customText) && <hr className="narrow-hr" />}
+            {stamp.strickenFromTrialSession && (
+              <>
+                - {STRICKEN_FROM_TRIAL_SESSION_MESSAGE} -
+                <br />
+              </>
+            )}
+            {stamp.jurisdictionalOption && (
+              <>
+                - {stamp.jurisdictionalOption} -<br />
+              </>
+            )}
+            <span className="text-bold">
+              {stamp.dueDateMessage && (
+                <>
+                  {stamp.dueDateMessage} {stamp.date}
+                  <br />
+                </>
+              )}
+              {stamp.customText}
+            </span>
+            <hr className="narrow-hr" />
+            <span className="text-bold" id="stamp-signature">
+              (Signed) {stamp.nameForSigning}
+              <br />
+              {stamp.nameForSigningLine2}
+            </span>
+          </span>
+        </div>
+      )}
 
       {certificateOfService && (
         <div id="certificate-of-service">Certificate of Service</div>

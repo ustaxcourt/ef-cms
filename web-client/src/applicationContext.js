@@ -66,6 +66,7 @@ import { addCaseToTrialSessionInteractor } from '../../shared/src/proxies/trialS
 import { addConsolidatedCaseInteractor } from '../../shared/src/proxies/addConsolidatedCaseProxy';
 import { addCoversheetInteractor } from '../../shared/src/proxies/documents/addCoversheetProxy';
 import { addDeficiencyStatisticInteractor } from '../../shared/src/proxies/caseStatistics/addDeficiencyStatisticProxy';
+import { addDraftStampOrderDocketEntryInteractor } from '../../shared/src/proxies/documents/addDraftStampOrderDocketEntryProxy';
 import { addPaperFilingInteractor } from '../../shared/src/proxies/documents/addPaperFilingProxy';
 import { addPetitionerToCaseInteractor } from '../../shared/src/proxies/addPetitionerToCaseProxy';
 import { aggregatePartiesForService } from '../../shared/src/business/utilities/aggregatePartiesForService';
@@ -152,6 +153,7 @@ import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useC
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
+import { generateStampedCoversheetInteractor } from '../../shared/src/proxies/documents/generateStampedCoversheetProxy';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
 import { getCalendaredCasesForTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/getCalendaredCasesForTrialSessionProxy';
@@ -236,6 +238,7 @@ import { sealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEn
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
+import { setDocumentTitleFromStampDataInteractor } from '../../shared/src/business/useCases/stampMotion/setDocumentTitleFromStampDataInteractor';
 import { setForHearingInteractor } from '../../shared/src/proxies/trialSessions/setForHearingProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
 import { setItemInteractor } from '../../shared/src/business/useCases/setItemInteractor';
@@ -309,6 +312,7 @@ import { validatePetitionerInformationFormInteractor } from '../../shared/src/bu
 import { validatePetitionerInteractor } from '../../shared/src/business/useCases/validatePetitionerInteractor';
 import { validatePractitionerInteractor } from '../../shared/src/business/useCases/practitioners/validatePractitionerInteractor';
 import { validateSearchDeadlinesInteractor } from '../../shared/src/business/useCases/validateSearchDeadlinesInteractor';
+import { validateStampInteractor } from '../../shared/src/business/useCases/stampMotion/validateStampInteractor';
 import { validateStartCaseWizardInteractor } from '../../shared/src/business/useCases/startCase/validateStartCaseWizardInteractor';
 import { validateTrialSessionInteractor } from '../../shared/src/business/useCases/trialSessions/validateTrialSessionInteractor';
 import { validateUpdateUserEmailInteractor } from '../../shared/src/business/useCases/validateUpdateUserEmailInteractor';
@@ -343,6 +347,7 @@ const allUseCases = {
   addConsolidatedCaseInteractor,
   addCoversheetInteractor,
   addDeficiencyStatisticInteractor,
+  addDraftStampOrderDocketEntryInteractor,
   addPaperFilingInteractor,
   addPetitionerToCaseInteractor,
   appendAmendedPetitionFormInteractor,
@@ -398,6 +403,7 @@ const allUseCases = {
   generatePrintableFilingReceiptInteractor,
   generatePrintablePendingReportInteractor,
   generateSignedDocumentInteractor,
+  generateStampedCoversheetInteractor,
   generateTrialCalendarPdfInteractor,
   getBlockedCasesInteractor,
   getCalendaredCasesForTrialSessionInteractor,
@@ -477,6 +483,7 @@ const allUseCases = {
   serveCaseToIrsInteractor,
   serveCourtIssuedDocumentInteractor,
   serveExternallyFiledDocumentInteractor,
+  setDocumentTitleFromStampDataInteractor,
   setForHearingInteractor,
   setItemInteractor,
   setMessageAsReadInteractor,
@@ -545,6 +552,7 @@ const allUseCases = {
   validatePetitionerInteractor,
   validatePractitionerInteractor,
   validateSearchDeadlinesInteractor,
+  validateStampInteractor,
   validateStartCaseWizardInteractor,
   validateTrialSessionInteractor,
   validateUpdateUserEmailInteractor,

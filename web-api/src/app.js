@@ -69,6 +69,9 @@ const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
 const {
+  addDraftStampOrderDocketEntryLambda,
+} = require('./documents/addDraftStampOrderDocketEntryLambda');
+const {
   addPetitionerToCaseLambda,
 } = require('./cases/addPetitionerToCaseLambda');
 const {
@@ -179,6 +182,9 @@ const {
 const {
   generatePrintablePendingReportLambda,
 } = require('./pendingItems/generatePrintablePendingReportLambda');
+const {
+  generateStampedCoversheetLambda,
+} = require('./documents/generateStampedCoversheetLambda');
 const {
   generateTrialCalendarPdfLambda,
 } = require('./trialSessions/generateTrialCalendarPdfLambda');
@@ -578,6 +584,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(addCoversheetLambda),
   );
   app.post(
+    '/case-documents/:docketNumber/:docketEntryId/stamped-coversheet',
+    lambdaWrapper(generateStampedCoversheetLambda),
+  );
+  app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
     lambdaWrapper(removeSignatureFromDocumentLambda),
   );
@@ -588,6 +598,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/sign',
     lambdaWrapper(saveSignedDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:docketEntryId/stamp',
+    lambdaWrapper(addDraftStampOrderDocketEntryLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/serve',

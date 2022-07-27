@@ -17,6 +17,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -141,8 +142,14 @@ export const messageDocumentHelper = (get, applicationContext) => {
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
+  const showApplyStampButton =
+    permissions.STAMP_MOTION &&
+    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
+
   return {
     addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
+    applyStampLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/apply-stamp`,
     archived: documentIsArchived,
     editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,
@@ -152,6 +159,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
+    showApplyStampButton,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
       showEditButtonForRole &&
