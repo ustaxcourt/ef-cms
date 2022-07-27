@@ -18,15 +18,13 @@ describe('setPDFForStampAction', () => {
 
     applicationContext
       .getUseCases()
-      .loadPDFForSigningInteractor.mockImplementation(
-        (_applicationContext, { onlyCover }) => {
-          if (onlyCover === true) {
-            removeCoverMock();
-            getPagesMock();
-          }
-          return mockPDFObj;
-        },
-      );
+      .loadPDFForSigningInteractor.mockImplementation(({ onlyCover }) => {
+        if (onlyCover === true) {
+          removeCoverMock();
+          getPagesMock();
+        }
+        return mockPDFObj;
+      });
 
     presenter.providers.applicationContext = applicationContext;
   });

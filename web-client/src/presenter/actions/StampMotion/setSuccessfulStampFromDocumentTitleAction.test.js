@@ -6,7 +6,7 @@ import { setSuccessfulStampFromDocumentTitleAction } from './setSuccessfulStampF
 describe('setSuccessfulStampFromDocumentTitleAction,', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  it('sets the success message from the documentTitle when the document eventCode is not PSDE', async () => {
+  it('sets the success message from the documentTitle for the motion', async () => {
     const mockMotionTitle = 'Motion for Continuance';
 
     const result = await runAction(setSuccessfulStampFromDocumentTitleAction, {
@@ -29,6 +29,32 @@ describe('setSuccessfulStampFromDocumentTitleAction,', () => {
 
     expect(result.output.alertSuccess.message).toEqual(
       `${mockMotionTitle} stamped successfully.`,
+    );
+  });
+
+  it('sets the success message from the documentType for the motion', async () => {
+    const mockDocumentType = 'Motion for Continuance';
+
+    const result = await runAction(setSuccessfulStampFromDocumentTitleAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: {
+          docketEntries: [
+            {
+              docketEntryId: 'abc',
+              documentType: mockDocumentType,
+              eventCode: 'O',
+            },
+          ],
+        },
+        docketEntryId: 'abc',
+      },
+    });
+
+    expect(result.output.alertSuccess.message).toEqual(
+      `${mockDocumentType} stamped successfully.`,
     );
   });
 });

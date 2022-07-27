@@ -6,6 +6,7 @@ describe('clearOptionalFieldsStampFormAction', () => {
     const { state } = await runAction(clearOptionalFieldsStampFormAction, {
       state: {
         form: {
+          customText: 'bam',
           day: '30',
           dueDateMessage: 'the end is nigh',
           jurisdictionalOption: 'as moot',
