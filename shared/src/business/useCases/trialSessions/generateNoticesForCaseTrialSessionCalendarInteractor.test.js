@@ -212,7 +212,6 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   });
 
   it('should send out notifications emails for the notice docket entry AND standing pretrial notice', async () => {
-    //
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       interactorParamObject,
