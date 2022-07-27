@@ -18,7 +18,7 @@ describe('completeMotionStampingAction', () => {
   applicationContext
     .getUseCases()
     .saveSignedDocumentInteractor.mockReturnValue({
-      signedDocketEntryId: mockDocketEntryId,
+      stampedDocketEntryId: mockDocketEntryId,
     });
 
   let mockState;

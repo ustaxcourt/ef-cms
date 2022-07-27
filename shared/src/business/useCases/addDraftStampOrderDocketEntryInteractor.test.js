@@ -8,7 +8,7 @@ const { ORDER_TYPES } = require('../entities/EntityConstants');
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   const mockSigningName = 'Guy Fieri';
-  const mockSignedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
+  const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
 
   beforeAll(() => {
@@ -23,8 +23,8 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       formattedDraftDocumentTitle:
         'some title with disposition and custom text',
       originalDocketEntryId: mockOriginalDocketEntryId,
-      signedDocketEntryId: mockSignedDocketEntryId,
       stampData: { nameForSigning: mockSigningName },
+      stampedDocketEntryId: mockStampedDocketEntryId,
     });
 
     const { caseToUpdate } =
@@ -42,11 +42,11 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
       doc =>
         doc.documentType === ORDER_TYPES[0].documentType &&
-        doc.docketEntryId === mockSignedDocketEntryId,
+        doc.docketEntryId === mockStampedDocketEntryId,
     );
 
     expect(draftDocketEntryEntity.docketEntryId).toEqual(
-      mockSignedDocketEntryId,
+      mockStampedDocketEntryId,
     );
     expect(draftDocketEntryEntity.isDraft).toEqual(true);
     const motionDocumentType = MOCK_CASE.docketEntries.find(
