@@ -231,7 +231,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrder = (
     cerebralTest.docketRecordEntry = servedDocketEntry;
 
     await cerebralTest.runSequence(
-      'serveCourtIssuedDocumentFromDocketEntrySequence',
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
     cerebralTest.draftOrders.shift();
 

@@ -1,16 +1,17 @@
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
+import {
+  refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 import { runCompute } from 'cerebral/test';
-import { waitForLoadingComponentToHide } from '../helpers';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
+export const docketClerkFilesAndServesDocumentOnLeadCase = (
   cerebralTest,
   draftOrderIndex,
 ) => {
-  return it(`Docket Clerk adds and serves a docket entry from the given order ${draftOrderIndex}`, async () => {
-    let caseDetailFormatted;
-
-    caseDetailFormatted = runCompute(
+  return it(`Docket Clerk files and serves the order after the docket entry has been created ${draftOrderIndex}`, async () => {
+    const caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
         state: cerebralTest.getState(),
@@ -30,7 +31,6 @@ export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    // default
     expect(cerebralTest.getState('form.eventCode')).toEqual(
       draftOrderDocument.eventCode,
     );
@@ -39,65 +39,44 @@ export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
       draftOrderDocument.documentType,
     );
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'eventCode',
-        value: 'OAP',
-      },
+    if (draftOrderDocument.eventCode === 'O') {
+      await cerebralTest.runSequence(
+        'updateCourtIssuedDocketEntryFormValueSequence',
+        {
+          key: 'serviceStamp',
+          value: 'Served',
+        },
+      );
+    }
+
+    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+
+    await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
+    expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
+
+    await cerebralTest.runSequence('updateCaseCheckboxSequence', {
+      docketNumber: caseDetailFormatted.consolidatedCases[1].docketNumber,
+    });
+    cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
+      cerebralTest.leadDocketNumber,
+    );
+    cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.push(
+      caseDetailFormatted.consolidatedCases[1].docketNumber,
     );
 
     await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'documentType',
-        value: 'Order for Amended Petition',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'scenario',
-        value: 'Type D',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'month',
-        value: '2',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'day',
-        value: '2',
-      },
-    );
-
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'year',
-        value: '2050',
-      },
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
 
     const caseDetail = cerebralTest.getState('caseDetail');
     const servedDocketEntry = caseDetail.docketEntries.find(
       d => d.docketEntryId === docketEntryId,
     );
-
     cerebralTest.docketRecordEntry = servedDocketEntry;
-
-    await cerebralTest.runSequence(
-      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
-    );
+    cerebralTest.draftOrders.shift();
 
     await waitForLoadingComponentToHide({ cerebralTest });
+
+    await refreshElasticsearchIndex();
   });
 };
