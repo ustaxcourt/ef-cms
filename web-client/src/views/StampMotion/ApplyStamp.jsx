@@ -526,11 +526,7 @@ export const ApplyStamp = connect(
                         {pdfForSigning.nameForSigningLine2}
                       </span>
                     </span>
-                    <canvas
-                      className={applyStampFormHelper.cursorClass}
-                      id="sign-pdf-canvas"
-                      ref={canvasRef}
-                    ></canvas>
+                    <canvas id="sign-pdf-canvas" ref={canvasRef}></canvas>
                   </div>
                 </div>
               </div>

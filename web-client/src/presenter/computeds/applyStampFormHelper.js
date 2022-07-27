@@ -13,7 +13,7 @@ export const applyStampFormHelper = (get, applicationContext) => {
   const pdfForSigning = get(state.pdfForSigning);
 
   const { customText } = form;
-  const { isPdfAlreadyStamped, stampApplied, stampData } = pdfForSigning;
+  const { isPdfAlreadyStamped, stampApplied } = pdfForSigning;
 
   const CUSTOM_ORDER_MAX_LENGTH = 60;
   const customOrderTextCharacterCount = customText?.length
@@ -22,8 +22,6 @@ export const applyStampFormHelper = (get, applicationContext) => {
 
   const canSaveStampOrder =
     !!form.disposition && get(state.pdfForSigning.stampApplied);
-  const cursorClass =
-    !stampData && stampApplied ? 'cursor-grabbing' : 'cursor-grab';
 
   const hideClass = stampApplied && !isPdfAlreadyStamped ? '' : 'hide';
 
@@ -42,7 +40,6 @@ export const applyStampFormHelper = (get, applicationContext) => {
 
   return {
     canSaveStampOrder,
-    cursorClass,
     customOrderTextCharacterCount,
     dateErrorClass,
     dispositionErrorClass,
