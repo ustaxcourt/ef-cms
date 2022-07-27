@@ -43,6 +43,13 @@ resource "aws_elasticsearch_domain" "efcms-search" {
     instance_count = var.es_instance_count == "" ? "1" : var.es_instance_count
   }
 
+  cognito_options {
+    enabled          = true
+    user_pool_id     = aws_cognito_user_pool.data_viewers.id
+    identity_pool_id = aws_cognito_identity_pool.data_viewers.id
+    role_arn         = aws_iam_role.es_kibana_role.arn
+  }
+
   ebs_options {
     ebs_enabled = true
     volume_size = var.es_volume_size
