@@ -12,8 +12,8 @@ const { DocketEntry } = require('../entities/DocketEntry');
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
  * @param {string} providers.formattedDraftDocumentTitle the formatted draft document title of the document
- * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
- * @param {string} providers.signedDocketEntryId the id of the signed document
+ * @param {string} providers.originalDocketEntryId the id of the original (un-stamped) document
+ * @param {string} providers.stampedDocketEntryId the id of the stamped document
  * @param {string} providers.stampData the stampData from the form
  */
 exports.addDraftStampOrderDocketEntryInteractor = async (
@@ -22,8 +22,8 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     docketNumber,
     formattedDraftDocumentTitle,
     originalDocketEntryId,
-    signedDocketEntryId,
     stampData,
+    stampedDocketEntryId,
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -46,7 +46,7 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
   signedDocketEntryEntity = new DocketEntry(
     {
       createdAt: applicationContext.getUtilities().createISODateString(),
-      docketEntryId: signedDocketEntryId,
+      docketEntryId: stampedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
       documentTitle: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       documentType: orderDocumentInfo.documentType,

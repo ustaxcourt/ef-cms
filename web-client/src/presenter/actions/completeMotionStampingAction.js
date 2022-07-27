@@ -38,8 +38,8 @@ export const completeMotionStampingAction = async ({
       docketNumber,
       formattedDraftDocumentTitle: props.formattedDraftDocumentTitle,
       originalDocketEntryId: motionDocketEntryID,
-      signedDocketEntryId: newDocketEntryId,
       stampData,
+      stampedDocketEntryId: newDocketEntryId,
     });
 
   await applicationContext
