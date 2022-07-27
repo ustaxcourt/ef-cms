@@ -9,7 +9,7 @@ exports.getDocumentQCInboxForSection = async ({
     has_parent: {
       inner_hits: {
         _source: {
-          includes: ['leadDocketNmber', 'docketNumber'],
+          includes: ['leadDocketNumber', 'docketNumber'],
         },
         name: 'case-mappings',
       },
