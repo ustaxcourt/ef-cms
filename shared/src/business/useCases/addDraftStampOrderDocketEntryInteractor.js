@@ -11,13 +11,20 @@ const { DocketEntry } = require('../entities/DocketEntry');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
+ * @param {string} providers.formattedDraftDocumentTitle the formatted draft document title of the document
  * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
  * @param {string} providers.signedDocketEntryId the id of the signed document
  * @param {string} providers.stampData the stampData from the form
  */
 exports.addDraftStampOrderDocketEntryInteractor = async (
   applicationContext,
-  { docketNumber, originalDocketEntryId, signedDocketEntryId, stampData },
+  {
+    docketNumber,
+    formattedDraftDocumentTitle,
+    originalDocketEntryId,
+    signedDocketEntryId,
+    stampData,
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
   const caseRecord = await applicationContext
@@ -41,16 +48,18 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: signedDocketEntryId,
       docketNumber: caseRecord.docketNumber,
-      documentTitle: 'Order',
+      documentTitle: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       documentType: orderDocumentInfo.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
-        documentTitle: 'Order',
+        documentTitle: formattedDraftDocumentTitle,
         documentType: orderDocumentInfo.documentType,
         eventCode: orderDocumentInfo.eventCode,
+        freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       },
       eventCode: orderDocumentInfo.eventCode,
       filedBy: originalDocketEntryEntity.filedBy,
+      freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isPaper: false,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,

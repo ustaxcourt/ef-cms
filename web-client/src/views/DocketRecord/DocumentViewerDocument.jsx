@@ -13,6 +13,8 @@ export const DocumentViewerDocument = connect(
     documentViewerHelper: state.documentViewerHelper,
     documentViewerLinksHelper: state.documentViewerLinksHelper,
     iframeSrc: state.iframeSrc,
+    navigateToPathAndSetRedirectUrlSequence:
+      sequences.navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence:
@@ -30,6 +32,7 @@ export const DocumentViewerDocument = connect(
     documentViewerHelper,
     documentViewerLinksHelper,
     iframeSrc,
+    navigateToPathAndSetRedirectUrlSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmServeCourtIssuedDocumentSequence,
     openConfirmServePaperFiledDocumentSequence,
@@ -154,8 +157,13 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showApplyStampButton && (
                 <Button
                   link
-                  href={documentViewerLinksHelper.applyStampLink}
                   icon="stamp"
+                  onClick={() => {
+                    navigateToPathAndSetRedirectUrlSequence({
+                      path: documentViewerLinksHelper.applyStampLink,
+                      redirectUrl: documentViewerLinksHelper.redirectUrl,
+                    });
+                  }}
                 >
                   Apply Stamp
                 </Button>
