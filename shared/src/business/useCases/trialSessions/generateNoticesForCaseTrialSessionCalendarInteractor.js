@@ -77,11 +77,7 @@ const serveNoticesForCase = async ({
           )) &&
         appendClinicLetter
       ) {
-        console.log('GOING TO REMOVE CLINIC LETTER');
         removeAppendedClinicLetter(noticeDocumentPdfCopy);
-      } else {
-        console.log('IN THE ELSE');
-        // CANT BE A PRACTITIONER AND NOT REPRESENTED, pro se practitioner
       }
 
       const addressPage = await applicationContext
@@ -120,11 +116,15 @@ const serveNoticesForCase = async ({
 };
 
 /**
- * TODO: ADD MORE ARGS MAPPINGS FOR setNoticeForCase
  * generates a notice of trial session and adds to the case
  *
- * @param {object} caseRecord the case data
- * @returns {object} the raw case object
+ * @param {object} deconstructed.applicationContext the applicationContext
+ * @param {object} deconstructed.caseRecord true if the clinic letter has been appended to the notice
+ * @param {string} deconstructed.docketNumber the case entity
+ * @param {string} deconstructed.jobId the pdf we are generating
+ * @param {object} deconstructed.trialSession the pdf data for the notice
+ * @param {object} deconstructed.trialSessionEntity pdf-lib object
+ * @param {string} deconstructed.userId the parties this document will be served to
  */
 const setNoticeForCase = async ({
   applicationContext,
@@ -141,7 +141,6 @@ const setNoticeForCase = async ({
   const caseEntity = new Case(caseRecord, { applicationContext });
   const { procedureType } = caseRecord;
 
-  // Notice of Trial Issued
   let noticeOfTrialIssuedFile = await applicationContext
     .getUseCases()
     .generateNoticeOfTrialIssuedInteractor(applicationContext, {
@@ -278,7 +277,6 @@ const setNoticeForCase = async ({
     { applicationContext },
   );
 
-  // TODO: the numberOfPages should already be stored somewhere, but it's not
   standingPretrialDocketEntry.numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({
