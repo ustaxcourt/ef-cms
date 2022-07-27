@@ -7,6 +7,5 @@ import { state } from 'cerebral';
  * @param {Function} providers.store the cerebral store
  */
 export const clearPDFStampDataAction = ({ store }) => {
-  store.unset(state.pdfForSigning.stampData);
   store.set(state.pdfForSigning.stampApplied, false);
 };
