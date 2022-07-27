@@ -11,6 +11,7 @@ const { DocketEntry } = require('../entities/DocketEntry');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
+ * @param {string} providers.formattedDraftDocumentTitle the formatted draft document title of the document
  * @param {string} providers.originalDocketEntryId the id of the original (unsigned) document
  * @param {string} providers.signedDocketEntryId the id of the signed document
  * @param {string} providers.stampData the stampData from the form
