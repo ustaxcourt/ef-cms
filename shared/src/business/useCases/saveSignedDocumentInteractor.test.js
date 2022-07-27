@@ -1,6 +1,5 @@
 const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  ORDER_TYPES,
   PETITIONS_SECTION,
   SIGNED_DOCUMENT_TYPES,
 } = require('../entities/EntityConstants');
@@ -184,58 +183,6 @@ describe('saveSignedDocumentInteractor', () => {
           documentTitle: 'Stipulated Decision',
         },
       ],
-    });
-  });
-
-  describe('stamp motions', () => {
-    it('should not replace the original, unsigned document with the signed document for stamp motions', async () => {
-      await saveSignedDocumentInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
-        isMotion: true,
-        nameForSigning: mockSigningName,
-        originalDocketEntryId: mockOriginalDocketEntryId,
-        signedDocketEntryId: mockSignedDocketEntryId,
-      });
-
-      expect(
-        applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-      ).not.toHaveBeenCalled();
-    });
-
-    it('should add a draft order docket entry to the case', async () => {
-      const { caseEntity } = await saveSignedDocumentInteractor(
-        applicationContext,
-        {
-          docketNumber: mockCase.docketNumber,
-          isMotion: true,
-          nameForSigning: mockSigningName,
-          originalDocketEntryId: mockOriginalDocketEntryId,
-          signedDocketEntryId: mockSignedDocketEntryId,
-        },
-      );
-
-      expect(caseEntity.docketEntries.length).toEqual(
-        MOCK_DOCUMENTS.length + 1,
-      );
-      const draftOrder = caseEntity.docketEntries.find(
-        e => e.documentType === ORDER_TYPES[0].documentType,
-      );
-      expect(draftOrder.docketNumber).toEqual(caseEntity.docketNumber);
-
-      const draftDocketEntryEntity = caseEntity.docketEntries.find(
-        doc =>
-          doc.documentType === ORDER_TYPES[0].documentType &&
-          doc.docketEntryId === mockSignedDocketEntryId,
-      );
-
-      expect(draftDocketEntryEntity.docketEntryId).toEqual(
-        mockSignedDocketEntryId,
-      );
-      expect(draftDocketEntryEntity.isDraft).toEqual(true);
-      expect(draftDocketEntryEntity.signedJudgeName).toEqual(mockSigningName);
-      expect(draftDocketEntryEntity.documentType).toEqual(
-        ORDER_TYPES[0].documentType,
-      );
     });
   });
 });

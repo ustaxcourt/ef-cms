@@ -20,6 +20,7 @@ export const ApplyStamp = connect(
     clearOptionalFieldsStampFormSequence:
       sequences.clearOptionalFieldsStampFormSequence,
     form: state.form,
+    navigateBackSequence: sequences.navigateBackSequence,
     pdfForSigning: state.pdfForSigning,
     pdfObj: state.pdfForSigning.pdfjsObj,
     pdfSignerHelper: state.pdfSignerHelper,
@@ -37,6 +38,7 @@ export const ApplyStamp = connect(
     form,
     JURISDICTIONAL_OPTIONS,
     MOTION_DISPOSITIONS,
+    navigateBackSequence,
     pdfForSigning,
     pdfObj,
     setPDFStampDataSequence,
@@ -104,16 +106,13 @@ export const ApplyStamp = connect(
           </div>
           <div className="grid-row grid-gap">
             <div className="grid-col-5">
-              <div className="grid-row grid-gap">
-                <Button
-                  link
-                  className="margin-bottom-3"
-                  href="/trial-sessions"
-                  icon={['fa', 'arrow-alt-circle-left']}
-                >
-                  Back to Document View
-                </Button>
-              </div>
+              <Button
+                link
+                icon={['fa', 'arrow-alt-circle-left']}
+                onClick={() => navigateBackSequence()}
+              >
+                Back
+              </Button>
 
               <div className="border border-base-lighter">
                 <div className="grid-header grid-row padding-left-205">
