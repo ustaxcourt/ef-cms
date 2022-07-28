@@ -2,7 +2,6 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
@@ -76,18 +75,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
           userId: user.userId,
         },
       });
-
-    // await sqs
-    //   .sendMessage({
-    //     MessageBody: JSON.stringify({
-    //       docketNumber: calendaredCase.docketNumber,
-    //       jobId,
-    //       trialSession,
-    //       userId: user.userId,
-    //     }),
-    //     QueueUrl: `https://sqs.${process.env.REGION}.amazonaws.com/${process.env.AWS_ACCOUNT_ID}/calendar_trial_session_queue_${process.env.STAGE}_${process.env.CURRENT_COLOR}`,
-    //   })
-    //   .promise();
   }
 
   await new Promise(resolve => {
@@ -112,10 +99,10 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
   });
 
-  const newPdfDoc = await PDFDocument.create();
+  const paperServiceDocumentsPdf = await PDFDocument.create();
 
   for (let calendaredCase of calendaredCases) {
-    const pdfExistsInS3 = await applicationContext
+    const casePdfDocumentsExistsInS3 = await applicationContext
       .getPersistenceGateway()
       .isFileExists({
         applicationContext,
@@ -123,7 +110,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
         useTempBucket: true,
       });
 
-    if (!pdfExistsInS3) {
+    if (!casePdfDocumentsExistsInS3) {
       continue;
     }
 
@@ -138,28 +125,26 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
 
     const calendaredCasePdf = await PDFDocument.load(calendaredCasePdfData);
 
-    await copyPagesFromPdf({
+    await applicationContext.getUtilities().copyPagesFromPdf({
       copyFrom: calendaredCasePdf,
-      copyInto: newPdfDoc,
+      copyInto: paperServiceDocumentsPdf,
     });
   }
 
-  let pdfUrl = null;
-  const serviceInfo = await applicationContext
+  const { docketEntryId, hasPaper, url } = await applicationContext
     .getUseCaseHelpers()
     .savePaperServicePdf({
       applicationContext,
-      document: newPdfDoc,
+      document: paperServiceDocumentsPdf,
     });
-  pdfUrl = serviceInfo.url;
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
       action: 'notice_generation_complete',
-      docketEntryId: serviceInfo.docketEntryId,
-      hasPaper: serviceInfo.hasPaper,
-      pdfUrl,
+      docketEntryId,
+      hasPaper,
+      pdfUrl: url || null,
     },
     userId: user.userId,
   });

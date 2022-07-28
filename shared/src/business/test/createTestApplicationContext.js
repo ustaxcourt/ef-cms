@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const DateHandler = require('../utilities/DateHandler');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
@@ -190,6 +191,7 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
+const { copyPagesFromPdf } = require('../utilities/copyPagesFromPdf');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -284,6 +286,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
     computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
+    copyPagesFromPdf: jest.fn().mockImplementation(copyPagesFromPdf),
     createEndOfDayISO: jest
       .fn()
       .mockImplementation(DateHandler.createEndOfDayISO),
@@ -681,6 +684,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getMessageGateway: appContextProxy({
       sendCalendarSessionEvent: jest.fn(),
       sendEmailEventToQueue: jest.fn(),
+      sendSetTrialSessionCalendarEvent: jest.fn(),
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
