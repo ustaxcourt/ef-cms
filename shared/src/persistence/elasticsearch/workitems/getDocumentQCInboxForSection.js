@@ -1,3 +1,4 @@
+const { GET_WORK_ITEM_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 exports.getDocumentQCInboxForSection = async ({
@@ -5,18 +6,6 @@ exports.getDocumentQCInboxForSection = async ({
   judgeUserName,
   section,
 }) => {
-  const hasParentParam = {
-    has_parent: {
-      inner_hits: {
-        _source: {
-          includes: ['leadDocketNumber', 'docketNumber'],
-        },
-        name: 'case-mappings',
-      },
-      parent_type: 'case',
-      query: { match_all: {} },
-    },
-  };
   const query = {
     body: {
       query: {
@@ -48,7 +37,7 @@ exports.getDocumentQCInboxForSection = async ({
                 },
               },
             },
-            hasParentParam,
+            GET_WORK_ITEM_PARENT_CASE,
           ],
         },
       },
@@ -69,8 +58,6 @@ exports.getDocumentQCInboxForSection = async ({
     applicationContext,
     searchParameters: query,
   });
-
-  // console.log('########Section Inbox##########', results); // case_relations undefined
 
   return results;
 };
