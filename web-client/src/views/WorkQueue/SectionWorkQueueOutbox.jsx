@@ -33,6 +33,7 @@ export const SectionWorkQueueOutbox = connect(
             </tr>
           </thead>
           {formattedWorkQueue.map(item => {
+            console.log(item);
             return (
               <tbody key={item.workItemId}>
                 <tr>

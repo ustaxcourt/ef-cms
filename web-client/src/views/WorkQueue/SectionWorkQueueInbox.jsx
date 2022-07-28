@@ -45,9 +45,9 @@ const SectionWorkQueueTable = connect(
           </tr>
         </thead>
         {formattedWorkQueue.map(formattedWorkItem => {
-          // formattedWorkItem.inConsolidatedGroup = true;
-          // formattedWorkItem.inLeadCase = false;
-          // formattedWorkItem.consolidatedIconTooltipText = 'Soemthing';
+          {
+            console.log(formattedWorkItem);
+          }
           return (
             <SectionWorkQueueTable.Row
               hideFiledByColumn={hideFiledByColumn}
