@@ -4,6 +4,8 @@ const {
 } = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
 const { DocketEntry } = require('../entities/DocketEntry');
+const { Message } = require('../entities/Message');
+const { orderBy } = require('lodash');
 
 /**
  * addDraftStampOrderDocketEntryInteractor
@@ -13,6 +15,7 @@ const { DocketEntry } = require('../entities/DocketEntry');
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
  * @param {string} providers.formattedDraftDocumentTitle the formatted draft document title of the document
  * @param {string} providers.originalDocketEntryId the id of the original (un-stamped) document
+ * @param {string} providers.parentMessageId the id of the parent message to add the stamped document to
  * @param {string} providers.stampedDocketEntryId the id of the stamped document
  * @param {string} providers.stampData the stampData from the form
  */
@@ -22,6 +25,7 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     docketNumber,
     formattedDraftDocumentTitle,
     originalDocketEntryId,
+    parentMessageId,
     stampData,
     stampedDocketEntryId,
   },
@@ -38,12 +42,12 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
 
-  let signedDocketEntryEntity;
+  let stampedDocketEntryEntity;
   const orderDocumentInfo = COURT_ISSUED_EVENT_CODES.find(
     doc => doc.eventCode === 'O',
   );
 
-  signedDocketEntryEntity = new DocketEntry(
+  stampedDocketEntryEntity = new DocketEntry(
     {
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: stampedDocketEntryId,
@@ -69,9 +73,33 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     { applicationContext },
   );
 
-  signedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
+  stampedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
 
-  caseEntity.addDocketEntry(signedDocketEntryEntity);
+  caseEntity.addDocketEntry(stampedDocketEntryEntity);
+
+  if (parentMessageId) {
+    const messages = await applicationContext
+      .getPersistenceGateway()
+      .getMessageThreadByParentId({
+        applicationContext,
+        parentMessageId,
+      });
+
+    const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
+
+    const messageEntity = new Message(mostRecentMessage, {
+      applicationContext,
+    }).validate();
+    messageEntity.addAttachment({
+      documentId: stampedDocketEntryEntity.docketEntryId,
+      documentTitle: stampedDocketEntryEntity.documentTitle,
+    });
+
+    await applicationContext.getPersistenceGateway().updateMessage({
+      applicationContext,
+      message: messageEntity.validate().toRawObject(),
+    });
+  }
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,

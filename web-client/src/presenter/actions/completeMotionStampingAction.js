@@ -17,6 +17,7 @@ export const completeMotionStampingAction = async ({
 }) => {
   const motionDocketEntryID = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
+  const parentMessageId = get(state.parentMessageId);
   const stampFormData = get(state.form);
 
   let newDocketEntryId;
@@ -38,6 +39,7 @@ export const completeMotionStampingAction = async ({
       docketNumber,
       formattedDraftDocumentTitle: props.formattedDraftDocumentTitle,
       originalDocketEntryId: motionDocketEntryID,
+      parentMessageId,
       stampData,
       stampedDocketEntryId: newDocketEntryId,
     });
@@ -51,7 +53,12 @@ export const completeMotionStampingAction = async ({
       stampedDocketEntryId: newDocketEntryId,
     });
 
-  const redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
+  let redirectUrl;
+  if (parentMessageId) {
+    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${newDocketEntryId}`;
+  } else {
+    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
+  }
 
   return {
     docketEntryId: newDocketEntryId,

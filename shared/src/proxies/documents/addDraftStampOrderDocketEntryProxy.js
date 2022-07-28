@@ -8,6 +8,7 @@ const { post } = require('../requests');
  * @param {string} providers.docketNumber the docket number of the case on which to save the document
  * @param {string} providers.formattedDraftDocumentTitle the formatted draft document title of the document
  * @param {string} providers.originalDocketEntryId the id of the original (un-stamped) document
+ * @param {string} providers.parentMessageId the id of the parent message to add the stamped document to
  * @param {string} providers.stampedDocketEntryId the id of the stamped document
  * @param {string} providers.stampData the stampData from the form to add to the draft order
  * @returns {Promise<*>} the promise of the api call
@@ -18,6 +19,7 @@ exports.addDraftStampOrderDocketEntryInteractor = (
     docketNumber,
     formattedDraftDocumentTitle,
     originalDocketEntryId,
+    parentMessageId,
     stampData,
     stampedDocketEntryId,
   },
@@ -26,6 +28,7 @@ exports.addDraftStampOrderDocketEntryInteractor = (
     applicationContext,
     body: {
       formattedDraftDocumentTitle,
+      parentMessageId,
       stampData,
       stampedDocketEntryId,
     },
