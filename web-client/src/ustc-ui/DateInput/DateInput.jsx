@@ -15,6 +15,7 @@ export const DateInput = props => {
     hideLegend,
     hintText,
     useHintNoWrap,
+    shouldClearHiddenInput,
     showDateHint,
     titleHintText,
     optional,
@@ -39,6 +40,7 @@ export const DateInput = props => {
       names={names}
       optional={optional}
       placeholder={placeholder}
+      shouldClearHiddenInput={shouldClearHiddenInput}
       showDateHint={showDateHint}
       titleHintText={titleHintText}
       useHintNoWrap={useHintNoWrap}
