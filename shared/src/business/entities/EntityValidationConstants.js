@@ -409,6 +409,7 @@ const WORK_ITEM_VALIDATION_RULE_KEYS = {
   inProgress: joi.boolean().optional(),
   isInitializeCase: joi.boolean().optional(),
   isRead: joi.boolean().optional(),
+  leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
   section: JoiValidationConstants.STRING.required(),
   sentBy: JoiValidationConstants.STRING.max(100)
     .required()
