@@ -38,6 +38,10 @@ module "elasticsearch_alpha" {
   es_volume_size      = var.es_volume_size
   alert_sns_topic_arn = var.alert_sns_topic_arn
 
+  es_kibana_role_arn                 = aws_iam_role.es_kibana_role.arn
+  es_kibana_cognito_user_pool_id     = aws_cognito_user_pool.data_viewers.id
+  es_kibana_cognito_identity_pool_id = aws_cognito_identity_pool.data_viewers.id
+
   providers = {
     aws.us-east-1 = aws.us-east-1
   }
@@ -54,6 +58,10 @@ module "elasticsearch_beta" {
   es_instance_type    = var.es_instance_type
   es_volume_size      = var.es_volume_size
   alert_sns_topic_arn = var.alert_sns_topic_arn
+
+  es_kibana_role_arn                 = aws_iam_role.es_kibana_role.arn
+  es_kibana_cognito_user_pool_id     = aws_cognito_user_pool.data_viewers.id
+  es_kibana_cognito_identity_pool_id = aws_cognito_identity_pool.data_viewers.id
 
   providers = {
     aws.us-east-1 = aws.us-east-1

@@ -21,3 +21,15 @@ variable "es_volume_size" {
 variable "alert_sns_topic_arn" {
   type = string
 }
+
+variable "es_kibana_role_arn" {
+  type = string
+}
+
+variable "es_kibana_cognito_user_pool_id" {
+  type = string
+}
+
+variable "es_kibana_cognito_identity_pool_id" {
+  type = string
+}

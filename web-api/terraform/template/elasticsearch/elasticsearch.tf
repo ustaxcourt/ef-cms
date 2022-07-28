@@ -45,9 +45,9 @@ resource "aws_elasticsearch_domain" "efcms-search" {
 
   cognito_options {
     enabled          = true
-    user_pool_id     = aws_cognito_user_pool.data_viewers.id
-    identity_pool_id = aws_cognito_identity_pool.data_viewers.id
-    role_arn         = aws_iam_role.es_kibana_role.arn
+    user_pool_id     = var.es_kibana_cognito_user_pool_id
+    identity_pool_id = var.es_kibana_cognito_identity_pool_id
+    role_arn         = var.es_kibana_role_arn
   }
 
   ebs_options {
