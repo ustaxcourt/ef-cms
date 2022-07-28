@@ -11,7 +11,7 @@ export const clearOptionalFieldsStampFormAction = ({ store }) => {
   store.unset(state.form.jurisdictionalOption);
 
   store.unset(state.form.dueDateMessage);
-  store.unset(state.form.customText);
+  store.set(state.form.customText, '');
   store.unset(state.form['day']);
   store.unset(state.form['month']);
   store.unset(state.form['year']);
