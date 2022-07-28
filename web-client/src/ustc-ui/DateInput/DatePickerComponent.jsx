@@ -17,6 +17,7 @@ export const DatePickerComponent = ({
   onChange,
   optional,
   placeholder,
+  shouldClearHiddenInput,
   showDateHint = true,
   titleHintText,
   useHintNoWrap,
@@ -51,6 +52,11 @@ export const DatePickerComponent = ({
     if (values.month && values.day && values.year) {
       input.value = `${values.month}/${values.day}/${values.year}`;
     } else {
+      if (shouldClearHiddenInput) {
+        // a hack because the inputRef points to the hidden input instead of the visible input on the page
+        const actualInput = window.document.getElementById(`${name}-date`);
+        actualInput.value = null;
+      }
       input.value = null;
     }
   }, [datePickerRef, values]);
