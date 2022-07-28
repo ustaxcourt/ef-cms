@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 export const draftDocumentViewerHelper = (get, applicationContext) => {
   const {
     EVENT_CODES_REQUIRING_SIGNATURE,
+    GENERIC_ORDER_EVENT_CODE,
     NOTICE_EVENT_CODES,
     STIPULATED_DECISION_EVENT_CODE,
   } = applicationContext.getConstants();
@@ -65,7 +66,7 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
   const showApplyRemoveSignatureButtonForRole = isInternalUser;
 
   const isDraftStampOrder =
-    formattedDocumentToDisplay.eventCode === 'O' &&
+    formattedDocumentToDisplay.eventCode === GENERIC_ORDER_EVENT_CODE &&
     formattedDocumentToDisplay.stampData?.disposition;
 
   const showEditButtonSigned =
