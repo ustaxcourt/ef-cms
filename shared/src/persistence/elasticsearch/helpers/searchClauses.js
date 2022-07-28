@@ -27,7 +27,7 @@ const IS_PRACTITIONER = [
     },
   },
 ];
-
+// TODO: Refactor into one?
 const GET_MESSAGE_PARENT_CASE = {
   has_parent: {
     inner_hits: {
