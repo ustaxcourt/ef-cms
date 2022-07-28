@@ -54,7 +54,7 @@ Stamp.VALIDATION_ERROR_MESSAGES = {
 };
 
 Stamp.schema = joi.object().keys({
-  customText: JoiValidationConstants.STRING.max(60).optional(),
+  customText: JoiValidationConstants.STRING.max(60).optional().allow(''),
   date: joi.when('dueDateMessage', {
     is: joi.exist().not(null),
     otherwise: joi.optional().allow(null),
