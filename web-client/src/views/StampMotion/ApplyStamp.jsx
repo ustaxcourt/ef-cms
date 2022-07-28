@@ -329,6 +329,7 @@ export const ApplyStamp = connect(
                               year: 'year',
                             }}
                             placeholder={'MM/DD/YYYY'}
+                            shouldClearHiddenInput={true}
                             showDateHint={false}
                             values={{
                               day: form.day,

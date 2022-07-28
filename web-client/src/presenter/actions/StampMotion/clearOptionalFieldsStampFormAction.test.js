@@ -25,6 +25,6 @@ describe('clearOptionalFieldsStampFormAction', () => {
     expect(state.form['month']).toBeUndefined();
     expect(state.form['year']).toBeUndefined();
 
-    expect(state.form.customText).toBeUndefined();
+    expect(state.form.customText).toEqual('');
   });
 });
