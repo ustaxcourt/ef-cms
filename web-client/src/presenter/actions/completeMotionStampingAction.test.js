@@ -99,6 +99,24 @@ describe('completeMotionStampingAction', () => {
     });
   });
 
+  it('should construct a redirectUrl to the message detail document view if there is a parentMessageId present in state', async () => {
+    const parentMessageId = applicationContext.getUniqueId();
+
+    const result = await runAction(completeMotionStampingAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        ...mockState,
+        parentMessageId,
+      },
+    });
+
+    expect(result.output).toMatchObject({
+      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockStampedDocketEntryId}`,
+    });
+  });
+
   it('should return the stamped document docket entry id as props', async () => {
     const result = await runAction(completeMotionStampingAction, {
       modules: {
