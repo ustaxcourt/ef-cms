@@ -36,21 +36,11 @@ const formatResults = body => {
     } else if (isMessageResultWithParentCaseMapping) {
       return formatMessageResult({ caseMap, hit, sourceUnmarshalled });
     } else if (isWorkItemResultWithParentCaseMapping) {
-      // console.log('-----------------------------');
-      // console.log(
-      //   'formatted results',
-      //   formatWorkItemResult({ caseMap, hit, sourceUnmarshalled }), // case relations is undefined
-      // );
-      // console.log('-----------------------------');
       return formatWorkItemResult({ caseMap, hit, sourceUnmarshalled });
     } else {
       return sourceUnmarshalled;
     }
   });
-
-  // console.log('+++++++++++++++++++++++++++++++++++++++');
-  // console.log('serachClient resutls', results); // case relations is undefined
-  // console.log('+++++++++++++++++++++++++++++++++++++++');
 
   return {
     results,
