@@ -72,8 +72,12 @@ exports.completeDocketEntryQCInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumber, overridePaperServiceAddress } =
-    entryMetadata;
+  const {
+    docketEntryId,
+    docketNumber,
+    leadDocketNumber,
+    overridePaperServiceAddress,
+  } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -135,6 +139,7 @@ exports.completeDocketEntryQCInteractor = async (
     { applicationContext, petitioners: caseToUpdate.petitioners },
   ).validate();
   updatedDocketEntry.setQCed(user);
+  updatedDocketEntry.leadDocketNumber = leadDocketNumber;
 
   let updatedDocumentTitle = getDocumentTitle({
     applicationContext,
@@ -349,6 +354,8 @@ exports.completeDocketEntryQCInteractor = async (
         docketNumber: caseEntity.docketNumber,
       });
   }
+
+  console.log('###############caseentity::::', caseEntity.leadDocketNumber);
 
   return {
     caseDetail: caseEntity.toRawObject(),
