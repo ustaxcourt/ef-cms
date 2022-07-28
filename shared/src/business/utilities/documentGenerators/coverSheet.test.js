@@ -96,5 +96,35 @@ describe('documentGenerators', () => {
       expect(applicationContext.getNodeSass).toHaveBeenCalled();
       expect(applicationContext.getPug).toHaveBeenCalled();
     });
+
+    it('Generates a CoverSheet document for a docket entry that is part of a consolidated case group', async () => {
+      const pdf = await coverSheet({
+        applicationContext,
+        data: {
+          caseCaptionExtension: PARTY_TYPES.petitioner,
+          caseTitle: 'Test Person',
+          consolidatedCases: new Array(38).fill(null).map((v, i) => ({
+            docketNumber: `${24929 + i}-17`,
+            documentNumber: i + 101,
+          })),
+          dateFiledLodged: '01/01/20',
+          dateFiledLodgedLabel: 'Filed',
+          docketNumberWithSuffix: '123-45S',
+          documentTitle: 'Petition',
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('Cover_Sheet_For_Consolidated_Cases', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
   });
 });
