@@ -42,12 +42,12 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     docketEntry => docketEntry.docketEntryId === originalDocketEntryId,
   );
 
-  let signedDocketEntryEntity;
+  let stampedDocketEntryEntity;
   const orderDocumentInfo = COURT_ISSUED_EVENT_CODES.find(
     doc => doc.eventCode === 'O',
   );
 
-  signedDocketEntryEntity = new DocketEntry(
+  stampedDocketEntryEntity = new DocketEntry(
     {
       createdAt: applicationContext.getUtilities().createISODateString(),
       docketEntryId: stampedDocketEntryId,
@@ -73,9 +73,9 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     { applicationContext },
   );
 
-  signedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
+  stampedDocketEntryEntity.setSigned(user.userId, stampData.nameForSigning);
 
-  caseEntity.addDocketEntry(signedDocketEntryEntity);
+  caseEntity.addDocketEntry(stampedDocketEntryEntity);
 
   if (parentMessageId) {
     const messages = await applicationContext
@@ -91,8 +91,8 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
       applicationContext,
     }).validate();
     messageEntity.addAttachment({
-      documentId: signedDocketEntryEntity.docketEntryId,
-      documentTitle: signedDocketEntryEntity.documentTitle,
+      documentId: stampedDocketEntryEntity.docketEntryId,
+      documentTitle: stampedDocketEntryEntity.documentTitle,
     });
 
     await applicationContext.getPersistenceGateway().updateMessage({
