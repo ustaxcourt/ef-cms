@@ -7,17 +7,13 @@ const {
 const {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } = require('../../entities/EntityConstants');
-const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
-const { fakeData } = require('../../test/getFakeFile');
 const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
 const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
+const { testPdfDoc } = require('../../test/getFakeFile');
 const { User } = require('../../entities/User');
-
-jest.mock('../../utilities/copyPagesFromPdf');
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   beforeEach(() => {
-    copyPagesFromPdf.mockResolvedValue(null);
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockResolvedValue([
@@ -44,7 +40,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
         ...MOCK_TRIAL_REGULAR,
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
       });
-
+    applicationContext.getNotificationGateway().sendNotificationToUser =
+      jest.fn();
     applicationContext
       .getPersistenceGateway()
       .getJobStatus.mockResolvedValueOnce({
@@ -64,7 +61,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getDocument.mockResolvedValue(fakeData);
+      .getDocument.mockResolvedValue(testPdfDoc);
 
     jest.spyOn(global, 'setInterval').mockImplementation(async cb => {
       await cb();
@@ -104,23 +101,45 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalled();
-    expect(applicationContext.invokeLambda).not.toHaveBeenCalled();
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: {
+          action: 'notice_generation_complete',
+          hasPaper: false,
+        },
+      }),
+    );
   });
 
-  it('should invoke the worker lambda 3 times when 3 cases are calendared on the session and a complete notification is sent back to the user when they all finish processing', async () => {
+  it('should send 3 events when 3 cases are calendared on the session and a complete notification is sent back to the user when they all finish processing', async () => {
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(applicationContext.invokeLambda).toHaveBeenCalledTimes(3);
-    expect(copyPagesFromPdf).toHaveBeenCalledTimes(3);
     expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledTimes(1);
+      applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
+    ).toHaveBeenCalledTimes(3);
+    const { pdfUrl } =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0].message;
+    expect(pdfUrl).toBe('http://example.com');
+    applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf.mockResolvedValue({
+        url: null,
+      });
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    const pdfUrlNull =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[1][0].message.pdfUrl;
+    expect(pdfUrlNull).toBe(null);
   });
 
-  it('should generate a empty pdf if all cases were electronic', async () => {
+  it('should generate an empty pdf if no calendared cases PDF documents exist', async () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(false);
@@ -129,7 +148,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(copyPagesFromPdf).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUtilities().copyPagesFromPdf,
+    ).not.toHaveBeenCalled();
 
     const pdfDoc =
       applicationContext.getUseCaseHelpers().savePaperServicePdf.mock
@@ -137,15 +161,21 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(pdfDoc.getPages().length).toBe(0);
   });
 
-  it('should log any errors when trying to invoke the worker lambda', async () => {
-    applicationContext.invokeLambda.mockImplementation((params, cb) => {
-      cb(new Error('lambda could not be invoked'));
-    });
-
+  it('should generate a pdf if calendared cases PDF documents exist', async () => {
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(applicationContext.logger.error).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalledTimes(3);
+    expect(
+      applicationContext.getUtilities().copyPagesFromPdf,
+    ).toHaveBeenCalledTimes(3);
+
+    const pdfDoc =
+      applicationContext.getUseCaseHelpers().savePaperServicePdf.mock
+        .calls[0][0].document;
+    expect(pdfDoc.getPages().length).toBe(3);
   });
 });

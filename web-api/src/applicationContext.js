@@ -162,6 +162,9 @@ const {
   confirmAuthCode,
 } = require('../../shared/src/persistence/cognito/confirmAuthCode');
 const {
+  copyPagesFromPdf,
+} = require('../../shared/src/business/utilities/copyPagesFromPdf');
+const {
   Correspondence,
 } = require('../../shared/src/business/entities/Correspondence');
 const {
@@ -2227,6 +2230,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,
+        copyPagesFromPdf,
         createISODateString,
         filterWorkItemsForUser,
         formatCaseForTrialSession,
