@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkViewsNoticeOfChangeOfAddress } from './journey/docketClerkViewsNoticeOfChangeOfAddress';
 import { docketClerkViewsQCItemForNCAForUnrepresentedPetitioner } from './journey/docketClerkViewsQCItemForNCAForUnrepresentedPetitioner';
 import { loginAs, setupTest, uploadPetition } from './helpers';

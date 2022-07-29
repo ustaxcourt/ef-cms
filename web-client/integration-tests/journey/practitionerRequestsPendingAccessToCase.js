@@ -1,5 +1,5 @@
 import { CaseAssociationRequestFactory } from '../../../shared/src/business/entities/CaseAssociationRequestFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactSecondaryFromState } from '../helpers';
 
 export const practitionerRequestsPendingAccessToCase = (

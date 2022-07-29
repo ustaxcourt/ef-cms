@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business//test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business//test/createTestApplicationContext';
 import { messageModalHelper as messageModalHelperComputed } from '../../src/presenter/computeds/messageModalHelper';
 import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';

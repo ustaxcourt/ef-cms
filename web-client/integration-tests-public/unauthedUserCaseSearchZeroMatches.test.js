@@ -1,5 +1,5 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { setupTest } from './helpers';
 import { setupTest as setupTestClient } from '../integration-tests/helpers';
 import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigatesToPublicSite';

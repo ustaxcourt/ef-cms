@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';

@@ -2,7 +2,7 @@ import {
   advancedSearchHelper as advancedSearchHelperComputed,
   paginationHelper,
 } from './advancedSearchHelper';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getUserPermissions } from '../../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';

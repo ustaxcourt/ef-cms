@@ -8,7 +8,7 @@ import {
   createISODateString,
   formatDateString,
 } from '../../shared/src/business/utilities/DateHandler';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryFromOrderOfDismissal } from './journey/docketClerkAddsDocketEntryFromOrderOfDismissal';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';

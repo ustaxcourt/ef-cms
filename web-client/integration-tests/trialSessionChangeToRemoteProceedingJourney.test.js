@@ -6,7 +6,7 @@ import {
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../shared/src/business/entities/EntityConstants';
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from '../src/presenter/computeds/addToTrialSessionModalHelper';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import {

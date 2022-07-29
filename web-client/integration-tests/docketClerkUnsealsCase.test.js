@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { associatedUserAdvancedSearchForCase } from './journey/associatedUserAdvancedSearchForCase';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';

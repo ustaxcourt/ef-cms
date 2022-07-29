@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { waitForExpectedItem, waitForLoadingComponentToHide } from '../helpers';
 
 const { STATUS_TYPES } = applicationContext.getConstants();

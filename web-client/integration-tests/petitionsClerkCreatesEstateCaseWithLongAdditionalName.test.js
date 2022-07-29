@@ -4,7 +4,7 @@ import {
   PARTY_TYPES,
   PAYMENT_STATUS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { fakeFile, loginAs, setupTest } from './helpers';
 
 const cerebralTest = setupTest();

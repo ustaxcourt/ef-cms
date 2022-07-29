@@ -3,7 +3,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { addTrialSessionInformationHelper as addTrialSessionInformationHelperComputed } from './addTrialSessionInformationHelper';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';
 

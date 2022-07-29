@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { fakeFile, loginAs, setupTest, uploadPetition } from './helpers';
 import { practitionerSearchesForUnassociatedSealedCase } from './journey/practitionerSearchesForUnassociatedSealedCase';
 import { respondent1ViewsCaseDetailOfAssociatedCase } from './journey/respondent1ViewsCaseDetailOfAssociatedCase';

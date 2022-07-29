@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition } from './journey/docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';

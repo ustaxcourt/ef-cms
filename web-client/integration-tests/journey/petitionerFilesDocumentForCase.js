@@ -1,5 +1,5 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 
 export const petitionerFilesDocumentForCase = (cerebralTest, fakeFile) => {

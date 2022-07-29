@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 import { runCompute } from 'cerebral/test';

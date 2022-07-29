@@ -1,5 +1,5 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { featureFlagHelper as featureFlagHelperComputed } from './featureFlagHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../withAppContext';

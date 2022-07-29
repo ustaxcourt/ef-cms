@@ -1,5 +1,5 @@
 import { addCourtIssuedDocketEntryHelper } from '../src/presenter/computeds/addCourtIssuedDocketEntryHelper';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHeaderHelper } from '../src/presenter/computeds/caseDetailHeaderHelper';
 import { caseDetailSubnavHelper } from '../src/presenter/computeds/caseDetailSubnavHelper';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';

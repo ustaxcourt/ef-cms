@@ -1,5 +1,5 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { getFormattedDocketEntriesForTest } from '../helpers';
 
 export const docketClerkEditsDocketEntryFromOrderTypeH = (

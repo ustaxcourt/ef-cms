@@ -1,5 +1,5 @@
 import { VALIDATION_ERROR_MESSAGES } from '../../../shared/src/business/entities/externalDocument/ExternalDocumentInformationFactory';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState } from '../helpers';
 import { fileDocumentHelper } from '../../src/presenter/computeds/fileDocumentHelper';
 import { runCompute } from 'cerebral/test';

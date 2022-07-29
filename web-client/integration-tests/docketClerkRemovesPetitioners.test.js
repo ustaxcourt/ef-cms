@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsPetitionerToCase } from './journey/docketClerkAddsPetitionerToCase';
 import { docketClerkRemovesIntervenorFromCase } from './journey/docketClerkRemovesIntervenorFromCase';
 import { docketClerkRemovesPetitionerFromCase } from './journey/docketClerkRemovesPetitionerFromCase';

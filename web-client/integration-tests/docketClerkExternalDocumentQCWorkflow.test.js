@@ -1,5 +1,5 @@
 import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   assignWorkItems,
   findWorkItemByDocketNumber,

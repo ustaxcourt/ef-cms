@@ -2,7 +2,7 @@ import {
   ADVANCED_SEARCH_OPINION_TYPES,
   DATE_RANGE_SEARCH_OPTIONS,
 } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsOpiniontoDocketyEntry } from './journey/docketClerkAddsOpinionToDocketEntry';
 import { docketClerkCreatesAnOpinion } from './journey/docketClerkCreatesAnOpinion';
 import { docketClerkSealsCase } from './journey/docketClerkSealsCase';

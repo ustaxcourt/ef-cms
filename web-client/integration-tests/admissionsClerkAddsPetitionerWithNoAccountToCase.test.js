@@ -1,5 +1,5 @@
 import { admissionsClerkAddsUnverifiedEmailToPetitioner } from './journey/admissionsClerkAddsUnverifiedEmailToPetitioner';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   callCognitoTriggerForPendingEmail,
   contactPrimaryFromState,

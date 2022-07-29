@@ -1,5 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 
 const { VALIDATION_ERROR_MESSAGES } = Case;
 

@@ -1,5 +1,5 @@
 import { ADVANCED_SEARCH_TABS } from '../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFromOrder } from '../integration-tests/journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkCreatesAnOrder } from '../integration-tests/journey/docketClerkCreatesAnOrder';
 import { docketClerkServesDocument } from '../integration-tests/journey/docketClerkServesDocument';

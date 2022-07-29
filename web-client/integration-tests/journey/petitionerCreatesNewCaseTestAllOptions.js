@@ -1,5 +1,5 @@
 import { Case } from '../../../shared/src/business/entities/cases/Case';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { startCaseHelper as startCaseHelperComputed } from '../../src/presenter/computeds/startCaseHelper';
 import { withAppContextDecorator } from '../../src/withAppContext';

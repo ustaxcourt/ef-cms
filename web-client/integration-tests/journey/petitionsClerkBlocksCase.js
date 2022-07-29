@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 
 const { DOCKET_NUMBER_SUFFIXES, STATUS_TYPES } =

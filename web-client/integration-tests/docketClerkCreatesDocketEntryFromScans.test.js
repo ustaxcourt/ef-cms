@@ -3,7 +3,7 @@ import {
   createPDFFromScannedBatches,
   selectScannerSource,
 } from './scanHelpers';
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkAddsDocketEntryFile } from './journey/docketClerkAddsDocketEntryFile';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkSavesAndServesDocketEntry } from './journey/docketClerkSavesAndServesDocketEntry';
