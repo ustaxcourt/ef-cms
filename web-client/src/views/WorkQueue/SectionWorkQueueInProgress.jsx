@@ -157,9 +157,6 @@ export const SectionWorkQueueInProgress = connect(
             </tr>
           </thead>
           {formattedWorkQueue.map(item => {
-            item.inConsolidatedGroup = true;
-            item.inLeadCase = false;
-            item.consolidatedIconTooltipText = 'Soemthing';
             return (
               <SectionWorkQueueInProgressRow
                 hideFiledByColumn={workQueueHelper.hideFiledByColumn}
