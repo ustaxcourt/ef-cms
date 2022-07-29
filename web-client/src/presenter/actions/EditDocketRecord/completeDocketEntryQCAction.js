@@ -18,10 +18,7 @@ export const completeDocketEntryQCAction = async ({
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
-  const leadDocketNumber = get(state.caseDetail.leadDocketNumber);
   const { overridePaperServiceAddress } = props;
-
-  console.log('@@@@@@@@@@ caseDetail in action:::', get(state.caseDetail));
 
   let entryMetadata = omit(
     {
@@ -35,7 +32,6 @@ export const completeDocketEntryQCAction = async ({
     createdAt: entryMetadata.dateReceived,
     docketEntryId,
     docketNumber,
-    leadDocketNumber,
     overridePaperServiceAddress,
     receivedAt: entryMetadata.dateReceived,
   };
@@ -55,12 +51,9 @@ export const completeDocketEntryQCAction = async ({
     doc => doc.docketEntryId === docketEntryId,
   )[0];
 
-  updatedDocument.leadDocketNumber = leadDocketNumber;
-
   const computedDocumentTitle = applicationContext
     .getUtilities()
     .getDocumentTitleWithAdditionalInfo({ docketEntry: updatedDocument });
-  console.log('************* updatedDocument::::', updatedDocument);
 
   return {
     alertSuccess: {
