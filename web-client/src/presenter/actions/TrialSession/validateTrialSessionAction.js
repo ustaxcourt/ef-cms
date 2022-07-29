@@ -27,6 +27,8 @@ export const validateTrialSessionAction = ({
     props.computedEstimatedEndDate,
   );
 
+  console.log({ estimatedEndDate, startDate });
+
   const trialSession = omit(
     {
       ...get(state.form),
@@ -46,6 +48,7 @@ export const validateTrialSessionAction = ({
     .validateTrialSessionInteractor(applicationContext, {
       trialSession: { ...trialSession, estimatedEndDate, startDate },
     });
+  console.log(errors);
 
   if (!errors) {
     return path.success();

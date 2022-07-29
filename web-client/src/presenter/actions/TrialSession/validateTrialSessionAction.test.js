@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateTrialSessionAction } from './validateTrialSessionAction';
@@ -18,18 +18,16 @@ describe('validateTrialSessionAction', () => {
   beforeAll(() => {
     successStub = jest.fn();
     errorStub = jest.fn();
-
     presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
     };
-
     applicationContext
       .getUseCases()
-      .validateTrialSessionInteractor.mockReturnValue(
-        'hello from validate trial session',
-      );
+      .validateTrialSessionInteractor.mockReturnValue({
+        startDate: 'hello from validate trial session',
+      });
   });
 
   it('should call the success path when no errors are found', async () => {

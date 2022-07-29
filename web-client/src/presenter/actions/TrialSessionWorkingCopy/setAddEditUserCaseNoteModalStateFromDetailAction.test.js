@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUserCaseNoteModalStateFromDetailAction';
@@ -6,12 +6,12 @@ import { setAddEditUserCaseNoteModalStateFromDetailAction } from './setAddEditUs
 describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  let user;
   const { USER_ROLES } = applicationContext.getConstants();
-  applicationContext.getCurrentUser = () => user;
 
   it('should set the modal state from caseDetail and props', async () => {
-    user = { role: USER_ROLES.judge };
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.judge,
+    });
     const result = await runAction(
       setAddEditUserCaseNoteModalStateFromDetailAction,
       {
@@ -40,8 +40,9 @@ describe('setAddEditUserCaseNoteModalStateFromDetailAction', () => {
   });
 
   it('should set the modal state when caseCaption and docketNumberSuffix do not exist', async () => {
-    user = { role: USER_ROLES.docketClerk };
-
+    applicationContext.getCurrentUser.mockReturnValue({
+      role: USER_ROLES.docketClerk,
+    });
     const result = await runAction(
       setAddEditUserCaseNoteModalStateFromDetailAction,
       {

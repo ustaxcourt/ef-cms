@@ -32,4 +32,5 @@ module.exports = {
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
   },
+  maxWorkers: 2,
 };
