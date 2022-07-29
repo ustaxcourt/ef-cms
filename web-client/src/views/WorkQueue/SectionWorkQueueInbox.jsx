@@ -45,9 +45,6 @@ const SectionWorkQueueTable = connect(
           </tr>
         </thead>
         {formattedWorkQueue.map(formattedWorkItem => {
-          {
-            console.log('section inbox:', formattedWorkItem);
-          }
           return (
             <SectionWorkQueueTable.Row
               hideFiledByColumn={hideFiledByColumn}
