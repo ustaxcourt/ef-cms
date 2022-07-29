@@ -3,8 +3,7 @@ import { persistPublicAppStateAction } from './persistPublicAppStateAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-// TODO: CS FIX ME
-describe.skip('persistPublicAppStateAction', () => {
+describe('persistPublicAppStateAction', () => {
   const advancedSearchFormValue = {
     caseSearchByDocketNumber: {},
     caseSearchByName: { countryType: 'domestic' },
@@ -17,6 +16,7 @@ describe.skip('persistPublicAppStateAction', () => {
     practitionerSearchByName: {},
     searchMode: 'byName',
   };
+
   beforeAll(() => {
     applicationContext.getUseCases().setItemInteractor.mockReturnValue(null);
     presenter.providers.applicationContext = applicationContext;
@@ -34,14 +34,14 @@ describe.skip('persistPublicAppStateAction', () => {
     });
 
     expect(
-      applicationContext.getUseCases().setItemInteractor,
-    ).toHaveBeenNthCalledWith(1, expect.anything(), {
+      applicationContext.getUseCases().setItemInteractor.mock.calls[0][1],
+    ).toEqual({
       key: 'advancedSearchTab',
       value: 'order',
     });
     expect(
-      applicationContext.getUseCases().setItemInteractor,
-    ).toHaveBeenNthCalledWith(2, expect.anything(), {
+      applicationContext.getUseCases().setItemInteractor.mock.calls[1][1],
+    ).toEqual({
       key: 'advancedSearchForm',
       value: advancedSearchFormValue,
     });

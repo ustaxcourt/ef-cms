@@ -81,13 +81,10 @@ describe('completeDocumentSigningAction', () => {
   });
 
   beforeEach(() => {
-    global.window = {
-      pdfjsObj: mockPdfjsObj,
-    };
-  });
-
-  afterEach(() => {
-    delete global.window;
+    Object.defineProperty(window, 'pdfjsObj', {
+      value: mockPdfjsObj,
+      writable: true,
+    });
   });
 
   it('should sign a document via executing various use cases', async () => {

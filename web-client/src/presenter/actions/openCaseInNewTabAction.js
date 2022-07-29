@@ -9,6 +9,5 @@ import { state } from 'cerebral';
  */
 export const openCaseInNewTabAction = ({ get, props }) => {
   const docketNumber = props.docketNumber || get(state.caseDetail.docketNumber);
-
   window.open(`/case-detail/${docketNumber}`, '_blank');
 };

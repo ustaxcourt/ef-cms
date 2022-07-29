@@ -3,17 +3,14 @@ import { runAction } from 'cerebral/test';
 
 describe('reloadPageAction', () => {
   beforeAll(() => {
-    global.window = {
-      location: {
+    Object.defineProperty(window, 'location', {
+      value: {
         configurable: true,
         reload: jest.fn(),
         value: { reload: jest.fn() },
       },
-    };
-  });
-
-  afterAll(() => {
-    delete global.window;
+      writable: true,
+    });
   });
 
   it('should call location reload api', async () => {
