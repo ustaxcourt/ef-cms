@@ -78,13 +78,11 @@ const createSectionOutboxRecords = ({
   section,
   workItem,
 }) => {
-  console.log('+++++++++++++++++++++ workItem::::::', workItem);
   const Item = {
     ...workItem,
     gsi1pk: `work-item|${workItem.workItemId}`,
     sk: workItem.completedAt ? workItem.completedAt : workItem.updatedAt,
   };
-  Item.leadDocketNumber = workItem.docketEntry.leadDocketNumber;
 
   return Promise.all([
     createSectionOutboxRecentRecord({
