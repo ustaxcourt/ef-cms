@@ -19,7 +19,11 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-hidden="true" className="consolidated-case-column"></th>
+              <th
+                aria-hidden="true"
+                className="consolidated-case-column"
+                colSpan="2"
+              ></th>
               <th aria-label="Docket Number" className="small" colSpan="2">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
