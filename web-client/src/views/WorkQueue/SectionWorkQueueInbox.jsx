@@ -46,7 +46,7 @@ const SectionWorkQueueTable = connect(
         </thead>
         {formattedWorkQueue.map(formattedWorkItem => {
           {
-            console.log(formattedWorkItem);
+            console.log('section inbox:', formattedWorkItem);
           }
           return (
             <SectionWorkQueueTable.Row
