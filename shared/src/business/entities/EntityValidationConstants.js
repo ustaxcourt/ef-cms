@@ -434,6 +434,7 @@ const OUTBOX_ITEM_VALIDATION_RULE_KEYS = {
     'Unique case identifier in XXXXX-YY format.',
   ),
   inProgress: joi.boolean().optional(),
+  leadDocketNumber: JoiValidationConstants.DOCKET_NUMBER.optional(),
   section: JoiValidationConstants.STRING.required(),
   trialDate: JoiValidationConstants.ISO_DATE.optional().allow(null),
 };
