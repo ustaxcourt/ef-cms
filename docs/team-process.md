@@ -39,7 +39,7 @@ Team Relationship Building - We encourage trust, strengthen our comfort in commu
 
 2. Retrospective: We retrospect often, following up on past experiments and other topics and coming up with future experiments to improve the team and project. We courageously bring topics to the retro in a psychologically safe space.
 
-3. Meetings: Bring attention to questions or comments in the zoom chat to the presenter, as they are not always able to see them.  While zooming, we value the relationship benefits of cameras on, but also respect the right to have cameras off.  When creating meeting invites, be respectful of other people's time. This includes only inviting those who will find value in the meeting, and marking attendees as optional where appropropriate. Care should also be taken to schedule during attendees' core working hours and not overlap with previously scheduled meetings.
+3. Meetings: Bring attention to questions or comments in the zoom chat to the presenter, as they are not always able to see them.  While zooming, we value the relationship benefits of cameras on, but also respect the right to have cameras off.  When creating meeting invites, be respectful of other people's time. This includes only inviting those who will find value in the meeting, and marking attendees as optional where appropriate. Care should also be taken to schedule during attendees' core working hours and not overlap with previously scheduled meetings.
 
 4. Voting: As a team we will use multiple methods of voting for decision making within the team. The team will use Roman voting for quick feedback from the group on a singular topic. The team will use dot voting for discussions that have a variety of options to choose from in order to narrow down to a smaller list of actionable items.  Planning poker will be the tool we will use for estimation voting on the urgency and importance in regards to the DevEx/OpEx backlog.
 
@@ -136,7 +136,7 @@ Every week we rotate responsibility for updating dependencies. As an open-source
 3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the resolutions block in `package.json` to specify version overrides.
 If dependencies have no patch, replace it with an alternative, or wait for the library to be patched.
 
-    NOTE: If any npm packages are updated, update the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
+    NOTE: If any npm packages are updated but the `package-lock.js` file is not updated, increment the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
 
 4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
 
@@ -151,7 +151,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 #### Caveats
 
-Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
+Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
 - `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
   - `@fortawesome/free-solid-svg-icons`
@@ -160,6 +160,4 @@ Below is a list of dependencies that are locked down due to known issues with se
 
 - It'd be good to keep an eye on `s3rver` for when it exceeds 3.7.1. We have a patch in place for called `s3rver+3.7.1.patch` in order to address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible.
 
--`puppeteer` and `puppeteer-core`: temporily locked to 14.1.x and its respective patches. The major update to 15.3.1 causes jest timeout issues as well as issues with prototype property using Chromium. Causes Cypress test failures as well. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/36266/workflows/bdd41d67-c752-40fd-b9ec-4ed36ae72853).
-
-- `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. ajv is a tranisitive dependeny of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/7286153454?check_suite_focus=true) to failing test on 07/04 dependency updates.
+-`puppeteer` and `puppeteer-core`: temporarily locked to 14.1.x and its respective patches. The major update to 15.3.1 causes jest timeout issues as well as issues with prototype property using Chromium. Causes Cypress test failures as well. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/36266/workflows/bdd41d67-c752-40fd-b9ec-4ed36ae72853).
