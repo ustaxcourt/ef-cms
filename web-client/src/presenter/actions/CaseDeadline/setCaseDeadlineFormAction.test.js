@@ -1,9 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setCaseDeadlineFormAction } from './setCaseDeadlineFormAction';
 
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('setCaseDeadlineFormAction', () => {
   it('does not set a caseDeadline on the state.form if props.caseDeadlineId does not match any of the caseDeadlineIds', async () => {

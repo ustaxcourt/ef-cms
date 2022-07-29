@@ -1,10 +1,10 @@
 import { CASE_STATUS_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateUpdateCaseModalAction } from './validateUpdateCaseModalAction';
 
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('validateUpdateCaseModalAction', () => {
   let successStub;

@@ -1,10 +1,10 @@
 import { COURT_ISSUED_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketEntryMetaTypeAction } from './setDocketEntryMetaTypeAction';
 
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('setDocketEntryMetaTypeAction', () => {
   it('Should return CourtIssued in the case of a court issued document', async () => {

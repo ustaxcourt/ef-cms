@@ -1,10 +1,10 @@
 import { SERVICE_INDICATOR_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associateIrsPractitionerWithCaseAction } from './associateIrsPractitionerWithCaseAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('associateIrsPractitionerWithCaseAction', () => {
   it('should run associateIrsPractitionerWithCaseInteractor and success path', async () => {

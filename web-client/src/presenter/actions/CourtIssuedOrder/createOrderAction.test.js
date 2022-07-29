@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { createOrderAction } from './createOrderAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -20,7 +20,7 @@ describe('createOrderAction', () => {
         }),
       });
 
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('creates an order', async () => {
@@ -45,7 +45,7 @@ describe('createOrderAction', () => {
   });
 
   it('creates an order for a notice', async () => {
-    applicationContextForClient.getClerkOfCourtNameForSigning.mockReturnValue(
+    applicationContext.getClerkOfCourtNameForSigning.mockReturnValue(
       'Bobby Flay',
     );
 
@@ -63,9 +63,7 @@ describe('createOrderAction', () => {
       },
     });
 
-    expect(
-      applicationContextForClient.getClerkOfCourtNameForSigning,
-    ).toBeCalled();
+    expect(applicationContext.getClerkOfCourtNameForSigning).toBeCalled();
     expect(result.output.contentHtml).toEqual('');
     expect(result.output.documentTitle).toEqual('');
     expect(result.output.signatureText).toEqual('Bobby Flay');

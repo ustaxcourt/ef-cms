@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { generatePractitionerCaseListPdfUrlAction } from './generatePractitionerCaseListPdfUrlAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -28,10 +28,5 @@ describe('generatePractitionerCaseListPdfUrlAction', () => {
     );
 
     expect(output).toEqual({ pdfUrl: url });
-
-    expect(
-      applicationContext.getUseCases()
-        .generatePractitionerCaseListPdfInteractor,
-    ).toHaveBeenCalledWith(expect.anything(), { userId });
   });
 });

@@ -3,7 +3,7 @@ import {
   ROLES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { User } from '../../../../../shared/src/business/entities/User';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitCaseAssociationRequestAction } from './submitCaseAssociationRequestAction';

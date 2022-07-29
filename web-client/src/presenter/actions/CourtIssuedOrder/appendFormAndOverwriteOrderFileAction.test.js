@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { overwriteOrderFileAction } from './overwriteOrderFileAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -11,7 +11,7 @@ describe('overwriteOrderFileAction', () => {
     errorStub = jest.fn();
     successStub = jest.fn();
 
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -34,12 +34,12 @@ describe('overwriteOrderFileAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases().uploadOrderDocumentInteractor,
+      applicationContext.getUseCases().uploadOrderDocumentInteractor,
     ).toBeCalled();
   });
 
   it('fails to overwrite the file for an order', () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .uploadOrderDocumentInteractor.mockImplementation(() => {
         throw new Error();

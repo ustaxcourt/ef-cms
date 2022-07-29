@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateAddIrsPractitionerAction } from './validateAddIrsPractitionerAction';
@@ -16,7 +16,7 @@ describe('validateAddIrsPractitioner', () => {
       user: { userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291' },
     };
 
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -24,7 +24,7 @@ describe('validateAddIrsPractitioner', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .validateAddIrsPractitionerInteractor.mockReturnValue(null);
 
@@ -38,14 +38,13 @@ describe('validateAddIrsPractitioner', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases()
-        .validateAddIrsPractitionerInteractor,
+      applicationContext.getUseCases().validateAddIrsPractitionerInteractor,
     ).toHaveBeenCalled();
     expect(successStub).toHaveBeenCalledTimes(1);
   });
 
   it('should call the error path when any errors are found', async () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .validateAddIrsPractitionerInteractor.mockReturnValue('error');
 
@@ -59,8 +58,7 @@ describe('validateAddIrsPractitioner', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases()
-        .validateAddIrsPractitionerInteractor,
+      applicationContext.getUseCases().validateAddIrsPractitionerInteractor,
     ).toHaveBeenCalled();
     expect(errorStub).toHaveBeenCalledTimes(1);
   });

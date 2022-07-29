@@ -1,5 +1,5 @@
 import { CONTACT_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { generateCaseAssociationTitleAction } from './generateCaseAssociationTitleAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';

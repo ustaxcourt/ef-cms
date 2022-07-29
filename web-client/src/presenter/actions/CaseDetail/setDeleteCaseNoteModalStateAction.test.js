@@ -1,9 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDeleteCaseNoteModalStateAction } from './setDeleteCaseNoteModalStateAction';
 
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('setDeleteCaseNoteModalStateAction', () => {
   it('should set the modal state docketNumber from caseDetail', async () => {

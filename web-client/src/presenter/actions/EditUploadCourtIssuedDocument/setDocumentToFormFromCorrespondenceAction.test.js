@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocumentToFormFromCorrespondenceAction } from './setDocumentToFormFromCorrespondenceAction';
@@ -7,7 +7,7 @@ describe('setDocumentToFormFromCorrespondenceAction', () => {
   let documentIdToEdit;
 
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('sets state.form for the given case and documentId when the document is a correspondence', async () => {

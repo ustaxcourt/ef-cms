@@ -3,7 +3,13 @@ import { runAction } from 'cerebral/test';
 
 describe('openCaseInNewTabAction', () => {
   beforeAll(() => {
-    window.open = jest.fn();
+    global.window = {
+      open: jest.fn(),
+    };
+  });
+
+  afterAll(() => {
+    delete global.window;
   });
 
   it('calls window.open with a blank tab for the given props.docketNumber', async () => {

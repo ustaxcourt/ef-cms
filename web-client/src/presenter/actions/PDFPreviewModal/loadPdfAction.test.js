@@ -1,5 +1,5 @@
 import {
-  applicationContextForClient as applicationContext,
+  applicationContext,
   testPdfDoc,
 } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { loadPdfAction } from './loadPdfAction';

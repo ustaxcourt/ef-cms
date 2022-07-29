@@ -1,15 +1,15 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';
 import { submitPublicCaseAdvancedSearchAction } from './submitPublicCaseAdvancedSearchAction';
 
 describe('submitPublicCaseAdvancedSearchAction', () => {
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('gets the public case information', async () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .casePublicSearchInteractor.mockResolvedValue([
         { docketNumber: '123-45' },
@@ -36,7 +36,7 @@ describe('submitPublicCaseAdvancedSearchAction', () => {
       ],
     });
     expect(
-      applicationContextForClient.getUseCases().casePublicSearchInteractor,
+      applicationContext.getUseCases().casePublicSearchInteractor,
     ).toBeCalled();
   });
 });

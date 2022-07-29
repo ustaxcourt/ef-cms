@@ -2,23 +2,22 @@ import { reloadPageAction } from './reloadPageAction';
 import { runAction } from 'cerebral/test';
 
 describe('reloadPageAction', () => {
-  const original = window.location;
-
   beforeAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: { reload: jest.fn() },
-    });
+    global.window = {
+      location: {
+        configurable: true,
+        reload: jest.fn(),
+        value: { reload: jest.fn() },
+      },
+    };
   });
 
   afterAll(() => {
-    Object.defineProperty(window, 'location', {
-      configurable: true,
-      value: original,
-    });
+    delete global.window;
   });
+
   it('should call location reload api', async () => {
     await runAction(reloadPageAction);
-    expect(location.reload).toHaveBeenCalled();
+    expect(window.location.reload).toHaveBeenCalled();
   });
 });

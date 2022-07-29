@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { submitEditPetitionerCounselAction } from './submitEditPetitionerCounselAction';
@@ -9,7 +9,7 @@ describe('submitEditPetitionerCounselAction', () => {
   beforeAll(() => {
     successStub = jest.fn();
 
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       success: successStub,
     };
@@ -35,12 +35,12 @@ describe('submitEditPetitionerCounselAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
-        .mock.calls.length,
+      applicationContext.getUseCases().updateCounselOnCaseInteractor.mock.calls
+        .length,
     ).toEqual(1);
     expect(
-      applicationContextForClient.getUseCases().updateCounselOnCaseInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases().updateCounselOnCaseInteractor.mock
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: '123-20',
       userData: {

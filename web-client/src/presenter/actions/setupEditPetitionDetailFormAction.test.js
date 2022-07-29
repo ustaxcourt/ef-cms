@@ -1,5 +1,5 @@
 import { PAYMENT_STATUS } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setupEditPetitionDetailFormAction } from './setupEditPetitionDetailFormAction';

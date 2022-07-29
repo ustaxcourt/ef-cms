@@ -1,11 +1,11 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPublicCaseAction } from './getPublicCaseAction';
 import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';
 
 describe('getPublicCaseAction', () => {
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('gets the public case information', async () => {
@@ -18,8 +18,6 @@ describe('getPublicCaseAction', () => {
       },
     });
 
-    expect(
-      applicationContextForClient.getUseCases().getCaseInteractor,
-    ).toBeCalled();
+    expect(applicationContext.getUseCases().getCaseInteractor).toBeCalled();
   });
 });

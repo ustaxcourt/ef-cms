@@ -1,10 +1,10 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setQCWorkItemIdToMarkAsReadIfNeededAction } from './setQCWorkItemIdToMarkAsReadIfNeededAction';
 
 describe('setQCWorkItemIdToMarkAsReadIfNeededAction', () => {
-  presenter.providers.applicationContext = applicationContextForClient;
+  presenter.providers.applicationContext = applicationContext;
 
   it('should return undefined when the docket entry was not found', async () => {
     const result = await runAction(setQCWorkItemIdToMarkAsReadIfNeededAction, {

@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { getInboxMessagesForSectionAction } from './getInboxMessagesForSectionAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -12,7 +12,7 @@ describe('getInboxMessagesForSectionAction', () => {
     presenter.providers.applicationContext = applicationContext;
     applicationContext
       .getUseCases()
-      .getInboxMessagesForSectionInteractor.mockReturnValue([message]);
+      .getInboxMessagesForSectionInteractor.mockResolvedValue([message]);
   });
 
   it('returns the messages retrieved from the use case', async () => {

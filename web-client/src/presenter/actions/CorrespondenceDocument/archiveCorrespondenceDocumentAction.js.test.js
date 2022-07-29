@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { archiveCorrespondenceDocumentAction } from './archiveCorrespondenceDocumentAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';

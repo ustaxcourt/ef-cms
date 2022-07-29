@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runAction } from 'cerebral/test';
 import { setIdleStatusFactoryAction } from './setIdleStatusFactoryAction';
 

@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { computeCertificateOfServiceFormDateAction } from './computeCertificateOfServiceFormDateAction';
 import { presenter } from '../../presenter';
 import { runAction } from 'cerebral/test';

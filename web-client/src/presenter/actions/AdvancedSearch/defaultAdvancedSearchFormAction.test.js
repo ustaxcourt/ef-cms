@@ -1,11 +1,11 @@
 import { COUNTRY_TYPES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { defaultAdvancedSearchFormAction } from './defaultAdvancedSearchFormAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('defaultAdvancedSearchFormAction', () => {
-  presenter.providers.applicationContext = applicationContextForClient;
+  presenter.providers.applicationContext = applicationContext;
 
   it('sets defaults on state.advancedSearchForm if state.advancedSearchForm is empty', async () => {
     const result = await runAction(defaultAdvancedSearchFormAction, {

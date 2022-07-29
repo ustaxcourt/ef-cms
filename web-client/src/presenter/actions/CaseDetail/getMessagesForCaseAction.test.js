@@ -1,10 +1,10 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getMessagesForCaseAction } from './getMessagesForCaseAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getMessagesForCaseAction', () => {
-  const { PETITIONS_SECTION } = applicationContextForClient.getConstants();
+  const { PETITIONS_SECTION } = applicationContext.getConstants();
   const mockMessage = {
     createdAt: '2019-03-01T21:40:46.415Z',
     docketNumber: '101-20',
@@ -20,8 +20,8 @@ describe('getMessagesForCaseAction', () => {
   };
 
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
-    applicationContextForClient
+    presenter.providers.applicationContext = applicationContext;
+    applicationContext
       .getUseCases()
       .getMessagesForCaseInteractor.mockReturnValue([mockMessage]);
   });
@@ -39,11 +39,11 @@ describe('getMessagesForCaseAction', () => {
     });
 
     expect(
-      applicationContextForClient.getUseCases().getMessagesForCaseInteractor,
+      applicationContext.getUseCases().getMessagesForCaseInteractor,
     ).toBeCalled();
     expect(
-      applicationContextForClient.getUseCases().getMessagesForCaseInteractor
-        .mock.calls[0][1],
+      applicationContext.getUseCases().getMessagesForCaseInteractor.mock
+        .calls[0][1],
     ).toMatchObject({
       docketNumber: '101-20',
     });

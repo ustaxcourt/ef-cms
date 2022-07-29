@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { validateAddPrivatePractitionerAction } from './validateAddPrivatePractitionerAction';
@@ -18,7 +18,7 @@ describe('validateAddPrivatePractitioner', () => {
       user: { userId: '15adf875-8c3c-4e94-91e9-a4c1bff51291' },
     };
 
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
     presenter.providers.path = {
       error: errorStub,
       success: successStub,
@@ -26,7 +26,7 @@ describe('validateAddPrivatePractitioner', () => {
   });
 
   it('should call the success path when no errors are found', async () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .validateAddPrivatePractitionerInteractor.mockReturnValue(null);
 
@@ -43,7 +43,7 @@ describe('validateAddPrivatePractitioner', () => {
   });
 
   it('should call the error path when any errors are found', async () => {
-    applicationContextForClient
+    applicationContext
       .getUseCases()
       .validateAddPrivatePractitionerInteractor.mockReturnValue('error');
 

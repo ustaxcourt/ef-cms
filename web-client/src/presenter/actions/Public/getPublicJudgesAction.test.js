@@ -1,5 +1,5 @@
 import { ROLES } from '../../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { getPublicJudgesAction } from './getPublicJudgesAction';
 import { presenter } from '../../presenter-public';
 import { runAction } from 'cerebral/test';

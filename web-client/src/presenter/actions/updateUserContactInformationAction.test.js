@@ -1,10 +1,13 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateUserContactInformationAction } from './updateUserContactInformationAction';
 
 describe('updateUserContactInformationAction', () => {
   beforeAll(() => {
+    applicationContext.getCurrentUser.mockReturnValue({
+      userId: 'a805d1ab-18d0-43ec-bafb-654e83405416',
+    });
     presenter.providers.applicationContext = applicationContext;
   });
 

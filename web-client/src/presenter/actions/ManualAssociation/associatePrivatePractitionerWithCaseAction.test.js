@@ -1,9 +1,9 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { associatePrivatePractitionerWithCaseAction } from './associatePrivatePractitionerWithCaseAction';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
-presenter.providers.applicationContext = applicationContextForClient;
+presenter.providers.applicationContext = applicationContext;
 
 describe('associatePrivatePractitionerWithCaseAction', () => {
   it('should run associatePrivatePractitionerWithCaseInteractor and success path', async () => {

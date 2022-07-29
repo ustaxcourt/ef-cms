@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { completeDocumentSigningAction } from './completeDocumentSigningAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -81,7 +81,13 @@ describe('completeDocumentSigningAction', () => {
   });
 
   beforeEach(() => {
-    global.window.pdfjsObj = mockPdfjsObj;
+    global.window = {
+      pdfjsObj: mockPdfjsObj,
+    };
+  });
+
+  afterEach(() => {
+    delete global.window;
   });
 
   it('should sign a document via executing various use cases', async () => {

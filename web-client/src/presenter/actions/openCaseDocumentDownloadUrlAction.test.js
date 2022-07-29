@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { openCaseDocumentDownloadUrlAction } from './openCaseDocumentDownloadUrlAction';
 import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
@@ -8,15 +8,16 @@ describe('openCaseDocumentDownloadUrlAction', () => {
   const writeSpy = jest.fn();
 
   beforeEach(() => {
-    window.open = jest.fn().mockReturnValue({
-      close: closeSpy,
-      document: {
-        write: writeSpy,
-      },
+    global.window = {
       location: { href: '' },
-    });
-    delete window.location;
-    window.location = { href: '' };
+      open: jest.fn().mockReturnValue({
+        close: closeSpy,
+        document: {
+          write: writeSpy,
+        },
+        location: { href: '' },
+      }),
+    };
 
     presenter.providers.applicationContext = applicationContext;
 
@@ -25,6 +26,10 @@ describe('openCaseDocumentDownloadUrlAction', () => {
       .getDocumentDownloadUrlInteractor.mockResolvedValue({
         url: 'http://example.com',
       });
+  });
+
+  afterEach(() => {
+    delete global.window;
   });
 
   it('should set iframeSrc with the url when props.isForIFrame is true', async () => {

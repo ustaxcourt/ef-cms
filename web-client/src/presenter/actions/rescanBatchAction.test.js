@@ -1,5 +1,5 @@
 import { SCAN_MODES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../presenter-mock';
 import { rescanBatchAction } from './rescanBatchAction';
 import { runAction } from 'cerebral/test';

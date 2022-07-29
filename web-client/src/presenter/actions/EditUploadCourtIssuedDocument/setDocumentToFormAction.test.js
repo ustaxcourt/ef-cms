@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocumentToFormAction } from './setDocumentToFormAction';
@@ -8,7 +8,7 @@ describe('setDocumentToFormAction', () => {
   let documentToMatch;
 
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('sets state.form for the given case and docketEntryId', async () => {

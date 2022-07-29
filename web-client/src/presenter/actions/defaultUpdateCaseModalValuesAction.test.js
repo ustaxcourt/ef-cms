@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { defaultUpdateCaseModalValuesAction } from './defaultUpdateCaseModalValuesAction';
 import { runAction } from 'cerebral/test';
 

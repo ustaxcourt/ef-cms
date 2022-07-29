@@ -1,11 +1,11 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setPetitionerCounselFormAction } from './setPetitionerCounselFormAction';
 
 describe('setPetitionerCounselFormAction', () => {
   beforeAll(() => {
-    presenter.providers.applicationContext = applicationContextForClient;
+    presenter.providers.applicationContext = applicationContext;
   });
 
   it('should set the state.form to the associated petitioner counsel via its barNumber', async () => {

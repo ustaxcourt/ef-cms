@@ -1,4 +1,4 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { updateDateRangeForDeadlinesAction } from './updateDateRangeForDeadlinesAction';
@@ -7,7 +7,7 @@ describe('updateDateRangeForDeadlinesAction', () => {
   const mockStartDate = '04/20/2019';
   const mockEndDate = '02/05/2021';
 
-  presenter.providers.applicationContext = applicationContextForClient;
+  presenter.providers.applicationContext = applicationContext;
 
   it('should compute and set screenMetadata.filterStartDate and screenMetadata.filterEndDate from screenMetadata', async () => {
     const result = await runAction(updateDateRangeForDeadlinesAction, {

@@ -9,6 +9,7 @@ export const generatePractitionerCaseListPdfUrlAction = async ({
   applicationContext,
   props,
 }) => {
+  console.log(applicationContext.getUseCases());
   const { url } = await applicationContext
     .getUseCases()
     .generatePractitionerCaseListPdfInteractor(applicationContext, {

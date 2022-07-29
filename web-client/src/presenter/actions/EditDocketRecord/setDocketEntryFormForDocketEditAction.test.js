@@ -1,10 +1,10 @@
-import { applicationContextForClient } from '../../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 import { setDocketEntryFormForDocketEditAction } from './setDocketEntryFormForDocketEditAction';
 
 describe('setDocketEntryFormForDocketEditAction', () => {
-  presenter.providers.applicationContext = applicationContextForClient;
+  presenter.providers.applicationContext = applicationContext;
 
   it("sets the given document's edit state on form.state", async () => {
     const editState = {

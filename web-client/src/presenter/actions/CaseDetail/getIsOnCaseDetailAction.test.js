@@ -10,12 +10,12 @@ describe('getIsOnCaseDetailAction', () => {
     noMock = jest.fn();
     yesMock = jest.fn();
 
-    delete window.location;
-    window.location = {
-      href: '',
-      pathname: '',
+    global.window = {
+      location: {
+        href: '',
+        pathname: '',
+      },
     };
-
     presenter = {
       providers: {
         path: {
@@ -24,6 +24,10 @@ describe('getIsOnCaseDetailAction', () => {
         },
       },
     };
+  });
+
+  afterAll(() => {
+    delete global.window;
   });
 
   it('returns the yes path if the current route matches the case detail view', async () => {
