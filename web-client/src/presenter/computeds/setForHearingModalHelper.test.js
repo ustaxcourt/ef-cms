@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { setForHearingModalHelper as setForHearingModalHelperComputed } from './setForHearingModalHelper';
 import { withAppContextDecorator } from '../../withAppContext';

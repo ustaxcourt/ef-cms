@@ -1,5 +1,5 @@
 import { CASE_TYPES_MAP } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { statisticsFormHelper as statisticsFormHelperComputed } from './statisticsFormHelper';
 import { withAppContextDecorator } from '../../withAppContext';

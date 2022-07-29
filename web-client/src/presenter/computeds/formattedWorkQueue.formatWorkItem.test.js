@@ -1,4 +1,4 @@
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { docketClerkUser } from '../../../../shared/src/test/mockUsers';
 import { formatWorkItem } from './formattedWorkQueue';
 

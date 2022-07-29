@@ -1,5 +1,5 @@
 import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formatCounsel } from './partiesInformationHelper';
 
 describe('partiesInformationHelper', () => {

@@ -1,6 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 import { MOCK_TRIAL_INPERSON } from '../../../../shared/src/test/mockTrial';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { gotoTrialSessionDetailSequence } from '../sequences/gotoTrialSessionDetailSequence';
 import { presenter } from '../presenter-mock';
 

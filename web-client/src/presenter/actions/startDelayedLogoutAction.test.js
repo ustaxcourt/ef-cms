@@ -5,6 +5,9 @@ import { startDelayedLogoutAction } from './startDelayedLogoutAction';
 
 describe('startDelayedLogoutAction', () => {
   beforeAll(() => {
+    applicationContext.getConstants.mockReturnValue({
+      SESSION_MODAL_TIMEOUT: 1,
+    });
     presenter.providers.applicationContext = applicationContext;
   });
 

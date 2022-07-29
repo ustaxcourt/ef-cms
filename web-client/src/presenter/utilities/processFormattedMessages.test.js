@@ -3,7 +3,7 @@ import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   applyFiltersToCompletedMessages,
   applyFiltersToMessages,

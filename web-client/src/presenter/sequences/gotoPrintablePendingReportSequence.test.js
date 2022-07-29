@@ -1,5 +1,5 @@
 import { CerebralTest } from 'cerebral/test';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { gotoPrintablePendingReportSequence } from '../sequences/gotoPrintablePendingReportSequence';
 import { presenter } from '../presenter-mock';
 

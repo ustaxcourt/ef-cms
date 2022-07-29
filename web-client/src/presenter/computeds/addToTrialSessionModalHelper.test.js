@@ -1,5 +1,5 @@
 import { addToTrialSessionModalHelper as addToTrialSessionModalHelperComputed } from './addToTrialSessionModalHelper';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 

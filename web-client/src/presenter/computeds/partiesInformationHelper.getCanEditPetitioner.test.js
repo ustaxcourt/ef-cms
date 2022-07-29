@@ -2,7 +2,7 @@ import {
   CONTACT_TYPES,
   ROLES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
   docketClerkUser,
   petitionsClerkUser,

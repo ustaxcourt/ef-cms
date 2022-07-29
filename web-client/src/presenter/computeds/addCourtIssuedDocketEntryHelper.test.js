@@ -5,7 +5,7 @@ import {
   INITIAL_DOCUMENT_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { addCourtIssuedDocketEntryHelper as addCourtIssuedDocketEntryHelperComputed } from './addCourtIssuedDocketEntryHelper';
-import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';

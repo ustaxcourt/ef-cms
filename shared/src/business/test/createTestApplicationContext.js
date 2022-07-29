@@ -13,6 +13,7 @@ const {
 } = require('../../../src/business/utilities/formatAttachments');
 const {
   formatCase,
+  formatDocketEntry,
 } = require('../../../src/business/utilities/getFormattedCaseDetail');
 const {
   getDocumentTitleWithAdditionalInfo,
@@ -64,10 +65,10 @@ const createTestApplicationContext = ({ user } = {}) => {
   return appContextProxy({
     getBroadcastGateway: appContextProxy(),
     getCaseTitle: Case.getCaseTitle,
-    getConstants: () => ({
+    getConstants: jest.fn().mockImplementation(() => ({
       ...getConstants(),
       ERROR_MAP_429,
-    }),
+    })),
     getCurrentUser: jest.fn().mockReturnValue(user),
     getLogger: appContextProxy(),
     getPersistenceGateway: appContextProxy(),
@@ -92,6 +93,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       formatAttachments: jest.fn().mockImplementation(formatAttachments),
       formatCase,
       formatDateString: DateHandler.formatDateString,
+      formatDocketEntry,
       getAttachmentDocumentById: Case.getAttachmentDocumentById,
       getCaseCaption: jest.fn().mockImplementation(Case.getCaseCaption),
       getContactPrimary,
