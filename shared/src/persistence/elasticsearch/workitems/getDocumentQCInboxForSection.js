@@ -1,4 +1,4 @@
-const { GET_WORK_ITEM_PARENT_CASE } = require('../helpers/searchClauses');
+const { GET_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 exports.getDocumentQCInboxForSection = async ({
@@ -37,7 +37,7 @@ exports.getDocumentQCInboxForSection = async ({
                 },
               },
             },
-            GET_WORK_ITEM_PARENT_CASE,
+            GET_PARENT_CASE,
           ],
         },
       },

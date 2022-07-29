@@ -27,21 +27,7 @@ const IS_PRACTITIONER = [
     },
   },
 ];
-// TODO: Refactor into one?
-const GET_MESSAGE_PARENT_CASE = {
-  has_parent: {
-    inner_hits: {
-      _source: {
-        includes: ['leadDocketNumber', 'docketNumber'],
-      },
-      name: 'case-mappings',
-    },
-    parent_type: 'case',
-    query: { match_all: {} },
-  },
-};
-
-const GET_WORK_ITEM_PARENT_CASE = {
+const GET_PARENT_CASE = {
   has_parent: {
     inner_hits: {
       _source: {
@@ -55,8 +41,7 @@ const GET_WORK_ITEM_PARENT_CASE = {
 };
 
 module.exports = {
-  GET_MESSAGE_PARENT_CASE,
-  GET_WORK_ITEM_PARENT_CASE,
+  GET_PARENT_CASE,
   IS_PRACTITIONER,
   IS_USER,
 };
