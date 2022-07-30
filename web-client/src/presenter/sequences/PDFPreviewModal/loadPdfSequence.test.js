@@ -1,6 +1,6 @@
 import { CerebralTest } from 'cerebral/test';
 import {
-  applicationContextForClient as applicationContext,
+  applicationContext,
   testPdfDoc,
 } from '../../../../../shared/src/business/test/createTestApplicationContext';
 import { loadPdfSequence } from '../../sequences/PDFPreviewModal/loadPdfSequence';

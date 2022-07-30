@@ -11,13 +11,11 @@ describe('sortTodaysOrdersSequence', () => {
     presenter.sequences = {
       sortTodaysOrdersSequence,
     };
-
+    cerebralTest = CerebralTest(presenter);
     applicationContext.getUseCases().getTodaysOrdersInteractor.mockReturnValue({
       results: ['newly', 'sorted', 'results'],
       totalCount: 3,
     });
-
-    cerebralTest = CerebralTest(presenter);
   });
 
   it('should always unset page number before requesting search results', async () => {
@@ -38,14 +36,12 @@ describe('sortTodaysOrdersSequence', () => {
       'filingDate',
     );
     expect(
-      applicationContext.getUseCases().getTodaysOrdersInteractor,
-    ).toHaveBeenCalledWith(
-      { context: expect.anything() },
-      {
-        page: 1,
-        todaysOrdersSort: 'filingDate',
-      },
-    );
+      applicationContext.getUseCases().getTodaysOrdersInteractor.mock
+        .calls[0][1],
+    ).toEqual({
+      page: 1,
+      todaysOrdersSort: 'filingDate',
+    });
     expect(cerebralTest.getState('todaysOrders')).toMatchObject({
       page: 2,
       results: ['newly', 'sorted', 'results'],

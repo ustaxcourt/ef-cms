@@ -105,6 +105,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       ERROR_MAP_429,
     })),
     getCurrentUser: jest.fn().mockReturnValue(user),
+    getCurrentUserPermissions: jest.fn(),
     getLogger: appContextProxy(),
     getPersistenceGateway: appContextProxy({
       getChambersSectionsLabels,

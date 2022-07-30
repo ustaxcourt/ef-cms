@@ -25,6 +25,7 @@ describe('gotoDashboardSequence', () => {
     cerebralTest = CerebralTest(presenter);
 
     applicationContext.getUseCases().getUserInteractor.mockReturnValue(user);
+    applicationContext.getCurrentUser.mockReturnValue(user);
 
     applicationContext.getUseCases().getCasesForUserInteractor.mockReturnValue({
       closedCaseList: closedCases,
