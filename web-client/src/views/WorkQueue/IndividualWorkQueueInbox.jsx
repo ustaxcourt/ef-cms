@@ -24,14 +24,14 @@ export const IndividualWorkQueueInbox = connect(
                 className="consolidated-case-column"
                 colSpan="2"
               ></th>
-              <th aria-label="Docket Number" className="small" colSpan="2">
+              <th aria-label="Docket Number" className="small">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
               <th className="small">Received</th>
+              <th>Case Title</th>
               <th aria-label="Status Icon" className="padding-right-0">
                 &nbsp;
               </th>
-              <th>Case Title</th>
               <th>Document</th>
               {!workQueueHelper.hideFiledByColumn && <th>Filed by</th>}
               <th>Case Status</th>

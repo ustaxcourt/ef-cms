@@ -27,7 +27,7 @@ export const IndividualWorkQueueInProgress = connect(
                 className="consolidated-case-column"
                 colSpan="2"
               ></th>
-              <th aria-label="Docket Number" colSpan="2">
+              <th aria-label="Docket Number">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
               <th>Received</th>
