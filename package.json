@@ -18,7 +18,7 @@
     "@fortawesome/react-fontawesome": "^0.1.19",
     "@hapi/joi-date": "^2.0.1",
     "@pdftron/pdfjs-express-viewer": "^8.7.0",
-    "@sparticuz/chrome-aws-lambda": "^14.3.0",
+    "@sparticuz/chrome-aws-lambda": "^15.5.0",
     "archiver": "^5.3.1",
     "aws-sdk": "^2.1182.0",
     "broadcast-channel": "^4.14.0",
