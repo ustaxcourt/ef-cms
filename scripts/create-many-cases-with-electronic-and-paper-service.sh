@@ -1,4 +1,5 @@
 #!/bin/bash
+# shellcheck disable=SC1073
 
 # login token. pull from a request header after logging in.
 # for this script the tokens should be from a petitioner account and from
@@ -18,8 +19,9 @@ requestForPlaceOfTrialFileId="[PLACE HERE]"
 # numberOfCases to create starts counting from 0, so a value of 9 will create 10 cases
 numberOfElectronicCasesToCreate=74
 numberOfPaperCasesToCreate=171
-let actualNumberOfElectronicCases=numberOfElectronicCasesToCreate+1
-let actualNumberOfPaperCases=numberOfPaperCasesToCreate+1
+actualNumberOfElectronicCases=${numberOfElectronicCasesToCreate+1}
+actualNumberOfPaperCases=${numberOfPaperCasesToCreate+1}
+
 
 createCaseWithElectronicServiceAndAddToTrialSession(){
   docketNumberWithElectronicService=$(curl "${baseUrl}/cases" \
@@ -37,7 +39,7 @@ createCaseWithElectronicServiceAndAddToTrialSession(){
   -H 'sec-fetch-mode: cors' \
   -H 'sec-fetch-site: same-site' \
   -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
-  --data-raw '{"petitionFileId":"'$petitionFileIdForElectronicService'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Thor deMarvel","address1":"12345 Main St","city":"El Paso","state":"TX","postalCode":"79938","phone":"123456789","email":"tshumway+petitioner1@flexion.us"},"wizardStep":"5","stinFile":{},"stinFileSize":145709,"petitionFile":{},"petitionFileSize":145709,"hasIrsNotice":false,"caseType":"Other","filingType":"Myself","partyType":"Petitioner","contactSecondary":{},"procedureType":"Regular","preferredTrialCity":"El Paso, Texas"},"stinFileId":"'$stinFileId'"}' \
+  --data-raw '{"petitionFileId":"'"$petitionFileIdForElectronicService"'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Thor deMarvel","address1":"12345 Main St","city":"El Paso","state":"TX","postalCode":"79938","phone":"123456789","email":"tshumway+petitioner1@flexion.us"},"wizardStep":"5","stinFile":{},"stinFileSize":145709,"petitionFile":{},"petitionFileSize":145709,"hasIrsNotice":false,"caseType":"Other","filingType":"Myself","partyType":"Petitioner","contactSecondary":{},"procedureType":"Regular","preferredTrialCity":"El Paso, Texas"},"stinFileId":"'"$stinFileId"'"}' \
   --compressed | jq -r '.docketNumber')
 
   echo -e "\n\nDOCKET NUMBER: ${docketNumberWithElectronicService} CREATED\n\n"
@@ -63,8 +65,6 @@ createCaseWithElectronicServiceAndAddToTrialSession(){
     --compressed
 
   echo -e "\n\nDOCKET NUMBER: ${docketNumberWithElectronicService} ADDED TO TRIAL SESSION\n\n"
-
-  casesToCalendar+=($docketNumberWithElectronicService)
 }
 
 createCaseWithPaperServiceAndAddToTrialSession(){
@@ -85,7 +85,7 @@ createCaseWithPaperServiceAndAddToTrialSession(){
     -H 'sec-fetch-mode: cors' \
     -H 'sec-fetch-site: same-site' \
     -H 'user-agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/103.0.0.0 Safari/537.36' \
-    --data-raw '{"petitionFileId":"'$petitionFileIdForPaperService'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Kelsie Taylor","address1":"811 Milton Road","address2":"Iusto quam consequat","address3":"Repellendus Tenetur","city":"Exercitation repelle","postalCode":"36589","phone":"+1 (778) 202-3151","state":"KY"},"procedureType":"Regular","hasVerifiedIrsNotice":false,"orderDesignatingPlaceOfTrial":false,"statistics":[],"partyType":"Petitioner","orderForOds":false,"petitionFile":{},"petitionFileSize":3028,"requestForPlaceOfTrialFile":{},"requestForPlaceOfTrialFileSize":3028,"caseCaption":"Kelsie Taylor, Petitioner","mailingDate":"24-Jul-1994","orderToShowCause":true,"petitionPaymentStatus":"Not paid","orderForFilingFee":true,"orderForAmendedPetitionAndFilingFee":true,"preferredTrialCity":"Dallas, Texas","caseType":"Innocent Spouse","receivedAt":"2022-07-04T04:00:00.000Z","petitionPaymentDate":null,"petitionPaymentWaivedDate":null},"requestForPlaceOfTrialFileId":"'$requestForPlaceOfTrialFileId'"}' \
+    --data-raw '{"petitionFileId":"'"$petitionFileIdForPaperService"'","petitionMetadata":{"contactPrimary":{"countryType":"domestic","name":"Kelsie Taylor","address1":"811 Milton Road","address2":"Iusto quam consequat","address3":"Repellendus Tenetur","city":"Exercitation repelle","postalCode":"36589","phone":"+1 (778) 202-3151","state":"KY"},"procedureType":"Regular","hasVerifiedIrsNotice":false,"orderDesignatingPlaceOfTrial":false,"statistics":[],"partyType":"Petitioner","orderForOds":false,"petitionFile":{},"petitionFileSize":3028,"requestForPlaceOfTrialFile":{},"requestForPlaceOfTrialFileSize":3028,"caseCaption":"Kelsie Taylor, Petitioner","mailingDate":"24-Jul-1994","orderToShowCause":true,"petitionPaymentStatus":"Not paid","orderForFilingFee":true,"orderForAmendedPetitionAndFilingFee":true,"preferredTrialCity":"Dallas, Texas","caseType":"Innocent Spouse","receivedAt":"2022-07-04T04:00:00.000Z","petitionPaymentDate":null,"petitionPaymentWaivedDate":null},"requestForPlaceOfTrialFileId":"'"$requestForPlaceOfTrialFileId"'"}' \
     --compressed | jq -r '.docketNumber')
 
   echo -e "\n\nDOCKET NUMBER: ${docketNumberWithPaperService} CREATED\n\n"
@@ -139,7 +139,7 @@ for i in $( seq 0 $numberOfElectronicCasesToCreate ); do
   createCaseWithElectronicServiceAndAddToTrialSession &
   sleep 3
 
-  let currentCaseNumber=i+1
+  currentCaseNumber=${i+1}
 
   echo -e "\n\nCASE ${currentCaseNumber} OF ${actualNumberOfElectronicCases} CREATED\n\n"
 done
@@ -152,9 +152,9 @@ for i in $( seq 0 $numberOfPaperCasesToCreate ); do
   createCaseWithPaperServiceAndAddToTrialSession &
   sleep 3
 
-  let currentCaseNumber=i+1
+  currentCaseNumber=${i+1}
 
   echo -e "\n\nCASE ${currentCaseNumber} OF ${actualNumberOfPaperCases} CREATED\n\n"
 done
 
-echo -e "\n\nFINISHED PAPER CASES"
+echo -e "\n\nFINISHED PAPER CASES\n"
