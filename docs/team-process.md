@@ -9,15 +9,15 @@ Here are some few resources for documentation associated with onboarding:
 1. [Onboarding checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk)
 2. [Onboarding Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c)
 
-If you do not have permissions to view these documents, please reaach out to the scrum master. 
+If you do not have permissions to view these documents, please reach out to the document owner.
+
 ## Working Agreement
 
 We have talked about writing some form of working agreement so team members have a common understanding of what is expected from them during their daily work.  Great teams strive for open communication, safe spaces to speak their mind, and continuous improvement in process.  Embracing some of the following ideologies will help grow and sustain a healthy team.
 
-
 ### Vision Statement
 
-For parties, practitioners, Court staff, and the public at large, DAWSON is a one-stop app that makes working with the USTC secure, efficient, and reliable; DAWSON empowers all of its users with an accessible, frictionless experience and sets the standard for how to engage with and manage the administration of justice. 
+For parties, practitioners, Court staff, and the public at large, DAWSON is a one-stop app that makes working with the USTC secure, efficient, and reliable; DAWSON empowers all of its users with an accessible, frictionless experience and sets the standard for how to engage with and manage the administration of justice.
 
 ### Mission Statement
 
@@ -25,13 +25,13 @@ The mission of the DAWSON Product Team is to continue to add and improve functio
 
 ### Core Values
 
-1. Respect and Appreciation - Respect and appreciation are basic human values that positively impact other areas like performance, workplace enjoyment, and team relationships. 
+1. Respect and Appreciation - Respect and appreciation are basic human values that positively impact other areas like performance, workplace enjoyment, and team relationships.
 2. Communication - As a team we value open and honest communication between team members in all aspects of work.
 3. Knowledge Sharing - We value sharing as much knowledge as possible with team members to allow us to build a quality product.
 4. Experimentation - Because we don’t know what we don’t know, we can’t give a clear cut answer/solution. By experimenting it increases optionality and helps us learn/reveal what we don’t know through the process of elimination. Sometimes multiple experiments are needed and failures can inform successes.
 5. Quality - It's a fundamental value that ensures confidence, enables users at all levels to effectively achieve their goals (perform their duties). We strive to develop processes that increase the overall quality of our code and product.
 6. Psychological Safety - Team members should feel safe to explore their ideas. Psych safety in a team ensures that all paths are seen as viable, therefore helping generate options in order to find the most effective and high quality path forward. Mistakes are valued as learning opportunities and failure generates more knowledge
-Team Relationship Building - We encourage trust, strengthen our comfort in communicating with others, diversity of opinions, and foster empathy. 
+Team Relationship Building - We encourage trust, strengthen our comfort in communicating with others, diversity of opinions, and foster empathy.
 
 ### How We Work
 
@@ -49,11 +49,10 @@ Team Relationship Building - We encourage trust, strengthen our comfort in commu
 
 1. Smoke and integration tests are accurate to real life scenarios.
 2. We don't merge a PR unless its associated build is passing and the PR as at least one approval.
-3. When merge conflicts are encountered, we post in the public channel so that no team members feel left out and can help with resolution. 
-4. When a bug-fix or story has unexpected side-effects, reach out to the assignee of that issue so they can address the feedback. 
+3. When merge conflicts are encountered, we post in the public channel so that no team members feel left out and can help with resolution.
+4. When a bug-fix or story has unexpected side-effects, reach out to the assignee of that issue so they can address the feedback.
 5. UX will collaborate with engineering when a technical issue arises over a design, before and during development.
 6. For all code and bugs, write a failing test  that covers the desired behavior, implement the desired behavior so the test passes, and refactor as needed.
-
 
 ### Flexion Fundamentals
 
@@ -61,10 +60,9 @@ For Flexioneers, remember to read and apply the flexion fundamentals to your dai
 
 [https://flexion.us/flexion-fundamentals/](http://fundamentals.flexion.us/)
 
-
 ### Pair / Mob Programming
 
-A majority of stories and bug we work on should be tackled using pair or mob programming.  The reason we utilize this type of programming is because it produces higher quality software, helps developers find defects in a shorter feedback loop, increases creativity, and strengthens knowledge sharing.  Remember, **cooperation** and **communication** are keys to *success*. 
+A majority of stories and bug we work on should be tackled using pair or mob programming.  The reason we utilize this type of programming is because it produces higher quality software, helps developers find defects in a shorter feedback loop, increases creativity, and strengthens knowledge sharing.  Remember, **cooperation** and **communication** are keys to *success*.
 
 > Two minds are better than one.
 
@@ -82,37 +80,36 @@ We strive to be keep our project as Agile as possible.  This means that every sp
 
 Since we strive to work in pairs and mobs, our stand ups focus more on group goals.  Every morning we meet to talk about our goals for our current sprint and also talk about our story goals for the day.  We setup **parking lot** items to give an opportunity to discuss any important topics that the entire team should be aware of.  We will often give small demos of story / bug progress to the Tax Court.
 
- - Time of Ceremony: 9:30 AM CT
- - Frequency of Ceremony: Daily Monday through Friday
+- Time of Ceremony: 9:30 AM CT
+- Frequency of Ceremony: Daily Monday through Friday
 
-### Sprint Retrospective 
+### Sprint Retrospective
 
-The retrospective is performed at the end of the sprint and offers the team a time to reflect on what went well or what they’d like to improve. 
+The retrospective is performed at the end of the sprint and offers the team a time to reflect on what went well or what they’d like to improve.
 
- - Time of Ceremony: 2:30-4:00 CT
- - Frequency of Ceremony: Every other week Tuesday
+- Time of Ceremony: 2:30-4:00 CT
+- Frequency of Ceremony: Every other week Tuesday
 
 ### Sprint Planning/Refinement
 
 We have combined our grooming and planning into one event. During this meeting we groom stories for the sprint. While a sprint is 2 weeks, we groom every week to allow for shifting PO priorities.
 
- - Time of Ceremony: 11:30-12:00 PM CT
- - Frequency of Ceremony: Every Tuesday 
+- Time of Ceremony: 11:30-12:00 PM CT
+- Frequency of Ceremony: Every Tuesday
 
 ### OpEx/DevEx Backlog Review
 
 A meeting for the team to review the backlog of larger refactoring items and point for priority (importance/urgency).
 
-Refactoring backlog: https://trello.com/b/9tgrIFfA/ef-cms-opex-devex
+Refactoring backlog: <https://trello.com/b/9tgrIFfA/ef-cms-opex-devex>
 
- - Time of Ceremony: 2:00-3:00 PM CT
- - Frequency of Ceremony: Every 2 weeks on Monday 
+- Time of Ceremony: 2:00-3:00 PM CT
+- Frequency of Ceremony: Every 2 weeks on Monday
 
+### Epic Refinement
 
-### Epic Refinement 
-
- - Time of Ceremony: 2:00-3:00 PM CT
- - Frequency of Ceremony: Ad hoc meeting
+- Time of Ceremony: 2:00-3:00 PM CT
+- Frequency of Ceremony: Ad hoc meeting
 
 ### Refactoring Backlog
 
@@ -124,10 +121,11 @@ Each week we rotate a few of the routine process and maintenance chores between 
 
 ### Dependency Updates
 
-Every week we rotate responsibility for updating dependencies. As an open-source project, we rely on external libraries which get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. Follow the [PR workflow](./pr-workflow.md) like any other change. 
+Every week we rotate responsibility for updating dependencies. As an open-source project, we rely on external libraries which get updates frequently. These include JavaScript Library Updates and Infrastructure as Code Libraries as described below. Follow the [PR workflow](./pr-workflow.md) like any other change.
 
 > After changes are made to any dependencies, deploy to an exp environment to verify that all tests pass!
-  > * If terraform needs to be updated, deploy locally to an exp environment first. 
+  >
+  > - If terraform needs to be updated, deploy locally to an exp environment first.
 
 #### Library Update Steps
 
@@ -135,7 +133,7 @@ Every week we rotate responsibility for updating dependencies. As an open-source
 
 2. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
 
-3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the resolutions block in `package.json` to specify version overrides. 
+3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the resolutions block in `package.json` to specify version overrides.
 If dependencies have no patch, replace it with an alternative, or wait for the library to be patched.
 
     NOTE: If any npm packages are updated, update the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
@@ -155,17 +153,13 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Feel free to try and update any of these items in the list, please be aware of the issue that's documented and ensure it's been resolved.
 
-- `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages: 
-    - `@fortawesome/free-solid-svg-icons`
-    - `@fortawesome/free-regular-svg-icons`
-    - `@fortawesome/fontawesome-svg-core` 
-
-- `@babel/core`: temporarily locked to ^7.17.12. With ^7.18.2, memory usage is exceeding the large Docker resource. Some performance updates noted in [devex-1068](https://trello.com/c/wCW5emlA/1068-reduce-memory-usage-on-deploying-web-client-s3), which helped some, but not consistently passing the client build. 
+- `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
+  - `@fortawesome/free-solid-svg-icons`
+  - `@fortawesome/free-regular-svg-icons`
+  - `@fortawesome/fontawesome-svg-core`
 
 - It'd be good to keep an eye on `s3rver` for when it exceeds 3.7.1. We have a patch in place for called `s3rver+3.7.1.patch` in order to address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible.
 
--`puppeteer` and `puppeteer-core`: temporily locked to 14.1.x and its respective patches. The major update to 15.3.1 causes jest timeout issues as well as issues with prototype property using Chromium. Causes Cypress test failures as well. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/36266/workflows/bdd41d67-c752-40fd-b9ec-4ed36ae72853). 
-
-- `broadcast-channel`: temporily locked to 4.12.0. The minor update to 4.13.0 introduces a breaking change to how esbrowser function processes the browser alias of process module. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/35774/workflows/ea7e7274-b979-4ee4-b7ff-edee692117f2/jobs/228087) for more information about memory leakage in cypress as well.
+-`puppeteer` and `puppeteer-core`: temporily locked to 14.1.x and its respective patches. The major update to 15.3.1 causes jest timeout issues as well as issues with prototype property using Chromium. Causes Cypress test failures as well. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/36266/workflows/bdd41d67-c752-40fd-b9ec-4ed36ae72853).
 
 - `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. ajv is a tranisitive dependeny of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/7286153454?check_suite_focus=true) to failing test on 07/04 dependency updates.

@@ -159,9 +159,6 @@ const {
   sealDocketEntryInteractor,
 } = require('../useCases/docketEntry/sealDocketEntryInteractor');
 const {
-  sendServedPartiesEmails,
-} = require('../useCaseHelper/service/sendServedPartiesEmails');
-const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
@@ -446,9 +443,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
-    sendServedPartiesEmails: jest
-      .fn()
-      .mockImplementation(sendServedPartiesEmails),
+    sendServedPartiesEmails: jest.fn(),
     setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
     updateCaseAndAssociations: jest
       .fn()
