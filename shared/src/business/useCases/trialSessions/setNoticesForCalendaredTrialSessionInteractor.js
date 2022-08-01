@@ -125,7 +125,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
 
     const calendaredCasePdf = await PDFDocument.load(calendaredCasePdfData);
 
-    await applicationContext.getUtilities().copyPagesFromPdf({
+    await applicationContext.getUtilities().copyPagesAndAppendToTargetPdf({
       copyFrom: calendaredCasePdf,
       copyInto: paperServiceDocumentsPdf,
     });
