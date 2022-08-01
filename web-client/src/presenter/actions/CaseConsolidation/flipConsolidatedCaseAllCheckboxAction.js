@@ -22,7 +22,7 @@ export const flipConsolidatedCaseAllCheckboxAction = ({ get, store }) => {
     );
 
     if (isLeadCase) {
-      const LEAD_CASE_TOOLTIP = 'Lead case cannot be unselected';
+      const LEAD_CASE_TOOLTIP = 'The lead case cannot be unselected';
       const displayedTooltip = allCheckboxPreviousState
         ? LEAD_CASE_TOOLTIP
         : '';
