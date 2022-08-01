@@ -177,6 +177,55 @@ describe('bulkIndexRecords', () => {
     });
   });
 
+  it('uses the routing parameter when the item is a WorkItem', async () => {
+    applicationContext.getSearchClient.mockReturnValue({
+      bulk: jest.fn().mockReturnValue({
+        errors: false,
+        items: [{}],
+        took: 100,
+      }),
+    });
+
+    await bulkIndexRecords({
+      applicationContext,
+      records: [
+        {
+          dynamodb: {
+            NewImage: {
+              entityName: { S: 'WorkItem' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'work-item|8675309' },
+            },
+          },
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalledWith({
+      body: [
+        {
+          index: {
+            _id: 'case|123-45_work-item|8675309',
+            _index: 'efcms-work-item',
+            routing: 'case|123-45_case|123-45|mapping',
+          },
+        },
+        {
+          entityName: {
+            S: 'WorkItem',
+          },
+          pk: {
+            S: 'case|123-45',
+          },
+          sk: {
+            S: 'work-item|8675309',
+          },
+        },
+      ],
+      refresh: false,
+    });
+  });
+
   it('sets an altered _id if the item is a CaseDocketEntryMapping', async () => {
     applicationContext.getSearchClient.mockReturnValue({
       bulk: jest.fn().mockReturnValue({
@@ -262,6 +311,55 @@ describe('bulkIndexRecords', () => {
         {
           entityName: {
             S: 'CaseMessageMapping',
+          },
+          pk: {
+            S: 'case|123-45',
+          },
+          sk: {
+            S: 'case|123-45',
+          },
+        },
+      ],
+      refresh: false,
+    });
+  });
+
+  it('sets an altered _id if the item is a CaseWorkItemMapping', async () => {
+    applicationContext.getSearchClient.mockReturnValue({
+      bulk: jest.fn().mockReturnValue({
+        errors: false,
+        items: [{}],
+        took: 100,
+      }),
+    });
+
+    await bulkIndexRecords({
+      applicationContext,
+      records: [
+        {
+          dynamodb: {
+            NewImage: {
+              entityName: { S: 'CaseWorkItemMapping' },
+              pk: { S: 'case|123-45' },
+              sk: { S: 'case|123-45' },
+            },
+          },
+        },
+      ],
+    });
+
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalledWith({
+      body: [
+        {
+          index: {
+            _id: 'case|123-45_case|123-45|mapping',
+            _index: 'efcms-work-item',
+            routing: null,
+          },
+        },
+        {
+          entityName: {
+            S: 'CaseWorkItemMapping',
           },
           pk: {
             S: 'case|123-45',
