@@ -38,6 +38,9 @@ const {
   compareStrings,
 } = require('../utilities/sortFunctions');
 const {
+  copyPagesAndAppendToTargetPdf,
+} = require('../utilities/copyPagesAndAppendToTargetPdf');
+const {
   createCaseAndAssociations,
 } = require('../useCaseHelper/caseAssociation/createCaseAndAssociations');
 const {
@@ -156,9 +159,6 @@ const {
   sealDocketEntryInteractor,
 } = require('../useCases/docketEntry/sealDocketEntryInteractor');
 const {
-  sendServedPartiesEmails,
-} = require('../useCaseHelper/service/sendServedPartiesEmails');
-const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
@@ -191,7 +191,6 @@ const {
 const {
   verifyCaseForUser,
 } = require('../../persistence/dynamo/cases/verifyCaseForUser');
-const { copyPagesFromPdf } = require('../utilities/copyPagesFromPdf');
 const { createCase } = require('../../persistence/dynamo/cases/createCase');
 const { createMockDocumentClient } = require('./createMockDocumentClient');
 const { DocketEntry } = require('../entities/DocketEntry');
@@ -286,7 +285,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
     computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
-    copyPagesFromPdf: jest.fn().mockImplementation(copyPagesFromPdf),
+    copyPagesAndAppendToTargetPdf: jest
+      .fn()
+      .mockImplementation(copyPagesAndAppendToTargetPdf),
     createEndOfDayISO: jest
       .fn()
       .mockImplementation(DateHandler.createEndOfDayISO),
@@ -442,9 +443,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
-    sendServedPartiesEmails: jest
-      .fn()
-      .mockImplementation(sendServedPartiesEmails),
+    sendServedPartiesEmails: jest.fn(),
     setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
     updateCaseAndAssociations: jest
       .fn()

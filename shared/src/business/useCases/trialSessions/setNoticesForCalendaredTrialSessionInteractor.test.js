@@ -179,7 +179,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       applicationContext.getPersistenceGateway().getDocument,
     ).toHaveBeenCalledTimes(3);
     expect(
-      applicationContext.getUtilities().copyPagesFromPdf,
+      applicationContext.getUtilities().copyPagesAndAppendToTargetPdf,
     ).toHaveBeenCalledTimes(3);
 
     const pdfDoc =

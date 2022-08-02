@@ -2,6 +2,9 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  copyPagesAndAppendToTargetPdf,
+} = require('../../utilities/copyPagesAndAppendToTargetPdf');
+const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } = require('../../entities/EntityConstants');
@@ -9,7 +12,6 @@ const {
   shouldAppendClinicLetter,
 } = require('../../utilities/shouldAppendClinicLetter');
 const { Case } = require('../../entities/cases/Case');
-const { copyPagesFromPdf } = require('../../utilities/copyPagesFromPdf');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 
@@ -92,23 +94,23 @@ const serveNoticesForCase = async ({
 
       const addressPageDoc = await PDFDocument.load(addressPage);
 
-      await copyPagesFromPdf({
+      await copyPagesAndAppendToTargetPdf({
         copyFrom: addressPageDoc,
         copyInto: combinedDocumentsPdf,
       });
 
-      await copyPagesFromPdf({
+      await copyPagesAndAppendToTargetPdf({
         copyFrom: noticeDocumentPdfCopy,
         copyInto: combinedDocumentsPdf,
       });
 
-      await copyPagesFromPdf({
+      await copyPagesAndAppendToTargetPdf({
         copyFrom: standingPretrialPdf,
         copyInto: combinedDocumentsPdf,
       });
     }
 
-    await copyPagesFromPdf({
+    await copyPagesAndAppendToTargetPdf({
       copyFrom: combinedDocumentsPdf,
       copyInto: newPdfDoc,
     });
