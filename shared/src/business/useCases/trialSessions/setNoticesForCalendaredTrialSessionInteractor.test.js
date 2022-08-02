@@ -13,6 +13,19 @@ const { testPdfDoc } = require('../../test/getFakeFile');
 const { User } = require('../../entities/User');
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
+  const mockPdfUrl = 'www.example.com';
+  const unAuthorizedUser = new User({
+    name: PARTY_TYPES.petitioner,
+    role: ROLES.petitioner,
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  });
+
+  const user = new User({
+    name: PARTY_TYPES.petitioner,
+    role: ROLES.petitionsClerk,
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  });
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -27,13 +40,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
           docketNumber: '103-20',
         },
       ]);
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: PARTY_TYPES.petitioner,
-        role: ROLES.petitionsClerk,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValue(user);
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionById.mockResolvedValue({
@@ -53,7 +60,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     applicationContext
       .getUseCaseHelpers()
       .savePaperServicePdf.mockResolvedValue({
-        url: 'http://example.com',
+        hasPaper: true,
+        url: mockPdfUrl,
       });
     applicationContext
       .getPersistenceGateway()
@@ -70,13 +78,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   });
 
   it('should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {
-    applicationContext.getCurrentUser.mockReturnValue(
-      new User({
-        name: PARTY_TYPES.petitioner,
-        role: ROLES.petitioner,
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      }),
-    );
+    applicationContext.getCurrentUser.mockReturnValue(unAuthorizedUser);
     let error;
 
     try {
@@ -90,56 +92,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(error).toBeDefined();
   });
 
-  it('should do nothing and send a notification to the user when setting a calendar with no cases', async () => {
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockResolvedValue([]);
-
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(
-      applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toHaveBeenCalledWith(
-      expect.objectContaining({
-        message: {
-          action: 'notice_generation_complete',
-          hasPaper: false,
-        },
-      }),
-    );
-  });
-
-  it('should send 3 events when 3 cases are calendared on the session and a complete notification is sent back to the user when they all finish processing', async () => {
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    expect(
-      applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
-    ).toHaveBeenCalledTimes(3);
-    const { pdfUrl } =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[0][0].message;
-    expect(pdfUrl).toBe('http://example.com');
-    applicationContext
-      .getUseCaseHelpers()
-      .savePaperServicePdf.mockResolvedValue({
-        url: null,
-      });
-
-    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-
-    const pdfUrlNull =
-      applicationContext.getNotificationGateway().sendNotificationToUser.mock
-        .calls[1][0].message.pdfUrl;
-    expect(pdfUrlNull).toBe(null);
-  });
-
-  it('should generate an empty pdf if no calendared cases PDF documents exist', async () => {
+  it('should NOT attempt to paper service a case with no corresponding case data information', async () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(false);
@@ -161,7 +114,63 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(pdfDoc.getPages().length).toBe(0);
   });
 
-  it('should generate a pdf if calendared cases PDF documents exist', async () => {
+  it('should send a notification with no paper service indicator for trial sessions with no calendared cases', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCalendaredCasesForTrialSession.mockResolvedValue([]);
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        message: {
+          action: 'notice_generation_complete',
+          hasPaper: false,
+        },
+        userId: user.userId,
+      }),
+    );
+  });
+
+  it('should create 3 trial session events and send 3 notifications for each completed trial session calendering job', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    expect(
+      applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
+    ).toHaveBeenCalledTimes(3);
+    const {
+      message: { hasPaper, pdfUrl },
+      userId,
+    } =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0];
+    expect(pdfUrl).toBe(mockPdfUrl);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .savePaperServicePdf.mockResolvedValue({
+        url: null,
+      });
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    });
+
+    const { pdfUrl: pdfUrlNull } =
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[1][0].message;
+    expect(pdfUrlNull).toBe(null);
+    expect(hasPaper).toBe(true);
+    expect(userId).toBe(user.userId);
+  });
+
+  it('should save the combined copies of the calendared cases for the trial sessions', async () => {
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
