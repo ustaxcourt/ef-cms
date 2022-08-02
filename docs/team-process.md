@@ -141,6 +141,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
 
     - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
+    - Change the version in `scripts/verify-terraform-version.sh`
     - increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
     - publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
       - `npm run deploy:ci-image`
