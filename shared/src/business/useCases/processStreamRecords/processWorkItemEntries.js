@@ -56,6 +56,6 @@ exports.processWorkItemEntries = async ({
     applicationContext.logger.error('the records that failed to index', {
       failedRecords,
     });
-    throw new Error('failed to index message records');
+    throw new Error('failed to index work item records');
   }
 };
