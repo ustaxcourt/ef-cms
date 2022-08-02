@@ -1,16 +1,9 @@
-// const { processEntries } = require('./processEntries');
 const { compact } = require('lodash');
 
 exports.processWorkItemEntries = async ({
   applicationContext,
   workItemRecords,
 }) => {
-  // processEntries({
-  //   applicationContext,
-  //   recordType: 'workItemRecords',
-  //   records: workItemRecords,
-  // });
-
   if (!workItemRecords.length) return;
 
   applicationContext.logger.debug(

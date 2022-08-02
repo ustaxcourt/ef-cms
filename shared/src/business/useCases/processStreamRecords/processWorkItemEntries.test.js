@@ -1,7 +1,6 @@
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
-const { processEntries } = require('./processEntries');
 const { processWorkItemEntries } = require('./processWorkItemEntries');
 jest.mock('./processEntries');
 
@@ -9,6 +8,9 @@ describe('processWorkItemEntries', () => {
   const mockWorkItemRecord = {
     dynamodb: {
       NewImage: {
+        docketNumber: {
+          S: '123-45',
+        },
         entityName: {
           S: 'WorkItem',
         },
@@ -22,15 +24,32 @@ describe('processWorkItemEntries', () => {
     },
   };
 
-  it('should make a call to processEntries to process the provided workItem records', async () => {
+  beforeEach(() => {
+    applicationContext
+      .getPersistenceGateway()
+      .bulkIndexRecords.mockReturnValue({ failedRecords: [] });
+  });
+
+  it('should do nothing when no workItemRecords are provided', async () => {
+    await processWorkItemEntries({
+      applicationContext,
+      workItemRecords: [],
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().bulkIndexRecords,
+    ).not.toHaveBeenCalled();
+  });
+
+  it('should make a call to bulk index the provided records', async () => {
     await processWorkItemEntries({
       applicationContext,
       workItemRecords: [mockWorkItemRecord],
     });
 
-    expect(processEntries.mock.calls[0][0]).toMatchObject({
-      recordType: 'workItemRecords',
-      records: [mockWorkItemRecord],
-    });
+    expect(
+      applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+        .calls[0][0].records,
+    ).toEqual([mockWorkItemRecord]);
   });
 });
