@@ -9,6 +9,7 @@ import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setPDFForStampAction } from '../actions/setPDFForStampAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
+import { setViewerDocumentToDisplayAction } from '../actions/setViewerDocumentToDisplayAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const goToApplyStampSequence = [
@@ -19,6 +20,8 @@ export const goToApplyStampSequence = [
       getCaseAction,
       setCaseAction,
       setDocketEntryIdAction,
+      // TODO: add action to set viewerDocumentToDisplay in props
+      setViewerDocumentToDisplayAction,
       clearPDFStampDataAction,
       clearFormAction,
       setSignatureNameForPdfSigningAction,
