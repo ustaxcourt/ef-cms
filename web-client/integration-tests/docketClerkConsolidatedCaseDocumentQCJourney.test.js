@@ -1,10 +1,14 @@
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
+import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { fakeFile } from '../integration-tests-public/helpers';
 import { loginAs, setupTest } from './helpers';
+import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
+import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkViewsSectionDocumentQC';
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
+import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 
 describe('Docket clerk consolidated case work item journey', () => {
   const cerebralTest = setupTest();
@@ -34,6 +38,7 @@ describe('Docket clerk consolidated case work item journey', () => {
   // });
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
+  //TODO: refactor practitionerCreatesNewCase to use an object as a 2nd arg
   practitionerCreatesNewCase(
     cerebralTest,
     fakeFile,
@@ -41,12 +46,15 @@ describe('Docket clerk consolidated case work item journey', () => {
     undefined,
     true,
   );
-
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
   // consolidate cases
   docketClerkOpensCaseConsolidateModal(cerebralTest);
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+
+  // file a document on lead case
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
   // create a non-lead case
   loginAs(cerebralTest, 'privatePractitioner@example.com');
@@ -58,19 +66,15 @@ describe('Docket clerk consolidated case work item journey', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
 
-  // need to add private practitioner to consolidated group lead case
-  // loginAs(cerebralTest, 'docketclerk@example.com');
-  // docketClerkAddsPetitionerToCase(cerebralTest);
-
-  // need to add private practitioner to consolidated group non-lead case
-  // login as private practitioner and go to dashboard
-  // open consolidated lead case
-  // file a document on lead case
   // file a document on non-lead case
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
-  // TODO: Document QC for external filed document
+  // login as petitions clerk
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkViewsSectionDocumentQC(cerebralTest);
 
-  // login as docket clerk
+  // filter for the consolidated cases (lead, non-lead)
 
   // TODO: Consolidated lead case
   // Navigate to Document QC Section
