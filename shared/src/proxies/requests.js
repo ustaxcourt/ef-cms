@@ -11,13 +11,10 @@ const moize = require('moize').default;
  * @returns {Promise<*>} the response data
  */
 exports.head = async ({ applicationContext, endpoint, params }) => {
-  const token = applicationContext.getCurrentUserToken();
   return await applicationContext
     .getHttpClient()
     .head(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
+      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       params,
     })
     .then(response => response.data);
@@ -34,7 +31,11 @@ exports.head = async ({ applicationContext, endpoint, params }) => {
  * @returns {Promise<*>} the response body data
  */
 const get = async ({ applicationContext, endpoint, params }) => {
-  const response = await getResponse({ applicationContext, endpoint, params });
+  const response = await getResponse({
+    applicationContext,
+    endpoint,
+    params,
+  });
   return response.data;
 };
 
@@ -49,13 +50,10 @@ const get = async ({ applicationContext, endpoint, params }) => {
  * @returns {Promise<*>} the complete http response
  */
 const getResponse = ({ applicationContext, endpoint, params }) => {
-  const token = applicationContext.getCurrentUserToken();
   return applicationContext
     .getHttpClient()
     .get(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: {
-        ...(token ? { Authorization: `Bearer ${token}` } : {}),
-      },
+      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       params,
     });
 };
@@ -96,7 +94,7 @@ exports.post = async ({
     .getHttpClient()
     .post(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
       headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
+        ...getDefaultHeaders(applicationContext.getCurrentUserToken()),
         ...headers,
       },
       ...options,
@@ -119,9 +117,7 @@ exports.put = async ({ applicationContext, body, endpoint }) => {
   return await applicationContext
     .getHttpClient()
     .put(`${applicationContext.getBaseUrl()}${endpoint}`, body, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
+      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
     })
     .then(response => response.data);
 };
@@ -146,11 +142,20 @@ exports.remove = async ({
   return await applicationContext
     .getHttpClient()
     .delete(`${applicationContext.getBaseUrl()}${endpoint}`, {
-      headers: {
-        Authorization: `Bearer ${applicationContext.getCurrentUserToken()}`,
-      },
+      headers: getDefaultHeaders(applicationContext.getCurrentUserToken()),
       params,
       ...options,
     })
     .then(response => response.data);
+};
+
+const getDefaultHeaders = userToken => {
+  const authorization = userToken ? `Bearer ${userToken}` : undefined;
+
+  let authorizationHeaderObject = {};
+  if (authorization) {
+    authorizationHeaderObject['Authorization'] = authorization;
+  }
+
+  return authorizationHeaderObject;
 };

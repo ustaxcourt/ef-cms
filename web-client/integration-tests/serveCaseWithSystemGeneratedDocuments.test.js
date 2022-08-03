@@ -156,7 +156,7 @@ describe('Petitions Clerk Serves Paper Petition With System Generated Documents'
       },
       {
         key: 'contactPrimary.phone',
-        value: faker.phone.phoneNumber(),
+        value: faker.phone.number(),
       },
       {
         key: 'petitionPaymentStatus',

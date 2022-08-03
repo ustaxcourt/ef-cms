@@ -123,7 +123,7 @@ const createCase = async ({
             countryType: COUNTRY_TYPES.DOMESTIC,
             email: faker.internet.email(),
             name: petitionerName,
-            phone: faker.phone.phoneNumber(),
+            phone: faker.phone.number(),
             postalCode: faker.address.zipCode(),
             state: faker.address.stateAbbr(),
           },

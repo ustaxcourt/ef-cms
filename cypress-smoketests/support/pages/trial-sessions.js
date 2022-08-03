@@ -53,7 +53,7 @@ exports.createTrialSession = (testData, overrides = {}) => {
     'not.exist',
   );
 
-  cy.get('#chambers-phone-number').type(faker.phone.phoneNumber());
+  cy.get('#chambers-phone-number').type(faker.phone.number());
   cy.get('#trial-clerk').select(testData.trialClerk || 'Test trialclerk1');
   cy.get('#court-reporter').type(faker.name.findName());
   cy.get('#irs-calendar-administrator').type(faker.name.findName());
