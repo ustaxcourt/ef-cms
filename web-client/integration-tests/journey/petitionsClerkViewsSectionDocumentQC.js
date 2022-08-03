@@ -16,6 +16,10 @@ export const petitionsClerkViewsSectionDocumentQC = (
 
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
+    const workItems = cerebralTest.getState(state.workQueue);
+
+    console.log('workQueueToDisplay', workQueueToDisplay);
+    console.log('workItems', workItems);
 
     if (storeCount) {
       const helper = await runCompute(workQueueHelper, {
