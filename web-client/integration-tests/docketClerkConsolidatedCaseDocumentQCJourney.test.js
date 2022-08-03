@@ -1,4 +1,4 @@
-import { loginAs, setupTest } from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 
 describe('Docket clerk consolidated case work item journey', () => {
   const cerebralTest = setupTest();
@@ -11,7 +11,10 @@ describe('Docket clerk consolidated case work item journey', () => {
     cerebralTest.closeSocket();
   });
 
-  // TODO: setup to test consolidated group cases document QC
+  // TODO: setup to test consolidated group cases for document QC
+  // create a lead case
+  // create a non-lead case
+  // consolidate cases
   // need to add private practitioner to consolidated group lead case
   // need to add private practitioner to consolidated group non-lead case
   // login as private practitioner and go to dashboard
@@ -30,6 +33,7 @@ describe('Docket clerk consolidated case work item journey', () => {
   // Assign work item to docket clerk
   // *VerifyLeadCaseIndicatorUserDocumentQCInbox
   // Complete Document QC
+  // Verify alertSuccess says "<Document Type> Record has been completed."
   // *VerifyLeadCaseIndicatorUserDocumentQCOutbox
   // *VerifyLeadCaseIndicatorSectionDocumentQCOutbox
 
@@ -40,6 +44,7 @@ describe('Docket clerk consolidated case work item journey', () => {
   // Assign work item to docket clerk
   // *VerifyNonLeadCaseIndicatorUserDocumentQCInbox
   // Complete Document QC
+  // Verify alertSuccess says "<Document Type> Record has been completed."
   // *VerifyNonLeadCaseIndicatorUserDocumentQCOutbox
   // *VerifyNonLeadCaseIndicatorSectionDocumentQCOutbox
 
@@ -49,11 +54,13 @@ describe('Docket clerk consolidated case work item journey', () => {
   // Search for consolidated case lead docket number
   // Create a paper filing on lead docket number
   // Save filing for later
+  // Verify alertSuccess says "Your entry has been added to the docket record."
   // Navigate to Document QC Section
   // Navigate to Section Document QC In Progress
   // *VerifyLeadCaseIndicatorSectionDocumentQCInProgress
   // *VerifyLeadCaseIndicatorUserDocumentQCInProgress
   // Save and Serve Document
+  // Verify alertSuccess says "Your entry has been added to the docket record."
   // !BUG: no indicators are present
   // *VerifyLeadCaseIndicatorUserDocumentQCOutbox
   // *VerifyLeadCaseIndicatorSectionDocumentQCOutbox
@@ -62,11 +69,13 @@ describe('Docket clerk consolidated case work item journey', () => {
   // Search for consolidated case non-lead docket number
   // Create a paper filing on non-lead docket number
   // Save filing for later
+  // Verify alertSuccess says "Your entry has been added to the docket record."
   // Navigate to Document QC Section
   // Navigate to Section Document QC In Progress
   // *VerifyNonLeadCaseIndicatorSectionDocumentQCInProgress
   // *VerifyNonLeadCaseIndicatorUserDocumentQCInProgress
   // Save and Serve Document
+  // Verify alertSuccess says "Your entry has been added to the docket record."
   // !BUG: no indicators are present
   // *VerifyNonLeadCaseIndicatorUserDocumentQCOutbox
   // *VerifyNonLeadCaseIndicatorSectionDocumentQCOutbox
