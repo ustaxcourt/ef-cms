@@ -1,7 +1,14 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
+import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
+import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
+import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { fakeFile } from '../integration-tests-public/helpers';
+import { loginAs, setupTest } from './helpers';
+import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 
 describe('Docket clerk consolidated case work item journey', () => {
   const cerebralTest = setupTest();
+  // const trialLocation = `Boise, Idaho, ${Date.now()}`;
 
   beforeAll(() => {
     jest.setTimeout(30000);
@@ -11,11 +18,50 @@ describe('Docket clerk consolidated case work item journey', () => {
     cerebralTest.closeSocket();
   });
 
+  // const overrides = {
+  //   preferredTrialCity: trialLocation,
+  //   trialLocation,
+  // };
+
   // TODO: setup to test consolidated group cases for document QC
   // create a lead case
-  // create a non-lead case
+
+  // it('login as a petitioner and create the lead case', async () => {
+  //   const caseDetail = await uploadPetition(cerebralTest, overrides);
+  //   expect(caseDetail.docketNumber).toBeDefined();
+  //   cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
+  //     caseDetail.docketNumber;
+  // });
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerCreatesNewCase(
+    cerebralTest,
+    fakeFile,
+    undefined,
+    undefined,
+    true,
+  );
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
   // consolidate cases
+  docketClerkOpensCaseConsolidateModal(cerebralTest);
+  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+
+  // create a non-lead case
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerCreatesNewCase(cerebralTest, fakeFile);
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+  // consolidate cases
+  docketClerkOpensCaseConsolidateModal(cerebralTest);
+  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+  docketClerkConsolidatesCases(cerebralTest, 2);
+
   // need to add private practitioner to consolidated group lead case
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkAddsPetitionerToCase(cerebralTest);
+
   // need to add private practitioner to consolidated group non-lead case
   // login as private practitioner and go to dashboard
   // open consolidated lead case
