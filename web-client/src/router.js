@@ -374,18 +374,6 @@ const router = {
     );
 
     registerRoute(
-      '/case-detail/*/messages/*/*/apply-stamp',
-      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
-        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
-        return app.getSequence('goToApplyStampSequence')({
-          docketEntryId,
-          docketNumber,
-          parentMessageId,
-        });
-      }),
-    );
-
-    registerRoute(
       '/case-detail/*/docket-entry/*/edit-meta',
       ifHasAccess({ app }, (docketNumber, docketRecordIndex) => {
         setPageTitle(
@@ -1162,6 +1150,18 @@ const router = {
         return app.getSequence('gotoMessageDetailSequence')({
           docketNumber,
           documentId,
+          parentMessageId,
+        });
+      }),
+    );
+
+    registerRoute(
+      '/messages/*/message-detail/*/*/apply-stamp',
+      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
+        return app.getSequence('goToApplyStampSequence')({
+          docketEntryId,
+          docketNumber,
           parentMessageId,
         });
       }),
