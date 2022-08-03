@@ -17,6 +17,8 @@ exports.createStampedCoversheetPdf = async ({
   docketEntryEntity,
   stampData,
 }) => {
+  docketEntryEntity.servedAt = undefined;
+
   const coverSheetData = await generateCoverSheetData({
     applicationContext,
     caseEntity,

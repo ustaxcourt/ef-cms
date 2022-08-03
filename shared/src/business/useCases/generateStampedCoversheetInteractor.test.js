@@ -15,10 +15,11 @@ describe('generateStampedCoversheetInteractor', () => {
         ...MOCK_CASE.docketEntries[0],
         certificateOfService: false,
         createdAt: '2019-04-19T14:45:15.595Z',
-        documentType: 'Answer',
-        eventCode: 'A',
+        documentType: 'Motion',
+        eventCode: 'M102',
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: false,
+        servedAt: '2019-04-19T14:45:15.595Z',
       },
     ],
   };
@@ -33,6 +34,20 @@ describe('generateStampedCoversheetInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(mockCase);
+  });
+
+  it('clears the servedAt property of the motion docket entry used for coversheet generation', async () => {
+    await generateStampedCoversheetInteractor(applicationContext, {
+      docketEntryId: mockDocketEntryId,
+      docketNumber: MOCK_CASE.docketNumber,
+      stampData: mockStampData,
+      stampedDocketEntryId: mockStampedDocketEntryId,
+    });
+
+    expect(
+      applicationContext.getDocumentGenerators().coverSheet.mock.calls[0][0]
+        .data.dateServed,
+    ).toEqual('');
   });
 
   it('generates a stamped coversheet pdf document with stampData', async () => {

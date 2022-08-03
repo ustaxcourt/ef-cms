@@ -509,7 +509,7 @@ export const ApplyStamp = connect(
                             - {form.jurisdictionalOption} -<br />
                           </>
                         )}
-                        <span className="text-semibold">
+                        <span>
                           {form.day && (
                             <>
                               {form.dueDateMessage} {form.month}/{form.day}/
