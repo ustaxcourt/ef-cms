@@ -1,8 +1,8 @@
-import { loginAs, setupTest, uploadPetition } from './helpers';
+import { loginAs, setupTest } from './helpers';
+
+const cerebralTest = setupTest();
 
 describe('Docket clerk consolidated case work item journey', () => {
-  const cerebralTest = setupTest();
-
   beforeAll(() => {
     jest.setTimeout(30000);
   });
