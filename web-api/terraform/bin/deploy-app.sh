@@ -8,8 +8,6 @@ MIGRATE_FLAG=$(../../../scripts/dynamo/get-migrate-flag.sh "${ENV}")
 export DEPLOYING_COLOR
 export MIGRATE_FLAG
 
-echo $DEPLOYING_COLOR
-
 # Getting the environment-specific deployment settings and injecting them into the shell environment
 if [ -z "${SECRETS_LOADED}" ]; then
   pushd ../../../
@@ -119,9 +117,9 @@ else
 fi
 
 if [[ -z "${DYNAMSOFT_URL_OVERRIDE}" ]]; then
-  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/dynamic-web-twain-sdk-14.3.1"
+  SCANNER_RESOURCE_URI="https://dynamsoft-lib.${EFCMS_DOMAIN}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 else
-  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/dynamic-web-twain-sdk-14.3.1"
+  SCANNER_RESOURCE_URI="${DYNAMSOFT_URL_OVERRIDE}/Dynamic%20Web%20TWAIN%20SDK%2017.2.5/Resources"
 fi
 
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN

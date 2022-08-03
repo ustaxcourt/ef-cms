@@ -28,6 +28,9 @@ const {
   addDocketEntryForSystemGeneratedOrder,
 } = require('../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder');
 const {
+  addDraftStampOrderDocketEntryInteractor,
+} = require('../../shared/src/business/useCases/addDraftStampOrderDocketEntryInteractor');
+const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
@@ -162,8 +165,8 @@ const {
   confirmAuthCode,
 } = require('../../shared/src/persistence/cognito/confirmAuthCode');
 const {
-  copyPagesFromPdf,
-} = require('../../shared/src/business/utilities/copyPagesFromPdf');
+  copyPagesAndAppendToTargetPdf,
+} = require('../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf');
 const {
   Correspondence,
 } = require('../../shared/src/business/entities/Correspondence');
@@ -401,6 +404,9 @@ const {
 const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
+const {
+  generateStampedCoversheetInteractor,
+} = require('../../shared/src/business/useCases/generateStampedCoversheetInteractor');
 const {
   generateStandingPretrialOrderForSmallCaseInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor');
@@ -2037,6 +2043,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
+        addDraftStampOrderDocketEntryInteractor,
         addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
         appendAmendedPetitionFormInteractor,
@@ -2091,6 +2098,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
+        generateStampedCoversheetInteractor,
         generateStandingPretrialOrderForSmallCaseInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
@@ -2230,7 +2238,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,
-        copyPagesFromPdf,
+        copyPagesAndAppendToTargetPdf,
         createISODateString,
         filterWorkItemsForUser,
         formatCaseForTrialSession,

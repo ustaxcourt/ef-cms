@@ -27,7 +27,7 @@ export const docketClerkCreatesDocketEntryForSignedStipulatedDecision =
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
       await cerebralTest.runSequence(
-        'serveCourtIssuedDocumentFromDocketEntrySequence',
+        'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
       );
 
       await waitForLoadingComponentToHide({ cerebralTest });

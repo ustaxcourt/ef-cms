@@ -3,7 +3,7 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy, union, without } = require('lodash');
+const { flatten, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
@@ -34,6 +34,16 @@ const TRIAL_SESSION_SCOPE_TYPES = {
   locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
 };
+
+const JURISDICTIONAL_OPTIONS = {
+  restoredToDocket: 'The case is restored to the general docket',
+  undersigned: 'Jurisdiction is retained by the undersigned',
+};
+
+const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
+
+const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
+  'This case is stricken from the trial session';
 
 const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
@@ -116,6 +126,7 @@ const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
     title: 'Notice of Change of Email Address',
   },
 ];
+
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(n => n.eventCode);
 
@@ -409,6 +420,12 @@ const TRACKED_DOCUMENT_TYPES = {
     eventCode: 'PSDE',
   },
 };
+
+const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter(doc => doc.category === 'Motion')
+    .map(x => x.eventCode),
+);
 
 const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES = EXTERNAL_DOCUMENTS_ARRAY.filter(
   doc =>
@@ -1354,10 +1371,12 @@ module.exports = deepFreeze({
   FILING_TYPES,
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_FILE_MAP,
+  STAMPED_DOCUMENTS_ALLOWLIST,
   INTERNAL_DOCUMENTS_ARRAY,
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
+  JURISDICTIONAL_OPTIONS,
   LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
   MAX_FILE_SIZE_BYTES,
@@ -1366,6 +1385,7 @@ module.exports = deepFreeze({
   MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MESSAGE_QUEUE_TYPES,
   MINUTE_ENTRIES_MAP,
+  MOTION_DISPOSITIONS,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
@@ -1404,6 +1424,7 @@ module.exports = deepFreeze({
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
+  STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TODAYS_ORDERS_PAGE_SIZE,
   TODAYS_ORDERS_SORT_DEFAULT,

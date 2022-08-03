@@ -19,6 +19,4 @@ jobs:
       - name: NPM Install
         run: npm ci --no-optional && npm rebuild
       - name: Shared
-        env:
-          NODE_OPTIONS: '--max-old-space-size=6192'
         run: npm run test:shared

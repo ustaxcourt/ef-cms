@@ -69,6 +69,9 @@ const {
   addDeficiencyStatisticLambda,
 } = require('./cases/addDeficiencyStatisticLambda');
 const {
+  addDraftStampOrderDocketEntryLambda,
+} = require('./documents/addDraftStampOrderDocketEntryLambda');
+const {
   addPetitionerToCaseLambda,
 } = require('./cases/addPetitionerToCaseLambda');
 const {
@@ -179,6 +182,9 @@ const {
 const {
   generatePrintablePendingReportLambda,
 } = require('./pendingItems/generatePrintablePendingReportLambda');
+const {
+  generateStampedCoversheetLambda,
+} = require('./documents/generateStampedCoversheetLambda');
 const {
   generateTrialCalendarPdfLambda,
 } = require('./trialSessions/generateTrialCalendarPdfLambda');
@@ -570,12 +576,16 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(appendAmendedPetitionFormLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
-    lambdaWrapper(serveCourtIssuedDocumentLambda),
+    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
+    lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/coversheet',
     lambdaWrapper(addCoversheetLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:docketEntryId/stamped-coversheet',
+    lambdaWrapper(generateStampedCoversheetLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
@@ -588,6 +598,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/sign',
     lambdaWrapper(saveSignedDocumentLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:docketEntryId/stamp',
+    lambdaWrapper(addDraftStampOrderDocketEntryLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/serve',
@@ -610,7 +624,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(fileCourtIssuedDocketEntryLambda),
   );
   app.post(
-    '/async/case-documents/:docketNumber/file-and-serve-court-issued-docket-entry',
+    '/async/case-documents/:subjectCaseDocketNumber/file-and-serve-court-issued-docket-entry',
     lambdaWrapper(fileAndServeCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
