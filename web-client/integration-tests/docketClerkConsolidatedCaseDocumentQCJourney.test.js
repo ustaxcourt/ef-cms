@@ -10,10 +10,9 @@ import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkVi
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 
-describe('Docket clerk consolidated case work item journey', () => {
-  const cerebralTest = setupTest();
-  // const trialLocation = `Boise, Idaho, ${Date.now()}`;
+const cerebralTest = setupTest();
 
+describe('Docket clerk consolidated case work item journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
