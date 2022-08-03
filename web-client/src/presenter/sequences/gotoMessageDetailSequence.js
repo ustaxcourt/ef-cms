@@ -29,6 +29,7 @@ const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
     getMessageThreadAction,
     setMessageAction,
     getMostRecentMessageInThreadAction,
+    //is something overriding viewerDocumentToDisplay in the following 2 actions?
     getDefaultAttachmentViewerDocumentToDisplayAction,
     setMessageDetailViewerDocumentToDisplayAction,
     setDefaultIsExpandedAction,
