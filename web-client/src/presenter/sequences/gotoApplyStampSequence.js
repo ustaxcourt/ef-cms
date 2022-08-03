@@ -6,11 +6,11 @@ import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
+import { setDocketEntrySelectedFromMessageAction } from '../actions/setDocketEntrySelectedFromMessageAction';
+import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setPDFForStampAction } from '../actions/setPDFForStampAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
-import { setSelectedDocketEntryAction } from '../actions/setSelectedDocketEntryAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
-import { setViewerDocumentToDisplayAction } from '../actions/setViewerDocumentToDisplayAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const goToApplyStampSequence = [
@@ -22,9 +22,9 @@ export const goToApplyStampSequence = [
       setCaseAction,
       setDocketEntryIdAction,
       // TODO: add action to set viewerDocumentToDisplay in props
-      setSelectedDocketEntryAction,
+      setDocketEntrySelectedFromMessageAction,
       //TODO do we need to call setMessageDetailViewerDocumentToDisplayAction instead
-      setViewerDocumentToDisplayAction,
+      setMessageDetailViewerDocumentToDisplayAction,
       clearPDFStampDataAction,
       clearFormAction,
       setSignatureNameForPdfSigningAction,

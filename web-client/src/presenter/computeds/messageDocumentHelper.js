@@ -160,7 +160,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   return {
     addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
-    applyStampLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/apply-stamp`,
+    applyStampFromMessagesLink: `/case-detail/${caseDetail.docketNumber}/messages/${parentMessageId}/${viewerDocumentIdToDisplay}/apply-stamp`,
     archived: documentIsArchived,
     editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,

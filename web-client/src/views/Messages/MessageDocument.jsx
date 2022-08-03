@@ -172,7 +172,7 @@ export const MessageDocument = connect(
             icon="stamp"
             onClick={() => {
               navigateToPathSequence({
-                path: messageDocumentHelper.applyStampLink,
+                path: messageDocumentHelper.applyStampFromCaseDetailsLink,
               });
             }}
           >
