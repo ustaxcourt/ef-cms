@@ -140,7 +140,12 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
 
-    - Once verification is complete, you will need to increment the docker image version being used in `.circleci/config.yml` and publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts.
+    - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
+    - Change the version in `scripts/verify-terraform-version.sh`
+    - increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
+    - publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
+      - `npm run deploy:ci-image`
+    - deploy as normal
 
 5. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
@@ -159,5 +164,3 @@ Below is a list of dependencies that are locked down due to known issues with se
   - `@fortawesome/fontawesome-svg-core`
 
 - It'd be good to keep an eye on `s3rver` for when it exceeds 3.7.1. We have a patch in place for called `s3rver+3.7.1.patch` in order to address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible.
-
--`puppeteer` and `puppeteer-core`: temporarily locked to 14.1.x and its respective patches. The major update to 15.3.1 causes jest timeout issues as well as issues with prototype property using Chromium. Causes Cypress test failures as well. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/36266/workflows/bdd41d67-c752-40fd-b9ec-4ed36ae72853).
