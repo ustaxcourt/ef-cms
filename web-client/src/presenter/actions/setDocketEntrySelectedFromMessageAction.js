@@ -1,7 +1,7 @@
 import { state } from 'cerebral';
 
 /**
- * sets the viewerDocumentToDisplay from props
+ * sets up props and state for the appropriate docket entry
  *
  * @param {object} providers the providers object
  * @param {object} providers.get the cerebral get method
@@ -14,13 +14,16 @@ export const setDocketEntrySelectedFromMessageAction = async ({
   store,
 }) => {
   const caseDetail = get(state.caseDetail);
-  const { docketEntryId, parentMessageId } = props;
+  const { docketEntryId } = props;
 
   const messageViewerDocumentToDisplay = caseDetail.docketEntries.find(
     entries => entries.docketEntryId === docketEntryId,
   );
   messageViewerDocumentToDisplay.documentId = docketEntryId;
-  store.set(state.documentId, docketEntryId);
 
-  return { messageViewerDocumentToDisplay, mostRecentMessage: parentMessageId };
+  store.set(
+    state.messageViewerDocumentToDisplay,
+    messageViewerDocumentToDisplay,
+  );
+  store.set(state.documentId, docketEntryId);
 };
