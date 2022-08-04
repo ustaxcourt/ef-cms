@@ -13,5 +13,6 @@ module.exports = {
     '\\.[jt]sx?$': ['babel-jest', { rootMode: 'upward' }],
     '^.+\\.html?$': `${__dirname}/web-client/htmlLoader.js`, //this is to ignore imported html files
   },
+  transformIgnorePatterns: ['/node_modules/(?!uuid)'],
   verbose: false,
 };

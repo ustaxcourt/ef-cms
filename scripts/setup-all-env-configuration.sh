@@ -19,3 +19,4 @@
 ./scripts/dynamo/setup-terminal-ip-allowlist.sh
 ./scripts/dynamo/setup-maintenance-mode-flag.sh
 ./scripts/dynamo/setup-section-outbox-retrieval-days.sh
+./scripts/dynamo/setup-consolidated-cases-propagate-docket-entries.sh

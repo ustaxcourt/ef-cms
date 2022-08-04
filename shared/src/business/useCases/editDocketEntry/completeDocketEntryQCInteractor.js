@@ -326,7 +326,7 @@ exports.completeDocketEntryQCInteractor = async (
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        caseEntity,
+        caseEntities: [caseEntity],
         docketEntryId: noticeUpdatedDocketEntry.docketEntryId,
       });
 

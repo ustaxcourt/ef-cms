@@ -111,7 +111,7 @@ export const CourtIssuedNonstandardForm = connect(
               }}
             >
               <option value="">- Select -</option>
-              <TrialCityOptions procedureType="All" />
+              <TrialCityOptions procedureType="AllPlusStandalone" />
             </select>
           </FormGroup>
         )}
