@@ -7,7 +7,6 @@ import { setCaseAction } from '../actions/setCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocketEntrySelectedFromMessageAction } from '../actions/setDocketEntrySelectedFromMessageAction';
-import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMessageDetailViewerDocumentToDisplayAction';
 import { setPDFForStampAction } from '../actions/setPDFForStampAction';
 import { setPDFPageForSigningAction } from '../actions/setPDFPageForSigningAction';
 import { setSignatureNameForPdfSigningAction } from '../actions/setSignatureNameForPdfSigningAction';
@@ -21,10 +20,7 @@ export const goToApplyStampSequence = [
       getCaseAction,
       setCaseAction,
       setDocketEntryIdAction,
-      // TODO: add action to set viewerDocumentToDisplay in props
       setDocketEntrySelectedFromMessageAction,
-      //TODO do we need to call setMessageDetailViewerDocumentToDisplayAction instead
-      setMessageDetailViewerDocumentToDisplayAction,
       clearPDFStampDataAction,
       clearFormAction,
       setSignatureNameForPdfSigningAction,
