@@ -1,106 +1,6 @@
-const {
-  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-} = require('../entities/EntityConstants');
 const { Case } = require('../entities/cases/Case');
-const { formatDateString, FORMATS } = require('../utilities/DateHandler');
-const { omit } = require('lodash');
+const { generateCoverSheetData } = require('./generateCoverSheetData');
 
-const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
-  const formatString = isPaper ? FORMATS.MMDDYY : FORMATS.DATE_TIME;
-  return docketEntryEntity.createdAt
-    ? formatDateString(docketEntryEntity.createdAt, formatString)
-    : '';
-};
-
-/**
- * a helper function which assembles the correct data to be used in the generation of a PDF
- *
- * @param {object} options the providers object
- * @param {object} options.applicationContext the application context
- * @param {string} options.caseEntity the case entity associated with the document we are creating the cover for
- * @param {object} options.docketEntryEntity the docket entry entity we are creating the cover for
- * @param {boolean} options.useInitialData whether to use the initial docket record suffix and case caption
- * @returns {object} the key/value pairs of computed strings
- */
-exports.generateCoverSheetData = ({
-  applicationContext,
-  caseEntity,
-  docketEntryEntity,
-  filingDateUpdated = false,
-  useInitialData = false,
-}) => {
-  const isLodged = docketEntryEntity.lodged;
-  const { certificateOfService, isPaper } = docketEntryEntity;
-
-  const dateServedFormatted = docketEntryEntity.servedAt
-    ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
-    : '';
-
-  let dateReceivedFormatted = formatDateReceived({
-    applicationContext,
-    docketEntryEntity,
-    isPaper,
-  });
-
-  const dateFiledFormatted = docketEntryEntity.filingDate
-    ? formatDateString(docketEntryEntity.filingDate, FORMATS.MMDDYY)
-    : '';
-
-  const caseCaption = useInitialData
-    ? caseEntity.initialCaption
-    : caseEntity.caseCaption;
-
-  const docketNumberSuffixToUse = useInitialData
-    ? caseEntity.initialDocketNumberSuffix.replace('_', '')
-    : caseEntity.docketNumberSuffix;
-
-  let caseTitle = applicationContext.getCaseTitle(caseCaption);
-  let caseCaptionExtension = '';
-  if (caseTitle !== caseCaption) {
-    caseTitle += ', ';
-    caseCaptionExtension = caseCaption.replace(caseTitle, '');
-  }
-
-  let documentTitle =
-    docketEntryEntity.documentTitle || docketEntryEntity.documentType;
-  if (docketEntryEntity.additionalInfo && docketEntryEntity.addToCoversheet) {
-    documentTitle += ` ${docketEntryEntity.additionalInfo}`;
-  }
-
-  const docketNumberWithSuffix =
-    caseEntity.docketNumber + (docketNumberSuffixToUse || '');
-
-  let coverSheetData = {
-    caseCaptionExtension,
-    caseTitle,
-    certificateOfService,
-    dateFiledLodged: dateFiledFormatted,
-    dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
-    dateReceived: filingDateUpdated
-      ? dateFiledFormatted
-      : dateReceivedFormatted,
-    dateServed: dateServedFormatted,
-    docketNumberWithSuffix,
-    documentTitle,
-    electronicallyFiled: !docketEntryEntity.isPaper,
-    index: docketEntryEntity.index,
-    mailingDate: docketEntryEntity.mailingDate || '',
-  };
-
-  if (
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
-      docketEntryEntity.eventCode,
-    )
-  ) {
-    coverSheetData = omit(coverSheetData, [
-      'dateReceived',
-      'electronicallyFiled',
-      'dateServed',
-    ]);
-  }
-
-  return coverSheetData;
-};
 /**
  * a helper function which creates a coversheet, prepends it to a pdf, and returns the new pdf
  *
@@ -120,7 +20,7 @@ exports.addCoverToPdf = async ({
   replaceCoversheet = false,
   useInitialData,
 }) => {
-  const coverSheetData = exports.generateCoverSheetData({
+  const coverSheetData = await generateCoverSheetData({
     applicationContext,
     caseEntity,
     docketEntryEntity,
@@ -159,6 +59,7 @@ exports.addCoverToPdf = async ({
   const numberOfPages = pdfDoc.getPages().length;
 
   return {
+    consolidatedCases: coverSheetData.consolidatedCases,
     numberOfPages,
     pdfData: newPdfData,
   };
@@ -198,10 +99,6 @@ exports.addCoversheetInteractor = async (
     caseEntity = new Case(caseRecord, { applicationContext });
   }
 
-  const docketEntryEntity = caseEntity.getDocketEntryById({
-    docketEntryId,
-  });
-
   let pdfData;
   try {
     const { Body } = await applicationContext
@@ -217,7 +114,15 @@ exports.addCoversheetInteractor = async (
     throw err;
   }
 
-  const { numberOfPages, pdfData: newPdfData } = await exports.addCoverToPdf({
+  const docketEntryEntity = caseEntity.getDocketEntryById({
+    docketEntryId,
+  });
+
+  const {
+    consolidatedCases, // if feature flag is off, this will always be null
+    numberOfPages,
+    pdfData: newPdfData,
+  } = await exports.addCoverToPdf({
     applicationContext,
     caseEntity,
     docketEntryEntity,
@@ -227,23 +132,61 @@ exports.addCoversheetInteractor = async (
     useInitialData,
   });
 
-  docketEntryEntity.setAsProcessingStatusAsCompleted();
-  docketEntryEntity.setNumberOfPages(numberOfPages);
-
-  const updatedDocketEntryEntity = docketEntryEntity.validate();
-
-  await applicationContext.getPersistenceGateway().updateDocketEntry({
-    applicationContext,
-    docketEntryId,
-    docketNumber: caseEntity.docketNumber,
-    document: updatedDocketEntryEntity.toRawObject(),
-  });
-
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: newPdfData,
     key: docketEntryId,
   });
 
-  return updatedDocketEntryEntity;
+  let docketNumbersToUpdate = [docketNumber];
+
+  if (consolidatedCases) {
+    docketNumbersToUpdate = consolidatedCases
+      .filter(consolidatedCase => consolidatedCase.documentNumber)
+      .map(({ docketNumber: caseDocketNumber }) => caseDocketNumber);
+  }
+
+  const updatedDocketEntries = await Promise.all(
+    docketNumbersToUpdate.map(async caseDocketNumber => {
+      // in one instance, we pass in the caseEntity which we don't want to refetch
+      let consolidatedCaseEntity = caseEntity;
+      if (caseEntity && caseDocketNumber !== docketNumber) {
+        const caseRecord = await applicationContext
+          .getPersistenceGateway()
+          .getCaseByDocketNumber({
+            applicationContext,
+            docketNumber: caseDocketNumber,
+          });
+        consolidatedCaseEntity = new Case(caseRecord, {
+          applicationContext,
+        });
+      }
+
+      const consolidatedCaseDocketEntryEntity =
+        consolidatedCaseEntity.getDocketEntryById({
+          docketEntryId,
+        });
+
+      if (consolidatedCaseDocketEntryEntity) {
+        consolidatedCaseDocketEntryEntity.setAsProcessingStatusAsCompleted();
+        consolidatedCaseDocketEntryEntity.setNumberOfPages(numberOfPages);
+
+        const updateConsolidatedDocketEntry = consolidatedCaseDocketEntryEntity
+          .validate()
+          .toRawObject();
+
+        await applicationContext.getPersistenceGateway().updateDocketEntry({
+          applicationContext,
+          docketEntryId,
+          docketNumber: caseDocketNumber,
+          document: updateConsolidatedDocketEntry,
+        });
+        return updateConsolidatedDocketEntry;
+      }
+    }),
+  );
+
+  return updatedDocketEntries
+    .filter(Boolean)
+    .find(entry => entry.docketNumber === docketNumber);
 };

@@ -39,6 +39,7 @@ Help()
 INTEGRATION=true
 PORT=1234
 NON_PUBLIC=app-
+BROWSER=edge
 
 # Get the options
 while getopts ":chloprs" option; do
@@ -56,6 +57,7 @@ while getopts ":chloprs" option; do
          OPEN=true
          ;;
       p) # run against the public client
+         BROWSER=chrome
          PORT=5678
          PUBLIC=-public
          unset NON_PUBLIC
@@ -122,7 +124,7 @@ else
 fi
 
 if [ -n "${OPEN}" ]; then
-  cypress open -C "${CONFIG_FILE}" --env ENV="$ENV"
+  cypress open --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
 else
-  cypress run -C "${CONFIG_FILE}" --env ENV="$ENV"
+  cypress run --browser "${BROWSER}" -C "${CONFIG_FILE}" --env ENV="$ENV"
 fi

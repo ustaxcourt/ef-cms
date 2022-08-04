@@ -1,4 +1,7 @@
-export const docketClerkConsolidatesCases = cerebralTest => {
+export const docketClerkConsolidatesCases = (
+  cerebralTest,
+  expectedNumberOfConsolidatedCases,
+) => {
   return it('Docket clerk consolidates cases', async () => {
     cerebralTest.setState('modal.confirmSelection', true);
     await cerebralTest.runSequence('submitAddConsolidatedCaseSequence');
@@ -8,7 +11,7 @@ export const docketClerkConsolidatesCases = cerebralTest => {
     );
     expect(
       cerebralTest.getState('caseDetail.consolidatedCases').length,
-    ).toEqual(2);
+    ).toEqual(expectedNumberOfConsolidatedCases);
     expect(cerebralTest.getState('modal.showModal')).toBeUndefined();
   });
 };

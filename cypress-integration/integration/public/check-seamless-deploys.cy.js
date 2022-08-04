@@ -12,6 +12,8 @@ const {
 describe('Public user experiences seamless reload after deployment', function () {
   it('should reload the page after deploy', () => {
     cy.visit('/');
+    cy.get('button#tab-case');
+
     cy.window().then(w => (w.beforeReload = true));
     cy.window().should('have.prop', 'beforeReload');
 
