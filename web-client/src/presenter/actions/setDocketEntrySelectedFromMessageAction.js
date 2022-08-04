@@ -19,10 +19,8 @@ export const setDocketEntrySelectedFromMessageAction = async ({
   const messageViewerDocumentToDisplay = caseDetail.docketEntries.find(
     entries => entries.docketEntryId === docketEntryId,
   );
-  // TODO: figure out why docketEntryId is correct here but we still go back to the wrong document
   messageViewerDocumentToDisplay.documentId = docketEntryId;
   store.set(state.documentId, docketEntryId);
-  console.log('setDocketEntrySelectedFromMessageAction', docketEntryId);
 
   return { messageViewerDocumentToDisplay, mostRecentMessage: parentMessageId };
 };
