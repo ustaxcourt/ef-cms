@@ -2,6 +2,7 @@ const {
   addDraftStampOrderDocketEntryInteractor,
 } = require('./addDraftStampOrderDocketEntryInteractor');
 const {
+  MOTION_DISPOSITIONS,
   ORDER_TYPES,
   PETITIONS_SECTION,
 } = require('../entities/EntityConstants');
@@ -27,7 +28,10 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       formattedDraftDocumentTitle:
         'some title with disposition and custom text',
       originalDocketEntryId: mockOriginalDocketEntryId,
-      stampData: { nameForSigning: mockSigningName },
+      stampData: {
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        nameForSigning: mockSigningName,
+      },
       stampedDocketEntryId: mockStampedDocketEntryId,
     });
 
@@ -94,7 +98,10 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
         'some title with disposition and custom text',
       originalDocketEntryId: mockOriginalDocketEntryId,
       parentMessageId: mockParentMessageId,
-      stampData: { nameForSigning: mockSigningName },
+      stampData: {
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        nameForSigning: mockSigningName,
+      },
       stampedDocketEntryId: mockStampedDocketEntryId,
     });
 
