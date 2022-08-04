@@ -20,7 +20,6 @@ export const setViewerDocumentToDisplayAction = async ({
   store.set(state.viewerDocumentToDisplay, viewerDocumentToDisplay);
 
   if (viewerDocumentToDisplay) {
-    console.log('are we here???');
     store.set(state.docketEntryId, viewerDocumentToDisplay.docketEntryId);
 
     const { url } = await applicationContext

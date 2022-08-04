@@ -22,7 +22,30 @@ export const getDefaultAttachmentViewerDocumentToDisplayAction = ({
     (!existingDocumentId ||
       (existingDocumentId && existingDocumentId === documentId))
   ) {
+    console.log('We should be here');
+    console.log(
+      'getDefaultAttachmentViewerDocumentToDisplayAction existingDocumentId',
+      existingDocumentId,
+    );
+    console.log(
+      'getDefaultAttachmentViewerDocumentToDisplayAction documentId',
+      documentId,
+    );
     return { messageViewerDocumentToDisplay: viewerDocumentToDisplayFromState };
+  } else {
+    console.log('But we are not');
+    console.log(
+      'getDefaultAttachmentViewerDocumentToDisplayAction viewerDocumentToDisplayFromState',
+      viewerDocumentToDisplayFromState,
+    );
+    console.log(
+      'getDefaultAttachmentViewerDocumentToDisplayAction existingDocumentId',
+      existingDocumentId,
+    );
+    console.log(
+      'getDefaultAttachmentViewerDocumentToDisplayAction documentId',
+      documentId,
+    );
   }
 
   const { attachments } = mostRecentMessage;
