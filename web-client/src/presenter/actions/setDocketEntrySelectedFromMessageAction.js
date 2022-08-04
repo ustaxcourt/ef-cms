@@ -11,6 +11,7 @@ import { state } from 'cerebral';
 export const setDocketEntrySelectedFromMessageAction = async ({
   get,
   props,
+  store,
 }) => {
   const caseDetail = get(state.caseDetail);
   const { docketEntryId, parentMessageId } = props;
@@ -19,7 +20,8 @@ export const setDocketEntrySelectedFromMessageAction = async ({
     entries => entries.docketEntryId === docketEntryId,
   );
   // TODO: figure out why docketEntryId is correct here but we still go back to the wrong document
-  // messageViewerDocumentToDisplay.documentId = docketEntryId;
+  messageViewerDocumentToDisplay.documentId = docketEntryId;
+  store.set(state.documentId, docketEntryId);
   console.log('setDocketEntrySelectedFromMessageAction', docketEntryId);
 
   return { messageViewerDocumentToDisplay, mostRecentMessage: parentMessageId };
