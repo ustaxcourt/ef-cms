@@ -9,9 +9,6 @@ import {
 } from './journey/docketClerkViewsSectionInboxNotHighPriority';
 import { fakeFile } from '../integration-tests-public/helpers';
 import {
-  loginAs,
-  setupTest,
-  uploadExternalDecisionDocument,
   getFormattedDocumentQCMyInbox,
   getFormattedDocumentQCSectionInbox,
   getIndividualInboxCount,
@@ -21,6 +18,7 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadExternalAdministrativeRecord,
+  uploadExternalDecisionDocument,
   uploadPetition,
 } from './helpers';
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
@@ -50,7 +48,20 @@ describe('Docket clerk consolidated case work item journey', () => {
   let decisionWorkItem;
 
   // TODO: setup to test consolidated group cases for document QC
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+
+  // it('login as the docketclerk and cache the initial inbox counts', async () => {
+  //   await getFormattedDocumentQCMyInbox(cerebralTest);
+  //   qcMyInboxCountBefore = getIndividualInboxCount(cerebralTest);
+
+  //   await getFormattedDocumentQCSectionInbox(cerebralTest);
+  //   qcSectionInboxCountBefore = getSectionInboxCount(cerebralTest);
+
+  //   notificationsBefore = getNotifications(cerebralTest);
+  // });
+
   // create a lead case
+  loginAs(cerebralTest, 'petitioner@example.com');
 
   it('login as a petitioner to create a lead case and add external document to generate respective work item', async () => {
     caseDetail = await uploadPetition(cerebralTest, overrides);
@@ -59,48 +70,56 @@ describe('Docket clerk consolidated case work item journey', () => {
       caseDetail.docketNumber;
   });
 
-  it('should file a document on lead case', async () => {
-    // file a document on lead case
-    console.log('permissions', cerebralTest.getState('permissions'));
+  // upload to file to lead case
+
+  it('petitioner uploads the external documents', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
       docketNumber: caseDetail.docketNumber,
     });
+
     await uploadExternalDecisionDocument(cerebralTest);
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
-  it('login as a petitioner and create a non-lead case and add external document to generate respective work item', async () => {
-    caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-    console.log('permissions 2', cerebralTest.getState('permissions'));
+  // it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
+  //   await refreshElasticsearchIndex();
 
-    // // file a document on non-lead case
-    // await cerebralTest.runSequence('gotoFileDocumentSequence', {
-    //   docketNumber: caseDetail.docketNumber,
-    // });
-    // await uploadExternalDecisionDocument(cerebralTest);
-  });
+  //   const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+  //     cerebralTest,
+  //   );
 
-  it('should file a document on non-lead case', async () => {
-    // file a document on lead case
-    await cerebralTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: caseDetail.docketNumber,
-    });
-    await uploadExternalDecisionDocument(cerebralTest);
-  });
+  //   decisionWorkItem = documentQCSectionInbox.find(
+  //     workItem => workItem.docketNumber === caseDetail.docketNumber,
+  //   );
+  //   expect(decisionWorkItem).toMatchObject({
+  //     docketEntry: {
+  //       documentTitle: 'Agreed Computation for Entry of Decision',
+  //       userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+  //     },
+  //   });
+
+  //   const qcSectionInboxCountAfter = getSectionInboxCount(cerebralTest);
+  //   expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 4);
+  // });
 
   // create a non-lead case
-  // loginAs(cerebralTest, 'privatePractitioner@example.com');
-  // practitionerCreatesNewCase(cerebralTest, fakeFile);
 
+  loginAs(cerebralTest, 'petitioner@example.com');
   it('login as a petitioner and create a case to consolidate with', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
     caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+
+  // upload file to non-lead case
+  it('should file a document on non-lead case', async () => {
+    // file a document on lead case
+    await cerebralTest.runSequence('gotoFileDocumentSequence', {
+      docketNumber: caseDetail.docketNumber,
+    });
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -112,8 +131,8 @@ describe('Docket clerk consolidated case work item journey', () => {
   docketClerkConsolidatesCases(cerebralTest, 2);
 
   // login as docket clerk
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkViewsSectionInbox(cerebralTest);
+  // loginAs(cerebralTest, 'docketclerk@example.com');
+  // docketClerkViewsSectionInbox(cerebralTest);
 
   // 103 - 22;
   // 104 - 22;
