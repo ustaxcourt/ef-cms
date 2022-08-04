@@ -16,10 +16,9 @@ export const petitionsClerkViewsSectionDocumentQC = (
 
     expect(workQueueToDisplay.queue).toEqual('section');
     expect(workQueueToDisplay.box).toEqual('inbox');
-    const workItems = cerebralTest.getState(state.workQueue);
+    const formattedWorkQueue = cerebralTest.getState('formattedWorkQueue');
 
-    console.log('workQueueToDisplay', workQueueToDisplay);
-    console.log('workItems', workItems);
+    console.log('formattedWorkQueue', formattedWorkQueue);
 
     if (storeCount) {
       const helper = await runCompute(workQueueHelper, {
@@ -27,6 +26,8 @@ export const petitionsClerkViewsSectionDocumentQC = (
       });
       cerebralTest.petitionsClerkSectionDocumentQCInboxCount =
         helper.sectionInboxCount;
+
+      console.log('sectionInbox', helper.sectionInboxCount);
     }
   });
 };
