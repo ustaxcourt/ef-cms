@@ -9,9 +9,15 @@ import {
 } from './journey/docketClerkViewsSectionInboxNotHighPriority';
 import { fakeFile } from '../integration-tests-public/helpers';
 import {
+  getFormattedDocumentQCMyInbox,
+  getFormattedDocumentQCSectionInbox,
+  getIndividualInboxCount,
+  getNotifications,
+  getSectionInboxCount,
   loginAs,
+  refreshElasticsearchIndex,
   setupTest,
-  uploadExternalDecisionDocument,
+  uploadExternalAdministrativeRecord,
   uploadPetition,
 } from './helpers';
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
@@ -19,10 +25,9 @@ import { petitionsClerkViewsSectionDocumentQC } from './journey/petitionsClerkVi
 import { practitionerCreatesNewCase } from './journey/practitionerCreatesNewCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 
-describe('Docket clerk consolidated case work item journey', () => {
-  const cerebralTest = setupTest();
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+const cerebralTest = setupTest();
 
+describe('Docket clerk consolidated case work item journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -35,54 +40,98 @@ describe('Docket clerk consolidated case work item journey', () => {
     preferredTrialCity: trialLocation,
     trialLocation,
   };
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  let caseDetail;
+  let qcMyInboxCountBefore;
+  let qcSectionInboxCountBefore;
+  let notificationsBefore;
+  let decisionWorkItem;
 
   // TODO: setup to test consolidated group cases for document QC
   // create a lead case
   let caseDetail;
 
-  it('login as a petitioner to create a lead case and add external document to generate respective work item', async () => {
+  it('login as a petitioner and create the lead case', async () => {
     caseDetail = await uploadPetition(cerebralTest, overrides);
     expect(caseDetail.docketNumber).toBeDefined();
     cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
       caseDetail.docketNumber;
   });
 
-  it('should file a document on lead case', async () => {
-    // file a document on lead case
-    console.log('permissions', cerebralTest.getState('permissions'));
-    await cerebralTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: caseDetail.docketNumber,
-    });
-    await uploadExternalDecisionDocument(cerebralTest);
-  });
-
+  // loginAs(cerebralTest, 'privatePractitioner@example.com');
+  //TODO: refactor practitionerCreatesNewCase to use an object as a 2nd arg
+  // practitionerCreatesNewCase(
+  //   cerebralTest,
+  //   fakeFile,
+  //   undefined,
+  //   undefined,
+  //   true,
+  // );
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
-  it('login as a petitioner and create a non-lead case and add external document to generate respective work item', async () => {
-    caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-    console.log('permissions 2', cerebralTest.getState('permissions'));
+  it('login as the docketclerk and cache the initial inbox counts', async () => {
+    await getFormattedDocumentQCMyInbox(cerebralTest);
+    qcMyInboxCountBefore = getIndividualInboxCount(cerebralTest);
 
-    // // file a document on non-lead case
-    // await cerebralTest.runSequence('gotoFileDocumentSequence', {
-    //   docketNumber: caseDetail.docketNumber,
-    // });
-    // await uploadExternalDecisionDocument(cerebralTest);
+    await getFormattedDocumentQCSectionInbox(cerebralTest);
+    qcSectionInboxCountBefore = getSectionInboxCount(cerebralTest);
+
+    notificationsBefore = getNotifications(cerebralTest);
   });
 
-  it('should file a document on non-lead case', async () => {
-    // file a document on lead case
+  // upload file to lead case
+  loginAs(cerebralTest, 'petitioner@example.com');
+  it('petitioner uploads the external document to lead case', async () => {
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: caseDetail.docketNumber,
+      docketNumber: caseDetail.leadDocketNumber,
     });
-    await uploadExternalDecisionDocument(cerebralTest);
+
+    await uploadExternalAdministrativeRecord(cerebralTest);
   });
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  it('login as the docketclerk and verify there are 4 document qc section inbox entries', async () => {
+    await refreshElasticsearchIndex();
+
+    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
+      cerebralTest,
+    );
+    console.log('inbox:', documentQCSectionInbox.slice(-1));
+
+    // decisionWorkItem = documentQCSectionInbox.find(
+    //   workItem => workItem.docketNumber === caseDetail.docketNumber,
+    // );
+    // expect(decisionWorkItem).toMatchObject({
+    //   docketEntry: {
+    //     documentTitle: 'Agreed Computation for Entry of Decision',
+    //     userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
+    //   },
+    // });
+
+    // const qcSectionInboxCountAfter = getSectionInboxCount(cerebralTest);
+    // expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 4);
+  });
+
+  // consolidate cases
+  // docketClerkOpensCaseConsolidateModal(cerebralTest);
+  // docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
+
+  // file a document on lead case
+  // loginAs(cerebralTest, 'privatePractitioner@example.com');
+  // practitionerFilesDocumentForOwnedCase(cerebralTest, fakeFile);
 
   // create a non-lead case
   // loginAs(cerebralTest, 'privatePractitioner@example.com');
   // practitionerCreatesNewCase(cerebralTest, fakeFile);
+
+  it('login as a petitioner and create a case to consolidate with', async () => {
+    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
+    caseDetail = await uploadPetition(cerebralTest, overrides);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
