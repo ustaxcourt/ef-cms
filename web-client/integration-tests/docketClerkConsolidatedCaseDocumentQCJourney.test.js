@@ -12,6 +12,15 @@ import {
   loginAs,
   setupTest,
   uploadExternalDecisionDocument,
+  getFormattedDocumentQCMyInbox,
+  getFormattedDocumentQCSectionInbox,
+  getIndividualInboxCount,
+  getNotifications,
+  getSectionInboxCount,
+  loginAs,
+  refreshElasticsearchIndex,
+  setupTest,
+  uploadExternalAdministrativeRecord,
   uploadPetition,
 } from './helpers';
 import { petitionsClerkViewsMyDocumentQC } from './journey/petitionsClerkViewsMyDocumentQC';
@@ -21,8 +30,6 @@ import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFil
 
 describe('Docket clerk consolidated case work item journey', () => {
   const cerebralTest = setupTest();
-  const trialLocation = `Boise, Idaho, ${Date.now()}`;
-
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -35,10 +42,15 @@ describe('Docket clerk consolidated case work item journey', () => {
     preferredTrialCity: trialLocation,
     trialLocation,
   };
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  let caseDetail;
+  let qcMyInboxCountBefore;
+  let qcSectionInboxCountBefore;
+  let notificationsBefore;
+  let decisionWorkItem;
 
   // TODO: setup to test consolidated group cases for document QC
   // create a lead case
-  let caseDetail;
 
   it('login as a petitioner to create a lead case and add external document to generate respective work item', async () => {
     caseDetail = await uploadPetition(cerebralTest, overrides);
@@ -83,6 +95,14 @@ describe('Docket clerk consolidated case work item journey', () => {
   // create a non-lead case
   // loginAs(cerebralTest, 'privatePractitioner@example.com');
   // practitionerCreatesNewCase(cerebralTest, fakeFile);
+
+  it('login as a petitioner and create a case to consolidate with', async () => {
+    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
+    caseDetail = await uploadPetition(cerebralTest, overrides);
+    expect(caseDetail.docketNumber).toBeDefined();
+    cerebralTest.docketNumber = caseDetail.docketNumber;
+  });
+
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
 
