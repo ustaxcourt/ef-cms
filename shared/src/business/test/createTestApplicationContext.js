@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const DateHandler = require('../utilities/DateHandler');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
@@ -36,6 +37,9 @@ const {
   compareISODateStrings,
   compareStrings,
 } = require('../utilities/sortFunctions');
+const {
+  copyPagesAndAppendToTargetPdf,
+} = require('../utilities/copyPagesAndAppendToTargetPdf');
 const {
   createCaseAndAssociations,
 } = require('../useCaseHelper/caseAssociation/createCaseAndAssociations');
@@ -81,6 +85,9 @@ const {
 const {
   generateAndServeDocketEntry,
 } = require('../useCaseHelper/service/createChangeItems');
+const {
+  generateNoticesForCaseTrialSessionCalendarInteractor,
+} = require('../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor');
 const {
   getAddressPhoneDiff,
 } = require('../utilities/generateChangeOfAddressTemplate');
@@ -151,6 +158,9 @@ const {
 const {
   sealDocketEntryInteractor,
 } = require('../useCases/docketEntry/sealDocketEntryInteractor');
+const {
+  setNoticesForCalendaredTrialSessionInteractor,
+} = require('../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
@@ -275,6 +285,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
     computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
+    copyPagesAndAppendToTargetPdf: jest
+      .fn()
+      .mockImplementation(copyPagesAndAppendToTargetPdf),
     createEndOfDayISO: jest
       .fn()
       .mockImplementation(DateHandler.createEndOfDayISO),
@@ -397,10 +410,16 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCases = appContextProxy({
+    generateNoticesForCaseTrialSessionCalendarInteractor: jest
+      .fn()
+      .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
       .mockImplementation(sealDocketEntryInteractor),
+    setNoticesForCalendaredTrialSessionInteractor: jest
+      .fn()
+      .mockImplementation(setNoticesForCalendaredTrialSessionInteractor),
     unsealDocketEntryInteractor: jest
       .fn()
       .mockImplementation(unsealDocketEntryInteractor),
@@ -424,6 +443,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
+    sendServedPartiesEmails: jest.fn(),
     setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
     updateCaseAndAssociations: jest
       .fn()
@@ -520,6 +540,7 @@ const createTestApplicationContext = ({ user } = {}) => {
       .mockReturnValue({ url: 'http://example.com/' }),
     getElasticsearchReindexRecords: jest.fn(),
     getItem: jest.fn().mockImplementation(getItem),
+    getJobStatus: jest.fn(),
     getJudgesChambers: jest.fn().mockImplementation(getJudgesChambers),
     getJudgesChambersWithLegacy: jest
       .fn()
@@ -545,6 +566,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
+    setJobAsProcessing: jest.fn(),
     setPriorityOnAllWorkItems: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseCorrespondence: jest
@@ -562,6 +584,7 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetMessagingClient = {
     deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -658,6 +681,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       error: jest.fn(),
     }),
     getMessageGateway: appContextProxy({
+      sendCalendarSessionEvent: jest.fn(),
+      sendEmailEventToQueue: jest.fn(),
+      sendSetTrialSessionCalendarEvent: jest.fn(),
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),

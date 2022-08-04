@@ -14,6 +14,5 @@ exports.setNoticesForCalendaredTrialSessionLambda = event =>
       .getUseCases()
       .setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
         trialSessionId,
-        ...event.body,
       });
   });

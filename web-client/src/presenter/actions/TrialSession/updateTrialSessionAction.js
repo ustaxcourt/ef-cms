@@ -18,12 +18,10 @@ export const updateTrialSessionAction = async ({
   path,
   props,
 }) => {
-  console.log('startDate before: ', props.computedStartDate);
   const startDate = preparedDateToISOString(
     applicationContext,
     props.computedStartDate,
   );
-  console.log('startDate after: ', startDate);
 
   const estimatedEndDate = preparedDateToISOString(
     applicationContext,
