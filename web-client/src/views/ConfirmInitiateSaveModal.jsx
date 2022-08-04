@@ -12,8 +12,6 @@ export const ConfirmInitiateSaveModal = connect(
       sequences.consolidatedCaseCheckboxAllChangeSequence,
     documentTitle: props.documentTitle,
     formattedCaseDetail: state.formattedCaseDetail,
-    serveCourtIssuedDocumentFromDocketEntrySequence:
-      sequences.serveCourtIssuedDocumentFromDocketEntrySequence,
     submitCourtIssuedDocketEntrySequence:
       sequences.submitCourtIssuedDocketEntrySequence,
     updateCaseCheckbox: sequences.updateCaseCheckboxSequence,

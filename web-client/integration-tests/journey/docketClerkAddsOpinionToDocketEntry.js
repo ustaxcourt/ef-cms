@@ -34,7 +34,7 @@ export const docketClerkAddsOpiniontoDocketyEntry = (
     );
 
     await cerebralTest.runSequence(
-      'serveCourtIssuedDocumentFromDocketEntrySequence',
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
 
     await waitForLoadingComponentToHide({ cerebralTest });
