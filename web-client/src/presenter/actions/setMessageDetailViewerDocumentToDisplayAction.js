@@ -59,6 +59,7 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
   props,
   store,
 }) => {
+  console.log('setMessageDetailViewerDocumentToDisplayAction');
   const { messageViewerDocumentToDisplay, mostRecentMessage } = props;
   const caseDetail = get(state.caseDetail);
   const { docketNumber } = caseDetail;
@@ -68,6 +69,7 @@ export const setMessageDetailViewerDocumentToDisplayAction = async ({
     messageViewerDocumentToDisplay,
   );
 
+  console.log('documentId', messageViewerDocumentToDisplay?.documentId);
   if (
     messageViewerDocumentToDisplay?.documentId &&
     mostRecentMessage.attachments?.length
