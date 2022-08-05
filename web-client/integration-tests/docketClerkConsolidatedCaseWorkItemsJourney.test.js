@@ -1,4 +1,5 @@
-import { docketClerkVerifiesConsolidatedCaseLeadIndicatorDocumentQCInbox } from './journey/docketClerkVerifiesConsolidatedCaseLeadIndicatorDocumentQCSectionInbox';
+import { docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCInbox } from './journey/docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSectionInbox';
+import { docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCInbox } from './journey/docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSectionInbox';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
@@ -45,9 +46,13 @@ describe('Docket clerk consolidated case work item journey', () => {
   );
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatedCaseLeadIndicatorDocumentQCInbox(
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCInbox(
     cerebralTest,
     leadCaseDocketNumber,
+  );
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCInbox(
+    cerebralTest,
+    consolidatedCaseDocketNumber,
   );
 
   // TODO: Consolidated lead case
