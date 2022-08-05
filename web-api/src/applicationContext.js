@@ -29,7 +29,7 @@ const {
 } = require('../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder');
 const {
   addDraftStampOrderDocketEntryInteractor,
-} = require('../../shared/src/business/useCases/addDraftStampOrderDocketEntryInteractor');
+} = require('../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor');
 const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
@@ -363,6 +363,9 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generateDraftStampOrderInteractor,
+} = require('../../shared/src/business/useCases/generateDraftStampOrderInteractor');
+const {
   generateNoticeOfChangeOfTrialJudgeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor');
 const {
@@ -394,7 +397,7 @@ const {
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
   generateStampedCoversheetInteractor,
-} = require('../../shared/src/business/useCases/generateStampedCoversheetInteractor');
+} = require('../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor');
 const {
   generateStandingPretrialOrderForSmallCaseInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor');
@@ -1938,6 +1941,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUseCaseHelpers: () => {
       return {
         addDocketEntryForSystemGeneratedOrder,
+        addDraftStampOrderDocketEntryInteractor,
         addExistingUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
@@ -1952,6 +1956,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
         generateNoticeOfChangeToInPersonProceeding,
+        generateStampedCoversheetInteractor,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
         getJudgeInSectionHelper,
@@ -1990,7 +1995,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         addConsolidatedCaseInteractor,
         addCoversheetInteractor,
         addDeficiencyStatisticInteractor,
-        addDraftStampOrderDocketEntryInteractor,
         addPaperFilingInteractor,
         addPetitionerToCaseInteractor,
         appendAmendedPetitionFormInteractor,
@@ -2035,6 +2039,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fileExternalDocumentInteractor,
         forwardMessageInteractor,
         generateDocketRecordPdfInteractor,
+        generateDraftStampOrderInteractor,
         generateNoticeOfChangeOfTrialJudgeInteractor,
         generateNoticeOfChangeToRemoteProceedingInteractor,
         generateNoticeOfTrialIssuedInteractor,
@@ -2044,7 +2049,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
-        generateStampedCoversheetInteractor,
         generateStandingPretrialOrderForSmallCaseInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
