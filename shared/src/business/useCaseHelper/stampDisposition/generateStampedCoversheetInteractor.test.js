@@ -1,9 +1,11 @@
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   generateStampedCoversheetInteractor,
 } = require('./generateStampedCoversheetInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { MOTION_DISPOSITIONS } = require('../entities/EntityConstants');
+const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOTION_DISPOSITIONS } = require('../../entities/EntityConstants');
 
 describe('generateStampedCoversheetInteractor', () => {
   const mockDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
