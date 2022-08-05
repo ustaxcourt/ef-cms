@@ -4,10 +4,8 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('completeMotionStampingAction', () => {
-  const {
-    addDraftStampOrderDocketEntryInteractor,
-    generateStampedCoversheetInteractor,
-  } = applicationContext.getUseCases();
+  const { generateDraftStampOrderInteractor } =
+    applicationContext.getUseCases();
   const { uploadDocumentFromClient } =
     applicationContext.getPersistenceGateway();
 
@@ -78,8 +76,7 @@ describe('completeMotionStampingAction', () => {
       state: mockState,
     });
 
-    expect(addDraftStampOrderDocketEntryInteractor.mock.calls.length).toBe(1);
-    expect(generateStampedCoversheetInteractor.mock.calls.length).toBe(1);
+    expect(generateDraftStampOrderInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       docketNumber,
       tab: 'docketRecord',

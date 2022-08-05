@@ -2,13 +2,15 @@ const {
   addDraftStampOrderDocketEntryInteractor,
 } = require('./addDraftStampOrderDocketEntryInteractor');
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
   MOTION_DISPOSITIONS,
   ORDER_TYPES,
   PETITIONS_SECTION,
-} = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+} = require('../../entities/EntityConstants');
+const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   const mockSigningName = 'Guy Fieri';
