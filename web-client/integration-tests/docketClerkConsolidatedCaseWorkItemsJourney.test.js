@@ -37,6 +37,14 @@ describe('Docket clerk consolidated case work item journey', () => {
     fakeFile,
     leadCaseDocketNumber,
   );
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSectionInbox(
+    cerebralTest,
+    leadCaseDocketNumber,
+  );
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
     fakeFile,
@@ -44,33 +52,10 @@ describe('Docket clerk consolidated case work item journey', () => {
   );
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSectionInbox(
-    cerebralTest,
-    leadCaseDocketNumber,
-  );
   docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSectionInbox(
     cerebralTest,
     consolidatedCaseDocketNumber,
   );
-
-  // TODO: Consolidated lead case
-  // Assign work item to docket clerk
-  // *VerifyLeadCaseIndicatorUserDocumentQCInbox
-  // Complete Document QC
-  // Verify alertSuccess says "<Document Type> Record has been completed."
-  // *VerifyLeadCaseIndicatorUserDocumentQCOutbox
-  // *VerifyLeadCaseIndicatorSectionDocumentQCOutbox
-
-  // TODO: Consolidated non-lead case
-  // Navigate to Document QC Section
-  // Navigate to Section Document QC Inbox
-  // *VerifyNonLeadCaseIndicatorSectionDocumentQCInbox
-  // Assign work item to docket clerk
-  // *VerifyNonLeadCaseIndicatorUserDocumentQCInbox
-  // Complete Document QC
-  // Verify alertSuccess says "<Document Type> Record has been completed."
-  // *VerifyNonLeadCaseIndicatorUserDocumentQCOutbox
-  // *VerifyNonLeadCaseIndicatorSectionDocumentQCOutbox
 
   // TODO: Document QC Internal filed document
 
