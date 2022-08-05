@@ -1,4 +1,6 @@
-import { setupTest } from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
+import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
+import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
 
 const cerebralTest = setupTest();
 
@@ -12,19 +14,34 @@ describe('Docket clerk consolidated case work item journey', () => {
   });
 
   // TODO: setup to test consolidated group cases for document QC
-  // create a lead case
-  // create a non-lead case
-  // consolidate cases
-  // need to add private practitioner to consolidated group lead case
-  // need to add private practitioner to consolidated group non-lead case
-  // login as private practitioner and go to dashboard
-  // open consolidated lead case
-  // file a document on lead case
-  // file a document on non-lead case
 
-  // TODO: Document QC for external filed document
+  const leadCaseDocketNumber = '111-19';
+  const consolidatedCaseDocketNumber = '112-19';
 
-  // login as docket clerk
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  petitionsClerkAddsPractitionersToCase(
+    cerebralTest,
+    true,
+    leadCaseDocketNumber,
+  );
+
+  petitionsClerkAddsPractitionersToCase(
+    cerebralTest,
+    true,
+    consolidatedCaseDocketNumber,
+  );
+
+  loginAs(cerebralTest, 'privatePractitioner@example.com');
+  practitionerFilesDocumentForOwnedCase(
+    cerebralTest,
+    fakeFile,
+    leadCaseDocketNumber,
+  );
+  practitionerFilesDocumentForOwnedCase(
+    cerebralTest,
+    fakeFile,
+    consolidatedCaseDocketNumber,
+  );
 
   // TODO: Consolidated lead case
   // Navigate to Document QC Section
