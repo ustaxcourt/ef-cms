@@ -1,5 +1,5 @@
-import { docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCInbox } from './journey/docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSectionInbox';
-import { docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCInbox } from './journey/docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSectionInbox';
+import { docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSectionInbox } from './journey/docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSectionInbox';
+import { docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSectionInbox } from './journey/docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSectionInbox';
 import { fakeFile, loginAs, setupTest } from './helpers';
 import { petitionsClerkAddsPractitionersToCase } from './journey/petitionsClerkAddsPractitionersToCase';
 import { practitionerFilesDocumentForOwnedCase } from './journey/practitionerFilesDocumentForOwnedCase';
@@ -14,8 +14,6 @@ describe('Docket clerk consolidated case work item journey', () => {
   afterAll(() => {
     cerebralTest.closeSocket();
   });
-
-  // TODO: setup to test consolidated group cases for document QC
 
   const leadCaseDocketNumber = '111-19';
   const consolidatedCaseDocketNumber = '112-19';
@@ -46,11 +44,11 @@ describe('Docket clerk consolidated case work item journey', () => {
   );
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCInbox(
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSectionInbox(
     cerebralTest,
     leadCaseDocketNumber,
   );
-  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCInbox(
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSectionInbox(
     cerebralTest,
     consolidatedCaseDocketNumber,
   );
