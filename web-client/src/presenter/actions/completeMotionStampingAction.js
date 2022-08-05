@@ -1,8 +1,6 @@
 import { Stamp } from '../../../../shared/src/business/entities/Stamp';
 import { state } from 'cerebral';
 
-// '/case-documents/:docketNumber/:docketEntryId/stamp',
-
 /**
  * generates an action for completing motion stamping
  *
