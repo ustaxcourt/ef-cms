@@ -1,37 +1,7 @@
-import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
-import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
-import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
-import {
-  getFormattedDocumentQCMyInbox,
-  getFormattedDocumentQCSectionInbox,
-  getIndividualInboxCount,
-  getSectionInboxCount,
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-  uploadExternalAdministrativeRecord,
-  uploadExternalRatificationDocument,
-  uploadPetition,
-} from './helpers';
-import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
-
+import { setupTest } from './helpers';
 const cerebralTest = setupTest();
 
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-const overrides = {
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
-let caseDetail;
-let qcMyInboxCountBefore;
-let qcSectionInboxCountBefore;
-let decisionWorkItem;
-
-describe('Docket clerk consolidated case work items journey', () => {
+describe('Docket clerk consolidated case work item journey', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -40,122 +10,72 @@ describe('Docket clerk consolidated case work items journey', () => {
     cerebralTest.closeSocket();
   });
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-
-  it('login as the docketclerk and cache the initial inbox counts', async () => {
-    await getFormattedDocumentQCMyInbox(cerebralTest);
-    qcMyInboxCountBefore = getIndividualInboxCount(cerebralTest);
-
-    await getFormattedDocumentQCSectionInbox(cerebralTest);
-    qcSectionInboxCountBefore = getSectionInboxCount(cerebralTest);
-  });
-
+  // TODO: setup to test consolidated group cases for document QC
   // create a lead case
-
-  loginAs(cerebralTest, 'petitioner@example.com');
-  it('login as a petitioner and create the lead case', async () => {
-    caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
-      caseDetail.docketNumber;
-  });
-
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-
-  loginAs(cerebralTest, 'petitioner@example.com');
-  it('petitioner uploads the external documents', async () => {
-    await cerebralTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: caseDetail.docketNumber,
-    });
-
-    await uploadExternalRatificationDocument(cerebralTest);
-  });
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  it('login as the docketclerk and verify there are 1 document qc section inbox entries', async () => {
-    await refreshElasticsearchIndex();
-
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-    );
-
-    decisionWorkItem = documentQCSectionInbox.find(
-      workItem => workItem.docketNumber === caseDetail.docketNumber,
-    );
-
-    expect(decisionWorkItem).toMatchObject({
-      docketEntry: {
-        documentTitle: 'Ratification of do the test',
-        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    });
-
-    const qcSectionInboxCountAfter = getSectionInboxCount(cerebralTest);
-    expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 1);
-  });
-
-  // create a case to consolidate with
-  loginAs(cerebralTest, 'petitioner@example.com');
-  it('login as a petitioner and create a case to consolidate with', async () => {
-    cerebralTest.docketNumberDifferentPlaceOfTrial = null;
-    caseDetail = await uploadPetition(cerebralTest, overrides);
-    expect(caseDetail.docketNumber).toBeDefined();
-    cerebralTest.docketNumber = caseDetail.docketNumber;
-  });
-
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
-  petitionsClerkServesElectronicCaseToIrs(cerebralTest);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
-
+  // create a non-lead case
   // consolidate cases
-  docketClerkOpensCaseConsolidateModal(cerebralTest);
-  docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest, 2);
+  // need to add private practitioner to consolidated group lead case
+  // need to add private practitioner to consolidated group non-lead case
+  // login as private practitioner and go to dashboard
+  // open consolidated lead case
+  // file a document on lead case
+  // file a document on non-lead case
 
-  loginAs(cerebralTest, 'petitioner@example.com');
-  it('petitioner uploads the external documents', async () => {
-    await cerebralTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: caseDetail.docketNumber,
-    });
+  // TODO: Document QC for external filed document
 
-    await uploadExternalRatificationDocument(cerebralTest);
-  });
+  // login as docket clerk
 
-  loginAs(cerebralTest, 'docketclerk@example.com');
-  it('login as the docketclerk and verify there are 1 document qc section inbox entries', async () => {
-    await refreshElasticsearchIndex();
+  // TODO: Consolidated lead case
+  // Navigate to Document QC Section
+  // Navigate to Section Document QC Inbox
+  // *VerifyLeadCaseIndicatorSectionDocumentQCInbox
+  // Assign work item to docket clerk
+  // *VerifyLeadCaseIndicatorUserDocumentQCInbox
+  // Complete Document QC
+  // Verify alertSuccess says "<Document Type> Record has been completed."
+  // *VerifyLeadCaseIndicatorUserDocumentQCOutbox
+  // *VerifyLeadCaseIndicatorSectionDocumentQCOutbox
 
-    const documentQCSectionInbox = await getFormattedDocumentQCSectionInbox(
-      cerebralTest,
-    );
+  // TODO: Consolidated non-lead case
+  // Navigate to Document QC Section
+  // Navigate to Section Document QC Inbox
+  // *VerifyNonLeadCaseIndicatorSectionDocumentQCInbox
+  // Assign work item to docket clerk
+  // *VerifyNonLeadCaseIndicatorUserDocumentQCInbox
+  // Complete Document QC
+  // Verify alertSuccess says "<Document Type> Record has been completed."
+  // *VerifyNonLeadCaseIndicatorUserDocumentQCOutbox
+  // *VerifyNonLeadCaseIndicatorSectionDocumentQCOutbox
 
-    decisionWorkItem = documentQCSectionInbox.find(
-      workItem => workItem.docketNumber === caseDetail.docketNumber,
-    );
+  // TODO: Document QC Internal filed document
 
-    expect(decisionWorkItem).toMatchObject({
-      docketEntry: {
-        documentTitle: 'Ratification of do the test',
-        userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    });
+  // TODO: Consolidated lead case
+  // Search for consolidated case lead docket number
+  // Create a paper filing on lead docket number
+  // Save filing for later
+  // Verify alertSuccess says "Your entry has been added to the docket record."
+  // Navigate to Document QC Section
+  // Navigate to Section Document QC In Progress
+  // *VerifyLeadCaseIndicatorSectionDocumentQCInProgress
+  // *VerifyLeadCaseIndicatorUserDocumentQCInProgress
+  // Save and Serve Document
+  // Verify alertSuccess says "Your entry has been added to the docket record."
+  // !BUG: no indicators are present
+  // *VerifyLeadCaseIndicatorUserDocumentQCOutbox
+  // *VerifyLeadCaseIndicatorSectionDocumentQCOutbox
 
-    const qcSectionInboxCountAfter = getSectionInboxCount(cerebralTest);
-    expect(qcSectionInboxCountAfter).toEqual(qcSectionInboxCountBefore + 2);
-  });
-
-  it('return casedetail', () => {
-    caseDetail = cerebralTest.getState('caseDetail');
-    console.log(caseDetail);
-    // const { consolidatedCases } = caseDetail;
-    // console.log('consolidatedCases', consolidatedCases);
-    // const { leadDocketNumber } = caseDetail;
-    // console.log('leadDocketNumber', leadDocketNumber);
-  });
+  // TODO: Consolidated non-lead case
+  // Search for consolidated case non-lead docket number
+  // Create a paper filing on non-lead docket number
+  // Save filing for later
+  // Verify alertSuccess says "Your entry has been added to the docket record."
+  // Navigate to Document QC Section
+  // Navigate to Section Document QC In Progress
+  // *VerifyNonLeadCaseIndicatorSectionDocumentQCInProgress
+  // *VerifyNonLeadCaseIndicatorUserDocumentQCInProgress
+  // Save and Serve Document
+  // Verify alertSuccess says "Your entry has been added to the docket record."
+  // !BUG: no indicators are present
+  // *VerifyNonLeadCaseIndicatorUserDocumentQCOutbox
+  // *VerifyNonLeadCaseIndicatorSectionDocumentQCOutbox
 });
