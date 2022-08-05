@@ -1,4 +1,5 @@
 import { setupTest } from './helpers';
+
 const cerebralTest = setupTest();
 
 describe('Docket clerk consolidated case work item journey', () => {
