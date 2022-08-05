@@ -1,3 +1,9 @@
+const {
+  isAuthorized,
+  ROLE_PERMISSIONS,
+} = require('../../authorization/authorizationClientService');
+const { UnauthorizedError } = require('../../errors/errors');
+
 /**
  * generateDraftStampOrderInteractor
  *
@@ -20,6 +26,12 @@ exports.generateDraftStampOrderInteractor = async (
     stampedDocketEntryId,
   },
 ) => {
+  const user = applicationContext.getCurrentUser();
+
+  if (!isAuthorized(user, ROLE_PERMISSIONS.STAMP_MOTION)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
+
   await applicationContext
     .getUseCaseHelpers()
     .addDraftStampOrderDocketEntryInteractor(applicationContext, {
