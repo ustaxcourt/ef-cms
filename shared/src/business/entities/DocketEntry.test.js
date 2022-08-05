@@ -37,7 +37,7 @@ describe('DocketEntry entity', () => {
       },
     );
 
-    expect(entry.stampData).toBeT({});
+    expect(entry.stampData).toEqual({});
   });
 
   describe('generateFiledBy', () => {
