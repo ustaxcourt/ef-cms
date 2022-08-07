@@ -12,14 +12,14 @@ ENV JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64
 
 RUN apt-get install -y zip
 
-RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.6.1.zip" -o "awscliv2.zip" && \
+RUN curl "https://awscli.amazonaws.com/awscli-exe-linux-x86_64-2.7.16.zip" -o "awscliv2.zip" && \
   unzip awscliv2.zip && \
   ./aws/install && \
   rm -rf awscliv2.zip
 
 RUN pip install --upgrade pip
 
-RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.2.4/terraform_1.2.4_linux_amd64.zip && \
+RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.2.6/terraform_1.2.6_linux_amd64.zip && \
   unzip -o terraform.zip terraform && \
   rm terraform.zip && \
   cp terraform /usr/local/bin/

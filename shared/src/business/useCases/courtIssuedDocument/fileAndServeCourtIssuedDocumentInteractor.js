@@ -29,6 +29,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
+ * @param {string} providers.clientConnectionId the UUID of the websocket connection for the current tab
  * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {Object} providers.form the form from the front end that has last minute modifications to the docket entry
@@ -242,7 +243,6 @@ const fileDocumentOnOneCase = async ({
   originalSubjectDocketEntry,
   user,
 }) => {
-  // Serve on all parties
   const servedParties = aggregatePartiesForService(caseEntity);
 
   const docketEntryEntity = new DocketEntry(
@@ -265,7 +265,7 @@ const fileDocumentOnOneCase = async ({
       isDraft: false,
       isFileAttached: true,
       isOnDocketRecord: true,
-      judge: form.judge, //TODO: should this judge come from the caseEntity or the form?
+      judge: form.judge,
       numberOfPages,
       scenario: form.scenario,
       serviceStamp: form.serviceStamp,
@@ -284,7 +284,7 @@ const fileDocumentOnOneCase = async ({
       {
         assigneeId: null,
         assigneeName: null,
-        associatedJudge: caseEntity.associatedJudge, //TODO: should this associatedJudge come from the caseEntity or the form?
+        associatedJudge: caseEntity.associatedJudge,
         caseStatus: caseEntity.status,
         caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
@@ -345,7 +345,7 @@ const fileDocumentOnOneCase = async ({
     });
 
   if (ENTERED_AND_SERVED_EVENT_CODES.includes(docketEntryEntity.eventCode)) {
-    await closeCaseAndUpdatedTrialSessionForEnteredAndServedDocuments({
+    await closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments({
       applicationContext,
       caseEntity,
     });
@@ -361,7 +361,7 @@ const fileDocumentOnOneCase = async ({
   return new Case(validRawCaseEntity, { applicationContext });
 };
 
-const closeCaseAndUpdatedTrialSessionForEnteredAndServedDocuments = async ({
+const closeCaseAndUpdateTrialSessionForEnteredAndServedDocuments = async ({
   applicationContext,
   caseEntity,
 }) => {

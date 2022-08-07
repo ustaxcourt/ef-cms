@@ -162,6 +162,9 @@ const {
   confirmAuthCode,
 } = require('../../shared/src/persistence/cognito/confirmAuthCode');
 const {
+  copyPagesAndAppendToTargetPdf,
+} = require('../../shared/src/business/utilities/copyPagesAndAppendToTargetPdf');
+const {
   Correspondence,
 } = require('../../shared/src/business/entities/Correspondence');
 const {
@@ -197,6 +200,9 @@ const {
 const {
   createCourtIssuedOrderPdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/courtIssuedOrder/createCourtIssuedOrderPdfFromHtmlInteractor');
+const {
+  createJobStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/createJobStatus');
 const {
   createMessage,
 } = require('../../shared/src/persistence/dynamo/messages/createMessage');
@@ -239,6 +245,9 @@ const {
 const {
   createUserInteractor,
 } = require('../../shared/src/business/useCases/users/createUserInteractor');
+const {
+  decrementJobCounter,
+} = require('../../shared/src/persistence/dynamo/trialSessions/decrementJobCounter');
 const {
   deleteCaseDeadline,
 } = require('../../shared/src/persistence/dynamo/caseDeadlines/deleteCaseDeadline');
@@ -371,6 +380,9 @@ const {
 const {
   generateNoticeOfTrialIssuedInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfTrialIssuedInteractor');
+const {
+  generateNoticesForCaseTrialSessionCalendarInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor');
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../shared/src/business/useCases/generatePdfFromHtmlInteractor');
@@ -590,6 +602,9 @@ const {
 const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
+const {
+  getJobStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getJobStatus');
 const {
   getJudgeInSectionHelper,
 } = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
@@ -988,6 +1003,9 @@ const {
   sendBulkTemplatedEmail,
 } = require('../../shared/src/dispatchers/ses/sendBulkTemplatedEmail');
 const {
+  sendEmailEventToQueue,
+} = require('../../shared/src/persistence/messages/sendEmailEventToQueue');
+const {
   sendEmailVerificationLink,
 } = require('../../shared/src/business/useCaseHelper/email/sendEmailVerificationLink');
 const {
@@ -1008,6 +1026,9 @@ const {
 const {
   sendServedPartiesEmails,
 } = require('../../shared/src/business/useCaseHelper/service/sendServedPartiesEmails');
+const {
+  sendSetTrialSessionCalendarEvent,
+} = require('../../shared/src/persistence/messages/sendSetTrialSessionCalendarEvent');
 const {
   sendSlackNotification,
 } = require('../../shared/src/dispatchers/slack/sendSlackNotification');
@@ -1035,6 +1056,9 @@ const {
 const {
   setForHearingInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
+const {
+  setJobAsProcessing,
+} = require('../../shared/src/persistence/dynamo/trialSessions/setJobAsProcessing');
 const {
   setMessageAsRead,
 } = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
@@ -1479,6 +1503,7 @@ const gatewayMethods = {
     fetchPendingItems,
     getConfigurationItemValue,
     getFeatureFlagValue,
+    getJobStatus,
     getMaintenanceMode,
     getSesStatus,
     incrementCounter,
@@ -1530,8 +1555,10 @@ const gatewayMethods = {
         };
       }
     : confirmAuthCode,
+  createJobStatus,
   createNewPetitionerUser,
   createNewPractitionerUser,
+  decrementJobCounter,
   deleteCaseDeadline,
   deleteCaseTrialSortMappingRecords,
   deleteDocketEntry,
@@ -1617,6 +1644,7 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   saveDispatchNotification,
+  setJobAsProcessing,
   updateCaseCorrespondence,
   updateUserCaseMapping,
   updateWorkItemAssociatedJudge,
@@ -1730,6 +1758,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       ),
       ORDER_TYPES_MAP: ORDER_TYPES,
       PENDING_ITEMS_PAGE_SIZE: 100,
+      SES_CONCURRENCY_LIMIT: process.env.SES_CONCURRENCY_LIMIT || 6,
       SESSION_STATUS_GROUPS,
     }),
     getCurrentUser,
@@ -1807,6 +1836,29 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getHttpClient: () => axios,
     getIrsSuperuserEmail: () => process.env.IRS_SUPERUSER_EMAIL,
     getMessageGateway: () => ({
+      sendEmailEventToQueue: async ({ applicationContext, emailParams }) => {
+        if (environment.stage !== 'local') {
+          await sendEmailEventToQueue({
+            applicationContext,
+            emailParams,
+          });
+        }
+      },
+      sendSetTrialSessionCalendarEvent: ({ applicationContext, payload }) => {
+        if (environment.stage === 'local') {
+          applicationContext
+            .getUseCases()
+            .generateNoticesForCaseTrialSessionCalendarInteractor(
+              applicationContext,
+              payload,
+            );
+        } else {
+          sendSetTrialSessionCalendarEvent({
+            applicationContext,
+            payload,
+          });
+        }
+      },
       sendUpdatePetitionerCasesMessage: ({
         applicationContext: appContext,
         user: userToSendTo,
@@ -1824,6 +1876,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         }
       },
     }),
+
     getMessagingClient: () => {
       if (!sqsCache) {
         sqsCache = new SQS({
@@ -2031,6 +2084,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateNoticeOfChangeOfTrialJudgeInteractor,
         generateNoticeOfChangeToRemoteProceedingInteractor,
         generateNoticeOfTrialIssuedInteractor,
+        generateNoticesForCaseTrialSessionCalendarInteractor,
         generatePDFFromJPGDataInteractor,
         generatePdfFromHtmlInteractor,
         generatePractitionerCaseListPdfInteractor,
@@ -2176,6 +2230,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         compareCasesByDocketNumber,
         compareISODateStrings,
         compareStrings,
+        copyPagesAndAppendToTargetPdf,
         createISODateString,
         filterWorkItemsForUser,
         formatCaseForTrialSession,
