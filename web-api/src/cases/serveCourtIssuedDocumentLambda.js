@@ -14,6 +14,7 @@ exports.serveCourtIssuedDocumentLambda = event =>
         .getUseCases()
         .serveCourtIssuedDocumentInteractor(applicationContext, {
           ...event.pathParameters,
+          ...JSON.parse(event.body),
         });
     },
     { logResults: false },

@@ -95,7 +95,7 @@ export const docketClerkAddsAndServesDocketEntryFromOrderOfAmendedPetition = (
     cerebralTest.docketRecordEntry = servedDocketEntry;
 
     await cerebralTest.runSequence(
-      'serveCourtIssuedDocumentFromDocketEntrySequence',
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
 
     await waitForLoadingComponentToHide({ cerebralTest });
