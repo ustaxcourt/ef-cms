@@ -17,7 +17,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
     });
 
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: cerebralTest.docketNumber,
+      docketNumber: caseDocketNumber || cerebralTest.docketNumber,
     });
 
     await cerebralTest.runSequence('updateScreenMetadataSequence', {

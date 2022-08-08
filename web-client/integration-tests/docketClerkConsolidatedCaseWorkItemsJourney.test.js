@@ -116,7 +116,9 @@ describe('Docket clerk consolidated case work item journey', () => {
     { box: 'outbox', queue: 'section' },
   );
 
-  // TODO: Document QC Internal filed document
+  // Document QC Internal filed document on Lead Case
+
+  loginAs(cerebralTest, 'docketclerk@example.com');
 
   docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(
     cerebralTest,
@@ -136,33 +138,25 @@ describe('Docket clerk consolidated case work item journey', () => {
     { box: 'inProgress', queue: 'my' },
   );
 
-  // TODO: Consolidated lead case
-  // Search for consolidated case lead docket number
-  // Create a paper filing on lead docket number
-  // Save filing for later
-  // Verify alertSuccess says "Your entry has been added to the docket record."
-  // Navigate to Document QC Section
-  // Navigate to Section Document QC In Progress
-  // *VerifyLeadCaseIndicatorSectionDocumentQCInProgress
-  // *VerifyLeadCaseIndicatorUserDocumentQCInProgress
-  // Save and Serve Document
-  // Verify alertSuccess says "Your entry has been added to the docket record."
-  // !BUG: no indicators are present
-  // *VerifyLeadCaseIndicatorUserDocumentQCOutbox
-  // *VerifyLeadCaseIndicatorSectionDocumentQCOutbox
+  // Document QC Internal filed document on Non-lead Case
 
-  // TODO: Consolidated non-lead case
-  // Search for consolidated case non-lead docket number
-  // Create a paper filing on non-lead docket number
-  // Save filing for later
-  // Verify alertSuccess says "Your entry has been added to the docket record."
-  // Navigate to Document QC Section
-  // Navigate to Section Document QC In Progress
-  // *VerifyNonLeadCaseIndicatorSectionDocumentQCInProgress
-  // *VerifyNonLeadCaseIndicatorUserDocumentQCInProgress
-  // Save and Serve Document
-  // Verify alertSuccess says "Your entry has been added to the docket record."
-  // !BUG: no indicators are present
-  // *VerifyNonLeadCaseIndicatorUserDocumentQCOutbox
-  // *VerifyNonLeadCaseIndicatorSectionDocumentQCOutbox
+  loginAs(cerebralTest, 'docketclerk@example.com');
+
+  docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(
+    cerebralTest,
+    fakeFile,
+    consolidatedCaseDocketNumber,
+  );
+
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
+    cerebralTest,
+    consolidatedCaseDocketNumber,
+    { box: 'inProgress', queue: 'section' },
+  );
+
+  docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
+    cerebralTest,
+    consolidatedCaseDocketNumber,
+    { box: 'inProgress', queue: 'my' },
+  );
 });
