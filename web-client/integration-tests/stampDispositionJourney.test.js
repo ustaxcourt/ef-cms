@@ -1,4 +1,5 @@
 import { MOTION_DISPOSITIONS } from '../../shared/src/business/entities/EntityConstants';
+import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
   fakeFile,
@@ -6,7 +7,17 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { userSendsMessageToJudge } from './journey/userSendsMessageToJudge';
+
 const cerebralTest = setupTest();
+const judgesChambers = applicationContext
+  .getPersistenceGateway()
+  .getJudgesChambers();
+const judgeCohenUserId = 'dabbad04-18d0-43ec-bafb-654e83405416';
+const messageSubject = 'Motion to Stamp';
+const deniedMotionDocketEntryTitle = 'Motion DENIED as moot without prejudice';
+const grantedMotionDocketEntryTitle = 'Motion GRANTED';
+const signedJudgeName = 'Mary Ann Cohen';
 
 describe('Stamp disposition journey test', () => {
   beforeAll(() => {
@@ -114,8 +125,15 @@ describe('Stamp disposition journey test', () => {
     cerebralTest.docketEntryId = motionDocketEntry.docketEntryId;
   });
 
+  userSendsMessageToJudge(
+    cerebralTest,
+    messageSubject,
+    judgesChambers.COHENS_CHAMBERS_SECTION.section,
+    judgeCohenUserId,
+  );
+
   loginAs(cerebralTest, 'judgeCohen@example.com');
-  it('apply a stamp disposition on the motion', async () => {
+  it('apply a stamp disposition on the motion from case detail', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -153,23 +171,88 @@ describe('Stamp disposition journey test', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 
-  it('verify the auto-generated draft stamp order', async () => {
+  it('verify the first auto-generated draft stamp order', async () => {
     expect(cerebralTest.getState('currentPage')).toBe('CaseDetailInternal');
 
     const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
-    const draftStampOrder = docketEntries.find(
-      entry => entry.isDraft === true && entry.eventCode === 'O',
-    );
+    const draftStampOrder = docketEntries.find(entry => {
+      return (
+        entry.isDraft === true &&
+        entry.eventCode === 'O' &&
+        entry.documentTitle === deniedMotionDocketEntryTitle
+      );
+    });
 
     expect(draftStampOrder).toMatchObject({
-      documentTitle: 'Motion DENIED as moot without prejudice',
-      freeText: 'Motion DENIED as moot without prejudice',
+      documentTitle: deniedMotionDocketEntryTitle,
+      freeText: deniedMotionDocketEntryTitle,
       isDraft: true,
-      signedJudgeName: 'Mary Ann Cohen',
+      signedJudgeName,
       stampData: {
         deniedAsMoot: true,
         deniedWithoutPrejudice: true,
         disposition: 'Denied',
+        entityName: 'Stamp',
+      },
+    });
+  });
+
+  it('apply a stamp disposition on the motion from message', async () => {
+    await cerebralTest.runSequence('gotoDashboardSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    const messages = cerebralTest.getState('messages');
+    const foundMessage = messages.find(
+      message => message.subject === messageSubject,
+    );
+
+    await cerebralTest.runSequence('gotoMessageDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+      parentMessageId: foundMessage.parentMessageId,
+    });
+
+    await cerebralTest.runSequence('goToApplyStampSequence', {
+      docketEntryId: cerebralTest.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    expect(cerebralTest.getState('currentPage')).toBe('ApplyStamp');
+
+    await cerebralTest.runSequence('submitStampMotionSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      disposition: 'Enter a disposition',
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'disposition',
+      value: MOTION_DISPOSITIONS.GRANTED,
+    });
+
+    await cerebralTest.runSequence('submitStampMotionSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+  });
+
+  it('verify the second auto-generated draft stamp order', async () => {
+    expect(cerebralTest.getState('currentPage')).toBe('MessageDetail');
+
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
+    const draftStampOrder = docketEntries.find(
+      entry =>
+        entry.isDraft === true &&
+        entry.eventCode === 'O' &&
+        entry.documentTitle === grantedMotionDocketEntryTitle,
+    );
+
+    expect(draftStampOrder).toMatchObject({
+      documentTitle: grantedMotionDocketEntryTitle,
+      freeText: grantedMotionDocketEntryTitle,
+      isDraft: true,
+      signedJudgeName,
+      stampData: {
+        disposition: 'Granted',
         entityName: 'Stamp',
       },
     });
