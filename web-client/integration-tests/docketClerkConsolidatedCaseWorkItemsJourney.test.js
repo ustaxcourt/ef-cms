@@ -1,4 +1,5 @@
 import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWorkItemToSelf';
+import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection } from './journey/docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection';
 import { docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection } from './journey/docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection';
 import { fakeFile, loginAs, setupTest } from './helpers';
@@ -19,22 +20,18 @@ describe('Docket clerk consolidated case work item journey', () => {
   const leadCaseDocketNumber = '111-19';
   const consolidatedCaseDocketNumber = '112-19';
 
-  // Document QC External filed document
+  // Document QC External filed document on Lead Case
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
+
   petitionsClerkAddsPractitionersToCase(
     cerebralTest,
     true,
     leadCaseDocketNumber,
   );
 
-  petitionsClerkAddsPractitionersToCase(
-    cerebralTest,
-    true,
-    consolidatedCaseDocketNumber,
-  );
-
   loginAs(cerebralTest, 'privatePractitioner@example.com');
+
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
     fakeFile,
@@ -42,19 +39,47 @@ describe('Docket clerk consolidated case work item journey', () => {
   );
 
   loginAs(cerebralTest, 'docketclerk@example.com');
+
   docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
     cerebralTest,
     leadCaseDocketNumber,
     { box: 'inbox', queue: 'section' },
   );
+
   docketClerkAssignWorkItemToSelf(cerebralTest, leadCaseDocketNumber);
+
   docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
     cerebralTest,
     leadCaseDocketNumber,
     { box: 'inbox', queue: 'my' },
   );
 
+  docketClerkQCsDocketEntry(cerebralTest);
+
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+    cerebralTest,
+    leadCaseDocketNumber,
+    { box: 'outbox', queue: 'my' },
+  );
+
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+    cerebralTest,
+    leadCaseDocketNumber,
+    { box: 'outbox', queue: 'section' },
+  );
+
+  // Document QC External filed document on Non-lead Case
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+
+  petitionsClerkAddsPractitionersToCase(
+    cerebralTest,
+    true,
+    consolidatedCaseDocketNumber,
+  );
+
   loginAs(cerebralTest, 'privatePractitioner@example.com');
+
   practitionerFilesDocumentForOwnedCase(
     cerebralTest,
     fakeFile,
@@ -62,16 +87,32 @@ describe('Docket clerk consolidated case work item journey', () => {
   );
 
   loginAs(cerebralTest, 'docketclerk@example.com');
+
   docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
     cerebralTest,
     consolidatedCaseDocketNumber,
     { box: 'inbox', queue: 'section' },
   );
   docketClerkAssignWorkItemToSelf(cerebralTest, consolidatedCaseDocketNumber);
+
   docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection(
     cerebralTest,
     consolidatedCaseDocketNumber,
     { box: 'inbox', queue: 'my' },
+  );
+
+  docketClerkQCsDocketEntry(cerebralTest);
+
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+    cerebralTest,
+    leadCaseDocketNumber,
+    { box: 'outbox', queue: 'my' },
+  );
+
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+    cerebralTest,
+    leadCaseDocketNumber,
+    { box: 'outbox', queue: 'section' },
   );
 
   // TODO: Document QC Internal filed document
