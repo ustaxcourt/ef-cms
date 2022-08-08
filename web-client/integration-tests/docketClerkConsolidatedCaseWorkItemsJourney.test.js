@@ -1,3 +1,4 @@
+import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater';
 import { docketClerkAssignWorkItemToSelf } from './journey/docketClerkAssignWorkItemToSelf';
 import { docketClerkQCsDocketEntry } from './journey/docketClerkQCsDocketEntry';
 import { docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection } from './journey/docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSection';
@@ -116,6 +117,24 @@ describe('Docket clerk consolidated case work item journey', () => {
   );
 
   // TODO: Document QC Internal filed document
+
+  docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater(
+    cerebralTest,
+    fakeFile,
+    leadCaseDocketNumber,
+  );
+
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+    cerebralTest,
+    leadCaseDocketNumber,
+    { box: 'inProgress', queue: 'section' },
+  );
+
+  docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection(
+    cerebralTest,
+    leadCaseDocketNumber,
+    { box: 'inProgress', queue: 'my' },
+  );
 
   // TODO: Consolidated lead case
   // Search for consolidated case lead docket number
