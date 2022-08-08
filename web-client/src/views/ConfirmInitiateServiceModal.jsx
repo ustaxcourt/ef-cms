@@ -74,9 +74,9 @@ export const ConfirmInitiateServiceModal = connect(
     consolidatedCaseCheckboxAllChange:
       sequences.consolidatedCaseCheckboxAllChangeSequence,
     documentTitle: props.documentTitle,
+    fileAndServeCourtIssuedDocumentFromDocketEntrySequence:
+      sequences.fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     formattedCaseDetail: state.formattedCaseDetail,
-    serveCourtIssuedDocumentFromDocketEntrySequence:
-      sequences.serveCourtIssuedDocumentFromDocketEntrySequence,
     updateCaseCheckbox: sequences.updateCaseCheckboxSequence,
     waitingForResponse: state.progressIndicator.waitingForResponse,
   },
@@ -87,8 +87,8 @@ export const ConfirmInitiateServiceModal = connect(
     consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange,
     documentTitle,
+    fileAndServeCourtIssuedDocumentFromDocketEntrySequence,
     formattedCaseDetail,
-    serveCourtIssuedDocumentFromDocketEntrySequence,
     updateCaseCheckbox,
     waitingForResponse,
   }) {
@@ -112,7 +112,7 @@ export const ConfirmInitiateServiceModal = connect(
           debounceSubmit(200);
           confirmSequence
             ? confirmSequence()
-            : serveCourtIssuedDocumentFromDocketEntrySequence();
+            : fileAndServeCourtIssuedDocumentFromDocketEntrySequence();
         }}
         disableSubmit={waitingForResponse || isSubmitDebounced}
         title="Are You Ready to Initiate Service?"
