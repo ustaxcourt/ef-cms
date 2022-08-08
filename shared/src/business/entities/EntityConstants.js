@@ -229,6 +229,7 @@ const ORDER_TYPES = [
     overrideFreeText: true,
   },
   {
+    documentTitle: 'Order petr(s) to show cause why "S" should not be removed',
     documentType: 'Order petr(s) to show cause why "S" should not be removed',
     eventCode: 'OSCP',
     overrideFreeText: false,
