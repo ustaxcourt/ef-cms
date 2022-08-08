@@ -1,11 +1,12 @@
 const {
   COURT_ISSUED_EVENT_CODES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { Message } = require('../entities/Message');
+} = require('../../entities/EntityConstants');
+const { Case } = require('../../entities/cases/Case');
+const { DocketEntry } = require('../../entities/DocketEntry');
+const { Message } = require('../../entities/Message');
 const { orderBy } = require('lodash');
+const { Stamp } = require('../../entities/Stamp');
 
 /**
  * addDraftStampOrderDocketEntryInteractor
@@ -47,6 +48,8 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
     doc => doc.eventCode === 'O',
   );
 
+  const validatedStampData = new Stamp(stampData);
+
   stampedDocketEntryEntity = new DocketEntry(
     {
       createdAt: applicationContext.getUtilities().createISODateString(),
@@ -67,7 +70,7 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
       isDraft: true,
       isPaper: false,
       processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      stampData,
+      stampData: validatedStampData,
       userId: user.userId,
     },
     { applicationContext },
