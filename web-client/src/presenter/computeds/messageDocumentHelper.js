@@ -14,6 +14,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
+    GENERIC_ORDER_EVENT_CODE,
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
@@ -90,6 +91,16 @@ export const messageDocumentHelper = (get, applicationContext) => {
     !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
   const showEditButtonForDocument =
     caseDocument.isDraft && !isCorrespondence && !isStipulatedDecision;
+  const isDraftStampOrder =
+    caseDocument.eventCode === GENERIC_ORDER_EVENT_CODE &&
+    caseDocument.stampData?.disposition;
+
+  const showEditButtonSigned =
+    showEditButtonForRole &&
+    showEditButtonForDocument &&
+    documentIsSigned &&
+    !isNotice &&
+    !isDraftStampOrder;
   const showRemoveSignatureButtonForDocument =
     documentIsSigned &&
     caseDocument.isDraft &&
@@ -149,7 +160,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
 
   return {
     addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
-    applyStampLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/apply-stamp`,
+    applyStampFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/apply-stamp`,
     archived: documentIsArchived,
     editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,
@@ -165,16 +176,13 @@ export const messageDocumentHelper = (get, applicationContext) => {
       showEditButtonForRole &&
       showEditButtonForDocument &&
       (!documentIsSigned || isNotice),
-    showEditButtonSigned:
-      showEditButtonForRole &&
-      showEditButtonForDocument &&
-      documentIsSigned &&
-      !isNotice,
+    showEditButtonSigned,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
-      showRemoveSignatureButtonForDocument,
+      showRemoveSignatureButtonForDocument &&
+      !isDraftStampOrder,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,

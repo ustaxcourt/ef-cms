@@ -1156,6 +1156,18 @@ const router = {
     );
 
     registerRoute(
+      '/messages/*/message-detail/*/*/apply-stamp',
+      ifHasAccess({ app }, (docketNumber, parentMessageId, docketEntryId) => {
+        setPageTitle(`${getPageTitleDocketPrefix(docketNumber)} Apply Stamp`);
+        return app.getSequence('goToApplyStampSequence')({
+          docketEntryId,
+          docketNumber,
+          parentMessageId,
+        });
+      }),
+    );
+
+    registerRoute(
       '/pdf-preview',
       ifHasAccess({ app }, () => {
         setPageTitle('PDF Preview');

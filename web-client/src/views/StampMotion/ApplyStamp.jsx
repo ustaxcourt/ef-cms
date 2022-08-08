@@ -329,6 +329,7 @@ export const ApplyStamp = connect(
                               year: 'year',
                             }}
                             placeholder={'MM/DD/YYYY'}
+                            shouldClearHiddenInput={true}
                             showDateHint={false}
                             values={{
                               day: form.day,
@@ -394,6 +395,7 @@ export const ApplyStamp = connect(
                               year: 'year',
                             }}
                             placeholder={'MM/DD/YYYY'}
+                            shouldClearHiddenInput={true}
                             showDateHint={false}
                             values={{
                               day: form.day,
@@ -508,7 +510,7 @@ export const ApplyStamp = connect(
                             - {form.jurisdictionalOption} -<br />
                           </>
                         )}
-                        <span className="text-semibold">
+                        <span>
                           {form.day && (
                             <>
                               {form.dueDateMessage} {form.month}/{form.day}/

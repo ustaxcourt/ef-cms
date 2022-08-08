@@ -1,18 +1,18 @@
 const { genericHandler } = require('../genericHandler');
 
 /**
- * used for generating a stamped coversheet
+ * used for generating a draft stamp order
  *
  * @param {object} event the AWS event object
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
-exports.generateStampedCoversheetLambda = event =>
+exports.generateDraftStampOrderLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
       await applicationContext
         .getUseCases()
-        .generateStampedCoversheetInteractor(applicationContext, {
+        .generateDraftStampOrderInteractor(applicationContext, {
           ...event.pathParameters,
           ...JSON.parse(event.body),
         });

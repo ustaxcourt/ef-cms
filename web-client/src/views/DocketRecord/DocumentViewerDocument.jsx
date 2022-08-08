@@ -160,7 +160,7 @@ export const DocumentViewerDocument = connect(
                   icon="stamp"
                   onClick={() => {
                     navigateToPathAndSetRedirectUrlSequence({
-                      path: documentViewerLinksHelper.applyStampLink,
+                      path: documentViewerLinksHelper.applyStampFromCaseDetailsLink,
                       redirectUrl: documentViewerLinksHelper.redirectUrl,
                     });
                   }}

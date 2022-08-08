@@ -4,10 +4,8 @@ import { presenter } from '../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('completeMotionStampingAction', () => {
-  const {
-    addDraftStampOrderDocketEntryInteractor,
-    generateStampedCoversheetInteractor,
-  } = applicationContext.getUseCases();
+  const { generateDraftStampOrderInteractor } =
+    applicationContext.getUseCases();
   const { uploadDocumentFromClient } =
     applicationContext.getPersistenceGateway();
 
@@ -78,8 +76,7 @@ describe('completeMotionStampingAction', () => {
       state: mockState,
     });
 
-    expect(addDraftStampOrderDocketEntryInteractor.mock.calls.length).toBe(1);
-    expect(generateStampedCoversheetInteractor.mock.calls.length).toBe(1);
+    expect(generateDraftStampOrderInteractor.mock.calls.length).toBe(1);
     expect(result.output).toMatchObject({
       docketNumber,
       tab: 'docketRecord',
@@ -96,6 +93,24 @@ describe('completeMotionStampingAction', () => {
 
     expect(result.output).toMatchObject({
       redirectUrl: `/case-detail/${docketNumber}/draft-documents?docketEntryId=${mockStampedDocketEntryId}`,
+    });
+  });
+
+  it('should construct a redirectUrl to the message detail document view if there is a parentMessageId present in state', async () => {
+    const parentMessageId = applicationContext.getUniqueId();
+
+    const result = await runAction(completeMotionStampingAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        ...mockState,
+        parentMessageId,
+      },
+    });
+
+    expect(result.output).toMatchObject({
+      redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${mockStampedDocketEntryId}`,
     });
   });
 

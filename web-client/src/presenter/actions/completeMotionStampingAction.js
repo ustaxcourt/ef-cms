@@ -15,11 +15,12 @@ export const completeMotionStampingAction = async ({
   get,
   props,
 }) => {
-  const motionDocketEntryID = get(state.pdfForSigning.docketEntryId);
+  const motionDocketEntryId = get(state.pdfForSigning.docketEntryId);
   const { docketNumber } = get(state.caseDetail);
+  const parentMessageId = get(state.parentMessageId);
   const stampFormData = get(state.form);
 
-  let newDocketEntryId;
+  const newDocketEntryId = applicationContext.getUniqueId();
 
   const { nameForSigning, nameForSigningLine2 } = get(state.pdfForSigning);
 
@@ -30,28 +31,23 @@ export const completeMotionStampingAction = async ({
     nameForSigningLine2,
   };
 
-  newDocketEntryId = applicationContext.getUniqueId();
-
   await applicationContext
     .getUseCases()
-    .addDraftStampOrderDocketEntryInteractor(applicationContext, {
+    .generateDraftStampOrderInteractor(applicationContext, {
       docketNumber,
       formattedDraftDocumentTitle: props.formattedDraftDocumentTitle,
-      originalDocketEntryId: motionDocketEntryID,
+      motionDocketEntryId,
+      parentMessageId,
       stampData,
       stampedDocketEntryId: newDocketEntryId,
     });
 
-  await applicationContext
-    .getUseCases()
-    .generateStampedCoversheetInteractor(applicationContext, {
-      docketEntryId: motionDocketEntryID,
-      docketNumber,
-      stampData,
-      stampedDocketEntryId: newDocketEntryId,
-    });
-
-  const redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
+  let redirectUrl;
+  if (parentMessageId) {
+    redirectUrl = `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${newDocketEntryId}`;
+  } else {
+    redirectUrl = `/case-detail/${docketNumber}/draft-documents?docketEntryId=${newDocketEntryId}`;
+  }
 
   return {
     docketEntryId: newDocketEntryId,
