@@ -17,6 +17,7 @@ import { setMessageDetailViewerDocumentToDisplayAction } from '../actions/setMes
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
 import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
+import { unsetDocumentIdAction } from '../actions/unsetDocumentIdAction';
 
 const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
   showProgressSequenceDecorator([
@@ -39,6 +40,7 @@ const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
       markRead: [setMessageAsReadAction],
       noAction: [],
     },
+    unsetDocumentIdAction,
   ]),
 );
 

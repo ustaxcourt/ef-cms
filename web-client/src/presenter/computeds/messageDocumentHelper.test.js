@@ -1240,8 +1240,8 @@ describe('messageDocumentHelper', () => {
     expect(result.addDocketEntryLink).toEqual(
       `/case-detail/${baseCaseDetail.docketNumber}/documents/${mockDocumentId}/add-court-issued-docket-entry/${mockParentMessageId}`,
     );
-    expect(result.applyStampLink).toEqual(
-      `/case-detail/${baseCaseDetail.docketNumber}/documents/${mockDocumentId}/apply-stamp`,
+    expect(result.applyStampFromMessagesLink).toEqual(
+      `/messages/${baseCaseDetail.docketNumber}/message-detail/${mockParentMessageId}/${mockDocumentId}/apply-stamp`,
     );
     expect(result.editCorrespondenceLink).toEqual(
       `/case-detail/${baseCaseDetail.docketNumber}/edit-correspondence/${mockDocumentId}/${mockParentMessageId}`,
