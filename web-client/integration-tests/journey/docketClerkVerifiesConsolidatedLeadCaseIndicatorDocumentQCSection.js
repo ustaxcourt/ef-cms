@@ -3,18 +3,18 @@ import { refreshElasticsearchIndex } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSectionInbox =
-  (cerebralTest, docketNumber) => {
+export const docketClerkVerifiesConsolidatedLeadCaseIndicatorDocumentQCSection =
+  (cerebralTest, docketNumber, { box, queue }) => {
     const formattedWorkQueue = withAppContextDecorator(
       formattedWorkQueueComputed,
     );
 
-    return it('docket clerk verifies consolidated case indicator Section Document QC inbox', async () => {
+    return it('docket clerk verifies lead case indicator Section Document QC', async () => {
       await refreshElasticsearchIndex();
       await cerebralTest.runSequence('gotoWorkQueueSequence');
       await cerebralTest.runSequence('chooseWorkQueueSequence', {
-        box: 'inbox',
-        queue: 'section',
+        box,
+        queue,
       });
 
       const sectionDocumentQCInbox = runCompute(formattedWorkQueue, {
@@ -26,9 +26,9 @@ export const docketClerkVerifiesConsolidatedCaseIndicatorDocumentQCSectionInbox 
       );
 
       expect(foundWorkItem).toMatchObject({
-        consolidatedIconTooltipText: 'Consolidated case',
+        consolidatedIconTooltipText: 'Lead case',
         inConsolidatedGroup: true,
-        inLeadCase: false,
+        inLeadCase: true,
       });
     });
   };

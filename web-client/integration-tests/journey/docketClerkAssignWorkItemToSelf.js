@@ -5,7 +5,10 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
 
-export const docketClerkAssignWorkItemToSelf = cerebralTest => {
+export const docketClerkAssignWorkItemToSelf = (
+  cerebralTest,
+  caseDocketNumber,
+) => {
   return it('Docket clerk assigns the selected work items to self', async () => {
     await refreshElasticsearchIndex();
 
@@ -19,8 +22,10 @@ export const docketClerkAssignWorkItemToSelf = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
+    const docketNumber = caseDocketNumber || cerebralTest.docketNumber;
+
     const selectedWorkItem = workQueueFormatted.find(
-      workItem => workItem.docketNumber === cerebralTest.docketNumber,
+      workItem => workItem.docketNumber === docketNumber,
     );
 
     cerebralTest.docketEntryId = selectedWorkItem.docketEntry.docketEntryId;
