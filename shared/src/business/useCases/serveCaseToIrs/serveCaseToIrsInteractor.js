@@ -532,12 +532,12 @@ const serveCaseToIrsInteractor = async (
   }
 
   if (caseEntity.orderToShowCause) {
-    const { orderToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
+    const { orderPetitionersToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
     await generateDraftDocument({
       applicationContext,
       caseEntity,
-      document: orderToShowCause,
+      document: orderPetitionersToShowCause,
       replacements: [formattedFiledDate, todayPlus60],
     });
   }
