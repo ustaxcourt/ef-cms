@@ -2,12 +2,15 @@ const {
   addDraftStampOrderDocketEntryInteractor,
 } = require('./addDraftStampOrderDocketEntryInteractor');
 const {
+  applicationContext,
+} = require('../../test/createTestApplicationContext');
+const {
+  MOTION_DISPOSITIONS,
   ORDER_TYPES,
   PETITIONS_SECTION,
-} = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+} = require('../../entities/EntityConstants');
+const { MOCK_CASE } = require('../../../test/mockCase');
+const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
 describe('addDraftStampOrderDocketEntryInteractor', () => {
   const mockSigningName = 'Guy Fieri';
@@ -27,7 +30,10 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       formattedDraftDocumentTitle:
         'some title with disposition and custom text',
       originalDocketEntryId: mockOriginalDocketEntryId,
-      stampData: { nameForSigning: mockSigningName },
+      stampData: {
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        nameForSigning: mockSigningName,
+      },
       stampedDocketEntryId: mockStampedDocketEntryId,
     });
 
@@ -94,7 +100,10 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
         'some title with disposition and custom text',
       originalDocketEntryId: mockOriginalDocketEntryId,
       parentMessageId: mockParentMessageId,
-      stampData: { nameForSigning: mockSigningName },
+      stampData: {
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        nameForSigning: mockSigningName,
+      },
       stampedDocketEntryId: mockStampedDocketEntryId,
     });
 
