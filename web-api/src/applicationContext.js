@@ -708,6 +708,9 @@ const {
   getTrialSessionDetailsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
 const {
+  getTrialSessionProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionProcessingStatus');
+const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
 const {
@@ -1092,6 +1095,9 @@ const {
 const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
+const {
+  setTrialSessionProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus');
 const {
   setupPdfDocument,
 } = require('../../shared/src/business/utilities/setupPdfDocument');
@@ -1506,6 +1512,7 @@ const gatewayMethods = {
     getJobStatus,
     getMaintenanceMode,
     getSesStatus,
+    getTrialSessionProcessingStatus,
     incrementCounter,
     incrementKeyCount,
     markMessageThreadRepliedTo,
@@ -1520,6 +1527,7 @@ const gatewayMethods = {
     setExpiresAt,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
+    setTrialSessionProcessingStatus,
     updateCase,
     updateCaseHearing,
     updateDocketEntry,
