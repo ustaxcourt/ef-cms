@@ -54,7 +54,28 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     applicationContext,
   });
 
+  const trialSessionProcessingStatus = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionProcessingStatus({
+      applicationContext,
+      trialSessionId,
+    });
+
+  if (trialSessionProcessingStatus) {
+    // TODO handle notifying user of already existing processing of trial session event
+    return;
+  }
+
+  await applicationContext
+    .getPersistenceGateway()
+    .setTrialSessionProcessingStatus({
+      applicationContext,
+      trialSessionId,
+      trialSessionStatus: true,
+    });
+
   const jobId = applicationContext.getUniqueId();
+
   await applicationContext.getPersistenceGateway().createJobStatus({
     applicationContext,
     docketNumbers: calendaredCases.map(
@@ -70,7 +91,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
         applicationContext,
         payload: {
           docketNumber: calendaredCase.docketNumber,
-          jobId,
+          jobId: trialSessionId,
           trialSession,
           userId: user.userId,
         },
@@ -83,9 +104,24 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
         .getPersistenceGateway()
         .getJobStatus({
           applicationContext,
-          jobId,
+          jobId: trialSessionId,
         });
       if (jobStatus.unfinishedCases === 0) {
+        // TASKS/TODOS
+        // 1. CHECK FOR ITEMS IN DL
+        //    - use trial-session lambda to check for items in DL
+        //    - DO WE RE-DUMP IT BACK TO THE ORIGINAL SOURCE QUEUE
+        // 2. end TRIAL SESSION PROCESSING (set TO FALSE)
+        //  await applicationContext
+        // .getPersistenceGateway()
+        // .setTrialSessionProcessingStatus({
+        //   applicationContext,
+        //   trialSessionId,
+        //   trialSessionStatus: false,
+        // });
+
+        // spin up dynamodb local
+
         clearInterval(interval);
         resolve();
       }
