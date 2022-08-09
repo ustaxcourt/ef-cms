@@ -591,7 +591,8 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OSCP')
       .documentType,
     eventCode: 'OSCP',
-    documentTitle: 'Order petr(s) to show cause why "S" should not be removed',
+    // Title for PDF only
+    documentTitle: 'Order to Show Cause',
   },
   noticeOfDocketChange: {
     documentTitle: 'Notice of Docket Change for Docket Entry No. [Index]',
