@@ -4,7 +4,7 @@ resource "aws_sqs_queue" "calendar_trial_session_queue" {
 
   redrive_policy = jsonencode({
     deadLetterTargetArn = aws_sqs_queue.calendar_trial_session_dl_queue.arn
-    maxReceiveCount     = 1
+    maxReceiveCount     = 3
   })
 }
 
