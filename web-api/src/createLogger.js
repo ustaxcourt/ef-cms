@@ -22,6 +22,48 @@ exports.redact = format(logEntry => {
   return copy;
 });
 
+exports.formatMetadata = format(logEntry => {
+  const rootFields = [
+    'authorizer',
+    'environment',
+    'level',
+    'logGroup',
+    'logStream',
+    'message',
+    'metadata',
+    'protectedRequiredFields',
+    'request',
+    'requestId',
+    'response',
+    'timestamp',
+    'user',
+  ];
+  let leftovers = cloneDeep(logEntry);
+  rootFields.forEach(k => unset(leftovers, k));
+
+  const metadata =
+    'metadata' in logEntry
+      ? {
+          ...leftovers,
+          ...logEntry.metadata,
+        }
+      : leftovers;
+
+  let formattedLogEntry = cloneDeep(logEntry);
+  [...Object.keys(metadata), 'metadata', 'protectedRequiredFields'].forEach(k =>
+    unset(formattedLogEntry, k),
+  );
+  formattedLogEntry.metadata = metadata;
+  if ('protectedRequiredFields' in logEntry) {
+    formattedLogEntry = {
+      ...formattedLogEntry,
+      ...logEntry.protectedRequiredFields,
+    };
+  }
+
+  return formattedLogEntry;
+});
+
 exports.createLogger = (opts = {}) => {
   const options = {
     defaultMeta: {},
@@ -31,7 +73,11 @@ exports.createLogger = (opts = {}) => {
     ...opts,
   };
 
-  const formatters = [errors({ stack: true }), exports.redact()];
+  const formatters = [
+    errors({ stack: true }),
+    exports.redact(),
+    exports.formatMetadata(),
+  ];
 
   if (process.env.NODE_ENV === 'production') {
     options.format = combine(...formatters, json());
