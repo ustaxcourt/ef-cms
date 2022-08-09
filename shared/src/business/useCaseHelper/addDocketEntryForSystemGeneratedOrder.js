@@ -22,15 +22,10 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
 }) => {
   const user = applicationContext.getCurrentUser();
   const isNotice = systemGeneratedDocument.eventCode === 'NOT';
-  // OSCP should retain the `Order to Show Cause` title on the PDF only
-  const documentTitle =
-    systemGeneratedDocument.eventCode !== 'OSCP'
-      ? systemGeneratedDocument.documentTitle
-      : 'Order to Show Cause';
 
   const newDocketEntry = new DocketEntry(
     {
-      documentTitle,
+      documentTitle: systemGeneratedDocument.documentTitle,
       documentType: systemGeneratedDocument.documentType,
       draftOrderState: {
         docketNumber: caseEntity.docketNumber,
@@ -51,6 +46,12 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
   const { caseCaptionExtension, caseTitle } = getCaseCaptionMeta(caseEntity);
   const { docketNumberWithSuffix } = caseEntity;
 
+  // OSCP should retain the `Order to Show Cause` title on the PDF only
+  const orderTitle =
+    systemGeneratedDocument.eventCode !== 'OSCP'
+      ? systemGeneratedDocument.documentTitle
+      : 'Order to Show Cause';
+
   let orderPdfData = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
@@ -58,7 +59,7 @@ exports.addDocketEntryForSystemGeneratedOrder = async ({
       caseTitle,
       docketNumberWithSuffix,
       orderContent: systemGeneratedDocument.content,
-      orderTitle: systemGeneratedDocument.documentTitle.toUpperCase(),
+      orderTitle: orderTitle.toUpperCase(),
       signatureText: isNotice
         ? applicationContext.getClerkOfCourtNameForSigning()
         : '',
