@@ -577,7 +577,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     eventCode: 'OAPF',
     documentTitle: 'Order',
   },
-  orderToShowCause: {
+  orderPetitionersToShowCause: {
     content: `&nbsp;&nbsp;&nbsp;&nbsp;The petition commencing the above-docketed matter was filed on [FILED_DATE]. In that document,
       petitioners elected to have this deficiency case conducted under the small tax case procedures. However, a review
       of the record shows that the amount in dispute for one or more taxable years exceeds $50,000. The small tax case
@@ -591,6 +591,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OSCP')
       .documentType,
     eventCode: 'OSCP',
+    // Title for PDF only
     documentTitle: 'Order to Show Cause',
   },
   noticeOfDocketChange: {
