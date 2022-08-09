@@ -184,7 +184,9 @@ describe('documentGenerators', () => {
           docketNumberWithSuffix: '123-45S',
           orderContent:
             SYSTEM_GENERATED_DOCUMENT_TYPES.orderPetitionersToShowCause.content,
-          orderTitle: 'Order to Show Cause',
+          orderTitle:
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderPetitionersToShowCause
+              .documentTitle,
         },
       });
 
