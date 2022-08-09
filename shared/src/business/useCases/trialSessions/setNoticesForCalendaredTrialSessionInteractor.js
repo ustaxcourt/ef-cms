@@ -65,7 +65,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     trialSessionProcessingStatus === 'processing' ||
     trialSessionProcessingStatus === 'complete'
   ) {
-    // TODO handle notifying user of already existing processing of trial session event
+    applicationContext.logger.warn(
+      `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
+    );
     return;
   }
 
@@ -110,20 +112,12 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
           jobId,
         });
       if (jobStatus.unfinishedCases === 0) {
-        // TASKS/TODOS
-        // 1. CHECK FOR ITEMS IN DL
-        //    - use trial-session lambda to check for items in DL
-        //    - HOW DO WE HANDLE ITEMS IN THE DEADLETTER QUEUE
-        //    - DO WE RE-DUMP IT BACK TO THE ORIGINAL SOURCE QUEUE
-        // 2. check for what doc was actually created
-
         clearInterval(interval);
         resolve();
       }
     }, 5000);
   });
 
-  // 2. end TRIAL SESSION PROCESSING (set TO complete)
   await applicationContext
     .getPersistenceGateway()
     .setTrialSessionProcessingStatus({
