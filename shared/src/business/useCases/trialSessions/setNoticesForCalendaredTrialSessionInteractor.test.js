@@ -171,6 +171,27 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     );
   });
 
+  it('should set the trial session status as complete after all the calendering jobs is completed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getJobStatus.mockResolvedValueOnce({
+        unfinishedCases: 0,
+      });
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .setTrialSessionProcessingStatus,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        trialSessionStatus: 'complete',
+      }),
+    );
+  });
+
   it('should send a notification with no paper service indicator for trial sessions with no calendared cases', async () => {
     applicationContext
       .getPersistenceGateway()
