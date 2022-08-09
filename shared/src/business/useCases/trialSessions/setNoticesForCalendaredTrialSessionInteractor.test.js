@@ -26,6 +26,8 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
   });
 
+  const trialSessionId = '6805d1ab-18d0-43ec-bafb-654e83405416';
+
   beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
@@ -66,10 +68,18 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .isFileExists.mockResolvedValue(true);
-
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionProcessingStatus.mockResolvedValue(undefined);
+    applicationContext.getPersistenceGateway().setTrialSessionProcessingStatus =
+      jest.fn();
     applicationContext
       .getPersistenceGateway()
       .getDocument.mockResolvedValue(testPdfDoc);
+
+    applicationContext.logger.warn.mockResolvedValue(
+      `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
+    );
 
     jest.spyOn(global, 'setInterval').mockImplementation(async cb => {
       await cb();
@@ -83,7 +93,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
     try {
       await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+        trialSessionId,
       });
     } catch (e) {
       error = e;
@@ -98,7 +108,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       .isFileExists.mockResolvedValue(false);
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      trialSessionId,
     });
 
     expect(
@@ -114,13 +124,60 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(pdfDoc.getPages().length).toBe(0);
   });
 
+  it('should NOT attempt to start a trial session calendering event if its already started or completed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionProcessingStatus.mockResolvedValueOnce('processing');
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId,
+    });
+    expect(
+      applicationContext.getPersistenceGateway()
+        .setTrialSessionProcessingStatus,
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.logger.warn).toHaveBeenCalledWith(
+      `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
+    );
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionProcessingStatus.mockResolvedValueOnce('complete');
+
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId,
+    });
+    expect(
+      applicationContext.getPersistenceGateway()
+        .setTrialSessionProcessingStatus,
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.logger.warn).toHaveBeenCalledWith(
+      expect.stringContaining(trialSessionId),
+    );
+  });
+
+  it('should set trialSessionStatus to processing if this is the first trial session calendering event', async () => {
+    await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
+      trialSessionId,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .setTrialSessionProcessingStatus,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        trialSessionStatus: 'processing',
+      }),
+    );
+  });
+
   it('should send a notification with no paper service indicator for trial sessions with no calendared cases', async () => {
     applicationContext
       .getPersistenceGateway()
       .getCalendaredCasesForTrialSession.mockResolvedValue([]);
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      trialSessionId,
     });
 
     expect(
@@ -138,7 +195,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
   it('should create 3 trial session events and send 3 notifications for each completed trial session calendering job', async () => {
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      trialSessionId,
     });
 
     expect(
@@ -159,7 +216,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       });
 
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      trialSessionId,
     });
 
     const { pdfUrl: pdfUrlNull } =
@@ -172,7 +229,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
 
   it('should save the combined copies of the calendared cases for the trial sessions', async () => {
     await setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+      trialSessionId,
     });
 
     expect(

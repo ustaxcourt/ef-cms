@@ -62,8 +62,9 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     });
 
   if (
-    trialSessionProcessingStatus === 'processing' ||
-    trialSessionProcessingStatus === 'complete'
+    trialSessionProcessingStatus &&
+    (trialSessionProcessingStatus === 'processing' ||
+      trialSessionProcessingStatus === 'complete')
   ) {
     applicationContext.logger.warn(
       `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
