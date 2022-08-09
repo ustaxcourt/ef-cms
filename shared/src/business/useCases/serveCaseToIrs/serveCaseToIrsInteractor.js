@@ -532,6 +532,7 @@ const serveCaseToIrsInteractor = async (
   }
 
   if (caseEntity.orderToShowCause) {
+    // OSCP, not OSC
     const { orderPetitionersToShowCause } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
     await generateDraftDocument({
