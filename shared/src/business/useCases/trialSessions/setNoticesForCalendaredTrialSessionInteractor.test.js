@@ -124,7 +124,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
     expect(pdfDoc.getPages().length).toBe(0);
   });
 
-  it('should NOT attempt to start a trial session calendering event if its already started or completed', async () => {
+  it('should NOT attempt to start a trial session calendering event if its already processing or completed', async () => {
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionProcessingStatus.mockResolvedValueOnce('processing');
