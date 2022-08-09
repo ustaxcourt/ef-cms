@@ -183,9 +183,10 @@ describe('documentGenerators', () => {
           caseTitle: 'Test Petitioner',
           docketNumberWithSuffix: '123-45S',
           orderContent:
-            SYSTEM_GENERATED_DOCUMENT_TYPES.orderToShowCause.content,
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderPetitionersToShowCause.content,
           orderTitle:
-            SYSTEM_GENERATED_DOCUMENT_TYPES.orderToShowCause.documentTitle,
+            SYSTEM_GENERATED_DOCUMENT_TYPES.orderPetitionersToShowCause
+              .documentTitle,
         },
       });
 
