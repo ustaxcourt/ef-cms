@@ -23,8 +23,6 @@ export const petitionsClerkViewsSectionDocumentQC = (
       });
       cerebralTest.petitionsClerkSectionDocumentQCInboxCount =
         helper.sectionInboxCount;
-
-      console.log('sectionInbox', helper.sectionInboxCount);
     }
   });
 };
