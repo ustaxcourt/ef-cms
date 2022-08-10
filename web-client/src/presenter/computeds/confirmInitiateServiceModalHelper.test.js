@@ -296,7 +296,9 @@ describe('confirmInitiateServiceModalHelper', () => {
           featureFlagHelper: featureFlagHelperState,
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
-          modal: { showModal: 'ConfirmInitiateServiceModal' },
+          modal: {
+            showModal: 'ConfirmInitiateCourtIssuedDocumentServiceModal',
+          },
         },
       });
 
@@ -324,7 +326,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.showConsolidatedCasesFlag).toEqual(false);
     });
 
-    it('should not process consolidated cases when not on confirmInitiateServiceModal', () => {
+    it('should not process consolidated cases when not on confirmInitiateServiceModal or ConfirmInitiateCourtIssuedDocumentServiceModal', () => {
       const formattedCaseDetail = {
         ...LEAD_CASE,
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
@@ -339,7 +341,7 @@ describe('confirmInitiateServiceModalHelper', () => {
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: {
-            showModal: 'ConfirmInitiateCourtIssuedDocumentServiceModal',
+            showModal: 'PaperServiceConfirmModal',
           },
         },
       });
