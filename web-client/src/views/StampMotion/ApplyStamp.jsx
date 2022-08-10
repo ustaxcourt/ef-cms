@@ -123,94 +123,93 @@ export const ApplyStamp = connect(
                     className={applyStampFormHelper.dispositionErrorClass}
                     errorText={validationErrors.disposition}
                   >
-                    <fieldset className="usa-fieldset margin-bottom-0">
-                      {[
-                        MOTION_DISPOSITIONS.GRANTED,
-                        MOTION_DISPOSITIONS.DENIED,
-                      ].map(option => (
-                        <div
-                          className={`usa-radio ${
-                            option === MOTION_DISPOSITIONS.DENIED
-                              ? 'margin-bottom-0'
-                              : ''
-                          }`}
-                          key={option}
+                    {[
+                      MOTION_DISPOSITIONS.GRANTED,
+                      MOTION_DISPOSITIONS.DENIED,
+                    ].map(option => (
+                      <div
+                        className={`usa-radio ${
+                          option === MOTION_DISPOSITIONS.DENIED
+                            ? 'margin-bottom-0'
+                            : ''
+                        }`}
+                        key={option}
+                      >
+                        <input
+                          aria-label={`disposition-${option}`}
+                          checked={form.disposition === option}
+                          className="usa-radio__input"
+                          id={`motion-disposition-${option}`}
+                          name="disposition"
+                          type="radio"
+                          value={option}
+                          onChange={e => {
+                            applyStampFormChangeSequence({
+                              key: e.target.name,
+                              value: e.target.value,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-radio__label"
+                          htmlFor={`motion-disposition-${option}`}
                         >
-                          <input
-                            checked={form.disposition === option}
-                            className="usa-radio__input"
-                            id={`motion-disposition-${option}`}
-                            name="disposition"
-                            type="radio"
-                            value={option}
-                            onChange={e => {
-                              applyStampFormChangeSequence({
-                                key: e.target.name,
-                                value: e.target.value,
-                              });
-                            }}
-                          />
-                          <label
-                            className="usa-radio__label"
-                            htmlFor={`motion-disposition-${option}`}
-                          >
-                            {option}
-                          </label>
-                        </div>
-                      ))}
-                      <FormGroup className="grid-container stamp-form-group denied-checkboxes">
-                        <div className="display-inline-block grid-col-6">
-                          <input
-                            checked={form.deniedAsMoot || false}
-                            className="usa-checkbox__input"
-                            disabled={
-                              form.disposition !== MOTION_DISPOSITIONS.DENIED
-                            }
-                            id="deniedAsMoot"
-                            name="deniedAsMoot"
-                            type="checkbox"
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.checked,
-                              });
-                            }}
-                          />
-                          <label
-                            className="usa-checkbox__label"
-                            htmlFor="deniedAsMoot"
-                            id="denied-as-moot-label"
-                          >
-                            As moot
-                          </label>
-                        </div>
-                        <div className="display-inline-block grid-col-auto">
-                          <input
-                            checked={form.deniedWithoutPrejudice || false}
-                            className="usa-checkbox__input"
-                            disabled={
-                              form.disposition !== MOTION_DISPOSITIONS.DENIED
-                            }
-                            id="deniedWithoutPrejudice"
-                            name="deniedWithoutPrejudice"
-                            type="checkbox"
-                            onChange={e => {
-                              updateFormValueSequence({
-                                key: e.target.name,
-                                value: e.target.checked,
-                              });
-                            }}
-                          />
-                          <label
-                            className="usa-checkbox__label"
-                            htmlFor="deniedWithoutPrejudice"
-                            id="denied-without-prejudice-label"
-                          >
-                            Without prejudice
-                          </label>
-                        </div>
-                      </FormGroup>
-                    </fieldset>
+                          {option}
+                        </label>
+                      </div>
+                    ))}
+                    <FormGroup className="grid-container stamp-form-group denied-checkboxes">
+                      <div className="display-inline-block grid-col-6">
+                        <input
+                          checked={form.deniedAsMoot || false}
+                          className="usa-checkbox__input"
+                          disabled={
+                            form.disposition !== MOTION_DISPOSITIONS.DENIED
+                          }
+                          id="deniedAsMoot"
+                          name="deniedAsMoot"
+                          type="checkbox"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="deniedAsMoot"
+                          id="denied-as-moot-label"
+                        >
+                          As moot
+                        </label>
+                      </div>
+                      <div className="display-inline-block grid-col-auto">
+                        <input
+                          checked={form.deniedWithoutPrejudice || false}
+                          className="usa-checkbox__input"
+                          disabled={
+                            form.disposition !== MOTION_DISPOSITIONS.DENIED
+                          }
+                          id="deniedWithoutPrejudice"
+                          name="deniedWithoutPrejudice"
+                          type="checkbox"
+                          onChange={e => {
+                            updateFormValueSequence({
+                              key: e.target.name,
+                              value: e.target.checked,
+                            });
+                          }}
+                        />
+                        <label
+                          className="usa-checkbox__label"
+                          htmlFor="deniedWithoutPrejudice"
+                          id="denied-without-prejudice-label"
+                        >
+                          Without prejudice
+                        </label>
+                      </div>
+                    </FormGroup>
                   </FormGroup>
                   <hr className="border-top-2px border-base-lighter" />
 
@@ -224,6 +223,7 @@ export const ApplyStamp = connect(
                     </label>
                     <div className="usa-radio usa-radio__inline">
                       <input
+                        aria-label="stricken from trial session"
                         checked={form.strickenFromTrialSession || false}
                         className="usa-radio__input"
                         id="stricken-from-trial-session"
@@ -252,6 +252,7 @@ export const ApplyStamp = connect(
                         <div className="usa-radio" key={key}>
                           <input
                             aria-describedby="jurisdictionalOption"
+                            aria-label={`jurisdictionalOption-${key}`}
                             checked={form.jurisdictionalOption === value}
                             className="usa-radio__input"
                             id={`jurisdictionalOption-${key}`}
@@ -288,6 +289,7 @@ export const ApplyStamp = connect(
                     <div className="usa-radio" key="statusReportDueDate">
                       <input
                         aria-describedby="dueDateMessage"
+                        aria-label="status report due date"
                         checked={
                           form.dueDateMessage ===
                           'The parties shall file a status report by'
@@ -306,7 +308,6 @@ export const ApplyStamp = connect(
                         }}
                       />
                       <label
-                        aria-label="statusReportDueDate"
                         className="usa-radio__label"
                         htmlFor="dueDateMessage-statusReportDueDate"
                         id="dueDateMessage-statusReportDueDate-label"
@@ -352,7 +353,7 @@ export const ApplyStamp = connect(
                       key="statusReportOrStipDecisionDueDate"
                     >
                       <input
-                        aria-describedby="dueDateMessage"
+                        aria-label="status report stip decision due date"
                         checked={
                           form.dueDateMessage ===
                           'The parties shall file a status report or proposed stipulated decision by'
@@ -371,7 +372,6 @@ export const ApplyStamp = connect(
                         }}
                       />
                       <label
-                        aria-label="statusReportOrStipDecisionDueDate"
                         className="usa-radio__label"
                         htmlFor="dueDateMessage-statusReportOrStipDecisionDueDate"
                         id="dueDateMessage-statusReportOrStipDecisionDueDate-label"
@@ -430,6 +430,7 @@ export const ApplyStamp = connect(
                       </label>
                       <textarea
                         aria-describedby="custom-text-label"
+                        aria-label="custom text"
                         autoCapitalize="none"
                         className="usa-textarea maxw-none height-8 usa-character-count__field"
                         id="custom-text"
