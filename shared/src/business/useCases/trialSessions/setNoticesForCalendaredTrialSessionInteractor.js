@@ -5,6 +5,23 @@ const {
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
+const waitForJobToFinish = ({ applicationContext, jobId }) => {
+  return new Promise(resolve => {
+    const interval = setInterval(async () => {
+      const jobStatus = await applicationContext
+        .getPersistenceGateway()
+        .getJobStatus({
+          applicationContext,
+          jobId,
+        });
+      if (jobStatus.unfinishedCases === 0) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 5000);
+  });
+};
+
 /**
  * Generates notices for all calendared cases for the given trialSessionId
  *
@@ -104,20 +121,7 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
       });
   }
 
-  await new Promise(resolve => {
-    const interval = setInterval(async () => {
-      const jobStatus = await applicationContext
-        .getPersistenceGateway()
-        .getJobStatus({
-          applicationContext,
-          jobId,
-        });
-      if (jobStatus.unfinishedCases === 0) {
-        clearInterval(interval);
-        resolve();
-      }
-    }, 5000);
-  });
+  await waitForJobToFinish({ applicationContext, jobId });
 
   await applicationContext
     .getPersistenceGateway()
@@ -172,6 +176,15 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
       applicationContext,
       document: paperServiceDocumentsPdf,
     });
+
+  if (url) {
+    applicationContext.logger.info(
+      `generated the printable paper service pdf at ${url}`,
+      {
+        url,
+      },
+    );
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
