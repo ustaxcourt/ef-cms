@@ -30,21 +30,22 @@ exports.sendBulkTemplatedEmail = async ({
   templateName,
 }) => {
   try {
-    const params = {
-      DefaultTemplateData: JSON.stringify(defaultTemplateData),
-      Destinations: destinations.map(destination => ({
-        Destination: {
-          ToAddresses: [destination.email],
-        },
-        ReplacementTemplateData: JSON.stringify(destination.templateData),
-      })),
-      ReturnPath:
-        process.env.BOUNCED_EMAIL_RECIPIENT || process.env.EMAIL_SOURCE,
-      Source: process.env.EMAIL_SOURCE,
-      Template: templateName,
-    };
-
-    await exports.sendWithRetry({ applicationContext, params });
+    await applicationContext.getMessageGateway().sendEmailEventToQueue({
+      applicationContext,
+      emailParams: {
+        DefaultTemplateData: JSON.stringify(defaultTemplateData),
+        Destinations: destinations.map(destination => ({
+          Destination: {
+            ToAddresses: [destination.email],
+          },
+          ReplacementTemplateData: JSON.stringify(destination.templateData),
+        })),
+        ReturnPath:
+          process.env.BOUNCED_EMAIL_RECIPIENT || process.env.EMAIL_SOURCE,
+        Source: process.env.EMAIL_SOURCE,
+        Template: templateName,
+      },
+    });
   } catch (err) {
     applicationContext.logger.error(`Error sending email: ${err}`, err);
     throw err;
@@ -73,7 +74,7 @@ exports.sendWithRetry = async ({
 
   // parse response from AWS
   const needToRetry = response.Status.map((attempt, index) => {
-    // AWS returns 'Success' and helpful identifier upon successful send
+    // AWS returns 'Success' and helpful identifier upon successful delivery
     return attempt.Status !== 'Success' ? params.Destinations[index] : false;
   }).filter(Boolean);
 

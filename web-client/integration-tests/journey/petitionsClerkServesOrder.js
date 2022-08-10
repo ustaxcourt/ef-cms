@@ -26,7 +26,7 @@ export const petitionsClerkServesOrder = cerebralTest => {
 
     await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
     await cerebralTest.runSequence(
-      'serveCourtIssuedDocumentFromDocketEntrySequence',
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
 
     await waitForLoadingComponentToHide({ cerebralTest });

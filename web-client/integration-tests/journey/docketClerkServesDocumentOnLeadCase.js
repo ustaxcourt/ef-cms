@@ -1,62 +1,23 @@
-import { formattedCaseDetail } from '../../src/presenter/computeds/formattedCaseDetail';
 import {
   refreshElasticsearchIndex,
   waitForLoadingComponentToHide,
 } from '../helpers';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../../src/withAppContext';
 
-export const docketClerkServesDocumentOnLeadCase = (
-  cerebralTest,
-  draftOrderIndex,
-) => {
-  return it(`Docket Clerk serves the order after the docket entry has been created ${draftOrderIndex}`, async () => {
-    const caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
+export const docketClerkServesDocumentOnLeadCase = cerebralTest => {
+  return it('Docket Clerk serves the order on a consolidated group after the docket entry added to the docket record', async () => {
+    await cerebralTest.runSequence(
+      'openConfirmServeCourtIssuedDocumentSequence',
       {
-        state: cerebralTest.getState(),
+        docketEntryId: cerebralTest.docketEntryId,
+        redirectUrl: `/case-detail/${cerebralTest.docketNumber}/document-view?docketEntryId=${cerebralTest.docketEntryId}`,
       },
     );
 
-    const { docketEntryId } = cerebralTest.draftOrders[draftOrderIndex];
-
-    const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.docketEntryId === docketEntryId,
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmInitiateCourtIssuedDocumentServiceModal',
     );
-
-    expect(draftOrderDocument).toBeTruthy();
-
-    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: cerebralTest.docketNumber,
-    });
-
-    expect(cerebralTest.getState('form.eventCode')).toEqual(
-      draftOrderDocument.eventCode,
-    );
-
-    expect(cerebralTest.getState('form.documentType')).toEqual(
-      draftOrderDocument.documentType,
-    );
-
-    if (draftOrderDocument.eventCode === 'O') {
-      await cerebralTest.runSequence(
-        'updateCourtIssuedDocketEntryFormValueSequence',
-        {
-          key: 'serviceStamp',
-          value: 'Served',
-        },
-      );
-    }
 
     const caseDetail = cerebralTest.getState('caseDetail');
-    const servedDocketEntry = caseDetail.docketEntries.find(
-      d => d.docketEntryId === docketEntryId,
-    );
-
-    cerebralTest.docketRecordEntry = servedDocketEntry;
-
-    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
 
     await cerebralTest.runSequence('consolidatedCaseCheckboxAllChangeSequence');
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toEqual(false);
@@ -71,9 +32,7 @@ export const docketClerkServesDocumentOnLeadCase = (
       caseDetail.consolidatedCases[1].docketNumber,
     );
 
-    await cerebralTest.runSequence(
-      'serveCourtIssuedDocumentFromDocketEntrySequence',
-    );
+    await cerebralTest.runSequence('serveCourtIssuedDocumentSequence');
     cerebralTest.draftOrders.shift();
 
     await waitForLoadingComponentToHide({ cerebralTest });
