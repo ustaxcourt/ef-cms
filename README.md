@@ -15,7 +15,8 @@
 
 ## Documentation
 
-To get a better understand of Dawson, head over our main documentation page found here: [https://flexion.github.io/ef-cms](https://flexion.github.io/ef-cms).  Our documentation should help give you a better understand of what Dawson is and how you can contribute.
+To get a better understand of Dawson, head over our main documentation page found here: [https://flexion.github.io/ef-cms](https://flexion.github.io/ef-cms).
+Our documentation should help give you a better understand of what Dawson is and how you can contribute.
 
 ### Project status
 
