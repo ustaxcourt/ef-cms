@@ -75,10 +75,11 @@ The application kicks off a migration automatically if it detects migrations tha
 1. Go into the environment's deploy table `efcms-<ENV>-deploy`
 2. Change the `migrate` flag to `true`
 3. Identify the source table and destination table. Both should be the same value, and that is what the application is currently using as it its main data store. If they are both `alpha`, then the destination table is `beta`. If they are both `beta`, the destination table is `alpha`. If they are different, inspect at the current color Lamdba's environment config to determine the dynamo table that the application is currently using as its data store.
-4. Switch to the `west-1` region.
-5. Delete the destination table in `west`
-6. Go back to east region
-7. Delete the destination table in `east`; note this may take a few minutes as the west table is deleting.
-8. Kick off a CircleCI workflow, which will follow the steps above for Automated Migration Steps.
+4. Change the value for the `current` key of the `pk`:`destination-table-version` to the destination table you identified in step 3 (`alpha` or `beta`).
+5. Switch to the `west-1` region.
+6. Delete the destination table in `west`
+7. Go back to east region
+8. Delete the destination table in `east`; note this may take a few minutes as the west table is deleting.
+9. Kick off a CircleCI workflow, which will follow the steps above for Automated Migration Steps.
 
 See [the troubleshooting guide](TROUBLESHOOTING.md) for solutions to problems that may arise during the migration process.
