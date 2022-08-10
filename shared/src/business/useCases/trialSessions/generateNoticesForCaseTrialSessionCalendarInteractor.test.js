@@ -89,9 +89,9 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       .getJobStatus.mockResolvedValue({});
   });
 
-  it('should return and do nothing if the job is already processing', async () => {
+  it('should return and do nothing if the job is already processed', async () => {
     applicationContext.getPersistenceGateway().getJobStatus.mockResolvedValue({
-      [docketNumber]: 'processing',
+      [docketNumber]: 'processed',
     });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
@@ -108,7 +108,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       interactorParamObject,
     );
     expect(
-      applicationContext.getPersistenceGateway().setJobAsProcessing,
+      applicationContext.getPersistenceGateway().setJobStatus,
     ).toHaveBeenCalled();
   });
 
