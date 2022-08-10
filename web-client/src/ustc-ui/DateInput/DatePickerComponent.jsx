@@ -85,6 +85,9 @@ export const DatePickerComponent = ({
         if (month.length > 2) {
           [year, month, day] = splitDate(e.target.value);
         }
+        if (year.length < 4) {
+          year = '';
+        }
         onChange({
           key: names.day,
           value: day,
