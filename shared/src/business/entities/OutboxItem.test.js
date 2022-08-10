@@ -124,6 +124,6 @@ describe('OutboxItem', () => {
     expect(outboxItem.docketEntry.documentType).toEqual(
       'Proposed Stipulated Decision',
     );
-    expect(outboxItem.leadDocketNumber).not.toBeUndefined();
+    expect(outboxItem.leadDocketNumber).toEqual('101-18');
   });
 });
