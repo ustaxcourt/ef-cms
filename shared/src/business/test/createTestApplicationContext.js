@@ -566,7 +566,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
-    setJobAsProcessing: jest.fn(),
+    setJobStatus: jest.fn(),
     setPriorityOnAllWorkItems: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseCorrespondence: jest
