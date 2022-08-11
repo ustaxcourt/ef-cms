@@ -26,6 +26,7 @@ exports.getCalendaredCasesForTrialSessionInteractor = async (
     .getPersistenceGateway()
     .getCalendaredCasesForTrialSession({
       applicationContext,
+      omitDocketEntries: true,
       trialSessionId,
     });
 
