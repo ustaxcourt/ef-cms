@@ -73,11 +73,6 @@ describe('Chambers dashboard', () => {
       },
     );
 
-    console.log(
-      'trialSessionFormatted.allCases',
-      trialSessionFormatted.allCases.map(c => c.docketNumber),
-    );
-
     const caseWithPtmFiledByPetitioner = trialSessionFormatted.allCases.find(
       c => c.docketNumber === cerebralTest.docketNumber1,
     );
