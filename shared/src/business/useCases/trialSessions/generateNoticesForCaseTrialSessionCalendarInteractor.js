@@ -332,7 +332,7 @@ exports.generateNoticesForCaseTrialSessionCalendarInteractor = async (
 ) => {
   const jobStatus = await applicationContext
     .getPersistenceGateway()
-    .getJobStatus({
+    .getTrialSessionJobStatusForCase({
       applicationContext,
       jobId,
     });
@@ -344,12 +344,14 @@ exports.generateNoticesForCaseTrialSessionCalendarInteractor = async (
     return;
   }
 
-  await applicationContext.getPersistenceGateway().setJobStatus({
-    applicationContext,
-    docketNumber,
-    jobId,
-    status: 'processing',
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .setTrialSessionJobStatusForCase({
+      applicationContext,
+      docketNumber,
+      jobId,
+      status: 'processing',
+    });
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
@@ -377,10 +379,12 @@ exports.generateNoticesForCaseTrialSessionCalendarInteractor = async (
     jobId,
   });
 
-  await applicationContext.getPersistenceGateway().setJobStatus({
-    applicationContext,
-    docketNumber,
-    jobId,
-    status: 'processed',
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .setTrialSessionJobStatusForCase({
+      applicationContext,
+      docketNumber,
+      jobId,
+      status: 'processed',
+    });
 };

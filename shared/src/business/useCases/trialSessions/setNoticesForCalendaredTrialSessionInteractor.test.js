@@ -53,7 +53,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       jest.fn();
     applicationContext
       .getPersistenceGateway()
-      .getJobStatus.mockResolvedValueOnce({
+      .getTrialSessionJobStatusForCase.mockResolvedValueOnce({
         unfinishedCases: 0,
       })
       .mockResolvedValueOnce({
@@ -133,8 +133,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId,
     });
     expect(
-      applicationContext.getPersistenceGateway()
-        .setTrialSessionProcessingStatus,
+      applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
     ).not.toHaveBeenCalled();
     expect(applicationContext.logger.warn).toHaveBeenCalledWith(
       `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
@@ -148,8 +147,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       trialSessionId,
     });
     expect(
-      applicationContext.getPersistenceGateway()
-        .setTrialSessionProcessingStatus,
+      applicationContext.getMessageGateway().sendSetTrialSessionCalendarEvent,
     ).not.toHaveBeenCalled();
     expect(applicationContext.logger.warn).toHaveBeenCalledWith(
       expect.stringContaining(trialSessionId),
@@ -174,7 +172,7 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   it('should set the trial session status as complete after all the calendering jobs is completed', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getJobStatus.mockResolvedValueOnce({
+      .getTrialSessionJobStatusForCase.mockResolvedValueOnce({
         unfinishedCases: 0,
       });
 
