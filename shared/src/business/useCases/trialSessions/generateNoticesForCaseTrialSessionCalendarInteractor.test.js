@@ -86,13 +86,15 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     };
     applicationContext
       .getPersistenceGateway()
-      .getJobStatus.mockResolvedValue({});
+      .getTrialSessionJobStatusForCase.mockResolvedValue({});
   });
 
-  it('should return and do nothing if the job is already processing', async () => {
-    applicationContext.getPersistenceGateway().getJobStatus.mockResolvedValue({
-      [docketNumber]: 'processing',
-    });
+  it('should return and do nothing if the job is already processed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionJobStatusForCase.mockResolvedValue({
+        [docketNumber]: 'processed',
+      });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       interactorParamObject,
@@ -102,14 +104,15 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     ).not.toHaveBeenCalled();
   });
 
-  it('should track the job status when processing begins', async () => {
+  it('should set the job status to processing the first time the job executes', async () => {
     await generateNoticesForCaseTrialSessionCalendarInteractor(
       applicationContext,
       interactorParamObject,
     );
     expect(
-      applicationContext.getPersistenceGateway().setJobAsProcessing,
-    ).toHaveBeenCalled();
+      applicationContext.getPersistenceGateway().setTrialSessionJobStatusForCase
+        .mock.calls[0][0].status,
+    ).toEqual('processing');
   });
 
   it('should decrement the job counter when a worker has processed a pdf file', async () => {
@@ -306,5 +309,27 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     const pdf = await PDFDocument.load(pdfBlob);
 
     expect(pdf.getPages().length).toBe(4);
+  });
+
+  it('should re-attempt the job after a previous failure that was never set to processed', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionJobStatusForCase.mockResolvedValueOnce('processing');
+
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    expect(
+      applicationContext.getUseCases().generateNoticeOfTrialIssuedInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().generateStandingPretrialOrderInteractor,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().setTrialSessionJobStatusForCase
+        .mock.calls[1][0].status,
+    ).toEqual('processed');
   });
 });
