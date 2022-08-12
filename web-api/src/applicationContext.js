@@ -612,9 +612,6 @@ const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
 const {
-  getJobStatus,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getJobStatus');
-const {
   getJudgeInSectionHelper,
 } = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
 const {
@@ -716,6 +713,12 @@ const {
 const {
   getTrialSessionDetailsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
+const {
+  getTrialSessionJobStatusForCase,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase');
+const {
+  getTrialSessionProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionProcessingStatus');
 const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
@@ -1066,9 +1069,6 @@ const {
   setForHearingInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
 const {
-  setJobAsProcessing,
-} = require('../../shared/src/persistence/dynamo/trialSessions/setJobAsProcessing');
-const {
   setMessageAsRead,
 } = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
 const {
@@ -1101,6 +1101,12 @@ const {
 const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
+const {
+  setTrialSessionJobStatusForCase,
+} = require('../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase');
+const {
+  setTrialSessionProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus');
 const {
   setupPdfDocument,
 } = require('../../shared/src/business/utilities/setupPdfDocument');
@@ -1512,9 +1518,10 @@ const gatewayMethods = {
     fetchPendingItems,
     getConfigurationItemValue,
     getFeatureFlagValue,
-    getJobStatus,
     getMaintenanceMode,
     getSesStatus,
+    getTrialSessionJobStatusForCase,
+    getTrialSessionProcessingStatus,
     incrementCounter,
     incrementKeyCount,
     markMessageThreadRepliedTo,
@@ -1529,6 +1536,7 @@ const gatewayMethods = {
     setExpiresAt,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
+    setTrialSessionProcessingStatus,
     updateCase,
     updateCaseHearing,
     updateDocketEntry,
@@ -1653,7 +1661,7 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   saveDispatchNotification,
-  setJobAsProcessing,
+  setTrialSessionJobStatusForCase,
   updateCaseCorrespondence,
   updateUserCaseMapping,
   updateWorkItemAssociatedJudge,
