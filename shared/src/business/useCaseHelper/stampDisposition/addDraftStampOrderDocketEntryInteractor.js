@@ -67,7 +67,7 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
         freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       },
       eventCode: orderDocumentInfo.eventCode,
-      filedBy: user.judgeFullName || user.name, // add test
+      filedBy: user.judgeFullName || user.name,
       freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isPaper: false,
