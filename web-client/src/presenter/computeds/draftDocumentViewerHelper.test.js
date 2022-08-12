@@ -298,7 +298,7 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
-  it('should return showRemoveSignatureButton false for NTD document type and internal users', () => {
+  it('returns showRemoveSignatureButton false for NOT document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     const result = runCompute(draftDocumentViewerHelper, {
