@@ -158,9 +158,14 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-- `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
-  - `@fortawesome/free-solid-svg-icons`
-  - `@fortawesome/free-regular-svg-icons`
-  - `@fortawesome/fontawesome-svg-core`
+1. `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
+    - `@fortawesome/free-solid-svg-icons`
+    - `@fortawesome/free-regular-svg-icons`
+    - `@fortawesome/fontawesome-svg-core`
 
-- It'd be good to keep an eye on `s3rver` for when it exceeds 3.7.1. We have a patch in place for called `s3rver+3.7.1.patch` in order to address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible.
+2. Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.com/package/s3rver). 
+    - Why is there a patch called `s3rver+3.7.1.patch`?
+      - To address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible. 
+    - How does the patch run?
+      - This runs as part of the `npm postinstall` step. 
+    - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
