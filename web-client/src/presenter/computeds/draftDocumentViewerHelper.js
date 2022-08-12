@@ -82,10 +82,11 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
       formattedDocumentToDisplay.eventCode,
     );
 
+  const showApplySignatureButtonForDocument = !documentIsSigned;
   const showRemoveSignatureButtonForDocument =
     documentIsSigned && !isNotice && !isStipulatedDecision;
 
-  const unsignedDocumentRequiringSignature =
+  const showDocumentNotSignedAlert =
     documentRequiresSignature && !documentIsSigned;
 
   return {
@@ -97,8 +98,8 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
-      unsignedDocumentRequiringSignature,
-    showDocumentNotSignedAlert: unsignedDocumentRequiringSignature,
+      showApplySignatureButtonForDocument,
+    showDocumentNotSignedAlert,
     showEditButtonNotSigned:
       showEditButtonForRole && (!documentIsSigned || isNotice),
     showEditButtonSigned,
