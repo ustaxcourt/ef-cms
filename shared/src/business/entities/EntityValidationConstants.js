@@ -14,9 +14,9 @@ const {
   INTERNAL_DOCUMENT_TYPES,
   OBJECTIONS_OPTIONS,
   OPINION_DOCUMENT_TYPES,
+  PARTIES_CODES,
   ROLES,
   SCENARIOS,
-  SERVED_PARTIES_CODES,
 } = require('./EntityConstants');
 const { JoiValidationConstants } = require('./JoiValidationConstants');
 
@@ -310,7 +310,7 @@ const DOCKET_ENTRY_VALIDATION_RULE_KEYS = {
     })
     .description('The parties to whom the document has been served.'),
   servedPartiesCode: JoiValidationConstants.STRING.valid(
-    ...Object.values(SERVED_PARTIES_CODES),
+    ...Object.values(PARTIES_CODES),
   )
     .allow(null)
     .optional()

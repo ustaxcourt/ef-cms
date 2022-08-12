@@ -73,7 +73,7 @@ SectionWorkQueueTable.Row = React.memo(
         <tr>
           {showSelectColumn && (
             <>
-              <td aria-hidden="true" className="focus-toggle" />
+              <td aria-hidden="true" />
               <td className="message-select-control">
                 <input
                   aria-label="Select work item"

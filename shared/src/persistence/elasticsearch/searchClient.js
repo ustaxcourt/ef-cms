@@ -1,54 +1,47 @@
 const AWS = require('aws-sdk');
+const {
+  formatDocketEntryResult,
+} = require('./helpers/formatDocketEntryResult');
+const { formatMessageResult } = require('./helpers/formatMessageResult');
 const { get } = require('lodash');
 
-exports.search = async ({ applicationContext, searchParameters }) => {
-  const caseMap = {};
-  const formatHit = hit => {
+const CHUNK_SIZE = 10000;
+
+const formatResults = body => {
+  const total = get(body, 'hits.total.value', 0);
+
+  let caseMap = {};
+  const results = get(body, 'hits.hits', []).map(hit => {
     const sourceUnmarshalled = AWS.DynamoDB.Converter.unmarshall(
       hit['_source'],
     );
     sourceUnmarshalled['_score'] = hit['_score'];
 
-    if (
+    const isDocketEntryResultWithParentCaseMapping =
       hit['_index'] === 'efcms-docket-entry' &&
       hit.inner_hits &&
-      hit.inner_hits['case-mappings']
-    ) {
-      const casePk = hit['_id'].split('_')[0];
-      const docketNumber = casePk.replace('case|', ''); // TODO figure out why docket number isn't always on a DocketEntry
+      hit.inner_hits['case-mappings'];
+    const isMessageResultWithParentCaseMapping =
+      hit['_index'] === 'efcms-message' &&
+      hit.inner_hits &&
+      hit.inner_hits['case-mappings'];
 
-      let foundCase = caseMap[docketNumber];
-
-      if (!foundCase) {
-        hit.inner_hits['case-mappings'].hits.hits.some(innerHit => {
-          const innerHitDocketNumber = innerHit['_source'].docketNumber.S;
-          caseMap[innerHitDocketNumber] = innerHit['_source'];
-
-          if (innerHitDocketNumber === docketNumber) {
-            foundCase = innerHit['_source'];
-            return true;
-          }
-        });
-      }
-
-      if (foundCase) {
-        const foundCaseUnmarshalled =
-          AWS.DynamoDB.Converter.unmarshall(foundCase);
-        return {
-          isCaseSealed: !!foundCaseUnmarshalled.isSealed,
-          isDocketEntrySealed: !!sourceUnmarshalled.isSealed,
-          ...foundCaseUnmarshalled,
-          ...sourceUnmarshalled,
-          isSealed: undefined,
-        };
-      } else {
-        return sourceUnmarshalled;
-      }
+    if (isDocketEntryResultWithParentCaseMapping) {
+      return formatDocketEntryResult({ caseMap, hit, sourceUnmarshalled });
+    } else if (isMessageResultWithParentCaseMapping) {
+      return formatMessageResult({ caseMap, hit, sourceUnmarshalled });
     } else {
       return sourceUnmarshalled;
     }
-  };
+  });
 
+  return {
+    results,
+    total,
+  };
+};
+
+exports.search = async ({ applicationContext, searchParameters }) => {
   let body;
   try {
     body = await applicationContext.getSearchClient().search(searchParameters);
@@ -56,12 +49,64 @@ exports.search = async ({ applicationContext, searchParameters }) => {
     applicationContext.logger.error(searchError);
     throw new Error('Search client encountered an error.');
   }
+  return formatResults(body);
+};
 
-  const total = get(body, 'hits.total.value', 0);
-  const results = get(body, 'hits.hits', []).map(formatHit);
+exports.searchAll = async ({ applicationContext, searchParameters }) => {
+  const index = searchParameters.index || '';
+  const query = searchParameters.body?.query || {};
+  const size = searchParameters.size || CHUNK_SIZE;
+
+  let countQ;
+  try {
+    countQ = await applicationContext.getSearchClient().count({
+      body: {
+        query,
+      },
+      index,
+    });
+  } catch (searchError) {
+    applicationContext.logger.error(searchError);
+    throw new Error('Search client encountered an error.');
+  }
+
+  // eslint-disable-next-line no-underscore-dangle
+  const _source = searchParameters.body?._source || [];
+  let search_after = [0];
+  const sort = searchParameters.body?.sort || [{ 'pk.S': 'asc' }]; // sort is required for paginated queries
+
+  const expected = get(countQ, 'count', 0);
+  let i = 0;
+  let results = [];
+  while (i < expected) {
+    const chunk = await applicationContext.getSearchClient().search({
+      _source,
+      body: {
+        query,
+        search_after,
+        sort,
+      },
+      index,
+      size,
+    });
+    const hits = get(chunk, 'hits.hits', []);
+
+    if (hits.length > 0) {
+      results = results.concat(hits);
+      search_after = hits[hits.length - 1].sort;
+    }
+    i += size; // this avoids an endless loop if expected is somehow greater than the sum of all hits
+  }
 
   return {
-    results,
-    total,
+    ...formatResults({
+      hits: {
+        hits: results,
+        total: {
+          value: results.length,
+        },
+      },
+    }),
+    expected,
   };
 };

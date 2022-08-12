@@ -43,7 +43,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
       draftOrderDocument.documentType,
     );
 
-    // eventCode: O
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
@@ -73,7 +72,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
     expect(cerebralTest.getState('form.freeText')).toEqual('Order');
     expect(cerebralTest.getState('form.serviceStamp')).toBeFalsy();
 
-    // eventCode: OCA
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
@@ -92,7 +90,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
     expect(nonstandardHelperComputed.showFreeText).toBeTruthy();
     expect(cerebralTest.getState('form.freeText')).toBeFalsy();
 
-    // eventCode: OAJ
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
@@ -113,7 +110,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
     expect(nonstandardHelperComputed.showJudge).toBeTruthy();
     expect(cerebralTest.getState('form.judge')).toBeFalsy();
 
-    // eventCode: OAL
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
@@ -133,7 +129,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
     expect(nonstandardHelperComputed.showDocketNumbers).toBeTruthy();
     expect(cerebralTest.getState('form.docketNumbers')).toBeFalsy();
 
-    // eventCode: OAP
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
@@ -156,7 +151,6 @@ export const docketClerkAddsDocketEntryFromOrder = (
     expect(cerebralTest.getState('form.day')).toBeFalsy();
     expect(cerebralTest.getState('form.year')).toBeFalsy();
 
-    // eventCode: OODS
     await cerebralTest.runSequence(
       'updateCourtIssuedDocketEntryFormValueSequence',
       {
@@ -223,7 +217,7 @@ export const docketClerkAddsDocketEntryFromOrder = (
     await cerebralTest.runSequence('submitCourtIssuedDocketEntrySequence');
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to docket record.',
+      'Your entry has been added to the docket record.',
     );
 
     await cerebralTest.runSequence('gotoCaseDetailSequence', {

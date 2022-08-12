@@ -1,4 +1,7 @@
-import { getFormattedDocketEntriesForTest } from '../helpers';
+import {
+  getFormattedDocketEntriesForTest,
+  waitForLoadingComponentToHide,
+} from '../helpers';
 
 export const petitionsClerkServesOrder = cerebralTest => {
   return it('Petitions Clerk serves the order', async () => {
@@ -23,7 +26,9 @@ export const petitionsClerkServesOrder = cerebralTest => {
 
     await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
     await cerebralTest.runSequence(
-      'serveCourtIssuedDocumentFromDocketEntrySequence',
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
+
+    await waitForLoadingComponentToHide({ cerebralTest });
   });
 };

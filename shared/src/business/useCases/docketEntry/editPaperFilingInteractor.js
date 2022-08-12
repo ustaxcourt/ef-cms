@@ -154,7 +154,7 @@ exports.editPaperFilingInteractor = async (
           .getUseCaseHelpers()
           .serveDocumentAndGetPaperServicePdf({
             applicationContext,
-            caseEntity,
+            caseEntities: [caseEntity],
             docketEntryId: docketEntryEntity.docketEntryId,
           });
 

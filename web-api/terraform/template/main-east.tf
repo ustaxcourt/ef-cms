@@ -8,9 +8,9 @@ resource "aws_s3_bucket" "api_lambdas_bucket_east" {
 }
 
 resource "aws_s3_bucket_object" "amended-petition-form-bucket-object-east" {
-  bucket     = aws_s3_bucket.documents_us_east_1.id
-  key        = "amended-petition-form.pdf"
-  source     = "${path.module}/lambdas/dist/amended-petition-form.pdf"
+  bucket = aws_s3_bucket.documents_us_east_1.id
+  key    = "amended-petition-form.pdf"
+  source = "${path.module}/lambdas/dist/amended-petition-form.pdf"
 }
 
 data "archive_file" "zip_api" {
@@ -26,7 +26,7 @@ data "archive_file" "zip_api" {
     "cognito-triggers.js",
     "cognito-authorizer.js",
     "public-api-authorizer.js",
-    "report.html" ]
+  "report.html"]
 }
 
 data "archive_file" "zip_triggers" {
@@ -38,6 +38,8 @@ data "archive_file" "zip_triggers" {
     "api-public.js",
     "websockets.js",
     "maintenance-notify.js",
+    "trial-session.js",
+    "send-emails.js",
     "cron.js",
     "streams.js",
     "cognito-authorizer.js",
@@ -357,22 +359,6 @@ data "aws_s3_bucket_object" "bounce_handler_green_east_object" {
   key        = "bounce_handler_green.js.zip"
 }
 
-data "aws_elasticsearch_domain" "green_east_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.green_elasticsearch_domain
-}
-
-data "aws_elasticsearch_domain" "blue_east_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.blue_elasticsearch_domain
-}
-
 data "aws_dynamodb_table" "green_dynamo_table" {
   depends_on = [
     module.dynamo_table_alpha,
@@ -470,10 +456,11 @@ module "api-east-green" {
   zone_id                   = data.aws_route53_zone.zone.id
   pool_arn                  = aws_cognito_user_pool.pool.arn
   lambda_environment = merge(data.null_data_source.locals.outputs, {
+    REGION                 = "us-east-1"
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_east_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-east-1"
   validate = 1
@@ -498,16 +485,16 @@ module "api-east-green" {
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
-  seal_in_lower_object           = null_resource.seal_in_lower_east_object
-  seal_in_lower_object_hash      = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_green_east_object.etag : ""
-  create_seal_in_lower           = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
-  lower_env_account_id           = var.lower_env_account_id
-  prod_env_account_id            = var.prod_env_account_id
+  seal_in_lower_object      = null_resource.seal_in_lower_east_object
+  seal_in_lower_object_hash = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_green_east_object.etag : ""
+  create_seal_in_lower      = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
+  lower_env_account_id      = var.lower_env_account_id
+  prod_env_account_id       = var.prod_env_account_id
 
   # lambda to handle bounced service email notifications
-  bounce_handler_object          = null_resource.bounce_handler_east_object
-  bounce_handler_object_hash     = data.aws_s3_bucket_object.bounce_handler_green_east_object.etag
-  create_bounce_handler          = 1
+  bounce_handler_object      = null_resource.bounce_handler_east_object
+  bounce_handler_object_hash = data.aws_s3_bucket_object.bounce_handler_green_east_object.etag
+  create_bounce_handler      = 1
 }
 
 module "api-east-blue" {
@@ -532,7 +519,8 @@ module "api-east-blue" {
     DYNAMODB_ENDPOINT      = "dynamodb.us-east-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_east_elasticsearch_domain.endpoint
+    REGION                 = "us-east-1"
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-east-1"
   validate = 1
@@ -557,14 +545,14 @@ module "api-east-blue" {
   triggers_object_hash           = data.aws_s3_bucket_object.triggers_green_east_object.etag
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
-  seal_in_lower_object           = null_resource.seal_in_lower_east_object
-  seal_in_lower_object_hash      = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_blue_east_object.etag : ""
-  create_seal_in_lower           = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
-  lower_env_account_id           = var.lower_env_account_id
-  prod_env_account_id            = var.prod_env_account_id
+  seal_in_lower_object      = null_resource.seal_in_lower_east_object
+  seal_in_lower_object_hash = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? data.aws_s3_bucket_object.seal_in_lower_blue_east_object.etag : ""
+  create_seal_in_lower      = var.lower_env_account_id == data.aws_caller_identity.current.account_id ? 1 : 0
+  lower_env_account_id      = var.lower_env_account_id
+  prod_env_account_id       = var.prod_env_account_id
 
   # lambda to handle bounced service email notifications
-  bounce_handler_object          = null_resource.bounce_handler_east_object
-  bounce_handler_object_hash     = data.aws_s3_bucket_object.bounce_handler_blue_east_object.etag
-  create_bounce_handler          = 1
+  bounce_handler_object      = null_resource.bounce_handler_east_object
+  bounce_handler_object_hash = data.aws_s3_bucket_object.bounce_handler_blue_east_object.etag
+  create_bounce_handler      = 1
 }

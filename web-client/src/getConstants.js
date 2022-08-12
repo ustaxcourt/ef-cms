@@ -67,6 +67,7 @@ import {
   ORDER_EVENT_CODES,
   ORDER_TYPES,
   OTHER_TYPES,
+  PARTIES_CODES,
   PARTY_TYPES,
   PARTY_VIEW_TABS,
   PAYMENT_STATUS,
@@ -80,7 +81,6 @@ import {
   SCAN_MODES,
   SCAN_MODE_LABELS,
   SECTIONS,
-  SERVED_PARTIES_CODES,
   SERVICE_INDICATOR_TYPES,
   SESSION_STATUS_GROUPS,
   SESSION_TYPES,
@@ -99,10 +99,13 @@ import {
   US_STATES,
   US_STATES_OTHER,
 } from '../../shared/src/business/entities/EntityConstants';
+import {
+  ENTERED_AND_SERVED_EVENT_CODES,
+  SERVICE_STAMP_OPTIONS,
+} from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import { FORMATS } from '../../shared/src/business/utilities/DateHandler';
 import { ROLE_PERMISSIONS } from '../../shared/src/authorization/authorizationClientService';
 import { SERVICE_INDICATOR_ERROR } from '../../shared/src/business/entities/EntityValidationConstants';
-import { SERVICE_STAMP_OPTIONS } from '../../shared/src/business/entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 const MINUTES = 60 * 1000;
 
@@ -163,6 +166,7 @@ export const getConstants = () => ({
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
   EMPLOYER_OPTIONS,
+  ENTERED_AND_SERVED_EVENT_CODES,
   ESTATE_TYPES,
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
@@ -190,6 +194,7 @@ export const getConstants = () => ({
   ORDER_EVENT_CODES,
   ORDER_TYPES_MAP: ORDER_TYPES,
   OTHER_TYPES,
+  PARTIES_CODES,
   PARTY_TYPES,
   PARTY_VIEW_TABS,
   PAYMENT_STATUS,
@@ -204,7 +209,6 @@ export const getConstants = () => ({
   SCAN_MODE_LABELS,
   SCAN_MODES,
   SECTIONS,
-  SERVED_PARTIES_CODES,
   SERVICE_INDICATOR_ERROR,
   SERVICE_INDICATOR_TYPES,
   SERVICE_STAMP_OPTIONS,

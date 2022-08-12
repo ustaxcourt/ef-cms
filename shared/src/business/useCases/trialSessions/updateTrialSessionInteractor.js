@@ -73,10 +73,13 @@ const updateAssociatedCaseAndSetNoticeOfChange = async ({
         });
     }
 
+    // should issue notice of change of trial judge only when changing from one judge to another
     const shouldIssueNoticeOfChangeOfTrialJudge =
       currentTrialSession.isCalendared &&
-      currentTrialSession.judge?.userId !==
-        updatedTrialSessionEntity.judge?.userId &&
+      currentTrialSession.judge &&
+      updatedTrialSessionEntity.judge &&
+      currentTrialSession.judge.userId !==
+        updatedTrialSessionEntity.judge.userId &&
       caseEntity.status !== CASE_STATUS_TYPES.closed;
 
     if (shouldIssueNoticeOfChangeOfTrialJudge) {
@@ -170,6 +173,7 @@ exports.updateTrialSessionInteractor = async (
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,
     courthouseName: trialSession.courthouseName,
+    estimatedEndDate: trialSession.estimatedEndDate,
     irsCalendarAdministrator: trialSession.irsCalendarAdministrator,
     joinPhoneNumber: trialSession.joinPhoneNumber,
     judge: trialSession.judge,
