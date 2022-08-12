@@ -109,4 +109,26 @@ describe('getDefaultAttachmentViewerDocumentToDisplayAction', () => {
       messageViewerDocumentToDisplay: { documentId: '1234' },
     });
   });
+
+  it('should return correct item if documentId exists in state', async () => {
+    const result = await runAction(
+      getDefaultAttachmentViewerDocumentToDisplayAction,
+      {
+        props: {
+          documentId: '1234',
+          mostRecentMessage: {
+            attachments: [{ documentId: '1234' }, { documentId: '2345' }],
+          },
+        },
+        state: {
+          documentId: '9999',
+          messageViewerDocumentToDisplay: { documentId: '9999' },
+        },
+      },
+    );
+
+    expect(result.output).toEqual({
+      messageViewerDocumentToDisplay: { documentId: '9999' },
+    });
+  });
 });

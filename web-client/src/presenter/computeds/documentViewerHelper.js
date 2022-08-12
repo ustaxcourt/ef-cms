@@ -5,9 +5,13 @@ export const documentViewerHelper = (get, applicationContext) => {
   const {
     COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
+
+  const permissions = get(state.permissions);
+  const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
   const formattedCaseDetail = applicationContext
@@ -21,16 +25,13 @@ export const documentViewerHelper = (get, applicationContext) => {
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
 
-  const permissions = get(state.permissions);
-
-  const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
-
   const formattedDocumentToDisplay =
     viewerDocumentToDisplay &&
     formattedCaseDetail.formattedDocketEntries.find(
       entry =>
         entry && entry.docketEntryId === viewerDocumentToDisplay.docketEntryId,
     );
+
   if (!formattedDocumentToDisplay) {
     return {};
   }
@@ -88,10 +89,15 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
 
+  const showApplyStampButton =
+    permissions.STAMP_MOTION &&
+    STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
+
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
     filedLabel,
     servedLabel,
+    showApplyStampButton,
     showCompleteQcButton,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
