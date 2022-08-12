@@ -136,18 +136,19 @@ describe('formatMetadata', () => {
         applicationLoadBalancer: 'Root=1-b0e37f79-3203-4c45-981a-7370b59370b1',
         lambda: '09e02bed-ad6f-4b0c-a8da-ad0a2a49157d',
       },
+      user: {
+        role: 'unauthenticated',
+      },
     },
     requestId: 'e82bd012-ce9a-4230-9ab6-69e2d2fa0502',
     timestamp: '2022-08-05T18:55:04.709Z',
-    user: {
-      role: 'unauthenticated',
-    },
     zTotallyUnexpectedKey: 'Chill out on the requests please',
   };
   const formattedLogEntry = formatMetadata().transform(mockLogEntry);
 
-  it('should move any data in keys not indexed into the metadata object', () => {
+  it('should move any data in keys not indexed into the context object', () => {
     const expectedKeys = [
+      'context',
       'environment',
       'level',
       'logGroup',
@@ -160,23 +161,13 @@ describe('formatMetadata', () => {
       'user',
     ]; // does not contain protectedRequiredFields or zTotallyUnexpectedKey
     expect(Object.keys(formattedLogEntry).sort()).toEqual(expectedKeys);
-    expect(Object.keys(formattedLogEntry).length).toBeLessThan(
-      Object.keys(mockLogEntry).length,
-    );
 
-    const expectedMetadataKeys = [
-      'code',
-      'retryable',
-      'stack',
-      'statusCode',
-      'time',
-      'zTotallyUnexpectedKey',
-    ];
-    expect(Object.keys(formattedLogEntry.metadata).sort()).toEqual(
-      expectedMetadataKeys,
+    expect(formattedLogEntry.context.environment).toEqual('test');
+    expect(formattedLogEntry.context.requestId).toEqual(
+      'e82bd012-ce9a-4230-9ab6-69e2d2fa0502',
     );
-    expect(Object.keys(formattedLogEntry.metadata).length).toBeGreaterThan(
-      Object.keys(mockLogEntry.metadata).length,
+    expect(formattedLogEntry.context.zTotallyUnexpectedKey).toEqual(
+      'Chill out on the requests please',
     );
   });
   it('should prioritize the data in the protectedRequiredFields object', () => {
