@@ -332,20 +332,26 @@ exports.generateNoticesForCaseTrialSessionCalendarInteractor = async (
 ) => {
   const jobStatus = await applicationContext
     .getPersistenceGateway()
-    .getJobStatus({
+    .getTrialSessionJobStatusForCase({
       applicationContext,
       jobId,
     });
 
-  if (jobStatus[docketNumber] === 'processing') {
+  if (jobStatus[docketNumber] === 'processed') {
+    applicationContext.logger.warn(
+      `skipping the processing of the docketNumber ${docketNumber} for job ${jobId} because it was already processed`,
+    );
     return;
   }
 
-  await applicationContext.getPersistenceGateway().setJobAsProcessing({
-    applicationContext,
-    docketNumber,
-    jobId,
-  });
+  await applicationContext
+    .getPersistenceGateway()
+    .setTrialSessionJobStatusForCase({
+      applicationContext,
+      docketNumber,
+      jobId,
+      status: 'processing',
+    });
 
   const trialSessionEntity = new TrialSession(trialSession, {
     applicationContext,
@@ -372,4 +378,13 @@ exports.generateNoticesForCaseTrialSessionCalendarInteractor = async (
     applicationContext,
     jobId,
   });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .setTrialSessionJobStatusForCase({
+      applicationContext,
+      docketNumber,
+      jobId,
+      status: 'processed',
+    });
 };
