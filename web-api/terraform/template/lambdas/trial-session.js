@@ -7,6 +7,11 @@ exports.handler = async event => {
     const { body, receiptHandle } = Records[0];
     const { docketNumber, jobId, trialSession, userId } = JSON.parse(body);
 
+    applicationContext.logger.info(
+      `received an event to generate notices for trial session ${trialSession.trialSessionId} on case ${docketNumber} for job ${jobId}`,
+      event,
+    );
+
     await applicationContext
       .getUseCases()
       .generateNoticesForCaseTrialSessionCalendarInteractor(
@@ -18,6 +23,11 @@ exports.handler = async event => {
           userId,
         },
       );
+
+    applicationContext.logger.info(
+      `finished processing the event to generate notices for trial session ${trialSession.trialSessionId} on case ${docketNumber} for job ${jobId}`,
+      event,
+    );
 
     const sqs = await applicationContext.getMessagingClient();
     await sqs
