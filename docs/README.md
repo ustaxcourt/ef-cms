@@ -30,8 +30,8 @@ Otherwise, if you're just interested in a particular topic, you can find it in t
 
 The onboarding checklist and quick reference guide will be handy as you navigate your first couple months. Please reach out to your onboarding buddy with questions. If you don't have a buddy and want one, please ask the team about it!
 
-1. [Onboarding Checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk): Your personal checklist of important tasks as you onboard
-2. [Onboarding Quick Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c): A hodge-podge of helpful links, information, who's who, what's what
+1. [Onboarding Checklist](https://docs.google.com/document/d/12twlx5nLG6B4R6ds96wh_gZ6wR5Y_PGjsmSeP98V6o0): Make a copy as this will be your personal checklist of important tasks as you onboard
+2. [Onboarding Quick Reference Guide](https://docs.google.com/document/d/1ObraR8X5YUzR1GIwsm903EhS7-AQbpy90--5aAWysKU): A hodge-podge of helpful links, information, who's who, what's what
 
 ## Looking for Old Docs?
 
