@@ -1671,7 +1671,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
   if (process.env.NODE_ENV === 'production') {
     const authenticated = user && Object.keys(user).length;
     logger.defaultMeta = logger.defaultMeta || {};
-    logger.defaultMeta.user = authenticated
+    logger.defaultMeta.protectedRequiredFields.user = authenticated
       ? user
       : { role: 'unauthenticated' };
   }

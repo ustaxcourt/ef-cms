@@ -23,45 +23,78 @@ exports.redact = format(logEntry => {
 });
 
 exports.formatMetadata = format(logEntry => {
-  const rootFields = [
-    'authorizer',
-    'environment',
-    'level',
-    'logGroup',
-    'logStream',
-    'message',
-    'metadata',
-    'protectedRequiredFields',
-    'request',
-    'requestId',
-    'response',
-    'timestamp',
-    'user',
-  ];
-  let leftovers = cloneDeep(logEntry);
-  rootFields.forEach(k => unset(leftovers, k));
+  // 1. prevent fields from being overwritten
+  // 2. ensure that our protectedRequiredFields are saved
 
-  const metadata =
-    'metadata' in logEntry
-      ? {
-          ...leftovers,
-          ...logEntry.metadata,
-        }
-      : leftovers;
+  // .logger.info('hey why am i doing this?', {requestId: 'foo-id'});
+  // .logger.info('hey why am i doing this?', {anything: 'foo-id'});
 
-  let formattedLogEntry = cloneDeep(logEntry);
-  [...Object.keys(metadata), 'metadata', 'protectedRequiredFields'].forEach(k =>
-    unset(formattedLogEntry, k),
-  );
-  formattedLogEntry.metadata = metadata;
-  if ('protectedRequiredFields' in logEntry) {
-    formattedLogEntry = {
-      ...formattedLogEntry,
-      ...logEntry.protectedRequiredFields,
-    };
+  const formattedLogEntry = {
+    ...logEntry.protectedRequiredFields,
+    context: {
+      ...logEntry,
+      level: undefined,
+      message: undefined,
+      metadata: undefined,
+      protectedRequiredFields: undefined,
+    },
+    level: logEntry.level,
+    message: logEntry.message,
+    metadata: logEntry.metadata,
+    protectedRequiredFields: undefined,
+  };
+
+  for (const key of Object.keys(logEntry)) {
+    if (formattedLogEntry[key] === formattedLogEntry.context[key]) {
+      unset(formattedLogEntry.context[key]);
+    }
   }
 
   return formattedLogEntry;
+
+  // const rootFields = [
+  //   'authorizer',
+  //   'environment',
+  //   'level',
+  //   'logGroup',
+  //   'logStream',
+  //   'message',
+  //   'metadata',
+  //   'protectedRequiredFields',
+  //   'request',
+  //   'requestId',
+  //   'response',
+  //   'timestamp',
+  //   'user',
+  // ];
+  // let leftovers = cloneDeep(logEntry);
+  // rootFields.forEach(k => unset(leftovers, k));
+
+  // const metadata =
+  //   'metadata' in logEntry
+  //     ? {
+  //         ...leftovers,
+  //         ...logEntry.metadata,
+  //       }
+  //     : leftovers;
+
+  // let formattedLogEntry = cloneDeep(logEntry);
+  // [...Object.keys(metadata), 'metadata', 'protectedRequiredFields'].forEach(k =>
+  //   unset(formattedLogEntry, k),
+  // );
+  // formattedLogEntry.metadata = metadata;
+  // if ('protectedRequiredFields' in logEntry) {
+  //   formattedLogEntry = {
+  //     ...formattedLogEntry,
+  //     ...logEntry.protectedRequiredFields,
+  //   };
+  // }
+
+  // loop through keys that are present in logEntry and
+  // if value different in logEntry than ...
+  // write key value into context
+
+  // return formattedLogEntry;
 });
 
 exports.createLogger = (opts = {}) => {
