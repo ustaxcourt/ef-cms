@@ -9,6 +9,7 @@ const {
   ORDER_TYPES,
   PETITIONS_SECTION,
 } = require('../../entities/EntityConstants');
+const { judgeUser } = require('../../../test/mockUsers');
 const { MOCK_CASE } = require('../../../test/mockCase');
 const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
 
@@ -22,6 +23,8 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
+
+    applicationContext.getCurrentUser.mockReturnValue(judgeUser);
   });
 
   it('should add a draft order docket entry to the case', async () => {
@@ -44,10 +47,10 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     expect(caseToUpdate.docketEntries.length).toEqual(
       MOCK_DOCUMENTS.length + 1,
     );
-    const draftOrder = caseToUpdate.docketEntries.find(
-      e => e.documentType === ORDER_TYPES[0].documentType,
-    );
-    expect(draftOrder.docketNumber).toEqual(caseToUpdate.docketNumber);
+
+    const motionDocumentType = MOCK_CASE.docketEntries.find(
+      e => e.docketEntryId === mockOriginalDocketEntryId,
+    ).documentType;
 
     const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
       doc =>
@@ -55,20 +58,57 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
         doc.docketEntryId === mockStampedDocketEntryId,
     );
 
-    expect(draftDocketEntryEntity.docketEntryId).toEqual(
-      mockStampedDocketEntryId,
+    expect(draftDocketEntryEntity).toMatchObject({
+      docketEntryId: mockStampedDocketEntryId,
+      docketNumber: caseToUpdate.docketNumber,
+      documentType: ORDER_TYPES[0].documentType,
+      filedBy: judgeUser.judgeFullName,
+      freeText: `${motionDocumentType} some title with disposition and custom text`,
+      isDraft: true,
+      signedJudgeName: mockSigningName,
+    });
+  });
+
+  it("should set the filedBy to the current user's name if there is no judge full name on the user", async () => {
+    await addDraftStampOrderDocketEntryInteractor(applicationContext, {
+      docketNumber: MOCK_CASE.docketNumber,
+      formattedDraftDocumentTitle:
+        'some title with disposition and custom text',
+      originalDocketEntryId: mockOriginalDocketEntryId,
+      stampData: {
+        disposition: MOTION_DISPOSITIONS.GRANTED,
+        nameForSigning: mockSigningName,
+      },
+      stampedDocketEntryId: mockStampedDocketEntryId,
+    });
+
+    const { caseToUpdate } =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[0][0];
+
+    expect(caseToUpdate.docketEntries.length).toEqual(
+      MOCK_DOCUMENTS.length + 1,
     );
-    expect(draftDocketEntryEntity.isDraft).toEqual(true);
+
     const motionDocumentType = MOCK_CASE.docketEntries.find(
       e => e.docketEntryId === mockOriginalDocketEntryId,
     ).documentType;
-    expect(draftDocketEntryEntity.freeText).toEqual(
-      `${motionDocumentType} some title with disposition and custom text`,
+
+    const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
+      doc =>
+        doc.documentType === ORDER_TYPES[0].documentType &&
+        doc.docketEntryId === mockStampedDocketEntryId,
     );
-    expect(draftDocketEntryEntity.signedJudgeName).toEqual(mockSigningName);
-    expect(draftDocketEntryEntity.documentType).toEqual(
-      ORDER_TYPES[0].documentType,
-    );
+
+    expect(draftDocketEntryEntity).toMatchObject({
+      docketEntryId: mockStampedDocketEntryId,
+      docketNumber: caseToUpdate.docketNumber,
+      documentType: ORDER_TYPES[0].documentType,
+      filedBy: judgeUser.judgeFullName, // change
+      freeText: `${motionDocumentType} some title with disposition and custom text`,
+      isDraft: true,
+      signedJudgeName: mockSigningName,
+    });
   });
 
   it('should add the stamped document to the latest message if parentMessageId is included', async () => {
