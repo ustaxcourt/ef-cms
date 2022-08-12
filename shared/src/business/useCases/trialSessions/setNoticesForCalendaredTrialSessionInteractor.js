@@ -10,7 +10,7 @@ const waitForJobToFinish = ({ applicationContext, jobId }) => {
     const interval = setInterval(async () => {
       const jobStatus = await applicationContext
         .getPersistenceGateway()
-        .getJobStatus({
+        .getTrialSessionJobStatusForCase({
           applicationContext,
           jobId,
         });
