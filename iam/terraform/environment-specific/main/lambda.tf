@@ -179,6 +179,19 @@ resource "aws_iam_role_policy" "lambda_policy" {
             "Action": "sns:Subscribe",
             "Resource": "arn:aws:sns:us-east-1:${data.aws_caller_identity.current.account_id}:bounced_service_emails_${var.environment}",
             "Effect": "Allow"
+        },
+        {
+            "Action": [
+                "sqs:DeleteMessage",
+                "sqs:SendMessage",
+                "sqs:SendMessageBatch",
+                "sqs:ReceiveMessage",
+                "sqs:GetQueueAttributes"
+            ],
+            "Resource": [
+                "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:*",
+                "arn:aws:sqs:us-west-1:${data.aws_caller_identity.current.account_id}:*"],
+            "Effect": "Allow"
         }
     ]
 }

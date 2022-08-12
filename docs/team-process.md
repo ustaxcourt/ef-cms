@@ -2,15 +2,6 @@
 
 Now that you've logged in and played around with our Dawson system a bit on a deployed environment, let's talk about our team process and what is expected from our fellow teammates.  This part of the documentation should help members get on the same page when it comes to the soft-skills required to work as a well-oiled agile machine.
 
-## Onboarding
-
-Here are some few resources for documentation associated with onboarding:
-
-1. [Onboarding checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk)
-2. [Onboarding Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c)
-
-If you do not have permissions to view these documents, please reach out to the document owner.
-
 ## Working Agreement
 
 We have talked about writing some form of working agreement so team members have a common understanding of what is expected from them during their daily work.  Great teams strive for open communication, safe spaces to speak their mind, and continuous improvement in process.  Embracing some of the following ideologies will help grow and sustain a healthy team.
@@ -140,7 +131,12 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
 
-    - Once verification is complete, you will need to increment the docker image version being used in `.circleci/config.yml` and publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts.
+    - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
+    - Change the version in `scripts/verify-terraform-version.sh`
+    - increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
+    - publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
+      - `npm run deploy:ci-image`
+    - deploy as normal
 
 5. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
@@ -153,11 +149,14 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 
 Below is a list of dependencies that are locked down due to known issues with security, integration problems within DAWSON, etc. Try to update these items but please be aware of the issue that's documented and ensure it's been resolved.
 
-- `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
-  - `@fortawesome/free-solid-svg-icons`
-  - `@fortawesome/free-regular-svg-icons`
-  - `@fortawesome/fontawesome-svg-core`
+1. `@fortawesome` packages locked down to versions pre-6.x.x to maintain consistency of icon styling until there is usability feedback and research that determines we should change them. This includes packages:
+    - `@fortawesome/free-solid-svg-icons`
+    - `@fortawesome/free-regular-svg-icons`
+    - `@fortawesome/fontawesome-svg-core`
 
-- It'd be good to keep an eye on `s3rver` for when it exceeds 3.7.1. We have a patch in place for called `s3rver+3.7.1.patch` in order to address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible.
-
--`puppeteer` and `puppeteer-core`: temporarily locked to 14.1.x and its respective patches. The major update to 15.3.1 causes jest timeout issues as well as issues with prototype property using Chromium. Causes Cypress test failures as well. See [build](https://app.circleci.com/pipelines/github/flexion/ef-cms/36266/workflows/bdd41d67-c752-40fd-b9ec-4ed36ae72853).
+2. Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.com/package/s3rver). 
+    - Why is there a patch called `s3rver+3.7.1.patch`?
+      - To address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible. 
+    - How does the patch run?
+      - This runs as part of the `npm postinstall` step. 
+    - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
