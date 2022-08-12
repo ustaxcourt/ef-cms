@@ -26,6 +26,13 @@ If you're ready for the challenge, navigate to the [Getting Started Guide](/gett
 
 Otherwise, if you're just interested in a particular topic, you can find it in the sidebar.
 
+## Onboarding Resources
+
+The onboarding checklist and quick reference guide will be handy as you navigate your first couple months. Please reach out to your onboarding buddy with questions. If you don't have a buddy and want one, please ask the team about it!
+
+1. [Onboarding Checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk): Your personal checklist of important tasks as you onboard
+2. [Onboarding Quick Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c): A hodge-podge of helpful links, information, who's who, what's what
+
 ## Looking for Old Docs?
 
 Most of the older documentation was moved directly into this docsify directory.  The goal is to eventually incorporate them into the top level sections of this documentation, or move them to a common sub directory if they don't fit well into the incremental introduction approach the documentation is attempting to follow. They can be found on one of the following links:
