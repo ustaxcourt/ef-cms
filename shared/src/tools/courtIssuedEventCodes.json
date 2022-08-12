@@ -418,6 +418,14 @@
     "isUnservable": true
   },
   {
+    "eventCode": "LOA",
+    "documentType": "Letter of Appeal",
+    "documentTitle": "Letter of Appeal [Anything]",
+    "scenario": "Type A",
+    "isUnservable": true,
+    "requiresCoversheet": true
+  },
+  {
     "eventCode": "TCOP",
     "documentType": "T.C. Opinion",
     "documentTitle": "T.C. Opinion [judge] [Anything]",
