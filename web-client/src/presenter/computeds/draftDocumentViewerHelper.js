@@ -30,8 +30,6 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
         viewerDraftDocumentToDisplayDocketEntryId,
     );
 
-  console.log(formattedDocumentToDisplay, 'formattedDocumentToDisplay');
-
   if (!formattedDocumentToDisplay) {
     return {
       createdByLabel: '',
