@@ -18,6 +18,16 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   const mockStampedDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3858';
   const mockOriginalDocketEntryId = 'abc81f4d-1e47-423a-8caf-6d2fdc3d3859';
   const mockParentMessageId = 'b3bc3773-6ddd-439d-a3c9-60d6beceff99';
+  const args = {
+    docketNumber: MOCK_CASE.docketNumber,
+    formattedDraftDocumentTitle: 'some title with disposition and custom text',
+    originalDocketEntryId: mockOriginalDocketEntryId,
+    stampData: {
+      disposition: MOTION_DISPOSITIONS.GRANTED,
+      nameForSigning: mockSigningName,
+    },
+    stampedDocketEntryId: mockStampedDocketEntryId,
+  };
 
   beforeAll(() => {
     applicationContext
@@ -28,17 +38,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   });
 
   it('should add a draft order docket entry to the case', async () => {
-    await addDraftStampOrderDocketEntryInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      formattedDraftDocumentTitle:
-        'some title with disposition and custom text',
-      originalDocketEntryId: mockOriginalDocketEntryId,
-      stampData: {
-        disposition: MOTION_DISPOSITIONS.GRANTED,
-        nameForSigning: mockSigningName,
-      },
-      stampedDocketEntryId: mockStampedDocketEntryId,
-    });
+    await addDraftStampOrderDocketEntryInteractor(applicationContext, args);
 
     const { caseToUpdate } =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -70,29 +70,16 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
   });
 
   it("should set the filedBy to the current user's name if there is no judge full name on the user", async () => {
-    await addDraftStampOrderDocketEntryInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      formattedDraftDocumentTitle:
-        'some title with disposition and custom text',
-      originalDocketEntryId: mockOriginalDocketEntryId,
-      stampData: {
-        disposition: MOTION_DISPOSITIONS.GRANTED,
-        nameForSigning: mockSigningName,
-      },
-      stampedDocketEntryId: mockStampedDocketEntryId,
+    applicationContext.getCurrentUser.mockReturnValue({
+      ...judgeUser,
+      judgeFullName: undefined,
     });
+
+    await addDraftStampOrderDocketEntryInteractor(applicationContext, args);
 
     const { caseToUpdate } =
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0];
-
-    expect(caseToUpdate.docketEntries.length).toEqual(
-      MOCK_DOCUMENTS.length + 1,
-    );
-
-    const motionDocumentType = MOCK_CASE.docketEntries.find(
-      e => e.docketEntryId === mockOriginalDocketEntryId,
-    ).documentType;
 
     const draftDocketEntryEntity = caseToUpdate.docketEntries.find(
       doc =>
@@ -101,13 +88,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
     );
 
     expect(draftDocketEntryEntity).toMatchObject({
-      docketEntryId: mockStampedDocketEntryId,
-      docketNumber: caseToUpdate.docketNumber,
-      documentType: ORDER_TYPES[0].documentType,
-      filedBy: judgeUser.judgeFullName, // change
-      freeText: `${motionDocumentType} some title with disposition and custom text`,
-      isDraft: true,
-      signedJudgeName: mockSigningName,
+      filedBy: judgeUser.name,
     });
   });
 
@@ -135,16 +116,8 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
       ]);
 
     await addDraftStampOrderDocketEntryInteractor(applicationContext, {
-      docketNumber: MOCK_CASE.docketNumber,
-      formattedDraftDocumentTitle:
-        'some title with disposition and custom text',
-      originalDocketEntryId: mockOriginalDocketEntryId,
+      ...args,
       parentMessageId: mockParentMessageId,
-      stampData: {
-        disposition: MOTION_DISPOSITIONS.GRANTED,
-        nameForSigning: mockSigningName,
-      },
-      stampedDocketEntryId: mockStampedDocketEntryId,
     });
 
     expect(

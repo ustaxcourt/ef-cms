@@ -33,7 +33,6 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
 ) => {
   const user = applicationContext.getCurrentUser();
 
-  console.log('***user', user);
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
