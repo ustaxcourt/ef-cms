@@ -15,13 +15,11 @@ const issIrs = `https://cognito-idp.us-east-1.amazonaws.com/${process.env.USER_P
 const getLogger = context => {
   return createLogger({
     defaultMeta: {
-      protectedRequiredFields: {
-        environment: {
-          stage: process.env.STAGE,
-        },
-        requestId: {
-          authorizer: context.awsRequestId,
-        },
+      environment: {
+        stage: process.env.STAGE,
+      },
+      requestId: {
+        authorizer: context.awsRequestId,
       },
     },
     logLevel: context.logLevel,
