@@ -26,7 +26,10 @@ describe('Petitions clerk views case detail', function () {
 
       cy.get('.document-viewer--documents h3').should('contain', 'First draft');
 
-      cy.get('.message-document-actions').children().should('have.length', 5);
+      const documentActionsCountWithoutApplySignatureBtn = 4;
+      cy.get('.message-document-actions')
+        .children()
+        .should('have.length', documentActionsCountWithoutApplySignatureBtn);
     });
   });
 
