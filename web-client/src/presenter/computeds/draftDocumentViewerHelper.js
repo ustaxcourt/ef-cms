@@ -30,6 +30,8 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
         viewerDraftDocumentToDisplayDocketEntryId,
     );
 
+  console.log(formattedDocumentToDisplay, 'formattedDocumentToDisplay');
+
   if (!formattedDocumentToDisplay) {
     return {
       createdByLabel: '',
@@ -76,11 +78,10 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
       formattedDocumentToDisplay.eventCode,
     );
 
-  const showApplySignatureButtonForDocument = !documentIsSigned;
   const showRemoveSignatureButtonForDocument =
     documentIsSigned && !isNotice && !isStipulatedDecision;
 
-  const showDocumentNotSignedAlert =
+  const unsignedDocumentRequiringSignature =
     documentRequiresSignature && !documentIsSigned;
 
   return {
@@ -92,8 +93,8 @@ export const draftDocumentViewerHelper = (get, applicationContext) => {
       showAddDocketEntryButtonForRole && showAddDocketEntryButtonForDocument,
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
-      showApplySignatureButtonForDocument,
-    showDocumentNotSignedAlert,
+      unsignedDocumentRequiringSignature,
+    showDocumentNotSignedAlert: unsignedDocumentRequiringSignature,
     showEditButtonNotSigned:
       showEditButtonForRole && (!documentIsSigned || isNotice),
     showEditButtonSigned,
