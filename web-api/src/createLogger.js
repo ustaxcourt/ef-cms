@@ -22,6 +22,21 @@ exports.redact = format(logEntry => {
   return copy;
 });
 
+exports.removeDuplicateLogInformation = format(logEntry => {
+  const copy = cloneDeep(logEntry);
+
+  if (!logEntry.context) return copy;
+
+  // check in .context to see if any of the keys contain what we already have in the root
+  for (const key of Object.keys(logEntry.context)) {
+    if (copy[key] == logEntry.context[key]) {
+      delete copy.context[key];
+    }
+  }
+
+  return copy;
+});
+
 exports.formatMetadata = format(logEntry => {
   const rootFields = [
     'authorizer',
@@ -87,7 +102,8 @@ exports.createLogger = (opts = {}) => {
   const formatters = [
     errors({ stack: true }),
     exports.redact(),
-    exports.formatMetadata(),
+    // exports.formatMetadata(),
+    exports.removeDuplicateLogInformation(),
   ];
 
   if (process.env.NODE_ENV === 'production') {

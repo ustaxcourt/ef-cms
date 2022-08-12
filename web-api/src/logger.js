@@ -20,22 +20,20 @@ module.exports =
     if (process.env.NODE_ENV === 'production') {
       const currentInvoke = getCurrentInvoke();
       logger.defaultMeta = {
-        protectedRequiredFields: {
-          environment: {
-            color: process.env.CURRENT_COLOR || 'green',
-            stage: process.env.STAGE || 'local',
-          },
-          request: {
-            body: JSON.stringify(req.body),
-            headers: req.headers,
-            method: req.method,
-            url: req.url,
-          },
-          requestId: {
-            apiGateway: get(currentInvoke, 'event.requestContext.requestId'),
-            applicationLoadBalancer: req.get('x-amzn-trace-id'),
-            lambda: get(currentInvoke, 'context.awsRequestId'),
-          },
+        environment: {
+          color: process.env.CURRENT_COLOR || 'green',
+          stage: process.env.STAGE || 'local',
+        },
+        request: {
+          body: JSON.stringify(req.body),
+          headers: req.headers,
+          method: req.method,
+          url: req.url,
+        },
+        requestId: {
+          apiGateway: get(currentInvoke, 'event.requestContext.requestId'),
+          applicationLoadBalancer: req.get('x-amzn-trace-id'),
+          lambda: get(currentInvoke, 'context.awsRequestId'),
         },
       };
     }

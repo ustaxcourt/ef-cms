@@ -1671,7 +1671,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
   if (process.env.NODE_ENV === 'production') {
     const authenticated = user && Object.keys(user).length;
     logger.defaultMeta = logger.defaultMeta || {};
-    logger.defaultMeta.protectedRequiredFields.user = authenticated
+    logger.defaultMeta.user = authenticated
       ? user
       : { role: 'unauthenticated' };
   }
@@ -2257,10 +2257,10 @@ module.exports = (appContextUser, logger = createLogger()) => {
     isAuthorized,
     isCurrentColorActive,
     logger: {
-      debug: logger.debug.bind(logger),
-      error: logger.error.bind(logger),
-      info: logger.info.bind(logger),
-      warn: logger.warn.bind(logger),
+      debug: (message, context) => logger.debug(message, { context }),
+      error: (message, context) => logger.error(message, { context }),
+      info: (message, context) => logger.info(message, { context }),
+      warn: (message, context) => logger.warn(message, { context }),
     },
     runVirusScan: async ({ filePath }) => {
       return await execPromise(`clamdscan ${filePath}`);
