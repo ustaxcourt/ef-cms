@@ -2,7 +2,7 @@ const { faker } = require('@faker-js/faker');
 
 export const admissionsClerkAddsNewPractitioner = cerebralTest => {
   return it('admissions clerk adds a new practitioner', async () => {
-    cerebralTest.fakeName = faker.name.findName();
+    cerebralTest.fakeName = faker.name.fullName();
 
     await cerebralTest.runSequence('gotoCreatePractitionerUserSequence');
 
