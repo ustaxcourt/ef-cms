@@ -61,7 +61,7 @@ describe('Docket Clerk serves a Order of Amended Petition', () => {
         d => d.docketEntryId === cerebralTest.docketRecordEntry.docketEntryId,
       );
     expect(servedEntry.documentTitle).toEqual(
-      'Order for Amended Petition on 02-02-2050',
+      'Order for Amended Petition on 02-02-2050 Order to do something',
     );
   });
 });

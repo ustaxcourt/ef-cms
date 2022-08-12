@@ -20,7 +20,7 @@ export const workQueueItemsAreEqual = (first, second) => {
  * @param {*} applicationContext our UI application context
  * @param {*} now optional now value used for large tables to avoid recalculating
  * @param {*} yesterday optional yesterday value used for large tables to avoid recalculating
- * @returns string formatted date as a string
+ * @returns {string} formatted date as a string
  */
 export const formatDateIfToday = (
   date,

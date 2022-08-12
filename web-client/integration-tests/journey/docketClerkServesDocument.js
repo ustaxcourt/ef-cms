@@ -1,15 +1,16 @@
 import {
   getFormattedDocketEntriesForTest,
   refreshElasticsearchIndex,
+  waitForLoadingComponentToHide,
 } from '../helpers';
 
-export const docketClerkServesDocument = (cerebralTest, draftOrderIndex) => {
-  return it(`Docket Clerk serves the order after the docket entry has been created ${draftOrderIndex}`, async () => {
+export const docketClerkServesDocument = (cerebralTest, docketRecordIndex) => {
+  return it(`Docket Clerk serves the order after the docket entry has been created ${docketRecordIndex}`, async () => {
     const { formattedDocketEntriesOnDocketRecord } =
       await getFormattedDocketEntriesForTest(cerebralTest);
 
     const docketEntryId = cerebralTest.draftOrders
-      ? cerebralTest.draftOrders[draftOrderIndex].docketEntryId
+      ? cerebralTest.draftOrders[docketRecordIndex].docketEntryId
       : cerebralTest.docketEntryId;
 
     const orderDocument = formattedDocketEntriesOnDocketRecord.find(
@@ -28,8 +29,10 @@ export const docketClerkServesDocument = (cerebralTest, draftOrderIndex) => {
     await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
 
     await cerebralTest.runSequence(
-      'serveCourtIssuedDocumentFromDocketEntrySequence',
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
+
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     await refreshElasticsearchIndex();
   });

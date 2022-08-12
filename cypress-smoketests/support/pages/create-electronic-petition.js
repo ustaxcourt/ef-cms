@@ -104,7 +104,7 @@ exports.completeWizardStep3 = (filingType, petitionerName) => {
   cy.get('input[name="contactPrimary.postalCode"]')
     .scrollIntoView()
     .type(faker.address.zipCode());
-  cy.get('input#phone').scrollIntoView().type(faker.phone.phoneNumber());
+  cy.get('input#phone').scrollIntoView().type(faker.phone.number());
 };
 
 exports.completeWizardStep4 = () => {

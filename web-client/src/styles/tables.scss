@@ -150,6 +150,12 @@ table,
     }
   }
 
+  th.consolidated-case-column,
+  td.consolidated-case-column {
+    width: 20px;
+    padding-right: 1px;
+  }
+
   th.message-unread-column,
   td.message-unread-column {
     width: 20px;
@@ -168,44 +174,9 @@ table,
   }
 
   tbody {
-    &:hover {
-      td.focus-toggle {
-        button.focus-button {
-          background-color: color($theme-color-primary);
-        }
-      }
-    }
-
     tr {
       td {
         transition: all 0.1s ease-in-out;
-
-        &.focus-toggle {
-          position: relative;
-          overflow: hidden;
-          width: 5px;
-          padding: 0;
-          margin: 0;
-
-          .focus-button {
-            position: absolute;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            width: 5px;
-            padding: 50px;
-            margin: 0;
-            background-color: transparent;
-            border-radius: 0;
-
-            &:hover,
-            &:focus,
-            &:active {
-              background-color: color($theme-color-primary);
-            }
-          }
-        }
       }
 
       &.queue-message {

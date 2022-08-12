@@ -103,3 +103,11 @@ variable "prod_env_account_id" {
 variable "lower_env_account_id" {
   type = string
 }
+
+variable "should_es_alpha_exist" {
+  type = bool
+}
+
+variable "should_es_beta_exist" {
+  type = bool
+}

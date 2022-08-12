@@ -1,67 +1,50 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
-import { applicationContext } from '../../applicationContext';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-const {
-  ALPHABETICALLY_ASCENDING,
-  ALPHABETICALLY_DESCENDING,
-  ASCENDING,
-  CHRONOLOGICALLY_ASCENDING,
-  CHRONOLOGICALLY_DESCENDING,
-  DESCENDING,
-} = applicationContext.getConstants();
-
 export const MessagesIndividualOutbox = connect(
   {
-    caseStatuses: state.formattedMessages.caseStatuses,
-    formattedMessages: state.formattedMessages.messages,
-    hasMessages: state.formattedMessages.hasMessages,
+    constants: state.constants,
+    formattedMessages: state.formattedMessages,
     screenMetadata: state.screenMetadata,
-    showFilters: state.formattedMessages.showFilters,
     showSortableHeaders: state.showSortableHeaders,
     sortMessagesSequence: sequences.sortMessagesSequence,
-    toSections: state.formattedMessages.toSections,
-    toUsers: state.formattedMessages.toUsers,
     updateScreenMetadataSequence: sequences.updateScreenMetadataSequence,
   },
   function MessagesIndividualOutbox({
-    caseStatuses,
+    constants,
     formattedMessages,
-    hasMessages,
     screenMetadata,
-    showFilters,
     showSortableHeaders,
     sortMessagesSequence,
-    toSections,
-    toUsers,
     updateScreenMetadataSequence,
   }) {
     return (
       <>
-        {showFilters && (
+        {formattedMessages.showFilters && (
           <TableFilters
             filters={[
               {
                 isSelected: screenMetadata.caseStatus,
                 key: 'caseStatus',
                 label: 'Case Status',
-                options: caseStatuses,
+                options: formattedMessages.caseStatuses,
               },
               {
                 isSelected: screenMetadata.toUser,
                 key: 'toUser',
                 label: 'To',
-                options: toUsers,
+                options: formattedMessages.toUsers,
               },
               {
                 isSelected: screenMetadata.toSection,
                 key: 'toSection',
                 label: 'Section',
-                options: toSections,
+                options: formattedMessages.toSections,
               },
             ]}
             onSelect={updateScreenMetadataSequence}
@@ -70,13 +53,14 @@ export const MessagesIndividualOutbox = connect(
         <table className="usa-table ustc-table subsection">
           <thead>
             <tr>
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               {showSortableHeaders && (
                 <th aria-label="Docket Number" className="small" colSpan="2">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={DESCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="docketNumber"
                     title="Docket No."
                     onClickSequence={sortMessagesSequence}
@@ -91,10 +75,10 @@ export const MessagesIndividualOutbox = connect(
               {showSortableHeaders && (
                 <th className="small">
                   <SortableColumnHeaderButton
-                    ascText={CHRONOLOGICALLY_ASCENDING}
-                    defaultSort={DESCENDING}
-                    descText={CHRONOLOGICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.CHRONOLOGICALLY_ASCENDING}
+                    defaultSort={constants.DESCENDING}
+                    descText={constants.CHRONOLOGICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="createdAt"
                     title="Sent"
                     onClickSequence={sortMessagesSequence}
@@ -105,10 +89,10 @@ export const MessagesIndividualOutbox = connect(
               {showSortableHeaders && (
                 <th>
                   <SortableColumnHeaderButton
-                    ascText={ALPHABETICALLY_ASCENDING}
-                    defaultSort={ASCENDING}
-                    descText={ALPHABETICALLY_DESCENDING}
-                    hasRows={hasMessages}
+                    ascText={constants.ALPHABETICALLY_ASCENDING}
+                    defaultSort={constants.ASCENDING}
+                    descText={constants.ALPHABETICALLY_DESCENDING}
+                    hasRows={formattedMessages.hasMessages}
                     sortField="subject"
                     title="Message"
                     onClickSequence={sortMessagesSequence}
@@ -122,12 +106,30 @@ export const MessagesIndividualOutbox = connect(
               <th className="small">Section</th>
             </tr>
           </thead>
-          {formattedMessages.map(message => {
+          {formattedMessages.messages.map(message => {
             return (
               <tbody key={`message-${message.messageId}`}>
                 <tr>
-                  <td aria-hidden="true" className="focus-toggle" />
-                  <td className="message-queue-row small">
+                  <td className="consolidated-case-column">
+                    {message.inConsolidatedGroup && (
+                      <span
+                        className="fa-layers fa-fw"
+                        title={message.consolidatedIconTooltipText}
+                      >
+                        <Icon
+                          aria-label={message.consolidatedIconTooltipText}
+                          className="fa-icon-blue"
+                          icon="copy"
+                        />
+                        {message.inLeadCase && (
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </td>
+                  <td className="message-queue-row small" colSpan="2">
                     {message.docketNumberWithSuffix}
                   </td>
                   <td className="message-queue-row small">
@@ -163,7 +165,7 @@ export const MessagesIndividualOutbox = connect(
             );
           })}
         </table>
-        {!hasMessages && <div>There are no messages.</div>}
+        {!formattedMessages.hasMessages && <div>There are no messages.</div>}
       </>
     );
   },

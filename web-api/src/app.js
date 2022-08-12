@@ -570,8 +570,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(appendAmendedPetitionFormLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
-    lambdaWrapper(serveCourtIssuedDocumentLambda),
+    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
+    lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/coversheet',
@@ -610,8 +610,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(fileCourtIssuedDocketEntryLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/file-and-serve-court-issued-docket-entry',
-    lambdaWrapper(fileAndServeCourtIssuedDocumentLambda),
+    '/async/case-documents/:subjectCaseDocketNumber/file-and-serve-court-issued-docket-entry',
+    lambdaWrapper(fileAndServeCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/correspondence',
@@ -745,8 +745,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  * case-notes
  */
 {
-  app.get(
-    '/case-notes/batch-cases/:docketNumbers/user-notes',
+  app.post(
+    '/case-notes/batch-cases/user-notes',
     lambdaWrapper(getUserCaseNoteForCasesLambda),
   );
   app.get(

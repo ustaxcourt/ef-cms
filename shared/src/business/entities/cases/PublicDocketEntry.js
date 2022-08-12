@@ -32,6 +32,7 @@ PublicDocketEntry.prototype.init = function init(rawDocketEntry) {
   this.eventCode = rawDocketEntry.eventCode;
   this.filedBy = rawDocketEntry.filedBy;
   this.filingDate = rawDocketEntry.filingDate;
+  this.freeText = rawDocketEntry.freeText;
   this.index = rawDocketEntry.index;
   this.isFileAttached = rawDocketEntry.isFileAttached;
   this.isLegacyServed = rawDocketEntry.isLegacyServed;
@@ -71,6 +72,7 @@ PublicDocketEntry.VALIDATION_RULES = joi.object().keys({
   filingDate: JoiValidationConstants.ISO_DATE.max('now')
     .required()
     .description('Date that this Document was filed.'),
+  freeText: JoiValidationConstants.STRING.max(1000).optional(),
   index: DOCKET_ENTRY_VALIDATION_RULE_KEYS.index,
   isFileAttached: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isFileAttached,
   isLegacyServed: DOCKET_ENTRY_VALIDATION_RULE_KEYS.isLegacyServed,

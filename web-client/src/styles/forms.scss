@@ -23,11 +23,8 @@
 }
 
 .ustc-time-of-day--am-pm {
-  position: absolute;
-  bottom: 0;
-  width: 9em;
-  margin-right: 1rem;
-  margin-bottom: 0;
+  position: relative;
+  top: 10px;
 }
 
 label.usa-label-display {
@@ -258,7 +255,7 @@ label.validated::after {
   height: 0.8rem;
   margin-right: -1.8rem;
   margin-left: 0.2rem;
-  background-image: url('./images/correct.svg');
+  background-image: url('images/correct.svg');
   background-position: 100%;
   background-repeat: no-repeat;
   content: ' ';
@@ -547,4 +544,10 @@ label.ustc-upload {
   .usa-form-group--error {
     margin-bottom: 0;
   }
+}
+
+.usa-input.grey-placeholder::placeholder {
+  /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: gray;
+  opacity: 1; /* Firefox */
 }

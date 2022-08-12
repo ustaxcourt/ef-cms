@@ -79,4 +79,68 @@ describe('validateTrialSessionAction', () => {
 
     expect(errorStub.mock.calls.length).toEqual(1);
   });
+
+  it('should pass the expected estimatedEndDate from props into the validation function', async () => {
+    applicationContext
+      .getUseCases()
+      .validateTrialSessionInteractor.mockReturnValue(null);
+
+    await runAction(validateTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        computedEstimatedEndDate: undefined,
+      },
+      state: {
+        form: { ...MOCK_TRIAL, term: 'Summer' },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateTrialSessionInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({
+      trialSession: {
+        estimatedEndDate: null,
+      },
+    });
+  });
+
+  it('removes the estimatedEndDateMonth, Day, Year from the trialSession', async () => {
+    await runAction(validateTrialSessionAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        computedEstimatedEndDate: '2020-12-01T00:00:00.000Z',
+        computedStartDate: '2019-12-01T00:00:00.000Z',
+      },
+      state: {
+        form: {
+          ...MOCK_TRIAL,
+          estimatedEndDateDay: '02',
+          estimatedEndDateMonth: '01',
+          estimatedEndDateYear: '2002',
+          startDateDay: '04',
+          startDateMonth: '04',
+          startDateYear: '2000',
+        },
+      },
+    });
+    const sentTrialSession =
+      applicationContext.getUseCases().validateTrialSessionInteractor.mock
+        .calls[0][1].trialSession;
+
+    expect(sentTrialSession.estimatedEndDateDay).not.toBeDefined();
+    expect(sentTrialSession.estimatedEndDateMonth).not.toBeDefined();
+    expect(sentTrialSession.estimatedEndDateYear).not.toBeDefined();
+    expect(sentTrialSession.startDateDay).not.toBeDefined();
+    expect(sentTrialSession.startDateMonth).not.toBeDefined();
+    expect(sentTrialSession.startDateYear).not.toBeDefined();
+    expect(sentTrialSession).toMatchObject({
+      estimatedEndDate: '2020-12-01T00:00:00.000Z',
+      startDate: '2019-12-01T00:00:00.000Z',
+    });
+  });
 });

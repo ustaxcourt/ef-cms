@@ -81,13 +81,26 @@ if [ -z "${CIRCLE_BRANCH}" ]; then
   popd
 fi
 
+
 if [ "${MIGRATE_FLAG}" == 'false' ]; then
   BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
   GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
-  BLUE_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
-  GREEN_ELASTICSEARCH_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+  DESTINATION_DOMAIN=$(../../../scripts/elasticsearch/get-destination-elasticsearch.sh "${ENV}")
+  BLUE_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
+  GREEN_ELASTICSEARCH_DOMAIN="${DESTINATION_DOMAIN}"
   COGNITO_TRIGGER_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
+
+  if [[ "${DESTINATION_DOMAIN}" == *'alpha'* ]]; then
+    SHOULD_ES_ALPHA_EXIST=true
+    SHOULD_ES_BETA_EXIST=false
+  else
+    SHOULD_ES_ALPHA_EXIST=false
+    SHOULD_ES_BETA_EXIST=true
+  fi
 else
+  SHOULD_ES_ALPHA_EXIST=true
+  SHOULD_ES_BETA_EXIST=true
+
   if [ "${DEPLOYING_COLOR}" == 'blue' ]; then
     BLUE_TABLE_NAME=$(../../../scripts/dynamo/get-destination-table.sh "${ENV}")
     GREEN_TABLE_NAME=$(../../../scripts/dynamo/get-source-table.sh "${ENV}")
@@ -111,9 +124,8 @@ fi
 
 export TF_VAR_blue_elasticsearch_domain=$BLUE_ELASTICSEARCH_DOMAIN
 export TF_VAR_blue_table_name=$BLUE_TABLE_NAME
-export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_bounce_alert_recipients=$BOUNCE_ALERT_RECIPIENTS
-export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
+export TF_VAR_bounced_email_recipient=$BOUNCED_EMAIL_RECIPIENT
 export TF_VAR_cognito_suffix=$COGNITO_SUFFIX
 export TF_VAR_cognito_table_name=$COGNITO_TRIGGER_TABLE_NAME
 export TF_VAR_deploying_color=$DEPLOYING_COLOR
@@ -131,6 +143,9 @@ export TF_VAR_irs_superuser_email=$IRS_SUPERUSER_EMAIL
 export TF_VAR_lower_env_account_id=$LOWER_ENV_ACCOUNT_ID
 export TF_VAR_prod_env_account_id=$PROD_ENV_ACCOUNT_ID
 export TF_VAR_scanner_resource_uri=$SCANNER_RESOURCE_URI
+export TF_VAR_should_es_alpha_exist=$SHOULD_ES_ALPHA_EXIST
+export TF_VAR_should_es_beta_exist=$SHOULD_ES_BETA_EXIST
+export TF_VAR_slack_webhook_url=$SLACK_WEBHOOK_URL
 export TF_VAR_zone_name=$ZONE_NAME
 
 terraform init -backend=true -backend-config=bucket="${BUCKET}" -backend-config=key="${KEY}" -backend-config=dynamodb_table="${LOCK_TABLE}" -backend-config=region="${REGION}"

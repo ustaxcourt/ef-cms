@@ -8,54 +8,66 @@ considerations:
 */
 module.exports = {
   ELASTICSEARCH_API_VERSION: '7.7', // when this changes, ensure elasticsearch.tf files are also updated
-  settings: {
-    index: {
-      analysis: {
-        analyzer: {
-          english_exact: {
-            filter: ['lowercase'],
-            tokenizer: 'standard',
-          },
-          ustc_analyzer: {
-            default: {
-              type: 'simple',
+  settings: ({ environment, overriddenNumberOfReplicasIfNonProd }) => {
+    let actualNumberOfReplicas = 2;
+    if (environment && environment !== 'prod') {
+      actualNumberOfReplicas = overriddenNumberOfReplicasIfNonProd || 0;
+    }
+
+    console.log(
+      'Configuring the index number_of_replicas to',
+      actualNumberOfReplicas,
+    );
+
+    return {
+      index: {
+        analysis: {
+          analyzer: {
+            english_exact: {
+              filter: ['lowercase'],
+              tokenizer: 'standard',
             },
-            default_search: {
+            ustc_analyzer: {
+              default: {
+                type: 'simple',
+              },
+              default_search: {
+                type: 'stop',
+              },
+              filter: [
+                'lowercase',
+                'asciifolding',
+                'english',
+                'ustc_stop',
+                'filter_stemmer',
+                'filter_shingle',
+              ],
+              tokenizer: 'standard',
+            },
+          },
+          filter: {
+            english: { stopwords: '_english_', type: 'stop' },
+            filter_shingle: {
+              max_shingle_size: 3,
+              min_shingle_size: 2,
+              output_unigrams: true,
+              type: 'shingle',
+            },
+            filter_stemmer: {
+              language: '_english_',
+              type: 'porter_stem',
+            },
+            ustc_stop: {
+              stopwords: ['tax', 'court'],
               type: 'stop',
             },
-            filter: [
-              'lowercase',
-              'asciifolding',
-              'english',
-              'ustc_stop',
-              'filter_stemmer',
-              'filter_shingle',
-            ],
-            tokenizer: 'standard',
           },
         },
-        filter: {
-          english: { stopwords: '_english_', type: 'stop' },
-          filter_shingle: {
-            max_shingle_size: 3,
-            min_shingle_size: 2,
-            output_unigrams: true,
-            type: 'shingle',
-          },
-          filter_stemmer: {
-            language: '_english_',
-            type: 'porter_stem',
-          },
-          ustc_stop: {
-            stopwords: ['tax', 'court'],
-            type: 'stop',
-          },
-        },
+        'mapping.total_fields.limit': '1000',
+        max_result_window: 20000,
+        number_of_replicas: actualNumberOfReplicas,
+        number_of_shards: 1,
       },
-      'mapping.total_fields.limit': '1000',
-      max_result_window: 20000,
-      number_of_replicas: 2,
-      number_of_shards: 1,
-    },
+    };
   },
 };

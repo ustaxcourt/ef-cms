@@ -17,7 +17,7 @@ exports.fillInCreateCaseFromPaperForm = testData => {
   cy.get('input[name="contactPrimary.postalCode"]').type(
     faker.address.zipCode(),
   );
-  cy.get('input[name="contactPrimary.phone"]').type(faker.phone.phoneNumber());
+  cy.get('input[name="contactPrimary.phone"]').type(faker.phone.number());
 
   cy.get('#tab-case-info').click();
 

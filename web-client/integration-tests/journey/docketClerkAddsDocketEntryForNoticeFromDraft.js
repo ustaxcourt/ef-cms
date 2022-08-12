@@ -6,7 +6,7 @@ export const docketClerkAddsDocketEntryForNoticeFromDraft = (
   cerebralTest,
   draftOrderIndex,
 ) => {
-  return it('Docket Clerk adds a docket entry  for a notice from the given draft', async () => {
+  return it('Docket Clerk adds a docket entry for a notice from the given draft', async () => {
     let caseDetailFormatted = runCompute(
       withAppContextDecorator(formattedCaseDetail),
       {
