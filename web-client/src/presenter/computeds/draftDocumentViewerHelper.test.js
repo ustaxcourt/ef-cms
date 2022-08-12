@@ -258,6 +258,35 @@ describe('draftDocumentViewerHelper', () => {
     expect(result.showRemoveSignatureButton).toEqual(false);
   });
 
+  it('returns showApplySignatureButton false and showRemoveSignatureButton false for a non servable court issues document not requiring singatures', () => {
+    const letterOfAppealDocketEntry = {
+      ...baseDraftDocketEntry,
+      docketEntryId: 'ed663819-887d-4f35-98c3-b8e07c74d773',
+      documentTitle: 'Letter of Appeal [Anything]',
+      documentType: 'Letter of Appeal',
+      eventCode: 'LOA',
+      scenario: 'Type A',
+      signedAt: undefined,
+    };
+
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
+
+    const result = runCompute(draftDocumentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketEntries: [letterOfAppealDocketEntry],
+        },
+        viewerDraftDocumentToDisplay: {
+          docketEntryId: letterOfAppealDocketEntry.docketEntryId,
+        },
+      },
+    });
+
+    expect(result.showApplySignatureButton).toEqual(false);
+    expect(result.showRemoveSignatureButton).toEqual(false);
+  });
+
   it('returns showRemoveSignatureButton false for NOT document type and internal users', () => {
     applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
