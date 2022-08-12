@@ -101,7 +101,7 @@ describe('Case Consolidation Journey', () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkFilesAndServesDocumentOnLeadCase(cerebralTest, 0);
 
-  it('should have a success message that mentions serving multiple cases', async () => {
+  it('should have a success message that mentions serving multiple cases', () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
     expect(alertSuccess.message).toEqual(
