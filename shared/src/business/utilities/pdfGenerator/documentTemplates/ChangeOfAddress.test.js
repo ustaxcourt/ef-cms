@@ -1,12 +1,13 @@
 const React = require('react');
 const { ChangeOfAddress } = require('./ChangeOfAddress.jsx');
 const { COUNTRY_TYPES } = require('../../../entities/EntityConstants.js');
-const { shallow } = require('enzyme');
+const { queryByAttribute, render, within } = require('@testing-library/react');
 
 describe('ChangeOfAddress', () => {
   let options;
   let newData;
   let oldData;
+  const getById = queryByAttribute.bind(null, 'id');
 
   beforeAll(() => {
     newData = {
@@ -46,8 +47,8 @@ describe('ChangeOfAddress', () => {
     };
   });
 
-  it('renders a table with the old contact information', () => {
-    const wrapper = shallow(
+  it('should render a table with the old contact information', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={{ ...newData, countryType: undefined }}
@@ -59,23 +60,33 @@ describe('ChangeOfAddress', () => {
         }}
       />,
     );
-    const table = wrapper.find('#contact_info_Old');
-    const tableRowText = table.find('tbody tr').text();
 
-    expect(table.find('thead tr th').text()).toEqual('Old Contact Information');
-    expect(tableRowText).toContain(`c/o ${oldData.inCareOf}`);
-    expect(tableRowText).toContain(oldData.address1);
-    expect(tableRowText).toContain(oldData.address2);
-    expect(tableRowText).toContain(oldData.address3);
-    expect(tableRowText).toContain(oldData.city);
-    expect(tableRowText).toContain(oldData.state);
-    expect(tableRowText).toContain(oldData.postalCode);
-    expect(tableRowText).toContain(oldData.country);
-    expect(tableRowText).toContain(oldData.phone);
+    const table = getById(container, 'contact_info_Old');
+
+    expect(
+      within(table).getByText('Old Contact Information'),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByText(`c/o ${oldData.inCareOf}`),
+    ).toBeInTheDocument();
+    expect(within(table).getByText(oldData.address1)).toBeInTheDocument();
+    expect(within(table).getByText(oldData.address2)).toBeInTheDocument();
+    expect(within(table).getByText(oldData.address3)).toBeInTheDocument();
+    expect(
+      within(table).getByText(oldData.city, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByText(oldData.state, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByText(oldData.postalCode, { exact: false }),
+    ).toBeInTheDocument();
+    expect(within(table).getByText(oldData.country)).toBeInTheDocument();
+    expect(within(table).getByText(oldData.phone)).toBeInTheDocument();
   });
 
-  it('renders a table with the new contact address and phone information', () => {
-    const wrapper = shallow(
+  it('should render a table with the new contact address and phone information', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={{ ...newData, countryType: undefined }}
@@ -87,23 +98,32 @@ describe('ChangeOfAddress', () => {
         }}
       />,
     );
-    const table = wrapper.find('#contact_info_New');
-    const tableRowText = table.find('tbody tr').text();
+    const table = getById(container, 'contact_info_New');
 
-    expect(table.find('thead tr th').text()).toEqual('New Contact Information');
-    expect(tableRowText).toContain(`c/o ${newData.inCareOf}`);
-    expect(tableRowText).toContain(newData.address1);
-    expect(tableRowText).toContain(newData.address2);
-    expect(tableRowText).toContain(newData.address3);
-    expect(tableRowText).toContain(newData.city);
-    expect(tableRowText).toContain(newData.state);
-    expect(tableRowText).toContain(newData.postalCode);
-    expect(tableRowText).toContain(newData.country);
-    expect(tableRowText).toContain(newData.phone);
+    expect(
+      within(table).getByText('New Contact Information'),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByText(`c/o ${newData.inCareOf}`),
+    ).toBeInTheDocument();
+    expect(within(table).getByText(newData.address1)).toBeInTheDocument();
+    expect(within(table).getByText(newData.address2)).toBeInTheDocument();
+    expect(within(table).getByText(newData.address3)).toBeInTheDocument();
+    expect(
+      within(table).getByText(newData.city, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByText(newData.state, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(table).getByText(newData.postalCode, { exact: false }),
+    ).toBeInTheDocument();
+    expect(within(table).getByText(newData.country)).toBeInTheDocument();
+    expect(within(table).getByText(newData.phone)).toBeInTheDocument();
   });
 
-  it('only displays an email address change if options.isEmailChange is true', () => {
-    const wrapper = shallow(
+  it('should only display an email address change if options.isEmailChange is true', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={newData}
@@ -117,31 +137,31 @@ describe('ChangeOfAddress', () => {
         }}
       />,
     );
-    const oldTable = wrapper.find('#contact_info_Old');
-    const oldTableRowText = wrapper
-      .find('#contact_info_Old')
-      .find('tbody tr')
-      .text();
+    const oldTable = getById(container, 'contact_info_Old');
 
-    expect(oldTable.find('thead tr th').text()).toEqual(
-      'Old Contact Information',
-    );
+    expect(
+      within(oldTable).getByText('Old Contact Information'),
+    ).toBeInTheDocument();
 
-    expect(oldTableRowText).toContain(oldData.email);
-    // TODO expect old table text not to contain phone, address
+    expect(within(oldTable).getByText(oldData.email)).toBeInTheDocument();
+    expect(within(oldTable).queryByText(oldData.phone)).not.toBeInTheDocument();
+    expect(
+      within(oldTable).queryByText(oldData.address1),
+    ).not.toBeInTheDocument();
 
-    const newTable = wrapper.find('#contact_info_New');
-    const newTableRowText = newTable.find('tbody tr').text();
-    expect(newTable.find('thead tr th').text()).toEqual(
-      'New Contact Information',
-    );
-
-    expect(newTableRowText).toContain(newData.email);
-    // TOOD expect new table text not to contain phone, address
+    const newTable = getById(container, 'contact_info_New');
+    expect(
+      within(newTable).getByText('New Contact Information'),
+    ).toBeInTheDocument();
+    expect(within(newTable).getByText(newData.email)).toBeInTheDocument();
+    expect(within(oldTable).queryByText(oldData.phone)).not.toBeInTheDocument();
+    expect(
+      within(oldTable).queryByText(oldData.address1),
+    ).not.toBeInTheDocument();
   });
 
-  it('only displays a phone number change if options.isPhoneChangeOnly is true', () => {
-    const wrapper = shallow(
+  it('should only display a phone number change if options.isPhoneChangeOnly is true', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={newData}
@@ -149,44 +169,64 @@ describe('ChangeOfAddress', () => {
         options={{ ...options, isPhoneChangeOnly: true }}
       />,
     );
-    const oldTable = wrapper.find('#contact_info_Old');
-    const oldTableRowText = oldTable.find('tbody tr').text();
+    const oldTable = getById(container, 'contact_info_Old');
 
-    expect(oldTable.find('thead tr th').text()).toEqual(
-      'Old Contact Information',
-    );
+    expect(within(oldTable).getByText(oldData.phone)).toBeInTheDocument();
+    expect(
+      within(oldTable).getByText('Old Contact Information'),
+    ).toBeInTheDocument();
 
-    expect(oldTableRowText).toContain(oldData.phone);
-    expect(oldTableRowText).not.toContain(`c/o ${oldData.inCareOf}`);
-    expect(oldTableRowText).not.toContain(oldData.address1);
-    expect(oldTableRowText).not.toContain(oldData.address2);
-    expect(oldTableRowText).not.toContain(oldData.address3);
-    expect(oldTableRowText).not.toContain(oldData.city);
-    expect(oldTableRowText).not.toContain(oldData.state);
-    expect(oldTableRowText).not.toContain(oldData.postalCode);
-    expect(oldTableRowText).not.toContain(oldData.country);
+    expect(
+      within(oldTable).queryByText(oldData.address1),
+    ).not.toBeInTheDocument();
+    expect(
+      within(oldTable).queryByText(oldData.inCareOf),
+    ).not.toBeInTheDocument();
+    expect(
+      within(oldTable).queryByText(oldData.address2),
+    ).not.toBeInTheDocument();
+    expect(
+      within(oldTable).queryByText(oldData.address3),
+    ).not.toBeInTheDocument();
+    expect(within(oldTable).queryByText(oldData.city)).not.toBeInTheDocument();
+    expect(within(oldTable).queryByText(oldData.state)).not.toBeInTheDocument();
+    expect(
+      within(oldTable).queryByText(oldData.postalCode),
+    ).not.toBeInTheDocument();
+    expect(
+      within(oldTable).queryByText(oldData.country),
+    ).not.toBeInTheDocument();
 
-    const newTable = wrapper.find('#contact_info_New');
-    const newTableRowText = newTable.find('tbody tr').text();
+    const newTable = getById(container, 'contact_info_New');
+    expect(
+      within(newTable).getByText('New Contact Information'),
+    ).toBeInTheDocument();
+    expect(within(newTable).getByText(newData.phone)).toBeInTheDocument();
 
-    expect(newTable.find('thead tr th').text()).toEqual(
-      'New Contact Information',
-    );
-
-    expect(newTableRowText).toContain(newData.phone);
-
-    expect(newTableRowText).not.toContain(`c/o ${newData.inCareOf}`);
-    expect(newTableRowText).not.toContain(newData.address1);
-    expect(newTableRowText).not.toContain(newData.address2);
-    expect(newTableRowText).not.toContain(newData.address3);
-    expect(newTableRowText).not.toContain(newData.city);
-    expect(newTableRowText).not.toContain(newData.state);
-    expect(newTableRowText).not.toContain(newData.postalCode);
-    expect(newTableRowText).not.toContain(newData.country);
+    expect(
+      within(newTable).queryByText(newData.address1),
+    ).not.toBeInTheDocument();
+    expect(
+      within(newTable).queryByText(newData.inCareOf),
+    ).not.toBeInTheDocument();
+    expect(
+      within(newTable).queryByText(newData.address2),
+    ).not.toBeInTheDocument();
+    expect(
+      within(newTable).queryByText(newData.address3),
+    ).not.toBeInTheDocument();
+    expect(within(newTable).queryByText(newData.city)).not.toBeInTheDocument();
+    expect(within(newTable).queryByText(newData.state)).not.toBeInTheDocument();
+    expect(
+      within(newTable).queryByText(newData.postalCode),
+    ).not.toBeInTheDocument();
+    expect(
+      within(newTable).queryByText(newData.country),
+    ).not.toBeInTheDocument();
   });
 
-  it('only displays an address change if options.showOnlyPhoneChange  and options.showAddressAndPhoneChange are falsy', () => {
-    const wrapper = shallow(
+  it('should only display an address change if options.showOnlyPhoneChange  and options.showAddressAndPhoneChange are falsy', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={newData}
@@ -197,44 +237,54 @@ describe('ChangeOfAddress', () => {
         }}
       />,
     );
-    const oldTable = wrapper.find('#contact_info_Old');
-    const oldTableRowText = oldTable.find('tbody tr').text();
+    const oldTable = getById(container, 'contact_info_Old');
+    expect(
+      within(oldTable).getByText('Old Contact Information'),
+    ).toBeInTheDocument();
+    expect(
+      within(oldTable).getByText(`c/o ${oldData.inCareOf}`),
+    ).toBeInTheDocument();
+    expect(within(oldTable).getByText(oldData.address1)).toBeInTheDocument();
+    expect(within(oldTable).getByText(oldData.address2)).toBeInTheDocument();
+    expect(within(oldTable).getByText(oldData.address3)).toBeInTheDocument();
+    expect(
+      within(oldTable).getByText(oldData.city, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(oldTable).getByText(oldData.state, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(oldTable).getByText(oldData.postalCode, { exact: false }),
+    ).toBeInTheDocument();
+    expect(within(oldTable).getByText(oldData.country)).toBeInTheDocument();
+    expect(within(oldTable).queryByText(oldData.phone)).not.toBeInTheDocument();
 
-    expect(oldTable.find('thead tr th').text()).toEqual(
-      'Old Contact Information',
-    );
+    const newTable = getById(container, 'contact_info_New');
+    expect(
+      within(newTable).getByText('New Contact Information'),
+    ).toBeInTheDocument();
 
-    expect(oldTableRowText).toContain(`c/o ${oldData.inCareOf}`);
-    expect(oldTableRowText).toContain(oldData.address1);
-    expect(oldTableRowText).toContain(oldData.address2);
-    expect(oldTableRowText).toContain(oldData.address3);
-    expect(oldTableRowText).toContain(oldData.city);
-    expect(oldTableRowText).toContain(oldData.state);
-    expect(oldTableRowText).toContain(oldData.postalCode);
-    expect(oldTableRowText).toContain(oldData.country);
-
-    expect(oldTableRowText).not.toContain(oldData.phone);
-
-    const newTable = wrapper.find('#contact_info_New');
-    const newTableRowText = newTable.find('tbody tr').text();
-    expect(newTable.find('thead tr th').text()).toEqual(
-      'New Contact Information',
-    );
-
-    expect(newTableRowText).toContain(`c/o ${newData.inCareOf}`);
-    expect(newTableRowText).toContain(newData.address1);
-    expect(newTableRowText).toContain(newData.address2);
-    expect(newTableRowText).toContain(newData.address3);
-    expect(newTableRowText).toContain(newData.city);
-    expect(newTableRowText).toContain(newData.state);
-    expect(newTableRowText).toContain(newData.postalCode);
-    expect(newTableRowText).toContain(newData.country);
-
-    expect(newTableRowText).not.toContain(newData.phone);
+    expect(
+      within(newTable).getByText(`c/o ${newData.inCareOf}`),
+    ).toBeInTheDocument();
+    expect(within(newTable).getByText(newData.address1)).toBeInTheDocument();
+    expect(within(newTable).getByText(newData.address2)).toBeInTheDocument();
+    expect(within(newTable).getByText(newData.address3)).toBeInTheDocument();
+    expect(
+      within(newTable).getByText(newData.city, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(newTable).getByText(newData.state, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(newTable).getByText(newData.postalCode, { exact: false }),
+    ).toBeInTheDocument();
+    expect(within(newTable).getByText(newData.country)).toBeInTheDocument();
+    expect(within(newTable).queryByText(newData.phone)).not.toBeInTheDocument();
   });
 
-  it('does not show inCareOf if not provided in the old or new data', () => {
-    const wrapper = shallow(
+  it('should not show inCareOf if not provided in the old or new data', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={{ ...newData, inCareOf: undefined }}
@@ -242,20 +292,19 @@ describe('ChangeOfAddress', () => {
         options={options}
       />,
     );
-    const oldTable = wrapper.find('#contact_info_Old');
-    const oldTableRowText = oldTable.find('tbody tr').text();
+    const oldTable = getById(container, 'contact_info_Old');
+    expect(
+      within(oldTable).queryByText(`c/o ${oldData.inCareOf}`),
+    ).not.toBeInTheDocument();
 
-    expect(oldTableRowText).not.toContain(`c/o ${oldData.inCareOf}`);
-
-    const newTableRowText = wrapper
-      .find('#contact_info_New')
-      .find('tbody tr')
-      .text();
-    expect(newTableRowText).not.toContain(`c/o ${newData.inCareOf}`);
+    const newTable = getById(container, 'contact_info_New');
+    expect(
+      within(newTable).queryByText(`c/o ${newData.inCareOf}`),
+    ).not.toBeInTheDocument();
   });
 
-  it('does not show city if not provided in the old or new data', () => {
-    const wrapper = shallow(
+  it('should not show city if not provided in the old or new data', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={{ ...newData, city: undefined }}
@@ -263,22 +312,16 @@ describe('ChangeOfAddress', () => {
         options={options}
       />,
     );
-    const oldTableRowText = wrapper
-      .find('#contact_info_Old')
-      .find('tbody tr')
-      .text();
 
-    expect(oldTableRowText).not.toContain(oldData.city);
+    const oldTable = getById(container, 'contact_info_Old');
+    expect(within(oldTable).queryByText(oldData.city)).not.toBeInTheDocument();
 
-    const newTableRowText = wrapper
-      .find('#contact_info_New')
-      .find('tbody tr')
-      .text();
-    expect(newTableRowText).not.toContain(newData.city);
+    const newTable = getById(container, 'contact_info_New');
+    expect(within(newTable).queryByText(newData.city)).not.toBeInTheDocument();
   });
 
-  it('does not show country if not provided in the old or new data', () => {
-    const wrapper = shallow(
+  it('should not show country if not provided in the old or new data', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={{ ...newData, country: undefined }}
@@ -286,20 +329,19 @@ describe('ChangeOfAddress', () => {
         options={options}
       />,
     );
-    const oldTableRowText = wrapper
-      .find('#contact_info_Old')
-      .find('tbody tr')
-      .text();
+    const oldTable = getById(container, 'contact_info_Old');
+    expect(
+      within(oldTable).queryByText(oldData.country),
+    ).not.toBeInTheDocument();
 
-    expect(oldTableRowText).not.toContain(oldData.country);
-
-    const newTable = wrapper.find('#contact_info_New');
-    const newTableRowText = newTable.find('tbody tr').text();
-    expect(newTableRowText).not.toContain(newData.country);
+    const newTable = getById(container, 'contact_info_New');
+    expect(
+      within(newTable).queryByText(newData.country),
+    ).not.toBeInTheDocument();
   });
 
-  it('does not show country if countryType is domestic', () => {
-    const wrapper = shallow(
+  it('should not show country if countryType is domestic', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={{ ...newData, countryType: COUNTRY_TYPES.DOMESTIC }}
@@ -307,23 +349,22 @@ describe('ChangeOfAddress', () => {
         options={{ ...options, isAddressChange: true }}
       />,
     );
-    const oldTableRowText = wrapper
-      .find('#contact_info_Old')
-      .find('tbody tr')
-      .text();
 
-    expect(oldTableRowText).toContain(oldData.address1);
-    expect(oldTableRowText).not.toContain(oldData.country);
+    const oldTable = getById(container, 'contact_info_Old');
+    expect(within(oldTable).getByText(oldData.address1)).toBeInTheDocument();
+    expect(
+      within(oldTable).queryByText(oldData.country),
+    ).not.toBeInTheDocument();
 
-    const newTable = wrapper.find('#contact_info_New');
-    const newTableRowText = newTable.find('tbody tr').text();
-
-    expect(newTableRowText).toContain(newData.address1);
-    expect(newTableRowText).not.toContain(newData.country);
+    const newTable = getById(container, 'contact_info_New');
+    expect(within(newTable).getByText(newData.address1)).toBeInTheDocument();
+    expect(
+      within(newTable).queryByText(newData.country),
+    ).not.toBeInTheDocument();
   });
 
-  it('shows country if countryType is international', () => {
-    const wrapper = shallow(
+  it('should show country if countryType is international', () => {
+    const { container } = render(
       <ChangeOfAddress
         name="Joe Exotic"
         newData={{ ...newData, countryType: COUNTRY_TYPES.INTERNATIONAL }}
@@ -331,17 +372,10 @@ describe('ChangeOfAddress', () => {
         options={{ ...options, isAddressChange: true }}
       />,
     );
-    const oldTableRowText = wrapper
-      .find('#contact_info_Old')
-      .find('tbody tr')
-      .text();
+    const oldTable = getById(container, 'contact_info_Old');
+    expect(within(oldTable).getByText(oldData.country)).toBeInTheDocument();
 
-    expect(oldTableRowText).toContain(oldData.country);
-
-    const newTableRowText = wrapper
-      .find('#contact_info_New')
-      .find('tbody tr')
-      .text();
-    expect(newTableRowText).toContain(newData.country);
+    const newTable = getById(container, 'contact_info_New');
+    expect(within(newTable).getByText(newData.country)).toBeInTheDocument();
   });
 });
