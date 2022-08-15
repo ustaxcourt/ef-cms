@@ -1,24 +1,24 @@
-import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
+import { applicationContext } from '../src/applicationContext';
+import { blockedCasesReportHelper } from '../src/presenter/computeds/blockedCasesReportHelper';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
-import {
-  fakeFile,
-  loginAs,
-  refreshElasticsearchIndex,
-  setupTest,
-} from './helpers';
+import { fakeFile, loginAs, setupTest } from './helpers';
+import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
-const cerebralTest = setupTest();
+const blockedCasesReportHelperComputed = withAppContextDecorator(
+  blockedCasesReportHelper,
+  applicationContext,
+);
 
-const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
-const overrides = {
-  trialLocation,
-};
+let leadDocketNumber;
+let memberCaseDocketNumber;
 
-describe('Block a consolidated case', () => {
+describe('Manually block consolidated cases', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -27,6 +27,10 @@ describe('Block a consolidated case', () => {
     cerebralTest.closeSocket();
   });
 
+  const cerebralTest = setupTest();
+
+  const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
 
@@ -34,6 +38,7 @@ describe('Block a consolidated case', () => {
     const caseDetail = cerebralTest.getState('caseDetail');
     cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
       caseDetail.docketNumber;
+    leadDocketNumber = caseDetail.docketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -42,6 +47,10 @@ describe('Block a consolidated case', () => {
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation);
+
+  it('should set member case docket number', () => {
+    memberCaseDocketNumber = cerebralTest.docketNumber;
+  });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);
@@ -51,10 +60,49 @@ describe('Block a consolidated case', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
 
-  it('test print', () => {
-    const caseDetail = cerebralTest.getState('caseDetail');
-    console.log('caseDetail:', caseDetail);
-    // console.log('leadDocketNumber', cerebralTest.leadDocketNumber);
-    // console.log('docketNumber', cerebralTest.docketNumber);
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  it('should set case docket number to leadDocketNumber', () => {
+    cerebralTest.docketNumber = leadDocketNumber;
+  });
+  petitionsClerkBlocksCase(cerebralTest, trialLocation);
+  it('should verify blocked case has inLeadCase flag, inConsolidatedGroup flag and "Lead case" tool tip', () => {
+    const { blockedCasesFormatted } = runCompute(
+      blockedCasesReportHelperComputed,
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+    expect(blockedCasesFormatted).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          consolidatedIconTooltipText: 'Lead case',
+          inConsolidatedGroup: true,
+          inLeadCase: true,
+        }),
+      ]),
+    );
+  });
+
+  loginAs(cerebralTest, 'petitionsclerk@example.com');
+  it('should set case docket number to memberCaseDocketNumber', () => {
+    cerebralTest.docketNumber = memberCaseDocketNumber;
+  });
+  petitionsClerkBlocksCase(cerebralTest, trialLocation);
+  it('should verify blocked case does NOT have inLeadCase flag, but has inConsolidatedGroup flag and "Consolidated case" tool tip', () => {
+    const { blockedCasesFormatted } = runCompute(
+      blockedCasesReportHelperComputed,
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+    expect(blockedCasesFormatted).toEqual(
+      expect.arrayContaining([
+        expect.objectContaining({
+          consolidatedIconTooltipText: 'Consolidated case',
+          inConsolidatedGroup: true,
+          inLeadCase: false,
+        }),
+      ]),
+    );
   });
 });
