@@ -1,8 +1,9 @@
+// eslint-disable-next-line spellcheck/spell-checker
 /**
- * This can add consolidatedToolTip, inConsolidatedGroup flag and/or inLeadCase flag to passed in object item.
+ * Adds consolidated case properties to the passed in object.
  *
- * @param object
- * @returns object
+ * @param {object} object - Object to have consolidated case properties added into.
+ * @returns {object} Object, consolidatedIconTooltipText, inConsolidatedGroup, and inLeadCase
  */
 
 export const addConsolidatedProperties = object => {
