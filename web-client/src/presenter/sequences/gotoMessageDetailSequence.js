@@ -1,7 +1,9 @@
 import { clearErrorAlertsAction } from '../actions/clearErrorAlertsAction';
 import { closeMobileMenuAction } from '../actions/closeMobileMenuAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getConstants } from '../../getConstants';
 import { getDefaultAttachmentViewerDocumentToDisplayAction } from '../actions/getDefaultAttachmentViewerDocumentToDisplayAction';
+import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { getMessageThreadAction } from '../actions/getMessageThreadAction';
 import { getMostRecentMessageInThreadAction } from '../actions/getMostRecentMessageInThreadAction';
 import { getShouldMarkMessageAsReadAction } from '../actions/getShouldMarkMessageAsReadAction';
@@ -32,6 +34,10 @@ const gotoMessageDetail = startWebSocketConnectionSequenceDecorator(
     getMostRecentMessageInThreadAction,
     getDefaultAttachmentViewerDocumentToDisplayAction,
     setMessageDetailViewerDocumentToDisplayAction,
+    getFeatureFlagValueFactoryAction(
+      getConstants().ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION,
+      true,
+    ),
     setDefaultIsExpandedAction,
     setCaseDetailPageTabActionGenerator('messages'),
     setCurrentPageAction('MessageDetail'),
