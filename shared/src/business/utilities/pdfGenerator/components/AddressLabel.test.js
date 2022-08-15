@@ -1,51 +1,83 @@
 const React = require('react');
 const { AddressLabel } = require('./AddressLabel.jsx');
-const { shallow } = require('enzyme');
+const { render, within } = require('@testing-library/react');
 
 describe('AddressLabel', () => {
-  it('renders the name and address', () => {
-    const wrapper = shallow(
+  let mockData = {
+    additionalName: 'Some Additional Person',
+    address1: '123 Some Street',
+    address2: 'Address 2',
+    address3: 'Address 3',
+    city: 'Some City',
+    countryName: 'USA',
+    inCareOf: 'Someone cool',
+    name: 'Test Person',
+    postalCode: '89890',
+    secondaryName: 'Mr. Rogers',
+    state: 'ZZ',
+    title: 'Mister',
+  };
+
+  it('should render the name and address', () => {
+    const { container } = render(
       <AddressLabel
-        address1="123 Some Street"
-        city="Some City"
-        countryName="USA"
-        name="Test Person"
-        postalCode="89890"
-        state="ZZ"
+        address1={mockData.address1}
+        city={mockData.city}
+        countryName={mockData.countryName}
+        name={mockData.name}
+        postalCode={mockData.postalCode}
+        state={mockData.state}
       />,
     );
-
-    expect(wrapper.text()).toContain('123 Some Street');
-    expect(wrapper.text()).toContain('Some City');
-    expect(wrapper.text()).toContain('USA');
-    expect(wrapper.text()).toContain('Test Person');
-    expect(wrapper.text()).toContain('89890');
-    expect(wrapper.text()).toContain('ZZ');
+    expect(within(container).getByText(mockData.address1)).toBeInTheDocument();
+    expect(
+      within(container).getByText(mockData.city, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(container).getByText(mockData.countryName),
+    ).toBeInTheDocument();
+    expect(within(container).getByText(mockData.name)).toBeInTheDocument();
+    expect(
+      within(container).getByText(mockData.postalCode, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(container).getByText(mockData.state, { exact: false }),
+    ).toBeInTheDocument();
   });
 
-  it('renders optional address information if present', () => {
-    const wrapper = shallow(
+  it('should render optional address information if present', () => {
+    const { container } = render(
       <AddressLabel
-        additionalName="Test Additional Name"
-        address1="123 Some Street"
-        address2="address two"
-        address3="address three"
-        city="Some City"
-        inCareOf="Care"
-        name="Test Person"
-        postalCode="89890"
-        secondaryName="Secondary"
-        state="ZZ"
-        title="The Title"
+        additionalName={mockData.additionalName}
+        address1={mockData.address1}
+        address2={mockData.address2}
+        address3={mockData.address3}
+        city={mockData.city}
+        inCareOf={mockData.inCareOf}
+        name={mockData.name}
+        postalCode={mockData.postalCode}
+        secondaryName={mockData.secondaryName}
+        state={mockData.state}
+        title={mockData.title}
       />,
     );
 
-    expect(wrapper.text()).toContain('address two');
-    expect(wrapper.text()).toContain('address three');
-    expect(wrapper.text()).not.toContain('USA');
-    expect(wrapper.text()).toContain('Secondary');
-    expect(wrapper.text()).toContain('The Title');
-    expect(wrapper.text()).toContain('Care');
-    expect(wrapper.text()).toContain('Test Additional Name');
+    expect(
+      within(container).queryByText(mockData.countryName),
+    ).not.toBeInTheDocument();
+    expect(
+      within(container).getByText(mockData.additionalName, { exact: false }),
+    ).toBeInTheDocument();
+    expect(within(container).getByText(mockData.address2)).toBeInTheDocument();
+    expect(within(container).getByText(mockData.address3)).toBeInTheDocument();
+    expect(
+      within(container).getByText(mockData.inCareOf, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(container).getByText(mockData.secondaryName, { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(container).queryAllByText(mockData.title, { exact: false }).length,
+    ).toBe(2);
   });
 });
