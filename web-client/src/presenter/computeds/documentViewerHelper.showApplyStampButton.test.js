@@ -3,9 +3,12 @@ import {
   STAMPED_DOCUMENTS_ALLOWLIST,
 } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
+import {
+  docketClerkUser,
+  petitionsClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { documentViewerHelper as documentViewerHelperComputed } from './documentViewerHelper';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
-import { petitionsClerkUser } from '../../../../shared/src/test/mockUsers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -29,12 +32,36 @@ describe('documentViewerHelper.showApplyStampButton', () => {
 
   const getBaseState = user => {
     return {
+      featureFlags: {
+        [ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key]: true,
+      },
       permissions: getUserPermissions(user),
       viewerDocumentToDisplay: {
         docketEntryId: mockDocketEntryId,
       },
     };
   };
+
+  const { ALLOWLIST_FEATURE_FLAGS } = applicationContext.getConstants();
+
+  it('should be false when the stamp disposition feature is turned off', () => {
+    const { showApplyStampButton } = runCompute(documentViewerHelper, {
+      state: {
+        ...getBaseState(docketClerkUser),
+        caseDetail: {
+          docketEntries: [
+            { ...baseDocketEntry, eventCode: STAMPED_DOCUMENTS_ALLOWLIST[0] },
+          ],
+        },
+        featureFlags: {
+          [ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key]: false,
+        },
+        permissions: { STAMP_MOTION: true },
+      },
+    });
+
+    expect(showApplyStampButton).toBe(false);
+  });
 
   it('should be false when the user does not have the STAMP_MOTION permission', () => {
     const { showApplyStampButton } = runCompute(documentViewerHelper, {
