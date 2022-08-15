@@ -1,4 +1,5 @@
 /* eslint-disable complexity */
+import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
@@ -153,7 +154,12 @@ export const messageDocumentHelper = (get, applicationContext) => {
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
+  const isStampDispositionEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key],
+  );
+
   const showApplyStampButton =
+    isStampDispositionEnabled &&
     permissions.STAMP_MOTION &&
     (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
       STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
