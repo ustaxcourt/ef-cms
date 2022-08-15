@@ -1,7 +1,9 @@
 import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
+import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
+import { docketClerkFilesAndServesDocumentOnLeadCase } from './journey/docketClerkFilesAndServesDocumentOnLeadCase';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
 import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServesDocumentOnLeadCase';
@@ -97,9 +99,9 @@ describe('Case Consolidation Journey', () => {
     expectedDocumentType: 'Order',
   });
   docketClerkSignsOrder(cerebralTest, 0);
-  docketClerkServesDocumentOnLeadCase(cerebralTest, 0);
+  docketClerkFilesAndServesDocumentOnLeadCase(cerebralTest, 0);
 
-  it('should have a success message that mentions serving multiple cases', async () => {
+  it('should have a success message that mentions serving multiple cases', () => {
     const alertSuccess = cerebralTest.getState('alertSuccess');
 
     expect(alertSuccess.message).toEqual(
@@ -107,6 +109,55 @@ describe('Case Consolidation Journey', () => {
     );
     expect(alertSuccess.overwritable).toEqual(false);
   });
+
+  it('should verify that document is filed and served on all checked consolidated cases', async () => {
+    const consolidatedCases = cerebralTest.getState(
+      'caseDetail.consolidatedCases',
+    );
+
+    for (let consolidatedCase of consolidatedCases) {
+      await cerebralTest.runSequence('gotoCaseDetailSequence', {
+        docketNumber: consolidatedCase.docketNumber,
+      });
+
+      const { docketEntryId } = cerebralTest.docketRecordEntry;
+
+      const documents = cerebralTest.getState('caseDetail.docketEntries');
+      const orderDocument = documents.find(
+        doc => doc.docketEntryId === docketEntryId,
+      );
+
+      if (
+        cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries.includes(
+          consolidatedCase.docketNumber,
+        )
+      ) {
+        expect(orderDocument.servedAt).toBeDefined();
+        expect(orderDocument.workItem.docketEntry.docketEntryId).toEqual(
+          orderDocument.docketEntryId,
+        );
+        expect(orderDocument.workItem.docketNumber).toEqual(
+          consolidatedCase.docketNumber,
+        );
+        expect(orderDocument.workItem.completedBy).toEqual('Test Docketclerk');
+        expect(orderDocument.workItem.completedMessage).toEqual('completed');
+        expect(orderDocument.workItem.completedAt).toBeDefined();
+        expect(orderDocument.workItem.inProgress).toBeUndefined();
+      } else {
+        expect(orderDocument).toBeUndefined();
+      }
+    }
+    cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
+  });
+
+  docketClerkCreatesAnOrder(cerebralTest, {
+    documentTitle: 'Order to test story 9513',
+    eventCode: 'O',
+    expectedDocumentType: 'Order',
+  });
+  docketClerkSignsOrder(cerebralTest, 0);
+  docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
+  docketClerkServesDocumentOnLeadCase(cerebralTest);
 
   it('should verify that document is served on all checked consolidated cases', async () => {
     const consolidatedCases = cerebralTest.getState(
@@ -145,8 +196,10 @@ describe('Case Consolidation Journey', () => {
         expect(orderDocument).toBeUndefined();
       }
     }
+    cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
   });
 
+  // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
   it('should set the feature flag to false', async () => {
     await setConsolidatedCasesPropagateEntriesFlag(false);
   });

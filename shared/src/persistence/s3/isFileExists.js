@@ -6,12 +6,18 @@
  * @param {object} providers.key the key to check
  * @returns {Promise} promise of true or false depending on if the file exists or not
  */
-exports.isFileExists = async ({ applicationContext, key }) => {
+exports.isFileExists = async ({
+  applicationContext,
+  key,
+  useTempBucket = false,
+}) => {
   try {
     await applicationContext
       .getStorageClient()
       .headObject({
-        Bucket: applicationContext.getDocumentsBucketName(),
+        Bucket: useTempBucket
+          ? applicationContext.getTempDocumentsBucketName()
+          : applicationContext.getDocumentsBucketName(),
         Key: key,
       })
       .promise();
