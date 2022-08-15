@@ -1,10 +1,11 @@
+import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { state } from 'cerebral';
 
 export const blockedCasesReportHelper = (get, applicationContext) => {
   const blockedCases = get(state.blockedCases);
 
   let blockedCasesFormatted = [];
-  let consolidatedIconTooltipText = null;
+  // let consolidatedIconTooltipText = null;
 
   const setFormattedBlockDates = blockedCase => {
     if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
@@ -33,28 +34,14 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
     blockedCasesFormatted = blockedCases
       .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
       .map(blockedCase => {
-        const inConsolidatedGroup = !!blockedCase.leadDocketNumber;
-        const inLeadCase =
-          inConsolidatedGroup &&
-          blockedCase.leadDocketNumber === blockedCase.docketNumber;
-
-        if (inConsolidatedGroup) {
-          if (inLeadCase) {
-            consolidatedIconTooltipText = 'Lead case';
-          } else {
-            consolidatedIconTooltipText = 'Consolidated case';
-          }
-        }
-
+        const blockedCaseWithConsolidatedProperties =
+          addConsolidatedProperties(blockedCase);
         return {
-          ...setFormattedBlockDates(blockedCase),
+          ...setFormattedBlockDates(blockedCaseWithConsolidatedProperties),
           caseTitle: applicationContext.getCaseTitle(
             blockedCase.caseCaption || '',
           ),
-          consolidatedIconTooltipText,
           docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
-          inConsolidatedGroup,
-          inLeadCase,
         };
       });
   }
