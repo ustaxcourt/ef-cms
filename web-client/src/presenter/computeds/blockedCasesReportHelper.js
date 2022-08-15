@@ -5,7 +5,6 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
   const blockedCases = get(state.blockedCases);
 
   let blockedCasesFormatted = [];
-  // let consolidatedIconTooltipText = null;
 
   const setFormattedBlockDates = blockedCase => {
     if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
