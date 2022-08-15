@@ -1,5 +1,4 @@
 /* eslint-disable complexity */
-import { ALLOWLIST_FEATURE_FLAGS } from '../../../../shared/src/business/entities/EntityConstants';
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
@@ -13,6 +12,7 @@ export const messageDocumentHelper = (get, applicationContext) => {
   }
 
   const {
+    ALLOWLIST_FEATURE_FLAGS,
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
     GENERIC_ORDER_EVENT_CODE,
