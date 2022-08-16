@@ -2,7 +2,7 @@ const React = require('react');
 const {
   TrialSessionPlanningReport,
 } = require('./TrialSessionPlanningReport.jsx');
-const { mount } = require('enzyme');
+const { queryByAttribute, render, within } = require('@testing-library/react');
 
 describe('TrialSessionPlanningReport', () => {
   const previousTerms = [
@@ -42,23 +42,28 @@ describe('TrialSessionPlanningReport', () => {
     },
   ];
 
-  it('renders a document header with the report term', () => {
-    const wrapper = mount(
+  const getById = queryByAttribute.bind(null, 'id');
+
+  it('should render a document header with the report term', () => {
+    const { container } = render(
       <TrialSessionPlanningReport
         locationData={[]}
         previousTerms={[]}
         term={'Winter 2020'}
       />,
     );
-
-    expect(wrapper.find('#reports-header h2').text()).toEqual(
-      'Trial Session Planning Report',
-    );
-    expect(wrapper.find('#reports-header h3').text()).toEqual('Winter 2020');
+    expect(
+      within(getById(container, 'reports-header')).getByText(
+        'Trial Session Planning Report',
+      ),
+    ).toBeInTheDocument();
+    expect(
+      within(getById(container, 'reports-header')).getByText('Winter 2020'),
+    ).toBeInTheDocument();
   });
 
-  it('creates table headings for the previous terms', () => {
-    const wrapper = mount(
+  it('should create table headings for the previous terms', () => {
+    const { container } = render(
       <TrialSessionPlanningReport
         locationData={[]}
         previousTerms={previousTerms}
@@ -66,15 +71,13 @@ describe('TrialSessionPlanningReport', () => {
       />,
     );
 
-    const tableHeaders = wrapper.find('table thead tr');
-
-    expect(tableHeaders.text()).toContain('Fall 2019');
-    expect(tableHeaders.text()).toContain('Spring 2019');
-    expect(tableHeaders.text()).toContain('Winter 2019');
+    expect(within(container).getByText('Fall 2019')).toBeInTheDocument();
+    expect(within(container).getByText('Spring 2019')).toBeInTheDocument();
+    expect(within(container).getByText('Winter 2019')).toBeInTheDocument();
   });
 
-  it('renders the given location data for the given terms', () => {
-    const wrapper = mount(
+  it('should render the given location data for the given terms', () => {
+    const { container } = render(
       <TrialSessionPlanningReport
         locationData={locationData}
         previousTerms={previousTerms}
@@ -82,14 +85,12 @@ describe('TrialSessionPlanningReport', () => {
       />,
     );
 
-    const table = wrapper.find('table tbody tr');
-
-    expect(table.at(0).text()).toContain('Little Rock, AR');
-    expect(table.at(1).text()).toContain('Mobile, AL');
+    expect(within(container).getByText('Little Rock, AR')).toBeInTheDocument();
+    expect(within(container).getByText('Mobile, AL')).toBeInTheDocument();
   });
 
-  it('renders location term data or a calendar icon', () => {
-    const wrapper = mount(
+  it('should render location term data or a calendar icon', () => {
+    const { container } = render(
       <TrialSessionPlanningReport
         locationData={locationData}
         previousTerms={previousTerms}
@@ -97,11 +98,10 @@ describe('TrialSessionPlanningReport', () => {
       />,
     );
 
-    const tableRow = wrapper.find('table tbody tr');
+    expect(within(container).getByText('(S) Buch')).toBeInTheDocument();
+    expect(within(container).getByText('(R) Cohen')).toBeInTheDocument();
 
-    expect(tableRow.at(0).text()).toContain('(S) Buch');
-    expect(tableRow.at(0).text()).toContain('(R) Cohen');
-
-    expect(tableRow.at(1).find('div.calendar-icon').length).toEqual(3);
+    // row 1 has 2 calendar icons while row 2 has 3
+    expect(container.getElementsByClassName('calendar-icon').length).toEqual(5);
   });
 });
