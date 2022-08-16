@@ -509,6 +509,11 @@ const serveCaseToIrsInteractor = async (
     startDate: formatNow(FORMATS.ISO),
   });
 
+  const todayPlus30 = getBusinessDateInFuture({
+    numberOfDays: 30,
+    startDate: formatNow(FORMATS.ISO),
+  });
+
   if (caseEntity.orderForFilingFee) {
     const { orderForFilingFee } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
@@ -516,7 +521,7 @@ const serveCaseToIrsInteractor = async (
       applicationContext,
       caseEntity,
       document: orderForFilingFee,
-      replacements: [todayPlus60, todayPlus60],
+      replacements: [todayPlus30, todayPlus30],
     });
   }
 
@@ -551,7 +556,7 @@ const serveCaseToIrsInteractor = async (
       applicationContext,
       caseEntity,
       document: orderForAmendedPetitionAndFilingFee,
-      replacements: [formattedFiledDate, todayPlus60, todayPlus60],
+      replacements: [formattedFiledDate, todayPlus30, todayPlus30],
     });
   }
 
