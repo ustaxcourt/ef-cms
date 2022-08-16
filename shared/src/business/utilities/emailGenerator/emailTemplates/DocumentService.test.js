@@ -19,7 +19,7 @@ describe('DocumentService', () => {
 
   const getById = queryByAttribute.bind(null, 'id');
 
-  it('renders case information', () => {
+  it('should render case information', () => {
     const { container } = render(
       <DocumentService
         caseDetail={caseDetail}
@@ -39,7 +39,7 @@ describe('DocumentService', () => {
     ).toBeInTheDocument();
   });
 
-  it('renders document information', () => {
+  it('should render document information', () => {
     const { container } = render(
       <DocumentService
         caseDetail={caseDetail}
@@ -56,10 +56,9 @@ describe('DocumentService', () => {
       }),
     ).toBeInTheDocument();
     expect(
-      within(documentInfo).queryByText(docketEntryNumber, {
-        exact: false,
-      }),
-    ).toBe(`Docket Entry No.: ${docketEntryNumber}`);
+      within(documentInfo).queryAllByText(docketEntryNumber, { exact: false })
+        .length,
+    ).toBe(2);
     expect(
       within(documentInfo).getByText(documentDetail.servedAtFormatted, {
         exact: false,
@@ -72,13 +71,13 @@ describe('DocumentService', () => {
     ).toBeInTheDocument();
   });
 
-  it.skip('renders N/A if filedBy is not present on documentDetail', () => {
+  it('should render N/A if filedBy is not present on documentDetail', () => {
     const documentDetailWithoutFiledBy = {
       ...documentDetail,
       filedBy: undefined,
     };
 
-    const wrapper = shallow(
+    const { container } = render(
       <DocumentService
         caseDetail={caseDetail}
         docketEntryNumber={docketEntryNumber}
@@ -86,12 +85,13 @@ describe('DocumentService', () => {
         taxCourtLoginUrl={taxCourtLoginUrl}
       />,
     );
-    const documentInfo = wrapper.find('#document-information');
 
-    expect(documentInfo.text()).toContain('Filed by: N/A');
+    const documentInfo = getById(container, 'document-information');
+
+    expect(within(documentInfo).getByText('Filed by: N/A')).toBeInTheDocument();
   });
 
-  it.skip('renders computer-readable information if user name is IRS', () => {
+  it.skip('should render computer-readable information if user name is IRS', () => {
     const wrapper = shallow(
       <DocumentService
         caseDetail={caseDetail}
@@ -106,5 +106,21 @@ describe('DocumentService', () => {
     expect(documentInfo.text()).not.toContain(
       caseDetail.docketNumberWithSuffix,
     );
+
+    // const { container } = render(
+    //   <DocumentService
+    //     caseDetail={caseDetail}
+    //     docketEntryNumber={docketEntryNumber}
+    //     documentDetail={documentDetail}
+    //     taxCourtLoginUrl={taxCourtLoginUrl}
+    //   />,
+    // );
+
+    // expect(within(container).getByText('docketNumber')).toBeInTheDocument();
+    // expect(
+    //   within(container).queryByText(caseDetail.docketNumberWithSuffix, {
+    //     exact: false,
+    //   }),
+    // ).not.toBeInTheDocument();
   });
 });
