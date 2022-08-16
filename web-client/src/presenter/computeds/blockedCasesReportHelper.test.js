@@ -9,11 +9,11 @@ describe('blockedCasesReportHelper', () => {
   const blockedCasesReportHelper = withAppContextDecorator(
     blockedCasesReportHelperComputed,
   );
-  it('returns blockedCasesCount as undefined if blockedCases is not on the state', () => {
+  it('returns blockedCasesCount as 0 if blockedCases is not on the state', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {},
     });
-    expect(result).toMatchObject({ blockedCasesCount: undefined });
+    expect(result).toMatchObject({ blockedCasesCount: 0 });
   });
 
   it('returns blockedCasesCount as 0 if the blockedCases array is empty', () => {

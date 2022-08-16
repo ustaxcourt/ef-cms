@@ -39,11 +39,14 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
           ),
           docketNumberWithSuffix: blockedCase.docketNumberWithSuffix,
         };
+      })
+      .filter(blockedCase => {
+        return blockedCase.procedureType === 'Small';
       });
   }
 
   return {
-    blockedCasesCount: blockedCases && blockedCases.length,
+    blockedCasesCount: blockedCasesFormatted && blockedCasesFormatted.length,
     blockedCasesFormatted,
   };
 };
