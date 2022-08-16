@@ -19,6 +19,7 @@ export const updateCaseNoteSequence = [
       stopShowValidationAction,
       clearAlertsAction,
       saveCaseNoteAction,
+      //validationerror for case
       setCaseNoteOnCaseDetailAction,
       setAlertSuccessAction,
       clearModalAction,

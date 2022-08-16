@@ -24,7 +24,7 @@ Note.VALIDATION_ERROR_MESSAGES = {
 };
 
 Note.schema = joi.object().keys({
-  notes: JoiValidationConstants.STRING.max(5).required(), //todo
+  notes: JoiValidationConstants.STRING.required(),
 });
 
 joiValidationDecorator(Note, Note.schema, Note.VALIDATION_ERROR_MESSAGES);
