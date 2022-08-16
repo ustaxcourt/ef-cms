@@ -47,6 +47,7 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
+              disabled={!form.trialLocation}
               id="procedure-type"
               name="procedureType"
               value={form.procedureType}
