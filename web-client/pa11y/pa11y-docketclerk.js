@@ -144,7 +144,6 @@ module.exports = [
       'wait for .confirm-initiate-save-modal to be visible',
     ],
     notes: 'checks a11y of confirm-initiate-save-modal dialog',
-    only: true,
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/111-19/documents/25100ec6-eeeb-4e88-872f-c99fad1fe6c7/add-court-issued-docket-entry&info=initiate-save-modal',
   },
   {
