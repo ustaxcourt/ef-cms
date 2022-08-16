@@ -189,4 +189,63 @@ describe('blockedCasesReportHelper', () => {
       ]),
     );
   });
+
+  it('should return blocked regular cases when regular is selected', () => {
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCases: [
+          {
+            blocked: true,
+            blockedDate: '2019-03-01T21:42:29.073Z',
+            caseCaption: 'Brett Osborne, Petitioner',
+            docketNumber: '105-19',
+            docketNumberWithSuffix: '105-19S',
+            procedureType: 'Small',
+          },
+          {
+            automaticBlocked: true,
+            automaticBlockedDate: '2018-03-05T21:42:29.073Z',
+            blocked: true,
+            blockedDate: '2019-07-01T21:42:29.073Z',
+            caseCaption: 'Selma Horn & Cairo Harris, Petitioners',
+            docketNumber: '102-19',
+            docketNumberWithSuffix: '102-19',
+            procedureType: 'Regular',
+          },
+          {
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+            blocked: true,
+            blockedDate: '2018-03-05T21:42:29.073Z',
+            caseCaption:
+              'Tatum Craig, Wayne Obrien, Partnership Representative, Petitioner(s)',
+            docketNumber: '103-18',
+            docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+            docketNumberWithSuffix: '103-18S',
+            procedureType: 'Small',
+          },
+          {
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+            caseCaption: 'Bob Barker, Petitioner',
+            docketNumber: '104-19',
+            docketNumberWithSuffix: '104-19',
+            procedureType: 'Regular',
+          },
+        ],
+        form: { procedureType: 'Regular' },
+      },
+    });
+    expect(result.blockedCasesCount).toBe(2);
+    expect(result.blockedCasesFormatted).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: '102-19',
+        }),
+        expect.objectContaining({
+          docketNumber: '104-19',
+        }),
+      ]),
+    );
+  });
 });
