@@ -1,14 +1,13 @@
 import { state } from 'cerebral';
 
 /**
- * validates the case detail note and sets state.validationErrors when errors occur.
+ * validates the case detail note
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context needed for getting the getUseCaseForDocumentUpload use case
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or failure)
- * @param {object} providers.store the cerebral store used for setting the state.validationErrors when validation errors occur
- * @returns {object} the alertSuccess and the generated docketNumber
+ * @returns {object} the path success or error depending on validation
  */
 export const validateNoteOnCaseDetailAction = ({
   applicationContext,
