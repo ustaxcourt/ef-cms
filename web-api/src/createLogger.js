@@ -10,7 +10,7 @@ const {
   format,
   transports,
 } = require('winston');
-const { cloneDeep, unset } = require('lodash');
+const { cloneDeep, isEqual, unset } = require('lodash');
 
 exports.redact = format(logEntry => {
   const copy = cloneDeep(logEntry);
@@ -25,11 +25,11 @@ exports.redact = format(logEntry => {
 exports.removeDuplicateLogInformation = format(logEntry => {
   const copy = cloneDeep(logEntry);
 
-  if (!logEntry.context) return copy;
+  if (!copy.context) return copy;
 
   // check in .context to see if any of the keys contain what we already have in the root
-  for (const key of Object.keys(logEntry.context)) {
-    if (copy[key] == logEntry.context[key]) {
+  for (const key of Object.keys(copy.context)) {
+    if (isEqual(copy[key], copy.context[key])) {
       delete copy.context[key];
     }
   }
