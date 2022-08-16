@@ -2,6 +2,7 @@ import { state } from 'cerebral';
 
 export const blockedCasesReportHelper = (get, applicationContext) => {
   const blockedCases = get(state.blockedCases);
+  const procedureTypeFilter = get(state.form.procedureType);
 
   let blockedCasesFormatted = [];
 
@@ -41,7 +42,9 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
         };
       })
       .filter(blockedCase => {
-        return blockedCase.procedureType === 'Small';
+        return procedureTypeFilter === 'All'
+          ? true
+          : blockedCase.procedureType === procedureTypeFilter;
       });
   }
 

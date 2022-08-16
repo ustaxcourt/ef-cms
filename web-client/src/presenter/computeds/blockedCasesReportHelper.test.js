@@ -33,6 +33,9 @@ describe('blockedCasesReportHelper', () => {
           { docketNumber: '102-19' },
           { docketNumber: '103-19' },
         ],
+        form: {
+          procedureType: 'All',
+        },
       },
     });
     expect(result).toMatchObject({ blockedCasesCount: 3 });
