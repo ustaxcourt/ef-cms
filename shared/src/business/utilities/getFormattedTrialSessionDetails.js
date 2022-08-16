@@ -68,6 +68,12 @@ exports.formatCase = ({
       caseItem,
     });
   }
+
+  caseItem.inConsolidatedGroup = !!caseItem.leadDocketNumber;
+  caseItem.inLeadCase =
+    caseItem.inConsolidatedGroup &&
+    caseItem.leadDocketNumber === caseItem.docketNumber;
+
   return caseItem;
 };
 
