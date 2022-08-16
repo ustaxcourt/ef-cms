@@ -25,6 +25,7 @@ exports.getBlockedCases = async ({ applicationContext, trialLocation }) => {
           'docketNumberSuffix',
           'docketNumberWithSuffix',
           'status',
+          'procedureType',
         ],
         query: {
           bool: {
