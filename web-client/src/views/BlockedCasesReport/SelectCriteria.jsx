@@ -16,7 +16,7 @@ export const SelectCriteria = connect(
           <h3>Select criteria</h3>
         </div>
         <div className="blue-container">
-          <div className="usa-form-group margin-bottom-0">
+          <div className="usa-form-group margin-bottom-3">
             <label className="usa-label" htmlFor="trial-location">
               Trial location
             </label>
@@ -34,6 +34,27 @@ export const SelectCriteria = connect(
             >
               <option value="">-- Select --</option>
               <TrialCityOptions procedureType="All" />
+            </select>
+          </div>
+          <div className="usa-form-group margin-bottom-0">
+            <label className="usa-label" htmlFor="trial-location">
+              Case Type
+            </label>
+            <select
+              className="usa-select"
+              id="case-type"
+              name="caseType"
+              value={form.caseType}
+              // onChange={e => {
+              // getBlockedCasesByTrialLocationSequence({
+              //   key: e.target.name,
+              //   value: e.target.value,
+              // });
+              // }}
+            >
+              <option value="all">All</option>
+              <option value="small">Small</option>
+              <option value="regular">Regular</option>
             </select>
           </div>
         </div>
