@@ -8,8 +8,13 @@ export const SelectCriteria = connect(
     form: state.form,
     getBlockedCasesByTrialLocationSequence:
       sequences.getBlockedCasesByTrialLocationSequence,
+    updateFormValueSequence: sequences.updateFormValueSequence,
   },
-  function SelectCriteria({ form, getBlockedCasesByTrialLocationSequence }) {
+  function SelectCriteria({
+    form,
+    getBlockedCasesByTrialLocationSequence,
+    updateFormValueSequence,
+  }) {
     return (
       <>
         <div className="header-with-blue-background">
@@ -42,19 +47,19 @@ export const SelectCriteria = connect(
             </label>
             <select
               className="usa-select"
-              id="case-type"
-              name="caseType"
-              value={form.caseType}
-              // onChange={e => {
-              // getBlockedCasesByTrialLocationSequence({
-              //   key: e.target.name,
-              //   value: e.target.value,
-              // });
-              // }}
+              id="procedure-type"
+              name="procedureType"
+              value={form.procedureType}
+              onChange={e => {
+                updateFormValueSequence({
+                  key: e.target.name,
+                  value: e.target.value,
+                });
+              }}
             >
-              <option value="all">All</option>
-              <option value="small">Small</option>
-              <option value="regular">Regular</option>
+              <option value="All">All</option>
+              <option value="Small">Small</option>
+              <option value="Regular">Regular</option>
             </select>
           </div>
         </div>
