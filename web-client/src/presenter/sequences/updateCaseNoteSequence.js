@@ -14,22 +14,22 @@ import { validateNoteOnCaseDetailAction } from '../actions/validateNoteOnCaseDet
 export const updateCaseNoteSequence = [
   startShowValidationAction,
   validateNoteAction,
-  validateNoteOnCaseDetailAction,
   {
     error: [setValidationErrorsAction],
-    success: showProgressSequenceDecorator([
-      stopShowValidationAction,
-      clearAlertsAction,
-      saveCaseNoteAction,
+    success: [
+      validateNoteOnCaseDetailAction,
       {
         error: [setValidationErrorsAction],
-        success: [
+        success: showProgressSequenceDecorator([
+          stopShowValidationAction,
+          clearAlertsAction,
+          saveCaseNoteAction,
           setCaseNoteOnCaseDetailAction,
           setAlertSuccessAction,
           clearModalAction,
           clearModalStateAction,
-        ],
+        ]),
       },
-    ]),
+    ],
   },
 ];
