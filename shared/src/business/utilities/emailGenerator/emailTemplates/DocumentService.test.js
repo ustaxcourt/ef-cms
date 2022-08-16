@@ -91,8 +91,8 @@ describe('DocumentService', () => {
     expect(within(documentInfo).getByText('Filed by: N/A')).toBeInTheDocument();
   });
 
-  it.skip('should render computer-readable information if user name is IRS', () => {
-    const wrapper = shallow(
+  it('should render computer-readable information if user name is IRS', () => {
+    const { container } = render(
       <DocumentService
         caseDetail={caseDetail}
         docketEntryNumber={docketEntryNumber}
@@ -100,27 +100,12 @@ describe('DocumentService', () => {
         taxCourtLoginUrl={taxCourtLoginUrl}
       />,
     );
-    const documentInfo = wrapper.find('#computer-readable');
 
-    expect(documentInfo.text()).toContain('docketNumber');
-    expect(documentInfo.text()).not.toContain(
-      caseDetail.docketNumberWithSuffix,
-    );
-
-    // const { container } = render(
-    //   <DocumentService
-    //     caseDetail={caseDetail}
-    //     docketEntryNumber={docketEntryNumber}
-    //     documentDetail={documentDetail}
-    //     taxCourtLoginUrl={taxCourtLoginUrl}
-    //   />,
-    // );
-
-    // expect(within(container).getByText('docketNumber')).toBeInTheDocument();
-    // expect(
-    //   within(container).queryByText(caseDetail.docketNumberWithSuffix, {
-    //     exact: false,
-    //   }),
-    // ).not.toBeInTheDocument();
+    expect(
+      within(container).getByText('docketNumber', { exact: false }),
+    ).toBeInTheDocument();
+    expect(
+      within(container).queryByText(caseDetail.docketNumberWithSuffix),
+    ).not.toBeInTheDocument();
   });
 });
