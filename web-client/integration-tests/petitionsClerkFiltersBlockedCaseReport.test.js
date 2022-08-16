@@ -22,8 +22,7 @@ const createAndBlockCase = (
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);
-  docketClerkCreatesATrialSession(cerebralTest, { trialLocation });
-  // docketClerkViewsTrialSessionList(cerebralTest);
+
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkBlocksCase(cerebralTest, trialLocation, overrides);
 };
@@ -40,16 +39,18 @@ describe('Blocking a Case', () => {
   });
 
   const trialLocation = `Charleston, West Virginia, ${Date.now()}`;
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkCreatesATrialSession(cerebralTest, { trialLocation });
 
   //manual block and unblock - check eligible list
-  createAndBlockCase(cerebralTest, 'Small', trialLocation);
-  createAndBlockCase(cerebralTest, 'Regular', trialLocation, {
-    docketNumberSuffix: '',
+  createAndBlockCase(cerebralTest, 'Small', trialLocation, {
+    docketNumberSuffix: 'S',
   });
-  createAndBlockCase(cerebralTest, 'Small', trialLocation);
-  createAndBlockCase(cerebralTest, 'Regular', trialLocation, {
-    docketNumberSuffix: '',
+  createAndBlockCase(cerebralTest, 'Regular', trialLocation);
+  createAndBlockCase(cerebralTest, 'Small', trialLocation, {
+    docketNumberSuffix: 'S',
   });
+  createAndBlockCase(cerebralTest, 'Regular', trialLocation);
 
   it('petitions clerk views all cases on blocked report', async () => {
     await refreshElasticsearchIndex();
@@ -62,13 +63,5 @@ describe('Blocking a Case', () => {
     });
 
     expect(cerebralTest.getState('blockedCases').length).toEqual(4);
-    // expect(cerebralTest.getState('blockedCases')).toMatchObject([
-    //   {
-    //     automaticBlocked: true,
-    //     automaticBlockedReason: AUTOMATIC_BLOCKED_REASONS.pendingAndDueDate,
-    //     blocked: false,
-    //     docketNumber: cerebralTest.docketNumber,
-    //   },
-    // ]);
   });
 });
