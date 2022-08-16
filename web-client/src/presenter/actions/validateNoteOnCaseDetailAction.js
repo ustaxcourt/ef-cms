@@ -1,7 +1,3 @@
-import {
-  aggregatePetitionerErrors,
-  aggregateStatisticsErrors,
-} from './validatePetitionFromPaperAction';
 import { state } from 'cerebral';
 
 /**
@@ -11,7 +7,6 @@ import { state } from 'cerebral';
  * @param {object} providers.applicationContext the application context needed for getting the getUseCaseForDocumentUpload use case
  * @param {Function} providers.get the cerebral get function
  * @param {object} providers.path the cerebral path which contains the next path in the sequence (path of success or failure)
- * @param {object} providers.props the cerebral store used for getting the props.formWithComputedDates
  * @param {object} providers.store the cerebral store used for setting the state.validationErrors when validation errors occur
  * @returns {object} the alertSuccess and the generated docketNumber
  */
@@ -19,54 +14,24 @@ export const validateNoteOnCaseDetailAction = ({
   applicationContext,
   get,
   path,
-  props,
-  store,
 }) => {
-  const { formWithComputedDates } = props;
-  const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
+  const caseDetail = get(state.caseDetail);
+  const note = get(state.modal.notes);
 
-  const findDocumentByType = type => {
-    return formWithComputedDates.docketEntries.find(
-      document => document.documentType === type,
-    );
-  };
-
-  const initialDocumentFormFiles = {};
-  Object.keys(INITIAL_DOCUMENT_TYPES_MAP).forEach(key => {
-    const foundDocument = findDocumentByType(INITIAL_DOCUMENT_TYPES_MAP[key]);
-    if (foundDocument) {
-      initialDocumentFormFiles[key] = {};
-      initialDocumentFormFiles[`${key}Size`] = 1;
-    }
-  });
-
-  let errors;
-
-    errors = applicationContext
-      .getUseCases()
-      .validateCaseDetailInteractor(applicationContext, {
-        caseDetail: formWithComputedDates,
-      });
-  }
-
-  errors = aggregatePetitionerErrors({ errors });
-
-  store.set(state.validationErrors, errors);
+  const errors = applicationContext
+    .getUseCases()
+    .validateCaseDetailInteractor(applicationContext, {
+      caseDetail: { ...caseDetail, caseNote: note },
+    });
 
   if (!errors) {
-    return path.success({
-      formWithComputedDates,
-    });
+    return path.success();
   } else {
-    const errorDisplayMap = {
-      statistics: 'Statistics',
-    };
-
-    const { errors: formattedErrors } = aggregateStatisticsErrors({
+    return path.error({
+      alertError: {
+        title: 'Errors were found. Please correct your form and resubmit.',
+      },
       errors,
-      get,
     });
-
-    return path.error({ errorDisplayMap, errors: formattedErrors });
   }
 };
