@@ -37,59 +37,6 @@ exports.removeDuplicateLogInformation = format(logEntry => {
   return copy;
 });
 
-exports.formatMetadata = format(logEntry => {
-  const rootFields = [
-    'authorizer',
-    'environment',
-    'level',
-    'logGroup',
-    'logStream',
-    'message',
-    'metadata',
-    'protectedRequiredFields',
-    'request',
-    'requestId',
-    'response',
-    'timestamp',
-    'user',
-  ];
-  let leftovers = cloneDeep(logEntry);
-  rootFields.forEach(k => unset(leftovers, k));
-
-  const metadata =
-    'metadata' in logEntry
-      ? {
-          ...leftovers,
-          ...logEntry.metadata,
-        }
-      : leftovers;
-
-  let formattedLogEntry = cloneDeep(logEntry);
-  [...Object.keys(metadata), 'metadata', 'protectedRequiredFields'].forEach(k =>
-    unset(formattedLogEntry, k),
-  );
-  formattedLogEntry.metadata = metadata;
-
-  if ('protectedRequiredFields' in logEntry) {
-    formattedLogEntry = {
-      ...formattedLogEntry,
-      ...logEntry.protectedRequiredFields,
-      context: {},
-    };
-  }
-
-  for (const key of Object.keys(logEntry)) {
-    if (
-      !(key in formattedLogEntry) ||
-      formattedLogEntry[key] !== logEntry[key]
-    ) {
-      formattedLogEntry.context[key] = logEntry[key];
-    }
-  }
-
-  return formattedLogEntry;
-});
-
 exports.createLogger = (opts = {}) => {
   const options = {
     defaultMeta: {},
@@ -102,7 +49,6 @@ exports.createLogger = (opts = {}) => {
   const formatters = [
     errors({ stack: true }),
     exports.redact(),
-    // exports.formatMetadata(),
     exports.removeDuplicateLogInformation(),
   ];
 
