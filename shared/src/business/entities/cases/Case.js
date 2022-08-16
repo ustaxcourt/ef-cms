@@ -480,7 +480,7 @@ Case.VALIDATION_RULES = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
-  caseNote: JoiValidationConstants.STRING.max(500)
+  caseNote: JoiValidationConstants.STRING.max(5) // todo
     .optional()
     .meta({ tags: ['Restricted'] }),
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
