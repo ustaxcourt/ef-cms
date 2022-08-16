@@ -1,4 +1,4 @@
-import { camelCase, pickBy } from 'lodash';
+import { camelCase, partition, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -22,7 +22,27 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   //get an array of strings of the trial statuses that are set to true
   const trueFilters = Object.keys(pickBy(filters));
 
-  let formattedCases = (trialSession.calendaredCases || [])
+  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
+    trialSession.calendaredCases || [],
+    calendaredCase => {
+      return (
+        !calendaredCase.leadDocketNumber ||
+        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
+      );
+    },
+  );
+
+  memberConsolidatedCases.forEach(memberCase => {
+    const leadCase = leadAndUnconsolidatedCases.find(consolidatedCase => {
+      return consolidatedCase.leadDocketNumber === memberCase.leadDocketNumber;
+    });
+
+    leadCase.consolidatedCases
+      ? leadCase.consolidatedCases.push(memberCase)
+      : (leadCase.consolidatedCases = [memberCase]);
+  });
+
+  let formattedCases = leadAndUnconsolidatedCases
     .slice()
     .filter(
       calendaredCase =>
