@@ -32,6 +32,10 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     },
   );
 
+  leadAndUnconsolidatedCases.forEach(leadCase => {
+    leadCase.consolidatedCases = [];
+  });
+
   memberConsolidatedCases.forEach(memberCase => {
     const leadCase = leadAndUnconsolidatedCases.find(consolidatedCase => {
       return consolidatedCase.leadDocketNumber === memberCase.leadDocketNumber;
