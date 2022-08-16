@@ -42,9 +42,9 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
         };
       })
       .filter(blockedCase => {
-        return procedureTypeFilter === 'All'
-          ? true
-          : blockedCase.procedureType === procedureTypeFilter;
+        return procedureTypeFilter && procedureTypeFilter !== 'All'
+          ? blockedCase.procedureType === procedureTypeFilter
+          : true;
       });
   }
 
