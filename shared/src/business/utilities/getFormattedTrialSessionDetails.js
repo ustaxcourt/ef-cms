@@ -69,10 +69,7 @@ exports.formatCase = ({
     });
   }
 
-  caseItem.inConsolidatedGroup = !!caseItem.leadDocketNumber;
-  caseItem.inLeadCase =
-    caseItem.inConsolidatedGroup &&
-    caseItem.leadDocketNumber === caseItem.docketNumber;
+  applicationContext.getUtilities().setConsolidationFlagsForDisplay(caseItem);
 
   return caseItem;
 };
