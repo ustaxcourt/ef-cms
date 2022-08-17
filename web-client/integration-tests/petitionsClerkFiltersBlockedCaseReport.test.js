@@ -1,3 +1,4 @@
+import { blockedCasesReportHelper as blockedCasesReportHelperComputed } from '../src/presenter/computeds/blockedCasesReportHelper';
 import { docketClerkCreatesATrialSession } from './journey/docketClerkCreatesATrialSession';
 import { docketClerkSetsCaseReadyForTrial } from './journey/docketClerkSetsCaseReadyForTrial';
 import {
@@ -12,7 +13,7 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
 const blockedCasesReportHelper = withAppContextDecorator(
-  blockedCasesReportHelper,
+  blockedCasesReportHelperComputed,
 );
 
 const createAndBlockCase = (
@@ -53,7 +54,6 @@ describe('Blocking a Case', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkCreatesATrialSession(cerebralTest, { trialLocation });
 
-  //manual block and unblock - check eligible list
   createAndBlockCase(
     cerebralTest,
     'Small',
@@ -118,11 +118,15 @@ describe('Blocking a Case', () => {
       value: trialLocation,
     });
 
-    // run sequence to update form
-    const { formattedBlockedCases } = runCompute(blockedCasesReportHelper, {
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'procedureType',
+      value: 'Small',
+    });
+
+    const { blockedCasesFormatted } = runCompute(blockedCasesReportHelper, {
       state: cerebralTest.getState(),
     });
 
-    expect(formattedBlockedCases.length).toEqual(2);
+    expect(blockedCasesFormatted.length).toEqual(2);
   });
 });
