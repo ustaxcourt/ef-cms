@@ -1,5 +1,13 @@
 import { state } from 'cerebral';
 
+/**
+ * gets the blocked cases and formats them and filters based on procedureType
+ *
+ * @param {Function} get the cerebral get function used
+ * for getting state.form.procedureType and state.blockedCases
+ * @param {object} applicationContext the application context
+ * @returns {object} {blockedCasesFormatted: *[], blockedCasesCount: number}
+ */
 export const blockedCasesReportHelper = (get, applicationContext) => {
   const blockedCases = get(state.blockedCases);
   const procedureTypeFilter = get(state.form.procedureType);
