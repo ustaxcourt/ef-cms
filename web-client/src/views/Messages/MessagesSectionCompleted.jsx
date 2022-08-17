@@ -102,7 +102,6 @@ export const MessagesSectionCompleted = connect(
               completedMessage={message.completedMessage}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               key={message.messageId}
-              message={message.message}
               messageDetailLink={message.messageDetailLink}
               subject={message.subject}
             />
@@ -143,7 +142,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
             </Button>
           </div>
 
-          <div className="message-document-detail">{message}</div>
+          <div className="message-document-detail">{message.message}</div>
         </td>
         <td className="message-queue-row">{completedMessage}</td>
         <td className="message-queue-row">{completedBy}</td>
