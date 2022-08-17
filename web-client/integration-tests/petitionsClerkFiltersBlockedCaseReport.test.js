@@ -21,14 +21,17 @@ const createAndBlockCase = (
   procedureType,
   trialLocation,
   overrides = {},
-  docketNumbers,
+  blockedCases,
 ) => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {
     procedureType,
   });
   it('track the docket number', () => {
-    docketNumbers.push(cerebralTest.docketNumber);
+    blockedCases.push({
+      docketNumber: cerebralTest.docketNumber,
+      procedureType,
+    });
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -40,7 +43,7 @@ const createAndBlockCase = (
 
 describe('Blocking a Case', () => {
   const cerebralTest = setupTest();
-  const docketNumbers = [];
+  const blockedCases = [];
 
   beforeAll(() => {
     jest.setTimeout(50000);
@@ -61,14 +64,14 @@ describe('Blocking a Case', () => {
     {
       docketNumberSuffix: 'S',
     },
-    docketNumbers,
+    blockedCases,
   );
   createAndBlockCase(
     cerebralTest,
     'Regular',
     trialLocation,
     undefined,
-    docketNumbers,
+    blockedCases,
   );
   createAndBlockCase(
     cerebralTest,
@@ -77,14 +80,14 @@ describe('Blocking a Case', () => {
     {
       docketNumberSuffix: 'S',
     },
-    docketNumbers,
+    blockedCases,
   );
   createAndBlockCase(
     cerebralTest,
     'Regular',
     trialLocation,
     undefined,
-    docketNumbers,
+    blockedCases,
   );
 
   it('petitions clerk views all cases on blocked report', async () => {
@@ -99,12 +102,40 @@ describe('Blocking a Case', () => {
 
     expect(cerebralTest.getState('blockedCases')).toMatchObject(
       expect.arrayContaining(
-        docketNumbers.map(docketNumber =>
+        blockedCases.map(blockedCase =>
           expect.objectContaining({
-            docketNumber,
+            docketNumber: blockedCase.docketNumber,
           }),
         ),
       ),
+    );
+  });
+
+  it('petitions clerk views small cases on blocked report', async () => {
+    await refreshElasticsearchIndex();
+
+    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
+
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
+      key: 'trialLocation',
+      value: trialLocation,
+    });
+
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'procedureType',
+      value: 'Small',
+    });
+
+    const { blockedCasesFormatted } = runCompute(blockedCasesReportHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(blockedCasesFormatted).not.toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          procedureType: 'Regular',
+        }),
+      ]),
     );
   });
 
