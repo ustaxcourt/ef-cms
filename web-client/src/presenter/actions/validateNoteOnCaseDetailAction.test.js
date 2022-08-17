@@ -62,4 +62,23 @@ describe('validateNoteOnCaseDetailAction', () => {
 
     expect(errorStub.mock.calls.length).toEqual(1);
   });
+
+  it('should call validateCaseDetailInteractor with useCaseEntity true', async () => {
+    await runAction(validateNoteOnCaseDetailAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        caseDetail: mockNote,
+        modal: {
+          notes: mockNote,
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases().validateCaseDetailInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({ useCaseEntity: true });
+  });
 });
