@@ -121,7 +121,7 @@ export const MessagesIndividualOutbox = connect(
                           className="fa-icon-blue"
                           icon="copy"
                         />
-                        {message.inLeadCase && (
+                        {message.leadCase && (
                           <span className="fa-inverse lead-case-icon-text">
                             L
                           </span>

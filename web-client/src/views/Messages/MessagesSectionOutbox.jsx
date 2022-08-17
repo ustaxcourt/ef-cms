@@ -122,8 +122,8 @@ export const MessagesSectionOutbox = connect(
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
               inConsolidatedGroup={message.inConsolidatedGroup}
-              inLeadCase={message.inLeadCase}
               key={message.messageId}
+              leadCase={message.leadCase}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
               messageId={message.messageId}
@@ -147,7 +147,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
   docketNumberWithSuffix,
   from,
   inConsolidatedGroup,
-  inLeadCase,
+  leadCase,
   message,
   messageDetailLink,
   subject,
@@ -168,7 +168,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
                 className="fa-icon-blue"
                 icon="copy"
               />
-              {inLeadCase && (
+              {leadCase && (
                 <span className="fa-inverse lead-case-icon-text">L</span>
               )}
             </span>
