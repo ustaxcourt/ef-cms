@@ -53,7 +53,10 @@ describe('validateNoteOnCaseDetailAction', () => {
         presenter,
       },
       state: {
-        form: mockNote,
+        caseDetail: mockNote,
+        modal: {
+          notes: mockNote,
+        },
       },
     });
 
