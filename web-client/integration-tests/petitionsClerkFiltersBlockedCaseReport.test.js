@@ -61,7 +61,7 @@ describe('Blocking a Case', () => {
     cerebralTest,
     'Regular',
     trialLocation,
-    null,
+    undefined,
     docketNumbers,
   );
   createAndBlockCase(
@@ -77,7 +77,7 @@ describe('Blocking a Case', () => {
     cerebralTest,
     'Regular',
     trialLocation,
-    null,
+    undefined,
     docketNumbers,
   );
 
