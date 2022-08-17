@@ -21,6 +21,7 @@ export const validateNoteOnCaseDetailAction = ({
     .getUseCases()
     .validateCaseDetailInteractor(applicationContext, {
       caseDetail: { ...caseDetail, caseNote: note },
+      isCaseExternal: true,
     });
 
   if (!errors) {
