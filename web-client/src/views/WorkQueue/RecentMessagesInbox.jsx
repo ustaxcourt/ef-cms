@@ -47,7 +47,7 @@ export const RecentMessagesInbox = connect(
                           className="fa-icon-blue"
                           icon="copy"
                         />
-                        {item.inLeadCase && (
+                        {item.leadCase && (
                           <span className="fa-inverse lead-case-icon-text">
                             L
                           </span>

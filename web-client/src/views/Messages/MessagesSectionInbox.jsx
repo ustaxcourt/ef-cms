@@ -123,8 +123,8 @@ export const MessagesSectionInbox = connect(
               from={message.from}
               fromSection={message.fromSection}
               inConsolidatedGroup={message.inConsolidatedGroup}
-              inLeadCase={message.inLeadCase}
               key={message.messageId}
+              leadCase={message.leadCase}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
               messageId={message.messageId}
@@ -148,7 +148,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
   from,
   fromSection,
   inConsolidatedGroup,
-  inLeadCase,
+  leadCase,
   message,
   messageDetailLink,
   subject,
@@ -168,7 +168,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
                 className="fa-icon-blue"
                 icon="copy"
               />
-              {inLeadCase && (
+              {leadCase && (
                 <span className="fa-inverse lead-case-icon-text">L</span>
               )}
             </span>

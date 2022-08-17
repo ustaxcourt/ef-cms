@@ -103,8 +103,8 @@ export const MessagesSectionCompleted = connect(
               consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               inConsolidatedGroup={message.inConsolidatedGroup}
-              inLeadCase={message.inLeadCase}
               key={message.messageId}
+              leadCase={message.leadCase}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
               subject={message.subject}
@@ -125,7 +125,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   consolidatedIconTooltipText,
   docketNumberWithSuffix,
   inConsolidatedGroup,
-  inLeadCase,
+  leadCase,
   message,
   messageDetailLink,
   subject,
@@ -144,7 +144,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
                 className="fa-icon-blue"
                 icon="copy"
               />
-              {inLeadCase && (
+              {leadCase && (
                 <span className="fa-inverse lead-case-icon-text">L</span>
               )}
             </span>

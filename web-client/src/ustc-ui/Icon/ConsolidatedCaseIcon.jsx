@@ -19,7 +19,7 @@ export const ConsolidatedCaseIcon = ({ caseItem }) => {
           className="fa-icon-blue"
           icon="copy"
         />
-        {caseItem.inLeadCase && (
+        {caseItem.leadCase && (
           <span className="fa-inverse lead-case-icon-text">L</span>
         )}
       </span>
