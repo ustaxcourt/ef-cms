@@ -21,14 +21,17 @@ const createAndBlockCase = (
   procedureType,
   trialLocation,
   overrides = {},
-  docketNumbers,
+  blockedCases,
 ) => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {
     procedureType,
   });
   it('track the docket number', () => {
-    docketNumbers.push(cerebralTest.docketNumber);
+    blockedCases.push({
+      docketNumber: cerebralTest.docketNumber,
+      procedureType,
+    });
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -40,7 +43,7 @@ const createAndBlockCase = (
 
 describe('Blocking a Case', () => {
   const cerebralTest = setupTest();
-  const docketNumbers = [];
+  const blockedCases = [];
 
   beforeAll(() => {
     jest.setTimeout(50000);
@@ -61,14 +64,14 @@ describe('Blocking a Case', () => {
     {
       docketNumberSuffix: 'S',
     },
-    docketNumbers,
+    blockedCases,
   );
   createAndBlockCase(
     cerebralTest,
     'Regular',
     trialLocation,
     undefined,
-    docketNumbers,
+    blockedCases,
   );
   createAndBlockCase(
     cerebralTest,
@@ -77,14 +80,14 @@ describe('Blocking a Case', () => {
     {
       docketNumberSuffix: 'S',
     },
-    docketNumbers,
+    blockedCases,
   );
   createAndBlockCase(
     cerebralTest,
     'Regular',
     trialLocation,
     undefined,
-    docketNumbers,
+    blockedCases,
   );
 
   it('petitions clerk views all cases on blocked report', async () => {
@@ -99,16 +102,16 @@ describe('Blocking a Case', () => {
 
     expect(cerebralTest.getState('blockedCases')).toMatchObject(
       expect.arrayContaining(
-        docketNumbers.map(docketNumber =>
+        blockedCases.map(blockedCase =>
           expect.objectContaining({
-            docketNumber,
+            docketNumber: blockedCase.docketNumber,
           }),
         ),
       ),
     );
   });
 
-  it('petitions clerk views small cases on blocked report', async () => {
+  it('petitions clerk views Small cases on blocked report', async () => {
     await refreshElasticsearchIndex();
 
     await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
@@ -127,6 +130,68 @@ describe('Blocking a Case', () => {
       state: cerebralTest.getState(),
     });
 
-    expect(blockedCasesFormatted.length).toEqual(2);
+    expect(blockedCasesFormatted).not.toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          procedureType: 'Regular',
+        }),
+      ]),
+    );
+  });
+
+  it('petitions clerk views Regular cases on blocked report', async () => {
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'procedureType',
+      value: 'Regular',
+    });
+
+    const { blockedCasesFormatted } = runCompute(blockedCasesReportHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(blockedCasesFormatted).not.toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          procedureType: 'Small',
+        }),
+      ]),
+    );
+  });
+
+  it('petitions clerk views All cases on blocked report', async () => {
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'procedureType',
+      value: 'All',
+    });
+
+    const { blockedCasesFormatted } = runCompute(blockedCasesReportHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(blockedCasesFormatted).toMatchObject(
+      expect.arrayContaining(
+        blockedCases.map(blockedCase =>
+          expect.objectContaining({
+            docketNumber: blockedCase.docketNumber,
+          }),
+        ),
+      ),
+    );
+  });
+
+  it('should reset the procedureType select back to All when changing the trial location dropdown', async () => {
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'procedureType',
+      value: 'Small',
+    });
+
+    expect(cerebralTest.getState('form.procedureType')).toEqual('Small');
+
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
+      key: 'trialLocation',
+      value: 'No existing trial location',
+    });
+
+    expect(cerebralTest.getState('form.procedureType')).toEqual('All');
   });
 });
