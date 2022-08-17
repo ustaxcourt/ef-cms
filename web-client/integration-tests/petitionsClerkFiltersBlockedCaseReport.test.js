@@ -8,6 +8,12 @@ import {
 } from './helpers';
 import { petitionsClerkBlocksCase } from './journey/petitionsClerkBlocksCase';
 import { petitionsClerkCreatesNewCase } from './journey/petitionsClerkCreatesNewCase';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
+
+const blockedCasesReportHelper = withAppContextDecorator(
+  blockedCasesReportHelper,
+);
 
 const createAndBlockCase = (
   cerebralTest,
@@ -100,5 +106,23 @@ describe('Blocking a Case', () => {
         ),
       ),
     );
+  });
+
+  it('petitions clerk views small cases on blocked report', async () => {
+    await refreshElasticsearchIndex();
+
+    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
+
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
+      key: 'trialLocation',
+      value: trialLocation,
+    });
+
+    // run sequence to update form
+    const { formattedBlockedCases } = runCompute(blockedCasesReportHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(formattedBlockedCases.length).toEqual(2);
   });
 });
