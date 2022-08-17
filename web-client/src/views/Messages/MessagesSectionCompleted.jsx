@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
@@ -100,11 +100,8 @@ export const MessagesSectionCompleted = connect(
               completedBy={message.completedBy}
               completedBySection={message.completedBySection}
               completedMessage={message.completedMessage}
-              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
-              inConsolidatedGroup={message.inConsolidatedGroup}
               key={message.messageId}
-              leadCase={message.leadCase}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
               subject={message.subject}
@@ -122,10 +119,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
   completedBy,
   completedBySection,
   completedMessage,
-  consolidatedIconTooltipText,
   docketNumberWithSuffix,
-  inConsolidatedGroup,
-  leadCase,
   message,
   messageDetailLink,
   subject,
@@ -134,21 +128,7 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
     <tbody>
       <tr>
         <td className="consolidated-case-column">
-          {inConsolidatedGroup && (
-            <span
-              className="fa-layers fa-fw"
-              title={consolidatedIconTooltipText}
-            >
-              <Icon
-                aria-label={consolidatedIconTooltipText}
-                className="fa-icon-blue"
-                icon="copy"
-              />
-              {leadCase && (
-                <span className="fa-inverse lead-case-icon-text">L</span>
-              )}
-            </span>
-          )}
+          <ConsolidatedCaseIcon caseItem={message}></ConsolidatedCaseIcon>
         </td>
         <td className="message-queue-row small" colSpan="2">
           {docketNumberWithSuffix}
