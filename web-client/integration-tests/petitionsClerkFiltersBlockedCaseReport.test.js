@@ -111,7 +111,7 @@ describe('Blocking a Case', () => {
     );
   });
 
-  it('petitions clerk views small cases on blocked report', async () => {
+  it('petitions clerk views Small cases on blocked report', async () => {
     await refreshElasticsearchIndex();
 
     await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
@@ -139,25 +139,43 @@ describe('Blocking a Case', () => {
     );
   });
 
-  it('petitions clerk views small cases on blocked report', async () => {
-    await refreshElasticsearchIndex();
-
-    await cerebralTest.runSequence('gotoBlockedCasesReportSequence');
-
-    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
-      key: 'trialLocation',
-      value: trialLocation,
-    });
-
+  it('petitions clerk views Regular cases on blocked report', async () => {
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
-      value: 'Small',
+      value: 'Regular',
     });
 
     const { blockedCasesFormatted } = runCompute(blockedCasesReportHelper, {
       state: cerebralTest.getState(),
     });
 
-    expect(blockedCasesFormatted.length).toEqual(2);
+    expect(blockedCasesFormatted).not.toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          procedureType: 'Small',
+        }),
+      ]),
+    );
+  });
+
+  it('petitions clerk views All cases on blocked report', async () => {
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'procedureType',
+      value: 'All',
+    });
+
+    const { blockedCasesFormatted } = runCompute(blockedCasesReportHelper, {
+      state: cerebralTest.getState(),
+    });
+
+    expect(blockedCasesFormatted).toMatchObject(
+      expect.arrayContaining(
+        blockedCases.map(blockedCase =>
+          expect.objectContaining({
+            docketNumber: blockedCase.docketNumber,
+          }),
+        ),
+      ),
+    );
   });
 });
