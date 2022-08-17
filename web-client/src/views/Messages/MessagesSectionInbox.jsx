@@ -122,7 +122,6 @@ export const MessagesSectionInbox = connect(
               from={message.from}
               fromSection={message.fromSection}
               key={message.messageId}
-              message={message.message}
               messageDetailLink={message.messageDetailLink}
               messageId={message.messageId}
               subject={message.subject}
@@ -166,7 +165,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
               {subject}
             </Button>
           </div>
-          <div className="message-document-detail">{message}</div>
+          <div className="message-document-detail">{message.message}</div>
         </td>
         <td className="message-queue-row max-width-25">{caseTitle}</td>
         <td className="message-queue-row">{caseStatus}</td>
