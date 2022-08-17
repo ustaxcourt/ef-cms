@@ -42,7 +42,7 @@ export const SelectCriteria = connect(
             </select>
           </div>
           <div className="usa-form-group margin-bottom-0">
-            <label className="usa-label" htmlFor="trial-location">
+            <label className="usa-label" htmlFor="procedure-type">
               Case Type
             </label>
             <select
