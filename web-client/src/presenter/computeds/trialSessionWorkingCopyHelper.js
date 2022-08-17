@@ -22,35 +22,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   //get an array of strings of the trial statuses that are set to true
   const trueFilters = Object.keys(pickBy(filters));
 
-  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
-    trialSession.calendaredCases || [],
-    calendaredCase => {
-      return (
-        !calendaredCase.leadDocketNumber ||
-        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
-      );
-    },
-  );
-
-  leadAndUnconsolidatedCases.forEach(leadCase => {
-    leadCase.consolidatedCases = [];
-  });
-
-  memberConsolidatedCases.forEach(memberCase => {
-    const leadCase = leadAndUnconsolidatedCases.find(consolidatedCase => {
-      return consolidatedCase.leadDocketNumber === memberCase.leadDocketNumber;
-    });
-
-    leadCase.consolidatedCases
-      ? leadCase.consolidatedCases.push(memberCase)
-      : (leadCase.consolidatedCases = [memberCase]);
-
-    leadCase.consolidatedCases.sort(
-      applicationContext.getUtilities().compareCasesByDocketNumber,
-    );
-  });
-
-  let formattedCases = leadAndUnconsolidatedCases
+  let formattedCases = (trialSession.calendaredCases || [])
     .slice()
     .filter(
       calendaredCase =>
@@ -74,16 +46,45 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     )
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
 
+  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
+    formattedCases,
+    calendaredCase => {
+      return (
+        !calendaredCase.leadDocketNumber ||
+        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
+      );
+    },
+  );
+
+  // consider reversing if there are more unconsolidated cases than consolidated
+  leadAndUnconsolidatedCases.forEach(aCase => {
+    if (aCase.leadCase) {
+      aCase.consolidatedCases = [];
+
+      const memberCases = memberConsolidatedCases.filter(memberCase => {
+        return memberCase.docketNumber !== aCase.leadDocketNumber;
+      });
+
+      aCase.consolidatedCases
+        ? aCase.consolidatedCases.push(...memberCases)
+        : (aCase.consolidatedCases = memberCases);
+
+      aCase.consolidatedCases.sort(
+        applicationContext.getUtilities().compareCasesByDocketNumber,
+      );
+    }
+  });
+
   if (sort === 'practitioner') {
-    formattedCases.sort(compareCasesByPractitioner);
+    leadAndUnconsolidatedCases.sort(compareCasesByPractitioner);
   }
 
   if (sortOrder === 'desc') {
-    formattedCases.reverse();
+    leadAndUnconsolidatedCases.reverse();
   }
 
   Object.keys(userNotes || {}).forEach(docketNumber => {
-    const caseToUpdate = formattedCases.find(
+    const caseToUpdate = leadAndUnconsolidatedCases.find(
       aCase => aCase.docketNumber === docketNumber,
     );
     if (caseToUpdate) {
@@ -109,7 +110,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
 
   return {
     casesShownCount: formattedCases.length,
-    formattedCases,
+    formattedCases: leadAndUnconsolidatedCases,
     trialStatusOptions,
   };
 };
