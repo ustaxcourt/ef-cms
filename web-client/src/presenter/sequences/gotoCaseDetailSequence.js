@@ -42,7 +42,6 @@ const gotoCaseDetailInternal = startWebSocketConnectionSequenceDecorator([
   showModalFromQueryAction,
   parallel([
     [getTrialSessionsOnCaseAction, setTrialSessionsAction],
-    () => console.log('watup beeches'),
     [getJudgeForCurrentUserAction, setJudgeUserAction],
     [fetchUserNotificationsSequence],
     [getCaseDeadlinesForCaseAction],

@@ -64,7 +64,9 @@ describe('Manually block consolidated cases', () => {
   it('should set case docket number to leadDocketNumber', () => {
     cerebralTest.docketNumber = leadDocketNumber;
   });
-  petitionsClerkBlocksCase(cerebralTest, trialLocation);
+  petitionsClerkBlocksCase(cerebralTest, trialLocation, {
+    docketNumberSuffix: 'S',
+  });
   it('should verify blocked case has inLeadCase flag, inConsolidatedGroup flag and "Lead case" tool tip', () => {
     const { blockedCasesFormatted } = runCompute(
       blockedCasesReportHelperComputed,
@@ -87,7 +89,9 @@ describe('Manually block consolidated cases', () => {
   it('should set case docket number to memberCaseDocketNumber', () => {
     cerebralTest.docketNumber = memberCaseDocketNumber;
   });
-  petitionsClerkBlocksCase(cerebralTest, trialLocation);
+  petitionsClerkBlocksCase(cerebralTest, trialLocation, {
+    docketNumberSuffix: 'S',
+  });
   it('should verify blocked case does NOT have inLeadCase flag, but has inConsolidatedGroup flag and "Consolidated case" tool tip', () => {
     const { blockedCasesFormatted } = runCompute(
       blockedCasesReportHelperComputed,
