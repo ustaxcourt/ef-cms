@@ -1,3 +1,4 @@
+const { Case } = require('../entities/cases/Case');
 const { CaseQC } = require('../entities/cases/CaseQC');
 
 /**
@@ -8,7 +9,15 @@ const { CaseQC } = require('../entities/cases/CaseQC');
  * @param {object} providers.caseDetail the case data to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validateCaseDetailInteractor = (applicationContext, { caseDetail }) => {
+exports.validateCaseDetailInteractor = (
+  applicationContext,
+  { caseDetail, isCaseExternal = false },
+) => {
+  if (isCaseExternal) {
+    return new Case(caseDetail, {
+      applicationContext,
+    }).getFormattedValidationErrors();
+  }
   return new CaseQC(caseDetail, {
     applicationContext,
   }).getFormattedValidationErrors();
