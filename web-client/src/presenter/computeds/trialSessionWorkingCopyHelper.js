@@ -44,6 +44,10 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     leadCase.consolidatedCases
       ? leadCase.consolidatedCases.push(memberCase)
       : (leadCase.consolidatedCases = [memberCase]);
+
+    leadCase.consolidatedCases.sort(
+      applicationContext.getUtilities().compareCasesByDocketNumber,
+    );
   });
 
   let formattedCases = leadAndUnconsolidatedCases
