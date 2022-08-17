@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
@@ -117,14 +117,11 @@ export const MessagesSectionInbox = connect(
             <MessageInboxRow
               caseStatus={message.caseStatus}
               caseTitle={message.caseTitle}
-              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               createdAtFormatted={message.createdAtFormatted}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
               fromSection={message.fromSection}
-              inConsolidatedGroup={message.inConsolidatedGroup}
               key={message.messageId}
-              leadCase={message.leadCase}
               message={message.message}
               messageDetailLink={message.messageDetailLink}
               messageId={message.messageId}
@@ -142,13 +139,10 @@ export const MessagesSectionInbox = connect(
 const MessageInboxRow = React.memo(function MessageInboxRow({
   caseStatus,
   caseTitle,
-  consolidatedIconTooltipText,
   createdAtFormatted,
   docketNumberWithSuffix,
   from,
   fromSection,
-  inConsolidatedGroup,
-  leadCase,
   message,
   messageDetailLink,
   subject,
@@ -158,21 +152,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
     <tbody>
       <tr>
         <td className="consolidated-case-column">
-          {inConsolidatedGroup && (
-            <span
-              className="fa-layers fa-fw"
-              title={consolidatedIconTooltipText}
-            >
-              <Icon
-                aria-label={consolidatedIconTooltipText}
-                className="fa-icon-blue"
-                icon="copy"
-              />
-              {leadCase && (
-                <span className="fa-inverse lead-case-icon-text">L</span>
-              )}
-            </span>
-          )}
+          <ConsolidatedCaseIcon caseItem={message}></ConsolidatedCaseIcon>
         </td>
         <td className="message-queue-row small" colSpan="2">
           {docketNumberWithSuffix}
