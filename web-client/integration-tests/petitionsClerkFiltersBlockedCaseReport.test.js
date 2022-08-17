@@ -178,4 +178,20 @@ describe('Blocking a Case', () => {
       ),
     );
   });
+
+  it('should reset the procedureType select back to All when changing the trial location dropdown', async () => {
+    await cerebralTest.runSequence('updateFormValueSequence', {
+      key: 'procedureType',
+      value: 'Small',
+    });
+
+    expect(cerebralTest.getState('form.procedureType')).toEqual('Small');
+
+    await cerebralTest.runSequence('getBlockedCasesByTrialLocationSequence', {
+      key: 'trialLocation',
+      value: 'No existing trial location',
+    });
+
+    expect(cerebralTest.getState('form.procedureType')).toEqual('All');
+  });
 });
