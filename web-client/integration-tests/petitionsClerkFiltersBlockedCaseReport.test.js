@@ -14,10 +14,14 @@ const createAndBlockCase = (
   procedureType,
   trialLocation,
   overrides = {},
+  docketNumbers,
 ) => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {
     procedureType,
+  });
+  it('track the docket number', () => {
+    docketNumbers.push(cerebralTest.docketNumber);
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
@@ -29,6 +33,7 @@ const createAndBlockCase = (
 
 describe('Blocking a Case', () => {
   const cerebralTest = setupTest();
+  const docketNumbers = [];
 
   beforeAll(() => {
     jest.setTimeout(50000);
@@ -43,14 +48,38 @@ describe('Blocking a Case', () => {
   docketClerkCreatesATrialSession(cerebralTest, { trialLocation });
 
   //manual block and unblock - check eligible list
-  createAndBlockCase(cerebralTest, 'Small', trialLocation, {
-    docketNumberSuffix: 'S',
-  });
-  createAndBlockCase(cerebralTest, 'Regular', trialLocation);
-  createAndBlockCase(cerebralTest, 'Small', trialLocation, {
-    docketNumberSuffix: 'S',
-  });
-  createAndBlockCase(cerebralTest, 'Regular', trialLocation);
+  createAndBlockCase(
+    cerebralTest,
+    'Small',
+    trialLocation,
+    {
+      docketNumberSuffix: 'S',
+    },
+    docketNumbers,
+  );
+  createAndBlockCase(
+    cerebralTest,
+    'Regular',
+    trialLocation,
+    null,
+    docketNumbers,
+  );
+  createAndBlockCase(
+    cerebralTest,
+    'Small',
+    trialLocation,
+    {
+      docketNumberSuffix: 'S',
+    },
+    docketNumbers,
+  );
+  createAndBlockCase(
+    cerebralTest,
+    'Regular',
+    trialLocation,
+    null,
+    docketNumbers,
+  );
 
   it('petitions clerk views all cases on blocked report', async () => {
     await refreshElasticsearchIndex();
@@ -62,6 +91,14 @@ describe('Blocking a Case', () => {
       value: trialLocation,
     });
 
-    expect(cerebralTest.getState('blockedCases').length).toEqual(4);
+    expect(cerebralTest.getState('blockedCases')).toMatchObject(
+      expect.arrayContaining(
+        docketNumbers.map(docketNumber =>
+          expect.objectContaining({
+            docketNumber,
+          }),
+        ),
+      ),
+    );
   });
 });
