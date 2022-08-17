@@ -7,6 +7,7 @@ const { CaseQC } = require('../entities/cases/CaseQC');
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {object} providers.caseDetail the case data to validate
+ * @param {object} providers.useCaseEntity the flag indicating what kind of entity to use
  * @returns {object} errors (null if no errors)
  */
 exports.validateCaseDetailInteractor = (
