@@ -9,6 +9,12 @@ describe('blockedCasesReportHelper', () => {
   const blockedCasesReportHelper = withAppContextDecorator(
     blockedCasesReportHelperComputed,
   );
+
+  const noBlockedCasesLocationMessage =
+    'There are no blocked cases for this location.';
+  const noBlockedCasesProcedureTypeMessage =
+    'There are no blocked cases for this case type.';
+
   it('returns blockedCasesCount as 0 if blockedCases is not on the state', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {},
@@ -299,8 +305,6 @@ describe('blockedCasesReportHelper', () => {
   });
 
   it('should display correct display message when blockedCasesCount equals zero', () => {
-    const noBlockedCasesLocationMessage =
-      'There are no blocked cases for this location.';
     const result = runCompute(blockedCasesReportHelper, {
       state: {
         blockedCases: [],
@@ -310,9 +314,7 @@ describe('blockedCasesReportHelper', () => {
     expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
   });
 
-  it('should display correct display message when ...', () => {
-    const noBlockedCasesProcedureTypeMessage =
-      'There are no blocked cases for this case type.';
+  it('should display correct display message when procedureType is set to Small and there are no Small Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
         blockedCases: [
@@ -331,7 +333,7 @@ describe('blockedCasesReportHelper', () => {
     expect(result.displayMessage).toEqual(noBlockedCasesProcedureTypeMessage);
   });
 
-  it('should display correct display message when ...', () => {
+  it('should not display any message when procedureType is set to Regular and there are Regular Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
         blockedCases: [
@@ -350,7 +352,7 @@ describe('blockedCasesReportHelper', () => {
     expect(result.displayMessage).toBeUndefined();
   });
 
-  it('should display correct display message when ...', () => {
+  it('should not display any message when procedureType is set to All and there are Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
         blockedCases: [
@@ -369,7 +371,7 @@ describe('blockedCasesReportHelper', () => {
     expect(result.displayMessage).toBeUndefined();
   });
 
-  it('should display correct display message when ...', () => {
+  it('should not display any message when procedureType is not set on form and there are Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
         blockedCases: [
@@ -387,9 +389,7 @@ describe('blockedCasesReportHelper', () => {
     expect(result.displayMessage).toBeUndefined();
   });
 
-  it('should display correct display message when ...', () => {
-    const noBlockedCasesLocationMessage =
-      'There are no blocked cases for this location.';
+  it('should display correct display message when procedureType is not on form and there are no Blocked Cases', () => {
     const result = runCompute(blockedCasesReportHelper, {
       state: {
         blockedCases: [],
