@@ -295,6 +295,106 @@ describe('blockedCasesReportHelper', () => {
         form: { procedureType: undefined },
       },
     });
-    expect(result.blockedCasesCount).toBe(4);
+    expect(result.blockedCasesCount).toEqual(4);
+  });
+
+  it('should display correct display message when blockedCasesCount equals zero', () => {
+    const noBlockedCasesLocationMessage =
+      'There are no blocked cases for this location.';
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCases: [],
+        form: { procedureType: 'All' },
+      },
+    });
+    expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
+  });
+
+  it('should display correct display message when ...', () => {
+    const noBlockedCasesProcedureTypeMessage =
+      'There are no blocked cases for this case type.';
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCases: [
+          {
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+            caseCaption: 'Bob Barker, Petitioner',
+            docketNumber: '104-19',
+            docketNumberWithSuffix: '104-19',
+            procedureType: 'Regular',
+          },
+        ],
+        form: { procedureType: 'Small' },
+      },
+    });
+    expect(result.displayMessage).toEqual(noBlockedCasesProcedureTypeMessage);
+  });
+
+  it('should display correct display message when ...', () => {
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCases: [
+          {
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+            caseCaption: 'Bob Barker, Petitioner',
+            docketNumber: '104-19',
+            docketNumberWithSuffix: '104-19',
+            procedureType: 'Regular',
+          },
+        ],
+        form: { procedureType: 'Regular' },
+      },
+    });
+    expect(result.displayMessage).toBeUndefined();
+  });
+
+  it('should display correct display message when ...', () => {
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCases: [
+          {
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+            caseCaption: 'Bob Barker, Petitioner',
+            docketNumber: '104-19',
+            docketNumberWithSuffix: '104-19',
+            procedureType: 'Regular',
+          },
+        ],
+        form: { procedureType: 'All' },
+      },
+    });
+    expect(result.displayMessage).toBeUndefined();
+  });
+
+  it('should display correct display message when ...', () => {
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCases: [
+          {
+            automaticBlocked: true,
+            automaticBlockedDate: '2019-03-05T21:42:29.073Z',
+            caseCaption: 'Bob Barker, Petitioner',
+            docketNumber: '104-19',
+            docketNumberWithSuffix: '104-19',
+            procedureType: 'Regular',
+          },
+        ],
+      },
+    });
+    expect(result.displayMessage).toBeUndefined();
+  });
+
+  it('should display correct display message when ...', () => {
+    const noBlockedCasesLocationMessage =
+      'There are no blocked cases for this location.';
+    const result = runCompute(blockedCasesReportHelper, {
+      state: {
+        blockedCases: [],
+      },
+    });
+    expect(result.displayMessage).toEqual(noBlockedCasesLocationMessage);
   });
 });
