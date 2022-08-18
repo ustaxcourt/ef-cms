@@ -24,8 +24,13 @@ exports.bulkIndexRecords = async ({ applicationContext, records }) => {
             if (doc.entityName.S === 'DocketEntry') {
               routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
             }
-
+            if (doc.entityName.S === 'Message') {
+              routing = `${doc.pk.S}_${doc.pk.S}|mapping`;
+            }
             if (doc.entityName.S === 'CaseDocketEntryMapping') {
+              id += '|mapping';
+            }
+            if (doc.entityName.S === 'CaseMessageMapping') {
               id += '|mapping';
             }
 

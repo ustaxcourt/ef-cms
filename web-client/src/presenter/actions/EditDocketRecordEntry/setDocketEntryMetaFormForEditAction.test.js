@@ -6,7 +6,7 @@ import { setDocketEntryMetaFormForEditAction } from './setDocketEntryMetaFormFor
 describe('setDocketEntryMetaFormForEditAction', () => {
   presenter.providers.applicationContext = applicationContext;
 
-  const { SERVED_PARTIES_CODES } = applicationContext.getConstants();
+  const { PARTIES_CODES } = applicationContext.getConstants();
 
   let caseDetail;
 
@@ -48,7 +48,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
           index: 4,
           isOnDocketRecord: true,
           lodged: false,
-          servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+          servedPartiesCode: PARTIES_CODES.RESPONDENT,
         },
       ],
       docketNumber: '123-45',
@@ -141,9 +141,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
       },
     });
 
-    expect(result.state.form.servedPartiesCode).toEqual(
-      SERVED_PARTIES_CODES.BOTH,
-    );
+    expect(result.state.form.servedPartiesCode).toEqual(PARTIES_CODES.BOTH);
   });
 
   it('overwrites documentDetail.servedPartiesCode if servedPartiesCode is present on docketRecordEntry', async () => {
@@ -158,7 +156,7 @@ describe('setDocketEntryMetaFormForEditAction', () => {
     });
 
     expect(result.state.form.servedPartiesCode).toEqual(
-      SERVED_PARTIES_CODES.RESPONDENT,
+      PARTIES_CODES.RESPONDENT,
     );
   });
 

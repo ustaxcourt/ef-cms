@@ -36,10 +36,6 @@ const receiptOfFiling = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactReceiptOfFilingTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Receipt of Filing',
-    },
   });
 
   const pdf = await applicationContext

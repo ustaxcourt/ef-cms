@@ -72,7 +72,7 @@ describe('processCaseEntries', () => {
     expect(caseRecord).toEqual('Case');
   });
 
-  it('should index a case docket entry mapping record', async () => {
+  it('should index a case docket entry mapping record in order to create a parent-child relationship between a case and a docket entry', async () => {
     await processCaseEntries({
       applicationContext,
       caseEntityRecords: [mockCaseRecord],
@@ -83,6 +83,19 @@ describe('processCaseEntries', () => {
         .calls[0][0].records[0].dynamodb.NewImage.entityName.S;
 
     expect(caseDocketEntryMappingRecord).toEqual('CaseDocketEntryMapping');
+  });
+
+  it('should index a case message mapping record in order to create a parent-child relationship between a case and a message', async () => {
+    await processCaseEntries({
+      applicationContext,
+      caseEntityRecords: [mockCaseRecord],
+    });
+
+    const caseMessageMappingRecord =
+      applicationContext.getPersistenceGateway().bulkIndexRecords.mock
+        .calls[0][0].records[1].dynamodb.NewImage.entityName.S;
+
+    expect(caseMessageMappingRecord).toEqual('CaseMessageMapping');
   });
 
   it('should log an error and throw an exception when bulk index returns failed records', async () => {

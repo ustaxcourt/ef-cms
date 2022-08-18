@@ -22,12 +22,15 @@ exports.deleteUserCaseNoteInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const judgeUser = await applicationContext
-    .getUseCases()
-    .getJudgeForUserChambersInteractor(applicationContext, { user });
+  const userId = await applicationContext
+    .getUseCaseHelpers()
+    .getUserIdForNote(applicationContext, {
+      userIdMakingRequest: user.userId,
+    });
+
   return await applicationContext.getPersistenceGateway().deleteUserCaseNote({
     applicationContext,
     docketNumber,
-    userId: (judgeUser && judgeUser.userId) || user.userId,
+    userId,
   });
 };

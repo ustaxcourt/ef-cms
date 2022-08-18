@@ -15,7 +15,7 @@ export const getDocketEntryAlertSuccessAction = ({ get }) => {
   if (isUpdatingWithFile) {
     message = 'Entry updated.';
   } else {
-    message = 'Your entry has been added to docket record.';
+    message = 'Your entry has been added to the docket record.';
   }
 
   return {

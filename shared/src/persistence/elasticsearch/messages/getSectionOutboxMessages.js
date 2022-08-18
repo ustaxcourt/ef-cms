@@ -1,4 +1,5 @@
 const { calculateISODate } = require('../../../business/utilities/DateHandler');
+const { GET_MESSAGE_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 exports.getSectionOutboxMessages = async ({ applicationContext, section }) => {
@@ -20,6 +21,7 @@ exports.getSectionOutboxMessages = async ({ applicationContext, section }) => {
                 },
               },
             },
+            GET_MESSAGE_PARENT_CASE,
           ],
         },
       },

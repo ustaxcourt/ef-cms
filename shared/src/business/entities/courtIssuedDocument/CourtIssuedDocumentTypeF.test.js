@@ -1,4 +1,5 @@
 const { CourtIssuedDocumentFactory } = require('./CourtIssuedDocumentFactory');
+const { TRIAL_SESSION_SCOPE_TYPES } = require('../EntityConstants');
 const { VALIDATION_ERROR_MESSAGES } = require('./CourtIssuedDocumentConstants');
 
 describe('CourtIssuedDocumentTypeF', () => {
@@ -115,6 +116,20 @@ describe('CourtIssuedDocumentTypeF', () => {
       });
       expect(extDoc.getDocumentTitle()).toEqual(
         'Further Trial before Colvin at Seattle, Washington',
+      );
+    });
+
+    it('should generate a title with "in standalone remote session" instead of "at [Place]" for Standalone Remote trial locations', () => {
+      const extDoc = CourtIssuedDocumentFactory({
+        attachments: false,
+        documentTitle: 'Further Trial before [Judge] at [Place]',
+        documentType: 'FTRL - Further Trial before ...',
+        judge: 'Colvin',
+        scenario: 'Type F',
+        trialLocation: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
+      });
+      expect(extDoc.getDocumentTitle()).toEqual(
+        'Further Trial before Colvin in standalone remote session',
       );
     });
   });

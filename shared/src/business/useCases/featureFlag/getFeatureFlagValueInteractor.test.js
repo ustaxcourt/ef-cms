@@ -41,6 +41,22 @@ describe('getFeatureFlagValueInteractor', () => {
     expect(result).toBe(false);
   });
 
+  it('should return a string if the feature flag is a string', async () => {
+    const mockFeatureFlagValue = {
+      current: 'Judge Kerrigan',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getFeatureFlagValue.mockResolvedValue(mockFeatureFlagValue);
+
+    const result = await getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag: ALLOWLIST_FEATURE_FLAGS.CHIEF_JUDGE_NAME.key,
+    });
+
+    expect(result).toBe(mockFeatureFlagValue.current);
+  });
+
   it('should throw an unauthorized error when the feature flag is not included in the allowlist', async () => {
     const mockFeatureFlagDenied = 'woopsies';
 

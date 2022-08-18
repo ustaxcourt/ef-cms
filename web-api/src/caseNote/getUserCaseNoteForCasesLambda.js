@@ -8,11 +8,9 @@ const { genericHandler } = require('../genericHandler');
  */
 exports.getUserCaseNoteForCasesLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
-    const { docketNumbers } = event.pathParameters || {};
-
     return await applicationContext
       .getUseCases()
       .getUserCaseNoteForCasesInteractor(applicationContext, {
-        docketNumbers: docketNumbers.split(','),
+        docketNumbers: JSON.parse(event.body),
       });
   });

@@ -1,5 +1,6 @@
 const AWS = require('aws-sdk');
 const seedEntries = require('../fixtures/seed');
+const { chunk: splitIntoChunks } = require('lodash');
 const { createCase1 } = require('./cases/createCase1');
 const { createOrder } = require('./cases/createOrder');
 const { createUsers } = require('./createUsers');
@@ -19,16 +20,20 @@ const client = new AWS.DynamoDB.DocumentClient({
 });
 
 const putEntries = async entries => {
-  await Promise.all(
-    entries.map(item =>
-      client
-        .put({
-          Item: item,
-          TableName: 'efcms-local',
-        })
-        .promise(),
-    ),
-  );
+  const chunks = splitIntoChunks(entries, 25);
+  for (let chunk of chunks) {
+    await client
+      .batchWrite({
+        RequestItems: {
+          'efcms-local': chunk.map(item => ({
+            PutRequest: {
+              Item: item,
+            },
+          })),
+        },
+      })
+      .promise();
+  }
 };
 
 module.exports.seedLocalDatabase = async entries => {

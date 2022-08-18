@@ -15,6 +15,7 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
   const {
     noticeOfAttachmentsInNatureOfEvidence,
     orderForAmendedPetition,
+    orderForAmendedPetitionAndFilingFee,
     orderForFilingFee,
   } = SYSTEM_GENERATED_DOCUMENT_TYPES;
 
@@ -145,6 +146,36 @@ describe('addDocketEntryForSystemGeneratedOrder', () => {
       applicationContext,
       caseEntity,
       systemGeneratedDocument: orderForAmendedPetition,
+    });
+
+    expect(
+      applicationContext.getStorageClient().getObject.mock.calls[0][0].Key,
+    ).toEqual(AMENDED_PETITION_FORM_NAME);
+
+    expect(
+      applicationContext.getUtilities().combineTwoPdfs.mock.calls[0][0]
+        .secondPdf,
+    ).toEqual(mockAmendedPetitionFormData);
+  });
+
+  it('should append additional pdf form data when the document is an orderForAmendedPetitionAndFilingFee', async () => {
+    const mockAmendedPetitionFormData = 'Elmo the Third';
+
+    applicationContext.getStorageClient.mockReturnValue({
+      getObject: jest.fn().mockReturnValue({
+        promise: () => ({ Body: mockAmendedPetitionFormData }),
+      }),
+    });
+
+    const mockCombinedPdfsReturnVal = 'Antonia Lafaso';
+    applicationContext
+      .getUtilities()
+      .combineTwoPdfs.mockReturnValue(mockCombinedPdfsReturnVal);
+
+    await addDocketEntryForSystemGeneratedOrder({
+      applicationContext,
+      caseEntity,
+      systemGeneratedDocument: orderForAmendedPetitionAndFilingFee,
     });
 
     expect(

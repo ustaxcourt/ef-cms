@@ -75,7 +75,7 @@ All of the scripts needed to run this project should be outlined in our [package
 
 ### Checkout Develop
 
-You'd want to make sure you are on the `flexion/develop` branch before you install the npm dependencies or try to start the services.
+You'd want to make sure you are on the `ustaxcourt/staging` branch before you install the npm dependencies or try to start the services.
 
 
 ### Install the NPM Depedencies
@@ -155,4 +155,4 @@ Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. Wit
 
 ## Troubleshooting
 
-Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `flexion/develop` is recommended.
+Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `ustaxcourt/staging` is recommended.

@@ -30,10 +30,6 @@ const order = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: reactOrderTemplate,
-    options: {
-      overwriteMain: true,
-      title: orderTitle,
-    },
   });
 
   const headerHtml = reactTemplateGenerator({

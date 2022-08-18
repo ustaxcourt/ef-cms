@@ -11,7 +11,7 @@ describe('getChromiumBrowser', () => {
         launch: launchMock,
       },
     };
-    jest.mock('chrome-aws-lambda', () => mockChromium);
+    jest.mock('@sparticuz/chrome-aws-lambda', () => mockChromium);
   });
 
   it('launches a chromium.puppeteer instance', async () => {

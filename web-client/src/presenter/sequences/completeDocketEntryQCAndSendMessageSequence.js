@@ -1,7 +1,6 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
-import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { clearScreenMetadataAction } from '../actions/clearScreenMetadataAction';
 import { clearUsersAction } from '../actions/clearUsersAction';
 import { completeDocketEntryQCAction } from '../actions/EditDocketRecord/completeDocketEntryQCAction';
@@ -33,7 +32,6 @@ export const completeDocketEntryQCAndSendMessageSequence = [
       clearScreenMetadataAction,
       clearUsersAction,
       clearModalAction,
-      clearModalStateAction,
       setCompleteDocketEntryAlertAction,
       setSaveAlertsForNavigationAction,
       setCaseAction,

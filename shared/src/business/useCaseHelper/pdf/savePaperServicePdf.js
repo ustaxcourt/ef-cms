@@ -9,6 +9,7 @@ exports.savePaperServicePdf = async ({ applicationContext, document }) => {
   let hasPaper = !!document.getPages().length;
   let docketEntryId = null;
   let pdfInfo = null;
+
   if (hasPaper) {
     const paperServicePdfData = await document.save();
     docketEntryId = applicationContext.getUniqueId();

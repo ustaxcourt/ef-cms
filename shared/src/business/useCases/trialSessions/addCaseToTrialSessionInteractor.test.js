@@ -41,7 +41,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await expect(
       addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
-        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -55,7 +55,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await expect(
       addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
-        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
     ).rejects.toThrow('The case is already calendared');
   });
@@ -70,26 +70,23 @@ describe('addCaseToTrialSessionInteractor', () => {
     await expect(
       addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+        trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
     ).rejects.toThrow('The case is already part of this trial session.');
   });
 
-  it('returns the expected case with new trial session info', async () => {
+  it('should return the expected case with new trial session information', async () => {
     mockTrialSession = {
       ...MOCK_TRIAL_REMOTE,
       caseOrder: [{ docketNumber: '123-45' }],
       isCalendared: true,
     };
-    applicationContext.getUniqueId.mockReturnValue(
-      '8675309b-18d0-43ec-bafb-654e83405411',
-    );
 
     const latestCase = await addCaseToTrialSessionInteractor(
       applicationContext,
       {
         docketNumber: MOCK_CASE.docketNumber,
-        trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+        trialSessionId: mockTrialSession.trialSessionId,
       },
     );
 
@@ -98,7 +95,7 @@ describe('addCaseToTrialSessionInteractor', () => {
       status: CASE_STATUS_TYPES.calendared,
       trialDate: '2025-12-01T00:00:00.000Z',
       trialLocation: 'Birmingham, Alabama',
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+      trialSessionId: mockTrialSession.trialSessionId,
       trialTime: '10:00',
     });
   });
@@ -109,14 +106,11 @@ describe('addCaseToTrialSessionInteractor', () => {
       caseOrder: [{ docketNumber: '123-45' }],
       isCalendared: true,
     };
-    applicationContext.getUniqueId.mockReturnValue(
-      '8675309b-18d0-43ec-bafb-654e83405411',
-    );
 
     await addCaseToTrialSessionInteractor(applicationContext, {
       calendarNotes: 'Test',
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
 
     const caseWithCalendarNotes = applicationContext
@@ -136,7 +130,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     await addCaseToTrialSessionInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
 
     expect(
@@ -157,7 +151,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     await addCaseToTrialSessionInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
 
     expect(

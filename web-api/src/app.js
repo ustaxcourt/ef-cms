@@ -249,9 +249,6 @@ const {
   getMessagesForCaseLambda,
 } = require('./messages/getMessagesForCaseLambda');
 const {
-  getOpenConsolidatedCasesLambda,
-} = require('./cases/getOpenConsolidatedCasesLambda');
-const {
   getOutboxMessagesForSectionLambda,
 } = require('./messages/getOutboxMessagesForSectionLambda');
 const {
@@ -440,8 +437,9 @@ const { getCaseExistsLambda } = require('./cases/getCaseExistsLambda');
 const { getCaseLambda } = require('./cases/getCaseLambda');
 const { getCaseLambda: v1GetCaseLambda } = require('./v1/getCaseLambda');
 const { getCaseLambda: v2GetCaseLambda } = require('./v2/getCaseLambda');
-const { getClosedCasesLambda } = require('./cases/getClosedCasesLambda');
+const { getCasesForUserLambda } = require('./cases/getCasesForUserLambda');
 const { getInternalUsersLambda } = require('./users/getInternalUsersLambda');
+const { getJudgeInSectionLambda } = require('./users/getJudgeInSectionLambda');
 const { getMessageThreadLambda } = require('./messages/getMessageThreadLambda');
 const { getNotificationsLambda } = require('./users/getNotificationsLambda');
 const { getUploadPolicyLambda } = require('./documents/getUploadPolicyLambda');
@@ -572,8 +570,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(appendAmendedPetitionFormLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
-    lambdaWrapper(serveCourtIssuedDocumentLambda),
+    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
+    lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/coversheet',
@@ -612,8 +610,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(fileCourtIssuedDocketEntryLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/file-and-serve-court-issued-docket-entry',
-    lambdaWrapper(fileAndServeCourtIssuedDocumentLambda),
+    '/async/case-documents/:subjectCaseDocketNumber/file-and-serve-court-issued-docket-entry',
+    lambdaWrapper(fileAndServeCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/correspondence',
@@ -747,8 +745,8 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  * case-notes
  */
 {
-  app.get(
-    '/case-notes/batch-cases/:docketNumbers/user-notes',
+  app.post(
+    '/case-notes/batch-cases/user-notes',
     lambdaWrapper(getUserCaseNoteForCasesLambda),
   );
   app.get(
@@ -803,10 +801,9 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
  * cases
  */
 {
-  app.get('/cases/open', lambdaWrapper(getOpenConsolidatedCasesLambda));
+  app.get('/cases', lambdaWrapper(getCasesForUserLambda));
   app.get('/cases/search', lambdaWrapper(caseAdvancedSearchLambda));
   app.post('/cases/paper', lambdaWrapper(createCaseFromPaperLambda));
-  app.get('/cases/closed', lambdaWrapper(getClosedCasesLambda));
   app.delete(
     '/cases/:docketNumber/remove-pending/:docketEntryId',
     lambdaWrapper(removeCasePendingItemLambda),
@@ -959,6 +956,7 @@ app.get(
   '/sections/:section/document-qc/inbox',
   lambdaWrapper(getDocumentQCInboxForSectionLambda),
 );
+app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
 
 /**
  * trial-sessions

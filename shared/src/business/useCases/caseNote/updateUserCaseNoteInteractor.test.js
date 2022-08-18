@@ -4,6 +4,7 @@ const {
 const {
   updateUserCaseNoteInteractor,
 } = require('./updateUserCaseNoteInteractor');
+const { omit } = require('lodash');
 const { ROLES } = require('../../entities/EntityConstants');
 const { UnauthorizedError } = require('../../../errors/errors');
 const { User } = require('../../entities/User');
@@ -30,15 +31,21 @@ describe('updateUserCaseNoteInteractor', () => {
     const mockUser = new User({
       name: 'Judge Colvin',
       role: ROLES.judge,
+      section: 'colvinChambers',
       userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(mockUser, 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockUser);
     applicationContext
       .getPersistenceGateway()
       .updateUserCaseNote.mockImplementation(v => v.caseNoteToUpdate);
     applicationContext
-      .getUseCases()
-      .getJudgeForUserChambersInteractor.mockReturnValue({
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue({
         role: ROLES.judge,
         userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       });
@@ -56,13 +63,19 @@ describe('updateUserCaseNoteInteractor', () => {
     const mockUser = new User({
       name: 'Judge Colvin',
       role: ROLES.judge,
+      section: 'colvinChambers',
       userId: userIdToExpect,
     });
-    applicationContext.getCurrentUser.mockReturnValue(mockUser);
+    applicationContext.getCurrentUser.mockImplementation(() =>
+      omit(mockUser, 'section'),
+    );
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockImplementation(() => mockUser);
     applicationContext.getPersistenceGateway().updateUserCaseNote = jest.fn();
-    applicationContext.getUseCases.mockReturnValue({
-      getJudgeForUserChambersInteractor: () => null,
-    });
+    applicationContext
+      .getUseCaseHelpers()
+      .getJudgeInSectionHelper.mockReturnValue(null);
 
     await updateUserCaseNoteInteractor(applicationContext, {
       docketNumber: mockCaseNote.docketNumber,

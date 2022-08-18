@@ -93,19 +93,15 @@ describe('setForHearingInteractor', () => {
     ).toHaveBeenCalled();
   });
 
-  it('successfully adds the trial session hearing', async () => {
+  it('should add the trial session hearing', async () => {
     mockCase = {
       ...MOCK_CASE_WITH_TRIAL_SESSION,
     };
 
-    applicationContext.getUniqueId.mockReturnValue(
-      '8675309b-18d0-43ec-bafb-654e83405411',
-    );
-
     await setForHearingInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
       isHearing: true,
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
 
     expect(
@@ -119,26 +115,22 @@ describe('setForHearingInteractor', () => {
         applicationContext: expect.anything(),
         docketNumber: mockCase.docketNumber,
         trialSession: expect.objectContaining({
-          trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
         }),
       }),
     );
   });
 
-  it('successfully adds the trial session hearing with calendarNotes', async () => {
+  it('should add the trial session hearing with calendarNotes', async () => {
     mockCase = {
       ...MOCK_CASE_WITH_TRIAL_SESSION,
     };
-
-    applicationContext.getUniqueId.mockReturnValue(
-      '8675309b-18d0-43ec-bafb-654e83405411',
-    );
 
     await setForHearingInteractor(applicationContext, {
       calendarNotes: 'this is a calendarNote',
       docketNumber: mockCase.docketNumber,
       isHearing: true,
-      trialSessionId: '8675309b-18d0-43ec-bafb-654e83405412',
+      trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
 
     expect(
@@ -158,7 +150,7 @@ describe('setForHearingInteractor', () => {
               docketNumber: mockCase.docketNumber,
             }),
           ]),
-          trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+          trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
         }),
       }),
     );

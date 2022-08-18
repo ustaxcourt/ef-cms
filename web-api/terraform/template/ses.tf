@@ -99,7 +99,6 @@ resource "aws_ses_template" "document_served" {
 EOF
 }
 
-
 #Petition Service Email Template
 resource "aws_ses_template" "petition_served" {
   name    = "petition_served_${var.environment}"
@@ -109,7 +108,6 @@ resource "aws_ses_template" "petition_served" {
 EOF
 }
 
-
 #Email Change Verification Email Template
 resource "aws_ses_template" "email_change_verification" {
   name    = "email_change_verification_${var.environment}"
@@ -117,4 +115,67 @@ resource "aws_ses_template" "email_change_verification" {
   html    = <<EOF
   {{emailContent}}
 EOF
+}
+
+#IRS Super User Bounce Report Email Template
+resource "aws_ses_template" "bounce_alert" {
+  name    = "bounce_alert_${var.environment}"
+  subject = "ALERT: Email to the IRS Super User has bounced"
+  html    = <<EOF
+  {{emailContent}}
+EOF
+}
+
+resource "aws_sns_topic" "bounced_service_emails" {
+  name = "bounced_service_emails_${var.environment}"
+} 
+
+resource "aws_sns_topic_policy" "bounced_service_emails" {
+  arn = aws_sns_topic.bounced_service_emails.arn
+  policy = data.aws_iam_policy_document.sns_bounced_service_emails_policy.json
+}
+
+data "aws_iam_policy_document" "sns_bounced_service_emails_policy" {
+  statement {
+    actions = [
+      "SNS:Publish",
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceAccount"
+
+      values = [
+        data.aws_caller_identity.current.account_id,
+      ]
+    }
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+
+      values = [
+        aws_ses_email_identity.ses_sender.arn
+      ]
+    }
+
+    effect = "Allow"
+    principals {
+      type        = "Service"
+      identifiers = [
+        "ses.amazonaws.com"
+      ]
+    }
+
+    resources = [
+      aws_sns_topic.bounced_service_emails.arn,
+    ]
+  }
+}
+
+resource "aws_ses_identity_notification_topic" "bounced_service_emails" {
+  topic_arn                = aws_sns_topic.bounced_service_emails.arn
+  notification_type        = "Bounce"
+  identity                 = aws_ses_email_identity.ses_sender.arn
+  include_original_headers = true
 }

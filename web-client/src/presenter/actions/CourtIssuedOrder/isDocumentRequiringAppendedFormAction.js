@@ -14,7 +14,10 @@ export const isDocumentRequiringAppendedFormAction = ({ get, path }) => {
 
   if (
     eventCode ===
-    SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetition.eventCode ||
+    eventCode ===
+      SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
+        .eventCode
   ) {
     return path.yes();
   }

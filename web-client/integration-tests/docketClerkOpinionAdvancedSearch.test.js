@@ -342,7 +342,9 @@ describe('Docket clerk opinion advanced search', () => {
       );
 
       expect(
-        searchResults.find(r => !r.judge.includes('Ashford')),
+        searchResults.find(
+          r => !(r.judge || r.signedJudgeName).includes('Ashford'),
+        ),
       ).toBeUndefined();
     });
   });

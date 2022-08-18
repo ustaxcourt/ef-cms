@@ -1,257 +1,25 @@
 const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
 const { TrialSession } = require('../../entities/trialSessions/TrialSession');
 const { UnauthorizedError } = require('../../../errors/errors');
 
-/**
- * serves a notice of trial session and standing pretrial document on electronic
- * recipients and generates paper notices for those that get paper service
- *
- * @param {object} deconstructed.applicationContext the applicationContext
- * @param {object} deconstructed.caseEntity the case entity
- * @param {object} deconstructed.newPdfDoc the pdf we are generating
- * @param {Uint8Array} deconstructed.noticeDocketEntryEntity the docket entry entity
- * @param {object} deconstructed.noticeDocumentPdfData the pdf data for the notice
- * @param {object} deconstructed.PDFDocument pdf-lib object
- * @param {object} deconstructed.servedParties the parties this document will be served to
- * @param {object} deconstructed.standingPretrialDocketEntryEntity the entity for the standing pretrial docket entry
- * @param {Uint8Array} deconstructed.standingPretrialPdfData the pdf data for the standing pretrial
- */
-const serveNoticesForCase = async ({
-  applicationContext,
-  caseEntity,
-  newPdfDoc,
-  noticeDocketEntryEntity,
-  noticeDocumentPdfData,
-  PDFDocument,
-  servedParties,
-  standingPretrialDocketEntryEntity,
-  standingPretrialPdfData,
-}) => {
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: noticeDocketEntryEntity.docketEntryId,
-    servedParties,
+const waitForJobToFinish = ({ applicationContext, jobId }) => {
+  return new Promise(resolve => {
+    const interval = setInterval(async () => {
+      const jobStatus = await applicationContext
+        .getPersistenceGateway()
+        .getTrialSessionJobStatusForCase({
+          applicationContext,
+          jobId,
+        });
+      if (jobStatus.unfinishedCases === 0) {
+        clearInterval(interval);
+        resolve();
+      }
+    }, 5000);
   });
-
-  await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
-    applicationContext,
-    caseEntity,
-    docketEntryId: standingPretrialDocketEntryEntity.docketEntryId,
-    servedParties,
-  });
-
-  if (servedParties.paper.length > 0) {
-    const combinedDocumentsPdf = await PDFDocument.create();
-    const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
-    const standingPretrialPdf = await PDFDocument.load(standingPretrialPdfData);
-
-    let copiedPages = await combinedDocumentsPdf.copyPages(
-      noticeDocumentPdf,
-      noticeDocumentPdf.getPageIndices(),
-    );
-
-    copiedPages = copiedPages.concat(
-      await combinedDocumentsPdf.copyPages(
-        standingPretrialPdf,
-        standingPretrialPdf.getPageIndices(),
-      ),
-    );
-
-    copiedPages.forEach(page => {
-      combinedDocumentsPdf.addPage(page);
-    });
-
-    await applicationContext
-      .getUseCaseHelpers()
-      .appendPaperServiceAddressPageToPdf({
-        applicationContext,
-        caseEntity,
-        newPdfDoc,
-        noticeDoc: combinedDocumentsPdf,
-        servedParties,
-      });
-  }
-};
-
-/**
- * generates a notice of trial session and adds to the case
- *
- * @param {object} caseRecord the case data
- * @returns {object} the raw case object
- */
-const setNoticeForCase = async ({
-  applicationContext,
-  caseRecord,
-  newPdfDoc,
-  PDFDocument,
-  trialSession,
-  trialSessionEntity,
-  user,
-}) => {
-  const caseEntity = new Case(caseRecord, { applicationContext });
-  const { procedureType } = caseRecord;
-
-  // Notice of Trial Issued
-  const noticeOfTrialIssuedFile = await applicationContext
-    .getUseCases()
-    .generateNoticeOfTrialIssuedInteractor(applicationContext, {
-      docketNumber: caseEntity.docketNumber,
-      trialSessionId: trialSessionEntity.trialSessionId,
-    });
-
-  const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: noticeOfTrialIssuedFile,
-    key: newNoticeOfTrialIssuedDocketEntryId,
-  });
-
-  const trialSessionStartDate = applicationContext
-    .getUtilities()
-    .formatDateString(trialSession.startDate, 'MMDDYYYY');
-
-  const noticeOfTrialDocumentTitle = `Notice of Trial on ${trialSessionStartDate} at ${trialSession.trialLocation}`;
-
-  const noticeOfTrialDocketEntry = new DocketEntry(
-    {
-      date: trialSessionEntity.startDate,
-      docketEntryId: newNoticeOfTrialIssuedDocketEntryId,
-      documentTitle: noticeOfTrialDocumentTitle,
-      documentType: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.documentType,
-      eventCode: SYSTEM_GENERATED_DOCUMENT_TYPES.noticeOfTrial.eventCode,
-      isFileAttached: true,
-      isOnDocketRecord: true,
-      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      signedAt: applicationContext.getUtilities().createISODateString(), // The signature is in the template of the document being generated
-      trialLocation: trialSessionEntity.trialLocation,
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
-
-  noticeOfTrialDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId: noticeOfTrialDocketEntry.docketEntryId,
-    });
-
-  caseEntity.addDocketEntry(noticeOfTrialDocketEntry);
-  caseEntity.setNoticeOfTrialDate();
-
-  // Standing Pretrial Notice/Order
-  let standingPretrialFile;
-  let standingPretrialDocumentTitle;
-  let standingPretrialDocumentEventCode;
-
-  if (procedureType === 'Small') {
-    // Generate Standing Pretrial Notice
-    standingPretrialFile = await applicationContext
-      .getUseCases()
-      .generateStandingPretrialOrderForSmallCaseInteractor(applicationContext, {
-        docketNumber: caseEntity.docketNumber,
-        trialSessionId: trialSessionEntity.trialSessionId,
-      });
-
-    standingPretrialDocumentTitle =
-      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
-        .documentType;
-    standingPretrialDocumentEventCode =
-      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrderForSmallCase
-        .eventCode;
-  } else {
-    // Generate Standing Pretrial Order
-    standingPretrialFile = await applicationContext
-      .getUseCases()
-      .generateStandingPretrialOrderInteractor(applicationContext, {
-        docketNumber: caseEntity.docketNumber,
-        trialSessionId: trialSessionEntity.trialSessionId,
-      });
-
-    standingPretrialDocumentTitle =
-      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.documentType;
-    standingPretrialDocumentEventCode =
-      SYSTEM_GENERATED_DOCUMENT_TYPES.standingPretrialOrder.eventCode;
-  }
-
-  const newStandingPretrialDocketEntryId = applicationContext.getUniqueId();
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: standingPretrialFile,
-    key: newStandingPretrialDocketEntryId,
-  });
-
-  const standingPretrialDocketEntry = new DocketEntry(
-    {
-      attachments: false,
-      description: standingPretrialDocumentTitle,
-      docketEntryId: newStandingPretrialDocketEntryId,
-      documentTitle: standingPretrialDocumentTitle,
-      documentType: standingPretrialDocumentTitle,
-      eventCode: standingPretrialDocumentEventCode,
-      isFileAttached: true,
-      isOnDocketRecord: true,
-      processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
-      signedAt: applicationContext.getUtilities().createISODateString(),
-      signedByUserId: trialSessionEntity.judge.userId,
-      signedJudgeName: trialSessionEntity.judge.name,
-      userId: user.userId,
-    },
-    { applicationContext },
-  );
-
-  // TODO: the numberOfPages should already be stored somewhere, but it's not
-  standingPretrialDocketEntry.numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId: standingPretrialDocketEntry.docketEntryId,
-    });
-
-  caseEntity.addDocketEntry(standingPretrialDocketEntry);
-
-  const servedParties = aggregatePartiesForService(caseEntity);
-
-  noticeOfTrialDocketEntry.setAsServed(servedParties.all);
-  standingPretrialDocketEntry.setAsServed(servedParties.all);
-
-  caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
-  caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
-
-  // Serve notice
-  await serveNoticesForCase({
-    PDFDocument,
-    applicationContext,
-    caseEntity,
-    newPdfDoc,
-    noticeDocketEntryEntity: noticeOfTrialDocketEntry,
-    noticeDocumentPdfData: noticeOfTrialIssuedFile,
-    servedParties,
-    standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
-    standingPretrialPdfData: standingPretrialFile,
-  });
-
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity,
-  });
-
-  return caseEntity.toRawObject();
 };
 
 /**
@@ -260,13 +28,11 @@ const setNoticeForCase = async ({
  * @param {object} applicationContext the applicationContext
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the trial session id
- * @param {string} providers.docketNumber optional docketNumber to explicitly set the notice on the ONE specified case
  */
 exports.setNoticesForCalendaredTrialSessionInteractor = async (
   applicationContext,
-  { docketNumber, trialSessionId },
+  { trialSessionId },
 ) => {
-  let shouldSetNoticesIssued = true;
   const user = applicationContext.getCurrentUser();
   const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -280,19 +46,6 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
       applicationContext,
       trialSessionId,
     });
-
-  // opting to pull from the set of calendared cases rather than load the
-  // case individually to add an additional layer of validation
-  if (docketNumber) {
-    // Do not set when sending notices for a single case
-    shouldSetNoticesIssued = false;
-
-    const singleCase = calendaredCases.find(
-      caseRecord => caseRecord.docketNumber === docketNumber,
-    );
-
-    calendaredCases = [singleCase];
-  }
 
   if (calendaredCases.length === 0) {
     await applicationContext.getNotificationGateway().sendNotificationToUser({
@@ -318,65 +71,128 @@ exports.setNoticesForCalendaredTrialSessionInteractor = async (
     applicationContext,
   });
 
-  const newPdfDoc = await PDFDocument.create();
+  const trialSessionProcessingStatus = await applicationContext
+    .getPersistenceGateway()
+    .getTrialSessionProcessingStatus({
+      applicationContext,
+      trialSessionId,
+    });
 
-  let processedCases = 0;
+  if (
+    trialSessionProcessingStatus &&
+    (trialSessionProcessingStatus === 'processing' ||
+      trialSessionProcessingStatus === 'complete')
+  ) {
+    applicationContext.logger.warn(
+      `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
+    );
+    return;
+  }
+
+  const jobId = trialSessionId;
+
+  await applicationContext
+    .getPersistenceGateway()
+    .setTrialSessionProcessingStatus({
+      applicationContext,
+      trialSessionId,
+      trialSessionStatus: 'processing',
+    });
+
+  await applicationContext.getPersistenceGateway().createJobStatus({
+    applicationContext,
+    docketNumbers: calendaredCases.map(
+      calendaredCase => calendaredCase.docketNumber,
+    ),
+    jobId,
+  });
+
   for (let calendaredCase of calendaredCases) {
-    const latestVersionOfCase = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
+    await applicationContext
+      .getMessageGateway()
+      .sendSetTrialSessionCalendarEvent({
         applicationContext,
-        docketNumber: calendaredCase.docketNumber,
+        payload: {
+          docketNumber: calendaredCase.docketNumber,
+          jobId,
+          trialSession,
+          userId: user.userId,
+        },
+      });
+  }
+
+  await waitForJobToFinish({ applicationContext, jobId });
+
+  await applicationContext
+    .getPersistenceGateway()
+    .setTrialSessionProcessingStatus({
+      applicationContext,
+      trialSessionId,
+      trialSessionStatus: 'complete',
+    });
+
+  await trialSessionEntity.setNoticesIssued();
+
+  await applicationContext.getPersistenceGateway().updateTrialSession({
+    applicationContext,
+    trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+  });
+
+  const paperServiceDocumentsPdf = await PDFDocument.create();
+
+  for (let calendaredCase of calendaredCases) {
+    const casePdfDocumentsExistsInS3 = await applicationContext
+      .getPersistenceGateway()
+      .isFileExists({
+        applicationContext,
+        key: `${jobId}-${calendaredCase.docketNumber}`,
+        useTempBucket: true,
       });
 
-    await setNoticeForCase({
-      PDFDocument,
-      applicationContext,
-      caseRecord: latestVersionOfCase,
-      newPdfDoc,
-      trialSession,
-      trialSessionEntity,
-      user,
-    });
-    processedCases++;
-    await applicationContext.getNotificationGateway().sendNotificationToUser({
-      applicationContext,
-      message: {
-        action: 'notice_generation_update_progress',
-        processedCases,
-        totalCases: latestVersionOfCase.length,
-      },
-      userId: user.userId,
-    });
-  }
+    if (!casePdfDocumentsExistsInS3) {
+      continue;
+    }
 
-  // Prevent from being overwritten when generating notices for a manually-added
-  // case, after the session has been set (see above)
-  if (shouldSetNoticesIssued) {
-    await trialSessionEntity.setNoticesIssued();
+    const calendaredCasePdfData = await applicationContext
+      .getPersistenceGateway()
+      .getDocument({
+        applicationContext,
+        key: `${jobId}-${calendaredCase.docketNumber}`,
+        protocol: 'S3',
+        useTempBucket: true,
+      });
 
-    await applicationContext.getPersistenceGateway().updateTrialSession({
-      applicationContext,
-      trialSessionToUpdate: trialSessionEntity.validate().toRawObject(),
+    const calendaredCasePdf = await PDFDocument.load(calendaredCasePdfData);
+
+    await applicationContext.getUtilities().copyPagesAndAppendToTargetPdf({
+      copyFrom: calendaredCasePdf,
+      copyInto: paperServiceDocumentsPdf,
     });
   }
 
-  let pdfUrl = null;
-  const serviceInfo = await applicationContext
+  const { docketEntryId, hasPaper, url } = await applicationContext
     .getUseCaseHelpers()
     .savePaperServicePdf({
       applicationContext,
-      document: newPdfDoc,
+      document: paperServiceDocumentsPdf,
     });
-  pdfUrl = serviceInfo.url;
+
+  if (url) {
+    applicationContext.logger.info(
+      `generated the printable paper service pdf at ${url}`,
+      {
+        url,
+      },
+    );
+  }
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
     message: {
       action: 'notice_generation_complete',
-      docketEntryId: serviceInfo.docketEntryId,
-      hasPaper: serviceInfo.hasPaper,
-      pdfUrl,
+      docketEntryId,
+      hasPaper,
+      pdfUrl: url || null,
     },
     userId: user.userId,
   });

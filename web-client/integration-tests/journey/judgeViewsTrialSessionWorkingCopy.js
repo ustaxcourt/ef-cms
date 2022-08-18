@@ -7,6 +7,7 @@ export const judgeViewsTrialSessionWorkingCopy = (
   cerebralTest,
   checkCase,
   calendarNote,
+  expectedNumberOfCasesOnTrialSession = 1,
 ) => {
   const { DOCKET_SECTION } = applicationContext.getConstants();
 
@@ -37,7 +38,9 @@ export const judgeViewsTrialSessionWorkingCopy = (
     expect(cerebralTest.getState('trialSessionWorkingCopy.sortOrder')).toEqual(
       'asc',
     );
-    expect(cerebralTest.getState('trialSession.caseOrder').length).toEqual(1);
+    expect(cerebralTest.getState('trialSession.caseOrder').length).toEqual(
+      expectedNumberOfCasesOnTrialSession,
+    );
 
     if (checkCase) {
       const foundCase = trialSessionFormatted.caseOrder.find(
