@@ -130,7 +130,6 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
     NOTE: If any npm packages are updated but the `package-lock.js` file is not updated, increment the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
 
 4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
-    -
     - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
     - Change the version in `scripts/verify-terraform-version.sh`
     - increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
