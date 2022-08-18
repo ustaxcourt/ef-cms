@@ -90,6 +90,8 @@ const verifyAdminUserDisabled = async () => {
         Username: USTC_ADMIN_USER,
       })
       .promise();
+
+    console.log('--------result------', result);
     if (result && result.Enabled === false) {
       console.log('USTC Admin user is disabled.');
       return;
