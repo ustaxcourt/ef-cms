@@ -749,10 +749,9 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - run:
-          name: Placeholder
+          name: Deploy Switch Colors Cron
           command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
-            source $BASH_ENV
+            npm run deploy:switch-colors-cron -- $ENV
 
   disable-switch-colors-cron:
     docker:
@@ -762,10 +761,9 @@ jobs:
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
       - run:
-          name: Placeholder
+          name: Disable Switch Colors Cron
           command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
-            source $BASH_ENV
+            ./disable-switch-colors-cron.sh
 
   switch-colors:
     docker:
