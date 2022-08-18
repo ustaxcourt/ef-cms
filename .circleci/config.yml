@@ -432,38 +432,38 @@ jobs:
           name: Build Docker Image
           command: |
             cd web-api/runtimes/puppeteer && ./build.sh && cd ../../..
-      - run:
-          name: Setup Blue Green Migration If Needed
-          command: |
-            ./setup-for-blue-green-migration.sh
-      - run:
-          name: Setup Reindex If Needed
-          command: |
-            ./setup-for-reindex.sh
-      - run:
-          name: Setup Migrate Flag
-          command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Setup Reindex Flag
-          command: echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
-      - run:
-          name: Setup Destination Table Var
-          command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
+      # - run:
+      #     name: Setup Blue Green Migration If Needed
+      #     command: |
+      #       ./setup-for-blue-green-migration.sh
+      # - run:
+      #     name: Setup Reindex If Needed
+      #     command: |
+      #       ./setup-for-reindex.sh
+      # - run:
+      #     name: Setup Migrate Flag
+      #     command: echo "export MIGRATE_FLAG=$(./scripts/dynamo/get-migrate-flag.sh $ENV)" >> $BASH_ENV
+      # - run:
+      #     name: Setup Reindex Flag
+      #     command: echo "export REINDEX_FLAG=$(./scripts/dynamo/get-reindex-flag.sh $ENV)" >> $BASH_ENV
+      # - run:
+      #     name: Setup Destination Table Var
+      #     command: echo "export DESTINATION_TABLE=$(./scripts/dynamo/get-destination-table.sh $ENV)" >> $BASH_ENV
       - run:
           no_output_timeout: 20m
           name: 'Deploy - Web API - Terraform'
           command: |
             cd web-api/terraform/main && ../bin/deploy-app.sh $ENV
-      - run:
-          no_output_timeout: 20m
-          name: 'Deploy - Web Client - Terraform'
-          command: |
-            cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
-      - run:
-          name: Setup Elasticsearch Index Settings
-          command: |
-            . ./scripts/load-environment-from-secrets.sh
-            ./web-api/setup-elasticsearch-index.sh $ENV
+      # - run:
+      #     no_output_timeout: 20m
+      #     name: 'Deploy - Web Client - Terraform'
+      #     command: |
+      #       cd web-client/terraform/main && ../bin/deploy-app.sh $ENV
+      # - run:
+      #     name: Setup Elasticsearch Index Settings
+      #     command: |
+      #       . ./scripts/load-environment-from-secrets.sh
+      #       ./web-api/setup-elasticsearch-index.sh $ENV
       - run:
           name: Admin User Setup
           command: |
