@@ -71,7 +71,7 @@ const deactivateAdminAccount = async () => {
   await cognito
     .adminDisableUser({
       UserPoolId,
-      Username: USTC_ADMIN_USER, // this should be a guid, not the email?
+      Username: USTC_ADMIN_USER,
     })
     .promise();
 };
