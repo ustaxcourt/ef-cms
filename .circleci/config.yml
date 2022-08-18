@@ -488,14 +488,14 @@ jobs:
             else
               echo "skipping…"
             fi
-      - run:
-          name: Judge Users Setup
-          command: |
-            if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
-              ./scripts/data-import/judge/bulk-import-judge-users.sh
-            else
-              echo "skipping…"
-            fi
+      # - run:
+      #     name: Judge Users Setup
+      #     command: |
+      #       if [ "${CIRCLE_BRANCH}" != "prod" ] && [ "${CIRCLE_BRANCH}" != "test" ] && [ "${CIRCLE_BRANCH}" != "migration" ]; then
+      #         ./scripts/data-import/judge/bulk-import-judge-users.sh
+      #       else
+      #         echo "skipping…"
+      #       fi
       # - run:
       #     name: 'Deploy - Web Client - S3'
       #     command: |
