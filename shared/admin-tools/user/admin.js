@@ -59,6 +59,31 @@ const activateAdminAccount = async () => {
     }
     process.exit(1);
   }
+
+  try {
+    let result = await cognito
+      .adminGetUser({
+        UserPoolId,
+        Username: USTC_ADMIN_USER,
+      })
+      .promise();
+    console.log('--------result------ activateAdminAccount', result);
+
+    if (result && result.Enabled === true) {
+      console.log('USTC Admin user is Enabled in activateAdminAccount.');
+      return;
+    } else {
+      console.error(
+        'USTC Admin user is NOT Enabled as expected in activateAdminAccount.',
+      );
+      // process.exit(1);
+    }
+  } catch (err) {
+    if (err.code !== 'UserNotFoundException') {
+      console.error(err);
+      // process.exit(1);
+    }
+  }
 };
 
 /**
@@ -104,7 +129,7 @@ const deactivateAdminAccount = async () => {
 /**
  * This verifies that the USTC admin user is disabled in Cognito
  */
-const verifyAdminUserDisabled = async () => {
+const verifyAdminUserDisabled = async ({ attempt }) => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const UserPoolId = await getUserPoolId();
 
@@ -122,9 +147,20 @@ const verifyAdminUserDisabled = async () => {
       return;
     } else {
       console.error(
-        'USTC Admin user is NOT disabled as expected in verifyAdminUserDisabled.',
+        'USTC Admin user is NOT disabled as expected in verifyAdminUserDisabled. Disabling...',
       );
-      process.exit(1);
+
+      const maxRetries = 3;
+      await cognito
+        .adminDisableUser({
+          UserPoolId,
+          Username: USTC_ADMIN_USER,
+        })
+        .promise();
+      if (attempt < maxRetries) {
+        attempt++;
+        await verifyAdminUserDisabled({ attempt });
+      }
     }
   } catch (err) {
     if (err.code !== 'UserNotFoundException') {
