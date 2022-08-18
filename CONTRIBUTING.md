@@ -36,11 +36,11 @@ From the [Issues page](https://github.com/ustaxcourt/ef-cms/issues) you can clic
 
 For security-sensitive issues, please do not file a public issue. Rather, please email [Dawson support](dawson.support@ustaxcourt.gov).
 
-### Proposing Changes
+## Proposing Changes
 
 We welcome pull requests, but we do still want those changes to be related to an [Issue](#reporting-issues). Please file one prior to submitting a pull request.
 
-### Pull Request Procedures
+## Pull Request Procedures
 
 Please follow these steps before submitting a pull request:
 
@@ -57,12 +57,12 @@ Please follow these steps before submitting a pull request:
 
 For non-trivial changes, PR's should be initiated into the `test` branch. Others can be initiated straight into the `staging` branch.
 
-#### Active Pull Requests
+### Active Pull Requests
 
 We will be civil, but we are opinionated about the architecture and coding standards in the project. Please do not be offended if the team requests changes or otherwise provides feedback. We may use [emoji's](https://github.com/erikthedeveloper/code-review-emoji-guide) in our comments.
 
 We will expect civil behavior from contributors as well, and reserve the right to close PR's for unacceptable behavior. For more on what is considered unacceptable behavior, refer to [18F Open Source Policy GitHub repository](https://github.com/18f/open-source-policy).
 
-### Contribution Prerequisites
+## Contribution Prerequisites
 
 You have Node 14 installed and in use.
