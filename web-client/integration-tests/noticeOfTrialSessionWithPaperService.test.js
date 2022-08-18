@@ -12,9 +12,9 @@ import { petitionsClerkCompletesAndSetsTrialSession } from './journey/petitionsC
 import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsCaseToIrs';
 import { petitionsClerkViewsDocketRecordAfterSettingTrial } from './journey/petitionsClerkViewsDocketRecordAfterSettingTrial';
 
-const cerebralTest = setupTest();
-
 describe('Generate Notices of Trial Session with Paper Service', () => {
+  const cerebralTest = setupTest();
+
   beforeAll(() => {
     jest.setTimeout(30000);
   });

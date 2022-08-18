@@ -26,13 +26,10 @@ describe('gotoDashboardSequence', () => {
 
     applicationContext.getUseCases().getUserInteractor.mockReturnValue(user);
 
-    applicationContext
-      .getUseCases()
-      .getOpenConsolidatedCasesInteractor.mockReturnValue(openCases);
-
-    applicationContext
-      .getUseCases()
-      .getClosedCasesInteractor.mockReturnValue(closedCases);
+    applicationContext.getUseCases().getCasesForUserInteractor.mockReturnValue({
+      closedCaseList: closedCases,
+      openCaseList: openCases,
+    });
 
     //set token to take 'isLoggedIn' path
     cerebralTest.setState('token', 'a');

@@ -14,9 +14,11 @@ shared/src/business/utilities/htmlGenerator/index.scss
 /policy.json
 artillery/private-app-report.json
 artillery/tokens.csv
+artillery/token-ids.csv
 artillery/private-advanced-order.json
 aws.json
 aws/lambdas/*.zip
+aws/lambdas/RotateInfoIndices/dist
 coverage/
 cypress-smoketests/screenshots
 cypress-smoketests/videos
@@ -49,6 +51,7 @@ web-api/runtimes/clamav/lib
 web-api/storage/s3/*
 web-api/terraform/main/new-policy.json
 web-api/terraform/template/lambdas/*.zip
+web-api/storage/fixtures/efcms-export.json
 web-client/.cache/
 web-client/coverage-e2e
 web-client/coverage-integration/*
@@ -58,5 +61,9 @@ web-client/reports
 web-client/terraform/common/cloudfront-edge/header-security-lambda.js.zip
 web-client/terraform/common/cloudfront-edge/strip-basepath-lambda.js.zip
 web-client/tests_output/
+web-client/integration-tests/test-output/
 bulk-import-log.txt
 **/.env
+metadata.json
+metadata-public.json
+stats.html

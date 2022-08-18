@@ -1,6 +1,9 @@
 const createApplicationContext = require('./applicationContext');
-const { getUserFromAuthHeader } = require('./middleware/apiGatewayHelper');
-const { handle } = require('./middleware/apiGatewayHelper');
+const {
+  getConnectionIdFromEvent,
+  getUserFromAuthHeader,
+  handle,
+} = require('./middleware/apiGatewayHelper');
 
 exports.dataSecurityFilter = (data, { applicationContext }) => {
   let returnData = data;
@@ -59,6 +62,7 @@ exports.checkMaintenanceMode = checkMaintenanceMode;
 exports.genericHandler = (awsEvent, cb, options = {}) => {
   return handle(awsEvent, async () => {
     const user = options.user || getUserFromAuthHeader(awsEvent);
+    const clientConnectionId = getConnectionIdFromEvent(awsEvent);
     const applicationContext =
       options.applicationContext ||
       createApplicationContext(user, awsEvent.logger);
@@ -77,7 +81,11 @@ exports.genericHandler = (awsEvent, cb, options = {}) => {
         await checkMaintenanceMode({ applicationContext });
       }
 
-      const results = await cb({ applicationContext, user });
+      const results = await cb({
+        applicationContext,
+        clientConnectionId,
+        user,
+      });
 
       const returnResults = exports.dataSecurityFilter(results, {
         applicationContext,

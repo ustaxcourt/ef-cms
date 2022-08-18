@@ -84,8 +84,11 @@ import { requestAccessHelper } from './computeds/requestAccessHelper';
 import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper';
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
+import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
+import { showSortableHeaders } from './computeds/showSortableHeaders';
+import { sortableColumnHelper } from './computeds/sortableColumnHelper';
 import { startCaseHelper } from './computeds/startCaseHelper';
 import { startCaseInternalContactsHelper } from './computeds/startCaseInternalContactsHelper';
 import { startCaseInternalHelper } from './computeds/startCaseInternalHelper';
@@ -106,7 +109,7 @@ import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
-const { IDLE_STATUS } = getConstants();
+const { ASCENDING, IDLE_STATUS } = getConstants();
 
 const helpers = {
   addCourtIssuedDocketEntryHelper,
@@ -192,8 +195,11 @@ const helpers = {
   reviewSavedPetitionHelper,
   scanBatchPreviewerHelper,
   scanHelper,
+  sealedCaseDetailHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
+  showSortableHeaders,
+  sortableColumnHelper,
   startCaseHelper,
   startCaseInternalContactsHelper,
   startCaseInternalHelper,
@@ -330,6 +336,10 @@ export const baseState = {
     todaysOrdersSort: [],
   },
   showValidation: false,
+  tableSort: {
+    sortField: 'createdAt',
+    sortOrder: ASCENDING,
+  },
   user: null,
   // used for progress indicator when updating contact information for all of a user's cases
   userContactEditProgress: {},

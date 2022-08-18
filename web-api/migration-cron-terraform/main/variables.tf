@@ -30,6 +30,10 @@ variable "migrate_flag" {
   type = bool
 }
 
+variable "reindex_flag" {
+  type = bool
+}
+
 variable "circle_machine_user_token" {
   type = string
 }

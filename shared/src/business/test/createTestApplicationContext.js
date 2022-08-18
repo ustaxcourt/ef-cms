@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const DateHandler = require('../utilities/DateHandler');
 const path = require('path');
 const sharedAppContext = require('../../sharedAppContext');
@@ -7,9 +8,6 @@ const {
 const {
   aggregatePartiesForService,
 } = require('../utilities/aggregatePartiesForService');
-const {
-  appendPaperServiceAddressPageToPdf,
-} = require('../useCaseHelper/service/appendPaperServiceAddressPageToPdf');
 const {
   bulkDeleteRecords,
 } = require('../../persistence/elasticsearch/bulkDeleteRecords');
@@ -39,6 +37,9 @@ const {
   compareISODateStrings,
   compareStrings,
 } = require('../utilities/sortFunctions');
+const {
+  copyPagesAndAppendToTargetPdf,
+} = require('../utilities/copyPagesAndAppendToTargetPdf');
 const {
   createCaseAndAssociations,
 } = require('../useCaseHelper/caseAssociation/createCaseAndAssociations');
@@ -84,6 +85,9 @@ const {
 const {
   generateAndServeDocketEntry,
 } = require('../useCaseHelper/service/createChangeItems');
+const {
+  generateNoticesForCaseTrialSessionCalendarInteractor,
+} = require('../useCases/trialSessions/generateNoticesForCaseTrialSessionCalendarInteractor');
 const {
   getAddressPhoneDiff,
 } = require('../utilities/generateChangeOfAddressTemplate');
@@ -155,6 +159,9 @@ const {
   sealDocketEntryInteractor,
 } = require('../useCases/docketEntry/sealDocketEntryInteractor');
 const {
+  setNoticesForCalendaredTrialSessionInteractor,
+} = require('../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
+const {
   setServiceIndicatorsForCase,
 } = require('../utilities/setServiceIndicatorsForCase');
 const {
@@ -195,6 +202,7 @@ const { getCropBox } = require('../../../src/business/utilities/getCropBox');
 const { getItem } = require('../../persistence/localStorage/getItem');
 const { getServedPartiesCode, isServed } = require('../entities/DocketEntry');
 const { getTextByCount } = require('../utilities/getTextByCount');
+const { getUserIdForNote } = require('../useCaseHelper/getUserIdForNote');
 const { removeItem } = require('../../persistence/localStorage/removeItem');
 const { replaceBracketed } = require('../utilities/replaceBracketed');
 const { ROLES } = require('../entities/EntityConstants');
@@ -277,6 +285,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     compareISODateStrings: jest.fn().mockImplementation(compareISODateStrings),
     compareStrings: jest.fn().mockImplementation(compareStrings),
     computeDate: jest.fn().mockImplementation(DateHandler.computeDate),
+    copyPagesAndAppendToTargetPdf: jest
+      .fn()
+      .mockImplementation(copyPagesAndAppendToTargetPdf),
     createEndOfDayISO: jest
       .fn()
       .mockImplementation(DateHandler.createEndOfDayISO),
@@ -399,10 +410,16 @@ const createTestApplicationContext = ({ user } = {}) => {
   };
 
   const mockGetUseCases = appContextProxy({
+    generateNoticesForCaseTrialSessionCalendarInteractor: jest
+      .fn()
+      .mockImplementation(generateNoticesForCaseTrialSessionCalendarInteractor),
     sealCaseInteractor: jest.fn().mockImplementation(sealCaseInteractor),
     sealDocketEntryInteractor: jest
       .fn()
       .mockImplementation(sealDocketEntryInteractor),
+    setNoticesForCalendaredTrialSessionInteractor: jest
+      .fn()
+      .mockImplementation(setNoticesForCalendaredTrialSessionInteractor),
     unsealDocketEntryInteractor: jest
       .fn()
       .mockImplementation(unsealDocketEntryInteractor),
@@ -415,18 +432,18 @@ const createTestApplicationContext = ({ user } = {}) => {
     addDocketEntryForSystemGeneratedOrder: jest
       .fn()
       .mockImplementation(addDocketEntryForSystemGeneratedOrder),
-    appendPaperServiceAddressPageToPdf: jest
-      .fn()
-      .mockImplementation(appendPaperServiceAddressPageToPdf),
     createCaseAndAssociations: jest
       .fn()
       .mockImplementation(createCaseAndAssociations),
     generateAndServeDocketEntry: jest
       .fn()
       .mockImplementation(generateAndServeDocketEntry),
+    getJudgeInSectionHelper: jest.fn(),
+    getUserIdForNote: jest.fn().mockImplementation(getUserIdForNote),
     removeCounselFromRemovedPetitioner: jest
       .fn()
       .mockImplementation(removeCounselFromRemovedPetitioner),
+    sendServedPartiesEmails: jest.fn(),
     setPdfFormFields: jest.fn().mockImplementation(setPdfFormFields),
     updateCaseAndAssociations: jest
       .fn()
@@ -443,6 +460,10 @@ const createTestApplicationContext = ({ user } = {}) => {
     changeOfAddress: jest.fn().mockImplementation(getFakeFile),
     coverSheet: jest.fn().mockImplementation(getFakeFile),
     docketRecord: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeOfTrialJudge: jest.fn().mockImplementation(getFakeFile),
+    noticeOfChangeToInPersonProceeding: jest
+      .fn()
+      .mockImplementation(getFakeFile),
     noticeOfChangeToRemoteProceeding: jest.fn().mockImplementation(getFakeFile),
     noticeOfDocketChange: jest.fn().mockImplementation(getFakeFile),
     noticeOfReceiptOfPetition: jest.fn().mockImplementation(getFakeFile),
@@ -503,6 +524,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getChambersSectionsLabels: jest
       .fn()
       .mockImplementation(getChambersSectionsLabels),
+    getDispatchNotification: jest.fn(),
     getDocument: jest.fn(),
     getDocumentQCInboxForSection: jest
       .fn()
@@ -527,6 +549,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getMessagesByDocketNumber: jest.fn(),
     getReconciliationReport: jest.fn(),
     getRecord: jest.fn(),
+    getTrialSessionJobStatusForCase: jest.fn(),
     getUserById: jest.fn().mockImplementation(getUserByIdPersistence),
     getUserCaseMappingsByDocketNumber: jest.fn().mockReturnValue([]),
     getWorkItemById: jest.fn().mockImplementation(getWorkItemByIdPersistence),
@@ -538,11 +561,13 @@ const createTestApplicationContext = ({ user } = {}) => {
     persistUser: jest.fn(),
     putWorkItemInOutbox: jest.fn().mockImplementation(putWorkItemInOutbox),
     removeItem: jest.fn().mockImplementation(removeItem),
+    saveDispatchNotification: jest.fn(),
     saveDocumentFromLambda: jest.fn(),
     saveWorkItem: jest.fn().mockImplementation(saveWorkItem),
     setExpiresAt: jest.fn(),
     setItem: jest.fn().mockImplementation(setItem),
     setPriorityOnAllWorkItems: jest.fn(),
+    setTrialSessionJobStatusForCase: jest.fn(),
     updateCase: jest.fn().mockImplementation(updateCase),
     updateCaseCorrespondence: jest
       .fn()
@@ -559,6 +584,7 @@ const createTestApplicationContext = ({ user } = {}) => {
 
   const mockGetMessagingClient = {
     deleteMessage: jest.fn().mockReturnValue({ promise: () => {} }),
+    sendMessage: jest.fn().mockReturnValue({ promise: () => {} }),
   };
 
   const mockDocumentClient = createMockDocumentClient();
@@ -596,9 +622,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     filterCaseMetadata: jest.fn(),
     getAppEndpoint: () => 'localhost:1234',
     getBaseUrl: () => 'http://localhost',
+    getBounceAlertRecipients: jest.fn(),
     getBroadcastGateway: jest.fn().mockReturnValue(mockBroadcastGateway),
     getCaseTitle: jest.fn().mockImplementation(Case.getCaseTitle),
-    getChiefJudgeNameForSigning: jest.fn(),
     getChromiumBrowser: jest.fn().mockImplementation(() => {
       return mockGetChromiumBrowserReturnValue;
     }),
@@ -636,6 +662,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDispatchers: jest.fn().mockReturnValue({
       sendBulkTemplatedEmail: jest.fn(),
       sendNotificationOfSealing: jest.fn(),
+      sendSlackNotification: jest.fn(),
     }),
     getDocumentClient: jest.fn().mockImplementation(() => mockDocumentClient),
     getDocumentGenerators: jest
@@ -644,7 +671,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     getDocumentsBucketName: jest.fn().mockReturnValue('DocumentBucketName'),
     getEmailClient: jest.fn().mockReturnValue(mockGetEmailClient),
     getEntityByName: jest.fn(),
-    getEnvironment: jest.fn(),
+    getEnvironment: jest.fn().mockReturnValue({
+      stage: 'local',
+    }),
     getFileReaderInstance: jest.fn(),
     getHttpClient: jest.fn().mockReturnValue(mockGetHttpClientReturnValue),
     getIrsSuperuserEmail: jest.fn(),
@@ -652,6 +681,9 @@ const createTestApplicationContext = ({ user } = {}) => {
       error: jest.fn(),
     }),
     getMessageGateway: appContextProxy({
+      sendCalendarSessionEvent: jest.fn(),
+      sendEmailEventToQueue: jest.fn(),
+      sendSetTrialSessionCalendarEvent: jest.fn(),
       sendUpdatePetitionerCasesMessage: jest.fn(),
     }),
     getMessagingClient: jest.fn().mockReturnValue(mockGetMessagingClient),
@@ -670,6 +702,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getScanner: jest.fn().mockReturnValue(mockGetScannerReturnValue),
     getScannerResourceUri: jest.fn().mockReturnValue(scannerResourcePath),
     getSearchClient: emptyAppContextProxy,
+    getSlackWebhookUrl: jest.fn(),
     getStorageClient: mockGetStorageClient,
     getTempDocumentsBucketName: jest.fn(),
     getUniqueId: jest.fn().mockImplementation(sharedAppContext.getUniqueId),
