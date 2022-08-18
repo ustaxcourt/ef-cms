@@ -13,6 +13,7 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
   const procedureTypeFilter = get(state.form.procedureType);
 
   let blockedCasesFormatted = [];
+  let displayMessage;
 
   const setFormattedBlockDates = blockedCase => {
     if (blockedCase.blockedDate && blockedCase.automaticBlocked) {
@@ -56,8 +57,17 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
       });
   }
 
+  if (blockedCasesFormatted.length === 0) {
+    displayMessage = 'There are no blocked cases for this location.';
+
+    if (procedureTypeFilter && procedureTypeFilter !== 'All') {
+      displayMessage = 'There are no blocked cases for this case type.';
+    }
+  }
+
   return {
-    blockedCasesCount: blockedCasesFormatted && blockedCasesFormatted.length,
+    blockedCasesCount: blockedCasesFormatted.length,
     blockedCasesFormatted,
+    displayMessage,
   };
 };
