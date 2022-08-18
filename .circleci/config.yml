@@ -741,6 +741,32 @@ jobs:
       - store_artifacts:
           path: /root/project/cypress-readonly/videos/
 
+  deploy-switch-colors-cron:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.2.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - run:
+          name: Placeholder
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+
+  disable-switch-colors-cron:
+    docker:
+      - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.2.0
+        aws_auth:
+          aws_access_key_id: $AWS_ACCESS_KEY_ID
+          aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
+    steps:
+      - run:
+          name: Placeholder
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+
   switch-colors:
     docker:
       - image: $AWS_ACCOUNT_ID.dkr.ecr.us-east-1.amazonaws.com/ef-cms-us-east-1:2.2.0
@@ -1063,10 +1089,20 @@ workflows:
           <<: *build-and-deploy-with-context-defaults
           requires:
             - disable-reindex-cron
+      - deploy-switch-colors-cron:
+          requires:
+            - smoketests-readonly
+      - wait-for-switch:
+          type: approval
+          requires:
+            - deploy-switch-colors-cron
+      - disable-switch-colors-cron:
+          requires:
+            - wait-for-switch
       - switch-colors:
           <<: *build-and-deploy-with-context-defaults
           requires:
-            - smoketests-readonly
+            - disable-switch-colors-cron
       - backup-source-dynamo-table:
           <<: *build-and-deploy-with-context-defaults
           requires:
