@@ -71,9 +71,34 @@ const deactivateAdminAccount = async () => {
   await cognito
     .adminDisableUser({
       UserPoolId,
-      Username: USTC_ADMIN_USER,
+      Username: USTC_ADMIN_USER, // this should be a guid, not the email?
     })
     .promise();
+
+  try {
+    let result = await cognito
+      .adminGetUser({
+        UserPoolId,
+        Username: USTC_ADMIN_USER,
+      })
+      .promise();
+
+    console.log('--------result------ 1', result);
+    if (result && result.Enabled === false) {
+      console.log('USTC Admin user is disabled in deactivateAdminAccount.');
+      return;
+    } else {
+      console.error(
+        'USTC Admin user is NOT disabled as expected in deactivateAdminAccount.',
+      );
+      // process.exit(1);
+    }
+  } catch (err) {
+    if (err.code !== 'UserNotFoundException') {
+      console.error(err);
+      // process.exit(1);
+    }
+  }
 };
 
 /**
@@ -91,12 +116,14 @@ const verifyAdminUserDisabled = async () => {
       })
       .promise();
 
-    console.log('--------result------', result);
+    console.log('--------result------ 2', result);
     if (result && result.Enabled === false) {
-      console.log('USTC Admin user is disabled.');
+      console.log('USTC Admin user is disabled in verifyAdminUserDisabled.');
       return;
     } else {
-      console.error('USTC Admin user is NOT disabled as expected.');
+      console.error(
+        'USTC Admin user is NOT disabled as expected in verifyAdminUserDisabled.',
+      );
       process.exit(1);
     }
   } catch (err) {

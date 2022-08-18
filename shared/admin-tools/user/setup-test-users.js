@@ -130,14 +130,14 @@ const setupPractitioners = async () => {
 
 (async () => {
   // check if we have what we need?
-  console.log('== Activating Admin Account');
-  await activateAdminAccount();
-  console.log('== Creating Court Users');
-  await setupCourtUsers();
-  console.log('== Creating Petitioners');
-  await setupPetitioners();
-  console.log('== Creating Practitioners');
-  await setupPractitioners();
+  // console.log('== Activating Admin Account');
+  // await activateAdminAccount();
+  // console.log('== Creating Court Users');
+  // await setupCourtUsers();
+  // console.log('== Creating Petitioners');
+  // await setupPetitioners();
+  // console.log('== Creating Practitioners');
+  // await setupPractitioners();
   console.log('== Deactivating Admin Account');
   await deactivateAdminAccount();
   console.log('== Done!');
