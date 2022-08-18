@@ -59,31 +59,6 @@ const activateAdminAccount = async () => {
     }
     process.exit(1);
   }
-
-  try {
-    let result = await cognito
-      .adminGetUser({
-        UserPoolId,
-        Username: USTC_ADMIN_USER,
-      })
-      .promise();
-    console.log('--------result------ activateAdminAccount', result);
-
-    if (result && result.Enabled === true) {
-      console.log('USTC Admin user is Enabled in activateAdminAccount.');
-      return;
-    } else {
-      console.error(
-        'USTC Admin user is NOT Enabled as expected in activateAdminAccount.',
-      );
-      // process.exit(1);
-    }
-  } catch (err) {
-    if (err.code !== 'UserNotFoundException') {
-      console.error(err);
-      // process.exit(1);
-    }
-  }
 };
 
 /**
@@ -99,31 +74,6 @@ const deactivateAdminAccount = async () => {
       Username: USTC_ADMIN_USER, // this should be a guid, not the email?
     })
     .promise();
-
-  try {
-    let result = await cognito
-      .adminGetUser({
-        UserPoolId,
-        Username: USTC_ADMIN_USER,
-      })
-      .promise();
-
-    console.log('--------result------ 1', result);
-    if (result && result.Enabled === false) {
-      console.log('USTC Admin user is disabled in deactivateAdminAccount.');
-      return;
-    } else {
-      console.error(
-        'USTC Admin user is NOT disabled as expected in deactivateAdminAccount.',
-      );
-      // process.exit(1);
-    }
-  } catch (err) {
-    if (err.code !== 'UserNotFoundException') {
-      console.error(err);
-      // process.exit(1);
-    }
-  }
 };
 
 /**
@@ -141,13 +91,12 @@ const verifyAdminUserDisabled = async ({ attempt }) => {
       })
       .promise();
 
-    console.log('--------result------ 2', result);
     if (result && result.Enabled === false) {
       console.log('USTC Admin user is disabled in verifyAdminUserDisabled.');
       return;
     } else {
       console.error(
-        'USTC Admin user is NOT disabled as expected in verifyAdminUserDisabled. Disabling...',
+        'USTC Admin user is NOT disabled as expected. Disabling...',
       );
 
       const maxRetries = 3;
@@ -157,9 +106,15 @@ const verifyAdminUserDisabled = async ({ attempt }) => {
           Username: USTC_ADMIN_USER,
         })
         .promise();
+
       if (attempt < maxRetries) {
         attempt++;
         await verifyAdminUserDisabled({ attempt });
+      } else {
+        console.error(
+          'Reached max retries attempts to disable USTC Admin user - unable to disable user. Exiting...',
+        );
+        process.exit(1);
       }
     }
   } catch (err) {
