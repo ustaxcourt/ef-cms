@@ -424,7 +424,7 @@ jobs:
       - run:
           name: Setup Env
           command: |
-            cat "./env-for-circle/${CIRCLE_BRANCH}.sh" >> $BASH_ENV
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
             source $BASH_ENV
             echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
             echo "export CURRENT_COLOR=$(./scripts/dynamo/get-current-color.sh $ENV)" >> $BASH_ENV
