@@ -136,6 +136,7 @@
     "destroy:env": "node env-destroy-utils/destroyEnvironment.js",
     "destroy:migration": "cd web-api/migration-terraform/main && ../bin/destroy-app.sh",
     "destroy:migration-cron": "cd web-api/migration-cron-terraform/main && ../bin/destroy-app.sh",
+    "destroy:switch-colors-cron": "cd web-api/switch-colors-cron-terraform/main && ../bin/destroy-app.sh",
     "destroy:client": "cd web-client/terraform/main && ../bin/destroy-app.sh",
     "destroy:api": "cd web-api/terraform/main && ../bin/destroy-app.sh",
     "docs": "npx docsify-cli serve ./docs",
