@@ -779,7 +779,7 @@ jobs:
       - run:
           name: Disable Switch Colors Cron
           command: |
-            ./disable-switch-colors-cron.sh
+            npm run destroy:switch-colors-cron -- $ENV
 
   switch-colors:
     docker:
