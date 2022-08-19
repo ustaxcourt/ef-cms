@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
 import { connect } from '@cerebral/react';
@@ -117,14 +117,10 @@ export const MessagesSectionOutbox = connect(
             <MessageOutboxRow
               caseStatus={message.caseStatus}
               caseTitle={message.caseTitle}
-              consolidatedIconTooltipText={message.consolidatedIconTooltipText}
               createdAtFormatted={message.createdAtFormatted}
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
-              inConsolidatedGroup={message.inConsolidatedGroup}
-              inLeadCase={message.inLeadCase}
               key={message.messageId}
-              message={message.message}
               messageDetailLink={message.messageDetailLink}
               messageId={message.messageId}
               subject={message.subject}
@@ -142,12 +138,9 @@ export const MessagesSectionOutbox = connect(
 const MessageOutboxRow = React.memo(function MessageOutboxRow({
   caseStatus,
   caseTitle,
-  consolidatedIconTooltipText,
   createdAtFormatted,
   docketNumberWithSuffix,
   from,
-  inConsolidatedGroup,
-  inLeadCase,
   message,
   messageDetailLink,
   subject,
@@ -158,21 +151,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
     <tbody>
       <tr>
         <td className="consolidated-case-column">
-          {inConsolidatedGroup && (
-            <span
-              className="fa-layers fa-fw"
-              title={consolidatedIconTooltipText}
-            >
-              <Icon
-                aria-label={consolidatedIconTooltipText}
-                className="fa-icon-blue"
-                icon="copy"
-              />
-              {inLeadCase && (
-                <span className="fa-inverse lead-case-icon-text">L</span>
-              )}
-            </span>
-          )}
+          <ConsolidatedCaseIcon caseItem={message}></ConsolidatedCaseIcon>
         </td>
         <td className="message-queue-row small" colSpan="2">
           {docketNumberWithSuffix}
@@ -187,7 +166,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
             </Button>
           </div>
 
-          <div className="message-document-detail">{message}</div>
+          <div className="message-document-detail">{message.message}</div>
         </td>
         <td className="message-queue-row max-width-25">{caseTitle}</td>
         <td className="message-queue-row">{caseStatus}</td>
