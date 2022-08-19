@@ -11,6 +11,7 @@ export const petitionsClerkCreatesNewCase = (
   fakeFile,
   trialLocation = 'Birmingham, Alabama',
   shouldServe = true,
+  overrides = {},
 ) => {
   return it('Petitions clerk creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
@@ -132,7 +133,7 @@ export const petitionsClerkCreatesNewCase = (
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
-      value: 'Small',
+      value: overrides.procedureType || 'Small',
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
