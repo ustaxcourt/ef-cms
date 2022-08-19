@@ -1,9 +1,8 @@
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import {
-  CASE_STATUS_TYPES,
   STATUS_TYPES,
   TRIAL_STATUS_TYPES,
 } from '../../../../shared/src/business/entities/EntityConstants';
-import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContext } from '../../applicationContext';
 import { runCompute } from 'cerebral/test';
 import { trialSessionWorkingCopyHelper as trialSessionWorkingCopyHelperComputed } from './trialSessionWorkingCopyHelper';
@@ -72,7 +71,7 @@ describe('trial session working copy computed', () => {
             calendaredCases: [
               MOCK_CASE,
               { ...MOCK_CASE, docketNumber: '102-19' },
-              { ...MOCK_CASE, docketNumber: '5000-17' },
+              { ...MOCK_CASE, docketNumber: '5000-17', testVar: 'a' },
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
@@ -91,7 +90,7 @@ describe('trial session working copy computed', () => {
       expect(formattedCases).toMatchObject([
         { docketNumber: '102-19' },
         { docketNumber: '101-18' },
-        { docketNumber: '5000-17' },
+        { docketNumber: '5000-17', testVar: 'a' },
         { docketNumber: '500-17' },
         { docketNumber: '90-07' },
       ]);
@@ -148,235 +147,8 @@ describe('trial session working copy computed', () => {
       ]);
       expect(casesShownCount).toEqual(5);
     });
-  });
 
-  describe('filtering', () => {
-    it('should only return cases with "A Basis Reached" status when that filter is the only one selected and every case has a status', () => {
-      const { casesShownCount, formattedCases } = runCompute(
-        trialSessionWorkingCopyHelper,
-        {
-          state: {
-            trialSession: {
-              ...MOCK_TRIAL_SESSION,
-              calendaredCases: [
-                MOCK_CASE,
-                { ...MOCK_CASE, docketNumber: '102-19' },
-                { ...MOCK_CASE, docketNumber: '5000-17' },
-                { ...MOCK_CASE, docketNumber: '500-17' },
-                { ...MOCK_CASE, docketNumber: '90-07' },
-              ],
-              caseOrder: [],
-            },
-            trialSessionWorkingCopy: {
-              caseMetadata: {
-                '90-07': { trialStatus: 'dismissed' },
-                '102-19': { trialStatus: 'aBasisReached' },
-                '500-17': { trialStatus: 'dismissed' },
-                '5000-17': { trialStatus: 'dismissed' },
-              },
-              filters: { aBasisReached: true },
-              sort: 'docket',
-              sortOrder: 'asc',
-              userNotes: {},
-            },
-          },
-        },
-      );
-
-      expect(formattedCases).toMatchObject([{ docketNumber: '102-19' }]);
-      expect(casesShownCount).toEqual(1);
-    });
-
-    it('should only return cases with "Dismissed" status when that filter is the only one selected and every case has a status', () => {
-      const { casesShownCount, formattedCases } = runCompute(
-        trialSessionWorkingCopyHelper,
-        {
-          state: {
-            trialSession: {
-              ...MOCK_TRIAL_SESSION,
-              calendaredCases: [
-                MOCK_CASE,
-                { ...MOCK_CASE, docketNumber: '102-19' },
-                { ...MOCK_CASE, docketNumber: '5000-17' },
-                { ...MOCK_CASE, docketNumber: '500-17' },
-                { ...MOCK_CASE, docketNumber: '90-07' },
-              ],
-              caseOrder: [],
-            },
-            trialSessionWorkingCopy: {
-              caseMetadata: {
-                '90-07': { trialStatus: 'dismissed' },
-                '102-19': { trialStatus: 'aBasisReached' },
-                '500-17': { trialStatus: 'dismissed' },
-                '5000-17': { trialStatus: 'dismissed' },
-              },
-              filters: { dismissed: true },
-              sort: 'docket',
-              sortOrder: 'asc',
-              userNotes: {},
-            },
-          },
-        },
-      );
-
-      expect(formattedCases).toMatchObject([
-        { docketNumber: '90-07' },
-        { docketNumber: '500-17' },
-        { docketNumber: '5000-17' },
-      ]);
-      expect(casesShownCount).toEqual(3);
-    });
-
-    it('should only return cases that match the filters selected when some cases do not have statuses set', () => {
-      const { casesShownCount, formattedCases } = runCompute(
-        trialSessionWorkingCopyHelper,
-        {
-          state: {
-            trialSession: {
-              ...MOCK_TRIAL_SESSION,
-              calendaredCases: [
-                MOCK_CASE,
-                { ...MOCK_CASE, docketNumber: '102-19' },
-                { ...MOCK_CASE, docketNumber: '5000-17' },
-                { ...MOCK_CASE, docketNumber: '500-17' },
-                { ...MOCK_CASE, docketNumber: '90-07' },
-              ],
-              caseOrder: [],
-            },
-            trialSessionWorkingCopy: {
-              caseMetadata: {
-                '90-07': { trialStatus: 'dismissed' },
-                '102-19': { trialStatus: 'aBasisReached' },
-                '5000-17': { trialStatus: 'recall' },
-              },
-              filters: {
-                aBasisReached: true,
-                dismissed: true,
-                recall: false,
-                statusUnassigned: false,
-              },
-              sort: 'docket',
-              sortOrder: 'asc',
-              userNotes: {},
-            },
-          },
-        },
-      );
-
-      expect(formattedCases).toMatchObject([
-        { docketNumber: '90-07' },
-        { docketNumber: '102-19' },
-      ]);
-      expect(casesShownCount).toEqual(2);
-    });
-
-    it('should only return cases that do not have a status when the statusUnassigned filter is selected', () => {
-      const { casesShownCount, formattedCases } = runCompute(
-        trialSessionWorkingCopyHelper,
-        {
-          state: {
-            trialSession: {
-              ...MOCK_TRIAL_SESSION,
-              calendaredCases: [
-                MOCK_CASE,
-                { ...MOCK_CASE, docketNumber: '102-19' },
-                { ...MOCK_CASE, docketNumber: '5000-17' },
-                { ...MOCK_CASE, docketNumber: '500-17' },
-                { ...MOCK_CASE, docketNumber: '90-07' },
-              ],
-              caseOrder: [],
-            },
-            trialSessionWorkingCopy: {
-              caseMetadata: {
-                '90-07': { trialStatus: 'dismissed' },
-                '102-19': { trialStatus: 'aBasisReached' },
-              },
-              filters: { statusUnassigned: true },
-              sort: 'docket',
-              sortOrder: 'asc',
-              userNotes: {},
-            },
-          },
-        },
-      );
-
-      expect(formattedCases).toMatchObject([
-        { docketNumber: '500-17' },
-        { docketNumber: '5000-17' },
-        { docketNumber: '101-18' },
-      ]);
-      expect(casesShownCount).toEqual(3);
-    });
-
-    it('should not return any cases when none of the cases on the trial session have a status set and the statusUnassigned filter is not selected', () => {
-      const { casesShownCount, formattedCases } = runCompute(
-        trialSessionWorkingCopyHelper,
-        {
-          state: {
-            trialSession: {
-              ...MOCK_TRIAL_SESSION,
-              calendaredCases: [
-                MOCK_CASE,
-                { ...MOCK_CASE, docketNumber: '102-19' },
-                { ...MOCK_CASE, docketNumber: '5000-17' },
-                { ...MOCK_CASE, docketNumber: '500-17' },
-                { ...MOCK_CASE, docketNumber: '90-07' },
-              ],
-              caseOrder: [],
-            },
-            trialSessionWorkingCopy: {
-              caseMetadata: {},
-              filters: { statusUnassigned: false },
-              sort: 'docket',
-              sortOrder: 'asc',
-              userNotes: {},
-            },
-          },
-        },
-      );
-
-      expect(formattedCases).toMatchObject([]);
-      expect(casesShownCount).toEqual(0);
-    });
-
-    it('should return all sessions if none of the cases on the trial session have statuses set and statusUnassigned filter is true', () => {
-      const { casesShownCount, formattedCases } = runCompute(
-        trialSessionWorkingCopyHelper,
-        {
-          state: {
-            trialSession: {
-              ...MOCK_TRIAL_SESSION,
-              calendaredCases: [
-                MOCK_CASE,
-                { ...MOCK_CASE, docketNumber: '102-19' },
-                { ...MOCK_CASE, docketNumber: '5000-17' },
-                { ...MOCK_CASE, docketNumber: '500-17' },
-                { ...MOCK_CASE, docketNumber: '90-07' },
-              ],
-              caseOrder: [],
-            },
-            trialSessionWorkingCopy: {
-              caseMetadata: {},
-              filters: { statusUnassigned: true },
-              sort: 'docket',
-              sortOrder: 'asc',
-              userNotes: {},
-            },
-          },
-        },
-      );
-
-      expect(formattedCases).toMatchObject([
-        { docketNumber: '90-07' },
-        { docketNumber: '500-17' },
-        { docketNumber: '5000-17' },
-        { docketNumber: '101-18' },
-        { docketNumber: '102-19' },
-      ]);
-      expect(casesShownCount).toEqual(5);
-    });
-
-    it('should only return cases without an assigned status when the statusUnassigned filter is true', () => {
+    it('should sort only lead and unconsolidated cases, but return the total number of cases as casesShownCount', () => {
       const { casesShownCount, formattedCases } = runCompute(
         trialSessionWorkingCopyHelper,
         {
@@ -388,22 +160,24 @@ describe('trial session working copy computed', () => {
                 {
                   ...MOCK_CASE,
                   docketNumber: '102-19',
-                  status: CASE_STATUS_TYPES.closed,
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [],
                 },
                 {
                   ...MOCK_CASE,
                   docketNumber: '5000-17',
-                  status: CASE_STATUS_TYPES.closed,
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [{}, {}],
                 },
                 {
                   ...MOCK_CASE,
                   docketNumber: '500-17',
-                  status: CASE_STATUS_TYPES.closed,
+                  leadDocketNumber: '500-17',
+                  privatePractitioners: [{}, {}],
                 },
                 {
                   ...MOCK_CASE,
                   docketNumber: '90-07',
-                  status: CASE_STATUS_TYPES.closed,
                 },
               ],
               caseOrder: [],
@@ -411,7 +185,7 @@ describe('trial session working copy computed', () => {
             trialSessionWorkingCopy: {
               caseMetadata: {},
               filters: { statusUnassigned: true },
-              sort: 'docket',
+              sort: 'practitioner',
               sortOrder: 'asc',
               userNotes: {},
             },
@@ -419,8 +193,12 @@ describe('trial session working copy computed', () => {
         },
       );
 
-      expect(formattedCases).toMatchObject([{ docketNumber: '101-18' }]);
-      expect(casesShownCount).toEqual(1);
+      expect(formattedCases).toMatchObject([
+        { docketNumber: '90-07' },
+        { docketNumber: '101-18' },
+        { docketNumber: '500-17' },
+      ]);
+      expect(casesShownCount).toEqual(5);
     });
   });
 
@@ -523,5 +301,76 @@ describe('trial session working copy computed', () => {
         ({ docketNumber }) => docketNumber === mockCaseWithoutUserNotes,
       ).userNotes,
     ).toBeUndefined();
+  });
+
+  it('should return lead and unconsolidated cases, and sort consolidated cases within a lead case in ascending order', () => {
+    const { casesShownCount, formattedCases } = runCompute(
+      trialSessionWorkingCopyHelper,
+      {
+        state: {
+          trialSession: {
+            ...MOCK_TRIAL_SESSION,
+            calendaredCases: [
+              MOCK_CASE,
+              {
+                ...MOCK_CASE,
+                docketNumber: '102-19',
+                leadDocketNumber: '500-17',
+                privatePractitioners: [],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '5000-17',
+                leadDocketNumber: '500-17',
+                privatePractitioners: [{}, {}],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '500-17',
+                leadDocketNumber: '500-17',
+                privatePractitioners: [{}, {}],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '90-18',
+                leadDocketNumber: '500-17',
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '101-21',
+                leadDocketNumber: '500-17',
+                privatePractitioners: [],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '115-20',
+                privatePractitioners: [],
+              },
+            ],
+            caseOrder: [],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: true },
+            sort: 'docket',
+            sortOrder: 'asc',
+            userNotes: {},
+          },
+        },
+      },
+    );
+
+    expect(formattedCases).toMatchObject([
+      { docketNumber: '500-17' },
+      { docketNumber: '101-18' },
+      { docketNumber: '115-20' },
+    ]);
+    expect(formattedCases[0].consolidatedCases).toMatchObject([
+      { docketNumber: '5000-17' },
+      { docketNumber: '90-18' },
+      { docketNumber: '102-19' },
+      { docketNumber: '101-21' },
+    ]);
+    expect(casesShownCount).toEqual(7);
   });
 });

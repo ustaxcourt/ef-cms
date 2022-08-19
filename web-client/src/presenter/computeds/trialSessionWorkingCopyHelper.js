@@ -46,45 +46,8 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     )
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
 
-  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
-    formattedCases,
-    calendaredCase => {
-      return (
-        !calendaredCase.leadDocketNumber ||
-        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
-      );
-    },
-  );
-
-  // consider reversing if there are more unconsolidated cases than consolidated
-  leadAndUnconsolidatedCases.forEach(aCase => {
-    if (aCase.leadCase) {
-      aCase.consolidatedCases = [];
-
-      const memberCases = memberConsolidatedCases.filter(memberCase => {
-        return memberCase.docketNumber !== aCase.leadDocketNumber;
-      });
-
-      aCase.consolidatedCases
-        ? aCase.consolidatedCases.push(...memberCases)
-        : (aCase.consolidatedCases = memberCases);
-
-      aCase.consolidatedCases.sort(
-        applicationContext.getUtilities().compareCasesByDocketNumber,
-      );
-    }
-  });
-
-  if (sort === 'practitioner') {
-    leadAndUnconsolidatedCases.sort(compareCasesByPractitioner);
-  }
-
-  if (sortOrder === 'desc') {
-    leadAndUnconsolidatedCases.reverse();
-  }
-
   Object.keys(userNotes || {}).forEach(docketNumber => {
-    const caseToUpdate = leadAndUnconsolidatedCases.find(
+    const caseToUpdate = formattedCases.find(
       aCase => aCase.docketNumber === docketNumber,
     );
     if (caseToUpdate) {
@@ -102,6 +65,41 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
       }
     }
   });
+
+  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
+    formattedCases,
+    calendaredCase => {
+      return (
+        !calendaredCase.leadDocketNumber ||
+        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
+      );
+    },
+  );
+
+  // consider reversing if there are more unconsolidated cases than consolidated
+  leadAndUnconsolidatedCases.forEach(caseToUpdate => {
+    if (caseToUpdate.leadCase) {
+      caseToUpdate.consolidatedCases = [];
+
+      const memberCases = memberConsolidatedCases.filter(memberCase => {
+        return memberCase.docketNumber !== caseToUpdate.leadDocketNumber;
+      });
+
+      caseToUpdate.consolidatedCases.push(...memberCases);
+
+      caseToUpdate.consolidatedCases.sort(
+        applicationContext.getUtilities().compareCasesByDocketNumber,
+      );
+    }
+  });
+
+  if (sort === 'practitioner') {
+    leadAndUnconsolidatedCases.sort(compareCasesByPractitioner);
+  }
+
+  if (sortOrder === 'desc') {
+    leadAndUnconsolidatedCases.reverse();
+  }
 
   const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
     key: camelCase(value),
