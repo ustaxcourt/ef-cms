@@ -16,7 +16,7 @@ echo "  - DESTINATION_TABLE=${DESTINATION_TABLE}"
 BUCKET="${ZONE_NAME}.terraform.deploys"
 KEY="switch-colors-cron-${ENVIRONMENT}.tfstate"
 LOCK_TABLE=efcms-terraform-lock
-REGION=us-east-1
+export REGION=us-east-1
 
 rm -rf .terraform
 
