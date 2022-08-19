@@ -7,7 +7,7 @@ data "archive_file" "switch_colors_status_zip" {
 
 resource "aws_lambda_function" "switch_colors_status_lambda" {
   filename         = data.archive_file.switch_colors_status_zip.output_path
-  function_name    = "reindex_status_lambda_${var.environment}"
+  function_name    = "switch_colors_status_lambda_${var.environment}"
   role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/switch_colors_status_role_${var.environment}"
   handler          = "switch-colors-status.handler"
   source_code_hash = data.archive_file.switch_colors_status_zip.output_base64sha256
