@@ -12,6 +12,7 @@ export const MessageDocument = connect(
     iframeSrc: state.iframeSrc,
     messageDocumentHelper: state.messageDocumentHelper,
     messageViewerDocumentToDisplay: state.messageViewerDocumentToDisplay,
+    navigateToPathSequence: sequences.navigateToPathSequence,
     openCaseDocumentDownloadUrlSequence:
       sequences.openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence: sequences.openConfirmEditModalSequence,
@@ -32,6 +33,7 @@ export const MessageDocument = connect(
     iframeSrc,
     messageDocumentHelper,
     messageViewerDocumentToDisplay,
+    navigateToPathSequence,
     openCaseDocumentDownloadUrlSequence,
     openConfirmEditModalSequence,
     openConfirmRemoveSignatureModalSequence,
@@ -161,6 +163,20 @@ export const MessageDocument = connect(
             icon="pencil-alt"
           >
             Sign Stipulated Decision
+          </Button>
+        )}
+
+        {messageDocumentHelper.showApplyStampButton && (
+          <Button
+            link
+            icon="stamp"
+            onClick={() => {
+              navigateToPathSequence({
+                path: messageDocumentHelper.applyStampFromMessagesLink,
+              });
+            }}
+          >
+            Apply Stamp
           </Button>
         )}
 
