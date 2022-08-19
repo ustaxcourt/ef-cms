@@ -71,7 +71,7 @@ describe('trial session working copy computed', () => {
             calendaredCases: [
               MOCK_CASE,
               { ...MOCK_CASE, docketNumber: '102-19' },
-              { ...MOCK_CASE, docketNumber: '5000-17', testVar: 'a' },
+              { ...MOCK_CASE, docketNumber: '5000-17' },
               { ...MOCK_CASE, docketNumber: '500-17' },
               { ...MOCK_CASE, docketNumber: '90-07' },
             ],
@@ -90,7 +90,7 @@ describe('trial session working copy computed', () => {
       expect(formattedCases).toMatchObject([
         { docketNumber: '102-19' },
         { docketNumber: '101-18' },
-        { docketNumber: '5000-17', testVar: 'a' },
+        { docketNumber: '5000-17' },
         { docketNumber: '500-17' },
         { docketNumber: '90-07' },
       ]);
