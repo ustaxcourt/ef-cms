@@ -159,6 +159,9 @@ const {
   sealDocketEntryInteractor,
 } = require('../useCases/docketEntry/sealDocketEntryInteractor');
 const {
+  setConsolidationFlagsForDisplay,
+} = require('../utilities/setConsolidationFlagsForDisplay');
+const {
   setNoticesForCalendaredTrialSessionInteractor,
 } = require('../useCases/trialSessions/setNoticesForCalendaredTrialSessionInteractor');
 const {
@@ -391,6 +394,9 @@ const createTestApplicationContext = ({ user } = {}) => {
     replaceBracketed: jest.fn().mockImplementation(replaceBracketed),
 
     serveCaseDocument: jest.fn().mockImplementation(serveCaseDocument),
+    setConsolidationFlagsForDisplay: jest
+      .fn()
+      .mockImplementation(setConsolidationFlagsForDisplay),
     setServiceIndicatorsForCase: jest
       .fn()
       .mockImplementation(setServiceIndicatorsForCase),
