@@ -751,6 +751,12 @@ jobs:
       - git-shallow-clone/checkout
       - npm-and-cypress-install
       - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
+            echo "export DEPLOYING_COLOR=$(./scripts/dynamo/get-deploying-color.sh $ENV)" >> $BASH_ENV
+      - run:
           name: Deploy Switch Colors Cron
           command: |
             npm run deploy:switch-colors-cron -- $ENV
@@ -764,6 +770,11 @@ jobs:
     steps:
       - git-shallow-clone/checkout
       - npm-and-cypress-install
+      - run:
+          name: Setup Env
+          command: |
+            cat "./env-for-circle/${CIRCLE_BRANCH}${CONFIG_SUFFIX}.sh" >> $BASH_ENV
+            source $BASH_ENV
       - run:
           name: Disable Switch Colors Cron
           command: |
