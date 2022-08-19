@@ -96,6 +96,7 @@ import { faSignOutAlt } from '@fortawesome/free-solid-svg-icons/faSignOutAlt';
 import { faSlash } from '@fortawesome/free-solid-svg-icons/faSlash';
 import { faSort } from '@fortawesome/free-solid-svg-icons/faSort';
 import { faSpinner } from '@fortawesome/free-solid-svg-icons/faSpinner';
+import { faStamp } from '@fortawesome/free-solid-svg-icons/faStamp';
 import { faStar } from '@fortawesome/free-solid-svg-icons/faStar';
 import { faStepBackward } from '@fortawesome/free-solid-svg-icons/faStepBackward';
 import { faStepForward } from '@fortawesome/free-solid-svg-icons/faStepForward';
@@ -278,6 +279,7 @@ const app = {
       faSlash,
       faSort,
       faSpinner,
+      faStamp,
       faStar,
       faStepBackward,
       faStepForward,

@@ -168,6 +168,9 @@ const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
+  generateDraftStampOrderLambda,
+} = require('./documents/generateDraftStampOrderLambda');
+const {
   generatePractitionerCaseListPdfLambda,
 } = require('./cases/generatePractitionerCaseListPdfLambda');
 const {
@@ -576,6 +579,10 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/coversheet',
     lambdaWrapper(addCoversheetLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
+    lambdaWrapper(generateDraftStampOrderLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
