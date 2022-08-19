@@ -9,11 +9,9 @@ import { sequences, state } from 'cerebral';
 import React from 'react';
 
 const getCaseRow = ({
-  autoSaveTrialSessionWorkingCopySequence,
   formattedCase,
   indentMemberCase = false,
-  openAddEditUserCaseNoteModalFromListSequence,
-  openDeleteUserCaseNoteConfirmModalSequence,
+  trialSequences,
   trialStatusOptions,
 }) => {
   return (
@@ -52,7 +50,7 @@ const getCaseRow = ({
             bind={`trialSessionWorkingCopy.caseMetadata.${formattedCase.docketNumber}.trialStatus`}
             id={`trialSessionWorkingCopy-${formattedCase.docketNumber}`}
             onChange={value => {
-              autoSaveTrialSessionWorkingCopySequence({
+              trialSequences.autoSaveTrialSessionWorkingCopySequence({
                 key: `caseMetadata.${formattedCase.docketNumber}.trialStatus`,
                 value,
               });
@@ -74,7 +72,7 @@ const getCaseRow = ({
               icon="plus-circle"
               id={`add-note-${formattedCase.docketNumber}`}
               onClick={() => {
-                openAddEditUserCaseNoteModalFromListSequence({
+                trialSequences.openAddEditUserCaseNoteModalFromListSequence({
                   docketNumber: formattedCase.docketNumber,
                   docketNumberWithSuffix: formattedCase.docketNumberWithSuffix,
                 });
@@ -112,7 +110,7 @@ const getCaseRow = ({
               className="red-warning"
               icon="trash"
               onClick={() => {
-                openDeleteUserCaseNoteConfirmModalSequence({
+                trialSequences.openDeleteUserCaseNoteConfirmModalSequence({
                   docketNumber: formattedCase.docketNumber,
                 });
               }}
@@ -126,7 +124,7 @@ const getCaseRow = ({
               link
               icon="edit"
               onClick={() => {
-                openAddEditUserCaseNoteModalFromListSequence({
+                trialSequences.openAddEditUserCaseNoteModalFromListSequence({
                   docketNumber: formattedCase.docketNumber,
                 });
               }}
@@ -139,11 +137,9 @@ const getCaseRow = ({
       {formattedCase.consolidatedCases &&
         formattedCase.consolidatedCases.map(memberCase =>
           getCaseRow({
-            autoSaveTrialSessionWorkingCopySequence,
             formattedCase: memberCase,
             indentMemberCase: true,
-            openAddEditUserCaseNoteModalFromListSequence,
-            openDeleteUserCaseNoteConfirmModalSequence,
+            trialSequences,
             trialStatusOptions,
           }),
         )}
@@ -151,7 +147,6 @@ const getCaseRow = ({
   );
 };
 
-// there must be a less repetitive way of doing this
 export const CaseListRowTrialSession = connect(
   {
     autoSaveTrialSessionWorkingCopySequence:
@@ -170,10 +165,12 @@ export const CaseListRowTrialSession = connect(
     trialStatusOptions,
   }) =>
     getCaseRow({
-      autoSaveTrialSessionWorkingCopySequence,
       formattedCase,
-      openAddEditUserCaseNoteModalFromListSequence,
-      openDeleteUserCaseNoteConfirmModalSequence,
+      trialSequences: {
+        autoSaveTrialSessionWorkingCopySequence,
+        openAddEditUserCaseNoteModalFromListSequence,
+        openDeleteUserCaseNoteConfirmModalSequence,
+      },
       trialStatusOptions,
     }),
 );
