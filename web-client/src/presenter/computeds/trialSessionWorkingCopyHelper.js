@@ -76,7 +76,6 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     },
   );
 
-  // consider reversing if there are more unconsolidated cases than consolidated
   leadAndUnconsolidatedCases.forEach(caseToUpdate => {
     if (caseToUpdate.leadCase) {
       caseToUpdate.consolidatedCases = [];
