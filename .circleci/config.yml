@@ -748,6 +748,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
       - run:
           name: Deploy Switch Colors Cron
           command: |
@@ -760,6 +762,8 @@ jobs:
           aws_access_key_id: $AWS_ACCESS_KEY_ID
           aws_secret_access_key: $AWS_SECRET_ACCESS_KEY
     steps:
+      - git-shallow-clone/checkout
+      - npm-and-cypress-install
       - run:
           name: Disable Switch Colors Cron
           command: |
