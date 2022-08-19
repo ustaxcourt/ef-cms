@@ -8,7 +8,7 @@ data "archive_file" "switch_colors_status_zip" {
 resource "aws_lambda_function" "switch_colors_status_lambda" {
   filename         = data.archive_file.switch_colors_status_zip.output_path
   function_name    = "switch_colors_status_lambda_${var.environment}"
-  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/switch_colors_status_role_${var.environment}"
+  role             = "arn:aws:iam::${data.aws_caller_identity.current.account_id}:role/lambda_role_${var.environment}"
   handler          = "switch-colors-status.handler"
   source_code_hash = data.archive_file.switch_colors_status_zip.output_base64sha256
 
@@ -27,18 +27,12 @@ resource "aws_lambda_function" "switch_colors_status_lambda" {
 
 resource "aws_cloudwatch_event_rule" "check_switch_colors_status_cron_rule-sunday" {
   name                = "check_switch_colors_status_cron_${var.environment}"
-  schedule_expression = "cron(0/1 0-3 * * SUN *)"
-  is_enabled          = "true"
-}
-
-resource "aws_cloudwatch_event_rule" "check_switch_colors_status_cron_rule" {
-  name                = "check_switch_colors_status_cron_${var.environment}"
-  schedule_expression = "cron(0/1 0-3 * * SUN *)"
+  schedule_expression = "cron(0/1 0-3 ? * SUN *)"
   is_enabled          = "true"
 }
 
 resource "aws_cloudwatch_event_target" "check_switch_colors_status_cron_target" {
-  rule      = aws_cloudwatch_event_rule.check_switch_colors_status_cron_rule.name
+  rule      = aws_cloudwatch_event_rule.check_switch_colors_status_cron_rule-sunday.name
   target_id = aws_lambda_function.switch_colors_status_lambda.function_name
   arn       = aws_lambda_function.switch_colors_status_lambda.arn
 }
@@ -48,5 +42,5 @@ resource "aws_lambda_permission" "allow_cloudwatch_to_call_switch_colors_status_
   action        = "lambda:InvokeFunction"
   function_name = aws_lambda_function.switch_colors_status_lambda.function_name
   principal     = "events.amazonaws.com"
-  source_arn    = aws_cloudwatch_event_rule.check_switch_colors_status_cron_rule.arn
+  source_arn    = aws_cloudwatch_event_rule.check_switch_colors_status_cron_rule-sunday.arn
 }
