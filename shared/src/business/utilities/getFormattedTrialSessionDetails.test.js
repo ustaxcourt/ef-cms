@@ -6,7 +6,7 @@ import {
   TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { applicationContext } from '../test/createTestApplicationContext';
 import {
   compareTrialSessionEligibleCases,
   formatCase,
@@ -43,6 +43,7 @@ describe('formattedTrialSessionDetails', () => {
       applicationContext,
       trialSession: TRIAL_SESSION,
     });
+
     expect(result).toMatchObject({
       formattedCityStateZip: 'Hartford, CT 12345',
       formattedCourtReporter: 'Test Court Reporter',
@@ -229,6 +230,9 @@ describe('formattedTrialSessionDetails', () => {
         caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT },
       }).isDocketSuffixHighPriority,
     ).toBe(true);
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(4);
   });
 
   describe('comparing eligible cases', () => {
@@ -377,8 +381,10 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(5);
     expect(result.formattedEligibleCases.length).toEqual(5);
-
     expect(result.formattedEligibleCases).toMatchObject([
       {
         caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
@@ -436,6 +442,9 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(3);
     expect(result.allCases.length).toEqual(3);
     expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-16S');
     expect(result.allCases[0].caseTitle).toEqual('Someone Else');
@@ -467,6 +476,9 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(5);
     expect(result.allCases).toMatchObject([
       { docketNumber: '90-07' },
       { docketNumber: '500-17' },
