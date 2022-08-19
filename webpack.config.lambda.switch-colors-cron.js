@@ -4,7 +4,7 @@ module.exports = {
   ...config,
   entry: {
     'reindex-status':
-      './web-api/colors-switch-cron-terraform/main/lambdas/switch-colors-status.js',
+      './web-api/switch-colors-cron-terraform/main/lambdas/switch-colors-status.js',
   },
   externals: ['aws-sdk'],
   output: {
