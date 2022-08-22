@@ -114,20 +114,7 @@ export const MessagesSectionInbox = connect(
             </tr>
           </thead>
           {formattedMessages.messages.map(message => (
-            <MessageInboxRow
-              caseStatus={message.caseStatus}
-              caseTitle={message.caseTitle}
-              createdAtFormatted={message.createdAtFormatted}
-              docketNumberWithSuffix={message.docketNumberWithSuffix}
-              from={message.from}
-              fromSection={message.fromSection}
-              key={message.messageId}
-              message={message.message}
-              messageDetailLink={message.messageDetailLink}
-              messageId={message.messageId}
-              subject={message.subject}
-              to={message.to}
-            />
+            <MessageInboxRow key={message.messageId} message={message} />
           ))}
         </table>
         {!formattedMessages.hasMessages && <div>There are no messages.</div>}
@@ -136,18 +123,7 @@ export const MessagesSectionInbox = connect(
   },
 );
 
-const MessageInboxRow = React.memo(function MessageInboxRow({
-  caseStatus,
-  caseTitle,
-  createdAtFormatted,
-  docketNumberWithSuffix,
-  from,
-  fromSection,
-  message,
-  messageDetailLink,
-  subject,
-  to,
-}) {
+const MessageInboxRow = React.memo(function MessageInboxRow({ message }) {
   return (
     <tbody>
       <tr>
@@ -155,24 +131,24 @@ const MessageInboxRow = React.memo(function MessageInboxRow({
           <ConsolidatedCaseIcon caseItem={message}></ConsolidatedCaseIcon>
         </td>
         <td className="message-queue-row small" colSpan="2">
-          {docketNumberWithSuffix}
+          {message.docketNumberWithSuffix}
         </td>
         <td className="message-queue-row small">
-          <span className="no-wrap">{createdAtFormatted}</span>
+          <span className="no-wrap">{message.createdAtFormatted}</span>
         </td>
         <td className="message-queue-row message-subject">
           <div className="message-document-title">
-            <Button link className="padding-0" href={messageDetailLink}>
-              {subject}
+            <Button link className="padding-0" href={message.messageDetailLink}>
+              {message.subject}
             </Button>
           </div>
           <div className="message-document-detail">{message}</div>
         </td>
-        <td className="message-queue-row max-width-25">{caseTitle}</td>
-        <td className="message-queue-row">{caseStatus}</td>
-        <td className="message-queue-row to">{to}</td>
-        <td className="message-queue-row from">{from}</td>
-        <td className="message-queue-row small">{fromSection}</td>
+        <td className="message-queue-row max-width-25">{message.caseTitle}</td>
+        <td className="message-queue-row">{message.caseStatus}</td>
+        <td className="message-queue-row to">{message.to}</td>
+        <td className="message-queue-row from">{message.from}</td>
+        <td className="message-queue-row small">{message.fromSection}</td>
       </tr>
     </tbody>
   );
