@@ -15,14 +15,12 @@ exports.handler = async () => {
 
   const allJobsInWorkflow = await axios.get(get_all_jobs.url, get_all_jobs);
 
-  console.log('JOB::allJobsInWorkflow', allJobsInWorkflow);
   const jobWithApprovalNeeded = findLast(
     allJobsInWorkflow.data.items,
     function (o) {
       return o.approval_request_id !== undefined;
     },
   );
-  console.log('JOB::jobWithApprovalNeeded', jobWithApprovalNeeded);
 
   const approveJob = {
     headers: { 'Circle-Token': apiToken },
