@@ -366,7 +366,7 @@ const {
 } = require('../../shared/src/persistence/dynamo/cases/updateCase');
 const {
   updateCaseCorrespondence,
-} = require('../.../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
+} = require('../../shared/src/persistence/dynamo/correspondence/updateCaseCorrespondence');
 const {
   updateCaseHearing,
 } = require('../../shared/src/persistence/dynamo/trialSessions/updateCaseHearing');
