@@ -1,5 +1,5 @@
 const axios = require('axios');
-// const { find } = require('lodash');
+const { find } = require('lodash');
 
 exports.handler = async () => {
   console.log('Approving CircleCI wait for color switch job');
@@ -16,18 +16,14 @@ exports.handler = async () => {
   const allJobsInWorkflow = await axios.get(get_all_jobs.url, get_all_jobs);
 
   console.log('JOB::allJobsInWorkflow', allJobsInWorkflow);
-  let jobWithApprovalNeeded;
-  allJobsInWorkflow.forEach(job => {
-    if (job.approval_request_id && job.status === 'blocked') {
-      jobWithApprovalNeeded = job;
-    }
-  });
-  // const jobWithApprovalNeeded = find(
-  //     allJobsInWorkflow.data.items,
-  //     function (o) {
-  //       return o.approval_request_id !== undefined && o.status === 'blocked';
-  //     },
-  // );
+  const jobWithApprovalNeeded = find(
+    allJobsInWorkflow.data.items,
+    function (o) {
+      if (o.approval_request_id) {
+        return o.status === 'blocked';
+      }
+    },
+  );
   console.log('JOB::jobWithApprovalNeeded', jobWithApprovalNeeded);
 
   const approveJob = {
