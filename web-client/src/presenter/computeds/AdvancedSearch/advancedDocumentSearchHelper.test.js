@@ -17,8 +17,8 @@ describe('advancedDocumentSearchHelper', () => {
     BENCH_OPINION_EVENT_CODE,
     DATE_RANGE_SEARCH_OPTIONS,
     DOCKET_NUMBER_SUFFIXES,
+    GENERIC_ORDER_EVENT_CODE,
     OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-    ORDER_EVENT_CODES,
     USER_ROLES,
   } = applicationContext.getConstants();
 
@@ -526,7 +526,7 @@ describe('advancedDocumentSearchHelper', () => {
 
     it('sets formattedJudgeName to an empty string when the search result is an order that does NOT have a signedJudgeName', () => {
       const mockResult = {
-        eventCode: ORDER_EVENT_CODES[0],
+        eventCode: GENERIC_ORDER_EVENT_CODE,
         signedJudgeName: undefined,
       };
 
@@ -540,7 +540,7 @@ describe('advancedDocumentSearchHelper', () => {
     it('sets formattedJudgeName to the judge last name when the search result is an order that has a signedJudgeName', () => {
       const mockJudgeName = 'Michael G. Scott';
       const mockResult = {
-        eventCode: ORDER_EVENT_CODES[0],
+        eventCode: GENERIC_ORDER_EVENT_CODE,
         signedJudgeName: mockJudgeName,
       };
 

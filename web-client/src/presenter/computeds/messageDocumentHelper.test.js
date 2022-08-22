@@ -367,6 +367,33 @@ describe('messageDocumentHelper', () => {
       expect(result.showRemoveSignatureButton).toEqual(false);
     });
 
+    it('should return showRemoveSignatureButton false for draft stamp orders', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+            docketEntries: [
+              petitionDocketEntry,
+              {
+                ...baseDocketEntry,
+                eventCode: 'O',
+                signedAt: '2020-06-25T20:49:28.192Z',
+                stampData: {
+                  disposition: 'yes',
+                },
+              },
+            ],
+          },
+          messageViewerDocumentToDisplay: {
+            documentId: 'abc',
+          },
+        },
+      });
+
+      expect(result.showRemoveSignatureButton).toEqual(false);
+    });
+
     it('return showApplySignatureButtonForDocument false if the document is a correspondence file', () => {
       const result = runCompute(messageDocumentHelper, {
         state: {
@@ -423,6 +450,30 @@ describe('messageDocumentHelper', () => {
                 ...baseDocketEntry,
                 eventCode: 'SDEC',
                 signedAt: '2020-06-25T20:49:28.192Z',
+              },
+            ],
+          },
+        },
+      });
+
+      expect(result.showEditButtonSigned).toEqual(false);
+    });
+
+    it('should return showEditButtonSigned false for draft stamp orders', () => {
+      const result = runCompute(messageDocumentHelper, {
+        state: {
+          ...getBaseState(docketClerkUser),
+          caseDetail: {
+            ...baseCaseDetail,
+            docketEntries: [
+              petitionDocketEntry,
+              {
+                ...baseDocketEntry,
+                eventCode: 'O',
+                signedAt: '2020-06-25T20:49:28.192Z',
+                stampData: {
+                  disposition: 'yes',
+                },
               },
             ],
           },
@@ -1188,6 +1239,9 @@ describe('messageDocumentHelper', () => {
 
     expect(result.addDocketEntryLink).toEqual(
       `/case-detail/${baseCaseDetail.docketNumber}/documents/${mockDocumentId}/add-court-issued-docket-entry/${mockParentMessageId}`,
+    );
+    expect(result.applyStampFromMessagesLink).toEqual(
+      `/messages/${baseCaseDetail.docketNumber}/message-detail/${mockParentMessageId}/${mockDocumentId}/apply-stamp`,
     );
     expect(result.editCorrespondenceLink).toEqual(
       `/case-detail/${baseCaseDetail.docketNumber}/edit-correspondence/${mockDocumentId}/${mockParentMessageId}`,
