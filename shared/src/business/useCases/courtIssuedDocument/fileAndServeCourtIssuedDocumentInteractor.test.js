@@ -285,6 +285,50 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should set the leadDocketNumber for work items', async () => {
+    const leadDocketNumber = MOCK_CASE.docketNumber;
+    const caseRecordWithLeadDocketNumber = {
+      ...MOCK_CASE,
+      docketEntries: [mockDocketEntryWithWorkItem],
+      leadDocketNumber,
+    };
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId:
+        caseRecordWithLeadDocketNumber.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecordWithLeadDocketNumber.docketNumber],
+      form: caseRecordWithLeadDocketNumber.docketEntries[0],
+      subjectCaseDocketNumber: caseRecordWithLeadDocketNumber.docketNumber,
+    });
+
+    // const updatedCase =
+    //   applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
+    //     .caseToUpdate;
+    // const updatedDocument = updatedCase.docketEntries.find(
+    //   docketEntry =>
+    //     docketEntry.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
+    // );
+
+    // expect(updatedDocument.servedAt).toBeDefined();
+    // expect(
+    //   applicationContext.getPersistenceGateway().updateCase,
+    // ).toHaveBeenCalled();
+    // expect(
+    //   applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
+    // ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+        .calls[0][0].workItem,
+    ).toMatchObject({
+      leadDocketNumber,
+    });
+  });
+
   it('should delete the case from the trial session if the case has a trialSessionId and is not calendared and the order document has an event code that should close the case', async () => {
     mockTrialSession.isCalendared = false;
     caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
