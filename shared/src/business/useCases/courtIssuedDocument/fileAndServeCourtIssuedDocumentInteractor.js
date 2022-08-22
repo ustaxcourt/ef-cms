@@ -304,6 +304,8 @@ const fileDocumentOnOneCase = async ({
     );
   }
 
+  docketEntryEntity.workItem.leadDocketNumber = caseEntity.leadDocketNumber;
+
   docketEntryEntity.workItem.assignToUser({
     assigneeId: user.userId,
     assigneeName: user.name,
