@@ -11,14 +11,12 @@ export const CaseDeadlinesInternal = connect(
       sequences.openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence:
       sequences.openEditCaseDeadlineModalSequence,
-    trackedItemsHelper: state.trackedItemsHelper,
   },
   function CaseDeadlinesInternal({
     caseDetailHelper,
     formattedCaseDeadlines,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
-    trackedItemsHelper,
   }) {
     return (
       <>
@@ -49,7 +47,7 @@ export const CaseDeadlinesInternal = connect(
                   </td>
                   <td className="padding-extra">{item.description}</td>
                   <td className="smaller-column center-column">
-                    {trackedItemsHelper.hasTrackedItemsPermission && (
+                    {caseDetailHelper.hasTrackedItemsPermission && (
                       <Button
                         link
                         className="margin-right-0 padding-0"
@@ -65,7 +63,7 @@ export const CaseDeadlinesInternal = connect(
                     )}
                   </td>
                   <td className="smaller-column center-column">
-                    {trackedItemsHelper.hasTrackedItemsPermission && (
+                    {caseDetailHelper.hasTrackedItemsPermission && (
                       <Button
                         link
                         className="margin-right-0 padding-0 red-warning"

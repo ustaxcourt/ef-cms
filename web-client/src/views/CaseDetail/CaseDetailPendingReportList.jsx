@@ -7,17 +7,17 @@ import React from 'react';
 
 export const CaseDetailPendingReportList = connect(
   {
+    caseDetailHelper: state.caseDetailHelper,
     formattedDocketEntries: state.formattedDocketEntries,
     openConfirmRemoveCaseDetailPendingItemModalSequence:
       sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     showModal: state.modal.showModal,
-    trackedItemsHelper: state.trackedItemsHelper,
   },
   function CaseDetailPendingReportList({
+    caseDetailHelper,
     formattedDocketEntries,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     showModal,
-    trackedItemsHelper,
   }) {
     return (
       <>
@@ -68,7 +68,7 @@ export const CaseDetailPendingReportList = connect(
                   </td>
                   <td>{entry.filedBy}</td>
                   <td>
-                    {trackedItemsHelper.hasTrackedItemsPermission && (
+                    {caseDetailHelper.hasTrackedItemsPermission && (
                       <Button
                         link
                         className="padding-0 no-wrap"

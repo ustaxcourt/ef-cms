@@ -4,6 +4,8 @@ import { state } from 'cerebral';
 export const caseDetailHelper = (get, applicationContext) => {
   const user = applicationContext.getCurrentUser();
   const { USER_ROLES } = applicationContext.getConstants();
+  const permissions = get(state.permissions);
+  const hasTrackedItemsPermission = permissions.TRACKED_ITEMS;
   const caseDetail = get(state.caseDetail);
   const caseDeadlines = get(state.caseDeadlines) || [];
   const documentDetailTab =
@@ -13,7 +15,6 @@ export const caseDetailHelper = (get, applicationContext) => {
     .getUtilities()
     .isExternalUser(user.role);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const permissions = get(state.permissions);
   const showJudgesNotes = permissions.JUDGES_NOTES;
 
   let showFileDocumentButton =
@@ -75,6 +76,7 @@ export const caseDetailHelper = (get, applicationContext) => {
     hasConsolidatedCases,
     hasIrsPractitioners,
     hasPrivatePractitioners,
+    hasTrackedItemsPermission,
     showAddCorrespondenceButton: permissions.CASE_CORRESPONDENCE,
     showAddRemoveFromHearingButtons: permissions.SET_FOR_HEARING,
     showCaseDeadlinesExternal,
