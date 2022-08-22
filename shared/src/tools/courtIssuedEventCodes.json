@@ -418,9 +418,9 @@
     "isUnservable": true
   },
   {
-    "eventCode": "LOA",
+    "eventCode": "LS",
     "documentType": "Letter of Appeal",
-    "documentTitle": "Letter of Appeal [Anything]",
+    "documentTitle": "Letter [Anything]",
     "scenario": "Type A",
     "isUnservable": true,
     "requiresCoversheet": true
