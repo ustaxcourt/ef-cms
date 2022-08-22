@@ -11,12 +11,14 @@ export const CaseDeadlinesInternal = connect(
       sequences.openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence:
       sequences.openEditCaseDeadlineModalSequence,
+    trackedItemsHelper: state.trackedItemsHelper,
   },
   function CaseDeadlinesInternal({
     caseDetailHelper,
     formattedCaseDeadlines,
     openDeleteCaseDeadlineModalSequence,
     openEditCaseDeadlineModalSequence,
+    trackedItemsHelper,
   }) {
     return (
       <>
@@ -47,32 +49,36 @@ export const CaseDeadlinesInternal = connect(
                   </td>
                   <td className="padding-extra">{item.description}</td>
                   <td className="smaller-column center-column">
-                    <Button
-                      link
-                      className="margin-right-0 padding-0"
-                      icon="edit"
-                      onClick={() => {
-                        openEditCaseDeadlineModalSequence({
-                          caseDeadlineId: item.caseDeadlineId,
-                        });
-                      }}
-                    >
-                      Edit
-                    </Button>
+                    {trackedItemsHelper.hasTrackedItemsPermission && (
+                      <Button
+                        link
+                        className="margin-right-0 padding-0"
+                        icon="edit"
+                        onClick={() => {
+                          openEditCaseDeadlineModalSequence({
+                            caseDeadlineId: item.caseDeadlineId,
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    )}
                   </td>
                   <td className="smaller-column center-column">
-                    <Button
-                      link
-                      className="margin-right-0 padding-0 red-warning"
-                      icon="trash"
-                      onClick={() => {
-                        openDeleteCaseDeadlineModalSequence({
-                          caseDeadlineId: item.caseDeadlineId,
-                        });
-                      }}
-                    >
-                      Delete
-                    </Button>
+                    {trackedItemsHelper.hasTrackedItemsPermission && (
+                      <Button
+                        link
+                        className="margin-right-0 padding-0 red-warning"
+                        icon="trash"
+                        onClick={() => {
+                          openDeleteCaseDeadlineModalSequence({
+                            caseDeadlineId: item.caseDeadlineId,
+                          });
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}
