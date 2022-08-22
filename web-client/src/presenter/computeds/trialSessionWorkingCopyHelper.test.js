@@ -373,4 +373,85 @@ describe('trial session working copy computed', () => {
     ]);
     expect(casesShownCount).toEqual(7);
   });
+
+  it('should assign consolidated member cases to the correct lead case and sort them correctly', () => {
+    const { casesShownCount, formattedCases } = runCompute(
+      trialSessionWorkingCopyHelper,
+      {
+        state: {
+          trialSession: {
+            ...MOCK_TRIAL_SESSION,
+            calendaredCases: [
+              {
+                ...MOCK_CASE,
+                docketNumber: '102-19',
+                leadDocketNumber: '90-18',
+                privatePractitioners: [],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '5000-17',
+                leadDocketNumber: '500-17',
+                privatePractitioners: [{}, {}],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '500-17',
+                leadDocketNumber: '500-17',
+                privatePractitioners: [{}, {}],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '90-18',
+                leadDocketNumber: '90-18',
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '101-21',
+                leadDocketNumber: '116-20',
+                privatePractitioners: [],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '116-20',
+                leadDocketNumber: '116-20',
+                privatePractitioners: [],
+              },
+              {
+                ...MOCK_CASE,
+                docketNumber: '111-22',
+                leadDocketNumber: '500-17',
+                privatePractitioners: [],
+              },
+            ],
+            caseOrder: [],
+          },
+          trialSessionWorkingCopy: {
+            caseMetadata: {},
+            filters: { statusUnassigned: true },
+            sort: 'docket',
+            sortOrder: 'desc',
+            userNotes: {},
+          },
+        },
+      },
+    );
+
+    expect(formattedCases).toMatchObject([
+      { docketNumber: '116-20' },
+      { docketNumber: '90-18' },
+      { docketNumber: '500-17' },
+    ]);
+    expect(formattedCases[0].consolidatedCases).toMatchObject([
+      { docketNumber: '101-21' },
+    ]);
+    expect(formattedCases[1].consolidatedCases).toMatchObject([
+      { docketNumber: '102-19' },
+    ]);
+    expect(formattedCases[2].consolidatedCases).toMatchObject([
+      { docketNumber: '5000-17' },
+      { docketNumber: '111-22' },
+    ]);
+    expect(casesShownCount).toEqual(7);
+  });
 });

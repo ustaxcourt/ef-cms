@@ -81,7 +81,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
       caseToUpdate.consolidatedCases = [];
 
       const memberCases = memberConsolidatedCases.filter(memberCase => {
-        return memberCase.docketNumber !== caseToUpdate.leadDocketNumber;
+        return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;
       });
 
       caseToUpdate.consolidatedCases.push(...memberCases);
