@@ -78,7 +78,7 @@ export const NoticeOfReceiptOfPetition = ({
         <div className="info-box-header">Change of Address:</div>
         <div className="info-box-content">
           You must notify the Clerk of the Court if you change your address. See
-          Rule 22(b)(4). If you filed your petition in paper, see Tax Court Form
+          Rule 24(e). If you filed your petition in paper, see Tax Court Form
           10, Notice of Change of Address, under &quot;Forms&quot; on the Tax
           Court’s Website at{' '}
           <strong>
