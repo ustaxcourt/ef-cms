@@ -19,7 +19,7 @@ exports.handler = async () => {
   const jobWithApprovalNeeded = find(
     allJobsInWorkflow.data.items,
     function (o) {
-      return o.approval_request_id !== undefined && o.status === 'blocked';
+      return o.status === 'blocked';
     },
   );
   console.log('JOB::jobWithApprovalNeeded', jobWithApprovalNeeded);
