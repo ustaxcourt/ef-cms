@@ -19,7 +19,12 @@ export const IndividualWorkQueueInbox = connect(
         >
           <thead>
             <tr>
-              <th aria-label="Docket Number" className="small" colSpan="2">
+              <th
+                aria-hidden="true"
+                className="consolidated-case-column"
+                colSpan="2"
+              ></th>
+              <th aria-label="Docket Number" className="small">
                 <span className="padding-left-2px">Docket No.</span>
               </th>
               <th className="small">Received</th>
@@ -37,6 +42,25 @@ export const IndividualWorkQueueInbox = connect(
               <tbody key={item.workItemId}>
                 <tr>
                   <td aria-hidden="true" />
+                  <td className="consolidated-case-column">
+                    {item.inConsolidatedGroup && (
+                      <span
+                        className="fa-layers fa-fw"
+                        title={item.consolidatedIconTooltipText}
+                      >
+                        <Icon
+                          aria-label={item.consolidatedIconTooltipText}
+                          className="fa-icon-blue"
+                          icon="copy"
+                        />
+                        {item.inLeadCase && (
+                          <span className="fa-inverse lead-case-icon-text">
+                            L
+                          </span>
+                        )}
+                      </span>
+                    )}
+                  </td>
                   <td className="message-queue-row small">
                     <CaseLink formattedCase={item} />
                   </td>

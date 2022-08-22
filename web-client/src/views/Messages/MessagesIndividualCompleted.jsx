@@ -1,5 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
-import { Icon } from '../../ustc-ui/Icon/Icon';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
@@ -79,23 +79,9 @@ export const MessagesIndividualCompleted = connect(
               <tbody key={`message-individual-${message.messageId}`}>
                 <tr>
                   <td className="consolidated-case-column">
-                    {message.inConsolidatedGroup && (
-                      <span
-                        className="fa-layers fa-fw"
-                        title={message.consolidatedIconTooltipText}
-                      >
-                        <Icon
-                          aria-label={message.consolidatedIconTooltipText}
-                          className="fa-icon-blue"
-                          icon="copy"
-                        />
-                        {message.inLeadCase && (
-                          <span className="fa-inverse lead-case-icon-text">
-                            L
-                          </span>
-                        )}
-                      </span>
-                    )}
+                    <ConsolidatedCaseIcon
+                      caseItem={message}
+                    ></ConsolidatedCaseIcon>
                   </td>
                   <td className="message-queue-row small" colSpan="2">
                     {message.docketNumberWithSuffix}
