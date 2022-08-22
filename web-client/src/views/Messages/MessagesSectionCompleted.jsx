@@ -95,16 +95,7 @@ export const MessagesSectionCompleted = connect(
             </tr>
           </thead>
           {formattedMessages.completedMessages.map(message => (
-            <CompletedMessageRow
-              completedAtFormatted={message.completedAtFormatted}
-              completedBy={message.completedBy}
-              completedBySection={message.completedBySection}
-              completedMessage={message.completedMessage}
-              docketNumberWithSuffix={message.docketNumberWithSuffix}
-              key={message.messageId}
-              messageDetailLink={message.messageDetailLink}
-              subject={message.subject}
-            />
+            <CompletedMessageRow key={message.messageId} message={message} />
           ))}
         </table>
         {!formattedMessages.hasMessages && <div>There are no messages.</div>}
@@ -114,14 +105,7 @@ export const MessagesSectionCompleted = connect(
 );
 
 const CompletedMessageRow = React.memo(function CompletedMessageRow({
-  completedAtFormatted,
-  completedBy,
-  completedBySection,
-  completedMessage,
-  docketNumberWithSuffix,
   message,
-  messageDetailLink,
-  subject,
 }) {
   return (
     <tbody>
@@ -130,23 +114,23 @@ const CompletedMessageRow = React.memo(function CompletedMessageRow({
           <ConsolidatedCaseIcon caseItem={message}></ConsolidatedCaseIcon>
         </td>
         <td className="message-queue-row small" colSpan="2">
-          {docketNumberWithSuffix}
+          {message.docketNumberWithSuffix}
         </td>
         <td className="message-queue-row small">
-          <span className="no-wrap">{completedAtFormatted}</span>
+          <span className="no-wrap">{message.completedAtFormatted}</span>
         </td>
         <td className="message-queue-row">
           <div className="message-document-title">
-            <Button link className="padding-0" href={messageDetailLink}>
-              {subject}
+            <Button link className="padding-0" href={message.messageDetailLink}>
+              {message.subject}
             </Button>
           </div>
 
           <div className="message-document-detail">{message.message}</div>
         </td>
-        <td className="message-queue-row">{completedMessage}</td>
-        <td className="message-queue-row">{completedBy}</td>
-        <td className="message-queue-row">{completedBySection}</td>
+        <td className="message-queue-row">{message.completedMessage}</td>
+        <td className="message-queue-row">{message.completedBy}</td>
+        <td className="message-queue-row">{message.completedBySection}</td>
       </tr>
     </tbody>
   );
