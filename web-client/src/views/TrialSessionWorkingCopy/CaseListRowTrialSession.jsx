@@ -18,7 +18,9 @@ const getCaseRow = ({
     <React.Fragment className="hoverable" key={formattedCase.docketNumber}>
       <tr className="vertical-align-middle-row">
         <td className="consolidated-case-column">
-          <ConsolidatedCaseIcon caseItem={formattedCase} />
+          <div className={indentMemberCase ? 'margin-left-2' : ''}>
+            <ConsolidatedCaseIcon caseItem={formattedCase} />
+          </div>
         </td>
         <td>
           <div className={indentMemberCase ? 'margin-left-2' : ''}>
