@@ -142,7 +142,7 @@ const MessageInboxRow = React.memo(function MessageInboxRow({ message }) {
               {message.subject}
             </Button>
           </div>
-          <div className="message-document-detail">{message}</div>
+          <div className="message-document-detail">{message.message}</div>
         </td>
         <td className="message-queue-row max-width-25">{message.caseTitle}</td>
         <td className="message-queue-row">{message.caseStatus}</td>
