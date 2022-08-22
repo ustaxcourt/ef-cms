@@ -35,7 +35,6 @@ describe('hasTrackedItemsPermission', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [],
-          privatePractitioners: [{ userId: '789' }],
         },
         permission: { TRACKED_ITEMS: true },
       },
@@ -51,7 +50,6 @@ describe('hasTrackedItemsPermission', () => {
         ...getBaseState(user),
         caseDetail: {
           docketEntries: [],
-          privatePractitioners: [{ userId: '789' }],
         },
         permission: { TRACKED_ITEMS: false },
       },
