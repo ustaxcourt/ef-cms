@@ -121,6 +121,7 @@ export const MessagesSectionOutbox = connect(
               docketNumberWithSuffix={message.docketNumberWithSuffix}
               from={message.from}
               key={message.messageId}
+              message={message.message}
               messageDetailLink={message.messageDetailLink}
               messageId={message.messageId}
               subject={message.subject}
@@ -166,7 +167,7 @@ const MessageOutboxRow = React.memo(function MessageOutboxRow({
             </Button>
           </div>
 
-          <div className="message-document-detail">{message.message}</div>
+          <div className="message-document-detail">{message}</div>
         </td>
         <td className="message-queue-row max-width-25">{caseTitle}</td>
         <td className="message-queue-row">{caseStatus}</td>
