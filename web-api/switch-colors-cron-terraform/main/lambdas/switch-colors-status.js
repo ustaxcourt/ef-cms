@@ -22,6 +22,7 @@ exports.handler = async () => {
       return o.approval_request_id !== undefined && o.status === 'blocked';
     },
   );
+  console.log('JOB::jobWithApprovalNeeded', jobWithApprovalNeeded);
 
   const approveJob = {
     headers: { 'Circle-Token': apiToken },
