@@ -12,11 +12,14 @@ export const messageDocumentHelper = (get, applicationContext) => {
   }
 
   const {
+    ALLOWLIST_FEATURE_FLAGS,
     COURT_ISSUED_EVENT_CODES,
     EVENT_CODES_REQUIRING_SIGNATURE,
+    GENERIC_ORDER_EVENT_CODE,
     INITIAL_DOCUMENT_TYPES,
     NOTICE_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
@@ -89,6 +92,16 @@ export const messageDocumentHelper = (get, applicationContext) => {
     !isCorrespondence && !documentIsSigned && caseDocument.isDraft;
   const showEditButtonForDocument =
     caseDocument.isDraft && !isCorrespondence && !isStipulatedDecision;
+  const isDraftStampOrder =
+    caseDocument.eventCode === GENERIC_ORDER_EVENT_CODE &&
+    caseDocument.stampData?.disposition;
+
+  const showEditButtonSigned =
+    showEditButtonForRole &&
+    showEditButtonForDocument &&
+    documentIsSigned &&
+    !isNotice &&
+    !isDraftStampOrder;
   const showRemoveSignatureButtonForDocument =
     documentIsSigned &&
     caseDocument.isDraft &&
@@ -141,8 +154,19 @@ export const messageDocumentHelper = (get, applicationContext) => {
       d => d.eventCode === STIPULATED_DECISION_EVENT_CODE && !d.archived,
     );
 
+  const isStampDispositionEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key],
+  );
+
+  const showApplyStampButton =
+    isStampDispositionEnabled &&
+    permissions.STAMP_MOTION &&
+    (STAMPED_DOCUMENTS_ALLOWLIST.includes(caseDocument.eventCode) ||
+      STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocument?.eventCode));
+
   return {
     addDocketEntryLink: `/case-detail/${caseDetail.docketNumber}/documents/${viewerDocumentIdToDisplay}/add-court-issued-docket-entry/${parentMessageId}`,
+    applyStampFromMessagesLink: `/messages/${caseDetail.docketNumber}/message-detail/${parentMessageId}/${viewerDocumentIdToDisplay}/apply-stamp`,
     archived: documentIsArchived,
     editCorrespondenceLink: `/case-detail/${caseDetail.docketNumber}/edit-correspondence/${viewerDocumentIdToDisplay}/${parentMessageId}`,
     editUrl,
@@ -152,21 +176,19 @@ export const messageDocumentHelper = (get, applicationContext) => {
     showApplySignatureButton:
       showApplyRemoveSignatureButtonForRole &&
       showApplySignatureButtonForDocument,
+    showApplyStampButton,
     showDocumentNotSignedAlert,
     showEditButtonNotSigned:
       showEditButtonForRole &&
       showEditButtonForDocument &&
       (!documentIsSigned || isNotice),
-    showEditButtonSigned:
-      showEditButtonForRole &&
-      showEditButtonForDocument &&
-      documentIsSigned &&
-      !isNotice,
+    showEditButtonSigned,
     showEditCorrespondenceButton:
       showEditButtonForRole && showEditButtonForCorrespondenceDocument,
     showRemoveSignatureButton:
       showApplyRemoveSignatureButtonForRole &&
-      showRemoveSignatureButtonForDocument,
+      showRemoveSignatureButtonForDocument &&
+      !isDraftStampOrder,
     showServeCourtIssuedDocumentButton,
     showServePaperFiledDocumentButton,
     showServePetitionButton,
