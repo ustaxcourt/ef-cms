@@ -21,6 +21,8 @@ resource "aws_lambda_function" "switch_colors_status_lambda" {
       ENVIRONMENT                   = var.environment
       NODE_ENV                      = "production"
       ACCOUNT_ID                    = data.aws_caller_identity.current.account_id
+      CIRCLE_MACHINE_USER_TOKEN     = var.circle_machine_user_token
+      CIRCLE_WORKFLOW_ID            = var.circle_workflow_id
     }
   }
 }
