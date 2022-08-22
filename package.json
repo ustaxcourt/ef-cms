@@ -77,9 +77,6 @@
     "*.{js,jsx}": [
       "eslint"
     ],
-    "pa11y-*.js": [
-      "node lint-pa11y.js"
-    ],
     "*.{css,scss}": [
       "stylelint"
     ],

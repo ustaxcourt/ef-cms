@@ -59,6 +59,15 @@ resource "aws_iam_role_policy" "iam_update_petitioner_cases_lambda_policy" {
         },
         {
             "Action": [
+                "ses:SendBulkTemplatedEmail"
+            ],
+            "Resource": [
+                "arn:aws:ses:us-east-1:${data.aws_caller_identity.current.account_id}:identity/noreply@${var.dns_domain}"
+            ],
+            "Effect": "Allow"
+        },
+        {
+            "Action": [
                 "s3:DeleteObject",
                 "s3:GetObject",
                 "s3:ListBucket",
@@ -84,14 +93,6 @@ resource "aws_iam_role_policy" "iam_update_petitioner_cases_lambda_policy" {
                 "sqs:DeleteQueue"
             ],
             "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:update_petitioner_cases_queue_${var.environment}_*",
-            "Effect": "Allow"
-        },
-        {
-            "Action": [
-                "sqs:SendMessage",
-                "sqs:DeleteMessage"
-            ],
-            "Resource": "arn:aws:sqs:us-east-1:${data.aws_caller_identity.current.account_id}:send_emails_queue_${var.environment}_*",
             "Effect": "Allow"
         }
     ]

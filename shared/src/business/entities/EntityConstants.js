@@ -83,9 +83,6 @@ const ALLOWLIST_FEATURE_FLAGS = {
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
   },
-  STAMP_DISPOSITION: {
-    key: 'stamp-disposition-enabled',
-  },
 };
 
 const CONFIGURATION_ITEM_KEYS = {
@@ -556,7 +553,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   },
   orderForFilingFee: {
     content:
-      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_30], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_30], may result in dismissal of this case.',
+      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
       .documentType,
     eventCode: 'OF',
@@ -586,13 +583,13 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       <br/>
       &nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is<br/>
       <br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_30], petitioner(s) shall file a proper
+      &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_60], petitioner(s) shall file a proper
       amended petition and pay the $60.00 filing fee. Waiver of the filing fee requires an affidavit
       containing specific financial information regarding the inability to make such payment. An
       Application for Waiver of Filing Fee and Affidavit form is available under "Case Related Forms" on
       the Court's website at www.ustaxcourt.gov/case_related_forms.html.<br/>
       <br/>
-      If, by [ORDER_PLUS_30], petitioner(s) do not file an Amended Petition and either pay the Court's
+      If, by [ORDER_PLUS_60], petitioner(s) do not file an Amended Petition and either pay the Court's
       $60.00 filing fee or submit an Application for Waiver of the Filing Fee, the case will be dismissed or
       other action taken as the Court deems appropriate.`,
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OAPF')

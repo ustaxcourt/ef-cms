@@ -1018,7 +1018,7 @@ describe('serveCaseToIrsInteractor', () => {
     });
   });
 
-  it('should replace brackets in orderForAmendedPetitionAndFilingFee content with the filing date of the petition, and today plus thirty twice', async () => {
+  it('should replace brackets in orderForAmendedPetitionAndFilingFee content with the filing date of the petition, and today plus sixty twice', async () => {
     mockCase = {
       ...MOCK_CASE,
       orderForAmendedPetitionAndFilingFee: true,
@@ -1044,8 +1044,8 @@ describe('serveCaseToIrsInteractor', () => {
       FORMATS.MONTH_DAY_YEAR,
     );
 
-    const todayPlus30 = getBusinessDateInFuture({
-      numberOfDays: 30,
+    const mockTodayPlus60 = getBusinessDateInFuture({
+      numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
 
@@ -1061,13 +1061,13 @@ describe('serveCaseToIrsInteractor', () => {
       <br/>
       &nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is<br/>
       <br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${todayPlus30}, petitioner(s) shall file a proper
+      &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before ${mockTodayPlus60}, petitioner(s) shall file a proper
       amended petition and pay the $60.00 filing fee. Waiver of the filing fee requires an affidavit
       containing specific financial information regarding the inability to make such payment. An
       Application for Waiver of Filing Fee and Affidavit form is available under "Case Related Forms" on
       the Court's website at www.ustaxcourt.gov/case_related_forms.html.<br/>
       <br/>
-      If, by ${todayPlus30}, petitioner(s) do not file an Amended Petition and either pay the Court's
+      If, by ${mockTodayPlus60}, petitioner(s) do not file an Amended Petition and either pay the Court's
       $60.00 filing fee or submit an Application for Waiver of the Filing Fee, the case will be dismissed or
       other action taken as the Court deems appropriate.`,
     });
@@ -1113,8 +1113,8 @@ describe('serveCaseToIrsInteractor', () => {
       content: expect.not.stringContaining('['),
     });
 
-    const mockTodayPlus30 = getBusinessDateInFuture({
-      numberOfDays: 30,
+    const mockTodayPlus60 = getBusinessDateInFuture({
+      numberOfDays: 60,
       startDate: formatNow(FORMATS.ISO),
     });
     expect(
@@ -1122,7 +1122,7 @@ describe('serveCaseToIrsInteractor', () => {
         .addDocketEntryForSystemGeneratedOrder.mock.calls[0][0]
         .systemGeneratedDocument,
     ).toMatchObject({
-      content: expect.stringContaining(mockTodayPlus30),
+      content: expect.stringContaining(mockTodayPlus60),
     });
   });
 });

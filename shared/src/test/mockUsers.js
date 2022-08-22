@@ -146,8 +146,6 @@ exports.irsSuperuserUser = {
   userId: '5a5c771d-ab63-4d78-a298-1de657dde621',
 };
 exports.judgeUser = {
-  judgeFullName: 'Barney the Dinosaur',
-  name: 'Barney',
   role: ROLES.judge,
   userId: '43b00e5f-b78c-476c-820e-5d6ed1d58828',
 };

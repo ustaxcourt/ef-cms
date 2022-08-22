@@ -32,7 +32,6 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
   },
 ) => {
   const user = applicationContext.getCurrentUser();
-
   const caseRecord = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -66,7 +65,7 @@ exports.addDraftStampOrderDocketEntryInteractor = async (
         freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       },
       eventCode: orderDocumentInfo.eventCode,
-      filedBy: user.judgeFullName || user.name,
+      filedBy: originalDocketEntryEntity.filedBy,
       freeText: `${originalDocketEntryEntity.documentType} ${formattedDraftDocumentTitle}`,
       isDraft: true,
       isPaper: false,
