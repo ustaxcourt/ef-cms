@@ -11,11 +11,13 @@ export const CaseDetailPendingReportList = connect(
     openConfirmRemoveCaseDetailPendingItemModalSequence:
       sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     showModal: state.modal.showModal,
+    trackedItemsHelper: state.trackedItemsHelper,
   },
   function CaseDetailPendingReportList({
     formattedDocketEntries,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     showModal,
+    trackedItemsHelper,
   }) {
     return (
       <>
@@ -66,18 +68,20 @@ export const CaseDetailPendingReportList = connect(
                   </td>
                   <td>{entry.filedBy}</td>
                   <td>
-                    <Button
-                      link
-                      className="padding-0 no-wrap"
-                      icon="trash"
-                      onClick={() =>
-                        openConfirmRemoveCaseDetailPendingItemModalSequence({
-                          docketEntryId: entry.docketEntryId,
-                        })
-                      }
-                    >
-                      Remove
-                    </Button>
+                    {trackedItemsHelper.hasTrackedItemsPermission && (
+                      <Button
+                        link
+                        className="padding-0 no-wrap"
+                        icon="trash"
+                        onClick={() =>
+                          openConfirmRemoveCaseDetailPendingItemModalSequence({
+                            docketEntryId: entry.docketEntryId,
+                          })
+                        }
+                      >
+                        Remove
+                      </Button>
+                    )}
                   </td>
                 </tr>
               </tbody>
