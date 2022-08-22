@@ -1,7 +1,5 @@
 const axios = require('axios');
-const createApplicationContext = require('../../../src/applicationContext');
 const { find } = require('lodash');
-const applicationContext = createApplicationContext({});
 
 exports.handler = async () => {
   console.log('Approving CircleCI wait for color switch job');
@@ -17,7 +15,7 @@ exports.handler = async () => {
 
   const allJobsInWorkflow = await axios.get(get_all_jobs.url, get_all_jobs);
 
-  applicationContext.logger.info(allJobsInWorkflow);
+  console.log('JOB::allJobsInWorkflow', allJobsInWorkflow);
   const jobWithApprovalNeeded = find(
     allJobsInWorkflow.data.items,
     function (o) {
