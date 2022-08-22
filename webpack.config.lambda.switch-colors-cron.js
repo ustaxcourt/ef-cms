@@ -3,7 +3,7 @@ const config = require('./webpack.config.lambda');
 module.exports = {
   ...config,
   entry: {
-    'reindex-status':
+    'switch-colors-status':
       './web-api/switch-colors-cron-terraform/main/lambdas/switch-colors-status.js',
   },
   externals: ['aws-sdk'],
