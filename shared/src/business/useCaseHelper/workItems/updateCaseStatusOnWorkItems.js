@@ -11,6 +11,7 @@ exports.updateCaseStatusOnWorkItems = async ({
     applicationContext.getPersistenceGateway().updateWorkItemCaseStatus({
       applicationContext,
       caseStatus,
+      docketNumber: workItem.docketNumber,
       workItemId: workItem.workItemId,
     }),
   );

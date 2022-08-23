@@ -15,6 +15,7 @@ describe('updateWorkItemCaseTitle', () => {
     await updateWorkItemCaseTitle({
       applicationContext,
       caseTitle: mockCaseTitle,
+      docketNumber: '101-20',
       workItemId: '123',
     });
 
@@ -23,7 +24,7 @@ describe('updateWorkItemCaseTitle', () => {
         ':caseTitle': mockCaseTitle,
       },
       Key: {
-        pk: 'work-item|123',
+        pk: 'case|101-20',
         sk: 'work-item|123',
       },
     });

@@ -2,8 +2,9 @@ const client = require('../../dynamodbClientService');
 
 exports.updateWorkItemTrialDate = ({
   applicationContext,
+  docketNumber,
   trialDate,
-  workItem,
+  workItemId,
 }) =>
   client.update({
     ExpressionAttributeNames: {
@@ -13,8 +14,8 @@ exports.updateWorkItemTrialDate = ({
       ':trialDate': trialDate,
     },
     Key: {
-      pk: workItem.pk,
-      sk: workItem.sk,
+      pk: `case|${docketNumber}`,
+      sk: `work-item|${workItemId}`,
     },
     UpdateExpression: 'SET #trialDate = :trialDate',
     applicationContext,
