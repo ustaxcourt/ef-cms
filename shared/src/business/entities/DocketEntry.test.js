@@ -28,6 +28,18 @@ export const MOCK_PETITIONERS = [
 ];
 
 describe('DocketEntry entity', () => {
+  it('defaults stampData to an empty object when no stamp data is passed in', () => {
+    const entry = new DocketEntry(
+      { ...A_VALID_DOCKET_ENTRY, stampData: undefined },
+      {
+        applicationContext,
+        petitioners: MOCK_PETITIONERS,
+      },
+    );
+
+    expect(entry.stampData).toEqual({});
+  });
+
   describe('generateFiledBy', () => {
     it('should update filedBy when the docket entry has not been served', () => {
       const myDoc = new DocketEntry(
