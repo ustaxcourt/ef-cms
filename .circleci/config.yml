@@ -1020,19 +1020,9 @@ workflows:
                 - experimental4
                 - experimental5
                 - migration
-      - deploy-switch-colors-cron:
-          requires:
-            - smoketests-readonly
-      - wait-for-switch:
-          type: approval
-          requires:
-            - deploy-switch-colors-cron
-      - disable-switch-colors-cron:
-          requires:
-            - wait-for-switch
       - switch-colors:
           requires:
-            - disable-switch-colors-cron
+            - smoketests-readonly
           filters:
             branches:
               only:
