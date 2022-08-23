@@ -2,15 +2,16 @@
 /**
  * Adds consolidated case properties to the passed in object.
  *
- * @param {object} object - Object to have consolidated case properties added into.
- * @returns {object} Object, consolidatedIconTooltipText, inConsolidatedGroup, and inLeadCase
+ * @param {object} caseObject - caseObject to have consolidated case properties added into.
+ * @returns {object} caseObject, consolidatedIconTooltipText, inConsolidatedGroup, and inLeadCase
  */
 
-export const addConsolidatedProperties = object => {
+export const addConsolidatedProperties = caseObject => {
   let consolidatedIconTooltipText = null;
-  const inConsolidatedGroup = !!object.leadDocketNumber;
+  const inConsolidatedGroup = !!caseObject.leadDocketNumber;
   const inLeadCase =
-    inConsolidatedGroup && object.leadDocketNumber === object.docketNumber;
+    inConsolidatedGroup &&
+    caseObject.leadDocketNumber === caseObject.docketNumber;
 
   if (inConsolidatedGroup) {
     if (inLeadCase) {
@@ -20,7 +21,7 @@ export const addConsolidatedProperties = object => {
     }
   }
   return {
-    ...object,
+    ...caseObject,
     consolidatedIconTooltipText,
     inConsolidatedGroup,
     inLeadCase,
