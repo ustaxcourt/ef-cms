@@ -19,10 +19,8 @@ describe('updateWorkItemAssociatedJudge', () => {
     await updateWorkItemAssociatedJudge({
       applicationContext,
       associatedJudge: mockAssociatedJudge,
-      workItem: {
-        pk: mockPk,
-        sk: mockSk,
-      },
+      docketNumber: 'pk',
+      workItemId: 'sk',
     });
 
     expect(client.update.mock.calls[0][0]).toMatchObject({
