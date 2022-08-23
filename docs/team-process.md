@@ -2,15 +2,6 @@
 
 Now that you've logged in and played around with our Dawson system a bit on a deployed environment, let's talk about our team process and what is expected from our fellow teammates.  This part of the documentation should help members get on the same page when it comes to the soft-skills required to work as a well-oiled agile machine.
 
-## Onboarding
-
-Here are some few resources for documentation associated with onboarding:
-
-1. [Onboarding checklist](https://docs.google.com/document/d/1zhvp8vcWnVSvUbTKZ-0sHrf5lA6OTlpXqvjeLgKJtVk)
-2. [Onboarding Reference Guide](https://docs.google.com/document/d/1jOd0wAsqTDBKsFeEvUj9ezvdTimTsqTwkYd6Imibl3c)
-
-If you do not have permissions to view these documents, please reach out to the document owner.
-
 ## Working Agreement
 
 We have talked about writing some form of working agreement so team members have a common understanding of what is expected from them during their daily work.  Great teams strive for open communication, safe spaces to speak their mind, and continuous improvement in process.  Embracing some of the following ideologies will help grow and sustain a healthy team.
@@ -139,12 +130,11 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
     NOTE: If any npm packages are updated but the `package-lock.js` file is not updated, increment the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
 
 4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
-
     - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
     - Change the version in `scripts/verify-terraform-version.sh`
     - increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
     - publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
-      - `npm run deploy:ci-image`
+      - `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
     - deploy as normal
 
 5. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
