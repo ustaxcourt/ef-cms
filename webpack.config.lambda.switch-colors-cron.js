@@ -4,7 +4,7 @@ module.exports = {
   ...config,
   entry: {
     'switch-colors-status':
-      './web-api/switch-colors-cron-terraform/main/lambdas/switch-colors-status.js',
+      './web-api/switch-colors-cron-terraform/main/lambdas/switch-colors.js',
   },
   externals: ['aws-sdk'],
   output: {

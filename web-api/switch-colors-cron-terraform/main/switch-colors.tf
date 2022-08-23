@@ -1,6 +1,6 @@
 data "archive_file" "switch_colors_status_zip" {
   type        = "zip"
-  output_path = "${path.module}/lambdas/switch-colors-status.js.zip"
+  output_path = "${path.module}/lambdas/switch-colors.js.zip"
   source_dir  = "${path.module}/lambdas/dist/"
   excludes = ["migration.js", "migration-segments.js"]
 }
