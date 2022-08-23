@@ -411,6 +411,9 @@ const {
   updateUserEmail,
 } = require('../../shared/src/persistence/dynamo/users/updateUserEmail');
 const {
+  updateUserRecords,
+} = require('../../shared/src/persistence/dynamo/users/updateUserRecords');
+const {
   updateWorkItemAssociatedJudge,
 } = require('../../shared/src/persistence/dynamo/workitems/updateWorkItemAssociatedJudge');
 const {
@@ -532,6 +535,7 @@ const gatewayMethods = {
     updateUser,
     updateUserCaseNote,
     updateUserEmail,
+    updateUserRecords,
     updateWorkItemAssociatedJudge,
     updateWorkItemCaseStatus,
     updateWorkItemCaseTitle,
