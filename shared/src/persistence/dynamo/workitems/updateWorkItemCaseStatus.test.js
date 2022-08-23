@@ -14,11 +14,14 @@ describe('updateWorkItemCaseStatus', () => {
 
   it('should call client.update with passed in case status and work item pk and sk', async () => {
     const mockCaseStatus = CASE_STATUS_TYPES.generalDocket;
+    const mockPk = 'case|pk';
+    const mockSk = 'work-item|sk';
 
     await updateWorkItemCaseStatus({
       applicationContext,
       caseStatus: mockCaseStatus,
-      workItemId: '123',
+      docketNumber: 'pk',
+      workItemId: 'sk',
     });
 
     expect(client.update.mock.calls[0][0]).toMatchObject({
@@ -26,8 +29,8 @@ describe('updateWorkItemCaseStatus', () => {
         ':caseStatus': mockCaseStatus,
       },
       Key: {
-        pk: 'work-item|123',
-        sk: 'work-item|123',
+        pk: mockPk,
+        sk: mockSk,
       },
     });
   });
