@@ -54,8 +54,6 @@ describe('Manually block consolidated cases', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);
-
-  loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkOpensCaseConsolidateModal(cerebralTest);
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
@@ -83,7 +81,6 @@ describe('Manually block consolidated cases', () => {
     );
   });
 
-  loginAs(cerebralTest, 'petitionsclerk@example.com');
   it('should set case docket number to memberCaseDocketNumber', () => {
     cerebralTest.docketNumber = memberCaseDocketNumber;
   });
