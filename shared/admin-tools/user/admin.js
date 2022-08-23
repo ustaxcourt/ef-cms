@@ -112,7 +112,7 @@ const verifyAdminUserDisabled = async ({ attempt }) => {
         await verifyAdminUserDisabled({ attempt });
       } else {
         console.error(
-          'Reached max retries attempts to disable USTC Admin user - unable to disable user. Exiting...',
+          'Unable to verify that the USTC Admin user is disabled - max retries reached. Exiting...',
         );
         process.exit(1);
       }
