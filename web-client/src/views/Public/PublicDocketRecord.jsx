@@ -41,6 +41,9 @@ export const PublicDocketRecord = connect(
           <tbody>
             {publicCaseDetailHelper.formattedDocketEntriesOnDocketRecord.map(
               entry => {
+                // {
+                //   console.log('entry:', entry);
+                // }
                 return (
                   <tr key={entry.index}>
                     <td className="center-column hide-on-mobile">
