@@ -13,12 +13,12 @@ import { getUserPermissions } from '../../../../shared/src/authorization/getUser
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../../src/withAppContext';
 
-const documentViewerHelper = withAppContextDecorator(
-  documentViewerHelperComputed,
-  applicationContext,
-);
-
 describe('documentViewerHelper', () => {
+  const documentViewerHelper = withAppContextDecorator(
+    documentViewerHelperComputed,
+    applicationContext,
+  );
+
   const DOCKET_ENTRY_ID = 'b8947b11-19b3-4c96-b7a1-fa6a5654e2d5';
 
   const baseDocketEntry = {
@@ -44,6 +44,76 @@ describe('documentViewerHelper', () => {
     applicationContext.getCurrentUser = jest
       .fn()
       .mockReturnValue(docketClerkUser);
+  });
+
+  describe('showCompleteQcButton', () => {
+    const showCompleteQcButtonTests = [
+      {
+        description:
+          'should be true if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress',
+        docketEntryOverrides: {
+          documentType: 'Proposed Stipulated Decision',
+          eventCode: 'PSDE',
+          servedAt: '2019-08-25T05:00:00.000Z',
+          workItem: {},
+        },
+        expectation: true,
+      },
+      {
+        description:
+          'should be false if the user does not have EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress',
+        docketEntryOverrides: {
+          documentType: 'Proposed Stipulated Decision',
+          eventCode: 'PSDE',
+          servedAt: '2019-08-25T05:00:00.000Z',
+          workItem: {},
+        },
+        expectation: false,
+        user: adcUser,
+      },
+      {
+        description:
+          'should be undefined if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item',
+        docketEntryOverrides: {
+          documentType: 'Proposed Stipulated Decision',
+          eventCode: 'PSDE',
+          servedAt: '2019-08-25T05:00:00.000Z',
+        },
+        expectation: undefined,
+      },
+      {
+        description:
+          'should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item but is in progress',
+        docketEntryOverrides: {
+          documentType: 'Proposed Stipulated Decision',
+          eventCode: 'PSDE',
+          isFileAttached: false,
+          servedAt: '2019-08-25T05:00:00.000Z',
+          workItem: {},
+        },
+        expectation: false,
+      },
+    ];
+
+    showCompleteQcButtonTests.forEach(
+      ({ description, docketEntryOverrides, expectation, user }) => {
+        it(`${description}`, () => {
+          const { showCompleteQcButton } = runCompute(documentViewerHelper, {
+            state: {
+              ...getBaseState(user || docketClerkUser),
+              caseDetail: {
+                docketEntries: [
+                  { ...baseDocketEntry, ...docketEntryOverrides },
+                ],
+                status: CASE_STATUS_TYPES.generalDocket,
+              },
+            },
+          });
+
+          expect(showCompleteQcButton).toEqual(expectation);
+        });
+      },
+    );
   });
 
   describe('showServeCourtIssuedDocumentButton', () => {
@@ -414,76 +484,6 @@ describe('documentViewerHelper', () => {
           );
 
           expect(showSignStipulatedDecisionButton).toEqual(expectation);
-        });
-      },
-    );
-  });
-
-  describe('showCompleteQcButton', () => {
-    const showCompleteQcButtonTests = [
-      {
-        description:
-          'should be true if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress',
-        docketEntryOverrides: {
-          documentType: 'Proposed Stipulated Decision',
-          eventCode: 'PSDE',
-          servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
-        },
-        expectation: true,
-      },
-      {
-        description:
-          'should be false if the user does not have EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item and is not in progress',
-        docketEntryOverrides: {
-          documentType: 'Proposed Stipulated Decision',
-          eventCode: 'PSDE',
-          servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
-        },
-        expectation: false,
-        user: adcUser,
-      },
-      {
-        description:
-          'should be undefined if the user has EDIT_DOCKET_ENTRY permissions and the docket entry does not have an incomplete work item',
-        docketEntryOverrides: {
-          documentType: 'Proposed Stipulated Decision',
-          eventCode: 'PSDE',
-          servedAt: '2019-08-25T05:00:00.000Z',
-        },
-        expectation: undefined,
-      },
-      {
-        description:
-          'should be false if the user has EDIT_DOCKET_ENTRY permissions and the docket entry has an incomplete work item but is in progress',
-        docketEntryOverrides: {
-          documentType: 'Proposed Stipulated Decision',
-          eventCode: 'PSDE',
-          isFileAttached: false,
-          servedAt: '2019-08-25T05:00:00.000Z',
-          workItem: {},
-        },
-        expectation: false,
-      },
-    ];
-
-    showCompleteQcButtonTests.forEach(
-      ({ description, docketEntryOverrides, expectation, user }) => {
-        it(`${description}`, () => {
-          const { showCompleteQcButton } = runCompute(documentViewerHelper, {
-            state: {
-              ...getBaseState(user || docketClerkUser),
-              caseDetail: {
-                docketEntries: [
-                  { ...baseDocketEntry, ...docketEntryOverrides },
-                ],
-                status: CASE_STATUS_TYPES.generalDocket,
-              },
-            },
-          });
-
-          expect(showCompleteQcButton).toEqual(expectation);
         });
       },
     );
