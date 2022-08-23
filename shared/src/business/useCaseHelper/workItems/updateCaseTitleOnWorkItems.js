@@ -11,6 +11,7 @@ exports.updateCaseTitleOnWorkItems = async ({
     applicationContext.getPersistenceGateway().updateWorkItemCaseTitle({
       applicationContext,
       caseTitle,
+      docketNumber: workItem.docketNumber,
       workItemId: workItem.workItemId,
     }),
   );
