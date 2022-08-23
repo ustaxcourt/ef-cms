@@ -29,9 +29,6 @@ const {
   createUserForContact,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/createUserForContact');
 const {
-  fetchPendingItems,
-} = require('../../shared/src/persistence/elasticsearch/fetchPendingItems');
-const {
   fetchPendingItemsByDocketNumber,
 } = require('../../shared/src/business/useCaseHelper/pendingItems/fetchPendingItemsByDocketNumber');
 const {
@@ -49,9 +46,6 @@ const {
 const {
   generateStampedCoversheetInteractor,
 } = require('../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor');
-const {
-  getCaseInventoryReport,
-} = require('../../shared/src/persistence/elasticsearch/getCaseInventoryReport');
 const {
   getConsolidatedCasesForLeadCase,
 } = require('../../shared/src/business/useCaseHelper/consolidatedCases/getConsolidatedCasesForLeadCase');
@@ -136,9 +130,6 @@ const {
 const {
   updateTrialDateOnWorkItems,
 } = require('../../shared/src/business/useCaseHelper/workItems/updateTrialDateOnWorkItems');
-const {
-  updateUserRecords,
-} = require('../../shared/src/persistence/dynamo/users/updateUserRecords');
 
 const useCaseHelpers = {
   addDocketEntryForSystemGeneratedOrder,
@@ -151,14 +142,12 @@ const useCaseHelpers = {
   createCaseAndAssociations,
   createTrialSessionAndWorkingCopy,
   createUserForContact,
-  fetchPendingItems,
   fetchPendingItemsByDocketNumber,
   formatAndSortConsolidatedCases,
   generateAndServeDocketEntry,
   generateCaseInventoryReportPdf,
   generateNoticeOfChangeToInPersonProceeding,
   generateStampedCoversheetInteractor,
-  getCaseInventoryReport,
   getConsolidatedCasesForLeadCase,
   getJudgeInSectionHelper,
   getUnassociatedLeadCase,
@@ -187,7 +176,6 @@ const useCaseHelpers = {
   updateDocketNumberSuffixOnWorkItems,
   updateInitialFilingDocuments,
   updateTrialDateOnWorkItems,
-  updateUserRecords,
 };
 
 exports.getUseCaseHelpers = () => useCaseHelpers;
