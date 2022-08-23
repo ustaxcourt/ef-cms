@@ -29,8 +29,8 @@ resource "aws_lambda_function" "switch_colors_status_lambda" {
 
 resource "aws_cloudwatch_event_rule" "check_switch_colors_status_cron_rule-sunday" {
   name                = "check_switch_colors_status_cron_${var.environment}"
-  schedule_expression = "cron(0/1 5-7 ? * MON-SAT *)"
-  is_enabled          = "true"
+  schedule_expression = "cron(0/1 2 ? * MON-SAT *)"
+  is_enabled          = "false"
 }
 
 resource "aws_cloudwatch_event_target" "check_switch_colors_status_cron_target" {
