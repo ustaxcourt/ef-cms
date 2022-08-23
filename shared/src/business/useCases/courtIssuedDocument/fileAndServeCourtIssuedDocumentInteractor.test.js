@@ -150,7 +150,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
@@ -292,6 +292,12 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       docketEntries: [mockDocketEntryWithWorkItem],
       leadDocketNumber,
     };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(caseRecordWithLeadDocketNumber)
+      .mockReturnValueOnce(caseRecordWithLeadDocketNumber);
+
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       clientConnectionId,
       docketEntryId:
@@ -540,16 +546,22 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error if there is no one on the case with electronic or paper service', async () => {
+    const petitioners = [
+      {
+        ...caseRecord.petitioners[0],
+        serviceIndicator: 'None',
+      },
+    ];
+
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
+      .getCaseByDocketNumber.mockReturnValueOnce({
         ...caseRecord,
-        petitioners: [
-          {
-            ...caseRecord.petitioners[0],
-            serviceIndicator: 'None',
-          },
-        ],
+        petitioners,
+      })
+      .mockReturnValueOnce({
+        ...caseRecord,
+        petitioners,
       });
 
     await expect(
