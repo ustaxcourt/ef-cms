@@ -5,8 +5,6 @@ exports.updateUserCaseMapping = ({ applicationContext, userCaseItem }) =>
     Item: {
       ...userCaseItem,
       gsi1pk: `user-case|${userCaseItem.docketNumber}`,
-      pk: `user|${userCaseItem.userId}`,
-      sk: `case|${userCaseItem.docketNumber}`,
     },
     applicationContext,
   });

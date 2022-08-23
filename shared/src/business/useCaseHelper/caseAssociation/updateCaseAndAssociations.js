@@ -7,7 +7,6 @@ const { IrsPractitioner } = require('../../entities/IrsPractitioner');
 const { Message } = require('../../entities/Message');
 const { pick } = require('lodash');
 const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
-const { UserCase } = require('../../entities/UserCase');
 
 /**
  * Identifies docket entries which have been updated and issues persistence calls
@@ -462,9 +461,7 @@ const updateUserCaseMappings = async ({
       function updateUserCaseMappings_cb() {
         applicationContext.getPersistenceGateway().updateUserCaseMapping({
           applicationContext,
-          userCaseItem: new UserCase({ ...ucItem, ...updatedAttributeValues })
-            .validate()
-            .toRawObject(),
+          userCaseItem: { ...ucItem, ...updatedAttributeValues },
         });
       },
   );
