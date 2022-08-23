@@ -307,22 +307,6 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       subjectCaseDocketNumber: caseRecordWithLeadDocketNumber.docketNumber,
     });
 
-    // const updatedCase =
-    //   applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
-    //     .caseToUpdate;
-    // const updatedDocument = updatedCase.docketEntries.find(
-    //   docketEntry =>
-    //     docketEntry.docketEntryId === caseRecord.docketEntries[1].docketEntryId,
-    // );
-
-    // expect(updatedDocument.servedAt).toBeDefined();
-    // expect(
-    //   applicationContext.getPersistenceGateway().updateCase,
-    // ).toHaveBeenCalled();
-    // expect(
-    //   applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
-    // ).toHaveBeenCalled();
-
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
