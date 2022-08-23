@@ -456,6 +456,7 @@ const isValidatedDecorator = persistenceGatewayMethods => {
             argument[key].entityName &&
             !argument[key].isValidated
           ) {
+            console.trace();
             throw new Error(
               `a entity of type ${argument[key].entityName} was not validated before passed to a persistence gateway method`,
             );
