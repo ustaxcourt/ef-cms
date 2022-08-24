@@ -10,7 +10,7 @@
  */
 exports.loadPDFForSigningInteractor = async (
   applicationContext,
-  { docketEntryId, docketNumber, removeCover = false },
+  { docketEntryId, docketNumber, onlyCover = false, removeCover = false },
 ) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 
@@ -28,6 +28,15 @@ exports.loadPDFForSigningInteractor = async (
     if (removeCover) {
       const pdfDoc = await PDFDocument.load(arrayBuffer);
       pdfDoc.removePage(0);
+      formattedArrayBuffer = await pdfDoc.save({
+        useObjectStreams: false,
+      });
+    } else if (onlyCover) {
+      const pdfDoc = await PDFDocument.load(arrayBuffer);
+      const pdfLength = pdfDoc.getPages().length;
+      for (let i = pdfLength - 1; i > 0; i--) {
+        pdfDoc.removePage(i);
+      }
       formattedArrayBuffer = await pdfDoc.save({
         useObjectStreams: false,
       });
