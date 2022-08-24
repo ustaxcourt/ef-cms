@@ -28,6 +28,9 @@ const {
   addDocketEntryForSystemGeneratedOrder,
 } = require('../../shared/src/business/useCaseHelper/addDocketEntryForSystemGeneratedOrder');
 const {
+  addDraftStampOrderDocketEntryInteractor,
+} = require('../../shared/src/business/useCaseHelper/stampDisposition/addDraftStampOrderDocketEntryInteractor');
+const {
   addExistingUserToCase,
 } = require('../../shared/src/business/useCaseHelper/caseAssociation/addExistingUserToCase');
 const {
@@ -369,6 +372,9 @@ const {
   generateDocketRecordPdfInteractor,
 } = require('../../shared/src/business/useCases/generateDocketRecordPdfInteractor');
 const {
+  generateDraftStampOrderInteractor,
+} = require('../../shared/src/business/useCases/generateDraftStampOrderInteractor');
+const {
   generateNoticeOfChangeOfTrialJudgeInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateNoticeOfChangeOfTrialJudgeInteractor');
 const {
@@ -401,6 +407,9 @@ const {
 const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
+const {
+  generateStampedCoversheetInteractor,
+} = require('../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor');
 const {
   generateStandingPretrialOrderForSmallCaseInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/generateStandingPretrialOrderForSmallCaseInteractor');
@@ -603,9 +612,6 @@ const {
   getIrsPractitionersBySearchKeyInteractor,
 } = require('../../shared/src/business/useCases/users/getIrsPractitionersBySearchKeyInteractor');
 const {
-  getJobStatus,
-} = require('../../shared/src/persistence/dynamo/trialSessions/getJobStatus');
-const {
   getJudgeInSectionHelper,
 } = require('../../shared/src/business/useCaseHelper/getJudgeInSectionHelper');
 const {
@@ -707,6 +713,12 @@ const {
 const {
   getTrialSessionDetailsInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/getTrialSessionDetailsInteractor');
+const {
+  getTrialSessionJobStatusForCase,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionJobStatusForCase');
+const {
+  getTrialSessionProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessionProcessingStatus');
 const {
   getTrialSessions,
 } = require('../../shared/src/persistence/dynamo/trialSessions/getTrialSessions');
@@ -1057,9 +1069,6 @@ const {
   setForHearingInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
 const {
-  setJobAsProcessing,
-} = require('../../shared/src/persistence/dynamo/trialSessions/setJobAsProcessing');
-const {
   setMessageAsRead,
 } = require('../../shared/src/persistence/dynamo/messages/setMessageAsRead');
 const {
@@ -1092,6 +1101,12 @@ const {
 const {
   setTrialSessionCalendarInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setTrialSessionCalendarInteractor');
+const {
+  setTrialSessionJobStatusForCase,
+} = require('../../shared/src/persistence/dynamo/trialSessions/setTrialSessionJobStatusForCase');
+const {
+  setTrialSessionProcessingStatus,
+} = require('../../shared/src/persistence/dynamo/trialSessions/setTrialSessionProcessingStatus');
 const {
   setupPdfDocument,
 } = require('../../shared/src/business/utilities/setupPdfDocument');
@@ -1503,9 +1518,10 @@ const gatewayMethods = {
     fetchPendingItems,
     getConfigurationItemValue,
     getFeatureFlagValue,
-    getJobStatus,
     getMaintenanceMode,
     getSesStatus,
+    getTrialSessionJobStatusForCase,
+    getTrialSessionProcessingStatus,
     incrementCounter,
     incrementKeyCount,
     markMessageThreadRepliedTo,
@@ -1520,6 +1536,7 @@ const gatewayMethods = {
     setExpiresAt,
     setMessageAsRead,
     setPriorityOnAllWorkItems,
+    setTrialSessionProcessingStatus,
     updateCase,
     updateCaseHearing,
     updateDocketEntry,
@@ -1644,7 +1661,7 @@ const gatewayMethods = {
   removeIrsPractitionerOnCase,
   removePrivatePractitionerOnCase,
   saveDispatchNotification,
-  setJobAsProcessing,
+  setTrialSessionJobStatusForCase,
   updateCaseCorrespondence,
   updateUserCaseMapping,
   updateWorkItemAssociatedJudge,
@@ -1985,6 +2002,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
     getUseCaseHelpers: () => {
       return {
         addDocketEntryForSystemGeneratedOrder,
+        addDraftStampOrderDocketEntryInteractor,
         addExistingUserToCase,
         addServedStampToDocument,
         appendPaperServiceAddressPageToPdf,
@@ -1999,6 +2017,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generateAndServeDocketEntry,
         generateCaseInventoryReportPdf,
         generateNoticeOfChangeToInPersonProceeding,
+        generateStampedCoversheetInteractor,
         getCaseInventoryReport,
         getConsolidatedCasesForLeadCase,
         getJudgeInSectionHelper,
@@ -2081,6 +2100,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         fileExternalDocumentInteractor,
         forwardMessageInteractor,
         generateDocketRecordPdfInteractor,
+        generateDraftStampOrderInteractor,
         generateNoticeOfChangeOfTrialJudgeInteractor,
         generateNoticeOfChangeToRemoteProceedingInteractor,
         generateNoticeOfTrialIssuedInteractor,
