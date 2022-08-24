@@ -1,5 +1,5 @@
 const cors = require('cors');
-const createApplicationContext = require('./applicationContext');
+import createApplicationContext from './applicationContext';
 const express = require('express');
 const logger = require('./logger');
 const { json, urlencoded } = require('body-parser');
@@ -8,7 +8,7 @@ const app = express();
 const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { set } = require('lodash');
 
-const applicationContext = createApplicationContext();
+const applicationContext = createApplicationContext({});
 
 app.use(cors());
 app.use(json());
