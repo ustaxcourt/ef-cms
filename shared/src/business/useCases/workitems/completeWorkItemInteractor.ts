@@ -16,7 +16,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {object} the completed work item
  */
-exports.completeWorkItemInteractor = async (
+export const completeWorkItemInteractor: ICompleteWorkItemInteractor = async (
   applicationContext,
   { completedMessage, workItemId },
 ) => {
