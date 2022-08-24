@@ -1,14 +1,32 @@
+import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+
 export const petitionsClerkAddsCaseNote = cerebralTest => {
   return it('petitions clerk adds procedural note to a case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+
     expect(cerebralTest.getState('caseDetail.caseNote')).toBeUndefined();
 
     await cerebralTest.runSequence('openAddEditCaseNoteModalSequence');
 
     expect(cerebralTest.getState('modal').notes).toBeUndefined();
+
+    const over9000Characters = applicationContext
+      .getUtilities()
+      .getTextByCount(9002);
+
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'modal.notes',
+      value: over9000Characters,
+    });
+
+    await cerebralTest.runSequence('updateCaseNoteSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toMatchObject({
+      caseNote: 'Limit is 9000 characters. Enter 9000 or fewer characters.',
+    });
 
     await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
       key: 'modal.notes',
