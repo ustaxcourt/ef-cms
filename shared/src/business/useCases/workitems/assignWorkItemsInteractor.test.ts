@@ -1,13 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const { assignWorkItemsInteractor } = require('./assignWorkItemsInteractor');
+} from '../../entities/EntityConstants';
+import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
 
 describe('assignWorkItemsInteractor', () => {
   const mockUserId = 'ebb34e3f-8ac1-4ac2-bc22-265b80a2acb2';
