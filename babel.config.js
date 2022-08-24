@@ -8,7 +8,6 @@ module.exports = {
           esmodules: true,
         },
       },
-      '@babel/preset-typescript',
     ],
     [
       '@babel/preset-react',

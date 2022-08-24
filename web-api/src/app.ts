@@ -1,12 +1,12 @@
 /* eslint-disable max-lines */
 const cors = require('cors');
-const createApplicationContext = require('./applicationContext');
+import createApplicationContext from './applicationContext';
 const express = require('express');
 const logger = require('./logger');
 const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const { set } = require('lodash');
-const applicationContext = createApplicationContext();
+const applicationContext = createApplicationContext({});
 
 const app = express();
 

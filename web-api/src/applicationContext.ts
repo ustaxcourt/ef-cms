@@ -1354,6 +1354,14 @@ const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
 
+class ErrorWithCodeException extends Error {
+  public code: string;
+
+  constructor() {
+    super();
+  }
+}
+
 const {
   CognitoIdentityServiceProvider,
   DynamoDB,
@@ -1764,7 +1772,7 @@ export default (
                   Username: foundUser.userId,
                 };
               } else {
-                const error = new Error();
+                const error = new ErrorWithCodeException();
                 error.code = 'UserNotFoundException';
                 throw error;
               }
