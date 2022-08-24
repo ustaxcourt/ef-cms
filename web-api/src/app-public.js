@@ -1,5 +1,5 @@
 const cors = require('cors');
-import createApplicationContext from './applicationContext';
+const createApplicationContext = require('./applicationContext');
 const express = require('express');
 const logger = require('./logger');
 const { json, urlencoded } = require('body-parser');

@@ -1,5 +1,3 @@
-import { IAssignWorkItemsInteractor } from '../../shared/src/business/useCases/workitems/assignWorkItemsInteractor';
-
 /* eslint-disable max-lines */
 const AWS = require('aws-sdk');
 const axios = require('axios');
@@ -1354,14 +1352,6 @@ const { WorkItem } = require('../../shared/src/business/entities/WorkItem');
 // increase the timeout for zip uploads to S3
 AWS.config.httpOptions.timeout = 300000;
 
-class ErrorWithCodeException extends Error {
-  public code: string;
-
-  constructor() {
-    super();
-  }
-}
-
 const {
   CognitoIdentityServiceProvider,
   DynamoDB,
@@ -1684,25 +1674,7 @@ const gatewayMethods = {
   zipDocuments,
 };
 
-type IPersistenceGateway = {
-  [key: string]: any;
-};
-
-type IUseCases = {
-  [key: string]: any;
-  assignWorkItemsInteractor: IAssignWorkItemsInteractor;
-};
-
-export interface IApplicationContext {
-  [key: string]: any;
-  getPersistenceGateway(): IPersistenceGateway;
-  getUseCases(): IUseCases;
-}
-
-export default (
-  appContextUser,
-  logger = createLogger(),
-): IApplicationContext => {
+module.exports = (appContextUser, logger = createLogger()) => {
   let user;
 
   if (appContextUser) {
@@ -1772,7 +1744,7 @@ export default (
                   Username: foundUser.userId,
                 };
               } else {
-                const error = new ErrorWithCodeException();
+                const error = new Error();
                 error.code = 'UserNotFoundException';
                 throw error;
               }

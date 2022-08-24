@@ -1,4 +1,4 @@
-import createApplicationContext from '../../src/applicationContext';
+const createApplicationContext = require('../../src/applicationContext');
 const users = require('../fixtures/seed/users.json');
 const {
   createPetitionerUserRecords,

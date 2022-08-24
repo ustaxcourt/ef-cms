@@ -1,4 +1,4 @@
-import createApplicationContext from '../applicationContext';
+const createApplicationContext = require('../applicationContext');
 const jwt = require('jsonwebtoken');
 const {
   NotFoundError,
