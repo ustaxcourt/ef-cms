@@ -81,7 +81,7 @@ const deactivateAdminAccount = async () => {
  */
 const verifyAdminUserDisabled = async ({ attempt }) => {
   const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
-  const UserPoolId = await getUserPoolId();
+  const UserPoolId = await getUserPoolId(cognito);
 
   try {
     let result = await cognito
@@ -119,7 +119,8 @@ const verifyAdminUserDisabled = async ({ attempt }) => {
     }
   } catch (err) {
     if (err.code !== 'UserNotFoundException') {
-      console.error(err);
+      console.log('err', err);
+      console.error(err.message);
       process.exit(1);
     }
   }
