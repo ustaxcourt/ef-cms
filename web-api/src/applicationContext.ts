@@ -1,3 +1,5 @@
+import { IAssignWorkItemsInteractor } from '../../shared/src/business/useCases/workitems/assignWorkItemsInteractor';
+
 /* eslint-disable max-lines */
 const AWS = require('aws-sdk');
 const axios = require('axios');
@@ -1674,7 +1676,24 @@ const gatewayMethods = {
   zipDocuments,
 };
 
-module.exports = (appContextUser, logger = createLogger()) => {
+type IPersistenceGateway = {
+  [key: string]: any;
+};
+
+type IUseCases = {
+  [key: string]: any;
+  assignWorkItemsInteractor: IAssignWorkItemsInteractor;
+};
+
+export interface IApplicationContext {
+  [key: string]: any;
+  getPersistenceGateway(): IPersistenceGateway;
+}
+
+export default (
+  appContextUser,
+  logger = createLogger(),
+): IApplicationContext => {
   let user;
 
   if (appContextUser) {

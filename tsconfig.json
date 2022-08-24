@@ -1,0 +1,17 @@
+{
+  "compilerOptions": {
+    "module": "commonjs",
+    "noImplicitAny": false,
+    "removeComments": true,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "esModuleInterop": true,
+    "types": ["jest", "node"]
+  },
+  "include": [
+    "./web-api/src/**/*",
+    "./shared/src/**/*",
+    "./web-client/src/**/*"
+  ],
+  "exclude": ["node_modules"]
+}

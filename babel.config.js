@@ -8,6 +8,7 @@ module.exports = {
           esmodules: true,
         },
       },
+      '@babel/preset-typescript',
     ],
     [
       '@babel/preset-react',
@@ -15,6 +16,7 @@ module.exports = {
         runtime: 'automatic',
       },
     ],
+    '@babel/preset-typescript',
   ],
   sourceType: 'unambiguous',
   targets: 'defaults',

@@ -1,9 +1,21 @@
-const {
+import { IApplicationContext } from '../../../../../web-api/src/applicationContext';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
+
+export interface IAssignWorkItemsInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      assigneeId: string;
+      assigneeName: string;
+      workItemId: string;
+    },
+  ): Promise<void>;
+}
 
 /**
  * getWorkItem
@@ -14,7 +26,7 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.assigneeName the name of the user to assign the work item to
  * @param {string} providers.workItemId the id of the work item to assign
  */
-exports.assignWorkItemsInteractor = async (
+export const assignWorkItemsInteractor: IAssignWorkItemsInteractor = async (
   applicationContext,
   { assigneeId, assigneeName, workItemId },
 ) => {
