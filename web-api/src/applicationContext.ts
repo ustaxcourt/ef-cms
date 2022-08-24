@@ -1688,6 +1688,7 @@ type IUseCases = {
 export interface IApplicationContext {
   [key: string]: any;
   getPersistenceGateway(): IPersistenceGateway;
+  getUseCases(): IUseCases;
 }
 
 export default (
