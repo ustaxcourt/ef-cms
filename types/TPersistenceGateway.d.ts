@@ -5,7 +5,7 @@ interface IGetUserById {
   }: {
     applicationContext: IApplicationContext;
     userId: string;
-  }): any;
+  }): Promise<any>;
 }
 
 interface IGetWorkItemById {
@@ -15,7 +15,17 @@ interface IGetWorkItemById {
   }: {
     applicationContext: IApplicationContext;
     workItemId: string;
-  }): any;
+  }): Promise<any>;
+}
+
+interface IPutWorkItemInOutbox{
+  ({
+    applicationContext,
+    workItem,
+  }: {
+    applicationContext: IApplicationContext;
+    workItem: any;
+  }): Promise<any>;
 }
 
 interface ISaveWorkItem {
@@ -25,7 +35,17 @@ interface ISaveWorkItem {
   }: {
     applicationContext: IApplicationContext;
     workItem: any;
-  }): any;
+  }): Promise<any>;
+}
+
+interface IGetCaseByDocketNumber {
+  ({
+    applicationContext,
+    docketNumber,
+  }: {
+    applicationContext: IApplicationContext;
+    docketNumber: string;
+  }): Promise<any>;
 }
 
 type TPersistenceGateway = {
@@ -33,4 +53,6 @@ type TPersistenceGateway = {
   getUserById: IGetUserById;
   getWorkItemById: IGetWorkItemById;
   saveWorkItem: ISaveWorkItem;
+  putWorkItemInOutbox: IPutWorkItemInOutbox;
+  getCaseByDocketNumber: IGetCaseByDocketNumber;
 };

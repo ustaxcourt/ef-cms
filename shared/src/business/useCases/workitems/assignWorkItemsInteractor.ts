@@ -5,16 +5,6 @@ import {
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
 
-export interface IAssignWorkItemsInteractor {
-  (
-    applicationContext: IApplicationContext,
-    options: {
-      assigneeId: string;
-      assigneeName: string;
-      workItemId: string;
-    },
-  ): Promise<void>;
-}
 
 /**
  * getWorkItem
@@ -45,7 +35,7 @@ export const assignWorkItemsInteractor: IAssignWorkItemsInteractor = async (
       applicationContext,
       workItemId,
     });
-
+  
   const workItemEntity = new WorkItem(workItemRecord, { applicationContext });
 
   workItemEntity.assignToUser({

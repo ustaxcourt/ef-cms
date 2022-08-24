@@ -8,6 +8,7 @@ import {
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
 
 describe('assignWorkItemsInteractor', () => {
+  const options = { assigneeId: 'ss', assigneeName: 'ss', workItemId: '' };
   const mockUserId = 'ebb34e3f-8ac1-4ac2-bc22-265b80a2acb2';
   let mockWorkItem;
 
@@ -49,7 +50,7 @@ describe('assignWorkItemsInteractor', () => {
     });
 
     await expect(
-      assignWorkItemsInteractor(applicationContext),
+      assignWorkItemsInteractor(applicationContext, options),
     ).rejects.toThrow();
   });
 
@@ -60,9 +61,7 @@ describe('assignWorkItemsInteractor', () => {
     });
 
     await expect(
-      assignWorkItemsInteractor(applicationContext, {
-        userId: 'docketclerk',
-      }),
+      assignWorkItemsInteractor(applicationContext, options),
     ).rejects.toThrow();
   });
 
