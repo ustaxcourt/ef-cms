@@ -3,11 +3,15 @@ jest.mock('aws-sdk');
 const aws = require('aws-sdk');
 
 describe('verifyAdminUserDisabled', () => {
-  let mockExit;
+  const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
+  const OLD_ENV = process.env;
+
   beforeAll(() => {
+    jest.resetModules();
+    process.env.ENV = 'superfake';
+
     jest.spyOn(console, 'log');
     jest.spyOn(console, 'error');
-    mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
 
     aws.CognitoIdentityServiceProvider.prototype = {
       adminDisableUser: jest.fn().mockReturnValue({
@@ -20,10 +24,16 @@ describe('verifyAdminUserDisabled', () => {
       }),
       listUserPools: jest.fn().mockReturnValue({
         promise: jest.fn().mockResolvedValue({
-          UserPools: [{ Id: 'asdfb', Name: 'efcms-stg' }],
+          UserPools: [{ Id: 'asdfb', Name: `efcms-${process.env.ENV}` }],
         }),
       }),
     };
+  });
+
+  afterAll(() => {
+    if (process.env.ENV === 'superfake') {
+      process.env = OLD_ENV; // Restore old environment
+    }
   });
 
   it('should call adminGetUser and return if the user is not enabled', async () => {
