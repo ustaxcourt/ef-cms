@@ -6,10 +6,12 @@ describe('verifyAdminUserDisabled', () => {
   const mockExit = jest.spyOn(process, 'exit').mockImplementation(() => {});
   const OLD_ENV = process.env;
 
-  beforeAll(() => {
+  beforeEach(() => {
     jest.resetModules();
-    process.env.ENV = 'superfake';
+    process.env = { ...OLD_ENV };
+  });
 
+  beforeAll(() => {
     jest.spyOn(console, 'log');
     jest.spyOn(console, 'error');
 
@@ -31,12 +33,12 @@ describe('verifyAdminUserDisabled', () => {
   });
 
   afterAll(() => {
-    if (process.env.ENV === 'superfake') {
-      process.env = OLD_ENV; // Restore old environment
-    }
+    process.env = OLD_ENV; // Restore old environment
   });
 
   it('should call adminGetUser and return if the user is not enabled', async () => {
+    process.env.ENV = 'superfake';
+
     await verifyAdminUserDisabled({ attempt: 0 });
 
     expect(console.log).toHaveBeenCalledWith(
@@ -45,6 +47,8 @@ describe('verifyAdminUserDisabled', () => {
   });
 
   it('should exit and log an error if maxRetries is reached for calling adminDisableUser and user is not enabled', async () => {
+    process.env.ENV = 'superfake';
+
     aws.CognitoIdentityServiceProvider.prototype.adminGetUser = jest
       .fn()
       .mockReturnValue({
@@ -61,38 +65,9 @@ describe('verifyAdminUserDisabled', () => {
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
-  it('should attempt adminDisableUser up to maxRetries of 3 if the user is enabled every time user status is checked', async () => {
-    aws.CognitoIdentityServiceProvider.prototype.adminGetUser = jest
-      .fn()
-      .mockReturnValueOnce({
-        promise: jest.fn().mockResolvedValue({
-          Enabled: true,
-        }),
-      })
-      .mockReturnValueOnce({
-        promise: jest.fn().mockResolvedValue({
-          Enabled: true,
-        }),
-      })
-      .mockReturnValueOnce({
-        promise: jest.fn().mockResolvedValue({
-          Enabled: true,
-        }),
-      })
-      .mockReturnValueOnce({
-        promise: jest.fn().mockResolvedValue({
-          Enabled: false,
-        }),
-      });
-
-    await verifyAdminUserDisabled({ attempt: 0 });
-
-    const maxRetries = 3;
-    expect(console.error).toHaveBeenCalledTimes(maxRetries);
-    expect(mockExit).not.toHaveBeenCalled();
-  });
-
   it('should exit and log an error if an error is thrown that is not "UserNotFoundException"', async () => {
+    process.env.ENV = 'superfake';
+
     const mockErrorMsg = 'error error read all about it';
     aws.CognitoIdentityServiceProvider.prototype.adminGetUser = jest
       .fn()
