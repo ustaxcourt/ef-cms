@@ -54,9 +54,9 @@ if [[ -z "${RUN_DIR}" ]]; then
 fi
 
 ts-node web-api/streams-local.js &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "node web-api/websockets-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "node web-api/src/app-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "node web-api/src/app-public-local.js"
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node web-api/websockets-local.js" &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node web-api/src/app-local.js" &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node web-api/src/app-public-local.js"
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
