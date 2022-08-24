@@ -15,8 +15,8 @@
 
 ## Documentation
 
-To get a better understanding of Dawson, head over our main documentation page found here: [https://flexion.github.io/ef-cms](https://flexion.github.io/ef-cms).
-Our documentation should help give you a better understanding of what Dawson is and how you can contribute.
+To get a better understand of Dawson, head over our main documentation page found here: [https://flexion.github.io/ef-cms](https://flexion.github.io/ef-cms).  Our documentation should help give you a better understanding of what Dawson is and how you can contribute.
+
 ### Project status
 
 DAWSON is in active use and is continually updated to deploy enhancements and new features.
