@@ -186,8 +186,6 @@ const setNoticeForCase = async ({
     });
   }
 
-  // noticeOfTrialIssuedFile is persisted here, but the clinic letter is
-
   const trialSessionStartDate = applicationContext
     .getUtilities()
     .formatDateString(trialSession.startDate, 'MMDDYYYY');
