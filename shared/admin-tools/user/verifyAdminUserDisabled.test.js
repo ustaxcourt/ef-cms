@@ -51,7 +51,7 @@ describe('verifyAdminUserDisabled', () => {
     expect(mockExit).toHaveBeenCalledWith(1);
   });
 
-  it('should call attempt adminDisableUser up to maxRetries of 3 if the user is enabled every time user status is checked', async () => {
+  it('should attempt adminDisableUser up to maxRetries of 3 if the user is enabled every time user status is checked', async () => {
     aws.CognitoIdentityServiceProvider.prototype.adminGetUser = jest
       .fn()
       .mockReturnValueOnce({
