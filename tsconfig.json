@@ -6,9 +6,14 @@
     "preserveConstEnums": true,
     "sourceMap": true,
     "esModuleInterop": true,
+    "typeRoots": ["./node_modules/@types", "./types"],
     "types": ["jest", "node"]
   },
+  "ts-node": {
+    "files": true
+  },
   "include": [
+    "./types/**/*.d.ts",
     "./web-api/src/**/*",
     "./shared/src/**/*",
     "./web-client/src/**/*"
