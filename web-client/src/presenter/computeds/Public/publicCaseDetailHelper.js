@@ -11,8 +11,6 @@ export const formatDocketEntryOnDocketRecord = (
     applicationContext.getConstants();
   const record = cloneDeep(entry);
 
-  console.log('record:', record);
-
   let filingsAndProceedingsWithAdditionalInfo = '';
   if (record.documentTitle && record.additionalInfo) {
     filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
@@ -29,8 +27,6 @@ export const formatDocketEntryOnDocketRecord = (
   const canTerminalUserSeeLink =
     record.isFileAttached && isServedDocument && !record.isSealed;
 
-  // console.log('canTerminalUserSeeLink', canTerminalUserSeeLink);
-
   const canPublicUserSeeLink =
     record.isCourtIssuedDocument &&
     record.isFileAttached &&
@@ -41,21 +37,19 @@ export const formatDocketEntryOnDocketRecord = (
     !record.isSealed &&
     EVENT_CODES_VISIBLE_TO_PUBLIC.includes(record.eventCode);
 
-  // console.log('isTerminalUser:', isTerminalUser);
-
   const canDisplayDocumentLink = isTerminalUser
     ? canTerminalUserSeeLink
     : canPublicUserSeeLink;
 
-  console.log('canDisplayDocumentLink', canDisplayDocumentLink);
-
   const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
-  // const showLinkToDocument =
-  //   canDisplayDocumentLink &&
-  //   record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
-  const showLinkToDocument = canDisplayDocumentLink;
 
-  console.log('showLinkToDocument', showLinkToDocument);
+  let showLinkToDocument = canDisplayDocumentLink;
+
+  if (!isTerminalUser) {
+    showLinkToDocument =
+      canDisplayDocumentLink &&
+      record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+  }
 
   if (record.isSealed) {
     record.sealedToTooltip = applicationContext
