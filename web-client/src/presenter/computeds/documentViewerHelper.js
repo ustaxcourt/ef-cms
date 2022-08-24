@@ -1,13 +1,19 @@
+/* eslint-disable complexity */
 import { getShowNotServedForDocument } from './getShowNotServedForDocument';
 import { state } from 'cerebral';
 
 export const documentViewerHelper = (get, applicationContext) => {
   const {
+    ALLOWLIST_FEATURE_FLAGS,
     COURT_ISSUED_EVENT_CODES,
     PROPOSED_STIPULATED_DECISION_EVENT_CODE,
+    STAMPED_DOCUMENTS_ALLOWLIST,
     STIPULATED_DECISION_EVENT_CODE,
     UNSERVABLE_EVENT_CODES,
   } = applicationContext.getConstants();
+
+  const permissions = get(state.permissions);
+  const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
   const caseDetail = get(state.caseDetail);
 
   const formattedCaseDetail = applicationContext
@@ -21,16 +27,13 @@ export const documentViewerHelper = (get, applicationContext) => {
     .getUtilities()
     .canAllowDocumentServiceForCase(caseDetail);
 
-  const permissions = get(state.permissions);
-
-  const viewerDocumentToDisplay = get(state.viewerDocumentToDisplay);
-
   const formattedDocumentToDisplay =
     viewerDocumentToDisplay &&
     formattedCaseDetail.formattedDocketEntries.find(
       entry =>
         entry && entry.docketEntryId === viewerDocumentToDisplay.docketEntryId,
     );
+
   if (!formattedDocumentToDisplay) {
     return {};
   }
@@ -88,10 +91,20 @@ export const documentViewerHelper = (get, applicationContext) => {
   const showCompleteQcButton =
     permissions.EDIT_DOCKET_ENTRY && formattedDocumentToDisplay.qcNeeded;
 
+  const isStampDispositionEnabled = get(
+    state.featureFlags[ALLOWLIST_FEATURE_FLAGS.STAMP_DISPOSITION.key],
+  );
+
+  const showApplyStampButton =
+    isStampDispositionEnabled &&
+    permissions.STAMP_MOTION &&
+    STAMPED_DOCUMENTS_ALLOWLIST.includes(formattedDocumentToDisplay.eventCode);
+
   return {
     description: formattedDocumentToDisplay.descriptionDisplay,
     filedLabel,
     servedLabel,
+    showApplyStampButton,
     showCompleteQcButton,
     showNotServed,
     showSealedInBlackstone: formattedDocumentToDisplay.isLegacySealed,
