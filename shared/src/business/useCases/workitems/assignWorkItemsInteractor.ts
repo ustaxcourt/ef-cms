@@ -1,4 +1,3 @@
-import { IApplicationContext } from '../../../../../web-api/src/applicationContext';
 import {
   isAuthorized,
   ROLE_PERMISSIONS,
@@ -8,7 +7,7 @@ import { WorkItem } from '../../entities/WorkItem';
 
 export interface IAssignWorkItemsInteractor {
   (
-    applicationContext: IApplicationContext,
+    applicationContext: any,
     options: {
       assigneeId: string;
       assigneeName: string;
