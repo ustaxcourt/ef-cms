@@ -7,7 +7,7 @@ import { WorkItem } from '../../entities/WorkItem';
 
 export interface IAssignWorkItemsInteractor {
   (
-    applicationContext: any,
+    applicationContext: IApplicationContext,
     options: {
       assigneeId: string;
       assigneeName: string;
@@ -34,9 +34,10 @@ export const assignWorkItemsInteractor: IAssignWorkItemsInteractor = async (
     throw new UnauthorizedError('Unauthorized to assign work item');
   }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+  const user = await applicationContext.getPersistenceGateway().getUserById({
+    applicationContext,
+    userId: authorizedUser.userId,
+  });
 
   const workItemRecord = await applicationContext
     .getPersistenceGateway()
