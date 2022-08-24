@@ -168,6 +168,9 @@ const {
   generateDocketRecordPdfLambda,
 } = require('./cases/generateDocketRecordPdfLambda');
 const {
+  generateDraftStampOrderLambda,
+} = require('./documents/generateDraftStampOrderLambda');
+const {
   generatePractitionerCaseListPdfLambda,
 } = require('./cases/generatePractitionerCaseListPdfLambda');
 const {
@@ -570,12 +573,16 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(appendAmendedPetitionFormLambda),
   );
   app.post(
-    '/case-documents/:docketNumber/:docketEntryId/serve-court-issued',
-    lambdaWrapper(serveCourtIssuedDocumentLambda),
+    '/case-documents/:subjectCaseDocketNumber/:docketEntryId/serve-court-issued',
+    lambdaWrapper(serveCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/coversheet',
     lambdaWrapper(addCoversheetLambda),
+  );
+  app.post(
+    '/case-documents/:docketNumber/:motionDocketEntryId/stamp',
+    lambdaWrapper(generateDraftStampOrderLambda),
   );
   app.post(
     '/case-documents/:docketNumber/:docketEntryId/remove-signature',
@@ -610,7 +617,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
     lambdaWrapper(fileCourtIssuedDocketEntryLambda),
   );
   app.post(
-    '/async/case-documents/:docketNumber/file-and-serve-court-issued-docket-entry',
+    '/async/case-documents/:subjectCaseDocketNumber/file-and-serve-court-issued-docket-entry',
     lambdaWrapper(fileAndServeCourtIssuedDocumentLambda, { isAsync: true }),
   );
   app.post(

@@ -9,7 +9,12 @@ const JUDGES_CHAMBERS = applicationContext
   .getPersistenceGateway()
   .getJudgesChambers();
 
-export const userSendsMessageToJudge = (cerebralTest, subject) => {
+export const userSendsMessageToJudge = (
+  cerebralTest,
+  subject,
+  judgesChambersSection,
+  judgeUserId,
+) => {
   const getHelper = () => {
     return runCompute(messageModalHelper, {
       state: cerebralTest.getState(),
@@ -27,13 +32,15 @@ export const userSendsMessageToJudge = (cerebralTest, subject) => {
       'updateSectionInCreateMessageModalSequence',
       {
         key: 'toSection',
-        value: JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
+        value:
+          judgesChambersSection ||
+          JUDGES_CHAMBERS.COLVINS_CHAMBERS_SECTION.section,
       },
     );
 
     await cerebralTest.runSequence('updateModalFormValueSequence', {
       key: 'toUserId',
-      value: 'dabbad00-18d0-43ec-bafb-654e83405416', //judgeColvin
+      value: judgeUserId || 'dabbad00-18d0-43ec-bafb-654e83405416', //judgeColvin
     });
 
     const messageDocument = getHelper().documents[0];

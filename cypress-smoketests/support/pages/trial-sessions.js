@@ -55,8 +55,8 @@ exports.createTrialSession = (testData, overrides = {}) => {
 
   cy.get('#chambers-phone-number').type(faker.phone.number());
   cy.get('#trial-clerk').select(testData.trialClerk || 'Test trialclerk1');
-  cy.get('#court-reporter').type(faker.name.findName());
-  cy.get('#irs-calendar-administrator').type(faker.name.findName());
+  cy.get('#court-reporter').type(faker.name.fullName());
+  cy.get('#irs-calendar-administrator').type(faker.name.fullName());
   cy.get('#notes').type(faker.company.catchPhrase());
 
   cy.get('#submit-trial-session').click();
