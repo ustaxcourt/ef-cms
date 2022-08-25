@@ -1,20 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  getCompletedMessagesForSectionInteractor,
-} = require('./getCompletedMessagesForSectionInteractor');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { omit } = require('lodash');
+} from '../../entities/EntityConstants';
+import { getMessageThreadInteractor } from './getMessageThreadInteractor';
+import { UnauthorizedError } from '../../../errors/errors';
 
-describe('getCompletedMessagesForSectionInteractor', () => {
+describe('getMessageThreadInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -22,19 +15,17 @@ describe('getCompletedMessagesForSectionInteractor', () => {
     });
 
     await expect(
-      getCompletedMessagesForSectionInteractor(applicationContext, {}),
+      getMessageThreadInteractor(applicationContext, {
+        parentMessageId: 'abc',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('retrieves the messages from persistence and returns them', async () => {
-    const messageData = {
+  it('retrieves the message thread from persistence and returns it', async () => {
+    const mockMessage = {
       attachments: [],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
-      completedAt: '2019-05-01T21:40:46.415Z',
-      completedBy: 'Test Petitionsclerk',
-      completedBySection: PETITIONS_SECTION,
-      completedByUserId: '21d7cd77-43e5-4713-92d4-aef69b5f72fd',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
@@ -42,13 +33,10 @@ describe('getCompletedMessagesForSectionInteractor', () => {
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
-      isCompleted: true,
       isRepliedTo: false,
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       parentMessageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      pk: 'case|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      sk: 'message|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       subject: 'Hey!',
       to: 'Test Petitionsclerk',
       toSection: PETITIONS_SECTION,
@@ -60,19 +48,18 @@ describe('getCompletedMessagesForSectionInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCompletedSectionInboxMessages.mockReturnValue([messageData]);
+      .getMessageThreadByParentId.mockReturnValue([mockMessage]);
 
-    const returnedMessages = await getCompletedMessagesForSectionInteractor(
+    const returnedMessage = await getMessageThreadInteractor(
       applicationContext,
       {
-        section: messageData.section,
+        parentMessageId: 'abc',
       },
     );
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .getCompletedSectionInboxMessages,
+      applicationContext.getPersistenceGateway().getMessageThreadByParentId,
     ).toBeCalled();
-    expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
+    expect(returnedMessage).toMatchObject([mockMessage]);
   });
 });

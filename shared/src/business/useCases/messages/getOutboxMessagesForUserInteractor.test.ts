@@ -1,15 +1,14 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const { getMessageThreadInteractor } = require('./getMessageThreadInteractor');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../entities/EntityConstants';
+import { getOutboxMessagesForUserInteractor } from './getOutboxMessagesForUserInteractor';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { omit } from 'lodash';
 
-describe('getMessageThreadInteractor', () => {
+describe('getOutboxMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -17,12 +16,14 @@ describe('getMessageThreadInteractor', () => {
     });
 
     await expect(
-      getMessageThreadInteractor(applicationContext, {}),
+      getOutboxMessagesForUserInteractor(applicationContext, {
+        userId: 'bob',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('retrieves the message thread from persistence and returns it', async () => {
-    const mockMessage = {
+  it('retrieves the messages from persistence and returns them', async () => {
+    const messageData = {
       attachments: [],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
@@ -37,6 +38,8 @@ describe('getMessageThreadInteractor', () => {
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       parentMessageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
+      pk: 'case|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
+      sk: 'message|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       subject: 'Hey!',
       to: 'Test Petitionsclerk',
       toSection: PETITIONS_SECTION,
@@ -48,18 +51,18 @@ describe('getMessageThreadInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getMessageThreadByParentId.mockReturnValue([mockMessage]);
+      .getUserOutboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessage = await getMessageThreadInteractor(
+    const returnedMessages = await getOutboxMessagesForUserInteractor(
       applicationContext,
       {
-        messageId: mockMessage.messageId,
+        userId: 'b9fcabc8-3c83-4cbf-9f4a-d2ecbdc591e1',
       },
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getMessageThreadByParentId,
+      applicationContext.getPersistenceGateway().getUserOutboxMessages,
     ).toBeCalled();
-    expect(returnedMessage).toMatchObject([mockMessage]);
+    expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

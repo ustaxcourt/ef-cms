@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  validateCreateMessageInteractor,
-} = require('./validateCreateMessageInteractor');
-const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateCreateMessageInteractor } from './validateCreateMessageInteractor';
+import { PETITIONS_SECTION } from '../../entities/EntityConstants';
 
 describe('validateCreateMessageInteractor', () => {
   it('returns null when no errors exist in the Message', () => {
@@ -26,7 +22,7 @@ describe('validateCreateMessageInteractor', () => {
         message: 'yup',
         toSection: PETITIONS_SECTION,
         toUserId: 'fa1179bd-04f5-4934-a716-964d8d7babc6',
-      },
+      } as any,
     });
 
     expect(errors).toMatchObject({

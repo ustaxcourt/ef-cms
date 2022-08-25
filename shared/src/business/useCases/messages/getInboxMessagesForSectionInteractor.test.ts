@@ -1,20 +1,14 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  getOutboxMessagesForSectionInteractor,
-} = require('./getOutboxMessagesForSectionInteractor');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { omit } = require('lodash');
+} from '../../entities/EntityConstants';
+import { getInboxMessagesForSectionInteractor } from './getInboxMessagesForSectionInteractor';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { omit } from 'lodash';
 
-describe('getOutboxMessagesForSectionInteractor', () => {
+describe('getInboxMessagesForSectionInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -22,7 +16,9 @@ describe('getOutboxMessagesForSectionInteractor', () => {
     });
 
     await expect(
-      getOutboxMessagesForSectionInteractor(applicationContext, {}),
+      getInboxMessagesForSectionInteractor(applicationContext, {
+        section: 'docket',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -55,17 +51,17 @@ describe('getOutboxMessagesForSectionInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getSectionOutboxMessages.mockReturnValue([messageData]);
+      .getSectionInboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getOutboxMessagesForSectionInteractor(
+    const returnedMessages = await getInboxMessagesForSectionInteractor(
       applicationContext,
       {
-        section: messageData.section,
+        section: 'docket',
       },
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getSectionOutboxMessages,
+      applicationContext.getPersistenceGateway().getSectionInboxMessages,
     ).toBeCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });

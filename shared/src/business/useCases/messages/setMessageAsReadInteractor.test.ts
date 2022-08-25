@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES } from '../../entities/EntityConstants';
 import { setMessageAsReadInteractor } from './setMessageAsReadInteractor';
 
 describe('setMessageAsReadInteractor', () => {

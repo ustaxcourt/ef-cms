@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * setMessageAsReadInteractor
@@ -13,7 +13,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.messageId the id of the message to set as read
  * @returns {Promise} the promise of the setMessageAsRead call
  */
-exports.setMessageAsReadInteractor = async (
+export const setMessageAsReadInteractor: ISetMessageAsReadInteractor = async (
   applicationContext,
   { docketNumber, messageId },
 ) => {
@@ -23,7 +23,7 @@ exports.setMessageAsReadInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  return await applicationContext
+  await applicationContext
     .getPersistenceGateway()
     .setMessageAsRead({ applicationContext, docketNumber, messageId });
 };
