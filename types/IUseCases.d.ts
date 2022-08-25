@@ -65,4 +65,18 @@ interface IGetWorkItemInteractor {
   ): Promise<WorkItem>;
 }
 
-
+interface ICreateMessageInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      attachments: {
+        documentId: string;
+      }[];
+      docketNumber: string;
+      message: string;
+      subject: string;
+      toSection: string;
+      toUserId: string;
+    },
+  ): Promise<TMessage>;
+}

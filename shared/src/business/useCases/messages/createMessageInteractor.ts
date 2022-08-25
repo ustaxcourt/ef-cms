@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { Message } = require('../../entities/Message');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { Message } from '../../entities/Message';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * creates a message on a case
@@ -19,7 +19,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} the created message
  */
-exports.createMessageInteractor = async (
+export const createMessageInteractor: ICreateMessageInteractor = async (
   applicationContext,
   { attachments, docketNumber, message, subject, toSection, toUserId },
 ) => {
@@ -42,7 +42,7 @@ exports.createMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const validatedRawMessage = new Message(
+  const validatedRawMessage: TMessage = new Message(
     {
       attachments,
       caseStatus: status,
