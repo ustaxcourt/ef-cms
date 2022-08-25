@@ -1,20 +1,14 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  getCompletedMessagesForUserInteractor,
-} = require('./getCompletedMessagesForUserInteractor');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { omit } = require('lodash');
+} from '../../entities/EntityConstants';
+import { getInboxMessagesForUserInteractor } from './getInboxMessagesForUserInteractor';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { omit } from 'lodash';
 
-describe('getCompletedMessagesForUserInteractor', () => {
+describe('getInboxMessagesForUserInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -22,7 +16,9 @@ describe('getCompletedMessagesForUserInteractor', () => {
     });
 
     await expect(
-      getCompletedMessagesForUserInteractor(applicationContext, {}),
+      getInboxMessagesForUserInteractor(applicationContext, {
+        userId: 'bob',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -31,10 +27,6 @@ describe('getCompletedMessagesForUserInteractor', () => {
       attachments: [],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
-      completedAt: '2019-05-01T21:40:46.415Z',
-      completedBy: 'Test Petitionsclerk',
-      completedBySection: PETITIONS_SECTION,
-      completedByUserId: '21d7cd77-43e5-4713-92d4-aef69b5f72fd',
       createdAt: '2019-03-01T21:40:46.415Z',
       docketNumber: '123-45',
       docketNumberWithSuffix: '123-45S',
@@ -42,7 +34,6 @@ describe('getCompletedMessagesForUserInteractor', () => {
       from: 'Test Petitionsclerk2',
       fromSection: PETITIONS_SECTION,
       fromUserId: 'fe6eeadd-e4e8-4e56-9ddf-0ebe9516df6b',
-      isCompleted: true,
       isRepliedTo: false,
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
@@ -60,17 +51,17 @@ describe('getCompletedMessagesForUserInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getCompletedUserInboxMessages.mockReturnValue([messageData]);
+      .getUserInboxMessages.mockReturnValue([messageData]);
 
-    const returnedMessages = await getCompletedMessagesForUserInteractor(
+    const returnedMessages = await getInboxMessagesForUserInteractor(
       applicationContext,
       {
-        userId: messageData.completedByUserId,
+        userId: 'bob',
       },
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getCompletedUserInboxMessages,
+      applicationContext.getPersistenceGateway().getUserInboxMessages,
     ).toBeCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });

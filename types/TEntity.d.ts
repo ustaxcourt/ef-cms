@@ -175,3 +175,7 @@ type TCase = {
   trialTime: string;
   useSameAsPrimary: string;
 };
+
+interface IValidateRawCollection<I> {
+  (collection: I[], options: { applicationContext: IApplicationContext }): I[];
+}
