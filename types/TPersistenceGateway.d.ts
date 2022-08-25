@@ -91,6 +91,19 @@ interface IGetConfigurationItemValue {
   }): string;
 }
 
+interface IUpdateDocketEntry {
+  ({
+    applicationContext,
+    docketEntryId,
+  }: {
+    applicationContext: IApplicationContext;
+    docketEntryId: string;
+    docketNumber: string;
+    document: any;
+  }): Promise<any>;
+}
+
+
 
 type TPersistenceGateway = {
   [key: string]: any;
@@ -103,4 +116,5 @@ type TPersistenceGateway = {
   saveWorkItem: ISaveWorkItem;
   getDocumentQCServedForSection: IGetDocumentQCServedForSection;
   getConfigurationItemValue: IGetConfigurationItemValue;
+  updateDocketEntry: IUpdateDocketEntry;
 };
