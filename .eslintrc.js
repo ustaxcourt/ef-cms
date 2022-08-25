@@ -56,7 +56,7 @@ module.exports = {
       },
     },
   ],
-  parser: '@babel/eslint-parser',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 9,
     jsx: true,
@@ -70,6 +70,7 @@ module.exports = {
     'jsdoc',
     'jsx-a11y',
     '@miovision/disallow-date',
+    '@typescript-eslint',
     'prettier',
     'promise',
     'react',

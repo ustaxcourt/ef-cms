@@ -33,8 +33,9 @@ type WorkItem = {
   docketNumber: string;
 }
 
-type TSectionWorkItem = WorkItem & { 
-  docketEntry: DocketEntry;
+type TSectionWorkItem = {
+  createdAt: string;
+  docketEntry: DocketEntry[];
   docketNumber: string;
   docketNumberSuffix: string;
   messages: any;
