@@ -26,12 +26,12 @@ exports.getCalendaredCasesForTrialSession = async ({
     ),
   );
 
-  return caseOrder.map(order => {
-    return {
-      ...order,
-      ...casesByDocketNumber.find(
-        aCase => aCase.docketNumber === order.docketNumber,
-      ),
+  for (let i = 0; i < caseOrder.length; i++) {
+    caseOrder[i] = {
+      ...caseOrder[i],
+      ...casesByDocketNumber[i],
     };
-  });
+  }
+
+  return caseOrder;
 };

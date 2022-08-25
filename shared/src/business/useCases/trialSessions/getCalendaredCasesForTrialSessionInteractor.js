@@ -29,16 +29,5 @@ exports.getCalendaredCasesForTrialSessionInteractor = async (
       trialSessionId,
     });
 
-  // instead of sending EVERY docket entry over, the front end only cares about the PMT documents not stricken
-  // to figure out the filingPartiesCode
-  const casesWithMinimalRequiredDocketEntries = cases.map(aCase => ({
-    ...aCase,
-    docketEntries: aCase.docketEntries.filter(
-      docketEntry => docketEntry.eventCode === 'PMT' && !docketEntry.isStricken,
-    ),
-  }));
-
-  return Case.validateRawCollection(casesWithMinimalRequiredDocketEntries, {
-    applicationContext,
-  });
+  return Case.validateRawCollection(cases, { applicationContext });
 };
