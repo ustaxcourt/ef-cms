@@ -116,6 +116,42 @@ type TUser = {
   contact?: TUserContact;
 };
 
+type TTrialSessionData = {
+  address1: string;
+  address2: string;
+  caseOrder: any;
+  chambersPhoneNumber: string;
+  city: string;
+  courtReporter: string;
+  courthouseName: string;
+  createdAt: string;
+  estimatedEndDate: string;
+  irsCalendarAdministrator: string;
+  isCalendared: boolean;
+  joinPhoneNumber: string;
+  maxCases: number;
+  meetingId: string;
+  notes: string;
+  noticeIssuedDate: string;
+  password: string;
+  postalCode: string;
+  sessionScope: string;
+  sessionType: string;
+  isClosed: boolean;
+  startDate: string;
+  startTime: string;
+  state: string;
+  swingSession: string;
+  swingSessionId: string;
+  term: string;
+  termYear: string;
+  trialLocation: string;
+  proceedingType: string;
+  trialSessionId: string;
+  judge: string;
+  trialClerk: string;
+};
+
 type TCase = {
   associatedJudge: string;
   automaticBlocked: string;
@@ -179,3 +215,21 @@ type TCase = {
 interface IValidateRawCollection<I> {
   (collection: I[], options: { applicationContext: IApplicationContext }): I[];
 }
+
+type TTrialSessionEntity = {
+  isCaseAlreadyCalendared(caseEntity: TCase): boolean;
+  deleteCaseFromCalendar({
+    docketNumber,
+  }: {
+    docketNumber: string;
+  }): TTrialSessionEntity;
+  manuallyAddCaseToCalendar({
+    calendarNotes,
+    caseEntity,
+  }: {
+    calendarNotes: string;
+    caseEntity: TCase;
+  });
+  validate(): TTrialSessionEntity;
+  toRawObject(): TTrialSessionData;
+} & TTrialSessionData;

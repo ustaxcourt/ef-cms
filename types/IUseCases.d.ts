@@ -201,3 +201,29 @@ interface IValidateCreateMessageInteractor {
     },
   ): any;
 }
+
+interface IForwardMessageInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      attachments: any[];
+      docketNumber: string;
+      message: string;
+      parentMessageId: string;
+      subject: string;
+      toSection: string;
+      toUserId: string;
+    },
+  ): Promise<TMessageData[]>;
+}
+
+interface IAddCaseToTrialSessionInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      calendarNotes: string;
+      docketNumber: string;
+      trialSessionId: string;
+    },
+  ): Promise<TCase>;
+}
