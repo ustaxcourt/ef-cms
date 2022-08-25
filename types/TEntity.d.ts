@@ -43,7 +43,7 @@ type TSectionWorkItem = {
   sentBy: string;
 };
 
-type TMessage = {
+type TMessageData = {
   attachments: {
     documentId: string;
   }[];
@@ -72,6 +72,23 @@ type TMessage = {
   toSection: string;
   toUserId: string;
 };
+
+type TMessageEntity = {
+  markAsCompleted: ({
+    message,
+    user,
+  }: {
+    message: string;
+    user: {
+      name: string;
+      userId: string;
+      section: string;
+    };
+  }) => void;
+  validate: () => {
+    toRawObject: () => TMessageData;
+  };
+} & TMessageData;
 
 type TUserContact = {
   address1: string;

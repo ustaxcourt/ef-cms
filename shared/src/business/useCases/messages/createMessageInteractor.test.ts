@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { createMessageInteractor } = require('./createMessageInteractor');
+} from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { createMessageInteractor } from './createMessageInteractor';
 
 describe('createMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -19,7 +15,14 @@ describe('createMessageInteractor', () => {
     });
 
     await expect(
-      createMessageInteractor(applicationContext, {}),
+      createMessageInteractor(applicationContext, {
+        attachments: [],
+        docketNumber: '101-20',
+        message: 'hello world',
+        subject: 'what is up',
+        toSection: 'docket',
+        toUserId: 'abc',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 

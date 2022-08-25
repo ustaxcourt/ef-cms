@@ -109,7 +109,37 @@ interface ICreateMessage {
     message,
   }: {
     applicationContext: IApplicationContext;
-    message: TMessage;
+    message: TMessageData;
+  }): Promise<void>;
+}
+
+interface IMarkMessageThreadRepliedTo {
+  ({
+    applicationContext,
+    parentMessageId,
+  }: {
+    applicationContext: IApplicationContext;
+    parentMessageId: string;
+  }): Promise<void>;
+}
+
+interface IGetMessageThreadByParentId {
+  ({
+    applicationContext,
+    parentMessageId,
+  }: {
+    applicationContext: IApplicationContext;
+    parentMessageId: string;
+  }): Promise<TMessageData[]>;
+}
+
+interface IUpdateMessage {
+  ({
+    applicationContext,
+    message,
+  }: {
+    applicationContext: IApplicationContext;
+    message: TMessageData;
   }): Promise<void>;
 }
 
@@ -126,4 +156,7 @@ type TPersistenceGateway = {
   getConfigurationItemValue: IGetConfigurationItemValue;
   updateDocketEntry: IUpdateDocketEntry;
   createMessage: ICreateMessage;
+  markMessageThreadRepliedTo: IMarkMessageThreadRepliedTo;
+  getMessageThreadByParentId: IGetMessageThreadByParentId;
+  updateMessage: IUpdateMessage;
 };
