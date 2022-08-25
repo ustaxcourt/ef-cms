@@ -59,13 +59,23 @@ interface IGetDocumentQCInboxForSection {
     judgeUserName: string
   }): Promise<any>;
 }
+  interface ICreateCaseDeadline {
+  ({
+    applicationContext,
+    caseDeadline,
+  }: {
+    applicationContext: IApplicationContext;
+    caseDeadline: TCaseDeadline;
+  }): any;
+}
 
 type TPersistenceGateway = {
   [key: string]: any;
+  createCaseDeadline: ICreateCaseDeadline;
+  getCaseByDocketNumber: IGetCaseByDocketNumber;
   getUserById: IGetUserById;
   getWorkItemById: IGetWorkItemById;
-  saveWorkItem: ISaveWorkItem;
   putWorkItemInOutbox: IPutWorkItemInOutbox;
-  getCaseByDocketNumber: IGetCaseByDocketNumber;
   getDocumentQCInboxForSection: IGetDocumentQCInboxForSection;
+  saveWorkItem: ISaveWorkItem;
 };

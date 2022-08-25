@@ -38,3 +38,11 @@ interface IGetDocumentQCInboxForUserInteractor {
   ): Promise<void>;
 }
 
+interface ICreateCaseDeadlineInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      caseDeadline: TCaseDeadline;
+    },
+  ): Promise<TCaseDeadline>;
+}
