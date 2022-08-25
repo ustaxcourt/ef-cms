@@ -13,7 +13,7 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.workItemId the id of the work item to set as read
  * @returns {Promise} the promise of the setWorkItemAsRead call
  */
-exports.setWorkItemAsReadInteractor = async (
+export const setWorkItemAsReadInteractor: IGetWorkItemInteractor = async (
   applicationContext,
   { workItemId },
 ) => {

@@ -9,20 +9,36 @@ type TCaseDeadline = {
 };
 
 type DocketEntry = {
+  additionalInfo: string;
+  descriptionDisplay: string;
+  docketEntryId: string;
+  documentTitle: string;
+  documentType: string;
+  eventCode: string;
+  filedBy: string;
+  index: string;
+  isFileAttached: string;
+  isPaper: string;
+  otherFilingParty: string;
+  receivedAt: string;
   sentBy: string;
+  servedAt: string;
+  userId: string;
 }
 
 type WorkItem = {
   createdAt: string;
+  assigneeId: string;
+  docketEntry: DocketEntry;
+  docketNumber: string;
 }
 
-type TSectionWorkItem = {
-  createdAt: string;
-  docketEntry: DocketEntry[];
+type TSectionWorkItem = WorkItem & { 
+  docketEntry: DocketEntry;
   docketNumber: string;
   docketNumberSuffix: string;
   messages: any;
   section: string;
   sentBy: string;
-};
+}
 
