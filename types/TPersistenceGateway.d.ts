@@ -5,7 +5,7 @@ interface IGetUserById {
   }: {
     applicationContext: IApplicationContext;
     userId: string;
-  }): Promise<any>;
+  }): Promise<TUser>;
 }
 
 interface IGetWorkItemById {
@@ -18,7 +18,7 @@ interface IGetWorkItemById {
   }): Promise<WorkItem>;
 }
 
-interface IPutWorkItemInOutbox{
+interface IPutWorkItemInOutbox {
   ({
     applicationContext,
     workItem,
@@ -45,7 +45,7 @@ interface IGetCaseByDocketNumber {
   }: {
     applicationContext: IApplicationContext;
     docketNumber: string;
-  }): Promise<any>;
+  }): Promise<TCase>;
 }
 
 interface IGetDocumentQCInboxForSection {
@@ -56,7 +56,7 @@ interface IGetDocumentQCInboxForSection {
   }: {
     applicationContext: IApplicationContext;
     section: any;
-    judgeUserName: string
+    judgeUserName: string;
   }): TSectionWorkItem[];
 }
 interface ICreateCaseDeadline {
@@ -103,7 +103,15 @@ interface IUpdateDocketEntry {
   }): Promise<any>;
 }
 
-
+interface ICreateMessage {
+  ({
+    applicationContext,
+    message,
+  }: {
+    applicationContext: IApplicationContext;
+    message: TMessage;
+  }): Promise<void>;
+}
 
 type TPersistenceGateway = {
   [key: string]: any;
@@ -117,4 +125,5 @@ type TPersistenceGateway = {
   getDocumentQCServedForSection: IGetDocumentQCServedForSection;
   getConfigurationItemValue: IGetConfigurationItemValue;
   updateDocketEntry: IUpdateDocketEntry;
+  createMessage: ICreateMessage;
 };
