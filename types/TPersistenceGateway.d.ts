@@ -225,6 +225,16 @@ interface ISetMessageAsRead {
   }): Promise<void>;
 }
 
+interface IGetTrialSessionById {
+  ({
+    applicationContext,
+    trialSessionId,
+  }: {
+    applicationContext: IApplicationContext;
+    trialSessionId: string;
+  }): Promise<TTrialSessionData>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   createCaseDeadline: ICreateCaseDeadline;
@@ -249,4 +259,5 @@ type TPersistenceGateway = {
   getSectionOutboxMessages: IGetSectionOutboxMessages;
   getUserOutboxMessages: IGetUserOutboxMessages;
   setMessageAsRead: ISetMessageAsRead;
+  getTrialSessionById: IGetTrialSessionById;
 };
