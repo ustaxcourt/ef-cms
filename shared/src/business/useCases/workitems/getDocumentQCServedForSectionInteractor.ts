@@ -17,7 +17,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.section the section to get the document qc served box
  * @returns {object} the work items in the section document served inbox
  */
-const getDocumentQCServedForSectionInteractor: IGetDocumentQCServedForSectionInteractor = async (
+export const getDocumentQCServedForSectionInteractor: IGetDocumentQCServedForSectionInteractor = async (
   applicationContext,
   { section },
 ) => {
@@ -73,6 +73,5 @@ const calculateAfterDate = async applicationContext => {
   return afterDate;
 };
 
-exports.getDocumentQCServedForSectionInteractor =
-  getDocumentQCServedForSectionInteractor;
+
 exports.calculateAfterDate = calculateAfterDate;
