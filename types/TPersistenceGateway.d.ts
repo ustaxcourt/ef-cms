@@ -236,6 +236,15 @@ interface IDeleteUserFromCase {
     userId: string;
   }): Promise<void>;
 }
+interface IGetTrialSessionById {
+  ({
+    applicationContext,
+    trialSessionId,
+  }: {
+    applicationContext: IApplicationContext;
+    trialSessionId: string;
+  }): Promise<TTrialSessionData>;
+}
 
 type TPersistenceGateway = {
   [key: string]: any;
@@ -262,4 +271,5 @@ type TPersistenceGateway = {
   getUserOutboxMessages: IGetUserOutboxMessages;
   setMessageAsRead: ISetMessageAsRead;
   deleteUserFromCase: IDeleteUserFromCase;
+  getTrialSessionById: IGetTrialSessionById;
 };

@@ -1,4 +1,4 @@
-const { replyToMessage } = require('./replyToMessageInteractor');
+import { replyToMessage } from './replyToMessageInteractor';
 
 /**
  * forwards a message
@@ -14,7 +14,7 @@ const { replyToMessage } = require('./replyToMessageInteractor');
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} the message
  */
-exports.forwardMessageInteractor = async (
+export const forwardMessageInteractor: IForwardMessageInteractor = async (
   applicationContext,
   {
     attachments,
