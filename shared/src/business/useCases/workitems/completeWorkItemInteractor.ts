@@ -16,10 +16,15 @@ import { createISODateString } from '../../utilities/DateHandler';
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {object} the completed work item
  */
-export const completeWorkItemInteractor: ICompleteWorkItemInteractor = async (
-  applicationContext,
-  { completedMessage, workItemId },
-) => {
+export const completeWorkItemInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      completedMessage: string;
+      workItemId: string;
+    },
+  ): Promise<WorkItem>;
+} = async (applicationContext, { completedMessage, workItemId }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {

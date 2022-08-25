@@ -1,16 +1,14 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CONTACT_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   deleteCounselFromCaseInteractor,
   setupServiceIndicatorForUnrepresentedPetitioners,
-} = require('./deleteCounselFromCaseInteractor');
-const { Case } = require('../../entities/cases/Case');
+} from './deleteCounselFromCaseInteractor';
 const { MOCK_CASE } = require('../../../test/mockCase.js');
 
 describe('deleteCounselFromCaseInteractor', () => {
