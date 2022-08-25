@@ -174,6 +174,13 @@ type TCase = {
   trialSessionId: string;
   trialTime: string;
   useSameAsPrimary: string;
+  petitioners: TPetitioner[];
+  isUserIdRepresentedByPrivatePractitioner: any;
+};
+
+type TPetitioner = {
+  contactId: string;
+  serviceIndicator: string;
 };
 
 interface IValidateRawCollection<I> {

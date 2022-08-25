@@ -51,8 +51,8 @@ interface IGetCaseByDocketNumber {
 interface IGetDocumentQCInboxForSection {
   ({
     applicationContext,
-    section,
     judgeUserName,
+    section,
   }: {
     applicationContext: IApplicationContext;
     section: any;
@@ -71,8 +71,8 @@ interface ICreateCaseDeadline {
 
 interface IGetDocumentQCServedForSection {
   ({
-    applicationContext,
     afterDate,
+    applicationContext,
     section,
   }: {
     applicationContext: IApplicationContext;
@@ -225,6 +225,18 @@ interface ISetMessageAsRead {
   }): Promise<void>;
 }
 
+interface IDeleteUserFromCase {
+  ({
+    applicationContext,
+    docketNumber,
+    userId,
+  }: {
+    applicationContext: IApplicationContext;
+    docketNumber: string;
+    userId: string;
+  }): Promise<void>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   createCaseDeadline: ICreateCaseDeadline;
@@ -249,4 +261,5 @@ type TPersistenceGateway = {
   getSectionOutboxMessages: IGetSectionOutboxMessages;
   getUserOutboxMessages: IGetUserOutboxMessages;
   setMessageAsRead: ISetMessageAsRead;
+  deleteUserFromCase: IDeleteUserFromCase;
 };

@@ -5,7 +5,7 @@ interface IUpdateCaseAndAssociations {
   }: {
     applicationContext: IApplicationContext;
     caseToUpdate: any;
-  }): Promise<any>;
+  }): Promise<TCase>;
 }
 
 interface IUpdateCaseAutomaticBlock {

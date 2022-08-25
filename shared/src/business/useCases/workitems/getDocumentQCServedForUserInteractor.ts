@@ -13,26 +13,32 @@ import { WorkItem } from '../../entities/WorkItem';
  * @param {string} providers.userId the user to get the document qc served box
  * @returns {object} the work items in the user document served inbox
  */
-export const getDocumentQCServedForUserInteractor: IGetDocumentQCServedForUserInteractor =
-  async (applicationContext, { userId }) => {
-    const user = applicationContext.getCurrentUser();
+export const getDocumentQCServedForUserInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      userId: string;
+    },
+  ): Promise<WorkItem>;
+} = async (applicationContext, { userId }) => {
+  const user = applicationContext.getCurrentUser();
 
-    if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
-      throw new UnauthorizedError('Unauthorized');
-    }
+  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
-    const workItems = await applicationContext
-      .getPersistenceGateway()
-      .getDocumentQCServedForUser({
-        applicationContext,
-        userId,
-      });
-
-    const filteredWorkItems = workItems.filter(workItem =>
-      user.role === ROLES.petitionsClerk ? !!workItem.section : true,
-    );
-
-    return WorkItem.validateRawCollection(filteredWorkItems, {
+  const workItems = await applicationContext
+    .getPersistenceGateway()
+    .getDocumentQCServedForUser({
       applicationContext,
+      userId,
     });
-  };
+
+  const filteredWorkItems = workItems.filter(workItem =>
+    user.role === ROLES.petitionsClerk ? !!workItem.section : true,
+  );
+
+  return WorkItem.validateRawCollection(filteredWorkItems, {
+    applicationContext,
+  });
+};
