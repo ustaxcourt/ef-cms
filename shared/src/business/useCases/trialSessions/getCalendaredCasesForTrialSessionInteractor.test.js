@@ -55,41 +55,4 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
       }),
     ).resolves.not.toThrow();
   });
-
-  it('should only return PMT docket entry on cases', async () => {
-    user = new User({
-      name: 'Docket Clerk',
-      role: ROLES.docketClerk,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    });
-    applicationContext
-      .getPersistenceGateway()
-      .getCalendaredCasesForTrialSession.mockReturnValue([
-        {
-          ...MOCK_CASE,
-          docketEntries: [
-            {
-              ...MOCK_CASE.docketEntries[0],
-              eventCode: 'PMT',
-              isStricken: false,
-            },
-            {
-              ...MOCK_CASE.docketEntries[0],
-              eventCode: 'PMT',
-              isStricken: true,
-            },
-          ],
-        },
-      ]);
-
-    const cases = await getCalendaredCasesForTrialSessionInteractor(
-      applicationContext,
-      {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
-    );
-
-    expect(cases[0].docketEntries.length).toEqual(1);
-    expect(cases[0].docketEntries[0].eventCode).toEqual('PMT');
-  });
 });
