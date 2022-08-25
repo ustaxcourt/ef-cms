@@ -48,6 +48,18 @@ interface IGetCaseByDocketNumber {
   }): Promise<any>;
 }
 
+interface IGetDocumentQCInboxForSection {
+  ({
+    applicationContext,
+    section,
+    judgeUserName,
+  }: {
+    applicationContext: IApplicationContext;
+    section: any;
+    judgeUserName: string
+  }): Promise<any>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   getUserById: IGetUserById;
@@ -55,4 +67,5 @@ type TPersistenceGateway = {
   saveWorkItem: ISaveWorkItem;
   putWorkItemInOutbox: IPutWorkItemInOutbox;
   getCaseByDocketNumber: IGetCaseByDocketNumber;
+  getDocumentQCInboxForSection: IGetDocumentQCInboxForSection;
 };

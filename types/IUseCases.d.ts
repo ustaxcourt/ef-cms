@@ -18,3 +18,23 @@ interface ICompleteWorkItemInteractor {
     },
   ): Promise<void>;
 }
+
+interface IGetDocumentQCInboxForSectionInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      judgeUserName: string;
+      section: string;
+    },
+  ): Promise<void>;
+}
+
+interface IGetDocumentQCInboxForUserInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      userId: string;
+    },
+  ): Promise<void>;
+}
+
