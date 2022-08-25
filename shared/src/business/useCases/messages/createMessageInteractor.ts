@@ -42,7 +42,7 @@ export const createMessageInteractor: ICreateMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const validatedRawMessage: TMessage = new Message(
+  const validatedRawMessage: TMessageEntity = new Message(
     {
       attachments,
       caseStatus: status,

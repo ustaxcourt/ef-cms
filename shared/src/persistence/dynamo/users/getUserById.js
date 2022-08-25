@@ -1,4 +1,4 @@
-import client from '../../dynamodbClientService';
+const client = require('../../dynamodbClientService');
 
 /**
  * getUserById
@@ -6,13 +6,7 @@ import client from '../../dynamodbClientService';
  * @param {string} userId the id of the user
  * @returns {*} result returned from persistence
  */
-export const getUserById = ({
-  applicationContext,
-  userId,
-}: {
-  applicationContext: IApplicationContext;
-  userId: string;
-}) =>
+exports.getUserById = ({ applicationContext, userId }) =>
   client.get({
     Key: {
       pk: `user|${userId}`,
