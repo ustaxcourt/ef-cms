@@ -1,21 +1,19 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  calculateAfterDate,
-  getDocumentQCServedForSectionInteractor,
-} = require('./getDocumentQCServedForSectionInteractor');
-const {
-  calculateISODate,
-  createISODateAtStartOfDayEST,
-} = require('../../../business/utilities/DateHandler');
-const {
+import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const { MOCK_USERS } = require('../../../test/mockUsers');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../entities/EntityConstants';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
+  calculateAfterDate,
+  getDocumentQCServedForSectionInteractor,
+} from './getDocumentQCServedForSectionInteractor';
+import {
+  calculateISODate,
+  createISODateAtStartOfDayEST,
+} from '../../../business/utilities/DateHandler';
 
 describe('getDocumentQCServedForSectionInteractor', () => {
   describe('interactor', () => {

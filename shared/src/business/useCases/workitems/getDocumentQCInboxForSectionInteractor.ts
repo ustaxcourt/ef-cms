@@ -1,13 +1,13 @@
-const {
+import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} = require('../../entities/EntityConstants');
-const {
-  isAuthorized,
+} from '../../entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  *

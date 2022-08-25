@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getDocumentQCServedForUserInteractor,
-} = require('./getDocumentQCServedForUserInteractor');
-const { DOCKET_SECTION, ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+import { DOCKET_SECTION, ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getDocumentQCServedForUserInteractor } from './getDocumentQCServedForUserInteractor';
 
 describe('getDocumentQCServedForUserInteractor', () => {
   let user;

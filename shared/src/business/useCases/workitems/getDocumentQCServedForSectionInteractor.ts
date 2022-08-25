@@ -17,37 +17,35 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.section the section to get the document qc served box
  * @returns {object} the work items in the section document served inbox
  */
-export const getDocumentQCServedForSectionInteractor: IGetDocumentQCServedForSectionInteractor = async (
-  applicationContext,
-  { section },
-) => {
-  const user = applicationContext.getCurrentUser();
+export const getDocumentQCServedForSectionInteractor: IGetDocumentQCServedForSectionInteractor =
+  async (applicationContext, { section }) => {
+    const user = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
-    throw new UnauthorizedError(
-      'Unauthorized for getting completed work items',
-    );
-  }
+    if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
+      throw new UnauthorizedError(
+        'Unauthorized for getting completed work items',
+      );
+    }
 
-  const afterDate = await calculateAfterDate(applicationContext);
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCServedForSection({
-      afterDate,
+    const afterDate = await calculateAfterDate(applicationContext);
+    const workItems = await applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCServedForSection({
+        afterDate,
+        applicationContext,
+        section,
+      });
+
+    const filteredWorkItems = workItems
+      .filter(workItem =>
+        user.role === ROLES.petitionsClerk ? !!workItem.section : true,
+      )
+      .map(workItem => new OutboxItem(workItem, { applicationContext }));
+
+    return OutboxItem.validateRawCollection(filteredWorkItems, {
       applicationContext,
-      section,
     });
-
-  const filteredWorkItems = workItems
-    .filter(workItem =>
-      user.role === ROLES.petitionsClerk ? !!workItem.section : true,
-    )
-    .map(workItem => new OutboxItem(workItem, { applicationContext }));
-
-  return OutboxItem.validateRawCollection(filteredWorkItems, {
-    applicationContext,
-  });
-};
+  };
 
 const calculateAfterDate = async applicationContext => {
   const daysToRetrieveKey =
@@ -72,6 +70,5 @@ const calculateAfterDate = async applicationContext => {
   });
   return afterDate;
 };
-
 
 exports.calculateAfterDate = calculateAfterDate;

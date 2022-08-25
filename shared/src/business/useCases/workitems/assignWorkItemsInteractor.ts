@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
@@ -34,7 +34,7 @@ export const assignWorkItemsInteractor: IAssignWorkItemsInteractor = async (
       applicationContext,
       workItemId,
     });
-  
+
   const workItemEntity = new WorkItem(workItemRecord, { applicationContext });
 
   workItemEntity.assignToUser({

@@ -1,9 +1,9 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
 import { Message } from '../../entities/Message';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -42,7 +42,7 @@ export const createMessageInteractor: ICreateMessageInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: toUserId });
 
-  const validatedRawMessage: TMessage = new Message(
+  const validatedRawMessage: TMessageData = new Message(
     {
       attachments,
       caseStatus: status,

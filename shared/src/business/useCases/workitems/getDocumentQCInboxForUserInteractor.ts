@@ -13,35 +13,33 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.userId the user to get the document qc
  * @returns {object} the work items in the user document inbox
  */
-export const getDocumentQCInboxForUserInteractor: IGetDocumentQCInboxForUserInteractor = async (
-  applicationContext,
-  { userId },
-) => {
-  const authorizedUser = applicationContext.getCurrentUser();
+export const getDocumentQCInboxForUserInteractor: IGetDocumentQCInboxForUserInteractor =
+  async (applicationContext, { userId }) => {
+    const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+    if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
+      throw new UnauthorizedError('Unauthorized');
+    }
 
-  const user = await applicationContext
-    .getPersistenceGateway()
-    .getUserById({ applicationContext, userId: authorizedUser.userId });
+    const user = await applicationContext
+      .getPersistenceGateway()
+      .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  const workItems = await applicationContext
-    .getPersistenceGateway()
-    .getDocumentQCInboxForUser({
+    const workItems = await applicationContext
+      .getPersistenceGateway()
+      .getDocumentQCInboxForUser({
+        applicationContext,
+        userId,
+      });
+
+    const filteredWorkItems = applicationContext
+      .getUtilities()
+      .filterWorkItemsForUser({
+        user,
+        workItems,
+      });
+
+    return WorkItem.validateRawCollection(filteredWorkItems, {
       applicationContext,
-      userId,
     });
-
-  const filteredWorkItems = applicationContext
-    .getUtilities()
-    .filterWorkItemsForUser({
-      user,
-      workItems,
-    });
-
-  return WorkItem.validateRawCollection(filteredWorkItems, {
-    applicationContext,
-  });
-};
+  };
