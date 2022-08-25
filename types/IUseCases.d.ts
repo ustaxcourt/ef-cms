@@ -80,3 +80,13 @@ interface ICreateMessageInteractor {
     },
   ): Promise<TMessage>;
 }
+
+interface ICompleteMessageInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      message: string;
+      parentMessageId: string;
+    },
+  ): Promise<TMessage>;
+}

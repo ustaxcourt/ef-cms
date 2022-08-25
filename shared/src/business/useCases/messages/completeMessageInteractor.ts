@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Message } = require('../../entities/Message');
-const { orderBy } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Message } from '../../entities/Message';
+import { orderBy } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * completes a message thread
@@ -15,7 +15,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {object} the message
  */
-exports.completeMessageInteractor = async (
+export const completeMessageInteractor: ICompleteMessageInteractor = async (
   applicationContext,
   { message, parentMessageId },
 ) => {
@@ -43,7 +43,7 @@ exports.completeMessageInteractor = async (
 
   const mostRecentMessage = orderBy(messages, 'createdAt', 'desc')[0];
 
-  const updatedMessage = new Message(mostRecentMessage, {
+  const updatedMessage: TMessageEntity = new Message(mostRecentMessage, {
     applicationContext,
   }).validate();
 

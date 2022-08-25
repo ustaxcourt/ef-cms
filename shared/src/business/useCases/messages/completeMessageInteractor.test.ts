@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { completeMessageInteractor } = require('./completeMessageInteractor');
+} from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { completeMessageInteractor } from './completeMessageInteractor';
 
 describe('completeMessageInteractor', () => {
   const mockMessages = [
