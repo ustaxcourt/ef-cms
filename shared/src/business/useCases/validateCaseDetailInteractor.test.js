@@ -197,4 +197,47 @@ describe('validate case detail', () => {
 
     expect(errors).toEqual(null);
   });
+
+  it('should validate a new Case entity when useCaseEntity is true', () => {
+    const errors = validateCaseDetailInteractor(applicationContext, {
+      caseDetail: {
+        caseCaption: 'Caption',
+        caseType: CASE_TYPES_MAP.other,
+        docketEntries: [
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+            docketNumber: '101-18',
+            documentType: 'Petition',
+            eventCode: 'P',
+            filedBy: 'Test Petitioner',
+            role: ROLES.petitioner,
+            userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
+          },
+          {
+            createdAt: '2018-11-21T20:49:28.192Z',
+            docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
+            docketNumber: '101-18',
+            documentType: 'Petition',
+            eventCode: 'P',
+            filedBy: 'Test Petitioner',
+            role: ROLES.petitioner,
+            userId: '9271f5ca-e7c9-40e8-b465-e970e22934e8',
+          },
+        ],
+        docketNumber: '101-18',
+        filingType: CASE_TYPES_MAP.other,
+        irsNoticeDate: applicationContext.getUtilities().createISODateString(),
+        partyType: PARTY_TYPES.petitioner,
+        petitioners,
+        preferredTrialCity: 'Fresno, California',
+        procedureType: 'Regular',
+        signature: true,
+        userId: 'e8577e31-d6d5-4c4a-adc6-520075f3dde5',
+      },
+      useCaseEntity: true,
+    });
+
+    expect(errors).toEqual(null);
+  });
 });
