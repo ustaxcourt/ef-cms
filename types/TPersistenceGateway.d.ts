@@ -15,7 +15,7 @@ interface IGetWorkItemById {
   }: {
     applicationContext: IApplicationContext;
     workItemId: string;
-  }): Promise<any>;
+  }): Promise<WorkItem>;
 }
 
 interface IPutWorkItemInOutbox{
@@ -57,9 +57,9 @@ interface IGetDocumentQCInboxForSection {
     applicationContext: IApplicationContext;
     section: any;
     judgeUserName: string
-  }): Promise<any>;
+  }): TSectionWorkItem[];
 }
-  interface ICreateCaseDeadline {
+interface ICreateCaseDeadline {
   ({
     applicationContext,
     caseDeadline,
@@ -68,6 +68,29 @@ interface IGetDocumentQCInboxForSection {
     caseDeadline: TCaseDeadline;
   }): any;
 }
+
+interface IGetDocumentQCServedForSection {
+  ({
+    applicationContext,
+    afterDate,
+    section,
+  }: {
+    applicationContext: IApplicationContext;
+    afterDate: string;
+    section: TSectionWorkItem;
+  }): any;
+}
+
+interface IGetConfigurationItemValue {
+  ({
+    applicationContext,
+    configurationItemKey,
+  }: {
+    applicationContext: IApplicationContext;
+    configurationItemKey: string;
+  }): string;
+}
+
 
 type TPersistenceGateway = {
   [key: string]: any;
@@ -78,4 +101,6 @@ type TPersistenceGateway = {
   putWorkItemInOutbox: IPutWorkItemInOutbox;
   getDocumentQCInboxForSection: IGetDocumentQCInboxForSection;
   saveWorkItem: ISaveWorkItem;
+  getDocumentQCServedForSection: IGetDocumentQCServedForSection;
+  getConfigurationItemValue: IGetConfigurationItemValue;
 };
