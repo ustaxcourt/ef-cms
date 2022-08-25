@@ -1,18 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  getCompletedMessagesForSectionInteractor,
-} = require('./getCompletedMessagesForSectionInteractor');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { omit } = require('lodash');
+} from '../../entities/EntityConstants';
+import { getCompletedMessagesForSectionInteractor } from './getCompletedMessagesForSectionInteractor';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { omit } from 'lodash';
 
 describe('getCompletedMessagesForSectionInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -22,7 +16,9 @@ describe('getCompletedMessagesForSectionInteractor', () => {
     });
 
     await expect(
-      getCompletedMessagesForSectionInteractor(applicationContext, {}),
+      getCompletedMessagesForSectionInteractor(applicationContext, {
+        section: 'docket',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -65,7 +61,7 @@ describe('getCompletedMessagesForSectionInteractor', () => {
     const returnedMessages = await getCompletedMessagesForSectionInteractor(
       applicationContext,
       {
-        section: messageData.section,
+        section: 'docket',
       },
     );
 

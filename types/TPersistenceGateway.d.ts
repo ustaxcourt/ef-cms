@@ -143,6 +143,16 @@ interface IUpdateMessage {
   }): Promise<void>;
 }
 
+interface IGetCompletedSectionInboxMessages {
+  ({
+    applicationContext,
+    section,
+  }: {
+    applicationContext: IApplicationContext;
+    section: string;
+  }): Promise<TMessageData[]>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   createCaseDeadline: ICreateCaseDeadline;
@@ -159,4 +169,5 @@ type TPersistenceGateway = {
   markMessageThreadRepliedTo: IMarkMessageThreadRepliedTo;
   getMessageThreadByParentId: IGetMessageThreadByParentId;
   updateMessage: IUpdateMessage;
+  getCompletedSectionInboxMessages: IGetCompletedSectionInboxMessages;
 };
