@@ -28,6 +28,7 @@ exports.generateCoverSheetData = async ({
   caseEntity,
   docketEntryEntity,
   filingDateUpdated = false,
+  stampData,
   useInitialData = false,
 }) => {
   const isLodged = docketEntryEntity.lodged;
@@ -46,6 +47,10 @@ exports.generateCoverSheetData = async ({
   const dateFiledFormatted = docketEntryEntity.filingDate
     ? formatDateString(docketEntryEntity.filingDate, FORMATS.MMDDYY)
     : '';
+
+  if (stampData && stampData.date) {
+    stampData.date = formatDateString(stampData.date, FORMATS.MMDDYYYY);
+  }
 
   const caseCaption = useInitialData
     ? caseEntity.initialCaption
@@ -86,6 +91,7 @@ exports.generateCoverSheetData = async ({
     electronicallyFiled: !docketEntryEntity.isPaper,
     index: docketEntryEntity.index,
     mailingDate: docketEntryEntity.mailingDate || '',
+    stamp: stampData,
   };
 
   if (
