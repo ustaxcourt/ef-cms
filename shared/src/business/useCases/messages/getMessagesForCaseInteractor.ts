@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Message } = require('../../entities/Message');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Message } from '../../entities/Message';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * gets messages for a case
@@ -13,24 +13,22 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the message
  */
-exports.getMessagesForCaseInteractor = async (
-  applicationContext,
-  { docketNumber },
-) => {
-  const authorizedUser = applicationContext.getCurrentUser();
+export const getMessagesForCaseInteractor: IGetMessagesForCaseInteractor =
+  async (applicationContext, { docketNumber }) => {
+    const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
-    throw new UnauthorizedError('Unauthorized');
-  }
+    if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
+      throw new UnauthorizedError('Unauthorized');
+    }
 
-  const messages = await applicationContext
-    .getPersistenceGateway()
-    .getMessagesByDocketNumber({
+    const messages = await applicationContext
+      .getPersistenceGateway()
+      .getMessagesByDocketNumber({
+        applicationContext,
+        docketNumber,
+      });
+
+    return Message.validateRawCollection(messages, {
       applicationContext,
-      docketNumber,
     });
-
-  return Message.validateRawCollection(messages, {
-    applicationContext,
-  });
-};
+  };
