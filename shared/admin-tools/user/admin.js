@@ -77,6 +77,56 @@ const deactivateAdminAccount = async () => {
 };
 
 /**
+ * This verifies that the USTC admin user is disabled in Cognito
+ */
+const verifyAdminUserDisabled = async ({ attempt }) => {
+  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const UserPoolId = await getUserPoolId(cognito);
+
+  try {
+    let result = await cognito
+      .adminGetUser({
+        UserPoolId,
+        Username: USTC_ADMIN_USER,
+      })
+      .promise();
+
+    if (result && result.Enabled === false) {
+      console.log('USTC Admin user is disabled in verifyAdminUserDisabled.');
+      return;
+    } else {
+      console.error(
+        'USTC Admin user is NOT disabled as expected. Disabling...',
+      );
+
+      const maxRetries = 3;
+      await cognito
+        .adminDisableUser({
+          UserPoolId,
+          Username: USTC_ADMIN_USER,
+        })
+        .promise();
+
+      if (attempt < maxRetries) {
+        attempt++;
+        await verifyAdminUserDisabled({ attempt });
+      } else {
+        console.error(
+          'Unable to verify that the USTC Admin user is disabled - max retries reached. Exiting...',
+        );
+        process.exit(1);
+      }
+    }
+  } catch (err) {
+    if (err.code !== 'UserNotFoundException') {
+      console.log('err', err);
+      console.error(err.message);
+      process.exit(1);
+    }
+  }
+};
+
+/**
  * Get an authentication token for the admin account
  *
  * @returns {String} token to use for authentication
@@ -250,3 +300,4 @@ exports.deactivateAdminAccount = deactivateAdminAccount;
 exports.createDawsonUser = createDawsonUser;
 exports.enableUser = enableUser;
 exports.disableUser = disableUser;
+exports.verifyAdminUserDisabled = verifyAdminUserDisabled;
