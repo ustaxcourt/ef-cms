@@ -15,9 +15,9 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {object} the message
  */
-export const completeMessageInteractor: ICompleteMessageInteractor = async (
-  applicationContext,
-  { message, parentMessageId },
+export const completeMessageInteractor = async (
+  applicationContext: IApplicationContext,
+  { message, parentMessageId }: { message: string; parentMessageId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

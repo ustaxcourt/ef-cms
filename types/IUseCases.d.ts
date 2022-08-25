@@ -81,16 +81,6 @@ interface ICreateMessageInteractor {
   ): Promise<TMessageData>;
 }
 
-interface ICompleteMessageInteractor {
-  (
-    applicationContext: IApplicationContext,
-    options: {
-      message: string;
-      parentMessageId: string;
-    },
-  ): Promise<TMessageData>;
-}
-
 interface IGetCompletedMessagesForSectionInteractor {
   (
     applicationContext: IApplicationContext,

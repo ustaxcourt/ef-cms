@@ -56,7 +56,10 @@ describe('completeMessageInteractor', () => {
     });
 
     await expect(
-      completeMessageInteractor(applicationContext, {}),
+      completeMessageInteractor(applicationContext, {
+        message: 'hi',
+        parentMessageId: '123',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
