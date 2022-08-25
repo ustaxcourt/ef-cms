@@ -78,7 +78,7 @@ interface ICreateMessageInteractor {
       toSection: string;
       toUserId: string;
     },
-  ): Promise<TMessage>;
+  ): Promise<TMessageData>;
 }
 
 interface ICompleteMessageInteractor {
@@ -88,5 +88,14 @@ interface ICompleteMessageInteractor {
       message: string;
       parentMessageId: string;
     },
-  ): Promise<TMessage>;
+  ): Promise<TMessageData>;
+}
+
+interface IGetCompletedMessagesForSectionInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      section: string;
+    },
+  ): Promise<TMessageData>;
 }
