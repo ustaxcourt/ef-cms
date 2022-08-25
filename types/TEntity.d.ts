@@ -14,10 +14,11 @@ type DocketEntry = {
 
 type WorkItem = {
   createdAt: string;
+  assigneeId: string;
 }
 
-type TSectionWorkItem = {
-  createdAt: string;
+// TODO: confirm if section work item safely extends workitem
+type TSectionWorkItem = WorkItem & { 
   docketEntry: DocketEntry[];
   docketNumber: string;
   docketNumberSuffix: string;

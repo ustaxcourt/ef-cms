@@ -252,6 +252,8 @@
     "@types/jest": "^28.1.8",
     "@types/joi": "^17.2.3",
     "@types/lodash": "^4.14.184",
+    "@typescript-eslint/eslint-plugin": "^5.35.1",
+    "@typescript-eslint/parser": "^5.35.1",
     "@vendia/serverless-express": "^4.10.1",
     "@wojtekmaj/enzyme-adapter-react-17": "^0.6.7",
     "adm-zip": "^0.5.9",
