@@ -1,11 +1,11 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { Petitioner } = require('../entities/contacts/Petitioner');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { Petitioner } from '../entities/contacts/Petitioner';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * used to add a petitioner to a case
@@ -16,7 +16,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the case data
  */
-exports.addPetitionerToCaseInteractor = async (
+export const addPetitionerToCaseInteractor = async (
   applicationContext,
   { caseCaption, contact, docketNumber },
 ) => {

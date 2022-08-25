@@ -28,11 +28,7 @@ export const getCompletedMessagesForUserInteractor: IGetCompletedMessagesForUser
         userId,
       });
 
-    const validatedMessages = (
-      Message.validateRawCollection as IValidateRawCollection<TMessageData>
-    )(messages, {
+    return Message.validateRawCollection(messages, {
       applicationContext,
     });
-
-    return validatedMessages;
   };

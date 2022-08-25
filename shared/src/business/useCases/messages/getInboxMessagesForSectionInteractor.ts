@@ -28,9 +28,7 @@ export const getInboxMessagesForSectionInteractor: IGetInboxMessagesForSectionIn
         section,
       });
 
-    return (
-      Message.validateRawCollection as IValidateRawCollection<TMessageData>
-    )(messages, {
+    return Message.validateRawCollection(messages, {
       applicationContext,
     });
   };
