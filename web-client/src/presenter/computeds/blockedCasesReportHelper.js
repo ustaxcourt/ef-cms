@@ -1,3 +1,4 @@
+import { addConsolidatedProperties } from './utilities/addConsolidatedProperties';
 import { state } from 'cerebral';
 
 export const blockedCasesReportHelper = (get, applicationContext) => {
@@ -32,8 +33,10 @@ export const blockedCasesReportHelper = (get, applicationContext) => {
     blockedCasesFormatted = blockedCases
       .sort(applicationContext.getUtilities().compareCasesByDocketNumber)
       .map(blockedCase => {
+        const blockedCaseWithConsolidatedProperties =
+          addConsolidatedProperties(blockedCase);
         return {
-          ...setFormattedBlockDates(blockedCase),
+          ...setFormattedBlockDates(blockedCaseWithConsolidatedProperties),
           caseTitle: applicationContext.getCaseTitle(
             blockedCase.caseCaption || '',
           ),
