@@ -37,6 +37,23 @@ interface IGetDocumentQCInboxForUserInteractor {
     },
   ): Promise<void>;
 }
+interface IGetDocumentQCServedForUserInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      userId: string;
+    },
+  ): Promise<void>;
+}
+
+interface IGetDocumentQCInboxForUserInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      userId: string;
+    },
+  ): Promise<void>;
+}
 
 interface ICreateCaseDeadlineInteractor {
   (

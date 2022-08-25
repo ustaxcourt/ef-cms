@@ -1,11 +1,11 @@
-const {
-  isAuthorized,
+import { Case } from '../../entities/cases/Case';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
+import { createISODateString } from '../../utilities/DateHandler';
 
 /**
  * completeWorkItemInteractor
