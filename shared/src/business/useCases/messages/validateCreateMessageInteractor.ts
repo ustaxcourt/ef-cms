@@ -1,4 +1,4 @@
-const { NewMessage } = require('../../entities/NewMessage');
+import { NewMessage } from '../../entities/NewMessage';
 
 /**
  * validateCreateMessageInteractor
@@ -8,8 +8,9 @@ const { NewMessage } = require('../../entities/NewMessage');
  * @param {object} providers.message the message data
  * @returns {object} errors (null if no errors)
  */
-exports.validateCreateMessageInteractor = (applicationContext, { message }) => {
-  return new NewMessage(message, {
-    applicationContext,
-  }).getFormattedValidationErrors();
-};
+export const validateCreateMessageInteractor: IValidateCreateMessageInteractor =
+  (applicationContext, { message }) => {
+    return new NewMessage(message, {
+      applicationContext,
+    }).getFormattedValidationErrors();
+  };
