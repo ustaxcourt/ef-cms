@@ -46,3 +46,23 @@ interface ICreateCaseDeadlineInteractor {
     },
   ): Promise<TCaseDeadline>;
 }
+
+interface IGetDocumentQCServedForSectionInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      section: any;
+    },
+  ): Promise<TCaseDeadline>;
+}
+
+interface IGetWorkItemInteractor {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      workItemId: string;
+    },
+  ): Promise<WorkItem>;
+}
+
+
