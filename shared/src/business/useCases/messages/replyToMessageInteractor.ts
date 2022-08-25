@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { Message } = require('../../entities/Message');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { Message } from '../../entities/Message';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * calls persistence methods to create a reply state for a message
@@ -20,7 +20,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} validated raw message object
  */
-const replyToMessage = async (
+export const replyToMessage = async (
   applicationContext,
   {
     attachments,
@@ -83,10 +83,8 @@ const replyToMessage = async (
     message: validatedRawMessage,
   });
 
-  return validatedRawMessage;
+  return validatedRawMessage as TMessageData[];
 };
-
-exports.replyToMessage = replyToMessage;
 
 /**
  * replies to a message
@@ -102,7 +100,7 @@ exports.replyToMessage = replyToMessage;
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} the message
  */
-exports.replyToMessageInteractor = async (
+export const replyToMessageInteractor: IReplyToMessageInteractor = (
   applicationContext,
   {
     attachments,
@@ -114,7 +112,7 @@ exports.replyToMessageInteractor = async (
     toUserId,
   },
 ) => {
-  return await replyToMessage(applicationContext, {
+  return replyToMessage(applicationContext, {
     attachments,
     docketNumber,
     message,

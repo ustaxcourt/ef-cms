@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { replyToMessageInteractor } = require('./replyToMessageInteractor');
+} from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { replyToMessageInteractor } from './replyToMessageInteractor';
 
 describe('replyToMessageInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
@@ -19,7 +15,19 @@ describe('replyToMessageInteractor', () => {
     });
 
     await expect(
-      replyToMessageInteractor(applicationContext, {}),
+      replyToMessageInteractor(applicationContext, {
+        attachments: [
+          {
+            documentId: 'b1130321-0a76-43bc-b3eb-64a18f079873',
+          },
+        ],
+        docketNumber: '101-20',
+        message: "How's it going?",
+        parentMessageId: '62ea7e6e-8101-4e4b-9bbd-932b149c86c3',
+        subject: 'Hey!',
+        toSection: PETITIONS_SECTION,
+        toUserId: 'b427ca37-0df1-48ac-94bb-47aed073d6f7',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 

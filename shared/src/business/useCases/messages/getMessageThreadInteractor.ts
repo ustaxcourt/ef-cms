@@ -1,21 +1,21 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Message } = require('../../entities/Message');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Message } from '../../entities/Message';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
- * getCompletedMessagesForUserInteractor
+ * gets a message thread by parent id
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.userId the user to get the inbox messages
- * @returns {object} the messages in the user inbox
+ * @param {string} providers.parentMessageId the id of the parent message for the thread
+ * @returns {object} the message
  */
-exports.getCompletedMessagesForUserInteractor = async (
+export const getMessageThreadInteractor: IGetMessageThreadInteractor = async (
   applicationContext,
-  { userId },
+  { parentMessageId },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -25,9 +25,9 @@ exports.getCompletedMessagesForUserInteractor = async (
 
   const messages = await applicationContext
     .getPersistenceGateway()
-    .getCompletedUserInboxMessages({
+    .getMessageThreadByParentId({
       applicationContext,
-      userId,
+      parentMessageId,
     });
 
   return Message.validateRawCollection(messages, {
