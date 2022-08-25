@@ -1,20 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  getOutboxMessagesForUserInteractor,
-} = require('./getOutboxMessagesForUserInteractor');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { omit } = require('lodash');
+} from '../../entities/EntityConstants';
+import { getMessageThreadInteractor } from './getMessageThreadInteractor';
+import { UnauthorizedError } from '../../../errors/errors';
 
-describe('getOutboxMessagesForUserInteractor', () => {
+describe('getMessageThreadInteractor', () => {
   it('throws unauthorized for a user without MESSAGES permission', async () => {
     applicationContext.getCurrentUser.mockReturnValue({
       role: ROLES.petitioner,
@@ -22,12 +15,14 @@ describe('getOutboxMessagesForUserInteractor', () => {
     });
 
     await expect(
-      getOutboxMessagesForUserInteractor(applicationContext, {}),
+      getMessageThreadInteractor(applicationContext, {
+        parentMessageId: 'abc',
+      }),
     ).rejects.toThrow(UnauthorizedError);
   });
 
-  it('retrieves the messages from persistence and returns them', async () => {
-    const messageData = {
+  it('retrieves the message thread from persistence and returns it', async () => {
+    const mockMessage = {
       attachments: [],
       caseStatus: CASE_STATUS_TYPES.generalDocket,
       caseTitle: 'Bill Burr',
@@ -42,8 +37,6 @@ describe('getOutboxMessagesForUserInteractor', () => {
       message: "How's it going?",
       messageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       parentMessageId: '9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      pk: 'case|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
-      sk: 'message|9ca37b65-9aac-4621-b5d7-e4a7c8a26a21',
       subject: 'Hey!',
       to: 'Test Petitionsclerk',
       toSection: PETITIONS_SECTION,
@@ -55,18 +48,18 @@ describe('getOutboxMessagesForUserInteractor', () => {
     });
     applicationContext
       .getPersistenceGateway()
-      .getUserOutboxMessages.mockReturnValue([messageData]);
+      .getMessageThreadByParentId.mockReturnValue([mockMessage]);
 
-    const returnedMessages = await getOutboxMessagesForUserInteractor(
+    const returnedMessage = await getMessageThreadInteractor(
       applicationContext,
       {
-        userId: messageData.userId,
+        parentMessageId: 'abc',
       },
     );
 
     expect(
-      applicationContext.getPersistenceGateway().getUserOutboxMessages,
+      applicationContext.getPersistenceGateway().getMessageThreadByParentId,
     ).toBeCalled();
-    expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
+    expect(returnedMessage).toMatchObject([mockMessage]);
   });
 });

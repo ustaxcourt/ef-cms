@@ -153,6 +153,78 @@ interface IGetCompletedSectionInboxMessages {
   }): Promise<TMessageData[]>;
 }
 
+interface IGetCompletedUserInboxMessages {
+  ({
+    applicationContext,
+    userId,
+  }: {
+    applicationContext: IApplicationContext;
+    userId: string;
+  }): Promise<TMessageData[]>;
+}
+
+interface IGetSectionInboxMessages {
+  ({
+    applicationContext,
+    section,
+  }: {
+    applicationContext: IApplicationContext;
+    section: string;
+  }): Promise<TMessageData[]>;
+}
+
+interface IGetUserInboxMessages {
+  ({
+    applicationContext,
+    userId,
+  }: {
+    applicationContext: IApplicationContext;
+    userId: string;
+  }): Promise<TMessageData[]>;
+}
+
+interface IGetMessagesByDocketNumber {
+  ({
+    applicationContext,
+    docketNumber,
+  }: {
+    applicationContext: IApplicationContext;
+    docketNumber: string;
+  }): Promise<TMessageData[]>;
+}
+
+interface IGetSectionOutboxMessages {
+  ({
+    applicationContext,
+    section,
+  }: {
+    applicationContext: IApplicationContext;
+    section: string;
+  }): Promise<TMessageData[]>;
+}
+
+interface IGetUserOutboxMessages {
+  ({
+    applicationContext,
+    userId,
+  }: {
+    applicationContext: IApplicationContext;
+    userId: string;
+  }): Promise<TMessageData[]>;
+}
+
+interface ISetMessageAsRead {
+  ({
+    applicationContext,
+    docketNumber,
+    messageId,
+  }: {
+    applicationContext: IApplicationContext;
+    docketNumber: string;
+    messageId: string;
+  }): Promise<void>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   createCaseDeadline: ICreateCaseDeadline;
@@ -170,4 +242,11 @@ type TPersistenceGateway = {
   getMessageThreadByParentId: IGetMessageThreadByParentId;
   updateMessage: IUpdateMessage;
   getCompletedSectionInboxMessages: IGetCompletedSectionInboxMessages;
+  getCompletedUserInboxMessages: IGetCompletedUserInboxMessages;
+  getSectionInboxMessages: IGetSectionInboxMessages;
+  getUserInboxMessages: IGetUserInboxMessages;
+  getMessagesByDocketNumber: IGetMessagesByDocketNumber;
+  getSectionOutboxMessages: IGetSectionOutboxMessages;
+  getUserOutboxMessages: IGetUserOutboxMessages;
+  setMessageAsRead: ISetMessageAsRead;
 };
