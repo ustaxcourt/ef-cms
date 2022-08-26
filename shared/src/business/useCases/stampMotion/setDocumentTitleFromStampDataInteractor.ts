@@ -1,5 +1,5 @@
-const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
-const { MOTION_DISPOSITIONS } = require('../../entities/EntityConstants');
+import { formatDateString, FORMATS } from '../../utilities/DateHandler';
+import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
 
 /**
  * setDocumentTitleFromStampDataInteractor
@@ -8,7 +8,20 @@ const { MOTION_DISPOSITIONS } = require('../../entities/EntityConstants');
  * @param {object} providers.stampMotionForm the stamp motion form
  * @returns {string} formattedDocumentTitle
  */
-exports.setDocumentTitleFromStampDataInteractor = ({ stampMotionForm }) => {
+export const setDocumentTitleFromStampDataInteractor = ({
+  stampMotionForm,
+}: {
+  stampMotionForm: {
+    customText?: string;
+    date?: string;
+    deniedAsMoot?: boolean;
+    deniedWithoutPrejudice?: boolean;
+    disposition?: string;
+    dueDateMessage?: string;
+    jurisdictionalOption?: string;
+    strickenFromTrialSession?: string;
+  };
+}) => {
   const {
     customText,
     date,

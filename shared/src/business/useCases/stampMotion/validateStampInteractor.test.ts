@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  validateStampInteractor,
-} = require('../stampMotion/validateStampInteractor');
-const { MOTION_DISPOSITIONS } = require('../../entities/EntityConstants');
-const { Stamp } = require('../../entities/Stamp');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateStampInteractor } from '../stampMotion/validateStampInteractor';
+import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
+import { Stamp } from '../../entities/Stamp';
 
 describe('validateStampInteractor', () => {
   it('returns the errors for required fields on an empty stamp form', () => {

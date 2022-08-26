@@ -1,4 +1,4 @@
-const { Stamp } = require('../../entities/Stamp');
+import { Stamp } from '../../entities/Stamp';
 
 /**
  * validateStampInteractor
@@ -8,7 +8,10 @@ const { Stamp } = require('../../entities/Stamp');
  * @param {object} providers.stampMotionForm the stamp motion form
  * @returns {object} errors if there are any, otherwise null
  */
-exports.validateStampInteractor = (applicationContext, { stampMotionForm }) => {
+export const validateStampInteractor = (
+  applicationContext,
+  { stampMotionForm },
+) => {
   const errors = new Stamp(stampMotionForm, {
     applicationContext,
   }).getFormattedValidationErrors();
