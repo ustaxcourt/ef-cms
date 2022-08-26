@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { refreshAuthTokenInteractor } = require('./refreshAuthTokenInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { refreshAuthTokenInteractor } from './refreshAuthTokenInteractor';
 
 describe('refreshAuthTokenInteractor', () => {
   beforeEach(() => {
