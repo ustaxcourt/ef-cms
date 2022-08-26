@@ -1,6 +1,4 @@
-const {
-  CaseAssociationRequestFactory,
-} = require('../../entities/CaseAssociationRequestFactory');
+import { CaseAssociationRequestFactory } from '../../entities/CaseAssociationRequestFactory';
 
 /**
  * generateCaseAssociationDocumentTitleInteractor
@@ -10,9 +8,12 @@ const {
  * @param {object} providers.caseAssociationRequest the case association request data
  * @returns {string} document title
  */
-exports.generateCaseAssociationDocumentTitleInteractor = (
-  applicationContext,
-  { caseAssociationRequest, petitioners },
+export const generateCaseAssociationDocumentTitleInteractor = (
+  applicationContext: IApplicationContext,
+  {
+    caseAssociationRequest,
+    petitioners,
+  }: { caseAssociationRequest: any; petitioners: any[] },
 ) => {
   const caseAssociation = CaseAssociationRequestFactory(caseAssociationRequest);
   return caseAssociation.getDocumentTitle(petitioners);

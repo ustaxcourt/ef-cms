@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateCaseDeadlineInteractor,
-} = require('./updateCaseDeadlineInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateCaseDeadlineInteractor } from './updateCaseDeadlineInteractor';
+import { ROLES } from '../../entities/EntityConstants';
+import { User } from '../../entities/User';
 
 describe('updateCaseDeadlineInteractor', () => {
   const CASE_DEADLINE_ID = '6805d1ab-18d0-43ec-bafb-654e83405416';
@@ -16,7 +12,7 @@ describe('updateCaseDeadlineInteractor', () => {
     deadlineDate: '2019-03-01T21:42:29.073Z',
     description: 'hello world',
     docketNumber: '123-20',
-  };
+  } as any;
 
   it('throws an error if the user is not valid or authorized', async () => {
     applicationContext.getCurrentUser.mockReturnValue({});

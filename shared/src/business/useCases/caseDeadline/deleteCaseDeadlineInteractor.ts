@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * deleteCaseDeadlineInteractor
@@ -14,9 +14,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case the case deadline is attached to
  * @returns {Promise} the promise of the delete call
  */
-exports.deleteCaseDeadlineInteractor = async (
-  applicationContext,
-  { caseDeadlineId, docketNumber },
+export const deleteCaseDeadlineInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    caseDeadlineId,
+    docketNumber,
+  }: { caseDeadlineId: string; docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

@@ -6,9 +6,9 @@
  * @param {string} providers.userId the user id to verify
  * @returns {Promise<*>} the promise of the pending case verification
  */
-exports.verifyPendingCaseForUserInteractor = async (
-  applicationContext,
-  { docketNumber, userId },
+export const verifyPendingCaseForUserInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber, userId }: { docketNumber: string; userId: string },
 ) => {
   return await applicationContext
     .getPersistenceGateway()

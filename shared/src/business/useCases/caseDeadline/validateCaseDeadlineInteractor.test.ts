@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  validateCaseDeadlineInteractor,
-} = require('./validateCaseDeadlineInteractor');
-const { CaseDeadline } = require('../../entities/CaseDeadline');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateCaseDeadlineInteractor } from './validateCaseDeadlineInteractor';
+import { CaseDeadline } from '../../entities/CaseDeadline';
 
 describe('validateCaseDeadlineInteractor', () => {
   it('returns the expected errors object on an empty case deadline', () => {
     const errors = validateCaseDeadlineInteractor(applicationContext, {
-      caseDeadline: {},
+      caseDeadline: {} as any,
     });
 
     expect(Object.keys(errors)).toEqual(
@@ -27,7 +23,7 @@ describe('validateCaseDeadlineInteractor', () => {
     };
 
     const errors = validateCaseDeadlineInteractor(applicationContext, {
-      caseDeadline: mockCaseDeadline,
+      caseDeadline: mockCaseDeadline as any,
     });
 
     expect(errors).toEqual(null);

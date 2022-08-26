@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  submitPendingCaseAssociationRequestInteractor,
-} = require('./submitPendingCaseAssociationRequestInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { submitPendingCaseAssociationRequestInteractor } from './submitPendingCaseAssociationRequestInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('submitPendingCaseAssociationRequest', () => {
   let caseRecord = {
@@ -21,7 +17,6 @@ describe('submitPendingCaseAssociationRequest', () => {
     await expect(
       submitPendingCaseAssociationRequestInteractor(applicationContext, {
         docketNumber: caseRecord.docketNumber,
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -43,7 +38,6 @@ describe('submitPendingCaseAssociationRequest', () => {
 
     await submitPendingCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
@@ -54,7 +48,6 @@ describe('submitPendingCaseAssociationRequest', () => {
   it('should not add mapping if these is already a pending association', async () => {
     await submitPendingCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
@@ -72,7 +65,6 @@ describe('submitPendingCaseAssociationRequest', () => {
 
     await submitPendingCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: caseRecord.docketNumber,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(

@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  verifyPendingCaseForUserInteractor,
-} = require('./verifyPendingCaseForUserInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { verifyPendingCaseForUserInteractor } from './verifyPendingCaseForUserInteractor';
 
 describe('verifyPendingCaseForUser', () => {
   it('should return results retrieved from persistence', async () => {

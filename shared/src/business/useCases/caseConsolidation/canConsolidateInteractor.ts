@@ -1,4 +1,4 @@
-const { Case } = require('../../entities/cases/Case');
+import { Case } from '../../entities/cases/Case';
 
 /**
  * canConsolidateInteractor
@@ -9,9 +9,12 @@ const { Case } = require('../../entities/cases/Case');
  * @param {object} providers.currentCase the case to check if caseToConsolidate can be consolidated with
  * @returns {object} whether or not the cases can be consolidated with the reason
  */
-exports.canConsolidateInteractor = (
-  applicationContext,
-  { caseToConsolidate, currentCase },
+export const canConsolidateInteractor = (
+  applicationContext: IApplicationContext,
+  {
+    caseToConsolidate,
+    currentCase,
+  }: { caseToConsolidate: TCase; currentCase: TCase },
 ) => {
   const caseEntity = new Case(currentCase, { applicationContext });
 

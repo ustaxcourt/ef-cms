@@ -1,4 +1,4 @@
-const { CaseDeadline } = require('../../entities/CaseDeadline');
+import { CaseDeadline } from '../../entities/CaseDeadline';
 
 /**
  * getCaseDeadlinesForCaseInteractor
@@ -8,9 +8,9 @@ const { CaseDeadline } = require('../../entities/CaseDeadline');
  * @param {string} providers.docketNumber the docket number of the case to get case deadlines for
  * @returns {Promise} the promise of the getCaseDeadlines call
  */
-exports.getCaseDeadlinesForCaseInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const getCaseDeadlinesForCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
   const caseDeadlines = await applicationContext
     .getPersistenceGateway()

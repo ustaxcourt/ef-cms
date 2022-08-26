@@ -1,11 +1,7 @@
-const {
-  addConsolidatedCaseInteractor,
-} = require('./addConsolidatedCaseInteractor');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+import { addConsolidatedCaseInteractor } from './addConsolidatedCaseInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 let mockCases;
 

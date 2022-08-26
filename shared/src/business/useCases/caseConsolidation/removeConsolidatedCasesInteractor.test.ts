@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  removeConsolidatedCasesInteractor,
-} = require('./removeConsolidatedCasesInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { removeConsolidatedCasesInteractor } from './removeConsolidatedCasesInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 let mockCases;
 const allDocketNumbers = ['101-19', '102-19', '103-19', '104-19', '105-19'];

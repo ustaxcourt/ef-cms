@@ -1,14 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  deleteCaseDeadlineInteractor,
-} = require('./deleteCaseDeadlineInteractor');
-const { AUTOMATIC_BLOCKED_REASONS } = require('../../entities/EntityConstants');
-const { MOCK_CASE_WITHOUT_PENDING } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { deleteCaseDeadlineInteractor } from './deleteCaseDeadlineInteractor';
+import { AUTOMATIC_BLOCKED_REASONS } from '../../entities/EntityConstants';
+import { MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 describe('deleteCaseDeadlineInteractor', () => {
   let user;
