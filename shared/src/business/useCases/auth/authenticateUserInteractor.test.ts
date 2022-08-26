@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { authenticateUserInteractor } = require('./authenticateUserInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { authenticateUserInteractor } from './authenticateUserInteractor';
 
 describe('authenticateUserInteractor', () => {
   const refreshTokenAndToken = {
