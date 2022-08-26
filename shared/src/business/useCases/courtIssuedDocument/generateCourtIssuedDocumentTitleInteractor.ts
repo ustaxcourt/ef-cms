@@ -1,7 +1,5 @@
-const {
-  CourtIssuedDocumentFactory,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
-const { COURT_ISSUED_EVENT_CODES } = require('../../entities/EntityConstants');
+import { CourtIssuedDocumentFactory } from '../../entities/courtIssuedDocument/CourtIssuedDocumentFactory';
+import { COURT_ISSUED_EVENT_CODES } from '../../entities/EntityConstants';
 
 /**
  * generateCourtIssuedDocumentTitleInteractor
@@ -10,7 +8,9 @@ const { COURT_ISSUED_EVENT_CODES } = require('../../entities/EntityConstants');
  * @param {object} providers.documentMetadata the document metadata
  * @returns {string} document title
  */
-exports.generateCourtIssuedDocumentTitleInteractor = ({ documentMetadata }) => {
+export const generateCourtIssuedDocumentTitleInteractor = ({
+  documentMetadata,
+}) => {
   const filingEvent = COURT_ISSUED_EVENT_CODES.find(
     item => documentMetadata.eventCode === item.eventCode,
   );

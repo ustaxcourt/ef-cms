@@ -1,28 +1,26 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   createISODateString,
   formatDateString,
-} = require('../../utilities/DateHandler');
-const {
+} from '../../utilities/DateHandler';
+import {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
+} from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { addServedStampToDocument } = require('./addServedStampToDocument');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../authorization/authorizationClientService';
+import { addServedStampToDocument } from './addServedStampToDocument';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { WorkItem } from '../../entities/WorkItem';
 
 const completeWorkItem = async ({
   applicationContext,
@@ -71,7 +69,7 @@ const completeWorkItem = async ({
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be served on
  * @returns {object} the updated case after the document was served
  */
-exports.serveCourtIssuedDocumentInteractor = async (
+export const serveCourtIssuedDocumentInteractor = async (
   applicationContext,
   { clientConnectionId, docketEntryId, docketNumbers, subjectCaseDocketNumber },
 ) => {

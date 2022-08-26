@@ -1,12 +1,12 @@
-const {
+import {
   addServedStampToDocument,
   computeCoordinates,
   PADDING,
-} = require('./addServedStampToDocument.js');
-const {
+} from './addServedStampToDocument.js';
+import {
   applicationContext,
   testPdfDoc,
-} = require('../../test/createTestApplicationContext');
+} from '../../test/createTestApplicationContext';
 
 describe('addServedStampToDocument', () => {
   let rotationReturnValue;

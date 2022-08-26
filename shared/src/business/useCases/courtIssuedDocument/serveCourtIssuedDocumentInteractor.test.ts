@@ -1,8 +1,8 @@
-const {
+import {
   applicationContext,
   testPdfDoc,
-} = require('../../test/createTestApplicationContext');
-const {
+} from '../../test/createTestApplicationContext';
+import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -12,17 +12,13 @@ const {
   PARTY_TYPES,
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
-  serveCourtIssuedDocumentInteractor,
-} = require('./serveCourtIssuedDocumentInteractor');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { docketClerkUser } = require('../../../test/mockUsers');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { v4: uuidv4 } = require('uuid');
+} from '../../entities/EntityConstants';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
+import { createISODateString } from '../../utilities/DateHandler';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor', () => {
   let extendCase;
@@ -246,7 +242,9 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: '000',
-        docketNumber: mockCases[0].docketNumber,
+        clientConnectionId: 'testing',
+        docketNumbers: ['101-20'],
+        subjectCaseDocketNumber: '101-20',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -261,6 +259,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         docketEntryId: '000',
         docketNumbers: ['000-00'],
         subjectCaseDocketNumber: '000-00',
+        clientConnectionId: 'testing',
       }),
     ).rejects.toThrow('Case 000-00 was not found');
   });
@@ -271,6 +270,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
         docketEntryId: '000',
         docketNumbers: [mockCases[0].docketNumber],
         subjectCaseDocketNumber: mockCases[0].docketNumber,
+        clientConnectionId: 'testing',
       }),
     ).rejects.toThrow('Docket entry 000 was not found');
   });
@@ -280,6 +280,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: mockServedDocketEntryId,
         docketNumbers: [mockCases[0].docketNumber],
+        clientConnectionId: 'testing',
         subjectCaseDocketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('Docket entry has already been served');
@@ -289,6 +290,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumbers: [mockCases[0].docketNumber],
+      clientConnectionId: 'testing',
       subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
@@ -317,6 +319,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumbers: [mockCases[0].docketNumber],
+      clientConnectionId: 'testing',
       subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
@@ -338,6 +341,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryId,
       docketNumbers: [mockCases[0].docketNumber],
+      clientConnectionId: 'testing',
       subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
@@ -364,6 +368,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: 'c54ba5a9-b37b-479d-9201-067ec6e335bc',
       docketNumbers: [mockCases[1].docketNumber],
+      clientConnectionId: 'testing',
       subjectCaseDocketNumber: mockCases[1].docketNumber,
     });
 
@@ -391,6 +396,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
       docketNumbers: [mockCases[0].docketNumber],
+      clientConnectionId: 'testing',
       subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
@@ -416,6 +422,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       docketEntryId: docketEntriesWithCaseClosingEventCodes[0].docketEntryId,
       docketNumbers: [mockCases[0].docketNumber],
       subjectCaseDocketNumber: mockCases[0].docketNumber,
+      clientConnectionId: 'testing',
     });
 
     expect(
@@ -433,6 +440,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       await serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: docketEntry.docketEntryId,
         docketNumbers: [mockCases[0].docketNumber],
+        clientConnectionId: 'testing',
         subjectCaseDocketNumber: mockCases[0].docketNumber,
       });
 
@@ -455,6 +463,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: mockCases[0].docketEntries[0].docketEntryId,
         docketNumbers: [mockCases[0].docketNumber],
+        clientConnectionId: 'testing',
         subjectCaseDocketNumber: mockCases[0].docketNumber,
       }),
     ).rejects.toThrow('Docket entry is already being served');
@@ -471,6 +480,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await serveCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: docketEntry.docketEntryId,
       docketNumbers: [mockCases[0].docketNumber],
+      clientConnectionId: 'testing',
       subjectCaseDocketNumber: mockCases[0].docketNumber,
     });
 
@@ -508,6 +518,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     await expect(
       serveCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: docketEntry.docketEntryId,
+        clientConnectionId: 'testing',
         docketNumbers: [mockCases[0].docketNumber],
         subjectCaseDocketNumber: mockCases[0].docketNumber,
       }),

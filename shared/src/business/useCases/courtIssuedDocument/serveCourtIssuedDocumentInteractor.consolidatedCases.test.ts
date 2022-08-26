@@ -1,27 +1,23 @@
-const {
+import {
   applicationContext,
   testPdfDoc,
-} = require('../../test/createTestApplicationContext');
-const {
+} from '../../test/createTestApplicationContext';
+import {
   DOCKET_SECTION,
   TRANSCRIPT_EVENT_CODE,
-} = require('../../entities/EntityConstants');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
+} from '../../entities/EntityConstants';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} = require('../../../test/mockCase');
-const {
-  serveCourtIssuedDocumentInteractor,
-} = require('./serveCourtIssuedDocumentInteractor');
-const { Case } = require('../../entities/cases/Case');
-const { cloneDeep } = require('lodash');
-const { docketClerkUser } = require('../../../test/mockUsers');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
-const { v4: uuidv4 } = require('uuid');
+} from '../../../test/mockCase';
+import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
+import { Case } from '../../entities/cases/Case';
+import { cloneDeep } from 'lodash';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
   const mockPdfUrl = 'www.example.com';
