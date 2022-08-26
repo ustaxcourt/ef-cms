@@ -1,6 +1,4 @@
-const {
-  ExternalDocumentInformationFactory,
-} = require('../../entities/externalDocument/ExternalDocumentInformationFactory');
+import { ExternalDocumentInformationFactory } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
 
 /**
  * validateExternalDocumentInformationInteractor
@@ -9,7 +7,7 @@ const {
  * @param {object} providers.documentMetadata the document metadata
  * @returns {object} errors (null if no errors)
  */
-exports.validateExternalDocumentInformationInteractor = ({
+export const validateExternalDocumentInformationInteractor = ({
   documentMetadata,
 }) => {
   const externalDocument = ExternalDocumentInformationFactory(documentMetadata);

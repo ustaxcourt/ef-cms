@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   AUTOMATIC_BLOCKED_REASONS,
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
@@ -10,12 +8,10 @@ const {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  fileExternalDocumentInteractor,
-} = require('./fileExternalDocumentInteractor');
-const { MOCK_USERS } = require('../../../test/mockUsers');
-const { User } = require('../../entities/User');
+} from '../../entities/EntityConstants';
+import { fileExternalDocumentInteractor } from './fileExternalDocumentInteractor';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { User } from '../../entities/User';
 
 describe('fileExternalDocumentInteractor', () => {
   const mockDocketEntryId = applicationContext.getUniqueId();
@@ -258,7 +254,6 @@ describe('fileExternalDocumentInteractor', () => {
     const updatedCase = await fileExternalDocumentInteractor(
       applicationContext,
       {
-        docketEntryIds: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
         documentMetadata: {
           docketNumber: caseRecord.docketNumber,
           documentTitle: 'Simultaneous Memoranda of Law',
@@ -371,7 +366,6 @@ describe('fileExternalDocumentInteractor', () => {
       ]);
 
     await fileExternalDocumentInteractor(applicationContext, {
-      docketEntryIds: [],
       documentMetadata: {
         category: 'Application',
         docketNumber: caseRecord.docketNumber,
@@ -399,7 +393,6 @@ describe('fileExternalDocumentInteractor', () => {
 
   it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {
     await fileExternalDocumentInteractor(applicationContext, {
-      docketNumbersForFiling: ['101-19', '102-19'],
       documentMetadata: {
         docketNumber: caseRecord.docketNumber,
         documentTitle: 'Memorandum in Support',

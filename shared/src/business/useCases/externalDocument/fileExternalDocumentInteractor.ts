@@ -1,20 +1,18 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   CASE_STATUS_TYPES,
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { pick } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { pick } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  *
@@ -23,9 +21,9 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers.documentMetadata the metadata for all the documents
  * @returns {object} the updated case after the documents have been added
  */
-exports.fileExternalDocumentInteractor = async (
-  applicationContext,
-  { documentMetadata },
+export const fileExternalDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  { documentMetadata }: { documentMetadata: any },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;

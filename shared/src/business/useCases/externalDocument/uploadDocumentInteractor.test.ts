@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { ROLES } = require('../../entities/EntityConstants');
-const { uploadDocumentInteractor } = require('./uploadDocumentInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES } from '../../entities/EntityConstants';
+import { uploadDocumentInteractor } from './uploadDocumentInteractor';
 
 describe('uploadDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {
@@ -13,12 +11,11 @@ describe('uploadDocumentInteractor', () => {
 
     await expect(
       uploadDocumentInteractor(applicationContext, {
-        documentFiles: [
-          {
-            primary: 'something',
-          },
-        ],
-        documentMetadata: {},
+        documentFile: {
+          primary: 'something',
+        },
+        key: 'abc',
+        onUploadProgress: () => {},
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -31,13 +28,11 @@ describe('uploadDocumentInteractor', () => {
 
     await expect(
       uploadDocumentInteractor(applicationContext, {
-        documentFiles: {
+        documentFile: {
           primary: 'something',
         },
-        documentMetadata: {},
-        progressFunctions: {
-          primary: 'something',
-        },
+        key: 'abc',
+        onUploadProgress: () => {},
       }),
     ).resolves.not.toThrow();
   });
@@ -50,24 +45,14 @@ describe('uploadDocumentInteractor', () => {
 
     await expect(
       uploadDocumentInteractor(applicationContext, {
-        documentFiles: {
+        documentFile: {
           primary: 'something',
           primarySupporting0: 'something3',
           secondary: 'something2',
           secondarySupporting0: 'something4',
         },
-        documentMetadata: {
-          hasSecondarySupportingDocuments: true,
-          hasSupportingDocuments: true,
-          secondarySupportingDocuments: [{ supportingDocument: 'something' }],
-          supportingDocuments: [{ supportingDocument: 'something' }],
-        },
-        progressFunctions: {
-          primary: 'something',
-          primarySupporting0: 'something3',
-          secondary: 'something2',
-          secondarySupporting0: 'something4',
-        },
+        key: 'abc',
+        onUploadProgress: () => {},
       }),
     ).resolves.not.toThrow();
   });
@@ -80,19 +65,14 @@ describe('uploadDocumentInteractor', () => {
 
     await expect(
       uploadDocumentInteractor(applicationContext, {
-        documentFiles: {
+        documentFile: {
           primary: 'something',
           primarySupporting0: 'something3',
           secondary: 'something2',
           secondarySupporting0: 'something4',
         },
-        documentMetadata: {},
-        progressFunctions: {
-          primary: 'something',
-          primarySupporting0: 'something3',
-          secondary: 'something2',
-          secondarySupporting0: 'something4',
-        },
+        key: 'abc',
+        onUploadProgress: () => {},
       }),
     ).resolves.not.toThrow();
   });

@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * Uploads external documents and calls the interactor to associate them with one or more cases
@@ -16,14 +16,20 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.progressFunctions callback functions for updating the progress indicator during file upload
  * @returns {Promise<Object>} the case details with the uploaded document(s) attached
  */
-exports.uploadExternalDocumentsInteractor = async (
-  applicationContext,
+export const uploadExternalDocumentsInteractor = async (
+  applicationContext: IApplicationContext,
   {
     docketNumbersForFiling,
     documentFiles,
     documentMetadata,
     leadDocketNumber,
     progressFunctions,
+  }: {
+    docketNumbersForFiling: string[];
+    documentFiles: Record<string, any>;
+    documentMetadata: any;
+    leadDocketNumber?: string;
+    progressFunctions: Record<string, any>;
   },
 ) => {
   const user = applicationContext.getCurrentUser();

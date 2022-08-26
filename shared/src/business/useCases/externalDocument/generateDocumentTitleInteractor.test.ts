@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generateDocumentTitleInteractor,
-} = require('./generateDocumentTitleInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateDocumentTitleInteractor } from './generateDocumentTitleInteractor';
 
 describe('generateDocumentTitleInteractor', () => {
   it('generates a document title from passed metadata', async () => {

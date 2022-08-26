@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  *
@@ -12,9 +12,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} object.documentFile file object to upload to S3
  * @returns {string} uploaded docket entry id
  */
-exports.uploadOrderDocumentInteractor = async (
-  applicationContext,
-  { docketEntryIdToOverwrite, documentFile },
+export const uploadOrderDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketEntryIdToOverwrite,
+    documentFile,
+  }: { docketEntryIdToOverwrite: number; documentFile: any },
 ) => {
   const user = applicationContext.getCurrentUser();
 

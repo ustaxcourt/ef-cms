@@ -1,6 +1,4 @@
-const {
-  ExternalDocumentFactory,
-} = require('../../entities/externalDocument/ExternalDocumentFactory');
+import { ExternalDocumentFactory } from '../../entities/externalDocument/ExternalDocumentFactory';
 
 /**
  * validateExternalDocumentInteractor
@@ -9,7 +7,7 @@ const {
  * @param {object} providers.documentMetadata the document metadata
  * @returns {object} errors (null if no errors)
  */
-exports.validateExternalDocumentInteractor = ({ documentMetadata }) => {
+export const validateExternalDocumentInteractor = ({ documentMetadata }) => {
   const externalDocument = ExternalDocumentFactory(documentMetadata);
 
   return externalDocument.getFormattedValidationErrors();
