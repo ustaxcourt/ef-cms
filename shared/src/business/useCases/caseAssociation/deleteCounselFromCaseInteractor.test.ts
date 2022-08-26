@@ -72,7 +72,7 @@ describe('deleteCounselFromCaseInteractor', () => {
       .getUserById.mockImplementation(({ userId }) => {
         return mockPrivatePractitioners
           .concat(mockIrsPractitioners)
-          .concat(mockPetitioners)
+          .concat(mockPetitioners as any)
           .find(user => user.userId === userId);
       });
 
