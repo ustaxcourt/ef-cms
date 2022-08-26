@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
-exports.uploadDocumentInteractor = async (
+export const uploadDocumentInteractor = async (
   applicationContext,
   { documentFile, key, onUploadProgress },
 ) => {

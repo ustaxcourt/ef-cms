@@ -1,17 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  fileExternalDocumentForConsolidatedInteractor,
-} = require('./fileExternalDocumentForConsolidatedInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase.js');
+} from '../../entities/EntityConstants';
+import { fileExternalDocumentForConsolidatedInteractor } from './fileExternalDocumentForConsolidatedInteractor';
+import { MOCK_CASE } from '../../../test/mockCase.js';
 
 describe('fileExternalDocumentForConsolidatedInteractor', () => {
   let caseRecords;
@@ -145,7 +141,7 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
     await expect(
       fileExternalDocumentForConsolidatedInteractor(applicationContext, {
         documentMetadata: {},
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -174,15 +170,14 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
   // eslint-disable-next-line
   it.skip('should aggregate the filing parties for the docket record entry', async () => {
     await fileExternalDocumentForConsolidatedInteractor(applicationContext, {
-      docketEntryIds: [docketEntryId0],
       documentMetadata: {
         documentTitle: 'Memorandum in Support',
         documentType: 'Memorandum in Support',
         eventCode: 'MISP',
         filedBy: 'Test Petitioner',
       },
-      filingPartyNames: ['Guy Fieri', 'Enzo Ferrari'],
       leadDocketNumber: docketNumber0,
+      docketNumbersForFiling: ['101-20'],
     });
   });
 

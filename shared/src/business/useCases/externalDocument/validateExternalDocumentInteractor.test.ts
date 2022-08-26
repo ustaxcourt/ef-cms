@@ -1,9 +1,5 @@
-const {
-  validateExternalDocumentInteractor,
-} = require('./validateExternalDocumentInteractor');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('../../entities/externalDocument/ExternalDocumentInformationFactory');
+import { validateExternalDocumentInteractor } from './validateExternalDocumentInteractor';
+import { VALIDATION_ERROR_MESSAGES } from '../../entities/externalDocument/ExternalDocumentInformationFactory';
 
 describe('validateExternalDocumentInteractor', () => {
   it('returns the expected errors object on an empty message', () => {

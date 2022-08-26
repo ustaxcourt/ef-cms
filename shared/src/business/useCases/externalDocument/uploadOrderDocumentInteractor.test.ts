@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  uploadOrderDocumentInteractor,
-} = require('./uploadOrderDocumentInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { uploadOrderDocumentInteractor } from './uploadOrderDocumentInteractor';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
 describe('uploadOrderDocumentInteractor', () => {
   it('throws an error when an unauthorized user tries to access the use case', async () => {

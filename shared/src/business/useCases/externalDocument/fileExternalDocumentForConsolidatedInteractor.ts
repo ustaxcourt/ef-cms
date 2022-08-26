@@ -1,19 +1,17 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { pick } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { pick } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  *
@@ -24,9 +22,17 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.leadDocketNumber the lead docket number in the consolidated cases
  * @returns {Promise<*>} an array of the updated consolidated cases
  */
-exports.fileExternalDocumentForConsolidatedInteractor = async (
-  applicationContext,
-  { docketNumbersForFiling, documentMetadata, leadDocketNumber },
+export const fileExternalDocumentForConsolidatedInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumbersForFiling,
+    documentMetadata,
+    leadDocketNumber,
+  }: {
+    docketNumbersForFiling: string[];
+    documentMetadata: any;
+    leadDocketNumber: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

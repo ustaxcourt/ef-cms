@@ -1,7 +1,5 @@
-const {
-  ExternalDocumentFactory,
-} = require('../../entities/externalDocument/ExternalDocumentFactory');
-const { cloneDeep } = require('lodash');
+import { ExternalDocumentFactory } from '../../entities/externalDocument/ExternalDocumentFactory';
+import { cloneDeep } from 'lodash';
 
 /**
  * generateDocumentTitleInteractor
@@ -11,8 +9,8 @@ const { cloneDeep } = require('lodash');
  * @param {object} providers.documentMetadata the document metadata
  * @returns {string} document title
  */
-exports.generateDocumentTitleInteractor = (
-  applicationContext,
+export const generateDocumentTitleInteractor = (
+  applicationContext: IApplicationContext,
   { documentMetadata },
 ) => {
   documentMetadata = cloneDeep(documentMetadata);
