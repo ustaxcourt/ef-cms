@@ -1,13 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  setTrialSessionAsSwingSessionInteractor,
-} = require('./setTrialSessionAsSwingSessionInteractor');
+} from '../../entities/EntityConstants';
+import { setTrialSessionAsSwingSessionInteractor } from './setTrialSessionAsSwingSessionInteractor';
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,

@@ -1,18 +1,16 @@
-const {
+import {
   CASE_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const {
-  TrialSessionWorkingCopy,
-} = require('../../entities/trialSessions/TrialSessionWorkingCopy');
-const { Case } = require('../../entities/cases/Case');
-const { get } = require('lodash');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
+import { Case } from '../../entities/cases/Case';
+import { get } from 'lodash';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 const updateAssociatedCaseAndSetNoticeOfChange = async ({
   applicationContext,
@@ -142,7 +140,7 @@ const createWorkingCopyForNewUserOnSession = async ({
  * @param {object} providers the providers object
  * @param {object} providers.trialSession the trial session data
  */
-exports.updateTrialSessionInteractor = async (
+export const updateTrialSessionInteractor = async (
   applicationContext,
   { trialSession },
 ) => {

@@ -1,16 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  setNoticesForCalendaredTrialSessionInteractor,
-} = require('./setNoticesForCalendaredTrialSessionInteractor');
-const {
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
-const { testPdfDoc } = require('../../test/getFakeFile');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { setNoticesForCalendaredTrialSessionInteractor } from './setNoticesForCalendaredTrialSessionInteractor';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { PARTY_TYPES, ROLES } from '../../entities/EntityConstants';
+import { testPdfDoc } from '../../test/getFakeFile';
+import { User } from '../../entities/User';
 
 describe('setNoticesForCalendaredTrialSessionInteractor', () => {
   const mockPdfUrl = 'www.example.com';
@@ -81,10 +75,12 @@ describe('setNoticesForCalendaredTrialSessionInteractor', () => {
       `A duplicate event was recieved for setting the notices for trial session: ${trialSessionId}`,
     );
 
-    jest.spyOn(global, 'setInterval').mockImplementation(async cb => {
-      await cb();
-      await cb();
-    });
+    jest
+      .spyOn(global, 'setInterval')
+      .mockImplementation((cb): ReturnType<typeof setTimeout> => {
+        (cb() as any).then(cb);
+        return undefined;
+      });
   });
 
   it('should return an unauthorized error if the user does not have the TRIAL_SESSIONS permission', async () => {

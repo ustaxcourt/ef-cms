@@ -1,12 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateTrialSessionWorkingCopyInteractor,
-} = require('./updateTrialSessionWorkingCopyInteractor');
-const { omit } = require('lodash');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateTrialSessionWorkingCopyInteractor } from './updateTrialSessionWorkingCopyInteractor';
+import { omit } from 'lodash';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
 let user;
 
@@ -41,7 +37,8 @@ describe('Update trial session working copy', () => {
 
     await expect(
       updateTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
+        trialSessionWorkingCopyToUpdate:
+          MOCK_WORKING_COPY as TTrialSessionWorkingCopyData,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -60,7 +57,8 @@ describe('Update trial session working copy', () => {
 
     await expect(
       updateTrialSessionWorkingCopyInteractor(applicationContext, {
-        trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
+        trialSessionWorkingCopyToUpdate:
+          MOCK_WORKING_COPY as TTrialSessionWorkingCopyData,
       }),
     ).rejects.toThrow('The TrialSessionWorkingCopy entity was invalid');
   });
@@ -78,7 +76,8 @@ describe('Update trial session working copy', () => {
     const result = await updateTrialSessionWorkingCopyInteractor(
       applicationContext,
       {
-        trialSessionWorkingCopyToUpdate: MOCK_WORKING_COPY,
+        trialSessionWorkingCopyToUpdate:
+          MOCK_WORKING_COPY as TTrialSessionWorkingCopyData,
       },
     );
     expect(result).toMatchObject(MOCK_WORKING_COPY);

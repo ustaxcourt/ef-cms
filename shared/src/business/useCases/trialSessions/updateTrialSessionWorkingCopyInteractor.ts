@@ -1,11 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const {
-  TrialSessionWorkingCopy,
-} = require('../../entities/trialSessions/TrialSessionWorkingCopy');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * updateTrialSessionWorkingCopyInteractor
@@ -15,9 +13,11 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.trialSessionWorkingCopyToUpdate the trial session working copy data to update
  * @returns {TrialSessionWorkingCopy} the updated trial session working copy returned from persistence
  */
-exports.updateTrialSessionWorkingCopyInteractor = async (
-  applicationContext,
-  { trialSessionWorkingCopyToUpdate },
+export const updateTrialSessionWorkingCopyInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    trialSessionWorkingCopyToUpdate,
+  }: { trialSessionWorkingCopyToUpdate: TTrialSessionWorkingCopyData },
 ) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)) {

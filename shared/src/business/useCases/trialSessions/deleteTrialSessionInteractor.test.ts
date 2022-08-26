@@ -1,13 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  deleteTrialSessionInteractor,
-} = require('./deleteTrialSessionInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
-const { ROLES } = require('../../entities/EntityConstants');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { deleteTrialSessionInteractor } from './deleteTrialSessionInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { ROLES } from '../../entities/EntityConstants';
+import { User } from '../../entities/User';
 
 describe('deleteTrialSessionInteractor', () => {
   let user;

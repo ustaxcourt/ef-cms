@@ -1,13 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  generateNoticeOfChangeToRemoteProceedingInteractor,
-} = require('./generateNoticeOfChangeToRemoteProceedingInteractor');
+} from '../../entities/EntityConstants';
+import { generateNoticeOfChangeToRemoteProceedingInteractor } from './generateNoticeOfChangeToRemoteProceedingInteractor';
 
 describe('generateNoticeOfChangeToRemoteProceedingInteractor', () => {
   const TEST_JUDGE = {

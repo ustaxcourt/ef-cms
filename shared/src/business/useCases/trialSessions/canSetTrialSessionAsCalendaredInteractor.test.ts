@@ -1,13 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  canSetTrialSessionAsCalendaredInteractor,
-} = require('./canSetTrialSessionAsCalendaredInteractor');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { canSetTrialSessionAsCalendaredInteractor } from './canSetTrialSessionAsCalendaredInteractor';
+import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 
 const MOCK_TRIAL = {
   maxCases: 100,
@@ -34,7 +30,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
 
     expect(() =>
       canSetTrialSessionAsCalendaredInteractor(applicationContext, {
-        trialSession: MOCK_TRIAL,
+        trialSession: MOCK_TRIAL as TTrialSessionData,
       }),
     ).toThrow('Unauthorized');
   });
@@ -50,7 +46,7 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
     const result = canSetTrialSessionAsCalendaredInteractor(
       applicationContext,
       {
-        trialSession: MOCK_TRIAL,
+        trialSession: MOCK_TRIAL as TTrialSessionData,
       },
     );
 
@@ -81,14 +77,13 @@ describe('canSetTrialSessionAsCalendaredInteractor', () => {
       {
         trialSession: {
           ...MOCK_TRIAL,
-
           chambersPhoneNumber: '1234567890',
           joinPhoneNumber: '099987654321',
           judge: { name: 'Bootsy Collins' },
           meetingId: '4',
           password: '42',
           proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.remote,
-        },
+        } as TTrialSessionData,
       },
     );
 

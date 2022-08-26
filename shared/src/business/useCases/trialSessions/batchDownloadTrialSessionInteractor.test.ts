@@ -1,13 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   batchDownloadTrialSessionInteractor,
   generateValidDocketEntryFilename,
-} = require('./batchDownloadTrialSessionInteractor');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+} from './batchDownloadTrialSessionInteractor';
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('batchDownloadTrialSessionInteractor', () => {
   let user;

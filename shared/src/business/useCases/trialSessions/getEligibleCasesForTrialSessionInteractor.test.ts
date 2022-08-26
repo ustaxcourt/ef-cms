@@ -1,20 +1,16 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getEligibleCasesForTrialSessionInteractor,
-} = require('./getEligibleCasesForTrialSessionInteractor');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getEligibleCasesForTrialSessionInteractor } from './getEligibleCasesForTrialSessionInteractor';
+import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-} = require('../../../test/mockCase');
-const {
+} from '../../../test/mockCase';
+import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { cloneDeep } = require('lodash');
-const { User } = require('../../entities/User');
+} from '../../entities/EntityConstants';
+import { cloneDeep } from 'lodash';
+import { User } from '../../entities/User';
 
 describe('getEligibleCasesForTrialSessionInteractor', () => {
   let mockCurrentUser;

@@ -1,11 +1,12 @@
-const {
+import {
   createISODateString,
   formatDateString,
   FORMATS,
-} = require('../../utilities/DateHandler');
-const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
-const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
+} from '../../utilities/DateHandler';
+import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
+
 /**
  * generateNoticeOfChangeToRemoteProceedingInteractor
  *
@@ -15,9 +16,12 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
  * @param {string} providers.trialSessionInformation the trial session information
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateNoticeOfChangeToRemoteProceedingInteractor = async (
-  applicationContext,
-  { docketNumber, trialSessionInformation },
+export const generateNoticeOfChangeToRemoteProceedingInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    trialSessionInformation,
+  }: { docketNumber; trialSessionInformation: any },
 ) => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,

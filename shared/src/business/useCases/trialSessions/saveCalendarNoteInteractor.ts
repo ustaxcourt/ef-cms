@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * saveCalendarNoteInteractor
@@ -15,9 +15,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the id of the trial session containing the case with the note
  * @returns {object} trial session entity
  */
-exports.saveCalendarNoteInteractor = async (
-  applicationContext,
-  { calendarNote, docketNumber, trialSessionId },
+export const saveCalendarNoteInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    calendarNote,
+    docketNumber,
+    trialSessionId,
+  }: { calendarNote: string; docketNumber: string; trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.ADD_CASE_TO_TRIAL_SESSION)) {

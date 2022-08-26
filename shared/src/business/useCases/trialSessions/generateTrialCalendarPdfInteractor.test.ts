@@ -1,13 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   formatCases,
   generateTrialCalendarPdfInteractor,
   getPractitionerName,
-} = require('./generateTrialCalendarPdfInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { US_STATES } = require('../../entities/EntityConstants');
+} from './generateTrialCalendarPdfInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { US_STATES } from '../../entities/EntityConstants';
 
 describe('generateTrialCalendarPdfInteractor', () => {
   const mockPdfUrl = { url: 'www.example.com' };
@@ -78,9 +76,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
   it('should find the cases for a trial session successfully', async () => {
     await expect(
       generateTrialCalendarPdfInteractor(applicationContext, {
-        content: {
-          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).resolves.not.toThrow();
 
@@ -163,9 +159,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
     const result = await generateTrialCalendarPdfInteractor(
       applicationContext,
       {
-        content: {
-          trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-        },
+        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       },
     );
 
@@ -200,9 +194,7 @@ describe('generateTrialCalendarPdfInteractor', () => {
       });
 
     await generateTrialCalendarPdfInteractor(applicationContext, {
-      content: {
-        trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      },
+      trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
     const caseWithCalendarNotes = applicationContext

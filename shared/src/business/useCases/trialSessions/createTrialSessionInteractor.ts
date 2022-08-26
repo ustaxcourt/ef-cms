@@ -1,12 +1,12 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const {
+} from '../../../authorization/authorizationClientService';
+import {
   isStandaloneRemoteSession,
   TrialSession,
-} = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * createTrialSessionInteractor
@@ -16,9 +16,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.trialSession the trial session data
  * @returns {object} the created trial session
  */
-exports.createTrialSessionInteractor = async (
-  applicationContext,
-  { trialSession },
+export const createTrialSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: TTrialSessionData },
 ) => {
   const user = applicationContext.getCurrentUser();
 

@@ -1,13 +1,11 @@
-const {
+import {
   createISODateString,
   formatDateString,
   FORMATS,
-} = require('../../utilities/DateHandler');
-const {
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
+} from '../../utilities/DateHandler';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getJudgeWithTitle } from '../../utilities/getJudgeWithTitle';
 
 /**
  * generateNoticeOfTrialIssuedInteractor
@@ -18,9 +16,12 @@ const { getJudgeWithTitle } = require('../../utilities/getJudgeWithTitle');
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateNoticeOfTrialIssuedInteractor = async (
-  applicationContext,
-  { docketNumber, trialSessionId },
+export const generateNoticeOfTrialIssuedInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    trialSessionId,
+  }: { docketNumber: string; trialSessionId: string },
 ) => {
   const trialSession = await applicationContext
     .getPersistenceGateway()

@@ -1,27 +1,21 @@
-const {
+import {
   applicationContext,
   fakeData,
   testPdfDoc,
-} = require('../../test/createTestApplicationContext');
-const {
-  combineTwoPdfs,
-} = require('../../utilities/documentGenerators/combineTwoPdfs');
-const {
-  generateNoticesForCaseTrialSessionCalendarInteractor,
-} = require('./generateNoticesForCaseTrialSessionCalendarInteractor');
-const {
+} from '../../test/createTestApplicationContext';
+import { combineTwoPdfs } from '../../utilities/documentGenerators/combineTwoPdfs';
+import { generateNoticesForCaseTrialSessionCalendarInteractor } from './generateNoticesForCaseTrialSessionCalendarInteractor';
+import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-} = require('../../../test/mockCase');
-const {
+} from '../../../test/mockCase';
+import {
   SERVICE_INDICATOR_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  shouldAppendClinicLetter,
-} = require('../../utilities/shouldAppendClinicLetter');
-const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
-const { PDFDocument } = require('pdf-lib');
+} from '../../entities/EntityConstants';
+import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
+import { MOCK_TRIAL_REGULAR } from '../../../test/mockTrial';
+import { PDFDocument } from 'pdf-lib';
 
 jest.mock('../../utilities/shouldAppendClinicLetter');
 

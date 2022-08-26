@@ -1,18 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  validateTrialSessionInteractor,
-} = require('./validateTrialSessionInteractor');
-const { formatNow, FORMATS } = require('../../utilities/DateHandler');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { TRIAL_SESSION_PROCEEDING_TYPES } from '../../entities/EntityConstants';
+import { validateTrialSessionInteractor } from './validateTrialSessionInteractor';
+import { formatNow, FORMATS } from '../../utilities/DateHandler';
 
 describe('validateTrialSessionInteractor', () => {
   it('returns a list of errors when the trial session is invalid', () => {
     const errors = validateTrialSessionInteractor(applicationContext, {
-      trialSession: {},
+      trialSession: {} as TTrialSessionData,
     });
 
     expect(Object.keys(errors).length).toBeGreaterThan(0);
@@ -31,7 +25,7 @@ describe('validateTrialSessionInteractor', () => {
     };
 
     const errors = validateTrialSessionInteractor(applicationContext, {
-      trialSession: { ...MOCK_TRIAL },
+      trialSession: { ...MOCK_TRIAL } as TTrialSessionData,
     });
 
     expect(errors).toEqual(null);

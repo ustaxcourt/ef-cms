@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * removeCaseFromTrialInteractor
@@ -16,9 +16,21 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the id of the trial session containing the case to set to removedFromTrial
  * @returns {Promise} the promise of the getCalendaredCasesForTrialSession call
  */
-exports.removeCaseFromTrialInteractor = async (
-  applicationContext,
-  { associatedJudge, caseStatus, disposition, docketNumber, trialSessionId },
+export const removeCaseFromTrialInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    associatedJudge,
+    caseStatus,
+    disposition,
+    docketNumber,
+    trialSessionId,
+  }: {
+    associatedJudge: string;
+    caseStatus: string;
+    disposition: string;
+    docketNumber: string;
+    trialSessionId: string;
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {

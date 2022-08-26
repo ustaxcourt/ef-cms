@@ -1,13 +1,13 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { capitalize } = require('lodash');
-const { invert } = require('lodash');
-const { TRIAL_CITIES, US_STATES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { capitalize } from 'lodash';
+import { invert } from 'lodash';
+import { TRIAL_CITIES, US_STATES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
-const getPreviousTerm = (currentTerm, currentYear) => {
+export const getPreviousTerm = (currentTerm, currentYear) => {
   const terms = [
     `fall ${+currentYear - 1}`,
     `winter ${currentYear}`,
@@ -26,7 +26,7 @@ const getPreviousTerm = (currentTerm, currentYear) => {
   };
 };
 
-const getTrialSessionPlanningReportData = async ({
+export const getTrialSessionPlanningReportData = async ({
   applicationContext,
   term,
   year,
@@ -138,9 +138,9 @@ const getTrialSessionPlanningReportData = async ({
  * @param {object} providers the providers object
  * @returns {Promise} the promise of the runTrialSessionPlanningReportInteractor call
  */
-exports.runTrialSessionPlanningReportInteractor = async (
-  applicationContext,
-  { term, year },
+export const runTrialSessionPlanningReportInteractor = async (
+  applicationContext: IApplicationContext,
+  { term, year }: { term: string; year: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -171,6 +171,3 @@ exports.runTrialSessionPlanningReportInteractor = async (
     useTempBucket: true,
   });
 };
-
-exports.getPreviousTerm = getPreviousTerm;
-exports.getTrialSessionPlanningReportData = getTrialSessionPlanningReportData;

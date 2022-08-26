@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * addCaseToTrialSessionInteractor
@@ -16,9 +16,17 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise} the promise of the addCaseToTrialSessionInteractor call
  */
-exports.addCaseToTrialSessionInteractor = async (
-  applicationContext,
-  { calendarNotes, docketNumber, trialSessionId },
+export const addCaseToTrialSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    calendarNotes,
+    docketNumber,
+    trialSessionId,
+  }: {
+    calendarNotes: string;
+    docketNumber: string;
+    trialSessionId: string;
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
 

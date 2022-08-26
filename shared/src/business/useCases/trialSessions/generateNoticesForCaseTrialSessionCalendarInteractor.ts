@@ -1,19 +1,13 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
-  copyPagesAndAppendToTargetPdf,
-} = require('../../utilities/copyPagesAndAppendToTargetPdf');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { copyPagesAndAppendToTargetPdf } from '../../utilities/copyPagesAndAppendToTargetPdf';
+import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  shouldAppendClinicLetter,
-} = require('../../utilities/shouldAppendClinicLetter');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+} from '../../entities/EntityConstants';
+import { shouldAppendClinicLetter } from '../../utilities/shouldAppendClinicLetter';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 
 const removeAppendedClinicLetter = pdfDocumentData => {
   const totalPages = pdfDocumentData.getPageCount();
@@ -326,9 +320,19 @@ const setNoticeForCase = async ({
   }
 };
 
-exports.generateNoticesForCaseTrialSessionCalendarInteractor = async (
-  applicationContext,
-  { docketNumber, jobId, trialSession, userId },
+export const generateNoticesForCaseTrialSessionCalendarInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    jobId,
+    trialSession,
+    userId,
+  }: {
+    docketNumber: string;
+    jobId: string;
+    trialSession: TTrialSessionData;
+    userId: string;
+  },
 ) => {
   const jobStatus = await applicationContext
     .getPersistenceGateway()

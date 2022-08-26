@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * deleteTrialSessionInteractor
@@ -14,9 +14,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the id of the trial session
  * @returns {Promise} the promise of the deleteTrialSessionInteractor call
  */
-exports.deleteTrialSessionInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const deleteTrialSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 
