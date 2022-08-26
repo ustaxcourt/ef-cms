@@ -1,0 +1,11 @@
+import { state } from 'cerebral';
+
+/**
+ * sets the procedure type filter to 'All'
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.store the cerebral store
+ */
+export const setProcedureTypeToAllAction = ({ store }) => {
+  store.set(state.form.procedureType, 'All');
+};
