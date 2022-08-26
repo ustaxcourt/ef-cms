@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { processEntries } = require('./processEntries');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { processEntries } from './processEntries';
 
 describe('processStreamUtilities', () => {
   const mockCaseRecord = {

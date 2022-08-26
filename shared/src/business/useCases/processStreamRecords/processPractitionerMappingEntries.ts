@@ -1,9 +1,12 @@
-const AWS = require('aws-sdk');
-const { flattenDeep } = require('lodash');
+import AWS from 'aws-sdk';
+import { flattenDeep } from 'lodash';
 
-exports.processPractitionerMappingEntries = async ({
+export const processPractitionerMappingEntries = async ({
   applicationContext,
   practitionerMappingRecords,
+}: {
+  applicationContext: IApplicationContext;
+  practitionerMappingRecords: any[];
 }) => {
   if (!practitionerMappingRecords.length) return;
 

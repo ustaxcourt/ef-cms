@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { processRemoveEntries } = require('./processRemoveEntries');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { processRemoveEntries } from './processRemoveEntries';
 
 describe('processRemoveEntries', () => {
   const mockRemoveRecord = {

@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  processPractitionerMappingEntries,
-} = require('./processPractitionerMappingEntries');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { processPractitionerMappingEntries } from './processPractitionerMappingEntries';
 
 describe('processPractitionerMappingEntries', () => {
   const mockCaseRecord = {

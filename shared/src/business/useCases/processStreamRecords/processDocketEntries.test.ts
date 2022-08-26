@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { processDocketEntries } = require('./processDocketEntries');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { processDocketEntries } from './processDocketEntries';
 
 describe('processDocketEntries', () => {
   const mockUnsearchableDocketEntryRecord = {

@@ -1,6 +1,6 @@
 const { partition } = require('lodash');
 
-const partitionRecords = records => {
+export const partitionRecords = records => {
   const [practitionerMappingRecords, nonPractitionerMappingRecords] = partition(
     records,
     record =>
@@ -55,7 +55,7 @@ const partitionRecords = records => {
 const practitionerEntityTypes = ['PrivatePractitioner', 'IrsPractitioner'];
 const practitionerSortKeys = ['privatePractitioner', 'irsPractitioner'];
 
-const isPractitionerMappingRemoveRecord = record => {
+export const isPractitionerMappingRemoveRecord = record => {
   const oldImage = record.dynamodb.OldImage;
   if (oldImage) {
     const trimmedSk = oldImage.sk.S.split('|')[0];
@@ -72,7 +72,7 @@ const isPractitionerMappingRemoveRecord = record => {
   return false;
 };
 
-const isPractitionerMappingInsertModifyRecord = record => {
+export const isPractitionerMappingInsertModifyRecord = record => {
   const newImage = record.dynamodb.NewImage;
 
   if (newImage) {
@@ -88,8 +88,3 @@ const isPractitionerMappingInsertModifyRecord = record => {
 
   return false;
 };
-
-exports.partitionRecords = partitionRecords;
-exports.isPractitionerMappingRemoveRecord = isPractitionerMappingRemoveRecord;
-exports.isPractitionerMappingInsertModifyRecord =
-  isPractitionerMappingInsertModifyRecord;

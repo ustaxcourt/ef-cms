@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { processEntries } = require('./processEntries');
-const { processOtherEntries } = require('./processOtherEntries');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { processEntries } from './processEntries';
+import { processOtherEntries } from './processOtherEntries';
 jest.mock('./processEntries');
 
 describe('processOtherEntries', () => {
@@ -19,7 +17,7 @@ describe('processOtherEntries', () => {
       otherRecords: [mockOtherRecord],
     });
 
-    expect(processEntries.mock.calls[0][0]).toMatchObject({
+    expect((processEntries as jest.Mock).mock.calls[0][0]).toMatchObject({
       recordType: 'otherRecords',
       records: [mockOtherRecord],
     });

@@ -1,14 +1,17 @@
-const AWS = require('aws-sdk');
-const { flattenDeep } = require('lodash');
+import AWS from 'aws-sdk';
+import { flattenDeep } from 'lodash';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.
  *
  * @param {array} caseEntityRecords all of the event stream records associated with case entities
  */
-exports.processCaseEntries = async ({
+export const processCaseEntries = async ({
   applicationContext,
   caseEntityRecords,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntityRecords: any[];
 }) => {
   if (!caseEntityRecords.length) return;
 
