@@ -1,20 +1,16 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  updateCounselOnCaseInteractor,
-} = require('./updateCounselOnCaseInteractor');
-const { IrsPractitioner } = require('../../entities/IrsPractitioner');
-const { MOCK_CASE } = require('../../../test/mockCase.js');
-const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
+} from '../../entities/EntityConstants';
+import { updateCounselOnCaseInteractor } from './updateCounselOnCaseInteractor';
+import { IrsPractitioner } from '../../entities/IrsPractitioner';
+import { MOCK_CASE } from '../../../test/mockCase.js';
+import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
 
 describe('updateCounselOnCaseInteractor', () => {
   const mockPrivatePractitioners = [

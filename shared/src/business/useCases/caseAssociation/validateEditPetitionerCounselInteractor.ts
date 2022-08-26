@@ -1,6 +1,4 @@
-const {
-  EditPetitionerCounselFactory,
-} = require('../../entities/caseAssociation/EditPetitionerCounselFactory');
+import { EditPetitionerCounselFactory } from '../../entities/caseAssociation/EditPetitionerCounselFactory';
 
 /**
  * validateEditPetitionerCounselInteractor
@@ -10,7 +8,11 @@ const {
  * @param {object} providers.practitioner the petitioner counsel to validate
  * @returns {object} errors
  */
-exports.validateEditPetitionerCounselInteractor = ({ practitioner }) => {
+export const validateEditPetitionerCounselInteractor = ({
+  practitioner,
+}: {
+  practitioner: any;
+}) => {
   return EditPetitionerCounselFactory(
     practitioner,
   ).getFormattedValidationErrors();

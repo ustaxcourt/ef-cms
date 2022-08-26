@@ -1,6 +1,4 @@
-const {
-  AddIrsPractitioner,
-} = require('../../entities/caseAssociation/AddIrsPractitioner');
+import { AddIrsPractitioner } from '../../entities/caseAssociation/AddIrsPractitioner';
 
 /**
  * validateAddIrsPractitionerInteractor
@@ -10,9 +8,9 @@ const {
  * @param {object} providers.counsel the practitioner to validate
  * @returns {object} errors
  */
-exports.validateAddIrsPractitionerInteractor = (
-  applicationContext,
-  { counsel },
+export const validateAddIrsPractitionerInteractor = (
+  applicationContext: IApplicationContext,
+  { counsel }: { counsel: any },
 ) => {
   const errors = new AddIrsPractitioner(counsel, {
     applicationContext,

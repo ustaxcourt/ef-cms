@@ -1,13 +1,7 @@
-const {
-  AddIrsPractitioner,
-} = require('../../entities/caseAssociation/AddIrsPractitioner');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  validateAddIrsPractitionerInteractor,
-} = require('./validateAddIrsPractitionerInteractor');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
+import { AddIrsPractitioner } from '../../entities/caseAssociation/AddIrsPractitioner';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateAddIrsPractitionerInteractor } from './validateAddIrsPractitionerInteractor';
+import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 
 describe('validateAddIrsPractitionerInteractor', () => {
   it('returns the expected errors object on an empty add irsPractitioner', () => {
