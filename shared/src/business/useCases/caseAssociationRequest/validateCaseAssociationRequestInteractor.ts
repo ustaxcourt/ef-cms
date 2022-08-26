@@ -1,6 +1,4 @@
-const {
-  CaseAssociationRequestFactory,
-} = require('../../entities/CaseAssociationRequestFactory');
+import { CaseAssociationRequestFactory } from '../../entities/CaseAssociationRequestFactory';
 
 /**
  * validateCaseAssociationRequestInteractor
@@ -9,7 +7,7 @@ const {
  * @param {string} providers.caseAssociationRequest the case association request data
  * @returns {object} errors if there are any, or null
  */
-exports.validateCaseAssociationRequestInteractor = ({
+export const validateCaseAssociationRequestInteractor = ({
   caseAssociationRequest,
 }) => {
   const errors = CaseAssociationRequestFactory(

@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getCaseDeadlinesForCaseInteractor,
-} = require('./getCaseDeadlinesForCaseInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getCaseDeadlinesForCaseInteractor } from './getCaseDeadlinesForCaseInteractor';
+import { ROLES } from '../../entities/EntityConstants';
+import { User } from '../../entities/User';
 
 describe('getCaseDeadlinesForCaseInteractor', () => {
   const mockCaseDeadline = {

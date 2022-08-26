@@ -1,12 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  submitCaseAssociationRequestInteractor,
-} = require('./submitCaseAssociationRequestInteractor');
-const { COUNTRY_TYPES, ROLES } = require('../../entities/EntityConstants');
-const { getContactPrimary } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase.js');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { submitCaseAssociationRequestInteractor } from './submitCaseAssociationRequestInteractor';
+import { COUNTRY_TYPES, ROLES } from '../../entities/EntityConstants';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase.js';
 
 describe('submitCaseAssociationRequest', () => {
   const mockContactId = getContactPrimary(MOCK_CASE).contactId;
@@ -36,7 +32,7 @@ describe('submitCaseAssociationRequest', () => {
     await expect(
       submitCaseAssociationRequestInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        filers: [],
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -70,8 +66,7 @@ describe('submitCaseAssociationRequest', () => {
 
     await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      representing: [mockContactId],
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      filers: [],
     });
 
     expect(
@@ -103,7 +98,6 @@ describe('submitCaseAssociationRequest', () => {
     await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       filers: [mockContactId],
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
     expect(
@@ -143,7 +137,7 @@ describe('submitCaseAssociationRequest', () => {
 
     await submitCaseAssociationRequestInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      filers: ['c54ba5a9-b37b-479d-9201-067ec6e335bb'],
     });
 
     expect(

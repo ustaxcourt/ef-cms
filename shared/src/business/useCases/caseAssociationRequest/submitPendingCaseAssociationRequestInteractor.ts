@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * submitPendingCaseAssociationRequestInteractor
@@ -12,9 +12,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Promise<*>} the promise of the pending case association request
  */
-exports.submitPendingCaseAssociationRequestInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const submitPendingCaseAssociationRequestInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

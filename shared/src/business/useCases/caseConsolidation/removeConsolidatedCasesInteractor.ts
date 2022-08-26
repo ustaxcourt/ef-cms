@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 /**
  * removeConsolidatedCasesInteractor
@@ -14,9 +14,12 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {Array} providers.docketNumbersToRemove the docket numbers of the cases to remove from consolidation
  * @returns {object} the updated case data
  */
-exports.removeConsolidatedCasesInteractor = async (
-  applicationContext,
-  { docketNumber, docketNumbersToRemove },
+export const removeConsolidatedCasesInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    docketNumbersToRemove,
+  }: { docketNumber: string; docketNumbersToRemove: string[] },
 ) => {
   const user = applicationContext.getCurrentUser();
 

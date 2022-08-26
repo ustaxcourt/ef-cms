@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 /**
  * addConsolidatedCaseInteractor
@@ -14,9 +14,12 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.docketNumberToConsolidateWith the docket number of the case with which to consolidate
  * @returns {object} the updated case data
  */
-exports.addConsolidatedCaseInteractor = async (
-  applicationContext,
-  { docketNumber, docketNumberToConsolidateWith },
+export const addConsolidatedCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    docketNumberToConsolidateWith,
+  }: { docketNumber: string; docketNumberToConsolidateWith: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

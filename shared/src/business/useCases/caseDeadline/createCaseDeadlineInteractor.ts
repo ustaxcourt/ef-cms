@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { CaseDeadline } = require('../../entities/CaseDeadline');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { CaseDeadline } from '../../entities/CaseDeadline';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * createCaseDeadlineInteractor
@@ -14,45 +14,47 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.caseDeadline the case deadline data
  * @returns {CaseDeadline} the created case deadline
  */
-export const createCaseDeadlineInteractor: ICreateCaseDeadlineInteractor =
-  async (applicationContext, { caseDeadline }) => {
-    const user = applicationContext.getCurrentUser();
+export const createCaseDeadlineInteractor = async (
+  applicationContext: IApplicationContext,
+  { caseDeadline }: { caseDeadline: TCaseDeadline },
+) => {
+  const user = applicationContext.getCurrentUser();
 
-    if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
-      throw new UnauthorizedError('Unauthorized for create case deadline');
-    }
+  if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
+    throw new UnauthorizedError('Unauthorized for create case deadline');
+  }
 
-    const caseDetail = await applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber({
-        applicationContext,
-        docketNumber: caseDeadline.docketNumber,
-      });
-    let caseEntity = new Case(caseDetail, { applicationContext });
-
-    const newCaseDeadline = new CaseDeadline(
-      { ...caseDeadline, associatedJudge: caseEntity.associatedJudge },
-      {
-        applicationContext,
-      },
-    );
-
-    await applicationContext.getPersistenceGateway().createCaseDeadline({
+  const caseDetail = await applicationContext
+    .getPersistenceGateway()
+    .getCaseByDocketNumber({
       applicationContext,
-      caseDeadline: newCaseDeadline.validate().toRawObject(),
+      docketNumber: caseDeadline.docketNumber,
+    });
+  let caseEntity = new Case(caseDetail, { applicationContext });
+
+  const newCaseDeadline = new CaseDeadline(
+    { ...caseDeadline, associatedJudge: caseEntity.associatedJudge },
+    {
+      applicationContext,
+    },
+  );
+
+  await applicationContext.getPersistenceGateway().createCaseDeadline({
+    applicationContext,
+    caseDeadline: newCaseDeadline.validate().toRawObject(),
+  });
+
+  caseEntity = await applicationContext
+    .getUseCaseHelpers()
+    .updateCaseAutomaticBlock({
+      applicationContext,
+      caseEntity,
     });
 
-    caseEntity = await applicationContext
-      .getUseCaseHelpers()
-      .updateCaseAutomaticBlock({
-        applicationContext,
-        caseEntity,
-      });
+  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+    applicationContext,
+    caseToUpdate: caseEntity,
+  });
 
-    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      applicationContext,
-      caseToUpdate: caseEntity,
-    });
-
-    return newCaseDeadline;
-  };
+  return newCaseDeadline;
+};

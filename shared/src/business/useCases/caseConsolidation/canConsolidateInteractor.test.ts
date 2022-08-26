@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { canConsolidateInteractor } = require('./canConsolidateInteractor');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { canConsolidateInteractor } from './canConsolidateInteractor';
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('canConsolidateInteractor', () => {
   let currentCase;

@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePrintableCaseInventoryReportInteractor,
-} = require('./generatePrintableCaseInventoryReportInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generatePrintableCaseInventoryReportInteractor } from './generatePrintableCaseInventoryReportInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('generatePrintableCaseInventoryReportInteractor', () => {
   it('calls generateCaseInventoryReportPdf function and returns result', async () => {

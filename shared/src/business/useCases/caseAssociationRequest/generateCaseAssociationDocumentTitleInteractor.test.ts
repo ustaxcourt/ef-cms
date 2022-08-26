@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generateCaseAssociationDocumentTitleInteractor,
-} = require('./generateCaseAssociationDocumentTitleInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generateCaseAssociationDocumentTitleInteractor } from './generateCaseAssociationDocumentTitleInteractor';
 
 describe('generateCaseAssociationDocumentTitle', () => {
   it('generates a document title', async () => {

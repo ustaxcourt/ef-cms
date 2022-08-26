@@ -1,4 +1,4 @@
-const { CaseDeadline } = require('../../entities/CaseDeadline');
+import { CaseDeadline } from '../../entities/CaseDeadline';
 
 /**
  * validateCaseDeadlineInteractor
@@ -8,9 +8,9 @@ const { CaseDeadline } = require('../../entities/CaseDeadline');
  * @param {object} providers.caseDeadline the case deadline data
  * @returns {object} errors if there are any, otherwise null
  */
-exports.validateCaseDeadlineInteractor = (
+export const validateCaseDeadlineInteractor = (
   applicationContext,
-  { caseDeadline },
+  { caseDeadline }: { caseDeadline: TCaseDeadline },
 ) => {
   const errors = new CaseDeadline(caseDeadline, {
     applicationContext,

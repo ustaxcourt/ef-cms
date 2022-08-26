@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getCaseInventoryReportInteractor
@@ -15,9 +15,19 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.status the optional status filter
  * @returns {object} the report data
  */
-exports.getCaseInventoryReportInteractor = async (
+export const getCaseInventoryReportInteractor = async (
   applicationContext,
-  { associatedJudge, from, pageSize, status },
+  {
+    associatedJudge,
+    from,
+    pageSize,
+    status,
+  }: {
+    associatedJudge?: string;
+    from?: string;
+    pageSize?: number;
+    status?: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

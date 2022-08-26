@@ -1,6 +1,4 @@
-const {
-  validateCaseAssociationRequestInteractor,
-} = require('./validateCaseAssociationRequestInteractor');
+import { validateCaseAssociationRequestInteractor } from './validateCaseAssociationRequestInteractor';
 
 describe('validateCaseAssociationRequest', () => {
   it('returns the expected errors object on an empty case association request', () => {

@@ -1,15 +1,11 @@
-const {
-  associateIrsPractitionerToCase,
-} = require('../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase');
-const {
-  associatePrivatePractitionerToCase,
-} = require('../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase');
-const {
+import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
+import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * submitCaseAssociationRequestInteractor
@@ -23,9 +19,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * the secondary contact on the case, false otherwise
  * @returns {Promise<*>} the promise of the case association request
  */
-exports.submitCaseAssociationRequestInteractor = async (
-  applicationContext,
-  { docketNumber, filers },
+export const submitCaseAssociationRequestInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber, filers }: { docketNumber: string; filers: string[] },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

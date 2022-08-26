@@ -1,20 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   AUTOMATIC_BLOCKED_REASONS,
   CHIEF_JUDGE,
-} = require('../../entities/EntityConstants');
-const {
-  createCaseDeadlineInteractor,
-} = require('./createCaseDeadlineInteractor');
-const {
-  MOCK_CASE,
-  MOCK_CASE_WITHOUT_PENDING,
-} = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+} from '../../entities/EntityConstants';
+import { createCaseDeadlineInteractor } from './createCaseDeadlineInteractor';
+import { MOCK_CASE, MOCK_CASE_WITHOUT_PENDING } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 describe('createCaseDeadlineInteractor', () => {
   const mockCaseDeadline = {
@@ -52,7 +45,7 @@ describe('createCaseDeadlineInteractor', () => {
     user = {};
     await expect(
       createCaseDeadlineInteractor(applicationContext, {
-        caseDeadline: mockCaseDeadline,
+        caseDeadline: mockCaseDeadline as any,
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -62,7 +55,7 @@ describe('createCaseDeadlineInteractor', () => {
 
     const caseDeadline = await createCaseDeadlineInteractor(
       applicationContext,
-      { caseDeadline: mockCaseDeadline },
+      { caseDeadline: mockCaseDeadline as any },
     );
 
     expect(caseDeadline).toBeDefined();
@@ -88,7 +81,7 @@ describe('createCaseDeadlineInteractor', () => {
 
     const caseDeadline = await createCaseDeadlineInteractor(
       applicationContext,
-      { caseDeadline: mockCaseDeadline },
+      { caseDeadline: mockCaseDeadline as any },
     );
 
     expect(caseDeadline).toBeDefined();

@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   DOCKET_NUMBER_SUFFIXES,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  getCaseInventoryReportInteractor,
-} = require('./getCaseInventoryReportInteractor');
+} from '../../entities/EntityConstants';
+import { getCaseInventoryReportInteractor } from './getCaseInventoryReportInteractor';
 
 describe('getCaseInventoryReportInteractor', () => {
   beforeEach(() => {

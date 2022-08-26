@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { CaseDeadline } = require('../../entities/CaseDeadline');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { CaseDeadline } from '../../entities/CaseDeadline';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * updateCaseDeadlineInteractor
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.caseDeadline the case deadline data
  * @returns {object} the updated case deadline
  */
-exports.updateCaseDeadlineInteractor = async (
-  applicationContext,
-  { caseDeadline },
+export const updateCaseDeadlineInteractor = async (
+  applicationContext: IApplicationContext,
+  { caseDeadline }: { caseDeadline: TCaseDeadline },
 ) => {
   const user = applicationContext.getCurrentUser();
 
