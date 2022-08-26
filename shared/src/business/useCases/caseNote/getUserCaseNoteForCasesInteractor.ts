@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { UserCaseNote } from '../../entities/notes/UserCaseNote';
 
 /**
  * getUserCaseNoteForCasesInteractor
@@ -13,9 +13,9 @@ const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
  * @param {string} providers.docketNumbers the docket numbers of the cases to get notes for
  * @returns {object} the case note object if one is found
  */
-exports.getUserCaseNoteForCasesInteractor = async (
+export const getUserCaseNoteForCasesInteractor = async (
   applicationContext,
-  { docketNumbers },
+  { docketNumbers }: { docketNumbers: string[] },
 ) => {
   const user = applicationContext.getCurrentUser();
 

@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { deleteCaseNoteInteractor } = require('./deleteCaseNoteInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { deleteCaseNoteInteractor } from './deleteCaseNoteInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 describe('deleteCaseNoteInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {

@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { UserCaseNote } from '../../entities/notes/UserCaseNote';
 
 /**
  * updateUserCaseNoteInteractor
@@ -14,9 +14,9 @@ const { UserCaseNote } = require('../../entities/notes/UserCaseNote');
  * @param {string} providers.notes the notes to update
  * @returns {object} the updated case note returned from persistence
  */
-exports.updateUserCaseNoteInteractor = async (
+export const updateUserCaseNoteInteractor = async (
   applicationContext,
-  { docketNumber, notes },
+  { docketNumber, notes }: { docketNumber: string; notes: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

@@ -1,10 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
-const { saveCaseNoteInteractor } = require('./saveCaseNoteInteractor');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
+import { saveCaseNoteInteractor } from './saveCaseNoteInteractor';
+import { User } from '../../entities/User';
 
 describe('saveCaseNoteInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
@@ -13,6 +11,7 @@ describe('saveCaseNoteInteractor', () => {
     await expect(
       saveCaseNoteInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
+        caseNote: 'testing',
       }),
     ).rejects.toThrow('Unauthorized');
   });

@@ -1,13 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  deleteUserCaseNoteInteractor,
-} = require('./deleteUserCaseNoteInteractor');
-const { omit } = require('lodash');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { deleteUserCaseNoteInteractor } from './deleteUserCaseNoteInteractor';
+import { omit } from 'lodash';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 describe('deleteUserCaseNoteInteractor', () => {
   it('throws an error if the user is not valid or authorized', async () => {
@@ -16,7 +12,6 @@ describe('deleteUserCaseNoteInteractor', () => {
     await expect(
       deleteUserCaseNoteInteractor(applicationContext, {
         docketNumber: '123-45',
-        userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
       }),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });

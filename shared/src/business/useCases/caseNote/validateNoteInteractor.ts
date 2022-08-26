@@ -1,4 +1,4 @@
-const { Note } = require('../../entities/notes/Note');
+import { Note } from '../../entities/notes/Note';
 
 /**
  * validateNote
@@ -8,7 +8,10 @@ const { Note } = require('../../entities/notes/Note');
  * @param {object} providers.note the note object
  * @returns {object} the errors or null
  */
-exports.validateNoteInteractor = (applicationContext, { note }) => {
+export const validateNoteInteractor = (
+  applicationContext: IApplicationContext,
+  { note }: { note: { notes?: string } },
+) => {
   const errors = new Note(note, {
     applicationContext,
   }).getFormattedValidationErrors();

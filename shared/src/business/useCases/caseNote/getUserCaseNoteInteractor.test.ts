@@ -1,12 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { getUserCaseNoteInteractor } = require('./getUserCaseNoteInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { omit } = require('lodash');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getUserCaseNoteInteractor } from './getUserCaseNoteInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { omit } from 'lodash';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 describe('Get case note', () => {
   const MOCK_NOTE = {

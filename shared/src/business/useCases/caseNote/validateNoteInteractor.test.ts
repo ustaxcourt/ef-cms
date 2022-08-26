@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { validateNoteInteractor } = require('./validateNoteInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateNoteInteractor } from './validateNoteInteractor';
 
 describe('validateNoteInteractor', () => {
   it('returns the expected errors object on an empty note', () => {
