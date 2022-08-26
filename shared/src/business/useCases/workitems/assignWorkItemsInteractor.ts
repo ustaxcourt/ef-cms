@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
@@ -14,10 +14,16 @@ import { WorkItem } from '../../entities/WorkItem';
  * @param {string} providers.assigneeName the name of the user to assign the work item to
  * @param {string} providers.workItemId the id of the work item to assign
  */
-export const assignWorkItemsInteractor: IAssignWorkItemsInteractor = async (
-  applicationContext,
-  { assigneeId, assigneeName, workItemId },
-) => {
+export const assignWorkItemsInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      assigneeId: string;
+      assigneeName: string;
+      workItemId: string;
+    },
+  ): Promise<void>;
+} = async (applicationContext, { assigneeId, assigneeName, workItemId }) => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSIGN_WORK_ITEM)) {
     throw new UnauthorizedError('Unauthorized to assign work item');
@@ -34,8 +40,10 @@ export const assignWorkItemsInteractor: IAssignWorkItemsInteractor = async (
       applicationContext,
       workItemId,
     });
-  
-  const workItemEntity = new WorkItem(workItemRecord, { applicationContext });
+
+  const workItemEntity: WorkItem = new WorkItem(workItemRecord, {
+    applicationContext,
+  });
 
   workItemEntity.assignToUser({
     assigneeId,

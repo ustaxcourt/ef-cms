@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  getDocumentQCInboxForSectionInteractor,
-} = require('./getDocumentQCInboxForSectionInteractor');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getDocumentQCInboxForSectionInteractor } from './getDocumentQCInboxForSectionInteractor';
 
 describe('getDocumentQCInboxForSectionInteractor', () => {
   let mockWorkItem = {

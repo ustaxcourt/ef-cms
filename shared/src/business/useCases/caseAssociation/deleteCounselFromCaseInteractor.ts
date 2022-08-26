@@ -1,13 +1,11 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
-  isAuthorized,
+import { Case } from '../../entities/cases/Case';
+import { ROLES } from '../../entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 
 /**
  * deleteCounselFromCaseInteractor
@@ -18,10 +16,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.userId the id of the user to be removed from the case
  * @returns {Promise} the promise of the update case call
  */
-exports.deleteCounselFromCaseInteractor = async (
-  applicationContext,
-  { docketNumber, userId },
-) => {
+export const deleteCounselFromCaseInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: { docketNumber: string; userId: string },
+  ): Promise<TCase>;
+} = async (applicationContext, { docketNumber, userId }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
@@ -72,7 +72,9 @@ exports.deleteCounselFromCaseInteractor = async (
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
 
-const setupServiceIndicatorForUnrepresentedPetitioners = caseEntity => {
+export const setupServiceIndicatorForUnrepresentedPetitioners: {
+  (caseEntity: TCase): TCase;
+} = caseEntity => {
   caseEntity.petitioners.forEach(petitioner => {
     if (
       !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)
@@ -83,6 +85,3 @@ const setupServiceIndicatorForUnrepresentedPetitioners = caseEntity => {
 
   return caseEntity;
 };
-
-exports.setupServiceIndicatorForUnrepresentedPetitioners =
-  setupServiceIndicatorForUnrepresentedPetitioners;

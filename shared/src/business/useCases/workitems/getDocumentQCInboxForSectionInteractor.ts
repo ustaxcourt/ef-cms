@@ -1,13 +1,13 @@
-const {
+import {
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} = require('../../entities/EntityConstants');
-const {
-  isAuthorized,
+} from '../../entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  *
@@ -16,10 +16,15 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.section the section to get the document qc
  * @returns {object} the work items in the section document inbox
  */
-exports.getDocumentQCInboxForSectionInteractor = async (
-  applicationContext,
-  { judgeUserName, section },
-) => {
+export const getDocumentQCInboxForSectionInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      judgeUserName: string;
+      section: string;
+    },
+  ): Promise<WorkItem>;
+} = async (applicationContext, { judgeUserName, section }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {

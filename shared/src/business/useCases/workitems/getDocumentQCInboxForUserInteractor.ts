@@ -13,10 +13,14 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.userId the user to get the document qc
  * @returns {object} the work items in the user document inbox
  */
-export const getDocumentQCInboxForUserInteractor: IGetDocumentQCInboxForUserInteractor = async (
-  applicationContext,
-  { userId },
-) => {
+export const getDocumentQCInboxForUserInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      userId: string;
+    },
+  ): Promise<WorkItem>;
+} = async (applicationContext, { userId }) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {

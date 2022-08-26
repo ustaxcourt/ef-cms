@@ -1,10 +1,10 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { assignWorkItemsInteractor } from './assignWorkItemsInteractor';
 
 describe('assignWorkItemsInteractor', () => {

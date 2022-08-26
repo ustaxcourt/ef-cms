@@ -17,10 +17,14 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.section the section to get the document qc served box
  * @returns {object} the work items in the section document served inbox
  */
-export const getDocumentQCServedForSectionInteractor: IGetDocumentQCServedForSectionInteractor = async (
-  applicationContext,
-  { section },
-) => {
+export const getDocumentQCServedForSectionInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      section: any;
+    },
+  ): Promise<WorkItem>;
+} = async (applicationContext, { section }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {
@@ -72,6 +76,5 @@ const calculateAfterDate = async applicationContext => {
   });
   return afterDate;
 };
-
 
 exports.calculateAfterDate = calculateAfterDate;
