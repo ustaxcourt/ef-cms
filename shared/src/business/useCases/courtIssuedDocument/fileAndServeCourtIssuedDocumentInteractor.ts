@@ -1,28 +1,26 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   createISODateString,
   formatDateString,
-} = require('../../utilities/DateHandler');
-const {
+} from '../../utilities/DateHandler';
+import {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
+} from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { omit } = require('lodash');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { omit } from 'lodash';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  * fileAndServeCourtIssuedDocumentInteractor
@@ -36,14 +34,20 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
  * @returns {Object} the URL of the document that was served
  */
-exports.fileAndServeCourtIssuedDocumentInteractor = async (
-  applicationContext,
+export const fileAndServeCourtIssuedDocumentInteractor = async (
+  applicationContext: IApplicationContext,
   {
     clientConnectionId,
     docketEntryId,
     docketNumbers,
     form,
     subjectCaseDocketNumber,
+  }: {
+    clientConnectionId: string;
+    docketEntryId: string;
+    docketNumbers: string[];
+    form: any;
+    subjectCaseDocketNumber: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

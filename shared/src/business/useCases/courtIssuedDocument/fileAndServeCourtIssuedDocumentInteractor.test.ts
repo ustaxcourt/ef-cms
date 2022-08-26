@@ -1,27 +1,23 @@
 /* eslint-disable max-lines */
-const {
+import {
   applicationContext,
   testPdfDoc,
-} = require('../../test/createTestApplicationContext');
-const {
+} from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
   SERVICE_INDICATOR_TYPES,
   TRANSCRIPT_EVENT_CODE,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  ENTERED_AND_SERVED_EVENT_CODES,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
-const {
-  fileAndServeCourtIssuedDocumentInteractor,
-} = require('../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor');
-const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { docketClerkUser } = require('../../../test/mockUsers');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { v4: uuidv4 } = require('uuid');
+} from '../../entities/EntityConstants';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
+import { Case } from '../../entities/cases/Case';
+import { createISODateString } from '../../utilities/DateHandler';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { v4 as uuidv4 } from 'uuid';
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   let caseRecord;
@@ -171,7 +167,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
         clientConnectionId,
         docketEntryId: caseRecord.docketEntries[1].docketEntryId,
         docketNumbers: [caseRecord.docketNumber],
-        documentType: 'Memorandum in Support',
+        form: {},
         subjectCaseDocketNumber: caseRecord.docketNumber,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -213,6 +209,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[0],
       subjectCaseDocketNumber: caseRecord.docketNumber,
+      clientConnectionId: 'testing',
     });
 
     const updatedCase =
@@ -332,6 +329,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
       docketNumbers: [caseRecord.docketNumber],
       form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
       subjectCaseDocketNumber: caseRecord.docketNumber,
+      clientConnectionId: 'testing',
     });
 
     expect(
@@ -434,6 +432,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
       docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
       docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
+      clientConnectionId: 'testing',
       form: {
         ...mockDocketEntryWithWorkItem,
         draftOrderState: {
@@ -526,6 +525,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
         docketEntryId: docketEntry.docketEntryId,
+        clientConnectionId: 'testing',
         docketNumbers: [docketEntry.docketNumber],
         form: docketEntry,
         subjectCaseDocketNumber: docketEntry.docketNumber,

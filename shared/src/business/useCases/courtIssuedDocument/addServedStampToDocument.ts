@@ -1,7 +1,7 @@
 const TEXT_SIZE = 14;
-const PADDING = 3;
+export const PADDING = 3;
 
-const computeCoordinates = ({
+export const computeCoordinates = ({
   applicationContext,
   boxHeight,
   boxWidth,
@@ -48,7 +48,7 @@ const getBoxHeight = ({ font }) => {
  * @param {string} providers.serviceStampText the service stamp text to add to the document
  * @returns {object} the new pdf with the stamp at the bottom center of the document
  */
-const addServedStampToDocument = async ({
+export const addServedStampToDocument = async ({
   applicationContext,
   pdfData,
   serviceStampText = `SERVED ${applicationContext
@@ -105,5 +105,3 @@ const addServedStampToDocument = async ({
     useObjectStreams: false,
   });
 };
-
-module.exports = { PADDING, addServedStampToDocument, computeCoordinates };

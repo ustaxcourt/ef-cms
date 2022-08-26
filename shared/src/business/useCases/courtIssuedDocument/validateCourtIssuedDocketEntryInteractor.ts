@@ -1,6 +1,4 @@
-const {
-  CourtIssuedDocumentFactory,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentFactory');
+import { CourtIssuedDocumentFactory } from '../../entities/courtIssuedDocument/CourtIssuedDocumentFactory';
 
 /**
  * validateCourtIssuedDocketEntryInteractor
@@ -10,7 +8,7 @@ const {
  * @param {object} providers.entryMetadata the docket entry metadata
  * @returns {object} errors (null if no errors)
  */
-exports.validateCourtIssuedDocketEntryInteractor = ({ entryMetadata }) => {
+export const validateCourtIssuedDocketEntryInteractor = ({ entryMetadata }) => {
   const courtIssuedDocument = CourtIssuedDocumentFactory(entryMetadata);
 
   return courtIssuedDocument.getFormattedValidationErrors();

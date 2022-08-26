@@ -1,9 +1,5 @@
-const {
-  validateCourtIssuedDocketEntryInteractor,
-} = require('./validateCourtIssuedDocketEntryInteractor');
-const {
-  VALIDATION_ERROR_MESSAGES,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+import { validateCourtIssuedDocketEntryInteractor } from './validateCourtIssuedDocketEntryInteractor';
+import { VALIDATION_ERROR_MESSAGES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 
 describe('validateCourtIssuedDocketEntryInteractor', () => {
   it('returns default errors on empty entryMetadata', () => {

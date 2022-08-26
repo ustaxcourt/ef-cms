@@ -1,6 +1,4 @@
-const {
-  generateCourtIssuedDocumentTitleInteractor,
-} = require('./generateCourtIssuedDocumentTitleInteractor');
+import { generateCourtIssuedDocumentTitleInteractor } from './generateCourtIssuedDocumentTitleInteractor';
 
 describe('generateCourtIssuedDocumentTitleInteractor', () => {
   it('generates a document title from passed metadata', async () => {
