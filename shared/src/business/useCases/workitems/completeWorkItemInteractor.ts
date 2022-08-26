@@ -1,11 +1,11 @@
-const {
-  isAuthorized,
+import { Case } from '../../entities/cases/Case';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
+import { createISODateString } from '../../utilities/DateHandler';
 
 /**
  * completeWorkItemInteractor
@@ -16,10 +16,15 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.workItemId the id of the work item to complete
  * @returns {object} the completed work item
  */
-export const completeWorkItemInteractor: ICompleteWorkItemInteractor = async (
-  applicationContext,
-  { completedMessage, workItemId },
-) => {
+export const completeWorkItemInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      completedMessage: string;
+      workItemId: string;
+    },
+  ): Promise<WorkItem>;
+} = async (applicationContext, { completedMessage, workItemId }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {

@@ -1,10 +1,10 @@
-const {
-  isAuthorized,
+import { ROLES } from '../../entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  *
@@ -13,10 +13,14 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.userId the user to get the document qc served box
  * @returns {object} the work items in the user document served inbox
  */
-exports.getDocumentQCServedForUserInteractor = async (
-  applicationContext,
-  { userId },
-) => {
+export const getDocumentQCServedForUserInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      userId: string;
+    },
+  ): Promise<WorkItem>;
+} = async (applicationContext, { userId }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {

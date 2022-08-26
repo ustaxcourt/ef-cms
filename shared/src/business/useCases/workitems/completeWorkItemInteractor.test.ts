@@ -1,14 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
-const { completeWorkItemInteractor } = require('./completeWorkItemInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { completeWorkItemInteractor } from './completeWorkItemInteractor';
 
 describe('completeWorkItemInteractor', () => {
   let mockUser;

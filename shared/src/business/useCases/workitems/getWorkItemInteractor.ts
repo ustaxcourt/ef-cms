@@ -13,10 +13,14 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.workItemId the id of the work item to get
  * @returns {object} the work item data
  */
-export const getWorkItemInteractor: IGetWorkItemInteractor = async (
-  applicationContext,
-  { workItemId },
-) => {
+export const getWorkItemInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    options: {
+      workItemId: string;
+    },
+  ): Promise<WorkItem>;
+} = async (applicationContext, { workItemId }) => {
   const workItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({

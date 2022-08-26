@@ -1,14 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  getDocumentQCInboxForUserInteractor,
-} = require('./getDocumentQCInboxForUserInteractor');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getDocumentQCInboxForUserInteractor } from './getDocumentQCInboxForUserInteractor';
 
 describe('getDocumentQCInboxForUserInteractor', () => {
   let mockWorkItem = {
