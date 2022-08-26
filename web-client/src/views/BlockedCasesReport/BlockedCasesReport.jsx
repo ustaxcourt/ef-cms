@@ -1,6 +1,7 @@
 import { BigHeader } from '../BigHeader';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { ErrorNotification } from '../ErrorNotification';
+import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SelectCriteria } from './SelectCriteria';
 import { SuccessNotification } from '../SuccessNotification';
 import { connect } from '@cerebral/react';
@@ -43,7 +44,13 @@ export const BlockedCasesReport = connect(
                     <table className="usa-table subsection ustc-table deadlines">
                       <thead>
                         <tr>
-                          <th aria-label="docket number">Docket No.</th>
+                          <th
+                            aria-hidden="true"
+                            className="consolidated-case-column"
+                          ></th>
+                          <th aria-label="Docket Number" className="small">
+                            <span className="padding-left-2px">Docket No.</span>
+                          </th>
                           <th>Date Blocked</th>
                           <th>Case Title</th>
                           <th>Case Status</th>
@@ -54,6 +61,27 @@ export const BlockedCasesReport = connect(
                         {blockedCasesReportHelper.blockedCasesFormatted.map(
                           item => (
                             <tr key={item.docketNumber}>
+                              <td className="consolidated-case-column">
+                                {item.inConsolidatedGroup && (
+                                  <span
+                                    className="fa-layers fa-fw"
+                                    title={item.consolidatedIconTooltipText}
+                                  >
+                                    <Icon
+                                      aria-label={
+                                        item.consolidatedIconTooltipText
+                                      }
+                                      className="fa-icon-blue"
+                                      icon="copy"
+                                    />
+                                    {item.inLeadCase && (
+                                      <span className="fa-inverse lead-case-icon-text">
+                                        L
+                                      </span>
+                                    )}
+                                  </span>
+                                )}
+                              </td>
                               <td>
                                 <CaseLink formattedCase={item} />
                               </td>
