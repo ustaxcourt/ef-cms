@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * deleteCaseNoteInteractor
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case the procedural note is attached to
  * @returns {Promise} the promise of the delete call
  */
-exports.deleteCaseNoteInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const deleteCaseNoteInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

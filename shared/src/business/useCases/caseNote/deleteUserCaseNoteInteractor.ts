@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * deleteUserCaseNoteInteractor
@@ -12,9 +12,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case the case note is attached to
  * @returns {Promise} the promise of the delete call
  */
-exports.deleteUserCaseNoteInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const deleteUserCaseNoteInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 
