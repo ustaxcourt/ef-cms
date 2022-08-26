@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 /**
  * getUserPendingEmailInteractor
@@ -13,9 +13,9 @@ const { User } = require('../../entities/User');
  * @param {string} providers.userId the userId
  * @returns {Promise} the user's pending email
  */
-exports.getUserPendingEmailInteractor = async (
-  applicationContext,
-  { userId },
+export const getUserPendingEmailInteractor = async (
+  applicationContext: IApplicationContext,
+  { userId }: { userId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

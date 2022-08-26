@@ -1,16 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  setUserEmailFromPendingEmailInteractor,
-} = require('./setUserEmailFromPendingEmailInteractor');
-const { getContactPrimary } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_PRACTITIONER, validUser } = require('../../../test/mockUsers');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { setUserEmailFromPendingEmailInteractor } from './setUserEmailFromPendingEmailInteractor';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_PRACTITIONER, validUser } from '../../../test/mockUsers';
 
 describe('setUserEmailFromPendingEmailInteractor', () => {
   let mockPractitioner;

@@ -1,20 +1,16 @@
-const {
-  entityName: irsPractitionerEntityName,
-} = require('../../entities/IrsPractitioner');
-const {
-  entityName: practitionerEntityName,
+import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
+import {
+  entityName as practitionerEntityName,
   Practitioner,
-} = require('../../entities/Practitioner');
-const {
-  entityName: privatePractitionerEntityName,
-} = require('../../entities/PrivatePractitioner');
-const {
+} from '../../entities/Practitioner';
+import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { generateChangeOfAddress } = require('./generateChangeOfAddress');
-const { isEqual } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { generateChangeOfAddress } from './generateChangeOfAddress';
+import { isEqual } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * updateUserContactInformationHelper
@@ -27,10 +23,14 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @returns {Promise} an object is successful
  */
 const updateUserContactInformationHelper = async (
-  applicationContext,
-  { contactInfo, firmName, userId },
+  applicationContext: IApplicationContext,
+  {
+    contactInfo,
+    firmName,
+    userId,
+  }: { contactInfo: any; firmName: string; userId: string },
 ) => {
-  const user = await applicationContext
+  const user: any = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId });
 
@@ -130,9 +130,13 @@ const updateUserContactInformationHelper = async (
  * @param {string} providers.contactInfo the contactInfo to update the contact info
  * @param {string} providers.userId the userId to update the contact info
  */
-exports.updateUserContactInformationInteractor = async (
-  applicationContext,
-  { contactInfo, firmName, userId },
+export const updateUserContactInformationInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    contactInfo,
+    firmName,
+    userId,
+  }: { contactInfo: any; firmName: string; userId: string },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 

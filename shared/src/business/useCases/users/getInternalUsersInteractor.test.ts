@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { getInternalUsersInteractor } = require('./getInternalUsersInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getInternalUsersInteractor } from './getInternalUsersInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('Get internal users', () => {
   beforeEach(() => {

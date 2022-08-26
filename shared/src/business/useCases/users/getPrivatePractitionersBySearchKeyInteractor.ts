@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { PrivatePractitioner } = require('../../entities/PrivatePractitioner');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { PrivatePractitioner } from '../../entities/PrivatePractitioner';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getPrivatePractitionersBySearchKeyInteractor
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} params.searchKey the search string entered by the user
  * @returns {*} the result
  */
-exports.getPrivatePractitionersBySearchKeyInteractor = async (
-  applicationContext,
-  { searchKey },
+export const getPrivatePractitionersBySearchKeyInteractor = async (
+  applicationContext: IApplicationContext,
+  { searchKey }: { searchKey: string },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 

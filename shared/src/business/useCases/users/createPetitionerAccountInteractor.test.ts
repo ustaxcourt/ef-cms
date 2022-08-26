@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  createPetitionerAccountInteractor,
-} = require('./createPetitionerAccountInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createPetitionerAccountInteractor } from './createPetitionerAccountInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('createPetitionerAccountInteractor', () => {
   it('should attempt to persist the petitioner', async () => {

@@ -1,16 +1,15 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { calculateISODate } = require('../../utilities/DateHandler');
-const { docketClerkUser } = require('../../../test/mockUsers');
-const { generateChangeOfAddress } = require('./generateChangeOfAddress');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { calculateISODate } from '../../utilities/DateHandler';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { generateChangeOfAddress } from './generateChangeOfAddress';
+import { MOCK_CASE } from '../../../test/mockCase';
+
 jest.mock('../addCoversheetInteractor', () => ({
   addCoverToPdf: jest.fn().mockReturnValue({
     pdfData: '',
@@ -83,7 +82,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       },
       user: mockPrivatePractitioner,
-    });
+    } as any);
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
@@ -105,7 +104,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       },
       user: mockPrivatePractitioner,
-    });
+    } as any);
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
@@ -137,7 +136,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       },
       user: mockPrivatePractitioner,
-    });
+    } as any);
 
     expect(applicationContext.logger.error).toBeCalled();
     expect(
@@ -166,7 +165,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       },
       user: mockPrivatePractitioner,
-    });
+    } as any);
 
     const noticeDocketEntry = getDocketEntryForNotice(cases);
 
@@ -184,7 +183,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       },
       user: mockPrivatePractitioner,
-    });
+    } as any);
 
     const noticeDocketEntry = getDocketEntryForNotice(cases);
 
@@ -206,7 +205,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
-    });
+    } as any);
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
@@ -238,7 +237,7 @@ describe('generateChangeOfAddress', () => {
         address1: '234 Main St',
       },
       user: mockPrivatePractitioner,
-    });
+    } as any);
 
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
@@ -276,7 +275,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
-    });
+    } as any);
 
     const noticeDocketEntry = getDocketEntryForNotice(cases);
 
@@ -310,7 +309,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
-    });
+    } as any);
 
     const noticeDocketEntry = getDocketEntryForNotice(cases);
 
@@ -350,7 +349,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
@@ -375,7 +374,7 @@ describe('generateChangeOfAddress', () => {
         ...mockPrivatePractitioner,
         serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
       },
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]

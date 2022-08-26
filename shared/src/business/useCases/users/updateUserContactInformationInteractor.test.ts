@@ -1,29 +1,20 @@
-const {
+import {
   ADMISSIONS_STATUS_OPTIONS,
   COUNTRY_TYPES,
   EMPLOYER_OPTIONS,
   PRACTITIONER_TYPE_OPTIONS,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  entityName: irsPractitionerEntityName,
-} = require('../../entities/IrsPractitioner');
-const {
-  entityName: practitionerEntityName,
-} = require('../../entities/Practitioner');
-const {
-  entityName: privatePractitionerEntityName,
-} = require('../../entities/PrivatePractitioner');
-const {
-  updateUserContactInformationInteractor,
-} = require('./updateUserContactInformationInteractor');
-const { MOCK_USERS } = require('../../../test/mockUsers');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { entityName as irsPractitionerEntityName } from '../../entities/IrsPractitioner';
+import { entityName as practitionerEntityName } from '../../entities/Practitioner';
+import { entityName as privatePractitionerEntityName } from '../../entities/PrivatePractitioner';
+import { updateUserContactInformationInteractor } from './updateUserContactInformationInteractor';
+import { MOCK_USERS } from '../../../test/mockUsers';
+import { UnauthorizedError } from '../../../errors/errors';
+
 jest.mock('./generateChangeOfAddress');
-const { generateChangeOfAddress } = require('./generateChangeOfAddress');
+import { generateChangeOfAddress } from './generateChangeOfAddress';
 
 describe('updateUserContactInformationInteractor', () => {
   let mockUser;
@@ -75,7 +66,7 @@ describe('updateUserContactInformationInteractor', () => {
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
         userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-      }),
+      } as any),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -84,7 +75,7 @@ describe('updateUserContactInformationInteractor', () => {
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
         userId: 'a7d90c05-f6cd-442c-a168-202db587f16f',
-      }),
+      } as any),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -121,7 +112,7 @@ describe('updateUserContactInformationInteractor', () => {
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
         userId: mockUser.userId,
-      }),
+      } as any),
     ).rejects.toThrow('something wicked');
 
     expect(
@@ -150,7 +141,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
@@ -187,7 +178,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    } as any);
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -211,7 +202,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    } as any);
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -235,7 +226,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    } as any);
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
@@ -259,7 +250,7 @@ describe('updateUserContactInformationInteractor', () => {
       updateUserContactInformationInteractor(applicationContext, {
         contactInfo,
         userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-      }),
+      } as any),
     ).rejects.toThrow();
 
     expect(
@@ -281,7 +272,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    } as any);
 
     expect(generateChangeOfAddress).toHaveBeenCalled();
   });
@@ -290,7 +281,7 @@ describe('updateUserContactInformationInteractor', () => {
     await updateUserContactInformationInteractor(applicationContext, {
       contactInfo,
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
-    });
+    } as any);
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,

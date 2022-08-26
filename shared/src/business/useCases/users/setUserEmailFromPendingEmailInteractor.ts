@@ -1,13 +1,10 @@
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import {
   updateCasesForPetitioner,
   updatePractitionerCases,
-} = require('./verifyUserPendingEmailInteractor');
-const { Practitioner } = require('../../entities/Practitioner');
-const { User } = require('../../entities/User');
+} from './verifyUserPendingEmailInteractor';
+import { Practitioner } from '../../entities/Practitioner';
+import { User } from '../../entities/User';
 
 /**
  * updatePetitionerCases
@@ -19,7 +16,13 @@ const { User } = require('../../entities/User');
  * @param {string} providers.user the user who is a primary contact on a case
  * @returns {Promise} resolves upon completion of case updates
  */
-const updatePetitionerCases = async ({ applicationContext, user }) => {
+export const updatePetitionerCases = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: TUser;
+}) => {
   const petitionerDocketNumbers = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByUser({
@@ -38,8 +41,6 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
   });
 };
 
-exports.updatePetitionerCases = updatePetitionerCases;
-
 /**
  * setUserEmailFromPendingEmailInteractor
  *
@@ -51,7 +52,7 @@ exports.updatePetitionerCases = updatePetitionerCases;
  * @param {string} providers.user the user
  * @returns {Promise} the updated user object
  */
-exports.setUserEmailFromPendingEmailInteractor = async (
+export const setUserEmailFromPendingEmailInteractor = async (
   applicationContext,
   { user },
 ) => {

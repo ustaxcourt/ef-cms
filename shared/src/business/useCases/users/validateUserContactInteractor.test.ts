@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  validateUserContactInteractor,
-} = require('./validateUserContactInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateUserContactInteractor } from './validateUserContactInteractor';
 
 describe('validateUserContactInteractor', () => {
   it('returns the expected errors object on an empty message', () => {
