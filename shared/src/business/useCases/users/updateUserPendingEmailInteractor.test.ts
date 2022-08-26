@@ -1,12 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateUserPendingEmailInteractor,
-} = require('./updateUserPendingEmailInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { validUser } = require('../../../test/mockUsers');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateUserPendingEmailInteractor } from './updateUserPendingEmailInteractor';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { validUser } from '../../../test/mockUsers';
 
 describe('updateUserPendingEmailInteractor', () => {
   const pendingEmail = 'hello@example.com';

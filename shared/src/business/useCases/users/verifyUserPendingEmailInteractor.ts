@@ -1,23 +1,22 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { Practitioner } = require('../../entities/Practitioner');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+} from '../../../authorization/authorizationClientService';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { Practitioner } from '../../entities/Practitioner';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 const updateCaseEntityAndGenerateChange = async ({
   applicationContext,
   rawCaseData,
   user,
+}: {
+  applicationContext: IApplicationContext;
+  rawCaseData: TCase;
+  user: TUser;
 }) => {
   const caseEntity = new Case(rawCaseData, {
     applicationContext,
@@ -77,7 +76,7 @@ const updateCaseEntityAndGenerateChange = async ({
   return caseEntity.validate();
 };
 
-const updateCasesForPetitioner = async ({
+export const updateCasesForPetitioner = async ({
   applicationContext,
   petitionerCases,
   user,
@@ -114,8 +113,6 @@ const updateCasesForPetitioner = async ({
   );
 };
 
-exports.updateCasesForPetitioner = updateCasesForPetitioner;
-
 /**
  * updatePetitionerCases
  * for the provided user, update their email address on all cases
@@ -126,7 +123,7 @@ exports.updateCasesForPetitioner = updateCasesForPetitioner;
  * @param {string} providers.user the user who is a primary or secondary contact on a case
  * @returns {Promise} resolves upon completion of case updates
  */
-const updatePetitionerCases = async ({ applicationContext, user }) => {
+export const updatePetitionerCases = async ({ applicationContext, user }) => {
   const petitionerCases = await applicationContext
     .getPersistenceGateway()
     .getCasesForUser({
@@ -141,8 +138,6 @@ const updatePetitionerCases = async ({ applicationContext, user }) => {
   });
 };
 
-exports.updatePetitionerCases = updatePetitionerCases;
-
 /**
  * updatePractitionerCases
  * for the provided user, update their email address on all cases
@@ -155,7 +150,13 @@ exports.updatePetitionerCases = updatePetitionerCases;
  * @param {string} providers.user the user who is a primary or secondary contact on a case
  * @returns {Promise} resolves upon completion of case updates
  */
-const updatePractitionerCases = async ({ applicationContext, user }) => {
+export const updatePractitionerCases = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: any;
+}) => {
   const practitionerDocketNumbers = await applicationContext
     .getPersistenceGateway()
     .getDocketNumbersByUser({
@@ -226,7 +227,6 @@ const updatePractitionerCases = async ({ applicationContext, user }) => {
 
   return validCasesToUpdate;
 };
-exports.updatePractitionerCases = updatePractitionerCases;
 
 /**
  * verifyUserPendingEmailInteractor
@@ -239,9 +239,9 @@ exports.updatePractitionerCases = updatePractitionerCases;
  * @param {object} providers the providers object
  * @param {string} providers.pendingEmail the pending email
  */
-exports.verifyUserPendingEmailInteractor = async (
-  applicationContext,
-  { token },
+export const verifyUserPendingEmailInteractor = async (
+  applicationContext: IApplicationContext,
+  { token }: { token: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

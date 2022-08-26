@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 /**
  * checkEmailAvailabilityInteractor
  *
@@ -11,9 +11,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.email the email to check
  * @returns {boolean} true if the email is available; false otherwise
  */
-exports.checkEmailAvailabilityInteractor = async (
-  applicationContext,
-  { email },
+export const checkEmailAvailabilityInteractor = async (
+  applicationContext: IApplicationContext,
+  { email }: { email: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

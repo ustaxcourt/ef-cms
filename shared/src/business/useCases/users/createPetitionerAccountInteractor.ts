@@ -1,5 +1,5 @@
-const { ROLES } = require('../../entities/EntityConstants');
-const { User } = require('../../entities/User');
+import { ROLES } from '../../entities/EntityConstants';
+import { User } from '../../entities/User';
 
 /**
  * createPetitionerAccountInteractor
@@ -9,9 +9,9 @@ const { User } = require('../../entities/User');
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-exports.createPetitionerAccountInteractor = async (
-  applicationContext,
-  { email, name, userId },
+export const createPetitionerAccountInteractor = async (
+  applicationContext: IApplicationContext,
+  { email, name, userId }: { email: string; name: string; userId: string },
 ) => {
   const userEntity = new User(
     {

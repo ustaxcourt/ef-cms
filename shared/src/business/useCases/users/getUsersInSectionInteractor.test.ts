@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getUsersInSectionInteractor,
-} = require('./getUsersInSectionInteractor');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { PETITIONS_SECTION, ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getUsersInSectionInteractor } from './getUsersInSectionInteractor';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { PETITIONS_SECTION, ROLES } from '../../entities/EntityConstants';
 
 describe('Get users in section', () => {
   const MOCK_SECTION = [

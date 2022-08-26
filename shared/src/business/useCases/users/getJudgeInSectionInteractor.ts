@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getJudgeInSectionInteractor - returns the judge user for a given section
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @returns {User} the judge user in this section provided
  */
 
-exports.getJudgeInSectionInteractor = async (
-  applicationContext,
-  { section },
+export const getJudgeInSectionInteractor = async (
+  applicationContext: IApplicationContext,
+  { section }: { section: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

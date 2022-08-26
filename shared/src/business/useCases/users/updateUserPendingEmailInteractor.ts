@@ -1,11 +1,11 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Practitioner } = require('../../entities/Practitioner');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+} from '../../../authorization/authorizationClientService';
+import { Practitioner } from '../../entities/Practitioner';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 /**
  * updateUserPendingEmailInteractor
@@ -16,9 +16,9 @@ const { User } = require('../../entities/User');
  * @param {string} providers.pendingEmail the pending email
  * @returns {Promise} the updated user object
  */
-exports.updateUserPendingEmailInteractor = async (
-  applicationContext,
-  { pendingEmail },
+export const updateUserPendingEmailInteractor = async (
+  applicationContext: IApplicationContext,
+  { pendingEmail }: { pendingEmail: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -37,7 +37,7 @@ exports.updateUserPendingEmailInteractor = async (
     throw new Error('Email is not available');
   }
 
-  const user = await applicationContext
+  const user: any = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 

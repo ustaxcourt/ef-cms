@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 /**
  * getInternalUsersInteractor
@@ -11,7 +11,9 @@ const { User } = require('../../entities/User');
  * @param {object} applicationContext the application context
  * @returns {Promise<User[]>} the internal users
  */
-exports.getInternalUsersInteractor = async applicationContext => {
+export const getInternalUsersInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
   if (
     !isAuthorized(
       applicationContext.getCurrentUser(),

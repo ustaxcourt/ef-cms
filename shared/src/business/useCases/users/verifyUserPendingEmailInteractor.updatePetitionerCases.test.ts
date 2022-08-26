@@ -1,18 +1,16 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   MOCK_CASE,
   MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS,
-} = require('../../../test/mockCase');
-const { updatePetitionerCases } = require('./verifyUserPendingEmailInteractor');
-const { validUser } = require('../../../test/mockUsers');
+} from '../../../test/mockCase';
+import { updatePetitionerCases } from './verifyUserPendingEmailInteractor';
+import { validUser } from '../../../test/mockUsers';
 
 describe('verifyUserPendingEmailInteractor updatePetitionerCases', () => {
   let mockPetitionerUser, userCases;

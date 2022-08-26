@@ -1,15 +1,8 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
-  generateAndServeDocketEntry,
-} = require('../../useCaseHelper/service/createChangeItems');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { clone } = require('lodash');
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { clone } from 'lodash';
 
 /**
  * Update an address on a case. This performs a search to get all of the cases associated with the user,
@@ -36,6 +29,16 @@ const generateChangeOfAddressForPractitioner = async ({
   updatedName,
   user,
   websocketMessagePrefix = 'user',
+}: {
+  applicationContext: IApplicationContext;
+  bypassDocketEntry?: boolean;
+  contactInfo: TUserContact;
+  firmName: string;
+  requestUserId?: string;
+  updatedEmail?: string;
+  updatedName?: string;
+  user: any;
+  websocketMessagePrefix?: string;
 }) => {
   const docketNumbers = await applicationContext
     .getPersistenceGateway()
@@ -170,7 +173,7 @@ const prepareToGenerateAndServeDocketEntry = async ({
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  const docketMeta = {};
+  const docketMeta = {} as any;
   if (user.role === ROLES.privatePractitioner) {
     docketMeta.privatePractitioners = [
       {
@@ -197,6 +200,4 @@ const prepareToGenerateAndServeDocketEntry = async ({
   caseEntity.updateDocketEntry(changeOfAddressDocketEntry);
 };
 
-module.exports = {
-  generateChangeOfAddress: generateChangeOfAddressForPractitioner,
-};
+export { generateChangeOfAddressForPractitioner as generateChangeOfAddress };

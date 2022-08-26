@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { IrsPractitioner } = require('../../entities/IrsPractitioner');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { IrsPractitioner } from '../../entities/IrsPractitioner';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getIrsPractitionersBySearchKeyInteractor
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} params.searchKey the search string entered by the user
  * @returns {*} the result
  */
-exports.getIrsPractitionersBySearchKeyInteractor = async (
-  applicationContext,
-  { searchKey },
+export const getIrsPractitionersBySearchKeyInteractor = async (
+  applicationContext: IApplicationContext,
+  { searchKey }: { searchKey: string },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 

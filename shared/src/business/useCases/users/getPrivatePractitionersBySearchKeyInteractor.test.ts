@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getPrivatePractitionersBySearchKeyInteractor,
-} = require('./getPrivatePractitionersBySearchKeyInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getPrivatePractitionersBySearchKeyInteractor } from './getPrivatePractitionersBySearchKeyInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 let user;
 describe('getPrivatePractitionersBySearchKeyInteractor', () => {

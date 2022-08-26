@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  UnauthorizedError,
-} = require('../../../../../shared/src/errors/errors');
-const { createUserInteractor } = require('./createUserInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { createUserInteractor } from './createUserInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('create user', () => {
   it('creates the user', async () => {

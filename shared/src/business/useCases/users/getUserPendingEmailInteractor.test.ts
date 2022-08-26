@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getUserPendingEmailInteractor,
-} = require('./getUserPendingEmailInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getUserPendingEmailInteractor } from './getUserPendingEmailInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('getUserPendingEmailInteractor', () => {
   let currentLoggedInUser;

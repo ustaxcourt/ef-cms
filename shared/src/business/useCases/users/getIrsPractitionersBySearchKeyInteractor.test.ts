@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getIrsPractitionersBySearchKeyInteractor,
-} = require('./getIrsPractitionersBySearchKeyInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getIrsPractitionersBySearchKeyInteractor } from './getIrsPractitionersBySearchKeyInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 let user;
 

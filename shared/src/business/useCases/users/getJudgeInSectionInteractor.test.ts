@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getJudgeInSectionInteractor,
-} = require('./getJudgeInSectionInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getJudgeInSectionInteractor } from './getJudgeInSectionInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('getJudgeInSectionInteractor', () => {
   beforeEach(() => {

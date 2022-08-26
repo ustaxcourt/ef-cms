@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 /**
  * getUsersInSectionInteractor
@@ -13,9 +13,9 @@ const { User } = require('../../entities/User');
  * @param {string} providers.section the section to get the users
  * @returns {Promise} the promise of the getUsersInSection call
  */
-exports.getUsersInSectionInteractor = async (
-  applicationContext,
-  { section },
+export const getUsersInSectionInteractor = async (
+  applicationContext: IApplicationContext,
+  { section }: { section: string },
 ) => {
   const user = applicationContext.getCurrentUser();
   let rolePermission;

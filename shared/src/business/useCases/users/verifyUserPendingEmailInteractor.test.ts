@@ -1,20 +1,18 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   updatePetitionerCases,
   verifyUserPendingEmailInteractor,
-} = require('./verifyUserPendingEmailInteractor');
-const { calculateISODate } = require('../../utilities/DateHandler');
-const { getContactPrimary } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../../test/mockDocuments');
-const { validUser } = require('../../../test/mockUsers');
+} from './verifyUserPendingEmailInteractor';
+import { calculateISODate } from '../../utilities/DateHandler';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { validUser } from '../../../test/mockUsers';
 
 describe('verifyUserPendingEmailInteractor', () => {
   let mockUser;

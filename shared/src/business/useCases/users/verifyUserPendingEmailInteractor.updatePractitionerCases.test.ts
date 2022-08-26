@@ -1,15 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  updatePractitionerCases,
-} = require('./verifyUserPendingEmailInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { validUser } = require('../../../test/mockUsers');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { updatePractitionerCases } from './verifyUserPendingEmailInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { validUser } from '../../../test/mockUsers';
 
 describe('verifyUserPendingEmailInteractor updatePractitionerCases', () => {
   let mockPractitionerUser;
