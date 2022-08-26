@@ -4,23 +4,29 @@ import { state } from 'cerebral';
 
 export const formatSession = (session, applicationContext) => {
   const { DATE_FORMATS } = applicationContext.getConstants();
+
   session.startOfWeek = createDateAtStartOfWeekEST(
     session.startDate,
     DATE_FORMATS.MONTH_DAY_YEAR,
   );
+
   session.startOfWeekSortable = createDateAtStartOfWeekEST(
     session.startDate,
     DATE_FORMATS.YYYYMMDD_NUMERIC,
   );
+
   session.formattedStartDate = applicationContext
     .getUtilities()
     .formatDateString(session.startDate, DATE_FORMATS.MMDDYY);
+
   session.formattedEstimatedEndDate = applicationContext
     .getUtilities()
     .formatDateString(session.estimatedEndDate, DATE_FORMATS.MMDDYY);
+
   session.formattedNoticeIssuedDate = applicationContext
     .getUtilities()
     .formatDateString(session.noticeIssuedDate, DATE_FORMATS.MMDDYYYY);
+
   return session;
 };
 
