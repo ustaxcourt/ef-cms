@@ -1,6 +1,4 @@
-const {
-  AddPrivatePractitionerFactory,
-} = require('../../entities/caseAssociation/AddPrivatePractitionerFactory');
+import { AddPrivatePractitionerFactory } from '../../entities/caseAssociation/AddPrivatePractitionerFactory';
 
 /**
  * validateAddPrivatePractitionerInteractor
@@ -9,7 +7,11 @@ const {
  * @param {object} providers.counsel the practitioner to validate
  * @returns {object} errors
  */
-exports.validateAddPrivatePractitionerInteractor = ({ counsel }) => {
+export const validateAddPrivatePractitionerInteractor = ({
+  counsel,
+}: {
+  counsel: any;
+}) => {
   const errors =
     AddPrivatePractitionerFactory(counsel).getFormattedValidationErrors();
 

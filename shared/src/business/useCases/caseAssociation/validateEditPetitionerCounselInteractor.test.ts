@@ -1,6 +1,4 @@
-const {
-  validateEditPetitionerCounselInteractor,
-} = require('./validateEditPetitionerCounselInteractor');
+import { validateEditPetitionerCounselInteractor } from './validateEditPetitionerCounselInteractor';
 
 describe('validateEditPetitionerCounselInteractor', () => {
   it('should return the expected errors when the petitioner counsel is invalid', () => {

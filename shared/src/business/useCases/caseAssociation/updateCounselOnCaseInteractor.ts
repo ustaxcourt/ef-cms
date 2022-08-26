@@ -1,13 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * updateCounselOnCaseInteractor
@@ -19,9 +16,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.userId the id of the user to be updated on the case
  * @returns {Promise} the promise of the update case call
  */
-exports.updateCounselOnCaseInteractor = async (
-  applicationContext,
-  { docketNumber, userData, userId },
+export const updateCounselOnCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    userData,
+    userId,
+  }: { docketNumber: string; userData: any; userId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 
