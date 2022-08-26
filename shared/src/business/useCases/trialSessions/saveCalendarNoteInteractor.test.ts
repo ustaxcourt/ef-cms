@@ -57,6 +57,7 @@ describe('saveCalendarNotes', () => {
       saveCalendarNoteInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         trialSessionId: mockTrialSessionId,
+        calendarNote: 'testing',
       }),
     ).rejects.toThrow('Unauthorized');
   });

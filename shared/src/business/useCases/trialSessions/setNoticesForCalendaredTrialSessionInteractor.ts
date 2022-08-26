@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 const waitForJobToFinish = ({ applicationContext, jobId }) => {
   return new Promise(resolve => {
@@ -16,7 +16,7 @@ const waitForJobToFinish = ({ applicationContext, jobId }) => {
         });
       if (jobStatus.unfinishedCases === 0) {
         clearInterval(interval);
-        resolve();
+        resolve(undefined);
       }
     }, 5000);
   });
@@ -29,9 +29,9 @@ const waitForJobToFinish = ({ applicationContext, jobId }) => {
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the trial session id
  */
-exports.setNoticesForCalendaredTrialSessionInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const setNoticesForCalendaredTrialSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
   const { PDFDocument } = await applicationContext.getPdfLib();

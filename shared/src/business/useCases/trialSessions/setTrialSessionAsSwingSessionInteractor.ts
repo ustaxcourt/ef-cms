@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * setTrialSessionAsSwingSessionInteractor
@@ -14,9 +14,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the trial session to add the swing session to
  * @returns {Promise} the promise of the updateTrialSession call
  */
-exports.setTrialSessionAsSwingSessionInteractor = async (
-  applicationContext,
-  { swingSessionId, trialSessionId },
+export const setTrialSessionAsSwingSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    swingSessionId,
+    trialSessionId,
+  }: { swingSessionId: string; trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

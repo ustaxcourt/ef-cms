@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   DOCKET_NUMBER_SUFFIXES,
   PROCEDURE_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
   TRIAL_SESSION_SCOPE_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  generateNoticeOfChangeOfTrialJudgeInteractor,
-} = require('./generateNoticeOfChangeOfTrialJudgeInteractor');
+} from '../../entities/EntityConstants';
+import { generateNoticeOfChangeOfTrialJudgeInteractor } from './generateNoticeOfChangeOfTrialJudgeInteractor';
 
 describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
   const formattedPhoneNumber = '123-456-7890';
@@ -22,7 +18,7 @@ describe('generateNoticeOfChangeOfTrialJudgeInteractor', () => {
     startDate: '2019-08-25T05:00:00.000Z',
     trialLocation: 'Mobile, Alabama',
     updatedJudgeTitleWithFullName: 'Chief Judge Lady Macbeth',
-  };
+  } as any;
 
   beforeEach(() => {
     applicationContext

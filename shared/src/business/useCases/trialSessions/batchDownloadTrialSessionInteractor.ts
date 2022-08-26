@@ -1,25 +1,25 @@
-const sanitize = require('sanitize-filename');
-const {
+import sanitize from 'sanitize-filename';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../../entities/EntityConstants');
-const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
-const { padStart } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../../entities/EntityConstants';
+import { formatDateString, FORMATS } from '../../utilities/DateHandler';
+import { padStart } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
- * batchDownloadTrialSessionInteractor
+ * batchDownloadTrialSessionInteractorHelper
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the id of the trial session
  * @returns {Promise} the promise of the batchDownloadTrialSessionInteractor call
  */
-const batchDownloadTrialSessionInteractor = async (
-  applicationContext,
-  { trialSessionId },
+const batchDownloadTrialSessionInteractorHelper = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -79,7 +79,7 @@ const batchDownloadTrialSessionInteractor = async (
 
     for (const docketEntry of docketEntriesWithFileAttached) {
       if (!docketEntry.docketEntryId) continue;
-      const filename = exports.generateValidDocketEntryFilename(docketEntry);
+      const filename = generateValidDocketEntryFilename(docketEntry);
       const pdfTitle = `${caseToBatch.caseFolder}/${filename}`;
       s3Ids.push(docketEntry.docketEntryId);
       fileNames.push(pdfTitle);
@@ -90,7 +90,11 @@ const batchDownloadTrialSessionInteractor = async (
   const numberOfDocketRecordsToGenerate = batchableSessionCases.length;
   const numberOfFilesToBatch = numberOfDocketRecordsToGenerate + s3Ids.length;
 
-  const onDocketRecordCreation = async docketNumber => {
+  const onDocketRecordCreation = async ({
+    docketNumber,
+  }: {
+    docketNumber: string;
+  }) => {
     if (docketNumber) {
       numberOfDocketRecordsGenerated += 1;
     }
@@ -107,7 +111,7 @@ const batchDownloadTrialSessionInteractor = async (
     });
   };
 
-  await onDocketRecordCreation();
+  await onDocketRecordCreation({ docketNumber: undefined });
 
   const generateDocumentAndDocketRecordForCase = async sessionCase => {
     const result = await applicationContext
@@ -217,7 +221,7 @@ const batchDownloadTrialSessionInteractor = async (
   });
 };
 
-exports.generateValidDocketEntryFilename = ({
+export const generateValidDocketEntryFilename = ({
   documentTitle,
   filingDate,
   index,
@@ -242,12 +246,12 @@ exports.generateValidDocketEntryFilename = ({
  * @param {object} providers the providers object
  * @param {string} providers.trialSessionId the id of the trial session
  */
-exports.batchDownloadTrialSessionInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const batchDownloadTrialSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   try {
-    await batchDownloadTrialSessionInteractor(applicationContext, {
+    await batchDownloadTrialSessionInteractorHelper(applicationContext, {
       trialSessionId,
     });
   } catch (error) {

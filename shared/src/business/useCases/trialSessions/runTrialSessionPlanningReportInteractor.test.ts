@@ -1,12 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   getPreviousTerm,
   getTrialSessionPlanningReportData,
   runTrialSessionPlanningReportInteractor,
-} = require('./runTrialSessionPlanningReportInteractor');
-const { ROLES, TRIAL_CITIES } = require('../../entities/EntityConstants');
+} from './runTrialSessionPlanningReportInteractor';
+import { ROLES, TRIAL_CITIES } from '../../entities/EntityConstants';
 
 describe('run trial session planning report', () => {
   const mockPdfUrl = 'www.example.com';

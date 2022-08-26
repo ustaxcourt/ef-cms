@@ -1,9 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { getTrialSessionsInteractor } = require('./getTrialSessionsInteractor');
-const { omit } = require('lodash');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getTrialSessionsInteractor } from './getTrialSessionsInteractor';
+import { omit } from 'lodash';
+import { ROLES } from '../../entities/EntityConstants';
 
 const MOCK_TRIAL_SESSION = {
   maxCases: 100,

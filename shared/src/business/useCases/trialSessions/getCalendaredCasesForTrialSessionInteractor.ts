@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getCalendaredCasesForTrialSessionInteractor
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the id of the trial session to get the calendared cases
  * @returns {Promise} the promise of the getCalendaredCasesForTrialSession call
  */
-exports.getCalendaredCasesForTrialSessionInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const getCalendaredCasesForTrialSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {

@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * canSetTrialSessionAsCalendaredInteractor
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSession trial session object
  * @returns {boolean} result of the entity method call depicting trial session calendaring eligibility
  */
-exports.canSetTrialSessionAsCalendaredInteractor = (
-  applicationContext,
-  { trialSession },
+export const canSetTrialSessionAsCalendaredInteractor = (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: TTrialSessionData },
 ) => {
   const user = applicationContext.getCurrentUser();
 

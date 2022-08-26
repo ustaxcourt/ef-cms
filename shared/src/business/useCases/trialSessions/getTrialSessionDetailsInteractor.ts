@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
+} from '../../../authorization/authorizationClientService';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
 
 /**
  * getTrialSessionDetailsInteractor
@@ -13,9 +13,9 @@ const { TrialSession } = require('../../entities/trialSessions/TrialSession');
  * @param {string} providers.trialSessionId the id of the trial session to get the details
  * @returns {object} the trial session details
  */
-exports.getTrialSessionDetailsInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const getTrialSessionDetailsInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {

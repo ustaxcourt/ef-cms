@@ -1,16 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  CASE_STATUS_TYPES,
-  CHIEF_JUDGE,
-} = require('../../entities/EntityConstants');
-const {
-  removeCaseFromTrialInteractor,
-} = require('./removeCaseFromTrialInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { MOCK_TRIAL_INPERSON } = require('../../../test/mockTrial');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../../entities/EntityConstants';
+import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('remove case from trial session', () => {
   let user;
@@ -52,6 +45,8 @@ describe('remove case from trial session', () => {
     await expect(
       removeCaseFromTrialInteractor(applicationContext, {
         disposition: 'because',
+        associatedJudge: '123',
+        caseStatus: 'new',
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       }),
@@ -63,6 +58,8 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
+      associatedJudge: '123',
+      caseStatus: 'new',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
@@ -124,6 +121,8 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
+      associatedJudge: '123',
+      caseStatus: 'new',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
@@ -185,6 +184,8 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
+      associatedJudge: '123',
+      caseStatus: 'new',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
@@ -217,6 +218,8 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
+      associatedJudge: '123',
+      caseStatus: 'new',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
@@ -242,6 +245,8 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       disposition: 'because',
+      associatedJudge: '123',
+      caseStatus: 'new',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });

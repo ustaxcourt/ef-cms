@@ -1,13 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   DOCKET_NUMBER_SUFFIXES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  generateStandingPretrialOrderInteractor,
-} = require('./generateStandingPretrialOrderInteractor');
+} from '../../entities/EntityConstants';
+import { generateStandingPretrialOrderInteractor } from './generateStandingPretrialOrderInteractor';
 
 describe('generateStandingPretrialOrderInteractor', () => {
   const TEST_JUDGE = {

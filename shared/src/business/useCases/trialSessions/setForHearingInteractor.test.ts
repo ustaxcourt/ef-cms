@@ -41,6 +41,7 @@ describe('setForHearingInteractor', () => {
       setForHearingInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
         trialSessionId: '8675309b-18d0-43ec-bafb-654e83405411',
+        calendarNotes: 'testing',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -53,7 +54,7 @@ describe('setForHearingInteractor', () => {
     await expect(
       setForHearingInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
-        isHearing: true,
+        calendarNotes: 'testing',
         trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
       }),
     ).rejects.toThrow('That Hearing is already assigned to the Case');
@@ -70,7 +71,7 @@ describe('setForHearingInteractor', () => {
     await expect(
       setForHearingInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
-        isHearing: true,
+        calendarNotes: 'testing',
         trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
       }),
     ).rejects.toThrow('That Hearing is already assigned to the Case');
@@ -84,7 +85,7 @@ describe('setForHearingInteractor', () => {
 
     await setForHearingInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
-      isHearing: true,
+      calendarNotes: 'testing',
       trialSessionId: MOCK_CASE_WITH_TRIAL_SESSION.trialSessionId,
     });
 
@@ -100,7 +101,7 @@ describe('setForHearingInteractor', () => {
 
     await setForHearingInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
-      isHearing: true,
+      calendarNotes: 'testing',
       trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
 
@@ -129,7 +130,6 @@ describe('setForHearingInteractor', () => {
     await setForHearingInteractor(applicationContext, {
       calendarNotes: 'this is a calendarNote',
       docketNumber: mockCase.docketNumber,
-      isHearing: true,
       trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
 

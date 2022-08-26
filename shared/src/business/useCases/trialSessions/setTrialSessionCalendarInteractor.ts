@@ -1,14 +1,12 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const {
-  TRIAL_SESSION_ELIGIBLE_CASES_BUFFER,
-} = require('../../entities/EntityConstants');
-const { Case } = require('../../entities/cases/Case');
-const { partition } = require('lodash');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { TRIAL_SESSION_ELIGIBLE_CASES_BUFFER } from '../../entities/EntityConstants';
+import { Case } from '../../entities/cases/Case';
+import { partition } from 'lodash';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * Removes a manually added case from the trial session
@@ -45,9 +43,9 @@ const removeManuallyAddedCaseFromTrialSession = ({
  * @param {string} providers.trialSessionId the id of the trial session to set the calendar
  * @returns {Promise} the promise of the updateTrialSession call
  */
-exports.setTrialSessionCalendarInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const setTrialSessionCalendarInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

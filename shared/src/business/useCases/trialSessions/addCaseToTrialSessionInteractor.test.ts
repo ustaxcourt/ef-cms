@@ -41,6 +41,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     await expect(
       addCaseToTrialSessionInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
+        calendarNotes: 'testing',
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
     ).rejects.toThrow('Unauthorized');
@@ -54,6 +55,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     await expect(
       addCaseToTrialSessionInteractor(applicationContext, {
+        calendarNotes: 'testing',
         docketNumber: mockCase.docketNumber,
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
@@ -69,6 +71,7 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     await expect(
       addCaseToTrialSessionInteractor(applicationContext, {
+        calendarNotes: 'testing',
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
@@ -85,6 +88,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     const latestCase = await addCaseToTrialSessionInteractor(
       applicationContext,
       {
+        calendarNotes: 'testing',
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: mockTrialSession.trialSessionId,
       },
@@ -129,6 +133,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await addCaseToTrialSessionInteractor(applicationContext, {
+      calendarNotes: 'testing',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });
@@ -150,6 +155,7 @@ describe('addCaseToTrialSessionInteractor', () => {
     };
 
     await addCaseToTrialSessionInteractor(applicationContext, {
+      calendarNotes: 'testing',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
     });

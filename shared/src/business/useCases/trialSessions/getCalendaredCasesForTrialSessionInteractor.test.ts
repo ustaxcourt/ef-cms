@@ -1,13 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getCalendaredCasesForTrialSessionInteractor,
-} = require('./getCalendaredCasesForTrialSessionInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { PARTY_TYPES, ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { User } = require('../../entities/User');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getCalendaredCasesForTrialSessionInteractor } from './getCalendaredCasesForTrialSessionInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { PARTY_TYPES, ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
+import { User } from '../../entities/User';
 
 const mockJudge = {
   role: ROLES.judge,

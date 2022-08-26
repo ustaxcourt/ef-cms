@@ -1,20 +1,16 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
-} = require('../../../test/mockTrial');
-const {
+} from '../../../test/mockTrial';
+import {
   ROLES,
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  updateTrialSessionInteractor,
-} = require('./updateTrialSessionInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+} from '../../entities/EntityConstants';
+import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { User } from '../../entities/User';
 
 describe('updateTrialSessionInteractor', () => {
   const mockUser = new User({

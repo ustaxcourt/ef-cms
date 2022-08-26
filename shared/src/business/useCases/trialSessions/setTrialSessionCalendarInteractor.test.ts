@@ -1,16 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   PARTY_TYPES,
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  setTrialSessionCalendarInteractor,
-} = require('./setTrialSessionCalendarInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+} from '../../entities/EntityConstants';
+import { setTrialSessionCalendarInteractor } from './setTrialSessionCalendarInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { User } from '../../entities/User';
 
 describe('setTrialSessionCalendarInteractor', () => {
   let user;

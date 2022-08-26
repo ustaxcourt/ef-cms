@@ -1,20 +1,16 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
-} = require('../../../test/mockTrial');
-const {
-  updateTrialSessionInteractor,
-} = require('./updateTrialSessionInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { User } = require('../../entities/User');
+} from '../../../test/mockTrial';
+import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { User } from '../../entities/User';
 
 describe('updateTrialSessionInteractor should Generate Notices of', () => {
   const mockUser = new User({

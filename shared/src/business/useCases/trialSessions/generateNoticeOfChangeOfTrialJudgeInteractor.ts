@@ -1,7 +1,8 @@
-const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
-const { formatPhoneNumber } = require('../../utilities/formatPhoneNumber');
-const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { TRIAL_SESSION_SCOPE_TYPES } = require('../../entities/EntityConstants');
+import { formatDateString, FORMATS } from '../../utilities/DateHandler';
+import { formatPhoneNumber } from '../../utilities/formatPhoneNumber';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
+
 /**
  * generateNoticeOfChangeOfTrialJudgeInteractor
  *
@@ -11,9 +12,15 @@ const { TRIAL_SESSION_SCOPE_TYPES } = require('../../entities/EntityConstants');
  * @param {string} providers.trialSessionInformation the trial session information
  * @returns {Uint8Array} notice of trial session pdf
  */
-exports.generateNoticeOfChangeOfTrialJudgeInteractor = async (
-  applicationContext,
-  { docketNumber, trialSessionInformation },
+export const generateNoticeOfChangeOfTrialJudgeInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    trialSessionInformation,
+  }: {
+    docketNumber: string;
+    trialSessionInformation: TTrialSessionData;
+  },
 ) => {
   const formattedStartDate = formatDateString(
     trialSessionInformation.startDate,

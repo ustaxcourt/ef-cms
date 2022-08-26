@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getTrialSessionDetailsInteractor,
-} = require('./getTrialSessionDetailsInteractor');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getTrialSessionDetailsInteractor } from './getTrialSessionDetailsInteractor';
+import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
-const { omit } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../entities/EntityConstants';
+import { omit } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
 
 describe('Get trial session details', () => {
   const MOCK_TRIAL_SESSION = {

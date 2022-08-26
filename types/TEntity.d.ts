@@ -148,8 +148,31 @@ type TTrialSessionData = {
   trialLocation: string;
   proceedingType: string;
   trialSessionId: string;
-  judge: string;
+  judge: {
+    name: string;
+  };
   trialClerk: string;
+};
+
+type TTrialSessionWorkingCopyData = {
+  caseMetadata: any;
+  filters: {
+    aBasisReached: boolean;
+    continued: boolean;
+    dismissed: boolean;
+    recall: boolean;
+    rule122: boolean;
+    setForTrial: boolean;
+    settled: boolean;
+    showAll: boolean;
+    statusUnassigned: boolean;
+    takenUnderAdvisement: boolean;
+  };
+  sessionNotes: string;
+  sort: string;
+  sortOrder: string;
+  trialSessionId: string;
+  userId: string;
 };
 
 type TCase = {
@@ -166,6 +189,9 @@ type TCase = {
   caseNote: string;
   caseType: string;
   closedDate: string;
+  hearings: {
+    trialSessionId: string;
+  }[];
   createdAt: string;
   damages: string;
   docketNumber: string;

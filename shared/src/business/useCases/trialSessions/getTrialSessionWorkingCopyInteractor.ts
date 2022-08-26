@@ -1,13 +1,11 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const {
-  TrialSessionWorkingCopy,
-} = require('../../entities/trialSessions/TrialSessionWorkingCopy');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { User } = require('../../entities/User');
+} from '../../../authorization/authorizationClientService';
+import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { User } from '../../entities/User';
 
 /**
  * getTrialSessionWorkingCopyInteractor
@@ -17,9 +15,9 @@ const { User } = require('../../entities/User');
  * @param {string} providers.trialSessionId id of the trial session
  * @returns {TrialSessionWorkingCopy} the trial session working copy returned from persistence
  */
-exports.getTrialSessionWorkingCopyInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const getTrialSessionWorkingCopyInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

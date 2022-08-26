@@ -1,6 +1,4 @@
-const {
-  NewTrialSession,
-} = require('../../entities/trialSessions/NewTrialSession');
+import { NewTrialSession } from '../../entities/trialSessions/NewTrialSession';
 
 /**
  * validateTrialSessionInteractor
@@ -10,9 +8,9 @@ const {
  * @param {object} providers.trialSession the trial session data
  * @returns {object} errors (null if no errors)
  */
-exports.validateTrialSessionInteractor = (
-  applicationContext,
-  { trialSession },
+export const validateTrialSessionInteractor = (
+  applicationContext: IApplicationContext,
+  { trialSession }: { trialSession: TTrialSessionData },
 ) => {
   const errors = new NewTrialSession(trialSession, {
     applicationContext,

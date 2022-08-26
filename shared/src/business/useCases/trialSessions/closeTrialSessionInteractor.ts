@@ -1,11 +1,11 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { isEmpty, isEqual } = require('lodash');
-const { TRIAL_SESSION_SCOPE_TYPES } = require('../../entities/EntityConstants');
-const { TrialSession } = require('../../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { isEmpty, isEqual } from 'lodash';
+import { TRIAL_SESSION_SCOPE_TYPES } from '../../entities/EntityConstants';
+import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * closeTrialSessionInteractor
@@ -14,9 +14,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.trialSessionId the id of the trial session to be closed
  * @returns {Promise} the promise of the updateTrialSession call
  */
-exports.closeTrialSessionInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const closeTrialSessionInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSIONS)) {

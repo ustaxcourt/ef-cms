@@ -1,9 +1,5 @@
-const {
-  compareCasesByDocketNumber,
-} = require('../../utilities/getFormattedTrialSessionDetails');
-const {
-  saveFileAndGenerateUrl,
-} = require('../../useCaseHelper/saveFileAndGenerateUrl');
+import { compareCasesByDocketNumber } from '../../utilities/getFormattedTrialSessionDetails';
+import { saveFileAndGenerateUrl } from '../../useCaseHelper/saveFileAndGenerateUrl';
 
 /**
  * generateTrialCalendarPdfInteractor
@@ -13,9 +9,9 @@ const {
  * @param {string} providers.trialSessionId the id for the trial session
  * @returns {string} trial session calendar pdf url
  */
-exports.generateTrialCalendarPdfInteractor = async (
-  applicationContext,
-  { trialSessionId },
+export const generateTrialCalendarPdfInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialSessionId }: { trialSessionId: string },
 ) => {
   const trialSession = await applicationContext
     .getPersistenceGateway()
@@ -38,7 +34,7 @@ exports.generateTrialCalendarPdfInteractor = async (
       trialSessionId,
     });
 
-  const formattedOpenCases = exports.formatCases({
+  const formattedOpenCases = formatCases({
     applicationContext,
     calendaredCases,
   });
@@ -88,13 +84,13 @@ exports.generateTrialCalendarPdfInteractor = async (
   });
 };
 
-exports.getPractitionerName = practitioner => {
+export const getPractitionerName = practitioner => {
   const { barNumber, name } = practitioner;
   const barNumberFormatted = barNumber ? ` (${barNumber})` : '';
   return `${name}${barNumberFormatted}`;
 };
 
-exports.formatCases = ({ applicationContext, calendaredCases }) => {
+export const formatCases = ({ applicationContext, calendaredCases }) => {
   const formattedOpenCases = calendaredCases
     .filter(calendaredCase => !calendaredCase.removedFromTrial)
     .sort(compareCasesByDocketNumber)
@@ -104,10 +100,10 @@ exports.formatCases = ({ applicationContext, calendaredCases }) => {
         docketNumber: openCase.docketNumber,
         docketNumberWithSuffix: openCase.docketNumberWithSuffix,
         petitionerCounsel: (openCase.privatePractitioners || []).map(
-          exports.getPractitionerName,
+          getPractitionerName,
         ),
         respondentCounsel: (openCase.irsPractitioners || []).map(
-          exports.getPractitionerName,
+          getPractitionerName,
         ),
       };
     });
