@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getPractitionersByNameInteractor
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} params.name the name to search by
  * @returns {*} the result
  */
-exports.getPractitionersByNameInteractor = async (
-  applicationContext,
-  { name },
+export const getPractitionersByNameInteractor = async (
+  applicationContext: IApplicationContext,
+  { name }: { name: string },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 

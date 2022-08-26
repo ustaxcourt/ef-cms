@@ -1,12 +1,10 @@
-const {
-  createPractitionerUser,
-} = require('../../utilities/createPractitionerUser');
-const {
+import { createPractitionerUser } from '../../utilities/createPractitionerUser';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Practitioner } = require('../../entities/Practitioner');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Practitioner } from '../../entities/Practitioner';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * createPractitionerUserInteractor
@@ -16,9 +14,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.user the user data
  * @returns {Promise} the promise of the createUser call
  */
-exports.createPractitionerUserInteractor = async (
-  applicationContext,
-  { user },
+export const createPractitionerUserInteractor = async (
+  applicationContext: IApplicationContext,
+  { user }: { user: TPractitioner },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
 

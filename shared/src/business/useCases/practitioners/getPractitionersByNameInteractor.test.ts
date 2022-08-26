@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getPractitionersByNameInteractor,
-} = require('./getPractitionersByNameInteractor');
-const { MAX_SEARCH_RESULTS, ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getPractitionersByNameInteractor } from './getPractitionersByNameInteractor';
+import { MAX_SEARCH_RESULTS, ROLES } from '../../entities/EntityConstants';
 
 describe('getPractitionersByNameInteractor', () => {
   beforeEach(() => {
@@ -21,13 +17,13 @@ describe('getPractitionersByNameInteractor', () => {
     });
 
     await expect(
-      getPractitionersByNameInteractor(applicationContext, {}),
+      getPractitionersByNameInteractor(applicationContext, {} as TPractitioner),
     ).rejects.toThrow('Unauthorized for searching practitioners');
   });
 
   it('throws an error if name is not passed in', async () => {
     await expect(
-      getPractitionersByNameInteractor(applicationContext, {}),
+      getPractitionersByNameInteractor(applicationContext, {} as TPractitioner),
     ).rejects.toThrow('Name must be provided to search');
   });
 

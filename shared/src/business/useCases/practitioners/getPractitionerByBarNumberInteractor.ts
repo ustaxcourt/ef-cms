@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Practitioner } = require('../../entities/Practitioner');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Practitioner } from '../../entities/Practitioner';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getPractitionerByBarNumberInteractor
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.barNumber the bar number for the practitioner to get
  * @returns {Practitioner} the retrieved practitioner
  */
-exports.getPractitionerByBarNumberInteractor = async (
-  applicationContext,
-  { barNumber },
+export const getPractitionerByBarNumberInteractor = async (
+  applicationContext: IApplicationContext,
+  { barNumber }: { barNumber: string },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
 

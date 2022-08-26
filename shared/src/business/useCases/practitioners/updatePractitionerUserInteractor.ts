@@ -1,11 +1,11 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
-const { omit, union } = require('lodash');
-const { Practitioner } = require('../../entities/Practitioner');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
+import { omit, union } from 'lodash';
+import { Practitioner } from '../../entities/Practitioner';
+import { UnauthorizedError } from '../../../errors/errors';
 
 const updateUserPendingEmail = async ({ applicationContext, user }) => {
   const isEmailAvailable = await applicationContext
@@ -56,9 +56,13 @@ const getUpdatedFieldNames = ({ applicationContext, oldUser, updatedUser }) => {
  * @param {object} providers.barNumber the barNumber of the user to update
  * @param {object} providers.user the user data
  */
-exports.updatePractitionerUserInteractor = async (
-  applicationContext,
-  { barNumber, bypassDocketEntry, user },
+export const updatePractitionerUserInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    barNumber,
+    bypassDocketEntry = false,
+    user,
+  }: { barNumber: string; bypassDocketEntry?: boolean; user: TPractitioner },
 ) => {
   const requestUser = applicationContext.getCurrentUser();
 

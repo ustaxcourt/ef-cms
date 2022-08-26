@@ -1,19 +1,15 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updatePractitionerUserInteractor,
-} = require('./updatePractitionerUserInteractor');
-const { MOCK_PRACTITIONER } = require('../../../test/mockUsers');
-const { ROLES } = require('../../entities/EntityConstants');
-const { SERVICE_INDICATOR_TYPES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updatePractitionerUserInteractor } from './updatePractitionerUserInteractor';
+import { MOCK_PRACTITIONER } from '../../../test/mockUsers';
+import { ROLES } from '../../entities/EntityConstants';
+import { SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 jest.mock('../users/generateChangeOfAddress');
-const { generateChangeOfAddress } = require('../users/generateChangeOfAddress');
+import { generateChangeOfAddress } from '../users/generateChangeOfAddress';
 
 describe('updatePractitionerUserInteractor', () => {
   let testUser;
-  let mockPractitioner = MOCK_PRACTITIONER;
+  let mockPractitioner = MOCK_PRACTITIONER as TPractitioner;
 
   beforeEach(() => {
     testUser = {
@@ -45,6 +41,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     await expect(
       updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: mockPractitioner,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -61,6 +58,7 @@ describe('updatePractitionerUserInteractor', () => {
     await expect(
       updatePractitionerUserInteractor(applicationContext, {
         barNumber: 'AB1111',
+        bypassDocketEntry: false,
         user: {
           ...mockPractitioner,
           barNumber: 'AB1111',
@@ -180,6 +178,7 @@ describe('updatePractitionerUserInteractor', () => {
 
       await expect(
         updatePractitionerUserInteractor(applicationContext, {
+          barNumber: 'pt101',
           user: mockPractitioner,
         }),
       ).rejects.toThrow('Unauthorized for updating practitioner user');
@@ -192,6 +191,7 @@ describe('updatePractitionerUserInteractor', () => {
 
       await expect(
         updatePractitionerUserInteractor(applicationContext, {
+          barNumber: 'pt101',
           user: {
             ...mockPractitioner,
             confirmEmail: 'exists@example.com',
@@ -203,6 +203,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     it('should update the user with the new user.updatedEmail value', async () => {
       await updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -221,6 +222,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     it("should send the verification email when the user's email is being changed", async () => {
       await updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -240,6 +242,7 @@ describe('updatePractitionerUserInteractor', () => {
     it("should NOT send the verification email when the user's email is being added for the first time", async () => {
       mockPractitioner.email = undefined;
       await updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -254,6 +257,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     it('should NOT call generateChangeOfAddress if ONLY the email is being updated', async () => {
       await updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -266,6 +270,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     it('should NOT call generateChangeOfAddress if ONLY the notes are being updated', async () => {
       await updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: {
           ...mockPractitioner,
           practitionerNotes: 'wow, real good notes',
@@ -277,6 +282,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     it('should NOT call generateChangeOfAddress if ONLY the notes and email are being updated', async () => {
       await updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -290,6 +296,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     it('should call generateChangeOfAddress if the email is being updated along with the address1', async () => {
       await updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',
@@ -306,6 +313,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     it('should call generateChangeOfAddress if the email is being updated along with the practitioner name', async () => {
       await updatePractitionerUserInteractor(applicationContext, {
+        barNumber: 'pt101',
         user: {
           ...mockPractitioner,
           confirmEmail: 'free-email-to-use@example.com',

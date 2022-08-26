@@ -1,4 +1,4 @@
-const { Practitioner } = require('../../entities/Practitioner');
+import { Practitioner } from '../../entities/Practitioner';
 
 /**
  * validatePractitionerInteractor
@@ -8,9 +8,9 @@ const { Practitioner } = require('../../entities/Practitioner');
  * @param {object} providers.practitioner metadata
  * @returns {object} errors
  */
-exports.validatePractitionerInteractor = (
-  applicationContext,
-  { practitioner },
+export const validatePractitionerInteractor = (
+  applicationContext: IApplicationContext,
+  { practitioner }: { practitioner: TPractitioner },
 ) => {
   const errors = new Practitioner(practitioner, {
     applicationContext,

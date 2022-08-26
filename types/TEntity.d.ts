@@ -105,12 +105,13 @@ type TUserContact = {
 type TUser = {
   email: string;
   name: string;
-  pendingEmail: string;
+  pendingEmail?: string;
   section: string;
   role: string;
   token: string;
   userId: string;
   isUpdatingInformation: boolean;
+  pendingEmailVerificationToken?: string;
   judgeFullName?: string;
   judgeTitle?: string;
   contact?: TUserContact;
@@ -244,6 +245,29 @@ type TPetitioner = {
   contactId: string;
   serviceIndicator: string;
 };
+
+type TPractitioner = {
+  additionalPhone: string;
+  admissionsDate: string;
+  admissionsStatus: string;
+  barNumber: string;
+  birthYear: string;
+  confirmEmail: string;
+  employer: string;
+  firmName: string;
+  firstName: string;
+  lastName: string;
+  middleName: string;
+  name: string;
+  originalBarState: string;
+  practitionerNotes: string;
+  practitionerType: string;
+  section: string;
+  suffix: string;
+  serviceIndicator: string;
+  updatedEmail: string;
+  role: string;
+} & TUser;
 
 interface IValidateRawCollection<I> {
   (collection: I[], options: { applicationContext: IApplicationContext }): I[];

@@ -1,15 +1,11 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  validatePractitionerInteractor,
-} = require('./validatePractitionerInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validatePractitionerInteractor } from './validatePractitionerInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('validatePractitionerInteractor', () => {
   it('returns the expected errors object on an empty practitioner', () => {
     const errors = validatePractitionerInteractor(applicationContext, {
-      practitioner: {},
+      practitioner: {} as TPractitioner,
     });
 
     expect(Object.keys(errors)).toEqual([
@@ -41,7 +37,7 @@ describe('validatePractitionerInteractor', () => {
         practitionerType: 'Attorney',
         role: ROLES.privatePractitioner,
         userId: '195e31b6-20f7-4fa4-980e-4236b771cced',
-      },
+      } as TPractitioner,
     });
 
     expect(errors).toBeNull();
