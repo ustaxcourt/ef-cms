@@ -1,7 +1,11 @@
-exports.processEntries = async ({
+export const processEntries = async ({
   applicationContext,
   records,
   recordType,
+}: {
+  applicationContext: IApplicationContext;
+  records: any[];
+  recordType: string;
 }) => {
   if (!records.length) return;
 

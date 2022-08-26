@@ -1,6 +1,9 @@
-exports.processRemoveEntries = async ({
+export const processRemoveEntries = async ({
   applicationContext,
   removeRecords,
+}: {
+  applicationContext: IApplicationContext;
+  removeRecords: any[];
 }) => {
   if (!removeRecords.length) return;
 

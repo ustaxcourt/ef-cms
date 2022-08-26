@@ -1,6 +1,12 @@
-const { processEntries } = require('./processEntries');
+import { processEntries } from './processEntries';
 
-exports.processWorkItemEntries = ({ applicationContext, workItemRecords }) =>
+export const processWorkItemEntries = ({
+  applicationContext,
+  workItemRecords,
+}: {
+  applicationContext: IApplicationContext;
+  workItemRecords: any[];
+}) =>
   processEntries({
     applicationContext,
     recordType: 'workItemRecords',

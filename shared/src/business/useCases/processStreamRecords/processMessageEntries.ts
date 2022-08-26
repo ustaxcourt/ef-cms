@@ -1,9 +1,12 @@
-const AWS = require('aws-sdk');
-const { compact } = require('lodash');
+import AWS from 'aws-sdk';
+import { compact } from 'lodash';
 
-exports.processMessageEntries = async ({
+export const processMessageEntries = async ({
   applicationContext,
   messageRecords,
+}: {
+  applicationContext: IApplicationContext;
+  messageRecords: any[];
 }) => {
   if (!messageRecords.length) return;
 

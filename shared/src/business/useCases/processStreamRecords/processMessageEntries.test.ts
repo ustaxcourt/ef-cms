@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { processMessageEntries } = require('./processMessageEntries');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { processMessageEntries } from './processMessageEntries';
 
 describe('processMessageEntries', () => {
   const mockRepliedToMessageRecord = {

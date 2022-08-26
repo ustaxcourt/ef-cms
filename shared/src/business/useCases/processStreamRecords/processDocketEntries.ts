@@ -1,17 +1,20 @@
-const AWS = require('aws-sdk');
-const {
+import AWS from 'aws-sdk';
+import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
  *
  * @param {array} docketEntryRecords all of the event stream records associated with docket entries
  */
-exports.processDocketEntries = async ({
+export const processDocketEntries = async ({
   applicationContext,
   docketEntryRecords: records,
+}: {
+  applicationContext: IApplicationContext;
+  docketEntryRecords: any[];
 }) => {
   if (!records.length) return;
 

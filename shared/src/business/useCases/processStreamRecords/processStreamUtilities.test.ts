@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   isPractitionerMappingInsertModifyRecord,
   isPractitionerMappingRemoveRecord,
   partitionRecords,
-} = require('./processStreamUtilities');
+} from './processStreamUtilities';
 
 describe('processStreamUtilities', () => {
   const mockRemoveRecord = {
