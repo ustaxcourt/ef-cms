@@ -1,21 +1,17 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  setDocumentTitleFromStampDataInteractor,
-} = require('./setDocumentTitleFromStampDataInteractor');
-const { formatDateString, FORMATS } = require('../../utilities/DateHandler');
-const { MOTION_DISPOSITIONS } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { setDocumentTitleFromStampDataInteractor } from './setDocumentTitleFromStampDataInteractor';
+import { formatDateString, FORMATS } from '../../utilities/DateHandler';
+import { MOTION_DISPOSITIONS } from '../../entities/EntityConstants';
 
 describe('setDocumentTitleFromStampDataInteractor', () => {
   const getDateISO = () =>
     applicationContext.getUtilities().createISODateString();
 
   const testCases = [
-    [{ disposition: MOTION_DISPOSITIONS.GRANTED }, 'GRANTED'],
+    [{ disposition: MOTION_DISPOSITIONS.GRANTED as string }, 'GRANTED'],
     [
       {
-        disposition: MOTION_DISPOSITIONS.GRANTED,
+        disposition: MOTION_DISPOSITIONS.GRANTED as string,
         jurisdictionalOption: 'The case is restored to the general docket',
         strickenFromTrialSession:
           'This case is stricken from the trial session',
@@ -26,20 +22,20 @@ describe('setDocumentTitleFromStampDataInteractor', () => {
       {
         deniedAsMoot: true,
         deniedWithoutPrejudice: true,
-        disposition: MOTION_DISPOSITIONS.DENIED,
+        disposition: MOTION_DISPOSITIONS.DENIED as string,
       },
       'DENIED as moot without prejudice',
     ],
     [
       {
-        disposition: MOTION_DISPOSITIONS.DENIED,
+        disposition: MOTION_DISPOSITIONS.DENIED as string,
       },
       'DENIED',
     ],
     [
       {
         customText: 'amazing custom text',
-        disposition: MOTION_DISPOSITIONS.GRANTED,
+        disposition: MOTION_DISPOSITIONS.GRANTED as string,
       },
       'GRANTED - amazing custom text',
     ],
@@ -47,7 +43,7 @@ describe('setDocumentTitleFromStampDataInteractor', () => {
       {
         customText: 'amazing custom text',
         date: getDateISO(),
-        disposition: MOTION_DISPOSITIONS.GRANTED,
+        disposition: MOTION_DISPOSITIONS.GRANTED as string,
         dueDateMessage: 'the parties shall file a status report by',
       },
       `GRANTED - the parties shall file a status report by ${formatDateString(
@@ -61,7 +57,7 @@ describe('setDocumentTitleFromStampDataInteractor', () => {
     it(`should return ${output} as formattedDraftDocumentTitle`, () => {
       const formattedDraftDocumentTitle =
         setDocumentTitleFromStampDataInteractor({
-          stampMotionForm: input,
+          stampMotionForm: input as any,
         });
 
       expect(formattedDraftDocumentTitle).toEqual(output);
