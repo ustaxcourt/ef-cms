@@ -100,8 +100,8 @@ export const BlockedCasesReport = connect(
                       </tbody>
                     </table>
                   )}
-                  {blockedCasesReportHelper.blockedCasesCount === 0 && (
-                    <p>There are no blocked cases for this location.</p>
+                  {blockedCasesReportHelper.displayMessage && (
+                    <p>{blockedCasesReportHelper.displayMessage}</p>
                   )}
                 </>
               )}
