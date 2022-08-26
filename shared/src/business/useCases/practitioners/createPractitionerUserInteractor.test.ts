@@ -1,14 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  createPractitionerUserInteractor,
-} = require('./createPractitionerUserInteractor');
-const {
-  ROLES,
-  SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createPractitionerUserInteractor } from './createPractitionerUserInteractor';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
 describe('create practitioner user', () => {
   const mockUser = {
@@ -25,7 +18,7 @@ describe('create practitioner user', () => {
     practitionerType: 'Attorney',
     role: ROLES.privatePractitioner,
     userId: '07044afe-641b-4d75-a84f-0698870b7650',
-  };
+  } as any;
 
   let testUser;
 

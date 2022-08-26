@@ -1,4 +1,4 @@
-const { NewPractitioner } = require('../../entities/NewPractitioner');
+import { NewPractitioner } from '../../entities/NewPractitioner';
 
 /**
  * validatePractitionerInteractor
@@ -8,9 +8,9 @@ const { NewPractitioner } = require('../../entities/NewPractitioner');
  * @param {object} providers.practitioner metadata
  * @returns {object} errors
  */
-exports.validateAddPractitionerInteractor = (
-  applicationContext,
-  { practitioner },
+export const validateAddPractitionerInteractor = (
+  applicationContext: IApplicationContext,
+  { practitioner }: { practitioner: TPractitioner },
 ) => {
   const errors = new NewPractitioner(practitioner, {
     applicationContext,
