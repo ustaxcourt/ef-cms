@@ -47,32 +47,36 @@ export const CaseDeadlinesInternal = connect(
                   </td>
                   <td className="padding-extra">{item.description}</td>
                   <td className="smaller-column center-column">
-                    <Button
-                      link
-                      className="margin-right-0 padding-0"
-                      icon="edit"
-                      onClick={() => {
-                        openEditCaseDeadlineModalSequence({
-                          caseDeadlineId: item.caseDeadlineId,
-                        });
-                      }}
-                    >
-                      Edit
-                    </Button>
+                    {caseDetailHelper.hasTrackedItemsPermission && (
+                      <Button
+                        link
+                        className="margin-right-0 padding-0"
+                        icon="edit"
+                        onClick={() => {
+                          openEditCaseDeadlineModalSequence({
+                            caseDeadlineId: item.caseDeadlineId,
+                          });
+                        }}
+                      >
+                        Edit
+                      </Button>
+                    )}
                   </td>
                   <td className="smaller-column center-column">
-                    <Button
-                      link
-                      className="margin-right-0 padding-0 red-warning"
-                      icon="trash"
-                      onClick={() => {
-                        openDeleteCaseDeadlineModalSequence({
-                          caseDeadlineId: item.caseDeadlineId,
-                        });
-                      }}
-                    >
-                      Delete
-                    </Button>
+                    {caseDetailHelper.hasTrackedItemsPermission && (
+                      <Button
+                        link
+                        className="margin-right-0 padding-0 red-warning"
+                        icon="trash"
+                        onClick={() => {
+                          openDeleteCaseDeadlineModalSequence({
+                            caseDeadlineId: item.caseDeadlineId,
+                          });
+                        }}
+                      >
+                        Delete
+                      </Button>
+                    )}
                   </td>
                 </tr>
               ))}
