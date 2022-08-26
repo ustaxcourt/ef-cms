@@ -1,11 +1,10 @@
 /* eslint-disable max-lines */
-const { serveCaseToIrsInteractor } = require('./serveCaseToIrsInteractor');
-
-const {
+import { serveCaseToIrsInteractor } from './serveCaseToIrsInteractor';
+import {
   applicationContext,
   testPdfDoc,
-} = require('../../test/createTestApplicationContext');
-const {
+} from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -15,21 +14,18 @@ const {
   PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  docketClerkUser,
-  petitionsClerkUser,
-} = require('../../../test/mockUsers');
-const {
+} from '../../entities/EntityConstants';
+import { docketClerkUser, petitionsClerkUser } from '../../../test/mockUsers';
+import {
   formatDateString,
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
-} = require('../../utilities/DateHandler');
-const { getContactPrimary } = require('../../entities/cases/Case');
-const { getFakeFile } = require('../../test/getFakeFile');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+} from '../../utilities/DateHandler';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { getFakeFile } from '../../test/getFakeFile';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('serveCaseToIrsInteractor', () => {
   const MOCK_WORK_ITEM = {

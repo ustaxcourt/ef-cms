@@ -1,12 +1,8 @@
-const {
-  addDocketEntryForPaymentStatus,
-} = require('./serveCaseToIrsInteractor');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { PAYMENT_STATUS } = require('../../entities/EntityConstants');
+import { addDocketEntryForPaymentStatus } from './serveCaseToIrsInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { PAYMENT_STATUS } from '../../entities/EntityConstants';
 
 describe('addDocketEntryForPaymentStatus', () => {
   let user;

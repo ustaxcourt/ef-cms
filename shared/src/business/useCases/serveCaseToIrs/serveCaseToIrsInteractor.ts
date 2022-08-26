@@ -1,34 +1,32 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   formatDateString,
   formatNow,
   FORMATS,
   getBusinessDateInFuture,
-} = require('../../utilities/DateHandler');
-const {
+} from '../../utilities/DateHandler';
+import {
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PARTIES_CODES,
   PAYMENT_STATUS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { generateDraftDocument } = require('./generateDraftDocument');
-const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { getClinicLetterKey } = require('../../utilities/getClinicLetterKey');
-const { PETITIONS_SECTION } = require('../../entities/EntityConstants');
-const { remove } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { generateDraftDocument } from './generateDraftDocument';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
+import { PETITIONS_SECTION } from '../../entities/EntityConstants';
+import { remove } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
 
-const addDocketEntryForPaymentStatus = ({
+export const addDocketEntryForPaymentStatus = ({
   applicationContext,
   caseEntity,
   user,
@@ -425,7 +423,7 @@ const contactAddressesAreDifferent = ({ applicationContext, caseEntity }) => {
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {Buffer} paper service pdf if the case is a paper case
  */
-const serveCaseToIrsInteractor = async (
+export const serveCaseToIrsInteractor = async (
   applicationContext,
   { docketNumber },
 ) => {
@@ -583,9 +581,4 @@ const serveCaseToIrsInteractor = async (
   });
 
   return urlToReturn;
-};
-
-module.exports = {
-  addDocketEntryForPaymentStatus,
-  serveCaseToIrsInteractor,
 };

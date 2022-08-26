@@ -1,6 +1,4 @@
-const {
-  replaceBracketed,
-} = require('../../../business/utilities/replaceBracketed');
+import { replaceBracketed } from '../../../business/utilities/replaceBracketed';
 
 /**
  * @param {object} providers the providers object containing applicationContext, caseEntity, document, replacements
@@ -10,11 +8,16 @@ const {
  * @param {string[]} providers.replacements an ordered array of strings that replace bracketed placeholders in providers.document.content
  * @returns {Promise<void>} does not return anything, rather creates a document and associated docket entry
  */
-const generateDraftDocument = async ({
+export const generateDraftDocument = async ({
   applicationContext,
   caseEntity,
   document,
   replacements,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: TCase;
+  document: any;
+  replacements: string[];
 }) => {
   const content = replaceBracketed(document.content, ...replacements);
 
@@ -28,8 +31,4 @@ const generateDraftDocument = async ({
         content,
       },
     });
-};
-
-module.exports = {
-  generateDraftDocument,
 };
