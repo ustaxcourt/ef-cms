@@ -9,20 +9,27 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { validateNoteAction } from '../actions/validateNoteAction';
+import { validateNoteOnCaseDetailAction } from '../actions/validateNoteOnCaseDetailAction';
 
 export const updateCaseNoteSequence = [
   startShowValidationAction,
   validateNoteAction,
   {
     error: [setValidationErrorsAction],
-    success: showProgressSequenceDecorator([
-      stopShowValidationAction,
-      clearAlertsAction,
-      saveCaseNoteAction,
-      setCaseNoteOnCaseDetailAction,
-      setAlertSuccessAction,
-      clearModalAction,
-      clearModalStateAction,
-    ]),
+    success: [
+      validateNoteOnCaseDetailAction,
+      {
+        error: [setValidationErrorsAction],
+        success: showProgressSequenceDecorator([
+          stopShowValidationAction,
+          clearAlertsAction,
+          saveCaseNoteAction,
+          setCaseNoteOnCaseDetailAction,
+          setAlertSuccessAction,
+          clearModalAction,
+          clearModalStateAction,
+        ]),
+      },
+    ],
   },
 ];
