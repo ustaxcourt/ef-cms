@@ -1,8 +1,8 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
-const { unprioritizeCaseInteractor } = require('./unprioritizeCaseInteractor');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
+import { unprioritizeCaseInteractor } from './unprioritizeCaseInteractor';
 
 describe('unprioritizeCaseInteractor', () => {
   let mockUser;

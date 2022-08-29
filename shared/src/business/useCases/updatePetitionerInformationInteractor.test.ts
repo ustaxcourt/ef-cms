@@ -1,31 +1,27 @@
 /* eslint-disable max-lines */
-const {
-  addExistingUserToCase,
-} = require('../useCaseHelper/caseAssociation/addExistingUserToCase');
-const {
+import { addExistingUserToCase } from '../useCaseHelper/caseAssociation/addExistingUserToCase';
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   INITIAL_DOCUMENT_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
+} from '../entities/EntityConstants';
+import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
-} = require('../../test/mockCase');
-const {
-  updatePetitionerInformationInteractor,
-} = require('./updatePetitionerInformationInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case, getOtherFilers } = require('../entities/cases/Case');
-const { docketClerkUser } = require('../../test/mockUsers');
-const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
-const { UserCase } = require('../entities/UserCase');
+} from '../../test/mockCase';
+import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { Case, getOtherFilers } from '../entities/cases/Case';
+import { docketClerkUser } from '../../test/mockUsers';
+import { PARTY_TYPES, ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
+import { UserCase } from '../entities/UserCase';
 jest.mock('./addCoversheetInteractor');
-const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { calculateISODate } = require('../utilities/DateHandler');
-const { DocketEntry } = require('../entities/DocketEntry');
+import { addCoverToPdf } from './addCoversheetInteractor';
+import { calculateISODate } from '../utilities/DateHandler';
+import { DocketEntry } from '../entities/DocketEntry';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockUser;
@@ -83,6 +79,7 @@ describe('updatePetitionerInformationInteractor', () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {},
       }),
     ).rejects.toThrow('Unauthorized for editing petition details');
   });
@@ -100,6 +97,7 @@ describe('updatePetitionerInformationInteractor', () => {
     await expect(
       updatePetitionerInformationInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
+        updatedPetitionerData: {},
       }),
     ).rejects.toThrow('Unauthorized for editing petition details');
   });

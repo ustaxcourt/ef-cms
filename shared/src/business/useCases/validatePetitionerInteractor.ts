@@ -1,7 +1,7 @@
-const { CONTACT_TYPES } = require('../entities/EntityConstants');
-const { isEmpty } = require('lodash');
-const { Petitioner } = require('../entities/contacts/Petitioner');
-const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
+import { CONTACT_TYPES } from '../entities/EntityConstants';
+import { isEmpty } from 'lodash';
+import { Petitioner } from '../entities/contacts/Petitioner';
+import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 
 /**
  * validatePetitionerInteractor
@@ -11,9 +11,12 @@ const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
  * @param {object} providers.contactInfo the contactInfo to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validatePetitionerInteractor = (
+export const validatePetitionerInteractor = (
   applicationContext,
-  { contactInfo, existingPetitioners },
+  {
+    contactInfo,
+    existingPetitioners,
+  }: { contactInfo: any; existingPetitioners?: any[] },
 ) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,

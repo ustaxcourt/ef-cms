@@ -1,4 +1,4 @@
-const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
+import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 
 /**
  * validateUpdateUserEmailInteractor
@@ -8,9 +8,9 @@ const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
  * @param {object} providers.updateUserEmail the update user email form data
  * @returns {object} errors (null if no errors)
  */
-exports.validateUpdateUserEmailInteractor = (
-  applicationContext,
-  { updateUserEmail },
+export const validateUpdateUserEmailInteractor = (
+  applicationContext: IApplicationContext,
+  { updateUserEmail }: { updateUserEmail: any },
 ) => {
   const errors = new UpdateUserEmail(updateUserEmail, {
     applicationContext,

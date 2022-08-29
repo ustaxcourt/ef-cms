@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { validateDocumentInteractor } = require('./validateDocumentInteractor');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { validateDocumentInteractor } from './validateDocumentInteractor';
 
 describe('validateDocumentInteractor', () => {
   it('returns the expected errors object on an empty docket record', () => {

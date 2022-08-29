@@ -1,10 +1,8 @@
-const {
-  unblockCaseFromTrialInteractor,
-} = require('./unblockCaseFromTrialInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+import { unblockCaseFromTrialInteractor } from './unblockCaseFromTrialInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
 
 describe('unblockCaseFromTrialInteractor', () => {
   it('should set the blocked flag to false and remove the blockedReason', async () => {
@@ -23,7 +21,6 @@ describe('unblockCaseFromTrialInteractor', () => {
 
     const result = await unblockCaseFromTrialInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-      reason: 'just because',
     });
 
     expect(result).toMatchObject({

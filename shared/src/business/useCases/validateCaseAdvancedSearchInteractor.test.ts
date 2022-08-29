@@ -1,8 +1,6 @@
-const {
-  validateCaseAdvancedSearchInteractor,
-} = require('./validateCaseAdvancedSearchInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CaseSearch } = require('../entities/cases/CaseSearch');
+import { validateCaseAdvancedSearchInteractor } from './validateCaseAdvancedSearchInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { CaseSearch } from '../entities/cases/CaseSearch';
 
 describe('validateCaseAdvancedSearchInteractor', () => {
   let validatorSpy;

@@ -1,8 +1,9 @@
-const { Case } = require('../entities/cases/Case');
-const { CONTACT_TYPES } = require('../entities/EntityConstants');
-const { isEmpty } = require('lodash');
-const { Petitioner } = require('../entities/contacts/Petitioner');
-const { some } = require('lodash');
+import { Case } from '../entities/cases/Case';
+import { CONTACT_TYPES } from '../entities/EntityConstants';
+import { isEmpty } from 'lodash';
+import { Petitioner } from '../entities/contacts/Petitioner';
+import { some } from 'lodash';
+
 /**
  * validateAddPetitionerInteractor
  *
@@ -11,9 +12,12 @@ const { some } = require('lodash');
  * @param {object} providers.contact the contact to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validateAddPetitionerInteractor = (
-  applicationContext,
-  { contact, existingPetitioners },
+export const validateAddPetitionerInteractor = (
+  applicationContext: IApplicationContext,
+  {
+    contact,
+    existingPetitioners,
+  }: { contact: any; existingPetitioners?: any[] },
 ) => {
   const petitionerErrors = new Petitioner(contact, {
     applicationContext,

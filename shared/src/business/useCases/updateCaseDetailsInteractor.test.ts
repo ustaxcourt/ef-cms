@@ -1,17 +1,15 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-} = require('../entities/EntityConstants');
-const {
-  updateCaseDetailsInteractor,
-} = require('./updateCaseDetailsInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { cloneDeep } = require('lodash');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../entities/EntityConstants';
+import { updateCaseDetailsInteractor } from './updateCaseDetailsInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
+import { UnauthorizedError } from '../../errors/errors';
 
 describe('updateCaseDetailsInteractor', () => {
   let mockCase, generalDocketReadyForTrialCase;
@@ -45,6 +43,7 @@ describe('updateCaseDetailsInteractor', () => {
     await expect(
       updateCaseDetailsInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
+        caseDetails: {},
       }),
     ).rejects.toThrow(UnauthorizedError);
   });

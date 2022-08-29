@@ -1,14 +1,14 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
+} from '../../authorization/authorizationClientService';
+import {
   MINUTE_ENTRIES_MAP,
   PAYMENT_STATUS,
-} = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * updateCaseDetailsInteractor
@@ -19,9 +19,9 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.caseDetails the case details to update on the case
  * @returns {object} the updated case data
  */
-exports.updateCaseDetailsInteractor = async (
-  applicationContext,
-  { caseDetails, docketNumber },
+export const updateCaseDetailsInteractor = async (
+  applicationContext: IApplicationContext,
+  { caseDetails, docketNumber }: { caseDetails: any; docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

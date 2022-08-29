@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * updateQcCompleteForTrialInteractor
@@ -15,9 +15,17 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.trialSessionId the id of the trial session to update
  * @returns {Promise<object>} the updated case data
  */
-exports.updateQcCompleteForTrialInteractor = async (
-  applicationContext,
-  { docketNumber, qcCompleteForTrial, trialSessionId },
+export const updateQcCompleteForTrialInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    qcCompleteForTrial,
+    trialSessionId,
+  }: {
+    docketNumber: string;
+    qcCompleteForTrial: boolean;
+    trialSessionId: string;
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
 

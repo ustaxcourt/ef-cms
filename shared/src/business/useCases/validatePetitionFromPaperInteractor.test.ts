@@ -1,14 +1,12 @@
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   PAYMENT_STATUS,
-} = require('../entities/EntityConstants');
-const {
-  validatePetitionFromPaperInteractor,
-} = require('./validatePetitionFromPaperInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+} from '../entities/EntityConstants';
+import { validatePetitionFromPaperInteractor } from './validatePetitionFromPaperInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('validate petition from paper', () => {
   it('returns the expected errors object on an empty petition', () => {
