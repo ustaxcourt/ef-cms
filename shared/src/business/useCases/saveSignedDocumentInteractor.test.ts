@@ -1,14 +1,12 @@
-const {
+import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PETITIONS_SECTION,
   SIGNED_DOCUMENT_TYPES,
-} = require('../entities/EntityConstants');
-const {
-  saveSignedDocumentInteractor,
-} = require('./saveSignedDocumentInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+} from '../entities/EntityConstants';
+import { saveSignedDocumentInteractor } from './saveSignedDocumentInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_DOCUMENTS } from '../../test/mockDocuments';
 
 describe('saveSignedDocumentInteractor', () => {
   let mockCase;
@@ -62,7 +60,7 @@ describe('saveSignedDocumentInteractor', () => {
       nameForSigning: mockSigningName,
       originalDocketEntryId: mockOriginalDocketEntryId,
       signedDocketEntryId: mockSignedDocketEntryId,
-    });
+    } as any);
 
     expect(applicationContext.getUniqueId).toHaveBeenCalled();
     expect(
@@ -79,7 +77,7 @@ describe('saveSignedDocumentInteractor', () => {
       nameForSigning: mockSigningName,
       originalDocketEntryId: mockOriginalDocketEntryId,
       signedDocketEntryId: mockSignedDocketEntryId,
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
@@ -97,7 +95,7 @@ describe('saveSignedDocumentInteractor', () => {
         nameForSigning: mockSigningName,
         originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         signedDocketEntryId: mockSignedDocketEntryId,
-      },
+      } as any,
     );
 
     expect(caseEntity.docketEntries.length).toEqual(MOCK_DOCUMENTS.length + 1);
@@ -131,7 +129,7 @@ describe('saveSignedDocumentInteractor', () => {
         nameForSigning: mockSigningName,
         originalDocketEntryId: mockOriginalDocketEntryId,
         signedDocketEntryId: mockSignedDocketEntryId,
-      },
+      } as any,
     );
 
     const signedDocument = caseEntity.docketEntries.find(
@@ -150,7 +148,7 @@ describe('saveSignedDocumentInteractor', () => {
         nameForSigning: mockSigningName,
         originalDocketEntryId: mockOriginalDocketEntryId,
         signedDocketEntryId: mockSignedDocketEntryId,
-      },
+      } as any,
     );
 
     const signedDocument = caseEntity.docketEntries.find(

@@ -1,4 +1,4 @@
-const { CaseSearch } = require('../entities/cases/CaseSearch');
+import { CaseSearch } from '../entities/cases/CaseSearch';
 
 /**
  * validateCaseAdvancedSearchInteractor
@@ -8,9 +8,9 @@ const { CaseSearch } = require('../entities/cases/CaseSearch');
  * @param {object} providers.caseSearch the case search to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validateCaseAdvancedSearchInteractor = (
-  applicationContext,
-  { caseSearch },
+export const validateCaseAdvancedSearchInteractor = (
+  applicationContext: IApplicationContext,
+  { caseSearch }: { caseSearch: any },
 ) => {
   const search = new CaseSearch(caseSearch, {
     applicationContext,

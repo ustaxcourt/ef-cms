@@ -1,8 +1,6 @@
-const {
-  uploadDocumentAndMakeSafeInteractor,
-} = require('./uploadDocumentAndMakeSafeInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_DOCUMENTS } = require('../../test/mockDocuments');
+import { uploadDocumentAndMakeSafeInteractor } from './uploadDocumentAndMakeSafeInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_DOCUMENTS } from '../../test/mockDocuments';
 
 describe('uploadDocumentAndMakeSafeInteractor', () => {
   const mockDocument = MOCK_DOCUMENTS;
@@ -18,6 +16,7 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
       applicationContext,
       {
         document: mockDocument,
+        key: 'abc',
         onUploadProgress: () => {},
       },
     );
@@ -27,6 +26,7 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
 
   it('calls upload on the provided document', async () => {
     await uploadDocumentAndMakeSafeInteractor(applicationContext, {
+      key: 'abc',
       document: mockDocument,
       onUploadProgress: () => {},
     });
@@ -53,6 +53,7 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
   it('does a virus scan on the provided document', async () => {
     await uploadDocumentAndMakeSafeInteractor(applicationContext, {
       document: mockDocument,
+      key: 'abc',
       onUploadProgress: () => {},
     });
 
@@ -65,6 +66,7 @@ describe('uploadDocumentAndMakeSafeInteractor', () => {
   it('validates the provided document', async () => {
     await uploadDocumentAndMakeSafeInteractor(applicationContext, {
       document: mockDocument,
+      key: 'abc',
       onUploadProgress: () => {},
     });
 

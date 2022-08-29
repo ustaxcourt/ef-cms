@@ -1,11 +1,11 @@
-const {
+import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SIGNED_DOCUMENT_TYPES,
-} = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { Message } = require('../entities/Message');
-const { orderBy } = require('lodash');
+} from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
+import { Message } from '../entities/Message';
+import { orderBy } from 'lodash';
 
 const saveOriginalDocumentWithNewId = async ({
   applicationContext,
@@ -63,7 +63,7 @@ const replaceOriginalWithSignedDocument = async ({
  * @param {string} providers.signedDocketEntryId the id of the signed document
  * @returns {object} an object containing the updated caseEntity and the signed document ID
  */
-exports.saveSignedDocumentInteractor = async (
+export const saveSignedDocumentInteractor = async (
   applicationContext,
   {
     docketNumber,

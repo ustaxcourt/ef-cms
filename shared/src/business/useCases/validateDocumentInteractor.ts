@@ -1,4 +1,4 @@
-const { DocketEntry } = require('../entities/DocketEntry');
+import { DocketEntry } from '../entities/DocketEntry';
 
 /**
  * validateDocumentInteractor
@@ -8,7 +8,10 @@ const { DocketEntry } = require('../entities/DocketEntry');
  * @param {object} providers.document the document to be validated
  * @returns {object} the validation errors or null
  */
-exports.validateDocumentInteractor = (applicationContext, { document }) => {
+export const validateDocumentInteractor = (
+  applicationContext: IApplicationContext,
+  { document }: { document: any },
+) => {
   const errors = new DocketEntry(document, {
     applicationContext,
   }).getFormattedValidationErrors();

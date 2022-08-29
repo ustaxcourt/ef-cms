@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { COUNTRY_TYPES, PARTY_TYPES } = require('../entities/EntityConstants');
-const { validatePetitionInteractor } = require('./validatePetitionInteractor');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { COUNTRY_TYPES, PARTY_TYPES } from '../entities/EntityConstants';
+import { validatePetitionInteractor } from './validatePetitionInteractor';
 
 describe('validatePetitionInteractor', () => {
   it('returns the expected errors object on an empty petition', () => {

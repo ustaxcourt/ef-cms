@@ -1,13 +1,11 @@
-const {
-  updateCaseTrialSortTagsInteractor,
-} = require('./updateCaseTrialSortTagsInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { omit } = require('lodash');
-const { ROLES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
+import { updateCaseTrialSortTagsInteractor } from './updateCaseTrialSortTagsInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { Case } from '../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { omit } from 'lodash';
+import { ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
 
 describe('Update case trial sort tags', () => {
   let mockCase;
@@ -88,7 +86,6 @@ describe('Update case trial sort tags', () => {
     await expect(
       updateCaseTrialSortTagsInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-        userId: 'petitionsclerk',
       }),
     ).rejects.toThrow('The Case entity was invalid');
   });

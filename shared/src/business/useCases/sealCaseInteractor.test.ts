@@ -1,7 +1,7 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
-const { sealCaseInteractor } = require('./sealCaseInteractor');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
+import { sealCaseInteractor } from './sealCaseInteractor';
 
 describe('sealCaseInteractor', () => {
   beforeAll(() => {
@@ -14,8 +14,6 @@ describe('sealCaseInteractor', () => {
     await expect(
       sealCaseInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-        qcCompleteForTrial: true,
-        trialSessionId: '10aa100f-0330-442b-8423-b01690c76e3f',
       }),
     ).rejects.toThrow('Unauthorized for sealing cases');
   });

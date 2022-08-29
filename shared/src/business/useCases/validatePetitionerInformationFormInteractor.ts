@@ -13,7 +13,7 @@ import { isEmpty } from 'lodash';
  */
 export const validatePetitionerInformationFormInteractor: {
   (
-    applicationContext,
+    applicationContext: IApplicationContext,
     {
       contactPrimary,
       contactSecondary,
@@ -23,12 +23,7 @@ export const validatePetitionerInformationFormInteractor: {
       contactSecondary: TContact;
       partyType: string;
     },
-  ):
-    | {
-        contactPrimary: TContact;
-        contactSecondary: TContact;
-      }
-    | TError;
+  );
 } = (applicationContext, { contactPrimary, contactSecondary, partyType }) => {
   const contacts = ContactFactory.createContacts({
     applicationContext,

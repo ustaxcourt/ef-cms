@@ -1,4 +1,4 @@
-const { CaseInternal } = require('../entities/cases/CaseInternal');
+import { CaseInternal } from '../entities/cases/CaseInternal';
 
 /**
  * validatePetitionFromPaper
@@ -8,9 +8,9 @@ const { CaseInternal } = require('../entities/cases/CaseInternal');
  * @param {object} providers.petition the petition data to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validatePetitionFromPaperInteractor = (
-  applicationContext,
-  { petition },
+export const validatePetitionFromPaperInteractor = (
+  applicationContext: IApplicationContext,
+  { petition }: { petition: any },
 ) => {
   const errors = new CaseInternal(petition, {
     applicationContext,

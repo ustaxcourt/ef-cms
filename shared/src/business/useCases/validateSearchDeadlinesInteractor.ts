@@ -1,4 +1,4 @@
-const { DeadlineSearch } = require('../entities/deadlines/DeadlineSearch');
+import { DeadlineSearch } from '../entities/deadlines/DeadlineSearch';
 
 /**
  * validateSearchDeadlinesInteractor
@@ -8,9 +8,9 @@ const { DeadlineSearch } = require('../entities/deadlines/DeadlineSearch');
  * @param {object} providers.deadlineSearch the deadlineSearch params to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validateSearchDeadlinesInteractor = (
+export const validateSearchDeadlinesInteractor = (
   applicationContext,
-  { deadlineSearch },
+  { deadlineSearch }: { deadlineSearch: any },
 ) => {
   const search = new DeadlineSearch(deadlineSearch, {
     applicationContext,

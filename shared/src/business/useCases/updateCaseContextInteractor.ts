@@ -1,11 +1,11 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { TrialSession } = require('../entities/trialSessions/TrialSession');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { TrialSession } from '../entities/trialSessions/TrialSession';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * updateCaseContextInteractor
@@ -18,9 +18,19 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.caseStatus the status to set on the case
  * @returns {object} the updated case data
  */
-exports.updateCaseContextInteractor = async (
-  applicationContext,
-  { associatedJudge, caseCaption, caseStatus, docketNumber },
+export const updateCaseContextInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    associatedJudge,
+    caseCaption,
+    caseStatus,
+    docketNumber,
+  }: {
+    associatedJudge?: string;
+    caseCaption?: string;
+    caseStatus?: string;
+    docketNumber: string;
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
 

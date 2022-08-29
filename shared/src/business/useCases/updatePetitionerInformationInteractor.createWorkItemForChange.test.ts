@@ -1,19 +1,17 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
-  updatePetitionerInformationInteractor,
-} = require('./updatePetitionerInformationInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { docketClerkUser, MOCK_PRACTITIONER } = require('../../test/mockUsers');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { PARTY_TYPES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
-const { UserCase } = require('../entities/UserCase');
+} from '../entities/EntityConstants';
+import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { docketClerkUser, MOCK_PRACTITIONER } from '../../test/mockUsers';
+import { MOCK_CASE } from '../../test/mockCase';
+import { PARTY_TYPES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
+import { UserCase } from '../entities/UserCase';
 jest.mock('./addCoversheetInteractor');
-const { addCoverToPdf } = require('./addCoversheetInteractor');
+import { addCoverToPdf } from './addCoversheetInteractor';
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockUser;

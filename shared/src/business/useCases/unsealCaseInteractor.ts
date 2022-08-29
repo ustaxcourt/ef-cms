@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * unsealCaseInteractor
@@ -13,7 +13,10 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {Promise<object>} the updated case data
  */
-exports.unsealCaseInteractor = async (applicationContext, { docketNumber }) => {
+export const unsealCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UNSEAL_CASE)) {

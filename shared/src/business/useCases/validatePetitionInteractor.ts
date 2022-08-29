@@ -1,4 +1,4 @@
-const { CaseExternal } = require('../entities/cases/CaseExternal');
+import { CaseExternal } from '../entities/cases/CaseExternal';
 
 /**
  * validatePetitionInteractor
@@ -8,7 +8,10 @@ const { CaseExternal } = require('../entities/cases/CaseExternal');
  * @param {object} providers.petition the petition data to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validatePetitionInteractor = (applicationContext, { petition }) => {
+export const validatePetitionInteractor = (
+  applicationContext: IApplicationContext,
+  { petition }: { petition: any },
+) => {
   const errors = new CaseExternal(petition, {
     applicationContext,
   }).getFormattedValidationErrors();

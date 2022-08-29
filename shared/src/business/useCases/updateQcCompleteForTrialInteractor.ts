@@ -15,23 +15,19 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {string} providers.trialSessionId the id of the trial session to update
  * @returns {Promise<object>} the updated case data
  */
-export const updateQcCompleteForTrialInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      docketNumber,
-      qcCompleteForTrial,
-      trialSessionId,
-    }: {
-      docketNumber: string;
-      qcCompleteForTrial: boolean;
-      trialSessionId: string;
-    },
-  ): Promise<TCase>;
-} = async (
-  applicationContext,
-  { docketNumber, qcCompleteForTrial, trialSessionId },
-) => {
+
+export const updateQcCompleteForTrialInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    qcCompleteForTrial,
+    trialSessionId,
+  }: {
+    docketNumber: string;
+    qcCompleteForTrial: boolean;
+    trialSessionId: string;
+  },
+): Promise<TCase> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.TRIAL_SESSION_QC_COMPLETE)) {

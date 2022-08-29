@@ -9,8 +9,8 @@ import { Statistic } from '../entities/Statistic';
  * @returns {object} errors (null if no errors)
  */
 export const validateAddDeficiencyStatisticsInteractor = (
-  applicationContext,
-  { statistic },
+  applicationContext: IApplicationContext,
+  { statistic }: { statistic: any },
 ) => {
   const errors = new Statistic(statistic, {
     applicationContext,
