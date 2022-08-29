@@ -1,5 +1,5 @@
-const { PublicUser } = require('../../entities/PublicUser');
-const { ROLES } = require('../../entities/EntityConstants');
+import { PublicUser } from '../../entities/PublicUser';
+import { ROLES } from '../../entities/EntityConstants';
 
 /**
  * getJudgesForPublicSearchInteractor
@@ -7,7 +7,9 @@ const { ROLES } = require('../../entities/EntityConstants');
  * @param {object} applicationContext the application context
  * @returns {object} the list of judges
  */
-exports.getJudgesForPublicSearchInteractor = async applicationContext => {
+export const getJudgesForPublicSearchInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
   const rawJudges = await applicationContext
     .getPersistenceGateway()
     .getUsersInSection({

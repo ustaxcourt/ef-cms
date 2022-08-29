@@ -1,13 +1,11 @@
-const {
+import {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-} = require('../../entities/EntityConstants');
-const {
-  PublicDocumentSearchResult,
-} = require('../../entities/documents/PublicDocumentSearchResult');
-const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
-const { formatNow, FORMATS } = require('../../utilities/DateHandler');
-const { omit } = require('lodash');
+} from '../../entities/EntityConstants';
+import { PublicDocumentSearchResult } from '../../entities/documents/PublicDocumentSearchResult';
+import { DocumentSearch } from '../../entities/documents/DocumentSearch';
+import { formatNow, FORMATS } from '../../utilities/DateHandler';
+import { omit } from 'lodash';
 
 /**
  * orderPublicSearchInteractor
@@ -22,8 +20,8 @@ const { omit } = require('lodash');
  * @param {string} providers.startDate start date for date range
  * @returns {object} the order search results
  */
-exports.orderPublicSearchInteractor = async (
-  applicationContext,
+export const orderPublicSearchInteractor = async (
+  applicationContext: IApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,
@@ -32,6 +30,14 @@ exports.orderPublicSearchInteractor = async (
     judge,
     keyword,
     startDate,
+  }: {
+    caseTitleOrPetitioner: string;
+    dateRange: string;
+    docketNumber: string;
+    endDate: string;
+    judge: string;
+    keyword: string;
+    startDate: string;
   },
 ) => {
   const orderSearch = new DocumentSearch({

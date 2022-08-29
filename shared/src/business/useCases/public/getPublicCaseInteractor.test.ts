@@ -1,14 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   PARTY_TYPES,
-} = require('../../entities/EntityConstants');
-const { cloneDeep } = require('lodash');
-const { getContactPrimary } = require('../../entities/cases/Case');
-const { getPublicCaseInteractor } = require('./getPublicCaseInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { cloneDeep } from 'lodash';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { getPublicCaseInteractor } from './getPublicCaseInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('getPublicCaseInteractor', () => {
   const mockCaseContactPrimary = getContactPrimary(MOCK_CASE);

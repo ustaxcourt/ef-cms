@@ -1,11 +1,11 @@
-const {
+import {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
-} = require('../../utilities/caseFilter');
-const { Case, isSealedCase } = require('../../entities/cases/Case');
-const { decorateForCaseStatus } = require('../getCaseInteractor');
-const { NotFoundError } = require('../../../errors/errors');
-const { PublicCase } = require('../../entities/cases/PublicCase');
+} from '../../utilities/caseFilter';
+import { Case, isSealedCase } from '../../entities/cases/Case';
+import { decorateForCaseStatus } from '../getCaseInteractor';
+import { NotFoundError } from '../../../errors/errors';
+import { PublicCase } from '../../entities/cases/PublicCase';
 
 /**
  * getPublicCaseInteractor
@@ -15,11 +15,11 @@ const { PublicCase } = require('../../entities/cases/PublicCase');
  * @param {string} providers.docketNumber the docket number of the case to get
  * @returns {object} the case data
  */
-exports.getPublicCaseInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const getPublicCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
-  let rawCaseRecord = await applicationContext
+  let rawCaseRecord: any = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,

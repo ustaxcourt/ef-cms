@@ -1,14 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} = require('../../entities/EntityConstants');
-const {
-  opinionPublicSearchInteractor,
-} = require('./opinionPublicSearchInteractor');
+} from '../../entities/EntityConstants';
+import { opinionPublicSearchInteractor } from './opinionPublicSearchInteractor';
 
 describe('opinionPublicSearchInteractor', () => {
   const mockOpinionSearchResult = [
@@ -39,7 +35,7 @@ describe('opinionPublicSearchInteractor', () => {
       keyword: 'fish',
       opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       startDate: '01/01/2001',
-    });
+    } as any);
 
     const searchArgs =
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -68,7 +64,7 @@ describe('opinionPublicSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -78,7 +74,7 @@ describe('opinionPublicSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'memorandum',
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(result).toEqual(mockOpinionSearchResult);
   });
@@ -92,13 +88,13 @@ describe('opinionPublicSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(results.length).toBe(1);
   });
 
   it('should set isOpinionSearch as true', async () => {
-    await opinionPublicSearchInteractor(applicationContext, {});
+    await opinionPublicSearchInteractor(applicationContext, {} as any);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock

@@ -1,6 +1,6 @@
-const { Case, isSealedCase } = require('../../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { PublicCase } = require('../../entities/cases/PublicCase');
+import { Case, isSealedCase } from '../../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { PublicCase } from '../../entities/cases/PublicCase';
 
 /**
  * getCaseForPublicDocketSearchInteractor
@@ -10,9 +10,9 @@ const { PublicCase } = require('../../entities/cases/PublicCase');
  * @param {string} providers.docketNumber the docket number of the case to get
  * @returns {object} the case data
  */
-exports.getCaseForPublicDocketSearchInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const getCaseForPublicDocketSearchInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
