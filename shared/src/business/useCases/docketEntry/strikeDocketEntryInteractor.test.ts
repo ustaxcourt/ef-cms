@@ -1,14 +1,12 @@
 import { strikeDocketEntryInteractor } from './strikeDocketEntryInteractor';
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 
 describe('strikeDocketEntryInteractor', () => {
   let caseRecord;

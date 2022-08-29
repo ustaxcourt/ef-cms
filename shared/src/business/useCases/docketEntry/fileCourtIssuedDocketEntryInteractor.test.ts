@@ -1,20 +1,16 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   DOCKET_SECTION,
   ROLES,
   TRANSCRIPT_EVENT_CODE,
-} = require('../../entities/EntityConstants');
-const {
-  fileCourtIssuedDocketEntryInteractor,
-} = require('./fileCourtIssuedDocketEntryInteractor');
-const {
+} from '../../entities/EntityConstants';
+import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
+import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-} = require('../../../test/mockCase');
-const { Case } = require('../../entities/cases/Case');
+} from '../../../test/mockCase';
+import { Case } from '../../entities/cases/Case';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;

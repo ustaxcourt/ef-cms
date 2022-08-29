@@ -1,6 +1,4 @@
-const {
-  DocketEntryFactory,
-} = require('../../entities/docketEntry/DocketEntryFactory');
+import { DocketEntryFactory } from '../../entities/docketEntry/DocketEntryFactory';
 
 /**
  * validateDocketEntryInteractor
@@ -9,7 +7,11 @@ const {
  * @param {object} providers.entryMetadata the docket entry metadata
  * @returns {object} errors (null if no errors)
  */
-exports.validateDocketEntryInteractor = ({ entryMetadata }) => {
+export const validateDocketEntryInteractor = ({
+  entryMetadata,
+}: {
+  entryMetadata: any;
+}) => {
   const docketEntry = DocketEntryFactory(entryMetadata);
   return docketEntry.getFormattedValidationErrors();
 };

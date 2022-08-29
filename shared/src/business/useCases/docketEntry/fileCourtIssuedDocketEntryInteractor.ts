@@ -1,14 +1,14 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
-const { omit } = require('lodash');
-const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DOCKET_SECTION } from '../../entities/EntityConstants';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { omit } from 'lodash';
+import { UNSERVABLE_EVENT_CODES } from '../../entities/EntityConstants';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  *
@@ -17,9 +17,17 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-exports.fileCourtIssuedDocketEntryInteractor = async (
-  applicationContext,
-  { docketNumbers, documentMeta, subjectDocketNumber },
+export const fileCourtIssuedDocketEntryInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumbers,
+    documentMeta,
+    subjectDocketNumber,
+  }: {
+    docketNumbers: string[];
+    documentMeta: any;
+    subjectDocketNumber: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

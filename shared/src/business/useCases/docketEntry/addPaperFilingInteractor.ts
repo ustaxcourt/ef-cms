@@ -1,20 +1,15 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
-  DOCUMENT_RELATIONSHIPS,
-  ROLES,
-} = require('../../entities/EntityConstants');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { DOCUMENT_RELATIONSHIPS, ROLES } from '../../entities/EntityConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DOCKET_SECTION } = require('../../entities/EntityConstants');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { pick } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DOCKET_SECTION } from '../../entities/EntityConstants';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { pick } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  *
@@ -25,9 +20,17 @@ const { WorkItem } = require('../../entities/WorkItem');
  * @param {string} providers.primaryDocumentFileId the id of the document file
  * @returns {object} the updated case after the documents are added
  */
-exports.addPaperFilingInteractor = async (
-  applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+export const addPaperFilingInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    documentMetadata,
+    isSavingForLater,
+    primaryDocumentFileId,
+  }: {
+    documentMetadata: any;
+    isSavingForLater: boolean;
+    primaryDocumentFileId: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

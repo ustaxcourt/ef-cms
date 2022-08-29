@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 /**
  *
@@ -13,9 +13,9 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.documentMeta document details to go on the record
  * @returns {object} the updated case after the documents are added
  */
-exports.updateCourtIssuedDocketEntryInteractor = async (
-  applicationContext,
-  { documentMeta },
+export const updateCourtIssuedDocketEntryInteractor = async (
+  applicationContext: IApplicationContext,
+  { documentMeta }: { documentMeta: any },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

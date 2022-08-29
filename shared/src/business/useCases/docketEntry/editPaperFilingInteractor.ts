@@ -1,17 +1,15 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  *
@@ -22,9 +20,17 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.primaryDocumentFileId the id of the primary document file
  * @returns {object} the updated case after the documents are added
  */
-exports.editPaperFilingInteractor = async (
-  applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+export const editPaperFilingInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    documentMetadata,
+    isSavingForLater,
+    primaryDocumentFileId,
+  }: {
+    documentMetadata: any;
+    isSavingForLater: boolean;
+    primaryDocumentFileId: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

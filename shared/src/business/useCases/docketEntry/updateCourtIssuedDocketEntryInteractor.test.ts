@@ -1,17 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   OBJECTIONS_OPTIONS_MAP,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  updateCourtIssuedDocketEntryInteractor,
-} = require('./updateCourtIssuedDocketEntryInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { updateCourtIssuedDocketEntryInteractor } from './updateCourtIssuedDocketEntryInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('updateCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
