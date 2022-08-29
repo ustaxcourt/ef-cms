@@ -1,14 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   DOCKET_SECTION,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { editPaperFilingInteractor } = require('./editPaperFilingInteractor');
-const { getContactPrimary } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { editPaperFilingInteractor } from './editPaperFilingInteractor';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('editPaperFilingInteractor', () => {
   let mockCurrentUser;

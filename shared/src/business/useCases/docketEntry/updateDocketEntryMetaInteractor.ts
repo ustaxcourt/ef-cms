@@ -1,21 +1,19 @@
-const {
+import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   UNSERVABLE_EVENT_CODES,
-} = require('../../entities/EntityConstants');
-const {
-  getDocumentTitleWithAdditionalInfo,
-} = require('../../utilities/getDocumentTitleWithAdditionalInfo');
-const {
+} from '../../entities/EntityConstants';
+import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { createISODateString } = require('../../utilities/DateHandler');
-const { DocketEntry, isServed } = require('../../entities/DocketEntry');
-const { NotFoundError } = require('../../../errors/errors');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { createISODateString } from '../../utilities/DateHandler';
+import { DocketEntry, isServed } from '../../entities/DocketEntry';
+import { NotFoundError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../errors/errors';
 
-const shouldGenerateCoversheetForDocketEntry = ({
+export const shouldGenerateCoversheetForDocketEntry = ({
   certificateOfServiceUpdated,
   documentTitleUpdated,
   entryRequiresCoverSheet,
@@ -35,8 +33,6 @@ const shouldGenerateCoversheetForDocketEntry = ({
   );
 };
 
-exports.shouldGenerateCoversheetForDocketEntry =
-  shouldGenerateCoversheetForDocketEntry;
 /**
  *
  * @param {object} applicationContext the application context
@@ -45,9 +41,12 @@ exports.shouldGenerateCoversheetForDocketEntry =
  * @param {object} providers.docketEntryMeta the docket entry metadata
  * @returns {object} the updated case after the documents are added
  */
-exports.updateDocketEntryMetaInteractor = async (
-  applicationContext,
-  { docketEntryMeta, docketNumber },
+export const updateDocketEntryMetaInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketEntryMeta,
+    docketNumber,
+  }: { docketEntryMeta: any; docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

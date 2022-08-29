@@ -1,9 +1,5 @@
-const {
-  DocketEntryFactory,
-} = require('../../entities/docketEntry/DocketEntryFactory');
-const {
-  validateDocketEntryInteractor,
-} = require('./validateDocketEntryInteractor');
+import { DocketEntryFactory } from '../../entities/docketEntry/DocketEntryFactory';
+import { validateDocketEntryInteractor } from './validateDocketEntryInteractor';
 
 const { VALIDATION_ERROR_MESSAGES } = DocketEntryFactory;
 

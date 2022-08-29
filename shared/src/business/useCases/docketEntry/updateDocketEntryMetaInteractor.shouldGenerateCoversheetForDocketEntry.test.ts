@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  shouldGenerateCoversheetForDocketEntry,
-} = require('./updateDocketEntryMetaInteractor');
-const { DocketEntry } = require('../../entities/DocketEntry');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { shouldGenerateCoversheetForDocketEntry } from './updateDocketEntryMetaInteractor';
+import { DocketEntry } from '../../entities/DocketEntry';
 
 describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry', () => {
   let mockDocketEntry = new DocketEntry(

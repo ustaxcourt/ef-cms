@@ -1,14 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateDocketEntryMetaInteractor,
-} = require('./updateDocketEntryMetaInteractor');
-const { docketClerkUser } = require('../../../test/mockUsers');
-const { getContactPrimary } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { NotFoundError } = require('../../../errors/errors');
-const { UnauthorizedError } = require('../../../errors/errors');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { NotFoundError } from '../../../errors/errors';
+import { UnauthorizedError } from '../../../errors/errors';
 
 describe('updateDocketEntryMetaInteractor', () => {
   let mockDocketEntries;

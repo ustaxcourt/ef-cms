@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 /**
  * seals a given docket entry on a case
@@ -14,9 +14,17 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the updated docket entry after it has been sealed
  */
-exports.sealDocketEntryInteractor = async (
-  applicationContext,
-  { docketEntryId, docketEntrySealedTo, docketNumber },
+export const sealDocketEntryInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketEntryId,
+    docketEntrySealedTo,
+    docketNumber,
+  }: {
+    docketEntryId: string;
+    docketEntrySealedTo: string;
+    docketNumber: string;
+  },
 ) => {
   if (!docketEntrySealedTo) {
     throw new Error('Docket entry sealed to is required');

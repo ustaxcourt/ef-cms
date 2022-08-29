@@ -1,15 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   AUTOMATIC_BLOCKED_REASONS,
   DOCKET_SECTION,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { addPaperFilingInteractor } = require('./addPaperFilingInteractor');
-const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { addPaperFilingInteractor } from './addPaperFilingInteractor';
+import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('addPaperFilingInteractor', () => {
   const user = {
@@ -45,6 +43,7 @@ describe('addPaperFilingInteractor', () => {
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
+        isSavingForLater: false,
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -59,6 +58,8 @@ describe('addPaperFilingInteractor', () => {
           documentType: 'Memorandum in Support',
           eventCode: 'MISP',
         },
+        isSavingForLater: false,
+        primaryDocumentFileId: undefined,
       }),
     ).rejects.toThrow('Did not receive a primaryDocumentFileId');
   });
@@ -67,6 +68,8 @@ describe('addPaperFilingInteractor', () => {
     await expect(
       addPaperFilingInteractor(applicationContext, {
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        documentMetadata: undefined,
+        isSavingForLater: false,
       }),
     ).rejects.toThrow('Did not receive meta data for docket entry');
   });
@@ -83,6 +86,7 @@ describe('addPaperFilingInteractor', () => {
         isFileAttached: true,
         isPaper: true,
       },
+      isSavingForLater: false,
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -120,6 +124,7 @@ describe('addPaperFilingInteractor', () => {
         isFileAttached: true,
         isPaper: true,
       },
+      isSavingForLater: false,
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -225,6 +230,7 @@ describe('addPaperFilingInteractor', () => {
         isFileAttached: true,
         isPaper: true,
       },
+      isSavingForLater: false,
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -261,6 +267,7 @@ describe('addPaperFilingInteractor', () => {
         isFileAttached: true,
         isPaper: true,
       },
+      isSavingForLater: false,
       primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     });
 
@@ -296,6 +303,7 @@ describe('addPaperFilingInteractor', () => {
           isFileAttached: true,
           isPaper: true,
         },
+        isSavingForLater: false,
         primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow(new Error('bad!'));

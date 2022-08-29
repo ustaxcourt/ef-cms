@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 /**
  * unseals a given docket entry on a case
@@ -14,9 +14,12 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the updated docket entry after it has been unsealed
  */
-exports.unsealDocketEntryInteractor = async (
-  applicationContext,
-  { docketEntryId, docketNumber },
+export const unsealDocketEntryInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketEntryId,
+    docketNumber,
+  }: { docketEntryId: string; docketNumber: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
