@@ -1,38 +1,31 @@
-const {
-  addServedStampToDocument,
-} = require('../../useCases/courtIssuedDocument/addServedStampToDocument');
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   CONTACT_CHANGE_DOCUMENT_TYPES,
   DOCUMENT_RELATIONSHIPS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  DOCUMENT_PROCESSING_STATUS_OPTIONS,
-} = require('../../entities/EntityConstants');
-const {
-  generateNoticeOfDocketChangePdf,
-} = require('../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf');
-const {
-  getDocumentTitleWithAdditionalInfo,
-} = require('../../utilities/getDocumentTitleWithAdditionalInfo');
-const {
+} from '../../entities/EntityConstants';
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../entities/EntityConstants';
+import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
+import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { CASE_CAPTION_POSTFIX } = require('../../entities/EntityConstants');
-const { dateStringsCompared } = require('../../utilities/DateHandler');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { formatDateString } = require('../../utilities/DateHandler');
-const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { getDocumentTitle } = require('../../utilities/getDocumentTitle');
-const { replaceBracketed } = require('../../utilities/replaceBracketed');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { CASE_CAPTION_POSTFIX } from '../../entities/EntityConstants';
+import { dateStringsCompared } from '../../utilities/DateHandler';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { formatDateString } from '../../utilities/DateHandler';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { getDocumentTitle } from '../../utilities/getDocumentTitle';
+import { replaceBracketed } from '../../utilities/replaceBracketed';
+import { UnauthorizedError } from '../../../errors/errors';
 
-const getNeedsNewCoversheet = ({ currentDocketEntry, updatedDocketEntry }) => {
+export const getNeedsNewCoversheet = ({
+  currentDocketEntry,
+  updatedDocketEntry,
+}) => {
   const receivedAtUpdated =
     dateStringsCompared(
       currentDocketEntry.receivedAt,
@@ -50,8 +43,6 @@ const getNeedsNewCoversheet = ({ currentDocketEntry, updatedDocketEntry }) => {
   );
 };
 
-exports.getNeedsNewCoversheet = getNeedsNewCoversheet;
-
 /**
  * completeDocketEntryQCInteractor
  *
@@ -60,7 +51,7 @@ exports.getNeedsNewCoversheet = getNeedsNewCoversheet;
  * @param {object} providers.entryMetadata the entry metadata
  * @returns {object} the updated case after the documents are added
  */
-exports.completeDocketEntryQCInteractor = async (
+export const completeDocketEntryQCInteractor = async (
   applicationContext,
   { entryMetadata },
 ) => {

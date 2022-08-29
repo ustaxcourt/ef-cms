@@ -1,9 +1,7 @@
-const fs = require('fs');
-const path = require('path');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { virusScanPdfInteractor } = require('./virusScanPdfInteractor');
+import fs from 'fs';
+import path from 'path';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { virusScanPdfInteractor } from './virusScanPdfInteractor';
 
 const testAssetsPath = path.join(__dirname, '../../../../test-assets/');
 
@@ -56,7 +54,7 @@ describe('virusScanPdfInteractor', () => {
 
   it('should NOT copy file to documents bucket, NOT delete from quarantine bucket, but successfully invoke callback if file is NOT clean', async () => {
     applicationContext.runVirusScan.mockImplementation(() => {
-      const err = new Error('a virus!');
+      const err: any = new Error('a virus!');
       err.code = 1;
       throw err;
     });
@@ -77,7 +75,7 @@ describe('virusScanPdfInteractor', () => {
 
   it('should call applicationContext.logger.info with file infected message AND invoke scanCompleteCallback if file is not clean and error code is 1', async () => {
     applicationContext.runVirusScan.mockImplementation(() => {
-      const err = new Error('a virus!');
+      const err: any = new Error('a virus!');
       err.code = 1;
       throw err;
     });
@@ -95,7 +93,7 @@ describe('virusScanPdfInteractor', () => {
 
   it('should call applicationContext.logger.error with something happened message and NOT invoke scanCompleteCallback if file is not clean and error code is NOT 1', async () => {
     applicationContext.runVirusScan.mockImplementation(() => {
-      const err = new Error('a virus!');
+      const err: any = new Error('a virus!');
       err.code = 2;
       throw err;
     });
