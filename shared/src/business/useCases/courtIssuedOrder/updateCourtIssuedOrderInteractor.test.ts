@@ -1,17 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  updateCourtIssuedOrderInteractor,
-} = require('./updateCourtIssuedOrderInteractor');
-const { User } = require('../../entities/User');
+} from '../../entities/EntityConstants';
+import { updateCourtIssuedOrderInteractor } from './updateCourtIssuedOrderInteractor';
+import { User } from '../../entities/User';
 
 describe('updateCourtIssuedOrderInteractor', () => {
   let mockCurrentUser;
