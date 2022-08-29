@@ -246,6 +246,40 @@ interface IGetTrialSessionById {
   }): Promise<TTrialSessionData>;
 }
 
+interface IDeleteDocumentFromS3 {
+  ({
+    applicationContext,
+    key,
+  }: {
+    applicationContext: IApplicationContext;
+    key: string;
+  }): Promise<void>;
+}
+
+interface IUpdateCaseCorrespondence {
+  ({
+    applicationContext,
+    correspondence,
+    docketNumber,
+  }: {
+    applicationContext: IApplicationContext;
+    correspondence: TCorrespondence;
+    docketNumber: string;
+  }): Promise<void>;
+}
+
+interface IUploadDocumentFromClient {
+  ({
+    applicationContext,
+    document,
+    key,
+  }: {
+    applicationContext: IApplicationContext;
+    document: string;
+    key: string;
+  }): Promise<string>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   createCaseDeadline: ICreateCaseDeadline;
@@ -272,4 +306,7 @@ type TPersistenceGateway = {
   setMessageAsRead: ISetMessageAsRead;
   deleteUserFromCase: IDeleteUserFromCase;
   getTrialSessionById: IGetTrialSessionById;
+  deleteDocumentFromS3: IDeleteDocumentFromS3;
+  updateCaseCorrespondence: IUpdateCaseCorrespondence;
+  uploadDocumentFromClient: IUploadDocumentFromClient;
 };

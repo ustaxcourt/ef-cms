@@ -1,12 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  archiveCorrespondenceDocumentInteractor,
-} = require('./archiveCorrespondenceDocumentInteractor');
-const { Correspondence } = require('../../entities/Correspondence');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+import { Correspondence } from '../../entities/Correspondence';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { archiveCorrespondenceDocumentInteractor } from './archiveCorrespondenceDocumentInteractor';
 
 describe('archiveCorrespondenceDocumentInteractor', () => {
   let mockUser;

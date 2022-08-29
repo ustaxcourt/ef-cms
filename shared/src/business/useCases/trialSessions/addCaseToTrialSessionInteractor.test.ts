@@ -1,12 +1,12 @@
-import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
-import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
-import { applicationContext } from '../../test/createTestApplicationContext';
-const {
+import {
   CASE_STATUS_TYPES,
   CHIEF_JUDGE,
   ROLES,
-} = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
+import { addCaseToTrialSessionInteractor } from './addCaseToTrialSessionInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addCaseToTrialSessionInteractor', () => {
   let mockCurrentUser;
@@ -40,8 +40,8 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     await expect(
       addCaseToTrialSessionInteractor(applicationContext, {
-        docketNumber: mockCase.docketNumber,
         calendarNotes: 'testing',
+        docketNumber: mockCase.docketNumber,
         trialSessionId: MOCK_TRIAL_REMOTE.trialSessionId,
       }),
     ).rejects.toThrow('Unauthorized');

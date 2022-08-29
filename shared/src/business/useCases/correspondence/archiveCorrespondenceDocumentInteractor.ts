@@ -1,9 +1,9 @@
-const {
-  isAuthorized,
+import { Case } from '../../entities/cases/Case';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * archiveCorrespondenceDocumentInteractor
@@ -14,10 +14,15 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {void}
  */
-exports.archiveCorrespondenceDocumentInteractor = async (
-  applicationContext,
-  { correspondenceId, docketNumber },
-) => {
+export const archiveCorrespondenceDocumentInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    {
+      correspondenceId,
+      docketNumber,
+    }: { correspondenceId: string; docketNumber: string },
+  ): Promise<void>;
+} = async (applicationContext, { correspondenceId, docketNumber }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
