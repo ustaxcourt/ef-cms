@@ -1,16 +1,14 @@
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../entities/EntityConstants');
-const {
-  validateCaseDetailInteractor,
-} = require('./validateCaseDetailInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CaseQC } = require('../entities/cases/CaseQC');
-const { MOCK_USERS } = require('../../test/mockUsers');
+} from '../entities/EntityConstants';
+import { validateCaseDetailInteractor } from './validateCaseDetailInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { CaseQC } from '../entities/cases/CaseQC';
+import { MOCK_USERS } from '../../test/mockUsers';
 const { VALIDATION_ERROR_MESSAGES } = CaseQC;
 
 describe('validate case detail', () => {

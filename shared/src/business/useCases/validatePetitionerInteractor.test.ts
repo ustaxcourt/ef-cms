@@ -1,15 +1,13 @@
-const {
+import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
-  validatePetitionerInteractor,
-} = require('./validatePetitionerInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { Petitioner } = require('../entities/contacts/Petitioner');
-const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
+} from '../entities/EntityConstants';
+import { validatePetitionerInteractor } from './validatePetitionerInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { ContactFactory } from '../entities/contacts/ContactFactory';
+import { Petitioner } from '../entities/contacts/Petitioner';
+import { UpdateUserEmail } from '../entities/UpdateUserEmail';
 
 describe('validatePetitionerInteractor', () => {
   let mockContact;

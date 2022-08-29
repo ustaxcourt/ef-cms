@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '../../errors/errors';
 
 /**
  * updates the case trial sort tags
@@ -12,9 +12,9 @@ const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers the providers object
  * @param {string} providers.docketNumber the docket number of the case to update the case trial sort tags
  */
-exports.updateCaseTrialSortTagsInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const updateCaseTrialSortTagsInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

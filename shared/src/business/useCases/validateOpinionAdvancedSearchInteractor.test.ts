@@ -1,8 +1,6 @@
-const {
-  validateOpinionAdvancedSearchInteractor,
-} = require('./validateOpinionAdvancedSearchInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DATE_RANGE_SEARCH_OPTIONS } = require('../entities/EntityConstants');
+import { validateOpinionAdvancedSearchInteractor } from './validateOpinionAdvancedSearchInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { DATE_RANGE_SEARCH_OPTIONS } from '../entities/EntityConstants';
 
 describe('validateOpinionAdvancedSearchInteractor', () => {
   it('returns null when no errors exist in the opinionSearch', () => {

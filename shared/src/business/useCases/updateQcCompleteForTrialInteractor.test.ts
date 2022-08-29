@@ -1,9 +1,7 @@
-const {
-  updateQcCompleteForTrialInteractor,
-} = require('./updateQcCompleteForTrialInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+import { updateQcCompleteForTrialInteractor } from './updateQcCompleteForTrialInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
 
 describe('updateQcCompleteForTrialInteractor', () => {
   let user;

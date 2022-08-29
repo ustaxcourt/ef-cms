@@ -1,8 +1,6 @@
-const {
-  validateOrderAdvancedSearchInteractor,
-} = require('./validateOrderAdvancedSearchInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { DATE_RANGE_SEARCH_OPTIONS } = require('../entities/EntityConstants');
+import { validateOrderAdvancedSearchInteractor } from './validateOrderAdvancedSearchInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { DATE_RANGE_SEARCH_OPTIONS } from '../entities/EntityConstants';
 
 describe('validateOrderAdvancedSearchInteractor', () => {
   it('returns null when no errors exist in the orderSearch', () => {

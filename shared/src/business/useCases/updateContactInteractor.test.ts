@@ -1,20 +1,20 @@
-const {
+import {
   applicationContext,
   fakeData,
-} = require('../test/createTestApplicationContext');
-const {
+} from '../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
+} from '../entities/EntityConstants';
+import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
-} = require('../../test/mockCase');
-const { getContactPrimary } = require('../entities/cases/Case');
-const { updateContactInteractor } = require('./updateContactInteractor');
-const { User } = require('../entities/User');
+} from '../../test/mockCase';
+import { getContactPrimary } from '../entities/cases/Case';
+import { updateContactInteractor } from './updateContactInteractor';
+import { User } from '../entities/User';
 
 describe('updates the contact on a case', () => {
   let mockCase;

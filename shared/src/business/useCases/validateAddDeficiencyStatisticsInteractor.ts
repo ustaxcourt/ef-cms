@@ -1,4 +1,4 @@
-const { Statistic } = require('../entities/Statistic');
+import { Statistic } from '../entities/Statistic';
 
 /**
  * validateAddDeficiencyStatisticsInteractor
@@ -8,9 +8,9 @@ const { Statistic } = require('../entities/Statistic');
  * @param {object} providers.statistic the statistic data to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validateAddDeficiencyStatisticsInteractor = (
-  applicationContext,
-  { statistic },
+export const validateAddDeficiencyStatisticsInteractor = (
+  applicationContext: IApplicationContext,
+  { statistic }: { statistic: any },
 ) => {
   const errors = new Statistic(statistic, {
     applicationContext,

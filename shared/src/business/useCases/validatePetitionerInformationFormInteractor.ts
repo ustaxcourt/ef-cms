@@ -1,5 +1,5 @@
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { isEmpty } = require('lodash');
+import { ContactFactory } from '../entities/contacts/ContactFactory';
+import { isEmpty } from 'lodash';
 
 /**
  * validatePetitionerInformationFormInteractor
@@ -11,9 +11,13 @@ const { isEmpty } = require('lodash');
  * @param {object} providers.partyType the partyType to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validatePetitionerInformationFormInteractor = (
-  applicationContext,
-  { contactPrimary, contactSecondary, partyType },
+export const validatePetitionerInformationFormInteractor = (
+  applicationContext: IApplicationContext,
+  {
+    contactPrimary,
+    contactSecondary,
+    partyType,
+  }: { contactPrimary: any; contactSecondary?: any; partyType: string },
 ) => {
   const contacts = ContactFactory.createContacts({
     applicationContext,

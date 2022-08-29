@@ -1,13 +1,11 @@
-const {
+import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
-} = require('../../test/mockCase');
-const {
-  sealCaseContactAddressInteractor,
-} = require('./sealCaseContactAddressInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getOtherFilers } = require('../entities/cases/Case');
-const { ROLES } = require('../entities/EntityConstants');
+} from '../../test/mockCase';
+import { sealCaseContactAddressInteractor } from './sealCaseContactAddressInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getOtherFilers } from '../entities/cases/Case';
+import { ROLES } from '../entities/EntityConstants';
 
 describe('sealCaseContactAddressInteractor', () => {
   beforeEach(() => {

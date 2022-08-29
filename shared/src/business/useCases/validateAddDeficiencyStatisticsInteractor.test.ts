@@ -1,7 +1,5 @@
-const {
-  validateAddDeficiencyStatisticsInteractor,
-} = require('./validateAddDeficiencyStatisticsInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { validateAddDeficiencyStatisticsInteractor } from './validateAddDeficiencyStatisticsInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('validateAddDeficiencyStatisticsInteractor', () => {
   it('returns the expected errors object on an empty statistic', () => {

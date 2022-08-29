@@ -1,24 +1,26 @@
-const {
-  aggregatePartiesForService,
-} = require('../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import {
   Case,
   getPetitionerById,
   getPractitionersRepresenting,
-} = require('../entities/cases/Case');
-const {
+} from '../entities/cases/Case';
+import {
   CASE_STATUS_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
+} from '../entities/EntityConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { defaults, pick } = require('lodash');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { defaults, pick } from 'lodash';
+import { NotFoundError, UnauthorizedError } from '../../errors/errors';
 
-const getIsUserAuthorized = ({ oldCase, updatedPetitionerData, user }) => {
+export const getIsUserAuthorized = ({
+  oldCase,
+  updatedPetitionerData,
+  user,
+}) => {
   let isRepresentingCounsel = false;
   if (user.role === ROLES.privatePractitioner) {
     const practitioners = getPractitionersRepresenting(
@@ -101,7 +103,7 @@ const updateCaseEntityAndGenerateChange = async ({
  * @param {string} providers.updatedPetitionerData the updatedPetitionerData to update
  * @returns {object} the updated case data
  */
-const updatePetitionerInformationInteractor = async (
+export const updatePetitionerInformationInteractor = async (
   applicationContext,
   { docketNumber, updatedPetitionerData },
 ) => {
@@ -298,9 +300,4 @@ const updatePetitionerInformationInteractor = async (
     paperServicePdfUrl: serviceUrl,
     updatedCase,
   };
-};
-
-module.exports = {
-  getIsUserAuthorized,
-  updatePetitionerInformationInteractor,
 };
