@@ -1,11 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { BOUNCE_NOTIFICATION } from '../../../test/mockBounceNotification';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   handleBounceNotificationInteractor,
   parseBounceNotification,
-} = require('./handleBounceNotificationInteractor');
-const { BOUNCE_NOTIFICATION } = require('../../../test/mockBounceNotification');
+} from './handleBounceNotificationInteractor';
 
 describe('handleBounceNotificationInteractor', () => {
   beforeEach(() => {
