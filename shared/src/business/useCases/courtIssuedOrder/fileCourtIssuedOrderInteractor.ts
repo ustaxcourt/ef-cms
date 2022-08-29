@@ -1,13 +1,13 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { DOCUMENT_RELATIONSHIPS } = require('../../entities/EntityConstants');
-const { Message } = require('../../entities/Message');
-const { orderBy } = require('lodash');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { DOCUMENT_RELATIONSHIPS } from '../../entities/EntityConstants';
+import { Message } from '../../entities/Message';
+import { orderBy } from 'lodash';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  *
@@ -17,9 +17,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the updated case entity after the document is added
  */
-exports.fileCourtIssuedOrderInteractor = async (
-  applicationContext,
-  { documentMetadata, primaryDocumentFileId },
+export const fileCourtIssuedOrderInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    documentMetadata,
+    primaryDocumentFileId,
+  }: { documentMetadata: any; primaryDocumentFileId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;

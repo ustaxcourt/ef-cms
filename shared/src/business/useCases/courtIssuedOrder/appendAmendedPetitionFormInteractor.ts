@@ -1,11 +1,9 @@
-const {
-  AMENDED_PETITION_FORM_NAME,
-} = require('../../entities/EntityConstants');
-const {
+import { AMENDED_PETITION_FORM_NAME } from '../../entities/EntityConstants';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 /**
  *
@@ -15,9 +13,9 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers the providers object
  * @param {string} providers.docketEntryId the docketEntryId of the document
  */
-exports.appendAmendedPetitionFormInteractor = async (
-  applicationContext,
-  { docketEntryId },
+export const appendAmendedPetitionFormInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketEntryId }: { docketEntryId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

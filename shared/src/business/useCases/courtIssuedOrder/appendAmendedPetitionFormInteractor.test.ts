@@ -1,13 +1,7 @@
-const {
-  AMENDED_PETITION_FORM_NAME,
-} = require('../../entities/EntityConstants');
-const {
-  appendAmendedPetitionFormInteractor,
-} = require('./appendAmendedPetitionFormInteractor');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { ROLES } = require('../../entities/EntityConstants');
+import { AMENDED_PETITION_FORM_NAME } from '../../entities/EntityConstants';
+import { appendAmendedPetitionFormInteractor } from './appendAmendedPetitionFormInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { ROLES } from '../../entities/EntityConstants';
 
 const mockDocketEntryId = 'd594360c-0514-4acd-a2ac-24a402060756';
 
@@ -44,7 +38,7 @@ describe('appendAmendedPetitionFormInteractor', () => {
     });
 
     await expect(
-      appendAmendedPetitionFormInteractor(applicationContext, {}),
+      appendAmendedPetitionFormInteractor(applicationContext, {} as any),
     ).rejects.toThrow('Unauthorized');
   });
 
