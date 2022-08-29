@@ -1,23 +1,22 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
- * updateOtherStatisticsInteractor
+ * deleteDeficiencyStatisticInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.docketNumber the docket number of the case to update statistics
- * @param {number} providers.damages damages statistic to add to the case
- * @param {number} providers.litigationCosts litigation costs statistic to add to the case
+ * @param {string} providers.docketNumber the docket number of the case to delete statistics
+ * @param {string} providers.statisticId id of the statistic on the case to delete
  * @returns {object} the updated case
  */
-exports.updateOtherStatisticsInteractor = async (
-  applicationContext,
-  { damages, docketNumber, litigationCosts },
+export const deleteDeficiencyStatisticInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -29,10 +28,8 @@ exports.updateOtherStatisticsInteractor = async (
     .getPersistenceGateway()
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
-  const newCase = new Case(
-    { ...oldCase, damages, litigationCosts },
-    { applicationContext },
-  );
+  const newCase = new Case(oldCase, { applicationContext });
+  newCase.deleteStatistic(statisticId);
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()

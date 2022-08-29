@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  fetchPendingItemsInteractor,
-} = require('./fetchPendingItemsInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { fetchPendingItemsInteractor } from './fetchPendingItemsInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('fetchPendingItemsInteractor', () => {
   let mockUser;
@@ -27,7 +23,7 @@ describe('fetchPendingItemsInteractor', () => {
     await expect(
       fetchPendingItemsInteractor(applicationContext, {
         judge: 'Judge Colvin',
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -35,7 +31,7 @@ describe('fetchPendingItemsInteractor', () => {
     await expect(
       fetchPendingItemsInteractor(applicationContext, {
         judge: undefined,
-      }),
+      } as any),
     ).rejects.toThrow('judge is required');
   });
 
@@ -49,7 +45,7 @@ describe('fetchPendingItemsInteractor', () => {
 
     const results = await fetchPendingItemsInteractor(applicationContext, {
       judge: 'Judge Colvin',
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().fetchPendingItems,

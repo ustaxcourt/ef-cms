@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { UNSERVABLE_EVENT_CODES } from '../../entities/EntityConstants';
 
 /**
  * generatePrintablePendingReportInteractor
@@ -14,9 +14,9 @@ const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
  * @param {string} providers.docketNumber the optional docketNumber filter
  * @returns {Array} the url of the document
  */
-exports.generatePrintablePendingReportInteractor = async (
-  applicationContext,
-  { docketNumber, judge },
+export const generatePrintablePendingReportInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber, judge }: { docketNumber: string; judge: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -99,7 +99,7 @@ exports.generatePrintablePendingReportInteractor = async (
         applicationContext.logger.error('error uploading to s3', err);
         reject(err);
       }
-      resolve();
+      resolve(undefined);
     });
   });
 

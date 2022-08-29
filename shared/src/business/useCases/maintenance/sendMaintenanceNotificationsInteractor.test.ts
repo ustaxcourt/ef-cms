@@ -1,9 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  sendMaintenanceNotificationsInteractor,
-} = require('./sendMaintenanceNotificationsInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { sendMaintenanceNotificationsInteractor } from './sendMaintenanceNotificationsInteractor';
 
 describe('sendMaintenanceNotificationsInteractor', () => {
   const mockConnections = [
