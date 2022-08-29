@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { onDisconnectInteractor } = require('./onDisconnectInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { onDisconnectInteractor } from './onDisconnectInteractor';
 
 describe('deleteUserConnection', () => {
   it('attempts to delete the user connection', async () => {
