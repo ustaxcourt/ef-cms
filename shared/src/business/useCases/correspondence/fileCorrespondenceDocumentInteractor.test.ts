@@ -1,17 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  fileCorrespondenceDocumentInteractor,
-} = require('./fileCorrespondenceDocumentInteractor');
-const { createISODateString } = require('../../utilities/DateHandler');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createISODateString } from '../../utilities/DateHandler';
+import { fileCorrespondenceDocumentInteractor } from './fileCorrespondenceDocumentInteractor';
 
 describe('fileCorrespondenceDocumentInteractor', () => {
   const mockUser = {

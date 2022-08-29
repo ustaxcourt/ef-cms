@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  uploadCorrespondenceDocumentInteractor,
-} = require('./uploadCorrespondenceDocumentInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { uploadCorrespondenceDocumentInteractor } from './uploadCorrespondenceDocumentInteractor';
 
 describe('uploadCorrespondenceDocumentInteractor', () => {
   let mockUser;

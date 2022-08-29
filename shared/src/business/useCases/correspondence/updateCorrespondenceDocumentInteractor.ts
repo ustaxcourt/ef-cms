@@ -1,10 +1,10 @@
-const {
-  isAuthorized,
+import { Case } from '../../entities/cases/Case';
+import { Correspondence } from '../../entities/Correspondence';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { Correspondence } = require('../../entities/Correspondence');
-const { UnauthorizedError } = require('../../../errors/errors');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * updateCorrespondenceDocumentInteractor
@@ -14,10 +14,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the correspondence document is updated
  */
-exports.updateCorrespondenceDocumentInteractor = async (
-  applicationContext,
-  { documentMetadata },
-) => {
+export const updateCorrespondenceDocumentInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    { documentMetadata }: { documentMetadata: TDocumentMetaData },
+  ): Promise<TCase>;
+} = async (applicationContext, { documentMetadata }) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 

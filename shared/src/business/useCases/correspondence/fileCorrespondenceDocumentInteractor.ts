@@ -1,10 +1,10 @@
-const {
-  isAuthorized,
+import { Case } from '../../entities/cases/Case';
+import { Correspondence } from '../../entities/Correspondence';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { Correspondence } = require('../../entities/Correspondence');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 
 /**
  * fileCorrespondenceDocumentInteractor
@@ -15,10 +15,15 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the raw case object
  */
-exports.fileCorrespondenceDocumentInteractor = async (
-  applicationContext,
-  { documentMetadata, primaryDocumentFileId },
-) => {
+export const fileCorrespondenceDocumentInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    {
+      documentMetadata,
+      primaryDocumentFileId,
+    }: { documentMetadata: TDocumentMetaData; primaryDocumentFileId: string },
+  ): Promise<TCase>;
+} = async (applicationContext, { documentMetadata, primaryDocumentFileId }) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 
