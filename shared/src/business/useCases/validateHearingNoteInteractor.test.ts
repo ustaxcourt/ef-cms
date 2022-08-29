@@ -1,7 +1,5 @@
-const {
-  validateHearingNoteInteractor,
-} = require('./validateHearingNoteInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { validateHearingNoteInteractor } from './validateHearingNoteInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('validateHearingNoteInteractor', () => {
   it('returns a defined errors object if the note is null', () => {

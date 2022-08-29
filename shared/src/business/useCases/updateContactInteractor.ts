@@ -1,19 +1,17 @@
-const {
-  aggregatePartiesForService,
-} = require('../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../utilities/aggregatePartiesForService';
+import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const { addCoverToPdf } = require('./addCoversheetInteractor');
-const { Case } = require('../entities/cases/Case');
-const { cloneDeep } = require('lodash');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { isEmpty } = require('lodash');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
-const { WorkItem } = require('../entities/WorkItem');
+} from '../entities/EntityConstants';
+import { addCoverToPdf } from './addCoversheetInteractor';
+import { Case } from '../entities/cases/Case';
+import { cloneDeep } from 'lodash';
+import { DocketEntry } from '../entities/DocketEntry';
+import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
+import { isEmpty } from 'lodash';
+import { NotFoundError, UnauthorizedError } from '../../errors/errors';
+import { WorkItem } from '../entities/WorkItem';
 
 /**
  * updateContactInteractor
@@ -26,7 +24,7 @@ const { WorkItem } = require('../entities/WorkItem');
  * @param {object} providers.contactInfo the contact info to update on the case
  * @returns {object} the updated case
  */
-exports.updateContactInteractor = async (
+export const updateContactInteractor = async (
   applicationContext,
   { contactInfo, docketNumber },
 ) => {

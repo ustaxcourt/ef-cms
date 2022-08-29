@@ -1,12 +1,12 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
+} from '../../authorization/authorizationClientService';
+import {
   UnauthorizedError,
   UnprocessableEntityError,
-} = require('../../errors/errors');
-const { Case } = require('../entities/cases/Case');
+} from '../../errors/errors';
+import { Case } from '../entities/cases/Case';
 
 /**
  * sealCaseContactAddressInteractor
@@ -17,7 +17,7 @@ const { Case } = require('../entities/cases/Case');
  * @param {string} providers.docketNumber the docket number of the case to update
  * @returns {object} the updated case data
  */
-exports.sealCaseContactAddressInteractor = async (
+export const sealCaseContactAddressInteractor = async (
   applicationContext,
   { contactId, docketNumber },
 ) => {

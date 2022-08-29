@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * used for unblocking a case
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.docketNumber the docket number to unblock
  * @returns {object} the case data
  */
-exports.unblockCaseFromTrialInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const unblockCaseFromTrialInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

@@ -1,13 +1,8 @@
-const {
-  CASE_STATUS_TYPES,
-  CONTACT_TYPES,
-} = require('../entities/EntityConstants');
-const {
-  getIsUserAuthorized,
-} = require('./updatePetitionerInformationInteractor');
-const { docketClerkUser, MOCK_PRACTITIONER } = require('../../test/mockUsers');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+import { CASE_STATUS_TYPES, CONTACT_TYPES } from '../entities/EntityConstants';
+import { getIsUserAuthorized } from './updatePetitionerInformationInteractor';
+import { docketClerkUser, MOCK_PRACTITIONER } from '../../test/mockUsers';
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
 
 describe('updatePetitionerInformationInteractor getIsUserAuthorized', () => {
   let mockUser;

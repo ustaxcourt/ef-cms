@@ -5,9 +5,13 @@
  * @param {Function} onUploadProgress the progressFunction
  * @returns {Promise<string>} the key returned from a successful upload
  */
-exports.uploadDocumentAndMakeSafeInteractor = async (
-  applicationContext,
-  { document, key, onUploadProgress },
+export const uploadDocumentAndMakeSafeInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    document,
+    key,
+    onUploadProgress,
+  }: { document: any; key: string; onUploadProgress: () => void },
 ) => {
   const uploadedKey = await applicationContext
     .getPersistenceGateway()
@@ -16,7 +20,7 @@ exports.uploadDocumentAndMakeSafeInteractor = async (
       document,
       key,
       onUploadProgress,
-    });
+    } as any);
 
   await applicationContext
     .getUseCases()

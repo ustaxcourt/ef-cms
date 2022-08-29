@@ -1,7 +1,5 @@
-const {
-  validateSearchDeadlinesInteractor,
-} = require('./validateSearchDeadlinesInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { validateSearchDeadlinesInteractor } from './validateSearchDeadlinesInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('validateSearchDeadlinesInteractor', () => {
   it('returns the expected errors object on an empty statistic', () => {

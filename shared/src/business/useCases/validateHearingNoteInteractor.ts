@@ -1,4 +1,4 @@
-const { HearingNote } = require('../entities/notes/HearingNote');
+import { HearingNote } from '../entities/notes/HearingNote';
 
 /**
  * validateHearingNoteInteractor
@@ -8,7 +8,10 @@ const { HearingNote } = require('../entities/notes/HearingNote');
  * @param {string} providers.note the note string
  * @returns {object} the errors or null
  */
-exports.validateHearingNoteInteractor = (applicationContext, { note }) => {
+export const validateHearingNoteInteractor = (
+  applicationContext: IApplicationContext,
+  { note }: {note: string},
+) => {
   const errors = new HearingNote(
     { note },
     {

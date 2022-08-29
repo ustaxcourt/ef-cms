@@ -1,5 +1,5 @@
-const { Case } = require('../entities/cases/Case');
-const { CaseQC } = require('../entities/cases/CaseQC');
+import { Case } from '../entities/cases/Case';
+import { CaseQC } from '../entities/cases/CaseQC';
 
 /**
  * validateCaseDetailInteractor
@@ -10,9 +10,12 @@ const { CaseQC } = require('../entities/cases/CaseQC');
  * @param {object} providers.useCaseEntity the flag indicating what kind of entity to use
  * @returns {object} errors (null if no errors)
  */
-exports.validateCaseDetailInteractor = (
-  applicationContext,
-  { caseDetail, useCaseEntity = false },
+export const validateCaseDetailInteractor = (
+  applicationContext: IApplicationContext,
+  {
+    caseDetail,
+    useCaseEntity = false,
+  }: { caseDetail: any; useCaseEntity?: boolean },
 ) => {
   if (useCaseEntity) {
     return new Case(caseDetail, {
