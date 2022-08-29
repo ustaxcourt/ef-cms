@@ -120,7 +120,8 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Withdraw as Counsel",
