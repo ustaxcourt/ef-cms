@@ -1,10 +1,8 @@
-const {
-  PublicDocumentSearchResult,
-} = require('../../entities/documents/PublicDocumentSearchResult');
-const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
-const { formatNow, FORMATS } = require('../../utilities/DateHandler');
-const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
-const { omit } = require('lodash');
+import { PublicDocumentSearchResult } from '../../entities/documents/PublicDocumentSearchResult';
+import { DocumentSearch } from '../../entities/documents/DocumentSearch';
+import { formatNow, FORMATS } from '../../utilities/DateHandler';
+import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
+import { omit } from 'lodash';
 
 /**
  * opinionPublicSearchInteractor
@@ -20,8 +18,8 @@ const { omit } = require('lodash');
  * @param {string} providers.startDate start date for date range
  * @returns {object} the opinion search results
  */
-exports.opinionPublicSearchInteractor = async (
-  applicationContext,
+export const opinionPublicSearchInteractor = async (
+  applicationContext: IApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,
@@ -31,6 +29,15 @@ exports.opinionPublicSearchInteractor = async (
     keyword,
     opinionTypes,
     startDate,
+  }: {
+    caseTitleOrPetitioner: string;
+    dateRange: string;
+    docketNumber: string;
+    endDate: string;
+    judge: string;
+    keyword: string;
+    opinionTypes: string;
+    startDate: string;
   },
 ) => {
   const opinionSearch = new DocumentSearch({

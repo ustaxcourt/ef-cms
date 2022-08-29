@@ -1,9 +1,7 @@
-const {
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} = require('../../entities/EntityConstants');
-const { Case, isSealedCase } = require('../../entities/cases/Case');
-const { isPrivateDocument } = require('../../entities/cases/PublicCase');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+import { Case, isSealedCase } from '../../entities/cases/Case';
+import { isPrivateDocument } from '../../entities/cases/PublicCase';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getPublicDownloadPolicyUrlInteractor
@@ -14,11 +12,15 @@ const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.key the key of the document to get
  * @returns {Promise<string>} the document download url
  */
-exports.getPublicDownloadPolicyUrlInteractor = async (
-  applicationContext,
-  { docketNumber, isTerminalUser, key },
+export const getPublicDownloadPolicyUrlInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    isTerminalUser,
+    key,
+  }: { docketNumber: string; isTerminalUser: boolean; key: string },
 ) => {
-  const caseToCheck = await applicationContext
+  const caseToCheck: any = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
       applicationContext,

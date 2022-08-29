@@ -1,15 +1,9 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  DOCKET_ENTRY_SEALED_TO_TYPES,
-} = require('../../entities/EntityConstants');
-const {
-  getPublicDownloadPolicyUrlInteractor,
-} = require('./getPublicDownloadPolicyUrlInteractor');
-const { cloneDeep } = require('lodash');
-const { DocketEntry } = require('../../entities/DocketEntry');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../entities/EntityConstants';
+import { getPublicDownloadPolicyUrlInteractor } from './getPublicDownloadPolicyUrlInteractor';
+import { cloneDeep } from 'lodash';
+import { DocketEntry } from '../../entities/DocketEntry';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('getPublicDownloadPolicyUrlInteractor', () => {
   let mockCase;
@@ -68,7 +62,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-      }),
+      } as any),
     ).rejects.toThrow('Case 123-20 was not found.');
   });
 
@@ -98,7 +92,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: '5a3ea70f-c539-4118-81a3-0be94be3b4f1',
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized to access documents in a sealed case');
   });
 
@@ -129,7 +123,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       {
         docketNumber: '123-20',
         key: '83813a24-7687-418e-a186-c416b4bb0ad4',
-      },
+      } as any,
     );
     expect(result).toEqual('localhost');
   });
@@ -155,7 +149,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       {
         docketNumber: '123-20',
         key: '8008b288-8b6b-48e3-8239-599266b13b8b',
-      },
+      } as any,
     );
     expect(result).toEqual('localhost');
   });
@@ -165,7 +159,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: 'b907f4e5-4d4d-44b3-bcfd-224a6f31d889',
-      }),
+      } as any),
     ).rejects.toThrow(
       'Docket entry b907f4e5-4d4d-44b3-bcfd-224a6f31d889 was not found.',
     );
@@ -191,7 +185,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
-      }),
+      } as any),
     ).rejects.toThrow(
       'Docket entry 8205c4bc-879f-4648-a3ba-9280384c4c00 does not have an attached file.',
     );
@@ -220,7 +214,7 @@ describe('getPublicDownloadPolicyUrlInteractor', () => {
       getPublicDownloadPolicyUrlInteractor(applicationContext, {
         docketNumber: '123-20',
         key: '8205c4bc-879f-4648-a3ba-9280384c4c00',
-      }),
+      } as any),
     ).rejects.toThrow('Docket entry has been sealed.');
   });
 });

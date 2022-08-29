@@ -1,14 +1,10 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-} = require('../../entities/EntityConstants');
-const {
-  orderPublicSearchInteractor,
-} = require('./orderPublicSearchInteractor');
+} from '../../entities/EntityConstants';
+import { orderPublicSearchInteractor } from './orderPublicSearchInteractor';
 
 describe('orderPublicSearchInteractor', () => {
   beforeEach(() => {
@@ -41,7 +37,7 @@ describe('orderPublicSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -56,7 +52,7 @@ describe('orderPublicSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -84,7 +80,7 @@ describe('orderPublicSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'fish',
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -111,7 +107,7 @@ describe('orderPublicSearchInteractor', () => {
         dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
         keyword: 'fish',
         startDate: '01/01/2001',
-      }),
+      } as any),
     ).rejects.toThrow('entity was invalid');
   });
 });

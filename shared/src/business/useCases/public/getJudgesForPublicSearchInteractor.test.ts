@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getJudgesForPublicSearchInteractor,
-} = require('./getJudgesForPublicSearchInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getJudgesForPublicSearchInteractor } from './getJudgesForPublicSearchInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('getJudgesForPublicSearchInteractor', () => {
   it('strips out all non public data', async () => {

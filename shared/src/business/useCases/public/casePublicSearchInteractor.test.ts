@@ -1,15 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CONTACT_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   MAX_SEARCH_RESULTS,
   PARTY_TYPES,
-} = require('../../entities/EntityConstants');
-const { casePublicSearchInteractor } = require('./casePublicSearchInteractor');
-const { getContactPrimary } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { casePublicSearchInteractor } from './casePublicSearchInteractor';
+import { getContactPrimary } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('casePublicSearchInteractor', () => {
   beforeAll(() => {
@@ -22,7 +20,10 @@ describe('casePublicSearchInteractor', () => {
   });
 
   it('returns empty array if no search params are passed in', async () => {
-    const results = await casePublicSearchInteractor(applicationContext, {});
+    const results = await casePublicSearchInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     expect(results).toEqual([]);
   });
@@ -47,7 +48,7 @@ describe('casePublicSearchInteractor', () => {
 
     const results = await casePublicSearchInteractor(applicationContext, {
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results).toEqual([
       {
@@ -93,7 +94,10 @@ describe('casePublicSearchInteractor', () => {
       .getPersistenceGateway()
       .casePublicSearch.mockResolvedValue(maxPlusOneResults);
 
-    const results = await casePublicSearchInteractor(applicationContext, {});
+    const results = await casePublicSearchInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -118,7 +122,7 @@ describe('casePublicSearchInteractor', () => {
 
     const results = await casePublicSearchInteractor(applicationContext, {
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results.length).toEqual(0);
   });
