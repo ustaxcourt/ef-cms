@@ -11,10 +11,15 @@ const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
  * @param {object} providers.contactInfo the contactInfo to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validatePetitionerInteractor = (
-  applicationContext,
-  { contactInfo, existingPetitioners },
-) => {
+export const validatePetitionerInteractor: {
+  (
+    applicationContext,
+    {
+      contactInfo,
+      existingPetitioners,
+    }: { contactInfo: TContact; existingPetitioners: TPetitioner[] },
+  ): TError | undefined;
+} = (applicationContext, { contactInfo, existingPetitioners }) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
   }).getFormattedValidationErrors();

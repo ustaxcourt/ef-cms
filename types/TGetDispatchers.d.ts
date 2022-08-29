@@ -10,6 +10,10 @@ interface ISendSlackNotification {
   }): Promise<string>;
 }
 
+type TMailDestination = {
+  email: string;
+};
+
 interface ISendBulkTemplatedEmail {
   ({
     applicationContext,
@@ -19,7 +23,7 @@ interface ISendBulkTemplatedEmail {
   }: {
     applicationContext: IApplicationContext;
     defaultTemplateData: TDefaultEmailTemplateData;
-    destinations: string[];
+    destinations: TMailDestination[];
     templateName: string;
   });
 }

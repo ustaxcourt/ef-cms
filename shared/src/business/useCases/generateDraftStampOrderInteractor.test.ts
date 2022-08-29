@@ -1,11 +1,6 @@
-const {
-  generateDraftStampOrderInteractor,
-} = require('./generateDraftStampOrderInteractor.js');
-const {
-  MOTION_DISPOSITIONS,
-  ROLES,
-} = require('../entities/EntityConstants.js');
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { MOTION_DISPOSITIONS, ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { generateDraftStampOrderInteractor } from './generateDraftStampOrderInteractor';
 
 describe('generateDraftStampOrderInteractor', () => {
   let mockCurrentUser;

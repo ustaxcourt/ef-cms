@@ -1,15 +1,13 @@
-const {
+import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
-  validatePetitionerInteractor,
-} = require('./validatePetitionerInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { ContactFactory } = require('../entities/contacts/ContactFactory');
-const { Petitioner } = require('../entities/contacts/Petitioner');
-const { UpdateUserEmail } = require('../entities/UpdateUserEmail');
+} from '../entities/EntityConstants';
+import { ContactFactory } from '../entities/contacts/ContactFactory';
+import { Petitioner } from '../entities/contacts/Petitioner';
+import { UpdateUserEmail } from '../entities/UpdateUserEmail';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { validatePetitionerInteractor } from './validatePetitionerInteractor';
 
 describe('validatePetitionerInteractor', () => {
   let mockContact;
@@ -30,7 +28,7 @@ describe('validatePetitionerInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       state: 'MN',
       updatedEmail: 'night@example.com',
-    };
+    } as TContact;
   });
 
   it('runs validation on a contact with no invalid properties', () => {

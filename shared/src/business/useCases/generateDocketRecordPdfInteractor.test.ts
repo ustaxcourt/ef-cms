@@ -1,14 +1,12 @@
-const {
+import {
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
-} = require('../entities/EntityConstants');
-const {
-  generateDocketRecordPdfInteractor,
-} = require('./generateDocketRecordPdfInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_PRACTITIONER, MOCK_USERS } = require('../../test/mockUsers');
+} from '../entities/EntityConstants';
+import { MOCK_PRACTITIONER, MOCK_USERS } from '../../test/mockUsers';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { generateDocketRecordPdfInteractor } from './generateDocketRecordPdfInteractor';
 
 describe('generateDocketRecordPdfInteractor', () => {
   const mockId = '12345';

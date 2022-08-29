@@ -1,6 +1,4 @@
-const {
-  reactTemplateGenerator,
-} = require('../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
+import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
 
 /**
  * Helper function to easily parse the information we need from the Notification about the bounce

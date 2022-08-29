@@ -273,10 +273,12 @@ interface IUploadDocumentFromClient {
     applicationContext,
     document,
     key,
+    onUploadProgress,
   }: {
     applicationContext: IApplicationContext;
     document: string;
     key: string;
+    onUploadProgress(): any;
   }): Promise<string>;
 }
 

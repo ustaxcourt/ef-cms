@@ -1,14 +1,14 @@
-const {
+import {
   Case,
   getPractitionersRepresenting,
   isSealedCase,
-} = require('../entities/cases/Case');
-const {
-  isAuthorized,
+} from '../entities/cases/Case';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
-const { UnauthorizedError } = require('../../errors/errors');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
+import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
 /**
  * generateDocketRecordPdfInteractor
@@ -18,7 +18,20 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.docketNumber the docket number for the docket record to be generated
  * @returns {Uint8Array} docket record pdf
  */
-exports.generateDocketRecordPdfInteractor = async (
+export const generateDocketRecordPdfInteractor: {
+  (
+    applicationContext,
+    {
+      docketNumber,
+      docketRecordSort,
+      includePartyDetail,
+    }: {
+      docketNumber: string;
+      docketRecordSort?: string;
+      includePartyDetail: boolean;
+    },
+  ): Promise<void>;
+} = async (
   applicationContext,
   { docketNumber, docketRecordSort, includePartyDetail = false },
 ) => {
