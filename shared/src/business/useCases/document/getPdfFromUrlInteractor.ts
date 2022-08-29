@@ -6,7 +6,10 @@
  * @param {object} providers.pdfUrl the url to the pdf to retrieve
  * @returns {object} the pdf file
  */
-exports.getPdfFromUrlInteractor = async (applicationContext, { pdfUrl }) => {
+export const getPdfFromUrlInteractor = async (
+  applicationContext: IApplicationContext,
+  { pdfUrl }: { pdfUrl: string },
+) => {
   const pdfFile = await applicationContext
     .getPersistenceGateway()
     .getPdfFromUrl({ applicationContext, url: pdfUrl });

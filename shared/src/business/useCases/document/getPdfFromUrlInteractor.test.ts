@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { getPdfFromUrlInteractor } = require('./getPdfFromUrlInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getPdfFromUrlInteractor } from './getPdfFromUrlInteractor';
 
 describe('getPdfFromUrlInteractor', () => {
   it('should return the pdf from persistence', async () => {

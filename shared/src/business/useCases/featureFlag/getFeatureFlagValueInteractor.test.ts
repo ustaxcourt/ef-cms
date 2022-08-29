@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getFeatureFlagValueInteractor,
-} = require('./getFeatureFlagValueInteractor');
-const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getFeatureFlagValueInteractor } from './getFeatureFlagValueInteractor';
+import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
 
 describe('getFeatureFlagValueInteractor', () => {
   it('should retrieve the value of the feature flag from persistence when the feature flag is included in the allowlist', async () => {

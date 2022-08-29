@@ -21,7 +21,7 @@ export const removePdf = async ({
  * @throws {Error} if pdf is invalid
  */
 export const validatePdfInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   { key }: { key: string },
 ) => {
   const { Body: pdfData } = await applicationContext

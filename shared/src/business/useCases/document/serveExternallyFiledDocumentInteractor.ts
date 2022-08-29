@@ -1,13 +1,11 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { addCoverToPdf } = require('../addCoversheetInteractor');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { addCoverToPdf } from '../addCoversheetInteractor';
+import { Case } from '../../entities/cases/Case';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -18,9 +16,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketEntryId the id of the docket entry to serve
  * @returns {object} the paper service pdf url
  */
-exports.serveExternallyFiledDocumentInteractor = async (
-  applicationContext,
-  { docketEntryId, docketNumber },
+export const serveExternallyFiledDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketEntryId,
+    docketNumber,
+  }: { docketEntryId: string; docketNumber: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

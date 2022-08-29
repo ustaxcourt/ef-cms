@@ -1,6 +1,4 @@
-const {
-  getStatusOfVirusScanInteractor,
-} = require('./getStatusOfVirusScanInteractor');
+import { getStatusOfVirusScanInteractor } from './getStatusOfVirusScanInteractor';
 
 describe('getStatusOfVirusScanInteractor', () => {
   it('should return true', () => {

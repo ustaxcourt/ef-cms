@@ -1,6 +1,4 @@
-const {
-  CaseExternalInformationFactory,
-} = require('../../entities/cases/CaseExternalInformationFactory');
+import { CaseExternalInformationFactory } from '../../entities/cases/CaseExternalInformationFactory';
 
 /**
  * validateStartCaseWizardInteractor
@@ -10,9 +8,9 @@ const {
  * @param {object} providers.petition the petition data
  * @returns {object} errors (null if no errors)
  */
-exports.validateStartCaseWizardInteractor = (
-  applicationContext,
-  { petition },
+export const validateStartCaseWizardInteractor = (
+  applicationContext: IApplicationContext,
+  { petition }: { petition: any },
 ) => {
   const errors = new CaseExternalInformationFactory(petition, {
     applicationContext,

@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getDocumentContentsForDocketEntryInteractor
@@ -12,9 +12,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {object} providers.documentContentsId document contents id
  * @returns {string} url for the generated document on the storage client
  */
-exports.getDocumentContentsForDocketEntryInteractor = async (
-  applicationContext,
-  { documentContentsId },
+export const getDocumentContentsForDocketEntryInteractor = async (
+  applicationContext: IApplicationContext,
+  { documentContentsId }: { documentContentsId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 
