@@ -1,12 +1,8 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  deleteDeficiencyStatisticInteractor,
-} = require('./deleteDeficiencyStatisticInteractor');
-const { CASE_TYPES_MAP } = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { deleteDeficiencyStatisticInteractor } from './deleteDeficiencyStatisticInteractor';
+import { CASE_TYPES_MAP } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('deleteDeficiencyStatisticInteractor', () => {
   const statisticId = 'f7a1cdb5-f534-4d12-a046-86ca3b46ddc4';
@@ -40,7 +36,7 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     await expect(
       deleteDeficiencyStatisticInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 

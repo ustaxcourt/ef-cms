@@ -1,11 +1,9 @@
-const {
-  associateIrsPractitionerToCase,
-} = require('../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase');
-const {
+import { associateIrsPractitionerToCase } from '../../useCaseHelper/caseAssociation/associateIrsPractitionerToCase';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * associateIrsPractitionerWithCaseInteractor
@@ -17,9 +15,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} params.userId the user id
  * @returns {*} the result
  */
-exports.associateIrsPractitionerWithCaseInteractor = async (
-  applicationContext,
-  { docketNumber, serviceIndicator, userId },
+export const associateIrsPractitionerWithCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    serviceIndicator,
+    userId,
+  }: { docketNumber: string; serviceIndicator: string; userId: string },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 

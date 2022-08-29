@@ -6,9 +6,9 @@
  * @param {string} providers.connectionId the websocket connection id
  * @returns {Promise} which resolves when connections have been deleted
  */
-exports.onDisconnectInteractor = async (
-  applicationContext,
-  { connectionId },
+export const onDisconnectInteractor = async (
+  applicationContext: IApplicationContext,
+  { connectionId }: { connectionId: string },
 ) => {
   await applicationContext.getPersistenceGateway().deleteUserConnection({
     applicationContext,

@@ -1,11 +1,9 @@
-const {
-  associatePrivatePractitionerToCase,
-} = require('../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase');
-const {
+import { associatePrivatePractitionerToCase } from '../../useCaseHelper/caseAssociation/associatePrivatePractitionerToCase';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * associatePrivatePractitionerWithCaseInteractor
@@ -18,9 +16,19 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} params.userId the user id
  * @returns {*} the result
  */
-exports.associatePrivatePractitionerWithCaseInteractor = async (
-  applicationContext,
-  { docketNumber, representing, serviceIndicator, userId },
+export const associatePrivatePractitionerWithCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    representing,
+    serviceIndicator,
+    userId,
+  }: {
+    docketNumber: string;
+    representing: string[];
+    serviceIndicator: string;
+    userId: string;
+  },
 ) => {
   const authenticatedUser = applicationContext.getCurrentUser();
 

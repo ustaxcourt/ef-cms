@@ -1,13 +1,13 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { Statistic } = require('../../entities/Statistic');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { Statistic } from '../../entities/Statistic';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
- * addDeficiencyStatisticInteractor
+ * updateDeficiencyStatisticInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
@@ -17,12 +17,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {number} providers.irsDeficiencyAmount deficiency amount from the IRS
  * @param {number} providers.irsTotalPenalties total penalties amount from the IRS
  * @param {string} providers.lastDateOfPeriod last date of the period for the statistic
+ * @param {string} providers.statisticId id of the statistic on the case to update
  * @param {number} providers.year year for the statistic
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {object} the updated case
  */
-exports.addDeficiencyStatisticInteractor = async (
-  applicationContext,
+export const updateDeficiencyStatisticInteractor = async (
+  applicationContext: IApplicationContext,
   {
     determinationDeficiencyAmount,
     determinationTotalPenalties,
@@ -30,8 +31,19 @@ exports.addDeficiencyStatisticInteractor = async (
     irsDeficiencyAmount,
     irsTotalPenalties,
     lastDateOfPeriod,
+    statisticId,
     year,
     yearOrPeriod,
+  }: {
+    determinationDeficiencyAmount: number;
+    determinationTotalPenalties: number;
+    docketNumber: string;
+    irsDeficiencyAmount: number;
+    irsTotalPenalties: number;
+    lastDateOfPeriod: string;
+    statisticId: string;
+    year: string;
+    yearOrPeriod: string;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
@@ -51,6 +63,7 @@ exports.addDeficiencyStatisticInteractor = async (
       irsDeficiencyAmount,
       irsTotalPenalties,
       lastDateOfPeriod,
+      statisticId,
       year,
       yearOrPeriod,
     },
@@ -58,7 +71,7 @@ exports.addDeficiencyStatisticInteractor = async (
   ).validate();
 
   const newCase = new Case(oldCase, { applicationContext });
-  newCase.addStatistic(statisticEntity);
+  newCase.updateStatistic(statisticEntity, statisticId);
 
   const updatedCase = await applicationContext
     .getUseCaseHelpers()
