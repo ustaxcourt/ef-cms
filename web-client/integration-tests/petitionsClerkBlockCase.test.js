@@ -48,7 +48,9 @@ describe('Blocking a Case', () => {
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   //manual block and unblock - check eligible list
   petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
-  petitionsClerkBlocksCase(cerebralTest, trialLocation);
+  petitionsClerkBlocksCase(cerebralTest, trialLocation, {
+    docketNumberSuffix: 'S',
+  });
   petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 0);
   petitionsClerkUnblocksCase(cerebralTest, trialLocation);
   petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
@@ -117,7 +119,9 @@ describe('Blocking a Case', () => {
   petitionsClerkViewsATrialSessionsEligibleCases(cerebralTest, 1);
 
   //automatic and manual block
-  petitionsClerkBlocksCase(cerebralTest, trialLocation);
+  petitionsClerkBlocksCase(cerebralTest, trialLocation, {
+    docketNumberSuffix: 'S',
+  });
   petitionsClerkCreatesACaseDeadline(cerebralTest);
   it('petitions clerk views blocked report with an automatically and manually blocked case', async () => {
     await refreshElasticsearchIndex();
