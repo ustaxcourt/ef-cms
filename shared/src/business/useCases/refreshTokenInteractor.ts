@@ -1,4 +1,4 @@
-const qs = require('qs');
+import qs from 'qs';
 
 /**
  * Refresh the Cognito token
@@ -8,10 +8,18 @@ const qs = require('qs');
  * @param {string} providers.refreshToken the refresh token
  * @returns {object} the token
  */
-exports.refreshTokenInteractor = async (
-  applicationContext,
-  { refreshToken },
-) => {
+export const refreshTokenInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    {
+      refreshToken,
+    }: {
+      refreshToken: string;
+    },
+  ): Promise<{
+    token: string;
+  }>;
+} = async (applicationContext, { refreshToken }) => {
   const data = qs.stringify({
     client_id: applicationContext.getCognitoClientId(),
     grant_type: 'refresh_token',

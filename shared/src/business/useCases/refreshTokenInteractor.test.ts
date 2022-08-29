@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { refreshTokenInteractor } = require('./refreshTokenInteractor');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { refreshTokenInteractor } from './refreshTokenInteractor';
 
 describe('refreshToken', () => {
   it('returns a token', async () => {

@@ -1,8 +1,6 @@
-const {
-  validatePetitionerInformationFormInteractor,
-} = require('./validatePetitionerInformationFormInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { COUNTRY_TYPES, PARTY_TYPES } = require('../entities/EntityConstants');
+import { COUNTRY_TYPES, PARTY_TYPES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { validatePetitionerInformationFormInteractor } from './validatePetitionerInformationFormInteractor';
 
 describe('validatePetition', () => {
   it('returns the expected errors object when contactPrimary is missing fields', () => {
