@@ -1,4 +1,4 @@
-const { OrderWithoutBody } = require('../../entities/orders/OrderWithoutBody');
+import { OrderWithoutBody } from '../../entities/orders/OrderWithoutBody';
 
 /**
  * validateOrderWithoutBodyInteractor
@@ -8,9 +8,9 @@ const { OrderWithoutBody } = require('../../entities/orders/OrderWithoutBody');
  * @param {object} providers.orderMetadata the order data to validate
  * @returns {object} errors (null if no errors)
  */
-exports.validateOrderWithoutBodyInteractor = (
-  applicationContext,
-  { orderMetadata },
+export const validateOrderWithoutBodyInteractor = (
+  applicationContext: IApplicationContext,
+  { orderMetadata }: { orderMetadata: any },
 ) => {
   const orderWithoutBody = new OrderWithoutBody(orderMetadata, {
     applicationContext,

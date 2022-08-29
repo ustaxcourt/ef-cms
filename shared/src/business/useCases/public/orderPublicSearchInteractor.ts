@@ -1,13 +1,14 @@
-const {
-  PublicDocumentSearchResult,
-} = require('../../entities/documents/PublicDocumentSearchResult');
-const { DocumentSearch } = require('../../entities/documents/DocumentSearch');
-const { formatNow, FORMATS } = require('../../utilities/DateHandler');
-const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
-const { omit } = require('lodash');
+import {
+  MAX_SEARCH_RESULTS,
+  ORDER_EVENT_CODES,
+} from '../../entities/EntityConstants';
+import { PublicDocumentSearchResult } from '../../entities/documents/PublicDocumentSearchResult';
+import { DocumentSearch } from '../../entities/documents/DocumentSearch';
+import { formatNow, FORMATS } from '../../utilities/DateHandler';
+import { omit } from 'lodash';
 
 /**
- * opinionPublicSearchInteractor
+ * orderPublicSearchInteractor
  *
  * @param {object} applicationContext application context object
  * @param {object} providers the providers object
@@ -16,12 +17,11 @@ const { omit } = require('lodash');
  * @param {string} providers.endDate ending date for date range
  * @param {string} providers.judge judge name to filter by
  * @param {string} providers.keyword keyword to search for
- * @param {string} providers.opinionTypes opinion types to filter by
  * @param {string} providers.startDate start date for date range
- * @returns {object} the opinion search results
+ * @returns {object} the order search results
  */
-exports.opinionPublicSearchInteractor = async (
-  applicationContext,
+export const orderPublicSearchInteractor = async (
+  applicationContext: IApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,
@@ -29,11 +29,18 @@ exports.opinionPublicSearchInteractor = async (
     endDate,
     judge,
     keyword,
-    opinionTypes,
     startDate,
+  }: {
+    caseTitleOrPetitioner: string;
+    dateRange: string;
+    docketNumber: string;
+    endDate: string;
+    judge: string;
+    keyword: string;
+    startDate: string;
   },
 ) => {
-  const opinionSearch = new DocumentSearch({
+  const orderSearch = new DocumentSearch({
     caseTitleOrPetitioner,
     dateRange,
     docketNumber,
@@ -43,27 +50,27 @@ exports.opinionPublicSearchInteractor = async (
     startDate,
   });
 
-  const rawSearch = opinionSearch.validate().toRawObject();
+  const rawSearch = orderSearch.validate().toRawObject();
 
   const { results, totalCount } = await applicationContext
     .getPersistenceGateway()
     .advancedDocumentSearch({
       applicationContext,
-      documentEventCodes: opinionTypes,
-      isOpinionSearch: true,
+      documentEventCodes: ORDER_EVENT_CODES,
+      omitSealed: true,
       ...rawSearch,
     });
 
   const timestamp = formatNow(FORMATS.LOG_TIMESTAMP);
-  await applicationContext.logger.info('public opinion search', {
+  await applicationContext.logger.info('public order search', {
     ...omit(rawSearch, 'entityName'),
     timestamp,
     totalCount,
   });
 
-  const filteredResults = results.slice(0, MAX_SEARCH_RESULTS);
+  const slicedResults = results.slice(0, MAX_SEARCH_RESULTS);
 
-  return PublicDocumentSearchResult.validateRawCollection(filteredResults, {
+  return PublicDocumentSearchResult.validateRawCollection(slicedResults, {
     applicationContext,
   });
 };

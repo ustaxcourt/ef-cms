@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -9,11 +7,9 @@ const {
   PARTY_TYPES,
   PETITIONS_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  fileCourtIssuedOrderInteractor,
-} = require('./fileCourtIssuedOrderInteractor');
-const { User } = require('../../entities/User');
+} from '../../entities/EntityConstants';
+import { fileCourtIssuedOrderInteractor } from './fileCourtIssuedOrderInteractor';
+import { User } from '../../entities/User';
 
 describe('fileCourtIssuedOrderInteractor', () => {
   const mockUserId = applicationContext.getUniqueId();
