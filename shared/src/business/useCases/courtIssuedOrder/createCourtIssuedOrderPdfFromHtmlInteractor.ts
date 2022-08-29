@@ -1,9 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { getCaseCaptionMeta } = require('../../utilities/getCaseCaptionMeta');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
+import { UnauthorizedError } from '../../../errors/errors';
+
 /**
  *
  * createCourtIssuedOrderPdfFromHtmlInteractor
@@ -16,9 +17,19 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.signatureText (optional) text to be used as the signatory of the document
  * @returns {string} url for the generated and stored document
  */
-exports.createCourtIssuedOrderPdfFromHtmlInteractor = async (
-  applicationContext,
-  { contentHtml, docketNumber, documentTitle, signatureText },
+export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    contentHtml,
+    docketNumber,
+    documentTitle,
+    signatureText,
+  }: {
+    contentHtml: string;
+    docketNumber: string;
+    documentTitle: string;
+    signatureText: string;
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
 

@@ -1,7 +1,5 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { filterForPublic, isCaseVisibleToPublic } = require('./publicHelpers');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { filterForPublic, isCaseVisibleToPublic } from './publicHelpers';
 
 describe('publicHelpers', () => {
   const sealedCaseMock = { docketNumber: '188-45', sealedDate: 'some date' };

@@ -1,17 +1,15 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
   deconstructDate,
-} = require('../../utilities/DateHandler');
-const {
+} from '../../utilities/DateHandler';
+import {
   ORDER_EVENT_CODES,
   TODAYS_ORDERS_PAGE_SIZE,
-} = require('../../entities/EntityConstants');
-const { getTodaysOrdersInteractor } = require('./getTodaysOrdersInteractor');
+} from '../../entities/EntityConstants';
+import { getTodaysOrdersInteractor } from './getTodaysOrdersInteractor';
 
 describe('getTodaysOrdersInteractor', () => {
   const mockOrderSearchResults = {
@@ -59,7 +57,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should only search for order document types for today', async () => {
-    await getTodaysOrdersInteractor(applicationContext, {});
+    await getTodaysOrdersInteractor(applicationContext, {} as any);
 
     const { day, month, year } = deconstructDate(createISODateString());
     const currentDateStart = createStartOfDayISO({ day, month, year });
@@ -80,7 +78,7 @@ describe('getTodaysOrdersInteractor', () => {
 
     await getTodaysOrdersInteractor(applicationContext, {
       page: mockCurrentPage,
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -89,7 +87,7 @@ describe('getTodaysOrdersInteractor', () => {
   });
 
   it('should filter out order documents belonging to sealed cases', async () => {
-    await getTodaysOrdersInteractor(applicationContext, {});
+    await getTodaysOrdersInteractor(applicationContext, {} as any);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -116,7 +114,7 @@ describe('getTodaysOrdersInteractor', () => {
   it('should return the results and totalCount of results', async () => {
     const result = await getTodaysOrdersInteractor(applicationContext, {
       page: 1,
-    });
+    } as any);
 
     expect(result.results).toBeDefined();
     expect(result.totalCount).toBeDefined();

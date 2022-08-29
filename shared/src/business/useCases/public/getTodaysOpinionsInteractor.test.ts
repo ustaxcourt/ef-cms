@@ -1,21 +1,17 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const {
+} from '../../entities/EntityConstants';
+import {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
   deconstructDate,
-} = require('../../utilities/DateHandler');
-const {
-  getTodaysOpinionsInteractor,
-} = require('./getTodaysOpinionsInteractor');
+} from '../../utilities/DateHandler';
+import { getTodaysOpinionsInteractor } from './getTodaysOpinionsInteractor';
 
 describe('getTodaysOpinionsInteractor', () => {
   const mockOpinionSearchResult = [
@@ -82,7 +78,7 @@ describe('getTodaysOpinionsInteractor', () => {
   });
 
   it('should set isOpinionSearch as true', async () => {
-    await getTodaysOpinionsInteractor(applicationContext, {});
+    await getTodaysOpinionsInteractor(applicationContext);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock

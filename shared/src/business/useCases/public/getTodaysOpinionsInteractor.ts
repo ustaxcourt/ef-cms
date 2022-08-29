@@ -1,12 +1,10 @@
-const {
+import {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
   deconstructDate,
-} = require('../../utilities/DateHandler');
-const {
-  OPINION_EVENT_CODES_WITH_BENCH_OPINION,
-} = require('../../entities/EntityConstants');
+} from '../../utilities/DateHandler';
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
 
 /**
  * getTodaysOpinionsInteractor
@@ -14,7 +12,9 @@ const {
  * @param {object} applicationContext application context object
  * @returns {array} an array of opinions (if any)
  */
-exports.getTodaysOpinionsInteractor = async applicationContext => {
+export const getTodaysOpinionsInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
   const { day, month, year } = deconstructDate(createISODateString());
   const currentDateStart = createStartOfDayISO({ day, month, year });
   const currentDateEnd = createEndOfDayISO({ day, month, year });

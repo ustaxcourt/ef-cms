@@ -1,4 +1,4 @@
-const { isSealedCase } = require('../../entities/cases/Case');
+import { isSealedCase } from '../../entities/cases/Case';
 
 /**
  * isCaseVisibleToPublic
@@ -10,9 +10,12 @@ const { isSealedCase } = require('../../entities/cases/Case');
  * @param {string} providers.docketNumber the docket number of a case
  * @returns {boolean} whether case ought to be visible to public
  */
-exports.isCaseVisibleToPublic = async ({
+export const isCaseVisibleToPublic = async ({
   applicationContext,
   docketNumber,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumber: string;
 }) => {
   const caseDetails = await applicationContext
     .getPersistenceGateway()
@@ -28,7 +31,13 @@ exports.isCaseVisibleToPublic = async ({
  * @param {string} providers.unfiltered an array of objects with a docketNumber property
  * @returns {array} the list of objects which ought to be visible to the public user
  */
-exports.filterForPublic = async ({ applicationContext, unfiltered }) => {
+export const filterForPublic = async ({
+  applicationContext,
+  unfiltered,
+}: {
+  applicationContext: IApplicationContext;
+  unfiltered: any[];
+}) => {
   const filtered = [];
   for (const result of unfiltered) {
     if (

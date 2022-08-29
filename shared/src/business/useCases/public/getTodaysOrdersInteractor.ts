@@ -1,13 +1,13 @@
-const {
+import {
   createEndOfDayISO,
   createISODateString,
   createStartOfDayISO,
   deconstructDate,
-} = require('../../utilities/DateHandler');
-const {
+} from '../../utilities/DateHandler';
+import {
   ORDER_EVENT_CODES,
   TODAYS_ORDERS_PAGE_SIZE,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 
 /**
  * getTodaysOrdersInteractor
@@ -17,9 +17,9 @@ const {
  * @param {string} providers.page the page of the order to get
  * @returns {array} an array of orders (if any)
  */
-exports.getTodaysOrdersInteractor = async (
-  applicationContext,
-  { page, todaysOrdersSort },
+export const getTodaysOrdersInteractor = async (
+  applicationContext: IApplicationContext,
+  { page, todaysOrdersSort }: { page: number; todaysOrdersSort: string },
 ) => {
   const { day, month, year } = deconstructDate(createISODateString());
   const currentDateStart = createStartOfDayISO({ day, month, year });

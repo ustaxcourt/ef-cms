@@ -1,6 +1,6 @@
-const { filterForPublic } = require('./publicHelpers');
-const { MAX_SEARCH_RESULTS } = require('../../entities/EntityConstants');
-const { PublicCase } = require('../../entities/cases/PublicCase');
+import { filterForPublic } from './publicHelpers';
+import { MAX_SEARCH_RESULTS } from '../../entities/EntityConstants';
+import { PublicCase } from '../../entities/cases/PublicCase';
 
 /**
  * casePublicSearchInteractor
@@ -10,9 +10,21 @@ const { PublicCase } = require('../../entities/cases/PublicCase');
  * @returns {object} the case data
  */
 
-exports.casePublicSearchInteractor = async (
-  applicationContext,
-  { countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin },
+export const casePublicSearchInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    countryType,
+    petitionerName,
+    petitionerState,
+    yearFiledMax,
+    yearFiledMin,
+  }: {
+    countryType: string;
+    petitionerName: string;
+    petitionerState: string;
+    yearFiledMax: string;
+    yearFiledMin: string;
+  },
 ) => {
   const foundCases = await applicationContext
     .getPersistenceGateway()

@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  createCourtIssuedOrderPdfFromHtmlInteractor,
-} = require('./createCourtIssuedOrderPdfFromHtmlInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createCourtIssuedOrderPdfFromHtmlInteractor } from './createCourtIssuedOrderPdfFromHtmlInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   const mockPdfUrl = 'www.example.com';
@@ -37,19 +33,28 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     });
 
     await expect(
-      createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {}),
+      createCourtIssuedOrderPdfFromHtmlInteractor(
+        applicationContext,
+        {} as any,
+      ),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('fetches the case by id', async () => {
-    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {});
+    await createCourtIssuedOrderPdfFromHtmlInteractor(
+      applicationContext,
+      {} as any,
+    );
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
     ).toHaveBeenCalled();
   });
 
   it('calls the pdf document generator function', async () => {
-    await createCourtIssuedOrderPdfFromHtmlInteractor(applicationContext, {});
+    await createCourtIssuedOrderPdfFromHtmlInteractor(
+      applicationContext,
+      {} as any,
+    );
     expect(
       applicationContext.getDocumentGenerators().order,
     ).toHaveBeenCalledWith(
@@ -64,7 +69,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   it('returns the pdf url from the temp documents bucket', async () => {
     const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
       applicationContext,
-      {},
+      {} as any,
     );
 
     expect(
