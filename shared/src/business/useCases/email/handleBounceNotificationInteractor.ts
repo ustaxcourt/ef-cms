@@ -11,7 +11,7 @@ const {
  * @returns {object} only the information we need about the bounce
  */
 export const parseBounceNotification: {
-  ({ bounce, mail }: { bounce: any; mail: any }): TNotification;
+  ({ bounce, mail }: { bounce: TBounce; mail: TMail }): TNotification;
 } = ({ bounce, mail }) => {
   return {
     bounceRecipient: bounce.bouncedRecipients[0].emailAddress,
