@@ -1,4 +1,4 @@
-const { generatePDFFromJPGs } = require('../utilities/generatePDFFromJPGs');
+import { generatePDFFromJPGs } from '../utilities/generatePDFFromJPGs';
 
 /**
  * generatePDFFromJPGDataInteractor
@@ -6,9 +6,9 @@ const { generatePDFFromJPGs } = require('../utilities/generatePDFFromJPGs');
  * @param imgData // Array of Uint8Array containing img data
  */
 
-exports.generatePDFFromJPGDataInteractor = (
-  applicationContext,
-  { imgData },
+export const generatePDFFromJPGDataInteractor = (
+  applicationContext: IApplicationContext,
+  { imgData }: { imgData: any },
 ) => {
   return generatePDFFromJPGs(applicationContext, { imgData });
 };

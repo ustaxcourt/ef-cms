@@ -1,14 +1,14 @@
-const {
-  isAuthorized,
+import { Case } from '../entities/cases/Case';
+import { CaseInternal } from '../entities/cases/CaseInternal';
+import { DocketEntry } from '../entities/DocketEntry';
+import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { CaseInternal } = require('../entities/cases/CaseInternal');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
-const { replaceBracketed } = require('../utilities/replaceBracketed');
-const { UnauthorizedError } = require('../../errors/errors');
-const { WorkItem } = require('../entities/WorkItem');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
+import { WorkItem } from '../entities/WorkItem';
+import { replaceBracketed } from '../utilities/replaceBracketed';
 
 const addPetitionDocketEntryWithWorkItemToCase = ({
   applicationContext,
@@ -58,8 +58,8 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
  * @param {string} providers.stinFileId the id of the stin file
  * @returns {object} the created case
  */
-exports.createCaseFromPaperInteractor = async (
-  applicationContext,
+export const createCaseFromPaperInteractor = async (
+  applicationContext: IApplicationContext,
   {
     applicationForWaiverOfFilingFeeFileId,
     ownershipDisclosureFileId,
@@ -67,6 +67,13 @@ exports.createCaseFromPaperInteractor = async (
     petitionMetadata,
     requestForPlaceOfTrialFileId,
     stinFileId,
+  }: {
+    applicationForWaiverOfFilingFeeFileId: string;
+    ownershipDisclosureFileId: string;
+    petitionFileId: string;
+    petitionMetadata: string;
+    requestForPlaceOfTrialFileId: string;
+    stinFileId: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

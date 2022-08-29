@@ -1,6 +1,6 @@
 jest.mock('uuid');
 const uuid = require('uuid');
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -9,13 +9,11 @@ const {
   PAYMENT_STATUS,
   PETITIONS_SECTION,
   ROLES,
-} = require('../entities/EntityConstants');
-const {
-  createCaseFromPaperInteractor,
-} = require('./createCaseFromPaperInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
+} from '../entities/EntityConstants';
+import { UnauthorizedError } from '../../errors/errors';
+import { User } from '../entities/User';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';
 
 describe('createCaseFromPaperInteractor', () => {
   const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
