@@ -36,7 +36,7 @@ describe('getHealthCheckInteractor', () => {
       logger: {
         error: () => {},
       },
-    });
+    } as any);
 
     expect(statusResult).toEqual({
       cognito: true,
@@ -107,7 +107,7 @@ describe('getHealthCheckInteractor', () => {
       logger: {
         error: () => {},
       },
-    });
+    } as any);
 
     expect(status).toEqual({
       cognito: false,
@@ -177,7 +177,7 @@ describe('getHealthCheckInteractor', () => {
         logger: {
           error: () => {},
         },
-      });
+      } as any);
 
       // app bucket
       expect(listObjectsMock.mock.calls[0][0].Bucket).toBe(

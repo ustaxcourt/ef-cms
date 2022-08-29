@@ -1,10 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  getDocumentContentsForDocketEntryInteractor,
-} = require('./getDocumentContentsForDocketEntryInteractor');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { getDocumentContentsForDocketEntryInteractor } from './getDocumentContentsForDocketEntryInteractor';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('getDocumentContentsForDocketEntryInteractor', () => {
   const mockDocumentContentsId = '599dbad3-4912-4a61-9525-3da245700893';

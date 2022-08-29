@@ -170,7 +170,9 @@ const getEmailServiceStatus = async ({ applicationContext }) => {
  * @param {object} applicationContext the application context
  * @returns {object} contains the status of all our different services
  */
-export const getHealthCheckInteractor = async applicationContext => {
+export const getHealthCheckInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
   const elasticSearchStatus = await getElasticSearchStatus({
     applicationContext,
   });

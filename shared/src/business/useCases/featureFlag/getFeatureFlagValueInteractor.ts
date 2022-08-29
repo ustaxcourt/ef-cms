@@ -1,5 +1,5 @@
-const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+import { ALLOWLIST_FEATURE_FLAGS } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * getFeatureFlagValueInteractor
@@ -8,12 +8,12 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.featureFlag the feature flag to get the value for
  * @returns {boolean} true if result of the persistence method is 'true'; false otherwise
  */
-exports.getFeatureFlagValueInteractor = async (
-  applicationContext,
-  { featureFlag },
+export const getFeatureFlagValueInteractor = async (
+  applicationContext: IApplicationContext,
+  { featureFlag }: { featureFlag: string },
 ) => {
   const allowlistFeatures = Object.values(ALLOWLIST_FEATURE_FLAGS).map(
-    flag => flag.key,
+    (flag: any) => flag.key,
   );
 
   if (!allowlistFeatures.includes(featureFlag)) {

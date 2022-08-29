@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  validateStartCaseWizardInteractor,
-} = require('./validateStartCaseWizardInteractor');
-const { COUNTRY_TYPES } = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { validateStartCaseWizardInteractor } from './validateStartCaseWizardInteractor';
+import { COUNTRY_TYPES } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('validateStartCaseWizardInteractor', () => {
   it('returns the expected errors object on an empty petition', () => {

@@ -1,20 +1,18 @@
-const {
+import {
   applicationContext,
   testPdfDoc,
-} = require('../../test/createTestApplicationContext');
-const {
+} from '../../test/createTestApplicationContext';
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_SECTION,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  serveExternallyFiledDocumentInteractor,
-} = require('./serveExternallyFiledDocumentInteractor');
+} from '../../entities/EntityConstants';
+import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoversheetInteractor');
-const { addCoverToPdf } = require('../addCoversheetInteractor');
+import { addCoverToPdf } from '../addCoversheetInteractor';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let caseRecord;
@@ -109,7 +107,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {}),
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        docketEntryId: '',
+        docketNumber: '',
+      }),
     ).rejects.toThrow('Unauthorized');
   });
 

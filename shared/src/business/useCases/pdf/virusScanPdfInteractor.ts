@@ -11,7 +11,7 @@ import tmp from 'tmp';
  * @returns {Promise} resolves when complete
  */
 export const virusScanPdfInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   {
     key,
     scanCompleteCallback,

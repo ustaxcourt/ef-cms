@@ -52,8 +52,8 @@ export const getNeedsNewCoversheet = ({
  * @returns {object} the updated case after the documents are added
  */
 export const completeDocketEntryQCInteractor = async (
-  applicationContext,
-  { entryMetadata },
+  applicationContext: IApplicationContext,
+  { entryMetadata }: { entryMetadata: any },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
