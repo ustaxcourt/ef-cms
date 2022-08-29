@@ -4,7 +4,7 @@ const HEALTH_CHECK_IDS = [
   'dynamo-deploy-table',
   'dynamsoft',
   'elasticsearch',
-  'emailService',
+  // 'emailService', disable for now due to flaky tests
   's3-app',
   's3-app-failover',
   's3-east-documents',
