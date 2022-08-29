@@ -1,4 +1,4 @@
-const { getHealthCheckInteractor } = require('./getHealthCheckInteractor');
+import { getHealthCheckInteractor } from './getHealthCheckInteractor';
 
 describe('getHealthCheckInteractor', () => {
   it('should return the expected true statues for all services', async () => {

@@ -1,18 +1,16 @@
-const {
+import {
   applicationContext,
   testPdfDoc,
-} = require('../../test/createTestApplicationContext');
-const {
-  completeDocketEntryQCInteractor,
-} = require('./completeDocketEntryQCInteractor');
-const {
+} from '../../test/createTestApplicationContext';
+import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
+import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
-} = require('../../entities/EntityConstants');
-const { docketClerkUser } = require('../../../test/mockUsers');
-const { MOCK_CASE } = require('../../../test/mockCase');
+} from '../../entities/EntityConstants';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -103,7 +101,9 @@ describe('completeDocketEntryQCInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      completeDocketEntryQCInteractor(applicationContext, {}),
+      completeDocketEntryQCInteractor(applicationContext, {
+        entryMetadata: {},
+      }),
     ).rejects.toThrow('Unauthorized');
   });
 

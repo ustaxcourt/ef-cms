@@ -1,6 +1,6 @@
-const { StringDecoder } = require('string_decoder');
+import { StringDecoder } from 'string_decoder';
 
-const removePdf = async ({
+export const removePdf = async ({
   applicationContext,
   key,
   message = 'PDF Error',
@@ -12,8 +12,6 @@ const removePdf = async ({
   });
 };
 
-exports.removePdf = removePdf;
-
 /**
  * validatePdfInteractor
  *
@@ -22,7 +20,10 @@ exports.removePdf = removePdf;
  * @param {string} providers.key the key of the document to validate
  * @throws {Error} if pdf is invalid
  */
-exports.validatePdfInteractor = async (applicationContext, { key }) => {
+export const validatePdfInteractor = async (
+  applicationContext,
+  { key }: { key: string },
+) => {
   const { Body: pdfData } = await applicationContext
     .getStorageClient()
     .getObject({

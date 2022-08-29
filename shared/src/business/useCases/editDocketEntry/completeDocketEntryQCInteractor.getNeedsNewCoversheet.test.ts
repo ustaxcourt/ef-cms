@@ -1,4 +1,4 @@
-const { getNeedsNewCoversheet } = require('./completeDocketEntryQCInteractor');
+import { getNeedsNewCoversheet } from './completeDocketEntryQCInteractor';
 
 describe('completeDocketEntryQCInteractor getNeedsNewCoversheet', () => {
   it('should return true when receivedAt is updated', () => {

@@ -1,5 +1,5 @@
-const fs = require('fs');
-const tmp = require('tmp');
+import fs from 'fs';
+import tmp from 'tmp';
 
 /**
  * virusScanPdfInteractor
@@ -10,9 +10,12 @@ const tmp = require('tmp');
  * @param {object} providers.scanCompleteCallback to execute after scanning completes
  * @returns {Promise} resolves when complete
  */
-exports.virusScanPdfInteractor = async (
+export const virusScanPdfInteractor = async (
   applicationContext,
-  { key, scanCompleteCallback },
+  {
+    key,
+    scanCompleteCallback,
+  }: { key: string; scanCompleteCallback: () => void },
 ) => {
   let { Body: pdfData } = await applicationContext
     .getStorageClient()
