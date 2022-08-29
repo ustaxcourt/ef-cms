@@ -505,8 +505,8 @@ const serveCaseToIrsInteractor = async (
     });
   }
 
-  const todayPlus60 = getBusinessDateInFuture({
-    numberOfDays: 60,
+  const todayPlus30 = getBusinessDateInFuture({
+    numberOfDays: 30,
     startDate: formatNow(FORMATS.ISO),
   });
 
@@ -517,9 +517,26 @@ const serveCaseToIrsInteractor = async (
       applicationContext,
       caseEntity,
       document: orderForFilingFee,
-      replacements: [todayPlus60, todayPlus60],
+      replacements: [todayPlus30, todayPlus30],
     });
   }
+
+  if (caseEntity.orderForAmendedPetitionAndFilingFee) {
+    const { orderForAmendedPetitionAndFilingFee } =
+      SYSTEM_GENERATED_DOCUMENT_TYPES;
+
+    await generateDraftDocument({
+      applicationContext,
+      caseEntity,
+      document: orderForAmendedPetitionAndFilingFee,
+      replacements: [formattedFiledDate, todayPlus30, todayPlus30],
+    });
+  }
+
+  const todayPlus60 = getBusinessDateInFuture({
+    numberOfDays: 60,
+    startDate: formatNow(FORMATS.ISO),
+  });
 
   if (caseEntity.orderForAmendedPetition) {
     const { orderForAmendedPetition } = SYSTEM_GENERATED_DOCUMENT_TYPES;
@@ -541,18 +558,6 @@ const serveCaseToIrsInteractor = async (
       caseEntity,
       document: orderPetitionersToShowCause,
       replacements: [formattedFiledDate, todayPlus60],
-    });
-  }
-
-  if (caseEntity.orderForAmendedPetitionAndFilingFee) {
-    const { orderForAmendedPetitionAndFilingFee } =
-      SYSTEM_GENERATED_DOCUMENT_TYPES;
-
-    await generateDraftDocument({
-      applicationContext,
-      caseEntity,
-      document: orderForAmendedPetitionAndFilingFee,
-      replacements: [formattedFiledDate, todayPlus60, todayPlus60],
     });
   }
 

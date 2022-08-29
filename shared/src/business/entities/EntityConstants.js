@@ -3,7 +3,7 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy, union, without } = require('lodash');
+const { flatten, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
@@ -34,6 +34,16 @@ const TRIAL_SESSION_SCOPE_TYPES = {
   locationBased: 'Location-based',
   standaloneRemote: 'Standalone Remote',
 };
+
+const JURISDICTIONAL_OPTIONS = {
+  restoredToDocket: 'The case is restored to the general docket',
+  undersigned: 'Jurisdiction is retained by the undersigned',
+};
+
+const MOTION_DISPOSITIONS = { DENIED: 'Denied', GRANTED: 'Granted' };
+
+const STRICKEN_FROM_TRIAL_SESSION_MESSAGE =
+  'This case is stricken from the trial session';
 
 const PARTY_VIEW_TABS = {
   participantsAndCounsel: 'Intervenor/Participant(s)',
@@ -72,6 +82,9 @@ const ALLOWLIST_FEATURE_FLAGS = {
   },
   PDFJS_EXPRESS_VIEWER: {
     key: 'pdfjs-express-viewer-enabled',
+  },
+  STAMP_DISPOSITION: {
+    key: 'stamp-disposition-enabled',
   },
 };
 
@@ -116,6 +129,7 @@ const NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP = [
     title: 'Notice of Change of Email Address',
   },
 ];
+
 const NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES =
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP.map(n => n.eventCode);
 
@@ -284,6 +298,9 @@ const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
+const GENERIC_ORDER_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
+  d => d.documentType === 'Order',
+).eventCode;
 
 const DOCUMENT_NOTICE_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isNotice,
@@ -411,6 +428,12 @@ const TRACKED_DOCUMENT_TYPES = {
   },
 };
 
+const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
+  [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
+    .filter(doc => doc.category === 'Motion')
+    .map(x => x.eventCode),
+);
+
 const EXTERNAL_TRACKED_DOCUMENT_EVENT_CODES = EXTERNAL_DOCUMENTS_ARRAY.filter(
   doc =>
     doc.category === TRACKED_DOCUMENT_TYPES.application.category ||
@@ -533,7 +556,7 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
   },
   orderForFilingFee: {
     content:
-      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_60], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_60], may result in dismissal of this case.',
+      '&nbsp;&nbsp;&nbsp;&nbsp;The Court’s $60.00 filing fee for this case has not been paid. Accordingly, it is <br/><br/> &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that, on or before [TODAY_PLUS_30], petitioner(s) shall pay the Court’s filing fee of $60.00, or this case may be dismissed. Waiver of the filing fee requires an affidavit or declaration containing specific financial information regarding the inability to make such payment. An Application for Waiver of Filing Fee form is available under “Case Related Forms” on the Court’s website at www.ustaxcourt.gov/case_related_forms.html. The Court will consider whether to waive the filing fee upon receipt of such information from petitioner(s). Failure to pay the Court’s $60.00 filing fee or submit an Application for Waiver of Filing Fee on or before [TODAY_PLUS_30], may result in dismissal of this case.',
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OF')
       .documentType,
     eventCode: 'OF',
@@ -563,13 +586,13 @@ const SYSTEM_GENERATED_DOCUMENT_TYPES = {
       <br/>
       &nbsp;&nbsp;&nbsp;&nbsp;Accordingly, it is<br/>
       <br/>
-      &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_60], petitioner(s) shall file a proper
+      &nbsp;&nbsp;&nbsp;&nbsp;ORDERED that on or before [ORDER_PLUS_30], petitioner(s) shall file a proper
       amended petition and pay the $60.00 filing fee. Waiver of the filing fee requires an affidavit
       containing specific financial information regarding the inability to make such payment. An
       Application for Waiver of Filing Fee and Affidavit form is available under "Case Related Forms" on
       the Court's website at www.ustaxcourt.gov/case_related_forms.html.<br/>
       <br/>
-      If, by [ORDER_PLUS_60], petitioner(s) do not file an Amended Petition and either pay the Court's
+      If, by [ORDER_PLUS_30], petitioner(s) do not file an Amended Petition and either pay the Court's
       $60.00 filing fee or submit an Application for Waiver of the Filing Fee, the case will be dismissed or
       other action taken as the Court deems appropriate.`,
     documentType: ORDER_TYPES.find(order => order.eventCode === 'OAPF')
@@ -1354,12 +1377,15 @@ module.exports = deepFreeze({
   EVENT_CODES_REQUIRING_SIGNATURE,
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
+  GENERIC_ORDER_EVENT_CODE,
   INITIAL_DOCUMENT_TYPES,
   INITIAL_DOCUMENT_TYPES_FILE_MAP,
+  STAMPED_DOCUMENTS_ALLOWLIST,
   INTERNAL_DOCUMENTS_ARRAY,
   INITIAL_DOCUMENT_TYPES_MAP,
   INTERNAL_DOCUMENT_TYPES,
   IRS_SYSTEM_SECTION,
+  JURISDICTIONAL_OPTIONS,
   LODGED_EVENT_CODE,
   MAX_ELASTICSEARCH_PAGINATION: 10000,
   MAX_FILE_SIZE_BYTES,
@@ -1368,6 +1394,7 @@ module.exports = deepFreeze({
   MAX_SEARCH_RESULTS: 100, // a fraction of MAX_SEARCH_CLIENT_RESULTS
   MESSAGE_QUEUE_TYPES,
   MINUTE_ENTRIES_MAP,
+  MOTION_DISPOSITIONS,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_EVENT_CODES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP,
@@ -1406,6 +1433,7 @@ module.exports = deepFreeze({
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
   STIPULATED_DECISION_EVENT_CODE,
+  STRICKEN_FROM_TRIAL_SESSION_MESSAGE,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
   TODAYS_ORDERS_PAGE_SIZE,
   TODAYS_ORDERS_SORT_DEFAULT,
