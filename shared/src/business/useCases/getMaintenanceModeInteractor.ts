@@ -4,7 +4,9 @@
  * @param {object} applicationContext the application context
  * @returns {boolean} the value of maintenance mode
  */
-exports.getMaintenanceModeInteractor = async applicationContext => {
+export const getMaintenanceModeInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
   const result = await applicationContext
     .getPersistenceGateway()
     .getMaintenanceMode({ applicationContext });

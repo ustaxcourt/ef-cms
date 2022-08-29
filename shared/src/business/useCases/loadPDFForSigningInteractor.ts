@@ -8,9 +8,19 @@
  * @param {boolean} providers.removeCover if saving should remove the cover sheet
  * @returns {Promise<object>} the document data
  */
-exports.loadPDFForSigningInteractor = async (
-  applicationContext,
-  { docketEntryId, docketNumber, onlyCover = false, removeCover = false },
+export const loadPDFForSigningInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketEntryId,
+    docketNumber,
+    onlyCover = false,
+    removeCover = false,
+  }: {
+    docketEntryId: string;
+    docketNumber: string;
+    onlyCover: boolean;
+    removeCover: boolean;
+  },
 ) => {
   const { PDFDocument } = await applicationContext.getPdfLib();
 

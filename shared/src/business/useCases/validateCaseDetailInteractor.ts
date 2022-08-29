@@ -16,7 +16,7 @@ export const validateCaseDetailInteractor = (
     caseDetail,
     useCaseEntity = false,
   }: { caseDetail: any; useCaseEntity?: boolean },
-) => {
+): Promise<TCase> => {
   if (useCaseEntity) {
     return new Case(caseDetail, {
       applicationContext,

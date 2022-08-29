@@ -1,7 +1,5 @@
-const {
-  getMaintenanceModeInteractor,
-} = require('./getMaintenanceModeInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getMaintenanceModeInteractor } from './getMaintenanceModeInteractor';
 
 describe('getMaintenanceModeInteractor', () => {
   it('should return the value of maintenanceMode from persistence', async () => {

@@ -1,11 +1,9 @@
-const {
+import { PDFDocument } from 'pdf-lib';
+import {
   applicationContext,
   testPdfDoc,
-} = require('../test/createTestApplicationContext');
-const {
-  loadPDFForSigningInteractor,
-} = require('./loadPDFForSigningInteractor');
-const { PDFDocument } = require('pdf-lib');
+} from '../test/createTestApplicationContext';
+import { loadPDFForSigningInteractor } from './loadPDFForSigningInteractor';
 
 const removePageMock = jest.fn();
 const saveMock = jest.fn();
