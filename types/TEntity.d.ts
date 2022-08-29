@@ -290,3 +290,14 @@ type TTrialSessionEntity = {
   validate(): TTrialSessionEntity;
   toRawObject(): TTrialSessionData;
 } & TTrialSessionData;
+
+type TCorrespondence = {
+  correspondenceId: string;
+};
+
+type TDocumentMetaData = {
+  docketNumber: string;
+  documentTitle: string;
+  filingDate: string;
+  correspondenceId: string;
+};
