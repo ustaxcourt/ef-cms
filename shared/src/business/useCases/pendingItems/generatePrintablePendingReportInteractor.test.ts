@@ -1,14 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  DOCKET_NUMBER_SUFFIXES,
-  ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  generatePrintablePendingReportInteractor,
-} = require('./generatePrintablePendingReportInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { DOCKET_NUMBER_SUFFIXES, ROLES } from '../../entities/EntityConstants';
+import { generatePrintablePendingReportInteractor } from './generatePrintablePendingReportInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('generatePrintablePendingReportInteractor', () => {
   let mockUser;
@@ -108,14 +101,14 @@ describe('generatePrintablePendingReportInteractor', () => {
     await expect(
       generatePrintablePendingReportInteractor(applicationContext, {
         judge: 'Colvin',
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('should call fetchPendingItems from persistence and return the results', async () => {
     const results = await generatePrintablePendingReportInteractor(
       applicationContext,
-      {},
+      {} as any,
     );
 
     expect(
@@ -128,7 +121,10 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should format the pending items', async () => {
-    await generatePrintablePendingReportInteractor(applicationContext, {});
+    await generatePrintablePendingReportInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     const { pendingItems } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
@@ -220,7 +216,10 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('should generate a subtitle with All Judges if no judge filter is applied', async () => {
-    await generatePrintablePendingReportInteractor(applicationContext, {});
+    await generatePrintablePendingReportInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     const { subtitle } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
@@ -231,7 +230,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should generate a subtitle with the judge name if a judge filter is applied', async () => {
     await generatePrintablePendingReportInteractor(applicationContext, {
       judge: 'Colvin',
-    });
+    } as any);
 
     const { subtitle } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
@@ -242,7 +241,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should get case information from persistence and generate a subtitle with the docket number if a docketNumber is present', async () => {
     await generatePrintablePendingReportInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-    });
+    } as any);
 
     const { subtitle } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
@@ -256,7 +255,7 @@ describe('generatePrintablePendingReportInteractor', () => {
 
     await generatePrintablePendingReportInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
-    });
+    } as any);
 
     const { subtitle } =
       applicationContext.getDocumentGenerators().pendingReport.mock.calls[0][0]
@@ -265,7 +264,10 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('calls the document generator function', async () => {
-    await generatePrintablePendingReportInteractor(applicationContext, {});
+    await generatePrintablePendingReportInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     expect(
       applicationContext.getDocumentGenerators().pendingReport,
@@ -273,7 +275,10 @@ describe('generatePrintablePendingReportInteractor', () => {
   });
 
   it('uploads the pdf to s3', async () => {
-    await generatePrintablePendingReportInteractor(applicationContext, {});
+    await generatePrintablePendingReportInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     expect(applicationContext.getStorageClient).toHaveBeenCalled();
     expect(applicationContext.getStorageClient().upload).toHaveBeenCalled();
@@ -282,7 +287,7 @@ describe('generatePrintablePendingReportInteractor', () => {
   it('should return the document url', async () => {
     const results = await generatePrintablePendingReportInteractor(
       applicationContext,
-      {},
+      {} as any,
     );
 
     expect(
@@ -297,7 +302,7 @@ describe('generatePrintablePendingReportInteractor', () => {
     });
 
     await expect(
-      generatePrintablePendingReportInteractor(applicationContext, {}),
+      generatePrintablePendingReportInteractor(applicationContext, {} as any),
     ).rejects.toEqual('error');
     expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(applicationContext.logger.error.mock.calls[0][0]).toEqual(

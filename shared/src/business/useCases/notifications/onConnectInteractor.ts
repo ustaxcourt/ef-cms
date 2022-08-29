@@ -8,9 +8,13 @@
  * @returns {Promise<object>} item updated in persistence
  */
 
-exports.onConnectInteractor = async (
-  applicationContext,
-  { clientConnectionId, connectionId, endpoint },
+export const onConnectInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    clientConnectionId,
+    connectionId,
+    endpoint,
+  }: { clientConnectionId: string; connectionId: string; endpoint: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!authorizedUser) {

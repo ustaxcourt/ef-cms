@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { UNSERVABLE_EVENT_CODES } from '../../entities/EntityConstants';
 
 /**
  * fetchPendingItemsInteractor
@@ -14,9 +14,9 @@ const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
  * @param {number} providers.page the optional page number
  * @returns {Array} the pending items found
  */
-exports.fetchPendingItemsInteractor = async (
-  applicationContext,
-  { judge, page },
+export const fetchPendingItemsInteractor = async (
+  applicationContext: IApplicationContext,
+  { judge, page }: { judge: string; page: number },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
