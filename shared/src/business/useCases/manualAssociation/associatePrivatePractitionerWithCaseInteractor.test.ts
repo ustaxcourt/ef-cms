@@ -1,16 +1,12 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  associatePrivatePractitionerWithCaseInteractor,
-} = require('./associatePrivatePractitionerWithCaseInteractor');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { associatePrivatePractitionerWithCaseInteractor } from './associatePrivatePractitionerWithCaseInteractor';
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 
 describe('associatePrivatePractitionerWithCaseInteractor', () => {
   const caseRecord = {
@@ -56,7 +52,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       associatePrivatePractitionerWithCaseInteractor(applicationContext, {
         docketNumber: caseRecord.docketNumber,
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -88,7 +84,7 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
       docketNumber: caseRecord.docketNumber,
       representing: [caseRecord.petitioners[0].contactId],
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,

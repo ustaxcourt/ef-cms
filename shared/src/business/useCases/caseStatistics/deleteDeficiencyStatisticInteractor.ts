@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * deleteDeficiencyStatisticInteractor
@@ -14,9 +14,9 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.statisticId id of the statistic on the case to delete
  * @returns {object} the updated case
  */
-exports.deleteDeficiencyStatisticInteractor = async (
-  applicationContext,
-  { docketNumber, statisticId },
+export const deleteDeficiencyStatisticInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber, statisticId }: { docketNumber: string; statisticId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

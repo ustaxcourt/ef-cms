@@ -1,11 +1,7 @@
-const {
-  addDeficiencyStatisticInteractor,
-} = require('./addDeficiencyStatisticInteractor');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+import { addDeficiencyStatisticInteractor } from './addDeficiencyStatisticInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('addDeficiencyStatisticInteractor', () => {
   beforeEach(() => {
@@ -25,7 +21,7 @@ describe('addDeficiencyStatisticInteractor', () => {
     await expect(
       addDeficiencyStatisticInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
@@ -42,7 +38,7 @@ describe('addDeficiencyStatisticInteractor', () => {
     const result = await addDeficiencyStatisticInteractor(applicationContext, {
       docketNumber: MOCK_CASE.docketNumber,
       ...statistic,
-    });
+    } as any);
     expect(result).toMatchObject({
       statistics: [statistic],
     });

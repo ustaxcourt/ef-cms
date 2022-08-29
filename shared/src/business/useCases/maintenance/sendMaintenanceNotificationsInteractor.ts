@@ -5,9 +5,9 @@
  * @param {object} providers the providers object
  * @param {string} providers.maintenanceMode true or false depending on whether we are turning maintenance mode on or off
  */
-exports.sendMaintenanceNotificationsInteractor = async (
-  applicationContext,
-  { maintenanceMode },
+export const sendMaintenanceNotificationsInteractor = async (
+  applicationContext: IApplicationContext,
+  { maintenanceMode }: { maintenanceMode: boolean },
 ) => {
   const allWebsocketConnections = await applicationContext
     .getPersistenceGateway()

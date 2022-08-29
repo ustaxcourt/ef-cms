@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * updateOtherStatisticsInteractor
@@ -15,9 +15,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {number} providers.litigationCosts litigation costs statistic to add to the case
  * @returns {object} the updated case
  */
-exports.updateOtherStatisticsInteractor = async (
-  applicationContext,
-  { damages, docketNumber, litigationCosts },
+export const updateOtherStatisticsInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    damages,
+    docketNumber,
+    litigationCosts,
+  }: { damages: number; docketNumber: string; litigationCosts: number },
 ) => {
   const user = applicationContext.getCurrentUser();
 

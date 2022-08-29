@@ -1,18 +1,14 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  associateIrsPractitionerWithCaseInteractor,
-} = require('./associateIrsPractitionerWithCaseInteractor');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { associateIrsPractitionerWithCaseInteractor } from './associateIrsPractitionerWithCaseInteractor';
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../../entities/EntityConstants');
-const { MOCK_CASE } = require('../../../test/mockCase.js');
+} from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase.js';
 
 describe('associateIrsPractitionerWithCaseInteractor', () => {
   let caseRecord = {
