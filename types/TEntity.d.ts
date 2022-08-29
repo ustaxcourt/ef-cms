@@ -301,15 +301,3 @@ type TDocumentMetaData = {
   filingDate: string;
   correspondenceId: string;
 };
-
-type TNotification = {
-  bounceRecipient: string;
-  bounceSubType: string;
-  bounceType: string;
-  errorMessage: string;
-  subject: string;
-};
-
-type TDefaultEmailTemplateData = {
-  emailContent: any;
-};
