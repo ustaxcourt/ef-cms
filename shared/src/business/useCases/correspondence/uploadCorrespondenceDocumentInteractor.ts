@@ -1,13 +1,18 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
-exports.uploadCorrespondenceDocumentInteractor = async (
-  applicationContext,
-  { documentFile, keyToOverwrite },
-) => {
+export const uploadCorrespondenceDocumentInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    {
+      documentFile,
+      keyToOverwrite,
+    }: { documentFile: string; keyToOverwrite: string },
+  ): Promise<string>;
+} = async (applicationContext, { documentFile, keyToOverwrite }) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
