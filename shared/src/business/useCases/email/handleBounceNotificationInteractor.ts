@@ -10,7 +10,9 @@ const {
  * @param {object} providers.mail information pertaining to the email that bounced
  * @returns {object} only the information we need about the bounce
  */
-exports.parseBounceNotification = ({ bounce, mail }) => {
+export const parseBounceNotification: {
+  ({ bounce, mail }: { bounce: any; mail: any }): TNotification;
+} = ({ bounce, mail }) => {
   return {
     bounceRecipient: bounce.bouncedRecipients[0].emailAddress,
     bounceSubType: bounce.bounceSubType,
@@ -28,10 +30,12 @@ exports.parseBounceNotification = ({ bounce, mail }) => {
  * @param {object} providers.bounce an object containing the information about the bounced email
  * @returns {Promise<object>} resolves upon completion
  */
-exports.handleBounceNotificationInteractor = async (
-  applicationContext,
-  notification,
-) => {
+export const handleBounceNotificationInteractor: {
+  (
+    applicationContext: IApplicationContext,
+    notification: TNotification,
+  ): Promise<void>;
+} = async (applicationContext, notification) => {
   const { bounceRecipient, bounceSubType, bounceType, errorMessage, subject } =
     exports.parseBounceNotification(notification);
 
