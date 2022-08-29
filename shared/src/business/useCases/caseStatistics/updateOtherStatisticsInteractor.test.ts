@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateOtherStatisticsInteractor,
-} = require('./updateOtherStatisticsInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateOtherStatisticsInteractor } from './updateOtherStatisticsInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('updateOtherStatisticsInteractor', () => {
   beforeEach(() => {
@@ -25,7 +21,7 @@ describe('updateOtherStatisticsInteractor', () => {
     await expect(
       updateOtherStatisticsInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 

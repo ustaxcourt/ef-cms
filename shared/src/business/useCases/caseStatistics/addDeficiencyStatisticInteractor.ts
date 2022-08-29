@@ -1,10 +1,10 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { Statistic } = require('../../entities/Statistic');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { Statistic } from '../../entities/Statistic';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * addDeficiencyStatisticInteractor
@@ -21,8 +21,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.yearOrPeriod whether the statistic is for a year or period
  * @returns {object} the updated case
  */
-exports.addDeficiencyStatisticInteractor = async (
-  applicationContext,
+export const addDeficiencyStatisticInteractor = async (
+  applicationContext: IApplicationContext,
   {
     determinationDeficiencyAmount,
     determinationTotalPenalties,
@@ -32,6 +32,15 @@ exports.addDeficiencyStatisticInteractor = async (
     lastDateOfPeriod,
     year,
     yearOrPeriod,
+  }: {
+    determinationDeficiencyAmount: number;
+    determinationTotalPenalties: number;
+    docketNumber: string;
+    irsDeficiencyAmount: number;
+    irsTotalPenalties: number;
+    lastDateOfPeriod: string;
+    year: string;
+    yearOrPeriod: string;
   },
 ) => {
   const user = applicationContext.getCurrentUser();

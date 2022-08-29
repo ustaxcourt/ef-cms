@@ -1,11 +1,7 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  updateDeficiencyStatisticInteractor,
-} = require('./updateDeficiencyStatisticInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateDeficiencyStatisticInteractor } from './updateDeficiencyStatisticInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('updateDeficiencyStatisticInteractor', () => {
   let statistic = {
@@ -37,7 +33,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
     await expect(
       updateDeficiencyStatisticInteractor(applicationContext, {
         docketNumber: MOCK_CASE.docketNumber,
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized for editing statistics');
   });
 
@@ -53,7 +49,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         statisticId: '7452b87f-7ba3-45c7-ae4b-bd1eab37c866',
         ...statisticToUpdate,
-      },
+      } as any,
     );
     expect(result).toMatchObject({
       statistics: [statisticToUpdate],
@@ -73,7 +69,7 @@ describe('updateDeficiencyStatisticInteractor', () => {
         docketNumber: MOCK_CASE.docketNumber,
         statisticId: 'a3f2aa54-ad95-4396-b1a9-2d90d9e22242',
         ...statisticToUpdate,
-      },
+      } as any,
     );
     expect(result).toMatchObject({
       statistics: [statistic],
