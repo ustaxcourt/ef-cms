@@ -205,6 +205,7 @@ type TCase = {
   automaticBlockedDate: string;
   automaticBlockedReason: string;
   blocked: string;
+  isSealed: boolean;
   blockedDate: string;
   blockedReason: string;
   docketEntries: DocketEntry[];
