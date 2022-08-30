@@ -1,8 +1,8 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * getBlockedCasesInteractor
@@ -12,9 +12,9 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.trialLocation the preferredTrialLocation to filter the blocked cases by
  * @returns {object} the case data
  */
-exports.getBlockedCasesInteractor = async (
-  applicationContext,
-  { trialLocation },
+export const getBlockedCasesInteractor = async (
+  applicationContext: IApplicationContext,
+  { trialLocation }: { trialLocation: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

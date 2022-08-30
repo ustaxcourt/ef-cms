@@ -1,15 +1,15 @@
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   PARTY_TYPES,
   ROLES,
-} = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getCaseDeadlinesInteractor } = require('./getCaseDeadlinesInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { User } = require('../entities/User');
+} from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { User } from '../entities/User';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getCaseDeadlinesInteractor } from './getCaseDeadlinesInteractor';
 
 describe('getCaseDeadlinesInteractor', () => {
   const mockDeadlines = [

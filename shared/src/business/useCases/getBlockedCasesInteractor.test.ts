@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getBlockedCasesInteractor } = require('./getBlockedCasesInteractor');
-const { ROLES } = require('../entities/EntityConstants');
+import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getBlockedCasesInteractor } from './getBlockedCasesInteractor';
 
 describe('getBlockedCasesInteractor', () => {
   it('calls search function with correct params and returns records', async () => {

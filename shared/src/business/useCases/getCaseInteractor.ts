@@ -1,28 +1,32 @@
-const {
+import {
+  Case,
   canAllowDocumentServiceForCase,
   canAllowPrintableDocketRecord,
-  Case,
   getPetitionerById,
   isAssociatedUser,
   isSealedCase,
-} = require('../entities/cases/Case');
-const {
+} from '../entities/cases/Case';
+import { NotFoundError } from '../../errors/errors';
+import { PublicCase } from '../entities/cases/PublicCase';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { User } from '../entities/User';
+import {
   caseContactAddressSealedFormatter,
   caseSealedFormatter,
-} = require('../utilities/caseFilter');
-const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { NotFoundError } = require('../../errors/errors');
-const { PublicCase } = require('../entities/cases/PublicCase');
-const { User } = require('../entities/User');
+} from '../utilities/caseFilter';
 
 const getSealedCase = ({
   applicationContext,
   caseRecord,
   isAssociatedWithCase,
-}) => {
+}: {
+  applicationContext: IApplicationContext;
+  caseRecord: TCase;
+  isAssociatedWithCase: boolean;
+}): TCase => {
   const currentUser = applicationContext.getCurrentUser();
 
   let isAuthorizedToViewSealedCase = isAuthorized(
@@ -82,7 +86,7 @@ const getCaseForExternalUser = ({
  * @param {Object} caseRecord the original caseRecord
  * @returns {Object} decorated caseRecord
  */
-const decorateForCaseStatus = caseRecord => {
+export const decorateForCaseStatus = (caseRecord: TCase) => {
   // allow document service
   caseRecord.canAllowDocumentService =
     canAllowDocumentServiceForCase(caseRecord);
@@ -93,8 +97,6 @@ const decorateForCaseStatus = caseRecord => {
   return caseRecord;
 };
 
-exports.decorateForCaseStatus = decorateForCaseStatus;
-
 /**
  * getCaseInteractor
  *
@@ -103,7 +105,10 @@ exports.decorateForCaseStatus = decorateForCaseStatus;
  * @param {string} providers.docketNumber the docket number of the case to get
  * @returns {object} the case data
  */
-exports.getCaseInteractor = async (applicationContext, { docketNumber }) => {
+export const getCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
+) => {
   const caseRecord = decorateForCaseStatus(
     await applicationContext.getPersistenceGateway().getCaseByDocketNumber({
       applicationContext,
