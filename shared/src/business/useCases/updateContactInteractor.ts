@@ -4,7 +4,6 @@ import {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { addCoverToPdf } from './addCoversheetInteractor';
 import { Case } from '../entities/cases/Case';
 import { cloneDeep } from 'lodash';
 import { DocketEntry } from '../entities/DocketEntry';
@@ -12,6 +11,7 @@ import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 import { isEmpty } from 'lodash';
 import { NotFoundError, UnauthorizedError } from '../../errors/errors';
 import { WorkItem } from '../entities/WorkItem';
+import { addCoverToPdf } from './addCoverToPdf';
 
 /**
  * updateContactInteractor

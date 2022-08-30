@@ -66,8 +66,10 @@ export const getCasesForUserInteractor = async (
       });
   }
 
-  const foundOpenCases = Object.values(casesAssociatedWithUserOrLeadCaseMap)
-    .map(c => {
+  const foundOpenCases: any[] = Object.values(
+    casesAssociatedWithUserOrLeadCaseMap,
+  )
+    .map((c: any) => {
       // explicitly unset the entityName because this is returning a composite entity and if an entityName
       // is set, the genericHandler will send it through the entity constructor for that entity and strip
       // out necessary data

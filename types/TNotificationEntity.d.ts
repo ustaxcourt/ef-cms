@@ -10,7 +10,12 @@ type TBounce = {
 };
 
 type TNotification = {
+  mail: any;
   bounceRecipient: string;
+  bouncedRecipients: {
+    emailAddress: string;
+    diagnosticCode: string;
+  }[];
   bounceSubType: string;
   bounceType: string;
   errorMessage: string;
