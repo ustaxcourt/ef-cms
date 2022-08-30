@@ -79,7 +79,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
 
     await expect(
       updateCorrespondenceDocumentInteractor(applicationContext, {
-        documentMetadata: { docketNumber: mockCase.docketNumber },
+        documentMetadata: { docketNumber: mockCase.docketNumber } as any,
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -90,7 +90,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
         correspondenceId: mockCorrespondence.correspondenceId,
         docketNumber: mockCase.docketNumber,
         documentTitle: 'A title that has been updated',
-      },
+      } as any,
     });
 
     expect(
@@ -113,7 +113,7 @@ describe('updateCorrespondenceDocumentInteractor', () => {
           correspondenceId: mockCorrespondence.correspondenceId,
           docketNumber: mockCase.docketNumber,
           documentTitle: 'A title that has been updated',
-        },
+        } as any,
       },
     );
 

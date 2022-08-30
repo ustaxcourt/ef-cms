@@ -1,8 +1,4 @@
 import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
-import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -10,9 +6,13 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
-jest.mock('../addCoversheetInteractor');
-import { addCoverToPdf } from '../addCoversheetInteractor';
+jest.mock('../addCoverToPdf');
+import { addCoverToPdf } from '../addCoverToPdf';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
   let caseRecord;
@@ -22,7 +22,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   beforeAll(() => {
     const PDF_MOCK_BUFFER = 'Hello World';
 
-    addCoverToPdf.mockResolvedValue({
+    (addCoverToPdf as jest.Mock).mockResolvedValue({
       pdfData: testPdfDoc,
     });
 
@@ -139,8 +139,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
-    const docketEntryIndex =
-      addCoverToPdf.mock.calls[0][0].docketEntryEntity.index;
+    const docketEntryIndex = (addCoverToPdf as jest.Mock).mock.calls[0][0]
+      .docketEntryEntity.index;
     expect(docketEntryIndex).toBeDefined();
   });
 

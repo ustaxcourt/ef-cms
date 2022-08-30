@@ -14,7 +14,7 @@ import { pick } from 'lodash';
  * @param {object} providers the providers object
  * @param {string} providers.endDate the end date
  * @param {string} providers.startDate the start date
- * @param {string} providers.from the index to start from
+ * @param {number} providers.from the index to start from
  * @param {string} providers.judge the judge
  * @param {number} providers.pageSize the page size
  * @returns {Promise} the promise of the getCaseDeadlinesByDateRange call
@@ -29,9 +29,9 @@ export const getCaseDeadlinesInteractor = async (
     startDate,
   }: {
     endDate: string;
-    from: string;
+    from: number;
     judge: string;
-    pageSize: string;
+    pageSize: number;
     startDate;
   },
 ) => {

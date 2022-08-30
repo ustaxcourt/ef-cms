@@ -62,7 +62,7 @@ describe('generateSignedDocument', () => {
         signatureName: mockSignatureName,
         signatureTitle: mockTitle,
       },
-    });
+    } as any);
 
     expect(
       applicationContext.getUtilities().setupPdfDocument.mock.calls[0][0],
@@ -72,7 +72,7 @@ describe('generateSignedDocument', () => {
   });
 
   it('should draw the signature and title text on the pdf document', async () => {
-    const args = {
+    const args: any = {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,
@@ -112,7 +112,7 @@ describe('generateSignedDocument', () => {
         signatureName: mockSignatureName,
         signatureTitle: mockTitle,
       },
-    });
+    } as any);
 
     expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
       color: expect.anything(),
@@ -136,7 +136,7 @@ describe('generateSignedDocument', () => {
         signatureName: mockSignatureName,
         signatureTitle: mockTitle,
       },
-    });
+    } as any);
 
     expect(drawRectangleMock.mock.calls[0][0]).toMatchObject({
       rotate: { angle: 0 },
@@ -157,7 +157,7 @@ describe('generateSignedDocument', () => {
     const mockRotationAngle = 80;
     rotationReturnValue = { angle: mockRotationAngle };
 
-    const args = {
+    const args: any = {
       pageIndex: 0,
       pdfData: testPdfDoc,
       posX: 200,

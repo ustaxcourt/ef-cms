@@ -20,6 +20,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:security/recommended',
     'prettier',
+    'plugin:import/typescript',
     // 'plugin:jsx-a11y/recommended', // todo
   ],
   overrides: [
@@ -432,7 +433,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.json'],
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
       },
     },
     react: {

@@ -1,12 +1,12 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   DOCKET_SECTION,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { editPaperFilingInteractor } from './editPaperFilingInteractor';
 import { getContactPrimary } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('editPaperFilingInteractor', () => {
   let mockCurrentUser;
@@ -23,7 +23,7 @@ describe('editPaperFilingInteractor', () => {
       documentType: 'Answer',
       eventCode: 'A',
       userId: mockDocketEntryId,
-    },
+    } as any,
     docketNumber: '45678-18',
     section: DOCKET_SECTION,
     sentBy: mockDocketEntryId,
@@ -79,7 +79,7 @@ describe('editPaperFilingInteractor', () => {
           eventCode: 'MISP',
         },
         primaryDocumentFileId: mockDocketEntryId,
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -94,7 +94,7 @@ describe('editPaperFilingInteractor', () => {
         isFileAttached: false,
       },
       primaryDocumentFileId: mockDocketEntryId,
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -120,7 +120,7 @@ describe('editPaperFilingInteractor', () => {
         isFileAttached: true,
       },
       primaryDocumentFileId: mockDocketEntryId,
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -156,7 +156,7 @@ describe('editPaperFilingInteractor', () => {
         isFileAttached: true,
       },
       primaryDocumentFileId: mockDocketEntryId,
-    });
+    } as any);
 
     expect(result.paperServicePdfUrl).toEqual(mockPdfUrl);
   });
@@ -174,7 +174,7 @@ describe('editPaperFilingInteractor', () => {
         isFileAttached: true,
       },
       primaryDocumentFileId: mockDocketEntryId,
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
@@ -203,7 +203,7 @@ describe('editPaperFilingInteractor', () => {
         otherFilingParty: 'Bert Brooks',
       },
       primaryDocumentFileId: mockDocketEntryId,
-    });
+    } as any);
 
     const updatedDocketEntry = applicationContext
       .getPersistenceGateway()

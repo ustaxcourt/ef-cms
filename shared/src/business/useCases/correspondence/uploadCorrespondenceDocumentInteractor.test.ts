@@ -21,7 +21,7 @@ describe('uploadCorrespondenceDocumentInteractor', () => {
     mockUser = { ...mockUser, role: ROLES.petitioner };
 
     await expect(
-      uploadCorrespondenceDocumentInteractor(applicationContext, {}),
+      uploadCorrespondenceDocumentInteractor(applicationContext, {} as any),
     ).rejects.toThrow('Unauthorized');
   });
 

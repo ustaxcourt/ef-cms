@@ -70,7 +70,9 @@ describe('fileCorrespondenceDocumentInteractor', () => {
 
     await expect(
       fileCorrespondenceDocumentInteractor(applicationContext, {
-        documentMetadata: { docketNumber: mockCase.docketNumber },
+        documentMetadata: {
+          docketNumber: mockCase.docketNumber,
+        } as any,
         primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -83,7 +85,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
 
     await expect(
       fileCorrespondenceDocumentInteractor(applicationContext, {
-        documentMetadata: { docketNumber: mockCase.docketNumber },
+        documentMetadata: { docketNumber: mockCase.docketNumber } as any,
         primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       }),
     ).rejects.toThrow('Case 123-45 was not found');
@@ -103,7 +105,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
         docketNumber: mockCase.docketNumber,
         documentTitle: 'A title',
         filingDate: '2001-02-01T05:00:00.000Z',
-      },
+      } as any,
       primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
     });
     expect(
@@ -133,7 +135,7 @@ describe('fileCorrespondenceDocumentInteractor', () => {
           docketNumber: mockCase.docketNumber,
           documentTitle: 'A title',
           filingDate: '2001-02-01T05:00:00.000Z',
-        },
+        } as any,
         primaryDocumentFileId: '14bb669b-0962-4781-87a0-50718f556e2b',
       },
     );
