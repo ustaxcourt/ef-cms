@@ -312,6 +312,47 @@ interface IGetCasesForUser {
   }): Promise<TCase[]>;
 }
 
+interface IGetCaseDeadlinesByDateRange {
+  ({
+    applicationContext,
+    endDate,
+    from,
+    judge,
+    pageSize,
+    startDate,
+  }: {
+    applicationContext: IApplicationContext;
+    endDate: string;
+    from: string;
+    judge: string;
+    pageSize: string;
+    startDate: string;
+  }): Promise<{
+    foundDeadlines: any;
+    totalCount: string;
+  }>;
+}
+
+interface IGetCasesByDocketNumbers {
+  ({
+    applicationContext,
+    docketNumbers,
+  }: {
+    applicationContext: IApplicationContext;
+    docketNumbers: string[];
+  }): Promise<TCase[]>;
+}
+
+interface IGetBlockedCases {
+  ({
+    applicationContext,
+    trialLocation,
+  }: {
+    applicationContext: IApplicationContext;
+    trialLocation: string;
+  }): Promise<TCase[]>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   createCaseDeadline: ICreateCaseDeadline;
@@ -344,4 +385,7 @@ type TPersistenceGateway = {
   getUserById: IGetUserById;
   getCasesAssociatedWithUser: IGetCasesAssociatedWithUser;
   getCasesForUser: IGetCasesForUser;
+  getCaseDeadlinesByDateRange: IGetCaseDeadlinesByDateRange;
+  getCasesByDocketNumbers: IGetCasesByDocketNumbers;
+  getBlockedCases: IGetBlockedCases;
 };

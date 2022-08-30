@@ -90,8 +90,22 @@ const computeCoordinates = ({
  * @returns {ByteArray} PDF data after signature is added
  */
 const generateSignedDocumentInteractor = async (
-  applicationContext,
-  { pageIndex, pdfData, posX, posY, scale = 1, sigTextData },
+  applicationContext: IApplicationContext,
+  {
+    pageIndex,
+    pdfData,
+    posX,
+    posY,
+    scale = 1,
+    sigTextData,
+  }: {
+    pageIndex: number;
+    pdfData: any;
+    posX: number;
+    posY: number;
+    scale: number;
+    sigTextData: any;
+  },
 ) => {
   const { degrees, rgb } = await applicationContext.getPdfLib();
 
