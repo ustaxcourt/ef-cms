@@ -18,8 +18,31 @@ interface IUpdateCaseAutomaticBlock {
   }): any;
 }
 
+interface IUpdateCaseAutomaticBlock {
+  ({
+    applicationContext: IApplicationContext,
+    caseEntity,
+  }: {
+    applicationContext: IApplicationContext;
+    caseEntity: any;
+  }): any;
+}
+
+interface IRemoveCounselFromRemovedPetitioner {
+  ({
+    applicationContext: IApplicationContext,
+    caseEntity,
+    petitionerContactId,
+  }: {
+    applicationContext: IApplicationContext;
+    caseEntity: any;
+    petitionerContactId: string;
+  }): any;
+}
+
 type TUseCaseHelpers = {
   [key: string]: any;
   updateCaseAndAssociations: IUpdateCaseAndAssociations;
   updateCaseAutomaticBlock: IUpdateCaseAutomaticBlock;
+  removeCounselFromRemovedPetitioner: IRemoveCounselFromRemovedPetitioner;
 };
