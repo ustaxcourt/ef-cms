@@ -289,7 +289,7 @@ interface IGetCasesByLeadDocketNumber {
   }: {
     applicationContext: IApplicationContext;
     leadDocketNumber: string;
-  }): Promise<TCase>;
+  }): Promise<TCase[]>;
 }
 
 interface IGetCasesAssociatedWithUser {
