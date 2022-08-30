@@ -302,6 +302,16 @@ interface IGetCasesAssociatedWithUser {
   }): Promise<TCase[]>;
 }
 
+interface IGetCasesForUser {
+  ({
+    applicationContext,
+    userId,
+  }: {
+    applicationContext: IApplicationContext;
+    userId: string;
+  }): Promise<TCase[]>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   createCaseDeadline: ICreateCaseDeadline;
@@ -333,4 +343,5 @@ type TPersistenceGateway = {
   getCasesByLeadDocketNumber: IGetCasesByLeadDocketNumber;
   getUserById: IGetUserById;
   getCasesAssociatedWithUser: IGetCasesAssociatedWithUser;
+  getCasesForUser: IGetCasesForUser;
 };
