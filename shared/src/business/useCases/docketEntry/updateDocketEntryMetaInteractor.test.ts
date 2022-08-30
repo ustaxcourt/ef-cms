@@ -1,10 +1,9 @@
+import { MOCK_CASE } from '../../../test/mockCase';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 import { docketClerkUser } from '../../../test/mockUsers';
 import { getContactPrimary } from '../../entities/cases/Case';
-import { MOCK_CASE } from '../../../test/mockCase';
-import { NotFoundError } from '../../../errors/errors';
-import { UnauthorizedError } from '../../../errors/errors';
+import { updateDocketEntryMetaInteractor } from './updateDocketEntryMetaInteractor';
 
 describe('updateDocketEntryMetaInteractor', () => {
   let mockDocketEntries;
@@ -147,6 +146,7 @@ describe('updateDocketEntryMetaInteractor', () => {
 
     await expect(
       updateDocketEntryMetaInteractor(applicationContext, {
+        docketEntryMeta: undefined,
         docketNumber: MOCK_CASE.docketNumber,
       }),
     ).rejects.toThrow(UnauthorizedError);
@@ -158,6 +158,7 @@ describe('updateDocketEntryMetaInteractor', () => {
       .getCaseByDocketNumber.mockReturnValue(undefined);
     await expect(
       updateDocketEntryMetaInteractor(applicationContext, {
+        docketEntryMeta: undefined,
         docketNumber: '999-99',
       }),
     ).rejects.toThrow(NotFoundError);
@@ -271,7 +272,6 @@ describe('updateDocketEntryMetaInteractor', () => {
 
   it('should NOT generate a new coversheet for the document if the servedAt field metadata formatted as YYYY-MM-DD is equivalent to the strict ISO formatted date on the entity', async () => {
     await updateDocketEntryMetaInteractor(applicationContext, {
-      applicationContext,
       docketEntryMeta: {
         ...mockDocketEntries[0],
         servedAt: '2019-01-01',

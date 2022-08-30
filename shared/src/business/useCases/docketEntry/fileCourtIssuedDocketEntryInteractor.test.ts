@@ -1,16 +1,16 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { Case } from '../../entities/cases/Case';
 import {
   DOCKET_SECTION,
   ROLES,
   TRANSCRIPT_EVENT_CODE,
 } from '../../entities/EntityConstants';
-import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
 import {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
-import { Case } from '../../entities/cases/Case';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { fileCourtIssuedDocketEntryInteractor } from './fileCourtIssuedDocketEntryInteractor';
 
 describe('fileCourtIssuedDocketEntryInteractor', () => {
   let caseRecord;
@@ -79,7 +79,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
           documentType: 'Memorandum in Support',
         },
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -91,7 +91,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           docketNumbers: [caseRecord.docketNumber],
           documentType: 'Order',
         },
-      }),
+      } as any),
     ).rejects.toThrow('Docket entry not found');
   });
 
@@ -105,7 +105,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
           docketEntryId: caseRecord.docketEntries[1].docketEntryId,
           documentType: 'Order',
         },
-      }),
+      } as any),
     ).rejects.toThrow('Docket entry has already been added to docket record');
   });
 
@@ -119,7 +119,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         eventCode: 'O',
         generatedDocumentTitle: 'Generated Order Document Title',
       },
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -140,7 +140,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         filingDate: '2011-03-01T21:40:46.415Z',
         generatedDocumentTitle: 'Generated Order Document Title',
       },
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
@@ -170,7 +170,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
         isDraft: true,
       },
-    });
+    } as any);
 
     const lastDocumentIndex =
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
@@ -199,7 +199,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         },
         eventCode: docketEntryToUpdate.eventCode,
       },
-    });
+    } as any);
 
     const updatedDocketEntry = applicationContext
       .getUseCaseHelpers()
@@ -223,7 +223,7 @@ describe('fileCourtIssuedDocketEntryInteractor', () => {
         generatedDocumentTitle: 'Transcript of Dogs on 03-01-19',
         serviceStamp: 'Served',
       },
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]

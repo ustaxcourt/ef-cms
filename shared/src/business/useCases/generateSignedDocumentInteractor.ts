@@ -17,6 +17,7 @@ export const computeCoordinates = ({
 }) => {
   const bottomLeftBoxCoordinates = {
     x: posX / scale,
+    y: undefined,
   };
   if (pageRotation === 90 || pageRotation === 270) {
     bottomLeftBoxCoordinates.y = cropBox.pageWidth - (posY + boxHeight) / scale;

@@ -143,7 +143,10 @@ describe('getNotificationsInteractor', () => {
         },
       ]);
 
-    const result = await getNotificationsInteractor(applicationContext, {});
+    const result = await getNotificationsInteractor(
+      applicationContext,
+      {} as any,
+    );
     expect(result).toEqual({
       qcIndividualInProgressCount: 0,
       qcIndividualInboxCount: 1,
@@ -159,7 +162,7 @@ describe('getNotificationsInteractor', () => {
   it('returns the total user inbox count', async () => {
     const result = await await getNotificationsInteractor(
       applicationContext,
-      {},
+      {} as any,
     );
 
     expect(result.userInboxCount).toEqual(1);
@@ -168,14 +171,17 @@ describe('getNotificationsInteractor', () => {
   it('returns the total section messages count', async () => {
     const result = await await getNotificationsInteractor(
       applicationContext,
-      {},
+      {} as any,
     );
 
     expect(result.userSectionCount).toEqual(2);
   });
 
   it('returns an accurate unread count for legacy items marked complete', async () => {
-    const result = await getNotificationsInteractor(applicationContext, {});
+    const result = await getNotificationsInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     expect(result.qcUnreadCount).toEqual(1);
   });

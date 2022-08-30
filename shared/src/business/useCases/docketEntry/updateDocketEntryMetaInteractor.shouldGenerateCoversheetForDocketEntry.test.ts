@@ -1,6 +1,6 @@
+import { DocketEntry } from '../../entities/DocketEntry';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { shouldGenerateCoversheetForDocketEntry } from './updateDocketEntryMetaInteractor';
-import { DocketEntry } from '../../entities/DocketEntry';
 
 describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry', () => {
   let mockDocketEntry = new DocketEntry(
@@ -35,7 +35,7 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
       originalDocketEntry,
       servedAtUpdated,
       shouldAddNewCoverSheet,
-    });
+    } as any);
 
     expect(result).toBe(true);
   });
@@ -51,7 +51,7 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
       originalDocketEntry,
       servedAtUpdated,
       shouldAddNewCoverSheet,
-    });
+    } as any);
 
     expect(result).toBe(true);
   });
@@ -68,7 +68,7 @@ describe('updateDocketEntryMetaInteractor shouldGenerateCoversheetForDocketEntry
       originalDocketEntry,
       servedAtUpdated,
       shouldAddNewCoverSheet,
-    });
+    } as any);
 
     expect(result).toBe(true);
   });

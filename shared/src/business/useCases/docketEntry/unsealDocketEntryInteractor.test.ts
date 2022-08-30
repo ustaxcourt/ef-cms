@@ -1,8 +1,5 @@
-import {
-  DOCKET_ENTRY_SEALED_TO_TYPES,
-  ROLES,
-} from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { unsealDocketEntryInteractor } from './unsealDocketEntryInteractor';
 
@@ -17,7 +14,6 @@ describe('unsealDocketEntryInteractor', () => {
     await expect(
       unsealDocketEntryInteractor(applicationContext, {
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
-        docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         docketNumber: '101-20',
       }),
     ).rejects.toThrow('Unauthorized');
@@ -31,7 +27,6 @@ describe('unsealDocketEntryInteractor', () => {
     await expect(
       unsealDocketEntryInteractor(applicationContext, {
         docketEntryId: '8675309b-18d0-43ec-bafb-654e83405411',
-        docketEntrySealedTo: DOCKET_ENTRY_SEALED_TO_TYPES.PUBLIC,
         docketNumber: '101-20',
       }),
     ).rejects.toThrow('Docket entry not found');

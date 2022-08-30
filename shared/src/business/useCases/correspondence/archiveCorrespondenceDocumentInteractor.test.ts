@@ -36,7 +36,7 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(user);
 
     await expect(
-      archiveCorrespondenceDocumentInteractor(applicationContext, {}),
+      archiveCorrespondenceDocumentInteractor(applicationContext, {} as any),
     ).rejects.toThrow('Unauthorized');
   });
 
