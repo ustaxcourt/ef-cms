@@ -1,10 +1,10 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getCasesForUserInteractor } = require('./getCasesForUserInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { MOCK_USERS } = require('../../test/mockUsers');
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_USERS } from '../../test/mockUsers';
+import { UserCase } from '../entities/UserCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getCasesForUserInteractor } from './getCasesForUserInteractor';
 jest.mock('../entities/UserCase');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { UserCase } = require('../entities/UserCase');
 
 describe('getCasesForUserInteractor', () => {
   let mockFoundCasesList;
