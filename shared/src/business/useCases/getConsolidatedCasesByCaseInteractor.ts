@@ -11,7 +11,7 @@ import { Case } from '../entities/cases/Case';
 export const getConsolidatedCasesByCaseInteractor = async (
   applicationContext: IApplicationContext,
   { docketNumber }: { docketNumber: string },
-): TCase => {
+) => {
   const consolidatedCases = await applicationContext
     .getPersistenceGateway()
     .getCasesByLeadDocketNumber({
