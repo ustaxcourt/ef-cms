@@ -41,7 +41,7 @@ export const filterForPublic = async ({
   const filtered = [];
   for (const result of unfiltered) {
     if (
-      await exports.isCaseVisibleToPublic({
+      await isCaseVisibleToPublic({
         applicationContext,
         docketNumber: result.docketNumber,
       })

@@ -1,3 +1,4 @@
+// <<<<<<< HEAD
 import { PETITIONS_SECTION, ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
@@ -5,6 +6,15 @@ import { getUserInteractor } from './getUserInteractor';
 import { entityName as irsPractitionerEntityName } from '../entities/IrsPractitioner';
 import { entityName as practitionerEntityName } from '../entities/Practitioner';
 import { entityName as privatePractitionerEntityName } from '../entities/PrivatePractitioner';
+// =======
+// import { entityName as irsPractitionerEntityName } from '../entities/IrsPractitioner';
+// import { entityName as practitionerEntityName } from '../entities/Practitioner';
+// import { entityName as privatePractitionerEntityName } from '../entities/PrivatePractitioner';
+// import { applicationContext } from '../test/createTestApplicationContext';
+// import { getUserInteractor } from './getUserInteractor';
+// import { PETITIONS_SECTION, ROLES } from '../entities/EntityConstants';
+// import { User } from '../entities/User';
+// >>>>>>> 9c85711760d2913d6ef83ad7dfa9d23edd18a71a
 
 describe('getUserInteractor', () => {
   it('should call the persistence method to get the user', async () => {

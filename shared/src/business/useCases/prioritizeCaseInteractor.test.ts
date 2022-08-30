@@ -1,8 +1,8 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { prioritizeCaseInteractor } = require('./prioritizeCaseInteractor');
-const { ROLES } = require('../entities/EntityConstants');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { prioritizeCaseInteractor } from './prioritizeCaseInteractor';
+import { ROLES } from '../entities/EntityConstants';
 
 describe('prioritizeCaseInteractor', () => {
   it('should update the case with the highPriority flag set as true and attach a reason', async () => {

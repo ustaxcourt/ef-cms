@@ -6,34 +6,16 @@ jest.mock('./processStreamRecords/processRemoveEntries');
 jest.mock('./processStreamRecords/processWorkItemEntries');
 jest.mock('./processStreamRecords/processCaseEntries');
 jest.mock('./processStreamRecords/processOtherEntries');
-const {
-  partitionRecords,
-} = require('./processStreamRecords/processStreamUtilities');
-const {
-  processCaseEntries,
-} = require('./processStreamRecords/processCaseEntries');
-const {
-  processDocketEntries,
-} = require('./processStreamRecords/processDocketEntries');
-const {
-  processMessageEntries,
-} = require('./processStreamRecords/processMessageEntries');
-const {
-  processOtherEntries,
-} = require('./processStreamRecords/processOtherEntries');
-const {
-  processPractitionerMappingEntries,
-} = require('./processStreamRecords/processPractitionerMappingEntries');
-const {
-  processRemoveEntries,
-} = require('./processStreamRecords/processRemoveEntries');
-const {
-  processStreamRecordsInteractor,
-} = require('./processStreamRecordsInteractor');
-const {
-  processWorkItemEntries,
-} = require('./processStreamRecords/processWorkItemEntries');
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { partitionRecords } from './processStreamRecords/processStreamUtilities';
+import { processCaseEntries } from './processStreamRecords/processCaseEntries';
+import { processDocketEntries } from './processStreamRecords/processDocketEntries';
+import { processMessageEntries } from './processStreamRecords/processMessageEntries';
+import { processOtherEntries } from './processStreamRecords/processOtherEntries';
+import { processPractitionerMappingEntries } from './processStreamRecords/processPractitionerMappingEntries';
+import { processRemoveEntries } from './processStreamRecords/processRemoveEntries';
+import { processStreamRecordsInteractor } from './processStreamRecordsInteractor';
+import { processWorkItemEntries } from './processStreamRecords/processWorkItemEntries';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
