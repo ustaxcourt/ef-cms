@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * archiveDraftDocumentInteractor
@@ -14,9 +14,12 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.docketEntryId the id of the docket entry which will be archived
  * @returns {object} the updated case note returned from persistence
  */
-exports.archiveDraftDocumentInteractor = async (
-  applicationContext,
-  { docketEntryId, docketNumber },
+export const archiveDraftDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketEntryId,
+    docketNumber,
+  }: { docketEntryId: string; docketNumber: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

@@ -11,9 +11,15 @@ type TCaseDeadline = {
 type DocketEntry = {
   additionalInfo: string;
   descriptionDisplay: string;
+  docketNumber: string;
   docketEntryId: string;
   documentTitle: string;
+  lodged: boolean;
   documentType: string;
+  certificateOfService: string;
+  filingDate: string;
+  addToCoversheet: boolean;
+  mailingDate: string;
   eventCode: string;
   filedBy: string;
   index: string;
@@ -25,6 +31,14 @@ type DocketEntry = {
   servedAt: string;
   userId: string;
 };
+
+type TDocketEntryEntity = {
+  setAsProcessingStatusAsCompleted: () => void;
+  setNumberOfPages: (numberOfPages: number) => void;
+
+  validate(): TDocketEntryEntity;
+  toRawObject(): DocketEntry;
+} & DocketEntry;
 
 type WorkItem = {
   createdAt: string;
@@ -176,6 +190,15 @@ type TTrialSessionWorkingCopyData = {
   userId: string;
 };
 
+type TCaseEntity = {
+  getDocketEntryById: ({
+    docketEntryId,
+  }: {
+    docketEntryId: string;
+  }) => TDocketEntryEntity;
+  addDocketEntry: (docketEntry: TDocketEntryEntity) => void;
+} & TCase;
+
 type TCase = {
   associatedJudge: string;
   automaticBlocked: string;
@@ -185,6 +208,7 @@ type TCase = {
   isSealed: boolean;
   blockedDate: string;
   blockedReason: string;
+  docketEntries: DocketEntry[];
   canAllowDocumentService: string;
   caseTitle: string;
   canAllowPrintableDocketRecord: string;
@@ -256,6 +280,7 @@ type TPractitioner = {
   additionalPhone: string;
   admissionsDate: string;
   admissionsStatus: string;
+  representing: string[];
   barNumber: string;
   birthYear: string;
   confirmEmail: string;

@@ -1,10 +1,10 @@
-const {
+import {
   ALLOWLIST_FEATURE_FLAGS,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-} = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
-const { formatDateString, FORMATS } = require('../utilities/DateHandler');
-const { omit } = require('lodash');
+} from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
+import { formatDateString, FORMATS } from '../utilities/DateHandler';
+import { omit } from 'lodash';
 
 const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
   const formatString = isPaper ? FORMATS.MMDDYY : FORMATS.DATE_TIME;
@@ -23,13 +23,20 @@ const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
  * @param {boolean} options.useInitialData whether to use the initial docket record suffix and case caption
  * @returns {object} the key/value pairs of computed strings
  */
-exports.generateCoverSheetData = async ({
+export const generateCoverSheetData = async ({
   applicationContext,
   caseEntity,
   docketEntryEntity,
   filingDateUpdated = false,
   stampData,
   useInitialData = false,
+}: {
+  applicationContext: IApplicationContext;
+  caseEntity: TCase;
+  docketEntryEntity: DocketEntry;
+  filingDateUpdated: boolean;
+  stampData?: any;
+  useInitialData: boolean;
 }) => {
   const isLodged = docketEntryEntity.lodged;
   const { certificateOfService, isPaper } = docketEntryEntity;
@@ -39,7 +46,6 @@ exports.generateCoverSheetData = async ({
     : '';
 
   let dateReceivedFormatted = formatDateReceived({
-    applicationContext,
     docketEntryEntity,
     isPaper,
   });
@@ -76,7 +82,7 @@ exports.generateCoverSheetData = async ({
   const docketNumberWithSuffix =
     caseEntity.docketNumber + (docketNumberSuffixToUse || '');
 
-  let coverSheetData = {
+  let coverSheetData: any = {
     caseCaptionExtension,
     caseTitle,
     certificateOfService,

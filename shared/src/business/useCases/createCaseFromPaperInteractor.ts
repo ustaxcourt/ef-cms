@@ -15,6 +15,11 @@ const addPetitionDocketEntryWithWorkItemToCase = ({
   caseToAdd,
   docketEntryEntity,
   user,
+}: {
+  applicationContext: IApplicationContext;
+  caseToAdd: TCaseEntity;
+  docketEntryEntity: DocketEntry;
+  user: TUser;
 }) => {
   const workItemEntity = new WorkItem(
     {
@@ -71,7 +76,7 @@ export const createCaseFromPaperInteractor = async (
     applicationForWaiverOfFilingFeeFileId: string;
     ownershipDisclosureFileId: string;
     petitionFileId: string;
-    petitionMetadata: string;
+    petitionMetadata: any;
     requestForPlaceOfTrialFileId: string;
     stinFileId: string;
   },

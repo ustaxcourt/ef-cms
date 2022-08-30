@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { UnauthorizedError } from '../../errors/errors';
 /**
  * used for setting a case as blocked
  *
@@ -13,9 +13,9 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.docketNumber the docket number to block
  * @returns {object} the case data
  */
-exports.blockCaseFromTrialInteractor = async (
-  applicationContext,
-  { docketNumber, reason },
+export const blockCaseFromTrialInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber, reason }: { docketNumber: string; reason: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
