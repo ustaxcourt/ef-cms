@@ -397,25 +397,9 @@ interface IGetReconciliationReport {
   }): Promise<string>;
 }
 
-interface IAdvancedDocumentSearch {
-  ({
-    applicationContext,
-    documentEventCodes,
-    isOpinionSearch,
-  }: {
-    applicationContext: IApplicationContext;
-    documentEventCodes: any;
-    isOpinionSearch: boolean;
-  }): Promise<{
-    results: any;
-    totalCount: string;
-  }>;
-}
-
 type TPersistenceGateway = {
   [key: string]: any;
   getReconciliationReport: IGetReconciliationReport;
-  advancedDocumentSearch: IAdvancedDocumentSearch;
   isFileExists: IIsFileExists;
   verifyCaseForUser: IVerifyCaseForUser;
   getDownloadPolicyUrl: IGetDownloadPolicyUrl;

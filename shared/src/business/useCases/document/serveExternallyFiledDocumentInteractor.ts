@@ -3,9 +3,9 @@ import {
   isAuthorized,
   ROLE_PERMISSIONS,
 } from '../../../authorization/authorizationClientService';
-import { addCoverToPdf } from '../addCoversheetInteractor';
 import { Case } from '../../entities/cases/Case';
 import { UnauthorizedError } from '../../../errors/errors';
+import { addCoverToPdf } from '../addCoverToPdf';
 
 /**
  * serveExternallyFiledDocumentInteractor

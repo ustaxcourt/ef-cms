@@ -34,7 +34,7 @@ export const getCaseDeadlinesInteractor = async (
     pageSize: string;
     startDate;
   },
-): { deadlines: any; totalCount: string } => {
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
