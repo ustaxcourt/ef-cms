@@ -1,5 +1,5 @@
 jest.mock('uuid');
-const uuid = require('uuid');
+import uuid from 'uuid';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -63,7 +63,7 @@ describe('createCaseFromPaperInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue({});
 
     await expect(
-      createCaseFromPaperInteractor(applicationContext, {}),
+      createCaseFromPaperInteractor(applicationContext, {} as any),
     ).rejects.toThrow(new UnauthorizedError('Unauthorized'));
   });
 
@@ -113,7 +113,7 @@ describe('createCaseFromPaperInteractor', () => {
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      },
+      } as any,
     );
 
     expect(caseFromPaper).toBeDefined();
@@ -165,7 +165,7 @@ describe('createCaseFromPaperInteractor', () => {
           stinFile: new File([], 'stinFile.pdf'),
           stinFileSize: 1,
         },
-      },
+      } as any,
     );
 
     const applicationForWaiverOfFilingFeeDocketEntry =
@@ -224,7 +224,7 @@ describe('createCaseFromPaperInteractor', () => {
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      },
+      } as any,
     );
 
     const stinDocketEntry = caseFromPaper.docketEntries.find(
@@ -280,7 +280,7 @@ describe('createCaseFromPaperInteractor', () => {
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      },
+      } as any,
     );
 
     const stinDocketEntry = caseFromPaper.docketEntries.find(
@@ -347,7 +347,7 @@ describe('createCaseFromPaperInteractor', () => {
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      },
+      } as any,
     );
 
     expect(caseFromPaper).toBeDefined();
@@ -399,7 +399,7 @@ describe('createCaseFromPaperInteractor', () => {
           stinFileSize: 1,
         },
         requestForPlaceOfTrialFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      },
+      } as any,
     );
 
     const reqForPlaceOfTrialDocketEntry = caseFromPaper.docketEntries.find(

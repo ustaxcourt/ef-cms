@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { authorizeCodeInteractor } = require('./authorizeCodeInteractor');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { authorizeCodeInteractor } from './authorizeCodeInteractor';
 
 describe('authorizeCodeInteractor', () => {
   it('returns the expected token and refresh token', async () => {
@@ -17,7 +17,10 @@ describe('authorizeCodeInteractor', () => {
       },
     });
 
-    const response = await authorizeCodeInteractor(applicationContext, {});
+    const response = await authorizeCodeInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     expect(response).toEqual({
       refreshToken: 'abc',

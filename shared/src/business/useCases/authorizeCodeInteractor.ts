@@ -1,4 +1,4 @@
-const qs = require('qs');
+import qs from 'qs';
 
 /**
  * After a successful login with Cognito, it redirects to our app via
@@ -11,7 +11,10 @@ const qs = require('qs');
  * @param {string} providers.code the authorization code
  * @returns {object} the refreshToken and token
  */
-exports.authorizeCodeInteractor = async (applicationContext, { code }) => {
+export const authorizeCodeInteractor = async (
+  applicationContext: IApplicationContext,
+  { code }: { code: string },
+) => {
   const data = qs.stringify({
     client_id: applicationContext.getCognitoClientId(),
     code,

@@ -1,9 +1,7 @@
-const {
-  blockCaseFromTrialInteractor,
-} = require('./blockCaseFromTrialInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+import { blockCaseFromTrialInteractor } from './blockCaseFromTrialInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
 
 describe('blockCaseFromTrialInteractor', () => {
   beforeEach(() => {
@@ -50,7 +48,7 @@ describe('blockCaseFromTrialInteractor', () => {
     await expect(
       blockCaseFromTrialInteractor(applicationContext, {
         docketNumber: '123-45',
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 });

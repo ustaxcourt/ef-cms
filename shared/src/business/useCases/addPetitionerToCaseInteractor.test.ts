@@ -1,15 +1,13 @@
-const {
-  addPetitionerToCaseInteractor,
-} = require('./addPetitionerToCaseInteractor');
-const {
+import { addPetitionerToCaseInteractor } from './addPetitionerToCaseInteractor';
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
+} from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../test/mockCase';
 
 describe('addPetitionerToCaseInteractor', () => {
   let mockContact;

@@ -1,11 +1,11 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
 
-exports.filePetitionInteractor = async (
-  applicationContext,
+export const filePetitionInteractor = async (
+  applicationContext: IApplicationContext,
   {
     ownershipDisclosureFile,
     ownershipDisclosureUploadProgress,
@@ -14,6 +14,14 @@ exports.filePetitionInteractor = async (
     petitionUploadProgress,
     stinFile,
     stinUploadProgress,
+  }: {
+    ownershipDisclosureFile: any;
+    ownershipDisclosureUploadProgress: any;
+    petitionFile: any;
+    petitionMetadata: any;
+    petitionUploadProgress: any;
+    stinFile: any;
+    stinUploadProgress: any;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
