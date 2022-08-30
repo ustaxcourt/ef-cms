@@ -1,6 +1,6 @@
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { compareISODateStrings } = require('../utilities/sortFunctions');
-const { UserCase } = require('../entities/UserCase');
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { UserCase } from '../entities/UserCase';
+import { compareISODateStrings } from '../utilities/sortFunctions';
 
 /**
  * getCasesForUserInteractor
@@ -8,7 +8,9 @@ const { UserCase } = require('../entities/UserCase');
  * @param {object} applicationContext the application context
  * @returns {object} A list of the open cases and a list of the closed cases for the user
  */
-exports.getCasesForUserInteractor = async applicationContext => {
+export const getCasesForUserInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
   const { userId } = await applicationContext.getCurrentUser();
 
   let allUserCases = await applicationContext
