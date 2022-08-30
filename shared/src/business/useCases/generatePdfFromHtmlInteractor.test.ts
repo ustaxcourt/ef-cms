@@ -50,7 +50,7 @@ describe('generatePdfFromHtmlInteractor', () => {
     };
 
     await expect(
-      generatePdfFromHtmlInteractor(applicationContext, args),
+      generatePdfFromHtmlInteractor(applicationContext, args as any),
     ).rejects.toThrow();
     expect(applicationContext.logger.error).toHaveBeenCalled();
   });
@@ -63,7 +63,7 @@ describe('generatePdfFromHtmlInteractor', () => {
       docketNumber: '123-45',
     };
 
-    await generatePdfFromHtmlInteractor(applicationContext, args);
+    await generatePdfFromHtmlInteractor(applicationContext, args as any);
 
     expect(launchMock).toHaveBeenCalled();
     expect(newPageMock).toHaveBeenCalled();
@@ -81,7 +81,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const result = await generatePdfFromHtmlInteractor(
       applicationContext,
-      args,
+      args as any,
     );
 
     expect(result.indexOf('<span class="pageNumber"></span>')).toBeGreaterThan(
@@ -101,7 +101,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const result = await generatePdfFromHtmlInteractor(
       applicationContext,
-      args,
+      args as any,
     );
 
     expect(result.indexOf('Page <span class="pageNumber"></span>')).toEqual(-1); // This is in the header by default
@@ -118,7 +118,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const result = await generatePdfFromHtmlInteractor(
       applicationContext,
-      args,
+      args as any,
     );
 
     expect(result.indexOf('Page <span class="pageNumber"></span>')).toEqual(-1); // This is in the header by default
@@ -134,7 +134,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const result = await generatePdfFromHtmlInteractor(
       applicationContext,
-      args,
+      args as any,
     );
 
     expect(result.indexOf('Test Footer')).toBeGreaterThan(-1);
@@ -151,7 +151,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const result = await generatePdfFromHtmlInteractor(
       applicationContext,
-      args,
+      args as any,
     );
 
     expect(result.indexOf(defaultFooterContent)).toEqual(-1);
@@ -169,7 +169,7 @@ describe('generatePdfFromHtmlInteractor', () => {
 
     const result = await generatePdfFromHtmlInteractor(
       applicationContext,
-      args,
+      args as any,
     );
 
     expect(result.indexOf(defaultFooterContent)).toEqual(-1);

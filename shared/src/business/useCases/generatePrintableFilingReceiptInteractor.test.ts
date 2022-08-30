@@ -1,10 +1,8 @@
-const {
-  generatePrintableFilingReceiptInteractor,
-} = require('./generatePrintableFilingReceiptInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getContactPrimary } = require('../entities/cases/Case');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { MOCK_USERS } = require('../../test/mockUsers');
+import { generatePrintableFilingReceiptInteractor } from './generatePrintableFilingReceiptInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getContactPrimary } from '../entities/cases/Case';
+import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_USERS } from '../../test/mockUsers';
 
 describe('generatePrintableFilingReceiptInteractor', () => {
   const mockPrimaryDocketEntryId = MOCK_CASE.docketEntries[0].docketEntryId;
