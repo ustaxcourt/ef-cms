@@ -1,11 +1,10 @@
-const {
-  isAuthorized,
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { UnauthorizedError } = require('../../errors/errors');
-
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
 /**
  * used to remove a petitioner from a case
  *
@@ -17,9 +16,13 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @returns {object} the case data
  */
 
-exports.removePetitionerAndUpdateCaptionInteractor = async (
-  applicationContext,
-  { caseCaption, contactId, docketNumber },
+export const removePetitionerAndUpdateCaptionInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    caseCaption,
+    contactId,
+    docketNumber,
+  }: { caseCaption: string; contactId: string; docketNumber: string },
 ) => {
   const petitionerContactId = contactId;
   const user = applicationContext.getCurrentUser();

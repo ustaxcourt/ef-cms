@@ -1,17 +1,15 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
-  removePetitionerAndUpdateCaptionInteractor,
-} = require('./removePetitionerAndUpdateCaptionInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getPetitionerById } = require('../entities/cases/Case');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { UnauthorizedError } from '../../errors/errors';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getPetitionerById } from '../entities/cases/Case';
+import { removePetitionerAndUpdateCaptionInteractor } from './removePetitionerAndUpdateCaptionInteractor';
 
 describe('removePetitionerAndUpdateCaptionInteractor', () => {
   let mockCase;

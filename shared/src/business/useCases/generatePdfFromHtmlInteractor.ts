@@ -1,7 +1,5 @@
-const {
-  reactTemplateGenerator,
-} = require('../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator');
-const { headerFontFace } = require('./headerFontFace');
+import { reactTemplateGenerator } from '../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
+import headerFontFace from './headerFontFace';
 
 /**
  * generatePdfFromHtmlInteractor
@@ -13,8 +11,8 @@ const { headerFontFace } = require('./headerFontFace');
  * @param {boolean} providers.displayHeaderFooter boolean to determine if the header and footer should be displayed
  * @returns {Buffer} the pdf as a binary buffer
  */
-exports.generatePdfFromHtmlInteractor = async (
-  applicationContext,
+export const generatePdfFromHtmlInteractor = async (
+  applicationContext: IApplicationContext,
   {
     contentHtml,
     displayHeaderFooter = true,
@@ -22,6 +20,13 @@ exports.generatePdfFromHtmlInteractor = async (
     footerHtml,
     headerHtml,
     overwriteFooter,
+  }: {
+    contentHtml: string;
+    displayHeaderFooter: boolean;
+    docketNumber: string;
+    footerHtml: string;
+    headerHtml: string;
+    overwriteFooter: string;
   },
 ) => {
   let browser = null;
