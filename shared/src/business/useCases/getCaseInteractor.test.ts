@@ -1,20 +1,17 @@
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../entities/EntityConstants');
-const {
-  decorateForCaseStatus,
-  getCaseInteractor,
-} = require('./getCaseInteractor');
-const {
+} from '../entities/EntityConstants';
+import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
-} = require('../../test/mockCase');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { cloneDeep } = require('lodash');
-const { getOtherFilers } = require('../entities/cases/Case');
+} from '../../test/mockCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { cloneDeep } from 'lodash';
+import { decorateForCaseStatus, getCaseInteractor } from './getCaseInteractor';
+import { getOtherFilers } from '../entities/cases/Case';
 
 describe('getCaseInteractor', () => {
   const petitionsclerkId = '23c4d382-1136-492f-b1f4-45e893c34771';

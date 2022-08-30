@@ -1,12 +1,12 @@
-const {
-  applicationContext,
-  testPdfDoc,
-} = require('../test/createTestApplicationContext');
-const {
+import {
+  TEXT_SIZE,
   computeCoordinates,
   generateSignedDocumentInteractor,
-  TEXT_SIZE,
-} = require('./generateSignedDocumentInteractor');
+} from './generateSignedDocumentInteractor';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../test/createTestApplicationContext';
 
 describe('generateSignedDocument', () => {
   let drawRectangleMock;

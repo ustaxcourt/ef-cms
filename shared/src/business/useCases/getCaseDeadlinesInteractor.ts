@@ -1,11 +1,11 @@
-const {
-  isAuthorized,
+import { Case } from '../entities/cases/Case';
+import { CaseDeadline } from '../entities/CaseDeadline';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { CaseDeadline } = require('../entities/CaseDeadline');
-const { pick } = require('lodash');
-const { UnauthorizedError } = require('../../errors/errors');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
+import { pick } from 'lodash';
 
 /**
  * getCaseDeadlinesInteractor
@@ -19,10 +19,22 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {number} providers.pageSize the page size
  * @returns {Promise} the promise of the getCaseDeadlinesByDateRange call
  */
-exports.getCaseDeadlinesInteractor = async (
-  applicationContext,
-  { endDate, from, judge, pageSize, startDate },
-) => {
+export const getCaseDeadlinesInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    endDate,
+    from,
+    judge,
+    pageSize,
+    startDate,
+  }: {
+    endDate: string;
+    from: string;
+    judge: string;
+    pageSize: string;
+    startDate;
+  },
+): { deadlines: any; totalCount: string } => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_DEADLINE)) {
@@ -78,6 +90,9 @@ exports.getCaseDeadlinesInteractor = async (
 const getCasesByDocketNumbers = async ({
   applicationContext,
   docketNumbers,
+}: {
+  applicationContext: IApplicationContext;
+  docketNumbers: string[];
 }) => {
   const caseData = await applicationContext
     .getPersistenceGateway()
