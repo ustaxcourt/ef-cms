@@ -1,13 +1,13 @@
 import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
+import { FORMATS, formatNow } from '../utilities/DateHandler';
 import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../authorization/authorizationClientService';
 import { MAX_SEARCH_RESULTS } from '../../business/entities/EntityConstants';
-import { formatNow, FORMATS } from '../utilities/DateHandler';
-import { omit } from 'lodash';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
+import { omit } from 'lodash';
 
 /**
  * opinionAdvancedSearchInteractor
@@ -18,7 +18,7 @@ import { UnauthorizedError } from '../../errors/errors';
  * @returns {object} the opinions data
  */
 export const opinionAdvancedSearchInteractor = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,
@@ -28,6 +28,15 @@ export const opinionAdvancedSearchInteractor = async (
     keyword,
     opinionTypes,
     startDate,
+  }: {
+    caseTitleOrPetitioner: string;
+    dateRange: string;
+    docketNumber: string;
+    endDate: string;
+    judge: string;
+    keyword: string;
+    opinionTypes: string;
+    startDate: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
