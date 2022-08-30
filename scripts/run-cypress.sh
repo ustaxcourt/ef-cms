@@ -5,9 +5,6 @@
 # Usage
 #   ./scripts/run-cypress.sh
 
-## Arguments
-##   - $1 - the environment to check {env}
-
 ############################################################
 # Help                                                     #
 ############################################################
@@ -18,7 +15,7 @@ Help()
    echo "It defaults to running integration tests with a headless browser."
    echo "Adding one or more of the options listed below allows running different tests and/or running them differently."
    echo
-   echo "Syntax: scriptTemplate [-c|h|l|o|p|r|s]"
+   echo "Syntax: ./scripts/run-cypress.sh [-c|h|l|o|p|r|s]"
    echo "options:"
    echo "c     Run smoketests against the currently deployed color rather than the deploying color. -s or -r should also be used."
    echo "h     Print this Help."

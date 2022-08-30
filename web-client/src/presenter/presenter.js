@@ -14,6 +14,7 @@ import { adminContactUpdateCompleteSequence } from './sequences/adminContactUpda
 import { adminContactUpdateInitialUpdateCompleteSequence } from './sequences/adminContactUpdateInitialUpdateCompleteSequence';
 import { adminContactUpdateProgressSequence } from './sequences/adminContactUpdateProgressSequence';
 import { advancedSearchTabChangeSequence } from './sequences/advancedSearchTabChangeSequence';
+import { applyStampFormChangeSequence } from './sequences/applyStampFormChangeSequence';
 import { archiveDraftDocumentModalSequence } from './sequences/archiveDraftDocumentModalSequence';
 import { archiveDraftDocumentSequence } from './sequences/archiveDraftDocumentSequence';
 import { assignSelectedWorkItemsSequence } from './sequences/assignSelectedWorkItemsSequence';
@@ -46,10 +47,12 @@ import { chooseWorkQueueSequence } from './sequences/chooseWorkQueueSequence';
 import { clearAdvancedSearchFormSequence } from './sequences/clearAdvancedSearchFormSequence';
 import { clearAlertSequence } from './sequences/clearAlertSequence';
 import { clearDropDownMenuStateSequence } from './sequences/clearDropDownMenuStateSequence';
+import { clearDueDateSequence } from './sequences/clearDueDateSequence';
 import { clearExistingDocumentSequence } from './sequences/clearExistingDocumentSequence';
 import { clearModalFormSequence } from './sequences/clearModalFormSequence';
 import { clearModalSequence } from './sequences/clearModalSequence';
 import { clearOpenClosedCasesCurrentPageSequence } from './sequences/clearOpenClosedCasesCurrentPageSequence';
+import { clearOptionalFieldsStampFormSequence } from './sequences/clearOptionalFieldsStampFormSequence';
 import { clearPdfPreviewUrlSequence } from './sequences/clearPdfPreviewUrlSequence';
 import { clearPreferredTrialCitySequence } from './sequences/clearPreferredTrialCitySequence';
 import { clearViewerDocumentToDisplaySequence } from './sequences/clearViewerDocumentToDisplaySequence';
@@ -105,6 +108,7 @@ import { generatePdfFromScanSessionSequence } from './sequences/generatePdfFromS
 import { getBlockedCasesByTrialLocationSequence } from './sequences/getBlockedCasesByTrialLocationSequence';
 import { getCaseInventoryReportSequence } from './sequences/getCaseInventoryReportSequence';
 import { getUsersInSectionSequence } from './sequences/getUsersInSectionSequence';
+import { goToApplyStampSequence } from './sequences/gotoApplyStampSequence';
 import { gotoAccessibilityStatementSequence } from './sequences/gotoAccessibilityStatementSequence';
 import { gotoAddCourtIssuedDocketEntrySequence } from './sequences/gotoAddCourtIssuedDocketEntrySequence';
 import { gotoAddDeficiencyStatisticsSequence } from './sequences/gotoAddDeficiencyStatisticsSequence';
@@ -190,6 +194,7 @@ import { navigateToCaseDetailFromPaperServiceSequence } from './sequences/naviga
 import { navigateToCaseDetailSequence } from './sequences/navigateToCaseDetailSequence';
 import { navigateToCaseDetailWithDraftDocumentSequence } from './sequences/navigateToCaseDetailWithDraftDocumentSequence';
 import { navigateToEditOrderSequence } from './sequences/navigateToEditOrderSequence';
+import { navigateToPathAndSetRedirectUrlSequence } from './sequences/navigateToPathAndSetRedirectUrlSequence';
 import { navigateToPathSequence } from './sequences/navigateToPathSequence';
 import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrintPaperServiceSequence';
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
@@ -318,6 +323,7 @@ import { setIrsNoticeFalseSequence } from './sequences/setIrsNoticeFalseSequence
 import { setMessageDetailViewerDocumentToDisplaySequence } from './sequences/setMessageDetailViewerDocumentToDisplaySequence';
 import { setPDFPageForSigningSequence } from './sequences/setPDFPageForSigningSequence';
 import { setPDFSignatureDataSequence } from './sequences/setPDFSignatureDataSequence';
+import { setPDFStampDataSequence } from './sequences/setPDFStampDataSequence';
 import { setPdfPreviewUrlSequence } from './sequences/setPdfPreviewUrlSequence';
 import { setPendingReportSelectedJudgeSequence } from './sequences/Pending/setPendingReportSelectedJudgeSequence';
 import { setSelectedAddressOnFormSequence } from './sequences/setSelectedAddressOnFormSequence';
@@ -374,6 +380,7 @@ import { submitPetitionFromPaperSequence } from './sequences/submitPetitionFromP
 import { submitPractitionerBarNumberSearchSequence } from './sequences/submitPractitionerBarNumberSearchSequence';
 import { submitPractitionerNameSearchSequence } from './sequences/submitPractitionerNameSearchSequence';
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
+import { submitStampMotionSequence } from './sequences/submitStampMotionSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
@@ -478,6 +485,7 @@ import { validatePrioritizeCaseSequence } from './sequences/validatePrioritizeCa
 import { validateRemoveFromTrialSessionSequence } from './sequences/validateRemoveFromTrialSessionSequence';
 import { validateSelectDocumentTypeSequence } from './sequences/validateSelectDocumentTypeSequence';
 import { validateSetForHearingSequence } from './sequences/validateSetForHearingSequence';
+import { validateStampSequence } from './sequences/validateStampSequence';
 import { validateStartCaseWizardSequence } from './sequences/validateStartCaseWizardSequence';
 import { validateTrialSessionHearingNoteSequence } from './sequences/validateTrialSessionHearingNoteSequence';
 import { validateTrialSessionNoteSequence } from './sequences/validateTrialSessionNoteSequence';
@@ -513,6 +521,7 @@ export const presenter = {
     adminContactUpdateInitialUpdateCompleteSequence,
     adminContactUpdateProgressSequence,
     advancedSearchTabChangeSequence,
+    applyStampFormChangeSequence,
     archiveDraftDocumentModalSequence,
     archiveDraftDocumentSequence,
     assignSelectedWorkItemsSequence,
@@ -545,10 +554,12 @@ export const presenter = {
     clearAdvancedSearchFormSequence,
     clearAlertSequence,
     clearDropDownMenuStateSequence,
+    clearDueDateSequence,
     clearExistingDocumentSequence,
     clearModalFormSequence,
     clearModalSequence,
     clearOpenClosedCasesCurrentPageSequence,
+    clearOptionalFieldsStampFormSequence,
     clearPdfPreviewUrlSequence,
     clearPreferredTrialCitySequence,
     clearViewerDocumentToDisplaySequence,
@@ -603,6 +614,7 @@ export const presenter = {
     getBlockedCasesByTrialLocationSequence,
     getCaseInventoryReportSequence,
     getUsersInSectionSequence,
+    goToApplyStampSequence,
     gotoAccessibilityStatementSequence,
     gotoAddCourtIssuedDocketEntrySequence,
     gotoAddDeficiencyStatisticsSequence,
@@ -688,6 +700,7 @@ export const presenter = {
     navigateToCaseDetailSequence,
     navigateToCaseDetailWithDraftDocumentSequence,
     navigateToEditOrderSequence,
+    navigateToPathAndSetRedirectUrlSequence,
     navigateToPathSequence,
     navigateToPrintPaperServiceSequence,
     navigateToPrintableCaseConfirmationSequence,
@@ -815,6 +828,7 @@ export const presenter = {
     setMessageDetailViewerDocumentToDisplaySequence,
     setPDFPageForSigningSequence,
     setPDFSignatureDataSequence,
+    setPDFStampDataSequence,
     setPdfPreviewUrlSequence,
     setPendingReportSelectedJudgeSequence,
     setSelectedAddressOnFormSequence,
@@ -870,6 +884,7 @@ export const presenter = {
     submitPractitionerBarNumberSearchSequence,
     submitPractitionerNameSearchSequence,
     submitRemoveConsolidatedCasesSequence,
+    submitStampMotionSequence,
     submitTrialSessionSequence,
     submitUpdateCaseModalSequence,
     submitUpdatePetitionerInformationFromModalSequence,
@@ -974,6 +989,7 @@ export const presenter = {
     validateRemoveFromTrialSessionSequence,
     validateSelectDocumentTypeSequence,
     validateSetForHearingSequence,
+    validateStampSequence,
     validateStartCaseWizardSequence,
     validateTrialSessionHearingNoteSequence,
     validateTrialSessionNoteSequence,
