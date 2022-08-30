@@ -5,7 +5,7 @@ interface IGetUserById {
   }: {
     applicationContext: IApplicationContext;
     userId: string;
-  }): Promise<TUser>;
+  }): Promise<TPractitioner>;
 }
 
 interface IGetWorkItemById {
@@ -282,11 +282,30 @@ interface IUploadDocumentFromClient {
   }): Promise<string>;
 }
 
+interface IGetCasesByLeadDocketNumber {
+  ({
+    applicationContext,
+    leadDocketNumber,
+  }: {
+    applicationContext: IApplicationContext;
+    leadDocketNumber: string;
+  }): Promise<TCase>;
+}
+
+interface IGetCasesAssociatedWithUser {
+  ({
+    applicationContext,
+    userId,
+  }: {
+    applicationContext: IApplicationContext;
+    userId: string;
+  }): Promise<TCase[]>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
   createCaseDeadline: ICreateCaseDeadline;
   getCaseByDocketNumber: IGetCaseByDocketNumber;
-  getUserById: IGetUserById;
   getWorkItemById: IGetWorkItemById;
   putWorkItemInOutbox: IPutWorkItemInOutbox;
   getDocumentQCInboxForSection: IGetDocumentQCInboxForSection;
@@ -311,4 +330,7 @@ type TPersistenceGateway = {
   deleteDocumentFromS3: IDeleteDocumentFromS3;
   updateCaseCorrespondence: IUpdateCaseCorrespondence;
   uploadDocumentFromClient: IUploadDocumentFromClient;
+  getCasesByLeadDocketNumber: IGetCasesByLeadDocketNumber;
+  getUserById: IGetUserById;
+  getCasesAssociatedWithUser: IGetCasesAssociatedWithUser;
 };

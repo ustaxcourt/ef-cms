@@ -1,8 +1,4 @@
 import {
-  applicationContext,
-  fakeData,
-} from '../test/createTestApplicationContext';
-import {
   CASE_STATUS_TYPES,
   COUNTRY_TYPES,
   ROLES,
@@ -12,9 +8,13 @@ import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
+import { User } from '../entities/User';
+import {
+  applicationContext,
+  fakeData,
+} from '../test/createTestApplicationContext';
 import { getContactPrimary } from '../entities/cases/Case';
 import { updateContactInteractor } from './updateContactInteractor';
-import { User } from '../entities/User';
 
 describe('updates the contact on a case', () => {
   let mockCase;

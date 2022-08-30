@@ -1,11 +1,12 @@
-const {
-  isAuthorized,
+import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { CASE_STATUS_TYPES } = require('../entities/EntityConstants');
-const { partition } = require('lodash');
-const { UnauthorizedError } = require('../../errors/errors');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
+import { partition } from 'lodash';
+
 /**
  * generatePractitionerCaseListPdfInteractor
  *
@@ -14,10 +15,10 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.userId the practitioner's user id
  * @returns {Object} returns an object of the PDF's fileId and url
  */
-exports.generatePractitionerCaseListPdfInteractor = async (
-  applicationContext,
-  { userId },
-) => {
+export const generatePractitionerCaseListPdfInteractor = async (
+  applicationContext: IApplicationContext,
+  { userId }: { userId: string },
+): Promise<void> => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.VIEW_PRACTITIONER_CASE_LIST)) {

@@ -185,6 +185,7 @@ type TCase = {
   blockedDate: string;
   blockedReason: string;
   canAllowDocumentService: string;
+  caseTitle: string;
   canAllowPrintableDocketRecord: string;
   caseCaption: string;
   caseNote: string;
@@ -198,6 +199,7 @@ type TCase = {
   docketNumber: string;
   docketNumberSuffix: string;
   docketNumberWithSuffix: string;
+  entityName: string;
   filingType: string;
   hasPendingItems: boolean;
   hasVerifiedIrsNotice: string;

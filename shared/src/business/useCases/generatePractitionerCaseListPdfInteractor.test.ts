@@ -1,9 +1,7 @@
-const {
-  generatePractitionerCaseListPdfInteractor,
-} = require('./generatePractitionerCaseListPdfInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CASE_STATUS_TYPES, ROLES } = require('../entities/EntityConstants');
-const { MOCK_CASE } = require('../../test/mockCase');
+import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { generatePractitionerCaseListPdfInteractor } from './generatePractitionerCaseListPdfInteractor';
 
 describe('generatePractitionerCaseListPdfInteractor', () => {
   beforeAll(() => {

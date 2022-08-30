@@ -1,11 +1,11 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
 
-exports.filePetitionFromPaperInteractor = async (
-  applicationContext,
+export const filePetitionFromPaperInteractor = async (
+  applicationContext: IApplicationContext,
   {
     applicationForWaiverOfFilingFeeFile,
     applicationForWaiverOfFilingFeeUploadProgress,
@@ -18,6 +18,18 @@ exports.filePetitionFromPaperInteractor = async (
     requestForPlaceOfTrialUploadProgress,
     stinFile,
     stinUploadProgress,
+  }: {
+    applicationForWaiverOfFilingFeeFile: string;
+    applicationForWaiverOfFilingFeeUploadProgress: string;
+    ownershipDisclosureFile: string;
+    ownershipDisclosureUploadProgress: string;
+    petitionFile: string;
+    petitionMetadata: any;
+    petitionUploadProgress: string;
+    requestForPlaceOfTrialFile: string;
+    requestForPlaceOfTrialUploadProgress: string;
+    stinFile: string;
+    stinUploadProgress: string;
   },
 ) => {
   const user = applicationContext.getCurrentUser();
