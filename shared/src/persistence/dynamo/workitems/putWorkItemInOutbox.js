@@ -12,7 +12,6 @@ exports.putWorkItemInOutbox = async ({ applicationContext, workItem }) => {
     },
     applicationContext,
   });
-  console.log('outbox section', user.section);
 
   await Promise.all([
     createUserOutboxRecord({
