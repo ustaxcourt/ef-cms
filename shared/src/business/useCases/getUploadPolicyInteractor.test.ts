@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getUploadPolicyInteractor } = require('./getUploadPolicyInteractor');
-const { ROLES } = require('../entities/EntityConstants');
+import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getUploadPolicyInteractor } from './getUploadPolicyInteractor';
 
 describe('getUploadPolicyInteractor', () => {
   it('throw unauthorized error on invalid role', async () => {

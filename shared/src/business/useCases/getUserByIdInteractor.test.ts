@@ -1,7 +1,7 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getUserByIdInteractor } = require('./getUserByIdInteractor');
-const { ROLES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
+import { ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getUserByIdInteractor } from './getUserByIdInteractor';
 
 const MOCK_REQUEST_USER = new User({
   name: 'Test Petitions clerk',

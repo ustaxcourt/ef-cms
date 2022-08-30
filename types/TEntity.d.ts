@@ -10,6 +10,7 @@ type TCaseDeadline = {
 
 type DocketEntry = {
   additionalInfo: string;
+  caseCaption: string;
   descriptionDisplay: string;
   docketNumber: string;
   docketEntryId: string;
@@ -30,6 +31,8 @@ type DocketEntry = {
   sentBy: string;
   servedAt: string;
   userId: string;
+  pk: string;
+  sk: string;
 };
 
 type TDocketEntryEntity = {

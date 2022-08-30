@@ -1,30 +1,28 @@
 /* eslint-disable max-lines */
-const {
-  calculateISODate,
-  createISODateString,
-} = require('../utilities/DateHandler');
-const {
+import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   NOTICE_OF_CHANGE_CONTACT_INFORMATION_MAP,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   TRANSCRIPT_EVENT_CODE,
-} = require('../entities/EntityConstants');
-const {
+} from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import {
+  calculateISODate,
+  createISODateString,
+} from '../utilities/DateHandler';
+import { cloneDeep } from 'lodash';
+import {
   docketClerkUser,
   irsPractitionerUser,
   irsSuperuserUser,
   petitionerUser,
   petitionsClerkUser,
   privatePractitionerUser,
-} = require('../../test/mockUsers');
-const {
-  getDownloadPolicyUrlInteractor,
-} = require('./getDownloadPolicyUrlInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { cloneDeep } = require('lodash');
-const { MOCK_CASE } = require('../../test/mockCase');
+} from '../../test/mockUsers';
+import { getDownloadPolicyUrlInteractor } from './getDownloadPolicyUrlInteractor';
 
 describe('getDownloadPolicyUrlInteractor', () => {
   let mockCase;

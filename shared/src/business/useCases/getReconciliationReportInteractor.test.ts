@@ -1,14 +1,12 @@
-const {
+import {
+  FORMATS,
   createEndOfDayISO,
   createStartOfDayISO,
   formatNow,
-  FORMATS,
-} = require('../../business/utilities/DateHandler');
-const {
-  getReconciliationReportInteractor,
-} = require('./getReconciliationReportInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { ROLES } = require('../entities/EntityConstants');
+} from '../utilities/DateHandler';
+import { ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getReconciliationReportInteractor } from './getReconciliationReportInteractor';
 
 describe('getReconciliationReportInteractor', () => {
   const mockCaseCaption = 'Kaitlin Chaney, Petitioner';
