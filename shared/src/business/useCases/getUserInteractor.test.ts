@@ -1,16 +1,11 @@
-const {
-  entityName: irsPractitionerEntityName,
-} = require('../entities/IrsPractitioner');
-const {
-  entityName: practitionerEntityName,
-} = require('../entities/Practitioner');
-const {
-  entityName: privatePractitionerEntityName,
-} = require('../entities/PrivatePractitioner');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getUserInteractor } = require('./getUserInteractor');
-const { PETITIONS_SECTION, ROLES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
+import { PETITIONS_SECTION, ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getUserInteractor } from './getUserInteractor';
+import { entityName as irsPractitionerEntityName } from '../entities/IrsPractitioner';
+import { entityName as practitionerEntityName } from '../entities/Practitioner';
+import { entityName as privatePractitionerEntityName } from '../entities/PrivatePractitioner';
+
 describe('getUserInteractor', () => {
   it('should call the persistence method to get the user', async () => {
     const mockPetitionsClerk = {

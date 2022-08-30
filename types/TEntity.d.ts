@@ -280,6 +280,7 @@ type TPetitioner = {
 };
 
 type TPractitioner = {
+  entityName: string;
   additionalPhone: string;
   admissionsDate: string;
   admissionsStatus: string;
