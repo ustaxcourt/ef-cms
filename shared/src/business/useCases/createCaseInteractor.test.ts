@@ -1,4 +1,4 @@
-const {
+import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
@@ -6,15 +6,12 @@ const {
   PARTY_TYPES,
   ROLES,
   SERVICE_INDICATOR_TYPES,
-} = require('../entities/EntityConstants');
-const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../entities/cases/Case');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { createCaseInteractor } = require('./createCaseInteractor');
-const { PrivatePractitioner } = require('../entities/PrivatePractitioner');
-const { User } = require('../entities/User');
+} from '../entities/EntityConstants';
+import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { createCaseInteractor } from './createCaseInteractor';
+import { PrivatePractitioner } from '../entities/PrivatePractitioner';
+import { User } from '../entities/User';
 
 describe('createCaseInteractor', () => {
   let user;
@@ -81,7 +78,7 @@ describe('createCaseInteractor', () => {
           procedureType: 'Small',
         },
         stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
@@ -96,7 +93,7 @@ describe('createCaseInteractor', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: mockPetitionMetadata,
       stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-    });
+    } as any);
 
     expect(result).toBeDefined();
     expect(
@@ -115,7 +112,7 @@ describe('createCaseInteractor', () => {
       petitionFileId: '413f62ce-d7c8-446e-aeda-14a2a625a626',
       petitionMetadata: mockPetitionMetadata,
       stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-    });
+    } as any);
 
     expect(result.petitioners[0].contactId).toEqual(user.userId);
     expect(result.petitioners[0].address1).toEqual('99 South Oak Lane');
@@ -151,7 +148,7 @@ describe('createCaseInteractor', () => {
         stinFileSize: 1,
       },
       stinFileId: '413f62ce-7c8d-446e-aeda-14a2a625a611',
-    });
+    } as any);
 
     const stinDocketEntry = result.docketEntries.find(
       d => d.eventCode === INITIAL_DOCUMENT_TYPES.stin.eventCode,
@@ -373,7 +370,7 @@ describe('createCaseInteractor', () => {
         wizardStep: '5',
       },
       stinFileId: 'e8bd0522-84ec-41fb-b490-0f4b8aa8a430',
-    });
+    } as any);
 
     result.petitioners.forEach(p => {
       expect(p.serviceIndicator).toBe(SERVICE_INDICATOR_TYPES.SI_NONE);

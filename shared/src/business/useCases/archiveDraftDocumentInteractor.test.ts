@@ -1,9 +1,7 @@
-const {
-  archiveDraftDocumentInteractor,
-} = require('./archiveDraftDocumentInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { ROLES } = require('../entities/EntityConstants');
+import { archiveDraftDocumentInteractor } from './archiveDraftDocumentInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../test/mockCase';
+import { ROLES } from '../entities/EntityConstants';
 
 describe('archiveDraftDocumentInteractor', () => {
   it('returns an unauthorized error on non petitionsclerk users', async () => {

@@ -1,8 +1,6 @@
-const {
-  filePetitionFromPaperInteractor,
-} = require('./filePetitionFromPaperInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { ROLES } = require('../entities/EntityConstants');
+import { filePetitionFromPaperInteractor } from './filePetitionFromPaperInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { ROLES } from '../entities/EntityConstants';
 
 beforeAll(() => {
   applicationContext
@@ -20,7 +18,7 @@ describe('filePetitionFromPaperInteractor', () => {
       filePetitionFromPaperInteractor(applicationContext, {
         petitionFile: null,
         petitionMetadata: null,
-      }),
+      } as any),
     ).rejects.toThrow();
   });
 
@@ -34,7 +32,7 @@ describe('filePetitionFromPaperInteractor', () => {
       filePetitionFromPaperInteractor(applicationContext, {
         petitionFile: null,
         petitionMetadata: null,
-      }),
+      } as any),
     ).rejects.toThrow();
   });
 
@@ -47,7 +45,7 @@ describe('filePetitionFromPaperInteractor', () => {
     await filePetitionFromPaperInteractor(applicationContext, {
       petitionFile: 'this petition file',
       petitionMetadata: null,
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
@@ -63,7 +61,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     await filePetitionFromPaperInteractor(applicationContext, {
       applicationForWaiverOfFilingFeeFile: 'this APW file',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
@@ -79,7 +77,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     await filePetitionFromPaperInteractor(applicationContext, {
       ownershipDisclosureFile: 'this ods file',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
@@ -95,7 +93,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     await filePetitionFromPaperInteractor(applicationContext, {
       stinFile: 'this stin file',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
@@ -111,7 +109,7 @@ describe('filePetitionFromPaperInteractor', () => {
 
     await filePetitionFromPaperInteractor(applicationContext, {
       requestForPlaceOfTrialFile: 'this rqt file',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().uploadDocumentAndMakeSafeInteractor.mock
@@ -124,7 +122,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
@@ -142,7 +140,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
@@ -160,7 +158,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
@@ -179,7 +177,7 @@ describe('filePetitionFromPaperInteractor', () => {
       petitionMetadata: 'something2',
       requestForPlaceOfTrialFile: 'something',
       stinFile: 'something3',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().createCaseFromPaperInteractor.mock
