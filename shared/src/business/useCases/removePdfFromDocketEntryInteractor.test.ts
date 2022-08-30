@@ -1,15 +1,13 @@
-const {
+import {
   CASE_STATUS_TYPES,
   CASE_TYPES_MAP,
   CONTACT_TYPES,
   COUNTRY_TYPES,
   PARTY_TYPES,
   ROLES,
-} = require('../entities/EntityConstants');
-const {
-  removePdfFromDocketEntryInteractor,
-} = require('./removePdfFromDocketEntryInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+} from '../entities/EntityConstants';
+import { removePdfFromDocketEntryInteractor } from './removePdfFromDocketEntryInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('removePdfFromDocketEntryInteractor', () => {
   const MOCK_CASE = {

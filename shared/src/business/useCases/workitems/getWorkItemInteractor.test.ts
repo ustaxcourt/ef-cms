@@ -1,8 +1,6 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const { DOCKET_SECTION, ROLES } = require('../../entities/EntityConstants');
-const { getWorkItemInteractor } = require('./getWorkItemInteractor');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { DOCKET_SECTION, ROLES } from '../../entities/EntityConstants';
+import { getWorkItemInteractor } from './getWorkItemInteractor';
 
 describe('getWorkItemInteractor', () => {
   let mockWorkItem = {

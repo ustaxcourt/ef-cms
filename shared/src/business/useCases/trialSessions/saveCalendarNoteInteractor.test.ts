@@ -1,13 +1,13 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { saveCalendarNoteInteractor } from './saveCalendarNoteInteractor';
-const {
+import {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
-} = require('../../../test/mockCase');
-const {
+} from '../../../test/mockCase';
+import {
   ROLES,
   TRIAL_SESSION_PROCEEDING_TYPES,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 
 describe('saveCalendarNotes', () => {
   let mockCurrentUser;

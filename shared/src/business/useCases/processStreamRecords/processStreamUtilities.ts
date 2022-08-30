@@ -1,4 +1,4 @@
-const { partition } = require('lodash');
+import { partition } from 'lodash';
 
 export const partitionRecords = records => {
   const [practitionerMappingRecords, nonPractitionerMappingRecords] = partition(

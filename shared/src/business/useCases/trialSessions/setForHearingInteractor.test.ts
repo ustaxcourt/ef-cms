@@ -1,11 +1,11 @@
 import { MOCK_TRIAL_REMOTE } from '../../../test/mockTrial';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { setForHearingInteractor } from './setForHearingInteractor';
-const {
+import {
   MOCK_CASE,
   MOCK_CASE_WITH_TRIAL_SESSION,
-} = require('../../../test/mockCase');
-const { ROLES } = require('../../entities/EntityConstants');
+} from '../../../test/mockCase';
+import { ROLES } from '../../entities/EntityConstants';
 
 describe('setForHearingInteractor', () => {
   let mockCurrentUser;

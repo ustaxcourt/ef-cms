@@ -1,17 +1,13 @@
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
+import { applicationContext } from '../../test/createTestApplicationContext';
+import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   ROLES,
-} = require('../../entities/EntityConstants');
-const {
-  setWorkItemAsReadInteractor,
-} = require('./setWorkItemAsReadInteractor');
-const { MOCK_CASE } = require('../../../test/mockCase');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+} from '../../entities/EntityConstants';
+import { setWorkItemAsReadInteractor } from './setWorkItemAsReadInteractor';
+import { MOCK_CASE } from '../../../test/mockCase';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 describe('setWorkItemAsReadInteractor', () => {
   let user;

@@ -1,13 +1,11 @@
-const {
+import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ROLES,
-} = require('../../business/entities/EntityConstants');
-const {
-  opinionAdvancedSearchInteractor,
-} = require('./opinionAdvancedSearchInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+} from '../../business/entities/EntityConstants';
+import { opinionAdvancedSearchInteractor } from './opinionAdvancedSearchInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('opinionAdvancedSearchInteractor', () => {
   beforeEach(() => {

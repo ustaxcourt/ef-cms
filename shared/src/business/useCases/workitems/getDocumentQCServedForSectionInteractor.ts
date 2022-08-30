@@ -1,14 +1,14 @@
-const {
+import {
   calculateISODate,
   createISODateAtStartOfDayEST,
-} = require('../../../business/utilities/DateHandler');
-const {
+} from '../../../business/utilities/DateHandler';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { OutboxItem } = require('../../entities/OutboxItem');
-const { ROLES } = require('../../entities/EntityConstants');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { OutboxItem } from '../../entities/OutboxItem';
+import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  *
@@ -53,7 +53,7 @@ export const getDocumentQCServedForSectionInteractor: {
   });
 };
 
-const calculateAfterDate = async applicationContext => {
+export const calculateAfterDate = async applicationContext => {
   const daysToRetrieveKey =
     applicationContext.getConstants().CONFIGURATION_ITEM_KEYS
       .SECTION_OUTBOX_NUMBER_OF_DAYS.key;
@@ -76,5 +76,3 @@ const calculateAfterDate = async applicationContext => {
   });
   return afterDate;
 };
-
-exports.calculateAfterDate = calculateAfterDate;

@@ -1,27 +1,11 @@
-const {
-  partitionRecords,
-} = require('./processStreamRecords/processStreamUtilities');
-const {
-  processCaseEntries,
-} = require('./processStreamRecords/processCaseEntries');
-const {
-  processDocketEntries,
-} = require('./processStreamRecords/processDocketEntries');
-const {
-  processMessageEntries,
-} = require('./processStreamRecords/processMessageEntries');
-const {
-  processOtherEntries,
-} = require('./processStreamRecords/processOtherEntries');
-const {
-  processPractitionerMappingEntries,
-} = require('./processStreamRecords/processPractitionerMappingEntries');
-const {
-  processRemoveEntries,
-} = require('./processStreamRecords/processRemoveEntries');
-const {
-  processWorkItemEntries,
-} = require('./processStreamRecords/processWorkItemEntries');
+import { partitionRecords } from './processStreamRecords/processStreamUtilities';
+import { processCaseEntries } from './processStreamRecords/processCaseEntries';
+import { processDocketEntries } from './processStreamRecords/processDocketEntries';
+import { processMessageEntries } from './processStreamRecords/processMessageEntries';
+import { processOtherEntries } from './processStreamRecords/processOtherEntries';
+import { processPractitionerMappingEntries } from './processStreamRecords/processPractitionerMappingEntries';
+import { processRemoveEntries } from './processStreamRecords/processRemoveEntries';
+import { processWorkItemEntries } from './processStreamRecords/processWorkItemEntries';
 
 /**
  * @param {object} applicationContext the application context
@@ -29,7 +13,7 @@ const {
  * @param {Array<object>} providers.recordsToProcess the records to process
  * @returns {object} the results of all the index calls for logging
  */
-exports.processStreamRecordsInteractor = async (
+export const processStreamRecordsInteractor = async (
   applicationContext,
   { recordsToProcess },
 ) => {

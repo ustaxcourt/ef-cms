@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * removePdfFromDocketEntryInteractor
@@ -14,7 +14,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.docketEntryId the docket entry id for the file to be removed
  * @returns {object} the updated case data
  */
-exports.removePdfFromDocketEntryInteractor = async (
+export const removePdfFromDocketEntryInteractor = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

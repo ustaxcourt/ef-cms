@@ -1,15 +1,15 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
+} from '../../authorization/authorizationClientService';
+import {
   UnauthorizedError,
   UnprocessableEntityError,
-} = require('../../errors/errors');
-const { Case } = require('../entities/cases/Case');
-const { CONTACT_TYPES } = require('../entities/EntityConstants');
-const { isEmpty } = require('lodash');
-const { WorkItem } = require('../entities/WorkItem');
+} from '../../errors/errors';
+import { Case } from '../entities/cases/Case';
+import { CONTACT_TYPES } from '../entities/EntityConstants';
+import { isEmpty } from 'lodash';
+import { WorkItem } from '../entities/WorkItem';
 
 /**
  * saveCaseDetailInternalEditInteractor
@@ -20,7 +20,7 @@ const { WorkItem } = require('../entities/WorkItem');
  * @param {object} providers.caseToUpdate the updated case data
  * @returns {object} the updated case data
  */
-exports.saveCaseDetailInternalEditInteractor = async (
+export const saveCaseDetailInternalEditInteractor = async (
   applicationContext,
   { caseToUpdate, docketNumber },
 ) => {
