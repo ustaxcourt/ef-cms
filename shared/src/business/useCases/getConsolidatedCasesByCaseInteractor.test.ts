@@ -1,9 +1,7 @@
-const {
-  getConsolidatedCasesByCaseInteractor,
-} = require('./getConsolidatedCasesByCaseInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { MOCK_USERS } = require('../../test/mockUsers');
+import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_USERS } from '../../test/mockUsers';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getConsolidatedCasesByCaseInteractor } from './getConsolidatedCasesByCaseInteractor';
 
 describe('getConsolidatedCasesByCaseInteractor', () => {
   let getCasesByLeadDocketNumberStub;
@@ -36,11 +34,13 @@ describe('getConsolidatedCasesByCaseInteractor', () => {
     const cases = await getConsolidatedCasesByCaseInteractor(
       applicationContext,
       {
-        leadDocketNumber: '101-20',
+        docketNumber: '101-20',
       },
     );
 
-    expect(getCasesByLeadDocketNumberStub).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().getCasesByLeadDocketNumber,
+    ).toHaveBeenCalled();
     expect(cases).toMatchObject([
       {
         caseCaption: 'Guy Fieri vs. Bobby Flay',

@@ -1,10 +1,10 @@
-const {
-  isAuthorized,
+import { MAX_SEARCH_RESULTS } from '../entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { caseSearchFilter } = require('../utilities/caseFilter');
-const { MAX_SEARCH_RESULTS } = require('../entities/EntityConstants');
-const { UnauthorizedError } = require('../../errors/errors');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
+import { caseSearchFilter } from '../utilities/caseFilter';
 
 /**
  * caseAdvancedSearchInteractor
@@ -13,9 +13,21 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers the providers object containing countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin
  * @returns {object} the case data
  */
-exports.caseAdvancedSearchInteractor = async (
-  applicationContext,
-  { countryType, petitionerName, petitionerState, yearFiledMax, yearFiledMin },
+export const caseAdvancedSearchInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    countryType,
+    petitionerName,
+    petitionerState,
+    yearFiledMax,
+    yearFiledMin,
+  }: {
+    countryType: string;
+    petitionerName: string;
+    petitionerState: string;
+    yearFiledMax: string;
+    yearFiledMin: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

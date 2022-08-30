@@ -1,5 +1,5 @@
-const { Case } = require('../entities/cases/Case');
-const { NotFoundError } = require('../../errors/errors');
+import { Case } from '../entities/cases/Case';
+import { NotFoundError } from '../../errors/errors';
 
 /**
  * getCaseExistsInteractor
@@ -11,9 +11,9 @@ const { NotFoundError } = require('../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case to get
  * @returns {boolean} whether case exists for requested docket number
  */
-exports.getCaseExistsInteractor = async (
-  applicationContext,
-  { docketNumber },
+export const getCaseExistsInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()

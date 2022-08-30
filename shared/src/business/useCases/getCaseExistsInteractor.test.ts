@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getCaseExistsInteractor } = require('./getCaseExistsInteractor');
-const { MOCK_CASE } = require('../../test/mockCase');
+import { MOCK_CASE } from '../../test/mockCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getCaseExistsInteractor } from './getCaseExistsInteractor';
 
 describe('getCaseExistsInteractor', () => {
   it('should format the given docket number before querying persistence, removing leading zeroes and suffix', async () => {

@@ -1,7 +1,5 @@
-const {
-  loadPDFForPreviewInteractor,
-} = require('./loadPDFForPreviewInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { loadPDFForPreviewInteractor } from './loadPDFForPreviewInteractor';
 
 describe('loadPDFForPreviewInteractor', () => {
   it('should fetch the specified document from persistence', async () => {

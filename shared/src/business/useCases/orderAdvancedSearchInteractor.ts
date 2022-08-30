@@ -1,22 +1,19 @@
-const {
-  DocumentSearch,
-} = require('../../business/entities/documents/DocumentSearch');
-const {
-  InternalDocumentSearchResult,
-} = require('../entities/documents/InternalDocumentSearchResult');
-const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
+import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
+import { FORMATS, formatNow } from '../../business/utilities/DateHandler';
+import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
+import {
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
-} = require('../../business/entities/EntityConstants');
-const { caseSearchFilter } = require('../utilities/caseFilter');
-const { formatNow, FORMATS } = require('../../business/utilities/DateHandler');
-const { omit } = require('lodash');
-const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
+} from '../entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
+import { User } from '../entities/User';
+import { caseSearchFilter } from '../utilities/caseFilter';
+import { omit } from 'lodash';
+
 /**
  * orderAdvancedSearchInteractor
  *
@@ -30,8 +27,8 @@ const { User } = require('../entities/User');
  * @param {string} providers.startDate start date for date range
  * @returns {object} the orders data
  */
-exports.orderAdvancedSearchInteractor = async (
-  applicationContext,
+export const orderAdvancedSearchInteractor = async (
+  applicationContext: IApplicationContext,
   {
     caseTitleOrPetitioner,
     dateRange,
@@ -41,6 +38,15 @@ exports.orderAdvancedSearchInteractor = async (
     judge,
     keyword,
     startDate,
+  }: {
+    caseTitleOrPetitioner: string;
+    dateRange: string;
+    docketNumber: string;
+    endDate: string;
+    from: string;
+    judge: string;
+    keyword: string;
+    startDate: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();

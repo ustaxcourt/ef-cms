@@ -1,4 +1,4 @@
-const { CHIEF_JUDGE, ROLES } = require('../entities/EntityConstants');
+import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
 
 /**
  * getNotificationsInteractor
@@ -8,9 +8,9 @@ const { CHIEF_JUDGE, ROLES } = require('../entities/EntityConstants');
  * @param {object} providers.judgeUser optional judgeUser for additional filtering
  * @returns {object} inbox unread message counts for the individual and section inboxes
  */
-exports.getNotificationsInteractor = async (
-  applicationContext,
-  { judgeUserId },
+export const getNotificationsInteractor = async (
+  applicationContext: IApplicationContext,
+  { judgeUserId }: { judgeUserId: string },
 ) => {
   const appContextUser = applicationContext.getCurrentUser();
   const currentUser = await applicationContext

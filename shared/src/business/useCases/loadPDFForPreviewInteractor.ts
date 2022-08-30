@@ -7,10 +7,13 @@
  * @param {string} providers.docketEntryId the docket entry id
  * @returns {Promise<object>} the document data
  */
-exports.loadPDFForPreviewInteractor = async (
-  applicationContext,
-  { docketEntryId, docketNumber },
-) => {
+export const loadPDFForPreviewInteractor = async (
+  applicationContext?: IApplicationContext,
+  {
+    docketEntryId,
+    docketNumber,
+  }: { docketEntryId?: string; docketNumber?: string },
+): Promise<void> => {
   try {
     return await applicationContext.getPersistenceGateway().getDocument({
       applicationContext,

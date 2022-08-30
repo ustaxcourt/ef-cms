@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { getItemInteractor } = require('./getItemInteractor');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getItemInteractor } from './getItemInteractor';
 
 describe('getItemInteractor', () => {
   it('returns an null when the item does not exist', async () => {

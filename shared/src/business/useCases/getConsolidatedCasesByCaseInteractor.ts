@@ -1,4 +1,4 @@
-const { Case } = require('../entities/cases/Case');
+import { Case } from '../entities/cases/Case';
 
 /**
  * getConsolidatedCasesByCaseInteractor
@@ -8,10 +8,10 @@ const { Case } = require('../entities/cases/Case');
  * @param {string} providers.docketNumber docket number of the case to get associated cases for
  * @returns {Array<object>} the cases the user is associated with
  */
-exports.getConsolidatedCasesByCaseInteractor = async (
-  applicationContext,
-  { docketNumber },
-) => {
+export const getConsolidatedCasesByCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
+): TCase => {
   const consolidatedCases = await applicationContext
     .getPersistenceGateway()
     .getCasesByLeadDocketNumber({

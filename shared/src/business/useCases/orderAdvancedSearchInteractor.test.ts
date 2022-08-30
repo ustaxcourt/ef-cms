@@ -1,13 +1,11 @@
-const {
+import {
   DATE_RANGE_SEARCH_OPTIONS,
   MAX_SEARCH_RESULTS,
   ORDER_EVENT_CODES,
   ROLES,
-} = require('../../business/entities/EntityConstants');
-const {
-  orderAdvancedSearchInteractor,
-} = require('./orderAdvancedSearchInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
+} from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { orderAdvancedSearchInteractor } from './orderAdvancedSearchInteractor';
 
 describe('orderAdvancedSearchInteractor', () => {
   beforeEach(() => {

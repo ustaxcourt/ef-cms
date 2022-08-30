@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { CHIEF_JUDGE, ROLES } = require('../entities/EntityConstants');
-const { getNotificationsInteractor } = require('./getNotificationsInteractor');
+import { CHIEF_JUDGE, ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getNotificationsInteractor } from './getNotificationsInteractor';
 
 const workItems = [
   {

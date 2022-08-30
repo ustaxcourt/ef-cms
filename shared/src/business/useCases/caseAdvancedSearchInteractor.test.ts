@@ -1,8 +1,6 @@
-const {
-  caseAdvancedSearchInteractor,
-} = require('./caseAdvancedSearchInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MAX_SEARCH_RESULTS, ROLES } = require('../entities/EntityConstants');
+import { MAX_SEARCH_RESULTS, ROLES } from '../entities/EntityConstants';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { caseAdvancedSearchInteractor } from './caseAdvancedSearchInteractor';
 
 describe('caseAdvancedSearchInteractor', () => {
   let mockUser;
