@@ -1,16 +1,31 @@
 import {
-  entityName as irsPractitionerEntityName,
+  // <<<<<<< HEAD
   IrsPractitioner,
+  entityName as irsPractitionerEntityName,
 } from '../entities/IrsPractitioner';
+import { NotFoundError } from '../../errors/errors';
 import {
-  entityName as practitionerEntityName,
   Practitioner,
+  entityName as practitionerEntityName,
 } from '../entities/Practitioner';
 import {
-  entityName as privatePractitionerEntityName,
   PrivatePractitioner,
+  entityName as privatePractitionerEntityName,
 } from '../entities/PrivatePractitioner';
-import { NotFoundError } from '../../errors/errors';
+// =======
+//   entityName as irsPractitionerEntityName,
+//   IrsPractitioner,
+// } from '../entities/IrsPractitioner';
+// import {
+//   entityName as practitionerEntityName,
+//   Practitioner,
+// } from '../entities/Practitioner';
+// import {
+//   entityName as privatePractitionerEntityName,
+//   PrivatePractitioner,
+// } from '../entities/PrivatePractitioner';
+// import { NotFoundError } from '../../errors/errors';
+// >>>>>>> 9c85711760d2913d6ef83ad7dfa9d23edd18a71a
 import { User } from '../entities/User';
 
 /**
@@ -19,7 +34,10 @@ import { User } from '../entities/User';
  * @param {object} applicationContext the application context
  * @returns {User} the retrieved user
  */
-export const getUserInteractor = async applicationContext => {
+
+export const getUserInteractor = async (
+  applicationContext: IApplicationContext,
+): Promise<TUser | TPractitioner> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const user = await applicationContext
