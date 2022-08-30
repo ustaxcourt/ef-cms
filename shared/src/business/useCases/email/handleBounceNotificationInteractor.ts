@@ -8,15 +8,13 @@ import { reactTemplateGenerator } from '../../utilities/generateHTMLTemplateForP
  * @param {object} providers.mail information pertaining to the email that bounced
  * @returns {object} only the information we need about the bounce
  */
-export const parseBounceNotification: {
-  ({ bounce, mail }: { bounce: TBounce; mail: TMail }): TNotification;
-} = ({ bounce, mail }) => {
+export const parseBounceNotification = (bounce: TNotification) => {
   return {
     bounceRecipient: bounce.bouncedRecipients[0].emailAddress,
     bounceSubType: bounce.bounceSubType,
     bounceType: bounce.bounceType,
     errorMessage: bounce.bouncedRecipients[0].diagnosticCode,
-    subject: mail.commonHeaders.subject,
+    subject: bounce.mail.commonHeaders.subject,
   };
 };
 
