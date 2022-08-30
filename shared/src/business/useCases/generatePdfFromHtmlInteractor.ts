@@ -1,5 +1,5 @@
 import { reactTemplateGenerator } from '../utilities/generateHTMLTemplateForPDF/reactTemplateGenerator';
-import headerFontFace from './headerFontFace';
+import { headerFontFace } from './headerFontFace';
 
 /**
  * generatePdfFromHtmlInteractor

@@ -1,8 +1,16 @@
-const { Case } = require('../entities/cases/Case');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { getCaseCaptionMeta } = require('../utilities/getCaseCaptionMeta');
+import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
+import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
 
-const getDocumentInfo = ({ applicationContext, documentData, petitioners }) => {
+const getDocumentInfo = ({
+  applicationContext,
+  documentData,
+  petitioners,
+}: {
+  applicationContext: IApplicationContext;
+  documentData: any;
+  petitioners?: any[];
+}) => {
   const doc = new DocketEntry(documentData, {
     applicationContext,
     petitioners,
@@ -31,9 +39,12 @@ const getDocumentInfo = ({ applicationContext, documentData, petitioners }) => {
  * @param {object} providers.documentsFiled object containing the docketNumber and documents for the filing receipt to be generated
  * @returns {string} url for the generated document on the storage client
  */
-exports.generatePrintableFilingReceiptInteractor = async (
-  applicationContext,
-  { docketNumber, documentsFiled },
+export const generatePrintableFilingReceiptInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    docketNumber,
+    documentsFiled,
+  }: { docketNumber: string; documentsFiled: any },
 ) => {
   const caseRecord = await applicationContext
     .getPersistenceGateway()
@@ -55,7 +66,7 @@ exports.generatePrintableFilingReceiptInteractor = async (
   primaryDocument.filedBy = primaryDocumentRecord.filedBy;
   primaryDocument.filingDate = primaryDocumentRecord.filingDate;
 
-  const filingReceiptDocumentParams = { document: primaryDocument };
+  const filingReceiptDocumentParams: any = { document: primaryDocument };
 
   if (documentsFiled.hasSupportingDocuments) {
     filingReceiptDocumentParams.supportingDocuments =
@@ -68,7 +79,7 @@ exports.generatePrintableFilingReceiptInteractor = async (
     filingReceiptDocumentParams.secondaryDocument = getDocumentInfo({
       applicationContext,
       documentData: documentsFiled.secondaryDocument,
-    });
+    } as any);
   }
 
   if (documentsFiled.hasSecondarySupportingDocuments) {
