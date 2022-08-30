@@ -56,8 +56,8 @@ describe('userIdLimiter', () => {
       res,
       next,
     );
-    expect(statusMock).toBeCalledWith(401);
-    expect(next).not.toBeCalled();
+    expect(statusMock).toHaveBeenCalledWith(401);
+    expect(next).not.toHaveBeenCalled();
   });
 
   it('should return a 429 response', async () => {
@@ -94,8 +94,8 @@ describe('userIdLimiter', () => {
       message: 'you are only allowed 15 requests in a 60 second window time',
       type: 'user-id-limiter',
     });
-    expect(statusMock).toBeCalledWith(429);
-    expect(next).not.toBeCalled();
+    expect(statusMock).toHaveBeenCalledWith(429);
+    expect(next).not.toHaveBeenCalled();
   });
 
   it('should call next if limit is not reached', async () => {
@@ -128,7 +128,7 @@ describe('userIdLimiter', () => {
       res,
       next,
     );
-    expect(next).toBeCalled();
+    expect(next).toHaveBeenCalled();
   });
 
   it('should reset the limiter counter if the current time is greater than expiresAt', async () => {
@@ -161,8 +161,8 @@ describe('userIdLimiter', () => {
       res,
       next,
     );
-    expect(deleteKeyCountMock).toBeCalled();
-    expect(next).toBeCalled();
+    expect(deleteKeyCountMock).toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
   });
 
   it('should be able to be invoked exactly 15 times before locking next if limit is not reached', async () => {
@@ -227,7 +227,7 @@ describe('userIdLimiter', () => {
       next,
     );
 
-    expect(next).toBeCalledTimes(15);
+    expect(next).toHaveBeenCalledTimes(15);
     // the 16th call should have failed and not invoked next
     expect(next.mock.calls[15]).toBeUndefined();
     expect(statusMock.mock.calls[0]).toBeDefined();
