@@ -540,6 +540,14 @@ jobs:
           name: 'Deploy - Verify Cognito Lambda Triggers'
           command: |
             npm run verify-cognito-lambda-triggers -- $ENV
+      - run:
+          name: 'Deploy - Verify USTC Admin User Disabled'
+          command: |
+            if [ "${CIRCLE_BRANCH}" != "prod" ]; then
+              node shared/admin-tools/user/verify-ustc-admin-user-disabled.js
+            else
+              echo "Skipping verify admin user disabled step on prod"
+            fi
       - store_artifacts:
           path: /home/app/cypress-smoketests/videos/
       - run:

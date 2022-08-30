@@ -32,7 +32,7 @@ export const AddEditCaseNoteModal = connect(
         </h5>
         <FormGroup
           className="margin-bottom-2"
-          errorText={validationErrors.notes}
+          errorText={validationErrors.notes || validationErrors.caseNote}
         >
           <label className="usa-label" htmlFor="procedural-notes">
             Case note
