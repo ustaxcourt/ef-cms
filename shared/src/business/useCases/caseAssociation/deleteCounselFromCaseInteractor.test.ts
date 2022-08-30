@@ -9,7 +9,7 @@ import {
   deleteCounselFromCaseInteractor,
   setupServiceIndicatorForUnrepresentedPetitioners,
 } from './deleteCounselFromCaseInteractor';
-const { MOCK_CASE } = require('../../../test/mockCase.js');
+import { MOCK_CASE } from '../../../test/mockCase.js';
 
 describe('deleteCounselFromCaseInteractor', () => {
   const mockPrivatePractitioners = [

@@ -1,5 +1,5 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { removeItemInteractor } = require('./removeItemInteractor');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { removeItemInteractor } from './removeItemInteractor';
 
 describe('removeItemInteractor', () => {
   it('should clear an item given a key', async () => {

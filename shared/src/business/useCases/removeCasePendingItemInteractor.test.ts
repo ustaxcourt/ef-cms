@@ -1,11 +1,9 @@
-const {
-  removeCasePendingItemInteractor,
-} = require('./removeCasePendingItemInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { AUTOMATIC_BLOCKED_REASONS } = require('../entities/EntityConstants');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { PARTY_TYPES, ROLES } = require('../entities/EntityConstants');
-const { User } = require('../entities/User');
+import { removeCasePendingItemInteractor } from './removeCasePendingItemInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { AUTOMATIC_BLOCKED_REASONS } from '../entities/EntityConstants';
+import { MOCK_CASE } from '../../test/mockCase';
+import { PARTY_TYPES, ROLES } from '../entities/EntityConstants';
+import { User } from '../entities/User';
 
 describe('removeCasePendingItemInteractor', () => {
   let user;

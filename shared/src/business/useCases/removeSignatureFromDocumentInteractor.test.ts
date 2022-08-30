@@ -1,8 +1,6 @@
-const {
-  removeSignatureFromDocumentInteractor,
-} = require('./removeSignatureFromDocumentInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
+import { removeSignatureFromDocumentInteractor } from './removeSignatureFromDocumentInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../test/mockCase';
 
 describe('removeSignatureFromDocumentInteractor', () => {
   let mockCase;

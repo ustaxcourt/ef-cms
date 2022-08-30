@@ -1,4 +1,4 @@
-exports.removeItemInteractor = (applicationContext, { key }) => {
+export const removeItemInteractor = (applicationContext, { key }) => {
   return applicationContext.getPersistenceGateway().removeItem({
     applicationContext,
     key,

@@ -1,22 +1,14 @@
-const {
+import {
   CONTACT_TYPES,
   PARTY_TYPES,
   PETITIONS_SECTION,
-} = require('../entities/EntityConstants');
-const {
-  getContactPrimary,
-  getContactSecondary,
-} = require('../entities/cases/Case');
-const {
-  MOCK_PRACTITIONER,
-  petitionsClerkUser,
-} = require('../../test/mockUsers');
-const {
-  saveCaseDetailInternalEditInteractor,
-} = require('./saveCaseDetailInternalEditInteractor');
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { MOCK_CASE } = require('../../test/mockCase');
-const { omit } = require('lodash');
+} from '../entities/EntityConstants';
+import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
+import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../test/mockUsers';
+import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../test/mockCase';
+import { omit } from 'lodash';
 
 describe('updateCase', () => {
   const mockCase = {

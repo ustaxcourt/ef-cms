@@ -1,4 +1,4 @@
-const { Case } = require('../entities/cases/Case');
+import { Case } from '../entities/cases/Case';
 
 /**
  * Removes a signature from a document
@@ -9,7 +9,7 @@ const { Case } = require('../entities/cases/Case');
  * @param {string} providers.docketEntryId the id of the docket entry for the signed document
  * @returns {object} the updated case
  */
-exports.removeSignatureFromDocumentInteractor = async (
+export const removeSignatureFromDocumentInteractor = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {
