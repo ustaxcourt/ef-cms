@@ -3,7 +3,7 @@
  * css with the body of the PDF when we render with puppeteer; therefore, we extracted the normal nimbus_roman
  * font to be used for the header.
  */
-exports.headerFontFace = `
+export const headerFontFace = `
 @font-face {
   font-family: 'nimbus_roman';
   font-style: normal;
