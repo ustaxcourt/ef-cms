@@ -22,7 +22,9 @@ describe('sealInLowerEnvironment', () => {
         docketNumber: MOCK_CASE.docketNumber,
       },
     ]);
-    expect(applicationContext.getUseCases().sealCaseInteractor).toBeCalled();
+    expect(
+      applicationContext.getUseCases().sealCaseInteractor,
+    ).toHaveBeenCalled();
     expect(result[0].sealedDate).toBeTruthy();
   });
 
@@ -30,8 +32,8 @@ describe('sealInLowerEnvironment', () => {
     await sealInLowerEnvironment(applicationContext, [{}]);
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
-    ).not.toBeCalled();
-    expect(applicationContext.logger.warn).toBeCalled();
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.logger.warn).toHaveBeenCalled();
   });
 
   it('should not execute if the current color is not active', async () => {
@@ -43,6 +45,6 @@ describe('sealInLowerEnvironment', () => {
     ]);
     expect(
       applicationContext.getUseCases().sealCaseInteractor,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

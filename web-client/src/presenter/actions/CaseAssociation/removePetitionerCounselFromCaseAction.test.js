@@ -30,7 +30,7 @@ describe('removePetitionerCounselFromCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().deleteCounselFromCaseInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(output.alertSuccess.message).toBe('Petitioner Counsel removed.');
     expect(output.docketNumber).toBe('101-20');
     expect(output.tab).toBe('caseInfo');

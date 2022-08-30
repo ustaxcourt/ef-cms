@@ -35,7 +35,7 @@ describe('isDocumentRequiringAppendedFormAction', () => {
       },
     });
 
-    expect(yesStub).toBeCalled();
+    expect(yesStub).toHaveBeenCalled();
   });
 
   it('should call path.yes when the document to edit is an OAPF', async () => {
@@ -56,7 +56,7 @@ describe('isDocumentRequiringAppendedFormAction', () => {
       },
     });
 
-    expect(yesStub).toBeCalled();
+    expect(yesStub).toHaveBeenCalled();
   });
 
   it('should call path.no when the document to edit is not an OAP', async () => {
@@ -77,6 +77,6 @@ describe('isDocumentRequiringAppendedFormAction', () => {
       },
     });
 
-    expect(noStub).toBeCalled();
+    expect(noStub).toHaveBeenCalled();
   });
 });
