@@ -55,9 +55,11 @@ const completeWorkItem = async ({
     workItem: workItemToUpdate.validate().toRawObject(),
   });
 
+  console.log('section:', user.section);
+
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
     applicationContext,
-    section: user.section,
+    section: user.section ? user.section : DOCKET_SECTION,
     userId: user.userId,
     workItem: workItemToUpdate.validate().toRawObject(),
   });
