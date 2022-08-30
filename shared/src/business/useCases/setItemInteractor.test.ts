@@ -1,18 +1,16 @@
 import { applicationContext } from '../test/createTestApplicationContext';
 import { setItemInteractor } from './setItemInteractor';
+import { getItem } from '../../persistence/localStorage/getItem';
+import { setItem } from '../../persistence/localStorage/setItem';
 
 describe('setItemInteractor', () => {
   it('should be able to set an item', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getItem.mockImplementation(
-        require('../../persistence/localStorage/getItem').getItem,
-      );
+      .getItem.mockImplementation(getItem);
     applicationContext
       .getPersistenceGateway()
-      .setItem.mockImplementation(
-        require('../../persistence/localStorage/setItem').setItem,
-      );
+      .setItem.mockImplementation(setItem);
 
     await setItemInteractor(applicationContext, {
       key: 'abc',

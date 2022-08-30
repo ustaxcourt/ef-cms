@@ -1,19 +1,13 @@
-const {
-  DocumentSearch,
-} = require('../../business/entities/documents/DocumentSearch');
-const {
-  InternalDocumentSearchResult,
-} = require('../entities/documents/InternalDocumentSearchResult');
-const {
+import { DocumentSearch } from '../../business/entities/documents/DocumentSearch';
+import { InternalDocumentSearchResult } from '../entities/documents/InternalDocumentSearchResult';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
-  MAX_SEARCH_RESULTS,
-} = require('../../business/entities/EntityConstants');
-const { formatNow, FORMATS } = require('../utilities/DateHandler');
-const { omit } = require('lodash');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { MAX_SEARCH_RESULTS } from '../../business/entities/EntityConstants';
+import { formatNow, FORMATS } from '../utilities/DateHandler';
+import { omit } from 'lodash';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * opinionAdvancedSearchInteractor
@@ -23,7 +17,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.keyword keyword used for searching opinions
  * @returns {object} the opinions data
  */
-exports.opinionAdvancedSearchInteractor = async (
+export const opinionAdvancedSearchInteractor = async (
   applicationContext,
   {
     caseTitleOrPetitioner,

@@ -1,7 +1,7 @@
-const TEXT_SIZE = 15;
+export const TEXT_SIZE = 15;
 const PADDING = 13;
 
-const computeCoordinates = ({
+export const computeCoordinates = ({
   applicationContext,
   boxHeight,
   boxWidth,
@@ -89,7 +89,7 @@ const computeCoordinates = ({
  * @param {object} providers.sigTextData // Signature text data including the name and title
  * @returns {ByteArray} PDF data after signature is added
  */
-const generateSignedDocumentInteractor = async (
+export const generateSignedDocumentInteractor = async (
   applicationContext: IApplicationContext,
   {
     pageIndex,
@@ -177,10 +177,4 @@ const generateSignedDocumentInteractor = async (
   return await pdfDoc.save({
     useObjectStreams: false,
   });
-};
-
-module.exports = {
-  TEXT_SIZE,
-  computeCoordinates,
-  generateSignedDocumentInteractor,
 };

@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { Case } = require('../../entities/cases/Case');
-const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { Case } from '../../entities/cases/Case';
+import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
 
 /**
  * setWorkItemAsReadInteractor

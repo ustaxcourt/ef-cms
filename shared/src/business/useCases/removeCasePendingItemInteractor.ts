@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * removeCasePendingItemInteractor
@@ -14,7 +14,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {object} providers.docketEntryId the id of the docket entry no longer pending
  * @returns {object} the updated case data
  */
-exports.removeCasePendingItemInteractor = async (
+export const removeCasePendingItemInteractor = async (
   applicationContext,
   { docketEntryId, docketNumber },
 ) => {

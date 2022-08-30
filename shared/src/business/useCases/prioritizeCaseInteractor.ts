@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { UnauthorizedError } = require('../../errors/errors');
+} from '../../authorization/authorizationClientService';
+import { Case } from '../entities/cases/Case';
+import { UnauthorizedError } from '../../errors/errors';
 
 /**
  * used for setting a case as high priority
@@ -14,7 +14,7 @@ const { UnauthorizedError } = require('../../errors/errors');
  * @param {string} providers.docketNumber the docket number of the case to set as high priority
  * @returns {object} the case data
  */
-exports.prioritizeCaseInteractor = async (
+export const prioritizeCaseInteractor = async (
   applicationContext,
   { docketNumber, reason },
 ) => {

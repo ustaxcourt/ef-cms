@@ -1,17 +1,17 @@
-const {
-  entityName: irsPractitionerEntityName,
+import {
+  entityName as irsPractitionerEntityName,
   IrsPractitioner,
-} = require('../entities/IrsPractitioner');
-const {
-  entityName: practitionerEntityName,
+} from '../entities/IrsPractitioner';
+import {
+  entityName as practitionerEntityName,
   Practitioner,
-} = require('../entities/Practitioner');
-const {
-  entityName: privatePractitionerEntityName,
+} from '../entities/Practitioner';
+import {
+  entityName as privatePractitionerEntityName,
   PrivatePractitioner,
-} = require('../entities/PrivatePractitioner');
-const { NotFoundError } = require('../../errors/errors');
-const { User } = require('../entities/User');
+} from '../entities/PrivatePractitioner';
+import { NotFoundError } from '../../errors/errors';
+import { User } from '../entities/User';
 
 /**
  * getUserInteractor
@@ -19,7 +19,7 @@ const { User } = require('../entities/User');
  * @param {object} applicationContext the application context
  * @returns {User} the retrieved user
  */
-exports.getUserInteractor = async applicationContext => {
+export const getUserInteractor = async applicationContext => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   const user = await applicationContext

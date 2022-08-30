@@ -35,7 +35,7 @@ export const handleBounceNotificationInteractor: {
   ): Promise<void>;
 } = async (applicationContext, notification) => {
   const { bounceRecipient, bounceSubType, bounceType, errorMessage, subject } =
-    exports.parseBounceNotification(notification);
+    parseBounceNotification(notification);
 
   if (bounceType !== 'Permanent') {
     return;

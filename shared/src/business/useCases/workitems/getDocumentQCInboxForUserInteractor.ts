@@ -1,9 +1,9 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
-const { WorkItem } = require('../../entities/WorkItem');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { WorkItem } from '../../entities/WorkItem';
 
 /**
  * getDocumentQCInboxForUserInteractor
