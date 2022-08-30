@@ -22,12 +22,15 @@ describe('caseAdvancedSearchInteractor', () => {
     mockUser.role = ROLES.petitioner;
 
     await expect(
-      caseAdvancedSearchInteractor(applicationContext, {}),
+      caseAdvancedSearchInteractor(applicationContext, {} as any),
     ).rejects.toThrow('Unauthorized');
   });
 
   it('returns empty array if no search params are passed in', async () => {
-    const results = await caseAdvancedSearchInteractor(applicationContext, {});
+    const results = await caseAdvancedSearchInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     expect(results).toEqual([]);
   });
@@ -48,7 +51,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results).toEqual([
       { docketNumber: '101-20', petitioners: [] },
@@ -75,7 +78,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results).toEqual([]);
   });
@@ -99,7 +102,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results).toEqual([]);
   });
@@ -122,7 +125,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -150,7 +153,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results).toEqual([
       {
@@ -183,7 +186,7 @@ describe('caseAdvancedSearchInteractor', () => {
 
     const results = await caseAdvancedSearchInteractor(applicationContext, {
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results).toEqual([
       {

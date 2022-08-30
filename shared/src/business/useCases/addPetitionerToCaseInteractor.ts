@@ -17,8 +17,12 @@ import { UnauthorizedError } from '../../errors/errors';
  * @returns {object} the case data
  */
 export const addPetitionerToCaseInteractor = async (
-  applicationContext,
-  { caseCaption, contact, docketNumber },
+  applicationContext: IApplicationContext,
+  {
+    caseCaption,
+    contact,
+    docketNumber,
+  }: { caseCaption: string; contact: any; docketNumber: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

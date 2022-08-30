@@ -1,15 +1,15 @@
-const {
+import {
   applicationContext,
   testPdfDoc,
-} = require('../test/createTestApplicationContext');
-const {
+} from '../test/createTestApplicationContext';
+import {
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
-} = require('../entities/EntityConstants');
-const { formatDateString, FORMATS } = require('../utilities/DateHandler');
-const { generateCoverSheetData } = require('./generateCoverSheetData');
-const { MOCK_CASE } = require('../../test/mockCase');
+} from '../entities/EntityConstants';
+import { formatDateString, FORMATS } from '../utilities/DateHandler';
+import { generateCoverSheetData } from './generateCoverSheetData';
+import { MOCK_CASE } from '../../test/mockCase';
 
 describe('generateCoverSheetData', () => {
   const testingCaseData = {
@@ -54,7 +54,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         certificateOfService: true,
       },
-    });
+    } as any);
 
     expect(result.certificateOfService).toEqual(true);
   });
@@ -67,7 +67,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         certificateOfService: false,
       },
-    });
+    } as any);
     expect(result.certificateOfService).toEqual(false);
   });
 
@@ -79,7 +79,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         filingDate: '2019-04-19T14:45:15.595Z',
       },
-    });
+    } as any);
 
     expect(result.dateFiledLodged).toEqual('04/19/19');
   });
@@ -96,7 +96,7 @@ describe('generateCoverSheetData', () => {
         additionalInfo: expectedAdditionalInfo,
         filingDate: '2019-04-19T14:45:15.595Z',
       },
-    });
+    } as any);
 
     expect(result.documentTitle).toEqual(`Petition ${expectedAdditionalInfo}`);
   });
@@ -109,7 +109,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         filingDate: null,
       },
-    });
+    } as any);
 
     expect(result.dateFiledLodged).toEqual('');
   });
@@ -122,7 +122,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         lodged: false,
       },
-    });
+    } as any);
 
     expect(result.dateFiledLodgedLabel).toEqual('Filed');
   });
@@ -135,7 +135,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         lodged: true,
       },
-    });
+    } as any);
 
     expect(result.dateFiledLodgedLabel).toEqual('Lodged');
   });
@@ -150,7 +150,7 @@ describe('generateCoverSheetData', () => {
         isPaper: false,
       },
       filingDateUpdated: false,
-    });
+    } as any);
 
     expect(result.dateReceived).toEqual('04/19/19 10:45 am');
   });
@@ -165,7 +165,7 @@ describe('generateCoverSheetData', () => {
         isPaper: false,
       },
       filingDateUpdated: false,
-    });
+    } as any);
 
     expect(result.dateReceived).toEqual('');
   });
@@ -179,7 +179,7 @@ describe('generateCoverSheetData', () => {
         filingDate: '2019-04-19T14:45:15.595Z',
         isPaper: true,
       },
-    });
+    } as any);
 
     expect(result.dateReceived).toEqual('04/19/19');
   });
@@ -193,7 +193,7 @@ describe('generateCoverSheetData', () => {
         createdAt: null,
         isPaper: true,
       },
-    });
+    } as any);
 
     expect(result.dateReceived).toEqual('');
   });
@@ -206,7 +206,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         servedAt: '2019-04-20T14:45:15.595Z',
       },
-    });
+    } as any);
 
     expect(result.dateServed).toEqual('04/20/19');
   });
@@ -219,7 +219,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         servedAt: undefined,
       },
-    });
+    } as any);
 
     expect(result.dateServed).toEqual('');
   });
@@ -229,7 +229,7 @@ describe('generateCoverSheetData', () => {
       applicationContext,
       caseEntity: testingCaseData,
       docketEntryEntity: testingCaseData.docketEntries[0],
-    });
+    } as any);
 
     expect(result.docketNumberWithSuffix).toEqual(MOCK_CASE.docketNumber);
   });
@@ -243,7 +243,7 @@ describe('generateCoverSheetData', () => {
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
       },
       docketEntryEntity: testingCaseData.docketEntries[0],
-    });
+    } as any);
 
     expect(result.docketNumberWithSuffix).toEqual(
       `${MOCK_CASE.docketNumber}${DOCKET_NUMBER_SUFFIXES.SMALL}`,
@@ -258,7 +258,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         isPaper: false,
       },
-    });
+    } as any);
 
     expect(result.electronicallyFiled).toEqual(true);
   });
@@ -271,7 +271,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         isPaper: true,
       },
-    });
+    } as any);
 
     expect(result.electronicallyFiled).toEqual(false);
   });
@@ -284,7 +284,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         mailingDate: '04/16/2019',
       },
-    });
+    } as any);
 
     expect(result.mailingDate).toEqual('04/16/2019');
   });
@@ -297,7 +297,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         mailingDate: '04/16/2019',
       },
-    });
+    } as any);
 
     expect(result.index).toEqual(testingCaseData.docketEntries[0].index);
   });
@@ -310,7 +310,7 @@ describe('generateCoverSheetData', () => {
         ...testingCaseData.docketEntries[0],
         mailingDate: undefined,
       },
-    });
+    } as any);
 
     expect(result.mailingDate).toEqual('');
   });
@@ -323,7 +323,7 @@ describe('generateCoverSheetData', () => {
         caseCaption: 'Janie Petitioner & Janie Petitioner, Petitioners',
       },
       docketEntryEntity: testingCaseData.docketEntries[0],
-    });
+    } as any);
 
     expect(result.caseCaptionExtension).toEqual('Petitioners');
   });
@@ -333,7 +333,7 @@ describe('generateCoverSheetData', () => {
       applicationContext,
       caseEntity: testingCaseData,
       docketEntryEntity: testingCaseData.docketEntries[0],
-    });
+    } as any);
 
     expect(result.caseCaptionExtension).toEqual(PARTY_TYPES.petitioner);
   });
@@ -346,7 +346,7 @@ describe('generateCoverSheetData', () => {
         caseCaption: 'Janie Petitioner',
       },
       docketEntryEntity: testingCaseData.docketEntries[0],
-    });
+    } as any);
 
     expect(result.caseCaptionExtension).toEqual('');
   });
@@ -365,7 +365,7 @@ describe('generateCoverSheetData', () => {
       },
       docketEntryEntity: testingCaseData.docketEntries[0],
       useInitialData: true,
-    });
+    } as any);
 
     expect(result.docketNumberWithSuffix).toEqual(
       `${MOCK_CASE.docketNumber}${mockInitialDocketNumberSuffix}`,
@@ -384,7 +384,7 @@ describe('generateCoverSheetData', () => {
         lodged: true,
         servedAt: '2019-04-20T14:45:15.595Z',
       },
-    });
+    } as any);
 
     expect(result.dateReceived).toBeUndefined();
     expect(result.electronicallyFiled).toBeUndefined();
@@ -400,7 +400,7 @@ describe('generateCoverSheetData', () => {
         filingDate: '2019-05-19T14:45:15.595Z',
       },
       filingDateUpdated: true,
-    });
+    } as any);
 
     expect(result.dateReceived).toBe('05/19/19');
   });
@@ -416,7 +416,7 @@ describe('generateCoverSheetData', () => {
         isPaper: true,
       },
       filingDateUpdated: false,
-    });
+    } as any);
 
     expect(result.dateReceived).toBe('02/15/19');
   });
@@ -433,7 +433,7 @@ describe('generateCoverSheetData', () => {
         documentType: mockDocumentType,
       },
       filingDateUpdated: false,
-    });
+    } as any);
 
     expect(result.documentTitle).toBe(mockDocumentType);
   });
@@ -482,7 +482,7 @@ describe('generateCoverSheetData', () => {
         eventCode: 'HE',
       },
       filingDateUpdated: false,
-    });
+    } as any);
 
     // should be in ascending order
     expect(result.consolidatedCases.length).toEqual(2);
@@ -505,7 +505,7 @@ describe('generateCoverSheetData', () => {
       stampData: {
         date: mockDate,
       },
-    });
+    } as any);
 
     expect(result.stamp.date).toEqual(
       formatDateString(mockDate, FORMATS.MMDDYYYY),

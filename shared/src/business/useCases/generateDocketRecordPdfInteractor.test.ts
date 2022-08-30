@@ -142,7 +142,7 @@ describe('generateDocketRecordPdfInteractor', () => {
   it('defaults includePartyDetail to false when a value has not been provided', async () => {
     await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
-    });
+    } as any);
 
     expect(
       applicationContext.getDocumentGenerators().docketRecord.mock.calls[0][0]
@@ -169,7 +169,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     await expect(
       generateDocketRecordPdfInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized to view sealed case.');
   });
 
@@ -188,7 +188,7 @@ describe('generateDocketRecordPdfInteractor', () => {
     await expect(
       generateDocketRecordPdfInteractor(applicationContext, {
         docketNumber: caseDetail.docketNumber,
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized to view sealed case.');
   });
 
@@ -208,7 +208,7 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     const result = await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
-    });
+    } as any);
 
     expect(result).toEqual(mockPdfUrlAndID);
   });
@@ -229,7 +229,7 @@ describe('generateDocketRecordPdfInteractor', () => {
 
     const result = await generateDocketRecordPdfInteractor(applicationContext, {
       docketNumber: caseDetail.docketNumber,
-    });
+    } as any);
 
     expect(result).toEqual(mockPdfUrlAndID);
   });

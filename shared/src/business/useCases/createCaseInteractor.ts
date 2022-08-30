@@ -1,21 +1,17 @@
-const {
-  CaseExternalIncomplete,
-} = require('../entities/cases/CaseExternalIncomplete');
-const {
+import { CaseExternalIncomplete } from '../entities/cases/CaseExternalIncomplete';
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
-  setServiceIndicatorsForCase,
-} = require('../utilities/setServiceIndicatorsForCase');
-const { Case } = require('../entities/cases/Case');
-const { DocketEntry } = require('../entities/DocketEntry');
-const { INITIAL_DOCUMENT_TYPES } = require('../entities/EntityConstants');
-const { PETITIONS_SECTION } = require('../entities/EntityConstants');
-const { ROLES } = require('../entities/EntityConstants');
-const { UnauthorizedError } = require('../../errors/errors');
-const { UserCase } = require('../entities/UserCase');
-const { WorkItem } = require('../entities/WorkItem');
+} from '../../authorization/authorizationClientService';
+import { setServiceIndicatorsForCase } from '../utilities/setServiceIndicatorsForCase';
+import { Case } from '../entities/cases/Case';
+import { DocketEntry } from '../entities/DocketEntry';
+import { INITIAL_DOCUMENT_TYPES } from '../entities/EntityConstants';
+import { PETITIONS_SECTION } from '../entities/EntityConstants';
+import { ROLES } from '../entities/EntityConstants';
+import { UnauthorizedError } from '../../errors/errors';
+import { UserCase } from '../entities/UserCase';
+import { WorkItem } from '../entities/WorkItem';
 
 const addPetitionDocketEntryToCase = ({
   applicationContext,
@@ -60,9 +56,19 @@ const addPetitionDocketEntryToCase = ({
  * @param {string} providers.stinFileId the id of the stin file
  * @returns {object} the created case
  */
-exports.createCaseInteractor = async (
-  applicationContext,
-  { ownershipDisclosureFileId, petitionFileId, petitionMetadata, stinFileId },
+export const createCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    ownershipDisclosureFileId,
+    petitionFileId,
+    petitionMetadata,
+    stinFileId,
+  }: {
+    ownershipDisclosureFileId: string;
+    petitionFileId: string;
+    petitionMetadata: any;
+    stinFileId: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

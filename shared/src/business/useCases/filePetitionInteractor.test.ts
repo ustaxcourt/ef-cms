@@ -1,6 +1,6 @@
-const { applicationContext } = require('../test/createTestApplicationContext');
-const { filePetitionInteractor } = require('./filePetitionInteractor');
-const { ROLES } = require('../entities/EntityConstants');
+import { applicationContext } from '../test/createTestApplicationContext';
+import { filePetitionInteractor } from './filePetitionInteractor';
+import { ROLES } from '../entities/EntityConstants';
 
 beforeAll(() => {
   applicationContext
@@ -15,7 +15,7 @@ describe('filePetitionInteractor', () => {
     applicationContext.getCurrentUser.mockReturnValue(null);
 
     await expect(
-      filePetitionInteractor(applicationContext, {}),
+      filePetitionInteractor(applicationContext, {} as any),
     ).rejects.toThrow();
   });
 
@@ -29,7 +29,7 @@ describe('filePetitionInteractor', () => {
       filePetitionInteractor(applicationContext, {
         petitionFile: null,
         petitionMetadata: null,
-      }),
+      } as any),
     ).rejects.toThrow();
   });
 
@@ -42,7 +42,7 @@ describe('filePetitionInteractor', () => {
     await filePetitionInteractor(applicationContext, {
       petitionFile: 'this petition file',
       petitionMetadata: null,
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
@@ -53,7 +53,7 @@ describe('filePetitionInteractor', () => {
   it('calls upload on an ODS file', async () => {
     await filePetitionInteractor(applicationContext, {
       ownershipDisclosureFile: 'this ods file',
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
@@ -64,7 +64,7 @@ describe('filePetitionInteractor', () => {
   it('calls upload on a STIN file', async () => {
     await filePetitionInteractor(applicationContext, {
       stinFile: 'this stin file',
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().uploadDocumentFromClient.mock
@@ -77,7 +77,7 @@ describe('filePetitionInteractor', () => {
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
@@ -94,7 +94,7 @@ describe('filePetitionInteractor', () => {
       petitionFile: 'something1',
       petitionMetadata: 'something2',
       stinFile: 'something3',
-    });
+    } as any);
 
     expect(
       applicationContext.getUseCases().createCaseInteractor.mock.calls[0][1],
