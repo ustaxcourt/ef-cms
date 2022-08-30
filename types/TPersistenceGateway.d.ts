@@ -113,6 +113,16 @@ interface ICreateMessage {
   }): Promise<void>;
 }
 
+interface IIsFileExists {
+  ({
+    applicationContext,
+    key,
+  }: {
+    applicationContext: IApplicationContext;
+    key: string;
+  }): Promise<boolean>;
+}
+
 interface IMarkMessageThreadRepliedTo {
   ({
     applicationContext,
@@ -353,8 +363,46 @@ interface IGetBlockedCases {
   }): Promise<TCase[]>;
 }
 
+interface IVerifyCaseForUser {
+  ({
+    applicationContext,
+    docketNumber,
+    userId,
+  }: {
+    applicationContext: IApplicationContext;
+    docketNumber: string;
+    userId: string;
+  }): Promise<TUser[]>;
+}
+
+interface IGetDownloadPolicyUrl {
+  ({
+    applicationContext,
+    key,
+  }: {
+    applicationContext: IApplicationContext;
+    key: string;
+  }): Promise<string>;
+}
+
+interface IGetReconciliationReport {
+  ({
+    applicationContext,
+    reconciliationDateEnd,
+    reconciliationDateStart,
+  }: {
+    applicationContext: IApplicationContext;
+    reconciliationDateEnd: string;
+    reconciliationDateStart: string;
+  }): Promise<string>;
+}
+
 type TPersistenceGateway = {
   [key: string]: any;
+  getReconciliationReport: IGetReconciliationReport;
+  isFileExists: IIsFileExists;
+  verifyCaseForUser: IVerifyCaseForUser;
+  getDownloadPolicyUrl: IGetDownloadPolicyUrl;
   createCaseDeadline: ICreateCaseDeadline;
   getCaseByDocketNumber: IGetCaseByDocketNumber;
   getWorkItemById: IGetWorkItemById;

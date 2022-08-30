@@ -1,21 +1,19 @@
-const {
+import { Case } from '../entities/cases/Case';
+import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
   INITIAL_DOCUMENT_TYPES,
   ROLES,
   STIPULATED_DECISION_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
-} = require('../entities/EntityConstants');
-const {
-  documentMeetsAgeRequirements,
-} = require('../utilities/getFormattedCaseDetail');
-const {
-  isAuthorized,
+} from '../entities/EntityConstants';
+import { NotFoundError, UnauthorizedError } from '../../errors/errors';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { Case } = require('../entities/cases/Case');
-const { isServed } = require('../entities/DocketEntry');
-const { NotFoundError, UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { User } from '../entities/User';
+import { documentMeetsAgeRequirements } from '../utilities/getFormattedCaseDetail';
+import { isServed } from '../entities/DocketEntry';
 
 const UNAUTHORIZED_DOCUMENT_MESSAGE =
   'Unauthorized to view document at this time.';
@@ -109,9 +107,9 @@ const getUserRoles = user => {
  * @param {string} providers.key the key of the document
  * @returns {Array<string>} the filing type options based on user role
  */
-exports.getDownloadPolicyUrlInteractor = async (
-  applicationContext,
-  { docketNumber, key },
+export const getDownloadPolicyUrlInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber, key }: { docketNumber: string; key: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

@@ -1,9 +1,9 @@
-const {
-  isAuthorized,
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
+import { User } from '../entities/User';
 
 /**
  *
@@ -11,7 +11,10 @@ const { User } = require('../entities/User');
  * @param {object} providers the providers object
  * @returns {Array<string>} the filing type options based on user role
  */
-exports.getUploadPolicyInteractor = async (applicationContext, { key }) => {
+export const getUploadPolicyInteractor = async (
+  applicationContext: IApplicationContext,
+  { key }: { key: string },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.UPLOAD_DOCUMENT)) {

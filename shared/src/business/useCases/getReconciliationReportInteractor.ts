@@ -1,18 +1,16 @@
-const {
+import {
+  FORMATS,
+  PATTERNS,
   createEndOfDayISO,
   createStartOfDayISO,
   formatNow,
-  FORMATS,
-  PATTERNS,
-} = require('../../business/utilities/DateHandler');
-const {
-  isAuthorized,
+} from '../../business/utilities/DateHandler';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const {
-  ReconciliationReportEntry,
-} = require('../entities/ReconciliationReportEntry');
-const { UnauthorizedError } = require('../../errors/errors');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { ReconciliationReportEntry } from '../entities/ReconciliationReportEntry';
+import { UnauthorizedError } from '../../errors/errors';
 
 const isValidDate = dateString => {
   const dateInputValid = PATTERNS.YYYYMMDD.test(dateString);
@@ -29,9 +27,9 @@ const isValidDate = dateString => {
  * @param {string} providers.reconciliationDate the reconciliation date to to query
  * @returns {object} the report data
  */
-exports.getReconciliationReportInteractor = async (
-  applicationContext,
-  { reconciliationDate },
+export const getReconciliationReportInteractor = async (
+  applicationContext: IApplicationContext,
+  { reconciliationDate }: { reconciliationDate: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -84,10 +82,12 @@ exports.getReconciliationReportInteractor = async (
  * @param {object} applicationContext the application context
  * @param {string} docketEntries the docketEntries to assign case captions
  */
-const assignCaseCaptionFromPersistence = async (
-  applicationContext,
-  docketEntries,
-) => {
+const assignCaseCaptionFromPersistence: {
+  (
+    applicationContext: IApplicationContext,
+    docketEntries: DocketEntry[],
+  ): Promise<void>;
+} = async (applicationContext, docketEntries) => {
   const docketNumbers = docketEntries.map(e => {
     const docketNumber = e.docketNumber || e.pk.substr(e.pk.indexOf('|') + 1);
     e.docketNumber = docketNumber;

@@ -1,10 +1,10 @@
-const {
-  isAuthorized,
+import { ROLES } from '../entities/EntityConstants';
+import {
   ROLE_PERMISSIONS,
-} = require('../../authorization/authorizationClientService');
-const { ROLES } = require('../entities/EntityConstants');
-const { UnauthorizedError } = require('../../errors/errors');
-const { User } = require('../entities/User');
+  isAuthorized,
+} from '../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../errors/errors';
+import { User } from '../entities/User';
 
 /**
  * getUserByIdInteractor
@@ -13,7 +13,10 @@ const { User } = require('../entities/User');
  * @param {object} userId the id for the user to get
  * @returns {User} the retrieved user
  */
-exports.getUserByIdInteractor = async (applicationContext, { userId }) => {
+export const getUserByIdInteractor = async (
+  applicationContext: IApplicationContext,
+  { userId }: { userId: string },
+): Promise<TUser> => {
   const requestUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(requestUser, ROLE_PERMISSIONS.MANAGE_PRACTITIONER_USERS)) {
