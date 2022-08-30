@@ -53,10 +53,10 @@ if [[ -z "${RUN_DIR}" ]]; then
   RUN_DIR="src"
 fi
 
-ts-node web-api/streams-local.js &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node web-api/websockets-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node web-api/src/app-local.js" &
-nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node web-api/src/app-public-local.js"
+ts-node-transpile-only web-api/streams-local.js &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration/ --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/websockets-local.js" &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-local.js" &
+nodemon -e js,ts --ignore web-client/ --ignore dist/ --ignore dist-public/ --ignore cypress-integration --ignore cypress-smoketests/ --ignore cypress-readonly --exec "ts-node-transpile-only web-api/src/app-public-local.js"
 
 if [ ! -e "$CIRCLECI" ]; then
   echo "killing dynamodb local"
