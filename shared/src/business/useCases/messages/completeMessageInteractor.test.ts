@@ -1,10 +1,10 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   PETITIONS_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
 import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { completeMessageInteractor } from './completeMessageInteractor';
 
 describe('completeMessageInteractor', () => {

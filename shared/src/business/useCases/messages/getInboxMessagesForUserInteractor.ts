@@ -1,8 +1,8 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Message } from '../../entities/Message';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -13,22 +13,24 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.userId the user to get the inbox messages
  * @returns {object} the messages in the user inbox
  */
-export const getInboxMessagesForUserInteractor: IGetInboxMessagesForUserInteractor =
-  async (applicationContext, { userId }) => {
-    const authorizedUser = applicationContext.getCurrentUser();
+export const getInboxMessagesForUserInteractor = async (
+  applicationContext: IApplicationContext,
+  { userId }: { userId: string },
+) => {
+  const authorizedUser = applicationContext.getCurrentUser();
 
-    if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
-      throw new UnauthorizedError('Unauthorized');
-    }
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
-    const messages = await applicationContext
-      .getPersistenceGateway()
-      .getUserInboxMessages({
-        applicationContext,
-        userId,
-      });
-
-    return Message.validateRawCollection(messages, {
+  const messages = await applicationContext
+    .getPersistenceGateway()
+    .getUserInboxMessages({
       applicationContext,
+      userId,
     });
-  };
+
+  return Message.validateRawCollection(messages, {
+    applicationContext,
+  });
+};

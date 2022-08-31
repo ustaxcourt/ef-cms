@@ -1,8 +1,8 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Message } from '../../entities/Message';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -13,9 +13,9 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.parentMessageId the id of the parent message for the thread
  * @returns {object} the message
  */
-export const getMessageThreadInteractor: IGetMessageThreadInteractor = async (
-  applicationContext,
-  { parentMessageId },
+export const getMessageThreadInteractor = async (
+  applicationContext: IApplicationContext,
+  { parentMessageId }: { parentMessageId: string },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

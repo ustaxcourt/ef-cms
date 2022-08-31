@@ -14,7 +14,7 @@ import { replyToMessage } from './replyToMessageInteractor';
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} the message
  */
-export const forwardMessageInteractor: IForwardMessageInteractor = async (
+export const forwardMessageInteractor = async (
   applicationContext,
   {
     attachments,
@@ -24,6 +24,14 @@ export const forwardMessageInteractor: IForwardMessageInteractor = async (
     subject,
     toSection,
     toUserId,
+  }: {
+    attachments: any;
+    docketNumber: string;
+    message: string;
+    parentMessageId: string;
+    subject: string;
+    toSection: string;
+    toUserId: string;
   },
 ) => {
   return await replyToMessage(applicationContext, {
