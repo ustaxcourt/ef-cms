@@ -18,7 +18,7 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
  */
 export const deleteCounselFromCaseInteractor = async (
   applicationContext: IApplicationContext,
-  options: { docketNumber: string; userId: string },
+  { docketNumber, userId }: { docketNumber: string; userId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

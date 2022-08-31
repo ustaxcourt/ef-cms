@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
 
@@ -17,22 +17,21 @@ import { UnauthorizedError } from '../../errors/errors';
  */
 export const generateDraftStampOrderInteractor = async (
   applicationContext: IApplicationContext,
-    {
-      docketNumber,
-      formattedDraftDocumentTitle,
-      motionDocketEntryId,
-      parentMessageId,
-      stampData,
-      stampedDocketEntryId,
-    }: {
-      docketNumber: string;
-      formattedDraftDocumentTitle: string;
-      motionDocketEntryId: string;
-      parentMessageId: string;
-      stampData: any;
-      stampedDocketEntryId: string;
-    },
-  ): Promise<void>;
+  {
+    docketNumber,
+    formattedDraftDocumentTitle,
+    motionDocketEntryId,
+    parentMessageId,
+    stampData,
+    stampedDocketEntryId,
+  }: {
+    docketNumber: string;
+    formattedDraftDocumentTitle: string;
+    motionDocketEntryId: string;
+    parentMessageId: string;
+    stampData: any;
+    stampedDocketEntryId: string;
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
 
