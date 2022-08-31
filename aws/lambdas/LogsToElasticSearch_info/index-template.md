@@ -1,6 +1,6 @@
 # Elasticsearch Index Template
 
-When parsing log entries into an index, Elasticsearch will attempt to create a new index with dynamic field **mapping**s if it does not already exist (the normal behavior). We can control how Elasticsearch performs that operation with an Index Template.
+When parsing log entries into an index, Elasticsearch will attempt to create a new index with dynamic field mappings if it does not already exist (the normal behavior). We can control how Elasticsearch performs that operation with an Index Template.
 
 Because log entries may contain data which is of an unknown shape and size, it is desirable to [limit the dynamic field mappings](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html#mapping-limit-settings) that occur. Say more!
 
