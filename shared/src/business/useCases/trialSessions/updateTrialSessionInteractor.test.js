@@ -289,6 +289,7 @@ describe('updateTrialSessionInteractor', () => {
     const updatedFields = {
       address1: '123 Main St',
       address2: 'Apt 234',
+      alternateTrialClerkName: 'Some OtherClerk',
       chambersPhoneNumber: '111111',
       city: 'Somewhere',
       courtReporter: 'Someone Reporter',
