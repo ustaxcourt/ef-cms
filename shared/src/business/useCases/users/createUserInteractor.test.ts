@@ -1,7 +1,7 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
-import { createUserInteractor } from './createUserInteractor';
 import { ROLES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../../../shared/src/errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { createUserInteractor } from './createUserInteractor';
 
 describe('create user', () => {
   it('creates the user', async () => {
@@ -28,7 +28,7 @@ describe('create user', () => {
     };
     const user = await createUserInteractor(applicationContext, {
       user: userToCreate,
-    });
+    } as any);
     expect(user).not.toBeUndefined();
   });
 
@@ -51,7 +51,7 @@ describe('create user', () => {
     await expect(
       createUserInteractor(applicationContext, {
         user: userToCreate,
-      }),
+      } as any),
     ).rejects.toThrow(UnauthorizedError);
   });
 
@@ -82,7 +82,7 @@ describe('create user', () => {
 
     const user = await createUserInteractor(applicationContext, {
       user: userToCreate,
-    });
+    } as any);
 
     expect(user).toMatchObject({
       barNumber: 'CS20001',
@@ -116,7 +116,7 @@ describe('create user', () => {
         originalBarState: 'CA',
         practitionerType: 'Attorney',
         role: ROLES.irsPractitioner,
-      },
+      } as any,
     });
 
     expect(user).toMatchObject({
@@ -151,7 +151,7 @@ describe('create user', () => {
         originalBarState: 'CA',
         practitionerType: 'Attorney',
         role: ROLES.inactivePractitioner,
-      },
+      } as any,
     });
 
     expect(user).toMatchObject({
@@ -189,7 +189,7 @@ describe('create user', () => {
 
     const user = await createUserInteractor(applicationContext, {
       user: userToCreate,
-    });
+    } as any);
 
     expect(user).toMatchObject({
       barNumber: 'CS20001',
@@ -222,7 +222,7 @@ describe('create user', () => {
 
     const user = await createUserInteractor(applicationContext, {
       user: userToCreate,
-    });
+    } as any);
 
     expect(user).not.toBeUndefined();
     expect(
@@ -258,7 +258,7 @@ describe('create user', () => {
 
     const user = await createUserInteractor(applicationContext, {
       user: userToCreate,
-    });
+    } as any);
 
     expect(user).not.toBeUndefined();
     expect(

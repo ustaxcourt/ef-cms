@@ -4,7 +4,7 @@ import { replyToMessage } from './replyToMessageInteractor';
 
 describe('forwardMessageInteractor', () => {
   it('should call the replyToMessageInteractor with the given params', async () => {
-    await forwardMessageInteractor({}, {});
+    await forwardMessageInteractor({} as any, {} as any);
 
     expect(replyToMessage).toHaveBeenCalled();
   });

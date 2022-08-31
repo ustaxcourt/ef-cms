@@ -1,17 +1,17 @@
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
+  PARTY_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
-import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { docketClerkUser, MOCK_PRACTITIONER } from '../../test/mockUsers';
 import { MOCK_CASE } from '../../test/mockCase';
-import { PARTY_TYPES } from '../entities/EntityConstants';
+import { MOCK_PRACTITIONER, docketClerkUser } from '../../test/mockUsers';
 import { User } from '../entities/User';
 import { UserCase } from '../entities/UserCase';
-jest.mock('./addCoversheetInteractor');
-import { addCoverToPdf } from './addCoversheetInteractor';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
+jest.mock('./addCoverToPdf');
+import { addCoverToPdf } from './addCoverToPdf';
 
 describe('updatePetitionerInformationInteractor createWorkItemForChange', () => {
   let mockUser;
@@ -38,7 +38,7 @@ describe('updatePetitionerInformationInteractor createWorkItemForChange', () => 
   };
 
   beforeAll(() => {
-    addCoverToPdf.mockResolvedValue({});
+    (addCoverToPdf as jest.Mock).mockResolvedValue({});
 
     applicationContext.getCurrentUser.mockImplementation(
       () => new User(mockUser),

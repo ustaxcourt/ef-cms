@@ -390,7 +390,7 @@ describe('getNotificationsInteractor', () => {
       ]);
 
     const result = await getNotificationsInteractor(applicationContext, {
-      userId: 'docketclerk',
+      judgeUserId: 'docketclerk',
     });
 
     expect(result).toMatchObject({
@@ -412,7 +412,7 @@ describe('getNotificationsInteractor', () => {
   });
 
   it('should fetch the qc section items without a judgeName when a judgeUserId is not provided', async () => {
-    await getNotificationsInteractor(applicationContext, {});
+    await getNotificationsInteractor(applicationContext, {} as any);
 
     expect(
       applicationContext.getPersistenceGateway().getDocumentQCInboxForSection
@@ -428,7 +428,7 @@ describe('getNotificationsInteractor', () => {
       userId: '79f21a87-810c-4440-9189-bb6bfea413fd',
     });
 
-    await getNotificationsInteractor(applicationContext, {});
+    await getNotificationsInteractor(applicationContext, {} as any);
 
     expect(
       applicationContext.getPersistenceGateway().getDocumentQCInboxForSection

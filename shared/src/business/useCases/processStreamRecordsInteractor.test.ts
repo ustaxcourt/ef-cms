@@ -6,6 +6,7 @@ jest.mock('./processStreamRecords/processRemoveEntries');
 jest.mock('./processStreamRecords/processWorkItemEntries');
 jest.mock('./processStreamRecords/processCaseEntries');
 jest.mock('./processStreamRecords/processOtherEntries');
+import { applicationContext } from '../test/createTestApplicationContext';
 import { partitionRecords } from './processStreamRecords/processStreamUtilities';
 import { processCaseEntries } from './processStreamRecords/processCaseEntries';
 import { processDocketEntries } from './processStreamRecords/processDocketEntries';
@@ -15,19 +16,18 @@ import { processPractitionerMappingEntries } from './processStreamRecords/proces
 import { processRemoveEntries } from './processStreamRecords/processRemoveEntries';
 import { processStreamRecordsInteractor } from './processStreamRecordsInteractor';
 import { processWorkItemEntries } from './processStreamRecords/processWorkItemEntries';
-import { applicationContext } from '../test/createTestApplicationContext';
 
 describe('processStreamRecordsInteractor', () => {
   beforeAll(() => {
-    processRemoveEntries.mockResolvedValue([]);
-    processCaseEntries.mockResolvedValue([]);
-    processDocketEntries.mockResolvedValue([]);
-    processWorkItemEntries.mockResolvedValue([]);
-    processMessageEntries.mockResolvedValue([]);
-    processPractitionerMappingEntries.mockResolvedValue([]);
-    processOtherEntries.mockResolvedValue([]);
+    (processRemoveEntries as jest.Mock).mockResolvedValue([]);
+    (processCaseEntries as jest.Mock).mockResolvedValue([]);
+    (processDocketEntries as jest.Mock).mockResolvedValue([]);
+    (processWorkItemEntries as jest.Mock).mockResolvedValue([]);
+    (processMessageEntries as jest.Mock).mockResolvedValue([]);
+    (processPractitionerMappingEntries as jest.Mock).mockResolvedValue([]);
+    (processOtherEntries as jest.Mock).mockResolvedValue([]);
 
-    partitionRecords.mockReturnValue({
+    (partitionRecords as jest.Mock).mockReturnValue({
       caseEntityRecords: [],
       docketEntryRecords: [],
       irsPractitionerMappingRecords: [],
@@ -47,7 +47,7 @@ describe('processStreamRecordsInteractor', () => {
   });
 
   it('should log an error, throw an exception, and halt further execution when processRemoveEntries fails', async () => {
-    processRemoveEntries.mockRejectedValueOnce(new Error());
+    (processRemoveEntries as jest.Mock).mockRejectedValueOnce(new Error());
 
     await expect(
       processStreamRecordsInteractor(applicationContext, {
@@ -66,7 +66,7 @@ describe('processStreamRecordsInteractor', () => {
   });
 
   it('should log an error, throw an exception, and halt further execution when processCaseEntries fails', async () => {
-    processCaseEntries.mockRejectedValueOnce(new Error());
+    (processCaseEntries as jest.Mock).mockRejectedValueOnce(new Error());
 
     await expect(
       processStreamRecordsInteractor(applicationContext, {
@@ -85,7 +85,7 @@ describe('processStreamRecordsInteractor', () => {
   });
 
   it('should log an error, throw an exception, and halt further execution when processDocketEntries fails', async () => {
-    processDocketEntries.mockRejectedValueOnce(new Error());
+    (processDocketEntries as jest.Mock).mockRejectedValueOnce(new Error());
 
     await expect(
       processStreamRecordsInteractor(applicationContext, {
@@ -104,7 +104,7 @@ describe('processStreamRecordsInteractor', () => {
   });
 
   it('should log an error, throw an exception, and halt further execution when processWorkItemEntries fails', async () => {
-    processWorkItemEntries.mockRejectedValueOnce(new Error());
+    (processWorkItemEntries as jest.Mock).mockRejectedValueOnce(new Error());
 
     await expect(
       processStreamRecordsInteractor(applicationContext, {
@@ -123,7 +123,7 @@ describe('processStreamRecordsInteractor', () => {
   });
 
   it('should log an error, throw an exception, and halt further execution when processMessageEntries fails', async () => {
-    processMessageEntries.mockRejectedValueOnce(new Error());
+    (processMessageEntries as jest.Mock).mockRejectedValueOnce(new Error());
 
     await expect(
       processStreamRecordsInteractor(applicationContext, {
@@ -142,7 +142,9 @@ describe('processStreamRecordsInteractor', () => {
   });
 
   it('should log an error, throw an exception, and halt further execution when processPractitionerMappingEntries fails', async () => {
-    processPractitionerMappingEntries.mockRejectedValueOnce(new Error());
+    (processPractitionerMappingEntries as jest.Mock).mockRejectedValueOnce(
+      new Error(),
+    );
 
     await expect(
       processStreamRecordsInteractor(applicationContext, {
@@ -161,7 +163,7 @@ describe('processStreamRecordsInteractor', () => {
   });
 
   it('should log an error, throw an exception, and halt further execution when processOtherEntries fails', async () => {
-    processOtherEntries.mockRejectedValueOnce(new Error());
+    (processOtherEntries as jest.Mock).mockRejectedValueOnce(new Error());
 
     await expect(
       processStreamRecordsInteractor(applicationContext, {

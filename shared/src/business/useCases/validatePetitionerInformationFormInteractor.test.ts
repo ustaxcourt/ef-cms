@@ -9,7 +9,7 @@ describe('validatePetition', () => {
       {
         contactPrimary: {},
         partyType: PARTY_TYPES.petitioner,
-      },
+      } as any,
     );
 
     expect(Object.keys(errors)).toEqual(['contactPrimary', 'contactSecondary']);
@@ -33,7 +33,7 @@ describe('validatePetition', () => {
           title: 'Executor',
         },
         partyType: PARTY_TYPES.petitioner,
-      },
+      } as any,
     );
 
     expect(errors.contactPrimary).toBeNull();
@@ -66,7 +66,7 @@ describe('validatePetition', () => {
           title: 'Executor',
         },
         partyType: PARTY_TYPES.petitionerSpouse,
-      },
+      } as any,
     );
 
     expect(errors.contactPrimary).toBeNull();

@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createPetitionerAccountInteractor } from './createPetitionerAccountInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('createPetitionerAccountInteractor', () => {
   it('should attempt to persist the petitioner', async () => {
@@ -36,7 +36,7 @@ describe('createPetitionerAccountInteractor', () => {
       await createPetitionerAccountInteractor(applicationContext, {
         name: 'Cody',
         userId: '2fa6da8d-4328-4a20-a5d7-b76637e1dc02',
-      });
+      } as any);
     } catch (err) {
       error = err;
     }

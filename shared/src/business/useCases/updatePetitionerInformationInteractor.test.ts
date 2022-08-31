@@ -1,5 +1,4 @@
 /* eslint-disable max-lines */
-import { addExistingUserToCase } from '../useCaseHelper/caseAssociation/addExistingUserToCase';
 import {
   CASE_STATUS_TYPES,
   CONTACT_TYPES,
@@ -7,21 +6,22 @@ import {
   INITIAL_DOCUMENT_TYPES,
   SERVICE_INDICATOR_TYPES,
 } from '../entities/EntityConstants';
+import { Case, getOtherFilers } from '../entities/cases/Case';
 import {
   MOCK_CASE,
   MOCK_CASE_WITH_SECONDARY_OTHERS,
 } from '../../test/mockCase';
-import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
-import { Case, getOtherFilers } from '../entities/cases/Case';
-import { docketClerkUser } from '../../test/mockUsers';
 import { PARTY_TYPES, ROLES } from '../entities/EntityConstants';
 import { User } from '../entities/User';
 import { UserCase } from '../entities/UserCase';
-jest.mock('./addCoversheetInteractor');
-import { addCoverToPdf } from './addCoversheetInteractor';
-import { calculateISODate } from '../utilities/DateHandler';
+import { addExistingUserToCase } from '../useCaseHelper/caseAssociation/addExistingUserToCase';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { docketClerkUser } from '../../test/mockUsers';
+import { updatePetitionerInformationInteractor } from './updatePetitionerInformationInteractor';
+jest.mock('./addCoverToPdf');
 import { DocketEntry } from '../entities/DocketEntry';
+import { addCoverToPdf } from './addCoverToPdf';
+import { calculateISODate } from '../utilities/DateHandler';
 
 describe('updatePetitionerInformationInteractor', () => {
   let mockUser;
@@ -43,7 +43,7 @@ describe('updatePetitionerInformationInteractor', () => {
   ];
 
   beforeAll(() => {
-    addCoverToPdf.mockResolvedValue({});
+    (addCoverToPdf as jest.Mock).mockResolvedValue({});
 
     applicationContext.getCurrentUser.mockImplementation(
       () => new User(mockUser),
