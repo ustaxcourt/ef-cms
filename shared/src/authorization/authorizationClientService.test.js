@@ -141,7 +141,7 @@ describe('Authorization client service', () => {
     it('should be authorized to perform track items operations', () => {
       expect(
         isAuthorized(
-          { role: ROLES.petitionsClerk, userId: 'docketclerk' },
+          { role: ROLES.docketClerk, userId: 'docketclerk' },
           ROLE_PERMISSIONS.TRACKED_ITEMS,
         ),
       ).toBeTruthy();
