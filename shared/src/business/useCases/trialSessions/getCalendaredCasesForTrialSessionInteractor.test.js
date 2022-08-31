@@ -56,7 +56,7 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
     ).resolves.not.toThrow();
   });
 
-  it('should only return PMT docket entry on cases', async () => {
+  it('should only return unstricken PMT docket entry on cases', async () => {
     user = new User({
       name: 'Docket Clerk',
       role: ROLES.docketClerk,
@@ -91,5 +91,6 @@ describe('getCalendaredCasesForTrialSessionInteractor', () => {
 
     expect(cases[0].docketEntries.length).toEqual(1);
     expect(cases[0].docketEntries[0].eventCode).toEqual('PMT');
+    expect(cases[0].docketEntries[0].isStricken).toEqual(false);
   });
 });
