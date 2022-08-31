@@ -4,12 +4,12 @@ import {
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
+import { MOCK_CASE } from '../../../test/mockCase.js';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   deleteCounselFromCaseInteractor,
   setupServiceIndicatorForUnrepresentedPetitioners,
 } from './deleteCounselFromCaseInteractor';
-import { MOCK_CASE } from '../../../test/mockCase.js';
 
 describe('deleteCounselFromCaseInteractor', () => {
   const mockPrivatePractitioners = [
