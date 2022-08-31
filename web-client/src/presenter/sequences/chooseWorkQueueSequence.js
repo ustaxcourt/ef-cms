@@ -15,8 +15,9 @@ import { showProgressSequenceDecorator } from '../utilities/showProgressSequence
 
 export const chooseWorkQueueSequence = showProgressSequenceDecorator([
   clearWorkQueueAction,
+  getJudgeForCurrentUserAction,
+  setJudgeUserAction,
   parallel([
-    [getJudgeForCurrentUserAction, setJudgeUserAction],
     [getNotificationsAction, setNotificationsAction, setWorkItemsCountAction],
     [
       chooseWorkQueueAction,
