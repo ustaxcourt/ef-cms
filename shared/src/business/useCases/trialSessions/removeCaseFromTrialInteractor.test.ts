@@ -61,7 +61,7 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
-      caseStatus: 'New',
+      caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
@@ -124,7 +124,7 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
-      caseStatus: 'new',
+      caseStatus: CASE_STATUS_TYPES.generalDocketReadyForTrial,
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
@@ -187,7 +187,7 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
-      caseStatus: 'new',
+      caseStatus: 'New',
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
@@ -215,13 +215,12 @@ describe('remove case from trial session', () => {
         preferredTrialCity: null,
         trialDate: '2018-03-01T00:00:00.000Z',
         trialLocation: 'Boise, Idaho',
-
         trialSessionId: '959c4338-0fac-42eb-b0eb-d53b8d0195cc',
       });
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
-      caseStatus: 'new',
+      caseStatus: 'New',
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
@@ -248,7 +247,7 @@ describe('remove case from trial session', () => {
 
     await removeCaseFromTrialInteractor(applicationContext, {
       associatedJudge: '123',
-      caseStatus: 'new',
+      caseStatus: 'New',
       disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
