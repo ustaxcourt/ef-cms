@@ -15,9 +15,8 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {boolean} providers.stampData the stamp data from the form to be applied to the stamp order pdf
  * @param {string} providers.stampedDocketEntryId the docket entry id of the new stamped order docket entry
  */
-export const generateDraftStampOrderInteractor: {
-  (
-    applicationContext: IApplicationContext,
+export const generateDraftStampOrderInteractor = async (
+  applicationContext: IApplicationContext,
     {
       docketNumber,
       formattedDraftDocumentTitle,
@@ -34,16 +33,6 @@ export const generateDraftStampOrderInteractor: {
       stampedDocketEntryId: string;
     },
   ): Promise<void>;
-} = async (
-  applicationContext,
-  {
-    docketNumber,
-    formattedDraftDocumentTitle,
-    motionDocketEntryId,
-    parentMessageId,
-    stampData,
-    stampedDocketEntryId,
-  },
 ) => {
   const user = applicationContext.getCurrentUser();
 

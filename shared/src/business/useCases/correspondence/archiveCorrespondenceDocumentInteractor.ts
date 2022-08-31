@@ -14,15 +14,13 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {void}
  */
-export const archiveCorrespondenceDocumentInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      correspondenceId,
-      docketNumber,
-    }: { correspondenceId: string; docketNumber: string },
-  ): Promise<void>;
-} = async (applicationContext, { correspondenceId, docketNumber }) => {
+export const archiveCorrespondenceDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    correspondenceId,
+    docketNumber,
+  }: { correspondenceId: string; docketNumber: string },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {

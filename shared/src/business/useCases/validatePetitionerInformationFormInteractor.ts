@@ -11,20 +11,18 @@ import { isEmpty } from 'lodash';
  * @param {object} providers.partyType the partyType to validate
  * @returns {object} errors (null if no errors)
  */
-export const validatePetitionerInformationFormInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      contactPrimary,
-      contactSecondary,
-      partyType,
-    }: {
-      contactPrimary: TContact;
-      contactSecondary: TContact;
-      partyType: string;
-    },
-  );
-} = (applicationContext, { contactPrimary, contactSecondary, partyType }) => {
+export const validatePetitionerInformationFormInteractor = (
+  applicationContext: IApplicationContext,
+  {
+    contactPrimary,
+    contactSecondary,
+    partyType,
+  }: {
+    contactPrimary: TContact;
+    contactSecondary: TContact;
+    partyType: string;
+  },
+) => {
   const contacts = ContactFactory.createContacts({
     applicationContext,
     contactInfo: { primary: contactPrimary, secondary: contactSecondary },

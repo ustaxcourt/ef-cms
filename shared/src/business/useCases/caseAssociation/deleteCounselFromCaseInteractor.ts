@@ -16,12 +16,10 @@ import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForS
  * @param {string} providers.userId the id of the user to be removed from the case
  * @returns {Promise} the promise of the update case call
  */
-export const deleteCounselFromCaseInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    options: { docketNumber: string; userId: string },
-  ): Promise<TCase>;
-} = async (applicationContext, { docketNumber, userId }) => {
+export const deleteCounselFromCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  options: { docketNumber: string; userId: string },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.ASSOCIATE_USER_WITH_CASE)) {
@@ -72,9 +70,9 @@ export const deleteCounselFromCaseInteractor: {
   return new Case(updatedCase, { applicationContext }).validate().toRawObject();
 };
 
-export const setupServiceIndicatorForUnrepresentedPetitioners: {
-  (caseEntity: TCase): TCase;
-} = caseEntity => {
+export const setupServiceIndicatorForUnrepresentedPetitioners = (
+  caseEntity: TCase,
+) => {
   caseEntity.petitioners.forEach(petitioner => {
     if (
       !caseEntity.isUserIdRepresentedByPrivatePractitioner(petitioner.contactId)

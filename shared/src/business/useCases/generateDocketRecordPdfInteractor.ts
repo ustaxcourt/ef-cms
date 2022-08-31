@@ -18,22 +18,17 @@ import { getCaseCaptionMeta } from '../utilities/getCaseCaptionMeta';
  * @param {string} providers.docketNumber the docket number for the docket record to be generated
  * @returns {Uint8Array} docket record pdf
  */
-export const generateDocketRecordPdfInteractor: {
-  (
-    applicationContext,
-    {
-      docketNumber,
-      docketRecordSort,
-      includePartyDetail,
-    }: {
-      docketNumber: string;
-      docketRecordSort?: string;
-      includePartyDetail: boolean;
-    },
-  ): Promise<void>;
-} = async (
+export const generateDocketRecordPdfInteractor = async (
   applicationContext,
-  { docketNumber, docketRecordSort, includePartyDetail = false },
+  {
+    docketNumber,
+    docketRecordSort,
+    includePartyDetail,
+  }: {
+    docketNumber: string;
+    docketRecordSort?: string;
+    includePartyDetail: boolean;
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
   const isAssociated = await applicationContext

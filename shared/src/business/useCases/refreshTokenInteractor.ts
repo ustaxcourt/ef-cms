@@ -8,18 +8,14 @@ import qs from 'qs';
  * @param {string} providers.refreshToken the refresh token
  * @returns {object} the token
  */
-export const refreshTokenInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      refreshToken,
-    }: {
-      refreshToken: string;
-    },
-  ): Promise<{
-    token: string;
-  }>;
-} = async (applicationContext, { refreshToken }) => {
+export const refreshTokenInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    refreshToken,
+  }: {
+    refreshToken: string;
+  },
+) => {
   const data = qs.stringify({
     client_id: applicationContext.getCognitoClientId(),
     grant_type: 'refresh_token',
