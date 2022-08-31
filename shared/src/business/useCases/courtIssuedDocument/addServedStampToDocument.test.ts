@@ -1,8 +1,8 @@
 import {
+  PADDING,
   addServedStampToDocument,
   computeCoordinates,
-  PADDING,
-} from './addServedStampToDocument.js';
+} from './addServedStampToDocument';
 import {
   applicationContext,
   testPdfDoc,

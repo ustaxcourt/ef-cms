@@ -1,9 +1,12 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
-import { CASE_STATUS_TYPES, CHIEF_JUDGE } from '../../entities/EntityConstants';
-import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
+import {
+  CASE_STATUS_TYPES,
+  CHIEF_JUDGE,
+  ROLES,
+} from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { MOCK_TRIAL_INPERSON } from '../../../test/mockTrial';
-import { ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { removeCaseFromTrialInteractor } from './removeCaseFromTrialInteractor';
 
 describe('remove case from trial session', () => {
   let user;
@@ -44,9 +47,9 @@ describe('remove case from trial session', () => {
 
     await expect(
       removeCaseFromTrialInteractor(applicationContext, {
-        disposition: 'because',
         associatedJudge: '123',
         caseStatus: 'new',
+        disposition: 'because',
         docketNumber: MOCK_CASE.docketNumber,
         trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
       }),
@@ -57,9 +60,9 @@ describe('remove case from trial session', () => {
     mockTrialSession = { ...MOCK_TRIAL_INPERSON, isCalendared: true };
 
     await removeCaseFromTrialInteractor(applicationContext, {
-      disposition: 'because',
       associatedJudge: '123',
-      caseStatus: 'new',
+      caseStatus: 'New',
+      disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
@@ -120,9 +123,9 @@ describe('remove case from trial session', () => {
     mockTrialSession = { ...MOCK_TRIAL_INPERSON, isCalendared: false };
 
     await removeCaseFromTrialInteractor(applicationContext, {
-      disposition: 'because',
       associatedJudge: '123',
       caseStatus: 'new',
+      disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
@@ -183,9 +186,9 @@ describe('remove case from trial session', () => {
     mockTrialSession = { ...MOCK_TRIAL_INPERSON, isCalendared: true };
 
     await removeCaseFromTrialInteractor(applicationContext, {
-      disposition: 'because',
       associatedJudge: '123',
       caseStatus: 'new',
+      disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
@@ -217,9 +220,9 @@ describe('remove case from trial session', () => {
       });
 
     await removeCaseFromTrialInteractor(applicationContext, {
-      disposition: 'because',
       associatedJudge: '123',
       caseStatus: 'new',
+      disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
@@ -244,9 +247,9 @@ describe('remove case from trial session', () => {
       });
 
     await removeCaseFromTrialInteractor(applicationContext, {
-      disposition: 'because',
       associatedJudge: '123',
       caseStatus: 'new',
+      disposition: 'because',
       docketNumber: MOCK_CASE.docketNumber,
       trialSessionId: MOCK_TRIAL_INPERSON.trialSessionId,
     });
