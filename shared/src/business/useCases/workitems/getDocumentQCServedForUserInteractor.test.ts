@@ -72,7 +72,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
 
     await expect(
       getDocumentQCServedForUserInteractor(applicationContext, {
-        section: DOCKET_SECTION,
+        userId: '123',
       }),
     ).rejects.toThrow(UnauthorizedError);
   });
@@ -81,7 +81,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
     const result = await getDocumentQCServedForUserInteractor(
       applicationContext,
       {
-        section: DOCKET_SECTION,
+        userId: '123',
       },
     );
     expect(result).toMatchObject([
@@ -113,7 +113,7 @@ describe('getDocumentQCServedForUserInteractor', () => {
     const result = await getDocumentQCServedForUserInteractor(
       applicationContext,
       {
-        section: DOCKET_SECTION,
+        userId: 'abc',
       },
     );
     expect(result).toMatchObject([

@@ -1,14 +1,14 @@
+import { OutboxItem } from '../../entities/OutboxItem';
+import { ROLES } from '../../entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 import {
   calculateISODate,
   createISODateAtStartOfDayEST,
 } from '../../../business/utilities/DateHandler';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
-import { OutboxItem } from '../../entities/OutboxItem';
-import { ROLES } from '../../entities/EntityConstants';
-import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  *
@@ -17,14 +17,10 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.section the section to get the document qc served box
  * @returns {object} the work items in the section document served inbox
  */
-export const getDocumentQCServedForSectionInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    options: {
-      section: any;
-    },
-  ): Promise<WorkItem>;
-} = async (applicationContext, { section }) => {
+export const getDocumentQCServedForSectionInteractor = async (
+  applicationContext: IApplicationContext,
+  { section }: { section: string },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.WORKITEM)) {

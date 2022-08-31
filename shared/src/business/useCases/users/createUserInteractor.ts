@@ -1,12 +1,12 @@
-import { createPractitionerUser } from '../../utilities/createPractitionerUser';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Practitioner } from '../../entities/Practitioner';
 import { ROLES } from '../../entities/EntityConstants';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { User } from '../../entities/User';
+import { createPractitionerUser } from '../../utilities/createPractitionerUser';
 
 /**
  * createUserInteractor

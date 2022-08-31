@@ -1,13 +1,13 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   CASE_STATUS_TYPES,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_SECTION,
   ROLES,
 } from '../../entities/EntityConstants';
-import { setWorkItemAsReadInteractor } from './setWorkItemAsReadInteractor';
 import { MOCK_CASE } from '../../../test/mockCase';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { setWorkItemAsReadInteractor } from './setWorkItemAsReadInteractor';
 
 describe('setWorkItemAsReadInteractor', () => {
   let user;

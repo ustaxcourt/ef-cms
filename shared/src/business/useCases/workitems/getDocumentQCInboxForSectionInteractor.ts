@@ -16,15 +16,16 @@ import { WorkItem } from '../../entities/WorkItem';
  * @param {string} providers.section the section to get the document qc
  * @returns {object} the work items in the section document inbox
  */
-export const getDocumentQCInboxForSectionInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    options: {
-      judgeUserName: string;
-      section: string;
-    },
-  ): Promise<WorkItem>;
-} = async (applicationContext, { judgeUserName, section }) => {
+export const getDocumentQCInboxForSectionInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    judgeUserName,
+    section,
+  }: {
+    judgeUserName?: string;
+    section: string;
+  },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {
