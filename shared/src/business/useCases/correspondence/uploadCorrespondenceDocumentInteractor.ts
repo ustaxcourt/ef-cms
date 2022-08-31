@@ -4,15 +4,13 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
-export const uploadCorrespondenceDocumentInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      documentFile,
-      keyToOverwrite,
-    }: { documentFile: string; keyToOverwrite: string },
-  ): Promise<string>;
-} = async (applicationContext, { documentFile, keyToOverwrite }) => {
+export const uploadCorrespondenceDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    documentFile,
+    keyToOverwrite,
+  }: { documentFile: string; keyToOverwrite: string },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {

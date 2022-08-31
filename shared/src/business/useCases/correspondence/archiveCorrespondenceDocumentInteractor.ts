@@ -14,15 +14,13 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {void}
  */
-export const archiveCorrespondenceDocumentInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      correspondenceId,
-      docketNumber,
-    }: { correspondenceId: string; docketNumber: string },
-  ): Promise<void>;
-} = async (applicationContext, { correspondenceId, docketNumber }) => {
+export const archiveCorrespondenceDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    correspondenceId,
+    docketNumber,
+  }: { correspondenceId: string; docketNumber: string },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.CASE_CORRESPONDENCE)) {
@@ -39,17 +37,15 @@ export const archiveCorrespondenceDocumentInteractor: {
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
-  const correspondenceToArchive = caseEntity.correspondence.find(
+  const correspondenceToArchiveEntity = caseEntity.correspondence.find(
     c => c.correspondenceId === correspondenceId,
   );
 
-  caseEntity.archiveCorrespondence(correspondenceToArchive, {
-    applicationContext,
-  });
+  caseEntity.archiveCorrespondence(correspondenceToArchiveEntity);
 
   await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
     applicationContext,
-    correspondence: correspondenceToArchive,
+    correspondence: correspondenceToArchiveEntity.validate().toRawObject(),
     docketNumber,
   });
 

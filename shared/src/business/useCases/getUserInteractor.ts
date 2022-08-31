@@ -1,5 +1,4 @@
 import {
-  // <<<<<<< HEAD
   IrsPractitioner,
   entityName as irsPractitionerEntityName,
 } from '../entities/IrsPractitioner';
@@ -12,20 +11,6 @@ import {
   PrivatePractitioner,
   entityName as privatePractitionerEntityName,
 } from '../entities/PrivatePractitioner';
-// =======
-//   entityName as irsPractitionerEntityName,
-//   IrsPractitioner,
-// } from '../entities/IrsPractitioner';
-// import {
-//   entityName as practitionerEntityName,
-//   Practitioner,
-// } from '../entities/Practitioner';
-// import {
-//   entityName as privatePractitionerEntityName,
-//   PrivatePractitioner,
-// } from '../entities/PrivatePractitioner';
-// import { NotFoundError } from '../../errors/errors';
-// >>>>>>> 9c85711760d2913d6ef83ad7dfa9d23edd18a71a
 import { User } from '../entities/User';
 
 /**

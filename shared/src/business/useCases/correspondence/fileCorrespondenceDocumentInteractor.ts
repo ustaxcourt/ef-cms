@@ -15,15 +15,13 @@ import {
  * @param {string} providers.primaryDocumentFileId the id of the primary document
  * @returns {Promise<*>} the raw case object
  */
-export const fileCorrespondenceDocumentInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      documentMetadata,
-      primaryDocumentFileId,
-    }: { documentMetadata: TDocumentMetaData; primaryDocumentFileId: string },
-  ): Promise<TCase>;
-} = async (applicationContext, { documentMetadata, primaryDocumentFileId }) => {
+export const fileCorrespondenceDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    documentMetadata,
+    primaryDocumentFileId,
+  }: { documentMetadata: TDocumentMetaData; primaryDocumentFileId: string },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 

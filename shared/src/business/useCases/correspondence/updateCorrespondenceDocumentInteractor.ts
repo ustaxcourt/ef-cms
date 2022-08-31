@@ -14,12 +14,10 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {object} providers.documentMetadata the document metadata
  * @returns {Promise<*>} the updated case entity after the correspondence document is updated
  */
-export const updateCorrespondenceDocumentInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    { documentMetadata }: { documentMetadata: TDocumentMetaData },
-  ): Promise<TCase>;
-} = async (applicationContext, { documentMetadata }) => {
+export const updateCorrespondenceDocumentInteractor = async (
+  applicationContext: IApplicationContext,
+  { documentMetadata }: { documentMetadata: TDocumentMetaData },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   const { docketNumber } = documentMetadata;
 

@@ -1,4 +1,4 @@
-import { camelCase, pickBy } from 'lodash';
+import { camelCase, partition, pickBy } from 'lodash';
 import { state } from 'cerebral';
 
 const compareCasesByPractitioner = (a, b) => {
@@ -46,14 +46,6 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     )
     .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
 
-  if (sort === 'practitioner') {
-    formattedCases.sort(compareCasesByPractitioner);
-  }
-
-  if (sortOrder === 'desc') {
-    formattedCases.reverse();
-  }
-
   Object.keys(userNotes || {}).forEach(docketNumber => {
     const caseToUpdate = formattedCases.find(
       aCase => aCase.docketNumber === docketNumber,
@@ -74,6 +66,40 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     }
   });
 
+  const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
+    formattedCases,
+    calendaredCase => {
+      return (
+        !calendaredCase.leadDocketNumber ||
+        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
+      );
+    },
+  );
+
+  leadAndUnconsolidatedCases.forEach(caseToUpdate => {
+    if (caseToUpdate.leadCase) {
+      caseToUpdate.consolidatedCases = [];
+
+      const memberCases = memberConsolidatedCases.filter(memberCase => {
+        return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;
+      });
+
+      caseToUpdate.consolidatedCases.push(...memberCases);
+
+      caseToUpdate.consolidatedCases.sort(
+        applicationContext.getUtilities().compareCasesByDocketNumber,
+      );
+    }
+  });
+
+  if (sort === 'practitioner') {
+    leadAndUnconsolidatedCases.sort(compareCasesByPractitioner);
+  }
+
+  if (sortOrder === 'desc') {
+    leadAndUnconsolidatedCases.reverse();
+  }
+
   const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
     key: camelCase(value),
     value,
@@ -81,7 +107,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
 
   return {
     casesShownCount: formattedCases.length,
-    formattedCases,
+    formattedCases: leadAndUnconsolidatedCases,
     trialStatusOptions,
   };
 };

@@ -12,15 +12,13 @@ import { isEmpty } from 'lodash';
  * @returns {object} errors (null if no errors)
  */
 
-export const validatePetitionerInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      contactInfo,
-      existingPetitioners,
-    }: { contactInfo: TContact; existingPetitioners: TPetitioner[] },
-  ): TError | undefined;
-} = (applicationContext, { contactInfo, existingPetitioners }) => {
+export const validatePetitionerInteractor = (
+  applicationContext: IApplicationContext,
+  {
+    contactInfo,
+    existingPetitioners,
+  }: { contactInfo: TContact; existingPetitioners: TPetitioner[] },
+) => {
   const contactErrors = new Petitioner(contactInfo, {
     applicationContext,
   }).getFormattedValidationErrors();

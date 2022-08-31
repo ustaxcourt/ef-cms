@@ -9,12 +9,6 @@ import { Case } from '../../entities/cases/Case';
 import { DocketEntry } from '../../entities/DocketEntry';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 
-const removeAppendedClinicLetter = pdfDocumentData => {
-  const totalPages = pdfDocumentData.getPageCount();
-  const lastPageIndex = totalPages - 1;
-  pdfDocumentData.removePage(lastPageIndex);
-};
-
 /**
  * serves a notice of trial session and standing pretrial document on electronic
  * recipients and generates paper notices for those that get paper service
@@ -36,11 +30,12 @@ const serveNoticesForCase = async ({
   caseEntity,
   newPdfDoc,
   noticeDocketEntryEntity,
-  noticeDocumentPdfData,
+  noticeOfTrialIssued,
+  noticeOfTrialIssuedWithClinicLetter,
   PDFDocument,
   servedParties,
   standingPretrialDocketEntryEntity,
-  standingPretrialPdfData,
+  standingPretrialFile,
 }) => {
   await applicationContext.getUseCaseHelpers().sendServedPartiesEmails({
     applicationContext,
@@ -56,24 +51,24 @@ const serveNoticesForCase = async ({
     servedParties,
   });
 
-  const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
-  const standingPretrialPdf = await PDFDocument.load(standingPretrialPdfData);
+  const standingPretrialPdf = await PDFDocument.load(standingPretrialFile);
   const combinedDocumentsPdf = await PDFDocument.create();
 
   if (servedParties.paper.length > 0) {
     for (let party of servedParties.paper) {
-      let noticeDocumentPdfCopy = await noticeDocumentPdf.copy();
-
       // practitioners do not have a contactId
+      let noticeDocumentPdf;
       const userId = party.userId || party.contactId;
       if (
-        (caseEntity.isPractitioner(userId) ||
-          caseEntity.isUserIdRepresentedByPrivatePractitioner(
-            party.contactId,
-          )) &&
+        !caseEntity.isPractitioner(userId) &&
+        !caseEntity.isUserIdRepresentedByPrivatePractitioner(party.contactId) &&
         appendClinicLetter
       ) {
-        removeAppendedClinicLetter(noticeDocumentPdfCopy);
+        noticeDocumentPdf = await PDFDocument.load(
+          noticeOfTrialIssuedWithClinicLetter,
+        );
+      } else {
+        noticeDocumentPdf = await PDFDocument.load(noticeOfTrialIssued);
       }
 
       const addressPage = await applicationContext
@@ -94,7 +89,7 @@ const serveNoticesForCase = async ({
       });
 
       await copyPagesAndAppendToTargetPdf({
-        copyFrom: noticeDocumentPdfCopy,
+        copyFrom: noticeDocumentPdf,
         copyInto: combinedDocumentsPdf,
       });
 
@@ -131,13 +126,10 @@ const setNoticeForCase = async ({
   trialSessionEntity,
   userId,
 }) => {
-  const { PDFDocument } = await applicationContext.getPdfLib();
-  const newPdfDoc = await PDFDocument.create();
-
   const caseEntity = new Case(caseRecord, { applicationContext });
   const { procedureType } = caseRecord;
 
-  let noticeOfTrialIssuedFile = await applicationContext
+  let noticeOfTrialIssued = await applicationContext
     .getUseCases()
     .generateNoticeOfTrialIssuedInteractor(applicationContext, {
       docketNumber: caseEntity.docketNumber,
@@ -155,8 +147,11 @@ const setNoticeForCase = async ({
       trialSession,
     });
 
+  let clinicLetter;
+  let noticeOfTrialIssuedWithClinicLetter;
+  const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
   if (appendClinicLetter) {
-    const clinicLetter = await applicationContext
+    clinicLetter = await applicationContext
       .getPersistenceGateway()
       .getDocument({
         applicationContext,
@@ -164,22 +159,26 @@ const setNoticeForCase = async ({
         protocol: 'S3',
         useTempBucket: false,
       });
-    noticeOfTrialIssuedFile = await applicationContext
+    noticeOfTrialIssuedWithClinicLetter = await applicationContext
       .getUtilities()
       .combineTwoPdfs({
         applicationContext,
-        firstPdf: noticeOfTrialIssuedFile,
+        firstPdf: noticeOfTrialIssued,
         secondPdf: clinicLetter,
       });
+
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: noticeOfTrialIssuedWithClinicLetter,
+      key: newNoticeOfTrialIssuedDocketEntryId,
+    });
+  } else {
+    await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
+      applicationContext,
+      document: noticeOfTrialIssued,
+      key: newNoticeOfTrialIssuedDocketEntryId,
+    });
   }
-
-  const newNoticeOfTrialIssuedDocketEntryId = applicationContext.getUniqueId();
-
-  await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
-    applicationContext,
-    document: noticeOfTrialIssuedFile,
-    key: newNoticeOfTrialIssuedDocketEntryId,
-  });
 
   const trialSessionStartDate = applicationContext
     .getUtilities()
@@ -288,6 +287,9 @@ const setNoticeForCase = async ({
   caseEntity.updateDocketEntry(noticeOfTrialDocketEntry); // to generate an index
   caseEntity.updateDocketEntry(standingPretrialDocketEntry); // to generate an index
 
+  const { PDFDocument } = await applicationContext.getPdfLib();
+  const newPdfDoc = await PDFDocument.create();
+
   await serveNoticesForCase({
     PDFDocument,
     appendClinicLetter,
@@ -295,10 +297,11 @@ const setNoticeForCase = async ({
     caseEntity,
     newPdfDoc,
     noticeDocketEntryEntity: noticeOfTrialDocketEntry,
-    noticeDocumentPdfData: noticeOfTrialIssuedFile,
+    noticeOfTrialIssued,
+    noticeOfTrialIssuedWithClinicLetter,
     servedParties,
     standingPretrialDocketEntryEntity: standingPretrialDocketEntry,
-    standingPretrialPdfData: standingPretrialFile,
+    standingPretrialFile,
   });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({

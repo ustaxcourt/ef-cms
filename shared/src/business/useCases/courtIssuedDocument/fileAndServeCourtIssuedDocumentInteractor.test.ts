@@ -146,7 +146,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
@@ -280,6 +280,40 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox,
     ).toHaveBeenCalled();
+  });
+
+  it('should set the leadDocketNumber for work items', async () => {
+    const leadDocketNumber = MOCK_CASE.docketNumber;
+    const caseRecordWithLeadDocketNumber = {
+      ...MOCK_CASE,
+      docketEntries: [mockDocketEntryWithWorkItem],
+      leadDocketNumber,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(caseRecordWithLeadDocketNumber)
+      .mockReturnValueOnce(caseRecordWithLeadDocketNumber);
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId:
+        caseRecordWithLeadDocketNumber.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecordWithLeadDocketNumber.docketNumber],
+      form: caseRecordWithLeadDocketNumber.docketEntries[0],
+      subjectCaseDocketNumber: caseRecordWithLeadDocketNumber.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+        .calls[0][0].workItem,
+    ).toMatchObject({
+      leadDocketNumber,
+    });
   });
 
   it('should delete the case from the trial session if the case has a trialSessionId and is not calendared and the order document has an event code that should close the case', async () => {
@@ -495,16 +529,22 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error if there is no one on the case with electronic or paper service', async () => {
+    const petitioners = [
+      {
+        ...caseRecord.petitioners[0],
+        serviceIndicator: 'None',
+      },
+    ];
+
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
+      .getCaseByDocketNumber.mockReturnValueOnce({
         ...caseRecord,
-        petitioners: [
-          {
-            ...caseRecord.petitioners[0],
-            serviceIndicator: 'None',
-          },
-        ],
+        petitioners,
+      })
+      .mockReturnValueOnce({
+        ...caseRecord,
+        petitioners,
       });
 
     await expect(

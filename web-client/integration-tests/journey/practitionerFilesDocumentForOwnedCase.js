@@ -4,16 +4,17 @@ import { contactPrimaryFromState } from '../helpers';
 export const practitionerFilesDocumentForOwnedCase = (
   cerebralTest,
   fakeFile,
+  caseDocketNumber,
 ) => {
   const { OBJECTIONS_OPTIONS_MAP } = applicationContext.getConstants();
 
   return it('Practitioner files document for owned case', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
+      docketNumber: caseDocketNumber || cerebralTest.docketNumber,
     });
 
     await cerebralTest.runSequence('gotoFileDocumentSequence', {
-      docketNumber: cerebralTest.docketNumber,
+      docketNumber: caseDocketNumber || cerebralTest.docketNumber,
     });
 
     const documentToSelect = {

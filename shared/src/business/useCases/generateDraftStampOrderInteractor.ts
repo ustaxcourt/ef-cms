@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../errors/errors';
 
@@ -15,27 +15,8 @@ import { UnauthorizedError } from '../../errors/errors';
  * @param {boolean} providers.stampData the stamp data from the form to be applied to the stamp order pdf
  * @param {string} providers.stampedDocketEntryId the docket entry id of the new stamped order docket entry
  */
-export const generateDraftStampOrderInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    {
-      docketNumber,
-      formattedDraftDocumentTitle,
-      motionDocketEntryId,
-      parentMessageId,
-      stampData,
-      stampedDocketEntryId,
-    }: {
-      docketNumber: string;
-      formattedDraftDocumentTitle: string;
-      motionDocketEntryId: string;
-      parentMessageId: string;
-      stampData: any;
-      stampedDocketEntryId: string;
-    },
-  ): Promise<void>;
-} = async (
-  applicationContext,
+export const generateDraftStampOrderInteractor = async (
+  applicationContext: IApplicationContext,
   {
     docketNumber,
     formattedDraftDocumentTitle,
@@ -43,6 +24,13 @@ export const generateDraftStampOrderInteractor: {
     parentMessageId,
     stampData,
     stampedDocketEntryId,
+  }: {
+    docketNumber: string;
+    formattedDraftDocumentTitle: string;
+    motionDocketEntryId: string;
+    parentMessageId: string;
+    stampData: any;
+    stampedDocketEntryId: string;
   },
 ) => {
   const user = applicationContext.getCurrentUser();

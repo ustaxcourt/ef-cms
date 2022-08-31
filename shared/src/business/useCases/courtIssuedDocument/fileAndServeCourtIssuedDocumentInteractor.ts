@@ -279,6 +279,7 @@ const fileDocumentOnOneCase = async ({
   );
 
   docketEntryEntity.setAsServed(servedParties.all).validate();
+  docketEntryEntity.setAsProcessingStatusAsCompleted();
 
   const isSubjectCase =
     originalSubjectDocketEntry.docketNumber === caseEntity.docketNumber;
@@ -306,6 +307,8 @@ const fileDocumentOnOneCase = async ({
       { applicationContext },
     );
   }
+
+  docketEntryEntity.workItem.leadDocketNumber = caseEntity.leadDocketNumber;
 
   docketEntryEntity.workItem.assignToUser({
     assigneeId: user.userId,

@@ -82,12 +82,10 @@ export const getReconciliationReportInteractor = async (
  * @param {object} applicationContext the application context
  * @param {string} docketEntries the docketEntries to assign case captions
  */
-const assignCaseCaptionFromPersistence: {
-  (
-    applicationContext: IApplicationContext,
-    docketEntries: DocketEntry[],
-  ): Promise<void>;
-} = async (applicationContext, docketEntries) => {
+const assignCaseCaptionFromPersistence = async (
+  applicationContext: IApplicationContext,
+  docketEntries: DocketEntry[],
+) => {
   const docketNumbers = docketEntries.map(e => {
     const docketNumber = e.docketNumber || e.pk.substr(e.pk.indexOf('|') + 1);
     e.docketNumber = docketNumber;
