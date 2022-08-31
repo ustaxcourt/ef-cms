@@ -10,6 +10,7 @@ import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServes
 import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
 import { docketClerkUnconsolidatesLeadCase } from './journey/docketClerkUnconsolidatesLeadCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
+import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import {
   fakeFile,
   loginAs,
@@ -20,10 +21,20 @@ import {
 import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
 import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
 import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
+import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../src/withAppContext';
 
-const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
+const cerebralTest = setupTest();
+const trialLocation = `Boise, Idaho, ${Date.now()}`;
+cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
+
+const overrides = {
+  preferredTrialCity: trialLocation,
+  trialLocation,
+};
+
 //DRY up this code
-export const docketClerkCompletesQcOnLeadCase = cerebralTest => {
+describe('Complete QC on lead case docket entry', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
   });
@@ -56,9 +67,67 @@ export const docketClerkCompletesQcOnLeadCase = cerebralTest => {
   //consolidate them
   //upload pdf on lead case
   docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+  it('Docket Clerk adds a docket entry and saves without serving', async () => {
+    let caseDetailFormatted = runCompute(
+      withAppContextDecorator(formattedCaseDetail),
+      {
+        state: cerebralTest.getState(),
+      },
+    );
+
+    const { docketEntryId } = cerebralTest.draftOrders[0];
+
+    const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
+      doc => doc.docketEntryId === docketEntryId,
+    );
+
+    expect(draftOrderDocument).toBeTruthy();
+
+    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+      docketEntryId: draftOrderDocument.docketEntryId,
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'eventCode',
+        value: 'TE',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateDay',
+        value: '01',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateMonth',
+        value: '01',
+      },
+    );
+
+    await cerebralTest.runSequence(
+      'updateCourtIssuedDocketEntryFormValueSequence',
+      {
+        key: 'filingDateYear',
+        value: '2000',
+      },
+    );
+
+    await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+    console.log(cerebralTest.docketNumber, '----');
+  });
   //add docket entry for pdf save for later
   //go to document qc and edit docket entry
   //expect modal to have checkbox or something for the consolidated case
   //serve/submit
   //expect the doc shows up on docket record for non lead case as well as lead case
-};
+});
