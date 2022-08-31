@@ -1,8 +1,8 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
-import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
 import { Case } from '../../entities/cases/Case';
+import { ROLES, SERVICE_INDICATOR_TYPES } from '../../entities/EntityConstants';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { clone } from 'lodash';
+import { generateAndServeDocketEntry } from '../../useCaseHelper/service/createChangeItems';
 
 /**
  * Update an address on a case. This performs a search to get all of the cases associated with the user,

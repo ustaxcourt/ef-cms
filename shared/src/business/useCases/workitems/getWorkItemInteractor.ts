@@ -1,8 +1,8 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { WorkItem } from '../../entities/WorkItem';
 
 /**
@@ -13,14 +13,10 @@ import { WorkItem } from '../../entities/WorkItem';
  * @param {string} providers.workItemId the id of the work item to get
  * @returns {object} the work item data
  */
-export const getWorkItemInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    options: {
-      workItemId: string;
-    },
-  ): Promise<WorkItem>;
-} = async (applicationContext, { workItemId }) => {
+export const getWorkItemInteractor = async (
+  applicationContext: IApplicationContext,
+  { workItemId }: { workItemId: string },
+) => {
   const workItem = await applicationContext
     .getPersistenceGateway()
     .getWorkItemById({

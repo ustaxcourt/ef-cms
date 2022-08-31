@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
@@ -13,14 +13,10 @@ import { WorkItem } from '../../entities/WorkItem';
  * @param {string} providers.userId the user to get the document qc
  * @returns {object} the work items in the user document inbox
  */
-export const getDocumentQCInboxForUserInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    options: {
-      userId: string;
-    },
-  ): Promise<WorkItem>;
-} = async (applicationContext, { userId }) => {
+export const getDocumentQCInboxForUserInteractor = async (
+  applicationContext: IApplicationContext,
+  { userId }: { userId: string },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.WORKITEM)) {

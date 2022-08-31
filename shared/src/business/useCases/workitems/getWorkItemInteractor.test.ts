@@ -1,5 +1,5 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import { DOCKET_SECTION, ROLES } from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 import { getWorkItemInteractor } from './getWorkItemInteractor';
 
 describe('getWorkItemInteractor', () => {

@@ -1,9 +1,9 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 
 /**
  * setWorkItemAsReadInteractor
@@ -13,14 +13,10 @@ import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.workItemId the id of the work item to set as read
  * @returns {Promise} the promise of the setWorkItemAsRead call
  */
-export const setWorkItemAsReadInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    options: {
-      workItemId: string;
-    },
-  ): Promise<WorkItem>;
-} = async (applicationContext, { workItemId }) => {
+export const setWorkItemAsReadInteractor = async (
+  applicationContext: IApplicationContext,
+  { workItemId }: { workItemId: string },
+) => {
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.GET_READ_MESSAGES)) {

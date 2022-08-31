@@ -14,16 +14,18 @@ import { WorkItem } from '../../entities/WorkItem';
  * @param {string} providers.assigneeName the name of the user to assign the work item to
  * @param {string} providers.workItemId the id of the work item to assign
  */
-export const assignWorkItemsInteractor: {
-  (
-    applicationContext: IApplicationContext,
-    options: {
-      assigneeId: string;
-      assigneeName: string;
-      workItemId: string;
-    },
-  ): Promise<void>;
-} = async (applicationContext, { assigneeId, assigneeName, workItemId }) => {
+export const assignWorkItemsInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    assigneeId,
+    assigneeName,
+    workItemId,
+  }: {
+    assigneeId: string;
+    assigneeName: string;
+    workItemId: string;
+  },
+) => {
   const authorizedUser = applicationContext.getCurrentUser();
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.ASSIGN_WORK_ITEM)) {
     throw new UnauthorizedError('Unauthorized to assign work item');

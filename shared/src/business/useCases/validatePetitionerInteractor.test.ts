@@ -28,13 +28,13 @@ describe('validatePetitionerInteractor', () => {
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_NONE,
       state: 'MN',
       updatedEmail: 'night@example.com',
-    } as TContact;
+    } as any;
   });
 
   it('runs validation on a contact with no invalid properties', () => {
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
-    });
+    } as any);
 
     expect(errors).toBeFalsy();
   });
@@ -48,7 +48,7 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
-    });
+    } as any);
 
     expect(errors).toBeFalsy();
   });
@@ -63,7 +63,7 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: mockContact,
-    });
+    } as any);
 
     expect(errors).toEqual({
       confirmEmail:
@@ -83,7 +83,7 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
-    });
+    } as any);
 
     expect(errors).toEqual({
       confirmEmail:
@@ -103,7 +103,7 @@ describe('validatePetitionerInteractor', () => {
 
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
-    });
+    } as any);
 
     expect(errors).toEqual({
       confirmEmail:
@@ -129,7 +129,7 @@ describe('validatePetitionerInteractor', () => {
     const errors = validatePetitionerInteractor(applicationContext, {
       contactInfo: contact,
       existingPetitioners: mockExistingPetitioners,
-    });
+    } as any);
 
     expect(errors).toEqual({
       contactType:
