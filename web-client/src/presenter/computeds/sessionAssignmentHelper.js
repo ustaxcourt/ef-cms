@@ -7,8 +7,7 @@ export const sessionAssignmentHelper = get => {
     ...formattedTrialClerks,
   ];
 
-  let showAlternateTrialClerkField =
-    get(state.form.trialClerk.userId) === 'Other';
+  let showAlternateTrialClerkField = get(state.form.trialClerkId) === 'Other';
 
   return { formattedTrialClerks, showAlternateTrialClerkField };
 };
