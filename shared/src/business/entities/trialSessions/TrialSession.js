@@ -35,6 +35,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
 
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
+  this.alternateTrialClerkName = rawSession.alternateTrialClerkName;
   this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
     addedToSessionAt: caseOrder.addedToSessionAt,
     calendarNotes: caseOrder.calendarNotes,
@@ -171,6 +172,9 @@ TrialSession.validationRules = {
   COMMON: {
     address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
     address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
+    alternateTrialClerkName: JoiValidationConstants.STRING.max(100)
+      .allow('')
+      .optional(),
     chambersPhoneNumber: stringRequiredForRemoteProceedings,
     city: JoiValidationConstants.STRING.max(100).allow('').optional(),
     courtReporter: JoiValidationConstants.STRING.max(100).optional(),

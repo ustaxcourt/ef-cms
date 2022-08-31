@@ -86,7 +86,40 @@ export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
   }
 
   if (props.key === 'trialClerkId') {
+    if (props.value.userId !== ('Other' || undefined)) {
+      store.set(state.form.alternateTrialClerkName, undefined);
+    }
     store.set(state.form.trialClerkId, props.value.userId);
     store.set(state.form.trialClerk, props.value);
+  }
+};
+
+/**
+ * computes the trial session data based on user input for submission
+ *
+ * @param {object} providers the providers object
+ * @param {object} providers.get the cerebral get function
+ * @param {object} providers.store the cerebral store function
+ */
+export const computeSubmitTrialSessionDataAction = ({ get, store }) => {
+  const form = get(state.form);
+
+  const { term, termYear } = computeTerm({
+    month: form.startDateMonth,
+    year: form.startDateYear,
+  });
+  store.set(state.form.term, term);
+  store.set(state.form.termYear, termYear);
+
+  const startTime = compute24HrTime({
+    extension: form.startTimeExtension,
+    hours: form.startTimeHours,
+    minutes: form.startTimeMinutes,
+  });
+  store.set(state.form.startTime, startTime);
+
+  if (form.alternateTrialClerkName) {
+    store.set(state.form.trialClerkId, undefined);
+    store.set(state.form.trialClerk, undefined);
   }
 };
