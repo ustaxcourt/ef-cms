@@ -1,6 +1,6 @@
 # Elasticsearch Index Template
 
-When parsing log entries into an index, Elasticsearch will attempt to create a new index with dynamic field mappings if it does not already exist (the normal behavior). We can control how Elasticsearch performs that operation with an Index Template.
+When parsing log entries into an index, Elasticsearch will attempt to create a new index with dynamic field **mapping**s if it does not already exist (the normal behavior). We can control how Elasticsearch performs that operation with an Index Template.
 
 Because log entries may contain data which is of an unknown shape and size, it is desirable to [limit the dynamic field mappings](https://www.elastic.co/guide/en/elasticsearch/reference/current/mapping.html#mapping-limit-settings) that occur. Say more!
 
@@ -27,59 +27,105 @@ PUT _template/cwl
   "index_patterns": ["cwl-*"],
   "mappings": {
     "properties": {
-      "metadata": {
-        "type": "object",
-        "dynamic": false,
-        "enabled": false
+      "authorizer": {
+        "properties": {
+          "error": {
+            "type": "text"
+          },
+          "responseTimeMs": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
+          "statusCode": {
+            "type": "integer",
+            "ignore_malformed": true
+          }
+        }
       },
       "environment": {
         "properties": {
-          "color": { "type": "keyword" },
-          "stage": { "type": "keyword" }
+          "color": {
+            "type": "keyword"
+          },
+          "stage": {
+            "type": "keyword"
+          }
         }
       },
-      "level": { "type": "keyword" },
-      "logGroup": { "type": "keyword" },
-      "logStream": { "type": "keyword" },
+      "level": {
+        "type": "keyword"
+      },
+      "logGroup": {
+        "type": "keyword"
+      },
+      "logStream": {
+        "type": "keyword"
+      },
       "message": {
         "type": "text",
         "fields": {
-          "raw": { "type": "keyword" }
+          "raw": {
+            "type": "keyword"
+          }
+        }
+      },
+      "metadata": {
+        "type": "object",
+        "dynamic": "false",
+        "enabled": false
+      },
+      "request": {
+        "properties": {
+          "body": {
+            "type": "text",
+            "index": false
+          },
+          "headers": {
+            "dynamic": "false",
+            "properties": {
+              "content-length": {
+                "type": "long",
+                "ignore_malformed": true
+              },
+              "x-forwarded-for": {
+                "type": "keyword",
+                "ignore_malformed": true
+              }
+            }
+          },
+          "method": {
+            "type": "keyword"
+          },
+          "url": {
+            "type": "keyword"
+          }
         }
       },
       "requestId": {
         "properties": {
-          "apiGateway": { "type": "keyword" },
-          "applicationLoadBalancer": { "type": "keyword" },
-          "lambda": { "type": "keyword" },
-          "authorizer": { "type": "keyword" },
-          "connection": { "type": "keyword" }
-        }
-      },
-      "request": {
-        "properties": {
-          "method": { "type": "keyword" },
-          "url": { "type": "keyword" },
-          "headers": {
-            "type": "object",
-            "dynamic": true
+          "apiGateway": {
+            "type": "keyword"
           },
-          "body": {
-            "type": "text",
-            "index": false
+          "applicationLoadBalancer": {
+            "type": "keyword"
+          },
+          "authorizer": {
+            "type": "keyword"
+          },
+          "connection": {
+            "type": "keyword"
+          },
+          "lambda": {
+            "type": "keyword"
           }
-        }
-      },
-      "user": {
-        "properties": {
-          "email": { "type": "keyword" },
-          "name": { "type": "text" },
-          "role": { "type": "keyword" },
-          "userId": { "type": "keyword" }
         }
       },
       "response": {
         "properties": {
+          "responseLength": {
+            "type": "integer",
+            "ignore_malformed": true
+          },
           "responseTimeMs": {
             "type": "integer",
             "ignore_malformed": true
@@ -90,21 +136,25 @@ PUT _template/cwl
           }
         }
       },
-      "authorizer": {
+      "timestamp": {
+        "type": "date"
+      },
+      "user": {
         "properties": {
-          "error": { "type": "text" },
-          "responseTimeMs": {
-            "type": "integer",
-            "ignore_malformed": true
+          "email": {
+            "type": "keyword"
           },
-          "statusCode": {
-            "type": "integer",
-            "ignore_malformed": true
+          "name": {
+            "type": "text"
+          },
+          "role": {
+            "type": "keyword"
+          },
+          "userId": {
+            "type": "keyword"
           }
         }
-      },
-      "timestamp": { "type": "date" }
+      }
     }
   }
-}
 ```
