@@ -23,7 +23,7 @@ export const generateDocketRecordPdfInteractor = async (
   {
     docketNumber,
     docketRecordSort,
-    includePartyDetail,
+    includePartyDetail = false,
   }: {
     docketNumber: string;
     docketRecordSort?: string;
