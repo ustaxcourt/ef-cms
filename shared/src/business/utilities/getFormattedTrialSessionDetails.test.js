@@ -116,6 +116,19 @@ describe('formattedTrialSessionDetails', () => {
     });
   });
 
+  it('formats trial session when trial clerk is empty and alternate trial clerk name is populated', () => {
+    let testTrialSession = { ...TRIAL_SESSION };
+    testTrialSession.trialClerk = {};
+    testTrialSession.alternateTrialClerkName = 'Some OtherClerk';
+    const result = formattedTrialSessionDetails({
+      applicationContext,
+      trialSession: testTrialSession,
+    });
+    expect(result).toMatchObject({
+      formattedTrialClerk: 'Some OtherClerk',
+    });
+  });
+
   describe('formats trial session start times', () => {
     it('formats trial session start time', () => {
       const result = formattedTrialSessionDetails({
