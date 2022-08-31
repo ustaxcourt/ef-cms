@@ -10,7 +10,7 @@ describe('getUploadPolicyInteractor', () => {
     });
     let error;
     try {
-      await getUploadPolicyInteractor(applicationContext, {});
+      await getUploadPolicyInteractor(applicationContext, {} as any);
     } catch (err) {
       error = err;
     }
@@ -30,7 +30,7 @@ describe('getUploadPolicyInteractor', () => {
       .getPersistenceGateway()
       .isFileExists.mockReturnValue(false);
 
-    const url = await getUploadPolicyInteractor(applicationContext, {});
+    const url = await getUploadPolicyInteractor(applicationContext, {} as any);
     expect(url).toEqual('policy');
   });
 
@@ -44,7 +44,7 @@ describe('getUploadPolicyInteractor', () => {
       .getPersistenceGateway()
       .getUploadPolicy.mockReturnValue('policy');
 
-    await getUploadPolicyInteractor(applicationContext, {});
+    await getUploadPolicyInteractor(applicationContext, {} as any);
     expect(
       applicationContext.getPersistenceGateway().isFileExists,
     ).not.toBeCalled();
@@ -65,7 +65,7 @@ describe('getUploadPolicyInteractor', () => {
 
     let error;
     try {
-      await getUploadPolicyInteractor(applicationContext, {});
+      await getUploadPolicyInteractor(applicationContext, {} as any);
     } catch (err) {
       error = err;
     }

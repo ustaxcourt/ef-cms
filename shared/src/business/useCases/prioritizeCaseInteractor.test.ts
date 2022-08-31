@@ -1,8 +1,7 @@
-import { applicationContext } from '../test/createTestApplicationContext';
-import { CASE_STATUS_TYPES } from '../entities/EntityConstants';
+import { CASE_STATUS_TYPES, ROLES } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../test/mockCase';
+import { applicationContext } from '../test/createTestApplicationContext';
 import { prioritizeCaseInteractor } from './prioritizeCaseInteractor';
-import { ROLES } from '../entities/EntityConstants';
 
 describe('prioritizeCaseInteractor', () => {
   it('should update the case with the highPriority flag set as true and attach a reason', async () => {
@@ -70,7 +69,7 @@ describe('prioritizeCaseInteractor', () => {
     await expect(
       prioritizeCaseInteractor(applicationContext, {
         docketNumber: '123-20',
-      }),
+      } as any),
     ).rejects.toThrow('Unauthorized');
   });
 

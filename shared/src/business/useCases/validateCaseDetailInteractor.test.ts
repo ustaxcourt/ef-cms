@@ -5,10 +5,10 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../entities/EntityConstants';
-import { validateCaseDetailInteractor } from './validateCaseDetailInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { CaseQC } from '../entities/cases/CaseQC';
 import { MOCK_USERS } from '../../test/mockUsers';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { validateCaseDetailInteractor } from './validateCaseDetailInteractor';
 const { VALIDATION_ERROR_MESSAGES } = CaseQC;
 
 describe('validate case detail', () => {
@@ -99,7 +99,7 @@ describe('validate case detail', () => {
   });
 
   it('returns the expected errors when passed bad date objects', () => {
-    const errors = validateCaseDetailInteractor(applicationContext, {
+    const errors: any = validateCaseDetailInteractor(applicationContext, {
       caseDetail: {
         hasVerifiedIrsNotice: true,
         irsNoticeDate: 'aa',

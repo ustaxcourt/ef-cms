@@ -3,12 +3,12 @@ import {
   PARTY_TYPES,
   PETITIONS_SECTION,
 } from '../entities/EntityConstants';
-import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
-import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../test/mockUsers';
-import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
-import { applicationContext } from '../test/createTestApplicationContext';
 import { MOCK_CASE } from '../../test/mockCase';
+import { MOCK_PRACTITIONER, petitionsClerkUser } from '../../test/mockUsers';
+import { applicationContext } from '../test/createTestApplicationContext';
+import { getContactPrimary, getContactSecondary } from '../entities/cases/Case';
 import { omit } from 'lodash';
+import { saveCaseDetailInternalEditInteractor } from './saveCaseDetailInternalEditInteractor';
 
 describe('updateCase', () => {
   const mockCase = {
@@ -59,7 +59,7 @@ describe('updateCase', () => {
     await expect(
       saveCaseDetailInternalEditInteractor(applicationContext, {
         docketNumber: mockCase.docketNumber,
-      }),
+      } as any),
     ).rejects.toThrow('cannot process');
   });
 

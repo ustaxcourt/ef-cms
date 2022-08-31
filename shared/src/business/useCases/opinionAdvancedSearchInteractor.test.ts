@@ -4,8 +4,8 @@ import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ROLES,
 } from '../../business/entities/EntityConstants';
-import { opinionAdvancedSearchInteractor } from './opinionAdvancedSearchInteractor';
 import { applicationContext } from '../test/createTestApplicationContext';
+import { opinionAdvancedSearchInteractor } from './opinionAdvancedSearchInteractor';
 
 describe('opinionAdvancedSearchInteractor', () => {
   beforeEach(() => {
@@ -45,7 +45,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     });
 
     await expect(
-      opinionAdvancedSearchInteractor(applicationContext, {}),
+      opinionAdvancedSearchInteractor(applicationContext, {} as any),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -54,7 +54,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(result).toMatchObject([
       {
@@ -95,7 +95,7 @@ describe('opinionAdvancedSearchInteractor', () => {
     const results = await opinionAdvancedSearchInteractor(applicationContext, {
       keyword: 'keyword',
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -108,7 +108,7 @@ describe('opinionAdvancedSearchInteractor', () => {
       keyword,
       opinionTypes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock
@@ -119,7 +119,7 @@ describe('opinionAdvancedSearchInteractor', () => {
   });
 
   it('should search for opinions with isOpinionSearch set to true', async () => {
-    await opinionAdvancedSearchInteractor(applicationContext, {});
+    await opinionAdvancedSearchInteractor(applicationContext, {} as any);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock

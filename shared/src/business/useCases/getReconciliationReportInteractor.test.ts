@@ -107,7 +107,7 @@ describe('getReconciliationReportInteractor', () => {
         filingDate: '2021-01-05T21:14:09.031Z',
         servedAt: '2021-01-05T21:14:09.031Z',
       },
-    ];
+    ] as any;
 
     applicationContext
       .getPersistenceGateway()

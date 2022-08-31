@@ -49,7 +49,7 @@ describe('orderAdvancedSearchInteractor', () => {
     });
 
     await expect(
-      orderAdvancedSearchInteractor(applicationContext, {}),
+      orderAdvancedSearchInteractor(applicationContext, {} as any),
     ).rejects.toThrow('Unauthorized');
   });
 
@@ -58,7 +58,7 @@ describe('orderAdvancedSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword: 'candy',
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(applicationContext.logger.info.mock.calls[0][1]).toMatchObject({
       from: 0,
@@ -85,7 +85,7 @@ describe('orderAdvancedSearchInteractor', () => {
     const results = await orderAdvancedSearchInteractor(applicationContext, {
       keyword: 'keyword',
       petitionerName: 'test person',
-    });
+    } as any);
 
     expect(results.length).toBe(MAX_SEARCH_RESULTS);
   });
@@ -97,7 +97,7 @@ describe('orderAdvancedSearchInteractor', () => {
       dateRange: DATE_RANGE_SEARCH_OPTIONS.CUSTOM_DATES,
       keyword,
       startDate: '01/01/2001',
-    });
+    } as any);
 
     expect(
       applicationContext.getPersistenceGateway().advancedDocumentSearch.mock

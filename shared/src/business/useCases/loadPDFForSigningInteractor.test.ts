@@ -15,7 +15,7 @@ describe('loadPDFForSigningInteractor', () => {
     applicationContext.getPdfJs().getDocument.mockReturnValue({
       promise: 'pdf data',
     });
-    window.Response = jest.fn().mockReturnValue({
+    (window as any).Response = jest.fn().mockReturnValue({
       arrayBuffer: () => Promise.resolve('array buffer data'),
     });
     PDFDocument.load = jest.fn().mockReturnValue({
@@ -30,7 +30,10 @@ describe('loadPDFForSigningInteractor', () => {
       .getPersistenceGateway()
       .getDocument.mockReturnValue(null);
 
-    const result = await loadPDFForSigningInteractor(applicationContext, {});
+    const result = await loadPDFForSigningInteractor(
+      applicationContext,
+      {} as any,
+    );
 
     expect(result).toEqual('pdf data');
   });
@@ -42,7 +45,7 @@ describe('loadPDFForSigningInteractor', () => {
 
     await loadPDFForSigningInteractor(applicationContext, {
       removeCover: true,
-    });
+    } as any);
 
     expect(removePageMock).toHaveBeenCalled();
     expect(saveMock).toHaveBeenCalled();
@@ -55,7 +58,7 @@ describe('loadPDFForSigningInteractor', () => {
 
     await loadPDFForSigningInteractor(applicationContext, {
       onlyCover: true,
-    });
+    } as any);
 
     expect(removePageMock).toHaveBeenCalledTimes(fakePdfPages.length - 1);
     expect(saveMock).toHaveBeenCalled();
@@ -69,7 +72,7 @@ describe('loadPDFForSigningInteractor', () => {
       });
 
     await expect(
-      loadPDFForSigningInteractor(applicationContext, {}),
+      loadPDFForSigningInteractor(applicationContext, {} as any),
     ).rejects.toThrow(new Error('error loading PDF for signing'));
   });
 });
