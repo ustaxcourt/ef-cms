@@ -1,8 +1,7 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { refreshElasticsearchIndex } from '../helpers';
 
-const { DOCKET_NUMBER_SUFFIXES, STATUS_TYPES } =
-  applicationContext.getConstants();
+const { STATUS_TYPES } = applicationContext.getConstants();
 
 export const petitionsClerkBlocksCase = (
   cerebralTest,
@@ -55,8 +54,7 @@ export const petitionsClerkBlocksCase = (
             overrides.caseCaption ||
             'Daenerys Stormborn, Deceased, Daenerys Stormborn, Surviving Spouse, Petitioner',
           docketNumber: cerebralTest.docketNumber,
-          docketNumberSuffix:
-            overrides.docketNumberSuffix || DOCKET_NUMBER_SUFFIXES.SMALL,
+          docketNumberSuffix: overrides.docketNumberSuffix || null,
           status:
             overrides.caseStatus || STATUS_TYPES.generalDocketReadyForTrial,
         }),
