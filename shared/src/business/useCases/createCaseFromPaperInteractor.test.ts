@@ -1,4 +1,5 @@
 jest.mock('uuid');
+import * as uuid from 'uuid';
 import {
   CASE_TYPES_MAP,
   CONTACT_TYPES,
@@ -13,7 +14,6 @@ import { UnauthorizedError } from '../../errors/errors';
 import { User } from '../entities/User';
 import { applicationContext } from '../test/createTestApplicationContext';
 import { createCaseFromPaperInteractor } from './createCaseFromPaperInteractor';
-import uuid from 'uuid';
 
 describe('createCaseFromPaperInteractor', () => {
   const MOCK_CASE_ID = '413f62ce-d7c8-446e-aeda-14a2a625a626';
