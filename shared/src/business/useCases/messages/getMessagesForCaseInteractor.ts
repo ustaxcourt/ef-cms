@@ -1,8 +1,8 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Message } from '../../entities/Message';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -13,22 +13,24 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.docketNumber the docket number of the case
  * @returns {object} the message
  */
-export const getMessagesForCaseInteractor: IGetMessagesForCaseInteractor =
-  async (applicationContext, { docketNumber }) => {
-    const authorizedUser = applicationContext.getCurrentUser();
+export const getMessagesForCaseInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber }: { docketNumber: string },
+) => {
+  const authorizedUser = applicationContext.getCurrentUser();
 
-    if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
-      throw new UnauthorizedError('Unauthorized');
-    }
+  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.VIEW_MESSAGES)) {
+    throw new UnauthorizedError('Unauthorized');
+  }
 
-    const messages = await applicationContext
-      .getPersistenceGateway()
-      .getMessagesByDocketNumber({
-        applicationContext,
-        docketNumber,
-      });
-
-    return Message.validateRawCollection(messages, {
+  const messages = await applicationContext
+    .getPersistenceGateway()
+    .getMessagesByDocketNumber({
       applicationContext,
+      docketNumber,
     });
-  };
+
+  return Message.validateRawCollection(messages, {
+    applicationContext,
+  });
+};

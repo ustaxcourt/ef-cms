@@ -19,9 +19,23 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} the created message
  */
-export const createMessageInteractor: ICreateMessageInteractor = async (
-  applicationContext,
-  { attachments, docketNumber, message, subject, toSection, toUserId },
+export const createMessageInteractor = async (
+  applicationContext: IApplicationContext,
+  {
+    attachments,
+    docketNumber,
+    message,
+    subject,
+    toSection,
+    toUserId,
+  }: {
+    attachments: any;
+    docketNumber: string;
+    message: string;
+    subject: string;
+    toSection: string;
+    toUserId: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 

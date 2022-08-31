@@ -1,6 +1,6 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
@@ -13,9 +13,9 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @param {string} providers.messageId the id of the message to set as read
  * @returns {Promise} the promise of the setMessageAsRead call
  */
-export const setMessageAsReadInteractor: ISetMessageAsReadInteractor = async (
-  applicationContext,
-  { docketNumber, messageId },
+export const setMessageAsReadInteractor = async (
+  applicationContext: IApplicationContext,
+  { docketNumber, messageId }: { docketNumber: string; messageId: string },
 ) => {
   const user = applicationContext.getCurrentUser();
 

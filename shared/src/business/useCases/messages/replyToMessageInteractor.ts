@@ -1,9 +1,9 @@
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
 import { Message } from '../../entities/Message';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 
 /**
@@ -21,7 +21,7 @@ import { UnauthorizedError } from '../../../errors/errors';
  * @returns {object} validated raw message object
  */
 export const replyToMessage = async (
-  applicationContext,
+  applicationContext: IApplicationContext,
   {
     attachments,
     docketNumber,
@@ -30,6 +30,14 @@ export const replyToMessage = async (
     subject,
     toSection,
     toUserId,
+  }: {
+    attachments: any;
+    docketNumber: string;
+    message: string;
+    parentMessageId: string;
+    subject: string;
+    toSection: string;
+    toUserId: string;
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
@@ -100,8 +108,8 @@ export const replyToMessage = async (
  * @param {string} providers.toUserId the user id of the user receiving the message
  * @returns {object} the message
  */
-export const replyToMessageInteractor: IReplyToMessageInteractor = (
-  applicationContext,
+export const replyToMessageInteractor = (
+  applicationContext: IApplicationContext,
   {
     attachments,
     docketNumber,
@@ -110,6 +118,14 @@ export const replyToMessageInteractor: IReplyToMessageInteractor = (
     subject,
     toSection,
     toUserId,
+  }: {
+    attachments: any;
+    docketNumber: string;
+    message: string;
+    parentMessageId: string;
+    subject: string;
+    toSection: string;
+    toUserId: string;
   },
 ) => {
   return replyToMessage(applicationContext, {
