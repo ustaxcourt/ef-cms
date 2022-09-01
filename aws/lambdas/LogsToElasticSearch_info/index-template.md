@@ -71,8 +71,21 @@ PUT _template/cwl
       },
       "metadata": {
         "type": "object",
-        "dynamic": "false",
+        "dynamic": false,
         "enabled": false
+      },
+      "context": {
+        "properties": {
+          "docketNumber": {
+            "type": "keyword"
+          },
+          "docketEntryId": {
+            "type": "keyword"
+          },
+          "trialSessionId": {
+            "type": "keyword"
+          },
+        },
       },
       "request": {
         "properties": {
@@ -81,7 +94,7 @@ PUT _template/cwl
             "index": false
           },
           "headers": {
-            "dynamic": "false",
+            "dynamic": false,
             "properties": {
               "content-length": {
                 "type": "long",
