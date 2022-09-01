@@ -7,6 +7,7 @@ const {
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   PARTY_TYPES,
 } = require('../entities/EntityConstants');
+const { formatDateString, FORMATS } = require('../utilities/DateHandler');
 const { generateCoverSheetData } = require('./generateCoverSheetData');
 const { MOCK_CASE } = require('../../test/mockCase');
 
@@ -493,5 +494,21 @@ describe('generateCoverSheetData', () => {
       docketNumber: '101-30',
       documentNumber: 3,
     });
+  });
+
+  it('should formatDateString if stampData.date exists', async () => {
+    const mockDate = applicationContext.getUtilities().createISODateString();
+    const result = await generateCoverSheetData({
+      applicationContext,
+      caseEntity: testingCaseData,
+      docketEntryEntity: testingCaseData.docketEntries[0],
+      stampData: {
+        date: mockDate,
+      },
+    });
+
+    expect(result.stamp.date).toEqual(
+      formatDateString(mockDate, FORMATS.MMDDYYYY),
+    );
   });
 });

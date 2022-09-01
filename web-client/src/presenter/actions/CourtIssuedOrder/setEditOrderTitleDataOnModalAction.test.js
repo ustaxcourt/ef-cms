@@ -1,10 +1,10 @@
-import { ORDER_EVENT_CODES } from '../../../../../shared/src/business/entities/EntityConstants';
+import { GENERIC_ORDER_EVENT_CODE } from '../../../../../shared/src/business/entities/EntityConstants';
 import { runAction } from 'cerebral/test';
 import { setEditOrderTitleDataOnModalAction } from './setEditOrderTitleDataOnModalAction';
 
 describe('setEditOrderTitleDataOnModalAction', () => {
   it('should set state.modal.eventCode from state.form.eventCode', async () => {
-    const mockEventCode = ORDER_EVENT_CODES[0];
+    const mockEventCode = GENERIC_ORDER_EVENT_CODE;
 
     const { state } = await runAction(setEditOrderTitleDataOnModalAction, {
       state: {

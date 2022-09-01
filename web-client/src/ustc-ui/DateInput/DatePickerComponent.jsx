@@ -5,16 +5,19 @@ import datePicker from '../../../../node_modules/uswds/src/js/components/date-pi
 
 export const DatePickerComponent = ({
   className,
+  disabled = false,
   errorText,
   hideLegend,
   hintText,
   label,
+  minDate,
   name,
   names,
   onBlur,
   onChange,
   optional,
   placeholder,
+  shouldClearHiddenInput,
   showDateHint = true,
   titleHintText,
   useHintNoWrap,
@@ -33,12 +36,27 @@ export const DatePickerComponent = ({
   }, [datePickerRef]);
 
   useEffect(() => {
+    const input = datePickerRef.current.querySelector('.usa-date-picker');
+
+    if (disabled) {
+      datePicker.disable(input);
+    } else {
+      datePicker.enable(input);
+    }
+  });
+
+  useEffect(() => {
     if (!datePickerRef.current) return;
     const input = datePickerRef.current.querySelector('input');
     if (!input) return;
     if (values.month && values.day && values.year) {
       input.value = `${values.month}/${values.day}/${values.year}`;
     } else {
+      if (shouldClearHiddenInput) {
+        // a hack because the inputRef points to the hidden input instead of the visible input on the page
+        const actualInput = window.document.getElementById(`${name}-date`);
+        actualInput.value = null;
+      }
       input.value = null;
     }
   }, [datePickerRef, values]);
@@ -66,6 +84,9 @@ export const DatePickerComponent = ({
         let [month, day, year] = splitDate(e.target.value);
         if (month.length > 2) {
           [year, month, day] = splitDate(e.target.value);
+        }
+        if (year.length < 4) {
+          year = '';
         }
         onChange({
           key: names.day,
@@ -106,7 +127,11 @@ export const DatePickerComponent = ({
           MM/DD/YYYY
         </div>
       )}
-      <div className="usa-date-picker" data-default-value={defaultValue}>
+      <div
+        className="usa-date-picker"
+        data-default-value={defaultValue}
+        data-min-date={minDate}
+      >
         <input
           aria-describedby={`${name}-date-label ${name}-date-hint`}
           className="usa-input grey-placeholder"

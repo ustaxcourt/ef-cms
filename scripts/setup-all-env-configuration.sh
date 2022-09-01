@@ -20,3 +20,4 @@
 ./scripts/dynamo/setup-maintenance-mode-flag.sh
 ./scripts/dynamo/setup-section-outbox-retrieval-days.sh
 ./scripts/dynamo/setup-consolidated-cases-propagate-docket-entries.sh
+./scripts/dynamo/enable-stamp-disposition.sh
