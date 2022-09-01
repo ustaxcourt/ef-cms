@@ -86,11 +86,17 @@ export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
   }
 
   if (props.key === 'trialClerkId') {
-    if (props.value.userId !== ('Other' || undefined)) {
+    if (!props.value) {
       store.set(state.form.alternateTrialClerkName, undefined);
+      store.set(state.form.trialClerk, undefined);
+      store.set(state.form.trialClerkId, undefined);
+    } else if (props.value.userId !== 'Other') {
+      store.set(state.form.alternateTrialClerkName, undefined);
+      store.set(state.form.trialClerk, props.value);
+      store.set(state.form.trialClerkId, props.value.userId);
+    } else {
+      store.set(state.form.trialClerkId, props.value.userId);
     }
-    store.set(state.form.trialClerkId, props.value.userId);
-    store.set(state.form.trialClerk, props.value);
   }
 };
 
