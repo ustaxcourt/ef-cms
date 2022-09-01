@@ -37,6 +37,7 @@ const overrides = {
 describe('Complete QC on lead case docket entry', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
+    cerebralTest.draftOrders = [];
   });
 
   afterAll(async () => {
@@ -51,6 +52,10 @@ describe('Complete QC on lead case docket entry', () => {
       caseDetail.docketNumber;
   });
 
+  loginAs(cerebralTest, 'docketclerk@example.com');
+  docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
+  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+
   it('login as a petitioner and create a case to consolidate with', async () => {
     cerebralTest.docketNumberDifferentPlaceOfTrial = null;
     const caseDetail = await uploadPetition(cerebralTest, overrides);
@@ -62,69 +67,66 @@ describe('Complete QC on lead case docket entry', () => {
   docketClerkUpdatesCaseStatusToReadyForTrial(cerebralTest);
   docketClerkOpensCaseConsolidateModal(cerebralTest);
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
-  docketClerkConsolidatesCases(cerebralTest, 1);
-  // maybe create 2 cases?
-  //consolidate them
-  //upload pdf on lead case
-  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
-  it('Docket Clerk adds a docket entry and saves without serving', async () => {
-    let caseDetailFormatted = runCompute(
-      withAppContextDecorator(formattedCaseDetail),
-      {
-        state: cerebralTest.getState(),
-      },
-    );
+  docketClerkConsolidatesCases(cerebralTest, 2);
 
-    const { docketEntryId } = cerebralTest.draftOrders[0];
+  // it('Docket Clerk adds a docket entry and saves without serving', async () => {
+  //   let caseDetailFormatted = runCompute(
+  //     withAppContextDecorator(formattedCaseDetail),
+  //     {
+  //       state: cerebralTest.getState(),
+  //     },
+  //   );
 
-    const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
-      doc => doc.docketEntryId === docketEntryId,
-    );
+  //   const { docketEntryId } = cerebralTest.draftOrders[0];
 
-    expect(draftOrderDocument).toBeTruthy();
+  //   const draftOrderDocument = caseDetailFormatted.draftDocuments.find(
+  //     doc => doc.docketEntryId === docketEntryId,
+  //   );
 
-    await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
-      docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: cerebralTest.docketNumber,
-    });
+  //   expect(draftOrderDocument).toBeTruthy();
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'eventCode',
-        value: 'TE',
-      },
-    );
+  //   await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
+  //     docketEntryId: draftOrderDocument.docketEntryId,
+  //     docketNumber: cerebralTest.docketNumber,
+  //   });
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateDay',
-        value: '01',
-      },
-    );
+  //   await cerebralTest.runSequence(
+  //     'updateCourtIssuedDocketEntryFormValueSequence',
+  //     {
+  //       key: 'eventCode',
+  //       value: 'TE',
+  //     },
+  //   );
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateMonth',
-        value: '01',
-      },
-    );
+  //   await cerebralTest.runSequence(
+  //     'updateCourtIssuedDocketEntryFormValueSequence',
+  //     {
+  //       key: 'filingDateDay',
+  //       value: '01',
+  //     },
+  //   );
 
-    await cerebralTest.runSequence(
-      'updateCourtIssuedDocketEntryFormValueSequence',
-      {
-        key: 'filingDateYear',
-        value: '2000',
-      },
-    );
+  //   await cerebralTest.runSequence(
+  //     'updateCourtIssuedDocketEntryFormValueSequence',
+  //     {
+  //       key: 'filingDateMonth',
+  //       value: '01',
+  //     },
+  //   );
 
-    await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
+  //   await cerebralTest.runSequence(
+  //     'updateCourtIssuedDocketEntryFormValueSequence',
+  //     {
+  //       key: 'filingDateYear',
+  //       value: '2000',
+  //     },
+  //   );
 
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-    console.log(cerebralTest.docketNumber, '----');
-  });
+  //   await cerebralTest.runSequence('saveCourtIssuedDocketEntrySequence');
+
+  //   expect(cerebralTest.getState('validationErrors')).toEqual({});
+  //   console.log(cerebralTest.docketNumber, '----');
+  // });
   //add docket entry for pdf save for later
   //go to document qc and edit docket entry
   //expect modal to have checkbox or something for the consolidated case
