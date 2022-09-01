@@ -11,6 +11,12 @@ option:first-child {
   font-weight: initial;
 }
 
+#inline-select {
+  max-width: 70%;
+  display: inline;
+  margin-left: 0.5rem;
+} 
+
 .create-case-steps p {
   max-width: 90%;
 }
