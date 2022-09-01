@@ -117,9 +117,11 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('formats trial session when trial clerk is empty and alternate trial clerk name is populated', () => {
-    let testTrialSession = { ...TRIAL_SESSION };
-    testTrialSession.trialClerk = {};
-    testTrialSession.alternateTrialClerkName = 'Some OtherClerk';
+    let testTrialSession = {
+      ...TRIAL_SESSION,
+      alternateTrialClerkName: 'Some OtherClerk',
+      trialClerk: {},
+    };
     const result = formattedTrialSessionDetails({
       applicationContext,
       trialSession: testTrialSession,
