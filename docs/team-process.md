@@ -159,3 +159,5 @@ Below is a list of dependencies that are locked down due to known issues with se
     - How does the patch run?
       - This runs as part of the `npm postinstall` step. 
     - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
+
+3. `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. `ajv` is a tranisitive dependeny of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/8136004664?check_suite_focus=true) to failing test on 08/29/22 dependency updates.
