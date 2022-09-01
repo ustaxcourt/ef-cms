@@ -1,3 +1,4 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { OpenPrintableDocketRecordModal } from './OpenPrintableDocketRecordModal';
@@ -64,8 +65,31 @@ export const DocketRecordHeader = connect(
                 ))}
               </select>
             </div>
+            {/* <div className="tablet:grid-col-1">
+            </div> */}
+            <div className="tablet:grid-col-2">
+              <label htmlFor="judgeFilter" id="garbage">
+                View
+              </label>
+              <BindedSelect
+                aria-describedby="case-deadlines-tab filterHeading"
+                aria-label="judge"
+                bind="screenMetadata.pendingItemsFilters.judge"
+                className="select-left"
+                id="judgeFilter"
+                name="judge"
+              >
+                <option value="">-Judge-</option>
+                {[].map(judge => (
+                  <option key={`pending-judge-${judge}`} value={judge}>
+                    {judge}
+                  </option>
+                ))}
+              </BindedSelect>
+            </div>
+
             {docketRecordHelper.showPrintableDocketRecord && (
-              <div className="tablet:grid-col-10 text-right">
+              <div className="tablet:grid-col-6 text-right">
                 <Button
                   link
                   aria-label="printable docket record"
