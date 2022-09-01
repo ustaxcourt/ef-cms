@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-const computeTerm = ({ month, year }) => {
+export const computeTermAndUpdateState = ({ month, year }, store) => {
   const selectedMonth = +month;
   let term, termYear;
 
@@ -22,12 +22,15 @@ const computeTerm = ({ month, year }) => {
     } else if (termsByMonth.fall.includes(selectedMonth)) {
       term = 'Fall';
     }
+    store.set(state.form.term, term);
+    store.set(state.form.termYear, termYear);
   }
-
-  return { term, termYear };
 };
 
-const compute24HrTime = ({ extension, hours, minutes }) => {
+export const compute24HrTimeAndUpdateState = (
+  { extension, hours, minutes },
+  store,
+) => {
   if (!hours && !minutes) return undefined;
   const TIME_INVALID = '99:99'; // force time validation error
 
@@ -54,7 +57,7 @@ const compute24HrTime = ({ extension, hours, minutes }) => {
     }
   }
 
-  return `${hours}:${minutes}`;
+  store.set(state.form.startTime, `${hours}:${minutes}`);
 };
 
 /**
@@ -67,19 +70,23 @@ const compute24HrTime = ({ extension, hours, minutes }) => {
 export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
   const form = get(state.form);
 
-  const { term, termYear } = computeTerm({
-    month: form.startDateMonth,
-    year: form.startDateYear,
-  });
-  store.set(state.form.term, term);
-  store.set(state.form.termYear, termYear);
+  computeTermAndUpdateState(
+    {
+      month: form.startDateMonth,
+      year: form.startDateYear,
+    },
+    store,
+  );
 
-  const startTime = compute24HrTime({
-    extension: form.startTimeExtension,
-    hours: form.startTimeHours,
-    minutes: form.startTimeMinutes,
-  });
-  store.set(state.form.startTime, startTime);
+  compute24HrTimeAndUpdateState(
+    {
+      extension: form.startTimeExtension,
+      hours: form.startTimeHours,
+      minutes: form.startTimeMinutes,
+    },
+    store,
+  );
+
   if (props.key === 'judgeId') {
     store.set(state.form.judgeId, props.value.userId);
     store.set(state.form.judge, props.value);
@@ -97,35 +104,5 @@ export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
       store.set(state.form.trialClerk, undefined);
       store.set(state.form.trialClerkId, undefined);
     }
-  }
-};
-
-/**
- * computes the trial session data based on user input for submission
- *
- * @param {object} providers the providers object
- * @param {object} providers.get the cerebral get function
- * @param {object} providers.store the cerebral store function
- */
-export const computeSubmitTrialSessionDataAction = ({ get, store }) => {
-  const form = get(state.form);
-
-  const { term, termYear } = computeTerm({
-    month: form.startDateMonth,
-    year: form.startDateYear,
-  });
-  store.set(state.form.term, term);
-  store.set(state.form.termYear, termYear);
-
-  const startTime = compute24HrTime({
-    extension: form.startTimeExtension,
-    hours: form.startTimeHours,
-    minutes: form.startTimeMinutes,
-  });
-  store.set(state.form.startTime, startTime);
-
-  if (form.alternateTrialClerkName) {
-    store.set(state.form.trialClerkId, undefined);
-    store.set(state.form.trialClerk, undefined);
   }
 };
