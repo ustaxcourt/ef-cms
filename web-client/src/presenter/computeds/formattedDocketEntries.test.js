@@ -539,6 +539,67 @@ describe('formattedDocketEntries', () => {
         },
       ]);
     });
+
+    it.only('should ONLY show exhibit docket entries when "Exhibits" has been selected as the filter', () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockDocketEntry,
+            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+            documentTitle: 'Exhibit for Noodles',
+            eventCode: 'EXH',
+          },
+          {
+            ...mockDocketEntry,
+            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+            documentTitle: 'Order in the Court',
+            eventCode: 'O',
+          },
+        ],
+      };
+
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(1);
+      expect(result.formattedDocketEntriesOnDocketRecord[0].eventCode).toBe(
+        'EXH',
+      );
+    });
+
+    it('should show all docket entries when "All documents" has been selected as the filter', () => {
+      const caseDetail = {
+        ...MOCK_CASE,
+        docketEntries: [
+          {
+            ...mockDocketEntry,
+            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+            documentTitle: 'Order in the Court',
+            eventCode: 'O',
+          },
+          {
+            ...mockDocketEntry,
+            docketEntryId: '402ccc12-72c0-481e-b3f2-44debcd167a4',
+            documentTitle: 'Exhibit for Noodles',
+            eventCode: 'EXH',
+          },
+        ],
+      };
+
+      const result = runCompute(formattedDocketEntries, {
+        state: {
+          caseDetail,
+          ...getBaseState(petitionsClerkUser),
+        },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord.length).toBe(2);
+    });
   });
 
   describe('qcNeeded', () => {
