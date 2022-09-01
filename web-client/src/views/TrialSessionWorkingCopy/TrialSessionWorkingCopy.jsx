@@ -46,6 +46,18 @@ export const TrialSessionWorkingCopy = connect(
               </h2>
             </div>
 
+            <div className="grid-col-3 display-flex">
+              <span className="flex-push-right width-0 margin-left-auto" />
+              <Button
+                link
+                className="margin-top-2"
+                href="/messages/section/inbox"
+                icon="print"
+              >
+                Print
+              </Button>
+            </div>
+
             {trialSessionHeaderHelper.showBatchDownloadButton && (
               <div className="grid-col-3 text-right padding-top-2">
                 <Button
