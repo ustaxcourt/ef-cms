@@ -46,7 +46,6 @@ describe('Complete QC on lead case docket entry', () => {
   });
 
   afterAll(async () => {
-    await setConsolidatedCasesPropagateEntriesFlag(true);
     cerebralTest.closeSocket();
   });
 
@@ -108,7 +107,7 @@ describe('Complete QC on lead case docket entry', () => {
   docketClerkSearchesForCaseToConsolidateWith(cerebralTest);
   docketClerkConsolidatesCases(cerebralTest, 2);
 
-  it('edits a docket entry in document QC', async () => {
+  it('edits a docket entry in document QC and serves on all consolidated cases in the group', async () => {
     const documentQCSectionInProcess =
       await getFormattedDocumentQCSectionInProgress(cerebralTest);
 
@@ -118,14 +117,33 @@ describe('Complete QC on lead case docket entry', () => {
 
     await cerebralTest.runSequence('gotoEditCourtIssuedDocketEntrySequence', {
       docketEntryId: savedDocument.docketEntry.docketEntryId,
-      docketNumber: caseDetail.docketNumber,
+      docketNumber: cerebralTest.leadDocketNumber,
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual(
       'CourtIssuedDocketEntry',
     );
+
+    await cerebralTest.runSequence('openConfirmInitiateServiceModalSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
+
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmInitiateServiceModal',
+    );
+
+    expect(cerebralTest.getState('state.consolidatedCaseAllCheckbox')).toBe(
+      true,
+    );
+
+    await cerebralTest.runSequence(
+      'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
+    );
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
   //expect modal to have checkbox or something for the consolidated case
   //serve/submit
+  // saveCourtIssuedDocketEntrySequence
   //expect the doc shows up on docket record for non lead case as well as lead case
 });
