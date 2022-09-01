@@ -60,6 +60,7 @@ export const validateTrialSessionAction = ({
       'maxCases',
       'trialLocation',
       'postalCode',
+      'alternateTrialClerkName',
     ];
     return path.error({
       alertError: {
