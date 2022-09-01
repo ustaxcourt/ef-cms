@@ -1,28 +1,17 @@
-import { docketClerkAddsAndServesDocketEntryFromOrder } from './journey/docketClerkAddsAndServesDocketEntryFromOrder';
-import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
-import { docketClerkConsolidatesCaseThatCannotBeConsolidated } from './journey/docketClerkConsolidatesCaseThatCannotBeConsolidated';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
-import { docketClerkCreatesAnOrder } from './journey/docketClerkCreatesAnOrder';
-import { docketClerkFilesAndServesDocumentOnLeadCase } from './journey/docketClerkFilesAndServesDocumentOnLeadCase';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
-import { docketClerkServesDocumentOnLeadCase } from './journey/docketClerkServesDocumentOnLeadCase';
-import { docketClerkSignsOrder } from './journey/docketClerkSignsOrder';
-import { docketClerkUnconsolidatesLeadCase } from './journey/docketClerkUnconsolidatesLeadCase';
 import { docketClerkUpdatesCaseStatusToReadyForTrial } from './journey/docketClerkUpdatesCaseStatusToReadyForTrial';
 import { docketClerkUploadsACourtIssuedDocument } from './journey/docketClerkUploadsACourtIssuedDocument';
 import {
   fakeFile,
   getFormattedDocumentQCSectionInProgress,
   loginAs,
-  setConsolidatedCasesPropagateEntriesFlag,
+  refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
 } from './helpers';
 import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDetail';
-import { petitionerVerifiesConsolidatedCases } from './journey/petitionerVerifiesConsolidatedCases';
-import { petitionerVerifiesUnconsolidatedCases } from './journey/petitionerVerifiesUnconsolidatedCases';
-import { petitionerViewsDashboard } from './journey/petitionerViewsDashboard';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
@@ -38,14 +27,13 @@ const overrides = {
 let leadDocketNumber;
 let caseDetail;
 
-//DRY up this code
 describe('Complete QC on lead case docket entry', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
   });
 
-  afterAll(async () => {
+  afterAll(() => {
     cerebralTest.closeSocket();
   });
 
@@ -132,9 +120,7 @@ describe('Complete QC on lead case docket entry', () => {
       'ConfirmInitiateServiceModal',
     );
 
-    expect(cerebralTest.getState('state.consolidatedCaseAllCheckbox')).toBe(
-      true,
-    );
+    expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
 
     await cerebralTest.runSequence(
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
@@ -142,8 +128,19 @@ describe('Complete QC on lead case docket entry', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
-  //expect modal to have checkbox or something for the consolidated case
-  //serve/submit
-  // saveCourtIssuedDocketEntrySequence
-  //expect the doc shows up on docket record for non lead case as well as lead case
+
+  it('case in consolidated group that is NOT the lead case should also have served docket entry', async () => {
+    await refreshElasticsearchIndex();
+
+    await cerebralTest.runSequence('gotoCaseDetailSequence', {
+      docketNumber: cerebralTest.docketNumber,
+    });
+
+    const docketEntries = cerebralTest.getState('caseDetail.docketEntries');
+    const foundDocketEntry = docketEntries.find(
+      doc => doc.eventCode === 'MISC',
+    );
+
+    expect(foundDocketEntry.servedAt).toBeDefined();
+  });
 });
