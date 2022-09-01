@@ -100,7 +100,7 @@ jobs:
             URL=http://localhost:9200 ./wait-until.sh
             URL=http://localhost:9000/ ./wait-until.sh
             URL=http://localhost:8000/shell ./wait-until.sh
-            sleep 50 # figure out why we need to sleep here since we wait above ^
+            sleep 20 # figure out why we need to sleep here since we wait above ^
             export TESTFILES=$(circleci tests glob "web-client/integration-tests/*.test.js" "web-client/integration-tests-public/*.test.js" | circleci tests split --split-by=timings)
             npm run test:client:integration:ci
       - store_artifacts:
@@ -167,7 +167,7 @@ jobs:
             URL=http://localhost:4000/api/swagger ./wait-until.sh
             URL=http://localhost:8000/shell ./wait-until.sh
             URL=http://localhost:9200/ CHECK_CODE=200 ./wait-until.sh
-            sleep 20
+            sleep 10
             npm run test:pa11y:1 --node-flags --max-old-space-size=1024
             npm run test:pa11y:2 --node-flags --max-old-space-size=1024
             npm run test:pa11y:3 --node-flags --max-old-space-size=1024
@@ -305,7 +305,7 @@ jobs:
             npx --no-install run-p start:api:ci start:client:ci start:public:ci > /tmp/cypress/cypress-output.txt &
             ./wait-until-services.sh
             URL=http://localhost:4000/api/swagger ./wait-until.sh
-            sleep 10
+            sleep 5
             npm run cypress:integration
       - store_artifacts:
           path: /root/project/cypress/videos/
