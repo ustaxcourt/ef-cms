@@ -336,6 +336,7 @@ export const baseState = {
   sectionUsers: [],
   selectedWorkItems: [],
   sessionMetadata: {
+    docketRecordFilter: '',
     docketRecordSort: [],
     todaysOrdersSort: [],
   },
