@@ -289,7 +289,6 @@ describe('updateTrialSessionInteractor', () => {
     const updatedFields = {
       address1: '123 Main St',
       address2: 'Apt 234',
-      alternateTrialClerkName: 'Some OtherClerk',
       chambersPhoneNumber: '111111',
       city: 'Somewhere',
       courtReporter: 'Someone Reporter',
@@ -320,6 +319,31 @@ describe('updateTrialSessionInteractor', () => {
         userId: '200d96ac-7edc-407d-a3a7-a3e7db78b881',
       },
       trialLocation: 'Boise, Idaho',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        ...MOCK_TRIAL_INPERSON,
+        ...updatedFields,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate,
+    ).toMatchObject({
+      ...MOCK_TRIAL_INPERSON,
+      ...updatedFields,
+    });
+  });
+
+  it('should update the trial session when an alternateTrialClerkName is added and no trial clerk', async () => {
+    const updatedFields = {
+      alternateTrialClerkName: 'Incredible Hulk',
     };
 
     applicationContext

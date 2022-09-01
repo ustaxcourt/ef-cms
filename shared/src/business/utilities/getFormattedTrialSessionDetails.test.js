@@ -117,9 +117,10 @@ describe('formattedTrialSessionDetails', () => {
   });
 
   it('formats trial session when trial clerk is empty and alternate trial clerk name is populated', () => {
-    let testTrialSession = {
+    const alternateTrialClerkName = 'Incredible Hulk';
+    const testTrialSession = {
       ...TRIAL_SESSION,
-      alternateTrialClerkName: 'Some OtherClerk',
+      alternateTrialClerkName,
       trialClerk: {},
     };
     const result = formattedTrialSessionDetails({
@@ -127,7 +128,7 @@ describe('formattedTrialSessionDetails', () => {
       trialSession: testTrialSession,
     });
     expect(result).toMatchObject({
-      formattedTrialClerk: 'Some OtherClerk',
+      formattedTrialClerk: alternateTrialClerkName,
     });
   });
 
