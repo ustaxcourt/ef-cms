@@ -27,7 +27,7 @@ export const DocketRecordHeader = connect(
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
-          <div className="grid-row hide-on-mobile">
+          <div className="grid-row grid-gap hide-on-mobile">
             <div className="tablet:grid-col-2">
               <select
                 aria-label="docket record"
@@ -65,31 +65,34 @@ export const DocketRecordHeader = connect(
                 ))}
               </select>
             </div>
-            {/* <div className="tablet:grid-col-1">
-            </div> */}
-            <div className="tablet:grid-col-2">
-              <label htmlFor="judgeFilter" id="garbage">
+            <div className="tablet:grid-col-3">
+              <label htmlFor="inline-select" id="docket-record-filter-label">
                 View
               </label>
               <BindedSelect
-                aria-describedby="case-deadlines-tab filterHeading"
-                aria-label="judge"
-                bind="screenMetadata.pendingItemsFilters.judge"
+                aria-describedby="docket-record-filter-label"
+                aria-label="docket record filter"
+                bind="screenMetadata.docketRecordFilter"
                 className="select-left"
-                id="judgeFilter"
-                name="judge"
+                id="inline-select"
+                name="docketRecordFilter"
+                onChange={e => {
+                  updateSessionMetadataSequence({
+                    key: e.target.name,
+                    value: e.target.value,
+                  });
+                }}
               >
-                <option value="">-Judge-</option>
-                {[].map(judge => (
-                  <option key={`pending-judge-${judge}`} value={judge}>
-                    {judge}
+                {['All documents', 'Exhibits'].map(filterType => (
+                  <option key={`filter-${filterType}`} value={filterType}>
+                    {filterType}
                   </option>
                 ))}
               </BindedSelect>
             </div>
 
             {docketRecordHelper.showPrintableDocketRecord && (
-              <div className="tablet:grid-col-6 text-right">
+              <div className="tablet:grid-col-7 text-right">
                 <Button
                   link
                   aria-label="printable docket record"
