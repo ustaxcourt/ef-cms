@@ -141,11 +141,13 @@ describe('createOrUpdatePractitionerUser', () => {
       user: privatePractitionerUserWithoutBarNumber,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).not.toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.getCognito().adminGetUser).not.toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should call cognito adminCreateUser for a private practitioner user with email address', async () => {
@@ -161,7 +163,7 @@ describe('createOrUpdatePractitionerUser', () => {
     ).toBe(privatePractitionerUserWithSection.email);
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should call cognito adminCreateUser for a private practitioner user with pendingEmail when it is defined', async () => {
@@ -190,10 +192,10 @@ describe('createOrUpdatePractitionerUser', () => {
       user: irsPractitionerUser,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should call cognito adminCreateUser for an inactive practitioner user with email address', async () => {
@@ -204,10 +206,10 @@ describe('createOrUpdatePractitionerUser', () => {
       user: inactivePractitionerUser,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should call cognito adminCreateUser for a private practitioner user with email address and use a random uniqueId if the response does not contain a username (for local testing)', async () => {
@@ -227,10 +229,10 @@ describe('createOrUpdatePractitionerUser', () => {
       user: privatePractitionerUserWithSection,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
+    expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should call cognito adminGetUser and adminUpdateUserAttributes if adminCreateUser throws an error', async () => {
@@ -250,11 +252,13 @@ describe('createOrUpdatePractitionerUser', () => {
       user: privatePractitionerUserWithSection,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).not.toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).toBeCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should throw an error when attempting to create a user that is not role private, IRS practitioner or inactive practitioner', async () => {

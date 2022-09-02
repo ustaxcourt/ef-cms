@@ -39,6 +39,6 @@ describe('chooseWorkQueueSequence', () => {
     });
     expect(
       applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });
