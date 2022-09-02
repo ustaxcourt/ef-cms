@@ -4,7 +4,7 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 export const docketClerkAddsDocketEntryForTrialExhibit = (
   cerebralTest,
-  { draftOrderIndex, getDocketNumber },
+  { draftOrderIndex },
 ) => {
   return it('Docket Clerk adds a docket entry for a Trial Exhibit from the given draft', async () => {
     let caseDetailFormatted = runCompute(
@@ -24,7 +24,7 @@ export const docketClerkAddsDocketEntryForTrialExhibit = (
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: getDocketNumber() || cerebralTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     await cerebralTest.runSequence(
