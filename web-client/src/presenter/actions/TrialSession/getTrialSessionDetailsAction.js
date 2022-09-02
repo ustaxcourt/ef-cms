@@ -11,11 +11,14 @@ export const getTrialSessionDetailsAction = async ({
   props,
 }) => {
   const { trialSessionId } = props;
+  console.log('trialSessionId', trialSessionId);
   const trialSession = await applicationContext
     .getUseCases()
     .getTrialSessionDetailsInteractor(applicationContext, {
       trialSessionId,
     });
+
+  console.log('trialSession 1', trialSession);
 
   if (trialSession.swingSession && trialSession.swingSessionId) {
     const swingSession = await applicationContext

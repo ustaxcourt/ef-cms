@@ -408,6 +408,9 @@ const {
   generatePrintablePendingReportInteractor,
 } = require('../../shared/src/business/useCases/pendingItems/generatePrintablePendingReportInteractor');
 const {
+  generatePrintableTrialSessionCopyReportInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor');
+const {
   generateStampedCoversheetInteractor,
 } = require('../../shared/src/business/useCaseHelper/stampDisposition/generateStampedCoversheetInteractor');
 const {
@@ -1333,6 +1336,7 @@ const {
 const {
   verifyUserPendingEmailInteractor,
 } = require('../../shared/src/business/useCases/users/verifyUserPendingEmailInteractor');
+
 const {
   virusScanPdfInteractor,
 } = require('../../shared/src/business/useCases/pdf/virusScanPdfInteractor');
@@ -2077,6 +2081,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         closeTrialSessionInteractor,
         completeDocketEntryQCInteractor,
         completeMessageInteractor,
+        generatePrintableTrialSessionCopyReportInteractor,
         completeWorkItemInteractor,
         createCaseDeadlineInteractor,
         createCaseFromPaperInteractor,
