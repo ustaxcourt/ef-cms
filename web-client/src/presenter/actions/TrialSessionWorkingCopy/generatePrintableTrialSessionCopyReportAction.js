@@ -9,20 +9,22 @@
 export const generatePrintableTrialSessionCopyReportAction = ({
   applicationContext,
   get,
+  props,
   store,
 }) => {
-  //   const { docketNumberFilter, judgeFilter } = props;
+  // 1. GET THE FORMATTED TRIAL SESSION INFORMATION
+  console.log('props', props);
 
-  //   const params = {};
-  //   if (docketNumberFilter) {
-  //     params.docketNumber = docketNumberFilter;
-  //   } else if (judgeFilter) {
-  //     params.judge = judgeFilter;
-  //   }
+  const { trialSession } = props;
+  console.log('trialSession 2', trialSession);
 
-  //   const pdfUrl = await applicationContext
-  //     .getUseCases()
-  //     .generatePrintablePendingReportInteractor(applicationContext, params);
-  const pdfUrl = 'pdfUrl';
+  const pdfUrl = applicationContext
+    .getUseCases()
+    .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
+      formattedTrialSession: trialSession,
+    });
+
+  console.log('pdfUrl', pdfUrl);
+
   return { pdfUrl };
 };
