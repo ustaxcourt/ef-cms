@@ -51,7 +51,7 @@ export const TrialSessionWorkingCopy = connect(
               <Button
                 link
                 className="margin-top-2"
-                href="/messages/section/inbox"
+                href="/trial-session-copy-report"
                 icon="print"
               >
                 Print
