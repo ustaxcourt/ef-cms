@@ -1,5 +1,8 @@
 /* eslint-disable max-lines */
-import { DOCKET_ENTRY_SEALED_TO_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
+import {
+  DOCKET_ENTRY_SEALED_TO_TYPES,
+  DOCKET_RECORD_FILTER_OPTIONS,
+} from '../../../../shared/src/business/entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import {
@@ -562,6 +565,9 @@ describe('formattedDocketEntries', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
           caseDetail,
+          sessionMetadata: {
+            docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.exhibits,
+          },
           ...getBaseState(petitionsClerkUser),
         },
       });

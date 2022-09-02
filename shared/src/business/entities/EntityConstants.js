@@ -454,7 +454,10 @@ const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
   ],
 );
 
-const DOCKET_RECORD_FILTER_OPTIONS = ['All documents', 'Exhibits'];
+const DOCKET_RECORD_FILTER_OPTIONS = {
+  allDocuments: 'All documents',
+  exhibits: 'Exhibits',
+};
 
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
@@ -1362,6 +1365,7 @@ module.exports = deepFreeze({
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_RECORD_FILTER_OPTIONS,
   DOCKET_SECTION,
   EXTERNAL_DOCUMENTS_ARRAY,
   DOCUMENT_EXTERNAL_CATEGORIES,
