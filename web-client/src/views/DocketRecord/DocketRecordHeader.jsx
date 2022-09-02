@@ -8,6 +8,7 @@ import React from 'react';
 
 export const DocketRecordHeader = connect(
   {
+    DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     gotoPrintableDocketRecordSequence:
@@ -17,6 +18,7 @@ export const DocketRecordHeader = connect(
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   function DocketRecordHeader({
+    DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper,
     formattedCaseDetail,
     gotoPrintableDocketRecordSequence,
@@ -77,11 +79,13 @@ export const DocketRecordHeader = connect(
                 id="inline-select"
                 name="docketRecordFilter"
               >
-                {['All documents', 'Exhibits'].map(filterType => (
-                  <option key={`filter-${filterType}`} value={filterType}>
-                    {filterType}
-                  </option>
-                ))}
+                {Object.entries(DOCKET_RECORD_FILTER_OPTIONS).map(
+                  ([key, value]) => (
+                    <option key={`filter-${key}`} value={value}>
+                      {value}
+                    </option>
+                  ),
+                )}
               </BindedSelect>
             </div>
 
