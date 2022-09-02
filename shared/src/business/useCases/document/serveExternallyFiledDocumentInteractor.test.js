@@ -119,7 +119,9 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       docketNumber: DOCKET_NUMBER,
     });
 
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     const updatedCaseDocument = applicationContext
       .getPersistenceGateway()
       .updateCase.mock.calls[0][0].caseToUpdate.docketEntries.find(
@@ -160,7 +162,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf
         .mock.calls[0][0],

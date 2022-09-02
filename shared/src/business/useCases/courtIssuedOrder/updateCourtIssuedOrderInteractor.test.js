@@ -143,7 +143,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
@@ -184,7 +184,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
@@ -223,7 +223,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
@@ -261,7 +261,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
@@ -294,7 +294,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
@@ -363,7 +363,7 @@ describe('updateCourtIssuedOrderInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate.docketEntries.length,
