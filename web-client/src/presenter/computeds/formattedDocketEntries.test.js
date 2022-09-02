@@ -48,6 +48,9 @@ describe('formattedDocketEntries', () => {
     globalUser = user;
     return {
       permissions: getUserPermissions(user),
+      sessionMetadata: {
+        docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+      },
     };
   };
 
@@ -526,8 +529,8 @@ describe('formattedDocketEntries', () => {
 
       const result = runCompute(formattedDocketEntries, {
         state: {
-          caseDetail,
           ...getBaseState(petitionsClerkUser),
+          caseDetail,
         },
       });
 
@@ -564,11 +567,11 @@ describe('formattedDocketEntries', () => {
 
       const result = runCompute(formattedDocketEntries, {
         state: {
+          ...getBaseState(petitionsClerkUser),
           caseDetail,
           sessionMetadata: {
             docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.exhibits,
           },
-          ...getBaseState(petitionsClerkUser),
         },
       });
 
@@ -599,8 +602,8 @@ describe('formattedDocketEntries', () => {
 
       const result = runCompute(formattedDocketEntries, {
         state: {
-          caseDetail,
           ...getBaseState(petitionsClerkUser),
+          caseDetail,
         },
       });
 
