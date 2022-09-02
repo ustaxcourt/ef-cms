@@ -1,3 +1,4 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { OpenPrintableDocketRecordModal } from './OpenPrintableDocketRecordModal';
@@ -7,6 +8,7 @@ import React from 'react';
 
 export const DocketRecordHeader = connect(
   {
+    DOCKET_RECORD_FILTER_OPTIONS: state.constants.DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper: state.docketRecordHelper,
     formattedCaseDetail: state.formattedCaseDetail,
     gotoPrintableDocketRecordSequence:
@@ -16,6 +18,7 @@ export const DocketRecordHeader = connect(
     updateSessionMetadataSequence: sequences.updateSessionMetadataSequence,
   },
   function DocketRecordHeader({
+    DOCKET_RECORD_FILTER_OPTIONS,
     docketRecordHelper,
     formattedCaseDetail,
     gotoPrintableDocketRecordSequence,
@@ -26,7 +29,7 @@ export const DocketRecordHeader = connect(
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
-          <div className="grid-row hide-on-mobile">
+          <div className="grid-row grid-gap hide-on-mobile">
             <div className="tablet:grid-col-2">
               <select
                 aria-label="docket record"
@@ -64,8 +67,30 @@ export const DocketRecordHeader = connect(
                 ))}
               </select>
             </div>
+            <div className="tablet:grid-col-3">
+              <label htmlFor="inline-select" id="docket-record-filter-label">
+                Filter by
+              </label>
+              <BindedSelect
+                aria-describedby="docket-record-filter-label"
+                aria-label="docket record filter"
+                bind="sessionMetadata.docketRecordFilter"
+                className="select-left"
+                id="inline-select"
+                name="docketRecordFilter"
+              >
+                {Object.entries(DOCKET_RECORD_FILTER_OPTIONS).map(
+                  ([key, value]) => (
+                    <option key={`filter-${key}`} value={value}>
+                      {value}
+                    </option>
+                  ),
+                )}
+              </BindedSelect>
+            </div>
+
             {docketRecordHelper.showPrintableDocketRecord && (
-              <div className="tablet:grid-col-10 text-right">
+              <div className="tablet:grid-col-7 text-right">
                 <Button
                   link
                   aria-label="printable docket record"
