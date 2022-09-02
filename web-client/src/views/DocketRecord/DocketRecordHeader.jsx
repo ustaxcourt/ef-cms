@@ -69,7 +69,7 @@ export const DocketRecordHeader = connect(
             </div>
             <div className="tablet:grid-col-3">
               <label htmlFor="inline-select" id="docket-record-filter-label">
-                View
+                Filter by
               </label>
               <BindedSelect
                 aria-describedby="docket-record-filter-label"

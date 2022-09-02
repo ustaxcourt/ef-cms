@@ -257,7 +257,8 @@ export const formattedDocketEntries = (get, applicationContext) => {
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
   const { docketRecordFilter } = get(state.sessionMetadata);
-  const { DOCKET_RECORD_FILTER_OPTIONS } = applicationContext.getConstants();
+  const { DOCKET_RECORD_FILTER_OPTIONS, EXHIBIT_EVENT_CODES } =
+    applicationContext.getConstants();
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
 
@@ -273,11 +274,10 @@ export const formattedDocketEntries = (get, applicationContext) => {
   }
 
   const result = formatCase(applicationContext, caseDetail);
-  const exhibitEventCodes = ['EXH', 'TE'];
 
   if (docketRecordFilter === DOCKET_RECORD_FILTER_OPTIONS.exhibits) {
     result.formattedDocketEntries = result.formattedDocketEntries.filter(
-      entry => exhibitEventCodes.includes(entry.eventCode),
+      entry => EXHIBIT_EVENT_CODES.includes(entry.eventCode),
     );
   }
 

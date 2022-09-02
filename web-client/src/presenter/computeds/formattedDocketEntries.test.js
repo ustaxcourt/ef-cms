@@ -611,7 +611,7 @@ describe('formattedDocketEntries', () => {
     });
   });
 
-  describe.only('qcNeeded', () => {
+  describe('qcNeeded', () => {
     it('should set qcNeeded to true when work item is not read', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {

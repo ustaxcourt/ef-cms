@@ -14,6 +14,8 @@ const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
 const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 
+const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
+
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
@@ -1381,6 +1383,7 @@ module.exports = deepFreeze({
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
+  EXHIBIT_EVENT_CODES,
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   GENERIC_ORDER_EVENT_CODE,
