@@ -275,8 +275,6 @@ export const formattedDocketEntries = (get, applicationContext) => {
   const result = formatCase(applicationContext, caseDetail);
   const exhibitEventCodes = ['EXH', 'TE'];
 
-  console.log(docketRecordFilter, '****');
-
   if (docketRecordFilter === DOCKET_RECORD_FILTER_OPTIONS.exhibits) {
     result.formattedDocketEntries = result.formattedDocketEntries.filter(
       entry => exhibitEventCodes.includes(entry.eventCode),
