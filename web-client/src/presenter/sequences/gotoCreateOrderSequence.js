@@ -1,6 +1,8 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
+import { getConstants } from '../../getConstants';
+import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
@@ -36,6 +38,11 @@ export const gotoCreateOrderSequence = [
           setCreateOrderModalDataOnFormAction,
           convertHtml2PdfSequence,
           setIsCreatingOrderAction,
+          getFeatureFlagValueFactoryAction(
+            getConstants().ALLOWLIST_FEATURE_FLAGS
+              .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS,
+            true,
+          ),
           setCurrentPageAction('CreateOrder'),
         ],
       },
