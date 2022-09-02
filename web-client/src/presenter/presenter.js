@@ -383,6 +383,7 @@ import { submitPractitionerNameSearchSequence } from './sequences/submitPractiti
 import { submitRemoveConsolidatedCasesSequence } from './sequences/submitRemoveConsolidatedCasesSequence';
 import { submitStampMotionSequence } from './sequences/submitStampMotionSequence';
 import { submitTrialSessionSequence } from './sequences/submitTrialSessionSequence';
+import { submitUpdateAddDocketNumbersToOrderSequence } from './sequences/submitUpdateAddDocketNumbersToOrderSequence';
 import { submitUpdateCaseModalSequence } from './sequences/submitUpdateCaseModalSequence';
 import { submitUpdatePetitionerInformationFromModalSequence } from './sequences/submitUpdatePetitionerInformationFromModalSequence';
 import { submitUpdatePractitionerUserSequence } from './sequences/submitUpdatePractitionerUserSequence';
@@ -888,6 +889,7 @@ export const presenter = {
     submitRemoveConsolidatedCasesSequence,
     submitStampMotionSequence,
     submitTrialSessionSequence,
+    submitUpdateAddDocketNumbersToOrderSequence,
     submitUpdateCaseModalSequence,
     submitUpdatePetitionerInformationFromModalSequence,
     submitUpdatePractitionerUserSequence,

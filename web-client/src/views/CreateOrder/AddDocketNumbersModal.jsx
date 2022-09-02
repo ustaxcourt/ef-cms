@@ -6,8 +6,9 @@ import React from 'react';
 
 export const AddDocketNumbersModal = connect(
   {
+    addDocketNumbersModalHelper: state.addDocketNumbersModalHelper,
     cancelSequence: sequences.dismissModalSequence,
-    confirmSequence: sequences.submitEditOrderTitleModalSequence,
+    confirmSequence: sequences.submitUpdateAddDocketNumbersToOrderSequence,
     consolidatedCaseAllCheckbox: state.consolidatedCaseAllCheckbox,
     consolidatedCaseCheckboxAllChange:
       sequences.consolidatedCaseCheckboxAllChangeSequence,
@@ -15,6 +16,7 @@ export const AddDocketNumbersModal = connect(
     updateCaseCheckbox: sequences.updateCaseCheckboxSequence,
   },
   function AddDocketNumbersModal({
+    addDocketNumbersModalHelper,
     cancelSequence,
     confirmSequence,
     consolidatedCaseAllCheckbox,
@@ -27,9 +29,9 @@ export const AddDocketNumbersModal = connect(
         cancelLabel="Take Me Back"
         cancelLink={false}
         cancelSequence={cancelSequence}
-        confirmLabel="Add Docket Numbers"
+        confirmLabel={addDocketNumbersModalHelper.confirmLabelTitle}
         confirmSequence={confirmSequence}
-        title="Add Docket Numbers"
+        title={addDocketNumbersModalHelper.modelTitle}
       >
         <div className="ustc-create-order-modal">
           <p>
