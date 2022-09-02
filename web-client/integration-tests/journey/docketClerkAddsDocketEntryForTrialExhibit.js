@@ -24,7 +24,7 @@ export const docketClerkAddsDocketEntryForTrialExhibit = (
 
     await cerebralTest.runSequence('gotoAddCourtIssuedDocketEntrySequence', {
       docketEntryId: draftOrderDocument.docketEntryId,
-      docketNumber: getDocketNumber(),
+      docketNumber: getDocketNumber() || cerebralTest.docketNumber,
     });
 
     await cerebralTest.runSequence(

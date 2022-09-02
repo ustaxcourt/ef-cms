@@ -1,3 +1,4 @@
+import { DOCKET_RECORD_FILTER_OPTIONS } from '../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../shared/src/business/test/createTestApplicationContext';
 import {
   contactPrimaryFromState,
@@ -8,6 +9,7 @@ import {
   setupTest,
   uploadPetition,
 } from './helpers';
+import { docketClerkAddsDocketEntryForTrialExhibit } from './journey/docketClerkAddsDocketEntryForTrialExhibit';
 import { docketClerkAddsDocketEntryFromOrder } from './journey/docketClerkAddsDocketEntryFromOrder';
 import { docketClerkAddsDocketEntryWithoutFile } from './journey/docketClerkAddsDocketEntryWithoutFile';
 import { docketClerkAddsTrackedDocketEntry } from './journey/docketClerkAddsTrackedDocketEntry';
@@ -547,5 +549,37 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
       eventCode: 'APPL',
       pending: true,
     });
+  });
+
+  docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
+  docketClerkAddsDocketEntryForTrialExhibit(cerebralTest, {
+    draftOrderIndex: 0,
+  });
+
+  it('docket clerk views docket record filtered for exhibit document types', async () => {
+    expect(cerebralTest.getState('sessionMetadata.docketRecordFilter')).toBe(
+      DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
+    );
+
+    const unfilteredDocketEntriesOnDocketRecord =
+      await getFormattedDocketEntriesForTest(cerebralTest);
+
+    expect(
+      unfilteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
+        .length,
+    ).toBe(8);
+
+    cerebralTest.setState(
+      'sessionMetadata.docketRecordFilter',
+      DOCKET_RECORD_FILTER_OPTIONS.exhibits,
+    );
+
+    const filteredDocketEntriesOnDocketRecord =
+      await getFormattedDocketEntriesForTest(cerebralTest);
+
+    expect(
+      filteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
+        .length,
+    ).toBe(1);
   });
 });
