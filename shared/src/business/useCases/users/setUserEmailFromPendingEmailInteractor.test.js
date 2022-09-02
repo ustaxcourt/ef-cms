@@ -132,7 +132,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0];
 
-    expect(applicationContext.logger.error).not.toBeCalled();
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
     expect(caseToUpdate.privatePractitioners[0]).toMatchObject({
       email: UPDATED_EMAIL,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,

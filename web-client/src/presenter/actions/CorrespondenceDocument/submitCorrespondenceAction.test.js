@@ -42,12 +42,14 @@ describe('submitCorrespondenceAction', () => {
 
     expect(
       applicationContext.getUseCases().getStatusOfVirusScanInteractor,
-    ).toBeCalled();
-    expect(applicationContext.getUseCases().validatePdfInteractor).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor,
+    ).toHaveBeenCalled();
 
     expect(
       applicationContext.getUseCases().fileCorrespondenceDocumentInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result.output).toMatchObject({
       caseDetail: {
         correspondence: [],
@@ -79,11 +81,13 @@ describe('submitCorrespondenceAction', () => {
 
     expect(
       applicationContext.getUseCases().getStatusOfVirusScanInteractor,
-    ).toBeCalled();
-    expect(applicationContext.getUseCases().validatePdfInteractor).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateCorrespondenceDocumentInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result.output).toMatchObject({
       caseDetail: {
         correspondence: [],

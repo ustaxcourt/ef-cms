@@ -59,7 +59,7 @@ describe('getMessageThreadInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getMessageThreadByParentId,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(returnedMessage).toMatchObject([mockMessage]);
   });
 });

@@ -31,7 +31,7 @@ describe('removeRespondentCounselFromCaseAction', () => {
 
     expect(
       applicationContext.getUseCases().deleteCounselFromCaseInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().deleteCounselFromCaseInteractor.mock
         .calls[0][1],
