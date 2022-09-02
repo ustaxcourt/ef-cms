@@ -3,6 +3,7 @@ import { state } from 'cerebral';
 export const createOrderHelper = (get, applicationContext) => {
   const documentToEdit = get(state.documentToEdit);
   const caseDetail = get(state.caseDetail);
+  const addedDocketNumbers = get(state.addedDocketNumbers);
   const isEditing = !!documentToEdit;
   const { documentTitle } = get(state.form);
 
@@ -21,6 +22,9 @@ export const createOrderHelper = (get, applicationContext) => {
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
 
   return {
+    addDocketNumbersButtonText: addedDocketNumbers
+      ? 'Edit docket numbers to the coversheet'
+      : 'Add docket numbers to the coversheet',
     documentToEdit,
     isEditing,
     pageTitle,

@@ -80,7 +80,7 @@ export const CreateOrder = connect(
                       openAddDocketNumbersModalSequence();
                     }}
                   >
-                    Add docket numbers to the coversheet
+                    {createOrderHelper.addDocketNumbersButtonText}
                   </Button>
                 )}
                 <TextEditor
