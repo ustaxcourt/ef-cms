@@ -66,7 +66,7 @@ describe('getOutboxMessagesForSectionInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getSectionOutboxMessages,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });
