@@ -1,5 +1,7 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
 import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
+import { hasAlreadyAddedDocketNumbersAction } from '../actions/CaseConsolidation/hasAlreadyAddedDocketNumbersAction';
+import { loadConsolidatedCasesForAddDocketNumbersModalAction } from '../actions/CaseConsolidation/loadConsolidatedCasesForAddDocketNumbersModalAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setupConsolidatedCasesAction } from '../actions/CaseConsolidation/setupConsolidatedCasesAction';
@@ -11,6 +13,10 @@ export const openAddDocketNumbersModalSequence = [
     getConsolidatedCasesByCaseAction,
     setConsolidatedCasesForCaseAction,
   ]),
-  setupConsolidatedCasesAction,
+  hasAlreadyAddedDocketNumbersAction,
+  {
+    no: [setupConsolidatedCasesAction],
+    yes: [loadConsolidatedCasesForAddDocketNumbersModalAction],
+  },
   setShowModalFactoryAction('AddDocketNumbersModal'),
 ];
