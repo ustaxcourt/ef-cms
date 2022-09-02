@@ -170,6 +170,7 @@ import { gotoReviewSavedPetitionSequence } from './sequences/gotoReviewSavedPeti
 import { gotoSignOrderSequence } from './sequences/gotoSignOrderSequence';
 import { gotoStartCaseWizardSequence } from './sequences/gotoStartCaseWizardSequence';
 import { gotoStyleGuideSequence } from './sequences/gotoStyleGuideSequence';
+import { gotoTrialSessionCopyReportSequence } from './sequences/gotoTrialSessionCopyReportSequence';
 import { gotoTrialSessionDetailSequence } from './sequences/gotoTrialSessionDetailSequence';
 import { gotoTrialSessionPlanningReportSequence } from './sequences/gotoTrialSessionPlanningReportSequence';
 import { gotoTrialSessionWorkingCopySequence } from './sequences/gotoTrialSessionWorkingCopySequence';
@@ -676,6 +677,7 @@ export const presenter = {
     gotoSignOrderSequence,
     gotoStartCaseWizardSequence,
     gotoStyleGuideSequence,
+    gotoTrialSessionCopyReportSequence,
     gotoTrialSessionDetailSequence,
     gotoTrialSessionPlanningReportSequence,
     gotoTrialSessionWorkingCopySequence,

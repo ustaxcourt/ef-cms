@@ -946,6 +946,14 @@ const router = {
     );
 
     registerRoute(
+      '/trial-session-copy-report',
+      ifHasAccess({ app }, () => {
+        setPageTitle('Trial Session Copy Report');
+        return app.getSequence('gotoTrialSessionCopyReportSequence')();
+      }),
+    );
+
+    registerRoute(
       '/practitioner-detail/*',
       ifHasAccess({ app }, barNumber => {
         setPageTitle('Practitioner Detail');
