@@ -9,15 +9,14 @@ import { getInboxMessagesForSectionAction } from '../actions/getInboxMessagesFor
 import { getInboxMessagesForUserAction } from '../actions/getInboxMessagesForUserAction';
 import { getOutboxMessagesForSectionAction } from '../actions/getOutboxMessagesForSectionAction';
 import { getOutboxMessagesForUserAction } from '../actions/getOutboxMessagesForUserAction';
-import { getUserAction } from '../actions/getUserAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
+import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { resetCacheKeyAction } from '../actions/resetCacheKeyAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setDefaultTableSortAction } from '../actions/setDefaultTableSortAction';
 import { setMessageCountsAction } from '../actions/setMessageCountsAction';
 import { setMessagesAction } from '../actions/setMessagesAction';
-import { setUserAction } from '../actions/setUserAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const goToMessages = startWebSocketConnectionSequenceDecorator([
@@ -26,21 +25,22 @@ const goToMessages = startWebSocketConnectionSequenceDecorator([
   closeMobileMenuAction,
   clearScreenMetadataAction,
   clearErrorAlertsAction,
-  fetchUserNotificationsSequence,
-  setMessageCountsAction,
-  chooseMessageBoxAction,
-  {
-    mycompleted: [getCompletedMessagesForUserAction],
-    myinbox: [getInboxMessagesForUserAction],
-    myoutbox: [getOutboxMessagesForUserAction],
-    sectioncompleted: [getCompletedMessagesForSectionAction],
-    sectioninbox: [getInboxMessagesForSectionAction],
-    sectionoutbox: [getOutboxMessagesForSectionAction],
-  },
   setDefaultTableSortAction,
-  getUserAction,
-  setUserAction,
-  setMessagesAction,
+  parallel([
+    [fetchUserNotificationsSequence, setMessageCountsAction],
+    [
+      chooseMessageBoxAction,
+      {
+        mycompleted: [getCompletedMessagesForUserAction],
+        myinbox: [getInboxMessagesForUserAction],
+        myoutbox: [getOutboxMessagesForUserAction],
+        sectioncompleted: [getCompletedMessagesForSectionAction],
+        sectioninbox: [getInboxMessagesForSectionAction],
+        sectionoutbox: [getOutboxMessagesForSectionAction],
+      },
+      setMessagesAction,
+    ],
+  ]),
   setCurrentPageAction('Messages'),
 ]);
 
