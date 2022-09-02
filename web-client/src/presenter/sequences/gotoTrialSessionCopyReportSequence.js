@@ -1,4 +1,4 @@
-import { generateTrialSessionCopyReportAction } from '../actions/TrialSessionWorkingCopy/generateTrialSessionCopyReportAction';
+import { generatePrintableTrialSessionCopyReportAction } from '../actions/TrialSessionWorkingCopy/generatePrintableTrialSessionCopyReportAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
@@ -7,7 +7,7 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 const generateTrialSessionCopyReport =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('TrialSessionCopyReport'),
-    generateTrialSessionCopyReportAction,
+    generatePrintableTrialSessionCopyReportAction,
   ]);
 
 export const gotoTrialSessionCopyReportSequence = [

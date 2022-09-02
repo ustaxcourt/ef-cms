@@ -6,7 +6,7 @@
  * @returns {Promise} async action
  */
 
-export const generateTrialSessionCopyReportAction = ({
+export const generatePrintableTrialSessionCopyReportAction = ({
   applicationContext,
   get,
   store,
