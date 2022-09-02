@@ -1066,6 +1066,9 @@ const {
   serveGeneratedNoticesOnCase,
 } = require('../../shared/src/business/useCaseHelper/trialSessions/serveGeneratedNoticesOnCase');
 const {
+  setConsolidationFlagsForDisplay,
+} = require('../../shared/src/business/utilities/setConsolidationFlagsForDisplay');
+const {
   setForHearingInteractor,
 } = require('../../shared/src/business/useCases/trialSessions/setForHearingInteractor');
 const {
@@ -2269,6 +2272,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         prepareDateFromString,
         scrapePdfContents,
         serveCaseDocument,
+        setConsolidationFlagsForDisplay,
         setServiceIndicatorsForCase,
         setupPdfDocument,
         uploadToS3,
