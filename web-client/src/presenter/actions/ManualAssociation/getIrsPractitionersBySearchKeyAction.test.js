@@ -44,7 +44,7 @@ describe('getIrsPractitionersBySearchKeyAction', () => {
         .mock.calls[0][1].searchKey,
     ).toEqual('Test Respondent');
     expect(successStub.mock.calls.length).toEqual(1);
-    expect(errorStub).not.toBeCalled();
+    expect(errorStub).not.toHaveBeenCalled();
   });
 
   it('calls the use case to get the matching irsPractitioners and calls the error path if no irsPractitioners are returned', async () => {
@@ -67,7 +67,7 @@ describe('getIrsPractitionersBySearchKeyAction', () => {
       applicationContext.getUseCases().getIrsPractitionersBySearchKeyInteractor
         .mock.calls[0][1].searchKey,
     ).toEqual('Test Respondent2');
-    expect(successStub).not.toBeCalled();
+    expect(successStub).not.toHaveBeenCalled();
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

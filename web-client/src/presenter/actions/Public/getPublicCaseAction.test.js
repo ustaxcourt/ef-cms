@@ -20,6 +20,6 @@ describe('getPublicCaseAction', () => {
 
     expect(
       applicationContextForClient.getUseCases().getCaseInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

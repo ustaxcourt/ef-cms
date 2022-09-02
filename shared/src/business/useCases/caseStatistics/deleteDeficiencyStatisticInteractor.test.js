@@ -55,7 +55,9 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     expect(result).toMatchObject({
       statistics: [],
     });
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
@@ -73,7 +75,9 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     expect(result).toMatchObject({
       statistics: [statistic],
     });
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
@@ -100,6 +104,6 @@ describe('deleteDeficiencyStatisticInteractor', () => {
     ).rejects.toThrow('The Case entity was invalid');
     expect(
       applicationContext.getPersistenceGateway().updateCase,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

@@ -65,7 +65,7 @@ describe('createOrderAction', () => {
 
     expect(
       applicationContextForClient.getClerkOfCourtNameForSigning,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result.output.contentHtml).toEqual('');
     expect(result.output.documentTitle).toEqual('');
     expect(result.output.signatureText).toEqual('Bobby Flay');
