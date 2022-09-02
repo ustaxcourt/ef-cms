@@ -434,7 +434,7 @@ describe('processFormattedMessages', () => {
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
           inConsolidatedGroup: false,
-          inLeadCase: false,
+          leadCase: false,
           message: 'This is a test message one',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
@@ -445,7 +445,7 @@ describe('processFormattedMessages', () => {
           createdAtFormatted: '01/01/19',
           docketNumber: '101-20',
           inConsolidatedGroup: false,
-          inLeadCase: false,
+          leadCase: false,
           message: 'This is a test message three',
           messageDetailLink: `/messages/101-20/message-detail/${PARENT_MESSAGE_ID}`,
           parentMessageId: PARENT_MESSAGE_ID,
@@ -478,8 +478,8 @@ describe('processFormattedMessages', () => {
       });
     });
 
-    describe('inLeadCase', () => {
-      it('returns inLeadCase true when message.leadDocketNumber is the same as message.docketNumber', () => {
+    describe('leadCase', () => {
+      it('returns leadCase true when message.leadDocketNumber is the same as message.docketNumber', () => {
         const result = getFormattedMessages({
           applicationContext,
           messages: [
@@ -491,10 +491,10 @@ describe('processFormattedMessages', () => {
           ],
         });
 
-        expect(result.messages[0].inLeadCase).toBeTruthy();
+        expect(result.messages[0].leadCase).toBeTruthy();
       });
 
-      it('returns inLeadCase false when message.leadDocketNumber is NOT the same as message.docketNumber', () => {
+      it('returns leadCase false when message.leadDocketNumber is NOT the same as message.docketNumber', () => {
         const result = getFormattedMessages({
           applicationContext,
           messages: [
@@ -506,7 +506,7 @@ describe('processFormattedMessages', () => {
           ],
         });
 
-        expect(result.messages[0].inLeadCase).toBeFalsy();
+        expect(result.messages[0].leadCase).toBeFalsy();
       });
     });
 

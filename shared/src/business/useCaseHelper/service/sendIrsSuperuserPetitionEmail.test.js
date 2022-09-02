@@ -60,7 +60,7 @@ describe('sendIrsSuperuserPetitionEmail', () => {
     expect(reactTemplateGenerator).toHaveBeenCalled();
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail.mock
         .calls[0][0].destinations,

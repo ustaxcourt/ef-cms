@@ -26,28 +26,27 @@ const { PDFDocument } = require('pdf-lib');
 jest.mock('../../utilities/shouldAppendClinicLetter');
 
 describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
-  let docketNumber, interactorParamObject;
-
   const trialSession = {
     ...MOCK_TRIAL_REGULAR,
     proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
   };
 
-  const noticeDocumentWithClinicLetter = combineTwoPdfs({
+  const twoPageClinicLetter = combineTwoPdfs({
     applicationContext,
     firstPdf: testPdfDoc,
     secondPdf: testPdfDoc,
   });
 
-  applicationContext
-    .getUtilities()
-    .combineTwoPdfs.mockResolvedValue(noticeDocumentWithClinicLetter);
-
+  const docketNumber = '101-20';
+  const interactorParamObject = {
+    docketNumber,
+    jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+    trialSession,
+    userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
+  };
   const clinicLetterKey = 'I am a key';
 
   beforeAll(() => {
-    docketNumber = '101-20';
-
     shouldAppendClinicLetter.mockResolvedValue({
       appendClinicLetter: true,
       clinicLetterKey,
@@ -75,15 +74,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
       .generateStandingPretrialOrderForSmallCaseInteractor.mockResolvedValue(
         testPdfDoc,
       );
-  });
 
-  beforeEach(() => {
-    interactorParamObject = {
-      docketNumber,
-      jobId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-      trialSession,
-      userId: '6805d1ab-18d0-43ec-bafb-654e83405416',
-    };
     applicationContext
       .getPersistenceGateway()
       .getTrialSessionJobStatusForCase.mockResolvedValue({});
@@ -92,7 +83,7 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
   it('should return and do nothing if the job is already processed', async () => {
     applicationContext
       .getPersistenceGateway()
-      .getTrialSessionJobStatusForCase.mockResolvedValue({
+      .getTrialSessionJobStatusForCase.mockResolvedValueOnce({
         [docketNumber]: 'processed',
       });
     await generateNoticesForCaseTrialSessionCalendarInteractor(
@@ -146,7 +137,31 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     expect(pdf.getPages().length).toBe(2);
   });
 
-  it('should only save a notice of trial order and NOT a clinic for practitioners', async () => {
+  it('should append a clinic letter (for a pro se petitioner) correctly regardless of number of pages', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValueOnce(twoPageClinicLetter);
+
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    expect(
+      applicationContext.getPersistenceGateway().getDocument,
+    ).toHaveBeenCalledWith(expect.objectContaining({ key: clinicLetterKey }));
+
+    expect(applicationContext.getUtilities().combineTwoPdfs).toHaveBeenCalled();
+
+    const pdfBlob =
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].document;
+    const pdf = await PDFDocument.load(pdfBlob);
+
+    expect(pdf.getPages().length).toBe(3);
+  });
+
+  it('should only save a notice of trial order and NOT a clinic letter for practitioners', async () => {
     shouldAppendClinicLetter.mockResolvedValueOnce({
       appendClinicLetter: false,
     });
@@ -169,6 +184,54 @@ describe('generateNoticesForCaseTrialSessionCalendarInteractor', () => {
     const pdf = await PDFDocument.load(pdfBlob);
 
     expect(pdf.getPages().length).toBe(1);
+  });
+
+  it('should save only a notice of trial order for practitioners but save a combined document for pro se petitioners, even when the clinic letter has multiple pages', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockResolvedValueOnce({
+        ...MOCK_CASE,
+        irsPractitioners:
+          MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners,
+        petitioners: [
+          {
+            ...MOCK_CASE.petitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
+        privatePractitioners:
+          MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners,
+      });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getDocument.mockResolvedValueOnce(twoPageClinicLetter);
+
+    await generateNoticesForCaseTrialSessionCalendarInteractor(
+      applicationContext,
+      interactorParamObject,
+    );
+
+    const noticeAndClinicLetterBlob =
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[0][0].document;
+
+    const noticeAndClinicLetter = await PDFDocument.load(
+      noticeAndClinicLetterBlob,
+    );
+
+    expect(noticeAndClinicLetter.getPages().length).toBe(3);
+
+    const combinedConfirmationBlob =
+      applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
+        .calls[2][0].document;
+
+    const combinedConfirmationPDF = await PDFDocument.load(
+      combinedConfirmationBlob,
+    );
+
+    // 2 practitioners + 1 petitioner + 1*2 page clinic letter = 5 total pages;
+    expect(combinedConfirmationPDF.getPages().length).toBe(5);
   });
 
   it('should generate a standing pretrial for small cases if the procedure type is Small', async () => {
