@@ -200,6 +200,7 @@ import { navigateToPrintPaperServiceSequence } from './sequences/navigateToPrint
 import { navigateToPrintableCaseConfirmationSequence } from './sequences/navigateToPrintableCaseConfirmationSequence';
 import { notFoundErrorSequence } from './sequences/notFoundErrorSequence';
 import { noticeGenerationCompleteSequence } from './sequences/noticeGenerationCompleteSequence';
+import { openAddDocketNumbersModalSequence } from './sequences/openAddDocketNumbersModalSequence';
 import { openAddEditCalendarNoteModalSequence } from './sequences/openAddEditCalendarNoteModalSequence';
 import { openAddEditCaseNoteModalSequence } from './sequences/openAddEditCaseNoteModalSequence';
 import { openAddEditHearingNoteModalSequence } from './sequences/openAddEditHearingNoteModalSequence';
@@ -706,6 +707,7 @@ export const presenter = {
     navigateToPrintableCaseConfirmationSequence,
     notFoundErrorSequence,
     noticeGenerationCompleteSequence,
+    openAddDocketNumbersModalSequence,
     openAddEditCalendarNoteModalSequence,
     openAddEditCaseNoteModalSequence,
     openAddEditHearingNoteModalSequence,
