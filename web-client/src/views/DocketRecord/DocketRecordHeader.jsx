@@ -72,16 +72,10 @@ export const DocketRecordHeader = connect(
               <BindedSelect
                 aria-describedby="docket-record-filter-label"
                 aria-label="docket record filter"
-                bind="screenMetadata.docketRecordFilter"
+                bind="sessionMetadata.docketRecordFilter"
                 className="select-left"
                 id="inline-select"
                 name="docketRecordFilter"
-                onChange={e => {
-                  updateSessionMetadataSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
               >
                 {['All documents', 'Exhibits'].map(filterType => (
                   <option key={`filter-${filterType}`} value={filterType}>

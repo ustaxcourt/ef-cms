@@ -256,7 +256,7 @@ export const formattedDocketEntries = (get, applicationContext) => {
     .isExternalUser(user.role);
   const permissions = get(state.permissions);
   const userAssociatedWithCase = get(state.screenMetadata.isAssociated);
-  const docketRecordFilter = get(state.sessionMetadata.docketRecordFilter);
+  const { docketRecordFilter } = get(state.sessionMetadata);
 
   const { formatCase, sortDocketEntries } = applicationContext.getUtilities();
 
@@ -272,9 +272,15 @@ export const formattedDocketEntries = (get, applicationContext) => {
   }
 
   const result = formatCase(applicationContext, caseDetail);
-  const exhibitEventCodes = []
+  const exhibitEventCodes = ['EXH', 'TE'];
 
-  result.formattedDocketEntries = result.formattedDocketEntries.filter( entry => )
+  console.log(docketRecordFilter, '****');
+
+  if (docketRecordFilter === 'Exhibits') {
+    result.formattedDocketEntries = result.formattedDocketEntries.filter(
+      entry => exhibitEventCodes.includes(entry.eventCode),
+    );
+  }
 
   let docketEntriesFormatted = sortDocketEntries(
     result.formattedDocketEntries,
