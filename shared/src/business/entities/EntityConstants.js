@@ -454,6 +454,8 @@ const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
   ],
 );
 
+const DOCKET_RECORD_FILTER_OPTIONS = ['All documents', 'Exhibits'];
+
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
   applicationForWaiverOfFilingFee: {
