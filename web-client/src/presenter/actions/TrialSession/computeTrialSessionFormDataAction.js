@@ -22,9 +22,9 @@ export const computeTermAndUpdateState = ({ month, year }, store) => {
     } else if (termsByMonth.fall.includes(selectedMonth)) {
       term = 'Fall';
     }
-    store.set(state.form.term, term);
-    store.set(state.form.termYear, termYear);
   }
+  store.set(state.form.term, term);
+  store.set(state.form.termYear, termYear);
 };
 
 export const compute24HrTimeAndUpdateState = (
@@ -42,14 +42,15 @@ export const compute24HrTimeAndUpdateState = (
     !VALID_MINUTE_RE.test(minutes) ||
     !['am', 'pm'].includes(extension)
   ) {
-    return TIME_INVALID;
+    store.set(state.form.startTime, TIME_INVALID);
+    return;
   }
 
   if (extension === 'pm') {
     if (+hours <= 11) {
       hours = `${+hours + 12}`;
     }
-  } else if (extension === 'am') {
+  } else {
     if (+hours === 12) {
       hours = '00';
     } else {
