@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { connect } from '@cerebral/react';
 import { state } from 'cerebral';
@@ -37,23 +38,9 @@ export const RecentMessagesInbox = connect(
               <tbody key={item.messageId}>
                 <tr>
                   <td className="consolidated-case-column">
-                    {item.inConsolidatedGroup && (
-                      <span
-                        className="fa-layers fa-fw"
-                        title={item.consolidatedIconTooltipText}
-                      >
-                        <Icon
-                          aria-label={item.consolidatedIconTooltipText}
-                          className="fa-icon-blue"
-                          icon="copy"
-                        />
-                        {item.inLeadCase && (
-                          <span className="fa-inverse lead-case-icon-text">
-                            L
-                          </span>
-                        )}
-                      </span>
-                    )}
+                    <ConsolidatedCaseIcon
+                      caseItem={item}
+                    ></ConsolidatedCaseIcon>
                   </td>
                   <td className="message-queue-row small">
                     {item.docketNumberWithSuffix}
