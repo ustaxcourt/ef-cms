@@ -94,7 +94,7 @@ describe('saveSignedDocumentInteractor', () => {
       applicationContext,
       {
         docketNumber: mockCase.docketNumber,
-        nameForSigning: 'Guy Fieri',
+        nameForSigning: mockSigningName,
         originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
         signedDocketEntryId: mockSignedDocketEntryId,
       },
@@ -119,7 +119,7 @@ describe('saveSignedDocumentInteractor', () => {
       mockSignedDocketEntryId,
     );
     expect(signedDocketEntryEntity.isDraft).toEqual(true);
-    expect(signedDocketEntryEntity.signedJudgeName).toEqual('Guy Fieri');
+    expect(signedDocketEntryEntity.signedJudgeName).toEqual(mockSigningName);
     expect(signedDocketEntryEntity.documentType).toEqual('Stipulated Decision');
   });
 
@@ -164,7 +164,7 @@ describe('saveSignedDocumentInteractor', () => {
   it('should add the signed document to the latest message in the message thread if parentMessageId is included and the original document is a Proposed Stipulated Decision', async () => {
     await saveSignedDocumentInteractor(applicationContext, {
       docketNumber: mockCase.docketNumber,
-      nameForSigning: 'Guy Fieri',
+      nameForSigning: mockSigningName,
       originalDocketEntryId: 'def81f4d-1e47-423a-8caf-6d2fdc3d3859',
       parentMessageId: mockParentMessageId,
       signedDocketEntryId: mockSignedDocketEntryId,

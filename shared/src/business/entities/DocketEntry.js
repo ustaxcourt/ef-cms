@@ -41,6 +41,7 @@ DocketEntry.prototype.initUnfilteredForInternalUsers =
   ) {
     this.editState = rawDocketEntry.editState;
     this.draftOrderState = rawDocketEntry.draftOrderState;
+    this.stampData = rawDocketEntry.stampData || {};
     this.isDraft = rawDocketEntry.isDraft || false;
     this.judge = rawDocketEntry.judge;
     this.judgeUserId = rawDocketEntry.judgeUserId;

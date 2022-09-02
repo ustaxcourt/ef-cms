@@ -6,9 +6,14 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
+const {
+  JURISDICTIONAL_OPTIONS,
+  MOTION_DISPOSITIONS,
+  PARTY_TYPES,
+} = require('../../entities/EntityConstants');
 const { coverSheet } = require('./coverSheet');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
-const { PARTY_TYPES } = require('../../entities/EntityConstants');
+const { Stamp } = require('../../entities/Stamp');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -117,6 +122,53 @@ describe('documentGenerators', () => {
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
         writePdfFile('Cover_Sheet_For_Consolidated_Cases', pdf);
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+  });
+
+  describe('stamped coverSheet', () => {
+    it('Generates a stamped CoverSheet document', async () => {
+      const stamp = new Stamp({
+        customText: 'Custom stamp data text',
+        date: '2022-07-27T04:00:00.000Z',
+        deniedAsMoot: true,
+        deniedWithoutPrejudice: true,
+        disposition: MOTION_DISPOSITIONS.DENIED,
+        dueDateMessage: 'The parties shall file a status report by',
+        jurisdictionalOption: JURISDICTIONAL_OPTIONS.restoredToDocket,
+        nameForSigning: 'Buch',
+        nameForSigningLine2: 'Judge',
+        strickenFromTrialSession: true,
+      });
+
+      const pdf = await coverSheet({
+        applicationContext,
+        data: {
+          caseCaptionExtension: PARTY_TYPES.petitioner,
+          caseTitle: 'Test Person',
+          certificateOfService: true,
+          dateFiledLodged: '01/01/20',
+          dateFiledLodgedLabel: 'Filed',
+          dateReceived: '01/02/20',
+          dateServed: '01/03/20',
+          docketNumberWithSuffix: '123-45S',
+          documentTitle: 'Petition',
+          electronicallyFiled: true,
+          index: 10,
+          stamp,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile('StampedCoverSheet', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 

@@ -49,16 +49,19 @@ const checkEnvVar = (value, message) => {
 /**
  * Ascertain the Cognito User Pool based on the current environment
  *
+ * @param {Object} cognitoInstance (optional) instance of the CognitoIdentityServiceProvider
  * @returns {String} The unique identifier of the Cognito User Pool
  */
-const getUserPoolId = async () => {
+const getUserPoolId = async cognitoInstance => {
   checkEnvVar(ENV, 'You must have ENV set in your local environment');
 
   if (UserPoolCache[ENV]) {
     return UserPoolCache[ENV];
   }
 
-  const cognito = new CognitoIdentityServiceProvider({ region: 'us-east-1' });
+  const cognito =
+    cognitoInstance ||
+    new CognitoIdentityServiceProvider({ region: 'us-east-1' });
   const results = await cognito
     .listUserPools({
       MaxResults: 50,
@@ -67,6 +70,7 @@ const getUserPoolId = async () => {
   const userPoolId = results.UserPools.find(
     pool => pool.Name === `efcms-${ENV}`,
   ).Id;
+
   UserPoolCache[ENV] = userPoolId;
   return UserPoolCache[ENV];
 };
