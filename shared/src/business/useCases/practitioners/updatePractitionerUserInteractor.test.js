@@ -109,7 +109,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updatePractitionerUser,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updatePractitionerUser.mock
         .calls[0][0],
@@ -135,7 +135,7 @@ describe('updatePractitionerUserInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().createNewPractitionerUser,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().createNewPractitionerUser.mock
         .calls[0][0].user.pendingEmail,

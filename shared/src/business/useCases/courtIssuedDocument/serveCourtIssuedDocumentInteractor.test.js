@@ -382,7 +382,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should remove the case from the trial session if the case has a trialSessionId and trialSession is calendared', async () => {

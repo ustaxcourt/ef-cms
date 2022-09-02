@@ -101,7 +101,9 @@ describe('setTrialSessionCalendarInteractor', () => {
       trialSessionId: '6805d1ab-18d0-43ec-bafb-654e83405416',
     });
 
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('should set a trial session to "calendared" and remove cases from the trial sessionthat have not been QCed', async () => {
@@ -175,7 +177,7 @@ describe('setTrialSessionCalendarInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
         .calls.length,
