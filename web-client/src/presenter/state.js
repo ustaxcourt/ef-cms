@@ -110,7 +110,7 @@ import { viewCounselHelper } from './computeds/viewCounselHelper';
 import { workQueueHelper } from './computeds/workQueueHelper';
 import { workQueueSectionHelper } from './computeds/workQueueSectionHelper';
 
-const { ASCENDING, IDLE_STATUS } = getConstants();
+const { ASCENDING, DOCKET_RECORD_FILTER_OPTIONS, IDLE_STATUS } = getConstants();
 
 const helpers = {
   addCourtIssuedDocketEntryHelper,
@@ -336,7 +336,7 @@ export const baseState = {
   sectionUsers: [],
   selectedWorkItems: [],
   sessionMetadata: {
-    docketRecordFilter: '',
+    docketRecordFilter: DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     docketRecordSort: [],
     todaysOrdersSort: [],
   },
