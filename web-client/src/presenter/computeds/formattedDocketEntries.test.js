@@ -543,7 +543,7 @@ describe('formattedDocketEntries', () => {
       ]);
     });
 
-    it.only('should ONLY show exhibit docket entries when "Exhibits" has been selected as the filter', () => {
+    it('should ONLY show exhibit docket entries when "Exhibits" has been selected as the filter', () => {
       const caseDetail = {
         ...MOCK_CASE,
         docketEntries: [
@@ -608,7 +608,7 @@ describe('formattedDocketEntries', () => {
     });
   });
 
-  describe('qcNeeded', () => {
+  describe.only('qcNeeded', () => {
     it('should set qcNeeded to true when work item is not read', () => {
       const result = runCompute(formattedDocketEntries, {
         state: {
