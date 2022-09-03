@@ -9,6 +9,7 @@ describe('chooseWorkQueueSequence', () => {
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
+      role: 'petitionsclerk',
       section: PETITIONS_SECTION,
     });
     applicationContext
