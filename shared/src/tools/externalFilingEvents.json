@@ -120,7 +120,8 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Name",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Withdraw as Counsel",
@@ -130,7 +131,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Withdraw Counsel",
@@ -140,7 +142,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     }
   ],
   "Application": [
@@ -378,7 +381,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Extension of Time",
@@ -388,7 +392,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Document Subpoena Hearing",
@@ -398,7 +403,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction",
@@ -408,7 +414,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Proceed Remotely",
@@ -418,7 +425,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Dismiss for Lack of Prosecution",
@@ -428,7 +436,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Summary Judgment",
@@ -438,7 +447,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Change or Correct Caption",
@@ -448,7 +458,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for a New Trial",
@@ -458,7 +469,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for an Order under Federal Rule of Evidence 502(d)",
@@ -468,7 +480,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for an Order under Model Rule of Professional Conduct 4.2",
@@ -478,7 +491,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Appointment of Mediator",
@@ -488,7 +502,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Assignment of Judge",
@@ -498,7 +513,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Audio of Trial Proceeding(s)",
@@ -508,7 +524,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Certification of an Interlocutory Order to Permit Immediate Appeal",
@@ -518,7 +535,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Default and Dismissal",
@@ -528,7 +546,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Entry of Decision",
@@ -538,7 +557,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Entry of Order that Undenied Allegations be Deemed Admitted Pursuant to Rule 37(c)",
@@ -548,7 +568,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Estate Tax Deduction Developing at or after Trial Pursuant to Rule 156",
@@ -558,7 +579,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for in Camera Review",
@@ -568,7 +590,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for International Judicial Assistance",
@@ -578,7 +601,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Judgment on the Pleadings",
@@ -588,7 +612,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Leave to Conduct Discovery Pursuant to Rule 70(a)(2)",
@@ -598,7 +623,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Leave to File [Document Name]",
@@ -608,7 +634,8 @@
       "scenario": "Nonstandard H",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Leave to File Out of Time [Document Name]",
@@ -618,7 +645,8 @@
       "scenario": "Nonstandard H",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Leave to Serve Additional Interrogatories",
@@ -628,7 +656,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Leave to Use Electronic Equipment",
@@ -638,7 +667,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for More Definite Statement Pursuant to Rule 51",
@@ -648,7 +678,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Non-Binding Mediation",
@@ -658,7 +689,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Oral Argument",
@@ -668,7 +700,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Order Fixing Amount of an Appeal Bond",
@@ -678,7 +711,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Order to Release the Amount of an Appeal Bond",
@@ -688,7 +722,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Order to Show Cause Why Case Should Not Be Sumitted on the Basis of the Administrative Record",
@@ -698,7 +733,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Order to Show Cause Why Judgment Should Not be Entered on the Basis of a Previously Decided Case",
@@ -708,7 +744,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Order to Show Cause Why Proposed Facts and Evidence Should Not be Accepted as Established Pursuant to Rule 91(f)",
@@ -718,7 +755,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Partial Summary Judgment",
@@ -728,7 +766,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Pretrial Conference",
@@ -738,7 +777,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Protective Order Pursuant to Rule 103",
@@ -748,7 +788,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Reasonable Litigation or Administrative Costs",
@@ -758,7 +799,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Reconsideration of Findings or Opinion Pursuant to Rule 161",
@@ -768,7 +810,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Reconsideration of Order",
@@ -778,7 +821,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Recusal of Judge",
@@ -788,7 +832,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Review of Jeopardy Assessment or Jeopardy Levy Pursuant to Rule 56",
@@ -798,7 +843,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for the Court to Pay the Expenses of a Transcript",
@@ -808,7 +854,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for the Court to Pay the Expenses of an Interpreter",
@@ -818,7 +865,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Voluntary Binding Arbitration",
@@ -828,7 +876,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion for Writ of Habeas Corpus Ad Testificandum",
@@ -838,7 +887,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion in Limine",
@@ -848,7 +898,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Add Lien or Levy Designation",
@@ -858,7 +909,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Add Small Tax Case Designation",
@@ -868,7 +920,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Amend Order",
@@ -878,7 +931,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Appoint an Interpreter Pursuant to Rule 143(f)",
@@ -888,7 +942,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Appoint New Tax Matters Partner",
@@ -898,7 +953,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Appoint Tax Matters Partner",
@@ -908,7 +964,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Authorize Proposed Sale of Seized Property",
@@ -918,7 +975,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Be Excused from Appearing at the Trial Session",
@@ -928,7 +986,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Be Recognized as Next Friend",
@@ -938,7 +997,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Bifurcate",
@@ -948,7 +1008,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Calendar",
@@ -958,7 +1019,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Calendar and Consolidate Docket Numbers [docket numbers]",
@@ -968,7 +1030,8 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Docket numbers (separate with a comma)",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Calendar in the Electronic (North) Courtroom",
@@ -978,7 +1041,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Certify for Interlocutory Appeal",
@@ -988,7 +1052,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Change or Correct Docket Entry",
@@ -998,7 +1063,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Change Place of Submission of Declaratory Judgment Case to [Place]",
@@ -1008,7 +1074,8 @@
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested location",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Change Place of Trial to [Place]",
@@ -1018,7 +1085,8 @@
       "scenario": "Nonstandard E",
       "labelPreviousDocument": "",
       "labelFreeText": "Requested location",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Change Service Method",
@@ -1028,7 +1096,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Clarify Order",
@@ -1038,7 +1107,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Close on Ground of Duplication",
@@ -1048,7 +1118,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Compel Discovery",
@@ -1058,7 +1129,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Compel Production of Documents",
@@ -1068,7 +1140,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Compel Responses to Interrogatories",
@@ -1078,7 +1151,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Compel the Taking of Deposition",
@@ -1088,7 +1162,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Conform the Pleadings to the Proof",
@@ -1098,7 +1173,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Consolidate Docket Numbers [docket numbers]",
@@ -1108,7 +1184,8 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Docket numbers to be consolidated (separate with a comma)",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Correct and Certify Record on Appeal",
@@ -1118,7 +1195,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Correct Clerical Order",
@@ -1128,7 +1206,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Correct Transcript",
@@ -1138,7 +1217,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Depose Pursuant to Rule 74",
@@ -1148,7 +1228,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Determine the Tax Matters Partner",
@@ -1158,7 +1239,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Dismiss",
@@ -1168,7 +1250,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Dismiss for Failure to Properly Prosecute",
@@ -1178,7 +1261,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Dismiss for Failure to State a Claim upon Which Relief Can Be Granted",
@@ -1188,7 +1272,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Dismiss for Lack of Jurisdiction as to [person, notice, or year]",
@@ -1198,7 +1283,8 @@
       "scenario": "Nonstandard B",
       "labelPreviousDocument": "",
       "labelFreeText": "Person, notice, or year",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Dismiss on Ground of Mootness",
@@ -1208,7 +1294,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Disqualify Counsel",
@@ -1218,7 +1305,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Enforce a Refund of Overpayment Pursuant to Rule 260",
@@ -1228,7 +1316,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Enforce Subpoena",
@@ -1238,7 +1327,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Extend Time to Move or File Answer",
@@ -1248,7 +1338,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Impose a Penalty",
@@ -1258,7 +1349,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Impose Sanctions",
@@ -1268,7 +1360,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Modify Decision in Estate Tax Case Pursuant to Rule 262",
@@ -1278,7 +1371,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Modify Order",
@@ -1288,7 +1382,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Permit Expert Witness to Testify without a Written Report Regarding Industry Practice Pursuant to Rule 143(g)(3)",
@@ -1298,7 +1393,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Permit Levy",
@@ -1308,7 +1404,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Preclude",
@@ -1318,7 +1415,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Quash or Modify Subpoena",
@@ -1328,7 +1426,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Redetermine Interest Pursuant to Rule 261",
@@ -1338,7 +1437,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Remand",
@@ -1348,7 +1448,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Remove Lien/Levy Designation",
@@ -1358,7 +1459,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Remove Small Tax Case Designation",
@@ -1368,7 +1470,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Remove Tax Matters Partner",
@@ -1378,7 +1481,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Reopen the Record",
@@ -1388,7 +1492,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Require Petitioner to File a Reply in a Small Tax Case Pursuant to Rule 173(c)",
@@ -1398,7 +1503,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Restore Case to the General Docket",
@@ -1408,7 +1514,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Restrain Assessment or Collection or to Order Refund of Amount Collected",
@@ -1418,7 +1525,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Retain File in Estate Tax Case Involving § 6166 Election Pursuant to Rule 157",
@@ -1428,7 +1536,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Review the Sufficiency of Answers or Objections to Request for Admissions",
@@ -1438,7 +1547,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Seal",
@@ -1448,7 +1558,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Set for a Time & Date Certain",
@@ -1458,7 +1569,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Set Pretrial Scheduling Order",
@@ -1468,7 +1580,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Sever",
@@ -1478,7 +1591,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Shift the Burden of Proof",
@@ -1488,7 +1602,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Shorten the Time",
@@ -1498,7 +1613,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Stay Proceedings",
@@ -1508,7 +1624,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Stay Proposed Sale of Seized Property",
@@ -1518,7 +1635,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Strike",
@@ -1528,7 +1646,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Submit Case Pursuant to Rule 122",
@@ -1538,7 +1657,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Substitute Parties and Change Caption",
@@ -1548,7 +1668,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Substitute Trial Exhibit(s)",
@@ -1558,7 +1679,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Supplement the Record",
@@ -1568,7 +1690,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Suppress Evidence",
@@ -1578,7 +1701,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Take Deposition Pursuant to Rule 74(c)(3)",
@@ -1588,7 +1712,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Take Judicial Notice",
@@ -1598,7 +1723,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Vacate",
@@ -1608,7 +1734,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Vacate or Revise Pursuant to Rule 162",
@@ -1618,7 +1745,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Withdraw",
@@ -1628,7 +1756,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     },
     {
       "documentTitle": "Motion to Withdraw or Modify the Deemed Admitted Admissions Pursuant to Rule 90(f)",
@@ -1638,7 +1767,8 @@
       "scenario": "Standard",
       "labelPreviousDocument": "",
       "labelFreeText": "",
-      "ordinalField": ""
+      "ordinalField": "",
+      "allowStamp": true
     }
   ],
   "Notice": [

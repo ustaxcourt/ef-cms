@@ -32,7 +32,7 @@ describe('validateCaseInventoryReportModalAction', () => {
       },
     });
 
-    expect(successStub).toBeCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
   it('should call the error path when any errors are found', async () => {
@@ -45,6 +45,6 @@ describe('validateCaseInventoryReportModalAction', () => {
       },
     });
 
-    expect(errorStub).toBeCalled();
+    expect(errorStub).toHaveBeenCalled();
   });
 });

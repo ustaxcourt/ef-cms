@@ -7,12 +7,14 @@ import React from 'react';
 
 export const CaseDetailPendingReportList = connect(
   {
+    caseDetailHelper: state.caseDetailHelper,
     formattedDocketEntries: state.formattedDocketEntries,
     openConfirmRemoveCaseDetailPendingItemModalSequence:
       sequences.openConfirmRemoveCaseDetailPendingItemModalSequence,
     showModal: state.modal.showModal,
   },
   function CaseDetailPendingReportList({
+    caseDetailHelper,
     formattedDocketEntries,
     openConfirmRemoveCaseDetailPendingItemModalSequence,
     showModal,
@@ -66,18 +68,20 @@ export const CaseDetailPendingReportList = connect(
                   </td>
                   <td>{entry.filedBy}</td>
                   <td>
-                    <Button
-                      link
-                      className="padding-0 no-wrap"
-                      icon="trash"
-                      onClick={() =>
-                        openConfirmRemoveCaseDetailPendingItemModalSequence({
-                          docketEntryId: entry.docketEntryId,
-                        })
-                      }
-                    >
-                      Remove
-                    </Button>
+                    {caseDetailHelper.hasTrackedItemsPermission && (
+                      <Button
+                        link
+                        className="padding-0 no-wrap"
+                        icon="trash"
+                        onClick={() =>
+                          openConfirmRemoveCaseDetailPendingItemModalSequence({
+                            docketEntryId: entry.docketEntryId,
+                          })
+                        }
+                      >
+                        Remove
+                      </Button>
+                    )}
                   </td>
                 </tr>
               </tbody>

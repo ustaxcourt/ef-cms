@@ -36,12 +36,14 @@ describe('submitCourtIssuedOrderAction', () => {
 
     expect(
       applicationContext.getUseCases().fileCourtIssuedOrderInteractor,
-    ).toBeCalled();
-    expect(applicationContext.getUseCases().validatePdfInteractor).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().validatePdfInteractor,
+    ).toHaveBeenCalled();
 
     expect(
       applicationContext.getUseCases().getStatusOfVirusScanInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should set document draftOrderState', async () => {
