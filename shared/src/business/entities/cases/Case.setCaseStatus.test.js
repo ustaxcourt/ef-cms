@@ -40,7 +40,7 @@ describe('setCaseStatus', () => {
 
     expect(updatedCase.status).toEqual(CASE_STATUS_TYPES.closed);
     expect(updatedCase.associatedJudge).toEqual('Judge Buch');
-    expect(closeCaseSpy).toBeCalled();
+    expect(closeCaseSpy).toHaveBeenCalled();
     closeCaseSpy.mockRestore();
   });
 });

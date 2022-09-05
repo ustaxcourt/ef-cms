@@ -91,14 +91,14 @@ describe('completeMessageInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().markMessageThreadRepliedTo,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().markMessageThreadRepliedTo.mock
         .calls[0][0].parentMessageId,
     ).toEqual(PARENT_MESSAGE_ID);
     expect(
       applicationContext.getPersistenceGateway().updateMessage,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
         .message,

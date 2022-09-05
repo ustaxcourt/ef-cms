@@ -43,6 +43,6 @@ describe('sealCaseInteractor', () => {
     });
     expect(
       applicationContext.getDispatchers().sendNotificationOfSealing,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

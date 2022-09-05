@@ -24,7 +24,7 @@ describe('submitPublicOrderAdvancedSearchAction', () => {
 
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().orderPublicSearchInteractor.mock
         .calls[0][1],

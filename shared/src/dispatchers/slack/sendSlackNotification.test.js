@@ -25,8 +25,8 @@ describe('sendSlackNotification', () => {
       topic: 'test-topic',
     });
 
-    expect(applicationContext.getHttpClient).toBeCalled();
-    expect(applicationContext.getHttpClient().post).toBeCalledWith(
+    expect(applicationContext.getHttpClient).toHaveBeenCalled();
+    expect(applicationContext.getHttpClient().post).toHaveBeenCalledWith(
       'https://slack.example.com',
       {
         text: 'How about now?',
@@ -43,7 +43,7 @@ describe('sendSlackNotification', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getDispatchNotification,
-    ).toBeCalledWith({
+    ).toHaveBeenCalledWith({
       applicationContext,
       topic: 'test-topic',
     });
@@ -58,7 +58,7 @@ describe('sendSlackNotification', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveDispatchNotification,
-    ).toBeCalledWith({
+    ).toHaveBeenCalledWith({
       applicationContext,
       topic: 'test-topic',
     });
@@ -81,6 +81,6 @@ describe('sendSlackNotification', () => {
       topic: 'test-topic',
     });
 
-    expect(applicationContext.getHttpClient().post).not.toBeCalled();
+    expect(applicationContext.getHttpClient().post).not.toHaveBeenCalled();
   });
 });

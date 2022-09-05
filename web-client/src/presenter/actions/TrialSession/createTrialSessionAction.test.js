@@ -77,10 +77,10 @@ describe('createTrialSessionAction', () => {
     });
     expect(
       applicationContext.getUseCases().createTrialSessionInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().setTrialSessionAsSwingSessionInteractor
         .mock.calls[0][1],

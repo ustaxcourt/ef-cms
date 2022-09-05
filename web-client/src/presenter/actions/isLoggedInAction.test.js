@@ -27,7 +27,7 @@ describe('isLoggedInAction', () => {
       },
     });
 
-    expect(isLoggedInStub).toBeCalled();
+    expect(isLoggedInStub).toHaveBeenCalled();
   });
 
   it('should call the unauthorized path if currentUser is undefined', async () => {
@@ -38,6 +38,6 @@ describe('isLoggedInAction', () => {
       state: {},
     });
 
-    expect(unauthorizedStub).toBeCalled();
+    expect(unauthorizedStub).toHaveBeenCalled();
   });
 });
