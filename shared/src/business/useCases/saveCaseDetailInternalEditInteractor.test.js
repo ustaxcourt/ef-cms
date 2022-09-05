@@ -130,7 +130,7 @@ describe('updateCase', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
         .workItem,
@@ -157,7 +157,7 @@ describe('updateCase', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should fail if the primary or secondary contact is empty', async () => {

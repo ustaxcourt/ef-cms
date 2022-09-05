@@ -54,7 +54,7 @@ describe('createCaseFromPaperAction', () => {
 
     expect(
       applicationContext.getUseCases().filePetitionFromPaperInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
         .calls[0][1],
@@ -68,7 +68,7 @@ describe('createCaseFromPaperAction', () => {
       requestForPlaceOfTrialFile: {},
       stinFile: {},
     });
-    expect(successStub).toBeCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
   it('should call filePetitionFromPaperInteractor and call path.error when finished if it throws an error', async () => {
@@ -98,7 +98,7 @@ describe('createCaseFromPaperAction', () => {
 
     expect(
       applicationContext.getUseCases().filePetitionFromPaperInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().filePetitionFromPaperInteractor.mock
         .calls[0][1],
@@ -110,7 +110,7 @@ describe('createCaseFromPaperAction', () => {
       },
       stinFile: {},
     });
-    expect(errorStub).toBeCalled();
+    expect(errorStub).toHaveBeenCalled();
   });
 });
 
