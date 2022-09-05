@@ -169,6 +169,7 @@ exports.updateTrialSessionInteractor = async (
   const editableFields = {
     address1: trialSession.address1,
     address2: trialSession.address2,
+    alternateTrialClerkName: trialSession.alternateTrialClerkName,
     chambersPhoneNumber: trialSession.chambersPhoneNumber,
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,

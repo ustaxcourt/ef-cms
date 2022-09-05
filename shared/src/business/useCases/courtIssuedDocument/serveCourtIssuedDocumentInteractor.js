@@ -27,6 +27,7 @@ const { WorkItem } = require('../../entities/WorkItem');
 const completeWorkItem = async ({
   applicationContext,
   docketEntryEntity,
+  leadDocketNumber,
   user,
   workItemToUpdate,
 }) => {
@@ -35,6 +36,8 @@ const completeWorkItem = async ({
       ...docketEntryEntity.validate().toRawObject(),
     },
   });
+
+  workItemToUpdate.leadDocketNumber = leadDocketNumber;
 
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
@@ -54,7 +57,7 @@ const completeWorkItem = async ({
 
   await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
     applicationContext,
-    section: user.section,
+    section: user.section ? user.section : DOCKET_SECTION,
     userId: user.userId,
     workItem: workItemToUpdate.validate().toRawObject(),
   });
@@ -287,6 +290,7 @@ const serveDocumentOnOneCase = async ({
   await completeWorkItem({
     applicationContext,
     docketEntryEntity,
+    leadDocketNumber: caseEntity.leadDocketNumber,
     user,
     workItemToUpdate,
   });

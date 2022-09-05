@@ -3,6 +3,7 @@ const {
 } = require('../../../business/test/createTestApplicationContext');
 const { getDocumentQCInboxForUser } = require('./getDocumentQCInboxForUser');
 jest.mock('../searchClient');
+const { GET_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 describe('getDocumentQCInboxForUser', () => {
@@ -10,7 +11,7 @@ describe('getDocumentQCInboxForUser', () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
   });
 
-  it('queries the search client for work items with the given userId', async () => {
+  it('should return work items with the given userId', async () => {
     await getDocumentQCInboxForUser({ applicationContext, userId: '123' });
 
     expect(search).toHaveBeenCalledWith({
@@ -46,6 +47,7 @@ describe('getDocumentQCInboxForUser', () => {
                     },
                   },
                 },
+                GET_PARENT_CASE,
               ],
             },
           },
