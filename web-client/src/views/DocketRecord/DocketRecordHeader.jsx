@@ -29,11 +29,11 @@ export const DocketRecordHeader = connect(
     return (
       <React.Fragment>
         <div className="grid-container padding-0 docket-record-header">
-          <div className="grid-row grid-gap hide-on-mobile">
+          <div className="grid-row grid-gap hide-on-mobile margin-bottom-3">
             <div className="tablet:grid-col-2">
               <select
                 aria-label="docket record"
-                className="usa-select margin-top-0 margin-bottom-2 sort"
+                className="usa-select margin-top-0 sort"
                 name={`docketRecordSort.${formattedCaseDetail.docketNumber}`}
                 value={formattedCaseDetail.docketRecordSort}
                 onChange={e => {
