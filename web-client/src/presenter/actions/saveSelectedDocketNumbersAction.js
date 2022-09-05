@@ -12,7 +12,7 @@ export const saveSelectedDocketNumbersAction = ({ get, store }) => {
 
   const checkedCases = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
-    .map(consolidatedCase => consolidatedCase.docketNumber);
+    .map(consolidatedCase => consolidatedCase.docketNumberWithSuffix);
 
   store.set(state.addedDocketNumbers, checkedCases);
 };
