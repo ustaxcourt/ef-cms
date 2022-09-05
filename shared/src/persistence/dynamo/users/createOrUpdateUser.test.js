@@ -82,10 +82,12 @@ describe('createOrUpdateUser', () => {
       user: petitionsclerkUser,
     });
 
-    expect(applicationContext.getCognito().adminDisableUser).not.toBeCalled();
+    expect(
+      applicationContext.getCognito().adminDisableUser,
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should create a user and cognito record, but disable the cognito user', async () => {
@@ -109,12 +111,12 @@ describe('createOrUpdateUser', () => {
       user: petitionsclerkUser,
     });
 
-    expect(applicationContext.getCognito().adminCreateUser).toBeCalled();
-    expect(applicationContext.getCognito().adminDisableUser).toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).toBeCalled();
+    expect(applicationContext.getCognito().adminCreateUser).toHaveBeenCalled();
+    expect(applicationContext.getCognito().adminDisableUser).toHaveBeenCalled();
+    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should call adminCreateUser with the correct UserAttributes', async () => {
@@ -163,11 +165,13 @@ describe('createOrUpdateUser', () => {
 
     await createOrUpdateUser({ applicationContext, user: petitionsClerkUser });
 
-    expect(applicationContext.getCognito().adminCreateUser).not.toBeCalled();
-    expect(applicationContext.getCognito().adminGetUser).toBeCalled();
+    expect(
+      applicationContext.getCognito().adminCreateUser,
+    ).not.toHaveBeenCalled();
+    expect(applicationContext.getCognito().adminGetUser).toHaveBeenCalled();
     expect(
       applicationContext.getCognito().adminUpdateUserAttributes,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('attempts to persist a private practitioner user with name and barNumber mapping records', async () => {

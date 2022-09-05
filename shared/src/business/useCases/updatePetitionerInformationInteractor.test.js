@@ -495,11 +495,11 @@ describe('updatePetitionerInformationInteractor', () => {
       },
     });
 
-    expect(updatePetitionerSpy).toBeCalled();
+    expect(updatePetitionerSpy).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).not.toBeCalled();
-    expect(addDocketEntrySpy).not.toBeCalled();
+    ).not.toHaveBeenCalled();
+    expect(addDocketEntrySpy).not.toHaveBeenCalled();
   });
 
   it('should not generated a notice if user is missing an email (aka, they are a new unverified user)', async () => {
@@ -555,11 +555,11 @@ describe('updatePetitionerInformationInteractor', () => {
       },
     });
 
-    expect(updatePetitionerSpy).toBeCalled();
+    expect(updatePetitionerSpy).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().generateAndServeDocketEntry,
-    ).toBeCalled();
-    expect(addDocketEntrySpy).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(addDocketEntrySpy).toHaveBeenCalled();
   });
 
   describe('admissions clerk adds a verified petitioner email', () => {
