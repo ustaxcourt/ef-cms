@@ -30,6 +30,6 @@ describe('generatePublicDocketRecordPdfUrlAction', () => {
     });
     expect(
       applicationContext.getUseCases().generatePublicDocketRecordPdfInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

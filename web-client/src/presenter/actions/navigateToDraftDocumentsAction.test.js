@@ -72,6 +72,6 @@ describe('navigateToDraftDocumentsAction', () => {
       },
     });
 
-    expect(routeStub).not.toBeCalled();
+    expect(routeStub).not.toHaveBeenCalled();
   });
 });

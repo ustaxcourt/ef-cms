@@ -25,7 +25,7 @@ describe('submitPublicOpinionAdvancedSearchAction', () => {
 
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().opinionPublicSearchInteractor.mock
         .calls[0][1],

@@ -40,8 +40,8 @@ describe('advancedQueryLimiter', () => {
       applicationContext,
       key: 'advanced-document-search',
     })(null, res, next);
-    expect(statusMock).toBeCalledWith(429);
-    expect(next).not.toBeCalled();
+    expect(statusMock).toHaveBeenCalledWith(429);
+    expect(next).not.toHaveBeenCalled();
     expect(jsonMock.mock.calls[0][0]).toMatchObject({
       message: 'you are only allowed 5 requests in a 1 second window time',
       type: 'advanced-query-limiter',
@@ -60,7 +60,7 @@ describe('advancedQueryLimiter', () => {
       applicationContext,
       key: 'advanced-document-search',
     })(null, res, next);
-    expect(next).toBeCalled();
+    expect(next).toHaveBeenCalled();
   });
 
   it('should reset the limiter counter if the current time is greater than expiresAt', async () => {
@@ -77,8 +77,8 @@ describe('advancedQueryLimiter', () => {
     })(null, res, next);
     expect(
       applicationContext.getPersistenceGateway().deleteKeyCount,
-    ).toBeCalled();
-    expect(next).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
   });
 
   it(`should be able to be invoked exactly ${MAX_INVOCATIONS} times before reaching next if limit is not reached`, async () => {
@@ -111,7 +111,7 @@ describe('advancedQueryLimiter', () => {
       key: 'advanced-document-search',
     })(null, res, next);
 
-    expect(next).toBeCalledTimes(MAX_INVOCATIONS);
+    expect(next).toHaveBeenCalledTimes(MAX_INVOCATIONS);
     // the 6th call should have failed and not invoked next
     expect(next.mock.calls[MAX_INVOCATIONS]).toBeUndefined();
     expect(statusMock.mock.calls[0]).toBeDefined();

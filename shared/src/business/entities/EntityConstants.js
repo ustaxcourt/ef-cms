@@ -432,7 +432,7 @@ const TRACKED_DOCUMENT_TYPES = {
 
 const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
-    .filter(doc => doc.category === 'Motion')
+    .filter(doc => doc.allowStamp)
     .map(x => x.eventCode),
 );
 
