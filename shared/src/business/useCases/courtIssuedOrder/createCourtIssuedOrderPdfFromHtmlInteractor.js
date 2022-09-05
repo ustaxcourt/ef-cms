@@ -18,7 +18,13 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext,
-  { contentHtml, docketNumber, documentTitle, signatureText },
+  {
+    addedDocketNumbers,
+    contentHtml,
+    docketNumber,
+    documentTitle,
+    signatureText,
+  },
 ) => {
   const user = applicationContext.getCurrentUser();
 
@@ -39,6 +45,7 @@ exports.createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
+      addedDocketNumbers,
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,

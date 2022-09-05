@@ -5,6 +5,7 @@ const { post } = require('../requests');
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {string} providers.addedDocketNumbers an optional array of docket numbers to add to the coversheet
  * @param {string} providers.docketNumber the docket number where the order is generated
  * @param {string} providers.contentHtml the html string for the pdf content
  * @param {string} providers.documentTitle the title of the document
@@ -13,11 +14,18 @@ const { post } = require('../requests');
  */
 exports.createCourtIssuedOrderPdfFromHtmlInteractor = (
   applicationContext,
-  { contentHtml, docketNumber, documentTitle, signatureText },
+  {
+    addedDocketNumbers,
+    contentHtml,
+    docketNumber,
+    documentTitle,
+    signatureText,
+  },
 ) => {
   return post({
     applicationContext,
     body: {
+      addedDocketNumbers,
       contentHtml,
       docketNumber,
       documentTitle,

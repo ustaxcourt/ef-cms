@@ -72,4 +72,20 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     ).toBeCalledWith(expect.objectContaining({ useTempBucket: true }));
     expect(result).toEqual(mockPdfUrl);
   });
+
+  it('calls the generate the order pdf with the defined addedDocketNumbers', async () => {
+    const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
+      applicationContext,
+      {
+        addedDocketNumbers: ['101-20'],
+      },
+    );
+
+    expect(applicationContext.getDocumentGenerators().order).toBeCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ addedDocketNumbers: ['101-20'] }),
+      }),
+    );
+    expect(result).toEqual(mockPdfUrl);
+  });
 });
