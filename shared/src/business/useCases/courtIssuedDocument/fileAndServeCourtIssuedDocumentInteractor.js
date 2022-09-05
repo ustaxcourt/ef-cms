@@ -66,6 +66,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
 
   const eventCodeCanOnlyBeServedOnSubjectCase =
     ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode);
+
   const consolidateCaseDuplicateDocketEntries = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {

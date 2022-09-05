@@ -16,6 +16,7 @@ export const submitPaperFilingAction = async ({
   props,
 }) => {
   const { docketNumber } = get(state.caseDetail);
+  let caseDetail = get(state.caseDetail);
   const { isSavingForLater, primaryDocumentFileId } = props;
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
@@ -62,7 +63,27 @@ export const submitPaperFilingAction = async ({
       });
   }
 
-  let caseDetail, paperServicePdfUrl;
+  let paperServicePdfUrl;
+
+  const consolidatedCasesPropagateDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
+  );
+
+  const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
+
+  const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
+
+  let docketNumbers = consolidatedCases
+    .filter(consolidatedCase => consolidatedCase.checked)
+    .map(consolidatedCase => consolidatedCase.docketNumber);
+
+  if (
+    !isLeadCase ||
+    !consolidatedCasesPropagateDocketEntriesFlag ||
+    docketNumbers.length === 0
+  ) {
+    docketNumbers = [caseDetail.docketNumber];
+  }
 
   if (isEditingDocketEntry) {
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
@@ -76,6 +97,7 @@ export const submitPaperFilingAction = async ({
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
       .getUseCases()
       .addPaperFilingInteractor(applicationContext, {
+        consolidatedGroupDocketNumbers: [docketNumbers],
         documentMetadata,
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,

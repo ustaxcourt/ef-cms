@@ -2,6 +2,7 @@ const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
 const {
+  ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   ROLES,
 } = require('../../entities/EntityConstants');
@@ -27,7 +28,12 @@ const { WorkItem } = require('../../entities/WorkItem');
  */
 exports.addPaperFilingInteractor = async (
   applicationContext,
-  { documentMetadata, isSavingForLater, primaryDocumentFileId },
+  {
+    consolidatedGroupDocketNumbers,
+    documentMetadata,
+    isSavingForLater,
+    primaryDocumentFileId,
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -43,6 +49,23 @@ exports.addPaperFilingInteractor = async (
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
+
+  // rename later
+
+  // for later, consider refactoring to check if (case.leadDocketNumber === docketNumber), THEN AND ONLY THEN
+  // you can file docket entries on consolidatedGroupDocketNumbers cases
+  // otherwise, file a docket entry (like old behavior) on documentMetadata.docketNumber case ONLY
+
+  const consolidateCaseDuplicateDocketEntries = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag:
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+    });
+
+  if (!consolidateCaseDuplicateDocketEntries) {
+    consolidatedGroupDocketNumbers = [docketNumber];
+  }
 
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
@@ -75,81 +98,106 @@ exports.addPaperFilingInteractor = async (
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
-  const docketEntryEntity = new DocketEntry(
-    {
-      ...baseMetadata,
-      ...metadata,
-      docketEntryId,
-      documentTitle: metadata.documentTitle,
-      documentType: metadata.documentType,
-      editState: JSON.stringify(docketRecordEditState),
-      filingDate: metadata.receivedAt,
-      isOnDocketRecord: true,
-      mailingDate: metadata.mailingDate,
-      relationship,
-      userId: user.userId,
-    },
-    { applicationContext, petitioners: caseEntity.petitioners },
-  );
-
-  const workItem = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      associatedJudge: caseToUpdate.associatedJudge,
-      caseStatus: caseToUpdate.status,
-      caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-      inProgress: isSavingForLater,
-      isRead: user.role !== ROLES.privatePractitioner,
-      section: DOCKET_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-    },
-    { applicationContext },
-  );
-
-  docketEntryEntity.setWorkItem(workItem);
-
-  workItem.assignToUser({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    section: user.section,
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
-  });
-
-  if (readyForService) {
-    docketEntryEntity.setAsServed(servedParties.all);
-  }
-
-  if (isFileAttached) {
-    docketEntryEntity.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
+  for (const dN of consolidatedGroupDocketNumbers) {
+    const aCase = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
         applicationContext,
-        docketEntryId,
+        docketNumber: dN,
       });
-  }
 
-  caseEntity.addDocketEntry(docketEntryEntity);
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
+    let aCaseEntity = new Case(aCase, { applicationContext });
+
+    const docketEntryEntity = new DocketEntry(
+      {
+        ...baseMetadata,
+        ...metadata,
+        docketEntryId,
+        documentTitle: metadata.documentTitle,
+        documentType: metadata.documentType,
+        editState: JSON.stringify(docketRecordEditState),
+        filingDate: metadata.receivedAt,
+        isOnDocketRecord: true,
+        mailingDate: metadata.mailingDate,
+        relationship,
+        userId: user.userId,
+      },
+      { applicationContext, petitioners: aCaseEntity.petitioners },
+    );
+
+    const workItem = new WorkItem(
+      {
+        assigneeId: null,
+        assigneeName: null,
+        associatedJudge: caseToUpdate.associatedJudge,
+        caseStatus: caseToUpdate.status,
+        caseTitle: Case.getCaseTitle(aCaseEntity.caseCaption),
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
+        },
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+        inProgress: isSavingForLater,
+        isRead: user.role !== ROLES.privatePractitioner,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      },
+      { applicationContext },
+    );
+
+    docketEntryEntity.setWorkItem(workItem);
+
+    workItem.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
     });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity,
-  });
+    if (readyForService) {
+      docketEntryEntity.setAsServed(servedParties.all);
+    }
+
+    if (isFileAttached) {
+      docketEntryEntity.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          docketEntryId,
+        });
+    }
+
+    aCaseEntity.addDocketEntry(docketEntryEntity);
+    aCaseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock({
+        applicationContext,
+        caseEntity: aCaseEntity,
+      });
+
+    // todo: why save case twice? this call also does NOT validate before saving, bad????
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: aCaseEntity,
+    });
+
+    if (readyForService) {
+      workItem.setAsCompleted({
+        message: 'completed',
+        user,
+      });
+    }
+
+    await saveWorkItem({
+      applicationContext,
+      isSavingForLater,
+      workItem,
+    });
+  }
 
   let paperServicePdfUrl;
 
@@ -158,25 +206,14 @@ exports.addPaperFilingInteractor = async (
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        caseEntities: [caseEntity],
-        docketEntryId: docketEntryEntity.docketEntryId,
+        caseEntities: [consolidatedGroupDocketNumbers],
+        docketEntryId,
       });
 
     if (servedParties.paper.length > 0) {
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
     }
-
-    workItem.setAsCompleted({
-      message: 'completed',
-      user,
-    });
   }
-
-  await saveWorkItem({
-    applicationContext,
-    isSavingForLater,
-    workItem,
-  });
 
   await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
     applicationContext,
