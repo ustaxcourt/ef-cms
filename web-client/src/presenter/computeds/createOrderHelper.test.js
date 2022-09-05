@@ -1,10 +1,21 @@
-import { createOrderHelper } from './createOrderHelper';
+import { applicationContext } from '../../applicationContext';
+import { createOrderHelper as createOrderHelperComputed } from './createOrderHelper';
 import { runCompute } from 'cerebral/test';
+import { withAppContextDecorator } from '../../withAppContext';
+
+const createOrderHelper = withAppContextDecorator(
+  createOrderHelperComputed,
+  applicationContext,
+);
 
 describe('createOrderHelper', () => {
   it('runs create order helper when not editing', () => {
     const result = runCompute(createOrderHelper, {
       state: {
+        caseDetail: {
+          docketNumber: '101-20',
+          leadDocketNumber: '102-20',
+        },
         form: {
           documentTitle: 'Order',
         },
@@ -18,6 +29,10 @@ describe('createOrderHelper', () => {
   it('runs create order helper when editing', () => {
     const result = runCompute(createOrderHelper, {
       state: {
+        caseDetail: {
+          docketNumber: '101-20',
+          leadDocketNumber: '102-20',
+        },
         documentToEdit: {},
         form: {
           documentTitle: 'Order',
@@ -28,5 +43,25 @@ describe('createOrderHelper', () => {
     expect(result.pageTitle).toEqual('Edit Order');
     expect(result.isEditing).toEqual(true);
     expect(result.documentToEdit).toMatchObject({});
+  });
+
+  it('sets showAddDocketNumbersButton to true when viewing a lead case', () => {
+    const result = runCompute(createOrderHelper, {
+      state: {
+        caseDetail: {
+          docketNumber: '101-20',
+          leadDocketNumber: '101-20',
+        },
+        documentToEdit: {},
+        featureFlags: {
+          'consolidated-cases-add-docket-numbers': true,
+        },
+        form: {
+          documentTitle: 'Order',
+        },
+      },
+    });
+
+    expect(result.showAddDocketNumbersButton).toEqual(true);
   });
 });
