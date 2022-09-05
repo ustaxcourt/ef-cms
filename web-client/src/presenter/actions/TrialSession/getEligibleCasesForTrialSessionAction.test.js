@@ -26,6 +26,6 @@ describe('getEligibleCasesForTrialSessionAction', () => {
     expect(
       applicationContext.getUseCases()
         .getEligibleCasesForTrialSessionInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

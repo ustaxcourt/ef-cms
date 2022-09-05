@@ -121,7 +121,7 @@ describe('router', () => {
       it('tries to navigate to /does-not-exist', () => {
         route('/does-not-exist');
         expect(window.document.title).toEqual(expect.stringMatching('Error'));
-        expect(getSequenceMock).toBeCalledWith('notFoundErrorSequence');
+        expect(getSequenceMock).toHaveBeenCalledWith('notFoundErrorSequence');
       });
 
       it('successfully navigates to / if that is not the current url', () => {
@@ -130,7 +130,7 @@ describe('router', () => {
         expect(window.document.title).toEqual(
           expect.stringMatching('Dashboard'),
         );
-        expect(getSequenceMock).toBeCalledWith('gotoDashboardSequence');
+        expect(getSequenceMock).toHaveBeenCalledWith('gotoDashboardSequence');
       });
     });
 
@@ -139,8 +139,8 @@ describe('router', () => {
       expect(window.document.title).toEqual(
         expect.stringMatching('Docket 123-45'),
       );
-      expect(getSequenceMock).toBeCalledWith('gotoCaseDetailSequence');
-      expect(sequenceMock).toBeCalledWith({ docketNumber: '123-45' });
+      expect(getSequenceMock).toHaveBeenCalledWith('gotoCaseDetailSequence');
+      expect(sequenceMock).toHaveBeenCalledWith({ docketNumber: '123-45' });
     });
 
     it('/case-detail/*?openModal=*', () => {
@@ -148,8 +148,8 @@ describe('router', () => {
       expect(window.document.title).toEqual(
         expect.stringMatching('Docket 123-45'),
       );
-      expect(getSequenceMock).toBeCalledWith('gotoCaseDetailSequence');
-      expect(sequenceMock).toBeCalledWith({
+      expect(getSequenceMock).toHaveBeenCalledWith('gotoCaseDetailSequence');
+      expect(sequenceMock).toHaveBeenCalledWith({
         docketNumber: '123-45',
         openModal: 'MyModal',
       });
@@ -166,10 +166,10 @@ describe('router', () => {
       expect(window.document.title).toEqual(
         expect.stringMatching('Add docket entry'),
       );
-      expect(getSequenceMock).toBeCalledWith(
+      expect(getSequenceMock).toHaveBeenCalledWith(
         'gotoAddCourtIssuedDocketEntrySequence',
       );
-      expect(sequenceMock).toBeCalledWith({
+      expect(sequenceMock).toHaveBeenCalledWith({
         docketEntryId,
         docketNumber,
         redirectUrl: `/messages/${docketNumber}/message-detail/${parentMessageId}?documentId=${docketEntryId}`,

@@ -37,8 +37,8 @@ describe('uploadCorrespondenceFileAction', () => {
 
     expect(
       applicationContext.getUseCases().uploadCorrespondenceDocumentInteractor,
-    ).toBeCalled();
-    expect(successStub).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
   it('fails to upload the correspondence document to s3', async () => {
@@ -55,6 +55,6 @@ describe('uploadCorrespondenceFileAction', () => {
       },
     });
 
-    expect(errorStub).toBeCalled();
+    expect(errorStub).toHaveBeenCalled();
   });
 });

@@ -237,6 +237,7 @@ import { sealDocketEntryInteractor } from '../../shared/src/proxies/editDocketEn
 import { serveCaseToIrsInteractor } from '../../shared/src/proxies/serveCaseToIrs/serveCaseToIrsProxy';
 import { serveCourtIssuedDocumentInteractor } from '../../shared/src/proxies/serveCourtIssuedDocumentProxy';
 import { serveExternallyFiledDocumentInteractor } from '../../shared/src/proxies/documents/serveExternallyFiledDocumentProxy';
+import { setConsolidationFlagsForDisplay } from '../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { setDocumentTitleFromStampDataInteractor } from '../../shared/src/business/useCases/stampMotion/setDocumentTitleFromStampDataInteractor';
 import { setForHearingInteractor } from '../../shared/src/proxies/trialSessions/setForHearingProxy';
 import { setItem } from '../../shared/src/persistence/localStorage/setItem';
@@ -740,6 +741,7 @@ const applicationContext = {
       isValidDateString,
       prepareDateFromString,
       replaceBracketed,
+      setConsolidationFlagsForDisplay,
       setServiceIndicatorsForCase,
       setupPdfDocument,
       sortDocketEntries,
