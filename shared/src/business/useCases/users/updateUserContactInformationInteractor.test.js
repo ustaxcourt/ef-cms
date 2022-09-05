@@ -95,11 +95,11 @@ describe('updateUserContactInformationInteractor', () => {
       userId: 'f7d90c05-f6cd-442c-a168-202db587f16f',
     });
 
-    expect(applicationContext.getUseCases().updateUser).not.toBeCalled();
-    expect(generateChangeOfAddress).not.toBeCalled();
+    expect(applicationContext.getUseCases().updateUser).not.toHaveBeenCalled();
+    expect(generateChangeOfAddress).not.toHaveBeenCalled();
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toBeCalledTimes(2);
+    ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message.action,
@@ -126,7 +126,7 @@ describe('updateUserContactInformationInteractor', () => {
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toBeCalledTimes(1);
+    ).toHaveBeenCalledTimes(1);
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message.action,
@@ -264,7 +264,7 @@ describe('updateUserContactInformationInteractor', () => {
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toBeCalledTimes(1);
+    ).toHaveBeenCalledTimes(1);
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message.action,
@@ -294,7 +294,7 @@ describe('updateUserContactInformationInteractor', () => {
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toBeCalledTimes(2);
+    ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[1][0].message.action,
@@ -337,6 +337,6 @@ describe('updateUserContactInformationInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateUser,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

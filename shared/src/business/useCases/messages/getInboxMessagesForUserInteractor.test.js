@@ -66,7 +66,7 @@ describe('getInboxMessagesForUserInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getUserInboxMessages,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

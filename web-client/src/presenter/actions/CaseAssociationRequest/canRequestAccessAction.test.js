@@ -19,7 +19,7 @@ describe('canRequestAccessAction', () => {
       state: { caseDetail: { docketNumber: '123-45' } },
     });
 
-    expect(presenter.providers.path.proceed).toBeCalled();
+    expect(presenter.providers.path.proceed).toHaveBeenCalled();
   });
 
   it('should call the unauthorized path with a docketNumber if props.isAssociated is truthy', async () => {
@@ -31,7 +31,7 @@ describe('canRequestAccessAction', () => {
       state: { caseDetail: { docketNumber: '123-45' } },
     });
 
-    expect(presenter.providers.path.unauthorized).toBeCalled();
+    expect(presenter.providers.path.unauthorized).toHaveBeenCalled();
     expect(
       presenter.providers.path.unauthorized.mock.calls[0][0],
     ).toMatchObject({

@@ -25,7 +25,7 @@ describe('fetchPendingItemsAction', () => {
 
     expect(
       applicationContextForClient.getUseCases().fetchPendingItemsInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result.output.pendingItems).toEqual(['some content']);
     expect(result.output.total).toEqual(10);
   });

@@ -70,7 +70,7 @@ describe('createMessageInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().createMessage,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().createMessage.mock.calls[0][0]
         .message,

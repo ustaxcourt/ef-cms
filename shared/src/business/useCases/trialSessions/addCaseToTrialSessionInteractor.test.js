@@ -156,6 +156,6 @@ describe('addCaseToTrialSessionInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

@@ -92,7 +92,7 @@ describe('createCaseAction', () => {
       },
     });
 
-    expect(filePetitionInteractor).toBeCalled();
+    expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
@@ -102,7 +102,7 @@ describe('createCaseAction', () => {
       stinFile: {},
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(2);
-    expect(successStub).toBeCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
   it('should call filePetitionInteractor and addCoversheetInteractor THREE times (when we have an ODS form) with the petition metadata and files and call the success path  finished', async () => {
@@ -193,7 +193,7 @@ describe('createCaseAction', () => {
       },
     });
 
-    expect(filePetitionInteractor).toBeCalled();
+    expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
@@ -203,7 +203,7 @@ describe('createCaseAction', () => {
       stinFile: {},
     });
     expect(addCoversheetInteractor).toHaveBeenCalledTimes(3); // STIN, Petition, and ODS
-    expect(successStub).toBeCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
   it('should call filePetitionInteractor and call path.error when finished if it throws an error', async () => {
@@ -229,7 +229,7 @@ describe('createCaseAction', () => {
       },
     });
 
-    expect(filePetitionInteractor).toBeCalled();
+    expect(filePetitionInteractor).toHaveBeenCalled();
     expect(filePetitionInteractor.mock.calls[0][1]).toMatchObject({
       ownershipDisclosureFile: {},
       petitionFile: {},
@@ -238,7 +238,7 @@ describe('createCaseAction', () => {
       },
       stinFile: {},
     });
-    expect(addCoversheetInteractor).not.toBeCalled();
-    expect(errorStub).toBeCalled();
+    expect(addCoversheetInteractor).not.toHaveBeenCalled();
+    expect(errorStub).toHaveBeenCalled();
   });
 });
