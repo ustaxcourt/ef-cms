@@ -83,7 +83,7 @@ describe('getPdfUrlAction', () => {
     expect(
       applicationContext.getUseCases()
         .createCourtIssuedOrderPdfFromHtmlInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result.output.pdfUrl).toBe(mockPdf.url);
 
     const args =
