@@ -46,7 +46,7 @@ describe('validateEditRespondentCounselAction', () => {
       },
     });
 
-    expect(successStub).toBeCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
   it('should call the error path when attempting to change from paper to electronic service', async () => {
@@ -68,7 +68,7 @@ describe('validateEditRespondentCounselAction', () => {
       },
     });
 
-    expect(errorStub).toBeCalled();
+    expect(errorStub).toHaveBeenCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
       serviceIndicator: expect.anything(),
     });
