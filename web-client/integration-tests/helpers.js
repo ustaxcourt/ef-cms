@@ -419,6 +419,16 @@ export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
   });
 };
 
+export const getFormattedDocumentQCSectionInProgress = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
+    box: 'inProgress',
+    queue: 'section',
+  });
+  return runCompute(formattedWorkQueue, {
+    state: cerebralTest.getState(),
+  });
+};
+
 export const getFormattedDocumentQCMyOutbox = async cerebralTest => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',
@@ -666,6 +676,32 @@ export const uploadProposedStipulatedDecision = async (
   cerebralTest.setState('form', {
     ...defaultForm,
     ...configObject,
+  });
+  await cerebralTest.runSequence('submitExternalDocumentSequence');
+};
+
+export const uploadExternalAdministrativeRecord = async cerebralTest => {
+  const contactPrimary = contactPrimaryFromState(cerebralTest);
+
+  cerebralTest.setState('form', {
+    attachments: false,
+    category: 'Miscellaneous',
+    certificateOfService: false,
+    certificateOfServiceDate: null,
+    documentTitle: 'Administrative Record',
+    documentType: 'Administrative Record',
+    eventCode: 'ADMR',
+    filers: [contactPrimary.contactId],
+    freeText: '',
+    hasSupportingDocuments: false,
+    primaryDocumentFile: fakeFile,
+    primaryDocumentFileSize: 115022,
+    scenario: 'Standard',
+    searchError: false,
+    supportingDocument: null,
+    supportingDocumentFile: null,
+    supportingDocumentFreeText: null,
+    supportingDocumentMetadata: null,
   });
   await cerebralTest.runSequence('submitExternalDocumentSequence');
 };
