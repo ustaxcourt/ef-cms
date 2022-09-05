@@ -119,17 +119,19 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
         .workItem,
     ).toMatchObject({ leadDocketNumber: caseRecord.docketNumber });
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('serves the document for electronic-only parties if a notice of docket change is generated', async () => {
@@ -139,12 +141,14 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toBeUndefined();
     expect(result.paperServiceParties.length).toEqual(0);
   });
@@ -162,7 +166,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
@@ -208,7 +212,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
@@ -228,7 +232,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
@@ -252,7 +256,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
@@ -276,7 +280,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
@@ -296,10 +300,10 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should generate a new coversheet when additionalInfo is changed and addToCoversheet is true', async () => {
@@ -315,7 +319,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
@@ -338,7 +342,7 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().noticeOfDocketChange.mock
         .calls[0][0].data.filingsAndProceedings,
@@ -394,12 +398,14 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -429,12 +435,14 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual('www.example.com');
     expect(result.paperServiceParties.length).toEqual(1);
   });
@@ -450,12 +458,14 @@ describe('completeDocketEntryQCInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(result.paperServicePdfUrl).toEqual(undefined);
     expect(result.paperServiceParties.length).toEqual(0);
   });

@@ -69,14 +69,14 @@ describe('remove case from trial session', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById.mock
         .calls[0][0].trialSessionId,
     ).toEqual(MOCK_TRIAL_INPERSON.trialSessionId);
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
@@ -93,7 +93,7 @@ describe('remove case from trial session', () => {
     });
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls[0][0].docketNumber,
@@ -101,12 +101,14 @@ describe('remove case from trial session', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
@@ -130,14 +132,14 @@ describe('remove case from trial session', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById.mock
         .calls[0][0].trialSessionId,
     ).toEqual(MOCK_TRIAL_INPERSON.trialSessionId);
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
@@ -147,7 +149,7 @@ describe('remove case from trial session', () => {
     });
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls[0][0].docketNumber,
@@ -155,19 +157,21 @@ describe('remove case from trial session', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
     ).toEqual(MOCK_CASE.docketNumber);
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock.mock
         .calls[0][0].caseEntity,
     ).toMatchObject({ docketNumber: '101-18' });
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
@@ -191,7 +195,7 @@ describe('remove case from trial session', () => {
 
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().setPriorityOnAllWorkItems.mock
         .calls[0][0],
@@ -224,7 +228,7 @@ describe('remove case from trial session', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('calls getTrialSessionById, updateTrialSession, getCaseByDocketNumber, and updateCase persistence methods with correct parameters for a non-calendared hearing', async () => {
@@ -248,14 +252,14 @@ describe('remove case from trial session', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById.mock
         .calls[0][0].trialSessionId,
     ).toEqual(MOCK_TRIAL_INPERSON.trialSessionId);
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,
@@ -265,7 +269,7 @@ describe('remove case from trial session', () => {
     });
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber.mock
         .calls[0][0].docketNumber,
@@ -273,11 +277,13 @@ describe('remove case from trial session', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAutomaticBlock,
-    ).not.toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,

@@ -78,13 +78,11 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
 
   leadAndUnconsolidatedCases.forEach(caseToUpdate => {
     if (caseToUpdate.leadCase) {
-      caseToUpdate.consolidatedCases = [];
-
-      const memberCases = memberConsolidatedCases.filter(memberCase => {
-        return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;
-      });
-
-      caseToUpdate.consolidatedCases.push(...memberCases);
+      caseToUpdate.consolidatedCases = memberConsolidatedCases.filter(
+        memberCase => {
+          return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;
+        },
+      );
 
       caseToUpdate.consolidatedCases.sort(
         applicationContext.getUtilities().compareCasesByDocketNumber,

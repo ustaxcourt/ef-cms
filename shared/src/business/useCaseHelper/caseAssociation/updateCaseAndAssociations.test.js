@@ -346,7 +346,7 @@ describe('updateCaseAndAssociations', () => {
 
       expect(
         applicationContext.getUseCaseHelpers().updateAssociatedJudgeOnWorkItems,
-      ).toBeCalledWith({
+      ).toHaveBeenCalledWith({
         applicationContext,
         associatedJudge: 'Judge Dredd',
         workItemId: '123',
@@ -365,7 +365,7 @@ describe('updateCaseAndAssociations', () => {
       expect(
         applicationContext.getUseCaseHelpers()
           .updateDocketNumberSuffixOnWorkItems,
-      ).toBeCalledWith({
+      ).toHaveBeenCalledWith({
         applicationContext,
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
         workItemId: '123',
@@ -383,7 +383,7 @@ describe('updateCaseAndAssociations', () => {
 
       expect(
         applicationContext.getUseCaseHelpers().updateCaseTitleOnWorkItems,
-      ).toBeCalledWith({
+      ).toHaveBeenCalledWith({
         applicationContext,
         caseTitle: Case.getCaseTitle('Some caption changed'),
         workItemId: '123',
@@ -401,7 +401,7 @@ describe('updateCaseAndAssociations', () => {
 
       expect(
         applicationContext.getUseCaseHelpers().updateCaseStatusOnWorkItems,
-      ).toBeCalledWith({
+      ).toHaveBeenCalledWith({
         applicationContext,
         caseStatus: CASE_STATUS_TYPES.generalDocket,
         workItemId: '123',
@@ -420,7 +420,7 @@ describe('updateCaseAndAssociations', () => {
 
       expect(
         applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems,
-      ).toBeCalledWith({
+      ).toHaveBeenCalledWith({
         applicationContext,
         trialDate: '2021-01-02T05:22:16.001Z',
         workItemId: '123',
@@ -449,7 +449,7 @@ describe('updateCaseAndAssociations', () => {
 
       expect(
         applicationContext.getUseCaseHelpers().updateTrialDateOnWorkItems,
-      ).toBeCalledWith({
+      ).toHaveBeenCalledWith({
         applicationContext,
         trialDate: null,
         workItemId: '123',
