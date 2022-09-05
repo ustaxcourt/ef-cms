@@ -13,7 +13,7 @@ export const OrderDocketHeader = ({
     <div className="order-docket-header">
       <div id="caption">
         <div id="caption-title">
-          {caseTitle}, {isEtAlOrder && 'ET AL.,'}
+          {caseTitle},{isEtAlOrder && ' ET AL.,'}
         </div>
         <div id="caption-extension">{caseCaptionExtension}</div>
         <div id="caption-v">v.</div>

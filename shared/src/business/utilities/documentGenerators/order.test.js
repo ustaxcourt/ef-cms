@@ -288,35 +288,5 @@ describe('documentGenerators', () => {
       expect(applicationContext.getNodeSass).toHaveBeenCalled();
       expect(applicationContext.getPug).toHaveBeenCalled();
     });
-
-    it('appends ET AL. to the caseTitle if multiple addedDocketNumbers were passed in', async () => {
-      const pdf = await order({
-        applicationContext,
-        data: {
-          addedDocketNumbers: ['101-20', '102-20'],
-          caseCaptionExtension: 'Petitioner(s)',
-          caseTitle: 'Test Petitioner',
-          docketNumberWithSuffix: '123-45S',
-          orderContent:
-            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
-              .content,
-          orderTitle:
-            SYSTEM_GENERATED_DOCUMENT_TYPES.orderForAmendedPetitionAndFilingFee
-              .documentTitle,
-        },
-      });
-
-      // Do not write PDF when running on CircleCI
-      if (process.env.PDF_OUTPUT) {
-        writePdfFile('Order_For_Amended_Petition_And_Filing_Fee_Et_Al', pdf);
-        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
-      }
-
-      expect(
-        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
-      ).toHaveBeenCalled();
-      expect(applicationContext.getNodeSass).toHaveBeenCalled();
-      expect(applicationContext.getPug).toHaveBeenCalled();
-    });
   });
 });
