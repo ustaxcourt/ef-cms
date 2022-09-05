@@ -27,7 +27,7 @@ describe('removeSignatureAction', () => {
 
     expect(
       applicationContext.getUseCases().removeSignatureFromDocumentInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result.output).toMatchObject({
       caseDetail: { docketNumber: '123-19' },
       viewerDraftDocumentToDisplay: {

@@ -1,4 +1,8 @@
-const { getMetadataLines, redact } = require('./createLogger');
+const {
+  getMetadataLines,
+  redact,
+  removeDuplicateLogInformation,
+} = require('./createLogger');
 
 describe('getMetadataLines', () => {
   it('should get empty array with no info', () => {
@@ -82,5 +86,137 @@ describe('redact', () => {
     expect(redactedLogEntry.user.email).toBe(
       'privatePractitioner1@example.com',
     );
+  });
+});
+
+describe('removeDuplicateLogInformation', () => {
+  const mockLogEntry = {
+    context: {
+      environment: 'test',
+      level: 'error',
+      message: 'Email service health check failed. Rate exceeded',
+      metadata: {
+        code: 'Throttling',
+        retryable: true,
+        stack:
+          'Throttling: Rate exceeded\\n at Request.extractError ' +
+          '(/var/runtime/node_modules/aws-sdk/lib/protocol/query.js:50:29)\\n ' +
+          'at Request.callListeners (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:106:20)\\n ' +
+          'at Request.emit (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:78:10)\\n ' +
+          'at Request.emit (/var/runtime/node_modules/aws-sdk/lib/request.js:686:14)\\n ' +
+          'at Request.transition (/var/runtime/node_modules/aws-sdk/lib/request.js:22:10)\\n ' +
+          'at AcceptorStateMachine.runTo (/var/runtime/node_modules/aws-sdk/lib/state_machine.js:14:12)\\n ' +
+          'at /var/runtime/node_modules/aws-sdk/lib/state_machine.js:26:10\\n ' +
+          'at Request.<anonymous> (/var/runtime/node_modules/aws-sdk/lib/request.js:38:9)\\n ' +
+          'at Request.<anonymous> (/var/runtime/node_modules/aws-sdk/lib/request.js:688:12)\\n ' +
+          'at Request.callListeners (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:116:18)',
+        statusCode: 400,
+        time: '2022-08-05T18:55:04.708Z',
+      },
+      request: {
+        body: {},
+        headers: {
+          accept: '*/*',
+          'accept-encoding': 'identity,gzip,deflate',
+          host: 'public-api.stg.ef-cms.ustaxcourt.gov',
+          'user-agent':
+            'Amazon-Route53-Health-Check-Service (ref 9fbb1225-66df-4837-a0c8-12df057ff0eb; report http://amzn.to/1vsZADi)',
+          'x-amzn-trace-id': 'Root=1-62ed6785-15b3374a2aa796500d42c17d',
+          'x-forwarded-for': '123.456.78.90',
+          'x-forwarded-port': 443,
+          'x-forwarded-proto': 'https',
+        },
+        method: 'GET',
+        url: '/public-api/health',
+      },
+      requestId: 'e82bd012-ce9a-4230-9ab6-69e2d2fa0502',
+      timestamp: '2022-08-05T18:55:04.709Z',
+      user: 'unauthenticated',
+      zTotallyUnexpectedKey: 'Chill out on the requests please',
+    },
+    environment: {
+      color: 'blue',
+      stage: 'stg',
+    },
+    level: 'error',
+    logGroup: '/aws/lambda/api_public_stg_blue',
+    logStream: '2022/08/05/[$LATEST]65150752d18a4837babc2e13107fdb5c',
+    message: 'Email service health check failed. Rate exceeded',
+    metadata: {
+      code: 'Throttling',
+      retryable: true,
+      stack:
+        'Throttling: Rate exceeded\\n at Request.extractError ' +
+        '(/var/runtime/node_modules/aws-sdk/lib/protocol/query.js:50:29)\\n ' +
+        'at Request.callListeners (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:106:20)\\n ' +
+        'at Request.emit (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:78:10)\\n ' +
+        'at Request.emit (/var/runtime/node_modules/aws-sdk/lib/request.js:686:14)\\n ' +
+        'at Request.transition (/var/runtime/node_modules/aws-sdk/lib/request.js:22:10)\\n ' +
+        'at AcceptorStateMachine.runTo (/var/runtime/node_modules/aws-sdk/lib/state_machine.js:14:12)\\n ' +
+        'at /var/runtime/node_modules/aws-sdk/lib/state_machine.js:26:10\\n ' +
+        'at Request.<anonymous> (/var/runtime/node_modules/aws-sdk/lib/request.js:38:9)\\n ' +
+        'at Request.<anonymous> (/var/runtime/node_modules/aws-sdk/lib/request.js:688:12)\\n ' +
+        'at Request.callListeners (/var/runtime/node_modules/aws-sdk/lib/sequential_executor.js:116:18)',
+      statusCode: 400,
+      time: '2022-08-05T18:55:04.708Z',
+    },
+    request: {
+      body: {},
+      headers: {
+        accept: '*/*',
+        'accept-encoding': 'identity,gzip,deflate',
+        host: 'public-api.stg.ef-cms.ustaxcourt.gov',
+        'user-agent':
+          'Amazon-Route53-Health-Check-Service (ref 9fbb1225-66df-4837-a0c8-12df057ff0eb; report http://amzn.to/1vsZADi)',
+        'x-amzn-trace-id': 'Root=1-62ed6785-15b3374a2aa796500d42c17d',
+        'x-forwarded-for': '123.456.78.90',
+        'x-forwarded-port': 443,
+        'x-forwarded-proto': 'https',
+      },
+      method: 'GET',
+      url: '/public-api/health',
+    },
+    requestId: {
+      apiGateway: 'e82bd012-ce9a-4230-9ab6-69e2d2fa0502',
+      applicationLoadBalancer: 'Root=1-b0e37f79-3203-4c45-981a-7370b59370b1',
+      lambda: '09e02bed-ad6f-4b0c-a8da-ad0a2a49157d',
+    },
+    timestamp: '2022-08-05T18:55:04.709Z',
+    user: {
+      role: 'unauthenticated',
+    },
+    zTotallyUnexpectedKey: 'Chill out on the requests please',
+  };
+  const formattedLogEntry =
+    removeDuplicateLogInformation().transform(mockLogEntry);
+
+  it('removes duplicate data from the context object', () => {
+    const expectedBaseKeys = [
+      'context',
+      'environment',
+      'level',
+      'logGroup',
+      'logStream',
+      'message',
+      'metadata',
+      'request',
+      'requestId',
+      'timestamp',
+      'user',
+      'zTotallyUnexpectedKey',
+    ];
+    expect(Object.keys(formattedLogEntry).sort()).toEqual(expectedBaseKeys);
+
+    // assert that data also in the base object is removed from the context object
+    const expectedContextKeys = ['environment', 'requestId', 'user'];
+    expect(Object.keys(formattedLogEntry.context).sort()).toEqual(
+      expectedContextKeys,
+    );
+  });
+
+  it('does not overwrite any defaultMeta, even if data was provided for one or more of the defaultMeta fields', () => {
+    expect(formattedLogEntry.environment instanceof Object).toBeTruthy();
+    expect(formattedLogEntry.requestId instanceof Object).toBeTruthy();
+    expect(formattedLogEntry.user instanceof Object).toBeTruthy();
   });
 });
