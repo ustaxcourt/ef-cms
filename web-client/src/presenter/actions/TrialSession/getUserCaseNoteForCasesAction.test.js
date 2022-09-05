@@ -37,7 +37,7 @@ describe('getUserCaseNoteForCasesAction', () => {
 
     expect(
       applicationContext.getUseCases().getUserCaseNoteForCasesInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().getUserCaseNoteForCasesInteractor.mock
         .calls[0][1].docketNumbers,

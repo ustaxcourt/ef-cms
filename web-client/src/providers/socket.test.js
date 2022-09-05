@@ -75,7 +75,7 @@ describe('socket', () => {
     startSocket();
     startSocket();
 
-    expect(webSocketStub).toBeCalledTimes(1);
+    expect(webSocketStub).toHaveBeenCalledTimes(1);
     expect(webSocketCloseStub).not.toHaveBeenCalled();
   });
 
@@ -89,12 +89,12 @@ describe('socket', () => {
     startSocket();
     oncloseFn({ reason: 'something bad happened' });
     expect(console.error).toHaveBeenCalled();
-    expect(webSocketStub).toBeCalledTimes(2);
+    expect(webSocketStub).toHaveBeenCalledTimes(2);
   });
 
   it('does not reconnect the websocket when closed via a normal event', () => {
     startSocket();
     oncloseFn({ reason: 'Normal connection closure' });
-    expect(webSocketStub).toBeCalledTimes(1);
+    expect(webSocketStub).toHaveBeenCalledTimes(1);
   });
 });

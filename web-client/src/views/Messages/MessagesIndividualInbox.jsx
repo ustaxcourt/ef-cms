@@ -1,4 +1,5 @@
 import { Button } from '../../ustc-ui/Button/Button';
+import { ConsolidatedCaseIcon } from '../../ustc-ui/Icon/ConsolidatedCaseIcon';
 import { Icon } from '../../ustc-ui/Icon/Icon';
 import { SortableColumnHeaderButton } from '../../ustc-ui/SortableColumnHeaderButton/SortableColumnHeaderButton';
 import { TableFilters } from '../../ustc-ui/TableFilters/TableFilters';
@@ -113,23 +114,9 @@ export const MessagesIndividualInbox = connect(
               <tbody key={message.messageId}>
                 <tr key={message.messageId}>
                   <td className="consolidated-case-column">
-                    {message.inConsolidatedGroup && (
-                      <span
-                        className="fa-layers fa-fw"
-                        title={message.consolidatedIconTooltipText}
-                      >
-                        <Icon
-                          aria-label={message.consolidatedIconTooltipText}
-                          className="fa-icon-blue"
-                          icon="copy"
-                        />
-                        {message.inLeadCase && (
-                          <span className="fa-inverse lead-case-icon-text">
-                            L
-                          </span>
-                        )}
-                      </span>
-                    )}
+                    <ConsolidatedCaseIcon
+                      caseItem={message}
+                    ></ConsolidatedCaseIcon>
                   </td>
                   <td className="message-queue-row small" colSpan="2">
                     {message.docketNumberWithSuffix}

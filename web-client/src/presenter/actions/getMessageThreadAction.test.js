@@ -20,7 +20,7 @@ describe('getMessageThreadAction', () => {
 
     expect(
       applicationContextForClient.getUseCases().getMessageThreadInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContextForClient.getUseCases().getMessageThreadInteractor.mock
         .calls[0][1],

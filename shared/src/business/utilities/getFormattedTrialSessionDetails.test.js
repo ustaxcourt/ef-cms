@@ -1,18 +1,13 @@
-/* eslint-disable max-lines */
 import {
   DOCKET_NUMBER_SUFFIXES,
-  PARTIES_CODES,
   SESSION_STATUS_GROUPS,
-  TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-const { applicationContext } = require('../test/createTestApplicationContext');
+import { applicationContext } from '../test/createTestApplicationContext';
 import {
   compareTrialSessionEligibleCases,
   formatCase,
   formattedTrialSessionDetails,
-  getTrialSessionStatus,
-  setPretrialMemorandumFiler,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
 
@@ -229,6 +224,9 @@ describe('formattedTrialSessionDetails', () => {
         caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT },
       }).isDocketSuffixHighPriority,
     ).toBe(true);
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(4);
   });
 
   describe('comparing eligible cases', () => {
@@ -377,8 +375,10 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(5);
     expect(result.formattedEligibleCases.length).toEqual(5);
-
     expect(result.formattedEligibleCases).toMatchObject([
       {
         caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
@@ -436,6 +436,9 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(3);
     expect(result.allCases.length).toEqual(3);
     expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-16S');
     expect(result.allCases[0].caseTitle).toEqual('Someone Else');
@@ -467,6 +470,9 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(5);
     expect(result.allCases).toMatchObject([
       { docketNumber: '90-07' },
       { docketNumber: '500-17' },
@@ -519,230 +525,5 @@ describe('formattedTrialSessionDetails', () => {
       },
     });
     expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.closed);
-  });
-
-  describe('getTrialSessionStatus', () => {
-    it('returns `Closed` when all trial session cases are inactive / removed from trial and sessionScope is locationBased', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19', removedFromTrial: true },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-      };
-
-      const results = getTrialSessionStatus({ applicationContext, session });
-
-      expect(results).toEqual(SESSION_STATUS_GROUPS.closed);
-    });
-
-    it('should not return `Closed` when all trial session cases are inactive / removed from trial and sessionScope is standaloneRemote', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19', removedFromTrial: true },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-      };
-
-      const results = getTrialSessionStatus({ applicationContext, session });
-
-      expect(results).not.toEqual(SESSION_STATUS_GROUPS.closed);
-    });
-
-    it('returns `Open` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19' },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-        isCalendared: true,
-      };
-
-      const results = getTrialSessionStatus({ applicationContext, session });
-
-      expect(results).toEqual(SESSION_STATUS_GROUPS.open);
-    });
-
-    it('returns `New` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19' },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-        isCalendared: false,
-      };
-
-      const results = getTrialSessionStatus({ applicationContext, session });
-
-      expect(results).toEqual(SESSION_STATUS_GROUPS.new);
-    });
-  });
-
-  describe('setPretrialMemorandumFiler', () => {
-    const mockPretrialMemorandumDocketEntry = {
-      createdAt: '2018-11-21T20:49:28.192Z',
-      docketEntryId: '9de27a7d-7c6b-434b-803b-7655f82d5e07',
-      docketNumber: '101-18',
-      documentTitle: 'Pretrial Memorandum',
-      documentType: 'Pretrial Memorandum',
-      eventCode: 'PMT',
-      filedBy: 'Test Petitioner',
-      filers: [MOCK_CASE.petitioners[0].contactId],
-      filingDate: '2018-03-01T05:00:00.000Z',
-      index: 5,
-      isFileAttached: true,
-      isOnDocketRecord: true,
-      isStricken: false,
-      partyIrsPractitioner: false,
-      processingStatus: 'complete',
-      receivedAt: '2018-03-01T05:00:00.000Z',
-      userId: '7805d1ab-18d0-43ec-bafb-654e83405416',
-    };
-
-    let mockCase;
-
-    beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockImplementation(() => mockCase);
-    });
-
-    it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
-      mockCase = {
-        ...MOCK_CASE,
-        docketEntries: [mockPretrialMemorandumDocketEntry],
-        irsPractitioners: [],
-      };
-
-      const result = setPretrialMemorandumFiler({
-        applicationContext,
-        caseItem: mockCase,
-      });
-
-      expect(result).toEqual(PARTIES_CODES.PETITIONER);
-    });
-
-    it('should set the pretrialMemorandumStatus to "R" when the filer is the respondent', () => {
-      mockCase = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...mockPretrialMemorandumDocketEntry,
-            filers: [],
-            partyIrsPractitioner: true,
-          },
-        ],
-      };
-
-      const result = setPretrialMemorandumFiler({
-        applicationContext,
-        caseItem: mockCase,
-      });
-
-      expect(result).toEqual(PARTIES_CODES.RESPONDENT);
-    });
-
-    it('should set the pretrialMemorandumStatus to "B" when the filers are both petitioner and respondent', () => {
-      mockCase = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...mockPretrialMemorandumDocketEntry,
-            filers: [MOCK_CASE.petitioners[0].contactId],
-            partyIrsPractitioner: true,
-          },
-        ],
-      };
-
-      const result = setPretrialMemorandumFiler({
-        applicationContext,
-        caseItem: mockCase,
-      });
-
-      expect(result).toEqual(PARTIES_CODES.BOTH);
-    });
-
-    it('should set the pretrialMemorandumStatus to "B" when there are 2 PMTs, one filed by petitioner and one filed by respondent', () => {
-      mockCase = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...mockPretrialMemorandumDocketEntry,
-            filers: [MOCK_CASE.petitioners[0].contactId],
-            partyIrsPractitioner: false,
-          },
-          {
-            ...mockPretrialMemorandumDocketEntry,
-            filers: [],
-            partyIrsPractitioner: true,
-          },
-        ],
-      };
-
-      const result = setPretrialMemorandumFiler({
-        applicationContext,
-        caseItem: mockCase,
-      });
-
-      expect(result).toEqual(PARTIES_CODES.BOTH);
-    });
-
-    it('should set the pretrialMemorandumStatus to "R" when there are 2 PMTs, one stricken and filed by petitioner and one filed by respondent', () => {
-      mockCase = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...mockPretrialMemorandumDocketEntry,
-            filers: [MOCK_CASE.petitioners[0].contactId],
-            isStricken: true,
-            partyIrsPractitioner: false,
-          },
-          {
-            ...mockPretrialMemorandumDocketEntry,
-            filers: [],
-            partyIrsPractitioner: true,
-          },
-        ],
-      };
-
-      const result = setPretrialMemorandumFiler({
-        applicationContext,
-        caseItem: mockCase,
-      });
-
-      expect(result).toEqual(PARTIES_CODES.RESPONDENT);
-    });
-
-    it('should set the pretrialMemorandumStatus to undefined when there is no pretrial memorandum on the case', () => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockReturnValue(MOCK_CASE);
-
-      const result = setPretrialMemorandumFiler({
-        applicationContext,
-        caseItem: MOCK_CASE,
-      });
-
-      expect(result).toBeUndefined();
-    });
-
-    it('should set the pretrialMemorandumStatus to undefined when there is a pretrial memorandum on the case but it is stricken', () => {
-      mockCase = {
-        ...MOCK_CASE,
-        docketEntries: [
-          {
-            ...mockPretrialMemorandumDocketEntry,
-            isStricken: true,
-          },
-        ],
-      };
-
-      const result = setPretrialMemorandumFiler({
-        applicationContext,
-        caseItem: MOCK_CASE,
-      });
-
-      expect(result).toBeUndefined();
-    });
   });
 });
