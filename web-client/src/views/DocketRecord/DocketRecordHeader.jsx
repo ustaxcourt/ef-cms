@@ -67,8 +67,12 @@ export const DocketRecordHeader = connect(
                 ))}
               </select>
             </div>
-            <div className="tablet:grid-col-3">
-              <label htmlFor="inline-select" id="docket-record-filter-label">
+            <div className="tablet:grid-col-4">
+              <label
+                className="dropdown-label-serif margin-right-3"
+                htmlFor="inline-select"
+                id="docket-record-filter-label"
+              >
                 Filter by
               </label>
               <BindedSelect
@@ -90,7 +94,7 @@ export const DocketRecordHeader = connect(
             </div>
 
             {docketRecordHelper.showPrintableDocketRecord && (
-              <div className="tablet:grid-col-7 text-right">
+              <div className="tablet:grid-col-6 text-right">
                 <Button
                   link
                   aria-label="printable docket record"
