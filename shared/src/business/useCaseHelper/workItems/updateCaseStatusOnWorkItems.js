@@ -8,12 +8,9 @@ exports.updateCaseStatusOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext.getPersistenceGateway().updateWorkItemCaseStatus({
-      applicationContext,
-      caseStatus,
-      docketNumber: workItem.docketNumber,
-      workItemId: workItem.workItemId,
-    }),
+    applicationContext
+      .getPersistenceGateway()
+      .updateWorkItemCaseStatus({ applicationContext, caseStatus, workItem }),
   );
 
   await Promise.all(workItemUpdates);

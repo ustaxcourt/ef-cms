@@ -269,51 +269,5 @@ describe('computeTrialSessionFormDataAction', () => {
       name: 'Test Clerk',
       userId: '321',
     });
-    expect(result.state.form.alternateTrialClerkName).toEqual(undefined);
-  });
-
-  it('should correctly store the trialClerkId to "Other" on the form when "Other" is selected in drop down', async () => {
-    const result = await runAction(computeTrialSessionFormDataAction, {
-      props: {
-        key: 'trialClerkId',
-        value: { name: 'Other*', userId: 'Other' },
-      },
-      state: { form },
-    });
-    expect(result.state.form.trialClerkId).toEqual('Other');
-    expect(result.state.form.trialClerk).toEqual(undefined);
-  });
-
-  it('should clear the trial clerk input when "Select" is selected in drop down', async () => {
-    let result = await runAction(computeTrialSessionFormDataAction, {
-      props: {
-        key: 'trialClerkId',
-        value: undefined,
-      },
-      state: {
-        form: {
-          ...form,
-          trialClerk: { name: 'trial clerk', userId: '78' },
-          trialClerkId: '9',
-        },
-      },
-    });
-    expect(result.state.form.trialClerkId).toEqual(undefined);
-    expect(result.state.form.trialClerk).toEqual(undefined);
-    result = await runAction(computeTrialSessionFormDataAction, {
-      props: {
-        key: 'trialClerkId',
-        value: undefined,
-      },
-      state: {
-        form: {
-          ...form,
-          trialClerk: { name: 'Other*', userId: 'Other' },
-          trialClerkId: 'Other',
-        },
-      },
-    });
-    expect(result.state.form.trialClerkId).toEqual(undefined);
-    expect(result.state.form.alternateTrialClerkName).toEqual(undefined);
   });
 });

@@ -1,5 +1,5 @@
 import { clearAlertsAction } from '../actions/clearAlertsAction';
-import { computeSubmitTrialSessionDataAction } from '../actions/TrialSession/computeSubmitTrialSessionDataAction';
+import { computeTrialSessionFormDataAction } from '../actions/TrialSession/computeTrialSessionFormDataAction';
 import { createTrialSessionAction } from '../actions/TrialSession/createTrialSessionAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getCreateTrialSessionAlertSuccessAction } from '../actions/TrialSession/getCreateTrialSessionAlertSuccessAction';
@@ -23,7 +23,7 @@ export const submitTrialSessionSequence = [
     null,
     'computedEstimatedEndDate',
   ),
-  computeSubmitTrialSessionDataAction,
+  computeTrialSessionFormDataAction,
   validateTrialSessionAction,
   {
     error: [

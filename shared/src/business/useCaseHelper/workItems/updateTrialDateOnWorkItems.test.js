@@ -6,8 +6,8 @@ const { updateTrialDateOnWorkItems } = require('./updateTrialDateOnWorkItems');
 
 describe('updateTrialDateOnWorkItems', () => {
   const workItemsResults = [
-    { docketNumber: '101-20', pk: 'sharpest', sk: 'tool', workItemId: 'abc' },
-    { docketNumber: '101-20', pk: 'in', sk: 'the shed', workItemId: 'abc' },
+    { pk: 'sharpest', sk: 'tool' },
+    { pk: 'in', sk: 'the shed' },
   ];
   beforeAll(() => {
     applicationContext
@@ -37,18 +37,8 @@ describe('updateTrialDateOnWorkItems', () => {
         .calls[0][0],
     ).toMatchObject({
       applicationContext,
-      docketNumber: '101-20',
       trialDate,
-      workItemId: 'abc',
-    });
-    expect(
-      applicationContext.getPersistenceGateway().updateWorkItemTrialDate.mock
-        .calls[1][0],
-    ).toMatchObject({
-      applicationContext,
-      docketNumber: '101-20',
-      trialDate,
-      workItemId: 'abc',
+      workItem: workItemsResults[0],
     });
   });
 });

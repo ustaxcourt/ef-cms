@@ -98,19 +98,6 @@ describe('processCaseEntries', () => {
     expect(caseMessageMappingRecord).toEqual('CaseMessageMapping');
   });
 
-  it('should index a case work item mapping record in order to create a parent-child relationship between a case and a work item', async () => {
-    await processCaseEntries({
-      applicationContext,
-      caseEntityRecords: [mockCaseRecord],
-    });
-
-    const caseWorkItemMappingRecord =
-      applicationContext.getPersistenceGateway().bulkIndexRecords.mock
-        .calls[0][0].records[2].dynamodb.NewImage.entityName.S;
-
-    expect(caseWorkItemMappingRecord).toEqual('CaseWorkItemMapping');
-  });
-
   it('should log an error and throw an exception when bulk index returns failed records', async () => {
     applicationContext
       .getPersistenceGateway()

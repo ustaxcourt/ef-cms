@@ -8,12 +8,9 @@ exports.updateTrialDateOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext.getPersistenceGateway().updateWorkItemTrialDate({
-      applicationContext,
-      docketNumber: workItem.docketNumber,
-      trialDate,
-      workItemId: workItem.workItemId,
-    }),
+    applicationContext
+      .getPersistenceGateway()
+      .updateWorkItemTrialDate({ applicationContext, trialDate, workItem }),
   );
 
   await Promise.all(workItemUpdates);

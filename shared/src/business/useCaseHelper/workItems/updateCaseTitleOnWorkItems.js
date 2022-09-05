@@ -8,12 +8,9 @@ exports.updateCaseTitleOnWorkItems = async ({
     .getWorkItemsByWorkItemId({ applicationContext, workItemId });
 
   const workItemUpdates = workItems.map(workItem =>
-    applicationContext.getPersistenceGateway().updateWorkItemCaseTitle({
-      applicationContext,
-      caseTitle,
-      docketNumber: workItem.docketNumber,
-      workItemId: workItem.workItemId,
-    }),
+    applicationContext
+      .getPersistenceGateway()
+      .updateWorkItemCaseTitle({ applicationContext, caseTitle, workItem }),
   );
 
   return Promise.all(workItemUpdates);

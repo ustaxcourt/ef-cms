@@ -935,11 +935,17 @@ Case.prototype.archiveDocketEntry = function (
  *
  * @param {string} correspondence the correspondence to archive
  */
-Case.prototype.archiveCorrespondence = function (correspondenceEntity) {
-  correspondenceEntity.archived = true;
-  this.archivedCorrespondences.push(correspondenceEntity);
+Case.prototype.archiveCorrespondence = function (
+  correspondence,
+  { applicationContext },
+) {
+  const correspondenceToArchive = new Correspondence(correspondence, {
+    applicationContext,
+  });
+  correspondenceToArchive.archived = true;
+  this.archivedCorrespondences.push(correspondenceToArchive);
   this.deleteCorrespondenceById({
-    correspondenceId: correspondenceEntity.correspondenceId,
+    correspondenceId: correspondenceToArchive.correspondenceId,
   });
 };
 

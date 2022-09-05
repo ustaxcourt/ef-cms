@@ -5,7 +5,6 @@ const {
   getDocumentQCInboxForSection,
 } = require('./getDocumentQCInboxForSection');
 jest.mock('../searchClient');
-const { GET_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 describe('getDocumentQCInboxForSection', () => {
@@ -13,7 +12,7 @@ describe('getDocumentQCInboxForSection', () => {
     search.mockReturnValue({ results: ['some', 'matches'], total: 0 });
   });
 
-  it('should return work items with the given section', async () => {
+  it('queries the search client for work items with the given section', async () => {
     await getDocumentQCInboxForSection({
       applicationContext,
       section: 'docket',
@@ -52,7 +51,6 @@ describe('getDocumentQCInboxForSection', () => {
                     },
                   },
                 },
-                GET_PARENT_CASE,
               ],
             },
           },
@@ -63,7 +61,7 @@ describe('getDocumentQCInboxForSection', () => {
     });
   });
 
-  it('should return work items with the given section and a judgeUserName', async () => {
+  it('queries the search client for work items with the given section and a judgeUserName', async () => {
     const mockJudgeName = 'Ashford';
     await getDocumentQCInboxForSection({
       applicationContext,

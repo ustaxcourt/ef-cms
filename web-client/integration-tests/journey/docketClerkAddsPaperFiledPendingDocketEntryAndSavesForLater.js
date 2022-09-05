@@ -7,17 +7,16 @@ import {
 export const docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater = (
   cerebralTest,
   fakeFile,
-  caseDocketNumber,
 ) => {
   const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
   return it('docket clerk adds paper filed docket entry and saves for later', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: caseDocketNumber || cerebralTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: caseDocketNumber || cerebralTest.docketNumber,
+      docketNumber: cerebralTest.docketNumber,
     });
 
     await cerebralTest.runSequence('updateScreenMetadataSequence', {

@@ -74,19 +74,5 @@ describe('NewTrialSession entity', () => {
       }
       expect(error).toBeDefined();
     });
-
-    it('should throw an error on when a valid alternateTrialClerkName is not provided and only when "Other" is selected', () => {
-      let error;
-      try {
-        const trialSession = new NewTrialSession(
-          { ...VALID_TRIAL_SESSION, trialClerkId: 'Other' },
-          { applicationContext },
-        );
-        trialSession.validate();
-      } catch (err) {
-        error = err;
-      }
-      expect(error).toBeDefined();
-    });
   });
 });

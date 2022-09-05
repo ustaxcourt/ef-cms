@@ -11,8 +11,7 @@ exports.updateAssociatedJudgeOnWorkItems = async ({
     applicationContext.getPersistenceGateway().updateWorkItemAssociatedJudge({
       applicationContext,
       associatedJudge,
-      docketNumber: workItem.docketNumber,
-      workItemId: workItem.workItemId,
+      workItem,
     }),
   );
 

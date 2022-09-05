@@ -3,8 +3,7 @@ const client = require('../../dynamodbClientService');
 exports.updateWorkItemAssociatedJudge = ({
   applicationContext,
   associatedJudge,
-  docketNumber,
-  workItemId,
+  workItem,
 }) =>
   client.update({
     ExpressionAttributeNames: {
@@ -14,8 +13,8 @@ exports.updateWorkItemAssociatedJudge = ({
       ':associatedJudge': associatedJudge,
     },
     Key: {
-      pk: `case|${docketNumber}`,
-      sk: `work-item|${workItemId}`,
+      pk: workItem.pk,
+      sk: workItem.sk,
     },
     UpdateExpression: 'SET #associatedJudge = :associatedJudge',
     applicationContext,

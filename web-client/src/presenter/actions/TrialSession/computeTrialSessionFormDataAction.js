@@ -1,6 +1,6 @@
 import { state } from 'cerebral';
 
-export const computeTermAndUpdateState = ({ month, year }, store) => {
+const computeTerm = ({ month, year }) => {
   const selectedMonth = +month;
   let term, termYear;
 
@@ -23,14 +23,11 @@ export const computeTermAndUpdateState = ({ month, year }, store) => {
       term = 'Fall';
     }
   }
-  store.set(state.form.term, term);
-  store.set(state.form.termYear, termYear);
+
+  return { term, termYear };
 };
 
-export const compute24HrTimeAndUpdateState = (
-  { extension, hours, minutes },
-  store,
-) => {
+const compute24HrTime = ({ extension, hours, minutes }) => {
   if (!hours && !minutes) return undefined;
   const TIME_INVALID = '99:99'; // force time validation error
 
@@ -42,15 +39,14 @@ export const compute24HrTimeAndUpdateState = (
     !VALID_MINUTE_RE.test(minutes) ||
     !['am', 'pm'].includes(extension)
   ) {
-    store.set(state.form.startTime, TIME_INVALID);
-    return;
+    return TIME_INVALID;
   }
 
   if (extension === 'pm') {
     if (+hours <= 11) {
       hours = `${+hours + 12}`;
     }
-  } else {
+  } else if (extension === 'am') {
     if (+hours === 12) {
       hours = '00';
     } else {
@@ -58,7 +54,7 @@ export const compute24HrTimeAndUpdateState = (
     }
   }
 
-  store.set(state.form.startTime, `${hours}:${minutes}`);
+  return `${hours}:${minutes}`;
 };
 
 /**
@@ -71,39 +67,26 @@ export const compute24HrTimeAndUpdateState = (
 export const computeTrialSessionFormDataAction = ({ get, props, store }) => {
   const form = get(state.form);
 
-  computeTermAndUpdateState(
-    {
-      month: form.startDateMonth,
-      year: form.startDateYear,
-    },
-    store,
-  );
+  const { term, termYear } = computeTerm({
+    month: form.startDateMonth,
+    year: form.startDateYear,
+  });
+  store.set(state.form.term, term);
+  store.set(state.form.termYear, termYear);
 
-  compute24HrTimeAndUpdateState(
-    {
-      extension: form.startTimeExtension,
-      hours: form.startTimeHours,
-      minutes: form.startTimeMinutes,
-    },
-    store,
-  );
-
+  const startTime = compute24HrTime({
+    extension: form.startTimeExtension,
+    hours: form.startTimeHours,
+    minutes: form.startTimeMinutes,
+  });
+  store.set(state.form.startTime, startTime);
   if (props.key === 'judgeId') {
     store.set(state.form.judgeId, props.value.userId);
     store.set(state.form.judge, props.value);
   }
 
   if (props.key === 'trialClerkId') {
-    if (props.value) {
-      store.set(state.form.trialClerkId, props.value.userId);
-      if (props.value.userId !== 'Other') {
-        store.set(state.form.trialClerk, props.value);
-        store.unset(state.form.alternateTrialClerkName);
-      }
-    } else {
-      store.unset(state.form.alternateTrialClerkName);
-      store.unset(state.form.trialClerk);
-      store.unset(state.form.trialClerkId);
-    }
+    store.set(state.form.trialClerkId, props.value.userId);
+    store.set(state.form.trialClerk, props.value);
   }
 };

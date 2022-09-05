@@ -1,4 +1,3 @@
-const { GET_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
@@ -33,7 +32,6 @@ exports.getDocumentQCInboxForUser = async ({ applicationContext, userId }) => {
                 },
               },
             },
-            GET_PARENT_CASE,
           ],
         },
       },

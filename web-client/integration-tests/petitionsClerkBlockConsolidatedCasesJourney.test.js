@@ -45,6 +45,7 @@ describe('Manually block consolidated cases', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkSetsCaseReadyForTrial(cerebralTest);
+  loginAs(cerebralTest, 'docketclerk@example.com');
 
   loginAs(cerebralTest, 'petitionsclerk@example.com');
   petitionsClerkCreatesNewCase(cerebralTest, fakeFile, trialLocation, true, {

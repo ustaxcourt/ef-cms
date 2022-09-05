@@ -51,11 +51,10 @@ OutboxItem.prototype.init = function init(
     rawOutboxItem.highPriority ||
     rawOutboxItem.caseStatus === CASE_STATUS_TYPES.calendared;
   this.inProgress = rawOutboxItem.inProgress;
-  this.leadDocketNumber = rawOutboxItem.leadDocketNumber;
-  this.section = rawOutboxItem.section;
   this.trialDate = rawOutboxItem.trialDate;
   this.workItemId =
     rawOutboxItem.workItemId || applicationContext.getUniqueId();
+  this.section = rawOutboxItem.section;
 };
 
 joiValidationDecorator(OutboxItem, OUTBOX_ITEM_VALIDATION_RULES);

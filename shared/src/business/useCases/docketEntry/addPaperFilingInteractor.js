@@ -107,7 +107,6 @@ exports.addPaperFilingInteractor = async (
       docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
       inProgress: isSavingForLater,
       isRead: user.role !== ROLES.privatePractitioner,
-      leadDocketNumber: caseToUpdate.leadDocketNumber,
       section: DOCKET_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,

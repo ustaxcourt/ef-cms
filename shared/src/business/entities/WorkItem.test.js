@@ -192,7 +192,6 @@ describe('WorkItem', () => {
         },
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
-        leadDocketNumber: '101-18',
         section: DOCKET_SECTION,
         sentBy: 'bob',
       },

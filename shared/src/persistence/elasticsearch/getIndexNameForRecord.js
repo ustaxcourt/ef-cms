@@ -34,10 +34,6 @@ const isRecordOfType = (record, type) => {
       return true;
     }
 
-    if (type == 'WorkItem' && entityName === 'CaseWorkItemMapping') {
-      return true;
-    }
-
     if (entityName === type) {
       return true;
     }

@@ -7,27 +7,13 @@ import { docketClerkEditsTrialSession } from './journey/docketClerkEditsTrialSes
 import { docketClerkUpdatesCaseStatusToClosed } from './journey/docketClerkUpdatesCaseStatusToClosed';
 import { docketClerkVerifiesCaseStatusIsUnchanged } from './journey/docketClerkVerifiesCaseStatusIsUnchanged';
 import { docketClerkViewsTrialSessionList } from './journey/docketClerkViewsTrialSessionList';
-import { formattedTrialSessionDetails as formattedTrialSessionDetailsComputed } from '../src/presenter/computeds/formattedTrialSessionDetails';
-import {
-  loginAs,
-  setupTest,
-  uploadPetition,
-  waitForExpectedItem,
-  waitForLoadingComponentToHide,
-} from './helpers';
+import { loginAs, setupTest, uploadPetition } from './helpers';
 import { markAllCasesAsQCed } from './journey/markAllCasesAsQCed';
 import { petitionsClerkManuallyAddsCaseToTrial } from './journey/petitionsClerkManuallyAddsCaseToTrial';
 import { petitionsClerkSetsATrialSessionsSchedule } from './journey/petitionsClerkSetsATrialSessionsSchedule';
-import { runCompute } from 'cerebral/test';
-import { withAppContextDecorator } from '../src/withAppContext';
-
-const formattedTrialSessionDetails = withAppContextDecorator(
-  formattedTrialSessionDetailsComputed,
-);
 
 describe('Docket Clerk edits a calendared trial session', () => {
   const cerebralTest = setupTest();
-  let overrides = {};
 
   beforeEach(() => {
     jest.setTimeout(30000);
@@ -87,7 +73,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkUpdatesCaseStatusToClosed(cerebralTest);
 
-  overrides = {
+  const overrides = {
     fieldToUpdate: 'judge',
     valueToUpdate: {
       name: 'Gustafson',
@@ -102,90 +88,6 @@ describe('Docket Clerk edits a calendared trial session', () => {
     });
 
     expect(cerebralTest.getState('trialSession.caseOrder').length).toBe(3);
-  });
-
-  it('should throw validation error when "Other" is selected and no alternateTrialClerkName provided', async () => {
-    await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: cerebralTest.trialSessionId,
-    });
-
-    expect(cerebralTest.getState('currentPage')).toEqual('EditTrialSession');
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'trialClerkId',
-      value: {
-        name: 'Other*',
-        userId: 'Other',
-      },
-    });
-    await cerebralTest.runSequence('updateTrialSessionSequence');
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({
-      alternateTrialClerkName:
-        'A valid Alternate Trial Clerk name must be provided if "Other*" is selected',
-    });
-  });
-
-  it('should set the alternateTrialClerkName', async () => {
-    const alternateTrialClerkName = 'Incredible Hulk';
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'alternateTrialClerkName',
-      value: alternateTrialClerkName,
-    });
-    await cerebralTest.runSequence('updateTrialSessionSequence');
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    await waitForLoadingComponentToHide({ cerebralTest });
-    await waitForExpectedItem({
-      cerebralTest,
-      currentItem: 'currentPage',
-      expectedItem: 'PrintPaperTrialNotices',
-    });
-    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
-
-    const formatted = runCompute(formattedTrialSessionDetails, {
-      state: cerebralTest.getState(),
-    });
-
-    expect(formatted.formattedTrialClerk).toEqual(alternateTrialClerkName);
-  });
-
-  it('should unset the alternateTrialClerkName by setting trial clerk name', async () => {
-    const testClerkName = 'Test Clerk';
-    await cerebralTest.runSequence('gotoEditTrialSessionSequence', {
-      trialSessionId: cerebralTest.trialSessionId,
-    });
-    expect(cerebralTest.getState('currentPage')).toEqual('EditTrialSession');
-
-    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'trialClerkId',
-      value: {
-        name: testClerkName,
-        userId: 'dabbad05-18d0-43ec-bafb-654e83405415',
-      },
-    });
-
-    await cerebralTest.runSequence('updateTrialSessionSequence');
-
-    expect(cerebralTest.getState('validationErrors')).toEqual({});
-
-    await waitForLoadingComponentToHide({ cerebralTest });
-    await waitForExpectedItem({
-      cerebralTest,
-      currentItem: 'currentPage',
-      expectedItem: 'PrintPaperTrialNotices',
-    });
-    expect(cerebralTest.getState('currentPage')).toEqual('TrialSessionDetail');
-
-    const formatted = runCompute(formattedTrialSessionDetails, {
-      state: cerebralTest.getState(),
-    });
-
-    expect(formatted.formattedTrialClerk).toEqual(testClerkName);
-    expect(
-      cerebralTest.getState('trialSession.alternateTrialClerkName'),
-    ).toEqual(undefined);
   });
 
   it('verify that a Notice of Change of Trial Judge was generated for each open case', async () => {

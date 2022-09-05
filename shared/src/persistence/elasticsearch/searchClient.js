@@ -3,7 +3,6 @@ const {
   formatDocketEntryResult,
 } = require('./helpers/formatDocketEntryResult');
 const { formatMessageResult } = require('./helpers/formatMessageResult');
-const { formatWorkItemResult } = require('./helpers/formatWorkItemResult');
 const { get } = require('lodash');
 
 const CHUNK_SIZE = 10000;
@@ -26,17 +25,11 @@ const formatResults = body => {
       hit['_index'] === 'efcms-message' &&
       hit.inner_hits &&
       hit.inner_hits['case-mappings'];
-    const isWorkItemResultWithParentCaseMapping =
-      hit['_index'] === 'efcms-work-item' &&
-      hit.inner_hits &&
-      hit.inner_hits['case-mappings'];
 
     if (isDocketEntryResultWithParentCaseMapping) {
       return formatDocketEntryResult({ caseMap, hit, sourceUnmarshalled });
     } else if (isMessageResultWithParentCaseMapping) {
       return formatMessageResult({ caseMap, hit, sourceUnmarshalled });
-    } else if (isWorkItemResultWithParentCaseMapping) {
-      return formatWorkItemResult({ caseMap, hit, sourceUnmarshalled });
     } else {
       return sourceUnmarshalled;
     }

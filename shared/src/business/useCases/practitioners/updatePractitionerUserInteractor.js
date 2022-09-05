@@ -109,17 +109,12 @@ exports.updatePractitionerUserInteractor = async (
       .getPersistenceGateway()
       .createNewPractitionerUser({
         applicationContext,
-        user: new Practitioner({
-          ...validatedUserData,
-          pendingEmail: user.updatedEmail,
-        })
-          .validate()
-          .toRawObject(),
+        user: { ...validatedUserData, pendingEmail: user.updatedEmail },
       });
   } else {
-    await applicationContext.getPersistenceGateway().updateUserRecords({
+    await applicationContext.getUseCaseHelpers().updateUserRecords({
       applicationContext,
-      oldUser: new Practitioner(oldUser).validate().toRawObject(),
+      oldUser,
       updatedUser: validatedUserData,
       userId: oldUser.userId,
     });

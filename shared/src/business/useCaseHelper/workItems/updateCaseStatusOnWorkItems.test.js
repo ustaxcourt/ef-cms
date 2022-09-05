@@ -8,8 +8,8 @@ const { faker } = require('@faker-js/faker');
 
 describe('updateCaseStatusOnWorkItems', () => {
   const workItemsResults = [
-    { docketNumber: '101-20', pk: 'hi', sk: 'there', workItemId: 'abc' },
-    { docketNumber: '101-20', pk: 'some', sk: 'body', workItemId: 'abc' },
+    { pk: 'hi', sk: 'there' },
+    { pk: 'some', sk: 'body' },
   ];
   beforeAll(() => {
     applicationContext
@@ -40,17 +40,7 @@ describe('updateCaseStatusOnWorkItems', () => {
     ).toMatchObject({
       applicationContext,
       caseStatus,
-      docketNumber: '101-20',
-      workItemId: 'abc',
-    });
-    expect(
-      applicationContext.getPersistenceGateway().updateWorkItemCaseStatus.mock
-        .calls[1][0],
-    ).toMatchObject({
-      applicationContext,
-      caseStatus,
-      docketNumber: '101-20',
-      workItemId: 'abc',
+      workItem: workItemsResults[0],
     });
   });
 });

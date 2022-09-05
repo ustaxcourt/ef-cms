@@ -138,15 +138,6 @@ describe('Authorization client service', () => {
       ).toBeTruthy();
     });
 
-    it('should be authorized to perform track items operations', () => {
-      expect(
-        isAuthorized(
-          { role: ROLES.docketClerk, userId: 'docketclerk' },
-          ROLE_PERMISSIONS.TRACKED_ITEMS,
-        ),
-      ).toBeTruthy();
-    });
-
     it('should be authorized for the WORK_ITEM permission', () => {
       expect(
         isAuthorized(

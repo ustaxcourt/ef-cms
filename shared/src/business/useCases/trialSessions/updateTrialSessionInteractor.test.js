@@ -341,31 +341,6 @@ describe('updateTrialSessionInteractor', () => {
     });
   });
 
-  it('should update the trial session when an alternateTrialClerkName is added and no trial clerk', async () => {
-    const updatedFields = {
-      alternateTrialClerkName: 'Incredible Hulk',
-    };
-
-    applicationContext
-      .getPersistenceGateway()
-      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
-
-    await updateTrialSessionInteractor(applicationContext, {
-      trialSession: {
-        ...MOCK_TRIAL_INPERSON,
-        ...updatedFields,
-      },
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway().updateTrialSession.mock
-        .calls[0][0].trialSessionToUpdate,
-    ).toMatchObject({
-      ...MOCK_TRIAL_INPERSON,
-      ...updatedFields,
-    });
-  });
-
   it('should NOT update fields that are NOT editable on the trial session', async () => {
     applicationContext
       .getPersistenceGateway()

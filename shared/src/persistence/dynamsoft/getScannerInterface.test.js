@@ -5,6 +5,9 @@ const { getScannerInterface } = require('./getScannerInterface');
 const { SCAN_MODES } = require('../../business/entities/EntityConstants');
 
 describe('getScannerInterface', () => {
+  window['EnumDWT_ImageType'] = { IT_PNG: 1 };
+  window['EnumDWT_PixelType'] = { TWPT_RGB: 1 };
+  window['EnumDWT_CapSupportedSizes'] = { TWSS_A4: 1 };
   const mockSources = ['Test Source 1', 'Test Source 2'];
   const mockScanCount = 1;
 
@@ -56,10 +59,7 @@ describe('getScannerInterface', () => {
   };
 
   const Dynamsoft = {
-    DWT: {
-      EnumDWT_CapSupportedSizes: { TWSS_A4: 1 },
-      EnumDWT_ImageType: { IT_PNG: 1 },
-      EnumDWT_PixelType: { TWPT_RGB: 1 },
+    WebTwainEnv: {
       GetWebTwain: () => DWObject,
     },
   };

@@ -18,9 +18,11 @@ describe('updateWorkItemDocketNumberSuffix', () => {
 
     await updateWorkItemDocketNumberSuffix({
       applicationContext,
-      docketNumber: 'pk',
       docketNumberSuffix: mockDocketNumberSuffix,
-      workItemId: 'sk',
+      workItem: {
+        pk: mockPk,
+        sk: mockSk,
+      },
     });
 
     expect(client.update.mock.calls[0][0]).toMatchObject({

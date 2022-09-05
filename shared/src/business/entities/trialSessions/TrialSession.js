@@ -35,7 +35,6 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
 
   this.address1 = rawSession.address1;
   this.address2 = rawSession.address2;
-  this.alternateTrialClerkName = rawSession.alternateTrialClerkName;
   this.caseOrder = (rawSession.caseOrder || []).map(caseOrder => ({
     addedToSessionAt: caseOrder.addedToSessionAt,
     calendarNotes: caseOrder.calendarNotes,
@@ -53,7 +52,6 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.estimatedEndDate = rawSession.estimatedEndDate || null;
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
-  this.isClosed = rawSession.isClosed || false;
   this.joinPhoneNumber = rawSession.joinPhoneNumber;
   this.maxCases = rawSession.maxCases;
   this.meetingId = rawSession.meetingId;
@@ -64,6 +62,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.sessionScope =
     rawSession.sessionScope || TRIAL_SESSION_SCOPE_TYPES.locationBased;
   this.sessionType = rawSession.sessionType;
+  this.isClosed = rawSession.isClosed || false;
   this.startDate = rawSession.startDate;
   if (isStandaloneRemoteSession(rawSession.sessionScope)) {
     this.startTime = '13:00';
@@ -172,11 +171,6 @@ TrialSession.validationRules = {
   COMMON: {
     address1: JoiValidationConstants.STRING.max(100).allow('').optional(),
     address2: JoiValidationConstants.STRING.max(100).allow('').optional(),
-    alternateTrialClerkName: joi.when('trialClerk', {
-      is: joi.exist(),
-      otherwise: JoiValidationConstants.STRING.max(100).allow('').optional(),
-      then: joi.any().forbidden(),
-    }),
     chambersPhoneNumber: stringRequiredForRemoteProceedings,
     city: JoiValidationConstants.STRING.max(100).allow('').optional(),
     courtReporter: JoiValidationConstants.STRING.max(100).optional(),

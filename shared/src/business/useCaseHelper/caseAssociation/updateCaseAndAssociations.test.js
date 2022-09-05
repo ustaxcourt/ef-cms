@@ -777,12 +777,7 @@ describe('updateCaseAndAssociations', () => {
       applicationContext
         .getPersistenceGateway()
         .getUserCaseMappingsByDocketNumber.mockReturnValue([
-          {
-            docketNumber: '101-20',
-            pk: 'abc|987',
-            sk: 'user-case|123',
-            userId: '987',
-          },
+          { pk: 'abc|987', sk: 'user-case|123' },
         ]);
     });
     it('exits without calling any persistence methods if non-mapping attributes are update', async () => {

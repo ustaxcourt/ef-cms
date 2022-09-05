@@ -15,7 +15,6 @@ export const DatePickerComponent = ({
   names,
   onBlur,
   onChange,
-  onValueChange,
   optional,
   placeholder,
   shouldClearHiddenInput,
@@ -81,14 +80,12 @@ export const DatePickerComponent = ({
       window.document.getElementById(`${name}-date`) || inputRef.current;
 
     input.addEventListener('change', e => {
-      onValueChange(e.target.value);
-
       if (values) {
         let [month, day, year] = splitDate(e.target.value);
         if (month.length > 2) {
           [year, month, day] = splitDate(e.target.value);
         }
-        if (year?.length < 4) {
+        if (year.length < 4) {
           year = '';
         }
         onChange({

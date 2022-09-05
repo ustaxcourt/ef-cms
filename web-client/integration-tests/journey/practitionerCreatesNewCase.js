@@ -12,7 +12,6 @@ export const practitionerCreatesNewCase = (
   fakeFile,
   trialLocation = 'Seattle, Washington',
   procedureType = 'Small',
-  isLeadCase = false,
 ) => {
   return it('Practitioner creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
@@ -207,11 +206,5 @@ export const practitionerCreatesNewCase = (
     cerebralTest.docketNumber = cerebralTest.getState(
       'openCases.0.docketNumber',
     );
-
-    if (isLeadCase) {
-      cerebralTest.leadDocketNumber = cerebralTest.getState(
-        'openCases.0.docketNumber',
-      );
-    }
   });
 };

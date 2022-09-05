@@ -12,9 +12,8 @@ exports.updateDocketNumberSuffixOnWorkItems = async ({
       .getPersistenceGateway()
       .updateWorkItemDocketNumberSuffix({
         applicationContext,
-        docketNumber: workItem.docketNumber,
         docketNumberSuffix,
-        workItemId: workItem.workItemId,
+        workItem,
       }),
   );
 

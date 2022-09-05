@@ -16,7 +16,7 @@ export const completeDocketEntryQCAction = async ({
   get,
   props,
 }) => {
-  const { docketNumber, leadDocketNumber } = get(state.caseDetail);
+  const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
   const { overridePaperServiceAddress } = props;
 
@@ -32,7 +32,6 @@ export const completeDocketEntryQCAction = async ({
     createdAt: entryMetadata.dateReceived,
     docketEntryId,
     docketNumber,
-    leadDocketNumber,
     overridePaperServiceAddress,
     receivedAt: entryMetadata.dateReceived,
   };

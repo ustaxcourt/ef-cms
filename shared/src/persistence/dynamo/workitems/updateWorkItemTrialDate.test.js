@@ -16,9 +16,11 @@ describe('updateWorkItemTrialDate', () => {
 
     await updateWorkItemTrialDate({
       applicationContext,
-      docketNumber: 'pk',
       trialDate: mockTrialDate,
-      workItemId: 'sk',
+      workItem: {
+        pk: mockPk,
+        sk: mockSk,
+      },
     });
 
     expect(client.update.mock.calls[0][0]).toMatchObject({

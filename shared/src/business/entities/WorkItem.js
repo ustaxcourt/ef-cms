@@ -52,7 +52,6 @@ WorkItem.prototype.init = function init(rawWorkItem, { applicationContext }) {
   ]);
 
   this.docketNumber = rawWorkItem.docketNumber;
-  this.leadDocketNumber = rawWorkItem.leadDocketNumber;
   this.docketNumberWithSuffix = rawWorkItem.docketNumberWithSuffix;
   this.hideFromPendingMessages = rawWorkItem.hideFromPendingMessages;
   this.highPriority =

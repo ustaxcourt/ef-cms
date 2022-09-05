@@ -1,4 +1,3 @@
-const { GET_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 exports.getDocumentQCInboxForSection = async ({
@@ -37,7 +36,6 @@ exports.getDocumentQCInboxForSection = async ({
                 },
               },
             },
-            GET_PARENT_CASE,
           ],
         },
       },

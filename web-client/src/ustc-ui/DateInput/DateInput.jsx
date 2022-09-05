@@ -1,31 +1,32 @@
 import { DatePickerComponent } from './DatePickerComponent';
 import React from 'react';
 
-export const DateInput = ({
-  minDate,
-  errorText,
-  id,
-  disabled,
-  className,
-  label,
-  onBlur = () => {},
-  onChange = () => {},
-  onValueChange = () => {},
-  placeholder,
-  hideLegend,
-  hintText,
-  useHintNoWrap,
-  shouldClearHiddenInput,
-  showDateHint,
-  titleHintText,
-  optional,
-  values = null,
-  names = {
-    day: 'day',
-    month: 'month',
-    year: 'year',
-  },
-}) => {
+export const DateInput = props => {
+  const {
+    minDate,
+    errorText,
+    id,
+    disabled,
+    className,
+    label,
+    onBlur = () => {},
+    onChange = () => {},
+    placeholder,
+    hideLegend,
+    hintText,
+    useHintNoWrap,
+    shouldClearHiddenInput,
+    showDateHint,
+    titleHintText,
+    optional,
+    values = null,
+    names = {
+      day: 'day',
+      month: 'month',
+      year: 'year',
+    },
+  } = props;
+
   return (
     <DatePickerComponent
       className={className}
@@ -46,7 +47,6 @@ export const DateInput = ({
       values={values}
       onBlur={onBlur}
       onChange={onChange}
-      onValueChange={onValueChange}
     />
   );
 };

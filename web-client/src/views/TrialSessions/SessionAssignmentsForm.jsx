@@ -8,15 +8,15 @@ export const SessionAssignmentsForm = connect(
       state.constants.TRIAL_SESSION_PROCEEDING_TYPES,
     form: state.form,
     judges: state.judges,
-    sessionAssignmentHelper: state.sessionAssignmentHelper,
+    trialClerks: state.trialClerks,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
   },
   function SessionAssignmentsForm({
     form,
     judges,
-    sessionAssignmentHelper,
     TRIAL_SESSION_PROCEEDING_TYPES,
+    trialClerks,
     updateTrialSessionFormDataSequence,
   }) {
     return (
@@ -71,64 +71,39 @@ export const SessionAssignmentsForm = connect(
               />
             </div>
           )}
-          <div className="grid-row">
-            <div className="usa-form-group desktop:grid-col-6 desktop:margin-right-3 no-shrink">
-              <label
-                className="usa-label"
-                htmlFor="trial-clerk"
-                id="trial-clerk-label"
-              >
-                Trial clerk <span className="usa-hint">(optional)</span>
-              </label>
-              <select
-                aria-describedby="trial-clerk-label"
-                className="usa-select"
-                id="trial-clerk"
-                name="trialClerkId"
-                value={form.trialClerkId || ''}
-                onChange={e => {
-                  updateTrialSessionFormDataSequence({
-                    key: e.target.name,
-                    value: sessionAssignmentHelper.formattedTrialClerks.find(
-                      trialClerk => trialClerk.userId === e.target.value,
-                    ),
-                  });
-                }}
-              >
-                <option value="">- Select -</option>
-                {sessionAssignmentHelper.formattedTrialClerks.map(
-                  trialClerk => (
-                    <option key={trialClerk.userId} value={trialClerk.userId}>
-                      {trialClerk.name}
-                    </option>
-                  ),
-                )}
-              </select>
-            </div>
 
-            <div
-              className="usa-form-group desktop:grid-col-6 no-shrink"
-              hidden={!sessionAssignmentHelper.showAlternateTrialClerkField}
+          <div className="usa-form-group">
+            <label
+              className="usa-label"
+              htmlFor="trial-clerk"
+              id="trial-clerk-label"
             >
-              <label className="usa-label" htmlFor="alternate-trial-clerk-name">
-                Alternate Trial Clerk Name{' '}
-              </label>
-              <input
-                autoCapitalize="none"
-                className="usa-input"
-                id="alternate-trial-clerk-name"
-                name="alternateTrialClerkName"
-                type="text"
-                value={form.alternateTrialClerkName || ''}
-                onChange={e => {
-                  updateTrialSessionFormDataSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              />
-            </div>
+              Trial clerk <span className="usa-hint">(optional)</span>
+            </label>
+            <select
+              aria-describedby="trial-clerk-label"
+              className="usa-select"
+              id="trial-clerk"
+              name="trialClerkId"
+              value={form.trialClerkId || ''}
+              onChange={e => {
+                updateTrialSessionFormDataSequence({
+                  key: e.target.name,
+                  value: trialClerks.find(
+                    trialClerk => trialClerk.userId === e.target.value,
+                  ),
+                });
+              }}
+            >
+              <option value="">- Select -</option>
+              {trialClerks.map(trialClerk => (
+                <option key={trialClerk.userId} value={trialClerk.userId}>
+                  {trialClerk.name}
+                </option>
+              ))}
+            </select>
           </div>
+
           <div className="usa-form-group">
             <label className="usa-label" htmlFor="court-reporter">
               Court reporter <span className="usa-hint">(optional)</span>
