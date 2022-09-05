@@ -81,7 +81,9 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       },
     );
 
-    expect(applicationContext.getDocumentGenerators().order).toBeCalledWith(
+    expect(
+      applicationContext.getDocumentGenerators().order,
+    ).toHaveBeenCalledWith(
       expect.objectContaining({
         data: expect.objectContaining({ addedDocketNumbers: ['101-20'] }),
       }),
