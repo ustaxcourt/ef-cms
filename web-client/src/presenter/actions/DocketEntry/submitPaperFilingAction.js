@@ -97,7 +97,7 @@ export const submitPaperFilingAction = async ({
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
       .getUseCases()
       .addPaperFilingInteractor(applicationContext, {
-        consolidatedGroupDocketNumbers: [docketNumbers],
+        consolidatedGroupDocketNumbers: docketNumbers,
         documentMetadata,
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,
