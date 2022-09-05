@@ -50,7 +50,7 @@ describe('submitEditPetitionerCounselAction', () => {
       },
       userId: '1',
     });
-    expect(successStub).toBeCalled();
+    expect(successStub).toHaveBeenCalled();
     expect(successStub.mock.calls[0][0]).toMatchObject({
       alertSuccess: {
         message: 'Petitioner counsel updated.',

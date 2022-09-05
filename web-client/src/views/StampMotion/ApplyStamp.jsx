@@ -470,12 +470,12 @@ export const ApplyStamp = connect(
                         <span>
                           {form.day && (
                             <>
-                              {form.dueDateMessage} {form.month}/{form.day}/
-                              {form.year}
+                              - {form.dueDateMessage} {form.month}/{form.day}/
+                              {form.year} -
                               <br />
                             </>
                           )}
-                          {form.customText}
+                          {form.customText && <>- {form.customText} -</>}
                         </span>
                       </span>
                       <hr className="narrow-hr" />
