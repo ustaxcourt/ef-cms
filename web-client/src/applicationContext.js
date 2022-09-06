@@ -78,6 +78,9 @@ import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src
 import { authenticateUserInteractor } from '../../shared/src/proxies/auth/authenticateUserProxy';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
+const {
+  generatePrintableTrialSessionCopyReportInteractor,
+} = require('../../shared/src/business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor');
 import {
   calculateISODate,
   checkDate,
@@ -403,6 +406,7 @@ const allUseCases = {
   generatePrintableCaseInventoryReportInteractor,
   generatePrintableFilingReceiptInteractor,
   generatePrintablePendingReportInteractor,
+  generatePrintableTrialSessionCopyReportInteractor,
   generateSignedDocumentInteractor,
   generateTrialCalendarPdfInteractor,
   getBlockedCasesInteractor,
