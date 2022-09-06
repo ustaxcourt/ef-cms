@@ -63,5 +63,31 @@ describe('createOrderHelper', () => {
     });
 
     expect(result.showAddDocketNumbersButton).toEqual(true);
+    expect(result.addDocketNumbersButtonText).toEqual(
+      'Add docket numbers to the coversheet',
+    );
+  });
+
+  it('sets the correct addDocketNumbersButtonText when addedDocketNumbers is defined', () => {
+    const result = runCompute(createOrderHelper, {
+      state: {
+        addedDocketNumbers: [],
+        caseDetail: {
+          docketNumber: '101-20',
+          leadDocketNumber: '101-20',
+        },
+        documentToEdit: {},
+        featureFlags: {
+          'consolidated-cases-add-docket-numbers': true,
+        },
+        form: {
+          documentTitle: 'Order',
+        },
+      },
+    });
+
+    expect(result.addDocketNumbersButtonText).toEqual(
+      'Edit docket numbers to the coversheet',
+    );
   });
 });
