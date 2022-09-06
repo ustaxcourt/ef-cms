@@ -95,8 +95,12 @@ exports.addPaperFilingInteractor = async (
   }
 
   const servedParties = aggregatePartiesForService(caseEntity);
+
+  console.log('aggregate #1 done');
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
+
+  let caseEntities = [];
 
   for (const dN of consolidatedGroupDocketNumbers) {
     const aCase = await applicationContext
@@ -107,6 +111,7 @@ exports.addPaperFilingInteractor = async (
       });
 
     let aCaseEntity = new Case(aCase, { applicationContext });
+    caseEntities.push(aCaseEntity);
 
     const docketEntryEntity = new DocketEntry(
       {
@@ -206,7 +211,7 @@ exports.addPaperFilingInteractor = async (
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        caseEntities: [consolidatedGroupDocketNumbers],
+        caseEntities,
         docketEntryId,
       });
 
