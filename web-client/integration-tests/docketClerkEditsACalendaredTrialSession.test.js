@@ -114,7 +114,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialClerkId',
       value: {
-        name: 'Other*',
+        name: 'Other',
         userId: 'Other',
       },
     });
@@ -122,7 +122,7 @@ describe('Docket Clerk edits a calendared trial session', () => {
 
     expect(cerebralTest.getState('validationErrors')).toEqual({
       alternateTrialClerkName:
-        'A valid Alternate Trial Clerk name must be provided if "Other*" is selected',
+        'A valid Alternate Trial Clerk name must be provided if "Other" is selected',
     });
   });
 
