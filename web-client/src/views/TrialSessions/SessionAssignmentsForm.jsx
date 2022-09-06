@@ -111,7 +111,7 @@ export const SessionAssignmentsForm = connect(
               hidden={!sessionAssignmentHelper.showAlternateTrialClerkField}
             >
               <label className="usa-label" htmlFor="alternate-trial-clerk-name">
-                Alternate Trial Clerk Name{' '}
+                Alternate trial clerk name{' '}
               </label>
               <input
                 autoCapitalize="none"
