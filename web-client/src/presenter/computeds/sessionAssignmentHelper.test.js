@@ -12,7 +12,7 @@ describe('sessionAssignmentHelper', () => {
       state: { trialClerks },
     });
     expect(result.formattedTrialClerks[0]).toEqual({
-      name: 'Other*',
+      name: 'Other',
       userId: 'Other',
     });
     expect(result.showAlternateTrialClerkField).toEqual(false);

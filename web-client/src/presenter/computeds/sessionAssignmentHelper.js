@@ -3,7 +3,7 @@ import { state } from 'cerebral';
 export const sessionAssignmentHelper = get => {
   let formattedTrialClerks = get(state.trialClerks);
   formattedTrialClerks = [
-    { name: 'Other*', userId: 'Other' },
+    { name: 'Other', userId: 'Other' },
     ...formattedTrialClerks,
   ];
 
