@@ -101,12 +101,12 @@ exports.addPaperFilingInteractor = async (
 
   let caseEntities = [];
   //sorry for ugly
-  for (let dN of consolidatedGroupDocketNumbers) {
+  for (let docketNo of consolidatedGroupDocketNumbers) {
     const aCase = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
         applicationContext,
-        docketNumber: dN,
+        docketNumber: docketNo,
       });
 
     let aCaseEntity = new Case(aCase, { applicationContext });
