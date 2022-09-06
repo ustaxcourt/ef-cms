@@ -34,7 +34,7 @@ describe('completeMessageAction', () => {
 
     expect(
       applicationContext.getUseCases().completeMessageInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().completeMessageInteractor.mock
         .calls[0][1],

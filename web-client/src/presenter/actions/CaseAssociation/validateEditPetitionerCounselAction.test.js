@@ -51,7 +51,7 @@ describe('validateEditPetitionerCounselAction', () => {
       },
     });
 
-    expect(successStub).toBeCalled();
+    expect(successStub).toHaveBeenCalled();
   });
 
   it('should call the error path when any errors are found', async () => {
@@ -86,8 +86,8 @@ describe('validateEditPetitionerCounselAction', () => {
 
     expect(
       applicationContext.getUseCases().validateEditPetitionerCounselInteractor,
-    ).toBeCalled();
-    expect(errorStub).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(errorStub).toHaveBeenCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
       something: 'error',
     });
@@ -126,8 +126,8 @@ describe('validateEditPetitionerCounselAction', () => {
 
     expect(
       applicationContext.getUseCases().validateEditPetitionerCounselInteractor,
-    ).toBeCalled();
-    expect(errorStub).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(errorStub).toHaveBeenCalled();
     expect(errorStub.mock.calls[0][0].errors).toEqual({
       serviceIndicator: expect.anything(),
       something: 'error',
