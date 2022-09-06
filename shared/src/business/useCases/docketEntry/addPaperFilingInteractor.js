@@ -96,13 +96,12 @@ exports.addPaperFilingInteractor = async (
 
   const servedParties = aggregatePartiesForService(caseEntity);
 
-  console.log('aggregate #1 done');
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
   let caseEntities = [];
-
-  for (const dN of consolidatedGroupDocketNumbers) {
+  //sorry for ugly
+  for (let dN of consolidatedGroupDocketNumbers) {
     const aCase = await applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber({
@@ -112,7 +111,11 @@ exports.addPaperFilingInteractor = async (
 
     let aCaseEntity = new Case(aCase, { applicationContext });
     caseEntities.push(aCaseEntity);
+  }
 
+  let filedByFromLeadCase;
+  //why raw case? who knows. couldnt think of a name
+  for (const rawCase of caseEntities) {
     const docketEntryEntity = new DocketEntry(
       {
         ...baseMetadata,
@@ -127,8 +130,16 @@ exports.addPaperFilingInteractor = async (
         relationship,
         userId: user.userId,
       },
-      { applicationContext, petitioners: aCaseEntity.petitioners },
+      { applicationContext, petitioners: rawCase.petitioners },
     );
+
+    if (rawCase.docketNumber === rawCase.leadDocketNumber) {
+      filedByFromLeadCase = docketEntryEntity.filedBy;
+    }
+
+    if (filedByFromLeadCase) {
+      docketEntryEntity.filedBy = filedByFromLeadCase;
+    }
 
     const workItem = new WorkItem(
       {
@@ -136,7 +147,7 @@ exports.addPaperFilingInteractor = async (
         assigneeName: null,
         associatedJudge: caseToUpdate.associatedJudge,
         caseStatus: caseToUpdate.status,
-        caseTitle: Case.getCaseTitle(aCaseEntity.caseCaption),
+        caseTitle: Case.getCaseTitle(rawCase.caseCaption),
         docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
@@ -176,12 +187,12 @@ exports.addPaperFilingInteractor = async (
         });
     }
 
-    aCaseEntity.addDocketEntry(docketEntryEntity);
-    aCaseEntity = await applicationContext
+    rawCase.addDocketEntry(docketEntryEntity);
+    const aCaseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
         applicationContext,
-        caseEntity: aCaseEntity,
+        caseEntity: rawCase,
       });
 
     // todo: why save case twice? this call also does NOT validate before saving, bad????
