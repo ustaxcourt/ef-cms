@@ -122,7 +122,7 @@ describe('addDraftStampOrderDocketEntryInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateMessage,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateMessage.mock.calls[0][0]
         .message,

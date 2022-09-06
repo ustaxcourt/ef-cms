@@ -48,7 +48,7 @@ describe('slowDownLimiter', () => {
       res,
       next,
     );
-    expect(next).toBeCalled();
+    expect(next).toHaveBeenCalled();
   });
 
   it('should call setTimeout with a delay more than 1 if limit is reached', async () => {
@@ -70,8 +70,8 @@ describe('slowDownLimiter', () => {
       res,
       next,
     );
-    expect(next).toBeCalled();
-    expect(setTimeout).toBeCalledWith(next, 19000);
+    expect(next).toHaveBeenCalled();
+    expect(setTimeout).toHaveBeenCalledWith(next, 19000);
   });
 
   it('should delete the limiter key if expires at is passed', async () => {
@@ -93,7 +93,7 @@ describe('slowDownLimiter', () => {
       res,
       next,
     );
-    expect(deleteKeyCountMock).toBeCalled();
-    expect(next).toBeCalled();
+    expect(deleteKeyCountMock).toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
   });
 });

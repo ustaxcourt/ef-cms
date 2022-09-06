@@ -156,7 +156,7 @@ describe('updates the contact on a case', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('creates a work item if the contact is represented by a privatePractitioner and there is paper service on the case', async () => {
@@ -192,7 +192,7 @@ describe('updates the contact on a case', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('does not create a work item if the contact is represented by a privatePractitioner and there is no paper service on the case', async () => {
@@ -228,7 +228,7 @@ describe('updates the contact on a case', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('throws an error if the case was not found', async () => {

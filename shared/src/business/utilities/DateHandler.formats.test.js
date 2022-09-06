@@ -31,6 +31,7 @@ describe('DateHandler', () => {
       YEAR_TWO_DIGIT: '18',
       YYYYMM: '2018-07',
       YYYYMMDD: '2018-07-02',
+      YYYYMMDD_NUMERIC: '20180702',
     };
 
     beforeAll(() => {
