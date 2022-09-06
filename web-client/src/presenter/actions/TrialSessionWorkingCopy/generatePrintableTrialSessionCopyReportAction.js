@@ -6,7 +6,7 @@
  * @returns {Promise} async action
  */
 
-export const generatePrintableTrialSessionCopyReportAction = ({
+export const generatePrintableTrialSessionCopyReportAction = async ({
   applicationContext,
   get,
   props,
@@ -15,13 +15,13 @@ export const generatePrintableTrialSessionCopyReportAction = ({
   // 1. GET THE FORMATTED TRIAL SESSION INFORMATION
   console.log('props', props);
 
-  const { trialSession } = props;
-  console.log('trialSession 2', trialSession);
+  const { formattedTrialSessionDetails } = props;
+  console.log('trialSession 3', formattedTrialSessionDetails);
 
-  const pdfUrl = applicationContext
+  const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-      formattedTrialSession: trialSession,
+      formattedTrialSession: formattedTrialSessionDetails,
     });
 
   console.log('pdfUrl', pdfUrl);

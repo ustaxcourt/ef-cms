@@ -18,11 +18,14 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext,
   { formattedTrialSession },
 ) => {
+  console.log('BEFORE AUTH');
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
     throw new UnauthorizedError('Unauthorized');
   }
+
+  console.log('AFTER AUTH');
 
   //   let pendingDocuments = [];
 
@@ -72,46 +75,48 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
   //     }`;
   //   }
 
-  const pdf = await applicationContext
-    .getDocumentGenerators()
-    .trialSessionWorkingCopy({
-      applicationContext,
-      data: {
-        // subtitle: reportTitle,
-        trialSession: formattedTrialSession,
-      },
-    });
+  // const pdf = await applicationContext
+  //   .getDocumentGenerators()
+  //   .trialSessionWorkingCopy({
+  //     applicationContext,
+  //     data: {
+  //       // subtitle: reportTitle,
+  //       trialSession: formattedTrialSession,
+  //     },
+  //   });
 
-  const key = `trial-session-copy-${applicationContext.getUniqueId()}.pdf`;
+  // console.log('pdf', pdf);
 
-  await new Promise((resolve, reject) => {
-    const documentsBucket =
-      applicationContext.environment.tempDocumentsBucketName;
-    const s3Client = applicationContext.getStorageClient();
+  // const key = `trial-session-copy-${applicationContext.getUniqueId()}.pdf`;
 
-    const params = {
-      Body: pdf,
-      Bucket: documentsBucket,
-      ContentType: 'application/pdf',
-      Key: key,
-    };
+  // await new Promise((resolve, reject) => {
+  //   const documentsBucket =
+  //     applicationContext.environment.tempDocumentsBucketName;
+  //   const s3Client = applicationContext.getStorageClient();
 
-    s3Client.upload(params, function (err) {
-      if (err) {
-        applicationContext.logger.error('error uploading to s3', err);
-        reject(err);
-      }
-      resolve();
-    });
-  });
+  //   const params = {
+  //     Body: pdf,
+  //     Bucket: documentsBucket,
+  //     ContentType: 'application/pdf',
+  //     Key: key,
+  //   };
 
-  const { url } = await applicationContext
-    .getPersistenceGateway()
-    .getDownloadPolicyUrl({
-      applicationContext,
-      key,
-      useTempBucket: true,
-    });
+  //   s3Client.upload(params, function (err) {
+  //     if (err) {
+  //       applicationContext.logger.error('error uploading to s3', err);
+  //       reject(err);
+  //     }
+  //     resolve();
+  //   });
+  // });
 
-  return url;
+  // const { url } = await applicationContext
+  //   .getPersistenceGateway()
+  //   .getDownloadPolicyUrl({
+  //     applicationContext,
+  //     key,
+  //     useTempBucket: true,
+  //   });
+
+  // return url;
 };
