@@ -12,6 +12,7 @@ import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction'
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
 import { setupConsolidatedCasesAction } from '../actions/caseConsolidation/setupConsolidatedCasesAction';
+import { shouldSetupConsolidatedCasesAction } from '../actions/caseConsolidation/shouldSetupConsolidatedCasesAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
@@ -29,7 +30,8 @@ export const openConfirmPaperServiceModalSequence = [
   computeCertificateOfServiceFormDateAction,
   getComputedFormDateFactoryAction('dateReceived'),
   setComputeFormDateFactoryAction('dateReceived'),
-  setupConsolidatedCasesAction,
+  shouldSetupConsolidatedCasesAction,
+  { no: [], yes: [setupConsolidatedCasesAction] },
   setDocumentIsRequiredAction,
   generateTitleForPaperFilingAction,
   setFilersFromFilersMapAction,
