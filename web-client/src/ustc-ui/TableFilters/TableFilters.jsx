@@ -30,7 +30,6 @@ export const TableFilters = ({ filters, onSelect }) => {
                   aria-label={
                     isSelected ? 'reset filter' : `${label} filter drop down`
                   }
-                  bind={`screenMetadata.${key}`}
                   className={classNames(
                     'usa-select',
                     isSelected && 'filter-selected',
