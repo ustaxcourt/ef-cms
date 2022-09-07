@@ -17,12 +17,15 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ENTERED_AND_SERVED_EVENT_CODES,
     SERVICE_INDICATOR_TYPES,
+    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   } = applicationContext.getConstants();
 
   const modalName = get(state.modal.showModal);
+  //TODO make this better
   const showConsolidatedOptions = [
     'ConfirmInitiateServiceModal',
     'ConfirmInitiateCourtIssuedDocumentServiceModal',
+    'ConfirmInitiatePaperDocumentServiceModal',
   ].includes(modalName);
 
   const formattedCaseDetail = get(state.formattedCaseDetail);
@@ -36,19 +39,14 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
     ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-    //can add our list of codes here and delete usage of showConsolidatedCaseCheckboxes
+    ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
 
   const hasConsolidatedCases =
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
 
-  const showConsolidatedCaseCheckboxes = get(
-    state.showConsolidatedCaseCheckboxes,
-  );
-
   const showConsolidatedCasesFlag =
-    showConsolidatedCaseCheckboxes &&
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&

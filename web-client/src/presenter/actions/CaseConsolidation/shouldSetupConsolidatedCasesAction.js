@@ -13,17 +13,14 @@ export const shouldSetupConsolidatedCasesAction = ({
   applicationContext,
   get,
   path,
-  store,
 }) => {
   const { eventCode } = get(state.form);
   const { SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES } =
     applicationContext.getConstants();
 
   if (SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.includes(eventCode)) {
-    store.set(state.showConsolidatedCaseCheckboxes, false);
     return path.no();
   }
 
-  store.set(state.showConsolidatedCaseCheckboxes, true);
   return path.yes();
 };
