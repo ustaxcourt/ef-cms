@@ -35,9 +35,10 @@ export const AddDocketNumbersModal = connect(
       >
         <div className="ustc-create-order-modal">
           <p>
-            Select cases that you want to add to the header of the cover sheet.
+            Select cases that you want to add to the caption of the cover sheet.
             <br />
-            {addDocketNumbersModalHelper.modalText}
+            Petitioner&apos;s name will be automatically appended with &quot;ET
+            AL.&quot; if more than one case is selected.
           </p>
 
           <ConsolidatedCasesCheckboxes
