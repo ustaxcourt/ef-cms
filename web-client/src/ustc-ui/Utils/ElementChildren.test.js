@@ -55,9 +55,7 @@ describe('forEach', () => {
 describe('getDefaultAttribute', () => {
   it('should find the first attribute and return that attribute', () => {
     const children = [
-      <div key="what" kid="someIds">
-        sds
-      </div>,
+      <div key="what">sds</div>,
       <div id="someId" key="what">
         sds
       </div>,
