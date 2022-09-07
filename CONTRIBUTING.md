@@ -49,7 +49,7 @@ Please follow these steps before submitting a pull request:
    1. Do not delete `package-lock.json`.
 1. If reasonable for the changes being made, write tests.
 1. Run `npm run lint:fix` in the repository root.
-1. Ensure that all tests run with the following scripts pass:
+1. Run the following scripts, ensuring no failures:
    1. `npm run test:api`
    1. `npm run test:client`
    1. `npm run test:shared`
