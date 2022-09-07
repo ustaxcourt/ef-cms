@@ -5,6 +5,7 @@ const {
   ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   ROLES,
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -45,25 +46,26 @@ exports.addPaperFilingInteractor = async (
     throw new Error('Did not receive meta data for docket entry');
   }
 
-  const { docketNumber, isFileAttached } = documentMetadata;
+  const { docketNumber, eventCode, isFileAttached } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
-
-  // rename later
 
   // for later, consider refactoring to check if (case.leadDocketNumber === docketNumber), THEN AND ONLY THEN
   // you can file docket entries on consolidatedGroupDocketNumbers cases
   // otherwise, file a docket entry (like old behavior) on documentMetadata.docketNumber case ONLY
 
-  const consolidateCaseDuplicateDocketEntries = await applicationContext
+  const isCaseConsolidationFeatureOn = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
       featureFlag:
         ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
     });
 
-  if (!consolidateCaseDuplicateDocketEntries) {
+  if (
+    !isCaseConsolidationFeatureOn ||
+    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.includes(eventCode)
+  ) {
     consolidatedGroupDocketNumbers = [docketNumber];
   }
 

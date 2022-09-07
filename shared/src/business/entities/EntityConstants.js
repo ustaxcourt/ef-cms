@@ -428,6 +428,19 @@ const TRACKED_DOCUMENT_TYPES = {
   },
 };
 
+// ACED, COED, M007, M083, PSDE
+const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+])
+  .filter(
+    internalEvent =>
+      (internalEvent.category === 'Decision' &&
+        internalEvent.documentTitle.includes('Decision')) ||
+      (internalEvent.category === 'Motion' &&
+        internalEvent.documentTitle.includes('Decision')),
+  )
+  .map(x => x.eventCode);
+
 const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
     .filter(doc => doc.allowStamp)
@@ -1429,6 +1442,7 @@ module.exports = deepFreeze({
   SESSION_TERMS,
   SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,

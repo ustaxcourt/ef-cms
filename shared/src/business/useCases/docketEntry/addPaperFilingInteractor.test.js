@@ -6,6 +6,7 @@ const {
   DOCKET_SECTION,
   ROLES,
   SERVICE_INDICATOR_TYPES,
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
   MOCK_CASE,
@@ -388,8 +389,7 @@ describe('addPaperFilingInteractor', () => {
       ).toHaveBeenCalledTimes(mockConsolidatedGroup.length);
     });
 
-    // event codes: ACED, COED, M007, M083, PSDE
-    it.skip('should not allow multi-docketing for certain event codes', async () => {
+    it('should not allow multi-docketing for SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
       const mockConsolidatedGroup = [
         MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
         MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
@@ -402,7 +402,7 @@ describe('addPaperFilingInteractor', () => {
           docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
           documentTitle: 'Memorandum in Support',
           documentType: 'Memorandum in Support',
-          eventCode: 'ACED',
+          eventCode: SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES[0],
           filedBy: 'Test Petitioner',
           isFileAttached: true,
           isPaper: true,
