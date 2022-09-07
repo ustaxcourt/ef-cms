@@ -37,6 +37,6 @@ describe('submitPublicCaseAdvancedSearchAction', () => {
     });
     expect(
       applicationContextForClient.getUseCases().casePublicSearchInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

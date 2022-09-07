@@ -130,7 +130,7 @@ describe('getReconciliationReportInteractor', () => {
     expect(result.docketEntries.length).toBe(docketEntries.length);
     expect(
       applicationContext.getPersistenceGateway().getReconciliationReport,
-    ).toBeCalledWith({
+    ).toHaveBeenCalledWith({
       applicationContext,
       reconciliationDateEnd: '2021-01-02T04:59:59.999Z',
       reconciliationDateStart: '2021-01-01T05:00:00.000Z',

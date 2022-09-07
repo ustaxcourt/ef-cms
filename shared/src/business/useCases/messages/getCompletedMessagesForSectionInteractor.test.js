@@ -72,7 +72,7 @@ describe('getCompletedMessagesForSectionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .getCompletedSectionInboxMessages,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

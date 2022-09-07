@@ -28,8 +28,8 @@ describe('hasCaseInventoryReportFilterSelectedAction', () => {
       },
     });
 
-    expect(proceedMock).toBeCalled();
-    expect(noMock).not.toBeCalled();
+    expect(proceedMock).toHaveBeenCalled();
+    expect(noMock).not.toHaveBeenCalled();
   });
 
   it('should return path.proceed if status is set on screenMetadata', async () => {
@@ -44,8 +44,8 @@ describe('hasCaseInventoryReportFilterSelectedAction', () => {
       },
     });
 
-    expect(proceedMock).toBeCalled();
-    expect(noMock).not.toBeCalled();
+    expect(proceedMock).toHaveBeenCalled();
+    expect(noMock).not.toHaveBeenCalled();
   });
 
   it('should return path.no if associatedJudge and status are not set on screenMetadata', async () => {
@@ -58,7 +58,7 @@ describe('hasCaseInventoryReportFilterSelectedAction', () => {
       },
     });
 
-    expect(noMock).toBeCalled();
-    expect(proceedMock).not.toBeCalled();
+    expect(noMock).toHaveBeenCalled();
+    expect(proceedMock).not.toHaveBeenCalled();
   });
 });
