@@ -40,29 +40,4 @@ For security-sensitive issues, please do not file a public issue. Rather, please
 
 We welcome pull requests, but we do still want those changes to be related to an [Issue](#reporting-issues). Please file one prior to submitting a pull request.
 
-## Pull Request Procedures
-
-Please follow these steps before submitting a pull request:
-
-1. Fork the repository and create a branch from `staging`.
-1. Run `npm install` in the repository root.
-   1. Do not delete `package-lock.json`.
-1. If reasonable for the changes being made, write tests.
-1. Run `npm run lint:fix` in the repository root.
-1. Run the following scripts, ensuring no failures:
-   1. `npm run test:api`
-   1. `npm run test:client`
-   1. `npm run test:shared`
-   1. `npm run test:pa11y`
-
-For non-trivial changes, PR's should be initiated into the `test` branch. Others can be initiated straight into the `staging` branch.
-
-### Active Pull Requests
-
-We will be civil, but we are opinionated about the architecture and coding standards in the project. Please do not be offended if the team requests changes or otherwise provides feedback. We may use [emoji's](https://github.com/erikthedeveloper/code-review-emoji-guide) in our comments.
-
-We will expect civil behavior from contributors as well, and reserve the right to close PR's for unacceptable behavior. For more on what is considered unacceptable behavior, refer to [18F Open Source Policy GitHub repository](https://github.com/18f/open-source-policy).
-
-## Contribution Prerequisites
-
-You have Node 14 installed and in use.
+Refer to our [Docsify documentation](https://ustaxcourt.github.io/ef-cms/#/external-contributions) for the contribution process.

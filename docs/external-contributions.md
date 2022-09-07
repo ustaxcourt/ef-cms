@@ -22,6 +22,8 @@ Take note of the following branches.
 
 ### External Contributor
 
+Below is a general overview of the workflow that would best prepare your contribution for inclusion in the project.
+
 1. Branch from `court/staging` into a branch in a separate fork.
     1. How you work in your own fork is up to you, but keep in mind the public nature of the main fork.
         1. Your branch name should be professional.
@@ -29,6 +31,7 @@ Take note of the following branches.
 1. Work on the issue.
     1. If your work is of a nature such that testing in a deployed environment is needed, contact [Dawson support](dawson.support@ustaxcourt.gov).
     1. While work is ongoing, other work may be merged into `court/staging`.  Backmerge that into your branch (and any sub-branches) so you have the latest and greatest.
+1. Prior to submitting any pull requests, please perform [Pre-PR Validation](#pre-pr-validation)
 1. At some point, you presume the work is done.  The work needs to be reviewed by the Court and PRs created and merged.
     - This can be accomplished in two ways.
         - Verification occurs in the `test` environment.
@@ -42,6 +45,25 @@ Take note of the following branches.
             1. If your branch is approved and merged, you have our thanks for your contribution.
 1. If there is PO feedback, address the feedback on the original feature branch.  Go back to step 3.
 1. If your work passes PO review, congratulations!  Create a PR from your original feature branch to `court/staging`.  You will need to wait for a court engineer to approve your PR and merge it.  Your code is now in `court/staging` and ready to fly to production on the next deployment!
+
+?> We will be civil, but we are opinionated about the architecture and our coding standards. Refer to [Pull Request (PR) Review Process](code-review.md) for more about coding standards. We may use [emoji's](https://github.com/erikthedeveloper/code-review-emoji-guide) in our comments.
+
+?> We will expect civil behavior from contributors as well, and reserve the right to close PR's for unacceptable behavior. For more on what is considered unacceptable behavior, refer to [18F Open Source Policy GitHub repository](https://github.com/18f/open-source-policy).
+
+#### Pre-PR Validation
+
+Please follow these steps to validate your changes before submitting a pull request:
+
+1. Fork the repository and create a branch from `staging`.
+1. Run `npm install` in the repository root.
+    1. Do not delete `package-lock.json`.
+1. If reasonable for the changes being made, write tests.
+1. Run `npm run lint:fix` in the repository root.
+1. Run the following scripts, ensuring no failures:
+    1. `npm run test:api`
+    1. `npm run test:client`
+    1. `npm run test:shared`
+    1. `npm run test:pa11y`
 
 #### Handling Merge Conflicts
 
