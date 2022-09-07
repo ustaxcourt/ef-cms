@@ -14,7 +14,6 @@ export const openConfirmServePaperFiledDocumentSequence = [
       .CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES,
     true,
   ),
-  () => console.log('sdfdsfdsfdsfdsfs'),
   setDocketEntryIdAction,
   clearModalStateAction,
   shouldSetupConsolidatedCasesAction,
