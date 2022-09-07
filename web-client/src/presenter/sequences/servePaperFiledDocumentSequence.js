@@ -15,6 +15,7 @@ export const servePaperFiledDocumentSequence = showProgressSequenceDecorator([
   clearModalAction,
   generateTitleAction,
   clearAlertsAction,
+  //TODO this also needs logic to serve on multiple cases
   servePaperFiledDocumentAction,
   setAlertSuccessAction,
   getCaseAction,
