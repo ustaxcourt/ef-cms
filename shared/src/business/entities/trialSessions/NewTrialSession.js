@@ -27,7 +27,7 @@ NewTrialSession.prototype.init = function init(
 NewTrialSession.VALIDATION_ERROR_MESSAGES = {
   ...TrialSession.VALIDATION_ERROR_MESSAGES,
   alternateTrialClerkName:
-    'A valid Alternate Trial Clerk name must be provided if "Other*" is selected',
+    'A valid alternate trial clerk name must be provided if "Other" is selected',
 };
 
 joiValidationDecorator(

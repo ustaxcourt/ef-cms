@@ -276,7 +276,7 @@ describe('computeTrialSessionFormDataAction', () => {
     const result = await runAction(computeTrialSessionFormDataAction, {
       props: {
         key: 'trialClerkId',
-        value: { name: 'Other*', userId: 'Other' },
+        value: { name: 'Other', userId: 'Other' },
       },
       state: { form },
     });
@@ -308,7 +308,7 @@ describe('computeTrialSessionFormDataAction', () => {
       state: {
         form: {
           ...form,
-          trialClerk: { name: 'Other*', userId: 'Other' },
+          trialClerk: { name: 'Other', userId: 'Other' },
           trialClerkId: 'Other',
         },
       },
