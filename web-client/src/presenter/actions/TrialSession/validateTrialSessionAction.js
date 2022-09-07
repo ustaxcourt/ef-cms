@@ -41,11 +41,32 @@ export const validateTrialSessionAction = ({
     ],
   );
 
-  const errors = applicationContext
+  let errors = applicationContext
     .getUseCases()
     .validateTrialSessionInteractor(applicationContext, {
-      trialSession: { ...trialSession, estimatedEndDate, startDate },
+      trialSession: {
+        ...trialSession,
+        estimatedEndDate,
+        startDate,
+      },
     });
+
+  const { estimatedEndDateDay, estimatedEndDateMonth, estimatedEndDateYear } =
+    get(state.form);
+
+  if (
+    get(state.form.estimatedEndDateText) &&
+    !applicationContext
+      .getUtilities()
+      .isValidDateString(
+        `${estimatedEndDateMonth}-${estimatedEndDateDay}-${estimatedEndDateYear}`,
+      )
+  ) {
+    errors = {
+      ...(errors || {}),
+      estimatedEndDate: 'Please enter a valid estimated end date.',
+    };
+  }
 
   if (!errors) {
     return path.success();
