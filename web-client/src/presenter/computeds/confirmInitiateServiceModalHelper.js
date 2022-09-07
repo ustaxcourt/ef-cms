@@ -36,6 +36,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
     ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+    //can add our list of codes here and delete usage of showConsolidatedCaseCheckboxes
   ];
 
   const hasConsolidatedCases =
