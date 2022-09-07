@@ -32,7 +32,7 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'category',
         value: inputValue.category,
@@ -53,7 +53,7 @@ describe('documentTypeSelectHelper', () => {
         key: 'scenario',
         value: inputValue.scenario,
       });
-      expect(validateSequenceSpy).toBeCalled();
+      expect(validateSequenceSpy).toHaveBeenCalled();
     });
 
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
@@ -63,12 +63,12 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'category',
         value: '',
       });
-      expect(validateSequenceSpy).toBeCalled();
+      expect(validateSequenceSpy).toHaveBeenCalled();
     });
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
@@ -78,8 +78,8 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).not.toBeCalled();
-      expect(validateSequenceSpy).not.toBeCalled();
+      expect(updateSequenceSpy).not.toHaveBeenCalled();
+      expect(validateSequenceSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -100,7 +100,7 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'secondaryDocument.category',
         value: inputValue.category,
@@ -121,7 +121,7 @@ describe('documentTypeSelectHelper', () => {
         key: 'secondaryDocument.scenario',
         value: inputValue.scenario,
       });
-      expect(validateSequenceSpy).toBeCalled();
+      expect(validateSequenceSpy).toHaveBeenCalled();
     });
 
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
@@ -131,12 +131,12 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'secondaryDocument.category',
         value: '',
       });
-      expect(validateSequenceSpy).toBeCalled();
+      expect(validateSequenceSpy).toHaveBeenCalled();
     });
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
@@ -146,8 +146,8 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).not.toBeCalled();
-      expect(validateSequenceSpy).not.toBeCalled();
+      expect(updateSequenceSpy).not.toHaveBeenCalled();
+      expect(validateSequenceSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -165,12 +165,12 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'primaryDocument.eventCode',
         value: inputValue.value,
       });
-      expect(validateSequenceSpy).toBeCalled();
+      expect(validateSequenceSpy).toHaveBeenCalled();
     });
 
     it('should call update sequence a single time followed by validate sequence if "action" is "clear"', () => {
@@ -181,12 +181,12 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'primaryDocument.eventCode',
         value: '',
       });
-      expect(validateSequenceSpy).toBeCalled();
+      expect(validateSequenceSpy).toHaveBeenCalled();
     });
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
@@ -196,8 +196,8 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).not.toBeCalled();
-      expect(validateSequenceSpy).not.toBeCalled();
+      expect(updateSequenceSpy).not.toHaveBeenCalled();
+      expect(validateSequenceSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -217,7 +217,7 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'documentType',
         value: inputValue.documentType,
@@ -234,7 +234,7 @@ describe('documentTypeSelectHelper', () => {
         key: 'scenario',
         value: inputValue.scenario,
       });
-      expect(validateSequenceSpy).toBeCalled();
+      expect(validateSequenceSpy).toHaveBeenCalled();
     });
 
     it('should call update sequence multiple times followed by validate sequence if "action" is "clear"', () => {
@@ -244,7 +244,7 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'documentType',
         value: '',
@@ -261,7 +261,7 @@ describe('documentTypeSelectHelper', () => {
         key: 'scenario',
         value: '',
       });
-      expect(validateSequenceSpy).toBeCalled();
+      expect(validateSequenceSpy).toHaveBeenCalled();
     });
 
     it('should not call update or validate sequence if "action" is not "select-option" or "clear"', () => {
@@ -271,8 +271,8 @@ describe('documentTypeSelectHelper', () => {
         validateSequence: validateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).not.toBeCalled();
-      expect(validateSequenceSpy).not.toBeCalled();
+      expect(updateSequenceSpy).not.toHaveBeenCalled();
+      expect(validateSequenceSpy).not.toHaveBeenCalled();
     });
   });
 
@@ -284,7 +284,7 @@ describe('documentTypeSelectHelper', () => {
         updateSequence: updateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).toBeCalled();
+      expect(updateSequenceSpy).toHaveBeenCalled();
       expect(updateSequenceSpy.mock.calls[0][0]).toEqual({
         key: 'searchText',
         value: 'something',
@@ -298,7 +298,7 @@ describe('documentTypeSelectHelper', () => {
         updateSequence: updateSequenceSpy,
       });
 
-      expect(updateSequenceSpy).not.toBeCalled();
+      expect(updateSequenceSpy).not.toHaveBeenCalled();
     });
   });
 
