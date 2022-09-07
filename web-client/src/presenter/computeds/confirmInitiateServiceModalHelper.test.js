@@ -257,7 +257,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
-    it.skip('showConsolidatedCasesFlag should be true when state.showConsolidatedCaseCheckboxes is true', () => {
+    it('showConsolidatedCasesFlag should be true when state.showConsolidatedCaseCheckboxes is true', () => {
       const formattedCaseDetail = {
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
         isLeadCase: true,
@@ -273,11 +273,12 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.showConsolidatedCasesFlag.length).toBe(true);
+      expect(result.showConsolidatedCasesFlag).toBe(true);
     });
 
-    it.skip('showConsolidatedCasesFlag should be false when state.showConsolidatedCaseCheckboxes is false', () => {
+    it('showConsolidatedCasesFlag should be false when state.showConsolidatedCaseCheckboxes is false', () => {
       const formattedCaseDetail = {
+        ...LEAD_CASE,
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
         isLeadCase: true,
       };
@@ -292,7 +293,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.showConsolidatedCasesFlag.length).toBe(false);
+      expect(result.showConsolidatedCasesFlag).toBe(false);
     });
 
     it('should remove duplicated paper contacts', () => {
