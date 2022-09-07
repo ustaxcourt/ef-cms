@@ -28,7 +28,7 @@ describe('deleteOtherStatisticsAction', () => {
       },
     });
 
-    expect(presenter.providers.path.success).toBeCalled();
+    expect(presenter.providers.path.success).toHaveBeenCalled();
   });
 
   it('should take the error path if errors are found', async () => {

@@ -29,6 +29,6 @@ describe('getCalendaredCasesForTrialSessionAction', () => {
     expect(
       applicationContext.getUseCases()
         .getCalendaredCasesForTrialSessionInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

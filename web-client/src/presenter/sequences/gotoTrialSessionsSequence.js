@@ -23,12 +23,8 @@ const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
   closeMobileMenuAction,
   clearErrorAlertsAction,
   parallel([
-    [
-      getJudgeForCurrentUserAction,
-      setJudgeUserAction,
-      getNotificationsAction,
-      setNotificationsAction,
-    ],
+    [getJudgeForCurrentUserAction, setJudgeUserAction],
+    [getNotificationsAction, setNotificationsAction],
     [getTrialSessionsAction, setTrialSessionsAction],
     [
       getUsersInSectionAction({ section: 'judge' }),

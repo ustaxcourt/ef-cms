@@ -37,7 +37,7 @@ describe('overwriteCorrespondenceFileAction', () => {
 
     expect(
       applicationContext.getUseCases().uploadCorrespondenceDocumentInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().uploadCorrespondenceDocumentInteractor
         .mock.calls[0][1],
@@ -66,6 +66,6 @@ describe('overwriteCorrespondenceFileAction', () => {
       },
     });
 
-    expect(errorStub).toBeCalled();
+    expect(errorStub).toHaveBeenCalled();
   });
 });
