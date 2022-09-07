@@ -7,9 +7,14 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
+const {
+  MOCK_CASE,
+  MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
+  MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} = require('../../../test/mockCase');
 const { addPaperFilingInteractor } = require('./addPaperFilingInteractor');
 const { Case } = require('../../entities/cases/Case');
-const { MOCK_CASE } = require('../../../test/mockCase');
 
 describe('addPaperFilingInteractor', () => {
   const user = {
@@ -353,6 +358,90 @@ describe('addPaperFilingInteractor', () => {
         .workItem,
     ).toMatchObject({
       caseTitle: Case.getCaseTitle(mockCase.caseCaption),
+    });
+  });
+
+  describe('consolidated groups', () => {
+    it('should create a work item and add it to the outbox for each case', async () => {
+      const mockConsolidatedGroup = [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ];
+      await addPaperFilingInteractor(applicationContext, {
+        consolidatedGroupDocketNumbers: mockConsolidatedGroup,
+        documentMetadata: {
+          docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: true,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItem,
+      ).toHaveBeenCalledTimes(mockConsolidatedGroup.length);
+    });
+
+    // event codes: ACED, COED, M007, M083, PSDE
+    it.skip('should not allow multi-docketing for certain event codes', async () => {
+      const mockConsolidatedGroup = [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ];
+
+      await addPaperFilingInteractor(applicationContext, {
+        consolidatedGroupDocketNumbers: mockConsolidatedGroup,
+        documentMetadata: {
+          docketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'ACED',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: true,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+
+      expect(
+        applicationContext.getPersistenceGateway().saveWorkItem,
+      ).toHaveBeenCalledTimes(1);
+    });
+
+    it('should still save only one copy of the document to s3', async () => {
+      const mockConsolidatedGroup = [
+        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+      ];
+
+      await addPaperFilingInteractor(applicationContext, {
+        consolidatedGroupDocketNumbers: mockConsolidatedGroup,
+        documentMetadata: {
+          docketNumber: MOCK_CASE.docketNumber,
+          documentTitle: 'Memorandum in Support',
+          documentType: 'Memorandum in Support',
+          eventCode: 'MISP',
+          filedBy: 'Test Petitioner',
+          isFileAttached: true,
+          isPaper: true,
+        },
+        isSavingForLater: false,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      });
+
+      expect(
+        applicationContext.getUseCaseHelpers()
+          .serveDocumentAndGetPaperServicePdf,
+      ).toHaveBeenCalledTimes(1);
     });
   });
 });
