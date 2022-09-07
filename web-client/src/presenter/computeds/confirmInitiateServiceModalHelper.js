@@ -42,12 +42,12 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
 
-  const hideConsolidatedCaseCheckboxes = get(
-    state.hideConsolidatedCaseCheckboxes,
+  const showConsolidatedCaseCheckboxes = get(
+    state.showConsolidatedCaseCheckboxes,
   );
 
   const showConsolidatedCasesFlag =
-    !hideConsolidatedCaseCheckboxes &&
+    showConsolidatedCaseCheckboxes &&
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&

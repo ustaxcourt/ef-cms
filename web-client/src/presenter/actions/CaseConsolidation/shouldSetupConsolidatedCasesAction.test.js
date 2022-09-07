@@ -21,7 +21,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     };
   });
 
-  it('should set state.hideConsolidatedCaseCheckboxes to true when eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
+  it('should set state.showConsolidatedCaseCheckboxes to false when eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
     const result = await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
@@ -33,7 +33,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
       },
     });
 
-    expect(result.state.hideConsolidatedCaseCheckboxes).toBe(true);
+    expect(result.state.showConsolidatedCaseCheckboxes).toBe(false);
   });
 
   it('should return the no path when the eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
@@ -51,7 +51,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
     expect(pathNoStub).toHaveBeenCalled();
   });
 
-  it('should set state.hideConsolidatedCaseCheckboxes to false when eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
+  it('should set state.showConsolidatedCaseCheckboxes to true when eventCode is one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
     const result = await runAction(shouldSetupConsolidatedCasesAction, {
       modules: {
         presenter,
@@ -63,7 +63,7 @@ describe('shouldSetupConsolidatedCasesAction', () => {
       },
     });
 
-    expect(result.state.hideConsolidatedCaseCheckboxes).toBe(false);
+    expect(result.state.showConsolidatedCaseCheckboxes).toBe(true);
   });
 
   it('should return the yes path when the eventCode is NOT one of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', async () => {
