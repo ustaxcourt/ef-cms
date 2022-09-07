@@ -48,7 +48,7 @@ describe('submitPendingCaseAssociationRequest', () => {
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCasePending,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should not add mapping if these is already a pending association', async () => {
@@ -59,7 +59,7 @@ describe('submitPendingCaseAssociationRequest', () => {
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCasePending,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should add mapping', async () => {
@@ -77,6 +77,6 @@ describe('submitPendingCaseAssociationRequest', () => {
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCasePending,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

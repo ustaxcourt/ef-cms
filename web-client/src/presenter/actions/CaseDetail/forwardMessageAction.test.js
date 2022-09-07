@@ -40,7 +40,7 @@ describe('forwardMessageAction', () => {
 
     expect(
       applicationContext.getUseCases().forwardMessageInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().forwardMessageInteractor.mock
         .calls[0][1],

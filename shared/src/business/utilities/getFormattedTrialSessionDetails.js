@@ -68,6 +68,9 @@ exports.formatCase = ({
       caseItem,
     });
   }
+
+  applicationContext.getUtilities().setConsolidationFlagsForDisplay(caseItem);
+
   return caseItem;
 };
 
