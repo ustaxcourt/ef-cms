@@ -74,7 +74,7 @@ export const CreateOrder = connect(
                   <Button
                     link
                     className="padding-top-0"
-                    icon="plus-circle"
+                    icon={createOrderHelper.addDocketNumbersButtonIcon}
                     id="add-docket-numbers-btn"
                     onClick={() => {
                       openAddDocketNumbersModalSequence();

@@ -22,9 +22,10 @@ export const createOrderHelper = (get, applicationContext) => {
   const isLeadCase = caseDetail.leadDocketNumber === caseDetail.docketNumber;
 
   return {
+    addDocketNumbersButtonIcon: addedDocketNumbers ? 'edit' : 'plus-circle',
     addDocketNumbersButtonText: addedDocketNumbers
-      ? 'Edit docket numbers to the coversheet'
-      : 'Add docket numbers to the coversheet',
+      ? 'Edit docket numbers in the cover sheet'
+      : 'Add docket numbers to the cover sheet',
     documentToEdit,
     isEditing,
     pageTitle,
