@@ -5,7 +5,6 @@ const {
   ALLOWLIST_FEATURE_FLAGS,
   DOCUMENT_RELATIONSHIPS,
   ROLES,
-  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
   isAuthorized,
@@ -46,7 +45,7 @@ exports.addPaperFilingInteractor = async (
     throw new Error('Did not receive meta data for docket entry');
   }
 
-  const { docketNumber, eventCode, isFileAttached } = documentMetadata;
+  const { docketNumber, isFileAttached } = documentMetadata;
   const user = await applicationContext
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
@@ -62,10 +61,7 @@ exports.addPaperFilingInteractor = async (
         ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
     });
 
-  if (
-    !isCaseConsolidationFeatureOn ||
-    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.includes(eventCode)
-  ) {
+  if (!isCaseConsolidationFeatureOn) {
     consolidatedGroupDocketNumbers = [docketNumber];
   }
 
