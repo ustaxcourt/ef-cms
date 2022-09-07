@@ -1,9 +1,9 @@
+import {
+  adcUser,
+  docketClerkUser,
+} from '../../../../shared/src/test/mockUsers';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { caseDetailHelper as caseDetailHelperComputed } from './caseDetailHelper';
-import {
-  docketClerkUser,
-  petitionsClerkUser,
-} from '../../../../shared/src/test/mockUsers';
 import { getUserPermissions } from '../../../../shared/src/authorization/getUserPermissions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
@@ -43,7 +43,7 @@ describe('hasTrackedItemsPermission', () => {
   });
 
   it('should be false when the user does not have TRACKED_ITEMS permission', () => {
-    const user = petitionsClerkUser;
+    const user = adcUser;
 
     const result = runCompute(caseDetailHelper, {
       state: {
@@ -54,6 +54,7 @@ describe('hasTrackedItemsPermission', () => {
         permission: { TRACKED_ITEMS: false },
       },
     });
+
     expect(result.hasTrackedItemsPermission).toEqual(false);
   });
 });
