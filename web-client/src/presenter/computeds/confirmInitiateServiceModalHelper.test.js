@@ -253,6 +253,44 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
+    it('showConsolidatedCasesFlag should be true when state.showConsolidatedCaseCheckboxes is true', () => {
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        isLeadCase: true,
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: featureFlagHelperState,
+          form: { eventCode: 'OSC' },
+          formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
+          showConsolidatedCaseCheckboxes: true,
+        },
+      });
+
+      expect(result.showConsolidatedCasesFlag.length).toBe(true);
+    });
+
+    it('showConsolidatedCasesFlag should be false when state.showConsolidatedCaseCheckboxes is false', () => {
+      const formattedCaseDetail = {
+        consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        isLeadCase: true,
+      };
+
+      const result = runCompute(confirmInitiateServiceModalHelper, {
+        state: {
+          featureFlagHelper: featureFlagHelperState,
+          form: { eventCode: 'OSC' },
+          formattedCaseDetail,
+          modal: { showModal: 'ConfirmInitiateServiceModal' },
+          showConsolidatedCaseCheckboxes: false,
+        },
+      });
+
+      expect(result.showConsolidatedCasesFlag.length).toBe(false);
+    });
+
     it('should remove duplicated paper contacts', () => {
       const firstNonLeadCase = {
         ...SECOND_CASE,

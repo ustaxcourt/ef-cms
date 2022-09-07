@@ -20,10 +20,10 @@ export const shouldSetupConsolidatedCasesAction = ({
     applicationContext.getConstants();
 
   if (SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.includes(eventCode)) {
-    store.set(state.hideConsolidatedCaseCheckboxes, true);
+    store.set(state.showConsolidatedCaseCheckboxes, false);
     return path.no();
   }
 
-  store.set(state.hideConsolidatedCaseCheckboxes, false);
+  store.set(state.showConsolidatedCaseCheckboxes, true);
   return path.yes();
 };
