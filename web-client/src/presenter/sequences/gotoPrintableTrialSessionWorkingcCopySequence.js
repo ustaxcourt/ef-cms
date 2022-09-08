@@ -16,7 +16,6 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 export const gotoPrintableTrialSessionWorkingcCopySequence =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
-    // getFormattedTrialSessionDetails,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
     setTitleForPrintableTrialSessionWorkingCopyAction,
