@@ -170,7 +170,7 @@ describe('getFormattedDocketEntry', () => {
 
       expect(
         applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
-      ).toBeCalled();
+      ).toHaveBeenCalled();
       expect(result.descriptionDisplay).toEqual(mockDescriptionDisplay);
     });
 
@@ -185,7 +185,7 @@ describe('getFormattedDocketEntry', () => {
 
       expect(
         applicationContext.getUtilities().getDocumentTitleWithAdditionalInfo,
-      ).not.toBeCalled();
+      ).not.toHaveBeenCalled();
       expect(result.descriptionDisplay).toBeUndefined();
     });
   });

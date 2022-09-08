@@ -47,7 +47,7 @@ describe('bulkDeleteRecords', () => {
       applicationContext,
       records,
     });
-    expect(applicationContext.getSearchClient().bulk).toBeCalled();
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalled();
     expect(result.failedRecords).toEqual([]);
   });
 
@@ -65,7 +65,7 @@ describe('bulkDeleteRecords', () => {
         },
       ],
     });
-    expect(applicationContext.getSearchClient().bulk).not.toBeCalled();
+    expect(applicationContext.getSearchClient().bulk).not.toHaveBeenCalled();
     expect(result.failedRecords).toEqual([]);
   });
 
@@ -94,7 +94,7 @@ describe('bulkDeleteRecords', () => {
       applicationContext,
       records,
     });
-    expect(applicationContext.getSearchClient().bulk).toBeCalled();
+    expect(applicationContext.getSearchClient().bulk).toHaveBeenCalled();
     expect(result.failedRecords).toEqual([
       {
         _id: `${oldImageRecord.pk.S}_${oldImageRecord.sk.S}`,

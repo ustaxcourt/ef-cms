@@ -45,7 +45,7 @@ describe('getPrivatePractitionersBySearchKeyAction', () => {
         .searchKey,
     ).toEqual('Test Practitioner');
     expect(successStub.mock.calls.length).toEqual(1);
-    expect(errorStub).not.toBeCalled();
+    expect(errorStub).not.toHaveBeenCalled();
   });
 
   it('calls the use case to get the matching privatePractitioners and calls the error path if no privatePractitioners are returned', async () => {
@@ -69,7 +69,7 @@ describe('getPrivatePractitionersBySearchKeyAction', () => {
         .getPrivatePractitionersBySearchKeyInteractor.mock.calls[0][1]
         .searchKey,
     ).toEqual('Test Practitioner2');
-    expect(successStub).not.toBeCalled();
+    expect(successStub).not.toHaveBeenCalled();
     expect(errorStub.mock.calls.length).toEqual(1);
   });
 });

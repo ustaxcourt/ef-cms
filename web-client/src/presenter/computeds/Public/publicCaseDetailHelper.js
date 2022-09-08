@@ -10,6 +10,7 @@ export const formatDocketEntryOnDocketRecord = (
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
     applicationContext.getConstants();
   const record = cloneDeep(entry);
+
   let filingsAndProceedingsWithAdditionalInfo = '';
   if (record.documentTitle && record.additionalInfo) {
     filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
@@ -41,9 +42,14 @@ export const formatDocketEntryOnDocketRecord = (
     : canPublicUserSeeLink;
 
   const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
-  const showLinkToDocument =
-    canDisplayDocumentLink &&
-    record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+
+  let showLinkToDocument = canDisplayDocumentLink;
+
+  if (!isTerminalUser) {
+    showLinkToDocument =
+      canDisplayDocumentLink &&
+      record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+  }
 
   if (record.isSealed) {
     record.sealedToTooltip = applicationContext

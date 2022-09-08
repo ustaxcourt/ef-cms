@@ -126,11 +126,11 @@ export const CoverSheet = ({
             )}
             {stamp.dueDateMessage && (
               <>
-                {stamp.dueDateMessage} {stamp.date}
+                - {stamp.dueDateMessage} {stamp.date} -
                 <br />
               </>
             )}
-            {stamp.customText}
+            - {stamp.customText} -
             <hr className="narrow-hr" />
             <span className="text-bold" id="stamp-signature">
               (Signed) {stamp.nameForSigning}
