@@ -946,11 +946,16 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-copy-report',
-      ifHasAccess({ app }, () => {
-        setPageTitle('Trial Session Copy Report');
-        return app.getSequence('gotoTrialSessionCopyReportSequence')();
-      }),
+      '/trial-session-working-copy-printable',
+      ifHasAccess(
+        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY },
+        () => {
+          setPageTitle('Trial Session Printable Working Copy');
+          return app.getSequence(
+            'gotoPrintableTrialSessionWorkingcCopySequence',
+          )();
+        },
+      ),
     );
 
     registerRoute(

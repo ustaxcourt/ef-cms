@@ -900,6 +900,9 @@ const {
   practitionerCaseList,
 } = require('../../shared/src/business/utilities/documentGenerators/practitionerCaseList');
 const {
+  printableWorkingCopySessionList,
+} = require('../../shared/src/business/utilities/documentGenerators/printableWorkingCopySessionList');
+const {
   prioritizeCaseInteractor,
 } = require('../../shared/src/business/useCases/prioritizeCaseInteractor');
 const {
@@ -1811,6 +1814,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
       order,
       pendingReport,
       practitionerCaseList,
+      printableWorkingCopySessionList,
       receiptOfFiling,
       standingPretrialOrder,
       standingPretrialOrderForSmallCase,
@@ -2092,7 +2096,6 @@ module.exports = (appContextUser, logger = createLogger()) => {
         createTrialSessionInteractor,
         createUserInteractor,
         deleteCaseDeadlineInteractor,
-        generatePrintableTrialSessionCopyReportInteractor,
         deleteCaseNoteInteractor,
         deleteCounselFromCaseInteractor,
         deleteDeficiencyStatisticInteractor,
@@ -2119,6 +2122,7 @@ module.exports = (appContextUser, logger = createLogger()) => {
         generatePrintableCaseInventoryReportInteractor,
         generatePrintableFilingReceiptInteractor,
         generatePrintablePendingReportInteractor,
+        generatePrintableTrialSessionCopyReportInteractor,
         generateStandingPretrialOrderForSmallCaseInteractor,
         generateStandingPretrialOrderInteractor,
         generateTrialCalendarPdfInteractor,
