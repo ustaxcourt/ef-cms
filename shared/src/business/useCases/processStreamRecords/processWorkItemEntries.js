@@ -10,7 +10,7 @@ exports.processWorkItemEntries = async ({
     `going to index ${workItemRecords.length} work item records`,
   );
 
-  const indexWorkItemEntry = async workItemRecord => {
+  const indexWorkItemEntry = workItemRecord => {
     const workItemNewImage = workItemRecord.dynamodb.NewImage;
 
     const caseWorkItemMappingRecordId = `${workItemNewImage.pk.S}_${workItemNewImage.pk.S}|mapping`;
