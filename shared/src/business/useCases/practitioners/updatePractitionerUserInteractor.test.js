@@ -160,7 +160,8 @@ describe('updatePractitionerUserInteractor', () => {
     });
 
     expect(
-      applicationContext.getUseCaseHelpers().updateUserRecords.mock.calls[0][0],
+      applicationContext.getPersistenceGateway().updateUserRecords.mock
+        .calls[0][0],
     ).toMatchObject({
       updatedUser: {
         ...mockPractitioner,
