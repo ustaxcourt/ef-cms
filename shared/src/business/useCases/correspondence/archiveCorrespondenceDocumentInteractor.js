@@ -34,17 +34,15 @@ exports.archiveCorrespondenceDocumentInteractor = async (
     .getCaseByDocketNumber({ applicationContext, docketNumber });
 
   const caseEntity = new Case(caseToUpdate, { applicationContext });
-  const correspondenceToArchive = caseEntity.correspondence.find(
+  const correspondenceToArchiveEntity = caseEntity.correspondence.find(
     c => c.correspondenceId === correspondenceId,
   );
 
-  caseEntity.archiveCorrespondence(correspondenceToArchive, {
-    applicationContext,
-  });
+  caseEntity.archiveCorrespondence(correspondenceToArchiveEntity);
 
   await applicationContext.getPersistenceGateway().updateCaseCorrespondence({
     applicationContext,
-    correspondence: correspondenceToArchive,
+    correspondence: correspondenceToArchiveEntity.validate().toRawObject(),
     docketNumber,
   });
 
