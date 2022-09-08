@@ -3,7 +3,6 @@ const {
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
 const { UnauthorizedError } = require('../../../errors/errors');
-const { UNSERVABLE_EVENT_CODES } = require('../../entities/EntityConstants');
 
 /**
  * generatePrintableTrialSessionCopyReportInteractor
@@ -27,96 +26,52 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
 
   console.log('AFTER AUTH');
 
-  //   let pendingDocuments = [];
+  let reportTitle = 'TODO FIX ME';
 
-  //   if (docketNumber) {
-  //     pendingDocuments = await applicationContext
-  //       .getUseCaseHelpers()
-  //       .fetchPendingItemsByDocketNumber({ applicationContext, docketNumber });
-  //   } else {
-  //     //depends on fetchPendingItems returning a list already sorted by receivedAt
-  //     pendingDocuments = (
-  //       await applicationContext.getPersistenceGateway().fetchPendingItems({
-  //         applicationContext,
-  //         judge,
-  //         unservableEventCodes: UNSERVABLE_EVENT_CODES,
-  //       })
-  //     ).foundDocuments;
-  //   }
+  const pdf = await applicationContext
+    .getDocumentGenerators()
+    .printableWorkingCopySessionList({
+      applicationContext,
+      data: {
+        subtitle: reportTitle,
+        trialSession: formattedTrialSession,
+      },
+    });
 
-  //   const formattedPendingItems = pendingDocuments.map(pendingItem => ({
-  //     ...pendingItem,
-  //     associatedJudgeFormatted: applicationContext
-  //       .getUtilities()
-  //       .formatJudgeName(pendingItem.associatedJudge),
-  //     caseTitle: applicationContext.getCaseTitle(pendingItem.caseCaption || ''),
-  //     docketNumberWithSuffix: `${pendingItem.docketNumber}${
-  //       pendingItem.docketNumberSuffix || ''
-  //     }`,
-  //     formattedFiledDate: applicationContext
-  //       .getUtilities()
-  //       .formatDateString(pendingItem.receivedAt, 'MMDDYY'),
-  //     formattedName: pendingItem.documentTitle || pendingItem.documentType,
-  //   }));
+  console.log('pdf', pdf);
 
-  //   let reportTitle = 'All Judges';
+  const key = `trial-session-copy-${applicationContext.getUniqueId()}.pdf`;
 
-  //   if (judge) {
-  //     reportTitle = `Judge ${judge}`;
-  //   } else if (docketNumber) {
-  //     const caseResult = await applicationContext
-  //       .getPersistenceGateway()
-  //       .getCaseByDocketNumber({
-  //         applicationContext,
-  //         docketNumber,
-  //       });
-  //     reportTitle = `Docket ${caseResult.docketNumber}${
-  //       caseResult.docketNumberSuffix || ''
-  //     }`;
-  //   }
+  await new Promise((resolve, reject) => {
+    const documentsBucket =
+      applicationContext.environment.tempDocumentsBucketName;
+    const s3Client = applicationContext.getStorageClient();
 
-  // const pdf = await applicationContext
-  //   .getDocumentGenerators()
-  //   .trialSessionWorkingCopy({
-  //     applicationContext,
-  //     data: {
-  //       // subtitle: reportTitle,
-  //       trialSession: formattedTrialSession,
-  //     },
-  //   });
+    const params = {
+      Body: pdf,
+      Bucket: documentsBucket,
+      ContentType: 'application/pdf',
+      Key: key,
+    };
 
-  // console.log('pdf', pdf);
+    s3Client.upload(params, function (err) {
+      if (err) {
+        applicationContext.logger.error('error uploading to s3', err);
+        reject(err);
+      }
+      resolve();
+    });
+  });
 
-  // const key = `trial-session-copy-${applicationContext.getUniqueId()}.pdf`;
+  const { url } = await applicationContext
+    .getPersistenceGateway()
+    .getDownloadPolicyUrl({
+      applicationContext,
+      key,
+      useTempBucket: true,
+    });
 
-  // await new Promise((resolve, reject) => {
-  //   const documentsBucket =
-  //     applicationContext.environment.tempDocumentsBucketName;
-  //   const s3Client = applicationContext.getStorageClient();
+  console.log('url*** ', url);
 
-  //   const params = {
-  //     Body: pdf,
-  //     Bucket: documentsBucket,
-  //     ContentType: 'application/pdf',
-  //     Key: key,
-  //   };
-
-  //   s3Client.upload(params, function (err) {
-  //     if (err) {
-  //       applicationContext.logger.error('error uploading to s3', err);
-  //       reject(err);
-  //     }
-  //     resolve();
-  //   });
-  // });
-
-  // const { url } = await applicationContext
-  //   .getPersistenceGateway()
-  //   .getDownloadPolicyUrl({
-  //     applicationContext,
-  //     key,
-  //     useTempBucket: true,
-  //   });
-
-  // return url;
+  return url;
 };

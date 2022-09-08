@@ -63,6 +63,9 @@ const {
   PretrialMemorandum,
 } = require('../pdfGenerator/components/PretrialMemorandum.jsx');
 const {
+  PrintableWorkingCopySessionList,
+} = require('../pdfGenerator/documentTemplates/PrintableWorkingCopySessionList.jsx');
+const {
   ReceiptOfFiling,
 } = require('../pdfGenerator/documentTemplates/ReceiptOfFiling.jsx');
 const {
@@ -120,6 +123,7 @@ const components = {
   PetitionService,
   PractitionerCaseList,
   PretrialMemorandum,
+  PrintableWorkingCopySessionList,
   ReceiptOfFiling,
   ReportsMetaHeader,
   StandingPretrialOrder,

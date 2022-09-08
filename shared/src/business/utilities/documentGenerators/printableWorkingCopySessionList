@@ -1,0 +1,50 @@
+const {
+  reactTemplateGenerator,
+} = require('../generateHTMLTemplateForPDF/reactTemplateGenerator');
+const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
+
+const printableWorkingCopySessionList = async ({
+  applicationContext,
+  // data,
+}) => {
+  // const { caseTitle, docketNumber } = data;
+
+  const trialSessionPlanningReportTemplate = reactTemplateGenerator({
+    componentName: 'Printable Working Copy Session List',
+    data: {},
+  });
+
+  const pdfContentHtml = await generateHTMLTemplateForPDF({
+    applicationContext,
+    content: trialSessionPlanningReportTemplate,
+  });
+
+  const headerHtml = reactTemplateGenerator({
+    componentName: 'ReportsMetaHeader',
+    data: {
+      headerTitle: 'Trial Session Worksheet: Judge Someone',
+    },
+  });
+
+  const footerHtml = reactTemplateGenerator({
+    componentName: 'DatePrintedFooter',
+    data: {
+      datePrinted: applicationContext.getUtilities().formatNow('MMDDYY'),
+    },
+  });
+
+  const pdf = await applicationContext
+    .getUseCases()
+    .generatePdfFromHtmlInteractor(applicationContext, {
+      contentHtml: pdfContentHtml,
+      displayHeaderFooter: true,
+      footerHtml,
+      headerHtml,
+    });
+
+  return pdf;
+};
+
+module.exports = {
+  printableWorkingCopySessionList,
+};
