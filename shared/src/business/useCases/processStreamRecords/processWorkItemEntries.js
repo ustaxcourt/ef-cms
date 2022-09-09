@@ -9,7 +9,7 @@ exports.processWorkItemEntries = async ({
   applicationContext.logger.debug(
     `going to index ${workItemRecords.length} work item records`,
   );
-
+  
   const indexWorkItemEntry = workItemRecord => {
     const workItemNewImage = workItemRecord.dynamodb.NewImage;
 

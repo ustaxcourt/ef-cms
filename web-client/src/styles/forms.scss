@@ -582,3 +582,9 @@ label.ustc-upload {
   color: gray;
   opacity: 1; /* Firefox */
 }
+
+.grid-row {
+  .no-shrink {
+    min-width: 480px;
+  }
+}
