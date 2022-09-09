@@ -189,7 +189,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   beforeEach(() => {
     extendCase = {};
 
-    applicationContext.getCurrentUser.mockImplementation(() => docketClerkUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(docketClerkUser);
+
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
