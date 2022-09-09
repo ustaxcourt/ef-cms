@@ -60,10 +60,18 @@ Please follow these steps to validate your changes before submitting a pull requ
 1. If reasonable for the changes being made, write tests.
 1. Run `npm run lint:fix` in the repository root.
 1. Run the following scripts, ensuring no failures:
+    1. Run first in separate terminals:
+       1. `npm run start:api:ci`
+       1. `npm run start:client:ci`
+       1. `npm run start:public:ci`
     1. `npm run test:api`
-    1. `npm run test:client`
-    1. `npm run test:shared`
+    1. `npm run test:client:unit`
     1. `npm run test:pa11y`
+    1. `npm run test:pa11y:public`
+    1. `npm run test:pa11y:public-search`
+    1. `npm run test:scripts`
+    1. `npm run test:shared`
+       
 
 #### Handling Merge Conflicts
 
