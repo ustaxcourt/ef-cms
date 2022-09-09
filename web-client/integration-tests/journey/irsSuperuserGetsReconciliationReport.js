@@ -28,6 +28,13 @@ export const irsSuperuserGetsReconciliationReport = cerebralTest => {
       docketEntries: expect.arrayContaining([
         expect.objectContaining({
           docketEntryId: cerebralTest.updatedDocketEntryId,
+          eventCode: expect.any(String),
+          eventCodeDescription: expect.any(String),
+          filedBy: expect.any(String),
+          filingDate: expect.any(String),
+          index: expect.any(Number),
+          isFileAttached: expect.any(Boolean),
+          servedAt: expect.any(String),
         }),
       ]),
       reconciliationDate: expect.anything(),
