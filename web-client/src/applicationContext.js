@@ -78,9 +78,6 @@ import { associatePrivatePractitionerWithCaseInteractor } from '../../shared/src
 import { authenticateUserInteractor } from '../../shared/src/proxies/auth/authenticateUserProxy';
 import { batchDownloadTrialSessionInteractor } from '../../shared/src/proxies/trialSessions/batchDownloadTrialSessionProxy';
 import { blockCaseFromTrialInteractor } from '../../shared/src/proxies/blockCaseFromTrialProxy';
-const {
-  generatePrintableTrialSessionCopyReportInteractor,
-} = require('../../shared/src/business/useCases/trialSessions/generatePrintableTrialSessionCopyReportInteractor');
 import {
   calculateISODate,
   checkDate,
@@ -155,6 +152,7 @@ import { generateDraftStampOrderInteractor } from '../../shared/src/proxies/docu
 import { generatePDFFromJPGDataInteractor } from '../../shared/src/business/useCases/generatePDFFromJPGDataInteractor';
 import { generatePractitionerCaseListPdfInteractor } from '../../shared/src/proxies/practitioners/generatePractitionerCaseListPdfProxy';
 import { generatePrintableFilingReceiptInteractor } from '../../shared/src/proxies/generatePrintableFilingReceiptProxy';
+import { generatePrintableTrialSessionCopyReportInteractor } from '../../shared/src/proxies/trialSessions/generatePrintableTrialSessionCopyReportProxy';
 import { generateSignedDocumentInteractor } from '../../shared/src/business/useCases/generateSignedDocumentInteractor';
 import { generateTrialCalendarPdfInteractor } from '../../shared/src/proxies/trialSessions/generateTrialCalendarPdfProxy';
 import { getBlockedCasesInteractor } from '../../shared/src/proxies/reports/getBlockedCasesProxy';
