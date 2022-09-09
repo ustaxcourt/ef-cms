@@ -10,10 +10,12 @@ exports.getGeneratePrintableTrialSessionCopyReportLambda = event =>
   genericHandler(
     event,
     async ({ applicationContext }) => {
+      const body = JSON.parse(event.body);
       return await applicationContext
         .getUseCases()
         .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-          formattedTrialSession: JSON.parse(event.body),
+          formattedCases: body.formattedCases,
+          formattedTrialSession: body.formattedTrialSession,
         });
     },
     // { logResults: false },
