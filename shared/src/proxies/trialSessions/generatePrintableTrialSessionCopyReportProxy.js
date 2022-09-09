@@ -9,7 +9,7 @@ const { get } = require('../requests');
  * @param {string} providers.docketNumber the optional trialSessionId filter
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generatePrintablePendingReportInteractor = (
+exports.generatePrintableTrialSessionCopyReportInteractorProxy = (
   applicationContext,
   { trialSessionId },
 ) => {
@@ -17,6 +17,6 @@ exports.generatePrintablePendingReportInteractor = (
 
   return get({
     applicationContext,
-    endpoint: `/reports/pending-report?${queryString}`,
+    endpoint: `/trial-sessions/${queryString}/printable-working-copy`,
   });
 };
