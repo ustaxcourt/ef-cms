@@ -15,7 +15,6 @@ export const setupConsolidatedCasesForAddedDocketNumbersAction = ({
   let consolidatedCases = get(state.caseDetail.consolidatedCases);
   let addedDocketNumbers = get(state.addedDocketNumbers) ?? [];
 
-  console.log(addedDocketNumbers);
   if (consolidatedCases) {
     consolidatedCases = consolidatedCases.map(consolidatedCase => {
       return {
@@ -30,8 +29,6 @@ export const setupConsolidatedCasesForAddedDocketNumbersAction = ({
         tooltip: '',
       };
     });
-
-    console.log('consolidatedCases', consolidatedCases);
 
     const shouldSelectedAll = consolidatedCases.every(
       consolidatedCase => consolidatedCase.checked,
