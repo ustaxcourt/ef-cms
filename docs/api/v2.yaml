@@ -231,22 +231,25 @@ components:
     DocketEntry:
       type: object
       properties:
+        caseCaption:
+          type: string
+          example: Joseph Smith, Petitioner
         docketEntryId:
           type: string
           format: guidv4
           example: 2621672d-cf3f-4ddd-ba50-92513b2fba76
-        isFileAttached:
-          type: boolean
-          example: true
-        index:
-          type: integer
-          example: 1
+        documentTitle:
+          type: string
+          example: Petition
         eventCode:
           type: string
           example: P
-        eventCodeDescription:
-          type: string
-          example: Petition
+        index:
+          type: integer
+          example: 1
+        isFileAttached:
+          type: boolean
+          example: true
         filedBy:
           type: string
           example: Petrs. Private practitioner & Annalise

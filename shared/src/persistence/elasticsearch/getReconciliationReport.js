@@ -52,6 +52,7 @@ exports.getReconciliationReport = async ({
           'filedBy',
           'filingDate',
           'index',
+          'isFileAttached',
           'pk',
           'servedAt',
           'servedPartiesCode',
