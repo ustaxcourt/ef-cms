@@ -6,8 +6,10 @@ import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWeb
 import { state } from 'cerebral';
 
 // TODOS
-// 1. Check if we need to be logged in AND authorized (judge, ca, trial clerks)
-// 2. Refactor setTitleForGlobalReportAction to take a dynamic value for header title
+// 1. check if formattedCases and formattedTrialSessionDetails are in state
+//    - if not, redirect back to Session Copy
+// 2. Make more resilient
+//    -
 
 const getFormattedTrialSessionDetails = ({ get }) => {
   const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);
