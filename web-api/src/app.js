@@ -1025,7 +1025,7 @@ app.get('/sections/:section/judge', lambdaWrapper(getJudgeInSectionLambda));
     lambdaWrapper(deleteTrialSessionLambda),
   );
   app.get('/trial-sessions', lambdaWrapper(getTrialSessionsLambda));
-  app.get(
+  app.post(
     '/trial-sessions/:trialSessionId/printable-working-copy',
     lambdaWrapper(getGeneratePrintableTrialSessionCopyReportLambda),
   );

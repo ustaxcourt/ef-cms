@@ -4,7 +4,10 @@ import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const React = require('react');
 
-export const PrintableWorkingCopySessionList = ({ formattedTrialSession }) => {
+export const PrintableWorkingCopySessionList = ({
+  formattedCases,
+  // formattedTrialSession,
+}) => {
   return (
     <>
       <table>
@@ -25,7 +28,7 @@ export const PrintableWorkingCopySessionList = ({ formattedTrialSession }) => {
           </tr>
         </thead>
         <tbody>
-          {formattedTrialSession.formattedCases.map(formattedCase => {
+          {formattedCases.map(formattedCase => {
             // fix me for member cases of consolidated groups
             const indentMemberCase = false;
             <tr className="vertical-align-middle-row">

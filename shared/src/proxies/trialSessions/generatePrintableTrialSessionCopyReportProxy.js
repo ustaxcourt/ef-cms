@@ -1,4 +1,4 @@
-const { get } = require('../requests');
+const { post } = require('../requests');
 
 /**
  * generatePrintableTrialSessionCopyReportInteractorProxy
@@ -10,11 +10,12 @@ const { get } = require('../requests');
  */
 exports.generatePrintableTrialSessionCopyReportInteractor = (
   applicationContext,
-  { formattedTrialSession, trialSessionId },
+  { formattedCases, formattedTrialSession, trialSessionId },
 ) => {
-  return get({
+  return post({
     applicationContext,
     body: {
+      formattedCases,
       formattedTrialSession,
     },
     endpoint: `/trial-sessions/${trialSessionId}/printable-working-copy`,

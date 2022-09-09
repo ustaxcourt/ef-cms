@@ -14,10 +14,17 @@ const getFormattedTrialSessionDetails = ({ get }) => {
   return { formattedTrialSessionDetails };
 };
 
+const getFormattedTrialSessionCasesAction = ({ get }) => {
+  const { formattedCases } = get(state.trialSessionWorkingCopyHelper) || [];
+  console.log('formattedCases***', formattedCases);
+  return { formattedCases };
+};
+
 export const gotoPrintableTrialSessionWorkingCopySequence =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
     getFormattedTrialSessionDetails,
+    getFormattedTrialSessionCasesAction,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
     setTitleForPrintableTrialSessionWorkingCopyAction,

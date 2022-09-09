@@ -7,11 +7,9 @@ const printableWorkingCopySessionList = async ({
   applicationContext,
   data,
 }) => {
-  const { formattedTrialSession } = data;
-
   const trialSessionPlanningReportTemplate = reactTemplateGenerator({
     componentName: 'PrintableWorkingCopySessionList',
-    data: { formattedTrialSession },
+    data,
   });
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({

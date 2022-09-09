@@ -4,8 +4,8 @@
 # shellcheck disable=SC2086
 
 
-trialSessionId="[PLACE TOKEN HERE]"
-token="[PLACE TOKEN HERE]"
+trialSessionId="4a15d545-ca9b-449b-a282-b10b7416a1ca"
+token="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6InBldGl0aW9uc2NsZXJrMUBleGFtcGxlLmNvbSIsIm5hbWUiOiJUZXN0IFBldGl0aW9uc2NsZXJrMSIsInVzZXJJZCI6IjQ4MDVkMWFiLTE4ZDAtNDNlYy1iYWZiLTY1NGU4MzQwNTQxNiIsImN1c3RvbTpyb2xlIjoicGV0aXRpb25zY2xlcmsiLCJzdWIiOiI0ODA1ZDFhYi0xOGQwLTQzZWMtYmFmYi02NTRlODM0MDU0MTYiLCJpYXQiOjE2NjI3NTMxMDV9.drSpQ3FjYWdwRLLKYlGPBWzJSy6Usi3Tzwt_gmH4vmo"
 targetExperimentalEnvironment="[EXP OF CHOICE]"
 currentColor="[CURRENT COLOR OF EXP]"
 hostName="api-${currentColor}.${targetExperimentalEnvironment}.ustc-case-mgmt.flexion.us"
