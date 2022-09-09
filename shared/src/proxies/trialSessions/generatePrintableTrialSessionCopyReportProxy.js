@@ -8,7 +8,7 @@ const { get } = require('../requests');
  * @param {string} providers.docketNumber the optional trialSessionId filter
  * @returns {Promise<*>} the promise of the api call
  */
-exports.generatePrintableTrialSessionCopyReportInteractorProxy = (
+exports.generatePrintableTrialSessionCopyReportInteractor = (
   applicationContext,
   { formattedTrialSession, trialSessionId },
 ) => {
