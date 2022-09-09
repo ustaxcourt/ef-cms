@@ -26,6 +26,7 @@ const REPORT_PROPERTIES = [
   'docketNumber',
   'documentTitle',
   'eventCode',
+  'isFileAttached',
   'filedBy',
   'filingDate',
   'index',
