@@ -17,7 +17,6 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext,
   { formattedTrialSession },
 ) => {
-  console.log('BEFORE AUTH');
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (
@@ -26,21 +25,14 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  console.log('AFTER AUTH');
-
-  let reportTitle = 'TODO FIX ME';
-
   const pdf = await applicationContext
     .getDocumentGenerators()
     .printableWorkingCopySessionList({
       applicationContext,
       data: {
-        subtitle: reportTitle,
-        trialSession: formattedTrialSession,
+        formattedTrialSession,
       },
     });
-
-  console.log('pdf', pdf);
 
   const key = `trial-session-printable-copy-${applicationContext.getUniqueId()}.pdf`;
 
