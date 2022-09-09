@@ -238,18 +238,15 @@ components:
           type: string
           format: guidv4
           example: 2621672d-cf3f-4ddd-ba50-92513b2fba76
+        docketNumber:
+          type: string
+          example: 123-22
         documentTitle:
           type: string
           example: Petition
         eventCode:
           type: string
           example: P
-        index:
-          type: integer
-          example: 1
-        isFileAttached:
-          type: boolean
-          example: true
         filedBy:
           type: string
           example: Petrs. Private practitioner & Annalise
@@ -257,6 +254,12 @@ components:
           type: string
           format: date-time
           example: '2016-08-29T09:12:33.001Z'
+        index:
+          type: integer
+          example: 1
+        isFileAttached:
+          type: boolean
+          example: true
         servedAt:
           type: string
           format: date-time
