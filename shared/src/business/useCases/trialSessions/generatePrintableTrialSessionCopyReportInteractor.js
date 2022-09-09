@@ -17,7 +17,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext,
   { formattedTrialSession },
 ) => {
-  // console.log('BEFORE AUTH');
+  console.log('BEFORE AUTH');
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (
@@ -26,7 +26,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  // console.log('AFTER AUTH');
+  console.log('AFTER AUTH');
 
   let reportTitle = 'TODO FIX ME';
 
