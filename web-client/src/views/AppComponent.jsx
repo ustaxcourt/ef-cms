@@ -76,7 +76,6 @@ import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
 import { StartCaseInternal } from './StartCaseInternal/StartCaseInternal';
 import { StartCaseWizard } from './StartCase/StartCaseWizard';
 import { StyleGuide } from './StyleGuide/StyleGuide';
-import { TrialSessionCopyReport } from './TrialSessionWorkingCopy/TrialSessionCopyReport';
 import { TrialSessionDetail } from './TrialSessionDetail/TrialSessionDetail';
 import { TrialSessionPlanningModal } from './TrialSessionPlanningModal';
 import { TrialSessionPlanningReport } from './TrialSessions/TrialSessionPlanningReport';
@@ -165,7 +164,6 @@ const pages = {
   StartCaseInternal,
   StartCaseWizard,
   StyleGuide,
-  TrialSessionCopyReport,
   TrialSessionDetail,
   TrialSessionPlanningReport,
   TrialSessionWorkingCopy,
