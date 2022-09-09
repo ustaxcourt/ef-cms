@@ -15,7 +15,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
  */
 exports.generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext,
-  { formattedCases, formattedTrialSession },
+  { formattedCases, formattedTrialSession, nameToDisplay },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
@@ -25,7 +25,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  console.log('formattedCases*** ', formattedCases);
+  console.log('nameToDisplay*** ', nameToDisplay);
 
   const pdf = await applicationContext
     .getDocumentGenerators()
@@ -34,6 +34,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
       data: {
         formattedCases,
         formattedTrialSession,
+        nameToDisplay,
       },
     });
 

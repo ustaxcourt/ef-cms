@@ -12,7 +12,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
 }) => {
   console.log('In generatePrintableTrialSessionCopyReportAction***');
 
-  const { formattedCases, formattedTrialSessionDetails } = props;
+  const { formattedCases, formattedTrialSessionDetails, nameToDisplay } = props;
 
   console.log('formattedTrialSessionDetails', formattedTrialSessionDetails);
 
@@ -21,6 +21,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
       formattedCases,
       formattedTrialSession: formattedTrialSessionDetails,
+      nameToDisplay,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
     });
 
