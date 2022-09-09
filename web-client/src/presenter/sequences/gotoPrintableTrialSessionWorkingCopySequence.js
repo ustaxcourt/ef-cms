@@ -22,11 +22,17 @@ const getFormattedTrialSessionCasesAction = ({ get }) => {
   return { formattedCases };
 };
 
+const getNameToDisplay = ({ get }) => {
+  const { nameToDisplay } = get(state.trialSessionHeaderHelper) || [];
+  return { nameToDisplay };
+};
+
 export const gotoPrintableTrialSessionWorkingCopySequence =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
     getFormattedTrialSessionDetails,
     getFormattedTrialSessionCasesAction,
+    getNameToDisplay,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
     setTitleForPrintableTrialSessionWorkingCopyAction,

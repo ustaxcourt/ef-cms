@@ -16,6 +16,7 @@ exports.getGeneratePrintableTrialSessionCopyReportLambda = event =>
         .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
           formattedCases: body.formattedCases,
           formattedTrialSession: body.formattedTrialSession,
+          nameToDisplay: body.nameToDisplay,
         });
     },
     // { logResults: false },
