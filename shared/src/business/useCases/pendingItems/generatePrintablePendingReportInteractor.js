@@ -111,5 +111,7 @@ exports.generatePrintablePendingReportInteractor = async (
       useTempBucket: true,
     });
 
+  console.log('url*** ', url);
+
   return url;
 };
