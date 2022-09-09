@@ -29,7 +29,7 @@ export const irsSuperuserGetsReconciliationReport = cerebralTest => {
         expect.objectContaining({
           caseCaption: expect.any(String),
           docketEntryId: cerebralTest.updatedDocketEntryId,
-          docketNumber: expect.any(String),
+          docketNumber: cerebralTest.docketNumber,
           documentTitle: expect.any(String),
           eventCode: expect.any(String),
           filedBy: expect.any(String),
