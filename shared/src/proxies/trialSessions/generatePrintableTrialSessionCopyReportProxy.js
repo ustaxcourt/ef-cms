@@ -1,4 +1,3 @@
-const qs = require('qs');
 const { get } = require('../requests');
 
 /**
@@ -11,12 +10,13 @@ const { get } = require('../requests');
  */
 exports.generatePrintableTrialSessionCopyReportInteractorProxy = (
   applicationContext,
-  { trialSessionId },
+  { formattedTrialSession, trialSessionId },
 ) => {
-  const queryString = qs.stringify({ trialSessionId });
-
   return get({
     applicationContext,
-    endpoint: `/trial-sessions/${queryString}/printable-working-copy`,
+    body: {
+      formattedTrialSession,
+    },
+    endpoint: `/trial-sessions/${trialSessionId}/printable-working-copy`,
   });
 };
