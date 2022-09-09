@@ -20,6 +20,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     .getUseCases()
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
       formattedTrialSession: formattedTrialSessionDetails,
+      trialSessionId: formattedTrialSessionDetails.trialSessionId,
     });
 
   console.log('pdfUrl', pdfUrl);
