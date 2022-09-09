@@ -30,7 +30,7 @@ export const setupConsolidatedCasesForAddedDocketNumbersAction = ({
       };
     });
 
-    const shouldSelectedAll = consolidatedCases.every(
+    const shouldSelectAll = consolidatedCases.every(
       consolidatedCase => consolidatedCase.checked,
     );
 
@@ -39,11 +39,11 @@ export const setupConsolidatedCasesForAddedDocketNumbersAction = ({
         ...consolidatedCase,
         checkboxDisabled:
           consolidatedCase.docketNumber === consolidatedCase.leadDocketNumber ||
-          shouldSelectedAll,
+          shouldSelectAll,
       };
     });
 
-    store.set(state.consolidatedCaseAllCheckbox, shouldSelectedAll);
+    store.set(state.consolidatedCaseAllCheckbox, shouldSelectAll);
     store.set(state.caseDetail.consolidatedCases, consolidatedCases);
   }
 };
