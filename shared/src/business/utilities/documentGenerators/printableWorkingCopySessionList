@@ -5,13 +5,14 @@ const { generateHTMLTemplateForPDF } = require('../generateHTMLTemplateForPDF');
 
 const printableWorkingCopySessionList = async ({
   applicationContext,
-  // data,
+  data,
 }) => {
-  // const { caseTitle, docketNumber } = data;
+  const { subtitle, trialSession } = data;
+  console.log('In printableWorkingCopySessionList***');
 
   const trialSessionPlanningReportTemplate = reactTemplateGenerator({
-    componentName: 'Printable Working Copy Session List',
-    data: {},
+    componentName: 'PrintableWorkingCopySessionList',
+    data: { subtitle, trialSession },
   });
 
   const pdfContentHtml = await generateHTMLTemplateForPDF({

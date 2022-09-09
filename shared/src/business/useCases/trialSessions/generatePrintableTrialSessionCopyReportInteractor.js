@@ -17,14 +17,16 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext,
   { formattedTrialSession },
 ) => {
-  console.log('BEFORE AUTH');
+  // console.log('BEFORE AUTH');
   const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.PENDING_ITEMS)) {
+  if (
+    !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
+  ) {
     throw new UnauthorizedError('Unauthorized');
   }
 
-  console.log('AFTER AUTH');
+  // console.log('AFTER AUTH');
 
   let reportTitle = 'TODO FIX ME';
 
@@ -40,7 +42,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
 
   console.log('pdf', pdf);
 
-  const key = `trial-session-copy-${applicationContext.getUniqueId()}.pdf`;
+  const key = `trial-session-printable-copy-${applicationContext.getUniqueId()}.pdf`;
 
   await new Promise((resolve, reject) => {
     const documentsBucket =
@@ -70,8 +72,6 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
       key,
       useTempBucket: true,
     });
-
-  console.log('url*** ', url);
 
   return url;
 };

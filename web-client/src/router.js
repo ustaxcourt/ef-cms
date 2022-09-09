@@ -947,15 +947,12 @@ const router = {
 
     registerRoute(
       '/trial-session-working-copy-printable',
-      ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY },
-        () => {
-          setPageTitle('Trial Session Printable Working Copy');
-          return app.getSequence(
-            'gotoPrintableTrialSessionWorkingcCopySequence',
-          )();
-        },
-      ),
+      ifHasAccess({ app }, () => {
+        setPageTitle('Trial Session Printable Working Copy');
+        return app.getSequence(
+          'gotoPrintableTrialSessionWorkingCopySequence',
+        )();
+      }),
     );
 
     registerRoute(
