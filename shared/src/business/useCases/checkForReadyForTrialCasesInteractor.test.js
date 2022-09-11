@@ -33,7 +33,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getReadyForTrialCases,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should not check case if no case is found', async () => {
@@ -51,7 +51,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getReadyForTrialCases,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it("should only check cases that are 'general docket - not at issue'", async () => {
@@ -69,7 +69,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it("should not update case to 'ready for trial' if it does not have answer document", async () => {
@@ -99,7 +99,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it("should update cases to 'ready for trial' that meet requirements", async () => {
@@ -135,7 +135,7 @@ describe('checkForReadyForTrialCasesInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().updateCase,
-    ).toBeCalledTimes(2);
+    ).toHaveBeenCalledTimes(2);
   });
 
   it('should not call createCaseTrialSortMappingRecords if case has no trial city', async () => {
@@ -159,6 +159,6 @@ describe('checkForReadyForTrialCasesInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

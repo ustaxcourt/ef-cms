@@ -71,7 +71,7 @@ describe('getCompletedMessagesForUserInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCompletedUserInboxMessages,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

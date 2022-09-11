@@ -15,14 +15,14 @@ describe('saveFileAndGenerateUrl', () => {
       file: '',
     });
 
-    expect(applicationContext.getUniqueId).toBeCalled();
+    expect(applicationContext.getUniqueId).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda.mock
         .calls[0][0],
     ).toMatchObject({ useTempBucket: false });
     expect(
       applicationContext.getPersistenceGateway().getDownloadPolicyUrl,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result).toEqual(mockPdfUrlAndId);
   });
 });
