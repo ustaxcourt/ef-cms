@@ -25,7 +25,7 @@ exports.serveGeneratedNoticesOnCase = async ({
   });
 
   if (servedParties.paper.length > 0) {
-    const { PDFDocument } = applicationContext.getPdfLib();
+    const { PDFDocument } = await applicationContext.getPdfLib();
     const noticeDocumentPdf = await PDFDocument.load(noticeDocumentPdfData);
 
     await applicationContext

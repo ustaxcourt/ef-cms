@@ -9,6 +9,7 @@ describe('chooseWorkQueueSequence', () => {
 
   beforeAll(() => {
     applicationContext.getCurrentUser.mockReturnValue({
+      role: 'petitionsclerk',
       section: PETITIONS_SECTION,
     });
     applicationContext
@@ -39,6 +40,6 @@ describe('chooseWorkQueueSequence', () => {
     });
     expect(
       applicationContext.getUseCases().getDocumentQCInboxForSectionInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });
