@@ -24,7 +24,7 @@ RUN wget -q -O terraform.zip https://releases.hashicorp.com/terraform/1.2.8/terr
   rm terraform.zip && \
   cp terraform /usr/local/bin/
 
-RUN apt-get install -y graphicsmagick=1.4+really1.3.35-1~deb10u1 ghostscript=9.27~dfsg-2+deb10u5
+RUN apt-get install -y graphicsmagick=1.4+really1.3.35-1~deb10u1 ghostscript=9.27~dfsg-2+deb10u6
 
 RUN wget https://packages.microsoft.com/repos/edge/pool/main/m/microsoft-edge-stable/microsoft-edge-stable_103.0.1264.44-1_amd64.deb
 RUN apt-get -yq install ./microsoft-edge-stable_103.0.1264.44-1_amd64.deb
