@@ -24,8 +24,8 @@ export const createOrderHelper = (get, applicationContext) => {
   return {
     addDocketNumbersButtonIcon: addedDocketNumbers ? 'edit' : 'plus-circle',
     addDocketNumbersButtonText: addedDocketNumbers
-      ? 'Edit docket numbers in the cover sheet'
-      : 'Add docket numbers to the cover sheet',
+      ? 'Edit docket numbers in the caption'
+      : 'Add docket numbers to the caption',
     documentToEdit,
     isEditing,
     pageTitle,

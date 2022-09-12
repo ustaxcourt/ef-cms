@@ -13,6 +13,7 @@ import { setAddedDocketNumbersAction } from '../actions/setAddedDocketNumbersAct
 import { setCaseAction } from '../actions/setCaseAction';
 import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
+import { setDefaultTabStateAction } from '../actions/setDefaultTabStateAction';
 import { setDocumentToEditAction } from '../actions/setDocumentToEditAction';
 import { setFormFromDraftStateAction } from '../actions/setFormFromDraftStateAction';
 import { setParentMessageIdAction } from '../actions/setParentMessageIdAction';
@@ -25,6 +26,7 @@ const gotoEditOrder = startWebSocketConnectionSequenceDecorator([
   setRedirectUrlAction,
   unsetDocumentToEditAction,
   clearModalAction,
+  setDefaultTabStateAction,
   setCurrentPageAction('Interstitial'),
   stopShowValidationAction,
   clearFormAction,
