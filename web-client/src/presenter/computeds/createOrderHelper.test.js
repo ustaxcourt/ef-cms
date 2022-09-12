@@ -64,7 +64,7 @@ describe('createOrderHelper', () => {
 
     expect(result.showAddDocketNumbersButton).toEqual(true);
     expect(result.addDocketNumbersButtonText).toEqual(
-      'Add docket numbers to the cover sheet',
+      'Add docket numbers to the caption',
     );
     expect(result.addDocketNumbersButtonIcon).toEqual('plus-circle');
   });
@@ -88,7 +88,7 @@ describe('createOrderHelper', () => {
     });
 
     expect(result.addDocketNumbersButtonText).toEqual(
-      'Edit docket numbers in the cover sheet',
+      'Edit docket numbers in the caption',
     );
     expect(result.addDocketNumbersButtonIcon).toEqual('edit');
   });
