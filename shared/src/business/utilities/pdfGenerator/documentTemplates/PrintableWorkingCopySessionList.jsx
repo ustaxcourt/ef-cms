@@ -1,6 +1,11 @@
-import { ConsolidatedCaseIcon } from '../../../../../../web-client/src/ustc-ui/Icon/ConsolidatedCaseIcon.jsx';
-
 const React = require('react');
+
+const isMemberCase = formattedCase => {
+  if (formattedCase.inConsolidatedGroup && !formattedCase.leadCase) {
+    return true;
+  }
+  return false;
+};
 
 export const PrintableWorkingCopySessionList = ({
   formattedCases,
@@ -79,14 +84,12 @@ export const PrintableWorkingCopySessionList = ({
           <tbody>
             {formattedCases.map(formattedCase => {
               // fix me for member cases of consolidated groups
-              const indentMemberCase = false;
+              const indentMemberCase = isMemberCase(formattedCase);
               return (
                 <React.Fragment key={formattedCase.docketNumber}>
                   <tr className="vertical-align-middle-row">
                     <td className="consolidated-case-column">
-                      <div className={indentMemberCase ? 'margin-left-2' : ''}>
-                        <ConsolidatedCaseIcon caseItem={formattedCase} />
-                      </div>
+                      {formattedCase.leadCase && <span>LC</span>}
                     </td>
                     <td>
                       <div className={indentMemberCase ? 'margin-left-2' : ''}>
@@ -119,6 +122,7 @@ export const PrintableWorkingCopySessionList = ({
     </div>
   );
 };
+
 // export const printableTrialSessionWorkingCopyHelper = ({ trialSession }) => {
 //   const compareCasesByPractitioner = (a, b) => {
 //     const aCount =

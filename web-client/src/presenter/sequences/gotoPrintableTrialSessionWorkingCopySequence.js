@@ -27,19 +27,19 @@ const getNameToDisplay = ({ get }) => {
   return { nameToDisplay };
 };
 
-const transformConsolidatedCasesOnFormattedCasesAction = ({ props }) => {
+const preparePrintableFormattedCasesAction = ({ props }) => {
   let { formattedCases } = props;
   let temporaryFormattedCases = [];
 
-  for (let i = 0; i < formattedCases.length; i++) {
-    temporaryFormattedCases.push(formattedCases[i]);
-    if (formattedCases[i].leadCase) {
+  formattedCases.map(formattedCase => {
+    temporaryFormattedCases.push(formattedCase);
+    if (formattedCase.leadCase) {
       temporaryFormattedCases = temporaryFormattedCases.concat(
-        formattedCases[i].consolidatedCases,
+        formattedCase.consolidatedCases,
       );
     }
-  }
-  console.log('temporaryFormattedCases*** ', temporaryFormattedCases);
+  });
+
   formattedCases = temporaryFormattedCases;
   return { formattedCases };
 };
@@ -49,7 +49,7 @@ export const gotoPrintableTrialSessionWorkingCopySequence =
     setCurrentPageAction('Interstitial'),
     getFormattedTrialSessionDetails,
     getFormattedTrialSessionCasesAction,
-    transformConsolidatedCasesOnFormattedCasesAction,
+    preparePrintableFormattedCasesAction,
     getNameToDisplay,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
