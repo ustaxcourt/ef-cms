@@ -83,7 +83,6 @@ export const PrintableWorkingCopySessionList = ({
           </thead>
           <tbody>
             {formattedCases.map(formattedCase => {
-              // fix me for member cases of consolidated groups
               const indentMemberCase = isMemberCase(formattedCase);
               return (
                 <React.Fragment key={formattedCase.docketNumber}>
@@ -110,8 +109,9 @@ export const PrintableWorkingCopySessionList = ({
                     <td className="minw-10">
                       {formattedCase.filingPartiesCode}
                     </td>
-                    <td className="minw-30">{formattedCase.trialStatus}</td>
-                    <td className="no-wrap">Add Note</td>
+                    <td className="minw-30">
+                      {formattedCase.trialStatus || 'Unassigned'}
+                    </td>
                   </tr>
                 </React.Fragment>
               );
