@@ -1393,15 +1393,19 @@ Case.prototype.updateDocketEntry = function (updatedDocketEntry) {
   );
 
   if (foundDocketEntryIndex !== -1) {
+    console.log('we hereeee-------');
+
     this.docketEntries[foundDocketEntryIndex] = updatedDocketEntry;
 
     if (updatedDocketEntry.isOnDocketRecord) {
+      console.log('we hereeee--222222222-----');
       const updateIndex = shouldGenerateDocketRecordIndex({
         caseDetail: this,
         docketEntry: updatedDocketEntry,
       });
 
       if (updateIndex) {
+        console.log('we hereeee----333333---');
         updatedDocketEntry.index = this.generateNextDocketRecordIndex();
       }
     }

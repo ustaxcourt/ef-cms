@@ -64,6 +64,7 @@ exports.fileAndServeCourtIssuedDocumentInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  //todo if covered by helper, REMOVE
   const eventCodeCanOnlyBeServedOnSubjectCase =
     ENTERED_AND_SERVED_EVENT_CODES.includes(form.eventCode);
 
