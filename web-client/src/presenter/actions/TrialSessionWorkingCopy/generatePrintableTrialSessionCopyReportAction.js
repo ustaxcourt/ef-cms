@@ -12,13 +12,19 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
 }) => {
   console.log('In generatePrintableTrialSessionCopyReportAction***');
 
-  const { formattedCases, formattedTrialSessionDetails, nameToDisplay } = props;
+  const {
+    filters,
+    formattedCases,
+    formattedTrialSessionDetails,
+    nameToDisplay,
+  } = props;
 
   console.log('formattedTrialSessionDetails', formattedTrialSessionDetails);
 
   const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
+      filters,
       formattedCases,
       formattedTrialSession: formattedTrialSessionDetails,
       nameToDisplay,

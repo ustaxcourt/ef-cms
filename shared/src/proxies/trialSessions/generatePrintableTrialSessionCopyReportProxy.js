@@ -10,11 +10,18 @@ const { post } = require('../requests');
  */
 exports.generatePrintableTrialSessionCopyReportInteractor = (
   applicationContext,
-  { formattedCases, formattedTrialSession, nameToDisplay, trialSessionId },
+  {
+    filters,
+    formattedCases,
+    formattedTrialSession,
+    nameToDisplay,
+    trialSessionId,
+  },
 ) => {
   return post({
     applicationContext,
     body: {
+      filters,
       formattedCases,
       formattedTrialSession,
       nameToDisplay,
