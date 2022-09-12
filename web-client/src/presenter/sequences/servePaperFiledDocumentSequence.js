@@ -17,6 +17,9 @@ export const servePaperFiledDocumentSequence = showProgressSequenceDecorator([
   clearAlertsAction,
   //TODO this also needs logic to serve on multiple cases
   servePaperFiledDocumentAction,
+  // save for later and serve doesn't go through the
+  // interactor that we made changes to
+  // maybe saw modal but didn't add to all cases
   setAlertSuccessAction,
   getCaseAction,
   setCaseAction,

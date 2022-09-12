@@ -24,3 +24,5 @@ export const shouldSetupConsolidatedCasesAction = ({
 
   return path.yes();
 };
+
+// fix tests

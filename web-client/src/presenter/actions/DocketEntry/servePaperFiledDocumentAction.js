@@ -15,9 +15,30 @@ export const servePaperFiledDocumentAction = async ({
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
 
+  const caseDetail = get(state.caseDetail);
+  const consolidatedCasesPropagateDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
+  );
+
+  const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
+  const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
+
+  let consolidatedGroupDocketNumbers = consolidatedCases
+    .filter(consolidatedCase => consolidatedCase.checked)
+    .map(consolidatedCase => consolidatedCase.docketNumber);
+
+  if (
+    !isLeadCase ||
+    !consolidatedCasesPropagateDocketEntriesFlag ||
+    consolidatedGroupDocketNumbers.length === 0
+  ) {
+    consolidatedGroupDocketNumbers = [caseDetail.docketNumber];
+  }
+
   const { pdfUrl } = await applicationContext
     .getUseCases()
     .serveExternallyFiledDocumentInteractor(applicationContext, {
+      consolidatedGroupDocketNumbers,
       docketEntryId,
       docketNumber,
     });
