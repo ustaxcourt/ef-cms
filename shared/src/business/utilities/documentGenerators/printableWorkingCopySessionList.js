@@ -7,6 +7,7 @@ const printableWorkingCopySessionList = async ({
   applicationContext,
   data,
 }) => {
+  console.log('We should have the data here.', data);
   const trialSessionPlanningReportTemplate = reactTemplateGenerator({
     componentName: 'PrintableWorkingCopySessionList',
     data,
