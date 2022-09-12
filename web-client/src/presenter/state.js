@@ -1,6 +1,7 @@
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
+import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -86,6 +87,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
@@ -116,6 +118,7 @@ const helpers = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
+  addDocketNumbersModalHelper,
   addToTrialSessionModalHelper,
   addTrialSessionInformationHelper,
   advancedDocumentSearchHelper,
@@ -198,6 +201,7 @@ const helpers = {
   scanBatchPreviewerHelper,
   scanHelper,
   sealedCaseDetailHelper,
+  sessionAssignmentHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   showSortableHeaders,
@@ -336,6 +340,7 @@ export const baseState = {
   sectionUsers: [],
   selectedWorkItems: [],
   sessionMetadata: {
+    docketRecordFilter: '',
     docketRecordSort: [],
     todaysOrdersSort: [],
   },
