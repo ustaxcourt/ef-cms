@@ -16,6 +16,11 @@ const getFormattedTrialSessionDetails = ({ get }) => {
   return { formattedTrialSessionDetails };
 };
 
+const getTrialSessionWorkingCopyFiltersAction = ({ get }) => {
+  const filters = get(state.trialSessionWorkingCopy.filters);
+  return { filters };
+};
+
 const getFormattedTrialSessionCasesAction = ({ get }) => {
   const { formattedCases } = get(state.trialSessionWorkingCopyHelper) || [];
   console.log('formattedCases***', formattedCases);
@@ -51,6 +56,7 @@ export const gotoPrintableTrialSessionWorkingCopySequence =
     getFormattedTrialSessionCasesAction,
     preparePrintableFormattedCasesAction,
     getNameToDisplay,
+    getTrialSessionWorkingCopyFiltersAction,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
     setTitleForPrintableTrialSessionWorkingCopyAction,

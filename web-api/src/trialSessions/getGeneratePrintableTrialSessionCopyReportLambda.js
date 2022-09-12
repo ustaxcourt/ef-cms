@@ -14,6 +14,7 @@ exports.getGeneratePrintableTrialSessionCopyReportLambda = event =>
       return await applicationContext
         .getUseCases()
         .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
+          filters: body.filters,
           formattedCases: body.formattedCases,
           formattedTrialSession: body.formattedTrialSession,
           nameToDisplay: body.nameToDisplay,
