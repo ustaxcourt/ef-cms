@@ -46,6 +46,8 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
 
+  // update tests
+  // try this for our flow as it wasn't working to show the modal
   const showConsolidatedCasesFlag =
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
