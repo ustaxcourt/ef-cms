@@ -86,7 +86,7 @@ export const PrintableWorkingCopySessionList = ({
               const indentMemberCase = isMemberCase(formattedCase);
               return (
                 <React.Fragment key={formattedCase.docketNumber}>
-                  <tr className="vertical-align-middle-row">
+                  <tr className="vertical-align-middle-row padding-bottom-2 content-row">
                     <td className="consolidated-case-column">
                       {formattedCase.leadCase && <span>LC</span>}
                     </td>
@@ -112,6 +112,15 @@ export const PrintableWorkingCopySessionList = ({
                     <td className="minw-30">
                       {formattedCase.trialStatus || 'Unassigned'}
                     </td>
+                  </tr>
+                  <tr className="note-row">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
                   </tr>
                 </React.Fragment>
               );
