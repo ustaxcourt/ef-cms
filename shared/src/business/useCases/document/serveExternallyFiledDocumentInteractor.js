@@ -334,6 +334,9 @@ const fileDocumentOnOneCase = async ({
 }) => {
   const servedParties = aggregatePartiesForService(caseEntity);
 
+  console.log(servedParties, '------');
+  //FOR TOMORROW looks like not getting served parties' names at this point
+
   const docketEntryEntity = new DocketEntry(
     {
       ...omit(originalSubjectDocketEntry, 'filedBy'),
