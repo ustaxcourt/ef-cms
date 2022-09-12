@@ -1,4 +1,3 @@
-import { CaseLink } from '../../../../../../web-client/src/ustc-ui/CaseLink/CaseLink.jsx';
 import { ConsolidatedCaseIcon } from '../../../../../../web-client/src/ustc-ui/Icon/ConsolidatedCaseIcon.jsx';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
@@ -10,7 +9,7 @@ export const PrintableWorkingCopySessionList = ({
   nameToDisplay,
 }) => {
   return (
-    <>
+    <div id="printable-working-copy-list">
       {/*TrialSessionDetailHeader*/}
       <div className="big-blue-header">
         <div className="grid-container">
@@ -64,11 +63,7 @@ export const PrintableWorkingCopySessionList = ({
         <table>
           <thead>
             <tr>
-              <th>
-                <span className="display-none">
-                  Consolidated Case Indicator
-                </span>
-              </th>
+              <th></th>
               <th
                 aria-label="Docket Number"
                 className="padding-left-2px no-wrap"
@@ -97,7 +92,7 @@ export const PrintableWorkingCopySessionList = ({
                     </td>
                     <td>
                       <div className={indentMemberCase ? 'margin-left-2' : ''}>
-                        <CaseLink formattedCase={formattedCase} />
+                        {formattedCase.docketNumberWithSuffix}
                       </div>
                     </td>
                     <td>
@@ -133,7 +128,7 @@ export const PrintableWorkingCopySessionList = ({
           </tbody>
         </table>
       </section>
-    </>
+    </div>
   );
 };
 // export const printableTrialSessionWorkingCopyHelper = ({ trialSession }) => {
