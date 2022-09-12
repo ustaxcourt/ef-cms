@@ -8,6 +8,7 @@ const {
 const { addCoverToPdf } = require('../addCoversheetInteractor');
 const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
+const { DocketEntry } = require('../../entities/DocketEntry');
 const { UnauthorizedError } = require('../../../errors/errors');
 
 /**
@@ -53,7 +54,7 @@ exports.serveExternallyFiledDocumentInteractor = async (
     });
   const caseEntity = new Case(caseToUpdate, { applicationContext });
 
-  const currentDocketEntry = caseEntity.getDocketEntryById({
+  let currentDocketEntry = caseEntity.getDocketEntryById({
     docketEntryId,
   });
 
@@ -89,31 +90,31 @@ exports.serveExternallyFiledDocumentInteractor = async (
     }
 
     let filedByFromLeadCase;
+    let serviceResults;
 
-    for (const rawCase of caseEntities) {
-      currentDocketEntry.setAsServed(servedParties.all);
-      currentDocketEntry.setAsProcessingStatusAsCompleted();
-
+    const filedDocumentPromises = caseEntities.map(async rawCase => {
       if (rawCase.docketNumber === rawCase.leadDocketNumber) {
+        currentDocketEntry.setAsServed(servedParties.all).validate();
+        currentDocketEntry.setAsProcessingStatusAsCompleted();
         filedByFromLeadCase = currentDocketEntry.filedBy;
+
+        caseEntity.updateDocketEntry(currentDocketEntry);
+      } else {
+        // add a new docket entry rather than update it
+        currentDocketEntry = new DocketEntry(
+          {
+            ...currentDocketEntry,
+            docketEntryId: applicationContext.getUniqueId(),
+          },
+          { applicationContext },
+        );
+
+        caseEntity.addDocketEntry(currentDocketEntry);
       }
 
       if (filedByFromLeadCase) {
         currentDocketEntry.filedBy = filedByFromLeadCase;
       }
-
-      // const aCaseEntity = await applicationContext
-      //   .getUseCaseHelpers()
-      //   .updateCaseAutomaticBlock({
-      //     applicationContext,
-      //     caseEntity: rawCase,
-      //   });
-
-      // todo: why save case twice? this call also does NOT validate before saving, bad????
-      // await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-      //   applicationContext,
-      //   caseToUpdate: aCaseEntity,
-      // });
 
       const { Body: pdfData } = await applicationContext
         .getStorageClient()
@@ -122,8 +123,6 @@ exports.serveExternallyFiledDocumentInteractor = async (
           Key: docketEntryId,
         })
         .promise();
-
-      caseEntity.updateDocketEntry(currentDocketEntry);
 
       const { pdfData: servedDocWithCover } = await addCoverToPdf({
         applicationContext,
@@ -167,24 +166,28 @@ exports.serveExternallyFiledDocumentInteractor = async (
         applicationContext,
         caseToUpdate: caseEntity,
       });
-    }
 
-    const serviceResults = await applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf({
-        applicationContext,
-        caseEntities: [caseEntity],
-        docketEntryId: currentDocketEntry.docketEntryId,
-      });
+      serviceResults = await applicationContext
+        .getUseCaseHelpers()
+        .serveDocumentAndGetPaperServicePdf({
+          applicationContext,
+          caseEntities,
+          docketEntryId: currentDocketEntry.docketEntryId,
+        });
 
-    await applicationContext
-      .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus({
-        applicationContext,
-        docketEntryId: currentDocketEntry.docketEntryId,
-        docketNumber: caseToUpdate.docketNumber,
-        status: false,
-      });
+      await applicationContext
+        .getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus({
+          applicationContext,
+          docketEntryId: currentDocketEntry.docketEntryId,
+          docketNumber: caseToUpdate.docketNumber,
+          status: false,
+        });
+    });
+
+    caseEntities = await Promise.all(filedDocumentPromises);
+
+    console.log('21234234caseEntities', caseEntities);
 
     return serviceResults;
   } catch (e) {
