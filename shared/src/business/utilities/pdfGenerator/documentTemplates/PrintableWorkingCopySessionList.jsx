@@ -1,5 +1,4 @@
 import { ConsolidatedCaseIcon } from '../../../../../../web-client/src/ustc-ui/Icon/ConsolidatedCaseIcon.jsx';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 
 const React = require('react');
 
@@ -70,7 +69,6 @@ export const PrintableWorkingCopySessionList = ({
               >
                 Docket No.
               </th>
-              <th aria-label="manually added indicator"></th>
               <th>Case Title</th>
               <th>Petitioner Counsel</th>
               <th>Respondent Counsel</th>
@@ -94,16 +92,6 @@ export const PrintableWorkingCopySessionList = ({
                       <div className={indentMemberCase ? 'margin-left-2' : ''}>
                         {formattedCase.docketNumberWithSuffix}
                       </div>
-                    </td>
-                    <td>
-                      {formattedCase.isManuallyAdded && (
-                        <span aria-label="manually added indicator">
-                          <FontAwesomeIcon
-                            className="mini-success"
-                            icon="calendar-plus"
-                          />
-                        </span>
-                      )}
                     </td>
                     <td className="minw-80">{formattedCase.caseTitle}</td>
                     <td>

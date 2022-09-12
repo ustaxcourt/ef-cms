@@ -27,11 +27,29 @@ const getNameToDisplay = ({ get }) => {
   return { nameToDisplay };
 };
 
+const transformConsolidatedCasesOnFormattedCasesAction = ({ props }) => {
+  let { formattedCases } = props;
+  let temporaryFormattedCases = [];
+
+  for (let i = 0; i < formattedCases.length; i++) {
+    temporaryFormattedCases.push(formattedCases[i]);
+    if (formattedCases[i].leadCase) {
+      temporaryFormattedCases = temporaryFormattedCases.concat(
+        formattedCases[i].consolidatedCases,
+      );
+    }
+  }
+  console.log('temporaryFormattedCases*** ', temporaryFormattedCases);
+  formattedCases = temporaryFormattedCases;
+  return { formattedCases };
+};
+
 export const gotoPrintableTrialSessionWorkingCopySequence =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
     getFormattedTrialSessionDetails,
     getFormattedTrialSessionCasesAction,
+    transformConsolidatedCasesOnFormattedCasesAction,
     getNameToDisplay,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
