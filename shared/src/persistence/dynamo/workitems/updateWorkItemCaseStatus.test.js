@@ -20,10 +20,8 @@ describe('updateWorkItemCaseStatus', () => {
     await updateWorkItemCaseStatus({
       applicationContext,
       caseStatus: mockCaseStatus,
-      workItem: {
-        pk: mockPk,
-        sk: mockSk,
-      },
+      docketNumber: 'pk',
+      workItemId: 'sk',
     });
 
     expect(client.update.mock.calls[0][0]).toMatchObject({

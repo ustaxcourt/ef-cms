@@ -74,7 +74,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
-    ).toBeCalledWith(expect.objectContaining({ useTempBucket: true }));
+    ).toHaveBeenCalledWith(expect.objectContaining({ useTempBucket: true }));
     expect(result).toEqual(mockPdfUrl);
   });
 });

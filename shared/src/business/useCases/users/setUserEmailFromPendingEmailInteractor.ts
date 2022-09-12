@@ -59,7 +59,8 @@ export const setUserEmailFromPendingEmailInteractor = async (
   let userEntity;
   if (
     user.role === ROLES.privatePractitioner ||
-    user.role === ROLES.irsPractitioner
+    user.role === ROLES.irsPractitioner ||
+    user.role === ROLES.inactivePractitioner
   ) {
     userEntity = new Practitioner({
       ...user,

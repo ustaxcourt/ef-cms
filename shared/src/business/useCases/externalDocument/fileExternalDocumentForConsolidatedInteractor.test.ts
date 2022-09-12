@@ -315,10 +315,10 @@ describe('fileExternalDocumentForConsolidatedInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should set work item as completed if isPaper is true', async () => {

@@ -94,6 +94,6 @@ describe('removeCasePendingItemInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

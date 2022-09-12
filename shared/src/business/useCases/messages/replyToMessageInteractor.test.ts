@@ -79,7 +79,7 @@ describe('replyToMessageInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().createMessage,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().createMessage.mock.calls[0][0]
         .message,
@@ -96,7 +96,7 @@ describe('replyToMessageInteractor', () => {
     });
     expect(
       applicationContext.getPersistenceGateway().markMessageThreadRepliedTo,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().markMessageThreadRepliedTo.mock
         .calls[0][0],

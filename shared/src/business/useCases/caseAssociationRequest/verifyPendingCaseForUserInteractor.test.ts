@@ -14,6 +14,6 @@ describe('verifyPendingCaseForUser', () => {
 
     expect(
       applicationContext.getPersistenceGateway().verifyPendingCaseForUser,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

@@ -24,6 +24,6 @@ describe('chooseMessageBoxAction', () => {
       box: 'inbox',
       queue: 'my',
     });
-    expect(myinboxMock).toBeCalled();
+    expect(myinboxMock).toHaveBeenCalled();
   });
 });

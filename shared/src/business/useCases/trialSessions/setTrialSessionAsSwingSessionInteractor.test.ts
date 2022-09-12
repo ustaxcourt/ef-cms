@@ -68,14 +68,14 @@ describe('Set trial session as swing session', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().getTrialSessionById.mock
         .calls[0][0].trialSessionId,
     ).toEqual('208a959f-9526-4db5-b262-e58c476a4604');
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateTrialSession.mock
         .calls[0][0].trialSessionToUpdate,

@@ -47,7 +47,7 @@ describe('getUploadPolicyInteractor', () => {
     await getUploadPolicyInteractor(applicationContext, {} as any);
     expect(
       applicationContext.getPersistenceGateway().isFileExists,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('throws an unauthorized exception when file already exists', async () => {

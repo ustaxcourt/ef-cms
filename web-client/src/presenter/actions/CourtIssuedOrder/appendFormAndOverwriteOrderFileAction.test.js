@@ -35,7 +35,7 @@ describe('overwriteOrderFileAction', () => {
 
     expect(
       applicationContextForClient.getUseCases().uploadOrderDocumentInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('fails to overwrite the file for an order', () => {
@@ -57,6 +57,6 @@ describe('overwriteOrderFileAction', () => {
       },
     });
 
-    expect(errorStub).toBeCalled();
+    expect(errorStub).toHaveBeenCalled();
   });
 });

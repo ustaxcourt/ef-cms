@@ -139,7 +139,7 @@ describe('generateChangeOfAddress', () => {
 
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser,
-    ).toBeCalledTimes(2);
+    ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getNotificationGateway().sendNotificationToUser.mock
         .calls[0][0].message,
@@ -211,7 +211,7 @@ describe('generateChangeOfAddress', () => {
       );
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toBeCalledTimes(1);
+    ).toHaveBeenCalledTimes(1);
     expect(changeOfAddressDocketEntry.numberOfPages).toBe(mockNumberOfPages);
   });
 

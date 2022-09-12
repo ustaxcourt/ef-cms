@@ -59,7 +59,7 @@ describe('getMessagesForCaseInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getMessagesByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(returnedMessage).toMatchObject([mockMessage]);
   });
 });

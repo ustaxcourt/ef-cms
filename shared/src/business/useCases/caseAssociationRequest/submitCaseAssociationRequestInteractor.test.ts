@@ -71,7 +71,7 @@ describe('submitCaseAssociationRequest', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should add mapping for a practitioner', async () => {
@@ -102,10 +102,10 @@ describe('submitCaseAssociationRequest', () => {
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should add mapping for an irsPractitioner', async () => {
@@ -142,9 +142,9 @@ describe('submitCaseAssociationRequest', () => {
 
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

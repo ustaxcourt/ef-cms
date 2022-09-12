@@ -138,10 +138,10 @@ describe('generateChangeOfAddress', () => {
       user: mockPrivatePractitioner,
     } as any);
 
-    expect(applicationContext.logger.error).toBeCalled();
+    expect(applicationContext.logger.error).toHaveBeenCalled();
     expect(
       applicationContext.getDocumentGenerators().changeOfAddress,
-    ).toBeCalledTimes(1);
+    ).toHaveBeenCalledTimes(1);
     expect(cases).toMatchObject([expect.objectContaining({ docketNumber })]);
   });
 

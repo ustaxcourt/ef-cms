@@ -40,7 +40,7 @@ describe('getCasesForUserInteractor', () => {
   it('should retrieve the current user information', async () => {
     await getCasesForUserInteractor(applicationContext);
 
-    expect(applicationContext.getCurrentUser).toBeCalled();
+    expect(applicationContext.getCurrentUser).toHaveBeenCalled();
   });
 
   it('should make a call to retrieve open and closed cases for the current user', async () => {
@@ -57,7 +57,7 @@ describe('getCasesForUserInteractor', () => {
   it('should validate the list of cases found for the current user', async () => {
     await getCasesForUserInteractor(applicationContext);
 
-    expect(UserCase.validateRawCollection).toBeCalled();
+    expect(UserCase.validateRawCollection).toHaveBeenCalled();
   });
 
   it('should return a list of open cases sorted by createdAt date descending', async () => {
