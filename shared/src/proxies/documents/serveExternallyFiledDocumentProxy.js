@@ -16,7 +16,7 @@ exports.serveExternallyFiledDocumentInteractor = (
 ) => {
   return post({
     applicationContext,
-    body: { consolidatedGroupDocketNumbers },
+    body: consolidatedGroupDocketNumbers,
     endpoint: `/case-documents/${docketNumber}/${docketEntryId}/serve`,
   });
 };
