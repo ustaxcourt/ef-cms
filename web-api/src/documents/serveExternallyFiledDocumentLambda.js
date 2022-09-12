@@ -12,6 +12,7 @@ exports.serveExternallyFiledDocumentLambda = event =>
       .getUseCases()
       .serveExternallyFiledDocumentInteractor(
         applicationContext,
+        JSON.parse(event.body),
         event.pathParameters,
       );
   });
