@@ -113,14 +113,14 @@ export const PrintableWorkingCopySessionList = ({
                       {formattedCase.trialStatus || 'Unassigned'}
                     </td>
                   </tr>
-                  <tr className="note-row">
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
-                    <td></td>
+                  <tr className="case-note-row">
+                    <td colSpan="2"></td>
+                    <td colSpan="5">
+                      {formattedCase.notes && formattedCase.notes.notes}
+                    </td>
+                  </tr>
+                  <tr className="blank-note-row">
+                    <td colSpan="7"></td>
                   </tr>
                 </React.Fragment>
               );
