@@ -249,7 +249,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should log an error when the petitioner is not found on one of their cases by userId', async () => {
@@ -287,7 +287,7 @@ describe('verifyUserPendingEmailInteractor', () => {
     );
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   describe('update cases', () => {

@@ -21,7 +21,7 @@ describe('shouldValidateAction', () => {
         showValidation: false,
       },
     });
-    expect(ignoreSpy).toBeCalled();
+    expect(ignoreSpy).toHaveBeenCalled();
   });
 
   it('calls path.validate if showValidation is true', async () => {
@@ -34,6 +34,6 @@ describe('shouldValidateAction', () => {
         showValidation: true,
       },
     });
-    expect(validateSpy).toBeCalled();
+    expect(validateSpy).toHaveBeenCalled();
   });
 });

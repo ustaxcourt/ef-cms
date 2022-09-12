@@ -72,10 +72,10 @@ describe('run trial session planning report', () => {
     expect(result).toBe(mockPdfUrl);
     expect(
       applicationContext.getDocumentGenerators().trialSessionPlanningReport,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   describe('getTrialSessionPlanningReportData', () => {

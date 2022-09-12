@@ -88,6 +88,6 @@ describe('associatePrivatePractitionerWithCaseInteractor', () => {
 
     expect(
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

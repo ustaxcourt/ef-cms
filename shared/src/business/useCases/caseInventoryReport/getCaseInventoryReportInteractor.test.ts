@@ -54,7 +54,7 @@ describe('getCaseInventoryReportInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseInventoryReport,
-    ).toBeCalledWith({
+    ).toHaveBeenCalledWith({
       applicationContext: expect.anything(),
       associatedJudge: CHIEF_JUDGE,
       status: CASE_STATUS_TYPES.NEW,

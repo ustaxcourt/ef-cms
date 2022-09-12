@@ -27,11 +27,11 @@ describe('handleBounceNotificationInteractor', () => {
     });
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
 
     expect(
       applicationContext.getDispatchers().sendSlackNotification,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should do nothing if the bounce is not permanent', async () => {
@@ -46,11 +46,11 @@ describe('handleBounceNotificationInteractor', () => {
     });
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
 
     expect(
       applicationContext.getDispatchers().sendSlackNotification,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('sends alerts when the user is the irs super user and the bounce is Permanent', async () => {
@@ -65,7 +65,7 @@ describe('handleBounceNotificationInteractor', () => {
     });
     expect(
       applicationContext.getDispatchers().sendBulkTemplatedEmail,
-    ).toBeCalledWith(
+    ).toHaveBeenCalledWith(
       expect.objectContaining({
         destinations: [{ email: 'sysadmin@example.com' }],
         templateName: process.env.EMAIL_BOUNCED_SUPER_USER_TEMPLATE,
@@ -74,7 +74,7 @@ describe('handleBounceNotificationInteractor', () => {
 
     expect(
       applicationContext.getDispatchers().sendSlackNotification,
-    ).toBeCalledWith({
+    ).toHaveBeenCalledWith({
       applicationContext,
       text: ':warning: (local environment) An Email to the IRS Super User (service.agent.test@example.com) has triggered a Permanent bounce (On Suppression List)',
       topic: 'bounce-notification',

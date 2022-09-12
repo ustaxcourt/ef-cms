@@ -40,7 +40,7 @@ describe('getMessagesForCaseAction', () => {
 
     expect(
       applicationContextForClient.getUseCases().getMessagesForCaseInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContextForClient.getUseCases().getMessagesForCaseInteractor
         .mock.calls[0][1],

@@ -109,15 +109,17 @@ describe('deleteTrialSessionInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().deleteTrialSessionWorkingCopy,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().deleteTrialSession,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('does not delete the trial session working copy if there is no judge on the trial session', async () => {
@@ -143,7 +145,7 @@ describe('deleteTrialSessionInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().deleteTrialSessionWorkingCopy,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should not call createCaseTrialSortMappingRecords if the case has no trial city', async () => {
@@ -172,6 +174,6 @@ describe('deleteTrialSessionInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

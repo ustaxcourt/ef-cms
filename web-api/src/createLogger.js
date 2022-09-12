@@ -10,7 +10,7 @@ const {
   format,
   transports,
 } = require('winston');
-const { cloneDeep, unset } = require('lodash');
+const { cloneDeep, isEqual, unset } = require('lodash');
 
 exports.redact = format(logEntry => {
   const copy = cloneDeep(logEntry);
@@ -19,6 +19,21 @@ exports.redact = format(logEntry => {
     'request.headers.authorization',
     'request.headers.Authorization',
   ].forEach(k => unset(copy, k));
+  return copy;
+});
+
+exports.removeDuplicateLogInformation = format(logEntry => {
+  const copy = cloneDeep(logEntry);
+
+  if (!copy.context) return copy;
+
+  // check in .context to see if any of the keys contain what we already have in the root
+  for (const key of Object.keys(copy.context)) {
+    if (isEqual(copy[key], copy.context[key])) {
+      delete copy.context[key];
+    }
+  }
+
   return copy;
 });
 
@@ -31,7 +46,11 @@ exports.createLogger = (opts = {}) => {
     ...opts,
   };
 
-  const formatters = [errors({ stack: true }), exports.redact()];
+  const formatters = [
+    errors({ stack: true }),
+    exports.redact(),
+    exports.removeDuplicateLogInformation(),
+  ];
 
   if (process.env.NODE_ENV === 'production') {
     options.format = combine(...formatters, json());

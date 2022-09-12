@@ -279,6 +279,7 @@ const fileDocumentOnOneCase = async ({
   );
 
   docketEntryEntity.setAsServed(servedParties.all).validate();
+  docketEntryEntity.setAsProcessingStatusAsCompleted();
 
   const isSubjectCase =
     originalSubjectDocketEntry.docketNumber === caseEntity.docketNumber;

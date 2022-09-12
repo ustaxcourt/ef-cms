@@ -60,7 +60,9 @@ describe('createCaseDeadlineInteractor', () => {
 
     expect(caseDeadline).toBeDefined();
     expect(caseDeadline.associatedJudge).toEqual(CHIEF_JUDGE); // judge is not set on the mock case, so it defaults to chief judge
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
@@ -72,7 +74,7 @@ describe('createCaseDeadlineInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('creates a case deadline, marks the case as automatically blocked, and calls deleteCaseTrialSortMappingRecords when there are already pending items on the case', async () => {
@@ -86,7 +88,9 @@ describe('createCaseDeadlineInteractor', () => {
 
     expect(caseDeadline).toBeDefined();
     expect(caseDeadline.associatedJudge).toEqual('Judge Buch');
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase.mock.calls[0][0]
         .caseToUpdate,
@@ -98,6 +102,6 @@ describe('createCaseDeadlineInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

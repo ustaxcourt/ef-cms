@@ -62,7 +62,7 @@ describe('getOutboxMessagesForUserInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getUserOutboxMessages,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

@@ -217,7 +217,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus,
-    ).toBeCalledTimes(finallyBlockCalls + initialCall);
+    ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
   });
 
   it('should call updateDocketEntryPendingServiceStatus on error', async () => {
@@ -248,7 +248,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .updateDocketEntryPendingServiceStatus,
-    ).toBeCalledTimes(finallyBlockCalls + initialCall);
+    ).toHaveBeenCalledTimes(finallyBlockCalls + initialCall);
   });
 
   it('should log the failure to call updateDocketEntryPendingServiceStatus in the finally block', async () => {
@@ -290,7 +290,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
       }),
     ).rejects.toThrow(expectedErrorString);
 
-    expect(applicationContext.logger.error).toBeCalledTimes(1);
+    expect(applicationContext.logger.error).toHaveBeenCalledTimes(1);
     expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(
       innerError,
     );
@@ -387,7 +387,7 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveDocumentFromLambda,
-    ).toBeCalledTimes(1);
+    ).toHaveBeenCalledTimes(1);
   });
 
   // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES

@@ -34,7 +34,7 @@ describe('Update case trial sort tags', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('calls persistence if case status is ready for trial', async () => {
@@ -47,7 +47,7 @@ describe('Update case trial sort tags', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('throws unauthorized error if user is unauthorized', async () => {

@@ -219,6 +219,6 @@ describe('updateCaseContextInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .createCaseTrialSortMappingRecords,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

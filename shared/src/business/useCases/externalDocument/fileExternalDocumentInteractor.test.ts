@@ -119,13 +119,13 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
@@ -148,11 +148,13 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).toHaveBeenCalled();
@@ -219,7 +221,9 @@ describe('fileExternalDocumentInteractor', () => {
         },
       },
     );
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(updatedCase.docketEntries).toMatchObject([
       {}, // first 4 docs were already on the case
       {},
@@ -267,11 +271,13 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
     ).not.toHaveBeenCalled();
@@ -297,7 +303,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
@@ -321,7 +327,7 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0],
     ).toMatchObject({
@@ -353,7 +359,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should automatically block the case with deadlines if the document filed is a tracked document and the case has a deadline', async () => {
@@ -388,7 +394,7 @@ describe('fileExternalDocumentInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should not sendServedPartiesEmails if docketEntryId is undefined', async () => {
@@ -405,9 +411,9 @@ describe('fileExternalDocumentInteractor', () => {
 
     expect(
       applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

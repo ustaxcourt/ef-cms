@@ -62,7 +62,7 @@ describe('getInboxMessagesForSectionInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getSectionInboxMessages,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(returnedMessages).toMatchObject([omit(messageData, 'pk', 'sk')]);
   });
 });

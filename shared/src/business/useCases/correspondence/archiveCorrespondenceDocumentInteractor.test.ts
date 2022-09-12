@@ -8,14 +8,16 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
   let mockUser;
   let mockUserId = '2474e5c0-f741-4120-befa-b77378ac8bf0';
   const mockCorrespondenceId = applicationContext.getUniqueId();
-  const mockCorrespondence = new Correspondence({
-    correspondenceId: mockCorrespondenceId,
-    documentTitle: 'My Correspondence',
-    filedBy: 'Docket clerk',
-    userId: mockUserId,
-  });
+  let mockCorrespondence;
 
   beforeEach(() => {
+    mockCorrespondence = new Correspondence({
+      correspondenceId: mockCorrespondenceId,
+      documentTitle: 'My Correspondence',
+      filedBy: 'Docket clerk',
+      userId: mockUserId,
+    });
+
     mockUser = {
       name: 'Docket Clerk',
       role: ROLES.docketClerk,
@@ -64,7 +66,10 @@ describe('archiveCorrespondenceDocumentInteractor', () => {
       applicationContext.getPersistenceGateway().updateCaseCorrespondence.mock
         .calls[0][0],
     ).toMatchObject({
-      correspondence: mockCorrespondence,
+      correspondence: {
+        ...mockCorrespondence,
+        archived: true,
+      },
       docketNumber: MOCK_CASE.docketNumber,
     });
   });

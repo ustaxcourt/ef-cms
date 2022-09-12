@@ -267,6 +267,6 @@ describe('getCaseDeadlinesInteractor', () => {
       ],
       totalCount: 3,
     });
-    expect(applicationContext.logger.error).toBeCalled();
+    expect(applicationContext.logger.error).toHaveBeenCalled();
   });
 });

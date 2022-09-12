@@ -98,15 +98,17 @@ describe('editPaperFilingInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).not.toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('adds documents and workitems', async () => {
@@ -124,15 +126,17 @@ describe('editPaperFilingInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().serveDocumentAndGetPaperServicePdf,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('should return paper service pdf url if the case has paper service parties', async () => {
@@ -178,15 +182,17 @@ describe('editPaperFilingInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().deleteWorkItemFromInbox,
-    ).not.toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('should update only allowed editable fields on a docket entry document', async () => {
@@ -235,14 +241,16 @@ describe('editPaperFilingInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().countPagesInDocument,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('updates document and workitem metadata with no file attached', async () => {
@@ -261,11 +269,13 @@ describe('editPaperFilingInteractor', () => {
 
     expect(
       applicationContext.getPersistenceGateway().getCaseByDocketNumber,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
-    expect(applicationContext.getPersistenceGateway().updateCase).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().updateCase,
+    ).toHaveBeenCalled();
   });
 
   it('should throw an error if the document is ready for service but is already pending service', async () => {

@@ -70,7 +70,7 @@ describe('deleteCaseDeadlineInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('calls persistence to delete a case deadline and leaves the case automatically blocked if there are more deadlines', async () => {
@@ -99,6 +99,6 @@ describe('deleteCaseDeadlineInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway()
         .deleteCaseTrialSortMappingRecords,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

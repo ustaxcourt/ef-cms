@@ -82,10 +82,10 @@ describe('createCaseInteractor', () => {
     ).rejects.toThrow('Unauthorized');
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should create a case successfully as a petitioner', async () => {
@@ -98,13 +98,13 @@ describe('createCaseInteractor', () => {
     expect(result).toBeDefined();
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().associateUserWithCase,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should match the current user id to the contactId when the user is petitioner', async () => {
@@ -202,10 +202,10 @@ describe('createCaseInteractor', () => {
     ]);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should create a case with contact primary and secondary successfully as a practitioner', async () => {
@@ -266,10 +266,10 @@ describe('createCaseInteractor', () => {
     ]);
     expect(
       applicationContext.getUseCaseHelpers().createCaseAndAssociations,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 
   it('should set serviceIndicators for each petitioner on the case', async () => {

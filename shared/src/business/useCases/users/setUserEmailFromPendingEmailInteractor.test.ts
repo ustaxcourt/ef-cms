@@ -125,7 +125,7 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[0][0];
 
-    expect(applicationContext.logger.error).not.toBeCalled();
+    expect(applicationContext.logger.error).not.toHaveBeenCalled();
     expect(caseToUpdate.privatePractitioners[0]).toMatchObject({
       email: UPDATED_EMAIL,
       serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
@@ -146,5 +146,30 @@ describe('setUserEmailFromPendingEmailInteractor', () => {
         user: mockPractitioner,
       }),
     ).rejects.toThrow(mockErrorMessage);
+  });
+
+  it('should not turn an inactive Practitioner into a User', async () => {
+    applicationContext
+      .getPersistenceGateway()
+      .getCasesByUserId.mockReturnValue(userCases);
+
+    await setUserEmailFromPendingEmailInteractor(applicationContext, {
+      user: {
+        ...mockPractitioner,
+        email: UPDATED_EMAIL,
+        role: ROLES.inactivePractitioner,
+        serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateUser.mock.calls[0][0]
+        .user,
+    ).toMatchObject({
+      email: UPDATED_EMAIL,
+      entityName: 'Practitioner',
+      pendingEmail: undefined,
+      serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+    });
   });
 });
