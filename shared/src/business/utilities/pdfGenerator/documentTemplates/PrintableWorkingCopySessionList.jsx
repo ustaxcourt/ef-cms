@@ -70,7 +70,6 @@ export const PrintableWorkingCopySessionList = ({
             </div>
           </div>
           {/*SessionNotes*/}
-          <div>Filters Selected: {generateSelectedFilterList(filters)}</div>
           <div className="case-notes">
             <div className="grid-container padding-x-0">
               <div className="grid-row grid-gap">
@@ -90,6 +89,8 @@ export const PrintableWorkingCopySessionList = ({
               </div>
             </div>
           </div>
+          {/*SelectedFilters*/}
+          <div>Filters Selected: {generateSelectedFilterList(filters)}</div>
           {/*WorkingCopySessionList*/}
           <table>
             <thead>
