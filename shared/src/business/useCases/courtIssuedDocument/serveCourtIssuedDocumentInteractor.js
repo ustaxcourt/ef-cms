@@ -78,11 +78,23 @@ exports.serveCourtIssuedDocumentInteractor = async (
   applicationContext,
   { clientConnectionId, docketEntryId, docketNumbers, subjectCaseDocketNumber },
 ) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {
-    throw new UnauthorizedError('Unauthorized for document service');
+  const hasPermission =
+    (isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
+      isAuthorized(
+        authorizedUser,
+        ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY,
+      )) &&
+    isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT);
+
+  if (!hasPermission) {
+    throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const subjectCase = await applicationContext
     .getPersistenceGateway()

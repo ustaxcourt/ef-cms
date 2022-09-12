@@ -20,6 +20,7 @@ const {
 const { formatMessageResult } = require('./helpers/formatMessageResult');
 const { formatWorkItemResult } = require('./helpers/formatWorkItemResult');
 const { search, searchAll } = require('./searchClient');
+
 jest.mock('./helpers/formatMessageResult', () => ({
   formatMessageResult: jest.fn(),
 }));
