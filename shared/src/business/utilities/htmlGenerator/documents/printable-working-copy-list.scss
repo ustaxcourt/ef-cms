@@ -16,9 +16,16 @@
   }
 }
 
-.note-row {
+.blank-note-row {
   td {
     height: 0.5rem;
     border-top: none;
+  }
+}
+
+.case-note-row {
+  td {
+    border-top: none;
+    border-bottom: none;
   }
 }
