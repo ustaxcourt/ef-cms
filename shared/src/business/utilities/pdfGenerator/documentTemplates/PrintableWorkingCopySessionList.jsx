@@ -37,6 +37,7 @@ export const PrintableWorkingCopySessionList = ({
         <div className="grid-row">
           <div className="grid-col-9">
             <h2 className="heading-1">{nameToDisplay} - Session Copy</h2>
+            <h2>Number of formatted cases: {formattedCases.length}</h2>
           </div>
         </div>
         {/*SessionNotes*/}
@@ -86,42 +87,48 @@ export const PrintableWorkingCopySessionList = ({
             {formattedCases.map(formattedCase => {
               // fix me for member cases of consolidated groups
               const indentMemberCase = false;
-              <tr className="vertical-align-middle-row">
-                <td className="consolidated-case-column">
-                  <div className={indentMemberCase ? 'margin-left-2' : ''}>
-                    <ConsolidatedCaseIcon caseItem={formattedCase} />
-                  </div>
-                </td>
-                <td>
-                  <div className={indentMemberCase ? 'margin-left-2' : ''}>
-                    <CaseLink formattedCase={formattedCase} />
-                  </div>
-                </td>
-                <td>
-                  {formattedCase.isManuallyAdded && (
-                    <span aria-label="manually added indicator">
-                      <FontAwesomeIcon
-                        className="mini-success"
-                        icon="calendar-plus"
-                      />
-                    </span>
-                  )}
-                </td>
-                <td className="minw-80">{formattedCase.caseTitle}</td>
-                <td>
-                  {formattedCase.privatePractitioners.map(practitioner => (
-                    <div key={practitioner.userId}>{practitioner.name}</div>
-                  ))}
-                </td>
-                <td>
-                  {formattedCase.irsPractitioners.map(respondent => (
-                    <div key={respondent.userId}>{respondent.name}</div>
-                  ))}
-                </td>
-                <td className="minw-10">{formattedCase.filingPartiesCode}</td>
-                <td className="minw-30">{formattedCase.trialStatus}</td>
-                <td className="no-wrap">Add Note</td>
-              </tr>;
+              return (
+                <React.Fragment key={formattedCase.docketNumber}>
+                  <tr className="vertical-align-middle-row">
+                    <td className="consolidated-case-column">
+                      <div className={indentMemberCase ? 'margin-left-2' : ''}>
+                        <ConsolidatedCaseIcon caseItem={formattedCase} />
+                      </div>
+                    </td>
+                    <td>
+                      <div className={indentMemberCase ? 'margin-left-2' : ''}>
+                        <CaseLink formattedCase={formattedCase} />
+                      </div>
+                    </td>
+                    <td>
+                      {formattedCase.isManuallyAdded && (
+                        <span aria-label="manually added indicator">
+                          <FontAwesomeIcon
+                            className="mini-success"
+                            icon="calendar-plus"
+                          />
+                        </span>
+                      )}
+                    </td>
+                    <td className="minw-80">{formattedCase.caseTitle}</td>
+                    <td>
+                      {formattedCase.privatePractitioners.map(practitioner => (
+                        <div key={practitioner.userId}>{practitioner.name}</div>
+                      ))}
+                    </td>
+                    <td>
+                      {formattedCase.irsPractitioners.map(respondent => (
+                        <div key={respondent.userId}>{respondent.name}</div>
+                      ))}
+                    </td>
+                    <td className="minw-10">
+                      {formattedCase.filingPartiesCode}
+                    </td>
+                    <td className="minw-30">{formattedCase.trialStatus}</td>
+                    <td className="no-wrap">Add Note</td>
+                  </tr>
+                </React.Fragment>
+              );
             })}
           </tbody>
         </table>
