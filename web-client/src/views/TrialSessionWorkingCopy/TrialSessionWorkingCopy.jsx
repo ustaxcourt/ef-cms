@@ -18,12 +18,15 @@ export const TrialSessionWorkingCopy = connect(
     batchDownloadTrialSessionSequence:
       sequences.batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
+    openPrintableTrialSessionWorkingCopyModalSequence:
+      sequences.openPrintableTrialSessionWorkingCopyModalSequence,
     showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
   },
   function TrialSessionWorkingCopy({
     batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails,
+    openPrintableTrialSessionWorkingCopyModalSequence,
     showModal,
     trialSessionHeaderHelper,
   }) {
@@ -51,8 +54,11 @@ export const TrialSessionWorkingCopy = connect(
               <Button
                 link
                 className="margin-top-2"
-                href={`/trial-session-working-copy-printable/${formattedTrialSessionDetails.trialSessionId}`}
                 icon="print"
+                // href={`/trial-session-working-copy-printable/${formattedTrialSessionDetails.trialSessionId}`}
+                onClick={() =>
+                  openPrintableTrialSessionWorkingCopyModalSequence()
+                }
               >
                 Print
               </Button>
