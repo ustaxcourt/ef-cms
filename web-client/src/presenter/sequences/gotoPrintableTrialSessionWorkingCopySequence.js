@@ -34,7 +34,7 @@ const getNameToDisplay = ({ get }) => {
 };
 
 const getCaseNotesFlagAction = ({ get }) => {
-  const caseNotesFlag = get(state.modal.caseNotesFlag);
+  const caseNotesFlag = get(state.modal.caseNotesFlag) || true;
   return { caseNotesFlag };
 };
 
