@@ -35,7 +35,7 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
               <select
                 aria-label="trial report term"
                 className={classNames('usa-select')}
-                name="term"
+                name="caseNotesFlag"
                 onChange={e => {
                   updateModalValueSequence({
                     key: e.target.name,
@@ -43,7 +43,6 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
                   });
                 }}
               >
-                <option value="">- Select -</option>
                 <option key="Yes" value="true">
                   Yes
                 </option>
