@@ -87,6 +87,7 @@ import { reviewSavedPetitionHelper } from './computeds/reviewSavedPetitionHelper
 import { scanBatchPreviewerHelper } from './computeds/scanBatchPreviewerHelper';
 import { scanHelper } from './computeds/scanHelper';
 import { sealedCaseDetailHelper } from './computeds/sealedCaseDetailHelper';
+import { sessionAssignmentHelper } from './computeds/sessionAssignmentHelper';
 import { setForHearingModalHelper } from './computeds/setForHearingModalHelper';
 import { showAppTimeoutModalHelper } from './computeds/showAppTimeoutModalHelper';
 import { showSortableHeaders } from './computeds/showSortableHeaders';
@@ -200,6 +201,7 @@ const helpers = {
   scanBatchPreviewerHelper,
   scanHelper,
   sealedCaseDetailHelper,
+  sessionAssignmentHelper,
   setForHearingModalHelper,
   showAppTimeoutModalHelper,
   showSortableHeaders,
@@ -338,6 +340,7 @@ export const baseState = {
   sectionUsers: [],
   selectedWorkItems: [],
   sessionMetadata: {
+    docketRecordFilter: '',
     docketRecordSort: [],
     todaysOrdersSort: [],
   },
