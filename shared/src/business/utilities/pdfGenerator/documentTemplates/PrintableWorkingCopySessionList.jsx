@@ -34,6 +34,7 @@ const generateSelectedFilterList = filters => {
 };
 
 export const PrintableWorkingCopySessionList = ({
+  caseNotesFlag,
   filters,
   formattedCases,
   formattedTrialSession,
@@ -73,13 +74,13 @@ export const PrintableWorkingCopySessionList = ({
             </div>
           </div>
           {/*SessionNotes*/}
+          {/*TODO: CHECK NEED FOR RENDERING SESSIONS NOTES IF THERE ARE NO SESSION NOTES*/}
           <div className="case-notes">
             <div className="grid-container padding-x-0">
               <div className="grid-row grid-gap">
                 <div className="tablet:grid-col-6">
                   <div className="card">
                     <div className="content-wrapper">
-                      {/* TODO: fix this as session notes is not passed in */}
                       <SessionNotesSection sessionNotes={sessionNotes} />
                     </div>
                   </div>
@@ -148,7 +149,9 @@ export const PrintableWorkingCopySessionList = ({
                     <tr className="case-note-row">
                       <td colSpan="2"></td>
                       <td colSpan="5">
-                        {formattedCase.notes && formattedCase.notes.notes}
+                        {caseNotesFlag &&
+                          formattedCase.notes &&
+                          formattedCase.notes.notes}
                       </td>
                     </tr>
                     <tr className="blank-note-row">
@@ -164,107 +167,3 @@ export const PrintableWorkingCopySessionList = ({
     </React.Fragment>
   );
 };
-
-// export const printableTrialSessionWorkingCopyHelper = ({ trialSession }) => {
-//   const compareCasesByPractitioner = (a, b) => {
-//     const aCount =
-//       (a.privatePractitioners && a.privatePractitioners.length && 1) || 0;
-//     const bCount =
-//       (b.privatePractitioners && b.privatePractitioners.length && 1) || 0;
-
-//     return aCount - bCount;
-//   };
-
-//   const { STATUS_TYPES, TRIAL_STATUS_TYPES } =
-//     applicationContext.getConstants();
-
-//   const { caseMetadata, filters, sort, sortOrder, userNotes } = get(
-//     state.trialSessionWorkingCopy,
-//   );
-
-//   //get an array of strings of the trial statuses that are set to true
-//   const trueFilters = Object.keys(pickBy(filters));
-
-//   let formattedCases = (trialSession.calendaredCases || [])
-//     .slice()
-//     .filter(
-//       calendaredCase =>
-//         calendaredCase.status !== STATUS_TYPES.closed &&
-//         calendaredCase.removedFromTrial !== true,
-//     )
-//     .filter(
-//       calendaredCase =>
-//         (trueFilters.includes('statusUnassigned') &&
-//           (!caseMetadata[calendaredCase.docketNumber] ||
-//             !caseMetadata[calendaredCase.docketNumber].trialStatus)) ||
-//         (caseMetadata[calendaredCase.docketNumber] &&
-//           trueFilters.includes(
-//             caseMetadata[calendaredCase.docketNumber].trialStatus,
-//           )),
-//     )
-//     .map(caseItem =>
-//       applicationContext
-//         .getUtilities()
-//         .formatCaseForTrialSession({ applicationContext, caseItem }),
-//     )
-//     .sort(applicationContext.getUtilities().compareCasesByDocketNumber);
-
-//   Object.keys(userNotes || {}).forEach(docketNumber => {
-//     const caseToUpdate = formattedCases.find(
-//       aCase => aCase.docketNumber === docketNumber,
-//     );
-//     if (caseToUpdate) {
-//       caseToUpdate.userNotes = userNotes[docketNumber].notes;
-//     }
-//   });
-
-//   trialSession.caseOrder.forEach(aCase => {
-//     if (aCase.calendarNotes) {
-//       const caseToUpdate = formattedCases.find(
-//         theCase => theCase.docketNumber === aCase.docketNumber,
-//       );
-//       if (caseToUpdate) {
-//         caseToUpdate.calendarNotes = aCase.calendarNotes;
-//       }
-//     }
-//   });
-
-//   const [leadAndUnconsolidatedCases, memberConsolidatedCases] = partition(
-//     formattedCases,
-//     calendaredCase => {
-//       return (
-//         !calendaredCase.leadDocketNumber ||
-//         calendaredCase.docketNumber === calendaredCase.leadDocketNumber
-//       );
-//     },
-//   );
-
-//   leadAndUnconsolidatedCases.forEach(caseToUpdate => {
-//     if (caseToUpdate.leadCase) {
-//       caseToUpdate.consolidatedCases = memberConsolidatedCases.filter(
-//         memberCase => {
-//           return memberCase.leadDocketNumber === caseToUpdate.leadDocketNumber;
-//         },
-//       );
-
-//       caseToUpdate.consolidatedCases.sort(
-//         applicationContext.getUtilities().compareCasesByDocketNumber,
-//       );
-//     }
-//   });
-
-//   if (sort === 'practitioner') {
-//     leadAndUnconsolidatedCases.sort(compareCasesByPractitioner);
-//   }
-
-//   if (sortOrder === 'desc') {
-//     leadAndUnconsolidatedCases.reverse();
-//   }
-
-//   const trialStatusOptions = TRIAL_STATUS_TYPES.map(value => ({
-//     key: camelCase(value),
-//     value,
-//   }));
-//   const formattedCasesFromHelper = leadAndUnconsolidatedCases;
-//   return formattedCasesFromHelper;
-// };

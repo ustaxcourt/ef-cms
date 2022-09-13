@@ -1,7 +1,7 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { sequences } from 'cerebral';
 import React from 'react';
 import classNames from 'classnames';
 
@@ -9,7 +9,6 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
     confirmSequence: sequences.gotoPrintableTrialSessionWorkingCopySequence,
-    trialYears: state.modal.trialYears,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function PrintableTrialSessionWorkingCopyModal({
@@ -43,7 +42,7 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
                   });
                 }}
               >
-                <option key="Yes" value="true">
+                <option selected key="Yes" value="true">
                   Yes
                 </option>
                 <option key="No" value="false">
