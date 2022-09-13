@@ -153,6 +153,10 @@ export const PrintableWorkingCopySessionList = ({
                           'caseNotesFlag:::::',
                           typeof caseNotesFlag,
                         )}
+                        {console.log(
+                          'formattedCase.notes:::::',
+                          formattedCase.notes,
+                        )}
                         {caseNotesFlag &&
                           formattedCase.notes &&
                           formattedCase.notes.notes}
