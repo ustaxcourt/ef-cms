@@ -35,10 +35,9 @@ export const AddDocketNumbersModal = connect(
       >
         <div className="ustc-create-order-modal">
           <p>
-            Select cases that you want to add to the caption.
-            <br />
-            Petitioner&apos;s name will be automatically appended with &quot;ET
-            AL.&quot; if more than one case is selected.
+            Select cases that you want to add to the caption. Petitioner&apos;s
+            name will be automatically appended with &quot;ET AL.&quot; if more
+            than one case is selected.
           </p>
 
           <ConsolidatedCasesCheckboxes
