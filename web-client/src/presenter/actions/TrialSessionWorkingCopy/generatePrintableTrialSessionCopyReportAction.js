@@ -23,6 +23,13 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
 
   console.log('formattedTrialSessionDetails', formattedTrialSessionDetails);
 
+  //Create DTO with only the information needed for the template
+  formattedCases.map(formattedCase => {
+    return {
+      docketNumber: formattedCase.docketNumber,
+    };
+  });
+
   const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
