@@ -149,6 +149,10 @@ export const PrintableWorkingCopySessionList = ({
                     <tr className="case-note-row">
                       <td colSpan="2"></td>
                       <td colSpan="5">
+                        {console.log(
+                          'caseNotesFlag:::::',
+                          typeof caseNotesFlag,
+                        )}
                         {caseNotesFlag &&
                           formattedCase.notes &&
                           formattedCase.notes.notes}
