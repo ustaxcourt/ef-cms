@@ -45,7 +45,7 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
                   onChange={e => {
                     updateModalValueSequence({
                       key: e.target.name,
-                      value: e.target.value,
+                      value: true,
                     });
                   }}
                 />
@@ -68,7 +68,7 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
                   onChange={e => {
                     updateModalValueSequence({
                       key: e.target.name,
-                      value: e.target.value,
+                      value: false,
                     });
                   }}
                 />

@@ -34,7 +34,9 @@ const getNameToDisplay = ({ get }) => {
 };
 
 const getCaseNotesFlagAction = ({ get }) => {
-  const caseNotesFlag = get(state.modal.caseNotesFlag) || true;
+  // const caseNotesFlag = get(state.modal.caseNotesFlag) || true;
+  const caseNotesFlag = get(state.modal.caseNotesFlag);
+  console.log('caseNotesFlag in sequence*** ', caseNotesFlag);
   return { caseNotesFlag };
 };
 
