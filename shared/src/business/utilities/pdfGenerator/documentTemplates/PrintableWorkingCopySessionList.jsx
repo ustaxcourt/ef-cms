@@ -150,7 +150,7 @@ export const PrintableWorkingCopySessionList = ({
                       <td colSpan="2"></td>
                       <td colSpan="5">
                         {formattedCase.calendarNotes &&
-                          'Calendar Notes: ' + formattedCase.calendarNotes}
+                          `Calendar Notes: ${formattedCase.calendarNotes}`}
                       </td>
                     </tr>
                     <tr className="case-note-row">
@@ -166,7 +166,7 @@ export const PrintableWorkingCopySessionList = ({
                         )}
                         {caseNotesFlag &&
                           formattedCase.userNotes &&
-                          'Notes: ' + formattedCase.userNotes}
+                          `Notes: ${formattedCase.userNotes}`}
                       </td>
                     </tr>
                     <tr className="blank-note-row">
