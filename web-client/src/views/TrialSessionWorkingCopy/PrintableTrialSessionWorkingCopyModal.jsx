@@ -3,7 +3,6 @@ import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
 import { sequences } from 'cerebral';
 import React from 'react';
-import classNames from 'classnames';
 
 export const PrintableTrialSessionWorkingCopyModal = connect(
   {
@@ -27,28 +26,60 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
       >
         <div className="margin-bottom-4">
           <FormGroup>
-            <fieldset className="usa-fieldset margin-bottom-0">
-              <legend className="display-block" id="trial-term">
+            <fieldset
+              className="usa-fieldset margin-bottom-0"
+              id="case-notes-included-radios"
+            >
+              <legend className="display-block" id="case-notes-included-radios">
                 Do you want to include case notes in the printable working copy?
               </legend>
-              <select
-                aria-label="trial report term"
-                className={classNames('usa-select')}
-                name="caseNotesFlag"
-                onChange={e => {
-                  updateModalValueSequence({
-                    key: e.target.name,
-                    value: e.target.value,
-                  });
-                }}
-              >
-                <option selected key="Yes" value="true">
+              <div className="usa-radio usa-radio__inline">
+                <input
+                  checked
+                  aria-describedby="irs-verified-notice-radios"
+                  className="usa-radio__input"
+                  id="caseNotesIncluded-yes"
+                  name="caseNotesFlag"
+                  type="radio"
+                  value={true}
+                  onChange={e => {
+                    updateModalValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor="caseNotesIncluded-yes"
+                  id="case-notes-included-yes"
+                >
                   Yes
-                </option>
-                <option key="No" value="false">
+                </label>
+              </div>
+              <div className="usa-radio usa-radio__inline">
+                <input
+                  aria-describedby="irs-verified-notice-radios"
+                  className="usa-radio__input"
+                  id="caseNotesIncluded-no"
+                  name="caseNotesFlag"
+                  type="radio"
+                  value={false}
+                  onChange={e => {
+                    updateModalValueSequence({
+                      key: e.target.name,
+                      value: e.target.value,
+                    });
+                  }}
+                />
+                <label
+                  className="usa-radio__label"
+                  htmlFor="caseNotesIncluded-no"
+                  id="case-notes-included-no"
+                >
                   No
-                </option>
-              </select>
+                </label>
+              </div>
             </fieldset>
           </FormGroup>
         </div>
