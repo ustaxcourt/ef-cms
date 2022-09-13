@@ -12,11 +12,11 @@ const { post } = require('../requests');
  */
 exports.serveExternallyFiledDocumentInteractor = (
   applicationContext,
-  { consolidatedGroupDocketNumbers, docketEntryId, docketNumber },
+  { docketEntryId, docketNumbers, subjectCaseDocketNumber },
 ) => {
   return post({
     applicationContext,
-    body: consolidatedGroupDocketNumbers,
-    endpoint: `/case-documents/${docketNumber}/${docketEntryId}/serve`,
+    body: docketNumbers,
+    endpoint: `/case-documents/${subjectCaseDocketNumber}/${docketEntryId}/serve`,
   });
 };
