@@ -14,4 +14,4 @@ STAGE=${ENV} \
     DYNAMODB_ENDPOINT="dynamodb.${REGION}.amazonaws.com" \
     S3_ENDPOINT="s3.${REGION}.amazonaws.com" \
     DOCUMENTS_BUCKET_NAME="${EFCMS_DOMAIN}-documents-${ENV}-${REGION}" \
-    node ./web-api/storage/scripts/loadTest/loadTestTrialSession.js
+    npx ts-node ./web-api/storage/scripts/loadTest/loadTestTrialSession.js
