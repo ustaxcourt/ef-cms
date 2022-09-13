@@ -2,6 +2,7 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { generatePrintableTrialSessionCopyReportAction } from '../actions/TrialSessionWorkingCopy/generatePrintableTrialSessionCopyReportAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
+import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
 import { setTitleForPrintableTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTitleForPrintableTrialSessionWorkingCopyAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 import { state } from 'cerebral';
@@ -57,9 +58,17 @@ const preparePrintableFormattedCasesAction = ({ props }) => {
   return { formattedCases };
 };
 
+const getRedirectUrlAction = ({ get }) => {
+  const trialSessionId = get(state.formattedTrialSessionDetails.trialSessionId);
+  console.log('We have the trial session id right?', trialSessionId);
+  return { redirectUrl: `/trial-session-working-copy/${trialSessionId}` };
+};
+
 export const gotoPrintableTrialSessionWorkingCopySequence =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
+    getRedirectUrlAction,
+    setRedirectUrlAction,
     clearModalAction,
     getFormattedTrialSessionDetails,
     getFormattedTrialSessionCasesAction,
@@ -70,5 +79,5 @@ export const gotoPrintableTrialSessionWorkingCopySequence =
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
     setTitleForPrintableTrialSessionWorkingCopyAction,
-    setCurrentPageAction('SimplePdfPreviewPage'),
+    setCurrentPageAction('PrintableTrialSessionWorkingCopyPreviewPage'),
   ]);
