@@ -39,8 +39,12 @@ export const serveExternallyFiledDocumentInteractor = async (
   {
     docketEntryId,
     docketNumbers,
-    subjectCaseDocketNumber
-  }: { docketEntryId: string; docketNumbers: string[], subjectCaseDocketNumber: string },
+    subjectCaseDocketNumber,
+  }: {
+    docketEntryId: string;
+    docketNumbers: string[];
+    subjectCaseDocketNumber: string;
+  },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
 
