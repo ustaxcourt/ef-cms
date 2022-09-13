@@ -219,7 +219,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.confirmationText).toEqual(
         'The following document will be served on all parties in selected cases:',
       );
-      expect(result.showConsolidatedCasesFlag).toEqual(true);
+      expect(result.showConsolidatedCasesForService).toEqual(true);
     });
 
     it('should say group if any non-lead case is checked & have the correct number of contacts', () => {
@@ -250,10 +250,10 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.confirmationText).toEqual(
         'The following document will be served on all parties in selected cases:',
       );
-      expect(result.showConsolidatedCasesFlag).toEqual(true);
+      expect(result.showConsolidatedCasesForService).toEqual(true);
     });
 
-    it('showConsolidatedCasesFlag should be true when form.eventCode is NOT in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
+    it('showConsolidatedCasesForService should be true when form.eventCode is NOT in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
       const formattedCaseDetail = {
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
         isLeadCase: true,
@@ -268,10 +268,10 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.showConsolidatedCasesFlag).toBe(true);
+      expect(result.showConsolidatedCasesForService).toBe(true);
     });
 
-    it('showConsolidatedCasesFlag should be false when form.eventCode is in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
+    it('showConsolidatedCasesForService should be false when form.eventCode is in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
       const formattedCaseDetail = {
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
         isLeadCase: true,
@@ -286,7 +286,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.showConsolidatedCasesFlag).toBe(true);
+      expect(result.showConsolidatedCasesForService).toBe(true);
     });
 
     it('should remove duplicated paper contacts', () => {
@@ -359,7 +359,7 @@ describe('confirmInitiateServiceModalHelper', () => {
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
       expect(result.caseOrGroup).toEqual('case');
-      expect(result.showConsolidatedCasesFlag).toEqual(false);
+      expect(result.showConsolidatedCasesForService).toEqual(false);
     });
 
     it('should not process consolidated cases when not on confirmInitiateServiceModal or ConfirmInitiateCourtIssuedDocumentServiceModal', () => {
@@ -383,7 +383,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       });
 
       expect(result.contactsNeedingPaperService.length).toEqual(1);
-      expect(result.showConsolidatedCasesFlag).toEqual(false);
+      expect(result.showConsolidatedCasesForService).toEqual(false);
     });
   });
 });
