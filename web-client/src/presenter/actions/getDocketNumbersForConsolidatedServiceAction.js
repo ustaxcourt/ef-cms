@@ -8,7 +8,7 @@ import { state } from 'cerebral';
  * @param {Function} providers.get the cerebral get function
  * @returns {object} the user
  */
-export const getDocketNumbersForConsolidatedServiceAction = async ({
+export const getDocketNumbersForConsolidatedServiceAction = ({
   applicationContext,
   get,
 }) => {
