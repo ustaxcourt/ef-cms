@@ -7,7 +7,7 @@
   "dependencies": {
     "@18f/us-federal-holidays": "^2.1.1",
     "@aws-crypto/sha256-browser": "^2.0.2",
-    "@aws-sdk/credential-provider-node": "^3.168.0",
+    "@aws-sdk/credential-provider-node": "^3.169.0",
     "@aws-sdk/node-http-handler": "^3.168.0",
     "@aws-sdk/protocol-http": "^3.168.0",
     "@aws-sdk/signature-v4": "^3.168.0",
@@ -20,7 +20,7 @@
     "@pdftron/pdfjs-express-viewer": "^8.7.0",
     "@sparticuz/chrome-aws-lambda": "^17.0.0",
     "archiver": "^5.3.1",
-    "aws-sdk": "^2.1213.0",
+    "aws-sdk": "^2.1214.0",
     "broadcast-channel": "^4.14.0",
     "canvas": "^2.10.1",
     "cerebral": "5.2.1",
