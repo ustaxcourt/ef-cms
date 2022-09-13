@@ -12,44 +12,11 @@ import { state } from 'cerebral';
 export const serveCourtIssuedDocumentAction = async ({
   applicationContext,
   get,
+  props,
 }) => {
-  const consolidatedCasesPropagateDocketEntriesFlag = get(
-    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
-  );
   const docketEntryId = get(state.docketEntryId);
   const caseDetail = get(state.caseDetail);
-  const {
-    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-    ENTERED_AND_SERVED_EVENT_CODES,
-  } = applicationContext.getConstants();
-
-  // ENTERED_AND_SERVED docs immediately close a case when served, and all COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET are unservable
-  const eventCodesNotCompatibleWithConsolidation = [
-    ...ENTERED_AND_SERVED_EVENT_CODES,
-    ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-  ];
-
-  const docketEntry = caseDetail.docketEntries.find(
-    entry => entry.docketEntryId === docketEntryId,
-  );
-  const currentDocketEntryCompatibleWithConsolidation =
-    !eventCodesNotCompatibleWithConsolidation.includes(docketEntry.eventCode);
-
-  const consolidatedCases = caseDetail.consolidatedCases || [];
-  let docketNumbers = consolidatedCases
-    .filter(consolidatedCase => consolidatedCase.checked)
-    .map(consolidatedCase => consolidatedCase.docketNumber);
-
-  const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
-
-  if (
-    !isLeadCase ||
-    !consolidatedCasesPropagateDocketEntriesFlag ||
-    docketNumbers.length === 0 ||
-    !currentDocketEntryCompatibleWithConsolidation
-  ) {
-    docketNumbers = [caseDetail.docketNumber];
-  }
+  let { docketNumbers } = props;
 
   const clientConnectionId = get(state.clientConnectionId);
 
