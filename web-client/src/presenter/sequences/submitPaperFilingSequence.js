@@ -34,6 +34,7 @@ import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocket
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 const savePaperFiling = showProgressSequenceDecorator([
+  setDocketEntryIdAction,
   getDocketNumbersForConsolidatedServiceAction,
   submitPaperFilingAction,
   setCaseAction,
