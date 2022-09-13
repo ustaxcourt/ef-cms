@@ -165,7 +165,9 @@ exports.formattedTrialSessionDetails = ({
   trialSession.formattedJudge =
     (trialSession.judge && trialSession.judge.name) || 'Not assigned';
   trialSession.formattedTrialClerk =
-    (trialSession.trialClerk && trialSession.trialClerk.name) || 'Not assigned';
+    (trialSession.trialClerk && trialSession.trialClerk.name) ||
+    trialSession.alternateTrialClerkName ||
+    'Not assigned';
   trialSession.formattedCourtReporter =
     trialSession.courtReporter || 'Not assigned';
   trialSession.formattedIrsCalendarAdministrator =
