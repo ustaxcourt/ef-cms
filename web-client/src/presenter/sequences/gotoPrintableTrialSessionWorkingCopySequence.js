@@ -33,6 +33,11 @@ const getNameToDisplay = ({ get }) => {
   return { nameToDisplay };
 };
 
+const getCaseNotesFlagAction = ({ get }) => {
+  const caseNotesFlag = get(state.modal.caseNotesFlag);
+  return { caseNotesFlag };
+};
+
 const preparePrintableFormattedCasesAction = ({ props }) => {
   let { formattedCases } = props;
   let temporaryFormattedCases = [];
@@ -58,6 +63,7 @@ export const gotoPrintableTrialSessionWorkingCopySequence =
     getFormattedTrialSessionCasesAction,
     preparePrintableFormattedCasesAction,
     getNameToDisplay,
+    getCaseNotesFlagAction,
     getTrialSessionWorkingCopyFiltersAction,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,

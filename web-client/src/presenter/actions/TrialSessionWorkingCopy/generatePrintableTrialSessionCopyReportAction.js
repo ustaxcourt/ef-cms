@@ -10,7 +10,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   applicationContext,
   props,
 }) => {
-  console.log('In generatePrintableTrialSessionCopyReportAction***');
+  console.log('caseNotesFlag***', props.caseNotesFlag);
 
   const {
     filters,

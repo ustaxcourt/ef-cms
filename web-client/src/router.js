@@ -946,19 +946,6 @@ const router = {
     );
 
     registerRoute(
-      '/trial-session-working-copy-printable/*',
-      ifHasAccess(
-        { app, permissionToCheck: ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY },
-        trialSessionId => {
-          setPageTitle('Trial Session Printable Working Copy');
-          return app.getSequence(
-            'gotoPrintableTrialSessionWorkingCopySequence',
-          )({ trialSessionId });
-        },
-      ),
-    );
-
-    registerRoute(
       '/practitioner-detail/*',
       ifHasAccess({ app }, barNumber => {
         setPageTitle('Practitioner Detail');
