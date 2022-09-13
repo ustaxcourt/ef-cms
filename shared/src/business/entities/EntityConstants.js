@@ -430,7 +430,7 @@ const TRACKED_DOCUMENT_TYPES = {
 
 // ACED, COED, M007, M083, PSDE
 const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
-  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+  ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
 ])
   .filter(internalEvent => internalEvent.caseDecision)
   .map(x => x.eventCode);

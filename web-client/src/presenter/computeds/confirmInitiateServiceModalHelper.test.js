@@ -76,7 +76,6 @@ describe('confirmInitiateServiceModalHelper', () => {
         form: {},
         formattedCaseDetail: FORMATTED_CASE_DETAIL_MULTIPLE_PARTIES,
         modal: { showModal: 'ConfirmInitiateServiceModal' },
-        showConsolidatedCaseCheckboxes: true,
       },
     });
 
@@ -121,7 +120,6 @@ describe('confirmInitiateServiceModalHelper', () => {
           privatePractitioners: [],
         },
         modal: { showModal: 'ConfirmInitiateServiceModal' },
-        showConsolidatedCaseCheckboxes: true,
       },
     });
 
@@ -213,7 +211,6 @@ describe('confirmInitiateServiceModalHelper', () => {
           form: { eventCode: 'O' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
-          showConsolidatedCaseCheckboxes: true,
         },
       });
 
@@ -245,7 +242,6 @@ describe('confirmInitiateServiceModalHelper', () => {
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
-          showConsolidatedCaseCheckboxes: true,
         },
       });
 
@@ -257,7 +253,7 @@ describe('confirmInitiateServiceModalHelper', () => {
       expect(result.showConsolidatedCasesFlag).toEqual(true);
     });
 
-    it('showConsolidatedCasesFlag should be true when state.showConsolidatedCaseCheckboxes is true', () => {
+    it('showConsolidatedCasesFlag should be true when form.eventCode is NOT in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
       const formattedCaseDetail = {
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
         isLeadCase: true,
@@ -266,19 +262,17 @@ describe('confirmInitiateServiceModalHelper', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           featureFlagHelper: featureFlagHelperState,
-          form: { eventCode: 'OSC' },
+          form: { eventCode: 'A' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
-          showConsolidatedCaseCheckboxes: true,
         },
       });
 
       expect(result.showConsolidatedCasesFlag).toBe(true);
     });
 
-    it('showConsolidatedCasesFlag should be false when state.showConsolidatedCaseCheckboxes is false', () => {
+    it('showConsolidatedCasesFlag should be false when form.eventCode is in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
       const formattedCaseDetail = {
-        ...LEAD_CASE,
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
         isLeadCase: true,
       };
@@ -286,14 +280,13 @@ describe('confirmInitiateServiceModalHelper', () => {
       const result = runCompute(confirmInitiateServiceModalHelper, {
         state: {
           featureFlagHelper: featureFlagHelperState,
-          form: { eventCode: 'OSC' },
+          form: { eventCode: 'PSDE' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
-          showConsolidatedCaseCheckboxes: false,
         },
       });
 
-      expect(result.showConsolidatedCasesFlag).toBe(false);
+      expect(result.showConsolidatedCasesFlag).toBe(true);
     });
 
     it('should remove duplicated paper contacts', () => {
@@ -342,7 +335,6 @@ describe('confirmInitiateServiceModalHelper', () => {
           modal: {
             showModal: 'ConfirmInitiateCourtIssuedDocumentServiceModal',
           },
-          showConsolidatedCaseCheckboxes: true,
         },
       });
 
@@ -362,7 +354,6 @@ describe('confirmInitiateServiceModalHelper', () => {
           form: { eventCode: 'OSC' },
           formattedCaseDetail,
           modal: { showModal: 'ConfirmInitiateServiceModal' },
-          showConsolidatedCaseCheckboxes: true,
         },
       });
 
@@ -388,7 +379,6 @@ describe('confirmInitiateServiceModalHelper', () => {
           modal: {
             showModal: 'PaperServiceConfirmModal',
           },
-          showConsolidatedCaseCheckboxes: true,
         },
       });
 
