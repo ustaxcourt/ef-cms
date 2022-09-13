@@ -48,7 +48,7 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
                   Yes
                 </option>
                 <option key="No" value="false">
-                  no
+                  No
                 </option>
               </select>
             </fieldset>
