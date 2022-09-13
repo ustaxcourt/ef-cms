@@ -149,6 +149,13 @@ export const PrintableWorkingCopySessionList = ({
                     <tr className="case-note-row">
                       <td colSpan="2"></td>
                       <td colSpan="5">
+                        {formattedCase.calendarNotes &&
+                          'Calendar Notes: ' + formattedCase.calendarNotes}
+                      </td>
+                    </tr>
+                    <tr className="case-note-row">
+                      <td colSpan="2"></td>
+                      <td colSpan="5">
                         {console.log(
                           'caseNotesFlag:::::',
                           typeof caseNotesFlag,
@@ -158,8 +165,8 @@ export const PrintableWorkingCopySessionList = ({
                           formattedCase.notes,
                         )}
                         {caseNotesFlag &&
-                          formattedCase.notes &&
-                          formattedCase.notes.notes}
+                          formattedCase.userNotes &&
+                          'Notes: ' + formattedCase.userNotes}
                       </td>
                     </tr>
                     <tr className="blank-note-row">
