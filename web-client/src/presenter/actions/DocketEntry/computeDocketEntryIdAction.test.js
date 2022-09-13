@@ -1,10 +1,10 @@
+import { computeDocketEntryIdAction } from './computeDocketEntryIdAction';
 import { runAction } from 'cerebral/test';
-import { setDocketEntryIdAction } from './setDocketEntryIdAction';
 
 // todo: fix these!
-describe('setDocketEntryIdAction', () => {
+describe('computeDocketEntryIdAction', () => {
   it('sets state.docketEntryId if blah blah blah', async () => {
-    const result = await runAction(setDocketEntryIdAction, {
+    const result = await runAction(computeDocketEntryIdAction, {
       state: {
         currentViewMetadata: { documentUploadMode: 'scan' },
         form: {},
