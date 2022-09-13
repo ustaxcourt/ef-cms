@@ -1,17 +1,19 @@
 import { FormGroup } from '../../ustc-ui/FormGroup/FormGroup';
 import { ModalDialog } from '../ModalDialog';
 import { connect } from '@cerebral/react';
-import { sequences } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PrintableTrialSessionWorkingCopyModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
+    caseNotesFlag: state.modal.caseNotesFlag,
     confirmSequence: sequences.gotoPrintableTrialSessionWorkingCopySequence,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function PrintableTrialSessionWorkingCopyModal({
     cancelSequence,
+    caseNotesFlag,
     confirmSequence,
     updateModalValueSequence,
   }) {
@@ -35,8 +37,8 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
               </legend>
               <div className="usa-radio usa-radio__inline">
                 <input
-                  checked
                   aria-describedby="irs-verified-notice-radios"
+                  checked={caseNotesFlag === true}
                   className="usa-radio__input"
                   id="caseNotesIncluded-yes"
                   name="caseNotesFlag"
@@ -60,6 +62,7 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
               <div className="usa-radio usa-radio__inline">
                 <input
                   aria-describedby="irs-verified-notice-radios"
+                  checked={caseNotesFlag === false}
                   className="usa-radio__input"
                   id="caseNotesIncluded-no"
                   name="caseNotesFlag"
