@@ -21,7 +21,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   } = applicationContext.getConstants();
 
   const modalName = get(state.modal.showModal);
-  //TODO make this better
+
   const showConsolidatedOptions = [
     'ConfirmInitiateServiceModal',
     'ConfirmInitiateCourtIssuedDocumentServiceModal',
@@ -46,21 +46,19 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
 
-  // update tests
-  // try this for our flow as it wasn't working to show the modal
-  const showConsolidatedCasesFlag =
+  const showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&
     !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
     hasConsolidatedCases;
 
-  const confirmationText = showConsolidatedCasesFlag
+  const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
   let parties;
-  if (showConsolidatedCasesFlag) {
+  if (showConsolidatedCasesForService) {
     parties = formattedCaseDetail.consolidatedCases.reduce(
       (aggregatedParties, aCase) => {
         if (!aCase.checked) {
@@ -124,7 +122,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   if (
     formattedCaseDetail.isLeadCase &&
     formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1 &&
-    showConsolidatedCasesFlag
+    showConsolidatedCasesForService
   ) {
     caseOrGroup = 'group';
   }
@@ -133,7 +131,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     caseOrGroup,
     confirmationText,
     contactsNeedingPaperService,
-    showConsolidatedCasesFlag,
+    showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };
 };

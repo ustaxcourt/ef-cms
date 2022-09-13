@@ -138,7 +138,7 @@ export const ConfirmInitiateServiceModal = connect(
             )}
           </Hint>
         )}
-        {confirmInitiateServiceModalHelper.showConsolidatedCasesFlag && (
+        {confirmInitiateServiceModalHelper.showConsolidatedCasesForService && (
           <ConsolidatedCasesCheckboxes
             consolidatedCaseAllCheckbox={consolidatedCaseAllCheckbox}
             consolidatedCaseCheckboxAllChange={
