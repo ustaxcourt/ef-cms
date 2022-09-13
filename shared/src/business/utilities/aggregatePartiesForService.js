@@ -11,7 +11,6 @@ const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
  * electronically-served parties, and paper-served parties
  */
 const aggregatePartiesForService = caseEntity => {
-  console.log('caseEntity', caseEntity);
   const formattedCase = setServiceIndicatorsForCase(caseEntity);
   const parties = [
     ...formattedCase.petitioners,
