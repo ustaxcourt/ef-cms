@@ -5,6 +5,7 @@ import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocume
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
+import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { getShouldGoToPaperServiceAction } from '../actions/DocketEntry/getShouldGoToPaperServiceAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
@@ -33,6 +34,7 @@ import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocket
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 const savePaperFiling = showProgressSequenceDecorator([
+  getDocketNumbersForConsolidatedServiceAction,
   submitPaperFilingAction,
   setCaseAction,
   closeFileUploadStatusModalAction,

@@ -11,35 +11,17 @@ import { state } from 'cerebral';
 export const servePaperFiledDocumentAction = async ({
   applicationContext,
   get,
+  props,
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
-
-  const caseDetail = get(state.caseDetail);
-  const consolidatedCasesPropagateDocketEntriesFlag = get(
-    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
-  );
-
-  const consolidatedCases = get(state.caseDetail.consolidatedCases) || [];
-  const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
-
-  let consolidatedGroupDocketNumbers = consolidatedCases
-    .filter(consolidatedCase => consolidatedCase.checked)
-    .map(consolidatedCase => consolidatedCase.docketNumber);
-
-  if (
-    !isLeadCase ||
-    !consolidatedCasesPropagateDocketEntriesFlag ||
-    consolidatedGroupDocketNumbers.length === 0
-  ) {
-    consolidatedGroupDocketNumbers = [caseDetail.docketNumber];
-  }
+  let { docketNumbers } = props;
 
   const { pdfUrl } = await applicationContext
     .getUseCases()
     .serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId,
-      docketNumbers: consolidatedGroupDocketNumbers,
+      docketNumbers,
       subjectCaseDocketNumber: docketNumber,
     });
 
