@@ -6,16 +6,16 @@ const {
   DOCUMENT_RELATIONSHIPS,
   ROLES,
 } = require('../../entities/EntityConstants');
-const {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
 import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { pick } from 'lodash';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
+import { pick } from 'lodash';
 
 /**
  *
@@ -38,7 +38,6 @@ export const addPaperFilingInteractor = async (
     documentMetadata: any;
     isSavingForLater: boolean;
     primaryDocumentFileId: string;
- ,
   },
 ) => {
   const authorizedUser = applicationContext.getCurrentUser();
