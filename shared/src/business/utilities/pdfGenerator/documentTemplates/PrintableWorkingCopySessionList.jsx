@@ -70,7 +70,6 @@ export const PrintableWorkingCopySessionList = ({
           <div className="grid-row">
             <div className="grid-col-9">
               <h2 className="heading-1">{nameToDisplay} - Session Copy</h2>
-              <h2>Number of formatted cases: {formattedCases.length}</h2>
             </div>
           </div>
           {/*SessionNotes*/}
