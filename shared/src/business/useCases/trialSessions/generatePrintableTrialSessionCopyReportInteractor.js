@@ -16,6 +16,7 @@ const { UnauthorizedError } = require('../../../errors/errors');
 exports.generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext,
   {
+    caseNotesFlag,
     filters,
     formattedCases,
     formattedTrialSession,
@@ -38,6 +39,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
     .printableWorkingCopySessionList({
       applicationContext,
       data: {
+        caseNotesFlag,
         filters,
         formattedCases,
         formattedTrialSession,

@@ -11,6 +11,7 @@ const { post } = require('../requests');
 exports.generatePrintableTrialSessionCopyReportInteractor = (
   applicationContext,
   {
+    caseNotesFlag,
     filters,
     formattedCases,
     formattedTrialSession,
@@ -22,6 +23,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = (
   return post({
     applicationContext,
     body: {
+      caseNotesFlag,
       filters,
       formattedCases,
       formattedTrialSession,

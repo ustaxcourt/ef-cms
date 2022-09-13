@@ -13,6 +13,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   console.log('caseNotesFlag***', props.caseNotesFlag);
 
   const {
+    caseNotesFlag,
     filters,
     formattedCases,
     formattedTrialSessionDetails,
@@ -25,6 +26,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
+      caseNotesFlag,
       filters,
       formattedCases,
       formattedTrialSession: formattedTrialSessionDetails,
