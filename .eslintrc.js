@@ -20,6 +20,7 @@ module.exports = {
     'plugin:react/recommended',
     'plugin:security/recommended',
     'prettier',
+    'plugin:import/typescript',
     // 'plugin:jsx-a11y/recommended', // todo
   ],
   overrides: [
@@ -56,7 +57,7 @@ module.exports = {
       },
     },
   ],
-  parser: '@babel/eslint-parser',
+  parser: '@typescript-eslint/parser',
   parserOptions: {
     ecmaVersion: 9,
     jsx: true,
@@ -70,6 +71,7 @@ module.exports = {
     'jsdoc',
     'jsx-a11y',
     '@miovision/disallow-date',
+    '@typescript-eslint',
     'prettier',
     'promise',
     'react',
@@ -431,7 +433,7 @@ module.exports = {
   settings: {
     'import/resolver': {
       node: {
-        extensions: ['.js', '.jsx', '.json'],
+        extensions: ['.js', '.jsx', '.json', '.ts', '.tsx'],
       },
     },
     react: {
