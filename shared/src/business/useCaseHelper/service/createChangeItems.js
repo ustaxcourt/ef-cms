@@ -3,7 +3,7 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const { addCoverToPdf } = require('../../useCases/addCoversheetInteractor');
+const { addCoverToPdf } = require('../../useCases/addCoverToPdf');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');

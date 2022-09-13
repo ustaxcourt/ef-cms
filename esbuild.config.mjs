@@ -1,3 +1,4 @@
+/* eslint-disable @miovision/disallow-date/no-new-date */
 import esbuildHelper from './esbuildHelper.mjs';
 import fs from 'fs';
 
@@ -10,7 +11,8 @@ const replaceHtmlFile = () => {
     .replace(/src="\/index\.js"/, `src="/${jsFile}"`)
     .replace(/href="\/index\.css"/, `href="/${cssFile}"`)
     .replace(/src="\/index\.[A-Z0-9]+\.js"/, `src="/${jsFile}"`)
-    .replace(/href="\/index\.[A-Z0-9]+\.css"/, `href="/${cssFile}"`);
+    .replace(/href="\/index\.[A-Z0-9]+\.css"/, `href="/${cssFile}"`)
+    .replace(/REPLACE_ME_LAST_DEPLOYED/, new Date().toString());
   fs.writeFileSync('./dist/index.html', indexFileReplaced, 'utf8');
 };
 
