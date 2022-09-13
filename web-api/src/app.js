@@ -6,7 +6,7 @@ const logger = require('./logger');
 const { getCurrentInvoke } = require('@vendia/serverless-express');
 const { lambdaWrapper } = require('./lambdaWrapper');
 const { set } = require('lodash');
-const applicationContext = createApplicationContext();
+const applicationContext = createApplicationContext({});
 
 const app = express();
 

@@ -1,0 +1,32 @@
+import {
+  createEndOfDayISO,
+  createISODateString,
+  createStartOfDayISO,
+  deconstructDate,
+} from '../../utilities/DateHandler';
+import { OPINION_EVENT_CODES_WITH_BENCH_OPINION } from '../../entities/EntityConstants';
+
+/**
+ * getTodaysOpinionsInteractor
+ *
+ * @param {object} applicationContext application context object
+ * @returns {array} an array of opinions (if any)
+ */
+export const getTodaysOpinionsInteractor = async (
+  applicationContext: IApplicationContext,
+) => {
+  const { day, month, year } = deconstructDate(createISODateString());
+  const currentDateStart = createStartOfDayISO({ day, month, year });
+  const currentDateEnd = createEndOfDayISO({ day, month, year });
+
+  const { results } = await applicationContext
+    .getPersistenceGateway()
+    .advancedDocumentSearch({
+      applicationContext,
+      documentEventCodes: OPINION_EVENT_CODES_WITH_BENCH_OPINION,
+      endDate: currentDateEnd,
+      isOpinionSearch: true,
+      startDate: currentDateStart,
+    });
+  return results;
+};
