@@ -11,7 +11,7 @@ exports.serveExternallyFiledDocumentLambda = event =>
     return await applicationContext
       .getUseCases()
       .serveExternallyFiledDocumentInteractor(applicationContext, {
-        consolidatedGroupDocketNumbers: JSON.parse(event.body),
+        docketNumbers: JSON.parse(event.body),
         ...event.pathParameters,
       });
   });

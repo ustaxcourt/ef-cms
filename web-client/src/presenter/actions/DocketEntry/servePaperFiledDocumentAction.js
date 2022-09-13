@@ -38,9 +38,9 @@ export const servePaperFiledDocumentAction = async ({
   const { pdfUrl } = await applicationContext
     .getUseCases()
     .serveExternallyFiledDocumentInteractor(applicationContext, {
-      consolidatedGroupDocketNumbers,
       docketEntryId,
-      docketNumber,
+      docketNumbers: consolidatedGroupDocketNumbers,
+      subjectCaseDocketNumber: docketNumber,
     });
 
   return {
