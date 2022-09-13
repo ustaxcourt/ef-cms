@@ -17,9 +17,9 @@ const getFormattedTrialSessionDetails = ({ get }) => {
   return { formattedTrialSessionDetails };
 };
 
-const getTrialSessionWorkingCopyFiltersAction = ({ get }) => {
-  const filters = get(state.trialSessionWorkingCopy.filters);
-  return { filters };
+const getTrialSessionWorkingCopyDataAction = ({ get }) => {
+  const { filters, sessionNotes } = get(state.trialSessionWorkingCopy);
+  return { filters, sessionNotes };
 };
 
 const getFormattedTrialSessionCasesAction = ({ get }) => {
@@ -64,7 +64,7 @@ export const gotoPrintableTrialSessionWorkingCopySequence =
     preparePrintableFormattedCasesAction,
     getNameToDisplay,
     getCaseNotesFlagAction,
-    getTrialSessionWorkingCopyFiltersAction,
+    getTrialSessionWorkingCopyDataAction,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
     setTitleForPrintableTrialSessionWorkingCopyAction,

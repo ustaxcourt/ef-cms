@@ -17,6 +17,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     formattedCases,
     formattedTrialSessionDetails,
     nameToDisplay,
+    sessionNotes,
   } = props;
 
   console.log('formattedTrialSessionDetails', formattedTrialSessionDetails);
@@ -28,6 +29,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       formattedCases,
       formattedTrialSession: formattedTrialSessionDetails,
       nameToDisplay,
+      sessionNotes,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
     });
 

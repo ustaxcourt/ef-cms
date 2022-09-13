@@ -1,3 +1,5 @@
+import { SessionNotesSection } from '../components/SessionNotesSection';
+
 const React = require('react');
 
 const isMemberCase = formattedCase => {
@@ -36,6 +38,7 @@ export const PrintableWorkingCopySessionList = ({
   formattedCases,
   formattedTrialSession,
   nameToDisplay,
+  sessionNotes,
 }) => {
   return (
     <React.Fragment className="printable-working-copy-list">
@@ -76,13 +79,8 @@ export const PrintableWorkingCopySessionList = ({
                 <div className="tablet:grid-col-6">
                   <div className="card">
                     <div className="content-wrapper">
-                      <h3 className="display-inline">Session Notes</h3>
-                      {/*TODO: Add session notes*/}
-                      {/*<If bind="trialSessionWorkingCopy.sessionNotes">*/}
-                      {/*  <div className="margin-top-1  margin-bottom-4">*/}
-                      {/*    <TextView bind="trialSessionWorkingCopy.sessionNotes" />*/}
-                      {/*  </div>*/}
-                      {/*</If>*/}
+                      {/* TODO: fix this as session notes is not passed in */}
+                      <SessionNotesSection sessionNotes={sessionNotes} />
                     </div>
                   </div>
                 </div>
