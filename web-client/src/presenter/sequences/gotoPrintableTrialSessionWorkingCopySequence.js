@@ -1,3 +1,4 @@
+import { clearModalAction } from '../actions/clearModalAction';
 import { generatePrintableTrialSessionCopyReportAction } from '../actions/TrialSessionWorkingCopy/generatePrintableTrialSessionCopyReportAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
@@ -52,6 +53,7 @@ const preparePrintableFormattedCasesAction = ({ props }) => {
 export const gotoPrintableTrialSessionWorkingCopySequence =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
+    clearModalAction,
     getFormattedTrialSessionDetails,
     getFormattedTrialSessionCasesAction,
     preparePrintableFormattedCasesAction,
