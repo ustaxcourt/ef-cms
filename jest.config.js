@@ -7,6 +7,7 @@ module.exports = {
   collectCoverage: false,
   coverageDirectory: './coverage',
   coverageProvider: 'babel',
+  preset: 'ts-jest',
   testEnvironment: 'jsdom',
   testSequencer: `${__dirname}/jestSequencer.js`,
   transform: {
