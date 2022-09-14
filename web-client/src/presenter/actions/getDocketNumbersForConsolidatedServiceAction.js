@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @param {Function} providers.get the cerebral get function
- * @returns {object} the user
+ * @returns {object} the list of docketNumbers
  */
 export const getDocketNumbersForConsolidatedServiceAction = ({
   applicationContext,
