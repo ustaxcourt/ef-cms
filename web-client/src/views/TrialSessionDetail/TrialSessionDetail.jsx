@@ -59,23 +59,26 @@ export const TrialSessionDetail = connect(
                 tabName="EligibleCases"
                 title="Eligible Cases"
               >
-                <div className="grid-row grid-col-9">
-                  <div className="grid-col-1 padding-top-05 margin-right-3">
-                    <h3 id="filterHybridSessionHeading">Filter by</h3>
+                {formattedTrialSessionDetails.isHybridSession && (
+                  <div className="grid-row grid-col-9">
+                    <div className="grid-col-1 padding-top-05 margin-right-3">
+                      <h3 id="filterHybridSessionHeading">Filter by</h3>
+                    </div>
+                    <div className="grid-col-3">
+                      <select
+                        aria-label="session"
+                        className="usa-select"
+                        id="hybridSessionFilter"
+                        name="hybridSessionType"
+                      >
+                        <option value="">-Session Type-</option>
+                        <option value="Regular">Regular</option>
+                        <option value="Small">Small</option>
+                      </select>
+                    </div>
+                    {console.log(formattedTrialSessionDetails)}
                   </div>
-                  <div className="grid-col-3">
-                    <select
-                      aria-label="session"
-                      className="usa-select"
-                      id="hybridSessionFilter"
-                      name="hybridSessionType"
-                    >
-                      <option value="">-Session Type-</option>
-                      <option value="Regular">Regular</option>
-                      <option value="Small">Small</option>
-                    </select>
-                  </div>
-                </div>
+                )}
                 <div id="eligible-cases-tab-content">
                   <EligibleCases />
                 </div>
