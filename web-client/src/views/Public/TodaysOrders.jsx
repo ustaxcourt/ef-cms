@@ -84,7 +84,9 @@ export const TodaysOrders = connect(
                   </thead>
                   <tbody>
                     {todaysOrdersHelper.formattedOrders.map((order, idx) => (
-                      <tr key={`todays-orders-${order.docketEntryId}`}>
+                      <tr
+                        key={`todays-orders-${order.docketNumber}-${order.docketEntryId}`}
+                      >
                         <td className="center-column">{idx + 1}</td>
                         <td aria-hidden="true"></td>
                         <td>
@@ -132,7 +134,9 @@ export const TodaysOrders = connect(
                   </thead>
                   <tbody>
                     {todaysOrdersHelper.formattedOrders.map(order => (
-                      <tr key={`todays-orders-mobile-${order.docketEntryId}`}>
+                      <tr
+                        key={`todays-orders-mobile-${order.docketNumber}-${order.docketEntryId}`}
+                      >
                         <td className="padding-5 margin-top-2">
                           <CaseLink formattedCase={order} />
                         </td>
