@@ -87,9 +87,7 @@ export const TodaysOrders = connect(
                       <tr
                         key={`todays-orders-${order.docketNumber}-${order.docketEntryId}`}
                       >
-                        <td className="center-column">
-                          {idx + 1} {order.docketEntryId}
-                        </td>
+                        <td className="center-column">{idx + 1}</td>
                         <td aria-hidden="true"></td>
                         <td>
                           <CaseLink formattedCase={order} />
