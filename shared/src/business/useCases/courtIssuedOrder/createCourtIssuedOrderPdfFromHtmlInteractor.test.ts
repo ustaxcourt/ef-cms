@@ -83,7 +83,7 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
       applicationContext,
       {
         addedDocketNumbers: ['101-20'],
-      },
+      } as any,
     );
 
     expect(
