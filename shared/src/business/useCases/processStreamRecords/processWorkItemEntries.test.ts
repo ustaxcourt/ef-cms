@@ -1,5 +1,4 @@
 import { applicationContext } from '../../test/createTestApplicationContext';
-import { processEntries } from './processEntries';
 import { processWorkItemEntries } from './processWorkItemEntries';
 jest.mock('./processEntries');
 
