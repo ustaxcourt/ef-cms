@@ -73,20 +73,7 @@ export const PrintableWorkingCopySessionList = ({
             </div>
           </div>
           {/*SessionNotes*/}
-          {/*TODO: CHECK NEED FOR RENDERING SESSIONS NOTES IF THERE ARE NO SESSION NOTES*/}
-          <div className="case-notes">
-            <div className="grid-container padding-x-0">
-              <div className="grid-row grid-gap">
-                <div className="tablet:grid-col-6">
-                  <div className="card">
-                    <div className="content-wrapper">
-                      <SessionNotesSection sessionNotes={sessionNotes} />
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
+          <SessionNotesSection sessionNotes={sessionNotes} />
           {/*SelectedFilters*/}
           <div>Filters Selected: {generateSelectedFilterList(filters)}</div>
           {/*WorkingCopySessionList*/}
