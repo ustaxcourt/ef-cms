@@ -18,25 +18,22 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   const caseDetail = get(state.caseDetail);
   const form = get(state.form);
   const consolidatedCases = caseDetail.consolidatedCases || [];
-  const docketEntryId = get(state.docketEntryId);
+
   const {
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ENTERED_AND_SERVED_EVENT_CODES,
     SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   } = applicationContext.getConstants();
+
   const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
     ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
-  const docketEntry = caseDetail.docketEntries.find(
-    entry => entry.docketEntryId === docketEntryId,
-  );
 
-  const eventCode = docketEntry ? docketEntry.eventCode : form.eventCode;
   const currentDocketEntryCompatibleWithConsolidation =
-    !eventCodesNotCompatibleWithConsolidation.includes(eventCode);
+    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode);
 
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
