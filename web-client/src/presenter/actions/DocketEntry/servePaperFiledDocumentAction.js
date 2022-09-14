@@ -15,7 +15,7 @@ export const servePaperFiledDocumentAction = async ({
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
-  let { docketNumbers } = props;
+  const { docketNumbers } = props;
 
   const { pdfUrl } = await applicationContext
     .getUseCases()
