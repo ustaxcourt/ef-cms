@@ -273,9 +273,9 @@ describe('dynamodbClientService', function () {
         items: [item],
       });
 
-      expect(applicationContext.getDocumentClient().batchWrite).toBeCalledTimes(
-        1,
-      );
+      expect(
+        applicationContext.getDocumentClient().batchWrite,
+      ).toHaveBeenCalledTimes(1);
       expect(
         applicationContext.getDocumentClient().batchWrite.mock.calls[0][0],
       ).toEqual({
@@ -359,7 +359,7 @@ describe('dynamodbClientService', function () {
           ],
         },
       });
-      expect(applicationContext.logger.error).not.toBeCalled();
+      expect(applicationContext.logger.error).not.toHaveBeenCalled();
     });
 
     it('should log an error if second attempt to batchWrite results in UnprocessedItems', async () => {
@@ -382,7 +382,7 @@ describe('dynamodbClientService', function () {
         items,
       });
 
-      expect(applicationContext.logger.error).toBeCalled();
+      expect(applicationContext.logger.error).toHaveBeenCalled();
     });
 
     it('should NOT call client.batchWrite when items is undefined', async () => {

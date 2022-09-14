@@ -4,7 +4,7 @@ The goal for this documentation is to consolidate all of the various forms of do
 
 ?> If you have a random piece of documentation that doesn't necessarily flow well into this documentation, you can put it in the [Additional Resources](/additional-resources/README) section and link to it from the appropriate section.
 
-## How to Contribute?
+## How to Contribute to this Documentation?
 
 The documentation is built using the open source tool [docsify](https://docsify.js.org/).
 
