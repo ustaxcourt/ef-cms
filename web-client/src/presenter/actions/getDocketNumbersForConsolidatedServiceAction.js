@@ -16,6 +16,7 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
     state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
   );
   const caseDetail = get(state.caseDetail);
+  const form = get(state.form);
   const consolidatedCases = caseDetail.consolidatedCases || [];
   const docketEntryId = get(state.docketEntryId);
   const {
@@ -32,8 +33,10 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   const docketEntry = caseDetail.docketEntries.find(
     entry => entry.docketEntryId === docketEntryId,
   );
+
+  const eventCode = docketEntry ? docketEntry.eventCode : form.eventCode;
   const currentDocketEntryCompatibleWithConsolidation =
-    !eventCodesNotCompatibleWithConsolidation.includes(docketEntry.eventCode);
+    !eventCodesNotCompatibleWithConsolidation.includes(eventCode);
 
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
