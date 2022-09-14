@@ -40,7 +40,7 @@ describe('replyToMessageAction', () => {
 
     expect(
       applicationContext.getUseCases().replyToMessageInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().replyToMessageInteractor.mock
         .calls[0][1],

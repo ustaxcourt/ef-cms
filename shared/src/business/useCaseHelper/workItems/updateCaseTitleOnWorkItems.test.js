@@ -6,8 +6,8 @@ const { updateCaseTitleOnWorkItems } = require('./updateCaseTitleOnWorkItems');
 
 describe('updateCaseTitleOnWorkItems', () => {
   const workItemsResults = [
-    { pk: 'some', sk: 'body' },
-    { pk: 'once', sk: 'told me' },
+    { docketNumber: 'some', pk: 'some', sk: 'body', workItemId: 'body' },
+    { docketNumber: 'once', pk: 'once', sk: 'told me', workItemId: 'told me' },
   ];
   beforeAll(() => {
     applicationContext
@@ -38,7 +38,17 @@ describe('updateCaseTitleOnWorkItems', () => {
     ).toMatchObject({
       applicationContext,
       caseTitle,
-      workItem: workItemsResults[0],
+      docketNumber: 'some',
+      workItemId: 'body',
+    });
+    expect(
+      applicationContext.getPersistenceGateway().updateWorkItemCaseTitle.mock
+        .calls[1][0],
+    ).toMatchObject({
+      applicationContext,
+      caseTitle,
+      docketNumber: 'once',
+      workItemId: 'told me',
     });
   });
 });

@@ -59,7 +59,7 @@ describe('getCaseInventoryReportAction', () => {
 
     expect(
       applicationContext.getUseCases().getCaseInventoryReportInteractor,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
     expect(result.state.caseInventoryReportData).toBeUndefined();
   });
 });

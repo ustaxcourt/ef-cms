@@ -60,10 +60,12 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       docketEntryId: mockDocketEntryId,
     });
 
-    expect(applicationContext.getStorageClient().getObject).not.toBeCalled();
+    expect(
+      applicationContext.getStorageClient().getObject,
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should call getObject and appendPaperServiceAddressPageToPdf and return the pdf url if there are paper service parties on the case', async () => {
@@ -94,10 +96,10 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       docketEntryId: mockDocketEntryId,
     });
 
-    expect(applicationContext.getStorageClient().getObject).toBeCalled();
+    expect(applicationContext.getStorageClient().getObject).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result).toEqual({ pdfUrl: mockPdfUrl });
   });
 
@@ -140,13 +142,13 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
       docketEntryId: caseEntity.docketEntries[0].docketEntryId,
     });
 
-    expect(applicationContext.getStorageClient().getObject).toBeCalled();
+    expect(applicationContext.getStorageClient().getObject).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toBeCalledTimes(2);
+    ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toBeCalledTimes(2);
+    ).toHaveBeenCalledTimes(2);
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
         .calls[0][0],
@@ -190,10 +192,12 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
     });
     expect(
       applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
-    ).toBeCalled();
-    expect(applicationContext.getStorageClient().getObject).not.toBeCalled();
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getStorageClient().getObject,
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 });

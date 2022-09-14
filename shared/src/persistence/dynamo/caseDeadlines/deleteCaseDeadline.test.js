@@ -55,6 +55,8 @@ describe('deleteCaseDeadline', () => {
       docketNumber: '456-20',
     });
 
-    expect(applicationContext.getDocumentClient().delete).not.toBeCalled();
+    expect(
+      applicationContext.getDocumentClient().delete,
+    ).not.toHaveBeenCalled();
   });
 });

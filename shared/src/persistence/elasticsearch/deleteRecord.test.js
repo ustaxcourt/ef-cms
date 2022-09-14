@@ -10,7 +10,7 @@ describe('deleteRecord', () => {
       indexName: 'efcms-case',
       recordId: 'pk_sk',
     });
-    expect(applicationContext.getSearchClient().delete).toBeCalled();
+    expect(applicationContext.getSearchClient().delete).toHaveBeenCalled();
   });
 
   it('does not searchClient.delete if indexName or recordId are not passed in', async () => {
@@ -18,12 +18,12 @@ describe('deleteRecord', () => {
       applicationContext,
       indexName: 'efcms-case',
     });
-    expect(applicationContext.getSearchClient().delete).not.toBeCalled();
+    expect(applicationContext.getSearchClient().delete).not.toHaveBeenCalled();
 
     await deleteRecord({
       applicationContext,
       recordId: 'pk_sk',
     });
-    expect(applicationContext.getSearchClient().delete).not.toBeCalled();
+    expect(applicationContext.getSearchClient().delete).not.toHaveBeenCalled();
   });
 });
