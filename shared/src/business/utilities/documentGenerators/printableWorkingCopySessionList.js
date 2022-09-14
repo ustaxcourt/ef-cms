@@ -18,6 +18,7 @@ const printableWorkingCopySessionList = async ({
     content: trialSessionPlanningReportTemplate,
   });
 
+  // TODO: Add Judge's name to header html
   const headerHtml = reactTemplateGenerator({
     componentName: 'ReportsMetaHeader',
     data: {
