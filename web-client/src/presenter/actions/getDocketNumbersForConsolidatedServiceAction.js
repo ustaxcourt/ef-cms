@@ -32,8 +32,8 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
     ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
 
-  const currentDocketEntryCompatibleWithConsolidation =
-    !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode);
+  const currentDocketEntryNotCompatibleWithConsolidation =
+    eventCodesNotCompatibleWithConsolidation.includes(form.eventCode);
 
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
@@ -43,7 +43,7 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
     !isLeadCase ||
     !consolidatedCasesPropagateDocketEntriesFlag ||
     docketNumbers.length === 0 ||
-    !currentDocketEntryCompatibleWithConsolidation
+    currentDocketEntryNotCompatibleWithConsolidation
   ) {
     docketNumbers = [caseDetail.docketNumber];
   }
