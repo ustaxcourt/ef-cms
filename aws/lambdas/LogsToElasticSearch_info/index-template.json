@@ -76,12 +76,10 @@
                 "ignore_malformed": true
               },
               "user-agent": {
-                "type": "keyword",
-                "ignore_malformed": true
+                "type": "keyword"
               },
               "x-forwarded-for": {
-                "type": "keyword",
-                "ignore_malformed": true
+                "type": "keyword"
               }
             }
           },
