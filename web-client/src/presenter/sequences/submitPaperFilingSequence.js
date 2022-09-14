@@ -2,7 +2,6 @@ import { checkForActiveBatchesAction } from '../actions/checkForActiveBatchesAct
 import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { closeFileUploadStatusModalAction } from '../actions/closeFileUploadStatusModalAction';
 import { computeCertificateOfServiceFormDateAction } from '../actions/FileDocument/computeCertificateOfServiceFormDateAction';
-import { computeDocketEntryIdAction } from '../actions/DocketEntry/computeDocketEntryIdAction';
 import { generateTitleForPaperFilingAction } from '../actions/FileDocument/generateTitleForPaperFilingAction';
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
@@ -35,7 +34,6 @@ import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocket
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
 const savePaperFiling = showProgressSequenceDecorator([
-  computeDocketEntryIdAction,
   getDocketNumbersForConsolidatedServiceAction,
   submitPaperFilingAction,
   setCaseAction,
