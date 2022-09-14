@@ -1,3 +1,5 @@
+import { addCoverToPdf } from '../addCoverToPdf';
+
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
@@ -116,10 +118,17 @@ export const serveExternallyFiledDocumentInteractor = async (
     })
     .promise();
 
+  const { pdfData: servedDocWithCover } = await addCoverToPdf({
+    applicationContext,
+    caseEntity: subjectCaseEntity,
+    docketEntryEntity: originalSubjectDocketEntry,
+    pdfData,
+  });
+
   const stampedPdf = await stampDocument({
     applicationContext,
     form: originalSubjectDocketEntry,
-    pdfData,
+    pdfData: servedDocWithCover,
   });
 
   const numberOfPages = await applicationContext
