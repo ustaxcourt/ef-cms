@@ -1,8 +1,8 @@
-const {
+import {
   isAuthorized,
   ROLE_PERMISSIONS,
-} = require('../../../authorization/authorizationClientService');
-const { UnauthorizedError } = require('../../../errors/errors');
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * generatePrintableTrialSessionCopyReportInteractor
@@ -13,8 +13,8 @@ const { UnauthorizedError } = require('../../../errors/errors');
  * @param {string} providers.docketNumber the optional docketNumber filter
  * @returns {Array} the url of the document
  */
-exports.generatePrintableTrialSessionCopyReportInteractor = async (
-  applicationContext,
+export const generatePrintableTrialSessionCopyReportInteractor = async (
+  applicationContext: IApplicationContext,
   {
     caseNotesFlag,
     filters,
@@ -22,8 +22,15 @@ exports.generatePrintableTrialSessionCopyReportInteractor = async (
     formattedTrialSession,
     nameToDisplay,
     sessionNotes,
+  }: {
+    caseNotesFlag: boolean,
+    filters: string[],
+    formattedCases: Case[],
+    formattedTrialSession: TTrialSessionData,
+    nameToDisplay: string,
+    sessionNotes: string,
   },
-) => {
+): Promise<string> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (
