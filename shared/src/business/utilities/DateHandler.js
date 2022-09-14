@@ -22,6 +22,7 @@ const FORMATS = {
   YEAR_TWO_DIGIT: 'yy',
   YYYYMM: 'yyyy-MM',
   YYYYMMDD: 'yyyy-MM-dd',
+  YYYYMMDD_NUMERIC: 'yyyyMMdd',
 };
 
 const PATTERNS = {
@@ -135,6 +136,12 @@ const createISODateString = (dateString, inputFormat) => {
   return result && result.setZone('utc').toISO();
 };
 
+/**
+ * createISODateAtStartOfDayEST
+ *
+ * @param {string} dateString a date string to be updated to ISO in USTC_TZ (ET)
+ * @returns {string} the ISO formatted date set at midnight of today USTC_TZ (ET)
+ */
 const createISODateAtStartOfDayEST = dateString => {
   const dtObj = dateString
     ? DateTime.fromISO(dateString, { zone: USTC_TZ })
@@ -143,6 +150,27 @@ const createISODateAtStartOfDayEST = dateString => {
   const iso = dtObj.startOf('day').setZone('utc').toISO();
 
   return iso;
+};
+
+/**
+ * createDateAtStartOfWeekEST
+ *
+ * @param {string} dateString a date string to be updated to given format in USTC_TZ (ET)
+ * @returns {string} the formatted date set at midnight of first Monday of
+ *                   given week USTC_TZ (ET)
+ */
+const createDateAtStartOfWeekEST = (dateString, format) => {
+  const dtObj = dateString
+    ? DateTime.fromISO(dateString, { zone: USTC_TZ })
+    : DateTime.now().setZone(USTC_TZ);
+
+  const dateOutput = dtObj
+    .startOf('week')
+    .startOf('day')
+    .setZone('utc')
+    .toFormat(format);
+
+  return dateOutput;
 };
 
 const createEndOfDayISO = ({ day, month, year }) => {
@@ -495,6 +523,7 @@ module.exports = {
   checkDate,
   combineISOandEasternTime,
   computeDate,
+  createDateAtStartOfWeekEST,
   createEndOfDayISO,
   createISODateAtStartOfDayEST,
   createISODateString,

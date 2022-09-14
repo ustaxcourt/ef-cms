@@ -36,7 +36,7 @@ export const IndividualWorkQueueInbox = connect(
             return (
               <tbody key={item.workItemId}>
                 <tr>
-                  <td aria-hidden="true" className="focus-toggle" />
+                  <td aria-hidden="true" />
                   <td className="message-queue-row small">
                     <CaseLink formattedCase={item} />
                   </td>

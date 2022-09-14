@@ -1,5 +1,5 @@
 const { getServedPartiesCode } = require('./DocketEntry');
-const { ROLES, SERVED_PARTIES_CODES } = require('./EntityConstants');
+const { PARTIES_CODES, ROLES } = require('./EntityConstants');
 
 describe('getServedPartiesCode', () => {
   it('returns an empty string if servedParties is undefined', () => {
@@ -18,7 +18,7 @@ describe('getServedPartiesCode', () => {
         role: ROLES.irsSuperuser,
       },
     ]);
-    expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.RESPONDENT);
+    expect(servedPartiesCode).toEqual(PARTIES_CODES.RESPONDENT);
   });
 
   it('returns the servedParties code for both if the only party in the given servedParties array does not have the irsSuperUser role', () => {
@@ -27,7 +27,7 @@ describe('getServedPartiesCode', () => {
         role: ROLES.petitioner,
       },
     ]);
-    expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
+    expect(servedPartiesCode).toEqual(PARTIES_CODES.BOTH);
   });
 
   it('returns the servedParties code for both if the given servedParties array contains multiple servedParties', () => {
@@ -39,6 +39,6 @@ describe('getServedPartiesCode', () => {
         role: ROLES.petitioner,
       },
     ]);
-    expect(servedPartiesCode).toEqual(SERVED_PARTIES_CODES.BOTH);
+    expect(servedPartiesCode).toEqual(PARTIES_CODES.BOTH);
   });
 });

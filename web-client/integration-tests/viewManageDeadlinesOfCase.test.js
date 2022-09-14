@@ -31,6 +31,10 @@ describe('View and manage the deadlines of a case', () => {
 
   beforeAll(() => {
     jest.setTimeout(30000);
+    jest.spyOn(
+      cerebralTest.applicationContext.getUseCases(),
+      'createMessageInteractor',
+    );
   });
 
   afterAll(() => {

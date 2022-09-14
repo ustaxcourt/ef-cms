@@ -1,7 +1,5 @@
-const {
-  SERVED_PARTIES_CODES,
-} = require('../../business/entities/EntityConstants');
 const { omit } = require('lodash');
+const { PARTIES_CODES } = require('../../business/entities/EntityConstants');
 const { search } = require('./searchClient');
 
 /**
@@ -23,8 +21,8 @@ exports.getReconciliationReport = async ({
         {
           terms: {
             'servedPartiesCode.S': [
-              SERVED_PARTIES_CODES.RESPONDENT,
-              SERVED_PARTIES_CODES.BOTH,
+              PARTIES_CODES.RESPONDENT,
+              PARTIES_CODES.BOTH,
             ],
           },
         },

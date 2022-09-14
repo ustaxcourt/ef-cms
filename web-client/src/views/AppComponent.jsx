@@ -7,6 +7,7 @@ import { AddTrialSession } from './TrialSessions/AddTrialSession';
 import { AdvancedSearch } from './AdvancedSearch/AdvancedSearch';
 import { AppMaintenance } from './AppMaintenance';
 import { AppMaintenanceModal } from './AppMaintenanceModal';
+import { ApplyStamp } from './StampMotion/ApplyStamp';
 import { BatchDownloadProgress } from './TrialSessionWorkingCopy/BatchDownloadProgress';
 import { BeforeStartingCase } from './BeforeStartingCase';
 import { BeforeYouFileADocument } from './FileDocument/BeforeYouFileADocument';
@@ -68,6 +69,7 @@ import { PrintableTrialCalendar } from './TrialSessionDetail/PrintableTrialCalen
 import { Privacy } from './Privacy';
 import { RequestAccessWizard } from './RequestAccess/RequestAccessWizard';
 import { ReviewSavedPetition } from './CaseDetailEdit/ReviewSavedPetition';
+import { SealedCaseDetail } from './CaseDetail/SealedCaseDetail';
 import { SelectDocumentType } from './FileDocument/SelectDocumentType';
 import { SignOrder } from './SignOrder';
 import { SimplePdfPreviewPage } from './PendingReport/SimplePdfPreviewPage';
@@ -98,6 +100,7 @@ const pages = {
   AddTrialSession,
   AdvancedSearch,
   AppMaintenance,
+  ApplyStamp,
   BeforeStartingCase,
   BeforeYouFileADocument,
   BlockedCasesReport,
@@ -154,6 +157,7 @@ const pages = {
   Privacy,
   RequestAccessWizard,
   ReviewSavedPetition,
+  SealedCaseDetail,
   SelectDocumentType,
   SignOrder,
   SimplePdfPreviewPage,

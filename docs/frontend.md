@@ -70,7 +70,7 @@ There are a lot of scripts related to running, bundling, and testing the fronten
 - `npm run build:client` - builds the client application
 - `npm run build:client:public` - builds the public client application
 - `npm run lint:css` - lints the CSS
-- `npm run lint:ui` - lints the UI
+- `npm run lint:js` - lints the UI and API related code
 
 Some of this scripts, such as pa11y, require the API to also be running since it requires live data to be displayed in the UI to verify accessibility.
 

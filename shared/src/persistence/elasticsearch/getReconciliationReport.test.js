@@ -1,10 +1,8 @@
 const {
   applicationContext,
 } = require('../../business/test/createTestApplicationContext');
-const {
-  SERVED_PARTIES_CODES,
-} = require('../../business/entities/EntityConstants');
 const { getReconciliationReport } = require('./getReconciliationReport');
+const { PARTIES_CODES } = require('../../business/entities/EntityConstants');
 jest.mock('./searchClient');
 const { search } = require('./searchClient');
 
@@ -30,8 +28,8 @@ describe('getReconciliationReport', () => {
           {
             terms: {
               'servedPartiesCode.S': [
-                SERVED_PARTIES_CODES.RESPONDENT,
-                SERVED_PARTIES_CODES.BOTH,
+                PARTIES_CODES.RESPONDENT,
+                PARTIES_CODES.BOTH,
               ],
             },
           },

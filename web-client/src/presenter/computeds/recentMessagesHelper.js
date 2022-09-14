@@ -1,4 +1,4 @@
-import { getFormattedMessages } from './formattedMessages';
+import { getFormattedMessages } from '../utilities/processFormattedMessages';
 import { state } from 'cerebral';
 
 export const recentMessagesHelper = (get, applicationContext) => {

@@ -10,7 +10,7 @@ const { post } = require('../requests');
 exports.refreshTokenInteractor = applicationContext => {
   return post({
     applicationContext,
-    endpoint: process.env.IS_LOCAL ? '/auth/refresh' : '/auth/auth/refresh',
+    endpoint: '/auth/refresh',
     options: {
       withCredentials: true,
     },

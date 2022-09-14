@@ -4,10 +4,7 @@ import {
   prepareDateFromString,
 } from '../../../../shared/src/business/utilities/DateHandler';
 import { applicationContext } from '../../applicationContext';
-import {
-  formatSession,
-  formattedTrialSessions as formattedTrialSessionsComputed,
-} from './formattedTrialSessions';
+import { formattedTrialSessions as formattedTrialSessionsComputed } from './formattedTrialSessions';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
@@ -113,6 +110,7 @@ describe('formattedTrialSessions', () => {
       },
       {
         caseOrder: [],
+        estimatedEndDate: '2045-02-17T15:00:00.000Z',
         judge: { name: '6', userId: '6' },
         proceedingType: TRIAL_SESSION_PROCEEDING_TYPES.inPerson,
         sessionType: TRIAL_SESSION_TYPES.regular,
@@ -137,17 +135,6 @@ describe('formattedTrialSessions', () => {
       error = err;
     }
     expect(error).toBeUndefined();
-  });
-
-  it('formats trial sessions correctly selecting startOfWeek and formatting start date', () => {
-    const result = formatSession(TRIAL_SESSIONS_LIST[2], applicationContext);
-    expect(result).toMatchObject({
-      formattedNoticeIssuedDate: '07/25/2019',
-      formattedStartDate: '11/27/19',
-      judge: { name: '3', userId: '3' },
-      startDate: '2019-11-27T15:00:00.000Z',
-      startOfWeek: 'November 25, 2019',
-    });
   });
 
   it('groups trial sessions into arrays according to session weeks', () => {

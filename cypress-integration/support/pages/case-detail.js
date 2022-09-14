@@ -27,10 +27,6 @@ exports.getCaseDetailTab = tabName => {
   return cy.get(`button#tab-${tabName}`);
 };
 
-exports.hoverOverSignatureWarning = () => {
-  return cy.get('#signature-warning').realHover();
-};
-
 exports.createOrder = docketNumber => {
   cy.goToRoute(
     `/case-detail/${docketNumber}/create-order?documentTitle=Order to Show Cause&documentType=Order to Show Cause&eventCode=OSC`,

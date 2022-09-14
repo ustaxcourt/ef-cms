@@ -114,4 +114,3 @@ Our basic principles drive team decision-making.
 9.  **Rely on DevSecOps.** This allows us to rapidly develop and deploy improvements to our systems, infrastructure-as-code, configuration-as-code, and CI/CD, to ensure that our work is high-quality and secure.
 
 10. **Embrace and drive change.** We recognize that this work requires constant learning on the part of all participants, and embrace the state of not-knowing that must precede learning.
-

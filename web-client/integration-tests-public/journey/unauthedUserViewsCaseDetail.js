@@ -24,7 +24,7 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
       state: cerebralTest.getState(),
     });
 
-    expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(5);
+    expect(helper.formattedDocketEntriesOnDocketRecord.length).toEqual(6);
     expect(helper.formattedDocketEntriesOnDocketRecord).toMatchObject([
       {
         descriptionDisplay: 'Petition',
@@ -40,6 +40,14 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
         servedPartiesCode: undefined,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
+      },
+      {
+        descriptionDisplay: 'Notice of Receipt of Petition',
+        eventCode: 'NOTR',
+        hasDocument: true,
+        servedPartiesCode: 'P',
+        showLinkToDocument: false,
+        showServed: true,
       },
       {
         descriptionDisplay:
@@ -69,7 +77,7 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
       },
     ]);
 
-    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(5);
+    expect(helper.formattedCaseDetail.docketEntries.length).toEqual(6);
     expect(helper.formattedCaseDetail.docketEntries).toEqual(
       expect.arrayContaining([
         expect.objectContaining({
@@ -78,6 +86,9 @@ export const unauthedUserViewsCaseDetail = cerebralTest => {
         expect.objectContaining({
           documentType:
             INITIAL_DOCUMENT_TYPES.requestForPlaceOfTrial.documentType,
+        }),
+        expect.objectContaining({
+          documentType: 'Notice of Receipt of Petition',
         }),
         expect.objectContaining({
           documentType: 'Order of Dismissal',

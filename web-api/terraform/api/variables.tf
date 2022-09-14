@@ -161,3 +161,15 @@ variable "prod_env_account_id" {
 variable "lower_env_account_id" {
   type = string
 }
+
+variable "create_bounce_handler" { 
+  type = number
+}
+
+variable "bounce_handler_object" {
+  type = any
+}
+
+variable "bounce_handler_object_hash" {
+  type = string
+}

@@ -5,11 +5,12 @@ module.exports = [
   {
     actions: [
       'wait for #advanced-search-button to be visible',
+      'set field #petitioner-name to cairo',
       'click element #advanced-search-button',
       'wait for .search-results to be visible',
     ],
     notes: 'checks a11y of advanced search results table',
-    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/search?petitionerName=cairo',
+    url: 'http://localhost:1234/log-in?code=judgeColvin@example.com&path=/search',
   },
   {
     actions: [

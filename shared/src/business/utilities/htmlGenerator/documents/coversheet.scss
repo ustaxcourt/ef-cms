@@ -7,7 +7,12 @@
   }
 
   #document-title {
+    margin-top: 200px;
     font-weight: normal;
+  }
+
+  #document-title.reduce-margin {
+    margin-top: 50px;
   }
 
   #certificate-of-service {
@@ -57,5 +62,9 @@
     &.condensed {
       margin-top: 0;
     }
+  }
+
+  .consolidated-cases {
+    font-size: 12px;
   }
 }

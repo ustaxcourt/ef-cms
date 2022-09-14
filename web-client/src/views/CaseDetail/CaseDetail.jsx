@@ -8,6 +8,7 @@ import { ParticipantsAndCounsel } from './ParticipantsAndCounsel';
 import { PartiesInformation } from './PartiesInformation';
 import { PetitionersAndCounsel } from './PetitionersAndCounsel';
 import { RespondentCounsel } from './RespondentCounsel';
+import { SealedCaseDetail } from './SealedCaseDetail';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
@@ -33,10 +34,10 @@ export const CaseDetail = connect(
   }) {
     return (
       <>
-        <CaseDetailHeader className="margin-bottom-0" />
-
         {caseDetailHelper.userCanViewCase && (
           <>
+            <CaseDetailHeader className="margin-bottom-0" />
+
             <CaseDetailSubnavTabs />
 
             <section className="usa-section grid-container">
@@ -156,14 +157,8 @@ export const CaseDetail = connect(
             </section>
           </>
         )}
-        {!caseDetailHelper.userCanViewCase && (
-          <section className="usa-section grid-container">
-            <p>
-              If you are counsel representing a party in this case, you must
-              file an Entry of Appearance by paper.
-            </p>
-          </section>
-        )}
+
+        {caseDetailHelper.showSealedCaseView && <SealedCaseDetail />}
       </>
     );
   },

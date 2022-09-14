@@ -23,7 +23,11 @@ export const TrialSessionDetailHeader = connect(
               </span>
             </div>
             <p className="margin-y-0" id="case-title">
-              <span>{formattedTrialSessionDetails.formattedStartDate}</span>
+              <span>
+                {formattedTrialSessionDetails.formattedStartDate}
+                {formattedTrialSessionDetails.formattedEstimatedEndDate &&
+                  ` - ${formattedTrialSessionDetails.formattedEstimatedEndDate}`}
+              </span>
             </p>
           </div>
         </div>

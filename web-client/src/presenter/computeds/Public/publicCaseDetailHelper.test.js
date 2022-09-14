@@ -1,7 +1,7 @@
 /* eslint-disable max-lines */
 import {
   DOCKET_ENTRY_SEALED_TO_TYPES,
-  SERVED_PARTIES_CODES,
+  PARTIES_CODES,
 } from '../../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextPublic } from '../../../applicationContextPublic';
 import {
@@ -156,6 +156,34 @@ describe('publicCaseDetailHelper', () => {
         description: 'Request for Place of Trial at Flavortown, TN',
         hasDocument: false,
       });
+    });
+
+    it('formats descriptionDisplay for `OCS` type documents correctly and makes it visible to public users', () => {
+      state.caseDetail.docketEntries = [
+        {
+          docketEntryId: 'd-1-2-3',
+          documentTitle: 'Online Cited Source',
+          documentType: 'Online Cited Source',
+          eventCode: 'OCS',
+          freeText: 'Test site viewed on 09/09/22',
+          isFileAttached: true,
+          isOnDocketRecord: true,
+          isUnservable: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, { state });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          descriptionDisplay:
+            'Test site viewed on 09/09/22 - Online Cited Source',
+          docketEntryId: 'd-1-2-3',
+          eventCode: 'OCS',
+          showLinkToDocument: true,
+        },
+      ]);
     });
 
     it('should not display a link for the PMT event code', () => {
@@ -317,6 +345,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'P',
           index: 1,
           isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
         {
           ...baseDocketEntry,
@@ -327,6 +356,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'RQT',
           index: 2,
           isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
         {
           ...baseDocketEntry,
@@ -336,6 +366,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'ODD',
           index: 3,
           isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
         {
           ...baseDocketEntry,
@@ -346,6 +377,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'NTD',
           index: 4,
           isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
         {
           ...baseDocketEntry,
@@ -355,6 +387,7 @@ describe('publicCaseDetailHelper', () => {
           eventCode: 'SPTO',
           index: 5,
           isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
         },
         {
           ...baseDocketEntry,
@@ -365,6 +398,7 @@ describe('publicCaseDetailHelper', () => {
           index: 6,
           isFileAttached: false,
           isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
         },
       ];
 
@@ -426,6 +460,181 @@ describe('publicCaseDetailHelper', () => {
         },
       ]);
     });
+
+    it('should not show a link for documents requested by a public user only', () => {
+      state.caseDetail.docketEntries = [
+        {
+          ...baseDocketEntry,
+          docketEntryId: '596223c1-527b-46b4-98b0-1b10455e9495',
+          documentTitle: 'Decision Entered, Judge Buch Decision',
+          documentType: 'Decision',
+          eventCode: 'DEC',
+          index: 1,
+          isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: 'af6f67db-3160-4562-ac36-5481ab091952',
+          documentTitle:
+            'Request for Place of Trial at San Francisco, California',
+          documentType: 'Request for Place of Trial',
+          eventCode: 'RQT',
+          index: 2,
+          isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          documentTitle: 'Decision Entered, Judge Buch Another Decision',
+          documentType: 'Decision',
+          eventCode: 'DEC',
+          index: 3,
+          isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '162d3c72-2a31-4c66-b3f4-efaceb2cf0fd',
+          documentTitle:
+            'Notice of Trial on 12/30/2019 at San Francisco, California',
+          documentType: 'Notice of Trial',
+          eventCode: 'NTD',
+          index: 4,
+          isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: 'a456c942-9d19-491a-b764-e2eac34205b0',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          index: 5,
+          isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          index: 6,
+          isFileAttached: false,
+          isLegacyServed: true,
+          processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE,
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, {
+        state: { ...state, isTerminalUser: false },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          descriptionDisplay: 'Decision Entered, Judge Buch Decision',
+          docketEntryId: '596223c1-527b-46b4-98b0-1b10455e9495',
+          eventCode: 'DEC',
+          index: 1,
+          openInSameTab: true,
+          showLinkToDocument: true,
+        },
+        {
+          descriptionDisplay:
+            'Request for Place of Trial at San Francisco, California',
+          docketEntryId: 'af6f67db-3160-4562-ac36-5481ab091952',
+          eventCode: 'RQT',
+          index: 2,
+          openInSameTab: true,
+          showLinkToDocument: false,
+        },
+        {
+          descriptionDisplay: 'Decision Entered, Judge Buch Another Decision',
+          docketEntryId: '1f1aa3f7-e2e3-43e6-885d-4ce341588c76',
+          eventCode: 'DEC',
+          index: 3,
+          openInSameTab: true,
+          showLinkToDocument: false,
+        },
+        {
+          descriptionDisplay:
+            'Notice of Trial on 12/30/2019 at San Francisco, California',
+          docketEntryId: '162d3c72-2a31-4c66-b3f4-efaceb2cf0fd',
+          eventCode: 'NTD', // not in EVENT_CODES_VISIBLE_TO_PUBLIC
+          index: 4,
+          openInSameTab: true,
+          showLinkToDocument: false,
+        },
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: 'a456c942-9d19-491a-b764-e2eac34205b0',
+          eventCode: 'SPTO',
+          index: 5,
+          openInSameTab: true,
+          showLinkToDocument: true,
+        },
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          eventCode: 'SPTO',
+          index: 6,
+          openInSameTab: true,
+          showLinkToDocument: false,
+        },
+      ]);
+    });
+
+    it('should not show a link for sealed documents requested by a terminal user', () => {
+      state.caseDetail.docketEntries = [
+        {
+          ...baseDocketEntry,
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          index: 1,
+          isFileAttached: false,
+          isLegacyServed: true,
+          isSealed: true,
+        },
+        {
+          ...baseDocketEntry,
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          documentTitle: 'Standing Pretrial Order',
+          documentType: 'Standing Pretrial Order',
+          eventCode: 'SPTO',
+          index: 2,
+          isFileAttached: false,
+          isLegacySealed: true,
+          isLegacyServed: true,
+        },
+      ];
+
+      const result = runCompute(publicCaseDetailHelper, {
+        state: { ...state, isTerminalUser: true },
+      });
+
+      expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          eventCode: 'SPTO',
+          index: 1,
+          openInSameTab: false,
+          showLinkToDocument: false,
+        },
+        {
+          descriptionDisplay: 'Standing Pretrial Order',
+          docketEntryId: '71ac5f88-2316-4670-89bd-3decb99cf3ba',
+          eventCode: 'SPTO',
+          index: 2,
+          openInSameTab: false,
+          showLinkToDocument: false,
+        },
+      ]);
+    });
   });
 
   it('should indicate when a case is sealed', () => {
@@ -452,7 +661,7 @@ describe('publicCaseDetailHelper', () => {
         index: 4,
         openInSameTab: true,
         processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.PENDING,
-        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+        servedPartiesCode: PARTIES_CODES.RESPONDENT,
       },
     ];
 
@@ -470,7 +679,7 @@ describe('publicCaseDetailHelper', () => {
           ' additionalInfo! (Attachment(s)) additional info 2!',
         index: 4,
         servedAtFormatted: undefined,
-        servedPartiesCode: SERVED_PARTIES_CODES.RESPONDENT,
+        servedPartiesCode: PARTIES_CODES.RESPONDENT,
         showDocumentDescriptionWithoutLink: true,
         showLinkToDocument: false,
         showNotServed: true,

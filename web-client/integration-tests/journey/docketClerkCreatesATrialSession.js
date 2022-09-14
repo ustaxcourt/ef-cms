@@ -39,18 +39,33 @@ export const docketClerkCreatesATrialSession = (
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'month',
+      key: 'startDateMonth',
       value: '13',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'day',
+      key: 'startDateDay',
       value: '12',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'year',
+      key: 'startDateYear',
       value: overrides.trialYear || '2025',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'estimatedEndDateMonth',
+      value: '01',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'estimatedEndDateDay',
+      value: '01',
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'estimatedEndDateYear',
+      value: '1995',
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
@@ -102,11 +117,9 @@ export const docketClerkCreatesATrialSession = (
     });
 
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
-      key: 'month',
+      key: 'startDateMonth',
       value: '12',
     });
-
-    await cerebralTest.runSequence('validateTrialSessionSequence');
 
     expect(cerebralTest.getState('form.term')).toEqual('Fall');
     expect(cerebralTest.getState('form.termYear')).toEqual(
@@ -116,6 +129,17 @@ export const docketClerkCreatesATrialSession = (
     await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
       key: 'trialLocation',
       value: overrides.trialLocation || 'Seattle, Washington',
+    });
+
+    await cerebralTest.runSequence('validateTrialSessionSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({
+      estimatedEndDate: errorMessages.estimatedEndDate[1],
+    });
+
+    await cerebralTest.runSequence('updateTrialSessionFormDataSequence', {
+      key: 'estimatedEndDateYear',
+      value: '2050',
     });
 
     await cerebralTest.runSequence('validateTrialSessionSequence');

@@ -1,4 +1,5 @@
 import { omit } from 'lodash';
+import { preparedDateToISOString } from '../../../utilities/preparedDateToISOString';
 import { state } from 'cerebral';
 
 /**
@@ -16,19 +17,28 @@ export const createTrialSessionAction = async ({
   path,
   props,
 }) => {
-  const startDate = // AAAA-BB-CC
-    (props.computedDate &&
-      applicationContext
-        .getUtilities()
-        .prepareDateFromString(props.computedDate)
-        .toISOString()) ||
-    null;
+  const startDate = preparedDateToISOString(
+    applicationContext,
+    props.computedStartDate,
+  );
+
+  const estimatedEndDate = preparedDateToISOString(
+    applicationContext,
+    props.computedEstimatedEndDate,
+  );
 
   const trialSession = omit(
     {
       ...get(state.form),
     },
-    ['year', 'month', 'day'],
+    [
+      'startDateYear',
+      'startDateMonth',
+      'startDateDay',
+      'estimatedEndDateYear',
+      'estimatedEndDateMonth',
+      'estimatedEndDateDay',
+    ],
   );
 
   let result;
@@ -36,7 +46,7 @@ export const createTrialSessionAction = async ({
     result = await applicationContext
       .getUseCases()
       .createTrialSessionInteractor(applicationContext, {
-        trialSession: { ...trialSession, startDate },
+        trialSession: { ...trialSession, estimatedEndDate, startDate },
       });
 
     if (trialSession.swingSession && trialSession.swingSessionId) {

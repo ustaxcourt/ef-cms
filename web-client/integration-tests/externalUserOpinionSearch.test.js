@@ -149,7 +149,7 @@ describe('verify opinion search works for external users', () => {
     const colvinDocketEntryIdKeyValue =
       '"docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb"';
     const ashfordDocketEntryIdKeyValue =
-      '"docketEntryId":"d085a9da-b4a6-41d2-aa40-f933fe2d4188"';
+      '"docketEntryId":"1a92894e-83a5-48ba-9994-3ada44235deb"';
     const colvinOpinionDocumentTitleKeyValue =
       '"documentTitle":"T.C. Opinion Judge Colvin Some very strong opinions about sunglasses"';
     const ashfordOpinionDocumentTitleKeyValue =

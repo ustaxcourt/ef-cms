@@ -3,6 +3,27 @@ const DateHandler = require('./DateHandler');
 const { FORMATS, PATTERNS } = DateHandler;
 
 describe('DateHandler', () => {
+  // Takes an ISO-8601 timestamp representing UTC and temporarily
+  // mocks the system's current time by overriding global Date implementation
+  const setupMockTestCurrentTime = isoTimestamp => {
+    const originalDateImpl = Date.now.bind(global.Date);
+    const dateNowMock = jest.fn();
+
+    const setDateMockValue = timestamp => {
+      // eslint-disable-next-line @miovision/disallow-date/no-new-date
+      dateNowMock.mockReturnValue(new Date(timestamp).valueOf());
+    };
+    const setupDateMock = () => {
+      setDateMockValue(isoTimestamp);
+      global.Date.now = dateNowMock;
+    };
+    const restoreDateMock = () => {
+      global.Date.now = originalDateImpl;
+    };
+
+    return { restoreDateMock, setDateMockValue, setupDateMock };
+  };
+
   describe('combine ISO date and EST time', () => {
     it('should combine ISO datestamp and a string representing hours and minutes in Eastern time', () => {
       const inputISO = '2021-11-11T05:00:00.000Z';
@@ -218,7 +239,35 @@ describe('DateHandler', () => {
       expect(formattedInEastern).toEqual('04/07/20 11:59 pm'); // the moment before midnight the next day
     });
   });
+
   describe('createISODateAtStartOfDayEST', () => {
+    describe('around midnight', () => {
+      const mockTimeFunc = setupMockTestCurrentTime('2021-10-07T00:31:51.621Z');
+      beforeAll(mockTimeFunc.setupDateMock);
+      afterAll(mockTimeFunc.restoreDateMock);
+
+      const midnightTests = [
+        // input in ISO UTC, output in ET start of day
+        ['2021-10-07T00:31:51.621Z', '2021-10-06T04:00:00.000Z'], // 10/6 at midnight ET
+        ['2021-10-07T11:01:51.621Z', '2021-10-07T04:00:00.000Z'],
+        ['2022-01-01T01:02:21.729Z', '2021-12-31T05:00:00.000Z'], // Jan 1 at 1am UTC is still Dec 31 ET
+      ];
+
+      midnightTests.forEach(([input, output]) => {
+        it(`gets an ISO Date String representing Midnight when given ${input}`, () => {
+          const result = DateHandler.createISODateAtStartOfDayEST(input);
+          expect(result).toBe(output);
+        });
+      });
+
+      it('gets an ISO Date String representing today at Midnight when given no arguments', () => {
+        const sameDay = '2022-07-16';
+        mockTimeFunc.setDateMockValue(`${sameDay}T18:54:00.000Z`);
+        const result = DateHandler.createISODateAtStartOfDayEST();
+        expect(result).toBe(`${sameDay}T04:00:00.000Z`);
+      });
+    });
+
     it('creates a timestamp at start of day EST when provided YYYY-MM-DD', () => {
       const myDate = DateHandler.createISODateAtStartOfDayEST('2020-03-15');
       expect(myDate).toEqual('2020-03-15T04:00:00.000Z');
@@ -472,18 +521,13 @@ describe('DateHandler', () => {
         },
       });
     });
+
     it('takes no arguments to create an object with keys month, day, and year according to Eastern Time with numeric strings', () => {
-      // mock the date implementation and returning original value upon test completion
-      const mockTimeValue = 1633566711621; // Thu, 07 Oct 2021 00:31:51 GMT
+      const mockTimeFunc = setupMockTestCurrentTime('2021-10-07T00:31:51.621Z');
 
-      const realDateNow = Date.now.bind(global.Date);
-      const dateNowStub = jest.fn().mockReturnValue(mockTimeValue);
-      global.Date.now = dateNowStub;
-
+      mockTimeFunc.setupDateMock();
       const result = DateHandler.getMonthDayYearInETObj();
-      expect(dateNowStub).toHaveBeenCalled();
-
-      global.Date.now = realDateNow;
+      mockTimeFunc.restoreDateMock();
 
       expect(result).toEqual({
         day: '6',

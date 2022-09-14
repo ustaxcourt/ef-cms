@@ -43,6 +43,10 @@
   }
 }
 
+.usa-checkbox__input:disabled + .usa-checkbox__label {
+  color: #1b1b1b;
+}
+
 .modal-dialog {
   position: relative;
   display: block;

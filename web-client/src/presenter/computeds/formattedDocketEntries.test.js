@@ -211,6 +211,40 @@ describe('formattedDocketEntries', () => {
     ]);
   });
 
+  it('formats descriptionDisplay for `OCS` type documents correctly', () => {
+    const result = runCompute(formattedDocketEntries, {
+      state: {
+        ...getBaseState(petitionsClerkUser),
+        caseDetail: {
+          ...MOCK_CASE,
+          docketEntries: [
+            {
+              docketEntryId: 'd-1-2-3',
+              documentTitle: 'Online Cited Source',
+              documentType: 'Online Cited Source',
+              eventCode: 'OCS',
+              freeText: 'Test site viewed on 09/09/22',
+              isOnDocketRecord: true,
+            },
+          ],
+        },
+      },
+    });
+
+    expect(result.formattedDocketEntriesOnDocketRecord).toMatchObject([
+      {
+        descriptionDisplay:
+          'Test site viewed on 09/09/22 - Online Cited Source',
+        docketEntryId: 'd-1-2-3',
+        documentType: 'Online Cited Source',
+        isCourtIssuedDocument: true,
+        isInProgress: false,
+        isPetition: false,
+        isStatusServed: false,
+      },
+    ]);
+  });
+
   describe('sorts docket records', () => {
     let sortedCaseDetail;
 

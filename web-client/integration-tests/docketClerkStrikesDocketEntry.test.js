@@ -42,12 +42,15 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   petitionsClerkServesElectronicCaseToIrs(cerebralTest);
 
   loginAs(cerebralTest, 'docketclerk@example.com');
-  docketClerkChecksDocketEntryEditLink(cerebralTest);
-  docketClerkQCsDocketEntry(cerebralTest);
+  docketClerkChecksDocketEntryEditLink(cerebralTest, {
+    index: 2,
+    value: false,
+  });
+  docketClerkQCsDocketEntry(cerebralTest, { index: 2 });
   docketClerkChecksDocketEntryEditLink(cerebralTest, { value: true });
 
-  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 3);
-  docketClerkStrikesDocketEntry(cerebralTest, 3);
+  docketClerkNavigatesToEditDocketEntryMeta(cerebralTest, 4);
+  docketClerkStrikesDocketEntry(cerebralTest, 4);
 
   docketClerkCreatesAnOrder(cerebralTest, {
     documentTitle: 'Order that is stricken',
@@ -58,12 +61,12 @@ describe("Docket Clerk Edits a Docket Entry's Meta", () => {
   docketClerkSignsOrder(cerebralTest, 0);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 0);
   docketClerkServesDocument(cerebralTest, 0);
-  docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(cerebralTest, 4);
-  docketClerkStrikesDocketEntry(cerebralTest, 4);
+  docketClerkNavigatesToEditDocketEntryMetaForCourtIssued(cerebralTest, 5);
+  docketClerkStrikesDocketEntry(cerebralTest, 5);
 
   loginAs(cerebralTest, 'privatePractitioner@example.com');
   practitionerViewsCaseDetail(cerebralTest, false);
-  privatePractitionerSeesStrickenDocketEntry(cerebralTest, 4);
+  privatePractitionerSeesStrickenDocketEntry(cerebralTest, 5);
   privatePractitionerAttemptsToViewStrickenDocumentUnsuccessfully(cerebralTest);
   userSearchesForStrickenDocument(cerebralTest);
 

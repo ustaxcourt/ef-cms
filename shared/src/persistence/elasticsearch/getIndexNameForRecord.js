@@ -30,6 +30,10 @@ const isRecordOfType = (record, type) => {
       return true;
     }
 
+    if (type == 'Message' && entityName === 'CaseMessageMapping') {
+      return true;
+    }
+
     if (entityName === type) {
       return true;
     }

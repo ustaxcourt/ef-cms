@@ -1,3 +1,4 @@
+const { GET_MESSAGE_PARENT_CASE } = require('../helpers/searchClauses');
 const { search } = require('../searchClient');
 
 exports.getUserInboxMessages = async ({ applicationContext, userId }) => {
@@ -15,6 +16,7 @@ exports.getUserInboxMessages = async ({ applicationContext, userId }) => {
             {
               term: { 'isCompleted.BOOL': false },
             },
+            GET_MESSAGE_PARENT_CASE,
           ],
         },
       },

@@ -7,7 +7,12 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 const startCaseHelper = withAppContextDecorator(startCaseHelperComputed);
 const { CASE_TYPES_MAP, COUNTRY_TYPES } = applicationContext.getConstants();
 
-export const practitionerCreatesNewCase = (cerebralTest, fakeFile) => {
+export const practitionerCreatesNewCase = (
+  cerebralTest,
+  fakeFile,
+  trialLocation = 'Seattle, Washington',
+  procedureType = 'Small',
+) => {
   return it('Practitioner creates a new case', async () => {
     await cerebralTest.runSequence('gotoStartCaseWizardSequence');
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
@@ -35,7 +40,6 @@ export const practitionerCreatesNewCase = (cerebralTest, fakeFile) => {
     });
     expect(result.showPrimaryContact).toBeFalsy();
     expect(result.showSecondaryContact).toBeFalsy();
-
     // Petitioner party type primary contact with international address
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'filingType',
@@ -81,7 +85,6 @@ export const practitionerCreatesNewCase = (cerebralTest, fakeFile) => {
       key: 'contactPrimary.phone',
       value: '1234567890',
     });
-
     expect(cerebralTest.getState('form.contactPrimary')).toEqual({
       address1: '123 Abc Ln',
       city: 'Cityville',
@@ -152,7 +155,6 @@ export const practitionerCreatesNewCase = (cerebralTest, fakeFile) => {
     });
     expect(result.showHasIrsNoticeOptions).toBeTruthy();
     expect(result.showNotHasIrsNoticeOptions).toBeFalsy();
-
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.whistleblower,
@@ -173,12 +175,12 @@ export const practitionerCreatesNewCase = (cerebralTest, fakeFile) => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'procedureType',
-      value: 'Small',
+      value: procedureType,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'preferredTrialCity',
-      value: 'Seattle, Washington',
+      value: trialLocation,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
@@ -190,9 +192,7 @@ export const practitionerCreatesNewCase = (cerebralTest, fakeFile) => {
       key: 'wizardStep',
       value: '5',
     });
-
     await cerebralTest.runSequence('submitFilePetitionSequence');
-
     expect(cerebralTest.getState('alertError')).toBeUndefined();
 
     expect(cerebralTest.getState('currentPage')).toBe('FilePetitionSuccess');

@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 const {
   applicationContext,
 } = require('../../test/createTestApplicationContext');
@@ -551,12 +552,47 @@ describe('TrialSession entity', () => {
           sessionScope: TRIAL_SESSION_SCOPE_TYPES.locationBased,
           trialLocation: mockTrialLocation,
         },
+        // eslint-disable-next-line max-lines
         {
           applicationContext,
         },
       );
 
       expect(trialSession.trialLocation).toBe(mockTrialLocation);
+    });
+  });
+
+  describe('estimatedEndDate', () => {
+    it('should error when estimatedEndDate is less than the startDate', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          estimatedEndDate: '2025-02-01T00:00:00.000Z',
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(() => trialSession.validate()).toThrow();
+      expect(trialSession.getFormattedValidationErrors()).toMatchObject({
+        estimatedEndDate:
+          TrialSession.VALIDATION_ERROR_MESSAGES.estimatedEndDate[0].message,
+      });
+    });
+
+    it('should be valid when estimatedEndDate is greater than or equal to the startDate', () => {
+      const trialSession = new TrialSession(
+        {
+          ...VALID_TRIAL_SESSION,
+          estimatedEndDate: VALID_TRIAL_SESSION.startDate,
+        },
+        {
+          applicationContext,
+        },
+      );
+
+      expect(trialSession.isValid()).toBe(true);
     });
   });
 });

@@ -34,10 +34,6 @@ const caseInventoryReport = async ({ applicationContext, data }) => {
   const pdfContentHtml = await generateHTMLTemplateForPDF({
     applicationContext,
     content: caseInventoryReportTemplate,
-    options: {
-      overwriteMain: true,
-      title: 'Case Inventory Report',
-    },
   });
 
   const pdf = await applicationContext

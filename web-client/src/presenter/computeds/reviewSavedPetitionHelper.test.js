@@ -182,7 +182,7 @@ describe('reviewSavedPetitionHelper', () => {
   });
 
   Object.keys(ordersAndNoticesNeededCodes).forEach(orderOrNotice => {
-    it('should verify ordersAndNoticesNeeded is populated with the order(s) or notice(s) that were selected', () => {
+    it(`should verify ordersAndNoticesNeeded is populated with ${orderOrNotice}`, () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
@@ -198,7 +198,7 @@ describe('reviewSavedPetitionHelper', () => {
   });
 
   Object.keys(ordersAndNoticesInDraftsCodes).forEach(orderOrNoticeInDraft => {
-    it('should verify ordersAndNoticesInDraft is populated with the order(s) or notice(s) that were selected', () => {
+    it(`should verify ordersAndNoticesInDraft is populated with ${orderOrNoticeInDraft}`, () => {
       const result = runCompute(reviewSavedPetitionHelper, {
         state: {
           form: {
@@ -278,6 +278,30 @@ describe('reviewSavedPetitionHelper', () => {
         formattedIrsDeficiencyAmount: '$0.00',
         formattedIrsTotalPenalties: '$21.00',
       },
+    ]);
+  });
+
+  it('adds the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is true', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { orderForAmendedPetition: true },
+      },
+    });
+
+    expect(result.ordersAndNoticesInDraft).toEqual([
+      'Order for Amended Petition',
+    ]);
+  });
+
+  it('does not add the OAP to ordersAndNoticesInDraft when form.orderForAmendedPetition is false', () => {
+    const result = runCompute(reviewSavedPetitionHelper, {
+      state: {
+        form: { orderForAmendedPetition: false },
+      },
+    });
+
+    expect(result.ordersAndNoticesInDraft).not.toBe([
+      'Order for Amended Petition',
     ]);
   });
 });

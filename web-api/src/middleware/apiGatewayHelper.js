@@ -190,3 +190,18 @@ exports.getUserFromAuthHeader = event => {
     return null;
   }
 };
+
+/**
+ * extracts the connectionId from the event header or query parameters and returns
+ *
+ * @param {object} event the api gateway request event
+ * @returns {string} the connectionId
+ */
+exports.getConnectionIdFromEvent = event => {
+  if (
+    event.queryStringParameters &&
+    event.queryStringParameters.clientConnectionId
+  ) {
+    return event.queryStringParameters.clientConnectionId;
+  }
+};

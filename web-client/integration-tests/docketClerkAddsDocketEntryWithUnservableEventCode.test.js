@@ -129,7 +129,7 @@ describe('Docket Clerk Adds Docket Entry With Unservable Event Code', () => {
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to docket record.',
+      'Your entry has been added to the docket record.',
     );
 
     await cerebralTest.runSequence('gotoEditDocketEntryMetaSequence', {

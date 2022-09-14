@@ -16,12 +16,10 @@ export const setNoticesForCalendaredTrialSessionAction = async ({
 }) => {
   const trialSessionId =
     props.trialSessionId || get(state.trialSession.trialSessionId);
-  const { docketNumber } = props;
 
   await applicationContext
     .getUseCases()
     .setNoticesForCalendaredTrialSessionInteractor(applicationContext, {
-      docketNumber,
       trialSessionId,
     });
 };

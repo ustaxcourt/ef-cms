@@ -3,7 +3,7 @@ const {
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } = require('../../entities/EntityConstants');
-const { addCoverToPdf } = require('../../useCases/addCoversheetInteractor');
+const { addCoverToPdf } = require('../../useCases/addCoverToPdf');
 const { Case } = require('../../entities/cases/Case');
 const { DOCKET_SECTION } = require('../../entities/EntityConstants');
 const { DocketEntry } = require('../../entities/DocketEntry');
@@ -84,6 +84,8 @@ const createDocketEntryForChange = async ({
     { applicationContext },
   );
 
+  caseEntity.addDocketEntry(changeOfAddressDocketEntry);
+
   const { pdfData: changeOfAddressPdfWithCover } = await addCoverToPdf({
     applicationContext,
     caseEntity,
@@ -97,9 +99,8 @@ const createDocketEntryForChange = async ({
       applicationContext,
       documentBytes: changeOfAddressPdfWithCover,
     });
-
-  caseEntity.addDocketEntry(changeOfAddressDocketEntry);
   changeOfAddressDocketEntry.setAsServed(servedParties.all);
+
   await applicationContext.getPersistenceGateway().saveDocumentFromLambda({
     applicationContext,
     document: changeOfAddressPdfWithCover,

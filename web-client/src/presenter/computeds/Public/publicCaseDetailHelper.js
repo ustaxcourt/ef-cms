@@ -1,3 +1,5 @@
+/* eslint-disable complexity */
+
 import { cloneDeep } from 'lodash';
 import { state } from 'cerebral';
 
@@ -8,6 +10,7 @@ export const formatDocketEntryOnDocketRecord = (
   const { DOCUMENT_PROCESSING_STATUS_OPTIONS, EVENT_CODES_VISIBLE_TO_PUBLIC } =
     applicationContext.getConstants();
   const record = cloneDeep(entry);
+
   let filingsAndProceedingsWithAdditionalInfo = '';
   if (record.documentTitle && record.additionalInfo) {
     filingsAndProceedingsWithAdditionalInfo += ` ${record.additionalInfo}`;
@@ -21,7 +24,8 @@ export const formatDocketEntryOnDocketRecord = (
 
   const isServedDocument = !record.isNotServedDocument;
 
-  const canTerminalUserSeeLink = record.isFileAttached && isServedDocument;
+  const canTerminalUserSeeLink =
+    record.isFileAttached && isServedDocument && !record.isSealed;
 
   const canPublicUserSeeLink =
     record.isCourtIssuedDocument &&
@@ -38,9 +42,14 @@ export const formatDocketEntryOnDocketRecord = (
     : canPublicUserSeeLink;
 
   const showDocumentDescriptionWithoutLink = !canDisplayDocumentLink;
-  const showLinkToDocument =
-    canDisplayDocumentLink &&
-    record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+
+  let showLinkToDocument = canDisplayDocumentLink;
+
+  if (!isTerminalUser) {
+    showLinkToDocument =
+      canDisplayDocumentLink &&
+      record.processingStatus === DOCUMENT_PROCESSING_STATUS_OPTIONS.COMPLETE;
+  }
 
   if (record.isSealed) {
     record.sealedToTooltip = applicationContext
@@ -48,11 +57,17 @@ export const formatDocketEntryOnDocketRecord = (
       .getSealedDocketEntryTooltip(applicationContext, record);
   }
 
+  if (entry.eventCode === 'OCS' && record.freeText) {
+    record.descriptionDisplay = `${record.freeText} - ${record.descriptionDisplay}`;
+  } else {
+    record.descriptionDisplay = record.documentTitle || record.description;
+  }
+
   return {
     action: record.action,
     createdAtFormatted: record.createdAtFormatted,
     description: record.description,
-    descriptionDisplay: record.documentTitle || record.description,
+    descriptionDisplay: record.descriptionDisplay,
     docketEntryId: record.docketEntryId,
     eventCode: record.eventCode,
     filedBy: record.filedBy,

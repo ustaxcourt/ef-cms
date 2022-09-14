@@ -1,16 +1,13 @@
-/* eslint-disable max-lines */
 import {
   DOCKET_NUMBER_SUFFIXES,
   SESSION_STATUS_GROUPS,
-  TRIAL_SESSION_SCOPE_TYPES,
 } from '../entities/EntityConstants';
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
-import { applicationContext } from '../../../../web-client/src/applicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
 import {
   compareTrialSessionEligibleCases,
   formatCase,
   formattedTrialSessionDetails,
-  getTrialSessionStatus,
 } from './getFormattedTrialSessionDetails';
 import { omit } from 'lodash';
 
@@ -159,6 +156,33 @@ describe('formattedTrialSessionDetails', () => {
       });
     });
   });
+  describe('formats trial session estimated end date', () => {
+    it('does not format trial session estimated end date when estimatedEndDate is an invalid DateTime', () => {
+      const result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          estimatedEndDate: 'Am I an ISO8601 date string?',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedEstimatedEndDate: 'Invalid DateTime',
+      });
+    });
+
+    it('formats trial session estimated end date', () => {
+      const result = formattedTrialSessionDetails({
+        applicationContext,
+        trialSession: {
+          ...TRIAL_SESSION,
+          estimatedEndDate: '2040-11-25T15:00:00.000Z',
+        },
+      });
+      expect(result).toMatchObject({
+        formattedEstimatedEndDate: '11/25/40',
+      });
+    });
+  });
 
   it('displays swing session area if session is a swing session', () => {
     const result = formattedTrialSessionDetails({
@@ -200,6 +224,9 @@ describe('formattedTrialSessionDetails', () => {
         caseItem: { docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT },
       }).isDocketSuffixHighPriority,
     ).toBe(true);
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(4);
   });
 
   describe('comparing eligible cases', () => {
@@ -348,8 +375,10 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(5);
     expect(result.formattedEligibleCases.length).toEqual(5);
-
     expect(result.formattedEligibleCases).toMatchObject([
       {
         caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
@@ -407,6 +436,9 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(3);
     expect(result.allCases.length).toEqual(3);
     expect(result.allCases[0].docketNumberWithSuffix).toEqual('101-16S');
     expect(result.allCases[0].caseTitle).toEqual('Someone Else');
@@ -438,6 +470,9 @@ describe('formattedTrialSessionDetails', () => {
         ],
       },
     });
+    expect(
+      applicationContext.getUtilities().setConsolidationFlagsForDisplay,
+    ).toHaveBeenCalledTimes(5);
     expect(result.allCases).toMatchObject([
       { docketNumber: '90-07' },
       { docketNumber: '500-17' },
@@ -465,6 +500,7 @@ describe('formattedTrialSessionDetails', () => {
         ...TRIAL_SESSION,
         calendaredCases: [
           {
+            docketEntries: [],
             docketNumber: MOCK_CASE.docketNumber,
           },
         ],
@@ -489,62 +525,5 @@ describe('formattedTrialSessionDetails', () => {
       },
     });
     expect(result.computedStatus).toEqual(SESSION_STATUS_GROUPS.closed);
-  });
-
-  describe('getTrialSessionStatus', () => {
-    it('returns `Closed` when all trial session cases are inactive / removed from trial and sessionScope is locationBased', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19', removedFromTrial: true },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-      };
-
-      const results = getTrialSessionStatus({ applicationContext, session });
-
-      expect(results).toEqual(SESSION_STATUS_GROUPS.closed);
-    });
-
-    it('should not return `Closed` when all trial session cases are inactive / removed from trial and sessionScope is standaloneRemote', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19', removedFromTrial: true },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-        sessionScope: TRIAL_SESSION_SCOPE_TYPES.standaloneRemote,
-      };
-
-      const results = getTrialSessionStatus({ applicationContext, session });
-
-      expect(results).not.toEqual(SESSION_STATUS_GROUPS.closed);
-    });
-
-    it('returns `Open` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19' },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-        isCalendared: true,
-      };
-
-      const results = getTrialSessionStatus({ applicationContext, session });
-
-      expect(results).toEqual(SESSION_STATUS_GROUPS.open);
-    });
-
-    it('returns `New` when a trial session is calendared and does not meet conditions for `Closed` status', () => {
-      const session = {
-        caseOrder: [
-          { docketNumber: '123-19' },
-          { docketNumber: '234-19', removedFromTrial: true },
-        ],
-        isCalendared: false,
-      };
-
-      const results = getTrialSessionStatus({ applicationContext, session });
-
-      expect(results).toEqual(SESSION_STATUS_GROUPS.new);
-    });
   });
 });

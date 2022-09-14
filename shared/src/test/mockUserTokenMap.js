@@ -8,18 +8,8 @@ const userMap = {};
 
 mockUsers.forEach(userRecord => {
   if (!userRecord.userId) return;
-  const newUser = pick(userRecord, [
-    'email',
-    'name',
-    'role',
-    'section',
-    'userId',
-    'barNumber',
-    'contact',
-    'section',
-  ]);
-
-  newUser['custom:role'] = newUser.role;
+  const newUser = pick(userRecord, ['email', 'name', 'userId']);
+  newUser['custom:role'] = userRecord.role;
   userMap[newUser.email] = newUser;
 });
 

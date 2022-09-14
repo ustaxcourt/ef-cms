@@ -7,8 +7,8 @@ const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
 const {
+  PARTIES_CODES,
   PARTY_TYPES,
-  SERVED_PARTIES_CODES,
 } = require('../../entities/EntityConstants');
 const { docketRecord } = require('./docketRecord');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
@@ -115,7 +115,7 @@ describe('documentGenerators', () => {
               isNotServedDocument: false,
               isStatusServed: true,
               servedAtFormatted: '02/02/20',
-              servedPartiesCode: SERVED_PARTIES_CODES.BOTH,
+              servedPartiesCode: PARTIES_CODES.BOTH,
             },
           ],
         },

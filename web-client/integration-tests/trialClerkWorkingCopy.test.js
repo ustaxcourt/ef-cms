@@ -42,6 +42,11 @@ describe('Trial Clerk Views Trial Session Working Copy', () => {
   docketClerkViewsTrialSessionList(cerebralTest);
   docketClerkViewsNewTrialSession(cerebralTest);
 
+  loginAs(cerebralTest, 'trialclerk@example.com');
+  trialClerkViewsTrialSessionWorkingCopy(cerebralTest, {
+    expectedNumberOfCases: 0,
+  });
+
   const caseOverrides = {
     ...overrides,
     caseType: CASE_TYPES_MAP.deficiency,

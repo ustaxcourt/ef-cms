@@ -1,6 +1,10 @@
+import { refreshElasticsearchIndex } from '../helpers';
+
 export const petitionsClerkVerifiesCompletedMessageNotInInbox =
   cerebralTest => {
     return it('petitions clerk verifies the completed message is not in their inbox', async () => {
+      await refreshElasticsearchIndex();
+
       await cerebralTest.runSequence('gotoMessagesSequence', {
         box: 'inbox',
         queue: 'my',

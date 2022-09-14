@@ -1,9 +1,56 @@
 import { Button } from '../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import React from 'react';
+import { Icon } from '../ustc-ui/Icon/Icon';
+import React, { useState } from 'react';
+
+const CaselessNotification = () => {
+  const [isDisplayed, setIsDisplayed] = useState(true);
+
+  return (
+    isDisplayed && (
+      <div className="card gray">
+        <div className="card-content padding-3 position-relative">
+          <Button
+            link
+            className="dismiss-btn margin-bottom-1 no-underline padding-0"
+            icon="times-circle"
+            iconRight={true}
+            onClick={() => setIsDisplayed(false)}
+          ></Button>
+
+          <h3 className="display-flex">
+            <Icon
+              aria-label="high priority"
+              className="iconHighPriority margin-right-1 margin-top-1"
+              icon={['fas', 'exclamation-circle']}
+              size="2x"
+            />{' '}
+            Have you already filed a petition by mail? Are you interested in
+            electronic access to your existing case?
+          </h3>
+
+          <div>
+            Do <b>NOT</b> start a new case. For more information about gaining
+            electronic service for your existing case, email{' '}
+            <a
+              href={
+                'mailto:dawson.support@ustaxcourt.gov?subject=eAccess to existing case'
+              }
+            >
+              dawson.support@ustaxcourt.gov
+            </a>
+            . Include the docket number (e.g. 12345-67) of your case in your
+            email.
+          </div>
+        </div>
+      </div>
+    )
+  );
+};
 
 export const WhatToExpect = () => (
   <>
+    <CaselessNotification />
     <h2>What to Expect When Filing a Case Online</h2>
     <p>
       To start a case with the Tax Court, you’ll need to file a Petition and

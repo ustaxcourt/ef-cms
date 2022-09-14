@@ -19,8 +19,7 @@ export const createTokenAction = ({ applicationContext, get, props }) => {
   }
 
   const { USER_ROLES } = applicationContext.getConstants();
-
-  if (userMap[name].role === USER_ROLES.legacyJudge) {
+  if (userMap[name]['custom:role'] === USER_ROLES.legacyJudge) {
     throw new ActionError(`The legacy judge "${name}" cannot login.`);
   }
 

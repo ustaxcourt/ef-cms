@@ -126,7 +126,7 @@ export const docketClerkAddsDocketEntries = (cerebralTest, fakeFile) => {
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to docket record.',
+      'Your entry has been added to the docket record.',
     );
 
     expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');

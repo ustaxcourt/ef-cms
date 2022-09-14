@@ -203,3 +203,44 @@ Solution:
     ```bash
     ENV=exp5 FILE_NAME=judge_users.csv ./scripts/bulk-import-judge-users.sh
     ```
+
+## AxiosError: Request failed with status code 403 on Test Users Setup
+Problem:
+- After an environment is torn down and it's being deployed again fresh, on running Test Users Setup, the url that axios posts to must include the DEPLOYING_COLOR. This is likely because the API gateway mapping record doesn't exist between the DEPLOYING_COLOR and the generic api record since `switch-colors` has not been run yet.
+
+Solution:
+- In `createDawsonUser`, make sure that the url that is passed to axios includes the DEPLOYING_COLOR. For example, `https://api-green.${EFCMS_DOMAIN}/users` instead of `https://api.${EFCMS_DOMAIN}/users`.
+
+## Docker Image Deploy
+Problem:
+- While running `npm run deploy:ci-image` the `apt-get update` command may present an error indicating that the debian distro is not signed properly. It will look like the following:
+  ```
+  > [ 5/16] RUN apt-get -o Acquire::Check-Valid-Until=false update:
+  #8 0.490 Get:1 http://security.debian.org/debian-security buster/updates InRelease [73.5 kB]
+  #8 0.493 Get:2 http://deb.debian.org/debian buster InRelease [122 kB]
+  #8 0.535 Get:3 http://deb.debian.org/debian buster-updates InRelease [56.6 kB]
+  #8 0.607 Err:1 http://security.debian.org/debian-security buster/updates InRelease
+  #8 0.607   At least one invalid signature was encountered.
+  #8 0.682 Err:2 http://deb.debian.org/debian buster InRelease
+  #8 0.682   At least one invalid signature was encountered.
+  #8 0.694 Get:4 http://ftp.debian.org/debian stretch-backports InRelease [99.9 kB]
+  #8 0.755 Err:3 http://deb.debian.org/debian buster-updates InRelease
+  #8 0.755   At least one invalid signature was encountered.
+  #8 0.826 Err:4 http://ftp.debian.org/debian stretch-backports InRelease
+  #8 0.826   At least one invalid signature was encountered.
+  #8 0.835 Reading package lists...
+  #8 0.850 W: GPG error: http://security.debian.org/debian-security buster/updates InRelease: At least one invalid signature was encountered.
+  #8 0.850 E: The repository 'http://security.debian.org/debian-security buster/updates InRelease' is not signed.
+  #8 0.850 W: GPG error: http://deb.debian.org/debian buster InRelease: At least one invalid signature was encountered.
+  #8 0.850 E: The repository 'http://deb.debian.org/debian buster InRelease' is not signed.
+  #8 0.850 W: GPG error: http://deb.debian.org/debian buster-updates InRelease: At least one invalid signature was encountered.
+  #8 0.850 E: The repository 'http://deb.debian.org/debian buster-updates InRelease' is not signed.
+  #8 0.851 W: GPG error: http://ftp.debian.org/debian stretch-backports InRelease: At least one invalid signature was encountered.
+  #8 0.851 E: The repository 'http://ftp.debian.org/debian stretch-backports InRelease' is not signed.
+  ------
+  executor failed running [/bin/sh -c apt-get -o Acquire::Check-Valid-Until=false update]: exit code: 100
+  ```
+
+Solution:
+  - It may help to run `docker system prune` as suggested in [this stackoverflow answer](https://stackoverflow.com/a/65524014)
+    - After running that command, try running `npm run deploy:ci-image` again.

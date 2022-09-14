@@ -9,15 +9,22 @@
  */
 exports.sendNotificationToUser = async ({
   applicationContext,
+  clientConnectionId,
   message,
   userId,
 }) => {
-  const connections = await applicationContext
+  let connections = await applicationContext
     .getPersistenceGateway()
     .getWebSocketConnectionsByUserId({
       applicationContext,
       userId,
     });
+
+  if (clientConnectionId) {
+    connections = connections.filter(connection => {
+      return connection.clientConnectionId === clientConnectionId;
+    });
+  }
 
   const messageStringified = JSON.stringify(message);
 

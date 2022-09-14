@@ -1,34 +1,11 @@
-import { clearModalAction } from '../actions/clearModalAction';
-import { followRedirectAction } from '../actions/followRedirectAction';
-import { getCaseAction } from '../actions/getCaseAction';
-import { isPrintPreviewPreparedAction } from '../actions/CourtIssuedOrder/isPrintPreviewPreparedAction';
-import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
-import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
+import { clearAlertsAction } from '../actions/clearAlertsAction';
+import { clearPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/clearPdfPreviewUrlAction';
 import { serveCourtIssuedDocumentAction } from '../actions/serveCourtIssuedDocumentAction';
-import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
-import { setCaseAction } from '../actions/setCaseAction';
-import { setDocumentToDisplayFromDocumentIdAction } from '../actions/setDocumentToDisplayFromDocumentIdAction';
-import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
-import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 
-export const serveCourtIssuedDocumentSequence = showProgressSequenceDecorator([
+export const serveCourtIssuedDocumentSequence = [
+  clearAlertsAction,
+  clearPdfPreviewUrlAction,
+  setWaitingForResponseAction,
   serveCourtIssuedDocumentAction,
-  setPdfPreviewUrlAction,
-  setAlertSuccessAction,
-  clearModalAction,
-  setSaveAlertsForNavigationAction,
-  isPrintPreviewPreparedAction,
-  {
-    no: [
-      getCaseAction,
-      setCaseAction,
-      followRedirectAction,
-      {
-        default: navigateToCaseDetailAction,
-        success: [setDocumentToDisplayFromDocumentIdAction],
-      },
-    ],
-    yes: [navigateToPrintPaperServiceAction],
-  },
-]);
+];

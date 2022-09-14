@@ -14,6 +14,7 @@ const TIME_TO_EXIST = 60 * 60 * 24;
  */
 exports.saveUserConnection = ({
   applicationContext,
+  clientConnectionId,
   connectionId,
   endpoint,
   userId,
@@ -21,6 +22,7 @@ exports.saveUserConnection = ({
   Promise.all([
     put({
       Item: {
+        clientConnectionId,
         connectionId,
         endpoint,
         gsi1pk: 'connection',
@@ -33,6 +35,7 @@ exports.saveUserConnection = ({
     }),
     put({
       Item: {
+        clientConnectionId,
         connectionId,
         endpoint,
         pk: `connection|${connectionId}`,

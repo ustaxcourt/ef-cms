@@ -35,9 +35,6 @@ export const CreateMessageModalDialog = connect(
     validationErrors,
     workQueueSectionHelper,
   }) {
-    validationErrors = validationErrors || {};
-    form = form || {};
-
     return (
       <ConfirmModal
         cancelLabel="Cancel"

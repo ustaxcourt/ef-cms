@@ -3,10 +3,13 @@ const {
   testPdfDoc,
 } = require('../test/createTestApplicationContext');
 const {
+  MOCK_CASE,
+  MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
+} = require('../../test/mockCase');
+const {
   serveDocumentAndGetPaperServicePdf,
 } = require('./serveDocumentAndGetPaperServicePdf');
 const { Case, getContactPrimary } = require('../entities/cases/Case');
-const { MOCK_CASE } = require('../../test/mockCase');
 const { SERVICE_INDICATOR_TYPES } = require('../entities/EntityConstants');
 
 describe('serveDocumentAndGetPaperServicePdf', () => {
@@ -32,7 +35,7 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
   it('should call sendServedPartiesEmails with the case entity, docket entry id, and aggregated served parties from the case', async () => {
     await serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      caseEntity,
+      caseEntities: [caseEntity],
       docketEntryId: mockDocketEntryId,
     });
 
@@ -53,17 +56,27 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
 
     await serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      caseEntity,
+      caseEntities: [caseEntity],
       docketEntryId: mockDocketEntryId,
     });
 
-    expect(applicationContext.getStorageClient().getObject).not.toBeCalled();
+    expect(
+      applicationContext.getStorageClient().getObject,
+    ).not.toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should call getObject and appendPaperServiceAddressPageToPdf and return the pdf url if there are paper service parties on the case', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf.mockImplementationOnce(
+        ({ newPdfDoc }) => {
+          newPdfDoc.addPage();
+        },
+      );
+
     caseEntity = new Case(
       {
         ...MOCK_CASE,
@@ -79,14 +92,112 @@ describe('serveDocumentAndGetPaperServicePdf', () => {
 
     const result = await serveDocumentAndGetPaperServicePdf({
       applicationContext,
-      caseEntity,
+      caseEntities: [caseEntity],
       docketEntryId: mockDocketEntryId,
     });
 
-    expect(applicationContext.getStorageClient().getObject).toBeCalled();
+    expect(applicationContext.getStorageClient().getObject).toHaveBeenCalled();
     expect(
       applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(result).toEqual({ pdfUrl: mockPdfUrl });
+  });
+
+  it('should serve parties for all consolidated cases', async () => {
+    applicationContext
+      .getUseCaseHelpers()
+      .appendPaperServiceAddressPageToPdf.mockImplementationOnce(
+        ({ newPdfDoc }) => {
+          newPdfDoc.addPage();
+        },
+      );
+
+    caseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        petitioners: [
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+          {
+            ...getContactPrimary(MOCK_CASE),
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+          },
+        ],
+        privatePractitioners: [
+          { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER },
+        ],
+      },
+      { applicationContext },
+    );
+
+    const secondCaseEntity = new Case(MOCK_LEAD_CASE_WITH_PAPER_SERVICE, {
+      applicationContext,
+    });
+
+    const result = await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity, secondCaseEntity],
+      docketEntryId: caseEntity.docketEntries[0].docketEntryId,
+    });
+
+    expect(applicationContext.getStorageClient().getObject).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalledTimes(2);
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[0][0],
+    ).toMatchObject({
+      caseEntity: expect.objectContaining({
+        docketNumber: caseEntity.docketNumber,
+      }),
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails.mock
+        .calls[1][0],
+    ).toMatchObject({
+      caseEntity: expect.objectContaining({
+        docketNumber: secondCaseEntity.docketNumber,
+      }),
+    });
+    expect(result).toEqual({ pdfUrl: mockPdfUrl });
+  });
+
+  it('should not call getObject or appendPaperServiceAddressPageToPdf if there are no paper service parties on any consolidated case', async () => {
+    caseEntity.petitioners.forEach(
+      p => (p.serviceIndicator = SERVICE_INDICATOR_TYPES.SI_ELECTRONIC),
+    );
+
+    const secondCaseEntity = new Case(
+      {
+        ...MOCK_CASE,
+        privatePractitioners: [
+          { serviceIndicator: SERVICE_INDICATOR_TYPES.SI_ELECTRONIC },
+        ],
+      },
+      {
+        applicationContext,
+      },
+    );
+
+    await serveDocumentAndGetPaperServicePdf({
+      applicationContext,
+      caseEntities: [caseEntity, secondCaseEntity],
+      docketEntryId: mockDocketEntryId,
+    });
+    expect(
+      applicationContext.getUseCaseHelpers().sendServedPartiesEmails,
+    ).toHaveBeenCalled();
+    expect(
+      applicationContext.getStorageClient().getObject,
+    ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCaseHelpers().appendPaperServiceAddressPageToPdf,
+    ).not.toHaveBeenCalled();
   });
 });

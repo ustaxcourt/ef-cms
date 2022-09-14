@@ -1,4 +1,4 @@
-const baseConfig = require('../jest.config');
+const baseConfig = require('../jest-browser.config');
 
 module.exports = {
   ...baseConfig,
@@ -15,6 +15,7 @@ module.exports = {
     '!src/index.prod.js',
     '!src/index-public.dev.js',
     '!src/index-public.prod.js',
+    '!src/views/Messages/sortConstants.js',
   ],
   coverageDirectory: './coverage-unit',
   coverageThreshold: {
@@ -30,12 +31,5 @@ module.exports = {
     FileReader() {},
     atob: x => x,
     presenter: { providers: { applicationContext: {} } },
-  },
-  testEnvironment: 'jsdom',
-  //this is to ignore imported html files
-  transform: {
-    '^.+\\.html?$': './htmlLoader.js',
-    '^.+\\.js$': 'babel-jest',
-    '^.+\\.jsx$': 'babel-jest',
   },
 };

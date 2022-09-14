@@ -173,6 +173,8 @@ export const TrialSessionInformation = connect(
                           >
                             {formattedTrialSessionDetails.formattedStartDate}{' '}
                             {formattedTrialSessionDetails.formattedStartTime}
+                            {formattedTrialSessionDetails.formattedEstimatedEndDate &&
+                              ` - ${formattedTrialSessionDetails.formattedEstimatedEndDate}`}
                           </p>
                         </div>
 

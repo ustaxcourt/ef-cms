@@ -5,15 +5,23 @@ import datePicker from '../../../../node_modules/uswds/src/js/components/date-pi
 
 export const DatePickerComponent = ({
   className,
+  disabled = false,
   errorText,
   hideLegend,
   hintText,
   label,
+  minDate,
   name,
   names,
   onBlur,
   onChange,
+  onValueChange,
   optional,
+  placeholder,
+  shouldClearHiddenInput,
+  showDateHint = true,
+  titleHintText,
+  useHintNoWrap,
   values,
 }) => {
   const datePickerRef = useRef();
@@ -29,12 +37,27 @@ export const DatePickerComponent = ({
   }, [datePickerRef]);
 
   useEffect(() => {
+    const input = datePickerRef.current.querySelector('.usa-date-picker');
+
+    if (disabled) {
+      datePicker.disable(input);
+    } else {
+      datePicker.enable(input);
+    }
+  });
+
+  useEffect(() => {
     if (!datePickerRef.current) return;
     const input = datePickerRef.current.querySelector('input');
     if (!input) return;
     if (values.month && values.day && values.year) {
       input.value = `${values.month}/${values.day}/${values.year}`;
     } else {
+      if (shouldClearHiddenInput) {
+        // a hack because the inputRef points to the hidden input instead of the visible input on the page
+        const actualInput = window.document.getElementById(`${name}-date`);
+        actualInput.value = null;
+      }
       input.value = null;
     }
   }, [datePickerRef, values]);
@@ -58,10 +81,15 @@ export const DatePickerComponent = ({
       window.document.getElementById(`${name}-date`) || inputRef.current;
 
     input.addEventListener('change', e => {
+      onValueChange(e.target.value);
+
       if (values) {
         let [month, day, year] = splitDate(e.target.value);
         if (month.length > 2) {
           [year, month, day] = splitDate(e.target.value);
+        }
+        if (year?.length < 4) {
+          year = '';
         }
         onChange({
           key: names.day,
@@ -95,21 +123,37 @@ export const DatePickerComponent = ({
         id={`${name}-date-label`}
       >
         {label} {optional && <span className="usa-hint">(optional)</span>}
+        {titleHintText && <span className="usa-hint">{titleHintText}</span>}
       </label>
-      <div className="usa-hint" id={`${name}-date-hint`}>
-        MM/DD/YYYY
-      </div>
-      <div className="usa-date-picker" data-default-value={defaultValue}>
+      {showDateHint && (
+        <div className="usa-hint" id={`${name}-date-hint`}>
+          MM/DD/YYYY
+        </div>
+      )}
+      <div
+        className="usa-date-picker"
+        data-default-value={defaultValue}
+        data-min-date={minDate}
+      >
         <input
           aria-describedby={`${name}-date-label ${name}-date-hint`}
-          className="usa-input"
+          className="usa-input grey-placeholder"
           id={`${name}-date`}
           name={`${name}-date`}
+          placeholder={placeholder}
           ref={inputRef}
           type="text"
         />
       </div>
-      {hintText && <span className="usa-hint margin-top-2">{hintText}</span>}
+      {hintText && (
+        <span
+          className={classNames('usa-hint', 'margin-top-2', {
+            'no-wrap': useHintNoWrap,
+          })}
+        >
+          {hintText}
+        </span>
+      )}
     </FormGroup>
   );
 };

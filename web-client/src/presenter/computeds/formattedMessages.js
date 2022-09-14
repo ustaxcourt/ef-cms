@@ -1,54 +1,58 @@
-import { formatDateIfToday } from './formattedWorkQueue';
+import {
+  applyFiltersToCompletedMessages,
+  applyFiltersToMessages,
+  getFormattedMessages,
+} from '../utilities/processFormattedMessages';
 import { state } from 'cerebral';
 
-export const getFormattedMessages = ({ applicationContext, messages }) => {
-  const formattedCaseMessages = messages
-    .map(message => ({
-      ...message,
-      completedAtFormatted: formatDateIfToday(
-        message.completedAt,
-        applicationContext,
-      ),
-      createdAtFormatted: formatDateIfToday(
-        message.createdAt,
-        applicationContext,
-      ),
-      messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
-    }))
-    .sort((a, b) => {
-      return a.createdAt.localeCompare(b.createdAt);
-    });
-
-  const inProgressMessages = formattedCaseMessages.filter(
-    message => !message.isRepliedTo && !message.isCompleted,
-  );
-  const completedMessages = formattedCaseMessages.filter(
-    message => message.isCompleted,
-  );
-
-  completedMessages.sort((a, b) => b.completedAt.localeCompare(a.completedAt));
-
-  return {
-    completedMessages,
-    inProgressMessages,
-    messages: formattedCaseMessages,
-  };
-};
-
 export const formattedMessages = (get, applicationContext) => {
+  const tableSort = get(state.tableSort);
+
   const { completedMessages, messages } = getFormattedMessages({
     applicationContext,
+    cacheKey: get(state.messageCacheKey),
     messages: get(state.messages) || [],
+    tableSort,
   });
 
-  const currentMessageBox = get(state.messageBoxToDisplay.box);
+  const { box } = get(state.messageBoxToDisplay);
+  const { role } = get(state.user);
+  const { USER_ROLES } = applicationContext.getConstants();
 
-  if (currentMessageBox === 'outbox') {
+  if (box === 'outbox' && role !== USER_ROLES.adc) {
     messages.reverse();
   }
+  const hasMessages = messages.length > 0;
 
-  return {
+  let showFilters = role === USER_ROLES.adc;
+
+  let sharedComputedResult = {
     completedMessages,
+    hasMessages,
     messages,
+    showFilters,
   };
+
+  if (showFilters) {
+    const messageFilterResults = applyFiltersToMessages({
+      messages,
+      screenMetadata: get(state.screenMetadata),
+    });
+
+    const completedMessageFilterResults = applyFiltersToCompletedMessages({
+      completedMessages,
+      screenMetadata: get(state.screenMetadata),
+    });
+
+    sharedComputedResult = {
+      ...sharedComputedResult,
+      ...messageFilterResults.filterValues,
+      ...completedMessageFilterResults.filterValues,
+      completedMessages:
+        completedMessageFilterResults.filteredCompletedMessages,
+      messages: messageFilterResults.filteredMessages,
+    };
+  }
+
+  return sharedComputedResult;
 };

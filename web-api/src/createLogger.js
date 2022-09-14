@@ -3,17 +3,37 @@ const combine = require('logform/combine');
 const errors = require('logform/errors');
 const json = require('logform/json');
 const printf = require('logform/printf');
+const util = require('util');
 const {
   config,
   createLogger: createWinstonLogger,
   format,
   transports,
 } = require('winston');
-const { cloneDeep, unset } = require('lodash');
+const { cloneDeep, isEqual, unset } = require('lodash');
 
-const redact = format(logEntry => {
+exports.redact = format(logEntry => {
   const copy = cloneDeep(logEntry);
-  ['user.token', 'request.headers.authorization'].forEach(k => unset(copy, k));
+  [
+    'user.token',
+    'request.headers.authorization',
+    'request.headers.Authorization',
+  ].forEach(k => unset(copy, k));
+  return copy;
+});
+
+exports.removeDuplicateLogInformation = format(logEntry => {
+  const copy = cloneDeep(logEntry);
+
+  if (!copy.context) return copy;
+
+  // check in .context to see if any of the keys contain what we already have in the root
+  for (const key of Object.keys(copy.context)) {
+    if (isEqual(copy[key], copy.context[key])) {
+      delete copy.context[key];
+    }
+  }
+
   return copy;
 });
 
@@ -26,7 +46,11 @@ exports.createLogger = (opts = {}) => {
     ...opts,
   };
 
-  const formatters = [errors({ stack: true }), redact()];
+  const formatters = [
+    errors({ stack: true }),
+    exports.redact(),
+    exports.removeDuplicateLogInformation(),
+  ];
 
   if (process.env.NODE_ENV === 'production') {
     options.format = combine(...formatters, json());
@@ -35,14 +59,7 @@ exports.createLogger = (opts = {}) => {
       ...formatters,
       colorize(),
       printf(info => {
-        const metadata = Object.assign({}, info, {
-          level: undefined,
-          message: undefined,
-        });
-
-        const stringified = JSON.stringify(metadata, null, 2);
-        const lines = stringified === '{}' ? [] : stringified.split('\n');
-
+        const lines = exports.getMetadataLines(info);
         return [`${info.level}:\t${info.message}`, ...lines].join('\n  ');
       }),
     );
@@ -53,4 +70,23 @@ exports.createLogger = (opts = {}) => {
   // alias Winston's "warning" to "warn".
   logger.warn = logger.warning;
   return logger;
+};
+
+exports.getMetadataLines = info => {
+  const metadata = Object.assign({}, info, {
+    level: undefined,
+    message: undefined,
+  });
+  // util.inspecting to avoid stringifying circular request/response error objects
+  const stringified = util.inspect(metadata, {
+    compact: false,
+    maxStringLength: null,
+  });
+  const undefinedPropertyMatcher = /.+: undefined,*/gm;
+  const stripped = stringified.replace(undefinedPropertyMatcher, '');
+  const emptyObjectMatcher = /{\s*}/gm;
+  if (stripped.match(emptyObjectMatcher)) {
+    return [];
+  }
+  return stripped.trim().split('\n');
 };
