@@ -43,12 +43,26 @@ export const PrintableWorkingCopySessionList = ({
 }) => {
   return (
     <React.Fragment className="printable-working-copy-list">
+      {/* Primary Header */}
+      <div id="primary-header">
+        <div className="us-tax-court-seal"></div>
+        <h1>United States Tax Court</h1>
+        <div className="court-address">Washington, DC 20217</div>
+        <div className="clear"></div>
+        <div>
+          <h2>{formattedTrialSession.trialLocation}</h2>
+          <h3>
+            {formattedTrialSession.formattedStartDate}
+            {formattedTrialSession.formattedEstimatedEndDate &&
+              ` - ${formattedTrialSession.formattedEstimatedEndDate}`}
+          </h3>
+        </div>
+      </div>
       <div>
         {/*TrialSessionDetailHeader*/}
         <div className="big-blue-header">
           <div className="grid-container">
             <div className="margin-bottom-1">
-              <h1 tabIndex="-1">{formattedTrialSession.trialLocation}</h1>
               <span className="usa-tag">
                 <span aria-hidden="true">
                   {formattedTrialSession.formattedTerm}:{' '}
@@ -56,13 +70,7 @@ export const PrintableWorkingCopySessionList = ({
                 </span>
               </span>
             </div>
-            <p className="margin-y-0" id="case-title">
-              <span>
-                {formattedTrialSession.formattedStartDate}
-                {formattedTrialSession.formattedEstimatedEndDate &&
-                  ` - ${formattedTrialSession.formattedEstimatedEndDate}`}
-              </span>
-            </p>
+            <p className="margin-y-0" id="case-title"></p>
           </div>
         </div>
         {/*TrialSessionWorkingCopy*/}
