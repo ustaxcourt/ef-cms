@@ -11,8 +11,8 @@ import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapA
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { setupConsolidatedCasesAction } from '../actions/caseConsolidation/setupConsolidatedCasesAction';
-import { shouldSetupConsolidatedCasesAction } from '../actions/caseConsolidation/shouldSetupConsolidatedCasesAction';
+import { setupConsolidatedCasesAction } from '../actions/CaseConsolidation/setupConsolidatedCasesAction';
+import { shouldSetupConsolidatedCasesAction } from '../actions/CaseConsolidation/shouldSetupConsolidatedCasesAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/suggestSaveForLaterValidationAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
