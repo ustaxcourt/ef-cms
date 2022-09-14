@@ -14,7 +14,6 @@
 * [Library Maintenance](/additional-resources/library-maintenance.md)
 * [Code Toggles](/additional-resources/code-toggles.md)
 * [Dates](/additional-resources/dates.md)
-* [Code Review](/additional-resources/code-review.md)
 * [Import Practitioner User](/additional-resources/importing-practitioner-users.md)
 * [Dynamo Recovery](/additional-resources/dynamodb-recovery.md)
 * [Dev Team Process](/additional-resources/development-team-process.md)
