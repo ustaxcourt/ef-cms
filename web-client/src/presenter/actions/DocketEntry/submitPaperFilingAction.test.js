@@ -4,6 +4,7 @@ import { runAction } from 'cerebral/test';
 import { submitPaperFilingAction } from './submitPaperFilingAction';
 
 describe('submitPaperFilingAction', () => {
+  const docketNumbers = ['123-45'];
   let caseDetail;
 
   beforeAll(() => {
@@ -25,6 +26,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketNumbers,
         primaryDocumentFileId: 'document-id-123',
       },
       state: {
@@ -69,6 +71,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketNumbers,
         primaryDocumentFileId: 'document-id-123',
       },
       state: {
@@ -93,6 +96,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketNumbers,
         isSavingForLater: true,
         primaryDocumentFileId: 'document-id-123',
       },
@@ -135,6 +139,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketNumbers,
         isSavingForLater: true,
       },
       state: {
@@ -217,6 +222,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketNumbers,
         isSavingForLater: true,
       },
       state: {
@@ -263,6 +269,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        docketNumbers,
         isSavingForLater: false,
       },
       state: {
@@ -306,6 +313,9 @@ describe('submitPaperFilingAction', () => {
     const result = await runAction(submitPaperFilingAction, {
       modules: {
         presenter,
+      },
+      props: {
+        docketNumbers,
       },
       state: {
         caseDetail,
