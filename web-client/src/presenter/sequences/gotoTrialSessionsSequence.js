@@ -14,6 +14,7 @@ import { setJudgeUserAction } from '../actions/setJudgeUserAction';
 import { setNotificationsAction } from '../actions/setNotificationsAction';
 import { setTrialSessionsAction } from '../actions/TrialSession/setTrialSessionsAction';
 import { setTrialSessionsFiltersAction } from '../actions/TrialSession/setTrialSessionsFiltersAction';
+import { setTrialSessionsTabsToDisplayAction } from '../actions/TrialSession/setTrialSessionsTabsToDisplayAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
@@ -22,12 +23,8 @@ const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
   closeMobileMenuAction,
   clearErrorAlertsAction,
   parallel([
-    [
-      getJudgeForCurrentUserAction,
-      setJudgeUserAction,
-      getNotificationsAction,
-      setNotificationsAction,
-    ],
+    [getJudgeForCurrentUserAction, setJudgeUserAction],
+    [getNotificationsAction, setNotificationsAction],
     [getTrialSessionsAction, setTrialSessionsAction],
     [
       getUsersInSectionAction({ section: 'judge' }),
@@ -35,6 +32,7 @@ const gotoTrialSessions = startWebSocketConnectionSequenceDecorator([
     ],
   ]),
   setTrialSessionsFiltersAction,
+  setTrialSessionsTabsToDisplayAction,
   setCurrentPageAction('TrialSessions'),
 ]);
 

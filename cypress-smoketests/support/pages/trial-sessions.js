@@ -2,7 +2,20 @@ const { faker } = require('@faker-js/faker');
 
 faker.seed(faker.datatype.number());
 
-exports.createTrialSession = testData => {
+exports.goToTrialSessions = () => {
+  cy.get('a[href="/trial-sessions"]').click();
+  cy.waitUntilSettled(50);
+  cy.get('h1').contains('Trial Sessions').should('exist');
+};
+
+exports.goToCreateTrialSession = () => {
+  cy.get('a[href="/add-a-trial-session"]').click();
+  cy.waitUntilSettled(50);
+  cy.get('h1').contains('Create Trial Session').should('exist');
+  cy.waitUntilSettled(50);
+};
+
+exports.createTrialSession = (testData, overrides = {}) => {
   const createFutureDate = () => {
     const month = faker.datatype.number({ max: 12, min: 1 });
     const day = faker.datatype.number({ max: 28, min: 1 });
@@ -13,9 +26,6 @@ exports.createTrialSession = testData => {
     return `${month}/${day}/${year}`;
   };
 
-  cy.get('a[href="/trial-sessions"]').click();
-  cy.get('a[href="/add-a-trial-session"]').click();
-
   // session information
   cy.get('#start-date-date').type(createFutureDate());
   cy.get('#start-time-hours')
@@ -23,7 +33,7 @@ exports.createTrialSession = testData => {
     .type(faker.datatype.number({ max: 11, min: 6 }));
   cy.get('#start-time-minutes')
     .clear()
-    .type(faker.random.arrayElement(['00', '15', '30', '45']));
+    .type(faker.helpers.arrayElement(['00', '15', '30', '45']));
   cy.get('label[for="startTimeExtension-pm"]').click();
   cy.get('label[for="session-type-Hybrid"]').click();
   cy.get('#max-cases').type(faker.datatype.number({ max: 100, min: 10 }));
@@ -39,10 +49,14 @@ exports.createTrialSession = testData => {
 
   // session assignments
   cy.get('#judgeId').select(testData.judgeName || 'Foley');
-  cy.get('#chambers-phone-number').type(faker.phone.phoneNumber());
+  cy.get(`#judgeId option:contains(${overrides.offboardedJudge})`).should(
+    'not.exist',
+  );
+
+  cy.get('#chambers-phone-number').type(faker.phone.number());
   cy.get('#trial-clerk').select(testData.trialClerk || 'Test trialclerk1');
-  cy.get('#court-reporter').type(faker.name.findName());
-  cy.get('#irs-calendar-administrator').type(faker.name.findName());
+  cy.get('#court-reporter').type(faker.name.fullName());
+  cy.get('#irs-calendar-administrator').type(faker.name.fullName());
   cy.get('#notes').type(faker.company.catchPhrase());
 
   cy.get('#submit-trial-session').click();
@@ -58,6 +72,7 @@ exports.createTrialSession = testData => {
 
 exports.goToTrialSession = trialSessionId => {
   cy.goToRoute(`/trial-session-detail/${trialSessionId}`);
+  cy.get('.big-blue-header').should('exist');
 };
 
 exports.setTrialSessionAsCalendared = trialSessionId => {

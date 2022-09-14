@@ -10,7 +10,6 @@ import { state } from 'cerebral';
 export const userContactUpdateProgressAction = ({ props, store }) => {
   const { completedCases, totalCases } = props;
 
-  store.set(state.userContactEditProgress.inProgress, true);
   store.set(state.userContactEditProgress.totalCases, totalCases);
   store.set(state.userContactEditProgress.completedCases, completedCases);
 };

@@ -30,7 +30,7 @@ Goldberg,Special Trial Judge,Goldberg,legacy.judge.goldberg@example.com,legacyJu
 Greaves,Judge,Travis A. Greaves,judge.greaves@example.com,judge,greavesChambers
 Gussis,Special Trial Judge,Gussis,legacy.judge.gussis@example.com,legacyJudge,legacyJudgesChambers
 Gustafson,Judge,David Gustafson,judge.gustafson@example.com,judge,gustafsonsChambers
-Guy,Special Trial Judge,"Daniel A. Guy, Jr.",stjudge.guy@example.com,judge,guysChambers
+Guy,Special Trial Judge,"Daniel A. Guy, Jr.",stjudge.guy@example.com,legacyJudge,legacyJudgesChambers
 Haines,Judge,Haines,legacy.judge.haines@example.com,legacyJudge,legacyJudgesChambers
 Halpern,Judge,James S. Halpern,judge.halpern@example.com,judge,halpernsChambers
 Hamblen,Judge,Hamblen,legacy.judge.hamblen@example.com,legacyJudge,legacyJudgesChambers

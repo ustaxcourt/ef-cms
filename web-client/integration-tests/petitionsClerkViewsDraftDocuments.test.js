@@ -33,7 +33,7 @@ describe('Petitions Clerk Views Draft Documents', () => {
 
   petitionsClerkAddsOrderToCase(cerebralTest);
   petitionsClerkAddsOrderToCase(cerebralTest);
-  petitionsClerkViewsDraftDocuments(cerebralTest, 2);
+  petitionsClerkViewsDraftDocuments(cerebralTest, 3);
 
   it('views the second document in the draft documents list', async () => {
     // reset the draft documents view meta

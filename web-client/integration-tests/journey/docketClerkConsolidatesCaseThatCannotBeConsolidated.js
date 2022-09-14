@@ -11,7 +11,7 @@ export const docketClerkConsolidatesCaseThatCannotBeConsolidated =
         'Place of trial is not the same',
       ]);
       expect(
-        cerebralTest.getState('caseDetail.consolidatedCases'),
-      ).toBeUndefined();
+        cerebralTest.getState('caseDetail.consolidatedCases').length,
+      ).toEqual(0);
     });
   };

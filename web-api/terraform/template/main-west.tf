@@ -185,22 +185,6 @@ data "aws_s3_bucket_object" "puppeteer_green_west_object" {
   provider   = aws.us-west-1
 }
 
-data "aws_elasticsearch_domain" "green_west_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.green_elasticsearch_domain
-}
-
-data "aws_elasticsearch_domain" "blue_west_elasticsearch_domain" {
-  depends_on = [
-    module.elasticsearch_alpha,
-    module.elasticsearch_beta,
-  ]
-  domain_name = var.blue_elasticsearch_domain
-}
-
 resource "aws_api_gateway_domain_name" "public_api_custom_main_west" {
   depends_on               = [aws_acm_certificate.api_gateway_cert_west]
   regional_certificate_arn = aws_acm_certificate.api_gateway_cert_west.arn
@@ -286,10 +270,11 @@ module "api-west-green" {
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
+    REGION                 = "us-west-1"
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "green"
     DYNAMODB_TABLE_NAME    = var.green_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.green_west_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.green_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-west-1"
   validate = 0
@@ -317,11 +302,16 @@ module "api-west-green" {
   create_triggers                = 0
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
-  seal_in_lower_object           = ""
-  seal_in_lower_object_hash      = ""
-  create_seal_in_lower           = 0
-  lower_env_account_id           = var.lower_env_account_id
-  prod_env_account_id            = var.prod_env_account_id
+  seal_in_lower_object      = ""
+  seal_in_lower_object_hash = ""
+  create_seal_in_lower      = 0
+  lower_env_account_id      = var.lower_env_account_id
+  prod_env_account_id       = var.prod_env_account_id
+
+  # lambda to handle bounced service email notifications
+  bounce_handler_object      = ""
+  bounce_handler_object_hash = ""
+  create_bounce_handler      = 0
 }
 
 module "api-west-blue" {
@@ -341,10 +331,11 @@ module "api-west-blue" {
   account_id                = data.aws_caller_identity.current.account_id
   zone_id                   = data.aws_route53_zone.zone.id
   lambda_environment = merge(data.null_data_source.locals.outputs, {
+    REGION                 = "us-west-1"
     DYNAMODB_ENDPOINT      = "dynamodb.us-west-1.amazonaws.com"
     CURRENT_COLOR          = "blue"
     DYNAMODB_TABLE_NAME    = var.blue_table_name
-    ELASTICSEARCH_ENDPOINT = data.aws_elasticsearch_domain.blue_west_elasticsearch_domain.endpoint
+    ELASTICSEARCH_ENDPOINT = length(regexall(".*beta.*", var.blue_elasticsearch_domain)) > 0 ? module.elasticsearch_beta[0].endpoint : module.elasticsearch_alpha[0].endpoint
   })
   region   = "us-west-1"
   validate = 0
@@ -372,9 +363,14 @@ module "api-west-blue" {
   create_triggers                = 0
 
   # lambda to seal cases in lower environment (only deployed to lower environments)
-  seal_in_lower_object           = ""
-  seal_in_lower_object_hash      = ""
-  create_seal_in_lower           = 0
-  lower_env_account_id           = var.lower_env_account_id
-  prod_env_account_id            = var.prod_env_account_id
+  seal_in_lower_object      = ""
+  seal_in_lower_object_hash = ""
+  create_seal_in_lower      = 0
+  lower_env_account_id      = var.lower_env_account_id
+  prod_env_account_id       = var.prod_env_account_id
+
+  # lambda to handle bounced service email notifications
+  bounce_handler_object      = ""
+  bounce_handler_object_hash = ""
+  create_bounce_handler      = 0
 }

@@ -10,7 +10,7 @@ const { remove } = require('../requests');
 exports.deleteAuthCookieInteractor = applicationContext => {
   return remove({
     applicationContext,
-    endpoint: process.env.IS_LOCAL ? '/auth/login' : '/auth/auth/login',
+    endpoint: '/auth/login',
     options: {
       withCredentials: true,
     },

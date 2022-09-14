@@ -1,4 +1,4 @@
-import { waitForLoadingComponentToHide } from '../helpers';
+import { waitForExpectedItem, waitForLoadingComponentToHide } from '../helpers';
 
 export const petitionsClerkCompletesAndSetsTrialSession = (
   cerebralTest,
@@ -59,9 +59,14 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
 
     await cerebralTest.runSequence('setTrialSessionCalendarSequence');
 
-    await waitForLoadingComponentToHide(cerebralTest);
+    await waitForLoadingComponentToHide({ cerebralTest });
 
     if (overrides.hasPaper) {
+      await waitForExpectedItem({
+        cerebralTest,
+        currentItem: 'currentPage',
+        expectedItem: 'PrintPaperTrialNotices',
+      });
       expect(cerebralTest.getState('currentPage')).toEqual(
         'PrintPaperTrialNotices',
       );
@@ -72,8 +77,15 @@ export const petitionsClerkCompletesAndSetsTrialSession = (
       expect(cerebralTest.getState('currentPage')).toEqual(
         'TrialSessionDetail',
       );
+
+      const expectedAlertMessage = 'Eligible cases set for trial.';
+      await waitForExpectedItem({
+        cerebralTest,
+        currentItem: 'alertSuccess.message',
+        expectedItem: expectedAlertMessage,
+      });
       expect(cerebralTest.getState('alertSuccess')).toEqual({
-        message: 'Eligible cases set for trial.',
+        message: expectedAlertMessage,
       });
     }
   });

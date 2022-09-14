@@ -7,15 +7,15 @@ import { withAppContextDecorator } from '../../src/withAppContext';
 
 const { VALIDATION_ERROR_MESSAGES } = CaseAssociationRequestFactory;
 
-const caseDetailHeaderHelper = withAppContextDecorator(
-  caseDetailHeaderHelperComputed,
-);
-const requestAccessHelper = withAppContextDecorator(
-  requestAccessHelperComputed,
-);
-
 export const practitionerRequestsAccessToCase = (cerebralTest, fakeFile) => {
   return it('Practitioner requests access to case', async () => {
+    const caseDetailHeaderHelper = withAppContextDecorator(
+      caseDetailHeaderHelperComputed,
+    );
+    const requestAccessHelper = withAppContextDecorator(
+      requestAccessHelperComputed,
+    );
+
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
     });
@@ -146,8 +146,15 @@ export const practitionerRequestsAccessToCase = (cerebralTest, fakeFile) => {
     expect(cerebralTest.getState('form.documentTitle')).toEqual(
       'Limited Entry of Appearance for Petrs. Mona Schultz & Jimothy Schultz',
     );
+
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await cerebralTest.runSequence('submitCaseAssociationRequestSequence');
+
+    const createdDocketEntry = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .find(entry => entry.eventCode === 'LEA');
+
+    expect(createdDocketEntry.filedBy).toEqual('Test Private Practitioner');
   });
 };

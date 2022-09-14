@@ -1,6 +1,7 @@
 const jwt = require('jsonwebtoken');
 const {
   getAuthHeader,
+  getConnectionIdFromEvent,
   getUserFromAuthHeader,
   handle,
   redirect,
@@ -449,5 +450,14 @@ describe('redirect', () => {
       headers: EXPECTED_HEADERS,
       statusCode: '400',
     });
+  });
+});
+
+describe('getConnectionIdFromEvent', () => {
+  it('should return clientConnectionId from queryStringParameters if it exists', async () => {
+    const response = await getConnectionIdFromEvent({
+      queryStringParameters: { clientConnectionId: 'abc-123' },
+    });
+    expect(response).toEqual('abc-123');
   });
 });

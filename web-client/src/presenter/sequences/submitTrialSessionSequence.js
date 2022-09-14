@@ -17,7 +17,12 @@ import { validateTrialSessionAction } from '../actions/TrialSession/validateTria
 export const submitTrialSessionSequence = [
   clearAlertsAction,
   startShowValidationAction,
-  getComputedFormDateFactoryAction(null),
+  getComputedFormDateFactoryAction('startDate', null, 'computedStartDate'),
+  getComputedFormDateFactoryAction(
+    'estimatedEndDate',
+    null,
+    'computedEstimatedEndDate',
+  ),
   computeTrialSessionFormDataAction,
   validateTrialSessionAction,
   {

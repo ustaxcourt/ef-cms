@@ -71,6 +71,12 @@ Case.VALIDATION_ERROR_MESSAGES = {
     'Your Filing Fee Waiver file size is empty',
   ],
   caseCaption: 'Enter a case caption',
+  caseNote: [
+    {
+      contains: 'must be less than or equal to',
+      message: 'Limit is 9000 characters. Enter 9000 or fewer characters.',
+    },
+  ],
   caseType: 'Select a case type',
   docketEntries: 'At least one valid docket entry is required',
   docketNumber: 'Docket number is required',
@@ -480,9 +486,11 @@ Case.VALIDATION_RULES = {
   caseCaption: JoiValidationConstants.CASE_CAPTION.required().description(
     'The name of the party bringing the case, e.g. "Carol Williams, Petitioner," "Mark Taylor, Incompetent, Debra Thomas, Next Friend, Petitioner," or "Estate of Test Taxpayer, Deceased, Petitioner." This is the first half of the case title.',
   ),
-  caseNote: JoiValidationConstants.STRING.max(500)
+  caseNote: JoiValidationConstants.STRING.max(9000)
     .optional()
-    .meta({ tags: ['Restricted'] }),
+    .meta({
+      tags: ['Restricted'],
+    }),
   caseType: JoiValidationConstants.STRING.valid(...CASE_TYPES).required(),
   closedDate: JoiValidationConstants.ISO_DATE.when('status', {
     is: CASE_STATUS_TYPES.closed,
@@ -927,17 +935,11 @@ Case.prototype.archiveDocketEntry = function (
  *
  * @param {string} correspondence the correspondence to archive
  */
-Case.prototype.archiveCorrespondence = function (
-  correspondence,
-  { applicationContext },
-) {
-  const correspondenceToArchive = new Correspondence(correspondence, {
-    applicationContext,
-  });
-  correspondenceToArchive.archived = true;
-  this.archivedCorrespondences.push(correspondenceToArchive);
+Case.prototype.archiveCorrespondence = function (correspondenceEntity) {
+  correspondenceEntity.archived = true;
+  this.archivedCorrespondences.push(correspondenceEntity);
   this.deleteCorrespondenceById({
-    correspondenceId: correspondenceToArchive.correspondenceId,
+    correspondenceId: correspondenceEntity.correspondenceId,
   });
 };
 
@@ -1706,6 +1708,19 @@ const getOtherFilers = function (rawCase) {
     p =>
       p.contactType === CONTACT_TYPES.participant ||
       p.contactType === CONTACT_TYPES.intervenor,
+  );
+};
+
+/**
+ * Checks if the provided userId is a private practitioner or irs practitioner on the case.
+ *
+ * @param {string} userId the userId of the user to check
+ * @returns  {boolean} if the userId is a private practitioner or irs practitioner on the case
+ */
+Case.prototype.isPractitioner = function (userId) {
+  return (
+    this.privatePractitioners.some(p => p.userId === userId) ||
+    this.irsPractitioners.some(p => p.userId === userId)
   );
 };
 

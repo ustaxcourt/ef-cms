@@ -42,7 +42,9 @@ module.exports.createOrder = async ({ docketNumber }) => {
       await applicationContext
         .getUseCases()
         .fileCourtIssuedDocketEntryInteractor(applicationContext, {
+          docketNumbers: [docketNumber],
           documentMeta: documentMetadata,
+          subjectDocketNumber: docketNumber,
         });
 
       await applicationContext
@@ -50,6 +52,7 @@ module.exports.createOrder = async ({ docketNumber }) => {
         .serveCourtIssuedDocumentInteractor(applicationContext, {
           docketEntryId,
           docketNumber,
+          subjectCaseDocketNumber: docketNumber,
         });
 
       return docketEntryId;

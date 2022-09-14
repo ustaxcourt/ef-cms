@@ -42,8 +42,8 @@ describe('ipLimiter', () => {
       res,
       next,
     );
-    expect(statusMock).toBeCalledWith(429);
-    expect(next).not.toBeCalled();
+    expect(statusMock).toHaveBeenCalledWith(429);
+    expect(next).not.toHaveBeenCalled();
     expect(jsonMock.mock.calls[0][0]).toMatchObject({
       message: 'you are only allowed 15 requests in a 60 second window time',
       type: 'ip-limiter',
@@ -71,7 +71,7 @@ describe('ipLimiter', () => {
       res,
       next,
     );
-    expect(next).toBeCalled();
+    expect(next).toHaveBeenCalled();
   });
 
   it('should delete the limiter key if expires at is passed', async () => {
@@ -97,8 +97,8 @@ describe('ipLimiter', () => {
     );
     expect(
       applicationContext.getPersistenceGateway().deleteKeyCount,
-    ).toBeCalled();
-    expect(next).toBeCalled();
+    ).toHaveBeenCalled();
+    expect(next).toHaveBeenCalled();
   });
 
   it('should be able to be invoked exactly 15 times before locking next if limit is not reached', async () => {
@@ -144,7 +144,7 @@ describe('ipLimiter', () => {
       next,
     );
 
-    expect(next).toBeCalledTimes(15);
+    expect(next).toHaveBeenCalledTimes(15);
     // the 16th call should have failed and not invoked next
     expect(next.mock.calls[15]).toBeUndefined();
     expect(statusMock.mock.calls[0]).toBeDefined();

@@ -1,4 +1,5 @@
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
+import { waitForExpectedItem, waitForLoadingComponentToHide } from '../helpers';
 
 const { STATUS_TYPES } = applicationContext.getConstants();
 
@@ -26,15 +27,21 @@ export const docketClerkCreatesDocketEntryForSignedStipulatedDecision =
       expect(cerebralTest.getState('validationErrors')).toEqual({});
 
       await cerebralTest.runSequence(
-        'serveCourtIssuedDocumentFromDocketEntrySequence',
+        'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
       );
-      expect(cerebralTest.getState('currentPage')).toEqual(
-        'CaseDetailInternal',
-      );
-      const documents = cerebralTest
+
+      await waitForLoadingComponentToHide({ cerebralTest });
+
+      await waitForExpectedItem({
+        cerebralTest,
+        currentItem: 'currentPage',
+        expectedItem: 'CaseDetailInternal',
+      });
+
+      const docketEntries = cerebralTest
         .getState('caseDetail.docketEntries')
         .filter(d => d.isOnDocketRecord);
-      expect(documents.length).toEqual(4);
+      expect(docketEntries.length).toEqual(5);
       const stipDecisionDocument = cerebralTest
         .getState('caseDetail.docketEntries')
         .find(d => d.documentType === 'Stipulated Decision');

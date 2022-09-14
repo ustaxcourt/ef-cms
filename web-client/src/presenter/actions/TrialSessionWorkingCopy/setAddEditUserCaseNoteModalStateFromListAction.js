@@ -23,14 +23,11 @@ export const setAddEditUserCaseNoteModalStateFromListAction = ({
     'notes',
   ]);
 
-  const caseDetail =
-    find(get(state.trialSession.calendaredCases), {
-      docketNumber,
-    }) || {};
+  const caseDetail = find(get(state.trialSession.calendaredCases), {
+    docketNumber,
+  });
 
-  const caseTitle = applicationContext.getCaseTitle(
-    caseDetail.caseCaption || '',
-  );
+  const caseTitle = applicationContext.getCaseTitle(caseDetail.caseCaption);
 
   store.set(state.modal.caseTitle, caseTitle);
   store.set(state.modal.docketNumber, docketNumber);

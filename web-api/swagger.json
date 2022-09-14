@@ -1180,55 +1180,11 @@
         }
       }
     },
-    "/cases/open": {
+    "/cases": {
       "get": {
         "tags": ["cases"],
-        "summary": "Retrieve open cases",
-        "description": "Retrieve open cases.\n",
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "schema": {
-              "$ref": "#/definitions/case"
-            }
-          }
-        },
-        "security": [
-          {
-            "CognitoUserPool": []
-          }
-        ]
-      },
-      "options": {
-        "consumes": ["application/json"],
-        "produces": ["application/json"],
-        "responses": {
-          "200": {
-            "description": "200 response",
-            "headers": {
-              "Access-Control-Allow-Origin": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Methods": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Credentials": {
-                "type": "string"
-              },
-              "Access-Control-Allow-Headers": {
-                "type": "string"
-              }
-            }
-          }
-        }
-      }
-    },
-    "/cases/closed": {
-      "get": {
-        "tags": ["cases"],
-        "summary": "Retrieve closed cases",
-        "description": "Retrieve closed cases.\n",
+        "summary": "Retrieve open and closed cases for the currently authenticated user",
+        "description": "Retrieve open and closed cases for the currently authenticated user.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {
@@ -2055,6 +2011,58 @@
             "description": "200 response",
             "schema": {
               "$ref": "#/definitions/documentContents"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{docketEntryId}/append-pdf": {
+      "parameters": [
+        {
+          "name": "docketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["case-documents"],
+        "summary": "appends a form pdf to the document with the corresponding docketEntryId",
+        "description": "Appends a form pdf to the document with the corresponding docketEntryId.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "$ref": "#/definitions/document"
             }
           }
         },
@@ -4422,6 +4430,61 @@
         "tags": ["workitems"],
         "summary": "creates a coversheet and prepends it to the existing s3 document",
         "description": "creates a coversheet and prepends it to the existing s3 document.\n",
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response"
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/case-documents/{docketNumber}/{motionDocketEntryId}/stamp": {
+      "parameters": [
+        {
+          "name": "docketNumber",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "name": "motionDocketEntryId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        }
+      ],
+      "post": {
+        "tags": ["docketentries"],
+        "summary": "creates a stamped order.",
+        "description": "creates a stamped order.\n",
         "produces": ["application/json"],
         "responses": {
           "200": {

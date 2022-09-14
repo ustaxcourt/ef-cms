@@ -8,6 +8,21 @@ describe('updateUserContactInformationAction', () => {
     presenter.providers.applicationContext = applicationContext;
   });
 
+  it('should set userContactEditProgress.inProgress to true', async () => {
+    const result = await runAction(updateUserContactInformationAction, {
+      modules: {
+        presenter,
+      },
+      state: {
+        form: {
+          contact: { address1: '999 Jump St' },
+          firmName: 'testing',
+        },
+      },
+    });
+    expect(result.state.userContactEditProgress.inProgress).toBe(true);
+  });
+
   it('should call the use case to update the user contact', async () => {
     await runAction(updateUserContactInformationAction, {
       modules: {

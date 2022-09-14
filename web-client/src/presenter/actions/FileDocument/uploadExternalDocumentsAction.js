@@ -1,6 +1,15 @@
 import { setupPercentDone } from '../createCaseFromPaperAction';
 import { state } from 'cerebral';
 
+const addCoversheet = ({ applicationContext, docketEntryId, docketNumber }) => {
+  return applicationContext
+    .getUseCases()
+    .addCoversheetInteractor(applicationContext, {
+      docketEntryId,
+      docketNumber,
+    });
+};
+
 /**
  * upload document to s3.
  *
@@ -17,13 +26,30 @@ export const uploadExternalDocumentsAction = async ({
   path,
   store,
 }) => {
+  const { PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP } =
+    applicationContext.getConstants();
+
   const { docketNumber } = get(state.caseDetail);
   const form = get(state.form);
+
+  let privatePractitioners = null;
+  let { filers } = form;
+  if (
+    PRACTITIONER_ASSOCIATION_DOCUMENT_TYPES_MAP.filter(
+      d => d.filedByPractitioner,
+    )
+      .map(item => item.eventCode)
+      .includes(form.eventCode)
+  ) {
+    privatePractitioners = form.practitioner;
+  }
 
   const documentMetadata = {
     ...form,
     docketNumber,
+    filers,
     isFileAttached: true,
+    privatePractitioners,
   };
 
   const documentFiles = {
@@ -49,9 +75,9 @@ export const uploadExternalDocumentsAction = async ({
     });
   }
 
-  const progressFunctions = setupPercentDone(documentFiles, store);
-
   try {
+    const progressFunctions = setupPercentDone(documentFiles, store);
+
     const { caseDetail, docketEntryIdsAdded } = await applicationContext
       .getUseCases()
       .uploadExternalDocumentsInteractor(applicationContext, {
@@ -60,17 +86,8 @@ export const uploadExternalDocumentsAction = async ({
         progressFunctions,
       });
 
-    const addCoversheet = docketEntryId => {
-      return applicationContext
-        .getUseCases()
-        .addCoversheetInteractor(applicationContext, {
-          docketEntryId,
-          docketNumber: caseDetail.docketNumber,
-        });
-    };
-
     for (let docketEntryId of docketEntryIdsAdded) {
-      await addCoversheet(docketEntryId);
+      await addCoversheet({ applicationContext, docketEntryId, docketNumber });
     }
 
     return path.success({

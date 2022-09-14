@@ -29,6 +29,6 @@ describe('getPdfFromUrlAction', () => {
     expect(result.output).toMatchObject(mockFile);
     expect(
       applicationContext.getUseCases().getPdfFromUrlInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
   });
 });

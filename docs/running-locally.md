@@ -16,7 +16,7 @@ After installing git, be sure to clone the project locally:
 `git clone git@github.com:flexion/ef-cms.git`
 
 
-### Node v14.16.0
+### Node v14.19.0
 
 All of our application code is built using Javascript: 
 
@@ -24,8 +24,8 @@ All of our application code is built using Javascript:
 - Our backend APIs are written using express and a serverless wrapper.
 
 Because of this, you will need to make sure you node and npm installed locked to the following versions:
-    - Node v14.16.0
-    - npm v6.14.11
+    - Node v14.19.0
+    - npm v6.14.16
 
 As of 03/17/22, AWS Lambda only supports up to [`nodejs14.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
@@ -62,6 +62,12 @@ tfenv use 1.1.0
 
 !> Before running terraform on your workspace, double check you are on the correct version.
 
+### Circleci
+Since we use circle ci in our CI/CD process, we using a husky pre-commit to validate our config file.  Because of this, you'll need to install this circleci package.
+
+```bash
+brew install circleci
+```
 
 ## Getting Running
 
@@ -69,7 +75,7 @@ All of the scripts needed to run this project should be outlined in our [package
 
 ### Checkout Develop
 
-You'd want to make sure you are on the `flexion/develop` branch before you install the npm dependencies or try to start the services.
+You'd want to make sure you are on the `ustaxcourt/staging` branch before you install the npm dependencies or try to start the services.
 
 
 ### Install the NPM Depedencies
@@ -149,4 +155,4 @@ Within Docker, you should allocate 2+ CPUs, 8+ GB of RAM, and 4+ GB of swap. Wit
 
 ## Troubleshooting
 
-Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `flexion/develop` is recommended.
+Hopefully everything will work fine, but if you have issues logging in, double check that your API didn't throw errors when trying to initialize.  Check your network tab or browser console for any errors when trying to access the localhost:4000 API.  Also verify you are on the correct branch. `ustaxcourt/staging` is recommended.

@@ -10,6 +10,7 @@ describe('CoverSheet', () => {
         caseCaptionExtension="Petitioner"
         caseTitle="Captain Fantastic"
         docketNumberWithSuffix="123-45S"
+        index="33"
       />,
     );
 
@@ -20,6 +21,7 @@ describe('CoverSheet', () => {
     expect(wrapper.find('#docket-number').text()).toContain(
       'Docket No. 123-45S',
     );
+    expect(wrapper.find('#docket-number').text()).toContain('Document No. 33');
   });
 
   it('renders the received date when received date is available', () => {

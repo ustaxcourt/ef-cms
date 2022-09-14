@@ -3,14 +3,16 @@ const { getJudgeWithTitle } = require('./getJudgeWithTitle');
 
 describe('getJudgeWithTitle', () => {
   const mockJudgeUserName = 'Judy';
-  const mockJudgesFromPersistence = [
-    { judgeTitle: 'Special Trial Judge', name: 'Judy' },
-  ];
+  const mockJudge = {
+    judgFullName: 'Judifer Justice Judy',
+    judgeTitle: 'Special Trial Judge',
+    name: 'Judy',
+  };
 
   beforeAll(() => {
     applicationContext
       .getPersistenceGateway()
-      .getUsersInSection.mockReturnValue(mockJudgesFromPersistence);
+      .getUsersInSection.mockReturnValue([mockJudge]);
   });
 
   it('retrieves a list of judges from persistence', async () => {
@@ -28,7 +30,18 @@ describe('getJudgeWithTitle', () => {
       applicationContext,
       judgeUserName: mockJudgeUserName,
     });
-    expect(result).toEqual('Special Trial Judge Judy');
+
+    expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.name}`);
+  });
+
+  it('should return the found judge full name with title when useFullName is true', async () => {
+    const result = await getJudgeWithTitle({
+      applicationContext,
+      judgeUserName: mockJudgeUserName,
+      useFullName: true,
+    });
+
+    expect(result).toEqual(`${mockJudge.judgeTitle} ${mockJudge.fullName}`);
   });
 
   it('throws an error when the specified judge is not found in persistence', async () => {

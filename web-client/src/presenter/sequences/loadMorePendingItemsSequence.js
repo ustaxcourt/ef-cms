@@ -1,4 +1,4 @@
-import { fetchPendingItemsSequence } from '../sequences/Pending/fetchPendingItemsSequence';
+import { fetchPendingItemsSequence } from './Pending/fetchPendingItemsSequence';
 import { incrementPendingItemsPageAction } from '../actions/PendingItems/incrementPendingItemsPageAction';
 
 export const loadMorePendingItemsSequence = [

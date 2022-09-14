@@ -49,6 +49,7 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
   this.courtReporter = rawSession.courtReporter;
   this.courthouseName = rawSession.courthouseName;
   this.createdAt = rawSession.createdAt || createISODateString();
+  this.estimatedEndDate = rawSession.estimatedEndDate || null;
   this.irsCalendarAdministrator = rawSession.irsCalendarAdministrator;
   this.isCalendared = rawSession.isCalendared || false;
   this.joinPhoneNumber = rawSession.joinPhoneNumber;
@@ -98,6 +99,13 @@ TrialSession.prototype.init = function (rawSession, { applicationContext }) {
 };
 
 TrialSession.VALIDATION_ERROR_MESSAGES = {
+  estimatedEndDate: [
+    {
+      contains: 'must be greater than or equal to',
+      message: 'Enter a valid estimated end date',
+    },
+    'Enter a valid estimated end date',
+  ],
   maxCases: 'Enter a valid number of maximum cases',
   postalCode: [
     {
@@ -169,6 +177,9 @@ TrialSession.validationRules = {
     courthouseName: JoiValidationConstants.STRING.max(100).allow('').optional(),
     createdAt: JoiValidationConstants.ISO_DATE.optional(),
     entityName: JoiValidationConstants.STRING.valid('TrialSession').required(),
+    estimatedEndDate: JoiValidationConstants.ISO_DATE.optional()
+      .min(joi.ref('startDate'))
+      .allow(null),
     irsCalendarAdministrator: JoiValidationConstants.STRING.max(100).optional(),
     isCalendared: joi.boolean().required(),
     joinPhoneNumber: stringRequiredForRemoteProceedings,
