@@ -6,7 +6,6 @@ const {
 const {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
-  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
 } = require('../../entities/EntityConstants');
 const {
   createISODateString,
@@ -89,13 +88,6 @@ export const serveExternallyFiledDocumentInteractor = async (
     throw new Error('Docket entry is already being served');
   }
 
-  // shouldn't be showing the modal but it is, but at least it's
-  // not serving on the non-lead case for these event codes
-  const eventCodeCanOnlyBeServedOnSubjectCase =
-    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES.includes(
-      originalSubjectDocketEntry.eventCode,
-    );
-
   const consolidateCaseDuplicateDocketEntries = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
@@ -103,10 +95,7 @@ export const serveExternallyFiledDocumentInteractor = async (
         ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
     });
 
-  if (
-    eventCodeCanOnlyBeServedOnSubjectCase ||
-    !consolidateCaseDuplicateDocketEntries
-  ) {
+  if (!consolidateCaseDuplicateDocketEntries) {
     docketNumbers = [subjectCaseDocketNumber];
   }
 
