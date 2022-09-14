@@ -96,7 +96,7 @@ import {
   prepareDateFromString,
   validateDateAndCreateISO,
 } from '../../shared/src/business/utilities/DateHandler';
-import { canConsolidateInteractor } from '../../shared/src/business/useCases/CaseConsolidation/canConsolidateInteractor';
+import { canConsolidateInteractor } from '../../shared/src/business/useCases/caseConsolidation/canConsolidateInteractor';
 import { canSetTrialSessionAsCalendaredInteractor } from '../../shared/src/business/useCases/trialSessions/canSetTrialSessionAsCalendaredInteractor';
 import { caseAdvancedSearchInteractor } from '../../shared/src/proxies/caseAdvancedSearchProxy';
 import { checkEmailAvailabilityInteractor } from '../../shared/src/proxies/users/checkEmailAvailabilityProxy';
