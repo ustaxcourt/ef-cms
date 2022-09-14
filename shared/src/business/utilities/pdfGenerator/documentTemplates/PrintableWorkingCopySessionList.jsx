@@ -1,6 +1,7 @@
-import { SessionNotesSection } from '../components/SessionNotesSection';
-
 const React = require('react');
+import { PrimaryHeader } from '../components/PrimaryHeader';
+import { ReportsHeader } from '../components/ReportsHeader';
+import { SessionNotesSection } from '../components/SessionNotesSection';
 
 const isMemberCase = formattedCase => {
   if (formattedCase.inConsolidatedGroup && !formattedCase.leadCase) {
@@ -41,23 +42,17 @@ export const PrintableWorkingCopySessionList = ({
   nameToDisplay,
   sessionNotes,
 }) => {
+  const formattedDate = formattedTrialSession.formattedEstimatedEndDate
+    ? `${formattedTrialSession.formattedStartDate} - ${formattedTrialSession.formattedEstimatedEndDate}`
+    : `${formattedTrialSession.formattedStartDate}`;
   return (
-    <React.Fragment className="printable-working-copy-list">
-      {/* Primary Header */}
-      <div id="primary-header">
-        <div className="us-tax-court-seal"></div>
-        <h1>United States Tax Court</h1>
-        <div className="court-address">Washington, DC 20217</div>
-        <div className="clear"></div>
-        <div>
-          <h2>{formattedTrialSession.trialLocation}</h2>
-          <h3>
-            {formattedTrialSession.formattedStartDate}
-            {formattedTrialSession.formattedEstimatedEndDate &&
-              ` - ${formattedTrialSession.formattedEstimatedEndDate}`}
-          </h3>
-        </div>
-      </div>
+    <div className="printable-working-copy-list">
+      <PrimaryHeader />
+      <ReportsHeader
+        subtitle={formattedDate}
+        title={formattedTrialSession.trialLocation}
+      />
+
       <div>
         {/*TrialSessionDetailHeader*/}
         <div className="big-blue-header">
@@ -165,6 +160,6 @@ export const PrintableWorkingCopySessionList = ({
           </table>
         </section>
       </div>
-    </React.Fragment>
+    </div>
   );
 };

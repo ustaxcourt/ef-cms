@@ -3,7 +3,12 @@ import {
   ROLE_PERMISSIONS,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
-
+import {
+  createISODateString,
+  formatDateString,
+  formatNow,
+  FORMATS,
+} from '../../utilities/DateHandler';
 /**
  * generatePrintableTrialSessionCopyReportInteractor
  *
@@ -25,12 +30,12 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
   }: {
     caseNotesFlag: boolean,
     filters: string[],
-    formattedCases: Case[],
+    formattedCases: TCase[],
     formattedTrialSession: TTrialSessionData,
     nameToDisplay: string,
     sessionNotes: string,
   },
-): Promise<string> => {
+): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (
@@ -40,6 +45,13 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
   }
 
   console.log('nameToDisplay*** ', nameToDisplay);
+
+  // get formattedStart time and end time and format to use Feb 16, 2023
+  const { formattedStartDate, formattedEstimatedEndDate } = formattedTrialSession;
+
+  const newFormattedStartDate = createISODateString(formattedStartDate, FORMATS.YYMDD)
+  console.log('newFormattedStartDate', newFormattedStartDate);
+  
 
   const pdf = await applicationContext
     .getDocumentGenerators()
@@ -57,7 +69,7 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
 
   const key = `trial-session-printable-copy-${applicationContext.getUniqueId()}.pdf`;
 
-  await new Promise((resolve, reject) => {
+  await new Promise<void>((resolve, reject) => {
     const documentsBucket =
       applicationContext.environment.tempDocumentsBucketName;
     const s3Client = applicationContext.getStorageClient();
