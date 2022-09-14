@@ -11,6 +11,7 @@ export const SessionInformationForm = connect(
     addTrialSessionInformationHelper: state.addTrialSessionInformationHelper,
     form: state.form,
     formattedTrialSessions: state.formattedTrialSessions,
+    updateFormValueSequence: sequences.updateFormValueSequence,
     updateTrialSessionFormDataSequence:
       sequences.updateTrialSessionFormDataSequence,
     validateTrialSessionSequence: sequences.validateTrialSessionSequence,
@@ -22,6 +23,7 @@ export const SessionInformationForm = connect(
     form,
     formattedTrialSessions,
     TRIAL_SESSION_SCOPE_TYPES,
+    updateFormValueSequence,
     updateTrialSessionFormDataSequence,
     validateTrialSessionSequence,
     validationErrors,
@@ -216,7 +218,17 @@ export const SessionInformationForm = connect(
                   year: form.estimatedEndDateYear,
                 }}
                 onBlur={validateTrialSessionSequence}
-                onChange={updateTrialSessionFormDataSequence}
+                onChange={opts => {
+                  updateTrialSessionFormDataSequence(opts);
+                  validateTrialSessionSequence();
+                }}
+                onValueChange={value => {
+                  updateFormValueSequence({
+                    key: 'estimatedEndDateText',
+                    value,
+                  });
+                  validateTrialSessionSequence();
+                }}
               />
             </div>
           </div>

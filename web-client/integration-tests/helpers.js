@@ -419,6 +419,16 @@ export const getFormattedDocumentQCSectionInbox = async cerebralTest => {
   });
 };
 
+export const getFormattedDocumentQCSectionInProgress = async cerebralTest => {
+  await cerebralTest.runSequence('chooseWorkQueueSequence', {
+    box: 'inProgress',
+    queue: 'section',
+  });
+  return runCompute(formattedWorkQueue, {
+    state: cerebralTest.getState(),
+  });
+};
+
 export const getFormattedDocumentQCMyOutbox = async cerebralTest => {
   await cerebralTest.runSequence('chooseWorkQueueSequence', {
     box: 'outbox',

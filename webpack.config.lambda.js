@@ -16,6 +16,12 @@ module.exports = {
         test: /\.(map|node)$/,
         use: ['file-loader'],
       },
+      {
+        exclude: /node_modules/,
+        // eslint-disable-next-line
+        test: /\.tsx?$/,
+        use: 'ts-loader',
+      },
     ],
   },
   optimization: {
@@ -31,7 +37,7 @@ module.exports = {
     }),
   ],
   resolve: {
-    extensions: ['.js', '.jsx'],
+    extensions: ['.js', '.jsx', '.ts', '.tsx'],
   },
   target: 'node',
 };

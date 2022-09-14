@@ -52,9 +52,9 @@ fi
 popd
 
 if [[ -n "${ELASTICSEARCH_ENDPOINT_ALPHA}" ]]; then
-  node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_ALPHA}"
+  npx ts-node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_ALPHA}"
 fi
 
 if [[ -n "${ELASTICSEARCH_ENDPOINT_BETA}" ]]; then
-  node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_BETA}"
+  npx ts-node ./web-api/elasticsearch/elasticsearch-index-settings.js "${ELASTICSEARCH_ENDPOINT_BETA}"
 fi
