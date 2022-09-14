@@ -1,5 +1,6 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { generatePrintableTrialSessionCopyReportAction } from '../actions/TrialSessionWorkingCopy/generatePrintableTrialSessionCopyReportAction';
+import { getTrialSessionWorkingCopyRedirectUrlAction } from '../actions/TrialSessionWorkingCopy/getTrialSessionWorkingCopyRedirectUrlAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
@@ -35,7 +36,6 @@ const getNameToDisplay = ({ get }) => {
 };
 
 const getCaseNotesFlagAction = ({ get }) => {
-  // const caseNotesFlag = get(state.modal.caseNotesFlag) || true;
   const caseNotesFlag = get(state.modal.caseNotesFlag);
   console.log('caseNotesFlag in sequence*** ', caseNotesFlag);
   return { caseNotesFlag };
@@ -58,16 +58,10 @@ const preparePrintableFormattedCasesAction = ({ props }) => {
   return { formattedCases };
 };
 
-const getRedirectUrlAction = ({ get }) => {
-  const trialSessionId = get(state.formattedTrialSessionDetails.trialSessionId);
-  console.log('We have the trial session id right?', trialSessionId);
-  return { redirectUrl: `/trial-session-working-copy/${trialSessionId}` };
-};
-
 export const gotoPrintableTrialSessionWorkingCopySequence =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
-    getRedirectUrlAction,
+    getTrialSessionWorkingCopyRedirectUrlAction,
     setRedirectUrlAction,
     clearModalAction,
     getFormattedTrialSessionDetails,
