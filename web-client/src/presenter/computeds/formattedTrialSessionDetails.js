@@ -24,6 +24,9 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
         .formatPhoneNumber(formattedTrialSession.chambersPhoneNumber);
     }
 
+    formattedTrialSession.isHybridSession =
+      formattedTrialSession.sessionType === 'Hybrid';
+
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext
         .getUtilities()
