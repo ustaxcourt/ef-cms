@@ -31,6 +31,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       docketNumber: formattedCase.docketNumber,
       docketNumberWithSuffix: formattedCase.docketNumberWithSuffix,
       filingPartiesCode: formattedCase.filingPartiesCode,
+      inConsolidatedGroup: formattedCase.inConsolidatedGroup,
       irsPractitioners: formattedCase.irsPractitioners,
       leadCase: formattedCase.leadCase,
       privatePractitioners: formattedCase.privatePractitioners,
