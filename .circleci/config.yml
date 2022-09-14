@@ -140,6 +140,7 @@ jobs:
       - run:
           name: Build Typescript Api
           command: |
+            npm run build:assets
             npm run build:lambda:api
 
   e2e-pa11y:
