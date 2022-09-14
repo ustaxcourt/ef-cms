@@ -44,15 +44,6 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  console.log('nameToDisplay*** ', nameToDisplay);
-
-  // get formattedStart time and end time and format to use Feb 16, 2023
-  const { formattedStartDate, formattedEstimatedEndDate } = formattedTrialSession;
-
-  const newFormattedStartDate = createISODateString(formattedStartDate, FORMATS.YYMDD)
-  console.log('newFormattedStartDate', newFormattedStartDate);
-  
-
   const pdf = await applicationContext
     .getDocumentGenerators()
     .printableWorkingCopySessionList({
