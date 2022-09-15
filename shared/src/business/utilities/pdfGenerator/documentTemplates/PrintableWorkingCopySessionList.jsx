@@ -42,14 +42,15 @@ export const PrintableWorkingCopySessionList = ({
   nameToDisplay,
   sessionNotes,
 }) => {
-  const formattedDate = formattedTrialSession.formattedEstimatedEndDate
-    ? `${formattedTrialSession.formattedStartDate} - ${formattedTrialSession.formattedEstimatedEndDate}`
-    : `${formattedTrialSession.formattedStartDate}`;
+  const trialSessionDateRange =
+    formattedTrialSession.formattedEstimatedEndDateFull
+      ? `${formattedTrialSession.formattedStartDateFull} - ${formattedTrialSession.formattedEstimatedEndDateFull}`
+      : `${formattedTrialSession.formattedStartDateFull}`;
   return (
     <div className="printable-working-copy-list">
       <PrimaryHeader />
       <ReportsHeader
-        subtitle={formattedDate}
+        subtitle={trialSessionDateRange}
         title={formattedTrialSession.trialLocation}
       />
 

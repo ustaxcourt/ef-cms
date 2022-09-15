@@ -20,6 +20,10 @@ const getFormattedTrialSessionDetails = ({ get }) => {
 };
 
 const getTrialSessionWorkingCopyDataAction = ({ get }) => {
+  console.log(
+    'trialSessionWorkingCopy:::::',
+    get(state.trialSessionWorkingCopy),
+  );
   const { filters, sessionNotes } = get(state.trialSessionWorkingCopy);
   return { filters, sessionNotes };
 };
