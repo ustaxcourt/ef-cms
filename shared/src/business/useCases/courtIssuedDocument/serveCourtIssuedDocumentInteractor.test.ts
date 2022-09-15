@@ -185,7 +185,11 @@ describe('serveCourtIssuedDocumentInteractor', () => {
   beforeEach(() => {
     extendCase = {};
 
-    applicationContext.getCurrentUser.mockImplementation(() => docketClerkUser);
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(docketClerkUser);
+
+    applicationContext.getCurrentUser.mockReturnValue(docketClerkUser);
 
     applicationContext
       .getPersistenceGateway()
@@ -304,6 +308,7 @@ describe('serveCourtIssuedDocumentInteractor', () => {
 
     expect(updatedDocument.servedAt).toBeDefined();
     expect(updatedDocument.filingDate).toBeDefined();
+    expect(updatedDocument.leadDocketNumber).not.toBeDefined();
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();

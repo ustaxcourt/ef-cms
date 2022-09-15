@@ -68,6 +68,24 @@ export const formatWorkItem = ({
 
   const result = cloneDeep(workItem);
 
+  const inConsolidatedGroup = !!result.leadDocketNumber;
+  const inLeadCase =
+    inConsolidatedGroup && result.leadDocketNumber === result.docketNumber;
+
+  let consolidatedIconTooltipText;
+
+  if (inConsolidatedGroup) {
+    if (inLeadCase) {
+      consolidatedIconTooltipText = 'Lead case';
+    } else {
+      consolidatedIconTooltipText = 'Consolidated case';
+    }
+  }
+
+  result.inConsolidatedGroup = inConsolidatedGroup;
+  result.inLeadCase = inLeadCase;
+  result.consolidatedIconTooltipText = consolidatedIconTooltipText;
+
   result.createdAtFormatted = applicationContext
     .getUtilities()
     .formatDateString(result.createdAt, 'MMDDYY');
