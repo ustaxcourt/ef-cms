@@ -1,4 +1,4 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../test/mockCase';
 import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
@@ -8,9 +8,9 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
-import { MOCK_CASE } from '../../../test/mockCase';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
 
 describe('updateTrialSessionInteractor', () => {
   const mockUser = new User({
