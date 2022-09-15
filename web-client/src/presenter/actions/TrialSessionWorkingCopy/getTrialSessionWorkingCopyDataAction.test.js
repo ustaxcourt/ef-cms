@@ -3,7 +3,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getTrialSessionWorkingCopyDataAction', () => {
-  it('should return true', async () => {
+  it('should return filters and session notes', async () => {
     const filters = {
       aBasisReached: true,
       continued: false,
