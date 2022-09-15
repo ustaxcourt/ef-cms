@@ -36,6 +36,7 @@ export const setTrialSessionDetailsOnFormAction = ({
     },
     judgeId: props.trialSession.judge && props.trialSession.judge.userId,
     trialClerkId:
-      props.trialSession.trialClerk && props.trialSession.trialClerk.userId,
+      (props.trialSession.trialClerk && props.trialSession.trialClerk.userId) ||
+      (props.trialSession.alternateTrialClerkName && 'Other'),
   });
 };
