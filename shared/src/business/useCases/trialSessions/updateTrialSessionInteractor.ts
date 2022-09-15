@@ -2,15 +2,15 @@ import {
   CASE_STATUS_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
-import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { Case } from '../../entities/cases/Case';
-import { get } from 'lodash';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
+import { TrialSessionWorkingCopy } from '../../entities/trialSessions/TrialSessionWorkingCopy';
 import { UnauthorizedError } from '../../../errors/errors';
+import { get } from 'lodash';
 
 const updateAssociatedCaseAndSetNoticeOfChange = async ({
   applicationContext,
@@ -167,6 +167,7 @@ export const updateTrialSessionInteractor = async (
   const editableFields = {
     address1: trialSession.address1,
     address2: trialSession.address2,
+    alternateTrialClerkName: trialSession.alternateTrialClerkName,
     chambersPhoneNumber: trialSession.chambersPhoneNumber,
     city: trialSession.city,
     courtReporter: trialSession.courtReporter,

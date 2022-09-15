@@ -171,6 +171,7 @@ export const addPaperFilingInteractor = async (
     workItem.assignToUser({
       assigneeId: user.userId,
       assigneeName: user.name,
+      leadDocketNumber: caseToUpdate.leadDocketNumber,
       section: user.section,
       sentBy: user.name,
       sentBySection: user.section,
