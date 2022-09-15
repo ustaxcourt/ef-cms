@@ -8,6 +8,7 @@ import { state } from 'cerebral';
  */
 
 export const getFormattedTrialSessionCasesAction = ({ get }) => {
-  const { formattedCases } = get(state.trialSessionWorkingCopyHelper) || [];
+  const formattedCases =
+    get(state.trialSessionWorkingCopyHelper).formattedCases || [];
   return { formattedCases };
 };
