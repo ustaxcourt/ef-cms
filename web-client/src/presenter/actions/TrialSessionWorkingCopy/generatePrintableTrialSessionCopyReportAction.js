@@ -10,8 +10,6 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   applicationContext,
   props,
 }) => {
-  console.log('caseNotesFlag***', props.caseNotesFlag);
-
   const {
     caseNotesFlag,
     filters,
@@ -23,7 +21,6 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
 
   console.log('formattedTrialSessionDetails', formattedTrialSessionDetails);
 
-  //Create DTO with only the information needed for the template
   const formattedCasesDTO = formattedCases.map(formattedCase => {
     return {
       calendarNotes: formattedCase.calendarNotes,
@@ -67,6 +64,5 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
     });
 
-  console.log('pdfUrl', pdfUrl);
   return { pdfUrl };
 };
