@@ -40,6 +40,7 @@ export const addPaperFilingInteractor = async (
     primaryDocumentFileId: string;
   },
 ) => {
+  console.log('addPaperFilingInteractor', consolidatedGroupDocketNumbers);
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
