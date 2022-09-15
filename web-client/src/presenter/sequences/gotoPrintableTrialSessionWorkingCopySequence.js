@@ -1,6 +1,5 @@
 import { clearModalAction } from '../actions/clearModalAction';
 import { generatePrintableTrialSessionCopyReportAction } from '../actions/TrialSessionWorkingCopy/generatePrintableTrialSessionCopyReportAction';
-import { getTrialSessionWorkingCopyRedirectUrlAction } from '../actions/TrialSessionWorkingCopy/getTrialSessionWorkingCopyRedirectUrlAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
@@ -64,7 +63,6 @@ const preparePrintableFormattedCasesAction = ({ props }) => {
 export const gotoPrintableTrialSessionWorkingCopySequence =
   startWebSocketConnectionSequenceDecorator([
     setCurrentPageAction('Interstitial'),
-    getTrialSessionWorkingCopyRedirectUrlAction,
     setRedirectUrlAction,
     clearModalAction,
     getFormattedTrialSessionDetails,
