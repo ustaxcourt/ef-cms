@@ -1,4 +1,4 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
+import { MOCK_CASE } from '../../../test/mockCase';
 import {
   MOCK_TRIAL_INPERSON,
   MOCK_TRIAL_REMOTE,
@@ -8,9 +8,9 @@ import {
   SESSION_TYPES,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
-import { MOCK_CASE } from '../../../test/mockCase';
 import { User } from '../../entities/User';
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { updateTrialSessionInteractor } from './updateTrialSessionInteractor';
 
 describe('updateTrialSessionInteractor', () => {
   const mockUser = new User({
@@ -315,6 +315,31 @@ describe('updateTrialSessionInteractor', () => {
         userId: '200d96ac-7edc-407d-a3a7-a3e7db78b881',
       },
       trialLocation: 'Boise, Idaho',
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getTrialSessionById.mockReturnValue(MOCK_TRIAL_INPERSON);
+
+    await updateTrialSessionInteractor(applicationContext, {
+      trialSession: {
+        ...MOCK_TRIAL_INPERSON,
+        ...updatedFields,
+      },
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().updateTrialSession.mock
+        .calls[0][0].trialSessionToUpdate,
+    ).toMatchObject({
+      ...MOCK_TRIAL_INPERSON,
+      ...updatedFields,
+    });
+  });
+
+  it('should update the trial session when an alternateTrialClerkName is added and no trial clerk', async () => {
+    const updatedFields = {
+      alternateTrialClerkName: 'Incredible Hulk',
     };
 
     applicationContext
