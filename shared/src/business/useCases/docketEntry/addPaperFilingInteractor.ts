@@ -40,7 +40,6 @@ export const addPaperFilingInteractor = async (
     primaryDocumentFileId: string;
   },
 ) => {
-  console.log('addPaperFilingInteractor', consolidatedGroupDocketNumbers);
   const authorizedUser = applicationContext.getCurrentUser();
 
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY)) {
@@ -202,7 +201,7 @@ export const addPaperFilingInteractor = async (
     // todo: why save case twice? this call also does NOT validate before saving, bad????
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
-      caseToUpdate: aCaseEntity,
+      caseToUpdate: aCaseEntity.validate().toRawObject(),
     });
 
     if (readyForService) {
@@ -235,11 +234,7 @@ export const addPaperFilingInteractor = async (
     }
   }
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
+  // todo: return lead case OR subject case NOT caseEntity (could just be the last in the list)
   return { caseDetail: caseEntity.toRawObject(), paperServicePdfUrl };
 };
 
