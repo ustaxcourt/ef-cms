@@ -44,9 +44,7 @@ export const processWorkItemEntries = async ({
     };
   };
 
-  const indexRecords = await Promise.all(
-    workItemRecords.map(indexWorkItemEntry),
-  );
+  const indexRecords = workItemRecords.map(indexWorkItemEntry);
 
   const { failedRecords } = await applicationContext
     .getPersistenceGateway()
