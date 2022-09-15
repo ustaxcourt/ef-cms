@@ -19,19 +19,18 @@ const generateSelectedFilterList = filters => {
     rule122: 'Rule 122',
     setForTrial: 'Set For Trial',
     settled: 'Settled',
-    showAll: 'Show All',
     statusUnassigned: 'Status Unassigned',
     takenUnderAdvisement: 'Taken Under Advisement',
   };
   const selectedFilters = [];
 
   Object.keys(filters).map(key => {
-    if (filters[key]) {
+    if (filterMap[key]) {
       selectedFilters.push(filterMap[key]);
     }
   });
 
-  return selectedFilters.join(', ');
+  return selectedFilters;
 };
 
 export const PrintableWorkingCopySessionList = ({
@@ -46,6 +45,7 @@ export const PrintableWorkingCopySessionList = ({
     formattedTrialSession.formattedEstimatedEndDateFull
       ? `${formattedTrialSession.formattedStartDateFull} - ${formattedTrialSession.formattedEstimatedEndDateFull}`
       : `${formattedTrialSession.formattedStartDateFull}`;
+  const selectedFilters = generateSelectedFilterList(filters);
   return (
     <div className="printable-working-copy-list">
       <PrimaryHeader />
@@ -79,7 +79,35 @@ export const PrintableWorkingCopySessionList = ({
           {/*SessionNotes*/}
           <SessionNotesSection sessionNotes={sessionNotes} />
           {/*SelectedFilters*/}
-          <div>Filters Selected: {generateSelectedFilterList(filters)}</div>
+          <table>
+            <thead>
+              <tr>
+                <th
+                  aria-label="Docket Number"
+                  className="padding-left-2px no-wrap"
+                  colSpan="4"
+                >
+                  Trial Status Filters Selected
+                </th>
+                <th>Total Shown: {formattedCases.length}</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr className="border-bottom-0">
+                <td>{selectedFilters[0] || ''}</td>
+                <td>{selectedFilters[2] || ''}</td>
+                <td>{selectedFilters[4] || ''}</td>
+                <td>{selectedFilters[6] || ''}</td>
+                <td>{selectedFilters[8] || ''}</td>
+              </tr>
+              <tr>
+                <td>{selectedFilters[1] || ''}</td>
+                <td>{selectedFilters[3] || ''}</td>
+                <td>{selectedFilters[5] || ''}</td>
+                <td colSpan="2">{selectedFilters[7] || ''}</td>
+              </tr>
+            </tbody>
+          </table>
           {/*WorkingCopySessionList*/}
           <table>
             <thead>
@@ -136,14 +164,14 @@ export const PrintableWorkingCopySessionList = ({
                         {formattedCase.trialStatus || 'Unassigned'}
                       </td>
                     </tr>
-                    <tr className="case-note-row">
+                    <tr className="border-bottom-0 border-top-0">
                       <td colSpan="2"></td>
                       <td colSpan="5">
                         {formattedCase.calendarNotes &&
                           `Calendar Notes: ${formattedCase.calendarNotes}`}
                       </td>
                     </tr>
-                    <tr className="case-note-row">
+                    <tr className="border-bottom-0 border-top-0">
                       <td colSpan="2"></td>
                       <td colSpan="5">
                         {caseNotesFlag &&

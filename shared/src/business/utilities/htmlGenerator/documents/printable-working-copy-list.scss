@@ -22,10 +22,15 @@
     }
   }
 
-  .case-note-row {
+  .border-bottom-0 {
+    td {
+      border-bottom: none;
+    }
+  }
+
+  .border-top-0 {
     td {
       border-top: none;
-      border-bottom: none;
     }
   }
 
