@@ -110,7 +110,10 @@ describe('completeDocketEntryQCInteractor', () => {
   it('adds documents and workitems', async () => {
     await expect(
       completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: caseRecord.docketEntries[0],
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          leadDocketNumber: caseRecord.docketNumber,
+        },
       }),
     ).resolves.not.toThrow();
 
@@ -121,6 +124,11 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
+        .workItem,
+    ).toMatchObject({ leadDocketNumber: caseRecord.docketNumber });
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
