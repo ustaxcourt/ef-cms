@@ -513,41 +513,41 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
 
   loginAs(cerebralTest, 'docketclerk@example.com');
   docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile);
-  // it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL)', async () => {
-  //   const { formattedDocketEntriesOnDocketRecord } =
-  //     await getFormattedDocketEntriesForTest(cerebralTest);
+  it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL)', async () => {
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-  //   const entry = formattedDocketEntriesOnDocketRecord.find(
-  //     docketEntry => docketEntry.eventCode === 'APPL',
-  //   );
+    const entry = formattedDocketEntriesOnDocketRecord.find(
+      docketEntry => docketEntry.eventCode === 'APPL',
+    );
 
-  //   expect(entry).toMatchObject({
-  //     createdAtFormatted: expect.anything(),
-  //     eventCode: 'APPL',
-  //     pending: true,
-  //   });
-  // });
+    expect(entry).toMatchObject({
+      createdAtFormatted: expect.anything(),
+      eventCode: 'APPL',
+      pending: true,
+    });
+  });
 
-  // const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
+  const { SERVICE_INDICATOR_TYPES } = applicationContext.getConstants();
 
-  // docketClerkEditsServiceIndicatorForPetitioner(
-  //   cerebralTest,
-  //   SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
-  // );
+  docketClerkEditsServiceIndicatorForPetitioner(
+    cerebralTest,
+    SERVICE_INDICATOR_TYPES.SI_ELECTRONIC,
+  );
 
-  // docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile, true);
-  // it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL) on a case with paper service parties', async () => {
-  //   const { formattedDocketEntriesOnDocketRecord } =
-  //     await getFormattedDocketEntriesForTest(cerebralTest);
+  docketClerkAddsTrackedDocketEntry(cerebralTest, fakeFile, true);
+  it('verifies the docket record after filing a tracked, paper-filed docket entry (APPL) on a case with paper service parties', async () => {
+    const { formattedDocketEntriesOnDocketRecord } =
+      await getFormattedDocketEntriesForTest(cerebralTest);
 
-  //   const entry = formattedDocketEntriesOnDocketRecord.find(
-  //     docketEntry => docketEntry.eventCode === 'APPL',
-  //   );
+    const entry = formattedDocketEntriesOnDocketRecord.find(
+      docketEntry => docketEntry.eventCode === 'APPL',
+    );
 
-  //   expect(entry).toMatchObject({
-  //     createdAtFormatted: expect.anything(),
-  //     eventCode: 'APPL',
-  //     pending: true,
-  //   });
-  // });
+    expect(entry).toMatchObject({
+      createdAtFormatted: expect.anything(),
+      eventCode: 'APPL',
+      pending: true,
+    });
+  });
 });
