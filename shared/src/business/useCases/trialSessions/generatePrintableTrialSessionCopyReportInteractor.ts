@@ -1,14 +1,8 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
-import {
-  createISODateString,
-  formatDateString,
-  formatNow,
-  FORMATS,
-} from '../../utilities/DateHandler';
 /**
  * generatePrintableTrialSessionCopyReportInteractor
  *
@@ -27,15 +21,14 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     formattedTrialSession,
     sessionNotes,
   }: {
-    caseNotesFlag: boolean,
-    filters: string[],
-    formattedCases: TCase[],
-    formattedTrialSession: TTrialSessionData,
-    sessionNotes: string,
+    caseNotesFlag: boolean;
+    filters: string[];
+    formattedCases: TCase[];
+    formattedTrialSession: TTrialSessionData;
+    sessionNotes: string;
   },
 ): Promise<void> => {
   const authorizedUser = applicationContext.getCurrentUser();
-
   if (
     !isAuthorized(authorizedUser, ROLE_PERMISSIONS.TRIAL_SESSION_WORKING_COPY)
   ) {
