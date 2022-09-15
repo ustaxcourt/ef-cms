@@ -137,7 +137,7 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
       - `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
     - deploy as normal
 
-5. `docker`: Update [docker base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
+5. `docker`: [docker cypress/base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
     See [here](ci-cd.md#docker) for the documentation to create and push the updated docker container for use in CircleCI.
 
@@ -153,11 +153,11 @@ Below is a list of dependencies that are locked down due to known issues with se
     - `@fortawesome/free-regular-svg-icons`
     - `@fortawesome/fontawesome-svg-core`
 
-2. Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.com/package/s3rver). 
+2. Check if there are updates to `s3rver` above version [3.7.1](https://www.npmjs.com/package/s3rver).
     - Why is there a patch called `s3rver+3.7.1.patch`?
-      - To address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible. 
+      - To address the high severity issue exposed by `s3rver`'s dependency on `busboy` 0.3.1, which relies on `dicer` that actually has the [security issue](https://github.com/advisories/GHSA-wm7h-9275-46v2). Unfortunately, `busboy` >0.3.1, aka ^1.0.0, is incompatible with s3rver which is why there's a patch in place to make it compatible.
     - How does the patch run?
-      - This runs as part of the `npm postinstall` step. 
+      - This runs as part of the `npm postinstall` step.
     - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
 
 3. `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. `ajv` is a transitive dependency of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/8136004664?check_suite_focus=true) to failing test on 08/29/22 dependency updates.
