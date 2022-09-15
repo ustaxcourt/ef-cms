@@ -68,17 +68,36 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   });
 
   it('calls the document generator function', async () => {
+    const interactorProps = {
+      caseNotesFlag: true,
+      filters: {
+        aBasisReached: true,
+        continued: true,
+        dismissed: true,
+        recall: true,
+        rule122: true,
+        setForTrial: true,
+        settled: true,
+        showAll: true,
+        statusUnassigned: true,
+        takenUnderAdvisement: true,
+      },
+      formattedCases: [{ someprop: 'value of some prop' }],
+      formattedTrialSession: mockTrialSession,
+      sessionNotes: 'session notes',
+    };
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
-      {
-        formattedTrialSession: mockTrialSession,
-      },
+      interactorProps,
     );
 
     expect(
       applicationContext.getDocumentGenerators()
         .printableWorkingCopySessionList,
-    ).toHaveBeenCalled();
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      data: interactorProps,
+    });
   });
 
   it('uploads the pdf to s3', async () => {
