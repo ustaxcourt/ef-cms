@@ -40,11 +40,17 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     };
   });
 
+  const formattedEstimatedEndDateFull = applicationContext
+    .getUtilities()
+    .formatDateString(
+      formattedTrialSessionDetails.estimatedEndDate,
+      'MONTH_DAY_YEAR',
+    );
+
   const formattedTrialSessionDTO = {
     computedStatus: formattedTrialSessionDetails.computedStatus,
-    formattedEstimatedEndDate:
-      formattedTrialSessionDetails.formattedEstimatedEndDate,
-    formattedStartDate: formattedTrialSessionDetails.formattedStartDate,
+    formattedEstimatedEndDateFull,
+    formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,
     trialLocation: formattedTrialSessionDetails.trialLocation,
   };
