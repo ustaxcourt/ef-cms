@@ -25,14 +25,12 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     filters,
     formattedCases,
     formattedTrialSession,
-    nameToDisplay,
     sessionNotes,
   }: {
     caseNotesFlag: boolean,
     filters: string[],
     formattedCases: TCase[],
     formattedTrialSession: TTrialSessionData,
-    nameToDisplay: string,
     sessionNotes: string,
   },
 ): Promise<void> => {
@@ -53,7 +51,6 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
         filters,
         formattedCases,
         formattedTrialSession,
-        nameToDisplay,
         sessionNotes,
       },
     });

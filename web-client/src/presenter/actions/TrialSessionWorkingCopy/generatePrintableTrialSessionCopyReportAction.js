@@ -1,9 +1,10 @@
 /**
+ * generatePrintableTrialSessionCopyReportAction
  *
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context
  * @param {object} providers.props the cerebral props object
- * @returns {Promise} async action
+ * @returns {String} pdfUrl
  */
 
 export const generatePrintableTrialSessionCopyReportAction = async ({
@@ -15,7 +16,6 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     filters,
     formattedCases,
     formattedTrialSessionDetails,
-    nameToDisplay,
     sessionNotes,
   } = props;
 
@@ -47,6 +47,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   const formattedTrialSessionDTO = {
     computedStatus: formattedTrialSessionDetails.computedStatus,
     formattedEstimatedEndDateFull,
+    formattedJudge: formattedTrialSessionDetails.formattedJudge,
     formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,
     trialLocation: formattedTrialSessionDetails.trialLocation,
@@ -59,7 +60,6 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       filters,
       formattedCases: formattedCasesDTO,
       formattedTrialSession: formattedTrialSessionDTO,
-      nameToDisplay,
       sessionNotes,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
     });
