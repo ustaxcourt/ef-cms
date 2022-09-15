@@ -17,11 +17,11 @@ const printableWorkingCopySessionList = async ({
     content: trialSessionPlanningReportTemplate,
   });
 
-  // TODO: Add Judge's name to header html
+  const headerTitle = `Trial Session Copy: ${data.formattedTrialSession.trialLocation};  ${data.formattedTrialSession.formattedStartDateFull} - ${data.formattedTrialSession.formattedEstimatedEndDateFull}; ${data.formattedTrialSession.formattedJudge}`;
   const headerHtml = reactTemplateGenerator({
     componentName: 'ReportsMetaHeader',
     data: {
-      headerTitle: 'Trial Session Worksheet: Judge Someone',
+      headerTitle,
     },
   });
 
