@@ -115,7 +115,6 @@ describe('Case Consolidation Coversheets Journey', () => {
   docketClerkUploadsACourtIssuedDocument(cerebralTest, fakeFile);
   docketClerkAddsDocketEntryForTrialExhibit(cerebralTest, {
     draftOrderIndex: 0,
-    getDocketNumber: () => [case2DocketNumber],
   });
 
   it('verify the TE docket entry does not exist on other cases in the consolidated group', async () => {

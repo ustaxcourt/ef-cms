@@ -26,6 +26,7 @@ describe('addPaperFilingInteractor', () => {
 
   beforeEach(() => {
     mockCase = { ...MOCK_CASE };
+    mockCase.leadDocketNumber = mockCase.docketNumber;
 
     applicationContext
       .getPersistenceGateway()
@@ -171,6 +172,10 @@ describe('addPaperFilingInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
+    ).toMatchObject({ leadDocketNumber: mockCase.leadDocketNumber });
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();

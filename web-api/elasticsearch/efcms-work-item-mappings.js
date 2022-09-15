@@ -6,6 +6,12 @@ module.exports = {
     'associatedJudge.S': {
       type: 'text',
     },
+    case_relations: {
+      relations: {
+        case: 'workItem',
+      },
+      type: 'join',
+    },
     'completedAt.S': {
       type: 'text',
     },
@@ -13,6 +19,9 @@ module.exports = {
       type: 'text',
     },
     'docketNumber.S': {
+      type: 'keyword',
+    },
+    'docketNumberWithSuffix.S': {
       type: 'keyword',
     },
     'highPriority.BOOL': {
@@ -26,6 +35,9 @@ module.exports = {
     },
     'isRead.BOOL': {
       type: 'boolean',
+    },
+    'leadDocketNumber.S': {
+      type: 'keyword',
     },
     'pk.S': {
       type: 'keyword',
