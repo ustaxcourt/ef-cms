@@ -47,10 +47,8 @@ exports.getScannerInterface = () => {
           if (leftToLoad <= 0) {
             const interval = setInterval(() => {
               const { Dynamsoft } = window;
-              Dynamsoft.WebTwainEnv.ScanDirectly = true;
-              DWObject = Dynamsoft.WebTwainEnv.GetWebTwain(
-                'dwtcontrolContainer',
-              );
+              Dynamsoft.DWT.ScanDirectly = true;
+              DWObject = Dynamsoft.DWT.GetWebTwain('dwtcontrolContainer');
               if (!DWObject) return;
 
               clearInterval(interval);
@@ -137,7 +135,7 @@ exports.getScannerInterface = () => {
             new Promise((resolveImage, rejectImage) => {
               DWObject.ConvertToBlob(
                 [index],
-                window['EnumDWT_ImageType'].IT_JPG,
+                window.Dynamsoft.DWT.EnumDWT_ImageType.IT_JPG,
                 resolveImage,
                 rejectImage,
               );
@@ -185,8 +183,9 @@ exports.getScannerInterface = () => {
       DWObject.Resolution = 300;
       DWObject.IfDuplexEnabled = duplexEnabled;
       DWObject.IfFeederEnabled = feederEnabled;
-      DWObject.PixelType = window['EnumDWT_PixelType'].TWPT_RGB;
-      DWObject.PageSize = window['EnumDWT_CapSupportedSizes'].TWSS_A4;
+      DWObject.PixelType = window.Dynamsoft.DWT.EnumDWT_PixelType.TWPT_RGB;
+      DWObject.PageSize =
+        window.Dynamsoft.DWT.EnumDWT_CapSupportedSizes.TWSS_A4;
 
       if (feederEnabled && !DWObject.IfFeederLoaded) {
         DWObject.UnregisterEvent('OnPostAllTransfers', onScanFinished);
