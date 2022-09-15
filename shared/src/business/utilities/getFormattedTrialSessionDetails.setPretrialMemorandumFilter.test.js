@@ -1,6 +1,6 @@
 import { MOCK_CASE } from '../../test/mockCase';
 import { PARTIES_CODES } from '../entities/EntityConstants';
-import { applicationContext } from '../test/createTestApplicationContext';
+const { applicationContext } = require('../test/createTestApplicationContext');
 import { setPretrialMemorandumFiler } from './getFormattedTrialSessionDetails';
 
 describe('formattedTrialSessionDetails', () => {
@@ -26,6 +26,12 @@ describe('formattedTrialSessionDetails', () => {
     };
 
     let mockCase;
+
+    beforeEach(() => {
+      applicationContext
+        .getPersistenceGateway()
+        .getCaseByDocketNumber.mockImplementation(() => mockCase);
+    });
 
     it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
       mockCase = {
