@@ -194,4 +194,16 @@ describe('getIndexNameForRecord', () => {
 
     expect(result).toEqual('efcms-work-item');
   });
+
+  it('returns efcms-work-item for CaseWorkItemMapping records', () => {
+    const record = {
+      entityName: {
+        S: 'CaseWorkItemMapping',
+      },
+    };
+
+    const result = getIndexNameForRecord(record);
+
+    expect(result).toEqual('efcms-work-item');
+  });
 });
