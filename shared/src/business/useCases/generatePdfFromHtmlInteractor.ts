@@ -48,7 +48,7 @@ export const generatePdfFromHtmlInteractor = async (
     }
 
     const headerTemplate = `
-          <div style="font-size: 8px; width: 100%; margin: 0px 40px; margin-top: 25px;">
+          <div style="font-size: 8px; width: 100%; margin: 25px 40px 0 -11px;">
             ${headerHtml}
           </div>
     `;
