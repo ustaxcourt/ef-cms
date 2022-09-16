@@ -274,7 +274,25 @@ describe('confirmInitiateServiceModalHelper', () => {
     it('showConsolidatedCasesForService should be false when form.eventCode is in the list of SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES', () => {
       const formattedCaseDetail = {
         consolidatedCases: [LEAD_CASE, SECOND_CASE, THIRD_CASE],
+        irsPractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.irsPractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
         isLeadCase: true,
+        petitioners: [
+          {
+            ...SECOND_CASE.petitioners[0],
+            contactId: LEAD_CASE.petitioners[0].contactId, //have the same contactId as the lead case
+          },
+        ],
+        privatePractitioners: [
+          {
+            ...MOCK_ELIGIBLE_CASE_WITH_PRACTITIONERS.privatePractitioners[0],
+            serviceIndicator: SERVICE_INDICATOR_TYPES.SI_PAPER,
+          },
+        ],
       };
 
       const result = runCompute(confirmInitiateServiceModalHelper, {
@@ -286,7 +304,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         },
       });
 
-      expect(result.showConsolidatedCasesForService).toBe(true);
+      expect(result.showConsolidatedCasesForService).toBe(false);
     });
 
     it('should remove duplicated paper contacts', () => {
