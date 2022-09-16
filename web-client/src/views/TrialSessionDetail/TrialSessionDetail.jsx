@@ -65,17 +65,19 @@ export const TrialSessionDetail = connect(
                     <div className="grid-col-1 padding-top-05 margin-right-3">
                       <h3 id="filterHybridSessionHeading">Filter by</h3>
                     </div>
-                    <div className="grid-col-3">
-                      <BindedSelect
-                        aria-label="session"
-                        bind="screenMetadata.eligibleCasesFilter.hybridSessionFilter"
-                        id="hybridSessionFilter"
-                        name="hybridSessionFilter"
-                      >
-                        <option value="">-Session Type-</option>
-                        <option value="Regular">Regular</option>
-                        <option value="Small">Small</option>
-                      </BindedSelect>
+                    <div className="grid-row grid-col-10 grid-gap padding-left-2 margin-bottom-3">
+                      <div className="grid-col-3">
+                        <BindedSelect
+                          aria-label="session"
+                          bind="screenMetadata.eligibleCasesFilter.hybridSessionFilter"
+                          id="hybridSessionFilter"
+                          name="hybridSessionFilter"
+                        >
+                          <option value="">-Session Type-</option>
+                          <option value="Regular">Regular</option>
+                          <option value="Small">Small</option>
+                        </BindedSelect>
+                      </div>
                     </div>
                   </div>
                 )}
