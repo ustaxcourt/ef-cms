@@ -159,6 +159,7 @@ export const addPaperFilingInteractor = async (
         docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
         inProgress: isSavingForLater,
         isRead: user.role !== ROLES.privatePractitioner,
+        leadDocketNumber: caseToUpdate.leadDocketNumber,
         section: DOCKET_SECTION,
         sentBy: user.name,
         sentByUserId: user.userId,
@@ -171,7 +172,6 @@ export const addPaperFilingInteractor = async (
     workItem.assignToUser({
       assigneeId: user.userId,
       assigneeName: user.name,
-      leadDocketNumber: caseToUpdate.leadDocketNumber,
       section: user.section,
       sentBy: user.name,
       sentBySection: user.section,
