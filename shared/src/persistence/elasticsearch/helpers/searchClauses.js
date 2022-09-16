@@ -27,8 +27,7 @@ const IS_PRACTITIONER = [
     },
   },
 ];
-
-const GET_MESSAGE_PARENT_CASE = {
+const GET_PARENT_CASE = {
   has_parent: {
     inner_hits: {
       _source: {
@@ -41,4 +40,8 @@ const GET_MESSAGE_PARENT_CASE = {
   },
 };
 
-module.exports = { GET_MESSAGE_PARENT_CASE, IS_PRACTITIONER, IS_USER };
+module.exports = {
+  GET_PARENT_CASE,
+  IS_PRACTITIONER,
+  IS_USER,
+};

@@ -15,6 +15,7 @@ module.exports = {
         runtime: 'automatic',
       },
     ],
+    '@babel/preset-typescript',
   ],
   sourceType: 'unambiguous',
   targets: 'defaults',

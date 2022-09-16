@@ -107,6 +107,7 @@ describe('OutboxItem', () => {
         },
         docketNumber: '101-18',
         docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.SMALL,
+        leadDocketNumber: '101-18',
         section: DOCKET_SECTION,
       },
       { applicationContext },
@@ -123,5 +124,6 @@ describe('OutboxItem', () => {
     expect(outboxItem.docketEntry.documentType).toEqual(
       'Proposed Stipulated Decision',
     );
+    expect(outboxItem.leadDocketNumber).toEqual('101-18');
   });
 });
