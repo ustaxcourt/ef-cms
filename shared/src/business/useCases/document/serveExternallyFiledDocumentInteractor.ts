@@ -248,7 +248,7 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all).validate();
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  const workItemToUpdate = originalSubjectDocketEntry.workItem;
+  const workItemToUpdate = docketEntryEntity.workItem;
 
   if (workItemToUpdate) {
     workItemToUpdate.setAsCompleted({
@@ -272,17 +272,17 @@ const fileDocumentOnOneCase = async ({
         workItem: workItemToUpdate.validate().toRawObject(),
       });
 
-      await applicationContext.getPersistenceGateway().saveWorkItem({
-        applicationContext,
-        workItem: docketEntryEntity.workItem.validate().toRawObject(),
-      });
-    
-      await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-        applicationContext,
-        section: user.section,
-        userId: user.userId,
-        workItem: docketEntryEntity.workItem.validate().toRawObject(),
-      });
+    await applicationContext.getPersistenceGateway().saveWorkItem({
+      applicationContext,
+      workItem: workItemToUpdate.validate().toRawObject(),
+    });
+
+    await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+      applicationContext,
+      section: user.section,
+      userId: user.userId,
+      workItem: workItemToUpdate.validate().toRawObject(),
+    });
   }
 
   if (
