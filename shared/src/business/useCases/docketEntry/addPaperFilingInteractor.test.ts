@@ -16,13 +16,14 @@ const { addPaperFilingInteractor } = require('./addPaperFilingInteractor');
 const { Case } = require('../../entities/cases/Case');
 
 describe('addPaperFilingInteractor', () => {
+  let mockCase;
+
   const user = {
     name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
     role: ROLES.docketClerk,
     section: DOCKET_SECTION,
     userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
   };
-  let mockCase;
 
   beforeEach(() => {
     mockCase = { ...MOCK_CASE, leadDocketNumber: mockCase.docketNumber };
