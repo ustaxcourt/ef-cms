@@ -25,6 +25,12 @@ const printableWorkingCopySessionList = async ({
     },
   });
 
+  const overrideHeader = `
+          <div style="font-size: 8px; width: 100%; margin: 25px 40px 0 -11px;">
+            ${headerHtml}
+          </div>
+    `;
+
   const footerHtml = reactTemplateGenerator({
     componentName: 'DatePrintedFooter',
     data: {
@@ -39,6 +45,7 @@ const printableWorkingCopySessionList = async ({
       displayHeaderFooter: true,
       footerHtml,
       headerHtml,
+      overrideHeader,
     });
 
   return pdf;

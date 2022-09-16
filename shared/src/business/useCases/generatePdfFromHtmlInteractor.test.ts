@@ -140,6 +140,28 @@ describe('generatePdfFromHtmlInteractor', () => {
     expect(result.indexOf('Test Footer')).toBeGreaterThan(-1);
   });
 
+  it('should display an alternate header html when overrideHeader is given', async () => {
+    const headerHtml = 'Header HTML';
+    const overrideHeader = `
+          <div style="font-size: 8px; width: 100%; margin: 25px 40px 0 -11px;">
+            ${headerHtml}
+          </div>
+    `;
+    const args = {
+      contentHtml:
+        '<!doctype html><html><head></head><body>Hello World</body></html>',
+      docketNumber: '123-45',
+      overrideHeader,
+    };
+
+    const result = await generatePdfFromHtmlInteractor(
+      applicationContext,
+      args as any,
+    );
+
+    expect(result.indexOf(headerHtml)).toBeGreaterThan(-1);
+  });
+
   it('should not show the default footer or additional footer content when overwriteFooter is set and footerHTML is not set', async () => {
     const args = {
       contentHtml:
