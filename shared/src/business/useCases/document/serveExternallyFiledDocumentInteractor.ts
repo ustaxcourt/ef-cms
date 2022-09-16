@@ -284,6 +284,13 @@ const fileDocumentOnOneCase = async ({
     sentByUserId: user.userId,
   });
 
+  await applicationContext
+    .getPersistenceGateway()
+    .saveWorkItemForDocketClerkFilingExternalDocument({
+      applicationContext,
+      workItem: docketEntryEntity.workItem.validate().toRawObject(),
+    });
+
   docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
 
   if (
