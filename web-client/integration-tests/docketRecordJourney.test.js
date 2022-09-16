@@ -507,8 +507,6 @@ describe('Docket Clerk Verifies Docket Record Display', () => {
         }),
       ]),
     );
-
-    console.log('the docketNumber', cerebralTest.docketNumber);
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
