@@ -32,6 +32,7 @@ const printableWorkingCopySessionList = async ({
     },
   });
 
+  console.log('content html:', pdfContentHtml);
   const pdf = await applicationContext
     .getUseCases()
     .generatePdfFromHtmlInteractor(applicationContext, {
