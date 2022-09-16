@@ -27,12 +27,6 @@ describe('formattedTrialSessionDetails', () => {
 
     let mockCase;
 
-    beforeEach(() => {
-      applicationContext
-        .getPersistenceGateway()
-        .getCaseByDocketNumber.mockImplementation(() => mockCase);
-    });
-
     it('should set the pretrialMemorandumStatus to "P" when the filer is the petitioner', () => {
       mockCase = {
         ...MOCK_CASE,
