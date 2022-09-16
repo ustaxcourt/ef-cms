@@ -17,7 +17,7 @@ const printableWorkingCopySessionList = async ({
     content: trialSessionPlanningReportTemplate,
   });
 
-  const headerTitle = `Trial Session Copy: ${data.formattedTrialSession.trialLocation};  ${data.formattedTrialSession.formattedStartDateFull} - ${data.formattedTrialSession.formattedEstimatedEndDateFull}; ${data.formattedTrialSession.formattedJudge}`;
+  const headerTitle = `Trial Session Copy: ${data.formattedTrialSession.trialLocation};  ${data.formattedTrialSession.startDateForAdditionalPageHeaders} - ${data.formattedTrialSession.endDateForAdditionalPageHeaders}; ${data.formattedTrialSession.formattedJudge}`;
   const headerHtml = reactTemplateGenerator({
     componentName: 'ReportsMetaHeader',
     data: {

@@ -44,12 +44,32 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       'MONTH_DAY_YEAR',
     );
 
+  const endDateForAdditionalPageHeaders = () => {
+    return applicationContext
+      .getUtilities()
+      .formatDateString(
+        formattedTrialSessionDetails.estimatedEndDate,
+        'SHORT_MONTH_DAY_YEAR',
+      );
+  };
+
+  const startDateForAdditionalPageHeaders = () => {
+    return applicationContext
+      .getUtilities()
+      .formatDateString(
+        formattedTrialSessionDetails.startDate,
+        'SHORT_MONTH_DAY_YEAR',
+      );
+  };
+
   const formattedTrialSessionDTO = {
     computedStatus: formattedTrialSessionDetails.computedStatus,
+    endDateForAdditionalPageHeaders: endDateForAdditionalPageHeaders(),
     formattedEstimatedEndDateFull,
     formattedJudge: formattedTrialSessionDetails.formattedJudge,
     formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,
+    startDateForAdditionalPageHeaders: startDateForAdditionalPageHeaders(),
     trialLocation: formattedTrialSessionDetails.trialLocation,
   };
 
