@@ -58,14 +58,6 @@ export const PrintableWorkingCopySessionList = ({
         {/*TrialSessionDetailHeader*/}
         <div className="big-blue-header">
           <div className="grid-container">
-            <div className="margin-bottom-1">
-              <span className="usa-tag">
-                <span aria-hidden="true">
-                  {formattedTrialSession.formattedTerm}:{' '}
-                  {formattedTrialSession.computedStatus}
-                </span>
-              </span>
-            </div>
             <p className="margin-y-0" id="case-title"></p>
           </div>
         </div>
