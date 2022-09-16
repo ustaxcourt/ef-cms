@@ -63,8 +63,12 @@ export const completeDocketEntryQCInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumber, overridePaperServiceAddress } =
-    entryMetadata;
+  const {
+    docketEntryId,
+    docketNumber,
+    leadDocketNumber,
+    overridePaperServiceAddress,
+  } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -122,6 +126,10 @@ export const completeDocketEntryQCInteractor = async (
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
+      workItem: {
+        ...currentDocketEntry.workItem,
+        leadDocketNumber,
+      },
     },
     { applicationContext, petitioners: caseToUpdate.petitioners },
   ).validate();
