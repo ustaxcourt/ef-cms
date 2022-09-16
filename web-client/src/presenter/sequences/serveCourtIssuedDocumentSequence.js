@@ -8,6 +8,6 @@ export const serveCourtIssuedDocumentSequence = [
   clearAlertsAction,
   clearPdfPreviewUrlAction,
   setWaitingForResponseAction,
-  getDocketNumbersForConsolidatedServiceAction, //is this needed?
+  getDocketNumbersForConsolidatedServiceAction,
   serveCourtIssuedDocumentAction,
 ];

@@ -77,7 +77,7 @@ export const addPaperFilingInteractor = async (
       docketNumber,
     });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntityToUpdate = new Case(caseToUpdate, { applicationContext });
 
   const baseMetadata = pick(documentMetadata, [
     'filers',
@@ -97,13 +97,12 @@ export const addPaperFilingInteractor = async (
     throw new Error('Did not receive a primaryDocumentFileId');
   }
 
-  const servedParties = aggregatePartiesForService(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntityToUpdate);
 
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
   let caseEntities = [];
-  //TODO sorry for ugly
   for (let docketNo of consolidatedGroupDocketNumbers) {
     const aCase = await applicationContext
       .getPersistenceGateway()
@@ -117,8 +116,7 @@ export const addPaperFilingInteractor = async (
   }
 
   let filedByFromLeadCase;
-  //why raw case? who knows. couldnt think of a name
-  for (const rawCase of caseEntities) {
+  for (const caseEntity of caseEntities) {
     const docketEntryEntity = new DocketEntry(
       {
         ...baseMetadata,
@@ -133,10 +131,10 @@ export const addPaperFilingInteractor = async (
         relationship,
         userId: user.userId,
       },
-      { applicationContext, petitioners: rawCase.petitioners },
+      { applicationContext, petitioners: caseEntity.petitioners },
     );
 
-    if (rawCase.docketNumber === rawCase.leadDocketNumber) {
+    if (caseEntity.docketNumber === caseEntity.leadDocketNumber) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
     }
 
@@ -150,7 +148,7 @@ export const addPaperFilingInteractor = async (
         assigneeName: null,
         associatedJudge: caseToUpdate.associatedJudge,
         caseStatus: caseToUpdate.status,
-        caseTitle: Case.getCaseTitle(rawCase.caseCaption),
+        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
         docketEntry: {
           ...docketEntryEntity.toRawObject(),
           createdAt: docketEntryEntity.createdAt,
@@ -191,12 +189,12 @@ export const addPaperFilingInteractor = async (
         });
     }
 
-    rawCase.addDocketEntry(docketEntryEntity);
+    caseEntity.addDocketEntry(docketEntryEntity);
     const aCaseEntity = await applicationContext
       .getUseCaseHelpers()
       .updateCaseAutomaticBlock({
         applicationContext,
-        caseEntity: rawCase,
+        caseEntity,
       });
 
     // todo: why save case twice? this call also does NOT validate before saving, bad????
@@ -236,7 +234,7 @@ export const addPaperFilingInteractor = async (
   }
 
   // todo: return lead case OR subject case NOT caseEntity (could just be the last in the list)
-  return { caseDetail: caseEntity.toRawObject(), paperServicePdfUrl };
+  return { caseDetail: caseEntityToUpdate.toRawObject(), paperServicePdfUrl };
 };
 
 /**
