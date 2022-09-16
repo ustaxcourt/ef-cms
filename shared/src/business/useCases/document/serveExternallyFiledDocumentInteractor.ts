@@ -138,6 +138,7 @@ export const serveExternallyFiledDocumentInteractor = async (
     });
 
   let caseEntities = [];
+  let serviceResults;
 
   try {
     for (const docketNumber of docketNumbers) {
@@ -162,7 +163,7 @@ export const serveExternallyFiledDocumentInteractor = async (
     );
     caseEntities = await Promise.all(filedDocumentPromises);
 
-    await applicationContext
+    serviceResults = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
@@ -195,6 +196,8 @@ export const serveExternallyFiledDocumentInteractor = async (
     document: stampedPdf,
     key: originalSubjectDocketEntry.docketEntryId,
   });
+
+  return serviceResults;
 };
 
 const stampDocument = async ({ applicationContext, form, pdfData }) => {
