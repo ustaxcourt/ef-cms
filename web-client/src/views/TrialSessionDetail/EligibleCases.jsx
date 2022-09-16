@@ -7,7 +7,7 @@ import React from 'react';
 export const EligibleCases = connect(
   {
     formattedEligibleCases:
-      state.formattedTrialSessionDetails.formattedEligibleCases,
+      state.formattedTrialSessionDetailsForEligibleCases.formattedEligibleCases,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
     trialSessionId: state.trialSession.trialSessionId,
     updateQcCompleteForTrialSequence:

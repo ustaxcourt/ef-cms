@@ -1,4 +1,5 @@
 import { AllCases } from './AllCases';
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { EligibleCases } from './EligibleCases';
@@ -65,18 +66,17 @@ export const TrialSessionDetail = connect(
                       <h3 id="filterHybridSessionHeading">Filter by</h3>
                     </div>
                     <div className="grid-col-3">
-                      <select
+                      <BindedSelect
                         aria-label="session"
-                        className="usa-select"
+                        bind="screenMetadata.eligibleCasesFilter.hybridSessionFilter"
                         id="hybridSessionFilter"
-                        name="hybridSessionType"
+                        name="hybridSessionFilter"
                       >
                         <option value="">-Session Type-</option>
                         <option value="Regular">Regular</option>
                         <option value="Small">Small</option>
-                      </select>
+                      </BindedSelect>
                     </div>
-                    {console.log(formattedTrialSessionDetails)}
                   </div>
                 )}
                 <div id="eligible-cases-tab-content">

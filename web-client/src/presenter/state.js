@@ -56,7 +56,10 @@ import { formattedDocument } from './computeds/formattedDocument';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
-import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
+import {
+  formattedTrialSessionDetails,
+  formattedTrialSessionDetailsForEligibleCases,
+} from './computeds/formattedTrialSessionDetails';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
@@ -171,6 +174,7 @@ const helpers = {
   formattedOpenCases,
   formattedPendingItems,
   formattedTrialSessionDetails,
+  formattedTrialSessionDetailsForEligibleCases,
   formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,
