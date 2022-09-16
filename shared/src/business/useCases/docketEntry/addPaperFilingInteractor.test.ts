@@ -25,8 +25,7 @@ describe('addPaperFilingInteractor', () => {
   let mockCase;
 
   beforeEach(() => {
-    mockCase = { ...MOCK_CASE };
-    mockCase.leadDocketNumber = mockCase.docketNumber;
+    mockCase = { ...MOCK_CASE, leadDocketNumber: mockCase.docketNumber };
 
     applicationContext
       .getPersistenceGateway()
