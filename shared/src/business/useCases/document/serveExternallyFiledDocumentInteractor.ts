@@ -248,50 +248,42 @@ const fileDocumentOnOneCase = async ({
   docketEntryEntity.setAsServed(servedParties.all).validate();
   docketEntryEntity.setAsProcessingStatusAsCompleted();
 
-  const isSubjectCase =
-    originalSubjectDocketEntry.docketNumber === caseEntity.docketNumber;
+  const workItemToUpdate = originalSubjectDocketEntry.workItem;
 
-  if (!docketEntryEntity.workItem || !isSubjectCase) {
-    docketEntryEntity.workItem = new WorkItem(
-      {
-        assigneeId: null,
-        assigneeName: null,
-        associatedJudge: caseEntity.associatedJudge,
-        caseStatus: caseEntity.status,
-        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-        docketEntry: {
-          ...docketEntryEntity.toRawObject(),
-          createdAt: docketEntryEntity.createdAt,
-        },
-        docketNumber: caseEntity.docketNumber,
-        docketNumberWithSuffix: caseEntity.docketNumberWithSuffix,
-        hideFromPendingMessages: true,
-        inProgress: true,
-        section: DOCKET_SECTION,
-        sentBy: user.name,
-        sentByUserId: user.userId,
-      },
-      { applicationContext },
-    );
-  }
-
-  docketEntryEntity.workItem.assignToUser({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    section: user.section,
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
-  });
-
-  await applicationContext
-    .getPersistenceGateway()
-    .saveWorkItemForDocketClerkFilingExternalDocument({
-      applicationContext,
-      workItem: docketEntryEntity.workItem.validate().toRawObject(),
+  if (workItemToUpdate) {
+    workItemToUpdate.setAsCompleted({
+      message: 'completed',
+      user,
     });
 
-  docketEntryEntity.workItem.setAsCompleted({ message: 'completed', user });
+    workItemToUpdate.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
+    });
+
+    await applicationContext
+      .getPersistenceGateway()
+      .saveWorkItemForDocketClerkFilingExternalDocument({
+        applicationContext,
+        workItem: workItemToUpdate.validate().toRawObject(),
+      });
+
+      await applicationContext.getPersistenceGateway().saveWorkItem({
+        applicationContext,
+        workItem: docketEntryEntity.workItem.validate().toRawObject(),
+      });
+    
+      await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
+        applicationContext,
+        section: user.section,
+        userId: user.userId,
+        workItem: docketEntryEntity.workItem.validate().toRawObject(),
+      });
+  }
 
   if (
     caseEntity.docketEntries.some(
@@ -303,18 +295,6 @@ const fileDocumentOnOneCase = async ({
   } else {
     caseEntity.addDocketEntry(docketEntryEntity);
   }
-
-  await applicationContext.getPersistenceGateway().saveWorkItem({
-    applicationContext,
-    workItem: docketEntryEntity.workItem.validate().toRawObject(),
-  });
-
-  await applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox({
-    applicationContext,
-    section: user.section,
-    userId: user.userId,
-    workItem: docketEntryEntity.workItem.validate().toRawObject(),
-  });
 
   caseEntity = await applicationContext
     .getUseCaseHelpers()
