@@ -40,7 +40,6 @@ export const PrintableWorkingCopySessionList = ({
   formattedTrialSession,
   sessionNotes,
 }) => {
-  console.log('formattedTrialSession*** ', formattedTrialSession);
   const trialSessionDateRange =
     formattedTrialSession.formattedEstimatedEndDateFull
       ? `${formattedTrialSession.formattedStartDateFull} - ${formattedTrialSession.formattedEstimatedEndDateFull}`
