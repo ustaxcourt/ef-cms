@@ -47,7 +47,6 @@ export const serveExternallyFiledDocumentInteractor = async (
     subjectCaseDocketNumber: string;
   },
 ) => {
-  console.log('serveExternallyFiledDocumentInteractor');
   const authorizedUser = applicationContext.getCurrentUser();
 
   const hasPermission =

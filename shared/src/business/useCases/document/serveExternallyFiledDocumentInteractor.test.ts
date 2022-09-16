@@ -144,9 +144,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
 
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
-    const docketEntryIndex = (addCoverToPdf as jest.Mock).mock.calls[0][0]
-      .docketEntryEntity.index;
-    expect(docketEntryIndex).toBeDefined();
   });
 
   it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
