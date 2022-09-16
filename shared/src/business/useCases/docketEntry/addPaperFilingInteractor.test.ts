@@ -1,11 +1,11 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   DOCKET_SECTION,
   ROLES,
   SERVICE_INDICATOR_TYPES,
   SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
+import { applicationContext } from '../../test/createTestApplicationContext';
 const {
   MOCK_CASE,
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
@@ -25,8 +25,7 @@ describe('addPaperFilingInteractor', () => {
   let mockCase;
 
   beforeEach(() => {
-    mockCase = { ...MOCK_CASE };
-    mockCase.leadDocketNumber = mockCase.docketNumber;
+    mockCase = { ...MOCK_CASE, leadDocketNumber: mockCase.docketNumber };
 
     applicationContext
       .getPersistenceGateway()
@@ -81,9 +80,9 @@ describe('addPaperFilingInteractor', () => {
     await expect(
       addPaperFilingInteractor(applicationContext, {
         consolidatedGroupDocketNumbers: [mockCase.docketNumber],
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: undefined,
         isSavingForLater: false,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Did not receive meta data for docket entry');
   });
