@@ -1,22 +1,20 @@
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { Case } from '../../entities/cases/Case';
 import {
   DOCKET_SECTION,
   TRANSCRIPT_EVENT_CODE,
 } from '../../entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE,
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
-import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
-import { Case } from '../../entities/cases/Case';
-import { cloneDeep } from 'lodash';
-import { docketClerkUser } from '../../../test/mockUsers';
 import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
+import { docketClerkUser } from '../../../test/mockUsers';
+import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
@@ -294,44 +292,6 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
     expect(applicationContext.logger.error.mock.calls[0][1]).toEqual(
       innerError,
     );
-  });
-
-  it('should only close and serve the lead case when serving ENTERED_AND_SERVED_EVENT_CODES', async () => {
-    const customLeadCaseDocketEntries = cloneDeep(leadCaseDocketEntries);
-    customLeadCaseDocketEntries[0].eventCode =
-      ENTERED_AND_SERVED_EVENT_CODES[0];
-
-    applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementationOnce(() => {
-        return {
-          ...MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
-          docketEntries: customLeadCaseDocketEntries,
-        };
-      });
-
-    await serveCourtIssuedDocumentInteractor(applicationContext, {
-      clientConnectionId,
-      docketEntryId: customLeadCaseDocketEntries[0].docketEntryId,
-      docketNumbers: [
-        MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
-        MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
-      ],
-      subjectCaseDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber,
-    });
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords,
-    ).toHaveBeenCalledTimes(1);
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .deleteCaseTrialSortMappingRecords.mock.calls[0][0].docketNumber,
-    ).toEqual(MOCK_LEAD_CASE_WITH_PAPER_SERVICE.docketNumber);
-
-    expect(addDocketEntrySpy).toHaveBeenCalledTimes(0);
   });
 
   it('should create a work item and add it to the outbox for each case', async () => {
