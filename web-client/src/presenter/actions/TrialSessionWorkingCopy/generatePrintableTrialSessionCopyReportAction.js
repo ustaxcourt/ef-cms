@@ -19,8 +19,6 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     sessionNotes,
   } = props;
 
-  console.log('formattedTrialSessionDetails', formattedTrialSessionDetails);
-
   const formattedCasesDTO = formattedCases.map(formattedCase => {
     return {
       calendarNotes: formattedCase.calendarNotes,

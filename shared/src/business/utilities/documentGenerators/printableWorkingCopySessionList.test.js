@@ -1,16 +1,9 @@
-const fs = require('fs');
-const path = require('path');
-
-const { getChromiumBrowser } = require('../getChromiumBrowser');
-const {
-  applicationContext,
-} = require('../../test/createTestApplicationContext');
-const {
-  generatePdfFromHtmlInteractor,
-} = require('../../useCases/generatePdfFromHtmlInteractor');
-const {
-  printableWorkingCopySessionList,
-} = require('./printableWorkingCopySessionList');
+import { applicationContext } from '../../test/createTestApplicationContext';
+import { generatePdfFromHtmlInteractor } from '../../useCases/generatePdfFromHtmlInteractor';
+import { getChromiumBrowser } from '../getChromiumBrowser';
+import { printableWorkingCopySessionList } from './printableWorkingCopySessionList';
+import fs from 'fs';
+import path from 'path';
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -62,13 +55,13 @@ describe('documentGenerators', () => {
           formattedCases: [
             {
               docketNumber: '189-22',
-              privatePractitioners: [],
               irsPractitioners: [],
+              privatePractitioners: [],
             },
             {
               docketNumber: '190-22',
-              privatePractitioners: [],
               irsPractitioners: [],
+              privatePractitioners: [],
             },
           ],
           formattedTrialSession: {},
