@@ -103,7 +103,6 @@ export const addPaperFilingInteractor = async (
     metadata.isFileAttached === false ? documentMetadata : {};
 
   let caseEntities = [];
-  //TODO sorry for ugly
   for (let docketNo of consolidatedGroupDocketNumbers) {
     const aCase = await applicationContext
       .getPersistenceGateway()
