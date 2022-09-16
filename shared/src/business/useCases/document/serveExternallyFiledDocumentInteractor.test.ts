@@ -174,7 +174,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(result).toEqual({ pdfUrl: 'localhost:123' });
   });
 
-  it('if the workItem exists, it should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
+  it.only('if the workItem exists, it should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
     caseRecord.docketEntries = [
       ...caseRecord.docketEntries,
       {
