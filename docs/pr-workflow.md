@@ -30,6 +30,8 @@ If you are at Flexion, you will never need to touch `court/prod`.
 
 ?> Changes are committed to the `court/staging` branch which requires us to back merge changes into our in-progress branches so we are up-to-date.
 
+?> Note that this document assumes you have chosen `court` as the name of your upstream for the US Tax Court fork. If you have chosen something else, say `ustaxcourt`, any reference to `court/{branch_name}` refers to `{upstream}/{branch_name}`. 
+
 ## The Workflow
 
 Please view the [diagram](https://lucid.app/documents/view/eb52faa0-5076-47f1-8cf4-d0fa2da8a768) as you go through this workflow.
