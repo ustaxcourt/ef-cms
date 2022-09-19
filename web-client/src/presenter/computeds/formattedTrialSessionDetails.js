@@ -27,6 +27,10 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     formattedTrialSession.isHybridSession =
       formattedTrialSession.sessionType === 'Hybrid';
 
+    if (formattedTrialSession.isHybridSession) {
+      formattedTrialSession.disableHybridFilter = false;
+    }
+
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext
         .getUtilities()
@@ -48,6 +52,10 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       const hasNoActiveCases =
         isEmpty(allCases) || isEqual(allCases, inactiveCases);
 
+      if (formattedTrialSession.formattedEligibleCases.length === 0) {
+        formattedTrialSession.disableHybridFilter = true;
+      }
+
       if (
         hasNoActiveCases &&
         !trialDateInFuture &&
@@ -59,6 +67,8 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       }
     }
   }
+
+  console.log(formattedTrialSession);
 
   return formattedTrialSession;
 };
