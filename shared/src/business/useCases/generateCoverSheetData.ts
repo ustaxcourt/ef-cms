@@ -108,6 +108,7 @@ export const generateCoverSheetData = async ({
       'dateServed',
     ]);
   }
+
   if (
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       docketEntryEntity.eventCode,
