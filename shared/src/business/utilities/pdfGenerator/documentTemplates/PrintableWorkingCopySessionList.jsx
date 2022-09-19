@@ -4,10 +4,7 @@ import { ReportsHeader } from '../components/ReportsHeader';
 import { SessionNotesSection } from '../components/SessionNotesSection';
 
 const isMemberCase = formattedCase => {
-  if (formattedCase.inConsolidatedGroup && !formattedCase.leadCase) {
-    return true;
-  }
-  return false;
+  return formattedCase.inConsolidatedGroup && !formattedCase.leadCase;
 };
 
 const generateSelectedFilterList = filters => {
@@ -119,17 +116,18 @@ export const PrintableWorkingCopySessionList = ({
             </thead>
             <tbody>
               {formattedCases.map(formattedCase => {
-                const indentMemberCase = isMemberCase(formattedCase);
+                const memberCase = isMemberCase(formattedCase);
                 return (
                   <React.Fragment key={formattedCase.docketNumber}>
                     <tr className="vertical-align-middle-row padding-bottom-2 content-row">
                       <td className="consolidated-case-column">
-                        {formattedCase.leadCase && <span>LC</span>}
+                        {formattedCase.leadCase && 'LC'}
+                        {memberCase && (
+                          <span className="margin-left-2">🔗</span>
+                        )}
                       </td>
                       <td>
-                        <div
-                          className={indentMemberCase ? 'margin-left-2' : ''}
-                        >
+                        <div className={memberCase ? 'margin-left-2' : ''}>
                           {formattedCase.docketNumberWithSuffix}
                         </div>
                       </td>
