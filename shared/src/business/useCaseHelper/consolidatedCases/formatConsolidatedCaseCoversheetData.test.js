@@ -4,9 +4,33 @@ const {
 const {
   formatConsolidatedCaseCoversheetData,
 } = require('./formatConsolidatedCaseCoversheetData');
+import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../entities/EntityConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('formatConsolidatedCaseCoversheetData', () => {
-  it('should add consolidatedCases to the coversheet data when the document is being filed on a lead case and the', async () => {
+  const testingCaseData = {
+    ...MOCK_CASE,
+    docketEntries: [
+      {
+        ...MOCK_CASE.docketEntries[0],
+        certificateOfService: false,
+        createdAt: '2019-04-19T14:45:15.595Z',
+        documentType: 'Answer',
+        eventCode: 'A',
+        filingDate: '2019-04-19T14:45:15.595Z',
+        isPaper: false,
+        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.pending,
+      },
+    ],
+  };
+
+  applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor.mockResolvedValue({
+      isFeatureFlagEnabled: true,
+    });
+
+  it('should add consolidatedCases to the coversheet data when the document is being filed on a lead case and the feature flag is enabled', async () => {
     const mockDocumentType = 'Hearing Exhibits';
 
     applicationContext
@@ -37,7 +61,7 @@ describe('formatConsolidatedCaseCoversheetData', () => {
         },
       ]);
 
-    const result = await generateCoverSheetData({
+    const result = await formatConsolidatedCaseCoversheetData({
       applicationContext,
       caseEntity: {
         ...testingCaseData,
@@ -50,7 +74,7 @@ describe('formatConsolidatedCaseCoversheetData', () => {
         eventCode: 'HE',
       },
       filingDateUpdated: false,
-    } as any);
+    });
 
     // should be in ascending order
     expect(result.consolidatedCases.length).toEqual(2);
