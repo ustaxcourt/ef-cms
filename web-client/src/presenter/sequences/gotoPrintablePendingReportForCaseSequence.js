@@ -15,6 +15,6 @@ export const gotoPrintablePendingReportForCaseSequence =
     setupPropsForPrintablePendingReportAction,
     generatePrintablePendingReportAction,
     setPdfPreviewUrlSequence,
-    setTitleForGlobalReportAction,
+    setTitleForGlobalReportAction('Pending Report'),
     setCurrentPageAction('SimplePdfPreviewPage'),
   ]);

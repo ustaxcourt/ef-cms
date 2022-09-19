@@ -9,6 +9,6 @@ export const gotoPrintablePendingReportSequence =
     setCurrentPageAction('Interstitial'),
     generatePrintablePendingReportAction,
     setPdfPreviewUrlSequence,
-    setTitleForGlobalReportAction,
+    setTitleForGlobalReportAction('Pending Report'),
     setCurrentPageAction('SimplePdfPreviewPage'),
   ]);

@@ -8,7 +8,7 @@ import { preparePrintableFormattedCasesAction } from '../actions/TrialSessionWor
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
 import { setRedirectUrlAction } from '../actions/setRedirectUrlAction';
-import { setTitleForPrintableTrialSessionWorkingCopyAction } from '../actions/TrialSession/setTitleForPrintableTrialSessionWorkingCopyAction';
+import { setTitleForGlobalReportAction } from '../actions/PendingItems/setTitleForGlobalReportAction';
 import { startWebSocketConnectionSequenceDecorator } from '../utilities/startWebSocketConnectionSequenceDecorator';
 
 export const gotoPrintableTrialSessionWorkingCopySequence =
@@ -23,6 +23,6 @@ export const gotoPrintableTrialSessionWorkingCopySequence =
     getTrialSessionWorkingCopyDataAction,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,
-    setTitleForPrintableTrialSessionWorkingCopyAction,
+    setTitleForGlobalReportAction('Trial Session Printable Working Copy'),
     setCurrentPageAction('PrintableTrialSessionWorkingCopyPreviewPage'),
   ]);
