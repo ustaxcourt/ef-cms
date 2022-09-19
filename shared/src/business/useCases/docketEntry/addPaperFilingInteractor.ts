@@ -55,10 +55,6 @@ export const addPaperFilingInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
-  // for later, consider refactoring to check if (case.leadDocketNumber === docketNumber), THEN AND ONLY THEN
-  // you can file docket entries on consolidatedGroupDocketNumbers cases
-  // otherwise, file a docket entry (like old behavior) on documentMetadata.docketNumber case ONLY
-
   const isCaseConsolidationFeatureOn = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
@@ -197,7 +193,6 @@ export const addPaperFilingInteractor = async (
         caseEntity,
       });
 
-    // todo: why save case twice? this call also does NOT validate before saving, bad????
     await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
       applicationContext,
       caseToUpdate: aCaseEntity.validate().toRawObject(),
@@ -233,7 +228,6 @@ export const addPaperFilingInteractor = async (
     }
   }
 
-  // todo: return lead case OR subject case NOT caseEntity (could just be the last in the list)
   return { caseDetail: caseEntityToUpdate.toRawObject(), paperServicePdfUrl };
 };
 
