@@ -1,3 +1,5 @@
+import { state } from 'cerebral';
+
 /**
  * generatePrintableTrialSessionCopyReportAction
  *
@@ -9,6 +11,7 @@
 
 export const generatePrintableTrialSessionCopyReportAction = async ({
   applicationContext,
+  get,
   props,
 }) => {
   const {
@@ -19,7 +22,13 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
     sessionNotes,
   } = props;
 
+  const { caseMetadata } = get(state.trialSessionWorkingCopy);
+
   const formattedCasesDTO = formattedCases.map(formattedCase => {
+    const trialStatus =
+      caseMetadata[formattedCase.docketNumber]?.trialStatus ||
+      formattedCase.trialStatus;
+
     return {
       calendarNotes: formattedCase.calendarNotes,
       caseTitle: formattedCase.caseTitle,
@@ -30,7 +39,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       irsPractitioners: formattedCase.irsPractitioners,
       leadCase: formattedCase.leadCase,
       privatePractitioners: formattedCase.privatePractitioners,
-      trialStatus: formattedCase.trialStatus,
+      trialStatus,
       userNotes: formattedCase.userNotes,
     };
   });
