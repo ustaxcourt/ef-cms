@@ -8,13 +8,8 @@ import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('formatConsolidatedCaseCoversheetData', () => {
   const mockDocketEntry = MOCK_CASE.docketEntries[0];
-  beforeEach(() => {
-    applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor.mockResolvedValue({
-        isFeatureFlagEnabled: true,
-      });
 
+  beforeEach(() => {
     applicationContext
       .getPersistenceGateway()
       .getCasesByLeadDocketNumber.mockResolvedValue([

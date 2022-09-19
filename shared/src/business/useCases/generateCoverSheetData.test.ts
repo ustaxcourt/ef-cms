@@ -5,10 +5,7 @@ import {
 } from '../entities/EntityConstants';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { MOCK_CASE } from '../../test/mockCase';
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../test/createTestApplicationContext';
+import { applicationContext } from '../test/createTestApplicationContext';
 import { generateCoverSheetData } from './generateCoverSheetData';
 
 describe('generateCoverSheetData', () => {
@@ -30,23 +27,13 @@ describe('generateCoverSheetData', () => {
 
   beforeEach(() => {
     applicationContext
-      .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue(testingCaseData);
-
-    applicationContext
       .getUseCases()
       .getFeatureFlagValueInteractor.mockResolvedValue({
         isFeatureFlagEnabled: true,
       });
-
-    applicationContext.getStorageClient().getObject.mockReturnValue({
-      promise: () => ({
-        Body: testPdfDoc,
-      }),
-    });
   });
 
-  it('displays Certificate of Service when the document is filed with a certificate of service', async () => {
+  it('should append Certificate of Service to the coversheet when the document is filed with a Certificate of Service', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -59,7 +46,7 @@ describe('generateCoverSheetData', () => {
     expect(result.certificateOfService).toEqual(true);
   });
 
-  it('does NOT display Certificate of Service when the document is filed without a certificate of service', async () => {
+  it('should NOT append Certificate of Service to the coversheet when the document is filed without a Certificate of Service', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -72,7 +59,7 @@ describe('generateCoverSheetData', () => {
     expect(result.certificateOfService).toEqual(false);
   });
 
-  it('generates correct filed date', async () => {
+  it('should append the filing date to the coversheet formatted as "MM/DD/YY"', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -85,7 +72,20 @@ describe('generateCoverSheetData', () => {
     expect(result.dateFiledLodged).toEqual('04/19/19');
   });
 
-  it('should append the correct additionalInfo if addToCoversheet is set', async () => {
+  it('should NOT append the filing date to the coversheet when it is not valid', async () => {
+    const result = await generateCoverSheetData({
+      applicationContext,
+      caseEntity: testingCaseData,
+      docketEntryEntity: {
+        ...testingCaseData.docketEntries[0],
+        filingDate: null,
+      },
+    } as any);
+
+    expect(result.dateFiledLodged).toEqual('');
+  });
+
+  it('should append additionalInfo to the coversheet when addToCoversheet is true', async () => {
     const expectedAdditionalInfo = 'abc';
 
     const result = await generateCoverSheetData({
@@ -102,20 +102,7 @@ describe('generateCoverSheetData', () => {
     expect(result.documentTitle).toEqual(`Petition ${expectedAdditionalInfo}`);
   });
 
-  it('shows does not show the filing date if the document does not have a valid filingDate', async () => {
-    const result = await generateCoverSheetData({
-      applicationContext,
-      caseEntity: testingCaseData,
-      docketEntryEntity: {
-        ...testingCaseData.docketEntries[0],
-        filingDate: null,
-      },
-    } as any);
-
-    expect(result.dateFiledLodged).toEqual('');
-  });
-
-  it('returns a filing date label of Filed if the document was NOT lodged', async () => {
+  it('should append a filing date label of Filed when the document is NOT lodged', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -128,7 +115,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateFiledLodgedLabel).toEqual('Filed');
   });
 
-  it('returns a filing date label of Lodged if the document was lodged', async () => {
+  it('should append a filing date label of Lodged when the document is lodged', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -141,7 +128,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateFiledLodgedLabel).toEqual('Lodged');
   });
 
-  it('shows the received date WITH time if electronically filed', async () => {
+  it('should append the received date WITH time when the document is electronically filed', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -156,7 +143,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateReceived).toEqual('04/19/19 10:45 am');
   });
 
-  it('does not show the received date if the document does not have a valid createdAt and is electronically filed', async () => {
+  it('should append the received date as an empty string when the document does not have a valid createdAt and is electronically filed', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -171,7 +158,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateReceived).toEqual('');
   });
 
-  it('shows the received date WITHOUT time if filed by paper', async () => {
+  it('should append the received date WITHOUT time when the document is paper filed', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,

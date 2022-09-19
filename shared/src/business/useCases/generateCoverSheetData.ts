@@ -37,16 +37,13 @@ export const generateCoverSheetData = async ({
   stampData?: any;
   useInitialData: boolean;
 }) => {
-  const isLodged = docketEntryEntity.lodged;
-  const { certificateOfService, isPaper } = docketEntryEntity;
-
   const dateServedFormatted = docketEntryEntity.servedAt
     ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
     : '';
 
   let dateReceivedFormatted = formatDateReceived({
     docketEntryEntity,
-    isPaper,
+    isPaper: docketEntryEntity.isPaper,
   });
 
   const dateFiledFormatted = docketEntryEntity.filingDate
@@ -84,9 +81,9 @@ export const generateCoverSheetData = async ({
   let coverSheetData: any = {
     caseCaptionExtension,
     caseTitle,
-    certificateOfService,
+    certificateOfService: docketEntryEntity.certificateOfService,
     dateFiledLodged: dateFiledFormatted,
-    dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
+    dateFiledLodgedLabel: docketEntryEntity.lodged ? 'Lodged' : 'Filed',
     dateReceived: filingDateUpdated
       ? dateFiledFormatted
       : dateReceivedFormatted,
