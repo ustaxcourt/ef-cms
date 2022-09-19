@@ -78,7 +78,7 @@
       "eslint"
     ],
     "**/*.{ts,tsx}": [
-      "tsc-files --noEmit"
+      "bash -c tsc --noEmit"
     ],
     "pa11y-*.js": [
       "node lint-pa11y.js"
