@@ -21,7 +21,7 @@ describe('updateUserCaseNoteAction', () => {
 
     expect(
       applicationContext.getUseCases().updateUserCaseNoteInteractor,
-    ).toBeCalled();
+    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().updateUserCaseNoteInteractor.mock
         .calls[0][1],

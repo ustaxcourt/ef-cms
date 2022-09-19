@@ -29,7 +29,7 @@ describe('isInternalUserAction', () => {
       state: {},
     });
 
-    expect(yesStub).toBeCalled();
+    expect(yesStub).toHaveBeenCalled();
   });
 
   it('should call the path.no if the user is an external user', async () => {
@@ -43,6 +43,6 @@ describe('isInternalUserAction', () => {
       state: {},
     });
 
-    expect(noStub).toBeCalled();
+    expect(noStub).toHaveBeenCalled();
   });
 });

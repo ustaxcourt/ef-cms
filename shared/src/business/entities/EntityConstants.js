@@ -14,6 +14,8 @@ const CURRENT_YEAR = +formatNow(FORMATS.YEAR);
 
 const DEFAULT_PRACTITIONER_BIRTH_YEAR = 1950;
 
+const EXHIBIT_EVENT_CODES = ['EXH', 'PTE', 'HE', 'TE', 'M123', 'STIP'];
+
 // city, state, optional unique ID (generated automatically in testing files)
 const TRIAL_LOCATION_MATCHER = /^[a-zA-Z ]+, [a-zA-Z ]+, [0-9]+$/;
 
@@ -430,7 +432,7 @@ const TRACKED_DOCUMENT_TYPES = {
 
 const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
-    .filter(doc => doc.category === 'Motion')
+    .filter(doc => doc.allowStamp)
     .map(x => x.eventCode),
 );
 
@@ -453,6 +455,11 @@ const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
     TRACKED_DOCUMENT_TYPES.orderToShowCause.eventCode,
   ],
 );
+
+const DOCKET_RECORD_FILTER_OPTIONS = {
+  allDocuments: 'All documents',
+  exhibits: 'Exhibits',
+};
 
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
@@ -1360,6 +1367,7 @@ module.exports = deepFreeze({
   DOCKET_ENTRY_SEALED_TO_TYPES,
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
+  DOCKET_RECORD_FILTER_OPTIONS,
   DOCKET_SECTION,
   EXTERNAL_DOCUMENTS_ARRAY,
   DOCUMENT_EXTERNAL_CATEGORIES,
@@ -1375,6 +1383,7 @@ module.exports = deepFreeze({
   EVENT_CODES_VISIBLE_TO_PUBLIC,
   EVENT_CODES_REQUIRING_JUDGE_SIGNATURE,
   EVENT_CODES_REQUIRING_SIGNATURE,
+  EXHIBIT_EVENT_CODES,
   EXTERNAL_DOCUMENT_TYPES,
   FILING_TYPES,
   GENERIC_ORDER_EVENT_CODE,

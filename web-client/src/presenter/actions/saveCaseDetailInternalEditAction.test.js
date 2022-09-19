@@ -152,7 +152,7 @@ describe('saveCaseDetailInternalEditAction', () => {
     });
     expect(
       applicationContext.getUseCases().updateCaseTrialSortTagsInteractor,
-    ).not.toBeCalled();
+    ).not.toHaveBeenCalled();
   });
 
   it('should upload initial filing documents if they exist on the case', async () => {

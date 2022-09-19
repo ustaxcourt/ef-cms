@@ -2,8 +2,9 @@ const client = require('../../dynamodbClientService');
 
 exports.updateWorkItemDocketNumberSuffix = ({
   applicationContext,
+  docketNumber,
   docketNumberSuffix,
-  workItem,
+  workItemId,
 }) =>
   client.update({
     ExpressionAttributeNames: {
@@ -13,8 +14,8 @@ exports.updateWorkItemDocketNumberSuffix = ({
       ':docketNumberSuffix': docketNumberSuffix,
     },
     Key: {
-      pk: workItem.pk,
-      sk: workItem.sk,
+      pk: `case|${docketNumber}`,
+      sk: `work-item|${workItemId}`,
     },
     UpdateExpression: 'SET #docketNumberSuffix = :docketNumberSuffix',
     applicationContext,

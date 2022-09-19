@@ -27,7 +27,7 @@ export const petitionsClerkVerifiesLeadCaseIndicatorSentMessagesBox = (
     expect(foundMessage).toMatchObject({
       consolidatedIconTooltipText: 'Lead case',
       inConsolidatedGroup: true,
-      inLeadCase: true,
+      leadCase: true,
     });
   });
 };
