@@ -15,12 +15,12 @@ export const formattedTrialSessionDetailsForFilteredEligibleCases = (
 
   trialSessionDetails.formattedEligibleCases =
     trialSessionDetails.formattedEligibleCases.filter(eligibleCase => {
-      if (!filter) return true;
       if (filter === 'Small') {
         return eligibleCase.docketNumberSuffix === 'S';
-      }
-      if (filter === 'Regular') {
+      } else if (filter === 'Regular') {
         return eligibleCase.docketNumberSuffix !== 'S';
+      } else {
+        return true;
       }
     });
 
