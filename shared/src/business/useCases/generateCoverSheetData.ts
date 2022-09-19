@@ -2,8 +2,7 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
 } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
-import { formatDateString, FORMATS } from '../utilities/DateHandler';
+import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { omit } from 'lodash';
 
 const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
@@ -38,16 +37,13 @@ export const generateCoverSheetData = async ({
   stampData?: any;
   useInitialData: boolean;
 }) => {
-  const isLodged = docketEntryEntity.lodged;
-  const { certificateOfService, isPaper } = docketEntryEntity;
-
   const dateServedFormatted = docketEntryEntity.servedAt
     ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
     : '';
 
   let dateReceivedFormatted = formatDateReceived({
     docketEntryEntity,
-    isPaper,
+    isPaper: docketEntryEntity.isPaper,
   });
 
   const dateFiledFormatted = docketEntryEntity.filingDate
@@ -85,9 +81,9 @@ export const generateCoverSheetData = async ({
   let coverSheetData: any = {
     caseCaptionExtension,
     caseTitle,
-    certificateOfService,
+    certificateOfService: docketEntryEntity.certificateOfService,
     dateFiledLodged: dateFiledFormatted,
-    dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
+    dateFiledLodgedLabel: docketEntryEntity.lodged ? 'Lodged' : 'Filed',
     dateReceived: filingDateUpdated
       ? dateFiledFormatted
       : dateReceivedFormatted,
@@ -121,30 +117,14 @@ export const generateCoverSheetData = async ({
       });
 
     if (isLeadCase && isFeatureFlagEnabled) {
-      const consolidatedCases = await applicationContext
-        .getPersistenceGateway()
-        .getCasesByLeadDocketNumber({
-          applicationContext,
-          leadDocketNumber: caseEntity.docketNumber,
-        });
-      consolidatedCases.sort(
-        (a, b) =>
-          Case.getSortableDocketNumber(a.docketNumber) -
-          Case.getSortableDocketNumber(b.docketNumber),
-      );
-      coverSheetData.consolidatedCases = consolidatedCases
-        .map(consolidatedCase => ({
-          docketNumber: consolidatedCase.docketNumber,
-          documentNumber: (
-            consolidatedCase.docketEntries.find(
-              docketEntry =>
-                docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
-            ) || {}
-          ).index,
-        }))
-        .filter(
-          consolidatedCase => consolidatedCase.documentNumber !== undefined,
-        );
+      coverSheetData = (
+        await applicationContext.getUseCaseHelpers()
+      ).formatConsolidatedCaseCoversheetData({
+        applicationContext,
+        caseEntity,
+        coverSheetData,
+        docketEntryEntity,
+      });
     }
   }
 
