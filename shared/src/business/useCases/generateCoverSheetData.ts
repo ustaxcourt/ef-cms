@@ -2,7 +2,6 @@ import {
   ALLOWLIST_FEATURE_FLAGS,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
 } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { omit } from 'lodash';
 
@@ -105,14 +104,31 @@ export const generateCoverSheetData = async ({
       docketEntryEntity.eventCode,
     )
   ) {
-    coverSheetData = (
-      await applicationContext.getUseCaseHelpers()
-    ).formatConsolidatedCaseCoversheetData({
-      applicationContext,
-      caseEntity,
-      coverSheetData,
-      docketEntryEntity,
-    });
+    coverSheetData = omit(coverSheetData, [
+      'dateReceived',
+      'electronicallyFiled',
+      'dateServed',
+    ]);
+
+    const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
+    const isFeatureFlagEnabled = await applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor(applicationContext, {
+        featureFlag:
+          ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
+            .key,
+      });
+
+    if (isLeadCase && isFeatureFlagEnabled) {
+      coverSheetData = (
+        await applicationContext.getUseCaseHelpers()
+      ).formatConsolidatedCaseCoversheetData({
+        applicationContext,
+        caseEntity,
+        coverSheetData,
+        docketEntryEntity,
+      });
+    }
   }
 
   return coverSheetData;

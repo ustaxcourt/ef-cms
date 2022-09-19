@@ -1,4 +1,3 @@
-const { omit } = require('lodash');
 const { Case } = require('../../entities/cases/Case');
 
 /**
@@ -16,47 +15,28 @@ exports.formatConsolidatedCaseCoversheetData = async ({
   coverSheetData,
   docketEntryEntity,
 }) => {
-  //add this to app context
-  coverSheetData = omit(coverSheetData, [
-    'dateReceived',
-    'electronicallyFiled',
-    'dateServed',
-  ]);
-
-  const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
-  const isFeatureFlagEnabled = await applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor(applicationContext, {
-      featureFlag:
-        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+  const consolidatedCases = await applicationContext
+    .getPersistenceGateway()
+    .getCasesByLeadDocketNumber({
+      applicationContext,
+      leadDocketNumber: caseEntity.docketNumber,
     });
-
-  if (isLeadCase && isFeatureFlagEnabled) {
-    const consolidatedCases = await applicationContext
-      .getPersistenceGateway()
-      .getCasesByLeadDocketNumber({
-        applicationContext,
-        leadDocketNumber: caseEntity.docketNumber,
-      });
-    consolidatedCases.sort(
-      (a, b) =>
-        Case.getSortableDocketNumber(a.docketNumber) -
-        Case.getSortableDocketNumber(b.docketNumber),
-    );
-    coverSheetData.consolidatedCases = consolidatedCases
-      .map(consolidatedCase => ({
-        docketNumber: consolidatedCase.docketNumber,
-        documentNumber: (
-          consolidatedCase.docketEntries.find(
-            docketEntry =>
-              docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
-          ) || {}
-        ).index,
-      }))
-      .filter(
-        consolidatedCase => consolidatedCase.documentNumber !== undefined,
-      );
-  }
+  consolidatedCases.sort(
+    (a, b) =>
+      Case.getSortableDocketNumber(a.docketNumber) -
+      Case.getSortableDocketNumber(b.docketNumber),
+  );
+  coverSheetData.consolidatedCases = consolidatedCases
+    .map(consolidatedCase => ({
+      docketNumber: consolidatedCase.docketNumber,
+      documentNumber: (
+        consolidatedCase.docketEntries.find(
+          docketEntry =>
+            docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
+        ) || {}
+      ).index,
+    }))
+    .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
 
   return coverSheetData;
 };
