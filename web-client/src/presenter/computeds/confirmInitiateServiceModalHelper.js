@@ -17,12 +17,15 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ENTERED_AND_SERVED_EVENT_CODES,
     SERVICE_INDICATOR_TYPES,
+    SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   } = applicationContext.getConstants();
 
   const modalName = get(state.modal.showModal);
+
   const showConsolidatedOptions = [
     'ConfirmInitiateServiceModal',
     'ConfirmInitiateCourtIssuedDocumentServiceModal',
+    'ConfirmInitiatePaperDocumentServiceModal',
   ].includes(modalName);
 
   const formattedCaseDetail = get(state.formattedCaseDetail);
@@ -36,25 +39,26 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
     ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+    ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
 
   const hasConsolidatedCases =
     formattedCaseDetail.consolidatedCases &&
     formattedCaseDetail.consolidatedCases.length > 0;
 
-  const showConsolidatedCasesFlag =
+  const showConsolidatedCasesForService =
     formattedCaseDetail.isLeadCase &&
     showConsolidatedOptions &&
     consolidatedCasesPropagateDocketEntriesFlag &&
     !eventCodesNotCompatibleWithConsolidation.includes(form.eventCode) &&
     hasConsolidatedCases;
 
-  const confirmationText = showConsolidatedCasesFlag
+  const confirmationText = showConsolidatedCasesForService
     ? 'The following document will be served on all parties in selected cases:'
     : 'The following document will be served on all parties:';
 
   let parties;
-  if (showConsolidatedCasesFlag) {
+  if (showConsolidatedCasesForService) {
     parties = formattedCaseDetail.consolidatedCases.reduce(
       (aggregatedParties, aCase) => {
         if (!aCase.checked) {
@@ -118,7 +122,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   if (
     formattedCaseDetail.isLeadCase &&
     formattedCaseDetail.consolidatedCases.filter(c => c.checked).length > 1 &&
-    showConsolidatedCasesFlag
+    showConsolidatedCasesForService
   ) {
     caseOrGroup = 'group';
   }
@@ -127,7 +131,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     caseOrGroup,
     confirmationText,
     contactsNeedingPaperService,
-    showConsolidatedCasesFlag,
+    showConsolidatedCasesForService,
     showPaperAlert: contactsNeedingPaperService.length > 0,
   };
 };

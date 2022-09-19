@@ -109,7 +109,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
         docketEntryId: '',
-        docketNumber: '',
+        docketNumbers: [''],
+        subjectCaseDocketNumber: '',
       }),
     ).rejects.toThrow('Unauthorized');
   });
@@ -117,7 +118,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should update the document with a servedAt date', async () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
+      docketNumbers: [DOCKET_NUMBER],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
     expect(
@@ -137,13 +139,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should add a coversheet to the document with the docket entry index passed in', async () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: DOCKET_ENTRY_ID,
-      docketNumber: DOCKET_NUMBER,
+      docketNumbers: [DOCKET_NUMBER],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
     expect(addCoverToPdf).toHaveBeenCalledTimes(1);
-    const docketEntryIndex = (addCoverToPdf as jest.Mock).mock.calls[0][0]
-      .docketEntryEntity.index;
-    expect(docketEntryIndex).toBeDefined();
   });
 
   it('should call serveDocumentAndGetPaperServicePdf and return its result', async () => {
@@ -157,7 +157,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       applicationContext,
       {
         docketEntryId: DOCKET_ENTRY_ID,
-        docketNumber: DOCKET_NUMBER,
+        docketNumbers: [DOCKET_NUMBER],
+        subjectCaseDocketNumber: DOCKET_NUMBER,
       },
     );
 
@@ -173,7 +174,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     expect(result).toEqual({ pdfUrl: 'localhost:123' });
   });
 
-  it('if the workItem exists, it should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
+  it('should complete the work item by deleting it from the QC inbox and adding it to the outbox (served)', async () => {
     caseRecord.docketEntries = [
       ...caseRecord.docketEntries,
       {
@@ -210,7 +211,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-      docketNumber: DOCKET_NUMBER,
+      docketNumbers: [DOCKET_NUMBER],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
     expect(
@@ -270,7 +272,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
-      docketNumber: DOCKET_NUMBER,
+      docketNumbers: [DOCKET_NUMBER],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
     const updatedWorkItem = applicationContext
@@ -287,7 +290,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
-        docketNumber: caseRecord.docketNumber,
+        docketNumbers: [caseRecord.docketNumber],
+        subjectCaseDocketNumber: DOCKET_NUMBER,
       }),
     ).rejects.toThrow('Docket entry is already being served');
 
@@ -301,7 +305,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId,
-      docketNumber: caseRecord.docketNumber,
+      docketNumbers: [caseRecord.docketNumber],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
     expect(
@@ -337,7 +342,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
         docketEntryId,
-        docketNumber: caseRecord.docketNumber,
+        docketNumbers: [caseRecord.docketNumber],
+        subjectCaseDocketNumber: DOCKET_NUMBER,
       }),
     ).rejects.toThrow('whoops, that is an error!');
 

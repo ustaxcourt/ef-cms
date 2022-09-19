@@ -1,26 +1,26 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
 } from '../../entities/EntityConstants';
-import {
-  createISODateString,
-  formatDateString,
-} from '../../utilities/DateHandler';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
 } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
-import { addServedStampToDocument } from './addServedStampToDocument';
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { WorkItem } from '../../entities/WorkItem';
+import { addServedStampToDocument } from './addServedStampToDocument';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
+  createISODateString,
+  formatDateString,
+} from '../../utilities/DateHandler';
 
 const completeWorkItem = async ({
   applicationContext,
@@ -133,8 +133,6 @@ export const serveCourtIssuedDocumentInteractor = async (
       });
   }
 
-  const eventCodeCanOnlyBeServedOnSubjectCase =
-    ENTERED_AND_SERVED_EVENT_CODES.includes(courtIssuedDocument.eventCode);
   const consolidateCaseDuplicateDocketEntries = await applicationContext
     .getUseCases()
     .getFeatureFlagValueInteractor(applicationContext, {
@@ -142,10 +140,7 @@ export const serveCourtIssuedDocumentInteractor = async (
         ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
     });
 
-  if (
-    eventCodeCanOnlyBeServedOnSubjectCase ||
-    !consolidateCaseDuplicateDocketEntries
-  ) {
+  if (!consolidateCaseDuplicateDocketEntries) {
     docketNumbers = [subjectCaseDocketNumber];
   }
 

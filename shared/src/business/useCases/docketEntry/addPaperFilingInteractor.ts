@@ -1,15 +1,21 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { DOCUMENT_RELATIONSHIPS, ROLES } from '../../entities/EntityConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
+const {
+  aggregatePartiesForService,
+} = require('../../utilities/aggregatePartiesForService');
+const {
+  ALLOWLIST_FEATURE_FLAGS,
+  DOCUMENT_RELATIONSHIPS,
+  ROLES,
+} = require('../../entities/EntityConstants');
 import { Case } from '../../entities/cases/Case';
 import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { pick } from 'lodash';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
+import { pick } from 'lodash';
 
 /**
  *
@@ -23,10 +29,12 @@ import { WorkItem } from '../../entities/WorkItem';
 export const addPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   {
+    consolidatedGroupDocketNumbers,
     documentMetadata,
     isSavingForLater,
     primaryDocumentFileId,
   }: {
+    consolidatedGroupDocketNumbers: string[];
     documentMetadata: any;
     isSavingForLater: boolean;
     primaryDocumentFileId: string;
@@ -47,6 +55,17 @@ export const addPaperFilingInteractor = async (
     .getPersistenceGateway()
     .getUserById({ applicationContext, userId: authorizedUser.userId });
 
+  const isCaseConsolidationFeatureOn = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag:
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+    });
+
+  if (!isCaseConsolidationFeatureOn) {
+    consolidatedGroupDocketNumbers = [docketNumber];
+  }
+
   const caseToUpdate = await applicationContext
     .getPersistenceGateway()
     .getCaseByDocketNumber({
@@ -54,7 +73,7 @@ export const addPaperFilingInteractor = async (
       docketNumber,
     });
 
-  let caseEntity = new Case(caseToUpdate, { applicationContext });
+  let caseEntityToUpdate = new Case(caseToUpdate, { applicationContext });
 
   const baseMetadata = pick(documentMetadata, [
     'filers',
@@ -74,86 +93,124 @@ export const addPaperFilingInteractor = async (
     throw new Error('Did not receive a primaryDocumentFileId');
   }
 
-  const servedParties = aggregatePartiesForService(caseEntity);
+  const servedParties = aggregatePartiesForService(caseEntityToUpdate);
+
   const docketRecordEditState =
     metadata.isFileAttached === false ? documentMetadata : {};
 
-  const docketEntryEntity = new DocketEntry(
-    {
-      ...baseMetadata,
-      ...metadata,
-      docketEntryId,
-      documentTitle: metadata.documentTitle,
-      documentType: metadata.documentType,
-      editState: JSON.stringify(docketRecordEditState),
-      filingDate: metadata.receivedAt,
-      isOnDocketRecord: true,
-      mailingDate: metadata.mailingDate,
-      relationship,
-      userId: user.userId,
-    },
-    { applicationContext, petitioners: caseEntity.petitioners },
-  );
-
-  const workItem = new WorkItem(
-    {
-      assigneeId: null,
-      assigneeName: null,
-      associatedJudge: caseToUpdate.associatedJudge,
-      caseStatus: caseToUpdate.status,
-      caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
-      docketEntry: {
-        ...docketEntryEntity.toRawObject(),
-        createdAt: docketEntryEntity.createdAt,
-      },
-      docketNumber: caseToUpdate.docketNumber,
-      docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
-      inProgress: isSavingForLater,
-      isRead: user.role !== ROLES.privatePractitioner,
-      leadDocketNumber: caseToUpdate.leadDocketNumber,
-      section: DOCKET_SECTION,
-      sentBy: user.name,
-      sentByUserId: user.userId,
-    },
-    { applicationContext },
-  );
-
-  docketEntryEntity.setWorkItem(workItem);
-
-  workItem.assignToUser({
-    assigneeId: user.userId,
-    assigneeName: user.name,
-    section: user.section,
-    sentBy: user.name,
-    sentBySection: user.section,
-    sentByUserId: user.userId,
-  });
-
-  if (readyForService) {
-    docketEntryEntity.setAsServed(servedParties.all);
-  }
-
-  if (isFileAttached) {
-    docketEntryEntity.numberOfPages = await applicationContext
-      .getUseCaseHelpers()
-      .countPagesInDocument({
+  let caseEntities = [];
+  for (let docketNo of consolidatedGroupDocketNumbers) {
+    const aCase = await applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber({
         applicationContext,
-        docketEntryId,
+        docketNumber: docketNo,
       });
+
+    let aCaseEntity = new Case(aCase, { applicationContext });
+    caseEntities.push(aCaseEntity);
   }
 
-  caseEntity.addDocketEntry(docketEntryEntity);
-  caseEntity = await applicationContext
-    .getUseCaseHelpers()
-    .updateCaseAutomaticBlock({
-      applicationContext,
-      caseEntity,
+  let filedByFromLeadCase;
+  for (const caseEntity of caseEntities) {
+    const docketEntryEntity = new DocketEntry(
+      {
+        ...baseMetadata,
+        ...metadata,
+        docketEntryId,
+        documentTitle: metadata.documentTitle,
+        documentType: metadata.documentType,
+        editState: JSON.stringify(docketRecordEditState),
+        filingDate: metadata.receivedAt,
+        isOnDocketRecord: true,
+        mailingDate: metadata.mailingDate,
+        relationship,
+        userId: user.userId,
+      },
+      { applicationContext, petitioners: caseEntity.petitioners },
+    );
+
+    if (caseEntity.docketNumber === caseEntity.leadDocketNumber) {
+      filedByFromLeadCase = docketEntryEntity.filedBy;
+    }
+
+    if (filedByFromLeadCase) {
+      docketEntryEntity.filedBy = filedByFromLeadCase;
+    }
+
+    const workItem = new WorkItem(
+      {
+        assigneeId: null,
+        assigneeName: null,
+        associatedJudge: caseToUpdate.associatedJudge,
+        caseStatus: caseToUpdate.status,
+        caseTitle: Case.getCaseTitle(caseEntity.caseCaption),
+        docketEntry: {
+          ...docketEntryEntity.toRawObject(),
+          createdAt: docketEntryEntity.createdAt,
+        },
+        docketNumber: caseToUpdate.docketNumber,
+        docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
+        inProgress: isSavingForLater,
+        isRead: user.role !== ROLES.privatePractitioner,
+        leadDocketNumber: caseToUpdate.leadDocketNumber,
+        section: DOCKET_SECTION,
+        sentBy: user.name,
+        sentByUserId: user.userId,
+      },
+      { applicationContext },
+    );
+
+    docketEntryEntity.setWorkItem(workItem);
+
+    workItem.assignToUser({
+      assigneeId: user.userId,
+      assigneeName: user.name,
+      section: user.section,
+      sentBy: user.name,
+      sentBySection: user.section,
+      sentByUserId: user.userId,
     });
 
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity,
-  });
+    if (readyForService) {
+      docketEntryEntity.setAsServed(servedParties.all);
+    }
+
+    if (isFileAttached) {
+      docketEntryEntity.numberOfPages = await applicationContext
+        .getUseCaseHelpers()
+        .countPagesInDocument({
+          applicationContext,
+          docketEntryId,
+        });
+    }
+
+    caseEntity.addDocketEntry(docketEntryEntity);
+    const aCaseEntity = await applicationContext
+      .getUseCaseHelpers()
+      .updateCaseAutomaticBlock({
+        applicationContext,
+        caseEntity,
+      });
+
+    await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
+      applicationContext,
+      caseToUpdate: aCaseEntity.validate().toRawObject(),
+    });
+
+    if (readyForService) {
+      workItem.setAsCompleted({
+        message: 'completed',
+        user,
+      });
+    }
+
+    await saveWorkItem({
+      applicationContext,
+      isSavingForLater,
+      workItem,
+    });
+  }
 
   let paperServicePdfUrl;
 
@@ -162,32 +219,16 @@ export const addPaperFilingInteractor = async (
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
-        caseEntities: [caseEntity],
-        docketEntryId: docketEntryEntity.docketEntryId,
+        caseEntities,
+        docketEntryId,
       });
 
     if (servedParties.paper.length > 0) {
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
     }
-
-    workItem.setAsCompleted({
-      message: 'completed',
-      user,
-    });
   }
 
-  await saveWorkItem({
-    applicationContext,
-    isSavingForLater,
-    workItem,
-  });
-
-  await applicationContext.getUseCaseHelpers().updateCaseAndAssociations({
-    applicationContext,
-    caseToUpdate: caseEntity.validate().toRawObject(),
-  });
-
-  return { caseDetail: caseEntity.toRawObject(), paperServicePdfUrl };
+  return { caseDetail: caseEntityToUpdate.toRawObject(), paperServicePdfUrl };
 };
 
 /**

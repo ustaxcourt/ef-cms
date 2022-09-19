@@ -333,6 +333,7 @@ const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
 );
 const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
+
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
@@ -434,6 +435,12 @@ const TRACKED_DOCUMENT_TYPES = {
     eventCode: 'PSDE',
   },
 };
+
+const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+])
+  .filter(internalEvent => internalEvent.caseDecision)
+  .map(x => x.eventCode);
 
 const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
@@ -1443,6 +1450,7 @@ module.exports = deepFreeze({
   SESSION_TERMS,
   SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
