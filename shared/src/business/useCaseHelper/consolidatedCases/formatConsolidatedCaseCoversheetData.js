@@ -21,11 +21,13 @@ exports.formatConsolidatedCaseCoversheetData = async ({
       applicationContext,
       leadDocketNumber: caseEntity.docketNumber,
     });
+
   consolidatedCases.sort(
     (a, b) =>
       Case.getSortableDocketNumber(a.docketNumber) -
       Case.getSortableDocketNumber(b.docketNumber),
   );
+
   coverSheetData.consolidatedCases = consolidatedCases
     .map(consolidatedCase => ({
       docketNumber: consolidatedCase.docketNumber,

@@ -4,34 +4,16 @@ const {
 const {
   formatConsolidatedCaseCoversheetData,
 } = require('./formatConsolidatedCaseCoversheetData');
-import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../entities/EntityConstants';
 import { MOCK_CASE } from '../../../test/mockCase';
 
 describe('formatConsolidatedCaseCoversheetData', () => {
-  const testingCaseData = {
-    ...MOCK_CASE,
-    docketEntries: [
-      {
-        ...MOCK_CASE.docketEntries[0],
-        certificateOfService: false,
-        createdAt: '2019-04-19T14:45:15.595Z',
-        documentType: 'Answer',
-        eventCode: 'A',
-        filingDate: '2019-04-19T14:45:15.595Z',
-        isPaper: false,
-        processingStatus: DOCUMENT_PROCESSING_STATUS_OPTIONS.pending,
-      },
-    ],
-  };
-
-  applicationContext
-    .getUseCases()
-    .getFeatureFlagValueInteractor.mockResolvedValue({
-      isFeatureFlagEnabled: true,
-    });
-
-  it('should add consolidatedCases to the coversheet data when the document is being filed on a lead case and the feature flag is enabled', async () => {
-    const mockDocumentType = 'Hearing Exhibits';
+  const mockDocketEntry = MOCK_CASE.docketEntries[0];
+  beforeEach(() => {
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockResolvedValue({
+        isFeatureFlagEnabled: true,
+      });
 
     applicationContext
       .getPersistenceGateway()
@@ -43,7 +25,7 @@ describe('formatConsolidatedCaseCoversheetData', () => {
         {
           docketEntries: [
             {
-              docketEntryId: testingCaseData.docketEntries[0].docketEntryId,
+              docketEntryId: mockDocketEntry.docketEntryId,
               index: 3,
             },
           ],
@@ -53,37 +35,56 @@ describe('formatConsolidatedCaseCoversheetData', () => {
         {
           docketEntries: [
             {
-              docketEntryId: testingCaseData.docketEntries[0].docketEntryId,
+              docketEntryId: mockDocketEntry.docketEntryId,
               index: 4,
             },
           ],
           docketNumber: '101-19',
         },
       ]);
+  });
 
+  it('should add docket numbers of all cases in the consolidated group to the coversheet data', async () => {
     const result = await formatConsolidatedCaseCoversheetData({
       applicationContext,
-      caseEntity: {
-        ...testingCaseData,
-        leadDocketNumber: testingCaseData.docketNumber,
-      },
-      docketEntryEntity: {
-        ...testingCaseData.docketEntries[0],
-        documentTitle: undefined,
-        documentType: mockDocumentType,
-        eventCode: 'HE',
-      },
-      filingDateUpdated: false,
+      caseEntity: MOCK_CASE,
+      coverSheetData: {},
+      docketEntryEntity: mockDocketEntry,
     });
 
-    // should be in ascending order
     expect(result.consolidatedCases.length).toEqual(2);
+  });
+
+  it('should sort the docket numbers of all cases in the consolidated group by docketNumber, ascending', async () => {
+    const result = await formatConsolidatedCaseCoversheetData({
+      applicationContext,
+      caseEntity: MOCK_CASE,
+      coverSheetData: {},
+      docketEntryEntity: mockDocketEntry,
+    });
+
     expect(result.consolidatedCases[0]).toMatchObject({
       docketNumber: '101-19',
       documentNumber: 4,
     });
     expect(result.consolidatedCases[1]).toMatchObject({
       docketNumber: '101-30',
+      documentNumber: 3,
+    });
+  });
+
+  it('should include the index of the docket entry for each case in the consolidated group that the document was filed on', async () => {
+    const result = await formatConsolidatedCaseCoversheetData({
+      applicationContext,
+      caseEntity: MOCK_CASE,
+      coverSheetData: {},
+      docketEntryEntity: mockDocketEntry,
+    });
+
+    expect(result.consolidatedCases[0]).toMatchObject({
+      documentNumber: 4,
+    });
+    expect(result.consolidatedCases[1]).toMatchObject({
       documentNumber: 3,
     });
   });
