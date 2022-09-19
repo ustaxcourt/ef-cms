@@ -98,8 +98,8 @@ describe('trialSessionHeaderHelper', () => {
     });
   });
 
-  describe('showBatchDownloadButton', () => {
-    it('should be false when at the trial session does not have any assigned cases', () => {
+  describe('showBatchDownloadAndPrintButtons', () => {
+    it('should be false when a trial session has no assigned cases', () => {
       mockFormattedTrialSession = {
         ...mockFormattedTrialSession,
         allCases: [],
@@ -109,10 +109,10 @@ describe('trialSessionHeaderHelper', () => {
         state: baseState,
       });
 
-      expect(result.showBatchDownloadButton).toBe(false);
+      expect(result.showBatchDownloadAndPrintButtons).toBe(false);
     });
 
-    it('should be true when at least one case has been added to the session', () => {
+    it('should be true when at least one case has been added to the trial session', () => {
       mockFormattedTrialSession = {
         ...mockFormattedTrialSession,
         allCases: [{ docketNumber: '123-45' }],
@@ -122,7 +122,7 @@ describe('trialSessionHeaderHelper', () => {
         state: baseState,
       });
 
-      expect(result.showBatchDownloadButton).toBe(true);
+      expect(result.showBatchDownloadAndPrintButtons).toBe(true);
     });
   });
 

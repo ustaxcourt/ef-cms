@@ -35,7 +35,7 @@ export const TrialSessionWorkingCopy = connect(
         <TrialSessionDetailHeader />
         <section className="usa-section grid-container">
           <div className="grid-row">
-            <div className="grid-col-9">
+            <div className="grid-col-8">
               <h2 className="heading-1">
                 {trialSessionHeaderHelper.nameToDisplay} - Session Copy
                 {trialSessionHeaderHelper.showSwitchToSessionDetail && (
@@ -48,39 +48,38 @@ export const TrialSessionWorkingCopy = connect(
                 )}
               </h2>
             </div>
+            {trialSessionHeaderHelper.showBatchDownloadAndPrintButtons && (
+              <>
+                <div className="grid-col-2 text-right padding-top-2">
+                  <Button
+                    link
+                    aria-label="Print session copy"
+                    icon="print"
+                    onClick={() =>
+                      openPrintableTrialSessionWorkingCopyModalSequence()
+                    }
+                  >
+                    Print
+                  </Button>
+                </div>
 
-            <div className="grid-col-3 display-flex">
-              <span className="flex-push-right width-0 margin-left-auto" />
-              <Button
-                link
-                className="margin-top-2"
-                icon="print"
-                // href={`/trial-session-working-copy-printable/${formattedTrialSessionDetails.trialSessionId}`}
-                onClick={() =>
-                  openPrintableTrialSessionWorkingCopyModalSequence()
-                }
-              >
-                Print
-              </Button>
-            </div>
-
-            {trialSessionHeaderHelper.showBatchDownloadButton && (
-              <div className="grid-col-3 text-right padding-top-2">
-                <Button
-                  link
-                  aria-label="Download batch of documents in a trial session"
-                  onClick={() =>
-                    batchDownloadTrialSessionSequence({
-                      allowRetry: true,
-                      trialSessionId:
-                        formattedTrialSessionDetails.trialSessionId,
-                    })
-                  }
-                >
-                  <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />
-                  Download All Cases
-                </Button>
-              </div>
+                <div className="grid-col-2 text-right padding-top-2">
+                  <Button
+                    link
+                    aria-label="Download batch of documents in a trial session"
+                    onClick={() =>
+                      batchDownloadTrialSessionSequence({
+                        allowRetry: true,
+                        trialSessionId:
+                          formattedTrialSessionDetails.trialSessionId,
+                      })
+                    }
+                  >
+                    <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />
+                    Download All Cases
+                  </Button>
+                </div>
+              </>
             )}
           </div>
           <SuccessNotification />
