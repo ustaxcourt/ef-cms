@@ -29,12 +29,6 @@ services:
     environment:
       ES_JAVA_OPTS: -Xms512m -Xmx512m
       discovery.type: single-node
-    networks:
-      - elk
-
-networks:
-  elk:
-    driver: bridge
 
 volumes:
   elasticsearch:
