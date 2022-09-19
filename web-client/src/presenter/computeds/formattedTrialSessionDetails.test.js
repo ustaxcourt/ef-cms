@@ -10,6 +10,8 @@ describe('formattedTrialSessionDetails', () => {
 
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
+  const REGULAR_SESSION_TYPE = 'Regular';
+  const HYBRID_SESSION_TYPE = 'Hybrid';
 
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
@@ -50,6 +52,34 @@ describe('formattedTrialSessionDetails', () => {
       state: {},
     });
     expect(result).toBeUndefined();
+  });
+
+  it('should return false for isHybridSession when sessionType is set to Regular', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: REGULAR_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ isHybridSession: false });
+  });
+
+  it('should be true for isHybridSession when sessionType is set to Hybrid', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: HYBRID_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ isHybridSession: true });
   });
 
   it('should NOT set canDelete, canEdit, or can canClose when the trial session does NOT have a start date', () => {

@@ -1,0 +1,123 @@
+import { formattedTrialSessionDetailsForFilteredEligibleCases } from './formattedTrialSessionDetailsForFilteredEligibleCases';
+import { runCompute } from 'cerebral/test';
+
+jest.mock('./formattedTrialSessionDetails', () => {
+  return {
+    __esModule: true,
+    formattedTrialSessionDetails: () => ({
+      formattedEligibleCases: [
+        {
+          caseCaption: 'testPetitioner1, Petitioner',
+          caseTitle: 'testPetitioner1',
+          caseType: 'CDP (Lien/Levy)',
+          docketNumber: '103-20',
+          docketNumberSuffix: 'L',
+          docketNumberWithSuffix: '103-20L',
+          entityName: 'EligibleCase',
+          inConsolidatedGroup: false,
+          irsPractitioners: [],
+          isDocketSuffixHighPriority: true,
+          leadCase: false,
+          privatePractitioners: [],
+          qcCompleteForTrial: {},
+        },
+        {
+          caseCaption: 'testPetitioner2, Petitioner',
+          caseTitle: 'testPetitioner2',
+          caseType: 'Worker Classification',
+          docketNumber: '108-19',
+          docketNumberSuffix: null,
+          docketNumberWithSuffix: '108-19',
+          entityName: 'EligibleCase',
+          inConsolidatedGroup: false,
+          irsPractitioners: [],
+          isDocketSuffixHighPriority: false,
+          leadCase: false,
+          privatePractitioners: [],
+          qcCompleteForTrial: {},
+        },
+        {
+          caseCaption: 'testPetitioner3, Petitioner',
+          caseTitle: 'testPetitioner3',
+          caseType: 'Deficiency',
+          docketNumber: '101-20',
+          docketNumberSuffix: 'S',
+          docketNumberWithSuffix: '101-20S',
+          entityName: 'EligibleCase',
+          inConsolidatedGroup: false,
+          irsPractitioners: [],
+          isDocketSuffixHighPriority: true,
+          leadCase: false,
+          privatePractitioners: [],
+          qcCompleteForTrial: {},
+        },
+      ],
+    }),
+  };
+});
+
+describe('formattedTrialSessionDetailsForFilteredEligibleCases', () => {
+  it('should display all cases when filter is falsy', () => {
+    const result = runCompute(
+      formattedTrialSessionDetailsForFilteredEligibleCases,
+      {
+        state: {
+          screenMetadata: {
+            eligibleCasesFilter: {
+              hybridSessionFilter: undefined,
+            },
+          },
+        },
+      },
+    );
+
+    expect(result.formattedEligibleCases).toHaveLength(3);
+  });
+
+  it('should display all small cases when filter is equal to Small', () => {
+    const result = runCompute(
+      formattedTrialSessionDetailsForFilteredEligibleCases,
+      {
+        state: {
+          screenMetadata: {
+            eligibleCasesFilter: {
+              hybridSessionFilter: 'Small',
+            },
+          },
+        },
+      },
+    );
+
+    expect(result.formattedEligibleCases).toHaveLength(1);
+    expect(result.formattedEligibleCases[0]).toMatchObject({
+      docketNumber: '101-20',
+    });
+  });
+
+  it('should display all regular cases when filter is equal to Regular', () => {
+    const result = runCompute(
+      formattedTrialSessionDetailsForFilteredEligibleCases,
+      {
+        state: {
+          screenMetadata: {
+            eligibleCasesFilter: {
+              hybridSessionFilter: 'Regular',
+            },
+          },
+        },
+      },
+    );
+
+    expect(result.formattedEligibleCases).toHaveLength(2);
+    expect(result.formattedEligibleCases).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: '103-20',
+        }),
+        expect.objectContaining({
+          docketNumber: '108-19',
+        }),
+      ]),
+    );
+  });
+});
