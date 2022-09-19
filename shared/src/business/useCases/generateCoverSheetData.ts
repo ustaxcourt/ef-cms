@@ -1,6 +1,7 @@
 import {
   ALLOWLIST_FEATURE_FLAGS,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { omit } from 'lodash';
@@ -99,15 +100,22 @@ export const generateCoverSheetData = async ({
   if (
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       docketEntryEntity.eventCode,
-    ) ||
-    MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES
+    )
   ) {
     coverSheetData = omit(coverSheetData, [
       'dateReceived',
       'electronicallyFiled',
       'dateServed',
     ]);
-
+  }
+  if (
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      docketEntryEntity.eventCode,
+    ) ||
+    MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES.includes(
+      docketEntryEntity.eventCode,
+    )
+  ) {
     const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
     const isFeatureFlagEnabled = await applicationContext
       .getUseCases()
