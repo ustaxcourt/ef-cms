@@ -10,8 +10,9 @@ describe('formattedTrialSessionDetails', () => {
 
   const FUTURE_DATE = '2090-11-25T15:00:00.000Z';
   const PAST_DATE = '2000-11-25T15:00:00.000Z';
-  const REGULAR_SESSION_TYPE = 'Regular';
-  const HYBRID_SESSION_TYPE = 'Hybrid';
+  const { TRIAL_SESSION_TYPES } = applicationContext.getConstants();
+  const REGULAR_SESSION_TYPE = TRIAL_SESSION_TYPES.regular;
+  const HYBRID_SESSION_TYPE = TRIAL_SESSION_TYPES.hybrid;
 
   const { SESSION_STATUS_GROUPS } = applicationContext.getConstants();
 
