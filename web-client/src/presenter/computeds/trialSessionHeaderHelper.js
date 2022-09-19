@@ -37,7 +37,7 @@ export const trialSessionHeaderHelper = (get, applicationContext) => {
     nameToDisplay: isTrialClerk
       ? currentUser.name
       : formattedTrialSession.formattedJudge,
-    showBatchDownloadButton: !isEmpty(formattedTrialSession.allCases),
+    showBatchDownloadAndPrintButtons: !isEmpty(formattedTrialSession.allCases),
     showSwitchToSessionDetail,
     showSwitchToWorkingCopy,
     title: 'Session Working Copy',
