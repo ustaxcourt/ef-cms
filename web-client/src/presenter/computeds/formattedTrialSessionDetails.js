@@ -68,7 +68,5 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     }
   }
 
-  console.log(formattedTrialSession);
-
   return formattedTrialSession;
 };
