@@ -7,18 +7,19 @@ const isMemberCase = formattedCase => {
   return formattedCase.inConsolidatedGroup && !formattedCase.leadCase;
 };
 
+const filterMap = {
+  aBasisReached: 'A Basis Reached',
+  continued: 'Continued',
+  dismissed: 'Dismissed',
+  recall: 'Recall',
+  rule122: 'Rule 122',
+  setForTrial: 'Set For Trial',
+  settled: 'Settled',
+  statusUnassigned: 'Status Unassigned',
+  takenUnderAdvisement: 'Taken Under Advisement',
+};
+
 const generateSelectedFilterList = filters => {
-  const filterMap = {
-    aBasisReached: 'A Basis Reached',
-    continued: 'Continued',
-    dismissed: 'Dismissed',
-    recall: 'Recall',
-    rule122: 'Rule 122',
-    setForTrial: 'Set For Trial',
-    settled: 'Settled',
-    statusUnassigned: 'Status Unassigned',
-    takenUnderAdvisement: 'Taken Under Advisement',
-  };
   const selectedFilters = [];
 
   Object.keys(filters).map(key => {
@@ -150,7 +151,7 @@ export const PrintableWorkingCopySessionList = ({
                         {formattedCase.filingPartiesCode}
                       </td>
                       <td className="minw-30">
-                        {formattedCase.trialStatus || 'Unassigned'}
+                        {filterMap[formattedCase.trialStatus] || 'Unassigned'}
                       </td>
                     </tr>
                     <tr className="border-bottom-0 border-top-0">
