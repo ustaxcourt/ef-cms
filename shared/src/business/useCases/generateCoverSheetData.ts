@@ -3,7 +3,7 @@ import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
 } from '../entities/EntityConstants';
 import { Case } from '../entities/cases/Case';
-import { formatDateString, FORMATS } from '../utilities/DateHandler';
+import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { omit } from 'lodash';
 
 const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
@@ -105,47 +105,62 @@ export const generateCoverSheetData = async ({
       docketEntryEntity.eventCode,
     )
   ) {
-    coverSheetData = omit(coverSheetData, [
-      'dateReceived',
-      'electronicallyFiled',
-      'dateServed',
-    ]);
+    coverSheetData = await formatConsolidatedCaseCoversheetData({
+      applicationContext,
+      caseEntity,
+      coverSheetData,
+      docketEntryEntity,
+    });
+  }
 
-    const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
-    const isFeatureFlagEnabled = await applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor(applicationContext, {
-        featureFlag:
-          ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
-            .key,
+  return coverSheetData;
+};
+
+const formatConsolidatedCaseCoversheetData = async ({
+  applicationContext,
+  caseEntity,
+  coverSheetData,
+  docketEntryEntity,
+}) => {
+  coverSheetData = omit(coverSheetData, [
+    'dateReceived',
+    'electronicallyFiled',
+    'dateServed',
+  ]);
+
+  const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
+  const isFeatureFlagEnabled = await applicationContext
+    .getUseCases()
+    .getFeatureFlagValueInteractor(applicationContext, {
+      featureFlag:
+        ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES.key,
+    });
+
+  if (isLeadCase && isFeatureFlagEnabled) {
+    const consolidatedCases = await applicationContext
+      .getPersistenceGateway()
+      .getCasesByLeadDocketNumber({
+        applicationContext,
+        leadDocketNumber: caseEntity.docketNumber,
       });
-
-    if (isLeadCase && isFeatureFlagEnabled) {
-      const consolidatedCases = await applicationContext
-        .getPersistenceGateway()
-        .getCasesByLeadDocketNumber({
-          applicationContext,
-          leadDocketNumber: caseEntity.docketNumber,
-        });
-      consolidatedCases.sort(
-        (a, b) =>
-          Case.getSortableDocketNumber(a.docketNumber) -
-          Case.getSortableDocketNumber(b.docketNumber),
+    consolidatedCases.sort(
+      (a, b) =>
+        Case.getSortableDocketNumber(a.docketNumber) -
+        Case.getSortableDocketNumber(b.docketNumber),
+    );
+    coverSheetData.consolidatedCases = consolidatedCases
+      .map(consolidatedCase => ({
+        docketNumber: consolidatedCase.docketNumber,
+        documentNumber: (
+          consolidatedCase.docketEntries.find(
+            docketEntry =>
+              docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
+          ) || {}
+        ).index,
+      }))
+      .filter(
+        consolidatedCase => consolidatedCase.documentNumber !== undefined,
       );
-      coverSheetData.consolidatedCases = consolidatedCases
-        .map(consolidatedCase => ({
-          docketNumber: consolidatedCase.docketNumber,
-          documentNumber: (
-            consolidatedCase.docketEntries.find(
-              docketEntry =>
-                docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
-            ) || {}
-          ).index,
-        }))
-        .filter(
-          consolidatedCase => consolidatedCase.documentNumber !== undefined,
-        );
-    }
   }
 
   return coverSheetData;
