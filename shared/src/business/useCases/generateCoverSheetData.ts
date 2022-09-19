@@ -99,7 +99,8 @@ export const generateCoverSheetData = async ({
   if (
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       docketEntryEntity.eventCode,
-    )
+    ) ||
+    MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES
   ) {
     coverSheetData = omit(coverSheetData, [
       'dateReceived',
@@ -117,14 +118,14 @@ export const generateCoverSheetData = async ({
       });
 
     if (isLeadCase && isFeatureFlagEnabled) {
-      coverSheetData = (
-        await applicationContext.getUseCaseHelpers()
-      ).formatConsolidatedCaseCoversheetData({
-        applicationContext,
-        caseEntity,
-        coverSheetData,
-        docketEntryEntity,
-      });
+      coverSheetData = await applicationContext
+        .getUseCaseHelpers()
+        .formatConsolidatedCaseCoversheetData({
+          applicationContext,
+          caseEntity,
+          coverSheetData,
+          docketEntryEntity,
+        });
     }
   }
 
