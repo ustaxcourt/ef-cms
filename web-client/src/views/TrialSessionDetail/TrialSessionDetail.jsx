@@ -70,6 +70,9 @@ export const TrialSessionDetail = connect(
                         <BindedSelect
                           aria-label="session"
                           bind="screenMetadata.eligibleCasesFilter.hybridSessionFilter"
+                          disabled={
+                            formattedTrialSessionDetails.disableHybridFilter
+                          }
                           id="hybridSessionFilter"
                           name="hybridSessionFilter"
                         >
