@@ -50,7 +50,7 @@ export const TrialSessionWorkingCopy = connect(
             </div>
             {trialSessionHeaderHelper.showBatchDownloadAndPrintButtons && (
               <>
-                <div className="grid-col-2 text-right padding-top-2">
+                <div className="grid-col-2 text-right padding-top-1">
                   <Button
                     link
                     aria-label="Print session copy"
@@ -63,7 +63,7 @@ export const TrialSessionWorkingCopy = connect(
                   </Button>
                 </div>
 
-                <div className="grid-col-2 text-right padding-top-2">
+                <div className="grid-col-2 text-right padding-top-1">
                   <Button
                     link
                     aria-label="Download batch of documents in a trial session"
