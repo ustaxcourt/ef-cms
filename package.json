@@ -73,26 +73,6 @@
     "wicg-inert": "^3.1.2",
     "winston": "^3.8.2"
   },
-  "lint-staged": {
-    "*.{js,jsx,ts,tsx}": [
-      "eslint"
-    ],
-    "**/*.{ts,tsx}": [
-      "bash -c tsc --noEmit"
-    ],
-    "pa11y-*.js": [
-      "node lint-pa11y.js"
-    ],
-    "*.{css,scss}": [
-      "stylelint"
-    ],
-    "swagger.json,v1.yaml,v2.yaml": [
-      "swagger-cli validate"
-    ],
-    "*.{sh}": [
-      "lint-staged-shellcheck"
-    ]
-  },
   "scripts": {
     "admin:create-user": "node shared/admin-tools/user/add-user.js",
     "admin:become-user": "node shared/admin-tools/glue/become-user.js",
