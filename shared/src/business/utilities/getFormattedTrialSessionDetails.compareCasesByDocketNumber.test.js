@@ -1,9 +1,12 @@
-import { compareTrialSessionEligibleCases } from './getFormattedTrialSessionDetails';
+import {
+  compareTrialSessionEligibleCases,
+  compareTrialSessionEligibleCasesGroupsFactory,
+} from './getFormattedTrialSessionDetails';
 
 describe('formattedTrialSessionDetails', () => {
   describe('comparing eligible cases', () => {
     it('prioritizes L and P', () => {
-      const result = compareTrialSessionEligibleCases(
+      const result = compareTrialSessionEligibleCases()(
         {
           docketNumber: '101-19',
           docketNumberSuffix: '',
@@ -35,7 +38,7 @@ describe('formattedTrialSessionDetails', () => {
         },
       ];
       const result = formattedEligibleCases.sort(
-        compareTrialSessionEligibleCases,
+        compareTrialSessionEligibleCases(),
       );
       expect(result).toMatchObject([
         {
@@ -82,7 +85,7 @@ describe('formattedTrialSessionDetails', () => {
         },
       ];
       const result = formattedEligibleCases.sort(
-        compareTrialSessionEligibleCases,
+        compareTrialSessionEligibleCases(),
       );
       expect(result).toMatchObject([
         {
@@ -109,5 +112,145 @@ describe('formattedTrialSessionDetails', () => {
         },
       ]);
     });
+  });
+
+  it('groups consolidated cases together for display', () => {
+    const eligibleCases = [
+      {
+        docketNumber: '104-22',
+      },
+    ];
+    const formattedEligibleCases = [
+      {
+        docketNumber: '103-22',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '103-22',
+        leadDocketNumber: '104-22',
+      },
+      {
+        docketNumber: '106-22',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '106-22',
+        leadDocketNumber: '104-22',
+      },
+      {
+        docketNumber: '104-22',
+        docketNumberSuffix: 'L',
+        docketNumberWithSuffix: '104-22L',
+        leadDocketNumber: '104-22',
+      },
+      {
+        docketNumber: '105-22',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '105-22P',
+      },
+      {
+        docketNumber: '107-22',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '107-22P',
+        highPriority: true,
+      },
+      {
+        docketNumber: '108-22',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '108-22P',
+        isManuallyAdded: true,
+      },
+    ];
+    const result = formattedEligibleCases.sort(
+      compareTrialSessionEligibleCases(
+        compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
+      ),
+    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '108-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '107-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+    ]);
+  });
+
+  it('groups consolidated cases together for display when consolidated groups are out of order', () => {
+    const eligibleCases = [
+      {
+        docketNumber: '104-22',
+      },
+    ];
+    const formattedEligibleCases = [
+      {
+        docketNumber: '106-22',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '106-22',
+        leadDocketNumber: '104-22',
+      },
+      {
+        docketNumber: '104-22',
+        docketNumberSuffix: 'L',
+        docketNumberWithSuffix: '104-22L',
+        leadDocketNumber: '104-22',
+      },
+      {
+        docketNumber: '103-22',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '103-22',
+        leadDocketNumber: '104-22',
+      },
+      {
+        docketNumber: '105-22',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '105-22P',
+      },
+      {
+        docketNumber: '107-22',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '107-22P',
+        highPriority: true,
+      },
+      {
+        docketNumber: '108-22',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '108-22P',
+        isManuallyAdded: true,
+      },
+    ];
+    const result = formattedEligibleCases.sort(
+      compareTrialSessionEligibleCases(
+        compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
+      ),
+    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '108-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '107-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+    ]);
   });
 });
