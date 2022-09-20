@@ -50,7 +50,7 @@ describe('formatConsolidatedCaseCoversheetData', () => {
     expect(result.consolidatedCases.length).toEqual(2);
   });
 
-  it.only('should not add any consolidated group information to the coverhseet when the document has only been filed on the lead case', async () => {
+  it('should not add any consolidated group information to the coverhseet when the document has only been filed on the lead case', async () => {
     const result = await formatConsolidatedCaseCoversheetData({
       applicationContext,
       caseEntity: MOCK_CASE,
