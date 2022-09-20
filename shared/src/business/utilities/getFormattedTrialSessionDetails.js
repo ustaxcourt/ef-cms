@@ -97,35 +97,34 @@ exports.compareTrialSessionEligibleCases =
     }
   };
 
+const getSortableDocketNumber = docketNumber => {
+  const [number, year] = docketNumber.split('-');
+  return `${year}-${number.padStart(6, '0')}`;
+};
+
+const getFullSortString = (theCase, cases) => {
+  const isLeadInEligible =
+    !!theCase.leadDocketNumber &&
+    !!cases.find(aCase => aCase.docketNumber === theCase.leadDocketNumber);
+
+  return `${getSortableDocketNumber(
+    isLeadInEligible
+      ? theCase.docketNumber === theCase.leadDocketNumber
+        ? '000-00'
+        : theCase.leadDocketNumber
+      : theCase.docketNumber,
+  )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+};
+
 exports.compareTrialSessionEligibleCasesGroupsFactory =
   eligibleCases => (a, b) => {
     if (!a || !a.docketNumber || !b || !b.docketNumber) {
       return 0;
     }
 
-    let aDocketNumber = a.docketNumber;
-    let bDocketNumber = b.docketNumber;
-
-    if (
-      eligibleCases.find(theCase => theCase.docketNumber === a.leadDocketNumber)
-    ) {
-      aDocketNumber = a.leadDocketNumber;
-    }
-
-    if (
-      eligibleCases.find(theCase => theCase.docketNumber === b.leadDocketNumber)
-    ) {
-      bDocketNumber = b.leadDocketNumber;
-    }
-
-    if (a.leadDocketNumber === b.leadDocketNumber) {
-      return exports.compareCasesByDocketNumber(a, b);
-    } else {
-      return exports.compareCasesByDocketNumber(
-        { ...a, docketNumber: aDocketNumber },
-        { ...b, docketNumber: bDocketNumber },
-      );
-    }
+    let aSortString = getFullSortString(a, eligibleCases);
+    let bSortString = getFullSortString(b, eligibleCases);
+    return aSortString.localeCompare(bSortString);
   };
 
 exports.compareCasesByDocketNumber = (a, b) => {
