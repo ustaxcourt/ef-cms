@@ -19,7 +19,6 @@ export const generatePdfFromHtmlInteractor = async (
     docketNumber,
     footerHtml,
     headerHtml,
-    overrideHeader,
     overwriteFooter,
   }: {
     contentHtml: string;
@@ -27,8 +26,7 @@ export const generatePdfFromHtmlInteractor = async (
     docketNumber: string;
     footerHtml: string;
     headerHtml: string;
-    overwriteFooter: boolean;
-    overrideHeader: string;
+    overwriteFooter: string;
   },
 ) => {
   let browser = null;
@@ -49,10 +47,8 @@ export const generatePdfFromHtmlInteractor = async (
       });
     }
 
-    const headerTemplate =
-      overrideHeader ||
-      `
-          <div style="font-size: 8px; width: 100%; margin: 0 40px; margin-top: 0;">
+    const headerTemplate = `
+          <div style="font-size: 8px; width: 100%; margin: 25px 40px 0 -11px;">
             ${headerHtml}
           </div>
     `;
