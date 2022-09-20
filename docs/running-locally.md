@@ -32,6 +32,7 @@ As of 03/17/22, AWS Lambda only supports up to [`nodejs14.x`](https://docs.aws.a
 ### Java 11+ 
 
 You will need Java installed in order to run **[elasticsearch](https://www.elastic.co/)** and **[dynamodb](https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/DynamoDBLocal.DownloadingAndRunning.html)** locally on your machine.  Grabbing the latest version of Java JDK should work fine.
+
 ### JQ
 
 JQ is a tool used for parsing JSON in the command line.  We use JQ a lot in various deployment scripts.
