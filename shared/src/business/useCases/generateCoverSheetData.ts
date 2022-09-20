@@ -1,9 +1,8 @@
 import {
-  ALLOWLIST_FEATURE_FLAGS,
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
+  MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
-import { Case } from '../entities/cases/Case';
-import { formatDateString, FORMATS } from '../utilities/DateHandler';
+import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { omit } from 'lodash';
 
 const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
@@ -38,16 +37,13 @@ export const generateCoverSheetData = async ({
   stampData?: any;
   useInitialData: boolean;
 }) => {
-  const isLodged = docketEntryEntity.lodged;
-  const { certificateOfService, isPaper } = docketEntryEntity;
-
   const dateServedFormatted = docketEntryEntity.servedAt
     ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
     : '';
 
-  let dateReceivedFormatted = formatDateReceived({
+  const dateReceivedFormatted = formatDateReceived({
     docketEntryEntity,
-    isPaper,
+    isPaper: docketEntryEntity.isPaper,
   });
 
   const dateFiledFormatted = docketEntryEntity.filingDate
@@ -85,9 +81,9 @@ export const generateCoverSheetData = async ({
   let coverSheetData: any = {
     caseCaptionExtension,
     caseTitle,
-    certificateOfService,
+    certificateOfService: docketEntryEntity.certificateOfService,
     dateFiledLodged: dateFiledFormatted,
-    dateFiledLodgedLabel: isLodged ? 'Lodged' : 'Filed',
+    dateFiledLodgedLabel: docketEntryEntity.lodged ? 'Lodged' : 'Filed',
     dateReceived: filingDateUpdated
       ? dateFiledFormatted
       : dateReceivedFormatted,
@@ -110,41 +106,27 @@ export const generateCoverSheetData = async ({
       'electronicallyFiled',
       'dateServed',
     ]);
+  }
 
+  if (
+    COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
+      docketEntryEntity.eventCode,
+    ) ||
+    MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES.includes(
+      docketEntryEntity.eventCode,
+    )
+  ) {
     const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
-    const isFeatureFlagEnabled = await applicationContext
-      .getUseCases()
-      .getFeatureFlagValueInteractor(applicationContext, {
-        featureFlag:
-          ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
-            .key,
-      });
 
-    if (isLeadCase && isFeatureFlagEnabled) {
-      const consolidatedCases = await applicationContext
-        .getPersistenceGateway()
-        .getCasesByLeadDocketNumber({
+    if (isLeadCase) {
+      coverSheetData = await applicationContext
+        .getUseCaseHelpers()
+        .formatConsolidatedCaseCoversheetData({
           applicationContext,
-          leadDocketNumber: caseEntity.docketNumber,
+          caseEntity,
+          coverSheetData,
+          docketEntryEntity,
         });
-      consolidatedCases.sort(
-        (a, b) =>
-          Case.getSortableDocketNumber(a.docketNumber) -
-          Case.getSortableDocketNumber(b.docketNumber),
-      );
-      coverSheetData.consolidatedCases = consolidatedCases
-        .map(consolidatedCase => ({
-          docketNumber: consolidatedCase.docketNumber,
-          documentNumber: (
-            consolidatedCase.docketEntries.find(
-              docketEntry =>
-                docketEntryEntity.docketEntryId === docketEntry.docketEntryId,
-            ) || {}
-          ).index,
-        }))
-        .filter(
-          consolidatedCase => consolidatedCase.documentNumber !== undefined,
-        );
     }
   }
 

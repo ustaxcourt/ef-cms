@@ -18,9 +18,13 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   let caseRecord;
   const DOCKET_NUMBER = '101-20';
   const DOCKET_ENTRY_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
+  const mockNumberOfPages = 999;
 
   beforeAll(() => {
     const PDF_MOCK_BUFFER = 'Hello World';
+    applicationContext
+      .getUseCaseHelpers()
+      .countPagesInDocument.mockReturnValue(mockNumberOfPages);
 
     (addCoverToPdf as jest.Mock).mockResolvedValue({
       pdfData: testPdfDoc,

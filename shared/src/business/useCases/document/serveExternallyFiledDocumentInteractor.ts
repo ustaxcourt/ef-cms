@@ -3,10 +3,7 @@ import { addCoverToPdf } from '../addCoverToPdf';
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
-const {
-  ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
+const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 const {
   createISODateString,
   formatDateString,
@@ -23,7 +20,6 @@ const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
-const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * serveExternallyFiledDocumentInteractor
@@ -107,26 +103,13 @@ export const serveExternallyFiledDocumentInteractor = async (
     })
     .promise();
 
-  const { pdfData: servedDocWithCover } = await addCoverToPdf({
-    applicationContext,
-    caseEntity: subjectCaseEntity,
-    docketEntryEntity: originalSubjectDocketEntry,
-    pdfData,
-  });
-
-  const stampedPdf = await stampDocument({
-    applicationContext,
-    form: originalSubjectDocketEntry,
-    pdfData: servedDocWithCover,
-  });
-
   const numberOfPages = await applicationContext
     .getUseCaseHelpers()
     .countPagesInDocument({
       applicationContext,
       docketEntryId,
       documentBytes: pdfData,
-    });
+  });
 
   await applicationContext
     .getPersistenceGateway()
@@ -139,6 +122,7 @@ export const serveExternallyFiledDocumentInteractor = async (
 
   let caseEntities = [];
   let serviceResults;
+  let stampedPdf; 
 
   try {
     for (const docketNumber of docketNumbers) {
@@ -152,16 +136,30 @@ export const serveExternallyFiledDocumentInteractor = async (
       caseEntities.push(new Case(caseToUpdate, { applicationContext }));
     }
 
+    const coversheetLength = 1;
     const filedDocumentPromises = caseEntities.map(caseEntity =>
       fileDocumentOnOneCase({
         applicationContext,
         caseEntity,
-        numberOfPages,
+        numberOfPages: (numberOfPages + coversheetLength),
         originalSubjectDocketEntry,
         user,
       }),
     );
     caseEntities = await Promise.all(filedDocumentPromises);
+
+    const { pdfData: servedDocWithCover } = await addCoverToPdf({
+      applicationContext,
+      caseEntity: subjectCaseEntity,
+      docketEntryEntity: originalSubjectDocketEntry,
+      pdfData,
+    });
+
+    stampedPdf = await stampDocument({
+      applicationContext,
+      form: originalSubjectDocketEntry,
+      pdfData: servedDocWithCover,
+    });
 
     serviceResults = await applicationContext
       .getUseCaseHelpers()
