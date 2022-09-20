@@ -15,7 +15,7 @@ exports.formatConsolidatedCaseCoversheetData = async ({
   coverSheetData,
   docketEntryEntity,
 }) => {
-  const consolidatedCases = await applicationContext
+  let consolidatedCases = await applicationContext
     .getPersistenceGateway()
     .getCasesByLeadDocketNumber({
       applicationContext,
@@ -28,7 +28,7 @@ exports.formatConsolidatedCaseCoversheetData = async ({
       Case.getSortableDocketNumber(b.docketNumber),
   );
 
-  coverSheetData.consolidatedCases = consolidatedCases
+  consolidatedCases = consolidatedCases
     .map(consolidatedCase => ({
       docketNumber: consolidatedCase.docketNumber,
       documentNumber: (
@@ -39,6 +39,10 @@ exports.formatConsolidatedCaseCoversheetData = async ({
       ).index,
     }))
     .filter(consolidatedCase => consolidatedCase.documentNumber !== undefined);
+
+  if (consolidatedCases.length) {
+    coverSheetData.consolidatedCases = consolidatedCases;
+  }
 
   return coverSheetData;
 };
