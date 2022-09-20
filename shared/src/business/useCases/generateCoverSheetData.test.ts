@@ -1,5 +1,4 @@
 import {
-  COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES,
@@ -104,7 +103,7 @@ describe('generateCoverSheetData', () => {
     expect(result.documentTitle).toEqual(`Petition ${expectedAdditionalInfo}`);
   });
 
-  it('should append "Filed" as filing date to the coversheet when the document is NOT lodged', async () => {
+  it('should append a filing date label of Filed when the document is NOT lodged', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -117,7 +116,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateFiledLodgedLabel).toEqual('Filed');
   });
 
-  it('should append "Lodged" as filing date to the coversheet when the document is lodged', async () => {
+  it('should append a filing date label of Lodged when the document is lodged', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -130,7 +129,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateFiledLodgedLabel).toEqual('Lodged');
   });
 
-  it('should append the received date WITH time to the coversheet when the document is electronically filed', async () => {
+  it('should append the received date WITH time when the document is electronically filed', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -145,7 +144,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateReceived).toEqual('04/19/19 10:45 am');
   });
 
-  it('should append the received date as an empty string to the coversheet when the document does not have a valid createdAt and is electronically filed', async () => {
+  it('should append the received date as an empty string when the document does not have a valid createdAt and is electronically filed', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -160,7 +159,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateReceived).toEqual('');
   });
 
-  it('should append the received date WITHOUT time to the coversheet when the document is paper filed', async () => {
+  it('should append the received date WITHOUT time when the document is paper filed', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -174,7 +173,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateReceived).toEqual('04/19/19');
   });
 
-  it('should NOT append the received date to the coversheet when the document does not have a valid createdAt and is filed by paper', async () => {
+  it('shows does not show the received date if the document does not have a valid createdAt and is filed by paper', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -188,7 +187,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateReceived).toEqual('');
   });
 
-  it('should append the servedDate of the document to the coversheet when it is defined as "MM/DD/YY"', async () => {
+  it('displays the date served if present in MMDDYYYY format', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -201,7 +200,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateServed).toEqual('04/20/19');
   });
 
-  it('should append the servedDate of the document to the coversheet as an empty string when it is not defined', async () => {
+  it('does not display the service date if servedAt is not present', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -214,7 +213,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateServed).toEqual('');
   });
 
-  it('should append the docketNumberWithSuffix as the docketNumber to the coversheet when case type suffix is undefined', async () => {
+  it('returns the docket number along with a Docket Number label', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -224,7 +223,7 @@ describe('generateCoverSheetData', () => {
     expect(result.docketNumberWithSuffix).toEqual(MOCK_CASE.docketNumber);
   });
 
-  it('should append the docket number with suffix to the coversheet when the case has a suffix defined', async () => {
+  it('returns the docket number with suffix along with a Docket Number label', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: {
@@ -240,7 +239,7 @@ describe('generateCoverSheetData', () => {
     );
   });
 
-  it('should return electronicallyFiled as true when the document is not paper filed', async () => {
+  it('displays Electronically Filed when the document is filed electronically', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -253,7 +252,7 @@ describe('generateCoverSheetData', () => {
     expect(result.electronicallyFiled).toEqual(true);
   });
 
-  it('should return electronicallyFiled as false when the document is filed by paper', async () => {
+  it('does NOT display Electronically Filed when the document is filed by paper', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -266,7 +265,7 @@ describe('generateCoverSheetData', () => {
     expect(result.electronicallyFiled).toEqual(false);
   });
 
-  it('should append the mailing date to the coversheet when it is defined', async () => {
+  it('returns the mailing date if present', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -279,7 +278,7 @@ describe('generateCoverSheetData', () => {
     expect(result.mailingDate).toEqual('04/16/2019');
   });
 
-  it('should append the index of the docket entry to the coversheet', async () => {
+  it('returns the index of the docket entry as part of the coversheet data', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -292,7 +291,7 @@ describe('generateCoverSheetData', () => {
     expect(result.index).toEqual(testingCaseData.docketEntries[0].index);
   });
 
-  it('should append the mailingDate as an empty string to the coversheet when it is not defined', async () => {
+  it('returns an empty string for the mailing date if NOT present', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -305,7 +304,7 @@ describe('generateCoverSheetData', () => {
     expect(result.mailingDate).toEqual('');
   });
 
-  it('should append caseCaptionExtension to the coversheet as "Petitioners" when there are multiple petitioners on the case', async () => {
+  it('generates cover sheet data appropriate for multiple petitioners', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: {
@@ -318,7 +317,7 @@ describe('generateCoverSheetData', () => {
     expect(result.caseCaptionExtension).toEqual('Petitioners');
   });
 
-  it('should append caseCaptionExtension to the coversheet as "Petitioner" when there is a single petitioner on the case', async () => {
+  it('generates cover sheet data appropriate for a single petitioner', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -328,7 +327,7 @@ describe('generateCoverSheetData', () => {
     expect(result.caseCaptionExtension).toEqual(PARTY_TYPES.petitioner);
   });
 
-  it('should append an empty string for caseCaptionExtension to the coversheet when the caseCaption is not in the proper format', async () => {
+  it('generates empty string for caseCaptionExtension if the caseCaption is not in the proper format', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: {
@@ -341,7 +340,7 @@ describe('generateCoverSheetData', () => {
     expect(result.caseCaptionExtension).toEqual('');
   });
 
-  it('should append the original caseCaption and docketNumber to the coversheet when the useInitialData is true', async () => {
+  it('preserves the original case caption and docket number when the useInitialData is true', async () => {
     const mockInitialDocketNumberSuffix = 'Z';
 
     const result = await generateCoverSheetData({
@@ -363,15 +362,15 @@ describe('generateCoverSheetData', () => {
     expect(result.caseTitle).toEqual('Janie and Jackie Petitioner, ');
   });
 
-  it('should NOT append dateReceived, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', async () => {
+  it('does NOT display dateReceived, electronicallyFiled, and dateServed when the coversheet is being generated for a court issued document', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
       docketEntryEntity: {
         ...testingCaseData.docketEntries[0],
-        dateReceived: '2012-04-20T14:45:15.595Z',
-        electronicallyFiled: true,
-        eventCode: COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET[0],
+        documentType: 'U.S.C.A',
+        eventCode: 'USCA',
+        lodged: true,
         servedAt: '2019-04-20T14:45:15.595Z',
       },
     } as any);
@@ -381,7 +380,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateServed).toBeUndefined();
   });
 
-  it('should append dateRecieved as formatted dateFiled to the coversheet when the filingDateUpdated is true', async () => {
+  it('sets the dateReceived to dateFiledFormatted when the filingDate has been updated', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -395,7 +394,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateReceived).toBe('05/19/19');
   });
 
-  it('should append dateReceived as createdAt date when the filingDateUpdated is false', async () => {
+  it('sets the dateReceived to createdAt date when the filingDate has not been updated', async () => {
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
@@ -411,7 +410,7 @@ describe('generateCoverSheetData', () => {
     expect(result.dateReceived).toBe('02/15/19');
   });
 
-  it('should append documentType as documentTitle to the coversheet when documentTitle is undefined', async () => {
+  it('should use documentType as documentTitle if documentTitle is undefined', async () => {
     const mockDocumentType = 'test doc type';
 
     const result = await generateCoverSheetData({
@@ -428,9 +427,8 @@ describe('generateCoverSheetData', () => {
     expect(result.documentTitle).toBe(mockDocumentType);
   });
 
-  it('should append the formatted stamp date as "MM/DD/YYYY" to the coversheet when stampData.date is defined', async () => {
+  it('should formatDateString if stampData.date exists', async () => {
     const mockDate = applicationContext.getUtilities().createISODateString();
-
     const result = await generateCoverSheetData({
       applicationContext,
       caseEntity: testingCaseData,
