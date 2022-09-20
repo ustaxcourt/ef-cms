@@ -103,27 +103,6 @@ export const serveExternallyFiledDocumentInteractor = async (
     })
     .promise();
 
-  const { pdfData: servedDocWithCover } = await addCoverToPdf({
-    applicationContext,
-    caseEntity: subjectCaseEntity,
-    docketEntryEntity: originalSubjectDocketEntry,
-    pdfData,
-  });
-
-  const stampedPdf = await stampDocument({
-    applicationContext,
-    form: originalSubjectDocketEntry,
-    pdfData: servedDocWithCover,
-  });
-
-  const numberOfPages = await applicationContext
-    .getUseCaseHelpers()
-    .countPagesInDocument({
-      applicationContext,
-      docketEntryId,
-      documentBytes: pdfData,
-    });
-
   await applicationContext
     .getPersistenceGateway()
     .updateDocketEntryPendingServiceStatus({
@@ -158,6 +137,19 @@ export const serveExternallyFiledDocumentInteractor = async (
       }),
     );
     caseEntities = await Promise.all(filedDocumentPromises);
+
+    const { pdfData: servedDocWithCover, numberOfPages } = await addCoverToPdf({
+      applicationContext,
+      caseEntity: subjectCaseEntity,
+      docketEntryEntity: originalSubjectDocketEntry,
+      pdfData,
+    });
+
+    const stampedPdf = await stampDocument({
+      applicationContext,
+      form: originalSubjectDocketEntry,
+      pdfData: servedDocWithCover,
+    });
 
     serviceResults = await applicationContext
       .getUseCaseHelpers()
