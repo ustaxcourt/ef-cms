@@ -162,6 +162,7 @@ describe('formattedTrialSessionDetails', () => {
         compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
       ),
     );
+
     expect(result).toEqual([
       expect.objectContaining({
         docketNumber: '108-22',
@@ -170,10 +171,10 @@ describe('formattedTrialSessionDetails', () => {
         docketNumber: '107-22',
       }),
       expect.objectContaining({
-        docketNumber: '103-22',
+        docketNumber: '104-22',
       }),
       expect.objectContaining({
-        docketNumber: '104-22',
+        docketNumber: '103-22',
       }),
       expect.objectContaining({
         docketNumber: '106-22',
@@ -187,7 +188,7 @@ describe('formattedTrialSessionDetails', () => {
   it('groups consolidated cases together for display when consolidated groups are out of order', () => {
     const eligibleCases = [
       {
-        docketNumber: '104-22',
+        docketNumber: '103-22',
       },
     ];
     const formattedEligibleCases = [
@@ -195,19 +196,19 @@ describe('formattedTrialSessionDetails', () => {
         docketNumber: '106-22',
         docketNumberSuffix: '',
         docketNumberWithSuffix: '106-22',
-        leadDocketNumber: '104-22',
+        leadDocketNumber: '103-22',
       },
       {
         docketNumber: '104-22',
         docketNumberSuffix: 'L',
         docketNumberWithSuffix: '104-22L',
-        leadDocketNumber: '104-22',
+        leadDocketNumber: '103-22',
       },
       {
         docketNumber: '103-22',
         docketNumberSuffix: '',
         docketNumberWithSuffix: '103-22',
-        leadDocketNumber: '104-22',
+        leadDocketNumber: '103-22',
       },
       {
         docketNumber: '105-22',
