@@ -42,7 +42,7 @@ export const generateCoverSheetData = async ({
     ? formatDateString(docketEntryEntity.servedAt, FORMATS.MMDDYY)
     : '';
 
-  let dateReceivedFormatted = formatDateReceived({
+  const dateReceivedFormatted = formatDateReceived({
     docketEntryEntity,
     isPaper: docketEntryEntity.isPaper,
   });

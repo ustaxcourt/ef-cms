@@ -60,11 +60,9 @@ describe('formatConsolidatedCaseCoversheetData', () => {
 
     expect(result.consolidatedCases[0]).toMatchObject({
       docketNumber: '101-19',
-      documentNumber: 4,
     });
     expect(result.consolidatedCases[1]).toMatchObject({
       docketNumber: '101-30',
-      documentNumber: 3,
     });
   });
 
