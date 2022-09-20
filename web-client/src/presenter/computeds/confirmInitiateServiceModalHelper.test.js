@@ -14,7 +14,6 @@ import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('confirmInitiateServiceModalHelper', () => {
-  // CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
   const featureFlagHelperState = {
     consolidatedCasesPropagateDocketEntries: true,
   };
@@ -284,7 +283,7 @@ describe('confirmInitiateServiceModalHelper', () => {
         petitioners: [
           {
             ...SECOND_CASE.petitioners[0],
-            contactId: LEAD_CASE.petitioners[0].contactId, //have the same contactId as the lead case
+            contactId: LEAD_CASE.petitioners[0].contactId,
           },
         ],
         privatePractitioners: [

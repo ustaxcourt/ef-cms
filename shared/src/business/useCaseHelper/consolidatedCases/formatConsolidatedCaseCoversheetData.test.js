@@ -50,14 +50,17 @@ describe('formatConsolidatedCaseCoversheetData', () => {
     expect(result.consolidatedCases.length).toEqual(2);
   });
 
-  it('should not add any consolidated group information to the coverhseet when the document has only been filed on the lead case', async () => {
+  it('should not add any consolidated group information to the coversheet when the document has only been filed on the lead case', async () => {
+    const docketEntryIdOnLeadCaseNotMultiDocketed =
+      'b0efe7fd-a8d6-4eb8-bf66-857bcb700483';
+
     const result = await formatConsolidatedCaseCoversheetData({
       applicationContext,
       caseEntity: MOCK_CASE,
       coverSheetData: {},
       docketEntryEntity: {
         ...mockDocketEntry,
-        docketEntryId: 'b0efe7fd-a8d6-4eb8-bf66-857bcb700483',
+        docketEntryId: docketEntryIdOnLeadCaseNotMultiDocketed,
       },
     });
 
