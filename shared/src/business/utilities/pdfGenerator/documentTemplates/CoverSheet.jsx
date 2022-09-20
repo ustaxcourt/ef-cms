@@ -54,7 +54,7 @@ export const CoverSheet = ({
         <div className="border-none" id="caption">
           <div id="caption-title">
             {caseTitle}
-            {consolidatedCases && ' et al.,'}
+            {consolidatedCases && ' ET AL.,'}
           </div>
           <div id="caption-extension">{caseCaptionExtension}</div>
           <div id="caption-v">v.</div>

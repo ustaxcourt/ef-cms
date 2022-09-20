@@ -50,6 +50,23 @@ describe('formatConsolidatedCaseCoversheetData', () => {
     expect(result.consolidatedCases.length).toEqual(2);
   });
 
+  it('should not add any consolidated group information to the coversheet when the document has only been filed on the lead case', async () => {
+    const docketEntryIdOnLeadCaseNotMultiDocketed =
+      'b0efe7fd-a8d6-4eb8-bf66-857bcb700483';
+
+    const result = await formatConsolidatedCaseCoversheetData({
+      applicationContext,
+      caseEntity: MOCK_CASE,
+      coverSheetData: {},
+      docketEntryEntity: {
+        ...mockDocketEntry,
+        docketEntryId: docketEntryIdOnLeadCaseNotMultiDocketed,
+      },
+    });
+
+    expect(result.consolidatedCases).toBeUndefined();
+  });
+
   it('should sort the docket numbers of all cases in the consolidated group by docketNumber, ascending', async () => {
     const result = await formatConsolidatedCaseCoversheetData({
       applicationContext,
@@ -60,11 +77,9 @@ describe('formatConsolidatedCaseCoversheetData', () => {
 
     expect(result.consolidatedCases[0]).toMatchObject({
       docketNumber: '101-19',
-      documentNumber: 4,
     });
     expect(result.consolidatedCases[1]).toMatchObject({
       docketNumber: '101-30',
-      documentNumber: 3,
     });
   });
 
