@@ -3,10 +3,7 @@ import { addCoverToPdf } from '../addCoverToPdf';
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
-const {
-  ALLOWLIST_FEATURE_FLAGS,
-  DOCKET_SECTION,
-} = require('../../entities/EntityConstants');
+const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 const {
   createISODateString,
   formatDateString,
@@ -23,7 +20,6 @@ const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
 const { omit } = require('lodash');
-const { WorkItem } = require('../../entities/WorkItem');
 
 /**
  * serveExternallyFiledDocumentInteractor
