@@ -50,6 +50,20 @@ describe('formatConsolidatedCaseCoversheetData', () => {
     expect(result.consolidatedCases.length).toEqual(2);
   });
 
+  it.only('should not add any consolidated group information to the coverhseet when the document has only been filed on the lead case', async () => {
+    const result = await formatConsolidatedCaseCoversheetData({
+      applicationContext,
+      caseEntity: MOCK_CASE,
+      coverSheetData: {},
+      docketEntryEntity: {
+        ...mockDocketEntry,
+        docketEntryId: 'b0efe7fd-a8d6-4eb8-bf66-857bcb700483',
+      },
+    });
+
+    expect(result.consolidatedCases).toBeUndefined();
+  });
+
   it('should sort the docket numbers of all cases in the consolidated group by docketNumber, ascending', async () => {
     const result = await formatConsolidatedCaseCoversheetData({
       applicationContext,
