@@ -1,3 +1,8 @@
+import {
+  FORMATTED_CASES,
+  FORMATTED_TRIAL_SESSION,
+  SESSION_NOTES,
+} from './constants/printableTrialSessionWorkingCopyConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { generatePdfFromHtmlInteractor } from '../../useCases/generatePdfFromHtmlInteractor';
 import { getChromiumBrowser } from '../getChromiumBrowser';
@@ -35,7 +40,7 @@ describe('documentGenerators', () => {
   });
 
   describe('printableWorkingCopySessionList', () => {
-    it('generates a Trial Session Working Copy document', async () => {
+    it('generates a Trial Session Working Copy document with case notes', async () => {
       const pdf = await printableWorkingCopySessionList({
         applicationContext,
         data: {
@@ -52,26 +57,57 @@ describe('documentGenerators', () => {
             statusUnassigned: true,
             takenUnderAdvisement: true,
           },
-          formattedCases: [
-            {
-              docketNumber: '189-22',
-              irsPractitioners: [],
-              privatePractitioners: [],
-            },
-            {
-              docketNumber: '190-22',
-              irsPractitioners: [],
-              privatePractitioners: [],
-            },
-          ],
-          formattedTrialSession: {},
-          sessionNotes: 'session notes',
+          formattedCases: FORMATTED_CASES,
+          formattedTrialSession: FORMATTED_TRIAL_SESSION,
+          sessionNotes: SESSION_NOTES,
         },
       });
 
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
-        writePdfFile('Printable_Working_Copy_Session_List', pdf);
+        writePdfFile(
+          'Printable_Trial_Session_Working_Copy_With_Case_Notes',
+          pdf,
+        );
+        expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
+      }
+
+      expect(
+        applicationContext.getUseCases().generatePdfFromHtmlInteractor,
+      ).toHaveBeenCalled();
+      expect(applicationContext.getNodeSass).toHaveBeenCalled();
+      expect(applicationContext.getPug).toHaveBeenCalled();
+    });
+
+    it('generates a Trial Session Working Copy document without case notes', async () => {
+      const pdf = await printableWorkingCopySessionList({
+        applicationContext,
+        data: {
+          caseNotesFlag: false,
+          filters: {
+            aBasisReached: true,
+            continued: false,
+            dismissed: true,
+            recall: true,
+            rule122: false,
+            setForTrial: true,
+            settled: true,
+            showAll: false,
+            statusUnassigned: true,
+            takenUnderAdvisement: false,
+          },
+          formattedCases: FORMATTED_CASES,
+          formattedTrialSession: FORMATTED_TRIAL_SESSION,
+          sessionNotes: SESSION_NOTES,
+        },
+      });
+
+      // Do not write PDF when running on CircleCI
+      if (process.env.PDF_OUTPUT) {
+        writePdfFile(
+          'Printable_Trial_Session_Working_Copy_Without_Case_Notes',
+          pdf,
+        );
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
