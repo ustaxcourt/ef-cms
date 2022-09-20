@@ -118,13 +118,6 @@ export const generateCoverSheetData = async ({
     )
   ) {
     const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
-    // const isFeatureFlagEnabled = await applicationContext
-    //   .getUseCases()
-    //   .getFeatureFlagValueInteractor(applicationContext, {
-    //     featureFlag:
-    //       ALLOWLIST_FEATURE_FLAGS.CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES
-    //         .key,
-    //   });
 
     if (isLeadCase) {
       coverSheetData = await applicationContext
