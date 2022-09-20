@@ -19,10 +19,8 @@ export const formattedTrialSessionDetailsForFilteredEligibleCases = (
       const regularCasesOnly = /^(?!S+)/;
 
       if (filter === 'Small') {
-        // return eligibleCase.docketNumberSuffix === 'S';
         return allSmallCases.test(eligibleCase.docketNumberSuffix);
       } else if (filter === 'Regular') {
-        // return eligibleCase.docketNumberSuffix !== 'S';
         return regularCasesOnly.test(eligibleCase.docketNumberSuffix);
       } else {
         return true;
