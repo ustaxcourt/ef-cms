@@ -51,6 +51,21 @@ jest.mock('./formattedTrialSessionDetails', () => {
           privatePractitioners: [],
           qcCompleteForTrial: {},
         },
+        {
+          caseCaption: 'testPetitioner4, Petitioner',
+          caseTitle: 'testPetitioner4',
+          caseType: 'CDP (Lien/Levy)',
+          docketNumber: '110-20',
+          docketNumberSuffix: 'SL',
+          docketNumberWithSuffix: '110-20SL',
+          entityName: 'EligibleCase',
+          inConsolidatedGroup: false,
+          irsPractitioners: [],
+          isDocketSuffixHighPriority: true,
+          leadCase: false,
+          privatePractitioners: [],
+          qcCompleteForTrial: {},
+        },
       ],
     }),
   };
@@ -71,7 +86,7 @@ describe('formattedTrialSessionDetailsForFilteredEligibleCases', () => {
       },
     );
 
-    expect(result.formattedEligibleCases).toHaveLength(3);
+    expect(result.formattedEligibleCases).toHaveLength(4);
   });
 
   it('should display all small cases when filter is equal to Small', () => {
@@ -88,10 +103,17 @@ describe('formattedTrialSessionDetailsForFilteredEligibleCases', () => {
       },
     );
 
-    expect(result.formattedEligibleCases).toHaveLength(1);
-    expect(result.formattedEligibleCases[0]).toMatchObject({
-      docketNumber: '101-20',
-    });
+    expect(result.formattedEligibleCases).toHaveLength(2);
+    expect(result.formattedEligibleCases).toMatchObject(
+      expect.arrayContaining([
+        expect.objectContaining({
+          docketNumber: '101-20',
+        }),
+        expect.objectContaining({
+          docketNumber: '110-20',
+        }),
+      ]),
+    );
   });
 
   it('should display all regular cases when filter is equal to Regular', () => {
