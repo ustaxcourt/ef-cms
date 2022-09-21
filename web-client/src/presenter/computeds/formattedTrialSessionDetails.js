@@ -1,3 +1,4 @@
+import { SESSION_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { isEmpty, isEqual } from 'lodash';
 import { state } from 'cerebral';
 
@@ -25,11 +26,10 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
     }
 
     formattedTrialSession.isHybridSession =
-      formattedTrialSession.sessionType === 'Hybrid';
+      formattedTrialSession.sessionType === SESSION_TYPES.hybrid;
 
-    if (formattedTrialSession.isHybridSession) {
-      formattedTrialSession.disableHybridFilter = false;
-    }
+    formattedTrialSession.disableHybridFilter =
+      formattedTrialSession.formattedEligibleCases.length === 0;
 
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext
@@ -51,10 +51,6 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       );
       const hasNoActiveCases =
         isEmpty(allCases) || isEqual(allCases, inactiveCases);
-
-      if (formattedTrialSession.formattedEligibleCases.length === 0) {
-        formattedTrialSession.disableHybridFilter = true;
-      }
 
       if (
         hasNoActiveCases &&
