@@ -53,6 +53,7 @@ import { formattedCaseMessages } from './computeds/formattedCaseMessages';
 import { formattedDashboardTrialSessions } from './computeds/formattedDashboardTrialSessions';
 import { formattedDocketEntries } from './computeds/formattedDocketEntries';
 import { formattedDocument } from './computeds/formattedDocument';
+import { formattedEligibleCasesHelper } from './computeds/formattedEligibleCasesHelper';
 import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
@@ -166,6 +167,7 @@ const helpers = {
   formattedDashboardTrialSessions,
   formattedDocketEntries,
   formattedDocument,
+  formattedEligibleCasesHelper,
   formattedMessageDetail,
   formattedMessages,
   formattedOpenCases,

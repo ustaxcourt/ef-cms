@@ -8,8 +8,7 @@ import classNames from 'classnames';
 
 export const EligibleCases = connect(
   {
-    formattedEligibleCases:
-      state.formattedTrialSessionDetails.formattedEligibleCases,
+    formattedEligibleCases: state.formattedEligibleCasesHelper,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
     trialSessionId: state.trialSession.trialSessionId,
     updateQcCompleteForTrialSequence:
