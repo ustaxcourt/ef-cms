@@ -2,7 +2,7 @@ const React = require('react');
 
 export const PrintableTrialSessionWorkingCopyMetaHeader = ({ headerTitle }) => {
   return (
-    <div style={{ position: 'relative' }}>
+    <div style={{ position: 'relative', top: '-20px' }}>
       <div
         className="header-title"
         style={{
