@@ -3,7 +3,7 @@ import { presenter } from '../../presenter-mock';
 import { runAction } from 'cerebral/test';
 
 describe('getTrialSessionWorkingCopyCaseNotesFlagAction', () => {
-  it('should return true', async () => {
+  it('should return true when caseNotesFlag is true', async () => {
     const result = await runAction(
       getTrialSessionWorkingCopyCaseNotesFlagAction,
       {
@@ -20,7 +20,7 @@ describe('getTrialSessionWorkingCopyCaseNotesFlagAction', () => {
     expect(result.output.caseNotesFlag).toEqual(true);
   });
 
-  it('should return false', async () => {
+  it('should return false when caseNotesFlag is false', async () => {
     const result = await runAction(
       getTrialSessionWorkingCopyCaseNotesFlagAction,
       {
