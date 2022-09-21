@@ -55,6 +55,7 @@ export const TrialSessionWorkingCopy = connect(
                     link
                     aria-label="Print session copy"
                     icon="print"
+                    id="print-session-working-copy"
                     onClick={() =>
                       openPrintableTrialSessionWorkingCopyModalSequence()
                     }
