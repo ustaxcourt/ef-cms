@@ -15,7 +15,17 @@ exports.setConsolidationFlagsForDisplay = (caseItem, eligibleCases) => {
         caseItem.leadCase = true;
         caseItem.consolidatedIconTooltipText = 'Lead case';
       } else {
-        caseItem.shouldIndent = true;
+        const leadCase = eligibleCases.find(
+          theCase => theCase.docketNumber === caseItem.leadDocketNumber,
+        );
+
+        if (
+          !leadCase.highPriority &&
+          !leadCase.isManuallyAdded &&
+          !leadCase.isDocketSuffixHighPriority
+        ) {
+          caseItem.shouldIndent = true;
+        }
       }
     }
   }
