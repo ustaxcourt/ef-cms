@@ -76,7 +76,7 @@ export const TrialSessionDetail = connect(
                           id="hybridSessionFilter"
                           name="hybridSessionFilter"
                         >
-                          <option value="">-Session Type-</option>
+                          <option value="">-Case Procedure-</option>
                           <option value="Regular">Regular</option>
                           <option value="Small">Small</option>
                         </BindedSelect>
