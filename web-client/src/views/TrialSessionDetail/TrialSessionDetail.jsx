@@ -61,19 +61,27 @@ export const TrialSessionDetail = connect(
                 title="Eligible Cases"
               >
                 {formattedTrialSessionDetails.isHybridSession && (
-                  <div className="grid-row grid-col-9">
-                    <div className="grid-col-1 padding-top-05 margin-right-3">
-                      <h3 id="filterHybridSessionHeading">Filter by</h3>
-                    </div>
-                    <div className="grid-row grid-col-10 grid-gap padding-left-2 margin-bottom-3">
-                      <div className="grid-col-3">
+                  <div className="grid-container padding-0 eligible-cases-header">
+                    <div className="grid-row hide-on-mobile margin-bottom-3">
+                      <div className="grid-col-1">
+                        <label
+                          className="dropdown-label-serif margin-right-3"
+                          htmlFor="hybrid-session-filter"
+                          id="hybrid-session-filter-label"
+                        >
+                          Filter by
+                        </label>
+                      </div>
+                      <div className="tablet:grid-col-2">
                         <BindedSelect
-                          aria-label="session"
+                          aria-describedby="hybrid-session-filter-label"
+                          aria-label="hybrid session filter"
                           bind="screenMetadata.eligibleCasesFilter.hybridSessionFilter"
+                          className="select-left"
                           disabled={
                             formattedTrialSessionDetails.disableHybridFilter
                           }
-                          id="hybridSessionFilter"
+                          id="hybrid-session-filter"
                           name="hybridSessionFilter"
                         >
                           <option value="">-Case Procedure-</option>
