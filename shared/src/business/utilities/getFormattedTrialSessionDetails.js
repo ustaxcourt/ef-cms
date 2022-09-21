@@ -103,14 +103,31 @@ const getSortableDocketNumber = docketNumber => {
 };
 
 const getFullSortString = (theCase, cases) => {
-  const isLeadInEligible =
-    !!theCase.leadDocketNumber &&
-    !!cases.find(aCase => aCase.docketNumber === theCase.leadDocketNumber);
+  const leadCase = cases.find(
+    aCase => aCase.docketNumber === theCase.leadDocketNumber,
+  );
+
+  const isLeadInEligible = !!theCase.leadDocketNumber && !!leadCase;
+
+  const isLeadCaseManuallyAdded = leadCase?.isManuallyAdded;
+  const isLeadCaseHighPriority = leadCase?.highPriority;
+  const isLeadCaseDocketSuffixHighPriority =
+    leadCase?.isDocketSuffixHighPriority;
+
+  if (
+    isLeadCaseManuallyAdded ||
+    isLeadCaseHighPriority ||
+    isLeadCaseDocketSuffixHighPriority
+  ) {
+    return `${getSortableDocketNumber(
+      theCase.docketNumber,
+    )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+  }
 
   return `${getSortableDocketNumber(
     isLeadInEligible
       ? theCase.docketNumber === theCase.leadDocketNumber
-        ? '000-00'
+        ? theCase.docketNumber
         : theCase.leadDocketNumber
       : theCase.docketNumber,
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;

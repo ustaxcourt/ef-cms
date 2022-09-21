@@ -117,43 +117,31 @@ describe('formattedTrialSessionDetails', () => {
   it('groups consolidated cases together for display', () => {
     const eligibleCases = [
       {
-        docketNumber: '104-22',
+        docketNumber: '103-22',
       },
     ];
     const formattedEligibleCases = [
       {
         docketNumber: '103-22',
-        docketNumberSuffix: '',
-        docketNumberWithSuffix: '103-22',
-        leadDocketNumber: '104-22',
+        leadDocketNumber: '103-22',
       },
       {
         docketNumber: '106-22',
-        docketNumberSuffix: '',
-        docketNumberWithSuffix: '106-22',
-        leadDocketNumber: '104-22',
+        leadDocketNumber: '103-22',
       },
       {
         docketNumber: '104-22',
-        docketNumberSuffix: 'L',
-        docketNumberWithSuffix: '104-22L',
-        leadDocketNumber: '104-22',
+        leadDocketNumber: '103-22',
       },
       {
         docketNumber: '105-22',
-        docketNumberSuffix: 'P',
-        docketNumberWithSuffix: '105-22P',
       },
       {
         docketNumber: '107-22',
-        docketNumberSuffix: 'P',
-        docketNumberWithSuffix: '107-22P',
         highPriority: true,
       },
       {
         docketNumber: '108-22',
-        docketNumberSuffix: 'P',
-        docketNumberWithSuffix: '108-22P',
         isManuallyAdded: true,
       },
     ];
@@ -162,7 +150,6 @@ describe('formattedTrialSessionDetails', () => {
         compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
       ),
     );
-
     expect(result).toEqual([
       expect.objectContaining({
         docketNumber: '108-22',
@@ -171,10 +158,10 @@ describe('formattedTrialSessionDetails', () => {
         docketNumber: '107-22',
       }),
       expect.objectContaining({
-        docketNumber: '104-22',
+        docketNumber: '103-22',
       }),
       expect.objectContaining({
-        docketNumber: '103-22',
+        docketNumber: '104-22',
       }),
       expect.objectContaining({
         docketNumber: '106-22',
@@ -233,6 +220,7 @@ describe('formattedTrialSessionDetails', () => {
         compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
       ),
     );
+
     expect(result).toEqual([
       expect.objectContaining({
         docketNumber: '108-22',
@@ -251,6 +239,274 @@ describe('formattedTrialSessionDetails', () => {
       }),
       expect.objectContaining({
         docketNumber: '105-22',
+      }),
+    ]);
+  });
+
+  it('groups two separate consolidated cases correctly', () => {
+    const eligibleCases = [
+      {
+        docketNumber: '103-22',
+      },
+      {
+        docketNumber: '103-21',
+      },
+    ];
+    const formattedEligibleCases = [
+      {
+        docketNumber: '105-21',
+        isManuallyAdded: true,
+        leadDocketNumber: '103-21',
+      },
+      {
+        docketNumber: '106-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '104-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '103-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '103-21',
+        leadDocketNumber: '103-21',
+      },
+      {
+        docketNumber: '105-23',
+      },
+      {
+        docketNumber: '107-22',
+        highPriority: true,
+      },
+      {
+        docketNumber: '108-22',
+        isManuallyAdded: true,
+      },
+      {
+        docketNumber: '104-21',
+        leadDocketNumber: '103-21',
+      },
+    ];
+    const result = formattedEligibleCases.sort(
+      compareTrialSessionEligibleCases(
+        compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
+      ),
+    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '105-21',
+      }),
+      expect.objectContaining({
+        docketNumber: '108-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '107-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '103-21',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-21',
+      }),
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-23',
+      }),
+    ]);
+  });
+
+  it('groups the cases correctly when the eligible lead case is not in the list', () => {
+    const eligibleCases = [];
+    const formattedEligibleCases = [
+      {
+        docketNumber: '106-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '104-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '105-22',
+      },
+      {
+        docketNumber: '107-22',
+        highPriority: true,
+      },
+      {
+        docketNumber: '108-22',
+        isManuallyAdded: true,
+      },
+    ];
+    const result = formattedEligibleCases.sort(
+      compareTrialSessionEligibleCases(
+        compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
+      ),
+    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '108-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '107-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+    ]);
+  });
+
+  it('should not group the consolidated cases when the lead case is high priority', () => {
+    const eligibleCases = [
+      {
+        docketNumber: '103-22',
+        highPriority: true,
+      },
+    ];
+    const formattedEligibleCases = [
+      {
+        docketNumber: '103-22',
+        highPriority: true,
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '104-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '106-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '105-22',
+      },
+    ];
+    const result = formattedEligibleCases.sort(
+      compareTrialSessionEligibleCases(
+        compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
+      ),
+    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+    ]);
+  });
+
+  it('should not group the consolidated cases when the lead case is manually added', () => {
+    const eligibleCases = [
+      {
+        docketNumber: '103-22',
+        isManuallyAdded: true,
+      },
+    ];
+    const formattedEligibleCases = [
+      {
+        docketNumber: '103-22',
+        isManuallyAdded: true,
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '104-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '106-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '105-22',
+      },
+    ];
+    const result = formattedEligibleCases.sort(
+      compareTrialSessionEligibleCases(
+        compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
+      ),
+    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+    ]);
+  });
+
+  it('should not group the consolidated cases when the lead case has high priority suffix', () => {
+    const eligibleCases = [
+      {
+        docketNumber: '103-22',
+        isDocketSuffixHighPriority: true,
+      },
+    ];
+    const formattedEligibleCases = [
+      {
+        docketNumber: '103-22',
+        isDocketSuffixHighPriority: true,
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '104-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '106-22',
+        leadDocketNumber: '103-22',
+      },
+      {
+        docketNumber: '105-22',
+      },
+    ];
+    const result = formattedEligibleCases.sort(
+      compareTrialSessionEligibleCases(
+        compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
+      ),
+    );
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
       }),
     ]);
   });
