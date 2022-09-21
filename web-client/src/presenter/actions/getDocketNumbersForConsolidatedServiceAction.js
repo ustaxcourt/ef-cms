@@ -31,7 +31,7 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
     ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
 
-  const isLeadCase = applicationContext.getUtilties().isLeadCase(caseDetail);
+  const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
 
   const currentDocketEntryNotCompatibleWithConsolidation =
     eventCodesNotCompatibleWithConsolidation.includes(eventCode);
