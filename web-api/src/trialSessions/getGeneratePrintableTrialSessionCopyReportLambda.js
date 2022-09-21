@@ -7,19 +7,15 @@ const { genericHandler } = require('../genericHandler');
  * @returns {Promise<*|undefined>} the api gateway response object containing the statusCode, body, and headers
  */
 exports.getGeneratePrintableTrialSessionCopyReportLambda = event =>
-  genericHandler(
-    event,
-    async ({ applicationContext }) => {
-      const body = JSON.parse(event.body);
-      return await applicationContext
-        .getUseCases()
-        .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-          caseNotesFlag: body.caseNotesFlag,
-          filters: body.filters,
-          formattedCases: body.formattedCases,
-          formattedTrialSession: body.formattedTrialSession,
-          sessionNotes: body.sessionNotes,
-        });
-    },
-    // { logResults: false },
-  );
+  genericHandler(event, async ({ applicationContext }) => {
+    const body = JSON.parse(event.body);
+    return await applicationContext
+      .getUseCases()
+      .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
+        caseNotesFlag: body.caseNotesFlag,
+        filters: body.filters,
+        formattedCases: body.formattedCases,
+        formattedTrialSession: body.formattedTrialSession,
+        sessionNotes: body.sessionNotes,
+      });
+  });

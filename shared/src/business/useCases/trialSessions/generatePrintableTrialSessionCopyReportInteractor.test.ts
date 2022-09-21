@@ -67,7 +67,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     ).rejects.toThrow('Unauthorized');
   });
 
-  it('calls the document generator function', async () => {
+  it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
     const interactorProps = {
       caseNotesFlag: true,
       filters: {
@@ -100,7 +100,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     });
   });
 
-  it('uploads the pdf to s3', async () => {
+  it('uploads the Trial Session Working Copy PDF to s3', async () => {
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
       {
@@ -112,7 +112,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
     expect(applicationContext.getStorageClient().upload).toHaveBeenCalled();
   });
 
-  it('should return the document url', async () => {
+  it('should return the Trial Session Working Copy PDF url', async () => {
     const results = await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
       {
