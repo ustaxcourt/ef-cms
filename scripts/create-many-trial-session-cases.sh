@@ -14,7 +14,6 @@ petitionFileId="[PLACE HERE]"
 requestForPlaceOfTrialFileId="[PLACE HERE]"
 numberOfCasesToCreate=5
 
-
 createCaseAndAddToTrialSession(){
    docketNumber=$(curl "${baseUrl}/cases/paper" \
     -H "authority: ${hostName}" \
