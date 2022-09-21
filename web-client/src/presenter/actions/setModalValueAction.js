@@ -8,6 +8,5 @@ import { state } from 'cerebral';
  * @param {object} providers.props the cerebral props object
  */
 export const setModalValueAction = ({ props, store }) => {
-  console.log(props.key, props.value, typeof props.value);
   store.set(state.modal[props.key], props.value);
 };
