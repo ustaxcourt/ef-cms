@@ -11,13 +11,6 @@ import { petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases } from './j
 const cerebralTest = setupTest();
 const { CASE_TYPES_MAP } = applicationContext.getConstants();
 
-// create a trial session
-// create four cases : 1 deficiency, 1 lien/levy, 1 small, 1 small lien/levy
-// make ready for trial all 4 cases
-// view trial session list
-// view new trial session list
-// view new trial session eligible cases list
-
 describe('Filter A Hybrid Trial Session', () => {
   beforeAll(() => {
     jest.setTimeout(30000);
