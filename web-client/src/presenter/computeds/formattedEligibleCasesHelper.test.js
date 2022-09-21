@@ -1,15 +1,102 @@
+/* eslint-disable max-lines */
+import { DOCKET_NUMBER_SUFFIXES } from '../../../../shared/src/business/entities/EntityConstants';
+import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { formattedEligibleCasesHelper as formattedEligibleCasesHelperComputed } from './formattedEligibleCasesHelper';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../withAppContext';
 
 describe('formattedTrialSessionDetails', () => {
+  const TRIAL_SESSION = {
+    caseOrder: [],
+    city: 'Hartford',
+    courtReporter: 'Test Court Reporter',
+    irsCalendarAdministrator: 'Test Calendar Admin',
+    judge: { name: 'Test Judge' },
+    postalCode: '12345',
+    startDate: '2019-11-25T15:00:00.000Z',
+    startTime: '10:00',
+    state: 'CT',
+    term: 'Fall',
+    termYear: '2019',
+    trialClerk: { name: 'Test Trial Clerk' },
+    trialLocation: 'Hartford, Connecticut',
+  };
+
   const formattedEligibleCasesHelper = withAppContextDecorator(
     formattedEligibleCasesHelperComputed,
     {
       ...applicationContext,
     },
   );
+
+  it('formats docket numbers with suffixes and case caption names without postfix on eligible cases', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [
+            MOCK_CASE,
+            {
+              ...MOCK_CASE,
+              caseCaption: 'Daenerys Stormborn & Someone Else, Petitioners',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.WHISTLEBLOWER,
+              docketNumberWithSuffix: '101-18W',
+            },
+            {
+              ...MOCK_CASE,
+              caseCaption: undefined,
+              docketNumber: '103-19',
+              docketNumberWithSuffix: '103-19',
+            },
+            {
+              ...MOCK_CASE,
+              caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
+              docketNumber: '799-19',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+              docketNumberWithSuffix: '799-19L', // high priority
+            },
+            {
+              ...MOCK_CASE,
+              caseCaption: 'Bob Dylan and the Traveling Wilburys, Petitioners',
+              docketNumber: '122-20',
+              docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+              docketNumberWithSuffix: '122-20P', // high priority
+            },
+          ],
+        },
+      },
+    });
+    expect(result.length).toEqual(5);
+    expect(result).toMatchObject([
+      {
+        caseCaption: 'Marky Mark and The Funky Bunch, Petitioners',
+        docketNumber: '799-19',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.LIEN_LEVY,
+        docketNumberWithSuffix: '799-19L',
+        isDocketSuffixHighPriority: true,
+      },
+      {
+        caseCaption: 'Bob Dylan and the Traveling Wilburys, Petitioners',
+        docketNumber: '122-20',
+        docketNumberSuffix: DOCKET_NUMBER_SUFFIXES.PASSPORT,
+        docketNumberWithSuffix: '122-20P',
+        isDocketSuffixHighPriority: true,
+      },
+      {
+        caseTitle: 'Test Petitioner',
+        docketNumberWithSuffix: '101-18',
+      },
+      {
+        caseTitle: 'Daenerys Stormborn & Someone Else',
+        docketNumberWithSuffix: '101-18W',
+      },
+      {
+        caseTitle: '',
+        docketNumberWithSuffix: '103-19',
+      },
+    ]);
+  });
 
   it('compares eligible trial session cases sorting lien/levy and passport first', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
