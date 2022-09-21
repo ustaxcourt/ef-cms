@@ -367,7 +367,8 @@ const formatCase = (applicationContext, caseDetail) => {
   formatTrialSessionScheduling({ applicationContext, formattedCase: result });
 
   result.isConsolidatedSubCase = !!(
-    result.leadDocketNumber && result.leadDocketNumber !== result.docketNumber
+    result.leadDocketNumber &&
+    !applicationContext.getUtilities().isLeadCase(result)
   );
 
   result.isLeadCase = isLeadCase(result);
