@@ -17,7 +17,7 @@ const {
   TRANSCRIPT_EVENT_CODE,
   UNSERVABLE_EVENT_CODES,
 } = require('../entities/EntityConstants');
-const { Case } = require('../entities/cases/Case');
+const { Case, isLeadCase } = require('../entities/cases/Case');
 const { cloneDeep, isEmpty, sortBy } = require('lodash');
 const { isServed } = require('../entities/DocketEntry');
 
@@ -370,9 +370,7 @@ const formatCase = (applicationContext, caseDetail) => {
     result.leadDocketNumber && result.leadDocketNumber !== result.docketNumber
   );
 
-  result.isLeadCase = !!(
-    result.leadDocketNumber && result.leadDocketNumber === result.docketNumber
-  );
+  result.isLeadCase = isLeadCase(result);
 
   let paymentDate = '';
   let paymentMethod = '';
