@@ -1,4 +1,5 @@
 import { AllCases } from './AllCases';
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { ConfirmModal } from '../../ustc-ui/Modal/ConfirmModal';
 import { EligibleCases } from './EligibleCases';
@@ -59,6 +60,38 @@ export const TrialSessionDetail = connect(
                 tabName="EligibleCases"
                 title="Eligible Cases"
               >
+                {formattedTrialSessionDetails.isHybridSession && (
+                  <div className="grid-container padding-0 eligible-cases-header">
+                    <div className="grid-row hide-on-mobile margin-bottom-3">
+                      <div className="grid-col-1">
+                        <label
+                          className="dropdown-label-serif margin-right-3"
+                          htmlFor="hybrid-session-filter"
+                          id="hybrid-session-filter-label"
+                        >
+                          Filter by
+                        </label>
+                      </div>
+                      <div className="tablet:grid-col-2">
+                        <BindedSelect
+                          aria-describedby="hybrid-session-filter-label"
+                          aria-label="hybrid session filter"
+                          bind="screenMetadata.eligibleCasesFilter.hybridSessionFilter"
+                          className="select-left"
+                          disabled={
+                            formattedTrialSessionDetails.disableHybridFilter
+                          }
+                          id="hybrid-session-filter"
+                          name="hybridSessionFilter"
+                        >
+                          <option value="">-Case Procedure-</option>
+                          <option value="Regular">Regular</option>
+                          <option value="Small">Small</option>
+                        </BindedSelect>
+                      </div>
+                    </div>
+                  </div>
+                )}
                 <div id="eligible-cases-tab-content">
                   <EligibleCases />
                 </div>
