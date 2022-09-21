@@ -1,9 +1,9 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { UnauthorizedError } from '../../../errors/errors';
 import { UNSERVABLE_EVENT_CODES } from '../../entities/EntityConstants';
+import { UnauthorizedError } from '../../../errors/errors';
 
 /**
  * generatePrintablePendingReportInteractor
@@ -110,8 +110,6 @@ export const generatePrintablePendingReportInteractor = async (
       key,
       useTempBucket: true,
     });
-
-  console.log('url*** ', url);
 
   return url;
 };
