@@ -3,6 +3,7 @@ import {
   MULTI_DOCKET_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
+import { isLeadCase } from '../entities/cases/Case';
 import { omit } from 'lodash';
 
 const formatDateReceived = ({ docketEntryEntity, isPaper }) => {
@@ -114,9 +115,7 @@ export const generateCoverSheetData = async ({
     ) ||
     MULTI_DOCKET_FILING_EVENT_CODES.includes(docketEntryEntity.eventCode)
   ) {
-    const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
-
-    if (isLeadCase) {
+    if (isLeadCase(caseEntity)) {
       coverSheetData = await applicationContext
         .getUseCaseHelpers()
         .formatConsolidatedCaseCoversheetData({
