@@ -1,6 +1,6 @@
 import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
-  MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES,
+  MULTI_DOCKET_FILING_EVENT_CODES,
 } from '../entities/EntityConstants';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
 import { omit } from 'lodash';
@@ -112,9 +112,7 @@ export const generateCoverSheetData = async ({
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET.includes(
       docketEntryEntity.eventCode,
     ) ||
-    MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES.includes(
-      docketEntryEntity.eventCode,
-    )
+    MULTI_DOCKET_FILING_EVENT_CODES.includes(docketEntryEntity.eventCode)
   ) {
     const isLeadCase = caseEntity.leadDocketNumber === caseEntity.docketNumber;
 
