@@ -2,14 +2,18 @@ import { addConsolidatedProperties } from './addConsolidatedProperties';
 import { applicationContextForClient as applicationContext } from '../../../../../shared/src/business/test/createTestApplicationContext';
 
 describe('addConsolidatedProperties', () => {
+  const mockLeadDocketNumber = '101-20';
+  const mockMemberDocketNumber = '101-21';
+
   it('should add the Lead case tooltip text and set both inConsolidatedGroup and isLeadCase to true when docket number and leadDocketNumber are the same', () => {
     const result = addConsolidatedProperties({
       applicationContext,
       caseObject: {
-        docketNumber: '101-20',
-        leadDocketNumber: '101-20',
+        docketNumber: mockLeadDocketNumber,
+        leadDocketNumber: mockLeadDocketNumber,
       },
     });
+
     expect(result).toMatchObject({
       consolidatedIconTooltipText: 'Lead case',
       inConsolidatedGroup: true,
@@ -21,10 +25,11 @@ describe('addConsolidatedProperties', () => {
     const result = addConsolidatedProperties({
       applicationContext,
       caseObject: {
-        docketNumber: '101-21',
-        leadDocketNumber: '101-20',
+        docketNumber: mockMemberDocketNumber,
+        leadDocketNumber: mockLeadDocketNumber,
       },
     });
+
     expect(result).toMatchObject({
       consolidatedIconTooltipText: 'Consolidated case',
       inConsolidatedGroup: true,
@@ -32,14 +37,15 @@ describe('addConsolidatedProperties', () => {
     });
   });
 
-  it('should not add a tool tip and set both inConsolidatedGroup and inLeadCase to false when the docket nuimber is not part of a consolidated group', () => {
+  it('should not add a tooltip and set both inConsolidatedGroup and inLeadCase to false when the docket number is not part of a consolidated group', () => {
     const result = addConsolidatedProperties({
       applicationContext,
       caseObject: {
-        docketNumber: '101-21',
+        docketNumber: mockMemberDocketNumber,
         leadDocketNumber: undefined,
       },
     });
+
     expect(result).toMatchObject({
       consolidatedIconTooltipText: null,
       inConsolidatedGroup: false,
