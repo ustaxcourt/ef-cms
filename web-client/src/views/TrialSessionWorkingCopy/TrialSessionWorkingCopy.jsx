@@ -18,17 +18,19 @@ export const TrialSessionWorkingCopy = connect(
     batchDownloadTrialSessionSequence:
       sequences.batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
-    // openPrintableTrialSessionWorkingCopyModalSequence:
-    //   sequences.openPrintableTrialSessionWorkingCopyModalSequence,
+    openPrintableTrialSessionWorkingCopyModalSequence:
+      sequences.openPrintableTrialSessionWorkingCopyModalSequence,
     showModal: state.modal.showModal,
     trialSessionHeaderHelper: state.trialSessionHeaderHelper,
+    trialSessionWorkingCopyHelper: state.trialSessionWorkingCopyHelper,
   },
   function TrialSessionWorkingCopy({
     batchDownloadTrialSessionSequence,
     formattedTrialSessionDetails,
-    // openPrintableTrialSessionWorkingCopyModalSequence,
+    openPrintableTrialSessionWorkingCopyModalSequence,
     showModal,
     trialSessionHeaderHelper,
+    trialSessionWorkingCopyHelper,
   }) {
     return (
       <>
@@ -48,38 +50,40 @@ export const TrialSessionWorkingCopy = connect(
                 )}
               </h2>
             </div>
-            {/* <div className="grid-col-2 text-right padding-top-1">
-              <Button
-                link
-                aria-label="Print session copy"
-                icon="print"
-                id="print-session-working-copy"
-                onClick={() =>
-                  openPrintableTrialSessionWorkingCopyModalSequence()
-                }
-              >
-                Print
-              </Button>
-            </div> */}
+            {trialSessionWorkingCopyHelper.showPrintButton ? (
+              <div className="grid-col-2 text-right padding-top-1">
+                <Button
+                  link
+                  aria-label="Print session copy"
+                  icon="print"
+                  id="print-session-working-copy"
+                  onClick={() =>
+                    openPrintableTrialSessionWorkingCopyModalSequence()
+                  }
+                >
+                  Print
+                </Button>
+              </div>
+            ) : (
+              <div className="grid-col-2 text-right padding-top-1" />
+            )}
             {trialSessionHeaderHelper.showBatchDownloadButton && (
-              <>
-                <div className="grid-col-2 text-right padding-top-1">
-                  <Button
-                    link
-                    aria-label="Download batch of documents in a trial session"
-                    onClick={() =>
-                      batchDownloadTrialSessionSequence({
-                        allowRetry: true,
-                        trialSessionId:
-                          formattedTrialSessionDetails.trialSessionId,
-                      })
-                    }
-                  >
-                    <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />
-                    Download All Cases
-                  </Button>
-                </div>
-              </>
+              <div className="grid-col-2 text-right padding-top-1">
+                <Button
+                  link
+                  aria-label="Download batch of documents in a trial session"
+                  onClick={() =>
+                    batchDownloadTrialSessionSequence({
+                      allowRetry: true,
+                      trialSessionId:
+                        formattedTrialSessionDetails.trialSessionId,
+                    })
+                  }
+                >
+                  <FontAwesomeIcon icon={['fas', 'cloud-download-alt']} />
+                  Download All Cases
+                </Button>
+              </div>
             )}
           </div>
           <SuccessNotification />
