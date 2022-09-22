@@ -13,15 +13,15 @@ export const shouldSaveToConsolidatedGroupAction = ({
   get,
   path,
 }) => {
-  const caseDetail = get(state.caseDetail);
-  const form = get(state.form);
   const { UNSERVABLE_EVENT_CODES } = applicationContext.getConstants();
-  const isUnservable = UNSERVABLE_EVENT_CODES.includes(form.eventCode);
-  const { docketNumber, leadDocketNumber } = caseDetail;
-  const isLeadCase = docketNumber === leadDocketNumber;
-  const takeYesPath = isLeadCase && isUnservable;
 
-  if (takeYesPath) {
+  const caseDetail = get(state.caseDetail);
+  const { eventCode } = get(state.form);
+
+  const isUnservable = UNSERVABLE_EVENT_CODES.includes(eventCode);
+  const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
+
+  if (isLeadCase && isUnservable) {
     return path.yes();
   } else {
     return path.no();
