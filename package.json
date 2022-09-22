@@ -345,7 +345,7 @@
     "stylelint-config-standard": "^28.0.0",
     "stylelint-config-standard-scss": "^5.0.0",
     "swagger-cli": "^4.0.4",
-    "ts-jest": "^28.0.8",
+    "ts-jest": "^29.0.1",
     "ts-loader": "^9.4.1",
     "ts-node": "^10.9.1",
     "tsc-files": "^1.1.3",
