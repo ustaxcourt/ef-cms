@@ -6,6 +6,7 @@ import { state } from 'cerebral';
  * @param {object} providers the providers object
  * @param {object} providers.applicationContext the application context used for getting the getUser use case
  * @param {Function} providers.get the cerebral get function
+ * @param {Function} providers.props the cerebral props function
  * @param {object} providers.router the riot.router object containing the createObjectURL function
  * @returns {object} the user
  */
