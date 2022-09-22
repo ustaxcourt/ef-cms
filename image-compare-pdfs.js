@@ -102,7 +102,9 @@ const pdfs = [
       const totalPixels = height * width;
       const percentDifference = (pixelDifference / totalPixels) * 100;
 
-      console.log(`${pdf.fileName}: ${percentDifference}%`);
+      console.log(
+        `${pdf.fileName} page ${pdf.pageNumber}: ${percentDifference}%`,
+      );
 
       fs.mkdirSync('./shared/test-output/diff', { recursive: true });
       fs.writeFileSync(
@@ -112,7 +114,7 @@ const pdfs = [
 
       if (percentDifference > 0.1) {
         console.error(
-          `${pdf} failed due to percentDifference of ${percentDifference}`,
+          `${pdf.fileName} page ${pdf.pageNumber} failed due to percentDifference of ${percentDifference}`,
         );
         fail = true;
       }
