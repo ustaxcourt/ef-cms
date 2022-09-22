@@ -7,28 +7,68 @@ const isMemberCase = formattedCase => {
   return formattedCase.inConsolidatedGroup && !formattedCase.leadCase;
 };
 
-const filterMap = {
-  aBasisReached: 'A Basis Reached',
-  continued: 'Continued',
-  dismissed: 'Dismissed',
-  recall: 'Recall',
-  rule122: 'Rule 122',
-  setForTrial: 'Set For Trial',
-  settled: 'Settled',
-  statusUnassigned: 'Status Unassigned',
-  takenUnderAdvisement: 'Taken Under Advisement',
-};
+const orderedFilterMap = [
+  {
+    code: 'setForTrial',
+    name: 'Set For Trial',
+  },
+  {
+    code: 'dismissed',
+    name: 'Dismissed',
+  },
+  {
+    code: 'continued',
+    name: 'Continued',
+  },
+  {
+    code: 'rule122',
+    name: 'Rule 122',
+  },
+  {
+    code: 'aBasisReached',
+    name: 'A Basis Reached',
+  },
+  {
+    code: 'settled',
+    name: 'Settled',
+  },
+  {
+    code: 'recall',
+    name: 'Recall',
+  },
+  {
+    code: 'takenUnderAdvisement',
+    name: 'Taken Under Advisement',
+  },
+  {
+    code: 'statusUnassigned',
+    name: 'Status Unassigned',
+  },
+];
 
 const generateSelectedFilterList = filters => {
   const selectedFilters = [];
+  const filterKeys = Object.keys(filters).filter(
+    filterKey => filterKey !== 'showAll',
+  );
+  const userFilterSelection = filterKeys.filter(
+    filterKey => filters[filterKey],
+  );
 
-  Object.keys(filters).map(key => {
-    if (filterMap[key]) {
-      selectedFilters.push(filterMap[key]);
+  orderedFilterMap.map(orderedFilterKey => {
+    const nameOfFilter = orderedFilterKey.code;
+    if (userFilterSelection.indexOf(nameOfFilter) > -1) {
+      selectedFilters.push(orderedFilterKey.name);
     }
   });
-
   return selectedFilters;
+};
+
+const generateCaseStatus = trialStatus => {
+  const foundTrialStatusFromMap = orderedFilterMap.find(
+    orderedFilterKey => orderedFilterKey.code === trialStatus,
+  );
+  return foundTrialStatusFromMap?.name || 'Unassigned';
 };
 
 export const PrintableWorkingCopySessionList = ({
@@ -43,6 +83,7 @@ export const PrintableWorkingCopySessionList = ({
       ? `${formattedTrialSession.formattedStartDateFull} - ${formattedTrialSession.formattedEstimatedEndDateFull}`
       : `${formattedTrialSession.formattedStartDateFull}`;
   const selectedFilters = generateSelectedFilterList(filters);
+
   return (
     <div className="printable-working-copy-list">
       <PrimaryHeader />
@@ -151,7 +192,7 @@ export const PrintableWorkingCopySessionList = ({
                         {formattedCase.filingPartiesCode}
                       </td>
                       <td className="minw-30">
-                        {filterMap[formattedCase.trialStatus] || 'Unassigned'}
+                        {generateCaseStatus(formattedCase.trialStatus)}
                       </td>
                     </tr>
                     <tr className="border-bottom-0 border-top-0">
