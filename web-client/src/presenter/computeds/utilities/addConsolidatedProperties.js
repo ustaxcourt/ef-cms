@@ -6,15 +6,17 @@
  * @returns {object} caseObject, consolidatedIconTooltipText, inConsolidatedGroup, and inLeadCase
  */
 
-export const addConsolidatedProperties = caseObject => {
+export const addConsolidatedProperties = ({
+  applicationContext,
+  caseObject,
+}) => {
   let consolidatedIconTooltipText = null;
+  const isLeadCase = applicationContext.getUtilities().isLeadCase(caseObject);
+
   const inConsolidatedGroup = !!caseObject.leadDocketNumber;
-  const inLeadCase =
-    inConsolidatedGroup &&
-    caseObject.leadDocketNumber === caseObject.docketNumber;
 
   if (inConsolidatedGroup) {
-    if (inLeadCase) {
+    if (isLeadCase) {
       consolidatedIconTooltipText = 'Lead case';
     } else {
       consolidatedIconTooltipText = 'Consolidated case';
@@ -24,6 +26,6 @@ export const addConsolidatedProperties = caseObject => {
     ...caseObject,
     consolidatedIconTooltipText,
     inConsolidatedGroup,
-    inLeadCase,
+    inLeadCase: isLeadCase,
   };
 };

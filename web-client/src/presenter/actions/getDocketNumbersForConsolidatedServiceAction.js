@@ -12,28 +12,29 @@ export const getDocketNumbersForConsolidatedServiceAction = ({
   applicationContext,
   get,
 }) => {
-  const consolidatedCasesPropagateDocketEntriesFlag = get(
-    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
-  );
-  const caseDetail = get(state.caseDetail);
-  const form = get(state.form);
-  const consolidatedCases = caseDetail.consolidatedCases || [];
-
   const {
     COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ENTERED_AND_SERVED_EVENT_CODES,
     SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   } = applicationContext.getConstants();
 
-  const isLeadCase = caseDetail.docketNumber === caseDetail.leadDocketNumber;
+  const consolidatedCasesPropagateDocketEntriesFlag = get(
+    state.featureFlagHelper.consolidatedCasesPropagateDocketEntries,
+  );
+  const caseDetail = get(state.caseDetail);
+  const { eventCode } = get(state.form);
+  const consolidatedCases = caseDetail.consolidatedCases || [];
+
   const eventCodesNotCompatibleWithConsolidation = [
     ...ENTERED_AND_SERVED_EVENT_CODES,
     ...COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
     ...SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   ];
 
+  const isLeadCase = applicationContext.getUtilities().isLeadCase(caseDetail);
+
   const currentDocketEntryNotCompatibleWithConsolidation =
-    eventCodesNotCompatibleWithConsolidation.includes(form.eventCode);
+    eventCodesNotCompatibleWithConsolidation.includes(eventCode);
 
   let docketNumbers = consolidatedCases
     .filter(consolidatedCase => consolidatedCase.checked)
