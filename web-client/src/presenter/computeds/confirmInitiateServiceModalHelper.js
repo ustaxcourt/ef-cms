@@ -1,4 +1,3 @@
-import { ROLES } from '../../../../shared/src/business/entities/EntityConstants';
 import { state } from 'cerebral';
 import { uniqBy } from 'lodash';
 
@@ -18,6 +17,7 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
     ENTERED_AND_SERVED_EVENT_CODES,
     SERVICE_INDICATOR_TYPES,
     SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
+    USER_ROLES,
   } = applicationContext.getConstants();
 
   const modalName = get(state.modal.showModal);
@@ -95,9 +95,9 @@ export const confirmInitiateServiceModalHelper = (get, applicationContext) => {
   const contactsNeedingPaperService = [];
 
   const roleToDisplay = party => {
-    if (party.role === ROLES.privatePractitioner) {
+    if (party.role === USER_ROLES.privatePractitioner) {
       return 'Petitioner Counsel';
-    } else if (party.role === ROLES.irsPractitioner) {
+    } else if (party.role === USER_ROLES.irsPractitioner) {
       return 'Respondent Counsel';
     } else {
       return CONTACT_TYPE_TITLES[party.contactType];

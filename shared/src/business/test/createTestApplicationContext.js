@@ -25,6 +25,7 @@ const {
   getPetitionDocketEntry,
   getPetitionerById,
   getPractitionersRepresenting,
+  isLeadCase,
   isUserIdRepresentedByPrivatePractitioner,
 } = require('../entities/cases/Case');
 const {
@@ -374,6 +375,7 @@ const createTestApplicationContext = ({ user } = {}) => {
     getWorkQueueFilters: jest.fn().mockImplementation(getWorkQueueFilters),
     isExternalUser: User.isExternalUser,
     isInternalUser: jest.fn().mockImplementation(User.isInternalUser),
+    isLeadCase: jest.fn().mockImplementation(isLeadCase),
     isPending: jest.fn().mockImplementation(DocketEntry.isPending),
     isServed: jest.fn().mockImplementation(isServed),
     isStandaloneRemoteSession: jest
