@@ -132,10 +132,10 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
     - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
     - Change the version in `scripts/verify-terraform-version.sh`
-    - increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
-    - publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
+    - Increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
+    - Publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
       - `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
-    - deploy as normal
+    - Deploy as normal
 
 5. `docker`: [docker cypress/base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
