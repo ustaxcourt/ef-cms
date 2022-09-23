@@ -160,4 +160,4 @@ Below is a list of dependencies that are locked down due to known issues with se
       - This runs as part of the `npm postinstall` step.
     - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
 
-3. `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. `ajv` is a transitive dependency of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/8136004664?check_suite_focus=true) to failing test on 08/29/22 dependency updates.
+3. `puppeteer` and `puppeteer-core` have a major version update, but they need to stay at the same major version as `chrome-aws-lambda`. If we upgrade `puppeteer`, we see a ` cannot read property 'prototype' of undefined` error. 
