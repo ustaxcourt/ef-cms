@@ -47,9 +47,9 @@ module.exports = [
   },
   {
     actions: [
-      'wait for #print-session-working-copy',
+      'wait for #print-session-working-copy to be visible',
       'click element #print-session-working-copy',
-      'wait for .modal-screen',
+      'wait for .modal-screen to be visible',
       'click element #modal-button-confirm',
     ],
     notes: 'checks a11y of print trial session working copy modal',
