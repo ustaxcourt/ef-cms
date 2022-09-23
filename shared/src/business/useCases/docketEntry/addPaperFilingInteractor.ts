@@ -6,7 +6,7 @@ const {
   DOCUMENT_RELATIONSHIPS,
   ROLES,
 } = require('../../entities/EntityConstants');
-import { Case } from '../../entities/cases/Case';
+import { Case, isLeadCase } from '../../entities/cases/Case';
 import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
@@ -130,7 +130,7 @@ export const addPaperFilingInteractor = async (
       { applicationContext, petitioners: caseEntity.petitioners },
     );
 
-    if (caseEntity.docketNumber === caseEntity.leadDocketNumber) {
+    if (isLeadCase(caseEntity)) {
       filedByFromLeadCase = docketEntryEntity.filedBy;
     }
 

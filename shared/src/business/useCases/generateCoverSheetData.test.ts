@@ -2,7 +2,7 @@ import {
   COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET,
   DOCKET_NUMBER_SUFFIXES,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
-  MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES,
+  MULTI_DOCKET_FILING_EVENT_CODES,
   PARTY_TYPES,
 } from '../entities/EntityConstants';
 import { FORMATS, formatDateString } from '../utilities/DateHandler';
@@ -454,7 +454,26 @@ describe('generateCoverSheetData', () => {
       },
       docketEntryEntity: {
         ...testingCaseData.docketEntries[0],
-        eventCode: MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES[0],
+        eventCode: MULTI_DOCKET_FILING_EVENT_CODES[0],
+      },
+    } as any);
+
+    expect(
+      applicationContext.getUseCaseHelpers()
+        .formatConsolidatedCaseCoversheetData,
+    ).toHaveBeenCalled();
+  });
+
+  it('should append consolidated group information to the coversheet when the document filed is multi-docketable and an internal event code', async () => {
+    await generateCoverSheetData({
+      applicationContext,
+      caseEntity: {
+        ...testingCaseData,
+        leadDocketNumber: testingCaseData.docketNumber,
+      },
+      docketEntryEntity: {
+        ...testingCaseData.docketEntries[0],
+        eventCode: 'NOT',
       },
     } as any);
 

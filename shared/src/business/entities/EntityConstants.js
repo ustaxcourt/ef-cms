@@ -437,15 +437,15 @@ const TRACKED_DOCUMENT_TYPES = {
 };
 
 const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
-  ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 ])
-  .filter(externalEvent => externalEvent.caseDecision)
+  .filter(internalEvent => internalEvent.caseDecision)
   .map(x => x.eventCode);
 
-const MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES = flatten([
-  ...Object.values(DOCUMENT_EXTERNAL_CATEGORIES_MAP),
+const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
 ])
-  .filter(externalEvent => !externalEvent.caseDecision)
+  .filter(internalEvent => !internalEvent.caseDecision)
   .map(x => x.eventCode);
 
 const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
@@ -1467,7 +1467,7 @@ module.exports = deepFreeze({
   TODAYS_ORDERS_SORT_DEFAULT,
   TODAYS_ORDERS_SORTS,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
-  MULTI_DOCKET_EXTERNAL_FILING_EVENT_CODES,
+  MULTI_DOCKET_FILING_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   REVISED_TRANSCRIPT_EVENT_CODE,
