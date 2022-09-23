@@ -5844,7 +5844,7 @@
         "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "address1": "111 Fast Ln",
         "postalCode": "12355",
-        "contactType": "petitioner",
+        "contactType": "primary",
         "sealedAndUnavailable": false,
         "countryType": "domestic",
         "serviceIndicator": "None",
@@ -12663,7 +12663,7 @@
         "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
         "address1": "123 Leet Street",
         "postalCode": "72364",
-        "contactType": "petitioner",
+        "contactType": "primary",
         "sealedAndUnavailable": false,
         "countryType": "domestic",
         "serviceIndicator": "None",
@@ -12686,7 +12686,7 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|111-19",
     "docketNumber": "111-19",
-    "status": "Submitted"
+    "status": "New"
   },
   {
     "isStricken": false,
