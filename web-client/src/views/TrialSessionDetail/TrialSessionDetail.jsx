@@ -62,7 +62,7 @@ export const TrialSessionDetail = connect(
               >
                 {formattedTrialSessionDetails.isHybridSession && (
                   <div className="grid-container padding-0">
-                    <div className="grid-row hide-on-mobile margin-bottom-2">
+                    <div className="grid-row hide-on-mobile margin-bottom-105">
                       <label
                         className="dropdown-label-serif margin-right-3 padding-top-05"
                         htmlFor="hybrid-session-filter"
