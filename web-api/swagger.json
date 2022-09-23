@@ -4830,26 +4830,22 @@
             "type": "object",
             "properties": {
               "caseNotesFlag": {
-                "required": true,
                 "type": "boolean"
               },
               "filters": {
-                "required": true,
                 "type": "object"
               },
               "formattedCases": {
-                "required": true,
                 "type": "array"
               },
               "formattedTrialSession": {
-                "required": true,
                 "type": "object"
               },
               "sessionNotes": {
-                "required": false,
                 "type": "string"
               }
-            }
+            },
+            "required": ["caseNotesFlag", "filters", "formattedCases", "formattedTrialSession"]
           }
         }
       ],
