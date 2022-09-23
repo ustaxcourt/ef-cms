@@ -49,7 +49,12 @@ module.exports = [
     notes: 'checks a11y of edit docket entry add other filing party',
     url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/documents/dc2664a1-f552-418f-bcc7-8a67f4246568/edit',
   },
-  'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/add-paper-filing',
+  {
+    actions: [],
+    notes:
+      'checks a11y of ConfirmInitiateServiceModal on paper filing for a consolidated group',
+    url: 'http://localhost:1234/log-in?code=docketclerk@example.com&path=/case-detail/103-19/add-paper-filing',
+  },
   'http://localhost:1234/log-in?code=docketclerk@example.com&path=/reports/pending-report',
   {
     actions: [
