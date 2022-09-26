@@ -49,17 +49,25 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] Story has been tested on a mobile device (for external users only)
 
 **Engineering**
- - [ ] Automated test scripts have been written, including visual tests for newly added PDFs
- - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning
- - [ ] Verify that language for docket record for internal users and external users is identical
- - [ ] New screens have been added to pa11y scripts
- - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html 
- - [ ] READMEs, other appropriate docs, JSDocs and swagger/APIs fully updated
- - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required)
- - [ ] Interactors should validate entities before calling persistence methods
- - [ ] Code refactored for clarity and to remove any known technical debt
- - [ ] Acceptance criteria for the story has been met
- - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story
+ - [ ] Automated test scripts have been written, including visual tests for newly added PDFs.
+ - [ ] Field level and page level validation errors (front-end and server-side) integrated and functioning.
+ - [ ] Verify that language for docket record for internal users and external users is identical.
+ - [ ] New screens have been added to pa11y scripts.
+ - [ ] All new functionality verified to work with keyboard and macOS voiceover https://www.apple.com/voiceover/info/guide/_1124.html.
+ - [ ] READMEs, other appropriate docs, JSDocs and swagger/APIs fully updated.
+ - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required).
+ - [ ] Interactors should validate entities before calling persistence methods.
+ - [ ] Code refactored for clarity and to remove any known technical debt.
+ - [ ] Acceptance criteria for the story has been met.
+ - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story.
+ - [ ] If the work completed for the story requires a reindex without a migration, or any other special deploy steps, apply these changes to the following flexion branches:
+   - [ ] experimental1
+   - [ ] experimental2
+   - [ ] experimental3
+   - [ ] experimental4
+   - [ ] experimental5
+   - [ ] experimental6
+   - [ ] develop
  - [ ] Reviewed by UX on a deployed environment.
  - [ ] Reviewed by PO on a deployed environment. Can be deployed to the Court's `test` environment if prod-like data is required. Otherwise deployed to any `experimental` environment.
  - [ ] Deployed to the Court's `staging` environment.
