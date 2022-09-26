@@ -1,8 +1,9 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
 import {
+  FORMATS,
   formatDateString,
   formatNow,
-  FORMATS,
   getBusinessDateInFuture,
 } from '../../utilities/DateHandler';
 import {
@@ -11,20 +12,19 @@ import {
   MINUTE_ENTRIES_MAP,
   PARTIES_CODES,
   PAYMENT_STATUS,
+  PETITIONS_SECTION,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
+import { UnauthorizedError } from '../../../errors/errors';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { generateDraftDocument } from './generateDraftDocument';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getClinicLetterKey } from '../../utilities/getClinicLetterKey';
-import { PETITIONS_SECTION } from '../../entities/EntityConstants';
 import { remove } from 'lodash';
-import { UnauthorizedError } from '../../../errors/errors';
 
 export const addDocketEntryForPaymentStatus = ({
   applicationContext,
@@ -428,6 +428,7 @@ export const serveCaseToIrsInteractor = async (
   applicationContext,
   { docketNumber },
 ) => {
+  console.log('**** HEY ***');
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
