@@ -98,15 +98,15 @@ describe('formattedTrialSessionDetails', () => {
     ]);
   });
 
-  it('compares eligible trial session cases sorting lien/levy and passport first', () => {
+  it('compares eligible trial session cases sorting passport first', () => {
     const result = runCompute(formattedEligibleCasesHelper, {
       state: {
         trialSession: {
           eligibleCases: [
             {
-              docketNumber: '101-19',
+              docketNumber: '102-19',
               docketNumberSuffix: '',
-              docketNumberWithSuffix: '101-19',
+              docketNumberWithSuffix: '102-19',
               isDocketSuffixHighPriority: false,
             },
             {
@@ -127,9 +127,9 @@ describe('formattedTrialSessionDetails', () => {
         isDocketSuffixHighPriority: true,
       },
       {
-        docketNumber: '101-19',
+        docketNumber: '102-19',
         docketNumberSuffix: '',
-        docketNumberWithSuffix: '101-19',
+        docketNumberWithSuffix: '102-19',
       },
     ]);
   });
