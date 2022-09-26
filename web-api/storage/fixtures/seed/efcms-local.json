@@ -12718,6 +12718,7 @@
     "eventCode": "TE",
     "processingStatus": "complete",
     "filers": [],
+    "index": 3,
     "signedAt": "2019-10-07T14:29:30.288Z",
     "documentId": "25100ec6-eeeb-4e88-872f-c99fad1fe6c7",
     "signedByUserId": "1805d1ab-18d0-43ec-bafb-654e83405416",
@@ -12772,6 +12773,7 @@
     "isOnDocketRecord": false,
     "eventCode": "STIN",
     "createdAt": "2019-12-11T15:25:09.286Z",
+    "index": 0,
     "processingStatus": "complete",
     "numberOfPages": 1,
     "filers": [
@@ -12814,6 +12816,41 @@
     "pk": "case|111-19",
     "documentTitle": "Petition",
     "docketNumber": "111-19"
+  },
+  {
+    "assigneeId": null,
+    "assigneeName": null,
+    "caseStatus": "New",
+    "docketEntry": {
+      "documentType": "Petition",
+      "index": 1,
+      "isFileAttached": true,
+      "eventCode": "P",
+      "createdAt": "2019-12-11T15:25:09.285Z",
+      "processingStatus": "pending",
+      "numberOfPages": 1,
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Guy Fieri",
+      "docketEntryId": "9de27a7d-7c6b-434b-803b-7655f82d5e07",
+      "sk": "docket-entry|9de27a7d-7c6b-434b-803b-7655f82d5e07",
+      "partySecondary": false,
+      "pk": "case|111-19",
+      "documentTitle": "Petition",
+      "docketNumber": "111-19"
+    },
+    "docketNumber": "111-19",
+    "docketNumberWithSuffix": "111-19L",
+    "gsi1pk": "work-item|b6d537eb-2bea-49c6-8375-6878588ca621",
+    "isInitializeCase": true,
+    "section": "petitions",
+    "entityName": "WorkItem",
+    "pk": "case|111-19",
+    "sk": "work-item|dffa984d-2caf-42b5-8d69-59728b32f13f",
+    "workItemId": "dffa984d-2caf-42b5-8d69-59728b32f13f",
+    "sentBy": "Test Petitionsclerk1"
   },
   {
     "associatedJudge": "Chief Judge",
