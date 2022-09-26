@@ -49,6 +49,12 @@ module.exports = {
       },
     },
     {
+      files: ['**/*.ts', '**/*.tsx'],
+      rules: {
+        'no-undef': 'off',
+      },
+    },
+    {
       files: ['**/*.test.js'],
       rules: {
         'max-lines': [
