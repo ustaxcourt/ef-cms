@@ -10,7 +10,7 @@ export const formattedTrialSessionDetailsForFilteredEligibleCases = (
     get,
     applicationContext,
   );
-  console.log('formattedEligibleCases', formattedEligibleCases);
+
   const filter = get(
     state.screenMetadata.eligibleCasesFilter.hybridSessionFilter,
   );
@@ -33,8 +33,6 @@ export const formattedTrialSessionDetailsForFilteredEligibleCases = (
       return true;
     }
   });
-
-  console.log('filteredEligibleCases', filteredEligibleCases);
 
   return filteredEligibleCases;
 };

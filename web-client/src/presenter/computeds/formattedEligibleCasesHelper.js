@@ -73,7 +73,6 @@ const compareTrialSessionEligibleCasesGroupsFactory =
   };
 
 exports.formattedEligibleCasesHelper = (get, applicationContext) => {
-  console.log('gg');
   const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
 
   const sortedCases = eligibleCases
@@ -86,7 +85,6 @@ exports.formattedEligibleCasesHelper = (get, applicationContext) => {
       ),
     )
     .map(caseItem => setConsolidationFlagsForDisplay(caseItem, eligibleCases));
-  console.log('gg', sortedCases);
 
   return sortedCases;
 };
