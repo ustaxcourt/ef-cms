@@ -1,3 +1,5 @@
+<!-- how important is it to keep this file up to date? can we delete this file altogether? -->
+
 # Team Process
 
 Now that you've logged in and played around with our Dawson system a bit on a deployed environment, let's talk about our team process and what is expected from our fellow teammates.  This part of the documentation should help members get on the same page when it comes to the soft-skills required to work as a well-oiled agile machine.
