@@ -1,29 +1,30 @@
-import {
-  compareCasesByDocketNumber,
-  formatCase,
-} from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import { formatCase } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '../../../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from 'cerebral';
 
-const compareTrialSessionEligibleCases =
-  (docketNumberSortFunction = compareCasesByDocketNumber) =>
-  (a, b) => {
-    if (a.isManuallyAdded && !b.isManuallyAdded) {
-      return -1;
-    } else if (!a.isManuallyAdded && b.isManuallyAdded) {
-      return 1;
-    } else if (a.highPriority && !b.highPriority) {
-      return -1;
-    } else if (!a.highPriority && b.highPriority) {
-      return 1;
-    } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
-      return -1;
-    } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
-      return 1;
-    } else {
-      return docketNumberSortFunction(a, b);
+const compareTrialSessionEligibleCases = eligibleCases => (a, b) => {
+  if (a.isManuallyAdded && !b.isManuallyAdded) {
+    return -1;
+  } else if (!a.isManuallyAdded && b.isManuallyAdded) {
+    return 1;
+  } else if (a.highPriority && !b.highPriority) {
+    return -1;
+  } else if (!a.highPriority && b.highPriority) {
+    return 1;
+  } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
+    return -1;
+  } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
+    return 1;
+  } else {
+    if (!a || !a.docketNumber || !b || !b.docketNumber) {
+      return 0;
     }
-  };
+
+    let aSortString = getFullSortString(a, eligibleCases);
+    let bSortString = getFullSortString(b, eligibleCases);
+    return aSortString.localeCompare(bSortString);
+  }
+};
 
 const getSortableDocketNumber = docketNumber => {
   const [number, year] = docketNumber.split('-');
@@ -61,17 +62,6 @@ const getFullSortString = (theCase, cases) => {
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-const compareTrialSessionEligibleCasesGroupsFactory =
-  eligibleCases => (a, b) => {
-    if (!a || !a.docketNumber || !b || !b.docketNumber) {
-      return 0;
-    }
-
-    let aSortString = getFullSortString(a, eligibleCases);
-    let bSortString = getFullSortString(b, eligibleCases);
-    return aSortString.localeCompare(bSortString);
-  };
-
 exports.formattedEligibleCasesHelper = (get, applicationContext) => {
   const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
 
@@ -79,11 +69,7 @@ exports.formattedEligibleCasesHelper = (get, applicationContext) => {
     .map(caseItem =>
       formatCase({ applicationContext, caseItem, eligibleCases }),
     )
-    .sort(
-      compareTrialSessionEligibleCases(
-        compareTrialSessionEligibleCasesGroupsFactory(eligibleCases),
-      ),
-    )
+    .sort(compareTrialSessionEligibleCases(eligibleCases))
     .map(caseItem => setConsolidationFlagsForDisplay(caseItem, eligibleCases));
 
   return sortedCases;
