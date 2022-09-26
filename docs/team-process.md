@@ -132,10 +132,10 @@ If dependencies have no patch, replace it with an alternative, or wait for the l
 4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
     - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
     - Change the version in `scripts/verify-terraform-version.sh`
-    - increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
-    - publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
+    - Increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
+    - Publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
       - `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
-    - deploy as normal
+    - Deploy as normal
 
 5. `docker`: [docker cypress/base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
@@ -160,4 +160,4 @@ Below is a list of dependencies that are locked down due to known issues with se
       - This runs as part of the `npm postinstall` step.
     - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
 
-3. `ajv` : temporarily installed as a project dependency due to lint:swagger failure in Github actions initiated during PR commits. The specific failure is "Cannot find module 'ajv/dist/core" failing on the lint:swagger script. `ajv` is a transitive dependency of multiple packages, including swagger-cli, which seems to be causing the issue. [Link](https://github.com/ustaxcourt/ef-cms/runs/8136004664?check_suite_focus=true) to failing test on 08/29/22 dependency updates.
+3. `puppeteer` and `puppeteer-core` have a major version update, but they need to stay at the same major version as `chrome-aws-lambda`. If we upgrade `puppeteer`, we see a ` cannot read property 'prototype' of undefined` error. 
