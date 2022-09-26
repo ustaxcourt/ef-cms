@@ -12,7 +12,7 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
       {
         docketNumber: '102-19',
         docketNumberSuffix: 'P',
-        docketNumberWithSuffix: '101-19P',
+        docketNumberWithSuffix: '102-19P',
         isDocketSuffixHighPriority: true,
       },
     );
@@ -24,13 +24,13 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
       {
         docketNumber: '102-19',
         docketNumberSuffix: '',
-        docketNumberWithSuffix: '101-19',
+        docketNumberWithSuffix: '102-19',
         isDocketSuffixHighPriority: false,
       },
       {
         docketNumber: '102-19',
         docketNumberSuffix: 'P',
-        docketNumberWithSuffix: '101-19P',
+        docketNumberWithSuffix: '102-19P',
         isDocketSuffixHighPriority: true,
       },
     );
@@ -42,13 +42,13 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
       {
         docketNumber: '103-19',
         docketNumberSuffix: '',
-        docketNumberWithSuffix: '101-19',
+        docketNumberWithSuffix: '103-19',
         isDocketSuffixHighPriority: false,
       },
       {
         docketNumber: '102-19',
         docketNumberSuffix: 'P',
-        docketNumberWithSuffix: '101-19P',
+        docketNumberWithSuffix: '103-19P',
         isDocketSuffixHighPriority: true,
       },
     );

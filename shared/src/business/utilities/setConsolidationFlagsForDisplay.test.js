@@ -47,12 +47,12 @@ describe('setConsolidationFlagsForDisplay', () => {
 
   it('should not indent the case item if the lead case is high priority', () => {
     const mockCaseItem = {
-      docketNumber: '300-20',
-      leadDocketNumber: '303-20',
+      docketNumber: '303-20',
+      leadDocketNumber: '300-20',
     };
     const result = setConsolidationFlagsForDisplay(mockCaseItem, [
       {
-        docketNumber: '303-20',
+        docketNumber: '300-20',
         highPriority: true,
       },
     ]);
@@ -68,12 +68,12 @@ describe('setConsolidationFlagsForDisplay', () => {
 
   it('should not indent the case item if the lead case is manually added', () => {
     const mockCaseItem = {
-      docketNumber: '300-20',
-      leadDocketNumber: '303-20',
+      docketNumber: '303-20',
+      leadDocketNumber: '300-20',
     };
     const result = setConsolidationFlagsForDisplay(mockCaseItem, [
       {
-        docketNumber: '303-20',
+        docketNumber: '300-20',
         isManuallyAdded: true,
       },
     ]);
@@ -89,12 +89,12 @@ describe('setConsolidationFlagsForDisplay', () => {
 
   it('should not indent the case item if the lead case has isDocketSuffixHighPriority', () => {
     const mockCaseItem = {
-      docketNumber: '300-20',
-      leadDocketNumber: '303-20',
+      docketNumber: '303-20',
+      leadDocketNumber: '300-20',
     };
     const result = setConsolidationFlagsForDisplay(mockCaseItem, [
       {
-        docketNumber: '303-20',
+        docketNumber: '300-20',
         isDocketSuffixHighPriority: true,
       },
     ]);
@@ -110,13 +110,13 @@ describe('setConsolidationFlagsForDisplay', () => {
 
   it('should not indent the case item if the caseItem has highPriority', () => {
     const mockCaseItem = {
-      docketNumber: '300-20',
+      docketNumber: '303-20',
       highPriority: true,
-      leadDocketNumber: '303-20',
+      leadDocketNumber: '300-20',
     };
     const result = setConsolidationFlagsForDisplay(mockCaseItem, [
       {
-        docketNumber: '303-20',
+        docketNumber: '300-20',
       },
     ]);
 
@@ -131,13 +131,13 @@ describe('setConsolidationFlagsForDisplay', () => {
 
   it('should not indent the case item if the caseItem has manuallyAdded', () => {
     const mockCaseItem = {
-      docketNumber: '300-20',
+      docketNumber: '303-20',
       isManuallyAdded: true,
-      leadDocketNumber: '303-20',
+      leadDocketNumber: '300-20',
     };
     const result = setConsolidationFlagsForDisplay(mockCaseItem, [
       {
-        docketNumber: '303-20',
+        docketNumber: '300-20',
       },
     ]);
 
@@ -152,13 +152,13 @@ describe('setConsolidationFlagsForDisplay', () => {
 
   it('should not indent the case item if the caseItem has isDocketSuffixHighPriority', () => {
     const mockCaseItem = {
-      docketNumber: '300-20',
+      docketNumber: '303-20',
       isDocketSuffixHighPriority: true,
-      leadDocketNumber: '303-20',
+      leadDocketNumber: '300-20',
     };
     const result = setConsolidationFlagsForDisplay(mockCaseItem, [
       {
-        docketNumber: '303-20',
+        docketNumber: '300-20',
       },
     ]);
 
