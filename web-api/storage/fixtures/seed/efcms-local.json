@@ -24116,10 +24116,10 @@
       {
         "isAddressSealed": false,
         "city": "Los Angeles",
-        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416",
+        "contactId": "7805d1ab-18d0-43ec-bafb-654e83405416", 
         "address1": "111 Fast Ln",
         "postalCode": "12355",
-        "contactType": "petitioner",
+        "contactType": "primary",
         "sealedAndUnavailable": false,
         "countryType": "domestic",
         "serviceIndicator": "None",
@@ -24142,7 +24142,42 @@
     "orderForAmendedPetitionAndFilingFee": false,
     "pk": "case|112-19",
     "docketNumber": "112-19",
-    "status": "Submitted"
+    "status": "New"
+  },
+  {
+    "assigneeId": null,
+    "assigneeName": null,
+    "caseStatus": "New",
+    "docketEntry": {
+      "documentType": "Petition",
+      "index": 1,
+      "isFileAttached": true,
+      "eventCode": "P",
+      "createdAt": "2019-12-11T15:25:09.285Z",
+      "processingStatus": "pending",
+      "numberOfPages": 1,
+      "filers": [
+        "7805d1ab-18d0-43ec-bafb-654e83405416"
+      ],
+      "entityName": "DocketEntry",
+      "filedBy": "Petr. Brian Earl Spilner",
+      "docketEntryId": "337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
+      "sk": "docket-entry|337b0684-0a8e-43fd-a9e5-3a01c8158cc8",
+      "partySecondary": false,
+      "pk": "case|112-19",
+      "documentTitle": "Petition",
+      "docketNumber": "112-19"
+    },
+    "docketNumber": "112-19",
+    "docketNumberWithSuffix": "112-19L",
+    "gsi1pk": "work-item|e7fb2a37-d371-4cdc-ba55-83561dde5f28",
+    "isInitializeCase": true,
+    "section": "petitions",
+    "entityName": "WorkItem",
+    "pk": "case|112-19",
+    "sk": "work-item|e7fb2a37-d371-4cdc-ba55-83561dde5f28",
+    "workItemId": "e7fb2a37-d371-4cdc-ba55-83561dde5f28",
+    "sentBy": "Test Petitionsclerk1"
   },
   {
     "isStricken": false,
@@ -24169,6 +24204,7 @@
     "partySecondary": false,
     "documentId": "1c56d0fc-b01b-4bc7-830f-0c25b4e6b803",
     "pk": "case|112-19",
+    "index": 0,
     "documentTitle": "Statement of Taxpayer Identification",
     "docketNumber": "112-19"
   },
