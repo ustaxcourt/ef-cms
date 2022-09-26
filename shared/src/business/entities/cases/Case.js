@@ -1753,6 +1753,7 @@ const updatePetitioner = function (rawCase, updatedPetitioner) {
     p => p.contactId === updatedPetitioner.contactId,
   );
 
+  console.log(rawCase.petitioners, updatedPetitioner, '@@@@@@@@@@@@@@@@@@@@');
   if (petitionerIndex !== -1) {
     rawCase.petitioners[petitionerIndex] = updatedPetitioner;
   } else {
