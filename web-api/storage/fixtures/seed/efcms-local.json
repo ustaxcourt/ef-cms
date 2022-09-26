@@ -25141,6 +25141,7 @@
     "eventCode": "STIN",
     "createdAt": "2019-07-12T17:09:41.027Z",
     "processingStatus": "complete",
+    "index": 0,
     "numberOfPages": 1,
     "filers": [],
     "entityName": "DocketEntry",
