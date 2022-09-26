@@ -73,7 +73,7 @@ const compareTrialSessionEligibleCasesGroupsFactory =
   };
 
 exports.formattedEligibleCasesHelper = (get, applicationContext) => {
-  const eligibleCases = get(state.trialSession.eligibleCases);
+  const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
 
   const sortedCases = eligibleCases
     .map(caseItem =>
