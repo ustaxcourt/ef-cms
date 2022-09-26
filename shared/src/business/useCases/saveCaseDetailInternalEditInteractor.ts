@@ -29,6 +29,7 @@ export const saveCaseDetailInternalEditInteractor = async (
   if (!isAuthorized(authorizedUser, ROLE_PERMISSIONS.UPDATE_CASE)) {
     throw new UnauthorizedError('Unauthorized for update case');
   }
+  console.log(authorizedUser, '///////////////////');
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -139,7 +140,7 @@ export const saveCaseDetailInternalEditInteractor = async (
     const petitionDocketEntry = caseEntity.getPetitionDocketEntry();
 
     const initializeCaseWorkItem = petitionDocketEntry.workItem;
-
+    console.log(authorizedUser, '///////////////////');
     const workItemEntity = new WorkItem(
       {
         ...initializeCaseWorkItem,
