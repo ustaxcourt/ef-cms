@@ -1,4 +1,4 @@
-name: Node.js CI
+name: Node.js CI - client
 
 on:
   pull_request:
