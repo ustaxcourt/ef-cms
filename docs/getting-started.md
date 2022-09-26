@@ -1,12 +1,12 @@
 ## Getting Started with Dawson
 
-Hopefully you've read through the [What is Dawson?](/what-is-dawson) section of this documentation because a lot of the terminology defined there will help you better understand how to navigate the Dawson application.  But, if you're the type of person who would rather just poke around on a live environment, this part of the documentation is for you. We'll guide you on how to log in to Dawson, the various urls and user roles we have, and how to begin using the Dawson application.
+Hopefully you've read through the [What is Dawson?](/what-is-dawson) section of this documentation because a lot of the terminology defined there will help you better understand how to navigate the Dawson application.  If you would rather poke around on a live environment, this part of the documentation is for you. We'll guide you on how to log in to Dawson, the various urls and user roles we have, and how to begin using the Dawson application.
 
 ?> You can find the [Running Locally Guide](/running-locally) if you'd like to get Dawson running on your machine to start development.
 
 ## Dawson's User Interfaces
 
-There are two separate UIs that we deploy for the Dawson system; both of which try to address the needs of authenticated and unauthenticated users.
+There are two UIs that we deploy for the Dawson system; both address the needs of authenticated and unauthenticated users.
 
 ### 👪 Public UI
 
@@ -14,9 +14,7 @@ Our **public** web application contains features accessible to the general publi
 
 The public UI contains some logic for **terminal users**, which are users who are physically sitting inside the Tax Court building needing access to search our public records.
 
-Below is a screenshot of the public UI.  Note that some of the features allow public users to search for cases, search for orders, search for opinions, view the documents, and view the case's docket record:
-
- Note that some of the publicly available features allow users to search for cases, orders, and opinions, as well as view the documents returned and the case's docket record:
+Below is a screenshot of the public UI. Note that some features allow public users to search for cases, search for orders, search for opinions, view the documents, and view the case's docket record:
 
 ![Public UI](./images/public-ui.png)
 
@@ -62,7 +60,7 @@ And the **Flexion** environments:
 
 The Dawson system is built using a role-based authentication system.  Each user in Dawson has different permissions for various features in the application.  For example, only a Petitions Clerk has the ability to serve a petition, whereas a Docket Clerk has the ability to upload a docket entry.  Here is a list of the current roles we have in our system:
 
-?> Check out our [User Roles](/what-is-dawson?id=users) documentation page to learn more about each of the various user roles in the Dawson system.
+?> Check [User Roles](/what-is-dawson?id=users) to  about each of the user roles in the Dawson system.
 
 - adc
 - admin
@@ -86,11 +84,11 @@ The Dawson system is built using a role-based authentication system.  Each user 
 
 ## Mock Users
 
-After deploying a brand new Dawson environment, an admin will manually run the [setup-test-users.sh](https://github.com/ustaxcourt/ef-cms/blob/staging/shared/admin-tools/user/setup-test-users.sh) script to create these mock users in our deployed environments so that members of our team can login and interact with the system to test the various roles.  This script will generate the following test users will allow you to login.
+After deploying a brand new Dawson environment, an admin will manually run the [setup-test-users.sh](https://github.com/ustaxcourt/ef-cms/blob/staging/shared/admin-tools/user/setup-test-users.sh) script to create these mock users in our deployed environments so members of our team can login and interact with the system to test various roles.  This script will generate the following test users will allow you to login.
 
 !> **Ask a teammate for the passwords.**
 
-?> the **1** in the emails is an example; you can use adc2@example.com, or adc10@example.com, etc...
+?> the **1** in the emails is an example; you can use adc2@example.com, or adc10@example.com, etc.
 
 | email                         | role            | number of users |
 |-------------------------------|-----------------|-----------------|
@@ -111,15 +109,15 @@ After deploying a brand new Dawson environment, an admin will manually run the [
 
 It's time to get your feet wet with Dawson.  Don't worry, we'll walk you through how you can file a petition as a Petitioner and then later serve that petition as a Petitions Clerk. 
 
-1. Login into to environment as `petitioner4@example.com` and click the `Create a Case` button.
-2. Read the instruction and try walking through the start a case wizard and give it a try.
+1. Login into the environment as `petitioner4@example.com` and click the `Create a Case` button.
+2. Read the instructions and try walking through the wizard.
 3. When the case is created, you should see it show up on your dashboard! 
-4. Write down your docket number (xxx-xx), you'll need it for the next steps.
-4. Now, try logging in as `petitionsclerk2@example.com`.
-5. Search for the case by docket number xxx-xx which will take you to the case.
-6. Click on the `petition` link that's in the case's docket record table.
-7. Review the petition information to make sure it's correct and press the `Review Petition` button.
-8. Review on the confirmation page and click `Serve to IRS` (don't worry, it won't really serve anything to the IRS).
-9. Congrats 🥳, you filed your first petition as a Petitioner and reviewed / served it as a Petitions Clerk!
+4. Write down your docket number (xxx-xx). You'll need it for the next steps.
+5. Now, try logging in as `petitionsclerk2@example.com`.
+6. Search for the case by docket number xxx-xx.
+7. Click on the `petition` link that's in the case's docket record table.
+8. Review the petition information to make sure it's correct and press the `Review Petition` button.
+9. Review on the confirmation page and click `Serve to IRS` (don't worry, it won't really serve anything to the IRS).
+10. Congrats 🥳, you filed your first petition as a Petitioner and reviewed / served it as a Petitions Clerk!
 
 This is just one of many user flows we have in our system.  The reason we started you off with a petition is because a petitioner filing their petition is the start of the life cycle of a case.
