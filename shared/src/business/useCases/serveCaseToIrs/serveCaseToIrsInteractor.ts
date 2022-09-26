@@ -428,7 +428,6 @@ export const serveCaseToIrsInteractor = async (
   applicationContext,
   { docketNumber },
 ) => {
-  console.log('**** HEY ***');
   const user = applicationContext.getCurrentUser();
 
   if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_PETITION)) {
