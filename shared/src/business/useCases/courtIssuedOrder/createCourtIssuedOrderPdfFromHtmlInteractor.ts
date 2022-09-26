@@ -21,11 +21,13 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: IApplicationContext,
   {
     contentHtml,
+    addedDocketNumbers,
     docketNumber,
     documentTitle,
     signatureText,
   }: {
     contentHtml: string;
+    addedDocketNumbers: string[];
     docketNumber: string;
     documentTitle: string;
     signatureText: string;
@@ -50,6 +52,7 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
+      addedDocketNumbers,
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,

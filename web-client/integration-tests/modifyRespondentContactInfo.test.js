@@ -3,6 +3,7 @@ import {
   refreshElasticsearchIndex,
   setupTest,
   uploadPetition,
+  waitForLoadingComponentToHide,
 } from './helpers';
 import { petitionsClerkAddsRespondentsToCase } from './journey/petitionsClerkAddsRespondentsToCase';
 import { petitionsClerkServesPetitionFromDocumentView } from './journey/petitionsClerkServesPetitionFromDocumentView';
@@ -52,9 +53,12 @@ describe('Modify Respondent Contact Information', () => {
   loginAs(cerebralTest, 'irsPractitioner@example.com');
   respondentUpdatesAddress(cerebralTest);
 
-  it('wait for ES index', async () => {
-    // waiting for the associated cases to be updated, and THEN an index
-    await refreshElasticsearchIndex(5000);
+  it('wait for notice of change of address to be generated for each case the respondent is associated with', async () => {
+    await waitForLoadingComponentToHide({
+      cerebralTest,
+      component: 'userContactEditProgress.inProgress',
+      refreshInterval: 1000,
+    });
   });
 
   respondentViewsCaseDetailNoticeOfChangeOfAddress(cerebralTest, 0, true);
