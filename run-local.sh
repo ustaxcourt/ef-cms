@@ -65,3 +65,5 @@ if [ ! -e "$CIRCLECI" ]; then
 fi
 
 pkill -P $S3RVER_PID
+
+echo "API running..."
