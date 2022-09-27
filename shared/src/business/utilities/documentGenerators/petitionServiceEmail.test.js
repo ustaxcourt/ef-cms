@@ -108,7 +108,7 @@ describe('documentGenerators', () => {
 
       // Do not write PDF when running on CircleCI
       if (process.env.PDF_OUTPUT) {
-        writePdfFile('Document_Service_Email', pdf);
+        writePdfFile('Petition_Service_Email', pdf);
         expect(applicationContext.getChromiumBrowser).toHaveBeenCalled();
       }
 
