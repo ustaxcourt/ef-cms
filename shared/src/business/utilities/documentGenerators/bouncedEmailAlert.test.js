@@ -39,7 +39,7 @@ describe('documentGenerators', () => {
   });
 
   describe('bouncedEmailAlert', () => {
-    it('generates an Bounced Email Alert document', async () => {
+    it('generates a Bounced Email Alert document', async () => {
       const pdf = await bouncedEmailAlert({
         applicationContext,
         data: {
