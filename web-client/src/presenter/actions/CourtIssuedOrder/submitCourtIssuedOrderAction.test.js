@@ -55,6 +55,7 @@ describe('submitCourtIssuedOrderAction', () => {
         primaryDocumentFileId: 'abc',
       },
       state: {
+        addedDocketNumbers: ['111-20'],
         caseDetail: {
           docketNumber: '111-20',
         },
@@ -70,6 +71,7 @@ describe('submitCourtIssuedOrderAction', () => {
       applicationContext.getUseCases().updateCourtIssuedOrderInteractor.mock
         .calls[0][1].documentMetadata.draftOrderState,
     ).toEqual({
+      addedDocketNumbers: ['111-20'],
       docketNumber: '111-20',
       documentType: 'Notice of Intervention',
     });
