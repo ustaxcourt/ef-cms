@@ -39,7 +39,7 @@ describe('documentGenerators', () => {
   });
 
   describe('documentServiceEmail', () => {
-    it('generates a Document Service Email document', async () => {
+    it('generates a DocumentServiceEmail document', async () => {
       const pdf = await documentServiceEmail({
         applicationContext,
         data: {
