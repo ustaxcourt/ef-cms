@@ -32,6 +32,7 @@ export const submitCourtIssuedOrderAction = async ({
 
   documentMetadata.draftOrderState = {
     ...documentMetadata,
+    addedDocketNumbers: get(state.addedDocketNumbers),
   };
 
   await applicationContext
