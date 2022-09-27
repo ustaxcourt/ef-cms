@@ -1,15 +1,15 @@
+import { CONTACT_TYPES } from '../entities/EntityConstants';
+import { Case } from '../entities/cases/Case';
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../authorization/authorizationClientService';
 import {
   UnauthorizedError,
   UnprocessableEntityError,
 } from '../../errors/errors';
-import { Case } from '../entities/cases/Case';
-import { CONTACT_TYPES } from '../entities/EntityConstants';
-import { isEmpty } from 'lodash';
 import { WorkItem } from '../entities/WorkItem';
+import { isEmpty } from 'lodash';
 
 /**
  * saveCaseDetailInternalEditInteractor
