@@ -7,6 +7,7 @@ export const Order = ({ options, orderContent, orderTitle, signatureText }) => {
     <div className="order-pdf">
       <OrderPrimaryHeader />
       <OrderDocketHeader
+        addedDocketNumbers={options.addedDocketNumbers}
         caseCaptionExtension={options.caseCaptionExtension}
         caseTitle={options.caseTitle.toUpperCase()}
         docketNumberWithSuffix={options.docketNumberWithSuffix}
