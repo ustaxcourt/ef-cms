@@ -47,8 +47,6 @@ Here is a list of the **Tax Court**'s deployed Dawson instances:
 
 And the **Flexion** environments:
 
-- [https://dev.ustc-case-mgmt.flexion.us/](https://dev.ustc-case-mgmt.flexion.us/) (flexion develop)
-- [https://stg.ustc-case-mgmt.flexion.us/](https://stg.ustc-case-mgmt.flexion.us/) (flexion staging)
 - [https://exp1.ustc-case-mgmt.flexion.us/](https://exp1.ustc-case-mgmt.flexion.us/) (flexion experimental1)
 - [https://exp2.ustc-case-mgmt.flexion.us/](https://exp2.ustc-case-mgmt.flexion.us/) (flexion experimental2)
 - [https://exp3.ustc-case-mgmt.flexion.us/](https://exp3.ustc-case-mgmt.flexion.us/) (flexion experimental3)
