@@ -33,6 +33,7 @@ const pdfs = [
   'Order.pdf',
   'Pending_Report.pdf',
   'Practitioner_Case_List.pdf',
+  'Petition_Service_Email.pdf',
   'Receipt_of_Filing.pdf',
   'Standing_Pretrial_Order_For_Small_Case.pdf',
   'Standing_Pretrial_Order.pdf',
