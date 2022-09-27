@@ -44,8 +44,8 @@ module.exports.seedLocalDatabase = async entries => {
 
     await putEntries(seedEntries);
 
-    const docketNumber = await createCase1();
+    // const docketNumber = await createCase1();
 
-    await createOrder({ docketNumber });
+    // await createOrder({ docketNumber });
   }
 };
