@@ -6,8 +6,8 @@ const {
 const {
   generatePdfFromHtmlInteractor,
 } = require('../../useCases/generatePdfFromHtmlInteractor');
-const { petitionServiceEmail } = require('./petitionServiceEmail');
 const { getChromiumBrowser } = require('../getChromiumBrowser');
+const { petitionServiceEmail } = require('./petitionServiceEmail');
 
 describe('documentGenerators', () => {
   const testOutputPath = path.resolve(
@@ -39,7 +39,7 @@ describe('documentGenerators', () => {
   });
 
   describe('petitionServiceEmail', () => {
-    it('generates a Petition Service Email document', async () => {
+    it('generates a PetitionServiceEmail document', async () => {
       const pdf = await petitionServiceEmail({
         applicationContext,
         data: {
