@@ -8,6 +8,7 @@ const outputPath = './shared/test-output/document-generation';
 
 const pdfs = [
   'Address_Label_Cover_Sheet.pdf',
+  'Bounced_Email_Alert.pdf',
   'Case_Inventory_Report.pdf',
   'Change_Of_Address.pdf',
   'CourtIssuedDocumentCoverSheet.pdf',
