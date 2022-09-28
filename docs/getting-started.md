@@ -58,7 +58,7 @@ And the **Flexion** environments:
 
 The Dawson system is built using a role-based authentication system.  Each user in Dawson has different permissions for various features in the application.  For example, only a Petitions Clerk has the ability to serve a petition, whereas a Docket Clerk has the ability to upload a docket entry.  Here is a list of the current roles we have in our system:
 
-?> Check [User Roles](/what-is-dawson?id=users) to  about each of the user roles in the Dawson system.
+?> Check [User Roles](/what-is-dawson?id=users) to learn about each of the user roles in the Dawson system.
 
 - adc
 - admin
