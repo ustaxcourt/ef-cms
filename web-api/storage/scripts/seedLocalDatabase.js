@@ -2,7 +2,6 @@ const AWS = require('aws-sdk');
 const seedEntries = require('../fixtures/seed');
 const { chunk: splitIntoChunks } = require('lodash');
 const { createCase1 } = require('./cases/createCase1');
-const { createOrder } = require('./cases/createOrder');
 const { createUsers } = require('./createUsers');
 
 AWS.config = new AWS.Config();
@@ -44,8 +43,6 @@ module.exports.seedLocalDatabase = async entries => {
 
     await putEntries(seedEntries);
 
-    // const docketNumber = await createCase1();
-
-    // await createOrder({ docketNumber });
+    await createCase1();
   }
 };
