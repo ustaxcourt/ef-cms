@@ -3,6 +3,9 @@ const seedEntries = require('../fixtures/seed');
 const { chunk: splitIntoChunks } = require('lodash');
 const { createCase1 } = require('./cases/createCase1');
 const { createUsers } = require('./createUsers');
+const {
+  migrateItems: validationMigration,
+} = require('../../migration-terraform/main/lambdas/migrations/0000-validate-all-items');
 
 AWS.config = new AWS.Config();
 AWS.config.region = 'us-east-1';
@@ -21,6 +24,12 @@ const client = new AWS.DynamoDB.DocumentClient({
 const putEntries = async entries => {
   const chunks = splitIntoChunks(entries, 25);
   for (let chunk of chunks) {
+    try {
+      validationMigration(chunk);
+    } catch (e) {
+      process.exit(1);
+    }
+
     await client
       .batchWrite({
         RequestItems: {
