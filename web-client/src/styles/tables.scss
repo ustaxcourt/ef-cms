@@ -195,6 +195,10 @@ table,
       .collapse-header {
         padding: 0;
       }
+
+      &.consolidated-indicators {
+        width: 70px;
+      }
     }
   }
 
