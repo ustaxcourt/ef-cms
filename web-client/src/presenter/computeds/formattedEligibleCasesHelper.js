@@ -15,11 +15,15 @@ const compareTrialSessionEligibleCases = eligibleCases => (a, b) => {
     return -1;
   } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
     return 1;
+  } else if (
+    (a.isManuallyAdded && b.isManuallyAdded) ||
+    (a.highPriority && b.highPriority) ||
+    (a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority)
+  ) {
+    let aSortString = getSortableDocketNumber(a.docketNumber);
+    let bSortString = getSortableDocketNumber(b.docketNumber);
+    return aSortString.localeCompare(bSortString);
   } else {
-    if (!a || !a.docketNumber || !b || !b.docketNumber) {
-      return 0;
-    }
-
     let aSortString = getFullSortString(a, eligibleCases);
     let bSortString = getFullSortString(b, eligibleCases);
     return aSortString.localeCompare(bSortString);
