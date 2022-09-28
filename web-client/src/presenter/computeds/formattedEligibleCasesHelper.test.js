@@ -554,4 +554,79 @@ describe('formattedTrialSessionDetails', () => {
       }),
     ]);
   });
+
+  it('should not group the consolidated cases when the lead case has high priority suffix', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          eligibleCases: [
+            {
+              docketNumber: '104-22',
+              leadDocketNumber: '103-22',
+            },
+            {
+              docketNumber: '103-22',
+              leadDocketNumber: '103-22',
+            },
+            {
+              docketNumber: '105-22',
+              docketNumberSuffix: 'L',
+            },
+            {
+              docketNumber: '102-22',
+            },
+            {
+              docketNumber: '101-22',
+            },
+            {
+              docketNumber: '106-22',
+              docketNumberSuffix: 'L',
+              leadDocketNumber: '103-22',
+            },
+            {
+              docketNumber: '115-22',
+              isManuallyAdded: true,
+            },
+            {
+              docketNumber: '112-22',
+              isManuallyAdded: true,
+            },
+            {
+              docketNumber: '114-23',
+              isManuallyAdded: true,
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '112-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '115-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '114-23',
+      }),
+      expect.objectContaining({
+        docketNumber: '105-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '106-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '101-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '102-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '103-22',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-22',
+      }),
+    ]);
+  });
 });
