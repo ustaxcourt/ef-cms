@@ -6,7 +6,6 @@ import { getFileExternalDocumentAlertSuccessAction } from '../actions/FileDocume
 import { getShouldRedirectToSigningAction } from '../actions/getShouldRedirectToSigningAction';
 import { isDocumentRequiringAppendedFormAction } from '../actions/CourtIssuedOrder/isDocumentRequiringAppendedFormAction';
 import { isEditingOrderAction } from '../actions/CourtIssuedOrder/isEditingOrderAction';
-import { isFormPristineAction } from '../actions/CourtIssuedOrder/isFormPristineAction';
 import { navigateToDraftDocumentsAction } from '../actions/navigateToDraftDocumentsAction';
 import { navigateToSignOrderAction } from '../actions/navigateToSignOrderAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -42,11 +41,7 @@ const onFileUploadedSuccess = [
 ];
 
 export const submitCourtIssuedOrderSequence = showProgressSequenceDecorator([
-  isFormPristineAction,
-  {
-    no: convertHtml2PdfSequence,
-    yes: [],
-  },
+  convertHtml2PdfSequence,
   isEditingOrderAction,
   {
     no: [
