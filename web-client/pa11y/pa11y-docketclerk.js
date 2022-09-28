@@ -266,8 +266,9 @@ module.exports = [
   {
     actions: [
       'wait for table.case-detail to be visible',
+      'wait for button[data-test="document-viewer-link-A"] to be visible',
       'click element button[data-test="document-viewer-link-A"]',
-      'click element button[data-test="serve-document"]',
+      'click element button[data-test="serve-paper-filed-document"]',
       'wait for .modal-dialog to be visible',
     ],
     notes:
