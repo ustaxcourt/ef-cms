@@ -1,13 +1,13 @@
-import { applicationContext } from '../../test/createTestApplicationContext';
 import {
   AUTOMATIC_BLOCKED_REASONS,
   DOCKET_SECTION,
   ROLES,
   SERVICE_INDICATOR_TYPES,
 } from '../../entities/EntityConstants';
-import { addPaperFilingInteractor } from './addPaperFilingInteractor';
 import { Case } from '../../entities/cases/Case';
 import { MOCK_CASE } from '../../../test/mockCase';
+import { addPaperFilingInteractor } from './addPaperFilingInteractor';
+import { applicationContext } from '../../test/createTestApplicationContext';
 
 describe('addPaperFilingInteractor', () => {
   const user = {
@@ -20,6 +20,7 @@ describe('addPaperFilingInteractor', () => {
 
   beforeEach(() => {
     mockCase = { ...MOCK_CASE };
+    mockCase.leadDocketNumber = mockCase.docketNumber;
 
     applicationContext
       .getPersistenceGateway()
@@ -67,9 +68,9 @@ describe('addPaperFilingInteractor', () => {
   it('should throw an error if documentMetadata is not provided', async () => {
     await expect(
       addPaperFilingInteractor(applicationContext, {
-        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         documentMetadata: undefined,
         isSavingForLater: false,
+        primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
       }),
     ).rejects.toThrow('Did not receive meta data for docket entry');
   });
@@ -155,6 +156,10 @@ describe('addPaperFilingInteractor', () => {
     expect(
       applicationContext.getPersistenceGateway().saveWorkItem,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem.mock.calls[0][0]
+        .workItem,
+    ).toMatchObject({ leadDocketNumber: mockCase.leadDocketNumber });
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();

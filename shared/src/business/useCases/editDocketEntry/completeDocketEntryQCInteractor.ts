@@ -1,26 +1,28 @@
-import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import {
+  CASE_CAPTION_POSTFIX,
   CONTACT_CHANGE_DOCUMENT_TYPES,
+  DOCUMENT_PROCESSING_STATUS_OPTIONS,
   DOCUMENT_RELATIONSHIPS,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
-import { DOCUMENT_PROCESSING_STATUS_OPTIONS } from '../../entities/EntityConstants';
-import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
-import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
-import { CASE_CAPTION_POSTFIX } from '../../entities/EntityConstants';
-import { dateStringsCompared } from '../../utilities/DateHandler';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { formatDateString } from '../../utilities/DateHandler';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
+import { UnauthorizedError } from '../../../errors/errors';
+import { addServedStampToDocument } from '../../useCases/courtIssuedDocument/addServedStampToDocument';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
+  dateStringsCompared,
+  formatDateString,
+} from '../../utilities/DateHandler';
+import { generateNoticeOfDocketChangePdf } from '../../useCaseHelper/noticeOfDocketChange/generateNoticeOfDocketChangePdf';
 import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { getDocumentTitle } from '../../utilities/getDocumentTitle';
+import { getDocumentTitleWithAdditionalInfo } from '../../utilities/getDocumentTitleWithAdditionalInfo';
 import { replaceBracketed } from '../../utilities/replaceBracketed';
-import { UnauthorizedError } from '../../../errors/errors';
 
 export const getNeedsNewCoversheet = ({
   currentDocketEntry,
@@ -63,8 +65,12 @@ export const completeDocketEntryQCInteractor = async (
     throw new UnauthorizedError('Unauthorized');
   }
 
-  const { docketEntryId, docketNumber, overridePaperServiceAddress } =
-    entryMetadata;
+  const {
+    docketEntryId,
+    docketNumber,
+    leadDocketNumber,
+    overridePaperServiceAddress,
+  } = entryMetadata;
 
   const user = await applicationContext
     .getPersistenceGateway()
@@ -122,6 +128,10 @@ export const completeDocketEntryQCInteractor = async (
       editState: '{}',
       relationship: DOCUMENT_RELATIONSHIPS.PRIMARY,
       userId: user.userId,
+      workItem: {
+        ...currentDocketEntry.workItem,
+        leadDocketNumber,
+      },
     },
     { applicationContext, petitioners: caseToUpdate.petitioners },
   ).validate();

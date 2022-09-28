@@ -1,15 +1,18 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
-import { DOCUMENT_RELATIONSHIPS, ROLES } from '../../entities/EntityConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
 import { Case } from '../../entities/cases/Case';
-import { DOCKET_SECTION } from '../../entities/EntityConstants';
+import {
+  DOCKET_SECTION,
+  DOCUMENT_RELATIONSHIPS,
+  ROLES,
+} from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
-import { pick } from 'lodash';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import { pick } from 'lodash';
 
 /**
  *
@@ -110,6 +113,7 @@ export const addPaperFilingInteractor = async (
       docketNumberWithSuffix: caseToUpdate.docketNumberWithSuffix,
       inProgress: isSavingForLater,
       isRead: user.role !== ROLES.privatePractitioner,
+      leadDocketNumber: caseToUpdate.leadDocketNumber,
       section: DOCKET_SECTION,
       sentBy: user.name,
       sentByUserId: user.userId,

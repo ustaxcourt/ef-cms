@@ -1,5 +1,5 @@
-import AWS from 'aws-sdk';
 import { flattenDeep } from 'lodash';
+import AWS from 'aws-sdk';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes all of the docket-entries associated with the case.
@@ -63,6 +63,25 @@ export const processCaseEntries = async ({
           ...marshalledCase,
           case_relations: { name: 'case' },
           entityName: { S: 'CaseMessageMapping' },
+        },
+      },
+      eventName: 'MODIFY',
+    });
+
+    caseRecords.push({
+      dynamodb: {
+        Keys: {
+          pk: {
+            S: caseNewImage.pk.S,
+          },
+          sk: {
+            S: `${caseNewImage.sk.S}`,
+          },
+        },
+        NewImage: {
+          ...marshalledCase,
+          case_relations: { name: 'case' },
+          entityName: { S: 'CaseWorkItemMapping' },
         },
       },
       eventName: 'MODIFY',

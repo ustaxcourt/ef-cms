@@ -1,16 +1,16 @@
 import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
-import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
-import {
   DOCKET_SECTION,
   DOCUMENT_PROCESSING_STATUS_OPTIONS,
   SERVICE_INDICATOR_TYPES,
   SYSTEM_GENERATED_DOCUMENT_TYPES,
 } from '../../entities/EntityConstants';
-import { docketClerkUser } from '../../../test/mockUsers';
 import { MOCK_CASE } from '../../../test/mockCase';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
+import { completeDocketEntryQCInteractor } from './completeDocketEntryQCInteractor';
+import { docketClerkUser } from '../../../test/mockUsers';
 
 describe('completeDocketEntryQCInteractor', () => {
   let caseRecord;
@@ -110,7 +110,10 @@ describe('completeDocketEntryQCInteractor', () => {
   it('adds documents and workitems', async () => {
     await expect(
       completeDocketEntryQCInteractor(applicationContext, {
-        entryMetadata: caseRecord.docketEntries[0],
+        entryMetadata: {
+          ...caseRecord.docketEntries[0],
+          leadDocketNumber: caseRecord.docketNumber,
+        },
       }),
     ).resolves.not.toThrow();
 
@@ -121,6 +124,11 @@ describe('completeDocketEntryQCInteractor', () => {
       applicationContext.getPersistenceGateway()
         .saveWorkItemForDocketClerkFilingExternalDocument,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getPersistenceGateway()
+        .saveWorkItemForDocketClerkFilingExternalDocument.mock.calls[0][0]
+        .workItem,
+    ).toMatchObject({ leadDocketNumber: caseRecord.docketNumber });
     expect(
       applicationContext.getPersistenceGateway().updateCase,
     ).toHaveBeenCalled();
