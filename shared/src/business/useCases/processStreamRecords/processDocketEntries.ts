@@ -1,8 +1,8 @@
-import AWS from 'aws-sdk';
 import {
   OPINION_EVENT_CODES_WITH_BENCH_OPINION,
   ORDER_EVENT_CODES,
 } from '../../entities/EntityConstants';
+import AWS from 'aws-sdk';
 
 /**
  * fetches the latest version of the case from dynamodb and re-indexes this docket-entries combined with the latest case info.
