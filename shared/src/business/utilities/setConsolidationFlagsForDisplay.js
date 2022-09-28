@@ -1,4 +1,4 @@
-exports.setConsolidationFlagsForDisplay = (caseItem, eligibleCases = []) => {
+exports.setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
   caseItem.inConsolidatedGroup = caseItem.leadCase = false;
 
   if (caseItem.leadDocketNumber) {
@@ -8,7 +8,7 @@ exports.setConsolidationFlagsForDisplay = (caseItem, eligibleCases = []) => {
       caseItem.leadCase = true;
       caseItem.consolidatedIconTooltipText = 'Lead case';
     } else {
-      const leadCase = eligibleCases.find(
+      const leadCase = theCases.find(
         theCase => theCase.docketNumber === caseItem.leadDocketNumber,
       );
 
