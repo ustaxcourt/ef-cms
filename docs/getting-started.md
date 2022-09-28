@@ -1,6 +1,6 @@
 ## Getting Started with Dawson
 
-Hopefully you've read through the [What is Dawson?](/what-is-dawson) section of this documentation because a lot of the terminology defined there will help you better understand how to navigate the Dawson application.  If you would rather poke around on a live environment, this part of the documentation is for you. We'll guide you on how to log in to Dawson, the various urls and user roles we have, and how to begin using the Dawson application.
+Hopefully you've read through [What is Dawson?](/what-is-dawson). The terminology defined there will help you better understand how to navigate the Dawson application.  If you would rather poke around on a live environment, this part of the documentation is for you. We'll guide you on how to log in to Dawson, the various URLs and user roles we have, and how to begin using the Dawson application.
 
 ?> You can find the [Running Locally Guide](/running-locally) if you'd like to get Dawson running on your machine to start development.
 
@@ -12,7 +12,7 @@ There are two UIs that we deploy for the Dawson system; both address the needs o
 
 Our **public** web application contains features accessible to the general public, such as *searching for a case*, *searching orders*, *searching opinions*, and *viewing the public docket entries of a case*.  This application does not require any form of authentication to be able to search.
 
-The public UI contains some logic for **terminal users**, which are users who are physically sitting inside the Tax Court building needing access to search our public records.
+The public UI contains some logic for **terminal users**, who are physically sitting inside the Tax Court building, searching through public records.
 
 Below is a screenshot of the public UI. Note that some features allow public users to search for cases, search for orders, search for opinions, view the documents, and view the case's docket record:
 
@@ -36,7 +36,7 @@ After logging into Dawson as a Petitioner, you'll be redirected to our private a
 
 ## Logging into Dawson
 
-Our Dawson application is hosted on a variety of different environments on different domains.  Flexion maintains their own instances of the Dawson system deployed to a Flexion AWS account separate from the Tax Court.  This enables Flexion to experiment with new features, security settings, new AWS services, etc without needing to ask the Tax Court's tech lead for special permissions or setup.  The following links all redirect to the **public UI**, but you can **click the log in** link in the header to navigate to the private application which should redirect you to a cognito login.
+Our Dawson application is hosted on a variety of different environments on different domains.  Flexion maintains their own instances of the Dawson system deployed to a Flexion AWS account separate from the Tax Court.  This enables Flexion to experiment with features, security settings, AWS services, etc. without requiring special permissions on the Tax Court environments. The following links all redirect to the **public UI**, but you can click the **log in** link in the header to navigate to the private application. This will redirect you to a Cognito login.
 
 Here is a list of the **Tax Court**'s deployed Dawson instances:
 
@@ -86,7 +86,7 @@ After deploying a brand new Dawson environment, an admin will manually run the [
 
 !> **Ask a teammate for the passwords.**
 
-?> the **1** in the emails is an example; you can use adc2@example.com, or adc10@example.com, etc.
+?> The **1** in the emails is an example; you can use adc2@example.com, or adc10@example.com, etc.
 
 | email                         | role            | number of users |
 |-------------------------------|-----------------|-----------------|
@@ -107,15 +107,14 @@ After deploying a brand new Dawson environment, an admin will manually run the [
 
 It's time to get your feet wet with Dawson.  Don't worry, we'll walk you through how you can file a petition as a Petitioner and then later serve that petition as a Petitions Clerk. 
 
-1. Login into the environment as `petitioner4@example.com` and click the `Create a Case` button.
-2. Read the instructions and try walking through the wizard.
-3. When the case is created, you should see it show up on your dashboard! 
-4. Write down your docket number (xxx-xx). You'll need it for the next steps.
-5. Now, try logging in as `petitionsclerk2@example.com`.
-6. Search for the case by docket number xxx-xx.
-7. Click on the `petition` link that's in the case's docket record table.
-8. Review the petition information to make sure it's correct and press the `Review Petition` button.
-9. Review on the confirmation page and click `Serve to IRS` (don't worry, it won't really serve anything to the IRS).
-10. Congrats 🥳, you filed your first petition as a Petitioner and reviewed / served it as a Petitions Clerk!
+1. Log in into the environment as `petitioner4@example.com` and click the `Create a Case` button.
+2. Read the instructions and try walking through the wizard. When the case is created, you should see it on your dashboard. 
+3. Write down your docket number (xxx-xx). You'll need it for the next steps.
+4. Log in as `petitionsclerk2@example.com`.
+5. Search for the case by docket number xxx-xx.
+6. Click on the `petition` link that's in the case's docket record table.
+7. Review the petition information to make sure it's correct and press the `Review Petition` button.
+8. Review on the confirmation page and click `Serve to IRS` (don't worry, it won't really serve anything to the IRS).
+9. Congrats! 🥳 You filed your first petition as a Petitioner and reviewed / served it as a Petitions Clerk!
 
 This is just one of many user flows we have in our system.  The reason we started you off with a petition is because a petitioner filing their petition is the start of the life cycle of a case.
