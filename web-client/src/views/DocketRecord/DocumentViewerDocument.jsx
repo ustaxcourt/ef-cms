@@ -94,7 +94,6 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServeCourtIssuedDocumentButton && (
                 <Button
                   link
-                  data-test="serve-document"
                   icon="paper-plane"
                   iconColor="white"
                   onClick={() => {
@@ -111,6 +110,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServePaperFiledDocumentButton && (
                 <Button
                   link
+                  data-test="serve-paper-filed-document"
                   icon="paper-plane"
                   iconColor="white"
                   onClick={() => {
