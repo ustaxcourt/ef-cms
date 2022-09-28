@@ -94,6 +94,7 @@ export const DocumentViewerDocument = connect(
               {documentViewerHelper.showServeCourtIssuedDocumentButton && (
                 <Button
                   link
+                  data-test="serve-document"
                   icon="paper-plane"
                   iconColor="white"
                   onClick={() => {
