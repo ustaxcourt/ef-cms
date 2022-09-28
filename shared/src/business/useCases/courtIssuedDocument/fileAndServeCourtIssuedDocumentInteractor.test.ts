@@ -1,9 +1,5 @@
 /* eslint-disable max-lines */
 import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
-import {
   CASE_STATUS_TYPES,
   COURT_ISSUED_EVENT_CODES,
   DOCKET_SECTION,
@@ -11,12 +7,16 @@ import {
   TRANSCRIPT_EVENT_CODE,
   TRIAL_SESSION_PROCEEDING_TYPES,
 } from '../../entities/EntityConstants';
-import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { Case } from '../../entities/cases/Case';
+import { ENTERED_AND_SERVED_EVENT_CODES } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
+import { MOCK_CASE } from '../../../test/mockCase';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
 import { createISODateString } from '../../utilities/DateHandler';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { MOCK_CASE } from '../../../test/mockCase';
+import { fileAndServeCourtIssuedDocumentInteractor } from '../courtIssuedDocument/fileAndServeCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('fileAndServeCourtIssuedDocumentInteractor', () => {
@@ -146,7 +146,7 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockImplementation(() => caseRecord);
+      .getCaseByDocketNumber.mockReturnValue(caseRecord);
 
     applicationContext.getStorageClient().getObject.mockReturnValue({
       promise: () => ({
@@ -205,11 +205,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should set the document as served and update the case and work items for a generic order document', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: caseRecord.docketEntries[0],
       subjectCaseDocketNumber: caseRecord.docketNumber,
-      clientConnectionId: 'testing',
     });
 
     const updatedCase =
@@ -282,6 +282,40 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
     ).toHaveBeenCalled();
   });
 
+  it('should set the leadDocketNumber for work items', async () => {
+    const leadDocketNumber = MOCK_CASE.docketNumber;
+    const caseRecordWithLeadDocketNumber = {
+      ...MOCK_CASE,
+      docketEntries: [mockDocketEntryWithWorkItem],
+      leadDocketNumber,
+    };
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(caseRecordWithLeadDocketNumber)
+      .mockReturnValueOnce(caseRecordWithLeadDocketNumber);
+
+    await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId:
+        caseRecordWithLeadDocketNumber.docketEntries[0].docketEntryId,
+      docketNumbers: [caseRecordWithLeadDocketNumber.docketNumber],
+      form: caseRecordWithLeadDocketNumber.docketEntries[0],
+      subjectCaseDocketNumber: caseRecordWithLeadDocketNumber.docketNumber,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway().saveWorkItem,
+    ).toHaveBeenCalled();
+
+    expect(
+      applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
+        .calls[0][0].workItem,
+    ).toMatchObject({
+      leadDocketNumber,
+    });
+  });
+
   it('should delete the case from the trial session if the case has a trialSessionId and is not calendared and the order document has an event code that should close the case', async () => {
     mockTrialSession.isCalendared = false;
     caseRecord.trialSessionId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
@@ -325,11 +359,11 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should call updateCaseAutomaticBlock and deleteCaseTrialSortMappingRecords if the order document has an event code that should close the case', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: caseRecord.docketEntries[0].docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       form: { ...caseRecord.docketEntries[0], eventCode: 'OD' },
       subjectCaseDocketNumber: caseRecord.docketNumber,
-      clientConnectionId: 'testing',
     });
 
     expect(
@@ -430,9 +464,9 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
   it('should delete the draftOrderState from the docketEntry', async () => {
     await fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
+      clientConnectionId: 'testing',
       docketEntryId: mockDocketEntryWithWorkItem.docketEntryId,
       docketNumbers: [mockDocketEntryWithWorkItem.docketNumber],
-      clientConnectionId: 'testing',
       form: {
         ...mockDocketEntryWithWorkItem,
         draftOrderState: {
@@ -495,16 +529,22 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
   });
 
   it('should throw an error if there is no one on the case with electronic or paper service', async () => {
+    const petitioners = [
+      {
+        ...caseRecord.petitioners[0],
+        serviceIndicator: 'None',
+      },
+    ];
+
     applicationContext
       .getPersistenceGateway()
-      .getCaseByDocketNumber.mockReturnValue({
+      .getCaseByDocketNumber.mockReturnValueOnce({
         ...caseRecord,
-        petitioners: [
-          {
-            ...caseRecord.petitioners[0],
-            serviceIndicator: 'None',
-          },
-        ],
+        petitioners,
+      })
+      .mockReturnValueOnce({
+        ...caseRecord,
+        petitioners,
       });
 
     await expect(
@@ -524,8 +564,8 @@ describe('fileAndServeCourtIssuedDocumentInteractor', () => {
 
     await expect(
       fileAndServeCourtIssuedDocumentInteractor(applicationContext, {
-        docketEntryId: docketEntry.docketEntryId,
         clientConnectionId: 'testing',
+        docketEntryId: docketEntry.docketEntryId,
         docketNumbers: [docketEntry.docketNumber],
         form: docketEntry,
         subjectCaseDocketNumber: docketEntry.docketNumber,

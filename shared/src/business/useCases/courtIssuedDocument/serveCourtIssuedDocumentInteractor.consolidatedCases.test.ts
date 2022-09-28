@@ -1,7 +1,4 @@
-import {
-  applicationContext,
-  testPdfDoc,
-} from '../../test/createTestApplicationContext';
+import { Case } from '../../entities/cases/Case';
 import {
   DOCKET_SECTION,
   TRANSCRIPT_EVENT_CODE,
@@ -12,11 +9,14 @@ import {
   MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE,
   MOCK_LEAD_CASE_WITH_PAPER_SERVICE,
 } from '../../../test/mockCase';
-import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
-import { Case } from '../../entities/cases/Case';
+import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import {
+  applicationContext,
+  testPdfDoc,
+} from '../../test/createTestApplicationContext';
 import { cloneDeep } from 'lodash';
 import { docketClerkUser } from '../../../test/mockUsers';
-import { MOCK_DOCUMENTS } from '../../../test/mockDocuments';
+import { serveCourtIssuedDocumentInteractor } from './serveCourtIssuedDocumentInteractor';
 import { v4 as uuidv4 } from 'uuid';
 
 describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
@@ -361,16 +361,31 @@ describe('serveCourtIssuedDocumentInteractor consolidated cases', () => {
 
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[0][0].workItem.docketNumber,
-    ).toEqual(mockWorkItem.docketNumber);
+        .calls[0][0].workItem,
+    ).toEqual(
+      expect.objectContaining({
+        docketNumber: mockWorkItem.docketNumber,
+        leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.leadDocketNumber,
+      }),
+    );
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[1][0].workItem.docketNumber,
-    ).toEqual(MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber);
+        .calls[1][0].workItem,
+    ).toEqual(
+      expect.objectContaining({
+        docketNumber: MOCK_CONSOLIDATED_1_CASE_WITH_PAPER_SERVICE.docketNumber,
+        leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.leadDocketNumber,
+      }),
+    );
     expect(
       applicationContext.getPersistenceGateway().putWorkItemInUsersOutbox.mock
-        .calls[2][0].workItem.docketNumber,
-    ).toEqual(MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber);
+        .calls[2][0].workItem,
+    ).toEqual(
+      expect.objectContaining({
+        docketNumber: MOCK_CONSOLIDATED_2_CASE_WITH_PAPER_SERVICE.docketNumber,
+        leadDocketNumber: MOCK_LEAD_CASE_WITH_PAPER_SERVICE.leadDocketNumber,
+      }),
+    );
   });
 
   it('should create a single source of truth for the document by saving only one copy', async () => {

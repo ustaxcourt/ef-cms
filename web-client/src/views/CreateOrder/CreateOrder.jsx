@@ -1,3 +1,4 @@
+import { AddDocketNumbersModal } from './AddDocketNumbersModal';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseDetailHeader } from '../CaseDetail/CaseDetailHeader';
 import { EditOrderTitleModal } from './EditOrderTitleModal';
@@ -16,6 +17,8 @@ export const CreateOrder = connect(
     createOrderHelper: state.createOrderHelper,
     editorDelta: state.form.editorDelta,
     formCancelToggleCancelSequence: sequences.formCancelToggleCancelSequence,
+    openAddDocketNumbersModalSequence:
+      sequences.openAddDocketNumbersModalSequence,
     openEditOrderTitleModalSequence: sequences.openEditOrderTitleModalSequence,
     refreshPdfSequence: sequences.refreshPdfSequence,
     richText: state.form.richText,
@@ -28,6 +31,7 @@ export const CreateOrder = connect(
     createOrderHelper,
     editorDelta,
     formCancelToggleCancelSequence,
+    openAddDocketNumbersModalSequence,
     openEditOrderTitleModalSequence,
     refreshPdfSequence,
     richText,
@@ -41,10 +45,6 @@ export const CreateOrder = connect(
     return (
       <>
         <CaseDetailHeader />
-        {showModal === 'FormCancelModalDialog' && (
-          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
-        )}
-        {showModal === 'EditOrderTitleModal' && <EditOrderTitleModal />}
         <SuccessNotification />
         <ErrorNotification />
 
@@ -70,6 +70,19 @@ export const CreateOrder = connect(
               }
             >
               <Tab id="tab-generate" tabName="generate" title="Generate">
+                {createOrderHelper.showAddDocketNumbersButton && (
+                  <Button
+                    link
+                    className="padding-top-0"
+                    icon={createOrderHelper.addDocketNumbersButtonIcon}
+                    id="add-docket-numbers-btn"
+                    onClick={() => {
+                      openAddDocketNumbersModalSequence();
+                    }}
+                  >
+                    {createOrderHelper.addDocketNumbersButtonText}
+                  </Button>
+                )}
                 <TextEditor
                   defaultValue={richText}
                   editorDelta={editorDelta}
@@ -105,6 +118,13 @@ export const CreateOrder = connect(
             </div>
           </div>
         </section>
+
+        {showModal === 'AddDocketNumbersModal' && <AddDocketNumbersModal />}
+
+        {showModal === 'FormCancelModalDialog' && (
+          <FormCancelModalDialog onCancelSequence="closeModalAndReturnToCaseDetailSequence" />
+        )}
+        {showModal === 'EditOrderTitleModal' && <EditOrderTitleModal />}
       </>
     );
   },

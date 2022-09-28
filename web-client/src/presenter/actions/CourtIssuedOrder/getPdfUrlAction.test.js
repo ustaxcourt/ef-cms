@@ -56,4 +56,47 @@ describe('getPdfUrlAction', () => {
       }),
     );
   });
+
+  it('should send the addedDocketNumbers to the order endpoint when some are set in state', async () => {
+    const mockPdf = { url: 'www.example.com' };
+    applicationContext
+      .getUseCases()
+      .createCourtIssuedOrderPdfFromHtmlInteractor.mockReturnValue(mockPdf);
+
+    const result = await runAction(getPdfUrlAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        contentHtml: '<p>hi</p>',
+        documentTitle: 'Test Title',
+        signatureText: 'Test Signature',
+      },
+      state: {
+        addedDocketNumbers: ['101-20', '102-20'],
+        caseDetail: {
+          docketNumber: '123-20',
+        },
+      },
+    });
+
+    expect(
+      applicationContext.getUseCases()
+        .createCourtIssuedOrderPdfFromHtmlInteractor,
+    ).toHaveBeenCalled();
+    expect(result.output.pdfUrl).toBe(mockPdf.url);
+
+    const args =
+      applicationContext.getUseCases()
+        .createCourtIssuedOrderPdfFromHtmlInteractor.mock.calls[0][1];
+    expect(args).toEqual(
+      expect.objectContaining({
+        addedDocketNumbers: ['101-20', '102-20'],
+        contentHtml: '<p>hi</p>',
+        docketNumber: '123-20',
+        documentTitle: 'Test Title',
+        signatureText: 'Test Signature',
+      }),
+    );
+  });
 });

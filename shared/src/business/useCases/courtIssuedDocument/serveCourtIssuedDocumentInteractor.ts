@@ -1,30 +1,31 @@
-import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import {
   ALLOWLIST_FEATURE_FLAGS,
   DOCKET_SECTION,
 } from '../../entities/EntityConstants';
-import {
-  createISODateString,
-  formatDateString,
-} from '../../utilities/DateHandler';
+import { Case } from '../../entities/cases/Case';
+import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
 } from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
-import {
-  isAuthorized,
-  ROLE_PERMISSIONS,
-} from '../../../authorization/authorizationClientService';
-import { addServedStampToDocument } from './addServedStampToDocument';
-import { Case } from '../../entities/cases/Case';
-import { DocketEntry } from '../../entities/DocketEntry';
 import { NotFoundError, UnauthorizedError } from '../../../errors/errors';
+import {
+  ROLE_PERMISSIONS,
+  isAuthorized,
+} from '../../../authorization/authorizationClientService';
 import { TrialSession } from '../../entities/trialSessions/TrialSession';
 import { WorkItem } from '../../entities/WorkItem';
+import { addServedStampToDocument } from './addServedStampToDocument';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
+import {
+  createISODateString,
+  formatDateString,
+} from '../../utilities/DateHandler';
 
 const completeWorkItem = async ({
   applicationContext,
   docketEntryEntity,
+  leadDocketNumber,
   user,
   workItemToUpdate,
 }) => {
@@ -33,6 +34,8 @@ const completeWorkItem = async ({
       ...docketEntryEntity.validate().toRawObject(),
     },
   });
+
+  workItemToUpdate.leadDocketNumber = leadDocketNumber;
 
   workItemToUpdate.assignToUser({
     assigneeId: user.userId,
@@ -73,11 +76,23 @@ export const serveCourtIssuedDocumentInteractor = async (
   applicationContext,
   { clientConnectionId, docketEntryId, docketNumbers, subjectCaseDocketNumber },
 ) => {
-  const user = applicationContext.getCurrentUser();
+  const authorizedUser = applicationContext.getCurrentUser();
 
-  if (!isAuthorized(user, ROLE_PERMISSIONS.SERVE_DOCUMENT)) {
-    throw new UnauthorizedError('Unauthorized for document service');
+  const hasPermission =
+    (isAuthorized(authorizedUser, ROLE_PERMISSIONS.DOCKET_ENTRY) ||
+      isAuthorized(
+        authorizedUser,
+        ROLE_PERMISSIONS.CREATE_ORDER_DOCKET_ENTRY,
+      )) &&
+    isAuthorized(authorizedUser, ROLE_PERMISSIONS.SERVE_DOCUMENT);
+
+  if (!hasPermission) {
+    throw new UnauthorizedError('Unauthorized');
   }
+
+  const user = await applicationContext
+    .getPersistenceGateway()
+    .getUserById({ applicationContext, userId: authorizedUser.userId });
 
   const subjectCase = await applicationContext
     .getPersistenceGateway()
@@ -285,6 +300,7 @@ const serveDocumentOnOneCase = async ({
   await completeWorkItem({
     applicationContext,
     docketEntryEntity,
+    leadDocketNumber: caseEntity.leadDocketNumber,
     user,
     workItemToUpdate,
   });

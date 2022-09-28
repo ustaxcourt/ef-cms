@@ -33,7 +33,7 @@ export const petitionsClerkBulkAssignsCases = (cerebralTest, createdCases) => {
     const { workQueue } = result.state;
     selectedWorkItems.forEach(assignedWorkItem => {
       const workItem = workQueue.find(
-        item => (item.workItemId = assignedWorkItem.workItemId),
+        item => item.workItemId === assignedWorkItem.workItemId,
       );
 
       expect(workItem.assigneeId).toEqual(currentUserId);

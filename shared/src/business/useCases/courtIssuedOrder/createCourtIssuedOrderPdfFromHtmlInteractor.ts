@@ -1,9 +1,9 @@
 import {
-  isAuthorized,
   ROLE_PERMISSIONS,
+  isAuthorized,
 } from '../../../authorization/authorizationClientService';
-import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 import { UnauthorizedError } from '../../../errors/errors';
+import { getCaseCaptionMeta } from '../../utilities/getCaseCaptionMeta';
 
 /**
  *
@@ -20,12 +20,14 @@ import { UnauthorizedError } from '../../../errors/errors';
 export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   applicationContext: IApplicationContext,
   {
+    addedDocketNumbers,
     contentHtml,
     docketNumber,
     documentTitle,
     signatureText,
   }: {
     contentHtml: string;
+    addedDocketNumbers: string[];
     docketNumber: string;
     documentTitle: string;
     signatureText: string;
@@ -50,6 +52,7 @@ export const createCourtIssuedOrderPdfFromHtmlInteractor = async (
   const orderPdf = await applicationContext.getDocumentGenerators().order({
     applicationContext,
     data: {
+      addedDocketNumbers,
       caseCaptionExtension,
       caseTitle,
       docketNumberWithSuffix,
