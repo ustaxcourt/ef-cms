@@ -136,7 +136,7 @@ exports.formattedTrialSessionDetails = ({
     .map(caseItem =>
       applicationContext
         .getUtilities()
-        .setConsolidationFlagsForDisplay(caseItem, allCases),
+        .setConsolidationFlagsForDisplay(caseItem, allCases, true),
     );
 
   [trialSession.inactiveCases, trialSession.openCases] = partition(
@@ -147,13 +147,17 @@ exports.formattedTrialSessionDetails = ({
   trialSession.openCases = trialSession.openCases.map(caseItem =>
     applicationContext
       .getUtilities()
-      .setConsolidationFlagsForDisplay(caseItem, trialSession.openCases),
+      .setConsolidationFlagsForDisplay(caseItem, trialSession.openCases, true),
   );
 
   trialSession.inactiveCases = trialSession.inactiveCases.map(caseItem =>
     applicationContext
       .getUtilities()
-      .setConsolidationFlagsForDisplay(caseItem, trialSession.inactiveCases),
+      .setConsolidationFlagsForDisplay(
+        caseItem,
+        trialSession.inactiveCases,
+        true,
+      ),
   );
   trialSession.formattedTerm = `${
     trialSession.term
