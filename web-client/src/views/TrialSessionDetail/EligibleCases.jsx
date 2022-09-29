@@ -23,7 +23,10 @@ export const EligibleCases = connect(
       <React.Fragment>
         {trialSessionDetailsHelper.showQcComplete && (
           <div className="float-right text-semibold margin-top-neg-3 margin-bottom-2">
-            Completed: {trialSessionDetailsHelper.eligibleCaseQcCompleteCount}
+            Total Completed:{' '}
+            <span className="font-weight-normal">
+              {trialSessionDetailsHelper.eligibleCaseQcCompleteCount}
+            </span>
           </div>
         )}
         <table
