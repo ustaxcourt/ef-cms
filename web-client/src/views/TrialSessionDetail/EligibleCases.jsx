@@ -27,7 +27,7 @@ export const EligibleCases = connect(
         <div className="grid-row float-right text-semibold margin-top-neg-3">
           {formattedTrialSessionDetails.isHybridSession && (
             <div className="grid-row">
-              <div className="margin-right-6">
+              <div className="margin-right-50 margin-right-mobile">
                 Regular:{' '}
                 <span className="font-weight-normal">
                   {
@@ -35,7 +35,7 @@ export const EligibleCases = connect(
                   }
                 </span>
               </div>
-              <div className="margin-right-6">
+              <div className="margin-right-50 margin-right-mobile">
                 Small:{' '}
                 <span className="font-weight-normal">
                   {
