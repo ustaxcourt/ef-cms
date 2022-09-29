@@ -36,11 +36,11 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
 
   return it('docket clerk adds paper filed docket entry and serves', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
-      docketNumber: cerebralTest.docketNumber,
+      docketNumber: cerebralTest.leadDocketNumber,
     });
 
     await cerebralTest.runSequence('gotoAddPaperFilingSequence', {
-      docketNumber: cerebralTest.docketNumber,
+      docketNumber: cerebralTest.leadDocketNumber,
     });
 
     for (const option of answerFilingOptions) {

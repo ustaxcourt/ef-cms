@@ -44,6 +44,7 @@ describe('docket clerk adds paper filing on lead case', () => {
     cerebralTest.docketNumber = cerebralTest.leadDocketNumber =
       caseDetail.docketNumber;
     leadDocketNumber = caseDetail.docketNumber;
+    cerebralTest.leadDocketNumber = leadDocketNumber;
   });
 
   loginAs(cerebralTest, 'docketclerk@example.com');
