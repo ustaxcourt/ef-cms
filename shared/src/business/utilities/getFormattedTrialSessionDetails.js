@@ -43,6 +43,7 @@ exports.setPretrialMemorandumFiler = ({ caseItem }) => {
 exports.formatCase = ({
   applicationContext,
   caseItem,
+  eligibleCases,
   setFilingPartiesCode = false,
 }) => {
   caseItem.caseTitle = applicationContext.getCaseTitle(
@@ -69,27 +70,11 @@ exports.formatCase = ({
     });
   }
 
-  applicationContext.getUtilities().setConsolidationFlagsForDisplay(caseItem);
+  applicationContext
+    .getUtilities()
+    .setConsolidationFlagsForDisplay(caseItem, eligibleCases);
 
   return caseItem;
-};
-
-exports.compareTrialSessionEligibleCases = (a, b) => {
-  if (a.isManuallyAdded && !b.isManuallyAdded) {
-    return -1;
-  } else if (!a.isManuallyAdded && b.isManuallyAdded) {
-    return 1;
-  } else if (a.highPriority && !b.highPriority) {
-    return -1;
-  } else if (!a.highPriority && b.highPriority) {
-    return 1;
-  } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
-    return -1;
-  } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
-    return 1;
-  } else {
-    return exports.compareCasesByDocketNumber(a, b);
-  }
 };
 
 exports.compareCasesByDocketNumber = (a, b) => {
@@ -113,10 +98,6 @@ exports.formattedTrialSessionDetails = ({
   trialSession,
 }) => {
   if (!trialSession) return undefined;
-
-  trialSession.formattedEligibleCases = (trialSession.eligibleCases || [])
-    .map(caseItem => exports.formatCase({ applicationContext, caseItem }))
-    .sort(exports.compareTrialSessionEligibleCases);
 
   trialSession.allCases = (trialSession.calendaredCases || [])
     .map(caseItem =>

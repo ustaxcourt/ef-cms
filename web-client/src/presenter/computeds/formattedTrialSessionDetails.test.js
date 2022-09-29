@@ -25,7 +25,7 @@ describe('formattedTrialSessionDetails', () => {
     caseOrder: [],
     city: 'Hartford',
     courtReporter: 'Test Court Reporter',
-    formattedEligibleCases: [],
+    eligibleCases: [],
     irsCalendarAdministrator: 'Test Calendar Admin',
     isCalendared: false,
     judge: { name: 'Test Judge' },
@@ -84,10 +84,10 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ isHybridSession: true });
   });
 
-  it('should be false for disableHybridFilter when there is at least one case in formattedEligibleCases', () => {
+  it('should be false for disableHybridFilter when there is at least one case in eligibleCases', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
-      formattedEligibleCases: [
+      eligibleCases: [
         {
           caseCaption: 'testPetitioner3, Petitioner',
           caseTitle: 'testPetitioner3',
@@ -115,7 +115,7 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ disableHybridFilter: false });
   });
 
-  it('should be true for disableHybridFilter when there are no cases in formattedEligibleCases', () => {
+  it('should be true for disableHybridFilter when there are no cases in eligibleCases', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
       sessionType: HYBRID_SESSION_TYPE,

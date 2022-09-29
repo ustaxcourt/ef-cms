@@ -64,12 +64,10 @@ const testCases = [
   },
 ];
 
-jest.mock('./formattedTrialSessionDetails', () => {
+jest.mock('./formattedEligibleCasesHelper', () => {
   return {
     __esModule: true,
-    formattedTrialSessionDetails: () => ({
-      formattedEligibleCases: testCases,
-    }),
+    formattedEligibleCasesHelper: () => testCases,
   };
 });
 
@@ -88,7 +86,7 @@ describe('formattedTrialSessionDetailsForFilteredEligibleCases', () => {
       },
     );
 
-    expect(result.formattedEligibleCases).toHaveLength(testCases.length);
+    expect(result).toHaveLength(testCases.length);
   });
 
   it('should display all small cases when filter is equal to Small', () => {
@@ -105,8 +103,8 @@ describe('formattedTrialSessionDetailsForFilteredEligibleCases', () => {
       },
     );
 
-    expect(result.formattedEligibleCases).toHaveLength(2);
-    expect(result.formattedEligibleCases).toMatchObject(
+    expect(result).toHaveLength(2);
+    expect(result).toMatchObject(
       expect.arrayContaining([
         expect.objectContaining({
           docketNumber: '101-20',
@@ -132,8 +130,8 @@ describe('formattedTrialSessionDetailsForFilteredEligibleCases', () => {
       },
     );
 
-    expect(result.formattedEligibleCases).toHaveLength(2);
-    expect(result.formattedEligibleCases).toMatchObject(
+    expect(result).toHaveLength(2);
+    expect(result).toMatchObject(
       expect.arrayContaining([
         expect.objectContaining({
           docketNumber: '103-20',
