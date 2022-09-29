@@ -1,3 +1,4 @@
+import { docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes';
 import { docketClerkConsolidatesCases } from './journey/docketClerkConsolidatesCases';
 import { docketClerkOpensCaseConsolidateModal } from './journey/docketClerkOpensCaseConsolidateModal';
 import { docketClerkSearchesForCaseToConsolidateWith } from './journey/docketClerkSearchesForCaseToConsolidateWith';
@@ -15,19 +16,19 @@ import { formattedCaseDetail } from '../src/presenter/computeds/formattedCaseDet
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../src/withAppContext';
 
-const cerebralTest = setupTest();
-const trialLocation = `Boise, Idaho, ${Date.now()}`;
-cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
-
-const overrides = {
-  preferredTrialCity: trialLocation,
-  trialLocation,
-};
-
-let leadDocketNumber;
-let caseDetail;
-
 describe('docket clerk adds paper filing on lead case', () => {
+  const cerebralTest = setupTest();
+  const trialLocation = `Boise, Idaho, ${Date.now()}`;
+  cerebralTest.consolidatedCasesThatShouldReceiveDocketEntries = [];
+
+  const overrides = {
+    preferredTrialCity: trialLocation,
+    trialLocation,
+  };
+
+  let leadDocketNumber;
+  let caseDetail;
+
   beforeAll(() => {
     jest.setTimeout(30000);
     cerebralTest.draftOrders = [];
@@ -62,6 +63,10 @@ describe('docket clerk adds paper filing on lead case', () => {
   docketClerkConsolidatesCases(cerebralTest, 2);
 
   //add paper filing
+  docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes(
+    cerebralTest,
+    'A',
+  );
   //save and serve
   //verify served on non lead case
 });
