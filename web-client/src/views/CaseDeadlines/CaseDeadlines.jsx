@@ -1,4 +1,5 @@
 import { BigHeader } from '../BigHeader';
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { CaseLink } from '../../ustc-ui/CaseLink/CaseLink';
 import { DateRangePickerComponent } from '../../ustc-ui/DateInput/DateRangePickerComponent';
@@ -88,33 +89,34 @@ export const CaseDeadlines = connect(
                 </div>
               </div>
               {caseDeadlineReportHelper.showJudgeSelect && (
-                <div className="grid-row grid-gap padding-bottom-1">
-                  <div className="grid-col-3 tablet:grid-col-2 padding-top-05">
-                    <h3 id="filterHeading">Filter by</h3>
-                  </div>
-                  <div className="grid-col-3">
-                    <select
-                      aria-describedby="case-deadlines-tab filterHeading"
-                      aria-label="judge"
-                      className="usa-select select-left"
-                      id="judgeFilter"
-                      name="judge"
-                      placeholder="- Judge -"
-                      value={caseDeadlineReport.judgeFilter}
-                      onChange={e =>
-                        filterCaseDeadlinesByJudgeSequence({
-                          judge: e.target.value,
-                        })
-                      }
-                    >
-                      <option value="">-Judge-</option>
-                      {caseDeadlineReportHelper.judges.map(judge => (
-                        <option key={judge} value={judge}>
-                          {judge}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
+                <div className="padding-bottom-2">
+                  <label
+                    className="dropdown-label-serif margin-right-3"
+                    htmlFor="inline-select"
+                    id="case-deadlines-filter-label"
+                  >
+                    Filter by
+                  </label>
+                  <BindedSelect
+                    aria-describedby="case-deadlines-tab case-deadlines-filter-label"
+                    aria-label="judge filter"
+                    className="select-left width-card-lg inline-select"
+                    name="judges"
+                    placeholder="- Judge -"
+                    value={caseDeadlineReport.judgeFilter}
+                    onChange={e =>
+                      filterCaseDeadlinesByJudgeSequence({
+                        judge: e,
+                      })
+                    }
+                  >
+                    <option value="">-Judge-</option>
+                    {caseDeadlineReportHelper.judges.map(judge => (
+                      <option key={judge} value={judge}>
+                        {judge}
+                      </option>
+                    ))}
+                  </BindedSelect>
                 </div>
               )}
               {caseDeadlineReportHelper.caseDeadlines.length > 0 && (
