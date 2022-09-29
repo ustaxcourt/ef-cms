@@ -42,7 +42,7 @@ export const TrialSessionsTable = connect(
           <BindedSelect
             aria-label="proceeding"
             bind="screenMetadata.trialSessionFilters.proceedingType"
-            className="select-left width-180 inline-select trial-session-select"
+            className="select-left width-180 inline-select margin-left-1pt5rem"
             id="proceedingFilter"
             name="proceedingType"
           >
@@ -56,7 +56,7 @@ export const TrialSessionsTable = connect(
           <BindedSelect
             aria-label="session"
             bind="screenMetadata.trialSessionFilters.sessionType"
-            className="select-left width-180 inline-select trial-session-select"
+            className="select-left width-180 inline-select margin-left-1pt5rem"
             id="sessionFilter"
             name="sessionType"
           >
@@ -70,7 +70,7 @@ export const TrialSessionsTable = connect(
           <BindedSelect
             aria-label="judge"
             bind="screenMetadata.trialSessionFilters.judge.userId"
-            className="select-left width-180 inline-select trial-session-select"
+            className="select-left width-180 inline-select margin-left-1pt5rem"
             id="judgeFilter"
             name="judge"
           >
