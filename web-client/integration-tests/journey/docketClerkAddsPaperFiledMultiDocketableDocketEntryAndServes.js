@@ -50,11 +50,6 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
       );
     }
 
-    // await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-    //   key: 'objections',
-    //   value: OBJECTIONS_OPTIONS_MAP.NO,
-    // });
-
     const contactPrimary = contactPrimaryFromState(cerebralTest);
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
@@ -64,15 +59,16 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
       },
     );
 
+    await cerebralTest.runSequence('openConfirmPaperServiceModalSequence');
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmInitiateServiceModal',
+    );
+
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
-
-    expect(cerebralTest.getState('modal.showModal')).toEqual(
-      'ConfirmInitiateServiceModal',
-    );
 
     // expect(cerebralTest.getState('alertSuccess').message).toEqual(
     //   'Your entry has been added to the docket record.',
