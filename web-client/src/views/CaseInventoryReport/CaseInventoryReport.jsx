@@ -50,8 +50,7 @@ export const CaseInventoryReport = connect(
             <select
               aria-describedby="case-inventory-filter-label"
               aria-label="judge"
-              className="usa-select select-left width-card-lg"
-              id="inline-select"
+              className="usa-select select-left width-card-lg inline-select"
               name="associatedJudge"
               value={screenMetadata.associatedJudge}
               onChange={e =>
@@ -71,8 +70,7 @@ export const CaseInventoryReport = connect(
             <select
               aria-describedby="case-inventory-filter-label"
               aria-label="status"
-              className="usa-select select-left width-card-lg"
-              id="inline-select"
+              className="usa-select select-left width-card-lg inline-select"
               name="status"
               value={screenMetadata.status}
               onChange={e =>

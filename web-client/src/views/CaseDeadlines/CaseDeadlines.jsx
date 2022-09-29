@@ -100,8 +100,7 @@ export const CaseDeadlines = connect(
                   <BindedSelect
                     aria-describedby="case-deadlines-tab case-deadlines-filter-label"
                     aria-label="judge filter"
-                    className="select-left width-card-lg"
-                    id="inline-select"
+                    className="select-left width-card-lg inline-select"
                     name="judges"
                     placeholder="- Judge -"
                     value={caseDeadlineReport.judgeFilter}
