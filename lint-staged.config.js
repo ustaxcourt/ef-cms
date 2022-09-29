@@ -1,6 +1,6 @@
 module.exports = {
   '**/*.{ts,tsx}': () => 'tsc --noEmit',
-  '*.{css,scss}': ['stylelint --fix'],
+  '*.{css,scss}': ['stylelint'],
   '*.{js,jsx,ts,tsx}': ['eslint'],
   '*.{sh}': ['lint-staged-shellcheck'],
   'pa11y-*.js': ['node lint-pa11y.js'],
