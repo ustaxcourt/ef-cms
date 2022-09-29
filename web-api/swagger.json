@@ -4814,6 +4814,85 @@
         }
       }
     },
+    "/trial-sessions/{trialSessionId}/printable-working-copy": {
+      "parameters": [
+        {
+          "name": "trialSessionId",
+          "in": "path",
+          "required": true,
+          "type": "string"
+        },
+        {
+          "in": "body",
+          "name": "trial session working copy info",
+          "description": "the trial session info needed to print a working copy",
+          "schema": {
+            "type": "object",
+            "properties": {
+              "caseNotesFlag": {
+                "type": "boolean"
+              },
+              "filters": {
+                "type": "object"
+              },
+              "formattedCases": {
+                "type": "array"
+              },
+              "formattedTrialSession": {
+                "type": "object"
+              },
+              "sessionNotes": {
+                "type": "string"
+              }
+            },
+            "required": ["caseNotesFlag", "filters", "formattedCases", "formattedTrialSession"]
+          }
+        }
+      ],
+      "post": {
+        "tags": ["trialsessions"],
+        "summary": "generates a printable trial session copy report",
+        "description": "generates a printable trial session copy report .\n",
+        "produces": ["text/plain"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "schema": {
+              "type": "string",
+              "example": "http://www.example.com"
+            }
+          }
+        },
+        "security": [
+          {
+            "CognitoUserPool": []
+          }
+        ]
+      },
+      "options": {
+        "consumes": ["application/json"],
+        "produces": ["application/json"],
+        "responses": {
+          "200": {
+            "description": "200 response",
+            "headers": {
+              "Access-Control-Allow-Origin": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Methods": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Credentials": {
+                "type": "string"
+              },
+              "Access-Control-Allow-Headers": {
+                "type": "string"
+              }
+            }
+          }
+        }
+      }
+    },
     "/trial-sessions/{trialSessionId}/eligible-cases": {
       "parameters": [
         {
