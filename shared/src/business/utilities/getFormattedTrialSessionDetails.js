@@ -77,18 +77,18 @@ exports.formatCase = ({
   return newCaseItem;
 };
 
-const getDocketNumberSortString = ({
-  allCases,
-  applicationContext,
-  theCase,
-}) => {
+const getSortableDocketNumber = docketNumber => {
+  const docketNumberSplit = docketNumber.split('-');
+  docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
+  return `${docketNumberSplit[1]}${docketNumberSplit[0]}`;
+};
+
+const getDocketNumberSortString = ({ allCases, theCase }) => {
   const leadCase = allCases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
 
   const isLeadCaseInList = !!theCase.leadDocketNumber && !!leadCase;
-
-  const { getSortableDocketNumber } = applicationContext.getUtilities();
 
   return `${getSortableDocketNumber(
     isLeadCaseInList
@@ -100,16 +100,14 @@ const getDocketNumberSortString = ({
 };
 
 const compareCasesByDocketNumber =
-  ({ allCases, applicationContext }) =>
+  ({ allCases }) =>
   (a, b) => {
     const aSortString = getDocketNumberSortString({
       allCases,
-      applicationContext,
       theCase: a,
     });
     const bSortString = getDocketNumberSortString({
       allCases,
-      applicationContext,
       theCase: b,
     });
     return aSortString.localeCompare(bSortString);
@@ -142,9 +140,7 @@ exports.formattedTrialSessionDetails = ({
         .getUtilities()
         .setConsolidationFlagsForDisplay(caseItem, openCases, true),
     )
-    .sort(
-      compareCasesByDocketNumber({ allCases: openCases, applicationContext }),
-    );
+    .sort(compareCasesByDocketNumber({ allCases: openCases }));
 
   trialSession.inactiveCases = inactiveCases
     .map(caseItem =>
@@ -155,7 +151,6 @@ exports.formattedTrialSessionDetails = ({
     .sort(
       compareCasesByDocketNumber({
         allCases: inactiveCases,
-        applicationContext,
       }),
     );
 
