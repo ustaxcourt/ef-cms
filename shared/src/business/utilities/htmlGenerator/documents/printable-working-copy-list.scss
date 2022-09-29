@@ -1,0 +1,57 @@
+.printable-working-copy-list {
+  font-family: 'Century Schoolbook Std', serif;
+  page: narrow;
+
+  .margin-left-2 {
+    margin-left: 1rem;
+  }
+
+  .padding-bottom-2 {
+    padding-bottom: 10rem;
+  }
+
+  .content-row {
+    td {
+      border-bottom: none;
+    }
+  }
+
+  .blank-note-row {
+    td {
+      height: 0.5rem;
+      border-top: none;
+    }
+  }
+
+  .border-bottom-0 {
+    td {
+      border-bottom: none;
+    }
+  }
+
+  .border-top-0 {
+    td {
+      border-top: none;
+    }
+  }
+
+  .card {
+    border: 1px solid #ccc;
+    margin: 12px 0 12px 0;
+    font-size: 14px;
+  }
+
+  .card-header {
+    padding: 10px;
+    border-bottom: 1px solid #ccc;
+    background: #f0f0f0;
+    font-size: 14px;
+    font-weight: bold;
+  }
+
+  .card-content {
+    display: flex;
+    align-items: flex-start;
+    padding: 10px;
+  }
+}

@@ -11,15 +11,18 @@ import { state } from 'cerebral';
 export const servePaperFiledDocumentAction = async ({
   applicationContext,
   get,
+  props,
 }) => {
   const docketNumber = get(state.caseDetail.docketNumber);
   const docketEntryId = get(state.docketEntryId);
+  const { docketNumbers } = props;
 
   const { pdfUrl } = await applicationContext
     .getUseCases()
     .serveExternallyFiledDocumentInteractor(applicationContext, {
       docketEntryId,
-      docketNumber,
+      docketNumbers,
+      subjectCaseDocketNumber: docketNumber,
     });
 
   return {

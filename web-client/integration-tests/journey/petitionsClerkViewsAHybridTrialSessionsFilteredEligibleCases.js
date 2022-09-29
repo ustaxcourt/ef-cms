@@ -24,7 +24,7 @@ export const petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases = (
       hybridFilter,
     );
 
-    const trialSessionFormatted = runCompute(
+    const formattedEligibleCases = runCompute(
       withAppContextDecorator(
         formattedTrialSessionDetailsForFilteredEligibleCases,
       ),
@@ -34,15 +34,9 @@ export const petitionsClerkViewsAHybridTrialSessionFilteredEligibleCases = (
     );
 
     if (hybridFilter) {
-      expect(trialSessionFormatted.formattedEligibleCases).toHaveLength(
-        expectedCount - 2,
-      );
+      expect(formattedEligibleCases).toHaveLength(expectedCount - 2);
     } else {
-      expect(trialSessionFormatted.formattedEligibleCases).toHaveLength(
-        expectedCount,
-      );
+      expect(formattedEligibleCases).toHaveLength(expectedCount);
     }
-
-    expect(trialSessionFormatted.computedStatus).toEqual('New');
   });
 };

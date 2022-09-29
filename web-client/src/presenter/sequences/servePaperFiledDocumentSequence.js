@@ -2,6 +2,7 @@ import { clearAlertsAction } from '../actions/clearAlertsAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { generateTitleAction } from '../actions/FileDocument/generateTitleAction';
 import { getCaseAction } from '../actions/getCaseAction';
+import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
 import { hasPaperAction } from '../actions/hasPaperAction';
 import { navigateToPrintPaperServiceAction } from '../actions/navigateToPrintPaperServiceAction';
 import { servePaperFiledDocumentAction } from '../actions/DocketEntry/servePaperFiledDocumentAction';
@@ -15,6 +16,7 @@ export const servePaperFiledDocumentSequence = showProgressSequenceDecorator([
   clearModalAction,
   generateTitleAction,
   clearAlertsAction,
+  getDocketNumbersForConsolidatedServiceAction,
   servePaperFiledDocumentAction,
   setAlertSuccessAction,
   getCaseAction,

@@ -71,7 +71,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
     calendaredCase => {
       return (
         !calendaredCase.leadDocketNumber ||
-        calendaredCase.docketNumber === calendaredCase.leadDocketNumber
+        applicationContext.getUtilities().isLeadCase(calendaredCase)
       );
     },
   );
@@ -106,6 +106,7 @@ export const trialSessionWorkingCopyHelper = (get, applicationContext) => {
   return {
     casesShownCount: formattedCases.length,
     formattedCases: leadAndUnconsolidatedCases,
+    showPrintButton: formattedCases.length > 0,
     trialStatusOptions,
   };
 };
