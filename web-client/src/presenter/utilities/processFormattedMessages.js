@@ -74,25 +74,34 @@ export const getFormattedMessages = ({
       'MMDDYY',
     );
     const formattedMessages = messages.map(message => {
-      const newMessage = applicationContext
+      const {
+        consolidatedIconTooltipText,
+        inConsolidatedGroup,
+        leadCase,
+        shouldIndent,
+      } = applicationContext
         .getUtilities()
-        .setConsolidationFlagsForDisplay(newMessage);
+        .setConsolidationFlagsForDisplay(message);
 
       return {
-        ...newMessage,
+        ...message,
         completedAtFormatted: formatDateIfToday(
           message.completedAt,
           applicationContext,
           now,
           yesterday,
         ),
+        consolidatedIconTooltipText,
         createdAtFormatted: formatDateIfToday(
           message.createdAt,
           applicationContext,
           now,
           yesterday,
         ),
+        inConsolidatedGroup,
+        leadCase,
         messageDetailLink: `/messages/${message.docketNumber}/message-detail/${message.parentMessageId}`,
+        shouldIndent,
       };
     });
     messageCache = formattedMessages;
