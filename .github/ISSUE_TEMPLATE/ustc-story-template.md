@@ -58,6 +58,7 @@ Process: Flexion developers and designers will test if the story meets acceptanc
  - [ ] UI should be touch optimized and responsive for external only (functions on supported mobile devices and optimized for screen sizes as required).
  - [ ] Interactors should validate entities before calling persistence methods.
  - [ ] Code refactored for clarity and to remove any known technical debt.
+ - [ ] If new docket entries have been added as seed data to `efcms-local.json`, 3 local s3 files corresponding to that docketEntryId have been added to `web-api/storage/fixtures/s3/noop-documents-local-us-east-1`
  - [ ] Acceptance criteria for the story has been met.
  - [ ] If there are special instructions in order to deploy into the next environment, add them as a comment in the story.
  - [ ] If the work completed for the story requires a reindex without a migration, or any other special deploy steps, apply these changes to the following flexion branches:
