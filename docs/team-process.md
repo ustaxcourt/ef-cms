@@ -160,4 +160,4 @@ Below is a list of dependencies that are locked down due to known issues with se
       - This runs as part of the `npm postinstall` step.
     - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
 
-3. `puppeteer` and `puppeteer-core` have a major version update, but they need to stay at the same major version as `chrome-aws-lambda`. If we upgrade `puppeteer`, we see a ` cannot read property 'prototype' of undefined` error. 
+3. `puppeteer` and `puppeteer-core` have a major version update, but they need to stay at the same major version as `chrome-aws-lambda`. If we upgrade `puppeteer`, we see a `cannot read property 'prototype' of undefined` error. 
