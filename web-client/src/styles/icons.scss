@@ -115,8 +115,8 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
     width: 40px;
     height: 40px;
     border: 2px solid color($theme-color-accent-cool);
-    background-color: color($theme-color-accent-cool);
     border-radius: 25px;
+    background-color: color($theme-color-accent-cool);
     color: color($theme-color-accent-cool);
   }
 
@@ -191,8 +191,8 @@ button:not(.ustc-button--unstyled) .fa-file-pdf {
   padding-top: 4px;
   border: 1px solid #005ea2;
   border-color: #005ea2;
-  background: url('data:image/svg+xml;utf8,<svg aria-labelledby="svg-inline--fa-title-DIDdjAjqj8je" data-prefix="fa" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="unread messages" color="white" aria-hidden="false"><title id="svg-inline--fa-title-DIDdjAjqj8je">unread messages</title><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/></svg>');
   border-radius: 50%;
+  background: url('data:image/svg+xml;utf8,<svg aria-labelledby="svg-inline--fa-title-DIDdjAjqj8je" data-prefix="fa" data-icon="circle" class="svg-inline--fa fa-circle fa-w-16 " role="img" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" aria-label="unread messages" color="white" aria-hidden="false"><title id="svg-inline--fa-title-DIDdjAjqj8je">unread messages</title><path fill="currentColor" d="M256 8C119 8 8 119 8 256s111 248 248 248 248-111 248-248S393 8 256 8z"/></svg>');
 
   .icon-tab-unread-messages-count {
     position: relative;
