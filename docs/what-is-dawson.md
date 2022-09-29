@@ -1,19 +1,19 @@
 # What is Dawson?
 
-This part of the documentation is meant to give a beginner a complete overview of what Dawson is; it's purpose, who it was built for, screen shots of the user interfaces, maybe videos giving a walkthrough of the system, etc.  I will also define some important terms such as **petitioner** and **petition**.
+This part of the documentation is meant to give a beginner a complete overview of what Dawson is; its purpose, who it was built for, screen shots of the user interfaces, maybe videos giving a walkthrough of the system, etc.  We will also define some important terms such as **petitioner** and **petition**.
 
 ## Overview
 
 **The [United States Tax Court](https://ustaxcourt.gov/)** is an independent Federal court that provides a forum for settling disputes between taxpayers and the Internal Revenue Service. There are approximately 200 employees at the Court and they handle approximately 60,000 petitions each year. About 60% of these petitions are filed from people without lawyers.
 
-**[DAWSON](https://dawson.ustaxcourt.gov/) (Docket Access Within a Secure Online Network)** is the U.S. Tax Court's open source electronic filing and case management system, available in this repository. It was [named after a beloved Judge](https://www.ustaxcourt.gov/dawson.html) that kept meticulous records.
+**[DAWSON](https://dawson.ustaxcourt.gov/) (Docket Access Within a Secure Online Network)** is the U.S. Tax Court's open source electronic filing and case management system, available in this repository. It was [named after a beloved Judge](https://www.ustaxcourt.gov/dawson.html) who kept meticulous records.
 
 **[Flexion](https://flexion.us/)** is the competitively awarded contractor that has been working on DAWSON since 2018. **18F** is a federal digital service team serving as advisors to the U.S. Tx Court and have paired with the U.S. Tax Court since the inception of DAWSON.
 
 
 ## Video Walkthroughs
 
-If you're the type of person who enjoys watching video walkthroughs, we have a couple of useful links that show various use cases of our DAWSON system that can help get you up to speed on how DAWSON works.  Watching these videos in order will provide you a great overview.
+If you prefer video walkthroughs, we have a couple of useful links that show various use cases of our DAWSON system that can help get you up to speed on how DAWSON works.  Watching these videos in order will provide you a great overview.
 
 1. [Intro to DAWSON](https://www.zoomgov.com/rec/share/uZF_F4PtqFpIcq_WshDOY4JmNabgT6a80HQe8vALmR0BwUIquAzNxmxd52uKHPjB)
 2. [Advanced Search for Case/Order/Opinion/Practitioner](https://www.zoomgov.com/rec/share/u-5YdZ-zqjlLbYXXyVHOfukbHtXmaaa803cb-foIyR3CO1Scp83aBrHComXxlAxz)
@@ -34,10 +34,9 @@ If you're the type of person who enjoys watching video walkthroughs, we have a c
 The taxpayer bringing a case before the Tax Court.
 
 #### Practitioner
+The Tax Court is the only court that allows a non-attorney individual represent a party in a case. Representation on both sides of a case are referred to as practitioners.  A private practitioner is the person representing the petitioner in the case, while a practitioner representing the respondent is an IRS attorney.
 
-The Tax Court is the only court that allows an individual who is not an attorney to represent a party in a case; therefore, the representation on both sides of a case are referred to as practitioners.  A private practitioner is the person representing the petitioner in the case. A practitioner representing the respondent is an IRS attorney.
 #### Respondent
-
 A defendant in a lawsuit. In our case, always the IRS.
 ### Internal Users
 
@@ -63,29 +62,31 @@ A defendant in a lawsuit. In our case, always the IRS.
 The case-initiating document containing the petition form and IRS notice(s) submitted by the petitioner or practitioner and recorded as an entry in the Docket Record.
 
 ### Case
-A dispute between two parties, in our case the petitioner and the IRS, that must be resolved by a judge
+A dispute between two parties, in our case the petitioner and the IRS, that must be resolved by a judge.
 
 #### Blocked
-Case is prevented from being set for trial. A blocked case will not display as eligible for upcoming trial sessions and cannot be manually added to a trial session until block is removed (See also Automatic Block)
+Case is prevented from being set for trial. A blocked case will not display as eligible for upcoming trial sessions and cannot be manually added to a trial session until block is removed.
 
-#### Automatic Blocked
+##### Automatic Block
 Case is temporarily blocked from trial due to a pending item or due date.
 
 #### Sealed
-Case that is restricted to the public; public users do not have access to view sealed cases; only parties associated with the case and internal users can view sealed case information
-#### Parties  
+Case that is restricted to the public; public users do not have access to view sealed cases; only parties associated with the case and internal users can view sealed case information.
 
-Anybody associated with the case e.g. Tax payers, Private Practititioners and IRS Respondents.
+#### Parties  
+Anybody associated with the case, e.g. Tax payers, Private Practititioners and IRS Respondents.
 
 #### Notes
-General note associated with a single case; this note can be created/edited/viewed by all internal users
+General notes associated with a single case; this note can be created/edited/viewed by all internal users
+
 ### Docket Entry
 A single, unique line item on the Docket Record, including external filings, court-issued documents, or can be system generated.
 
 ### Docket Record
 List of all documents filed and served in a case, as well as system generated entries generated by party or Tax Court actions in the system.
+
 ### Trial Session
-A period of time (one week) in which a USTC judge and trail clerk will visit a city (trial location) and hold trial for cases.
+A period of time (one week) in which a USTC judge and trial clerk will visit a city (trial location) and hold trial for cases.
 ### Reports
 
 ### Advanced Search
@@ -119,10 +120,7 @@ Search by bar number
 * if there is exact match, navigate to Practitioner Info page (design to be implemented in 4365)
 * if there is no exact match, display "No matching results"
 
-
-
 #### Order Search
-
 * search is limited to Orders that have been served
 * Orders in sealed cases display in internal order search results but do NOT display in public order search results
 
@@ -145,8 +143,8 @@ Start Date - End Date
 
 
 #### Opinion Search
-* search is limited to Opinions that have been served
-* Opinions for sealed cases appear in internal and public Opinion search results
+* Search is limited to Opinions that have been served
+* Opinions for sealed cases appear in both internal and public Opinion search results
 
 Search by keyword
 * is required for search
