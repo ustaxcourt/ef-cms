@@ -51,7 +51,7 @@ exports.lambdaWrapper = (lambda, options = {}) => {
       return;
     }
 
-    res.status(response.statusCode);
+    res.status(parseInt(response.statusCode));
 
     res.set({
       ...response.headers,
