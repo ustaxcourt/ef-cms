@@ -362,8 +362,8 @@ select[disabled] {
     left: 0;
     width: 30px;
     height: 30px;
-    background: color($theme-color-primary-dark);
     border-radius: 30px;
+    background: color($theme-color-primary-dark);
     color: $color-white;
     font-size: 20px;
     font-weight: $font-semibold;
@@ -564,9 +564,9 @@ select[disabled] {
 
 .usa-label-uploading {
   padding: 0.3rem 0.7rem;
+  border-radius: 2px;
   margin-right: 0.5rem;
   background-color: color($theme-color-base);
-  border-radius: 2px;
   color: $color-white;
   font-size: 1.3rem;
   text-transform: uppercase;
@@ -615,8 +615,8 @@ select[disabled] {
     width: 75px;
     height: 75px;
     padding: 20px;
-    background-color: color($theme-color-primary);
     border-radius: 55px;
+    background-color: color($theme-color-primary);
 
     svg,
     .svg-wrapper {
@@ -661,9 +661,9 @@ select[disabled] {
     width: 40px;
     height: 40px;
     padding: 10px;
+    border-radius: 55px;
     margin-right: 10px;
     background-color: color($theme-color-primary);
-    border-radius: 55px;
 
     svg,
     .svg-wrapper {
@@ -849,8 +849,8 @@ textarea#case-caption {
 .assign-work-item-count {
   display: inline-block;
   min-width: 35px;
-  background: color($theme-color-primary);
   border-radius: 20px;
+  background: color($theme-color-primary);
   color: $color-white;
   font-weight: $font-bold;
   text-align: center;
@@ -892,8 +892,8 @@ header.usa-header {
       background: none;
 
       :hover {
-        background-color: color($theme-color-primary);
         border-radius: 0;
+        background-color: color($theme-color-primary);
         color: $color-white;
       }
     }
@@ -1938,8 +1938,8 @@ button.change-scanner-button {
   width: 100px;
   height: 95px;
   border: 7px solid color($theme-color-warning);
-  margin: 0 auto;
   border-radius: 50%;
+  margin: 0 auto;
 }
 
 .text-middle-margin {
@@ -2018,4 +2018,8 @@ button.change-scanner-button {
   position: absolute;
   right: 0;
   width: 20px;
+}
+
+.width-180 {
+  width: 180px;
 }
