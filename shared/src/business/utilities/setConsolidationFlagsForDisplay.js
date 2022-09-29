@@ -1,4 +1,8 @@
-exports.setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
+exports.setConsolidationFlagsForDisplay = (
+  caseItem,
+  theCases = [],
+  skipPriorityStatus = false,
+) => {
   caseItem.inConsolidatedGroup = caseItem.leadCase = false;
 
   if (caseItem.leadDocketNumber) {
@@ -14,12 +18,13 @@ exports.setConsolidationFlagsForDisplay = (caseItem, theCases = []) => {
 
       if (
         !!leadCase &&
-        !leadCase.highPriority &&
-        !leadCase.isManuallyAdded &&
-        !leadCase.isDocketSuffixHighPriority &&
-        !caseItem.highPriority &&
-        !caseItem.isManuallyAdded &&
-        !caseItem.isDocketSuffixHighPriority
+        (skipPriorityStatus ||
+          (!leadCase.highPriority &&
+            !leadCase.isManuallyAdded &&
+            !leadCase.isDocketSuffixHighPriority &&
+            !caseItem.highPriority &&
+            !caseItem.isManuallyAdded &&
+            !caseItem.isDocketSuffixHighPriority))
       ) {
         caseItem.shouldIndent = true;
       }
