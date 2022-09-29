@@ -23,6 +23,21 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
     expect(result).toBe(-1);
   });
 
+  it('190-07 should come before 102-19', () => {
+    const result = compareCasesByDocketNumber({
+      allCases: [],
+      applicationContext,
+    })(
+      {
+        docketNumber: '190-07',
+      },
+      {
+        docketNumber: '102-19',
+      },
+    );
+    expect(result).toBe(-1);
+  });
+
   it('102-19 should equal 102-19', () => {
     const result = compareCasesByDocketNumber({
       allCases: [],
