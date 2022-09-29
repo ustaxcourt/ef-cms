@@ -100,7 +100,6 @@ export const getFormattedMessages = ({
   }
 
   const sortedMessages = sortFormattedMessages(messageCache, tableSort);
-
   const inProgressMessages = sortedMessages.filter(
     message => !message.isRepliedTo && !message.isCompleted,
   );
