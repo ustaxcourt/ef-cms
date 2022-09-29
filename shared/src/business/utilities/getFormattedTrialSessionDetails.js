@@ -70,11 +70,11 @@ exports.formatCase = ({
     });
   }
 
-  applicationContext
+  const newCaseItem = applicationContext
     .getUtilities()
     .setConsolidationFlagsForDisplay(caseItem, eligibleCases);
 
-  return caseItem;
+  return newCaseItem;
 };
 
 const getDocketNumberSortString = ({
@@ -131,34 +131,47 @@ exports.formattedTrialSessionDetails = ({
     }),
   );
 
+  const [inactiveCases, openCases] = partition(
+    allCases,
+    item => item.removedFromTrial === true,
+  );
+
+  trialSession.openCases = openCases
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, openCases, true),
+    )
+    .sort(
+      compareCasesByDocketNumber({ allCases: openCases, applicationContext }),
+    );
+
+  trialSession.inactiveCases = inactiveCases
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, inactiveCases, true),
+    )
+    .sort(
+      compareCasesByDocketNumber({
+        allCases: inactiveCases,
+        applicationContext,
+      }),
+    );
+
   trialSession.allCases = allCases
-    .sort(compareCasesByDocketNumber({ allCases, applicationContext }))
     .map(caseItem =>
       applicationContext
         .getUtilities()
         .setConsolidationFlagsForDisplay(caseItem, allCases, true),
+    )
+    .sort(
+      compareCasesByDocketNumber({
+        allCases,
+        applicationContext,
+      }),
     );
 
-  [trialSession.inactiveCases, trialSession.openCases] = partition(
-    trialSession.allCases,
-    item => item.removedFromTrial === true,
-  );
-
-  trialSession.openCases = trialSession.openCases.map(caseItem =>
-    applicationContext
-      .getUtilities()
-      .setConsolidationFlagsForDisplay(caseItem, trialSession.openCases, true),
-  );
-
-  trialSession.inactiveCases = trialSession.inactiveCases.map(caseItem =>
-    applicationContext
-      .getUtilities()
-      .setConsolidationFlagsForDisplay(
-        caseItem,
-        trialSession.inactiveCases,
-        true,
-      ),
-  );
   trialSession.formattedTerm = `${
     trialSession.term
   } ${trialSession.termYear.substr(-2)}`;

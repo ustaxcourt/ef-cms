@@ -74,12 +74,12 @@ export const getFormattedMessages = ({
       'MMDDYY',
     );
     const formattedMessages = messages.map(message => {
-      applicationContext
+      const newMessage = applicationContext
         .getUtilities()
-        .setConsolidationFlagsForDisplay(message);
+        .setConsolidationFlagsForDisplay(newMessage);
 
       return {
-        ...message,
+        ...newMessage,
         completedAtFormatted: formatDateIfToday(
           message.completedAt,
           applicationContext,
