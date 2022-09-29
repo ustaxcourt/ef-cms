@@ -115,6 +115,8 @@ const compareCasesByDocketNumber =
     return aSortString.localeCompare(bSortString);
   };
 
+exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
+
 exports.formattedTrialSessionDetails = ({
   applicationContext,
   trialSession,
