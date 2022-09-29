@@ -164,6 +164,8 @@ export default function ({
           ],
         }),
       ],
+      sourcemap: true,
+      sourcesContent: true,
       splitting: true,
       watch: watch
         ? {

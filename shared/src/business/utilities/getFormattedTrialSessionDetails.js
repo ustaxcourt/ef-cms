@@ -77,17 +77,19 @@ exports.formatCase = ({
   return caseItem;
 };
 
-const getSortableDocketNumber = docketNumber => {
-  const [number, year] = docketNumber.split('-');
-  return `${year}-${number.padStart(6, '0')}`;
-};
-
-const getFullSortString = (theCase, cases) => {
-  const leadCase = cases.find(
+const getDocketNumberSortString = ({
+  allCases,
+  applicationContext,
+  theCase,
+}) => {
+  const leadCase = allCases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
 
   const isLeadCaseInList = !!theCase.leadDocketNumber && !!leadCase;
+
+  const { getSortableDocketNumber } =
+    applicationContext.getUtilities().getSortableDocketNumber;
 
   return `${getSortableDocketNumber(
     isLeadCaseInList
@@ -98,11 +100,21 @@ const getFullSortString = (theCase, cases) => {
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-const compareCasesByDocketNumber = allCases => (a, b) => {
-  let aSortString = getFullSortString(a, allCases);
-  let bSortString = getFullSortString(b, allCases);
-  return aSortString.localeCompare(bSortString);
-};
+const compareCasesByDocketNumber =
+  ({ allCases, applicationContext }) =>
+  (a, b) => {
+    const aSortString = getDocketNumberSortString({
+      allCases,
+      applicationContext,
+      theCase: a,
+    });
+    const bSortString = getDocketNumberSortString({
+      allCases,
+      applicationContext,
+      theCase: b,
+    });
+    return aSortString.localeCompare(bSortString);
+  };
 
 exports.formattedTrialSessionDetails = ({
   applicationContext,
@@ -119,7 +131,7 @@ exports.formattedTrialSessionDetails = ({
   );
 
   trialSession.allCases = allCases
-    .sort(compareCasesByDocketNumber(allCases))
+    .sort(compareCasesByDocketNumber({ allCases, applicationContext }))
     .map(caseItem =>
       applicationContext
         .getUtilities()
