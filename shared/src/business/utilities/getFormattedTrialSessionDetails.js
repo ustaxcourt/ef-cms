@@ -88,8 +88,7 @@ const getDocketNumberSortString = ({
 
   const isLeadCaseInList = !!theCase.leadDocketNumber && !!leadCase;
 
-  const { getSortableDocketNumber } =
-    applicationContext.getUtilities().getSortableDocketNumber;
+  const { getSortableDocketNumber } = applicationContext.getUtilities();
 
   return `${getSortableDocketNumber(
     isLeadCaseInList

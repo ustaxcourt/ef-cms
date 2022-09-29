@@ -86,7 +86,7 @@ export default function ({
       },
       logLevel: 'info',
       metafile: true,
-      minify: true,
+      minify: process.env.USTC_ENV === 'prod',
       outdir,
       plugins: [
         clean({
@@ -164,8 +164,7 @@ export default function ({
           ],
         }),
       ],
-      sourcemap: true,
-      sourcesContent: true,
+      sourcemap: process.env.USTC_ENV !== 'prod',
       splitting: true,
       watch: watch
         ? {
