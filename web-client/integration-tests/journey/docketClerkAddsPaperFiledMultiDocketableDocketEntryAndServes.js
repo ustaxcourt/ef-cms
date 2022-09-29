@@ -1,5 +1,3 @@
-import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
-import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
 import { contactPrimaryFromState, fakeFile } from '../helpers';
 
 export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
@@ -32,9 +30,8 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
       value: eventCode,
     },
   ];
-  //add check for modal with cons cases
 
-  return it('docket clerk adds paper filed docket entry and serves', async () => {
+  return it('Docket clerk adds paper filed multi-docketable document and serves', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.leadDocketNumber,
     });
@@ -70,15 +67,8 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
 
     expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
 
-    // expect(cerebralTest.getState('alertSuccess').message).toEqual(
-    //   'Your entry has been added to the docket record.',
-    // );
-
-    // expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
-    // expect(cerebralTest.getState('form')).toEqual({});
-
-    // cerebralTest.docketEntryId = cerebralTest
-    //   .getState('caseDetail.docketEntries')
-    //   .find(doc => doc.eventCode === eventCode).docketEntryId;
+    cerebralTest.multiDocketedDocketEntryId = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .find(doc => doc.eventCode === eventCode).docketEntryId;
   });
 };
