@@ -3,17 +3,19 @@ exports.setConsolidationFlagsForDisplay = (
   theCases = [],
   skipPriorityStatus = false,
 ) => {
-  caseItem.inConsolidatedGroup = caseItem.leadCase = false;
+  const newCaseItem = { ...caseItem };
 
-  if (caseItem.leadDocketNumber) {
-    caseItem.inConsolidatedGroup = true;
-    caseItem.consolidatedIconTooltipText = 'Consolidated case';
-    if (caseItem.leadDocketNumber === caseItem.docketNumber) {
-      caseItem.leadCase = true;
-      caseItem.consolidatedIconTooltipText = 'Lead case';
+  newCaseItem.inConsolidatedGroup = newCaseItem.leadCase = false;
+
+  if (newCaseItem.leadDocketNumber) {
+    newCaseItem.inConsolidatedGroup = true;
+    newCaseItem.consolidatedIconTooltipText = 'Consolidated case';
+    if (newCaseItem.leadDocketNumber === newCaseItem.docketNumber) {
+      newCaseItem.leadCase = true;
+      newCaseItem.consolidatedIconTooltipText = 'Lead case';
     } else {
       const leadCase = theCases.find(
-        theCase => theCase.docketNumber === caseItem.leadDocketNumber,
+        theCase => theCase.docketNumber === newCaseItem.leadDocketNumber,
       );
 
       if (
@@ -22,14 +24,14 @@ exports.setConsolidationFlagsForDisplay = (
           (!leadCase.highPriority &&
             !leadCase.isManuallyAdded &&
             !leadCase.isDocketSuffixHighPriority &&
-            !caseItem.highPriority &&
-            !caseItem.isManuallyAdded &&
-            !caseItem.isDocketSuffixHighPriority))
+            !newCaseItem.highPriority &&
+            !newCaseItem.isManuallyAdded &&
+            !newCaseItem.isDocketSuffixHighPriority))
       ) {
-        caseItem.shouldIndent = true;
+        newCaseItem.shouldIndent = true;
       }
     }
   }
 
-  return caseItem;
+  return newCaseItem;
 };
