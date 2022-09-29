@@ -7,7 +7,8 @@ import React from 'react';
 export const EligibleCases = connect(
   {
     formattedEligibleCases:
-      state.formattedTrialSessionDetails.formattedEligibleCases,
+      state.formattedTrialSessionDetailsForFilteredEligibleCases
+        .formattedEligibleCases,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
     trialSessionId: state.trialSession.trialSessionId,
     updateQcCompleteForTrialSequence:
@@ -22,11 +23,8 @@ export const EligibleCases = connect(
     return (
       <React.Fragment>
         {trialSessionDetailsHelper.showQcComplete && (
-          <div className="float-right text-semibold margin-top-neg-3 margin-bottom-2">
-            Total Completed:{' '}
-            <span className="font-weight-normal">
-              {trialSessionDetailsHelper.eligibleCaseQcCompleteCount}
-            </span>
+          <div className="float-right text-semibold margin-top-neg-3">
+            Completed: {trialSessionDetailsHelper.eligibleCaseQcCompleteCount}
           </div>
         )}
         <table
