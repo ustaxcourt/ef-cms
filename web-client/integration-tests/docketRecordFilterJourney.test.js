@@ -15,6 +15,7 @@ import { petitionsClerkSubmitsCaseToIrs } from './journey/petitionsClerkSubmitsC
 
 describe('Docket Record Filter Journey', () => {
   const cerebralTest = setupTest();
+
   cerebralTest.draftOrders = [];
 
   beforeAll(() => {
@@ -47,25 +48,28 @@ describe('Docket Record Filter Journey', () => {
   docketClerkSignsOrder(cerebralTest, 1);
   docketClerkAddsDocketEntryFromOrder(cerebralTest, 1);
 
-  it('docket clerk views docket record filtered for exhibit document types', async () => {
+  it('docket clerk views docket record filtered for all document types', async () => {
     expect(cerebralTest.getState('sessionMetadata.docketRecordFilter')).toBe(
       DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     );
 
-    const unfilteredDocketEntriesOnDocketRecord =
+    const docketEntries = cerebralTest
+      .getState('caseDetail.docketEntries')
+      .filter(doc => !doc.isDraft);
+    const filteredDocketEntriesOnDocketRecord =
       await getFormattedDocketEntriesForTest(cerebralTest);
-    let { docketEntries } = cerebralTest.getState('caseDetail');
-    docketEntries = docketEntries.filter(doc => !doc.isDraft);
 
     expect(
-      unfilteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
+      filteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
         .length,
     ).toBe(docketEntries.length);
+  });
 
-    cerebralTest.setState(
-      'sessionMetadata.docketRecordFilter',
-      DOCKET_RECORD_FILTER_OPTIONS.exhibits,
-    );
+  it('docket clerk views docket record filtered for exhibit document types', async () => {
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'sessionMetadata.docketRecordFilter',
+      value: DOCKET_RECORD_FILTER_OPTIONS.exhibits,
+    });
 
     const filteredDocketEntriesOnDocketRecord =
       await getFormattedDocketEntriesForTest(cerebralTest);
@@ -81,20 +85,10 @@ describe('Docket Record Filter Journey', () => {
   });
 
   it('docket clerk views docket record filtered for order document types', async () => {
-    const unfilteredDocketEntriesOnDocketRecord =
-      await getFormattedDocketEntriesForTest(cerebralTest);
-    let { docketEntries } = cerebralTest.getState('caseDetail');
-    docketEntries = docketEntries.filter(doc => !doc.isDraft);
-
-    expect(
-      unfilteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
-        .length,
-    ).toBe(docketEntries.length);
-
-    cerebralTest.setState(
-      'sessionMetadata.docketRecordFilter',
-      DOCKET_RECORD_FILTER_OPTIONS.orders,
-    );
+    await cerebralTest.runSequence('cerebralBindSimpleSetStateSequence', {
+      key: 'sessionMetadata.docketRecordFilter',
+      value: DOCKET_RECORD_FILTER_OPTIONS.orders,
+    });
 
     const filteredDocketEntriesOnDocketRecord =
       await getFormattedDocketEntriesForTest(cerebralTest);
@@ -107,30 +101,5 @@ describe('Docket Record Filter Journey', () => {
       filteredDocketEntriesOnDocketRecord
         .formattedDocketEntriesOnDocketRecord[0].eventCode,
     ).toBe('O');
-  });
-
-  it('docket clerk views docket record filtered for all document types', async () => {
-    const unfilteredDocketEntriesOnDocketRecord =
-      await getFormattedDocketEntriesForTest(cerebralTest);
-    let { docketEntries } = cerebralTest.getState('caseDetail');
-    docketEntries = docketEntries.filter(doc => !doc.isDraft);
-
-    expect(
-      unfilteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
-        .length,
-    ).toBe(docketEntries.length);
-
-    cerebralTest.setState(
-      'sessionMetadata.docketRecordFilter',
-      DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
-    );
-
-    const filteredDocketEntriesOnDocketRecord =
-      await getFormattedDocketEntriesForTest(cerebralTest);
-
-    expect(
-      filteredDocketEntriesOnDocketRecord.formattedDocketEntriesOnDocketRecord
-        .length,
-    ).toBe(docketEntries.length);
   });
 });
