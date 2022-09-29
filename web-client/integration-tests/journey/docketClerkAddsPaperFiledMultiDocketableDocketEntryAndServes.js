@@ -1,14 +1,38 @@
 import { OBJECTIONS_OPTIONS_MAP } from '../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../shared/src/business/test/createTestApplicationContext';
-import { contactPrimaryFromState } from '../helpers';
+import { contactPrimaryFromState, fakeFile } from '../helpers';
 
 export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
   cerebralTest,
-  fakeFile,
   eventCode,
 ) => {
+  const answerFilingOptions = [
+    {
+      key: 'dateReceivedMonth',
+      value: 4,
+    },
+    {
+      key: 'dateReceivedDay',
+      value: 30,
+    },
+    {
+      key: 'dateReceivedYear',
+      value: 2001,
+    },
+    {
+      key: 'primaryDocumentFile',
+      value: fakeFile,
+    },
+    {
+      key: 'primaryDocumentFileSize',
+      value: 100,
+    },
+    {
+      key: 'eventCode',
+      value: eventCode,
+    },
+  ];
   //add check for modal with cons cases
-  const { DOCUMENT_RELATIONSHIPS } = applicationContext.getConstants();
 
   return it('docket clerk adds paper filed docket entry and serves', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
@@ -19,38 +43,19 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
       docketNumber: cerebralTest.docketNumber,
     });
 
-    await cerebralTest.runSequence('updateScreenMetadataSequence', {
-      key: DOCUMENT_RELATIONSHIPS.SUPPORTING,
-      value: false,
-    });
+    for (const option of answerFilingOptions) {
+      await cerebralTest.runSequence(
+        'updateDocketEntryFormValueSequence',
+        option,
+      );
+    }
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedMonth',
-      value: 4,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedDay',
-      value: 30,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'dateReceivedYear',
-      value: 2001,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFile',
-      value: fakeFile,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'primaryDocumentFileSize',
-      value: 100,
-    });
+    // await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
+    //   key: 'objections',
+    //   value: OBJECTIONS_OPTIONS_MAP.NO,
+    // });
 
     const contactPrimary = contactPrimaryFromState(cerebralTest);
-
     await cerebralTest.runSequence(
       'updateFileDocumentWizardFormValueSequence',
       {
@@ -59,34 +64,25 @@ export const docketClerkAddsPaperFiledMultiDocketableDocketEntryAndServes = (
       },
     );
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'eventCode',
-      value: eventCode,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'pending',
-      value: true,
-    });
-
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence', {
-      key: 'objections',
-      value: OBJECTIONS_OPTIONS_MAP.NO,
-    });
-
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
-    expect(cerebralTest.getState('alertSuccess').message).toEqual(
-      'Your entry has been added to the docket record.',
+    expect(cerebralTest.getState('consolidatedCaseAllCheckbox')).toBe(true);
+
+    expect(cerebralTest.getState('modal.showModal')).toEqual(
+      'ConfirmInitiateServiceModal',
     );
 
-    expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
-    expect(cerebralTest.getState('form')).toEqual({});
+    // expect(cerebralTest.getState('alertSuccess').message).toEqual(
+    //   'Your entry has been added to the docket record.',
+    // );
 
-    cerebralTest.docketEntryId = cerebralTest
-      .getState('caseDetail.docketEntries')
-      .find(doc => doc.eventCode === eventCode).docketEntryId;
+    // expect(cerebralTest.getState('currentPage')).toEqual('CaseDetailInternal');
+    // expect(cerebralTest.getState('form')).toEqual({});
+
+    // cerebralTest.docketEntryId = cerebralTest
+    //   .getState('caseDetail.docketEntries')
+    //   .find(doc => doc.eventCode === eventCode).docketEntryId;
   });
 };
