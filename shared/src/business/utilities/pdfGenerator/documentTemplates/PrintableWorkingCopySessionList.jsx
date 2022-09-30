@@ -5,10 +5,8 @@ import { SessionNotesSection } from '../components/SessionNotesSection';
 import {
   generateCaseStatus,
   generateSelectedFilterList,
+  isMemberCase,
 } from '../../generateSelectedFilterList';
-const isMemberCase = formattedCase => {
-  return formattedCase.inConsolidatedGroup && !formattedCase.leadCase;
-};
 
 export const PrintableWorkingCopySessionList = ({
   filters,
