@@ -49,7 +49,7 @@ export const EligibleCases = connect(
             <div>
               Total Completed:{' '}
               <span className="font-weight-normal">
-                {trialSessionDetailsHelper.eligibleCaseQcTotalCompleteCount}
+                {trialSessionDetailsHelper.eligibleTotalCaseQcCompleteCount}
               </span>
             </div>
           )}
