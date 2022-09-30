@@ -1,25 +1,17 @@
-import { Button } from '../../ustc-ui/Button/Button';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
 import { PractitionerDetails } from './PractitionerDetails';
 import { SuccessNotification } from '../SuccessNotification';
 import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
-import { sequences, state } from 'cerebral';
+import { state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerInformation = connect(
   {
-    gotoPrintPractitionerCasesSequence:
-      sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
     showModal: state.modal.showModal,
   },
-  function PractitionerInformation({
-    gotoPrintPractitionerCasesSequence,
-    practitionerDetailHelper,
-    showModal,
-  }) {
+  function PractitionerInformation({ practitionerDetailHelper, showModal }) {
     return (
       <React.Fragment>
         <div className="big-blue-header">
@@ -44,35 +36,9 @@ export const PractitionerInformation = connect(
 
         <div className="grid-container">
           <div className="grid-row grid-gap">
-            <div className="grid-col-8">
+            {/* used to be col-8, 12 necessary? check this out */}
+            <div className="grid-col-12">
               <SuccessNotification />
-            </div>
-
-            <div className="grid-col-4">
-              {practitionerDetailHelper.showPrintCaseListLink && (
-                <Button
-                  link
-                  className="push-right margin-bottom-1"
-                  icon="print"
-                  onClick={() => {
-                    gotoPrintPractitionerCasesSequence({
-                      userId: practitionerDetailHelper.userId,
-                    });
-                  }}
-                >
-                  Print case list
-                </Button>
-              )}
-              {practitionerDetailHelper.showEditLink && (
-                <Button
-                  link
-                  className="push-right margin-bottom-1"
-                  href={`/users/edit-practitioner/${practitionerDetailHelper.barNumber}`}
-                  icon="edit"
-                >
-                  Edit
-                </Button>
-              )}
             </div>
           </div>
         </div>

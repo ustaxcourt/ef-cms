@@ -1,16 +1,48 @@
+import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { connect } from '@cerebral/react';
-import { state } from 'cerebral';
+import { sequences, state } from 'cerebral';
 import React from 'react';
 
 export const PractitionerDetails = connect(
   {
+    gotoPrintPractitionerCasesSequence:
+      sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
     showModal: state.modal.showModal,
   },
-  function PractitionerDetails({ practitionerDetailHelper }) {
+  function PractitionerDetails({
+    gotoPrintPractitionerCasesSequence,
+    practitionerDetailHelper,
+  }) {
     return (
       <React.Fragment>
+        <div className="display-flex flex-justify-end">
+          {practitionerDetailHelper.showEditLink && (
+            <Button
+              link
+              className="push-right margin-bottom-1"
+              href={`/users/edit-practitioner/${practitionerDetailHelper.barNumber}`}
+              icon="edit"
+            >
+              Edit
+            </Button>
+          )}
+          {practitionerDetailHelper.showPrintCaseListLink && (
+            <Button
+              link
+              className="push-right margin-bottom-1"
+              icon="print"
+              onClick={() => {
+                gotoPrintPractitionerCasesSequence({
+                  userId: practitionerDetailHelper.userId,
+                });
+              }}
+            >
+              Print case list
+            </Button>
+          )}
+        </div>
         <div className="grid-row grid-gap">
           <div className="tablet:grid-col-4 margin-bottom-4">
             <div className="card height-full margin-bottom-0">
