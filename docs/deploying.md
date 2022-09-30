@@ -2,7 +2,7 @@
 
 ## During CI/CD
 
-Automated deployments are just one portion of CI/CD. Please see the CircleCI portion of the [CI/CD documentation](/ci-cd).
+Automated deployments are just one portion of CI/CD. Please see the CircleCI portion of the [CI/CD documentation](./ci-cd.md).
 
 ## During Development
 
