@@ -6,22 +6,18 @@ export const trialSessionDetailsHelper = get => {
   const permissions = get(state.permissions);
 
   const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
-    eligibleCase =>
-      eligibleCase.qcCompleteForTrial &&
-      eligibleCase.qcCompleteForTrial[trialSessionId],
+    eligibleCase => eligibleCase.qcCompleteForTrial?.[trialSessionId],
   ).length;
   const eligibleSmallCaseQcTotalCompleteCount = (eligibleCases || []).filter(
     eligibleCase =>
-      eligibleCase.qcCompleteForTrial &&
-      eligibleCase.qcCompleteForTrial[trialSessionId] &&
+      eligibleCase.qcCompleteForTrial?.[trialSessionId] &&
       (eligibleCase.docketNumberSuffix === DOCKET_NUMBER_SUFFIXES.SMALL ||
         eligibleCase.docketNumberSuffix ===
           DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY),
   ).length;
   const eligibleRegularCaseQcTotalCompleteCount = (eligibleCases || []).filter(
     eligibleCase =>
-      eligibleCase.qcCompleteForTrial &&
-      eligibleCase.qcCompleteForTrial[trialSessionId] &&
+      eligibleCase.qcCompleteForTrial?.[trialSessionId] &&
       (eligibleCase.docketNumberSuffix === null ||
         (eligibleCase.docketNumberSuffix !== DOCKET_NUMBER_SUFFIXES.SMALL &&
           eligibleCase.docketNumberSuffix !==
