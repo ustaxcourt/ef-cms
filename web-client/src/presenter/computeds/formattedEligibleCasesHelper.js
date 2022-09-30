@@ -30,22 +30,22 @@ const compareTrialSessionEligibleCases =
     } else {
       let aSortString = getEligibleDocketNumberSortString({
         allCases: eligibleCases,
-        theCase: a,
+        caseToSort: a,
       });
       let bSortString = getEligibleDocketNumberSortString({
         allCases: eligibleCases,
-        theCase: b,
+        caseToSort: b,
       });
       return aSortString.localeCompare(bSortString);
     }
   };
 
-const getEligibleDocketNumberSortString = ({ allCases, theCase }) => {
+const getEligibleDocketNumberSortString = ({ allCases, caseToSort }) => {
   const leadCase = allCases.find(
-    aCase => aCase.docketNumber === theCase.leadDocketNumber,
+    aCase => aCase.docketNumber === caseToSort.leadDocketNumber,
   );
 
-  const isLeadInEligible = !!theCase.leadDocketNumber && !!leadCase;
+  const isLeadInEligible = !!caseToSort.leadDocketNumber && !!leadCase;
 
   const isLeadCaseManuallyAdded = leadCase?.isManuallyAdded;
   const isLeadCaseHighPriority = leadCase?.highPriority;
@@ -58,17 +58,17 @@ const getEligibleDocketNumberSortString = ({ allCases, theCase }) => {
     isLeadCaseDocketSuffixHighPriority
   ) {
     return `${getSortableDocketNumber(
-      theCase.docketNumber,
-    )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+      caseToSort.docketNumber,
+    )}-${getSortableDocketNumber(caseToSort.docketNumber)}`;
   }
 
   return `${getSortableDocketNumber(
     isLeadInEligible
-      ? theCase.docketNumber === theCase.leadDocketNumber
-        ? theCase.docketNumber
-        : theCase.leadDocketNumber
-      : theCase.docketNumber,
-  )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+      ? caseToSort.docketNumber === caseToSort.leadDocketNumber
+        ? caseToSort.docketNumber
+        : caseToSort.leadDocketNumber
+      : caseToSort.docketNumber,
+  )}-${getSortableDocketNumber(caseToSort.docketNumber)}`;
 };
 
 exports.formattedEligibleCasesHelper = (get, applicationContext) => {
