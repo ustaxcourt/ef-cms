@@ -6,14 +6,14 @@ import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
 
-export const PractitionerDetail = connect(
+export const PractitionerInformation = connect(
   {
     gotoPrintPractitionerCasesSequence:
       sequences.gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper: state.practitionerDetailHelper,
     showModal: state.modal.showModal,
   },
-  function PractitionerDetail({
+  function PractitionerInformation({
     gotoPrintPractitionerCasesSequence,
     practitionerDetailHelper,
     showModal,
