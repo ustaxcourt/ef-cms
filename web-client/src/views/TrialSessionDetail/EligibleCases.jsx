@@ -10,6 +10,7 @@ export const EligibleCases = connect(
   {
     formattedEligibleCases:
       state.formattedTrialSessionDetailsForFilteredEligibleCases,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
     trialSessionId: state.trialSession.trialSessionId,
     updateQcCompleteForTrialSequence:
@@ -17,17 +18,43 @@ export const EligibleCases = connect(
   },
   function EligibleCases({
     formattedEligibleCases,
+    formattedTrialSessionDetails,
     trialSessionDetailsHelper,
     trialSessionId,
     updateQcCompleteForTrialSequence,
   }) {
     return (
       <React.Fragment>
-        {trialSessionDetailsHelper.showQcComplete && (
-          <div className="float-right text-semibold margin-top-neg-3">
-            Completed: {trialSessionDetailsHelper.eligibleCaseQcCompleteCount}
-          </div>
-        )}
+        <div className="grid-row float-right text-semibold margin-top-neg-3">
+          {formattedTrialSessionDetails.isHybridSession && (
+            <div className="grid-row">
+              <div className="margin-right-50 margin-right-mobile">
+                Regular:{' '}
+                <span className="font-weight-normal">
+                  {
+                    trialSessionDetailsHelper.eligibleRegularCaseQcTotalCompleteCount
+                  }
+                </span>
+              </div>
+              <div className="margin-right-50 margin-right-mobile">
+                Small:{' '}
+                <span className="font-weight-normal">
+                  {
+                    trialSessionDetailsHelper.eligibleSmallCaseQcTotalCompleteCount
+                  }
+                </span>
+              </div>
+            </div>
+          )}
+          {trialSessionDetailsHelper.showQcComplete && (
+            <div>
+              Total Completed:{' '}
+              <span className="font-weight-normal">
+                {trialSessionDetailsHelper.eligibleTotalCaseQcCompleteCount}
+              </span>
+            </div>
+          )}
+        </div>
         <table
           aria-describedby="eligible-cases-tab"
           className="usa-table ustc-table trial-sessions subsection"
