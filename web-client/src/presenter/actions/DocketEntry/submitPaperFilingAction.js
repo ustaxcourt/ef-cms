@@ -21,7 +21,9 @@ export const submitPaperFilingAction = async ({
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
   const generateCoversheet = isFileAttached && !isSavingForLater;
   const isEditingDocketEntry = get(state.isEditingDocketEntry);
+  const { docketNumbers } = props;
 
+  let caseDetail;
   let docketEntryId;
 
   if (isEditingDocketEntry) {
@@ -62,7 +64,7 @@ export const submitPaperFilingAction = async ({
       });
   }
 
-  let caseDetail, paperServicePdfUrl;
+  let paperServicePdfUrl;
 
   if (isEditingDocketEntry) {
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
@@ -76,6 +78,7 @@ export const submitPaperFilingAction = async ({
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
       .getUseCases()
       .addPaperFilingInteractor(applicationContext, {
+        consolidatedGroupDocketNumbers: docketNumbers,
         documentMetadata,
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,

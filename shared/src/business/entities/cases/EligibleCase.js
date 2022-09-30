@@ -20,6 +20,7 @@ EligibleCase.prototype.init = function init(rawCase) {
   this.entityName = 'EligibleCase';
   this.caseCaption = rawCase.caseCaption;
   this.docketNumber = rawCase.docketNumber;
+  this.leadDocketNumber = rawCase.leadDocketNumber;
   this.docketNumberSuffix = rawCase.docketNumberSuffix;
   this.docketNumberWithSuffix =
     rawCase.docketNumber + (rawCase.docketNumberSuffix || '');
