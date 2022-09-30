@@ -1,8 +1,11 @@
-import { formatCase } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import {
+  formatCase,
+  getSortableDocketNumber,
+} from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { state } from 'cerebral';
 
 const compareTrialSessionEligibleCases =
-  ({ applicationContext, eligibleCases }) =>
+  ({ eligibleCases }) =>
   (a, b) => {
     if (a.isManuallyAdded && !b.isManuallyAdded) {
       return -1;
@@ -21,33 +24,23 @@ const compareTrialSessionEligibleCases =
       (a.highPriority && b.highPriority) ||
       (a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority)
     ) {
-      let aSortString = applicationContext
-        .getUtilities()
-        .getSortableDocketNumber(a.docketNumber);
-      let bSortString = applicationContext
-        .getUtilities()
-        .getSortableDocketNumber(b.docketNumber);
+      let aSortString = getSortableDocketNumber(a.docketNumber);
+      let bSortString = getSortableDocketNumber(b.docketNumber);
       return aSortString.localeCompare(bSortString);
     } else {
       let aSortString = getEligibleDocketNumberSortString({
         allCases: eligibleCases,
-        applicationContext,
         theCase: a,
       });
       let bSortString = getEligibleDocketNumberSortString({
         allCases: eligibleCases,
-        applicationContext,
         theCase: b,
       });
       return aSortString.localeCompare(bSortString);
     }
   };
 
-const getEligibleDocketNumberSortString = ({
-  allCases,
-  applicationContext,
-  theCase,
-}) => {
+const getEligibleDocketNumberSortString = ({ allCases, theCase }) => {
   const leadCase = allCases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
@@ -58,8 +51,6 @@ const getEligibleDocketNumberSortString = ({
   const isLeadCaseHighPriority = leadCase?.highPriority;
   const isLeadCaseDocketSuffixHighPriority =
     leadCase?.isDocketSuffixHighPriority;
-
-  const { getSortableDocketNumber } = applicationContext.getUtilities();
 
   if (
     isLeadCaseManuallyAdded ||
@@ -87,9 +78,7 @@ exports.formattedEligibleCasesHelper = (get, applicationContext) => {
     .map(caseItem =>
       formatCase({ applicationContext, caseItem, eligibleCases }),
     )
-    .sort(
-      compareTrialSessionEligibleCases({ applicationContext, eligibleCases }),
-    )
+    .sort(compareTrialSessionEligibleCases({ eligibleCases }))
     .map(caseItem =>
       applicationContext
         .getUtilities()
