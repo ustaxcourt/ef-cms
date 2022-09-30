@@ -726,6 +726,7 @@ const applicationContext = {
       getPractitionersRepresenting,
       getSealedDocketEntryTooltip,
       getServedPartiesCode,
+      getSortableDocketNumber: Case.getSortableDocketNumber,
       getStampBoxCoordinates,
       getStandaloneRemoteDocumentTitle,
       getTrialSessionStatus,

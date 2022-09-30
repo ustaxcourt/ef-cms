@@ -1,42 +1,47 @@
-import { formatCase } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
-import { setConsolidationFlagsForDisplay } from '../../../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
+import {
+  formatCase,
+  getSortableDocketNumber,
+} from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { state } from 'cerebral';
 
-const compareTrialSessionEligibleCases = eligibleCases => (a, b) => {
-  if (a.isManuallyAdded && !b.isManuallyAdded) {
-    return -1;
-  } else if (!a.isManuallyAdded && b.isManuallyAdded) {
-    return 1;
-  } else if (a.highPriority && !b.highPriority) {
-    return -1;
-  } else if (!a.highPriority && b.highPriority) {
-    return 1;
-  } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
-    return -1;
-  } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
-    return 1;
-  } else if (
-    (a.isManuallyAdded && b.isManuallyAdded) ||
-    (a.highPriority && b.highPriority) ||
-    (a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority)
-  ) {
-    let aSortString = getSortableDocketNumber(a.docketNumber);
-    let bSortString = getSortableDocketNumber(b.docketNumber);
-    return aSortString.localeCompare(bSortString);
-  } else {
-    let aSortString = getFullSortString(a, eligibleCases);
-    let bSortString = getFullSortString(b, eligibleCases);
-    return aSortString.localeCompare(bSortString);
-  }
-};
+const compareTrialSessionEligibleCases =
+  ({ eligibleCases }) =>
+  (a, b) => {
+    if (a.isManuallyAdded && !b.isManuallyAdded) {
+      return -1;
+    } else if (!a.isManuallyAdded && b.isManuallyAdded) {
+      return 1;
+    } else if (a.highPriority && !b.highPriority) {
+      return -1;
+    } else if (!a.highPriority && b.highPriority) {
+      return 1;
+    } else if (a.isDocketSuffixHighPriority && !b.isDocketSuffixHighPriority) {
+      return -1;
+    } else if (!a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority) {
+      return 1;
+    } else if (
+      (a.isManuallyAdded && b.isManuallyAdded) ||
+      (a.highPriority && b.highPriority) ||
+      (a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority)
+    ) {
+      let aSortString = getSortableDocketNumber(a.docketNumber);
+      let bSortString = getSortableDocketNumber(b.docketNumber);
+      return aSortString.localeCompare(bSortString);
+    } else {
+      let aSortString = getEligibleDocketNumberSortString({
+        allCases: eligibleCases,
+        theCase: a,
+      });
+      let bSortString = getEligibleDocketNumberSortString({
+        allCases: eligibleCases,
+        theCase: b,
+      });
+      return aSortString.localeCompare(bSortString);
+    }
+  };
 
-const getSortableDocketNumber = docketNumber => {
-  const [number, year] = docketNumber.split('-');
-  return `${year}-${number.padStart(6, '0')}`;
-};
-
-const getFullSortString = (theCase, cases) => {
-  const leadCase = cases.find(
+const getEligibleDocketNumberSortString = ({ allCases, theCase }) => {
+  const leadCase = allCases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
 
@@ -73,8 +78,12 @@ exports.formattedEligibleCasesHelper = (get, applicationContext) => {
     .map(caseItem =>
       formatCase({ applicationContext, caseItem, eligibleCases }),
     )
-    .sort(compareTrialSessionEligibleCases(eligibleCases))
-    .map(caseItem => setConsolidationFlagsForDisplay(caseItem, eligibleCases));
+    .sort(compareTrialSessionEligibleCases({ eligibleCases }))
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, eligibleCases),
+    );
 
   return sortedCases;
 };

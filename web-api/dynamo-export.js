@@ -1,6 +1,6 @@
 const AWS = require('aws-sdk');
 
-const tableName = process.argv[2];
+const tableName = process.argv[2] ?? 'efcms-local';
 
 if (!tableName) {
   console.error('Table name to export is required');
