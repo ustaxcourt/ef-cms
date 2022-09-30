@@ -9,7 +9,7 @@ export const preparePrintableFormattedCasesAction = ({ props }) => {
   let { formattedCases } = props;
   let temporaryFormattedCases = [];
 
-  formattedCases.map(formattedCase => {
+  formattedCases.forEach(formattedCase => {
     temporaryFormattedCases.push(formattedCase);
     if (formattedCase.leadCase) {
       temporaryFormattedCases = temporaryFormattedCases.concat(
