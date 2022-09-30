@@ -1,6 +1,7 @@
 import {
   generateCaseStatus,
   generateSelectedFilterList,
+  isMemberCase,
   orderedFilterMap,
 } from './generateSelectedFilterList';
 
@@ -73,5 +74,23 @@ describe('generateSelectedFilterList', () => {
       'A Basis Reached',
       'Taken Under Advisement',
     ]);
+  });
+});
+
+describe('isMemberCase', () => {
+  it('return true if case in a member case and not lead case', () => {
+    const formattedCase = {
+      inConsolidatedGroup: true,
+      leadCase: false,
+    };
+    const result = isMemberCase(formattedCase);
+    expect(result).toEqual(true);
+  });
+  it('return false if case is not a member of consolidated group', () => {
+    const formattedCase = {
+      inConsolidatedGroup: false,
+    };
+    const result = isMemberCase(formattedCase);
+    expect(result).toEqual(false);
   });
 });

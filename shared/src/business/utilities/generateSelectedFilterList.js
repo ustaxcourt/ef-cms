@@ -60,8 +60,13 @@ const generateSelectedFilterList = filters => {
     .map(filteredKey => filteredKey.name);
 };
 
+const isMemberCase = formattedCase => {
+  return formattedCase.inConsolidatedGroup && !formattedCase.leadCase;
+};
+
 module.exports = {
   generateCaseStatus,
   generateSelectedFilterList,
+  isMemberCase,
   orderedFilterMap,
 };
