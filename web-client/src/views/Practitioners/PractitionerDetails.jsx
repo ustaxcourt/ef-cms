@@ -33,6 +33,7 @@ export const PractitionerDetails = connect(
               link
               className="push-right margin-bottom-1"
               icon="print"
+              overrideMargin={true}
               onClick={() => {
                 gotoPrintPractitionerCasesSequence({
                   userId: practitionerDetailHelper.userId,

@@ -43,13 +43,11 @@ export const PractitionerInformation = connect(
           </div>
         </div>
 
-        <section
-          className="usa-section grid-container"
-          id="case-detail-internal"
-        >
+        <section className="usa-section grid-container">
           <Tabs
             className="classic-horizontal-header3 tab-border"
             defaultActiveTab="practitioner-details"
+            marginBottom={false}
           >
             <Tab tabName="practitioner-details" title={'Details'}>
               <PractitionerDetails />
