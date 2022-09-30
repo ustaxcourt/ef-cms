@@ -1,11 +1,11 @@
 import { runAction } from 'cerebral/test';
-import { setTitleForGlobalReportAction } from './setTitleForGlobalReportAction';
+import { setTitleForGlobalReportFactoryAction } from './setTitleForGlobalReportFactoryAction';
 
-describe('setTitleForGlobalReportAction', () => {
+describe('setTitleForGlobalReportFactoryAction', () => {
   it('sets headerTitle to state.screenMetadata.headerTitle in state', async () => {
     const headerTitle = 'Pending Report';
     const { state } = await runAction(
-      setTitleForGlobalReportAction(headerTitle),
+      setTitleForGlobalReportFactoryAction(headerTitle),
       {},
     );
     expect(state.screenMetadata.headerTitle).toEqual(headerTitle);

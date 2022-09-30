@@ -6,7 +6,7 @@ import { state } from 'cerebral';
  * @param {string} headerTitle the name of the header title
  * @returns {Promise} async action
  */
-export const setTitleForGlobalReportAction =
+export const setTitleForGlobalReportFactoryAction =
   headerTitle =>
   /**
    * sets the state.screenMetaData.headerTitle

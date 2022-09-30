@@ -2,73 +2,12 @@ const React = require('react');
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
 import { SessionNotesSection } from '../components/SessionNotesSection';
-
+import {
+  generateCaseStatus,
+  generateSelectedFilterList,
+} from '../../generateSelectedFilterList';
 const isMemberCase = formattedCase => {
   return formattedCase.inConsolidatedGroup && !formattedCase.leadCase;
-};
-
-const orderedFilterMap = [
-  {
-    code: 'setForTrial',
-    name: 'Set For Trial',
-  },
-  {
-    code: 'dismissed',
-    name: 'Dismissed',
-  },
-  {
-    code: 'continued',
-    name: 'Continued',
-  },
-  {
-    code: 'rule122',
-    name: 'Rule 122',
-  },
-  {
-    code: 'aBasisReached',
-    name: 'A Basis Reached',
-  },
-  {
-    code: 'settled',
-    name: 'Settled',
-  },
-  {
-    code: 'recall',
-    name: 'Recall',
-  },
-  {
-    code: 'takenUnderAdvisement',
-    name: 'Taken Under Advisement',
-  },
-  {
-    code: 'statusUnassigned',
-    name: 'Status Unassigned',
-  },
-];
-
-const generateSelectedFilterList = filters => {
-  const selectedFilters = [];
-  const filterKeys = Object.keys(filters).filter(
-    filterKey => filterKey !== 'showAll',
-  );
-  const userFilterSelection = filterKeys.filter(
-    filterKey => filters[filterKey],
-  );
-
-  orderedFilterMap.forEach(orderedFilterKey => {
-    const nameOfFilter = orderedFilterKey.code;
-    if (userFilterSelection.indexOf(nameOfFilter) > -1) {
-      selectedFilters.push(orderedFilterKey.name);
-    }
-  });
-  return selectedFilters;
-};
-
-const generateCaseStatus = trialStatus => {
-  const foundTrialStatusFromMap = orderedFilterMap.find(
-    orderedFilterKey => orderedFilterKey.code === trialStatus,
-  );
-  return foundTrialStatusFromMap?.name || 'Unassigned';
 };
 
 export const PrintableWorkingCopySessionList = ({
