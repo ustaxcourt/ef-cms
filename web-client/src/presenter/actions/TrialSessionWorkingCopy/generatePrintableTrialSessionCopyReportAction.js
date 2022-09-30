@@ -15,11 +15,11 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   props,
 }) => {
   const {
-    caseNotesFlag,
     filters,
     formattedCases,
     formattedTrialSessionDetails,
     sessionNotes,
+    showCaseNotes,
   } = props;
 
   const { caseMetadata } = get(state.trialSessionWorkingCopy);
@@ -83,11 +83,11 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-      caseNotesFlag,
       filters,
       formattedCases: formattedCasesDTO,
       formattedTrialSession: formattedTrialSessionDTO,
       sessionNotes,
+      showCaseNotes,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
     });
 

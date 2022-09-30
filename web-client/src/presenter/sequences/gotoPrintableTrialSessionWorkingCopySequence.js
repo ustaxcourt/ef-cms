@@ -2,8 +2,8 @@ import { clearModalAction } from '../actions/clearModalAction';
 import { generatePrintableTrialSessionCopyReportAction } from '../actions/TrialSessionWorkingCopy/generatePrintableTrialSessionCopyReportAction';
 import { getFormattedTrialSessionCasesAction } from '../actions/TrialSessionWorkingCopy/getFormattedTrialSessionCasesAction';
 import { getFormattedTrialSessionDetailsAction } from '../actions/TrialSessionWorkingCopy/getFormattedTrialSessionDetailsAction';
-import { getTrialSessionWorkingCopyCaseNotesFlagAction } from '../actions/TrialSessionWorkingCopy/getTrialSessionWorkingCopyCaseNotesFlagAction';
 import { getTrialSessionWorkingCopyDataAction } from '../actions/TrialSessionWorkingCopy/getTrialSessionWorkingCopyDataAction';
+import { getTrialSessionWorkingCopyShowCaseNotesAction } from '../actions/TrialSessionWorkingCopy/getTrialSessionWorkingCopyShowCaseNotesAction';
 import { preparePrintableFormattedCasesAction } from '../actions/TrialSessionWorkingCopy/preparePrintableFormattedCasesAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setPdfPreviewUrlSequence } from './setPdfPreviewUrlSequence';
@@ -19,7 +19,7 @@ export const gotoPrintableTrialSessionWorkingCopySequence =
     getFormattedTrialSessionDetailsAction,
     getFormattedTrialSessionCasesAction,
     preparePrintableFormattedCasesAction,
-    getTrialSessionWorkingCopyCaseNotesFlagAction,
+    getTrialSessionWorkingCopyShowCaseNotesAction,
     getTrialSessionWorkingCopyDataAction,
     generatePrintableTrialSessionCopyReportAction,
     setPdfPreviewUrlSequence,

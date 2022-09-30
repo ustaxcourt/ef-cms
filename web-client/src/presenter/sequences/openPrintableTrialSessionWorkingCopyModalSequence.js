@@ -1,9 +1,10 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setCaseNotesFlagDefaultAction } from '../actions/TrialSessionWorkingCopy/setCaseNotesFlagDefaultAction';
+
+import { setShowCaseNotesDefaultAction } from '../actions/TrialSessionWorkingCopy/setShowCaseNotesDefaultAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openPrintableTrialSessionWorkingCopyModalSequence = [
   clearModalStateAction,
-  setCaseNotesFlagDefaultAction,
+  setShowCaseNotesDefaultAction,
   setShowModalFactoryAction('PrintableTrialSessionWorkingCopyModal'),
 ];

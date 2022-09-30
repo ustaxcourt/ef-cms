@@ -44,7 +44,6 @@ describe('documentGenerators', () => {
       const pdf = await printableWorkingCopySessionList({
         applicationContext,
         data: {
-          caseNotesFlag: true,
           filters: {
             aBasisReached: true,
             continued: true,
@@ -60,6 +59,7 @@ describe('documentGenerators', () => {
           formattedCases: FORMATTED_CASES,
           formattedTrialSession: FORMATTED_TRIAL_SESSION,
           sessionNotes: SESSION_NOTES,
+          showCaseNotes: true,
         },
       });
 
@@ -86,7 +86,6 @@ describe('documentGenerators', () => {
       const pdf = await printableWorkingCopySessionList({
         applicationContext,
         data: {
-          caseNotesFlag: false,
           filters: {
             aBasisReached: true,
             continued: false,
@@ -102,6 +101,7 @@ describe('documentGenerators', () => {
           formattedCases: FORMATTED_CASES,
           formattedTrialSession: FORMATTED_TRIAL_SESSION,
           sessionNotes: SESSION_NOTES,
+          showCaseNotes: false,
         },
       });
 

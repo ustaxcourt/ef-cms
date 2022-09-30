@@ -15,13 +15,13 @@ import { UnauthorizedError } from '../../../errors/errors';
 export const generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext: IApplicationContext,
   {
-    caseNotesFlag,
     filters,
     formattedCases,
     formattedTrialSession,
     sessionNotes,
+    showCaseNotes,
   }: {
-    caseNotesFlag: boolean;
+    showCaseNotes: boolean;
     filters: string[];
     formattedCases: TCase[];
     formattedTrialSession: TTrialSessionData;
@@ -40,11 +40,11 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     .printableWorkingCopySessionList({
       applicationContext,
       data: {
-        caseNotesFlag,
         filters,
         formattedCases,
         formattedTrialSession,
         sessionNotes,
+        showCaseNotes,
       },
     });
 
