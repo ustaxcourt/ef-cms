@@ -1,10 +1,6 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
+import { setCaseNotesFlagDefaultAction } from '../actions/TrialSessionWorkingCopy/setCaseNotesFlagDefaultAction';
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
-import { state } from 'cerebral';
-
-const setCaseNotesFlagDefaultAction = ({ store }) => {
-  store.set(state.modal['caseNotesFlag'], true);
-};
 
 export const openPrintableTrialSessionWorkingCopyModalSequence = [
   clearModalStateAction,
