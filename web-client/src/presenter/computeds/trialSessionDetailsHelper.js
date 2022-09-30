@@ -5,7 +5,7 @@ export const trialSessionDetailsHelper = get => {
   const { eligibleCases, trialSessionId } = get(state.trialSession);
   const permissions = get(state.permissions);
 
-  const eligibleCaseQcTotalCompleteCount = (eligibleCases || []).filter(
+  const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
     eligibleCase =>
       eligibleCase.qcCompleteForTrial &&
       eligibleCase.qcCompleteForTrial[trialSessionId],
@@ -30,9 +30,9 @@ export const trialSessionDetailsHelper = get => {
   const showQcComplete = permissions.TRIAL_SESSION_QC_COMPLETE;
 
   return {
-    eligibleCaseQcTotalCompleteCount,
     eligibleRegularCaseQcTotalCompleteCount,
     eligibleSmallCaseQcTotalCompleteCount,
+    eligibleTotalCaseQcCompleteCount,
     showQcComplete,
     showSetCalendarButton: permissions.SET_TRIAL_SESSION_CALENDAR,
   };

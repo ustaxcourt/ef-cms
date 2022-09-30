@@ -52,7 +52,7 @@ describe('trialSessionDetailsHelper', () => {
     },
   ];
 
-  it('returns count of eligible cases with QC complete', () => {
+  it('returns total count of eligible cases with QC complete', () => {
     const result = runCompute(trialSessionDetailsHelper, {
       state: {
         permissions: { TRIAL_SESSION_QC_COMPLETE: true },
@@ -62,12 +62,12 @@ describe('trialSessionDetailsHelper', () => {
         },
       },
     });
-    expect(result.eligibleCaseQcTotalCompleteCount).toEqual(
+    expect(result.eligibleTotalCaseQcCompleteCount).toEqual(
       mockCases.length - 1,
     );
   });
 
-  it('returns eligibleCaseQcCompleteCount of 0 if eligibleCases is not on the state', () => {
+  it('returns 0 total of eligible cases if eligibleCases is not on the state', () => {
     const result = runCompute(trialSessionDetailsHelper, {
       state: {
         permissions: { TRIAL_SESSION_QC_COMPLETE: true },
@@ -76,7 +76,7 @@ describe('trialSessionDetailsHelper', () => {
         },
       },
     });
-    expect(result.eligibleCaseQcTotalCompleteCount).toEqual(0);
+    expect(result.eligibleTotalCaseQcCompleteCount).toEqual(0);
   });
 
   it('returns count of small eligible cases with QC complete', () => {
