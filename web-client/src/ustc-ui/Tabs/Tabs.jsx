@@ -164,6 +164,7 @@ export function TabsComponent({
     asSwitch,
     boxed,
     headingLevel,
+    marginBottom,
     setTab,
   });
 
@@ -175,7 +176,7 @@ export function TabsComponent({
             className={classNames(
               'ustc-ui-tabs',
               { 'grid-row': boxed },
-              !marginBottom && 'no-margin-bottom',
+              !marginBottom && 'margin-bottom-0',
             )}
             role="tablist"
           >
