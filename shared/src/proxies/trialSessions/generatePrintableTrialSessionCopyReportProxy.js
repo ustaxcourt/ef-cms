@@ -11,22 +11,22 @@ const { post } = require('../requests');
 exports.generatePrintableTrialSessionCopyReportInteractor = (
   applicationContext,
   {
-    caseNotesFlag,
     filters,
     formattedCases,
     formattedTrialSession,
     sessionNotes,
+    showCaseNotes,
     trialSessionId,
   },
 ) => {
   return post({
     applicationContext,
     body: {
-      caseNotesFlag,
       filters,
       formattedCases,
       formattedTrialSession,
       sessionNotes,
+      showCaseNotes,
     },
     endpoint: `/trial-sessions/${trialSessionId}/printable-working-copy`,
   });

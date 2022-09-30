@@ -12,10 +12,10 @@ exports.getGeneratePrintableTrialSessionCopyReportLambda = event =>
     return await applicationContext
       .getUseCases()
       .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-        caseNotesFlag: body.caseNotesFlag,
         filters: body.filters,
         formattedCases: body.formattedCases,
         formattedTrialSession: body.formattedTrialSession,
         sessionNotes: body.sessionNotes,
+        showCaseNotes: body.showCaseNotes,
       });
   });

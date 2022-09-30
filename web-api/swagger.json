@@ -4829,7 +4829,7 @@
           "schema": {
             "type": "object",
             "properties": {
-              "caseNotesFlag": {
+              "showCaseNotes": {
                 "type": "boolean"
               },
               "filters": {
@@ -4845,7 +4845,7 @@
                 "type": "string"
               }
             },
-            "required": ["caseNotesFlag", "filters", "formattedCases", "formattedTrialSession"]
+            "required": ["showCaseNotes", "filters", "formattedCases", "formattedTrialSession"]
           }
         }
       ],

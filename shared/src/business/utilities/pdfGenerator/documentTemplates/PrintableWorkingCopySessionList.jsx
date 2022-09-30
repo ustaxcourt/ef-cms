@@ -72,11 +72,11 @@ const generateCaseStatus = trialStatus => {
 };
 
 export const PrintableWorkingCopySessionList = ({
-  caseNotesFlag,
   filters,
   formattedCases,
   formattedTrialSession,
   sessionNotes,
+  showCaseNotes,
 }) => {
   const trialSessionDateRange =
     formattedTrialSession.formattedEstimatedEndDateFull
@@ -187,7 +187,7 @@ export const PrintableWorkingCopySessionList = ({
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan="2"></td>
                     <td colSpan="5">
-                      {caseNotesFlag &&
+                      {showCaseNotes &&
                         formattedCase.userNotes &&
                         `Notes: ${formattedCase.userNotes}`}
                     </td>

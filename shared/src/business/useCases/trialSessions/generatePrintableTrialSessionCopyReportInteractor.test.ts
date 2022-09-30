@@ -69,7 +69,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
 
   it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
     const interactorProps = {
-      caseNotesFlag: true,
       filters: {
         aBasisReached: true,
         continued: true,
@@ -85,6 +84,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
       formattedCases: [{ someprop: 'value of some prop' }],
       formattedTrialSession: mockTrialSession,
       sessionNotes: 'session notes',
+      showCaseNotes: true,
     };
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,
