@@ -1,9 +1,62 @@
 import { applicationContext } from '../test/createTestApplicationContext';
-import { compareCasesByDocketNumber } from './getFormattedTrialSessionDetails';
+import {
+  compareCasesByDocketNumber,
+  compareCasesByDocketNumberFactory,
+} from './getFormattedTrialSessionDetails';
 
 describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
   it('101-19 should come before 102-19', () => {
-    const result = compareCasesByDocketNumber({
+    const result = compareCasesByDocketNumber(
+      {
+        docketNumber: '101-19',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '101-19',
+        isDocketSuffixHighPriority: false,
+      },
+      {
+        docketNumber: '102-19',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '102-19P',
+        isDocketSuffixHighPriority: true,
+      },
+    );
+    expect(result).toBe(-1);
+  });
+
+  it('190-07 should come before 102-19', () => {
+    const result = compareCasesByDocketNumber(
+      {
+        docketNumber: '190-07',
+      },
+      {
+        docketNumber: '102-19',
+      },
+    );
+    expect(result).toBe(-1);
+  });
+
+  it('102-19 should equal 102-19', () => {
+    const result = compareCasesByDocketNumber(
+      {
+        docketNumber: '102-19',
+        docketNumberSuffix: '',
+        docketNumberWithSuffix: '102-19',
+        isDocketSuffixHighPriority: false,
+      },
+      {
+        docketNumber: '102-19',
+        docketNumberSuffix: 'P',
+        docketNumberWithSuffix: '102-19P',
+        isDocketSuffixHighPriority: true,
+      },
+    );
+    expect(result).toBe(0);
+  });
+});
+
+describe('formattedTrialSessionDetails.compareCasesByDocketNumberFactory', () => {
+  it('101-19 should come before 102-19', () => {
+    const result = compareCasesByDocketNumberFactory({
       allCases: [],
       applicationContext,
     })(
@@ -24,7 +77,7 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
   });
 
   it('190-07 should come before 102-19', () => {
-    const result = compareCasesByDocketNumber({
+    const result = compareCasesByDocketNumberFactory({
       allCases: [],
       applicationContext,
     })(
@@ -39,7 +92,7 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
   });
 
   it('102-19 should equal 102-19', () => {
-    const result = compareCasesByDocketNumber({
+    const result = compareCasesByDocketNumberFactory({
       allCases: [],
       applicationContext,
     })(
@@ -60,7 +113,7 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
   });
 
   it('103-19 should come after 102-19', () => {
-    const result = compareCasesByDocketNumber({
+    const result = compareCasesByDocketNumberFactory({
       allCases: [],
       applicationContext,
     })(
@@ -103,7 +156,7 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
     ];
 
     cases.sort(
-      compareCasesByDocketNumber({
+      compareCasesByDocketNumberFactory({
         allCases: [
           {
             docketNumber: '101-20',
@@ -152,7 +205,7 @@ describe('formattedTrialSessionDetails.compareCasesByDocketNumber', () => {
     ];
 
     cases.sort(
-      compareCasesByDocketNumber({
+      compareCasesByDocketNumberFactory({
         allCases: [],
         applicationContext,
       }),
