@@ -35,15 +35,43 @@ describe('generateSelectedFilterList', () => {
       takenUnderAdvisement: true,
     };
     const result = generateSelectedFilterList(userFilters);
+
     expect(result.length).toEqual(9);
+    expect(result).toEqual([
+      'Set For Trial',
+      'Dismissed',
+      'Continued',
+      'Rule 122',
+      'A Basis Reached',
+      'Settled',
+      'Recall',
+      'Taken Under Advisement',
+      'Status Unassigned',
+    ]);
   });
 
-  it.skip('should format clinic letter key correctly for locations with multiple spaces', () => {
-    const result = generateSelectedFilterList({
-      procedureType: 'Small',
-      trialLocation: 'Los Angeles, New York',
-    });
+  it('return only the filters set to true', () => {
+    const userFilters = {
+      aBasisReached: true,
+      continued: false,
+      dismissed: true,
+      recall: false,
+      rule122: true,
+      setForTrial: true,
+      settled: false,
+      showAll: false,
+      statusUnassigned: false,
+      takenUnderAdvisement: true,
+    };
+    const result = generateSelectedFilterList(userFilters);
 
-    expect(result).toEqual('clinic-letter-los-angeles-new-york-small');
+    expect(result.length).toEqual(5);
+    expect(result).toEqual([
+      'Set For Trial',
+      'Dismissed',
+      'Rule 122',
+      'A Basis Reached',
+      'Taken Under Advisement',
+    ]);
   });
 });
