@@ -39,11 +39,11 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         },
         props: {
           formattedCases: [formattedCaseMock],
+        },
+        state: {
           formattedTrialSessionDetails: {
             estimatedEndDate: '12/12/12',
           },
-        },
-        state: {
           trialSessionWorkingCopy: {
             caseMetadata: formattedCaseMock,
           },
@@ -61,11 +61,11 @@ describe('generatePrintableTrialSessionCopyReportAction', () => {
         },
         props: {
           formattedCases: [formattedCaseMock],
+        },
+        state: {
           formattedTrialSessionDetails: {
             estimatedEndDate: '12/12/12',
           },
-        },
-        state: {
           trialSessionWorkingCopy: {
             caseMetadata: {},
           },
