@@ -9,7 +9,7 @@ import { state } from 'cerebral';
 export const setTitleForGlobalReportAction =
   headerTitle =>
   /**
-   * sets the state.screenMetaDate.headerTitle based on the scoped page
+   * sets the state.screenMetaData.headerTitle
    *
    * @param {object} providers the providers object
    * @param {object} providers.store the cerebral store used for setting the state.screenMetadata.headerTitle

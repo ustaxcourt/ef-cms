@@ -55,7 +55,7 @@ const generateSelectedFilterList = filters => {
     filterKey => filters[filterKey],
   );
 
-  orderedFilterMap.map(orderedFilterKey => {
+  orderedFilterMap.forEach(orderedFilterKey => {
     const nameOfFilter = orderedFilterKey.code;
     if (userFilterSelection.indexOf(nameOfFilter) > -1) {
       selectedFilters.push(orderedFilterKey.name);
