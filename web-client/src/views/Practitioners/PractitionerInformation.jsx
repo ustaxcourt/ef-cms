@@ -1,7 +1,9 @@
 import { Button } from '../../ustc-ui/Button/Button';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { OpenPractitionerCaseListPdfModal } from './OpenPractitionerCaseListPdfModal';
+import { PractitionerDetails } from './PractitionerDetails';
 import { SuccessNotification } from '../SuccessNotification';
+import { Tab, Tabs } from '../../ustc-ui/Tabs/Tabs';
 import { connect } from '@cerebral/react';
 import { sequences, state } from 'cerebral';
 import React from 'react';
@@ -41,6 +43,58 @@ export const PractitionerInformation = connect(
         </div>
 
         <div className="grid-container">
+          <div className="grid-row grid-gap">
+            <div className="grid-col-8">
+              <SuccessNotification />
+            </div>
+
+            <div className="grid-col-4">
+              {practitionerDetailHelper.showPrintCaseListLink && (
+                <Button
+                  link
+                  className="push-right margin-bottom-1"
+                  icon="print"
+                  onClick={() => {
+                    gotoPrintPractitionerCasesSequence({
+                      userId: practitionerDetailHelper.userId,
+                    });
+                  }}
+                >
+                  Print case list
+                </Button>
+              )}
+              {practitionerDetailHelper.showEditLink && (
+                <Button
+                  link
+                  className="push-right margin-bottom-1"
+                  href={`/users/edit-practitioner/${practitionerDetailHelper.barNumber}`}
+                  icon="edit"
+                >
+                  Edit
+                </Button>
+              )}
+            </div>
+          </div>
+        </div>
+
+        <section
+          className="usa-section grid-container"
+          id="case-detail-internal"
+        >
+          <Tabs
+            className="classic-horizontal-header3 tab-border"
+            defaultActiveTab="practitioner-details"
+          >
+            <Tab tabName="practitioner-details" title={'Details'}>
+              <PractitionerDetails />
+            </Tab>
+            <Tab tabName="practitioner-documentation" title={'Documentation'}>
+              <div>hi</div>
+            </Tab>
+          </Tabs>
+        </section>
+
+        {/* <div className="grid-container">
           <div className="grid-row grid-gap">
             <div className="grid-col-8">
               <SuccessNotification />
@@ -183,7 +237,6 @@ export const PractitionerInformation = connect(
                           Address
                         </span>
                         <div className="margin-bottom-4">
-                          {/* TODO: use helper (international) */}
                           {practitionerDetailHelper.contact.address1}
                           {practitionerDetailHelper.contact.address2 && (
                             <>
@@ -282,7 +335,7 @@ export const PractitionerInformation = connect(
               </div>
             </div>
           </div>
-        </div>
+        </div> */}
 
         {showModal === 'OpenPractitionerCaseListPdfModal' && (
           <OpenPractitionerCaseListPdfModal />
