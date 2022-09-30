@@ -52,12 +52,12 @@ const generateSelectedFilterList = filters => {
     filterKey => filters[filterKey],
   );
 
-  return orderedFilterMap.map(orderedFilterKey => {
-    const filterCode = orderedFilterKey.code;
-    if (userFilterSelection.indexOf(filterCode) > -1) {
-      return orderedFilterKey.name;
-    }
-  });
+  return orderedFilterMap
+    .filter(orderedFilterKey => {
+      const filterCode = orderedFilterKey.code;
+      return userFilterSelection.indexOf(filterCode) > -1;
+    })
+    .map(filteredKey => filteredKey.name);
 };
 
 module.exports = {
