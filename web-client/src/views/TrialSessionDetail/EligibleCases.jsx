@@ -8,7 +8,8 @@ import classNames from 'classnames';
 
 export const EligibleCases = connect(
   {
-    formattedEligibleCases: state.formattedEligibleCasesHelper,
+    formattedEligibleCases:
+      state.formattedTrialSessionDetailsForFilteredEligibleCases,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
     trialSessionId: state.trialSession.trialSessionId,
     updateQcCompleteForTrialSequence:
@@ -23,7 +24,7 @@ export const EligibleCases = connect(
     return (
       <React.Fragment>
         {trialSessionDetailsHelper.showQcComplete && (
-          <div className="float-right text-semibold margin-top-neg-3 margin-bottom-2">
+          <div className="float-right text-semibold margin-top-neg-3">
             Completed: {trialSessionDetailsHelper.eligibleCaseQcCompleteCount}
           </div>
         )}

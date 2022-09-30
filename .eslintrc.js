@@ -23,6 +23,7 @@ module.exports = {
     'plugin:import/typescript',
     // 'plugin:jsx-a11y/recommended', // todo
   ],
+  ignorePatterns: '**/*_.js',
   overrides: [
     {
       files: [
@@ -45,6 +46,12 @@ module.exports = {
       ],
       rules: {
         'jest/expect-expect': 'off',
+      },
+    },
+    {
+      files: ['**/*.ts', '**/*.tsx'],
+      rules: {
+        'no-undef': 'off',
       },
     },
     {

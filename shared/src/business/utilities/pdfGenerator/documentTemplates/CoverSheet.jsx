@@ -21,6 +21,9 @@ export const CoverSheet = ({
   const reduceMarginTopOnTitle =
     consolidatedCases && consolidatedCases.length > 10;
 
+  const filingOnMultipleConsolidatedCases =
+    consolidatedCases && consolidatedCases.length > 1;
+
   return (
     <div id="document-cover-sheet">
       <div>
@@ -54,7 +57,7 @@ export const CoverSheet = ({
         <div className="border-none" id="caption">
           <div id="caption-title">
             {caseTitle}
-            {consolidatedCases && ' et al.,'}
+            {filingOnMultipleConsolidatedCases && ' ET AL.,'}
           </div>
           <div id="caption-extension">{caseCaptionExtension}</div>
           <div id="caption-v">v.</div>

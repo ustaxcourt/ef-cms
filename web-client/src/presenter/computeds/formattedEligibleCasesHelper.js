@@ -1,4 +1,7 @@
-import { formatCase } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import {
+  formatCase,
+  getSortableDocketNumber,
+} from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { state } from 'cerebral';
 
 const compareTrialSessionEligibleCases =
@@ -21,12 +24,8 @@ const compareTrialSessionEligibleCases =
       (a.highPriority && b.highPriority) ||
       (a.isDocketSuffixHighPriority && b.isDocketSuffixHighPriority)
     ) {
-      let aSortString = applicationContext
-        .getUtilities()
-        .getSortableDocketNumber(a.docketNumber);
-      let bSortString = applicationContext
-        .getUtilities()
-        .getSortableDocketNumber(b.docketNumber);
+      let aSortString = getSortableDocketNumber(a.docketNumber);
+      let bSortString = getSortableDocketNumber(b.docketNumber);
       return aSortString.localeCompare(bSortString);
     } else {
       let aSortString = getEligibleDocketNumberSortString({

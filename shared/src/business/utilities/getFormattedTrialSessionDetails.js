@@ -83,6 +83,8 @@ const getSortableDocketNumber = docketNumber => {
   return `${docketNumberSplit[1]}${docketNumberSplit[0]}`;
 };
 
+exports.getSortableDocketNumber = getSortableDocketNumber;
+
 const getDocketNumberSortString = ({ allCases, theCase }) => {
   const leadCase = allCases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,

@@ -1,6 +1,7 @@
 import { addCourtIssuedDocketEntryHelper } from './computeds/addCourtIssuedDocketEntryHelper';
 import { addCourtIssuedDocketEntryNonstandardHelper } from './computeds/addCourtIssuedDocketEntryNonstandardHelper';
 import { addDocketEntryHelper } from './computeds/addDocketEntryHelper';
+import { addDocketNumbersModalHelper } from './computeds/addDocketNumbersModalHelper';
 import { addToTrialSessionModalHelper } from './computeds/addToTrialSessionModalHelper';
 import { addTrialSessionInformationHelper } from './computeds/TrialSession/addTrialSessionInformationHelper';
 import { advancedDocumentSearchHelper } from './computeds/AdvancedSearch/advancedDocumentSearchHelper';
@@ -58,6 +59,7 @@ import { formattedMessageDetail } from './computeds/formattedMessageDetail';
 import { formattedMessages } from './computeds/formattedMessages';
 import { formattedPendingItems } from './computeds/formattedPendingItems';
 import { formattedTrialSessionDetails } from './computeds/formattedTrialSessionDetails';
+import { formattedTrialSessionDetailsForFilteredEligibleCases } from './computeds/formattedTrialSessionDetailsForFilteredEligibleCases';
 import { formattedTrialSessions } from './computeds/formattedTrialSessions';
 import { formattedWorkQueue } from './computeds/formattedWorkQueue';
 import { getConstants } from '../getConstants';
@@ -118,6 +120,7 @@ const helpers = {
   addCourtIssuedDocketEntryHelper,
   addCourtIssuedDocketEntryNonstandardHelper,
   addDocketEntryHelper,
+  addDocketNumbersModalHelper,
   addToTrialSessionModalHelper,
   addTrialSessionInformationHelper,
   advancedDocumentSearchHelper,
@@ -173,6 +176,7 @@ const helpers = {
   formattedOpenCases,
   formattedPendingItems,
   formattedTrialSessionDetails,
+  formattedTrialSessionDetailsForFilteredEligibleCases,
   formattedTrialSessions,
   formattedWorkQueue,
   getTrialCityName,
