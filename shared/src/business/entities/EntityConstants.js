@@ -305,6 +305,7 @@ const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
+
 const GENERIC_ORDER_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Order',
 ).eventCode;
@@ -477,6 +478,7 @@ const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
 const DOCKET_RECORD_FILTER_OPTIONS = {
   allDocuments: 'All documents',
   exhibits: 'Exhibits',
+  orders: 'Orders',
 };
 
 // TODO: should come from internal or external filing event
