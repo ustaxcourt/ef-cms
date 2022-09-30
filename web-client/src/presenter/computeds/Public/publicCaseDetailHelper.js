@@ -118,14 +118,11 @@ export const publicCaseDetailHelper = (get, applicationContext) => {
       }),
   );
 
-  switch (docketRecordFilter) {
-    case PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders:
-      formattedDocketEntriesOnDocketRecord =
-        formattedDocketEntriesOnDocketRecord.filter(entry =>
-          ORDER_EVENT_CODES.includes(entry.eventCode),
-        );
-
-      break;
+  if (docketRecordFilter === PUBLIC_DOCKET_RECORD_FILTER_OPTIONS.orders) {
+    formattedDocketEntriesOnDocketRecord =
+      formattedDocketEntriesOnDocketRecord.filter(entry =>
+        ORDER_EVENT_CODES.includes(entry.eventCode),
+      );
   }
 
   const formattedCaseDetail = formatCaseDetail(publicCase);
