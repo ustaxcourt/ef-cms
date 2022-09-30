@@ -85,7 +85,7 @@ const getSortableDocketNumber = docketNumber => {
 
 exports.getSortableDocketNumber = getSortableDocketNumber;
 
-const getDocketNumberSortString = ({ allCases, theCase }) => {
+const getDocketNumberSortString = ({ allCases = [], theCase }) => {
   const leadCase = allCases.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
@@ -101,7 +101,7 @@ const getDocketNumberSortString = ({ allCases, theCase }) => {
   )}-${getSortableDocketNumber(theCase.docketNumber)}`;
 };
 
-const compareCasesByDocketNumber =
+const compareCasesByDocketNumberFactory =
   ({ allCases }) =>
   (a, b) => {
     const aSortString = getDocketNumberSortString({
@@ -115,6 +115,13 @@ const compareCasesByDocketNumber =
     return aSortString.localeCompare(bSortString);
   };
 
+const compareCasesByDocketNumber = (a, b) => {
+  const aSortString = getSortableDocketNumber(a.docketNumber);
+  const bSortString = getSortableDocketNumber(b.docketNumber);
+  return aSortString.localeCompare(bSortString);
+};
+
+exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
 exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
 
 exports.formattedTrialSessionDetails = ({
@@ -142,7 +149,7 @@ exports.formattedTrialSessionDetails = ({
         .getUtilities()
         .setConsolidationFlagsForDisplay(caseItem, openCases, true),
     )
-    .sort(compareCasesByDocketNumber({ allCases: openCases }));
+    .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
 
   trialSession.inactiveCases = inactiveCases
     .map(caseItem =>
@@ -151,7 +158,7 @@ exports.formattedTrialSessionDetails = ({
         .setConsolidationFlagsForDisplay(caseItem, inactiveCases, true),
     )
     .sort(
-      compareCasesByDocketNumber({
+      compareCasesByDocketNumberFactory({
         allCases: inactiveCases,
       }),
     );
@@ -163,7 +170,7 @@ exports.formattedTrialSessionDetails = ({
         .setConsolidationFlagsForDisplay(caseItem, allCases, true),
     )
     .sort(
-      compareCasesByDocketNumber({
+      compareCasesByDocketNumberFactory({
         allCases,
         applicationContext,
       }),
