@@ -9,8 +9,7 @@ import classNames from 'classnames';
 export const EligibleCases = connect(
   {
     formattedEligibleCases:
-      state.formattedTrialSessionDetailsForFilteredEligibleCases
-        .formattedEligibleCases,
+      state.formattedTrialSessionDetailsForFilteredEligibleCases,
     formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
     trialSessionId: state.trialSession.trialSessionId,
