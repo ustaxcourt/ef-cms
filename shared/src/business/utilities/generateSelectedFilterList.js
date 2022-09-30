@@ -53,8 +53,8 @@ const generateSelectedFilterList = filters => {
   );
 
   return orderedFilterMap.map(orderedFilterKey => {
-    const nameOfFilter = orderedFilterKey.code;
-    if (userFilterSelection.indexOf(nameOfFilter) > -1) {
+    const filterCode = orderedFilterKey.code;
+    if (userFilterSelection.indexOf(filterCode) > -1) {
       return orderedFilterKey.name;
     }
   });
@@ -63,4 +63,5 @@ const generateSelectedFilterList = filters => {
 module.exports = {
   generateCaseStatus,
   generateSelectedFilterList,
+  orderedFilterMap,
 };
