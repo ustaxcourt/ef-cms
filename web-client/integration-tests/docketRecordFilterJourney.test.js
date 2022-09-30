@@ -53,6 +53,8 @@ describe('Docket Record Filter Journey', () => {
       DOCKET_RECORD_FILTER_OPTIONS.allDocuments,
     );
 
+    console.log(cerebralTest.docketNumber, ')0))))nb');
+
     const docketEntries = cerebralTest
       .getState('caseDetail.docketEntries')
       .filter(doc => !doc.isDraft);
