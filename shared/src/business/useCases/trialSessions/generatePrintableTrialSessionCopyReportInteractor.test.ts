@@ -4,28 +4,12 @@ const {
 const {
   generatePrintableTrialSessionCopyReportInteractor,
 } = require('./generatePrintableTrialSessionCopyReportInteractor');
+const { MOCK_TRIAL_REGULAR } = require('../../../test/mockTrial');
 const { ROLES } = require('../../entities/EntityConstants');
 
 describe('generatePrintableTrialSessionCopyReportInteractor', () => {
   let mockUser;
   let mockTrialSession;
-
-  const TRIAL_SESSION = {
-    caseOrder: [],
-    city: 'Hartford',
-    courtReporter: 'Test Court Reporter',
-    irsCalendarAdministrator: 'Test Calendar Admin',
-    isCalendared: false,
-    judge: { name: 'Test Judge' },
-    postalCode: '12345',
-    startDate: '2019-11-25T15:00:00.000Z',
-    startTime: '10:00',
-    state: 'CT',
-    term: 'Fall',
-    termYear: '2019',
-    trialClerk: { name: 'Test Trial Clerk' },
-    trialLocation: 'Hartford, Connecticut',
-  };
 
   beforeAll(() => {
     applicationContext.getStorageClient.mockReturnValue({
@@ -45,7 +29,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
 
     applicationContext.getCurrentUser.mockImplementation(() => mockUser);
 
-    mockTrialSession = TRIAL_SESSION;
+    mockTrialSession = MOCK_TRIAL_REGULAR;
   });
 
   afterEach(() => {
@@ -69,7 +53,6 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
 
   it('calls the document generator function to generate a Trial Session Working Copy PDF', async () => {
     const interactorProps = {
-      caseNotesFlag: true,
       filters: {
         aBasisReached: true,
         continued: true,
@@ -85,6 +68,7 @@ describe('generatePrintableTrialSessionCopyReportInteractor', () => {
       formattedCases: [{ someprop: 'value of some prop' }],
       formattedTrialSession: mockTrialSession,
       sessionNotes: 'session notes',
+      showCaseNotes: true,
     };
     await generatePrintableTrialSessionCopyReportInteractor(
       applicationContext,

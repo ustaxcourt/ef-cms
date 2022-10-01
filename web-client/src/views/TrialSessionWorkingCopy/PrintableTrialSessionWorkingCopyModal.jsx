@@ -7,14 +7,14 @@ import React from 'react';
 export const PrintableTrialSessionWorkingCopyModal = connect(
   {
     cancelSequence: sequences.clearModalSequence,
-    caseNotesFlag: state.modal.caseNotesFlag,
     confirmSequence: sequences.gotoPrintableTrialSessionWorkingCopySequence,
+    showCaseNotes: state.modal.showCaseNotes,
     updateModalValueSequence: sequences.updateModalValueSequence,
   },
   function PrintableTrialSessionWorkingCopyModal({
     cancelSequence,
-    caseNotesFlag,
     confirmSequence,
+    showCaseNotes,
     updateModalValueSequence,
   }) {
     return (
@@ -38,10 +38,10 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
               <div className="usa-radio usa-radio__inline">
                 <input
                   aria-describedby="irs-verified-notice-radios"
-                  checked={caseNotesFlag === true}
+                  checked={showCaseNotes}
                   className="usa-radio__input"
                   id="caseNotesIncluded-yes"
-                  name="caseNotesFlag"
+                  name="showCaseNotes"
                   type="radio"
                   value={true}
                   onChange={e => {
@@ -62,10 +62,10 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
               <div className="usa-radio usa-radio__inline">
                 <input
                   aria-describedby="irs-verified-notice-radios"
-                  checked={caseNotesFlag === false}
+                  checked={!showCaseNotes}
                   className="usa-radio__input"
                   id="caseNotesIncluded-no"
-                  name="caseNotesFlag"
+                  name="showCaseNotes"
                   type="radio"
                   value={false}
                   onChange={e => {

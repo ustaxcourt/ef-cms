@@ -12,7 +12,6 @@ export const PrintableTrialSessionWorkingCopyPreviewPage = connect(
     gotoTrialSessionWorkingCopySequence:
       sequences.gotoTrialSessionWorkingCopySequence,
     headerTitle: state.screenMetadata.headerTitle,
-    navigateBackSequence: sequences.navigateBackSequence,
     trialSessionId: state.trialSessionId,
   },
   function PrintableTrialSessionWorkingCopyPreviewPage({

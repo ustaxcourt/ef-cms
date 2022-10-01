@@ -3,25 +3,29 @@ import {
   isAuthorized,
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
+
 /**
  * generatePrintableTrialSessionCopyReportInteractor
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
- * @param {string} providers.judge the optional judge filter
- * @param {string} providers.docketNumber the optional docketNumber filter
- * @returns {Array} the url of the document
+ * @param {object} providers.filters the selected trial status filters
+ * @param {array} providers.formattedCases the case data formatted as on the non-printable version
+ * @param {object} providers.formattedTrialSession the trial session data formatted as on the non-printable version
+ * @param {string} providers.sessionNotes the user's session notes if any
+ * @param {boolean} providers.showCaseNotes a flag for whether to show case notes or not
+ * @returns {string} the url of the document
  */
 export const generatePrintableTrialSessionCopyReportInteractor = async (
   applicationContext: IApplicationContext,
   {
-    caseNotesFlag,
     filters,
     formattedCases,
     formattedTrialSession,
     sessionNotes,
+    showCaseNotes,
   }: {
-    caseNotesFlag: boolean;
+    showCaseNotes: boolean;
     filters: string[];
     formattedCases: TCase[];
     formattedTrialSession: TTrialSessionData;
@@ -40,11 +44,11 @@ export const generatePrintableTrialSessionCopyReportInteractor = async (
     .printableWorkingCopySessionList({
       applicationContext,
       data: {
-        caseNotesFlag,
         filters,
         formattedCases,
         formattedTrialSession,
         sessionNotes,
+        showCaseNotes,
       },
     });
 

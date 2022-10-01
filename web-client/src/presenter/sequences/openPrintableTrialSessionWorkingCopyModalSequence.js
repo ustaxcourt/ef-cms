@@ -1,13 +1,10 @@
 import { clearModalStateAction } from '../actions/clearModalStateAction';
-import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
-import { state } from 'cerebral';
 
-const setCaseNotesFlagDefaultAction = ({ store }) => {
-  store.set(state.modal['caseNotesFlag'], true);
-};
+import { setShowCaseNotesDefaultAction } from '../actions/TrialSessionWorkingCopy/setShowCaseNotesDefaultAction';
+import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 
 export const openPrintableTrialSessionWorkingCopyModalSequence = [
   clearModalStateAction,
-  setCaseNotesFlagDefaultAction,
+  setShowCaseNotesDefaultAction,
   setShowModalFactoryAction('PrintableTrialSessionWorkingCopyModal'),
 ];

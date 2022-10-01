@@ -14,15 +14,15 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
   get,
   props,
 }) => {
-  const {
-    caseNotesFlag,
-    filters,
-    formattedCases,
-    formattedTrialSessionDetails,
-    sessionNotes,
-  } = props;
+  const { formattedCases } = props;
 
-  const { caseMetadata } = get(state.trialSessionWorkingCopy);
+  const showCaseNotes = get(state.modal.showCaseNotes);
+
+  const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);
+
+  const { caseMetadata, filters, sessionNotes } = get(
+    state.trialSessionWorkingCopy,
+  );
 
   const formattedCasesDTO = formattedCases.map(formattedCase => {
     const trialStatus =
@@ -51,43 +51,39 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       'MONTH_DAY_YEAR',
     );
 
-  const endDateForAdditionalPageHeaders = () => {
-    return applicationContext
-      .getUtilities()
-      .formatDateString(
-        formattedTrialSessionDetails.estimatedEndDate,
-        'SHORT_MONTH_DAY_YEAR',
-      );
-  };
+  const endDateForAdditionalPageHeaders = applicationContext
+    .getUtilities()
+    .formatDateString(
+      formattedTrialSessionDetails.estimatedEndDate,
+      'SHORT_MONTH_DAY_YEAR',
+    );
 
-  const startDateForAdditionalPageHeaders = () => {
-    return applicationContext
-      .getUtilities()
-      .formatDateString(
-        formattedTrialSessionDetails.startDate,
-        'SHORT_MONTH_DAY_YEAR',
-      );
-  };
+  const startDateForAdditionalPageHeaders = applicationContext
+    .getUtilities()
+    .formatDateString(
+      formattedTrialSessionDetails.startDate,
+      'SHORT_MONTH_DAY_YEAR',
+    );
 
   const formattedTrialSessionDTO = {
     computedStatus: formattedTrialSessionDetails.computedStatus,
-    endDateForAdditionalPageHeaders: endDateForAdditionalPageHeaders(),
+    endDateForAdditionalPageHeaders,
     formattedEstimatedEndDateFull,
     formattedJudge: formattedTrialSessionDetails.formattedJudge,
     formattedStartDateFull: formattedTrialSessionDetails.formattedStartDateFull,
     formattedTerm: formattedTrialSessionDetails.formattedTerm,
-    startDateForAdditionalPageHeaders: startDateForAdditionalPageHeaders(),
+    startDateForAdditionalPageHeaders,
     trialLocation: formattedTrialSessionDetails.trialLocation,
   };
 
   const pdfUrl = await applicationContext
     .getUseCases()
     .generatePrintableTrialSessionCopyReportInteractor(applicationContext, {
-      caseNotesFlag,
       filters,
       formattedCases: formattedCasesDTO,
       formattedTrialSession: formattedTrialSessionDTO,
       sessionNotes,
+      showCaseNotes,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
     });
 
