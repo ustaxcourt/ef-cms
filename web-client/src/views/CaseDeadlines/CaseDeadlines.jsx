@@ -89,7 +89,7 @@ export const CaseDeadlines = connect(
                 </div>
               </div>
               {caseDeadlineReportHelper.showJudgeSelect && (
-                <div className="padding-bottom-2">
+                <div className="padding-bottom-4">
                   <label
                     className="dropdown-label-serif margin-right-3"
                     htmlFor="inline-select"
