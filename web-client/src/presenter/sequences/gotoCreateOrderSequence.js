@@ -1,11 +1,16 @@
 import { clearFormAction } from '../actions/clearFormAction';
 import { clearModalAction } from '../actions/clearModalAction';
 import { convertHtml2PdfSequence } from './convertHtml2PdfSequence';
+import { getConsolidatedCasesByCaseAction } from '../actions/CaseConsolidation/getConsolidatedCasesByCaseAction';
+import { getConstants } from '../../getConstants';
+import { getFeatureFlagValueFactoryAction } from '../actions/getFeatureFlagValueFactoryAction';
 import { hasOrderTypeSelectedAction } from '../actions/CourtIssuedOrder/hasOrderTypeSelectedAction';
 import { isLoggedInAction } from '../actions/isLoggedInAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openCreateOrderChooseTypeModalSequence } from './openCreateOrderChooseTypeModalSequence';
+import { parallel } from 'cerebral';
 import { redirectToCognitoAction } from '../actions/redirectToCognitoAction';
+import { setConsolidatedCasesForCaseAction } from '../actions/CaseConsolidation/setConsolidatedCasesForCaseAction';
 import { setCreateOrderModalDataOnFormAction } from '../actions/CourtIssuedOrder/setCreateOrderModalDataOnFormAction';
 import { setCurrentPageAction } from '../actions/setCurrentPageAction';
 import { setIsCreatingOrderAction } from '../actions/setIsCreatingOrderAction';
@@ -34,8 +39,20 @@ export const gotoCreateOrderSequence = [
           stopShowValidationAction,
           clearFormAction,
           setCreateOrderModalDataOnFormAction,
-          convertHtml2PdfSequence,
           setIsCreatingOrderAction,
+          convertHtml2PdfSequence,
+          parallel([
+            [
+              getConsolidatedCasesByCaseAction,
+              setConsolidatedCasesForCaseAction,
+            ],
+            getFeatureFlagValueFactoryAction(
+              getConstants().ALLOWLIST_FEATURE_FLAGS
+                .CONSOLIDATED_CASES_ADD_DOCKET_NUMBERS,
+              true,
+            ),
+          ]),
+
           setCurrentPageAction('CreateOrder'),
         ],
       },
