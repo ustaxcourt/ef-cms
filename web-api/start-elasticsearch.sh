@@ -7,7 +7,11 @@
 if [ -f /.dockerenv ]; then
   ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.2-linux-x86_64.tar.gz"
 else
-  ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.2-darwin-x86_64.tar.gz"
+  if [[ $(uname -m) == 'arm64' ]]; then
+    ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.17.6-darwin-aarch64.tar.gz"
+  else
+    ES_DOWNLOAD="https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-7.10.2-darwin-x86_64.tar.gz"
+  fi
 fi
 
 ES_ARCH_RENAMED="elasticsearch.tar.gz"
