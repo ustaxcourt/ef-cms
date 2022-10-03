@@ -24,10 +24,39 @@ describe('Petitions clerk creates case with statistics', () => {
     // select deficiency for case type
 
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+      key: 'hasVerifiedIrsNotice',
+      value: true,
+    });
+
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.deficiency,
     });
 
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+      key: 'statistics.0.year',
+      value: 2000,
+    });
+
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+      key: 'statistics.0.irsDeficiencyAmount',
+      value: 100,
+    });
+
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+      key: 'statistics.0.irsTotalPenalties',
+      value: 100,
+    });
+
+    await cerebralTest.runSequence('showCalculatePenaltiesModalSequence', {
+      statisticIndex: 0,
+      title: 'Calculate Penalties on IRS Notice',
+    });
+
+    expect(cerebralTest.getState('modal.showModal')).toBe(
+      'CalculatePenaltiesModal',
+    );
+    // penalties.0
     // enter year, amount, total penalites
     // click on 'calculate penalties'
     // submit case
