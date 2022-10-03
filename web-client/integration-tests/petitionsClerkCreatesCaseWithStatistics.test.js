@@ -19,10 +19,6 @@ describe('Petitions clerk creates case with statistics', () => {
   petitionsClerkEditsSavedPetition(cerebralTest);
 
   it('should do stuff', async () => {
-    // select yes for irs notice
-
-    // select deficiency for case type
-
     await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
@@ -56,10 +52,21 @@ describe('Petitions clerk creates case with statistics', () => {
     expect(cerebralTest.getState('modal.showModal')).toBe(
       'CalculatePenaltiesModal',
     );
-    // penalties.0
-    // enter year, amount, total penalites
-    // click on 'calculate penalties'
-    // submit case
-    // expect no validation errors
+
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+      key: 'penalties.0',
+      value: '100',
+    });
+
+    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+      key: 'penalties.1',
+      value: '1000',
+    });
+
+    await cerebralTest.runSequence('calculatePenaltiesSequence');
+
+    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+
+    expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
 });
