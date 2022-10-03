@@ -1,4 +1,4 @@
-const client = require('../../dynamodbClientService');
+import * as client from '../../dynamodbClientService';
 
 /**
  * getUserById
