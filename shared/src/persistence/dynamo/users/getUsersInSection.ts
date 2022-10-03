@@ -1,8 +1,12 @@
-const {
-  getRecordsViaMapping,
-} = require('../../dynamo/helpers/getRecordsViaMapping');
+import { getRecordsViaMapping } from '../../dynamo/helpers/getRecordsViaMapping';
 
-exports.getUsersInSection = ({ applicationContext, section }) => {
+export const getUsersInSection = ({
+  applicationContext,
+  section,
+}: {
+  applicationContext: IApplicationContext;
+  section: string;
+}) => {
   return getRecordsViaMapping({
     applicationContext,
     pk: `section|${section}`,

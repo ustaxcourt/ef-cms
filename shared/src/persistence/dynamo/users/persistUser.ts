@@ -1,6 +1,12 @@
-const client = require('../../dynamodbClientService');
+import * as client from '../../dynamodbClientService';
 
-exports.persistUser = async ({ applicationContext, user }) => {
+export const persistUser = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: TUser;
+}) => {
   await client.put({
     Item: {
       ...user,
