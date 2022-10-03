@@ -18,28 +18,28 @@ describe('Petitions clerk creates case with statistics', () => {
   petitionsClerkCreatesNewCaseFromPaper(cerebralTest, fakeFile);
   petitionsClerkEditsSavedPetition(cerebralTest);
 
-  it('should do stuff', async () => {
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+  it('petitions clerk adds statistics with penalties to unserved case and saves for later', async () => {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'hasVerifiedIrsNotice',
       value: true,
     });
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'caseType',
       value: CASE_TYPES_MAP.deficiency,
     });
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statistics.0.year',
       value: 2000,
     });
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statistics.0.irsDeficiencyAmount',
       value: 100,
     });
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'statistics.0.irsTotalPenalties',
       value: 100,
     });
@@ -53,19 +53,19 @@ describe('Petitions clerk creates case with statistics', () => {
       'CalculatePenaltiesModal',
     );
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'penalties.0',
       value: '100',
     });
 
-    await cerebralTest.runSequence('updateStartCaseFormValueSequence', {
+    await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'penalties.1',
       value: '1000',
     });
 
     await cerebralTest.runSequence('calculatePenaltiesSequence');
 
-    await cerebralTest.runSequence('submitPetitionFromPaperSequence');
+    await cerebralTest.runSequence('saveSavedCaseForLaterSequence');
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
   });
