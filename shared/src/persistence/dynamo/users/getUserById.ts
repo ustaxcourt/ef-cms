@@ -6,7 +6,13 @@ const client = require('../../dynamodbClientService');
  * @param {string} userId the id of the user
  * @returns {*} result returned from persistence
  */
-exports.getUserById = ({ applicationContext, userId }) =>
+export const getUserById = ({
+  applicationContext,
+  userId,
+}: {
+  applicationContext: IApplicationContext;
+  userId: string;
+}) =>
   client.get({
     Key: {
       pk: `user|${userId}`,
