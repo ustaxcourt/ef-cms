@@ -38,10 +38,11 @@ npm run deploy:api "${ENV}"
 ./web-api/setup-elasticsearch-index.sh "${ENV}"
 
 # Indexing data
-node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
+npx ts-node ./web-api/reindex-dynamodb-records.js "${DESTINATION_TABLE}"
 
 # Setting up users
-node shared/admin-tools/user/setup-admin.js
+npx ts-node shared/admin-tools/user/setup-admin.js
+# shellcheck disable=SC1091
 . ./shared/admin-tools/user/setup-test-users.sh "${ENV}"
 
 # Setting up Judge users
