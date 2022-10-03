@@ -1,6 +1,12 @@
-const client = require('../../dynamodbClientService');
+import * as client from '../../dynamodbClientService';
 
-exports.updateUser = async ({ applicationContext, user }) => {
+export const updateUser = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: TUser;
+}) => {
   await client.put({
     Item: {
       pk: `user|${user.userId}`,

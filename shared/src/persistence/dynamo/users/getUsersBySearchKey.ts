@@ -1,6 +1,14 @@
-const { getRecordsViaMapping } = require('../helpers/getRecordsViaMapping');
+import { getRecordsViaMapping } from '../helpers/getRecordsViaMapping';
 
-exports.getUsersBySearchKey = ({ applicationContext, searchKey, type }) => {
+export const getUsersBySearchKey = ({
+  applicationContext,
+  searchKey,
+  type,
+}: {
+  applicationContext: IApplicationContext;
+  searchKey: string;
+  type: string;
+}) => {
   return getRecordsViaMapping({
     applicationContext,
     pk: `${type}|${searchKey.toUpperCase()}`,
