@@ -40,6 +40,23 @@ const SectionWorkQueueInProgressRow = React.memo(
               </td>
             </>
           )}
+          <td className="consolidated-case-column">
+            {item.inConsolidatedGroup && (
+              <span
+                className="fa-layers fa-fw"
+                title={item.consolidatedIconTooltipText}
+              >
+                <Icon
+                  aria-label={item.consolidatedIconTooltipText}
+                  className="fa-icon-blue"
+                  icon="copy"
+                />
+                {item.inLeadCase && (
+                  <span className="fa-inverse lead-case-icon-text">L</span>
+                )}
+              </span>
+            )}
+          </td>
           <td className="message-queue-row">
             <CaseLink formattedCase={item} />
           </td>
@@ -129,6 +146,7 @@ export const SectionWorkQueueInProgress = connect(
           <thead>
             <tr>
               {workQueueHelper.showSelectColumn && <th colSpan="2">&nbsp;</th>}
+              <th aria-hidden="true" className="consolidated-case-column"></th>
               <th aria-label="Docket Number">Docket No.</th>
               <th>Filed</th>
               <th>Case Title</th>
@@ -138,16 +156,18 @@ export const SectionWorkQueueInProgress = connect(
               {workQueueHelper.showAssignedToColumn && <th>Assigned To</th>}
             </tr>
           </thead>
-          {formattedWorkQueue.map(item => (
-            <SectionWorkQueueInProgressRow
-              hideFiledByColumn={workQueueHelper.hideFiledByColumn}
-              item={item}
-              key={item.workItemId}
-              selectWorkItemSequence={selectWorkItemSequence}
-              showAssignedToColumn={workQueueHelper.showAssignedToColumn}
-              showSelectColumn={workQueueHelper.showSelectColumn}
-            />
-          ))}
+          {formattedWorkQueue.map(item => {
+            return (
+              <SectionWorkQueueInProgressRow
+                hideFiledByColumn={workQueueHelper.hideFiledByColumn}
+                item={item}
+                key={item.workItemId}
+                selectWorkItemSequence={selectWorkItemSequence}
+                showAssignedToColumn={workQueueHelper.showAssignedToColumn}
+                showSelectColumn={workQueueHelper.showSelectColumn}
+              />
+            );
+          })}
         </table>
         {formattedWorkQueue.length === 0 && <p>There are no documents.</p>}
       </React.Fragment>
