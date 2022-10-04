@@ -38,14 +38,10 @@ export const PrintableWorkingCopySessionList = ({
         <table>
           <thead>
             <tr>
-              <th
-                aria-label="Docket Number"
-                className="padding-left-2px no-wrap"
-                colSpan="4"
-              >
-                Trial Status Filters Selected
+              <th colSpan="4">Trial Status Filters Selected</th>
+              <th className="align-right">
+                Total Shown: {formattedCases.length}
               </th>
-              <th>Total Shown: {formattedCases.length}</th>
             </tr>
           </thead>
           <tbody>
