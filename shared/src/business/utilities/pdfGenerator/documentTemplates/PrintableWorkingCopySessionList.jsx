@@ -117,16 +117,27 @@ export const PrintableWorkingCopySessionList = ({
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan="2"></td>
                     <td colSpan="5">
-                      {formattedCase.calendarNotes &&
-                        `Calendar Notes: ${formattedCase.calendarNotes}`}
+                      {formattedCase.calendarNotes && (
+                        <span>
+                          <span className="text-bold margin-right-1">
+                            Calendar Notes:
+                          </span>
+                          {formattedCase.calendarNotes}
+                        </span>
+                      )}
                     </td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan="2"></td>
                     <td colSpan="5">
-                      {showCaseNotes &&
-                        formattedCase.userNotes &&
-                        `Notes: ${formattedCase.userNotes}`}
+                      {showCaseNotes && formattedCase.userNotes && (
+                        <span>
+                          <span className="text-bold margin-right-1">
+                            Notes:
+                          </span>
+                          {formattedCase.userNotes}
+                        </span>
+                      )}
                     </td>
                   </tr>
                   <tr className="blank-note-row">
