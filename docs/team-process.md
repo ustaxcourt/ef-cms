@@ -121,28 +121,29 @@ Every week we rotate responsibility for updating dependencies. As an open-source
 #### Library Update Steps
 
 1. `npm update`: Update to current minor versions of all libraries. These shouldn't include any breaking changes, but still might, so it's best to verify with smoke tests in AWS.
-
-2. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
-
-3. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the resolutions block in `package.json` to specify version overrides.
+1. `npm outdated`: Informs us of major version updates that we need to update manually. Often there are breaking API changes that require refactoring.
+1. `npm audit`: Informs us of known security vulnerabilities. If transitive dependencies are vulnerable, use the resolutions block in `package.json` to specify version overrides.
 If dependencies have no patch, replace it with an alternative, or wait for the library to be patched.
-
-    NOTE: If any npm packages are updated but the `package-lock.js` file is not updated, increment the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
-
-4. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
+?>    NOTE: If any npm packages are updated but the `package-lock.js` file is not updated, increment the node cache version in the circle config. You can do this by searching within `config.yml` for vX-npm and vX-cypress where X is the current version of the cache key, then increment the version found.
+1. `terraform`: check for a newer version on the [Terraform site](https://www.terraform.io/downloads).
     - Change the version of the `terraform.zip` that we retrieve in `./Dockerfile`
     - Change the version in `scripts/verify-terraform-version.sh`
     - Increment the docker image version being used in `.circleci/config.yml` in the `docker: image:` property
     - Publish a docker image tagged with the incremented version number to ECR for both Flexion and USTC accounts
       - `export DESTINATION_TAG=[INSERT NEW DOCKER IMAGE VERSION] && npm run deploy:ci-image`
     - Deploy as normal
-
-5. `docker`: [docker cypress/base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
+1. `docker`: [docker cypress/base image](https://hub.docker.com/r/cypress/base/tags?page=1&name=14.) if an update is available for the current node version the project is using.
 
     See [here](ci-cd.md#docker) for the documentation to create and push the updated docker container for use in CircleCI.
-
-6. Check through the list of caveats to see if any of the documented issues have been resolved.
-7. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
+1. PDF Testing
+   1. Check `./Dockerfile-pdf-testing` for our versions of the following scripts:
+      1. `ghostscript`: check to make sure support has not fallen off; our version should be listed on the [Debian Package Tracker](https://tracker.debian.org/pkg/ghostscript) on the _Versions_ table
+      1. `graphicsmagick`: check to make sure support has not fallen off; our version should be listed on the [Debian Package Tracker](https://tracker.debian.org/pkg/graphicsmagick) on the _Versions_ table
+   1. If support for either package has fallen off, we need to update
+      1. Replace the version in the Dockerfile with one of the listed stable versions
+      1. Verify the PDF's still pass by running the commands listed on `./docs/testing.md` under the _PDF Testing_ heading
+1. Check through the list of caveats to see if any of the documented issues have been resolved
+1. Validate updates by deploying, with a [migration](./additional-resources/blue-green-migration.md#manual-migration-steps), to an experimental environment. This helps us verify that the package updates don't affect the migration workflow.
 
 #### Caveats
 
