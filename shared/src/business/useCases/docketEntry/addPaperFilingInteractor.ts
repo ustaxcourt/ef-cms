@@ -21,6 +21,7 @@ import { pick } from 'lodash';
  *
  * @param {object} applicationContext the application context
  * @param {object} providers the providers object
+ * @param {object} providers.clientConnectionId the client connection Id
  * @param {object} providers.consolidatedGroupDocketNumbers the docket numbers from the consolidated group
  * @param {object} providers.documentMetadata the document metadata
  * @param {boolean} providers.isSavingForLater flag for saving docket entry for later instead of serving it

@@ -26,6 +26,7 @@ const { omit } = require('lodash');
  *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
+ * @param {object} providers.clientConnectionId the client connection Id
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
@@ -35,9 +36,11 @@ export const serveExternallyFiledDocumentInteractor = async (
   applicationContext: IApplicationContext,
   {
     docketEntryId,
+    clientConnectionId,
     docketNumbers,
     subjectCaseDocketNumber,
   }: {
+    clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
     subjectCaseDocketNumber: string;
@@ -194,6 +197,25 @@ export const serveExternallyFiledDocumentInteractor = async (
     document: stampedPdf,
     key: originalSubjectDocketEntry.docketEntryId,
   });
+
+  const successMessage =
+  docketNumbers.length > 1
+    ? 'Document served to selected cases in group. '
+    : 'Document served. ';
+
+await applicationContext.getNotificationGateway().sendNotificationToUser({
+  applicationContext,
+  clientConnectionId,
+  message: {
+    action: 'serve_court_issued_document_complete',
+    alertSuccess: {
+      message: successMessage,
+      overwritable: false,
+    },
+    pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
+  },
+  userId: user.userId,
+});
 
   return serviceResults;
 };
