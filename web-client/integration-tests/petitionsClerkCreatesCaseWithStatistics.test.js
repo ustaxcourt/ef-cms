@@ -29,17 +29,17 @@ describe('Petitions clerk creates case with statistics', () => {
       value: CASE_TYPES_MAP.deficiency,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
       key: 'statistics.0.year',
       value: 2000,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
       key: 'statistics.0.irsDeficiencyAmount',
       value: 100,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateStatisticsFormValueSequence', {
       key: 'statistics.0.irsTotalPenalties',
       value: 100,
     });
@@ -53,12 +53,12 @@ describe('Petitions clerk creates case with statistics', () => {
       'CalculatePenaltiesModal',
     );
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'penalties.0',
       value: 100,
     });
 
-    await cerebralTest.runSequence('updateFormValueSequence', {
+    await cerebralTest.runSequence('updateModalValueSequence', {
       key: 'penalties.1',
       value: 1000,
     });

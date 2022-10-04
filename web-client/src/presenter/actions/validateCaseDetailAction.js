@@ -23,6 +23,7 @@ export const validateCaseDetailAction = ({
   store,
 }) => {
   const { formWithComputedDates } = props;
+  console.log('***formWithComputedDates', formWithComputedDates);
   const { INITIAL_DOCUMENT_TYPES_MAP } = applicationContext.getConstants();
 
   const findDocumentByType = type => {
