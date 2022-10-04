@@ -1,5 +1,5 @@
 import { confirmInitiateServiceModalHelper } from '../../src/presenter/computeds/confirmInitiateServiceModalHelper';
-import { getFormattedDocketEntriesForTest, waitFor } from '../helpers';
+import { getFormattedDocketEntriesForTest, waitForCondition } from '../helpers';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
@@ -47,9 +47,9 @@ export const docketClerkServesOrderWithPaperService = (
       'fileAndServeCourtIssuedDocumentFromDocketEntrySequence',
     );
 
-    await waitFor({
-      booleanExpression: () =>
-        cerebralTest.getState('currentPage') !== 'PrintPaperService',
+    await waitForCondition({
+      booleanExpressionCondition: () =>
+        cerebralTest.getState('currentPage') === 'PrintPaperService',
     });
 
     expect(cerebralTest.getState('currentPage')).toEqual('PrintPaperService');
