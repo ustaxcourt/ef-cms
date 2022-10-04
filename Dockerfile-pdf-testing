@@ -1,4 +1,4 @@
-FROM cypress/base:14.19.0
+FROM cypress/base:16.17.1
 
 WORKDIR /home/app
 
@@ -7,7 +7,17 @@ RUN sed -i '/deb http:\/\/deb.debian.org\/debian stretch-backports main/d' /etc/
 RUN apt-get -o Acquire::Check-Valid-Until=false update
 
 RUN apt-get install -y \
-  graphicsmagick=1.4+really1.3.35-1~deb10u1
+  libgconf-2-4 \
+  libatk1.0-0 \
+  libatk-bridge2.0-0 \
+  libgdk-pixbuf2.0-0 \
+  libgtk-3-0 \
+  libgbm-dev \
+  libnss3-dev \
+  libxss-dev
+
+RUN apt-get install -y \
+  graphicsmagick=1.4+really1.3.36+hg16481-2
 
 COPY . /home/app/efcms
 
