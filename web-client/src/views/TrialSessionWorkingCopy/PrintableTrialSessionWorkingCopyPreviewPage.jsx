@@ -11,17 +11,15 @@ export const PrintableTrialSessionWorkingCopyPreviewPage = connect(
   {
     gotoTrialSessionWorkingCopySequence:
       sequences.gotoTrialSessionWorkingCopySequence,
-    headerTitle: state.screenMetadata.headerTitle,
     trialSessionId: state.trialSessionId,
   },
   function PrintableTrialSessionWorkingCopyPreviewPage({
     gotoTrialSessionWorkingCopySequence,
-    headerTitle,
     trialSessionId,
   }) {
     return (
       <>
-        <BigHeader text={headerTitle} />
+        <BigHeader text="Printable Session Copy" />
         <div className="grid-container print-planning-report">
           <WarningNotification />
           <Button
@@ -34,7 +32,7 @@ export const PrintableTrialSessionWorkingCopyPreviewPage = connect(
             }}
           >
             <FontAwesomeIcon icon={['fa', 'arrow-alt-circle-left']} />
-            Back to Trial Session Working Copy
+            Back to Session Copy
           </Button>
           <PdfPreview />
         </div>
