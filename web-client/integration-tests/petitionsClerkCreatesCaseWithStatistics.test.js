@@ -55,12 +55,12 @@ describe('Petitions clerk creates case with statistics', () => {
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'penalties.0',
-      value: '100',
+      value: 100,
     });
 
     await cerebralTest.runSequence('updateFormValueSequence', {
       key: 'penalties.1',
-      value: '1000',
+      value: 1000,
     });
 
     await cerebralTest.runSequence('calculatePenaltiesSequence');
