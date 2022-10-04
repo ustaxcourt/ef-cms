@@ -2,6 +2,10 @@
   font-family: 'Century Schoolbook Std', serif;
   page: narrow;
 
+  .align-right {
+    text-align: right;
+  }
+
   .margin-left-2 {
     margin-left: 1rem;
   }
@@ -57,5 +61,10 @@
     display: flex;
     align-items: flex-start;
     padding: 10px;
+  }
+
+  .filters-header {
+    display: flex;
+    justify-content: space-between;
   }
 }
