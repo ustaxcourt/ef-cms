@@ -19,6 +19,16 @@ RUN apt-get install -y \
 RUN apt-get install -y \
   graphicsmagick=1.4+really1.3.36+hg16481-2
 
+RUN apt-get install -y chromium
+
+RUN apt-get install -y build-essential
+
+RUN apt-get install -y libcairo2-dev libpango1.0-dev libjpeg-dev libgif-dev librsvg2-dev
+
+ENV PUPPETEER_SKIP_CHROMIUM_DOWNLOAD=true \
+    PUPPETEER_SKIP_DOWNLOAD=true \
+    PUPPETEER_EXECUTABLE_PATH=/usr/bin/chromium
+
 COPY . /home/app/efcms
 
 CMD echo "🔥"
