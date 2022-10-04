@@ -7,8 +7,8 @@ export const DollarsInput = props => {
       {...props}
       decimalScale="2"
       fixedDecimalScale={true}
-      isNumericString={true}
       prefix="$"
+      valueIsNumericString={true}
     />
   );
 };
