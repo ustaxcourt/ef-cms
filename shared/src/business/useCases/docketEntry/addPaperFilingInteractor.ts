@@ -30,11 +30,13 @@ import { pick } from 'lodash';
 export const addPaperFilingInteractor = async (
   applicationContext: IApplicationContext,
   {
+    clientConnectionId,
     consolidatedGroupDocketNumbers,
     documentMetadata,
     isSavingForLater,
     primaryDocumentFileId,
   }: {
+    clientConnectionId: string;
     consolidatedGroupDocketNumbers: string[];
     documentMetadata: any;
     isSavingForLater: boolean;
@@ -214,9 +216,10 @@ export const addPaperFilingInteractor = async (
   }
 
   let paperServicePdfUrl;
+  let paperServiceResult;
 
   if (readyForService) {
-    const paperServiceResult = await applicationContext
+    paperServiceResult = await applicationContext
       .getUseCaseHelpers()
       .serveDocumentAndGetPaperServicePdf({
         applicationContext,
@@ -228,6 +231,25 @@ export const addPaperFilingInteractor = async (
       paperServicePdfUrl = paperServiceResult && paperServiceResult.pdfUrl;
     }
   }
+
+  const successMessage =
+    consolidatedGroupDocketNumbers.length > 1
+      ? 'Document served to selected cases in group. '
+      : 'Document served. ';
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_court_issued_document_complete',
+      alertSuccess: {
+        message: successMessage,
+        overwritable: false,
+      },
+      pdfUrl: paperServiceResult ? paperServiceResult.pdfUrl : undefined,
+    },
+    userId: user.userId,
+  });
 
   return { caseDetail: caseEntityToUpdate.toRawObject(), paperServicePdfUrl };
 };

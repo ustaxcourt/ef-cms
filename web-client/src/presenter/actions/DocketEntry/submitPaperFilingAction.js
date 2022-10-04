@@ -65,6 +65,7 @@ export const submitPaperFilingAction = async ({
   }
 
   let paperServicePdfUrl;
+  const clientConnectionId = get(state.clientConnectionId);
 
   if (isEditingDocketEntry) {
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
@@ -78,6 +79,7 @@ export const submitPaperFilingAction = async ({
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
       .getUseCases()
       .addPaperFilingInteractor(applicationContext, {
+        clientConnectionId,
         consolidatedGroupDocketNumbers: docketNumbers,
         documentMetadata,
         isSavingForLater,

@@ -84,12 +84,8 @@ export const socketRouter = (app, onMessageCallbackFn) => {
         });
         break;
       case 'file_and_serve_court_issued_document_complete':
-        await app.getSequence('serveCourtIssuedDocumentCompleteSequence')({
-          ...message,
-        });
-        break;
-      case 'serve_court_issued_document_complete':
-        await app.getSequence('serveCourtIssuedDocumentCompleteSequence')({
+      case 'serve_court_issued_document_complete': //todo: update this name to more generic since paper filing also
+        await app.getSequence('serveDocumentCompleteSequence')({
           ...message,
         });
         break;
