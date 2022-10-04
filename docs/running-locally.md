@@ -27,7 +27,7 @@ Because of this, you will need to make sure you node and npm installed locked to
     - Node v14.19.0
     - npm v6.14.16
 
-As of 03/17/22, AWS Lambda only supports up to [`nodejs14.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
+As of May 2022, AWS Lambda only supports up to [`nodejs16.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
 ### Java 11+ 
 
