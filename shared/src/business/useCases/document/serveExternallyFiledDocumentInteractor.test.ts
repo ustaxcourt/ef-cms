@@ -19,6 +19,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   const DOCKET_NUMBER = '101-20';
   const DOCKET_ENTRY_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
   const mockNumberOfPages = 999;
+  const clientConnectionId = '987654';
 
   beforeAll(() => {
     const PDF_MOCK_BUFFER = 'Hello World';
@@ -112,6 +113,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId: '',
         docketNumbers: [''],
         subjectCaseDocketNumber: '',
@@ -121,6 +123,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
   it('should update the document with a servedAt date', async () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumbers: [DOCKET_NUMBER],
       subjectCaseDocketNumber: DOCKET_NUMBER,
@@ -142,6 +145,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
   it('should add a coversheet to the document with the docket entry index passed in', async () => {
     await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: DOCKET_ENTRY_ID,
       docketNumbers: [DOCKET_NUMBER],
       subjectCaseDocketNumber: DOCKET_NUMBER,
@@ -160,6 +164,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     const result = await serveExternallyFiledDocumentInteractor(
       applicationContext,
       {
+        clientConnectionId,
         docketEntryId: DOCKET_ENTRY_ID,
         docketNumbers: [DOCKET_NUMBER],
         subjectCaseDocketNumber: DOCKET_NUMBER,
@@ -214,6 +219,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ];
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
       docketNumbers: [DOCKET_NUMBER],
       subjectCaseDocketNumber: DOCKET_NUMBER,
@@ -275,6 +281,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ];
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
       docketNumbers: [DOCKET_NUMBER],
       subjectCaseDocketNumber: DOCKET_NUMBER,
@@ -293,6 +300,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId: caseRecord.docketEntries[0].docketEntryId,
         docketNumbers: [caseRecord.docketNumber],
         subjectCaseDocketNumber: DOCKET_NUMBER,
@@ -308,6 +316,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     const { docketEntryId } = caseRecord.docketEntries[0];
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId,
       docketNumbers: [caseRecord.docketNumber],
       subjectCaseDocketNumber: DOCKET_NUMBER,
@@ -345,6 +354,46 @@ describe('serveExternallyFiledDocumentInteractor', () => {
 
     await expect(
       serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId,
+        docketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        subjectCaseDocketNumber: DOCKET_NUMBER,
+      }),
+    ).rejects.toThrow('whoops, that is an error!');
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: true,
+    });
+
+    expect(
+      applicationContext.getPersistenceGateway()
+        .updateDocketEntryPendingServiceStatus,
+    ).toHaveBeenCalledWith({
+      applicationContext,
+      docketEntryId,
+      docketNumber: caseRecord.docketNumber,
+      status: false,
+    });
+  });
+
+  it('should send a serve_court_issued_document_complete notification with a success message', async () => {
+    const { docketEntryId } = caseRecord.docketEntries[0];
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
+        new Error('whoops, that is an error!'),
+      );
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId,
         docketEntryId,
         docketNumbers: [caseRecord.docketNumber],
         subjectCaseDocketNumber: DOCKET_NUMBER,

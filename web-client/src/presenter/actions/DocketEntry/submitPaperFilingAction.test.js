@@ -5,6 +5,7 @@ import { submitPaperFilingAction } from './submitPaperFilingAction';
 
 describe('submitPaperFilingAction', () => {
   const docketNumbers = ['123-45'];
+  const clientConnectionId = '999999999';
   let caseDetail;
 
   beforeAll(() => {
@@ -31,6 +32,7 @@ describe('submitPaperFilingAction', () => {
       },
       state: {
         caseDetail,
+        clientConnectionId,
         document: '123-456-789-abc',
         form: {
           primaryDocumentFile: {},
@@ -76,6 +78,7 @@ describe('submitPaperFilingAction', () => {
       },
       state: {
         caseDetail,
+        clientConnectionId,
         document: '123-456-789-abc',
         form: {
           primaryDocumentFile: {},
@@ -96,6 +99,7 @@ describe('submitPaperFilingAction', () => {
         presenter,
       },
       props: {
+        clientConnectionId,
         docketNumbers,
         isSavingForLater: true,
         primaryDocumentFileId: 'document-id-123',
@@ -144,6 +148,7 @@ describe('submitPaperFilingAction', () => {
       },
       state: {
         caseDetail,
+        clientConnectionId,
         document: '123-456-789-abc',
         form: {},
       },
@@ -155,6 +160,10 @@ describe('submitPaperFilingAction', () => {
     expect(
       applicationContext.getUseCases().addPaperFilingInteractor,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addPaperFilingInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({ clientConnectionId });
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
     ).not.toHaveBeenCalled();
