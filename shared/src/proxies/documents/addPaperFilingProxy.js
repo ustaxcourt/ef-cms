@@ -16,6 +16,7 @@ const { post } = require('../requests');
 exports.addPaperFilingInteractor = (
   applicationContext,
   {
+    clientConnectionId,
     consolidatedGroupDocketNumbers,
     documentMetadata,
     isSavingForLater,
@@ -26,6 +27,7 @@ exports.addPaperFilingInteractor = (
   return post({
     applicationContext,
     body: {
+      clientConnectionId,
       consolidatedGroupDocketNumbers,
       documentMetadata,
       isSavingForLater,
