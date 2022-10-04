@@ -10,8 +10,8 @@ exports.serveExternallyFiledDocumentLambda = event =>
   genericHandler(event, async ({ applicationContext }) => {
     return await applicationContext
       .getUseCases()
-      .serveExternallyFiledDocumentInteractor(
-        applicationContext,
-        event.pathParameters,
-      );
+      .serveExternallyFiledDocumentInteractor(applicationContext, {
+        docketNumbers: JSON.parse(event.body),
+        ...event.pathParameters,
+      });
   });

@@ -3,7 +3,7 @@ const COURT_ISSUED_EVENT_CODES = require('../../tools/courtIssuedEventCodes.json
 const deepFreeze = require('deep-freeze');
 const DOCUMENT_EXTERNAL_CATEGORIES_MAP = require('../../tools/externalFilingEvents.json');
 const DOCUMENT_INTERNAL_CATEGORIES_MAP = require('../../tools/internalFilingEvents.json');
-const { flatten, sortBy, union, uniq, without } = require('lodash');
+const { flatten, omit, sortBy, union, uniq, without } = require('lodash');
 const { formatNow, FORMATS } = require('../utilities/DateHandler');
 
 // if repeatedly using the same rules to validate how an input should be formatted, capture it here.
@@ -305,6 +305,7 @@ const ADVANCED_SEARCH_OPINION_TYPES_LIST = [
 const ORDER_EVENT_CODES = COURT_ISSUED_EVENT_CODES.filter(
   d => d.isOrder && d.eventCode !== BENCH_OPINION_EVENT_CODE,
 ).map(pickEventCode);
+
 const GENERIC_ORDER_EVENT_CODE = COURT_ISSUED_EVENT_CODES.find(
   d => d.documentType === 'Order',
 ).eventCode;
@@ -333,6 +334,7 @@ const DOCUMENT_INTERNAL_CATEGORIES = Object.keys(
 );
 const COURT_ISSUED_EVENT_CODES_REQUIRING_COVERSHEET =
   COURT_ISSUED_EVENT_CODES.filter(d => d.requiresCoversheet).map(pickEventCode);
+
 const EVENT_CODES_REQUIRING_SIGNATURE = COURT_ISSUED_EVENT_CODES.filter(
   d => d.requiresSignature,
 ).map(pickEventCode);
@@ -435,6 +437,18 @@ const TRACKED_DOCUMENT_TYPES = {
   },
 };
 
+const SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+])
+  .filter(internalEvent => internalEvent.caseDecision)
+  .map(x => x.eventCode);
+
+const MULTI_DOCKET_FILING_EVENT_CODES = flatten([
+  ...Object.values(DOCUMENT_INTERNAL_CATEGORIES_MAP),
+])
+  .filter(internalEvent => !internalEvent.caseDecision)
+  .map(x => x.eventCode);
+
 const STAMPED_DOCUMENTS_ALLOWLIST = uniq(
   [...EXTERNAL_DOCUMENTS_ARRAY, ...INTERNAL_DOCUMENTS_ARRAY]
     .filter(doc => doc.allowStamp)
@@ -464,7 +478,12 @@ const TRACKED_DOCUMENT_TYPES_EVENT_CODES = union(
 const DOCKET_RECORD_FILTER_OPTIONS = {
   allDocuments: 'All documents',
   exhibits: 'Exhibits',
+  orders: 'Orders',
 };
+
+const PUBLIC_DOCKET_RECORD_FILTER_OPTIONS = omit(DOCKET_RECORD_FILTER_OPTIONS, [
+  'exhibits',
+]);
 
 // TODO: should come from internal or external filing event
 const INITIAL_DOCUMENT_TYPES = {
@@ -1373,6 +1392,7 @@ module.exports = deepFreeze({
   DOCKET_NUMBER_MATCHER,
   DOCKET_NUMBER_SUFFIXES,
   DOCKET_RECORD_FILTER_OPTIONS,
+  PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
   DOCKET_SECTION,
   EXTERNAL_DOCUMENTS_ARRAY,
   DOCUMENT_EXTERNAL_CATEGORIES,
@@ -1443,6 +1463,7 @@ module.exports = deepFreeze({
   SESSION_TERMS,
   SESSION_TYPES,
   SIGNED_DOCUMENT_TYPES,
+  SINGLE_DOCKET_RECORD_ONLY_EVENT_CODES,
   STATE_NOT_AVAILABLE,
   STATUS_TYPES_MANUAL_UPDATE,
   STATUS_TYPES_WITH_ASSOCIATED_JUDGE,
@@ -1453,6 +1474,7 @@ module.exports = deepFreeze({
   TODAYS_ORDERS_SORT_DEFAULT,
   TODAYS_ORDERS_SORTS,
   TRACKED_DOCUMENT_TYPES_EVENT_CODES,
+  MULTI_DOCKET_FILING_EVENT_CODES,
   TRANSCRIPT_EVENT_CODE,
   CORRECTED_TRANSCRIPT_EVENT_CODE,
   REVISED_TRANSCRIPT_EVENT_CODE,
