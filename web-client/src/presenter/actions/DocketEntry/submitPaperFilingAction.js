@@ -21,6 +21,7 @@ export const submitPaperFilingAction = async ({
   const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
   const generateCoversheet = isFileAttached && !isSavingForLater;
   const isEditingDocketEntry = get(state.isEditingDocketEntry);
+  const clientConnectionId = get(state.clientConnectionId);
   const { docketNumbers } = props;
 
   let caseDetail;
@@ -65,7 +66,6 @@ export const submitPaperFilingAction = async ({
   }
 
   let paperServicePdfUrl;
-  const clientConnectionId = get(state.clientConnectionId);
 
   if (isEditingDocketEntry) {
     ({ caseDetail, paperServicePdfUrl } = await applicationContext
