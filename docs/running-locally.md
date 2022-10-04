@@ -16,7 +16,7 @@ After installing git, be sure to clone the project locally:
 `git clone git@github.com:flexion/ef-cms.git`
 
 
-### Node v14.19.0
+### Node v16.17.1
 
 All of our application code is built using Javascript: 
 
@@ -24,8 +24,8 @@ All of our application code is built using Javascript:
 - Our backend APIs are written using express and a serverless wrapper.
 
 Because of this, you will need to make sure you node and npm installed locked to the following versions:
-    - Node v14.19.0
-    - npm v6.14.16
+    - Node v16.17.1
+    - npm v8.15.0
 
 As of May 2022, AWS Lambda only supports up to [`nodejs16.x`](https://docs.aws.amazon.com/lambda/latest/dg/lambda-runtimes.html)
 
