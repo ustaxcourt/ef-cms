@@ -7,8 +7,10 @@ export const DollarsInput = props => {
       {...props}
       decimalScale="2"
       fixedDecimalScale={true}
-      isNumericString={true}
       prefix="$"
+      thousandSeparator=","
+      thousandsGroupStyle="thousand"
+      valueIsNumericString={true}
     />
   );
 };
