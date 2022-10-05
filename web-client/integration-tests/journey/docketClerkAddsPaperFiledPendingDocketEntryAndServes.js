@@ -2,11 +2,14 @@ import {
   DOCUMENT_RELATIONSHIPS,
   OBJECTIONS_OPTIONS_MAP,
 } from '../../../shared/src/business/entities/EntityConstants';
-import { contactPrimaryFromState, waitForCondition } from '../helpers';
+import {
+  contactPrimaryFromState,
+  fakeFile,
+  waitForCondition,
+} from '../helpers';
 
 export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
   cerebralTest,
-  fakeFile,
   eventCode,
 ) => {
   return it('docket clerk adds paper filed docket entry and serves', async () => {
@@ -58,7 +61,7 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
       },
     ];
 
-    for (const item in pendingDocketEntryInfo) {
+    for (const item of pendingDocketEntryInfo) {
       await cerebralTest.runSequence(
         'updateDocketEntryFormValueSequence',
         item,
@@ -75,17 +78,13 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
       },
     );
 
-    await cerebralTest.runSequence('updateDocketEntryFormValueSequence');
-
     await cerebralTest.runSequence('submitPaperFilingSequence');
-
-    // wait for  condition paper servcie???
 
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await waitForCondition({
       booleanExpressionCondition: () =>
-        cerebralTest.getState('currentPage') === 'CaseDetail',
+        cerebralTest.getState('currentPage') === 'CaseDetailInternal',
     });
 
     expect(cerebralTest.getState('alertSuccess').message).toEqual(
