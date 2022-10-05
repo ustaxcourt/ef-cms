@@ -1,11 +1,15 @@
-const {
+import {
   ADC_SECTION,
   DOCKET_SECTION,
   PETITIONS_SECTION,
-} = require('../../../business/entities/EntityConstants');
-const { getUsersInSection } = require('./getUsersInSection');
+} from '../../../business/entities/EntityConstants';
+import { getUsersInSection } from './getUsersInSection';
 
-exports.getInternalUsers = async ({ applicationContext }) => {
+export const getInternalUsers = async ({
+  applicationContext,
+}: {
+  applicationContext: IApplicationContext;
+}) => {
   const users = [
     ...(await getUsersInSection({
       applicationContext,
