@@ -580,7 +580,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       message: expect.objectContaining({
         action: 'serve_document_complete',
         alertSuccess: {
-          message: 'Document served. ',
+          message: 'Your entry has been added to the docket record.',
           overwritable: false,
         },
         pdfUrl: mockPdfUrl,
