@@ -20,6 +20,8 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   const DOCKET_ENTRY_ID = '225d5474-b02b-4137-a78e-2043f7a0f806';
   const mockNumberOfPages = 999;
   const clientConnectionId = '987654';
+  const mockPdfUrl = 'ayo.seankingston.com';
+  let docketClerkUser;
 
   beforeAll(() => {
     const PDF_MOCK_BUFFER = 'Hello World';
@@ -36,9 +38,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         Body: testPdfDoc,
       }),
     });
+
     applicationContext
       .getStorageClient()
       .upload.mockImplementation((params, resolve) => resolve());
+
     applicationContext.getChromiumBrowser().newPage.mockReturnValue({
       addStyleTag: () => {},
       pdf: () => {
@@ -46,11 +50,16 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       },
       setContent: () => {},
     });
+
     applicationContext
       .getPersistenceGateway()
       .getDownloadPolicyUrl.mockReturnValue({
         url: 'www.example.com',
       });
+
+    applicationContext
+      .getNotificationGateway()
+      .sendNotificationToUser.mockReturnValue(null);
   });
 
   beforeEach(() => {
@@ -91,21 +100,34 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
     };
 
+    const mockUserId = 'c54ba5a9-b37b-479d-9201-067ec6e335bb';
+    docketClerkUser = {
+      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+      role: ROLES.docketClerk,
+      section: DOCKET_SECTION,
+      userId: mockUserId,
+    };
+
     applicationContext.getCurrentUser.mockReturnValue({
       name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
       role: ROLES.docketClerk,
       section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+      userId: mockUserId,
     });
-    applicationContext.getPersistenceGateway().getUserById.mockReturnValue({
-      name: 'Emmett Lathrop "Doc" Brown, Ph.D.',
-      role: ROLES.docketClerk,
-      section: DOCKET_SECTION,
-      userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
-    });
+
+    applicationContext
+      .getPersistenceGateway()
+      .getUserById.mockReturnValue(docketClerkUser);
+
     applicationContext
       .getPersistenceGateway()
       .getCaseByDocketNumber.mockReturnValue(caseRecord);
+
+    applicationContext
+      .getUseCaseHelpers()
+      .serveDocumentAndGetPaperServicePdf.mockReturnValue({
+        pdfUrl: mockPdfUrl,
+      });
   });
 
   it('should throw an error if not authorized', async () => {
@@ -385,39 +407,28 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   it('should send a serve_court_issued_document_complete notification with a success message', async () => {
     const { docketEntryId } = caseRecord.docketEntries[0];
 
-    applicationContext
-      .getUseCaseHelpers()
-      .serveDocumentAndGetPaperServicePdf.mockRejectedValueOnce(
-        new Error('whoops, that is an error!'),
-      );
-
-    await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        subjectCaseDocketNumber: DOCKET_NUMBER,
-      }),
-    ).rejects.toThrow('whoops, that is an error!');
-
-    expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
       docketEntryId,
-      docketNumber: caseRecord.docketNumber,
-      status: true,
+      docketNumbers: [caseRecord.docketNumber],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
     expect(
-      applicationContext.getPersistenceGateway()
-        .updateDocketEntryPendingServiceStatus,
-    ).toHaveBeenCalledWith({
-      applicationContext,
-      docketEntryId,
-      docketNumber: caseRecord.docketNumber,
-      status: false,
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0],
+    ).toEqual({
+      applicationContext: expect.anything(),
+      clientConnectionId,
+      message: expect.objectContaining({
+        action: 'serve_court_issued_document_complete',
+        alertSuccess: {
+          message: 'Document served. ',
+          overwritable: false,
+        },
+        pdfUrl: mockPdfUrl,
+      }),
+      userId: docketClerkUser.userId,
     });
   });
 });
