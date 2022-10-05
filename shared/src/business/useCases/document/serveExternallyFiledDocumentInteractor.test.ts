@@ -7,6 +7,7 @@ import {
   ROLES,
 } from '../../entities/EntityConstants';
 const {
+  ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
 } = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 import {
@@ -268,9 +269,144 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
   });
 
-  it.only('should update the case with the completed work item when the work item exists', async () => {
+  it('should add a new docket entry to the case when the docketEntry is not found by docketEntryId on the case', async () => {
+    const mockmemberCase = MOCK_CASE;
+    const mockDocketEntryId = '225d5474-b02b-4137-a78e-2043f7a0f805';
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId: mockDocketEntryId,
+      docketNumbers: [DOCKET_NUMBER, mockmemberCase.docketNumber],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
+
+    const memberCaseUpdate =
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
+        .calls[1][0].caseToUpdate;
+    const memberCaseAddedDocketEntry = memberCaseUpdate.docketEntries.find(
+      doc => doc.docketEntryId === mockDocketEntryId,
+    );
+
+    expect(memberCaseAddedDocketEntry).toBeDefined();
+  });
+
+  it('should stamp document with serviceStamp on the docketEntry when the docketEntry is an Order', async () => {
     const mockDocketEntryWithWorkItemId =
       '225d5474-b02b-4137-a78e-2043f7a0f805';
+    const mockServiceStamp = 'Something something';
+
+    caseRecord.docketEntries = [
+      ...caseRecord.docketEntries,
+      {
+        docketEntryId: mockDocketEntryWithWorkItemId,
+        docketNumber: DOCKET_NUMBER,
+        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
+        eventCode: 'O',
+        filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        judge: 'someone',
+        serviceStamp: mockServiceStamp,
+        signedAt: '2019-03-11T21:56:01.625Z',
+        signedByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        signedJudgeName: 'someone',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        workItem: {
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            docketNumber: DOCKET_NUMBER,
+            documentType: GENERIC_ORDER_DOCUMENT_TYPE,
+            entityName: 'DocketEntry',
+            eventCode: 'O',
+            filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          docketNumber: DOCKET_NUMBER,
+          isInitializeCase: true,
+          section: DOCKET_SECTION,
+          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
+        },
+      },
+    ];
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+      docketNumbers: [DOCKET_NUMBER],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
+
+    const { serviceStampText } =
+      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
+        .calls[0][0];
+    expect(serviceStampText).toContain(mockServiceStamp);
+  });
+
+  it('should stamp document with serviceStamp as "Entered and Served" when the docketEntry is one of `ENTERED_AND_SERVED_EVENT_CODES`', async () => {
+    const mockDocketEntryWithWorkItemId =
+      '225d5474-b02b-4137-a78e-2043f7a0f805';
+
+    caseRecord.docketEntries = [
+      ...caseRecord.docketEntries,
+      {
+        docketEntryId: mockDocketEntryWithWorkItemId,
+        docketNumber: DOCKET_NUMBER,
+        documentType: 'Order of Dismissal for Lack of Jurisdiction',
+        eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
+        filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        judge: 'someone',
+        serviceStamp: 'This should not be the service stamp',
+        signedAt: '2019-03-11T21:56:01.625Z',
+        signedByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        signedJudgeName: 'someone',
+        userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        workItem: {
+          docketEntry: {
+            createdAt: '2019-03-11T21:56:01.625Z',
+            docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+            docketNumber: DOCKET_NUMBER,
+            documentType: 'Order of Dismissal for Lack of Jurisdiction',
+            entityName: 'DocketEntry',
+            eventCode: ENTERED_AND_SERVED_EVENT_CODES[0],
+            filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            filingDate: '2019-03-11T21:56:01.625Z',
+            isDraft: false,
+            isMinuteEntry: false,
+            isOnDocketRecord: true,
+            sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+            userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+          },
+          docketNumber: DOCKET_NUMBER,
+          isInitializeCase: true,
+          section: DOCKET_SECTION,
+          sentBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+          workItemId: '4a57f4fe-991f-4d4b-bca4-be2a3f5bb5f8',
+        },
+      },
+    ];
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
+      docketNumbers: [DOCKET_NUMBER],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
+
+    const { serviceStampText } =
+      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
+        .calls[0][0];
+    expect(serviceStampText).toContain('Entered and Served');
+  });
+
+  it('should update the case with the completed work item when the work item exists', async () => {
+    const mockDocketEntryWithWorkItemId =
+      '225d5474-b02b-4137-a78e-2043f7a0f805';
+
     caseRecord.docketEntries = [
       ...caseRecord.docketEntries,
       {
@@ -322,11 +458,6 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         entry => entry.docketEntryId === mockDocketEntryWithWorkItemId,
       ).workItem;
     expect(updatedWorkItem.completedAt).toBeDefined();
-
-    expect(
-      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
-        .calls[0][0],
-    ).toMatchObject({ serviceStampText: '' });
   });
 
   it('should throw an error if the document is already pending service', async () => {
