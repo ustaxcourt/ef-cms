@@ -2,7 +2,6 @@ import { docketClerkAddsPaperFiledPendingDocketEntryAndSavesForLater } from './j
 import { docketClerkAddsPaperFiledPendingDocketEntryAndServes } from './journey/docketClerkAddsPaperFiledPendingDocketEntryAndServes';
 import {
   docketClerkLoadsPendingReportOnChiefJudgeSelection,
-  fakeFile,
   loginAs,
   setupTest,
   uploadPetition,
@@ -31,13 +30,6 @@ describe('docket clerk interacts with pending items', () => {
 
   beforeAll(() => {
     jest.setTimeout(30000);
-    global.window.pdfjsObj = {
-      getData: () => {
-        return new Promise(resolve => {
-          resolve(new Uint8Array(fakeFile));
-        });
-      },
-    };
   });
 
   afterAll(() => {
@@ -163,11 +155,7 @@ describe('docket clerk interacts with pending items', () => {
     );
   });
 
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
-    cerebralTest,
-    fakeFile,
-    'EVID',
-  );
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, 'EVID');
 
   it('docket clerk views a pending report item and confirms the correct receivedAt date format', async () => {
     await docketClerkLoadsPendingReportOnChiefJudgeSelection({
@@ -198,11 +186,7 @@ describe('docket clerk interacts with pending items', () => {
     expect(answerPendingReceivedAtFormatted).toEqual('04/30/2001');
   });
 
-  docketClerkAddsPaperFiledPendingDocketEntryAndServes(
-    cerebralTest,
-    fakeFile,
-    'MOTR',
-  );
+  docketClerkAddsPaperFiledPendingDocketEntryAndServes(cerebralTest, 'MOTR');
 
   it('docket clerk views pending motion to proceed remotely', async () => {
     await docketClerkLoadsPendingReportOnChiefJudgeSelection({
