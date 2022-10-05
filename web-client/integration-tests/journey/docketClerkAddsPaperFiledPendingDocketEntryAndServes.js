@@ -79,6 +79,8 @@ export const docketClerkAddsPaperFiledPendingDocketEntryAndServes = (
 
     await cerebralTest.runSequence('submitPaperFilingSequence');
 
+    // wait for  condition paper servcie???
+
     expect(cerebralTest.getState('validationErrors')).toEqual({});
 
     await waitForCondition({
