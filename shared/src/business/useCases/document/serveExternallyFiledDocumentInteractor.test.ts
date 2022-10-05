@@ -459,22 +459,25 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     ).rejects.toThrow('Docket entry has already been served');
   });
 
-  it('throws an error when the docket entry pending service status cannot be updated', async () => {
+  it('should log and NOT throw an error when the docket entry pending service status cannot be updated', async () => {
     const { docketEntryId } = caseRecord.docketEntries[0];
-   
+    const mockError = 'Something went wrong';
+
     applicationContext
       .getPersistenceGateway()
-      .updateDocketEntryPendingServiceStatus.mockRejectedValue('Bad');
+      .updateDocketEntryPendingServiceStatus.mockReturnValueOnce('')
+      .mockRejectedValue(mockError);
 
-    await expect(
-      serveExternallyFiledDocumentInteractor(applicationContext, {
-        clientConnectionId,
-        docketEntryId,
-        docketNumbers: [caseRecord.docketNumber],
-        subjectCaseDocketNumber: DOCKET_NUMBER,
-      }),
-    ).rejects.toThrow(
-      `Encountered an exception trying to reset isPendingService on Docket Number ${DOCKET_NUMBER}.`,
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId,
+      docketNumbers: [caseRecord.docketNumber],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
+
+    expect(applicationContext.logger.error).toHaveBeenCalledWith(
+      `Encountered an exception trying to reset isPendingService on Docket Number ${caseRecord.docketNumber}.`,
+      mockError,
     );
   });
 });
