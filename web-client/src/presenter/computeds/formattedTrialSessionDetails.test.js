@@ -77,7 +77,6 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
         trialSession: {},
       },
     });
@@ -109,7 +108,6 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
         trialSession: {},
       },
     });
@@ -124,7 +122,6 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
-        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
         trialSession: {},
       },
     });
