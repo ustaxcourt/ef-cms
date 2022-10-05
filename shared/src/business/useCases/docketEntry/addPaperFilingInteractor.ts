@@ -236,7 +236,7 @@ export const addPaperFilingInteractor = async (
   const successMessage =
     consolidatedGroupDocketNumbers.length > 1
       ? 'Document served to selected cases in group. '
-      : 'Document served. ';
+      : 'Your entry has been added to the docket record.';
 
   await applicationContext.getNotificationGateway().sendNotificationToUser({
     applicationContext,
