@@ -1,6 +1,6 @@
+import { ROLES } from '../../entities/EntityConstants';
 import { applicationContext } from '../../test/createTestApplicationContext';
 import { createCourtIssuedOrderPdfFromHtmlInteractor } from './createCourtIssuedOrderPdfFromHtmlInteractor';
-import { ROLES } from '../../entities/EntityConstants';
 
 describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
   const mockPdfUrl = 'www.example.com';
@@ -75,6 +75,24 @@ describe('createCourtIssuedOrderPdfFromHtmlInteractor', () => {
     expect(
       applicationContext.getUseCaseHelpers().saveFileAndGenerateUrl,
     ).toHaveBeenCalledWith(expect.objectContaining({ useTempBucket: true }));
+    expect(result).toEqual(mockPdfUrl);
+  });
+
+  it('calls the generate the order pdf with the defined addedDocketNumbers', async () => {
+    const result = await createCourtIssuedOrderPdfFromHtmlInteractor(
+      applicationContext,
+      {
+        addedDocketNumbers: ['101-20'],
+      } as any,
+    );
+
+    expect(
+      applicationContext.getDocumentGenerators().order,
+    ).toHaveBeenCalledWith(
+      expect.objectContaining({
+        data: expect.objectContaining({ addedDocketNumbers: ['101-20'] }),
+      }),
+    );
     expect(result).toEqual(mockPdfUrl);
   });
 });

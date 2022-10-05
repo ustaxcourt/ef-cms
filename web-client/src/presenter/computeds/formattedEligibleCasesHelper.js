@@ -1,3 +1,4 @@
+import { DOCKET_NUMBER_SUFFIXES } from '../../../../shared/src/business/entities/EntityConstants';
 import { formatCase } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '../../../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from 'cerebral';
@@ -69,12 +70,34 @@ const getFullSortString = (theCase, cases) => {
 exports.formattedEligibleCasesHelper = (get, applicationContext) => {
   const eligibleCases = get(state.trialSession.eligibleCases) ?? [];
 
+  const filter = get(
+    state.screenMetadata.eligibleCasesFilter.hybridSessionFilter,
+  );
+
   const sortedCases = eligibleCases
     .map(caseItem =>
       formatCase({ applicationContext, caseItem, eligibleCases }),
     )
     .sort(compareTrialSessionEligibleCases(eligibleCases))
-    .map(caseItem => setConsolidationFlagsForDisplay(caseItem, eligibleCases));
+    .map(caseItem => setConsolidationFlagsForDisplay(caseItem, eligibleCases))
+    .filter(eligibleCase => {
+      if (filter === 'Small') {
+        return (
+          eligibleCase.docketNumberSuffix === DOCKET_NUMBER_SUFFIXES.SMALL ||
+          eligibleCase.docketNumberSuffix ===
+            DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY
+        );
+      } else if (filter === 'Regular') {
+        return (
+          eligibleCase.docketNumberSuffix === null ||
+          (eligibleCase.docketNumberSuffix !== DOCKET_NUMBER_SUFFIXES.SMALL &&
+            eligibleCase.docketNumberSuffix !==
+              DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY)
+        );
+      } else {
+        return true;
+      }
+    });
 
   return sortedCases;
 };
