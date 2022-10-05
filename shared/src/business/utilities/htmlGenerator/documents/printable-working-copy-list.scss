@@ -2,6 +2,10 @@
   font-family: 'Century Schoolbook Std', serif;
   page: narrow;
 
+  .sortActive {
+    border-bottom: 3px solid black;
+  }
+
   .align-right {
     text-align: right;
   }
