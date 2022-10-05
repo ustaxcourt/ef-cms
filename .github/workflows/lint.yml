@@ -1,6 +1,10 @@
-name: Node.js CI
+name: Node.js CI - lint
 
-on: [pull_request]
+on:
+  pull_request:
+  push:
+    branches:
+      - dependency-updates
 
 jobs:
   Lint:

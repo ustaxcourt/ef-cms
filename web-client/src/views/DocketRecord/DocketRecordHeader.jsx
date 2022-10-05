@@ -79,8 +79,7 @@ export const DocketRecordHeader = connect(
                 aria-describedby="docket-record-filter-label"
                 aria-label="docket record filter"
                 bind="sessionMetadata.docketRecordFilter"
-                className="select-left"
-                id="inline-select"
+                className="select-left inline-select"
                 name="docketRecordFilter"
               >
                 {Object.entries(DOCKET_RECORD_FILTER_OPTIONS).map(
