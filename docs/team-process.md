@@ -161,3 +161,5 @@ Below is a list of dependencies that are locked down due to known issues with se
     - Common troubleshooting: If you see the high severity audit issue warning for  `dicer`, run a full `npm install` rather than a single package update, as this will run the `postinstall` which is required to run the patch that addresses the security issue.
 
 3. `puppeteer` and `puppeteer-core` have a major version update, but they need to stay at the same major version as `chrome-aws-lambda`. If we upgrade `puppeteer`, we see a ` cannot read property 'prototype' of undefined` error. 
+
+4. `axios` has a major update available to ^1.0.0 but there are breaking changes and no associated upgrade guide as of writing this. See [this issue](https://github.com/axios/axios/issues/5014). Seems like as of now, there are still quite a few issues popping up with this major update so it may be worthwhile to wait a few days until those are ironed out.
