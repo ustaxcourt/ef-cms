@@ -25,7 +25,7 @@ import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocket
 
 const savePaperFiling = [
   getDocketNumbersForConsolidatedServiceAction,
-  closeFileUploadStatusModalAction,
+  // closeFileUploadStatusModalAction,
   submitPaperFilingAction,
 ];
 
