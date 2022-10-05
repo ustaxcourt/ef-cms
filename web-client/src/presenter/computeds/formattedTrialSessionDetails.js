@@ -9,7 +9,6 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
       applicationContext,
       trialSession: get(state.trialSession),
     });
-  const permissions = get(state.permissions);
 
   if (formattedTrialSession) {
     const { DATE_FORMATS, SESSION_STATUS_GROUPS, TRIAL_SESSION_SCOPE_TYPES } =
@@ -31,10 +30,6 @@ export const formattedTrialSessionDetails = (get, applicationContext) => {
 
     formattedTrialSession.disableHybridFilter =
       formattedTrialSession.formattedEligibleCases.length === 0;
-
-    formattedTrialSession.showSmallAndRegularQcComplete =
-      formattedTrialSession.isHybridSession &&
-      permissions.TRIAL_SESSION_QC_COMPLETE;
 
     if (formattedTrialSession.startDate) {
       const trialDateFormatted = applicationContext

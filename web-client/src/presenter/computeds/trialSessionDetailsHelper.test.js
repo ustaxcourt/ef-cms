@@ -1,4 +1,5 @@
 import { MOCK_CASE } from '../../../../shared/src/test/mockCase';
+import { SESSION_TYPES } from '../../../../shared/src/business/entities/EntityConstants';
 import { applicationContextForClient as applicationContext } from '../../../../shared/src/business/test/createTestApplicationContext';
 import { runCompute } from 'cerebral/test';
 import { trialSessionDetailsHelper } from './trialSessionDetailsHelper';
@@ -129,5 +130,47 @@ describe('trialSessionDetailsHelper', () => {
       },
     });
     expect(result.showQcComplete).toEqual(false);
+  });
+
+  it('returns showSmallAndRegularQcComplete true if the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType is Hybrid', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [],
+          sessionType: SESSION_TYPES.hybrid,
+        },
+      },
+    });
+    expect(result.showSmallAndRegularQcComplete).toEqual(true);
+  });
+
+  it('returns showSmallAndRegularQcComplete false if the user does not have TRIAL_SESSION_QC_COMPLETE permission and sessionType is Hybrid', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: false },
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [],
+          sessionType: SESSION_TYPES.hybrid,
+        },
+      },
+    });
+    expect(result.showSmallAndRegularQcComplete).toEqual(false);
+  });
+
+  it('returns showSmallAndRegularQcComplete false if the user has TRIAL_SESSION_QC_COMPLETE permission and sessionType is Regular', () => {
+    const result = runCompute(trialSessionDetailsHelper, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {
+          ...TRIAL_SESSION,
+          eligibleCases: [],
+          sessionType: SESSION_TYPES.regular,
+        },
+      },
+    });
+    expect(result.showSmallAndRegularQcComplete).toEqual(false);
   });
 });
