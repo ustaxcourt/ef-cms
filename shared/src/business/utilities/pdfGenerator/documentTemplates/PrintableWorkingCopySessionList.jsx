@@ -48,10 +48,12 @@ export const PrintableWorkingCopySessionList = ({
                 aria-label="Docket Number"
                 className="padding-left-2px no-wrap"
               >
-                Docket No.
+                <span className="sortActive">Docket No.</span>
               </th>
               <th>Case Title</th>
-              <th>Petitioner Counsel</th>
+              <th>
+                <span className="">Petitioner Counsel</span>
+              </th>
               <th>Respondent Counsel</th>
               <th>PTM</th>
               <th colSpan="2">Trial Status</th>
