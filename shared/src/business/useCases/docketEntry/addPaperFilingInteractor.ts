@@ -247,12 +247,10 @@ export const addPaperFilingInteractor = async (
         message: successMessage,
         overwritable: false,
       },
-      pdfUrl: paperServiceResult ? paperServiceResult.pdfUrl : undefined,
+      pdfUrl: paperServicePdfUrl || undefined,
     },
     userId: user.userId,
   });
-
-  return { caseDetail: caseEntityToUpdate.toRawObject(), paperServicePdfUrl };
 };
 
 /**

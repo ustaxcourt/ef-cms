@@ -76,7 +76,7 @@ export const submitPaperFilingAction = async ({
         primaryDocumentFileId: docketEntryId,
       }));
   } else {
-    ({ caseDetail, paperServicePdfUrl } = await applicationContext
+    await applicationContext
       .getUseCases()
       .addPaperFilingInteractor(applicationContext, {
         clientConnectionId,
@@ -84,7 +84,7 @@ export const submitPaperFilingAction = async ({
         documentMetadata,
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,
-      }));
+      });
   }
 
   if (generateCoversheet) {

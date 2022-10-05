@@ -12,11 +12,10 @@ export const uploadDocketEntryFileAction = async ({
   applicationContext,
   get,
   path,
-  props,
   store,
 }) => {
   const { primaryDocumentFile } = get(state.form);
-  const docketEntryId = props.docketEntryId || get(state.docketEntryId);
+  const docketEntryId = get(state.docketEntryId);
 
   const progressFunctions = setupPercentDone(
     {
