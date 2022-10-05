@@ -22,9 +22,9 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
         cancelLabel="Cancel"
         cancelSequence={cancelSequence}
         className="trial-session-planning-modal"
-        confirmLabel="Run Report"
+        confirmLabel="Print"
         confirmSequence={confirmSequence}
-        title="Run Printable Trial Session Copy"
+        title="Print Session Copy"
       >
         <div className="margin-bottom-4">
           <FormGroup>
@@ -33,7 +33,8 @@ export const PrintableTrialSessionWorkingCopyModal = connect(
               id="case-notes-included-radios"
             >
               <legend className="display-block" id="case-notes-included-radios">
-                Do you want to include case notes in the printable session copy?
+                Do you want to include your case notes in the printable session
+                copy?
               </legend>
               <div className="usa-radio usa-radio__inline">
                 <input

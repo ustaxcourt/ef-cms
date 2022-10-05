@@ -1,6 +1,7 @@
 const React = require('react');
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
+import { SelectedFiltersSection } from '../components/SelectedFiltersSection';
 import { SessionNotesSection } from '../components/SessionNotesSection';
 import {
   generateCaseStatus,
@@ -35,35 +36,10 @@ export const PrintableWorkingCopySessionList = ({
           </div>
         </div>
         <SessionNotesSection sessionNotes={sessionNotes} />
-        <table>
-          <thead>
-            <tr>
-              <th
-                aria-label="Docket Number"
-                className="padding-left-2px no-wrap"
-                colSpan="4"
-              >
-                Trial Status Filters Selected
-              </th>
-              <th>Total Shown: {formattedCases.length}</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-bottom-0">
-              <td>{selectedFilters[0] || ''}</td>
-              <td>{selectedFilters[2] || ''}</td>
-              <td>{selectedFilters[4] || ''}</td>
-              <td>{selectedFilters[6] || ''}</td>
-              <td>{selectedFilters[8] || ''}</td>
-            </tr>
-            <tr>
-              <td>{selectedFilters[1] || ''}</td>
-              <td>{selectedFilters[3] || ''}</td>
-              <td>{selectedFilters[5] || ''}</td>
-              <td colSpan="2">{selectedFilters[7] || ''}</td>
-            </tr>
-          </tbody>
-        </table>
+        <SelectedFiltersSection
+          count={formattedCases.length}
+          selectedFilters={selectedFilters}
+        />
         <table>
           <thead>
             <tr>
@@ -117,16 +93,27 @@ export const PrintableWorkingCopySessionList = ({
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan="2"></td>
                     <td colSpan="5">
-                      {formattedCase.calendarNotes &&
-                        `Calendar Notes: ${formattedCase.calendarNotes}`}
+                      {formattedCase.calendarNotes && (
+                        <span>
+                          <span className="text-bold margin-right-1">
+                            Calendar Notes:
+                          </span>
+                          {formattedCase.calendarNotes}
+                        </span>
+                      )}
                     </td>
                   </tr>
                   <tr className="border-bottom-0 border-top-0">
                     <td colSpan="2"></td>
                     <td colSpan="5">
-                      {showCaseNotes &&
-                        formattedCase.userNotes &&
-                        `Notes: ${formattedCase.userNotes}`}
+                      {showCaseNotes && formattedCase.userNotes && (
+                        <span>
+                          <span className="text-bold margin-right-1">
+                            Notes:
+                          </span>
+                          {formattedCase.userNotes}
+                        </span>
+                      )}
                     </td>
                   </tr>
                   <tr className="blank-note-row">
