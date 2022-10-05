@@ -25,7 +25,7 @@ export const EligibleCases = connect(
     return (
       <React.Fragment>
         <div className="grid-row float-right text-semibold margin-bottom-2">
-          {formattedTrialSessionDetails.isHybridSession && (
+          {formattedTrialSessionDetails.showSmallAndRegularQcComplete && (
             <div className="grid-row">
               <div className="margin-right-50 margin-right-mobile">
                 Regular:{' '}

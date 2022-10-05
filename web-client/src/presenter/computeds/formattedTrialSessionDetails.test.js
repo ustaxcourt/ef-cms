@@ -70,6 +70,51 @@ describe('formattedTrialSessionDetails', () => {
     expect(result).toMatchObject({ isHybridSession: false });
   });
 
+  it('should return false for showSmallAndRegularQcComplete when sessionType is set to Hybrid and does not have permission to QC trial session', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: HYBRID_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: false },
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ showSmallAndRegularQcComplete: false });
+  });
+
+  it('should return true for showSmallAndRegularQcComplete when sessionType is set to Hybrid and has permission to QC trial session', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: HYBRID_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ showSmallAndRegularQcComplete: true });
+  });
+
+  it('should return false for showSmallAndRegularQcComplete when sessionType is set to Regular and has permission to QC trial session', () => {
+    mockTrialSession = {
+      ...TRIAL_SESSION,
+      sessionType: REGULAR_SESSION_TYPE,
+    };
+    const result = runCompute(formattedTrialSessionDetails, {
+      state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
+        trialSession: {},
+      },
+    });
+
+    expect(result).toMatchObject({ showSmallAndRegularQcComplete: false });
+  });
+
   it('should be true for isHybridSession when sessionType is set to Hybrid', () => {
     mockTrialSession = {
       ...TRIAL_SESSION,
@@ -77,6 +122,7 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
         trialSession: {},
       },
     });
@@ -108,6 +154,7 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
         trialSession: {},
       },
     });
@@ -122,6 +169,7 @@ describe('formattedTrialSessionDetails', () => {
     };
     const result = runCompute(formattedTrialSessionDetails, {
       state: {
+        permissions: { TRIAL_SESSION_QC_COMPLETE: true },
         trialSession: {},
       },
     });
