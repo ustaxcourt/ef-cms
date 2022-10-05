@@ -21,6 +21,6 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
       - name: NPM Install
-        run: npm ci --no-optional && npm rebuild
+        run: npm ci --legacy-peer-dep --no-optional && npm rebuild
       - name: Shared
         run: npm run test:shared
