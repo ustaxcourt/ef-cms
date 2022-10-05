@@ -1,6 +1,7 @@
 const React = require('react');
 import { PrimaryHeader } from '../components/PrimaryHeader';
 import { ReportsHeader } from '../components/ReportsHeader';
+import { SelectedFiltersSection } from '../components/SelectedFiltersSection';
 import { SessionNotesSection } from '../components/SessionNotesSection';
 import {
   generateCaseStatus,
@@ -35,31 +36,10 @@ export const PrintableWorkingCopySessionList = ({
           </div>
         </div>
         <SessionNotesSection sessionNotes={sessionNotes} />
-        <table>
-          <thead>
-            <tr>
-              <th colSpan="4">Trial Status Filters Selected</th>
-              <th className="align-right">
-                Total Shown: {formattedCases.length}
-              </th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr className="border-bottom-0">
-              <td>{selectedFilters[0] || ''}</td>
-              <td>{selectedFilters[2] || ''}</td>
-              <td>{selectedFilters[4] || ''}</td>
-              <td>{selectedFilters[6] || ''}</td>
-              <td>{selectedFilters[8] || ''}</td>
-            </tr>
-            <tr>
-              <td>{selectedFilters[1] || ''}</td>
-              <td>{selectedFilters[3] || ''}</td>
-              <td>{selectedFilters[5] || ''}</td>
-              <td colSpan="2">{selectedFilters[7] || ''}</td>
-            </tr>
-          </tbody>
-        </table>
+        <SelectedFiltersSection
+          count={formattedCases.length}
+          selectedFilters={selectedFilters}
+        />
         <table>
           <thead>
             <tr>

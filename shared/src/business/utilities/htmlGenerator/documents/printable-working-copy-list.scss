@@ -63,8 +63,27 @@
     padding: 10px;
   }
 
-  .filters-header {
+  .filter {
+    align-self: flex-start;
+  }
+
+  .filters {
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+  }
+
+  .filters-selected-header {
     display: flex;
     justify-content: space-between;
+  }
+
+  .filters-selected-content {
+    display: inline-block;
+  }
+
+  .filters-selected-column {
+    display: inline-block;
+    width: 1.415in;
   }
 }
