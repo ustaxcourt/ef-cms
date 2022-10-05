@@ -6,10 +6,10 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
-const {
+import {
   ENTERED_AND_SERVED_EVENT_CODES,
   GENERIC_ORDER_DOCUMENT_TYPE,
-} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
+} from '../../entities/courtIssuedDocument/CourtIssuedDocumentConstants';
 import {
   applicationContext,
   testPdfDoc,
@@ -561,7 +561,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     });
   });
 
-  it('should send a serve_court_issued_document_complete notification with a success message', async () => {
+  it('should send a serve_document_complete notification with a success message', async () => {
     const { docketEntryId } = caseRecord.docketEntries[0];
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
@@ -578,7 +578,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       applicationContext: expect.anything(),
       clientConnectionId,
       message: expect.objectContaining({
-        action: 'serve_court_issued_document_complete',
+        action: 'serve_document_complete',
         alertSuccess: {
           message: 'Document served. ',
           overwritable: false,

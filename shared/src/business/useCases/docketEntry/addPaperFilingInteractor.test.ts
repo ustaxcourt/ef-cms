@@ -420,7 +420,7 @@ describe('addPaperFilingInteractor', () => {
     });
   });
 
-  it('should send a serve_court_issued_document_complete notification with a success message', async () => {
+  it('should send a serve_document_complete notification with a success message', async () => {
     await addPaperFilingInteractor(applicationContext, {
       clientConnectionId,
       consolidatedGroupDocketNumbers: [mockCase.docketNumber],
@@ -444,7 +444,7 @@ describe('addPaperFilingInteractor', () => {
       applicationContext: expect.anything(),
       clientConnectionId,
       message: expect.objectContaining({
-        action: 'serve_court_issued_document_complete',
+        action: 'serve_document_complete',
         alertSuccess: {
           message: 'Document served. ',
           overwritable: false,
