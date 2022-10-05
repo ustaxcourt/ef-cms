@@ -29,6 +29,10 @@ describe('serveExternallyFiledDocumentInteractor', () => {
   let docketClerkUser;
 
   beforeAll(() => {
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockReturnValue(true);
+
     const PDF_MOCK_BUFFER = 'Hello World';
     applicationContext
       .getUseCaseHelpers()
@@ -270,7 +274,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
   });
 
-  it.only('should add a new docket entry to the case when the docketEntry is not found by docketEntryId on the case', async () => {
+  it('should add a new docket entry to the case when the docketEntry is not found by docketEntryId on the case', async () => {
     const mockMemberCase = MOCK_CASE;
     const { docketEntryId } = caseRecord.docketEntries[0];
 
@@ -610,6 +614,26 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         subjectCaseDocketNumber: DOCKET_NUMBER,
       }),
     ).rejects.toThrow('Docket entry has already been served');
+  });
+
+  it('should should only do things on the subjectcase when the CONSOLIDATED_CASES_PROPAGATE_DOCKET_ENTRIES flag is off', async () => {
+    applicationContext
+      .getUseCases()
+      .getFeatureFlagValueInteractor.mockReturnValue(false);
+
+    const mockMemberCase = MOCK_CASE;
+    const { docketEntryId } = caseRecord.docketEntries[0];
+
+    await serveExternallyFiledDocumentInteractor(applicationContext, {
+      clientConnectionId,
+      docketEntryId,
+      docketNumbers: [DOCKET_NUMBER, mockMemberCase.docketNumber],
+      subjectCaseDocketNumber: DOCKET_NUMBER,
+    });
+
+    expect(
+      applicationContext.getUseCaseHelpers().updateCaseAndAssociations,
+    ).toHaveBeenCalledTimes(1);
   });
 
   it('should log and NOT throw an error when the docket entry pending service status cannot be updated', async () => {
