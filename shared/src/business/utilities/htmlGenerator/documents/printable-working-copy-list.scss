@@ -63,15 +63,21 @@
     padding: 10px;
   }
 
-  .filter {
-    align-self: flex-start;
+  // .filter {
+  //   align-self: flex-start;
+  // }
+
+  .filters-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
   }
 
-  .filters {
-    display: flex;
-    flex-direction: column;
-    row-gap: 8px;
-  }
+  // .filters {
+  //   display: flex;
+  //   flex-direction: column;
+  //   row-gap: 8px;
+  // }
 
   .filters-selected-header {
     display: flex;
@@ -79,11 +85,19 @@
   }
 
   .filters-selected-content {
-    display: inline-block;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
   }
 
   .filters-selected-column {
     display: inline-block;
-    width: 1.415in;
+
+    // width: 1.415in;
   }
+
+  // .filters-selected-row {
+  //   display: inline-block;
+  //   // width: 1.415in;
+  // }
 }
