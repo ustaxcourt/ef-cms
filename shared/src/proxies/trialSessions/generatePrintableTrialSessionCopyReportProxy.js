@@ -16,6 +16,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = (
     formattedTrialSession,
     sessionNotes,
     showCaseNotes,
+    sort,
     trialSessionId,
   },
 ) => {
@@ -27,6 +28,7 @@ exports.generatePrintableTrialSessionCopyReportInteractor = (
       formattedTrialSession,
       sessionNotes,
       showCaseNotes,
+      sort,
     },
     endpoint: `/trial-sessions/${trialSessionId}/printable-working-copy`,
   });
