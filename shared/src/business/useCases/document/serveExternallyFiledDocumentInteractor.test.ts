@@ -16,6 +16,7 @@ import {
 } from '../../test/createTestApplicationContext';
 import { serveExternallyFiledDocumentInteractor } from './serveExternallyFiledDocumentInteractor';
 jest.mock('../addCoverToPdf');
+import { MOCK_CASE } from '../../../test/mockCase';
 import { addCoverToPdf } from '../addCoverToPdf';
 
 describe('serveExternallyFiledDocumentInteractor', () => {
@@ -269,14 +270,23 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
   });
 
-  it('should add a new docket entry to the case when the docketEntry is not found by docketEntryId on the case', async () => {
-    const mockmemberCase = MOCK_CASE;
-    const mockDocketEntryId = '225d5474-b02b-4137-a78e-2043f7a0f805';
+  it.only('should add a new docket entry to the case when the docketEntry is not found by docketEntryId on the case', async () => {
+    const mockMemberCase = MOCK_CASE;
+    const { docketEntryId } = caseRecord.docketEntries[0];
+
+    applicationContext
+      .getPersistenceGateway()
+      .getCaseByDocketNumber.mockReturnValueOnce(caseRecord)
+      .mockReturnValueOnce({
+        ...caseRecord,
+        docketEntries: [],
+        docketNumber: mockMemberCase.docketNumber,
+      });
 
     await serveExternallyFiledDocumentInteractor(applicationContext, {
       clientConnectionId,
-      docketEntryId: mockDocketEntryId,
-      docketNumbers: [DOCKET_NUMBER, mockmemberCase.docketNumber],
+      docketEntryId,
+      docketNumbers: [DOCKET_NUMBER, mockMemberCase.docketNumber],
       subjectCaseDocketNumber: DOCKET_NUMBER,
     });
 
@@ -284,7 +294,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       applicationContext.getUseCaseHelpers().updateCaseAndAssociations.mock
         .calls[1][0].caseToUpdate;
     const memberCaseAddedDocketEntry = memberCaseUpdate.docketEntries.find(
-      doc => doc.docketEntryId === mockDocketEntryId,
+      doc => doc.docketEntryId === docketEntryId,
     );
 
     expect(memberCaseAddedDocketEntry).toBeDefined();
