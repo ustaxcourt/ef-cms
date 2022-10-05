@@ -8,6 +8,7 @@ export const trialSessionDetailsHelper = get => {
   const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
     eligibleCase => eligibleCase.qcCompleteForTrial?.[trialSessionId],
   ).length;
+
   const eligibleSmallCaseQcTotalCompleteCount = (eligibleCases || []).filter(
     eligibleCase =>
       eligibleCase.qcCompleteForTrial?.[trialSessionId] &&
@@ -15,6 +16,7 @@ export const trialSessionDetailsHelper = get => {
         eligibleCase.docketNumberSuffix ===
           DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY),
   ).length;
+
   const eligibleRegularCaseQcTotalCompleteCount = (eligibleCases || []).filter(
     eligibleCase =>
       eligibleCase.qcCompleteForTrial?.[trialSessionId] &&
@@ -23,6 +25,7 @@ export const trialSessionDetailsHelper = get => {
           eligibleCase.docketNumberSuffix !==
             DOCKET_NUMBER_SUFFIXES.SMALL_LIEN_LEVY)),
   ).length;
+
   const showQcComplete = permissions.TRIAL_SESSION_QC_COMPLETE;
 
   return {
