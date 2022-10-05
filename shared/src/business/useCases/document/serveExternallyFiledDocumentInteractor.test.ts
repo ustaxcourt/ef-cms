@@ -6,6 +6,9 @@ import {
   PARTY_TYPES,
   ROLES,
 } from '../../entities/EntityConstants';
+const {
+  GENERIC_ORDER_DOCUMENT_TYPE,
+} = require('../../entities/courtIssuedDocument/CourtIssuedDocumentConstants');
 import {
   applicationContext,
   testPdfDoc,
@@ -265,7 +268,7 @@ describe('serveExternallyFiledDocumentInteractor', () => {
     );
   });
 
-  it('should update the case with the completed work item when the work item exists', async () => {
+  it.only('should update the case with the completed work item when the work item exists', async () => {
     const mockDocketEntryWithWorkItemId =
       '225d5474-b02b-4137-a78e-2043f7a0f805';
     caseRecord.docketEntries = [
@@ -273,18 +276,22 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       {
         docketEntryId: mockDocketEntryWithWorkItemId,
         docketNumber: DOCKET_NUMBER,
-        documentType: 'Administrative Record',
-        eventCode: 'ADMR',
+        documentType: GENERIC_ORDER_DOCUMENT_TYPE,
+        eventCode: 'O',
         filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
+        judge: 'someone',
+        signedAt: '2019-03-11T21:56:01.625Z',
+        signedByUserId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+        signedJudgeName: 'someone',
         userId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
         workItem: {
           docketEntry: {
             createdAt: '2019-03-11T21:56:01.625Z',
             docketEntryId: '225d5474-b02b-4137-a78e-2043f7a0f805',
             docketNumber: DOCKET_NUMBER,
-            documentType: 'Administrative Record',
+            documentType: GENERIC_ORDER_DOCUMENT_TYPE,
             entityName: 'DocketEntry',
-            eventCode: 'ADMR',
+            eventCode: 'O',
             filedBy: 'Emmett Lathrop "Doc" Brown, Ph.D.',
             filingDate: '2019-03-11T21:56:01.625Z',
             isDraft: false,
@@ -315,6 +322,11 @@ describe('serveExternallyFiledDocumentInteractor', () => {
         entry => entry.docketEntryId === mockDocketEntryWithWorkItemId,
       ).workItem;
     expect(updatedWorkItem.completedAt).toBeDefined();
+
+    expect(
+      applicationContext.getUseCaseHelpers().addServedStampToDocument.mock
+        .calls[0][0],
+    ).toMatchObject({ serviceStampText: '' });
   });
 
   it('should throw an error if the document is already pending service', async () => {
