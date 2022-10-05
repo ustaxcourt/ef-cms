@@ -419,4 +419,37 @@ describe('addPaperFilingInteractor', () => {
       ).toHaveBeenCalledTimes(1);
     });
   });
+
+  it('should send a serve_court_issued_document_complete notification with a success message', async () => {
+    await addPaperFilingInteractor(applicationContext, {
+      clientConnectionId,
+      consolidatedGroupDocketNumbers: [mockCase.docketNumber],
+      documentMetadata: {
+        docketNumber: mockCase.docketNumber,
+        documentTitle: 'Memorandum in Support',
+        documentType: 'Memorandum in Support',
+        eventCode: 'MISP',
+        filedBy: 'Test Petitioner',
+        isFileAttached: true,
+        isPaper: true,
+      },
+      isSavingForLater: true,
+      primaryDocumentFileId: 'c54ba5a9-b37b-479d-9201-067ec6e335bb',
+    });
+
+    expect(
+      applicationContext.getNotificationGateway().sendNotificationToUser.mock
+        .calls[0][0],
+    ).toMatchObject({
+      applicationContext: expect.anything(),
+      clientConnectionId,
+      message: expect.objectContaining({
+        action: 'serve_court_issued_document_complete',
+        alertSuccess: {
+          message: 'Document served. ',
+          overwritable: false,
+        },
+      }),
+    });
+  });
 });
