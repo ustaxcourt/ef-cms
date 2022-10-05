@@ -431,4 +431,50 @@ describe('serveExternallyFiledDocumentInteractor', () => {
       userId: docketClerkUser.userId,
     });
   });
+
+  it('throws an error when the docket entry does not exist on the subject case', async () => {
+    const mockNonExistentDocketEntryId = 'd9f645b1-c0b6-4782-a798-091760343573';
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId,
+        docketEntryId: mockNonExistentDocketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        subjectCaseDocketNumber: DOCKET_NUMBER,
+      }),
+    ).rejects.toThrow('Docket entry not found');
+  });
+
+  it('throws an error when the docket entry has already been served', async () => {
+    const { docketEntryId } = caseRecord.docketEntries[0];
+    caseRecord.docketEntries[0].servedAt = '2018-03-01T05:00:00.000Z';
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId,
+        docketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        subjectCaseDocketNumber: DOCKET_NUMBER,
+      }),
+    ).rejects.toThrow('Docket entry has already been served');
+  });
+
+  it('throws an error when the docket entry pending service status cannot be updated', async () => {
+    const { docketEntryId } = caseRecord.docketEntries[0];
+   
+    applicationContext
+      .getPersistenceGateway()
+      .updateDocketEntryPendingServiceStatus.mockRejectedValue('Bad');
+
+    await expect(
+      serveExternallyFiledDocumentInteractor(applicationContext, {
+        clientConnectionId,
+        docketEntryId,
+        docketNumbers: [caseRecord.docketNumber],
+        subjectCaseDocketNumber: DOCKET_NUMBER,
+      }),
+    ).rejects.toThrow(
+      `Encountered an exception trying to reset isPendingService on Docket Number ${DOCKET_NUMBER}.`,
+    );
+  });
 });
