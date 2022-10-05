@@ -8,6 +8,7 @@ import {
   generateSelectedFilterList,
   isMemberCase,
 } from '../../generateSelectedFilterList';
+import classNames from 'classnames';
 
 export const PrintableWorkingCopySessionList = ({
   filters,
@@ -15,6 +16,7 @@ export const PrintableWorkingCopySessionList = ({
   formattedTrialSession,
   sessionNotes,
   showCaseNotes,
+  sort,
 }) => {
   const trialSessionDateRange =
     formattedTrialSession.formattedEstimatedEndDateFull
@@ -48,11 +50,19 @@ export const PrintableWorkingCopySessionList = ({
                 aria-label="Docket Number"
                 className="padding-left-2px no-wrap"
               >
-                <span className="sortActive">Docket No.</span>
+                <span className={classNames(sort === 'docket' && 'sortActive')}>
+                  Docket No.
+                </span>
               </th>
               <th>Case Title</th>
               <th>
-                <span className="">Petitioner Counsel</span>
+                <span
+                  className={classNames(
+                    sort === 'practitioner' && 'sortActive',
+                  )}
+                >
+                  Petitioner Counsel
+                </span>
               </th>
               <th>Respondent Counsel</th>
               <th>PTM</th>

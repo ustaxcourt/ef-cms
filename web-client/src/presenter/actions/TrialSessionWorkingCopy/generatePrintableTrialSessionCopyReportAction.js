@@ -20,7 +20,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
 
   const formattedTrialSessionDetails = get(state.formattedTrialSessionDetails);
 
-  const { caseMetadata, filters, sessionNotes } = get(
+  const { caseMetadata, filters, sessionNotes, sort } = get(
     state.trialSessionWorkingCopy,
   );
 
@@ -84,6 +84,7 @@ export const generatePrintableTrialSessionCopyReportAction = async ({
       formattedTrialSession: formattedTrialSessionDTO,
       sessionNotes,
       showCaseNotes,
+      sort,
       trialSessionId: formattedTrialSessionDetails.trialSessionId,
     });
 

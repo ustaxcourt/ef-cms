@@ -17,5 +17,6 @@ exports.getGeneratePrintableTrialSessionCopyReportLambda = event =>
         formattedTrialSession: body.formattedTrialSession,
         sessionNotes: body.sessionNotes,
         showCaseNotes: body.showCaseNotes,
+        sort: body.sort,
       });
   });
