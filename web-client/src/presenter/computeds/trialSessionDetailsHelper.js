@@ -10,8 +10,6 @@ export const trialSessionDetailsHelper = get => {
   );
   const permissions = get(state.permissions);
 
-  console.log(get(state.trialSession));
-
   const eligibleTotalCaseQcCompleteCount = (eligibleCases || []).filter(
     eligibleCase => eligibleCase.qcCompleteForTrial?.[trialSessionId],
   ).length;
