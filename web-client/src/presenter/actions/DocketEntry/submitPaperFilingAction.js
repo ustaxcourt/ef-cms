@@ -15,14 +15,12 @@ export const submitPaperFilingAction = async ({
   get,
   props,
 }) => {
+  const { docketNumbers, isSavingForLater, primaryDocumentFileId } = props;
   const { docketNumber } = get(state.caseDetail);
-  const { isSavingForLater, primaryDocumentFileId } = props;
   const isFileAttachedNow = get(state.form.primaryDocumentFile);
-  const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
-  const generateCoversheet = isFileAttached && !isSavingForLater;
-  const isEditingDocketEntry = get(state.isEditingDocketEntry);
   const clientConnectionId = get(state.clientConnectionId);
-  const { docketNumbers } = props;
+  const isEditingDocketEntry = get(state.isEditingDocketEntry);
+  const isFileAttached = get(state.form.isFileAttached) || isFileAttachedNow;
 
   let caseDetail;
   let docketEntryId;
@@ -75,6 +73,16 @@ export const submitPaperFilingAction = async ({
         isSavingForLater,
         primaryDocumentFileId: docketEntryId,
       }));
+
+    const generateCoversheet = isFileAttached && !isSavingForLater;
+    if (generateCoversheet) {
+      await applicationContext
+        .getUseCases()
+        .addCoversheetInteractor(applicationContext, {
+          docketEntryId,
+          docketNumber: caseDetail.docketNumber,
+        });
+    }
   } else {
     await applicationContext
       .getUseCases()
@@ -87,20 +95,11 @@ export const submitPaperFilingAction = async ({
       });
   }
 
-  if (generateCoversheet && caseDetail) {
-    await applicationContext
-      .getUseCases()
-      .addCoversheetInteractor(applicationContext, {
-        docketEntryId,
-        docketNumber: caseDetail.docketNumber,
-      });
-  }
-
   return {
     caseDetail: caseDetail || {},
     docketEntryId,
     docketNumber,
     overridePaperServiceAddress: true,
-    pdfUrl: paperServicePdfUrl || '',
+    pdfUrl: paperServicePdfUrl,
   };
 };
