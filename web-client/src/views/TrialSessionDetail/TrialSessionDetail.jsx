@@ -62,7 +62,14 @@ export const TrialSessionDetail = connect(
               >
                 {formattedTrialSessionDetails.isHybridSession && (
                   <div className="grid-container padding-0">
-                    <div className="grid-row hide-on-mobile margin-bottom-neg-205">
+                    <div
+                      className={`grid-row hide-on-mobile ${
+                        trialSessionDetailsHelper.showQcComplete
+                          ? 'margin-bottom-neg-205'
+                          : 'margin-bottom-2'
+                      }
+                        `}
+                    >
                       <label
                         className="dropdown-label-serif margin-right-3 padding-top-05"
                         htmlFor="hybrid-session-filter"
