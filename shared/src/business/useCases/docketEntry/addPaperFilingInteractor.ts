@@ -1,13 +1,10 @@
-const {
-  aggregatePartiesForService,
-} = require('../../utilities/aggregatePartiesForService');
-const {
+import {
   ALLOWLIST_FEATURE_FLAGS,
+  DOCKET_SECTION,
   DOCUMENT_RELATIONSHIPS,
   ROLES,
-} = require('../../entities/EntityConstants');
+} from '../../entities/EntityConstants';
 import { Case, isLeadCase } from '../../entities/cases/Case';
-import { DOCKET_SECTION } from '../../entities/EntityConstants';
 import { DocketEntry } from '../../entities/DocketEntry';
 import {
   ROLE_PERMISSIONS,
@@ -15,6 +12,7 @@ import {
 } from '../../../authorization/authorizationClientService';
 import { UnauthorizedError } from '../../../errors/errors';
 import { WorkItem } from '../../entities/WorkItem';
+import { aggregatePartiesForService } from '../../utilities/aggregatePartiesForService';
 import { pick } from 'lodash';
 
 /**
