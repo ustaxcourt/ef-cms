@@ -1,15 +1,18 @@
 import {
   contactPrimaryFromState,
   fakeFile,
+  refreshElasticsearchIndex,
   waitForCondition,
 } from '../helpers';
 import { formattedWorkQueue as formattedWorkQueueComputed } from '../../src/presenter/computeds/formattedWorkQueue';
 import { runCompute } from 'cerebral/test';
 import { withAppContextDecorator } from '../../src/withAppContext';
 
-const formattedWorkQueue = withAppContextDecorator(formattedWorkQueueComputed);
-
 export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
+  const formattedWorkQueue = withAppContextDecorator(
+    formattedWorkQueueComputed,
+  );
+
   return it('DocketClerk adds miscellaneous paper filing', async () => {
     await cerebralTest.runSequence('gotoCaseDetailSequence', {
       docketNumber: cerebralTest.docketNumber,
@@ -69,6 +72,8 @@ export const docketClerkAddsMiscellaneousPaperFiling = cerebralTest => {
 
     expect(miscellaneousDocument.documentTitle).not.toContain('Miscellaneous');
     expect(miscellaneousDocument.documentTitle).toEqual('A title');
+
+    await refreshElasticsearchIndex();
 
     await cerebralTest.runSequence('gotoWorkQueueSequence');
     expect(cerebralTest.getState('currentPage')).toEqual('WorkQueue');
