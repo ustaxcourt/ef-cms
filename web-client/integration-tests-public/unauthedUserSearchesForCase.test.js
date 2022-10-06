@@ -17,6 +17,7 @@ import { unauthedUserNavigatesToPublicSite } from './journey/unauthedUserNavigat
 import { unauthedUserSearchesByDocketNumber } from './journey/unauthedUserSearchesByDocketNumber';
 import { unauthedUserSearchesByMeta } from './journey/unauthedUserSearchesByMeta';
 import { unauthedUserViewsCaseDetail } from './journey/unauthedUserViewsCaseDetail';
+import { unauthedUserViewsFilteredDocketRecord } from './journey/unauthedUserViewsFilteredDocketRecord';
 import { unauthedUserViewsPrintableDocketRecord } from './journey/unauthedUserViewsPrintableDocketRecord';
 
 const cerebralTest = setupTest();
@@ -114,5 +115,6 @@ describe('Unauthed user searches for a case and views a case detail page', () =>
   unauthedUserSearchesByMeta(cerebralTest);
   unauthedUserSearchesByDocketNumber(cerebralTest, testClient);
   unauthedUserViewsCaseDetail(cerebralTest);
+  unauthedUserViewsFilteredDocketRecord(cerebralTest);
   unauthedUserViewsPrintableDocketRecord(cerebralTest);
 });
