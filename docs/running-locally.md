@@ -84,6 +84,11 @@ All of the applications dependencies are managed via our `package.json` and `pac
 
 `npm install`
 
+### 💻 MacOS Monterey+ 
+
+There is a conflict on `port 5000` with the public API and AirPlay Receiver. 
+
+Disable AirPlay Receiver: System Preferences --> Sharing --> Uncheck "AirPlay Receiver" in the list.
 
 ### 🏃 Starting the Services
 

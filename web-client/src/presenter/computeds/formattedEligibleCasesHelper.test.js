@@ -678,4 +678,31 @@ describe('formattedTrialSessionDetails', () => {
       }),
     ]);
   });
+
+  it('should sort the high priority items correctly', () => {
+    const result = runCompute(formattedEligibleCasesHelper, {
+      state: {
+        trialSession: {
+          eligibleCases: [
+            {
+              docketNumber: '104-12',
+              isManuallyAdded: true,
+            },
+            {
+              docketNumber: '103-07',
+              isManuallyAdded: true,
+            },
+          ],
+        },
+      },
+    });
+    expect(result).toEqual([
+      expect.objectContaining({
+        docketNumber: '103-07',
+      }),
+      expect.objectContaining({
+        docketNumber: '104-12',
+      }),
+    ]);
+  });
 });

@@ -10,6 +10,7 @@ export const EligibleCases = connect(
   {
     formattedEligibleCases:
       state.formattedTrialSessionDetailsForFilteredEligibleCases,
+    formattedTrialSessionDetails: state.formattedTrialSessionDetails,
     trialSessionDetailsHelper: state.trialSessionDetailsHelper,
     trialSessionId: state.trialSession.trialSessionId,
     updateQcCompleteForTrialSequence:
@@ -23,11 +24,36 @@ export const EligibleCases = connect(
   }) {
     return (
       <React.Fragment>
-        {trialSessionDetailsHelper.showQcComplete && (
-          <div className="float-right text-semibold margin-top-neg-3 margin-bottom-2">
-            Completed: {trialSessionDetailsHelper.eligibleCaseQcCompleteCount}
-          </div>
-        )}
+        <div className="grid-row float-right text-semibold margin-bottom-2">
+          {trialSessionDetailsHelper.showSmallAndRegularQcComplete && (
+            <div className="grid-row">
+              <div className="margin-right-50 margin-right-mobile">
+                Regular:{' '}
+                <span className="font-weight-normal">
+                  {
+                    trialSessionDetailsHelper.eligibleRegularCaseQcTotalCompleteCount
+                  }
+                </span>
+              </div>
+              <div className="margin-right-50 margin-right-mobile">
+                Small:{' '}
+                <span className="font-weight-normal">
+                  {
+                    trialSessionDetailsHelper.eligibleSmallCaseQcTotalCompleteCount
+                  }
+                </span>
+              </div>
+            </div>
+          )}
+          {trialSessionDetailsHelper.showQcComplete && (
+            <div>
+              Total Completed:{' '}
+              <span className="font-weight-normal">
+                {trialSessionDetailsHelper.eligibleTotalCaseQcCompleteCount}
+              </span>
+            </div>
+          )}
+        </div>
         <table
           aria-describedby="eligible-cases-tab"
           className="usa-table ustc-table trial-sessions subsection"
@@ -35,7 +61,7 @@ export const EligibleCases = connect(
         >
           <thead>
             <tr>
-              <th></th>
+              <th aria-label="consolidated group indicator"></th>
               <th aria-label="Docket Number">Docket No.</th>
               <th aria-label="manually added indicator"></th>
               <th>Case Title</th>

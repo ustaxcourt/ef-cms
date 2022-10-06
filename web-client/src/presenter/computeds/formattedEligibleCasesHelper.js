@@ -1,5 +1,8 @@
 import { DOCKET_NUMBER_SUFFIXES } from '../../../../shared/src/business/entities/EntityConstants';
-import { formatCase } from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
+import {
+  formatCase,
+  getSortableDocketNumber,
+} from '../../../../shared/src/business/utilities/getFormattedTrialSessionDetails';
 import { setConsolidationFlagsForDisplay } from '../../../../shared/src/business/utilities/setConsolidationFlagsForDisplay';
 import { state } from 'cerebral';
 
@@ -7,7 +10,7 @@ const groupKeySymbol = Symbol('group');
 
 const addGroupSymbol = (object, value) => {
   Object.defineProperty(object, groupKeySymbol, {
-    enumerable: false,
+    enumerable: true,
     value,
     writable: true,
   });
@@ -45,19 +48,20 @@ const compareTrialSessionEligibleCases = eligibleCases => {
   const groups = getPriorityGroups(eligibleCases);
 
   return (a, b) => {
-    const aSortString = getFullSortString(a, groups[a[groupKeySymbol]]);
-    const bSortString = getFullSortString(b, groups[b[groupKeySymbol]]);
+    const aSortString = getEligibleDocketNumberSortString(
+      a,
+      groups[a[groupKeySymbol]],
+    );
+    const bSortString = getEligibleDocketNumberSortString(
+      b,
+      groups[b[groupKeySymbol]],
+    );
     return aSortString.localeCompare(bSortString);
   };
 };
 
-const getSortableDocketNumber = docketNumber => {
-  const [number, year] = docketNumber.split('-');
-  return `${year}-${number.padStart(6, '0')}`;
-};
-
-const getFullSortString = (theCase, cases) => {
-  const leadCase = cases.find(
+const getEligibleDocketNumberSortString = (theCase, casesInGroup) => {
+  const leadCase = casesInGroup.find(
     aCase => aCase.docketNumber === theCase.leadDocketNumber,
   );
 

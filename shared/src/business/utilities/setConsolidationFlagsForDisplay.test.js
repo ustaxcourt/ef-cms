@@ -80,4 +80,44 @@ describe('setConsolidationFlagsForDisplay', () => {
       shouldIndent: true,
     });
   });
+
+  it('should not indent the case item if the lead case is in the cases group', () => {
+    const mockCaseItem = {
+      docketNumber: '303-20',
+      leadDocketNumber: '300-20',
+    };
+    const result = setConsolidationFlagsForDisplay(
+      mockCaseItem,
+      [
+        {
+          docketNumber: '300-20',
+        },
+      ],
+      true,
+    );
+
+    expect(result).toEqual({
+      ...mockCaseItem,
+      consolidatedIconTooltipText: 'Consolidated case',
+      inConsolidatedGroup: true,
+      leadCase: false,
+      shouldIndent: undefined,
+    });
+  });
+
+  it('should NOT indent the case when the lead case is missing from the case list and skipPriorityStatus is true', () => {
+    const mockCaseItem = {
+      docketNumber: '303-20',
+      leadDocketNumber: '300-20',
+    };
+    const result = setConsolidationFlagsForDisplay(mockCaseItem, [], true);
+
+    expect(result).toEqual({
+      ...mockCaseItem,
+      consolidatedIconTooltipText: 'Consolidated case',
+      inConsolidatedGroup: true,
+      leadCase: false,
+      shouldIndent: undefined,
+    });
+  });
 });

@@ -70,28 +70,59 @@ exports.formatCase = ({
     });
   }
 
-  applicationContext
+  const newCaseItem = applicationContext
     .getUtilities()
     .setConsolidationFlagsForDisplay(caseItem, eligibleCases);
 
-  return caseItem;
+  return newCaseItem;
 };
 
-exports.compareCasesByDocketNumber = (a, b) => {
-  if (!a || !a.docketNumber || !b || !b.docketNumber) {
-    return 0;
-  }
-
-  const [numberA, yearA] = a.docketNumber.split('-');
-  const [numberB, yearB] = b.docketNumber.split('-');
-
-  let yearDifference = +yearA - +yearB;
-  if (yearDifference === 0) {
-    return +numberA - +numberB;
-  } else {
-    return yearDifference;
-  }
+const getSortableDocketNumber = docketNumber => {
+  const docketNumberSplit = docketNumber.split('-');
+  docketNumberSplit[0] = docketNumberSplit[0].padStart(6, '0');
+  return `${docketNumberSplit[1]}${docketNumberSplit[0]}`;
 };
+
+exports.getSortableDocketNumber = getSortableDocketNumber;
+
+const getDocketNumberSortString = ({ allCases = [], theCase }) => {
+  const leadCase = allCases.find(
+    aCase => aCase.docketNumber === theCase.leadDocketNumber,
+  );
+
+  const isLeadCaseInList = !!theCase.leadDocketNumber && !!leadCase;
+
+  return `${getSortableDocketNumber(
+    isLeadCaseInList
+      ? theCase.docketNumber === theCase.leadDocketNumber
+        ? theCase.docketNumber
+        : theCase.leadDocketNumber
+      : theCase.docketNumber,
+  )}-${getSortableDocketNumber(theCase.docketNumber)}`;
+};
+
+const compareCasesByDocketNumberFactory =
+  ({ allCases }) =>
+  (a, b) => {
+    const aSortString = getDocketNumberSortString({
+      allCases,
+      theCase: a,
+    });
+    const bSortString = getDocketNumberSortString({
+      allCases,
+      theCase: b,
+    });
+    return aSortString.localeCompare(bSortString);
+  };
+
+const compareCasesByDocketNumber = (a, b) => {
+  const aSortString = getSortableDocketNumber(a.docketNumber);
+  const bSortString = getSortableDocketNumber(b.docketNumber);
+  return aSortString.localeCompare(bSortString);
+};
+
+exports.compareCasesByDocketNumberFactory = compareCasesByDocketNumberFactory;
+exports.compareCasesByDocketNumber = compareCasesByDocketNumber;
 
 exports.formattedTrialSessionDetails = ({
   applicationContext,
@@ -99,20 +130,51 @@ exports.formattedTrialSessionDetails = ({
 }) => {
   if (!trialSession) return undefined;
 
-  trialSession.allCases = (trialSession.calendaredCases || [])
-    .map(caseItem =>
-      exports.formatCase({
-        applicationContext,
-        caseItem,
-        setFilingPartiesCode: true,
-      }),
-    )
-    .sort(exports.compareCasesByDocketNumber);
+  const allCases = (trialSession.calendaredCases || []).map(caseItem =>
+    exports.formatCase({
+      applicationContext,
+      caseItem,
+      setFilingPartiesCode: true,
+    }),
+  );
 
-  [trialSession.inactiveCases, trialSession.openCases] = partition(
-    trialSession.allCases,
+  const [inactiveCases, openCases] = partition(
+    allCases,
     item => item.removedFromTrial === true,
   );
+
+  trialSession.openCases = openCases
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, openCases, true),
+    )
+    .sort(compareCasesByDocketNumberFactory({ allCases: openCases }));
+
+  trialSession.inactiveCases = inactiveCases
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, inactiveCases, true),
+    )
+    .sort(
+      compareCasesByDocketNumberFactory({
+        allCases: inactiveCases,
+      }),
+    );
+
+  trialSession.allCases = allCases
+    .map(caseItem =>
+      applicationContext
+        .getUtilities()
+        .setConsolidationFlagsForDisplay(caseItem, allCases, true),
+    )
+    .sort(
+      compareCasesByDocketNumberFactory({
+        allCases,
+        applicationContext,
+      }),
+    );
 
   trialSession.formattedTerm = `${
     trialSession.term

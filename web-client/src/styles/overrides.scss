@@ -11,10 +11,14 @@ option:first-child {
   font-weight: initial;
 }
 
-#inline-select {
+.inline-select {
   display: inline;
   max-width: 70%;
   margin-left: 0.5rem;
+}
+
+.margin-left-1pt5rem:not(:first-child) {
+  margin-left: 1.5rem;
 }
 
 .create-case-steps p {
@@ -270,6 +274,10 @@ option:first-child {
   margin-top: 7.7rem;
 }
 
+.margin-right-50 {
+  margin-right: 50px;
+}
+
 p {
   max-width: 700px;
   line-height: 24px;
@@ -325,10 +333,16 @@ textarea {
 }
 
 input[type='file']::-webkit-file-upload-button {
-  appearance: initial;
   border-radius: 5px;
+  appearance: initial;
 }
 
 .modal-button-link .svg-inline--fa {
   margin-right: 0.5rem;
+}
+
+@media only screen and (max-width: $medium-screen + 180px) {
+  .margin-right-mobile {
+    margin-right: 20px;
+  }
 }

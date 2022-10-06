@@ -3,6 +3,7 @@ const { isLeadCase } = require('../entities/cases/Case');
 exports.setConsolidationFlagsForDisplay = (
   caseItem,
   eligibleCasesInGroup = [],
+  skipPriorityStatus = false,
 ) => {
   const newCaseItem = { ...caseItem };
   newCaseItem.inConsolidatedGroup = newCaseItem.leadCase = false;
@@ -19,7 +20,7 @@ exports.setConsolidationFlagsForDisplay = (
         theCase => theCase.docketNumber === newCaseItem.leadDocketNumber,
       );
 
-      if (leadCase) {
+      if (!!leadCase && !skipPriorityStatus) {
         newCaseItem.shouldIndent = true;
       }
     }
