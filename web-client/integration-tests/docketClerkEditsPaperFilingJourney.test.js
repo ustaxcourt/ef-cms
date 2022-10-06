@@ -8,6 +8,7 @@ import {
   waitForCondition,
 } from './helpers';
 import { docketClerkAddsMiscellaneousPaperFiling } from './journey/docketClerkAddsMiscellaneousPaperFiling';
+import { docketClerkServesPaperFilingFromDocumentQC } from './journey/docketClerkServesPaperFilingFromDocumentQC';
 import { petitionsClerkServesElectronicCaseToIrs } from './journey/petitionsClerkServesElectronicCaseToIrs';
 
 describe('Docket Clerk edits a paper filing journey', () => {
@@ -192,4 +193,5 @@ describe('Docket Clerk edits a paper filing journey', () => {
   });
 
   docketClerkAddsMiscellaneousPaperFiling(cerebralTest);
+  docketClerkServesPaperFilingFromDocumentQC(cerebralTest);
 });

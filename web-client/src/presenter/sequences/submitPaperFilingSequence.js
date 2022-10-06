@@ -17,7 +17,6 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -33,11 +32,27 @@ import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/sugg
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const savePaperFiling = [
+const savePaperFilingMultiDocketableFlow = [
   closeFileUploadStatusModalAction,
   setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
   submitPaperFilingAction,
+];
+
+const savePaperFilingNotMultiDocketableFlow = [
+  submitPaperFilingAction,
+  setCaseAction,
+  closeFileUploadStatusModalAction,
+  getShouldGoToPaperServiceAction,
+  {
+    no: [
+      getDocketEntryAlertSuccessAction,
+      setAlertSuccessAction,
+      setSaveAlertsForNavigationAction,
+      navigateToCaseDetailAction,
+    ],
+    yes: [setPdfPreviewUrlAction, gotoPrintPaperServiceSequence],
+  },
 ];
 
 export const submitPaperFilingSequence = [
@@ -66,38 +81,32 @@ export const submitPaperFilingSequence = [
         success: [
           stopShowValidationAction,
           clearAlertsAction,
-          isFileAttachedAction,
+          isEditingDocketEntryAction,
           {
-            no: savePaperFiling,
-            yes: [
-              openFileUploadStatusModalAction,
-              uploadDocketEntryFileAction,
+            no: [
+              isFileAttachedAction,
               {
-                error: [openFileUploadErrorModal],
-                success: [
-                  isEditingDocketEntryAction,
+                no: savePaperFilingMultiDocketableFlow,
+                yes: [
+                  openFileUploadStatusModalAction,
+                  uploadDocketEntryFileAction,
                   {
-                    no: [savePaperFiling],
-                    yes: [
-                      getDocketNumbersForConsolidatedServiceAction,
-                      submitPaperFilingAction,
-                      setCaseAction,
-                      closeFileUploadStatusModalAction,
-                      setDocketEntryIdAction,
-                      getShouldGoToPaperServiceAction,
-                      {
-                        no: [
-                          getDocketEntryAlertSuccessAction,
-                          setAlertSuccessAction,
-                          setSaveAlertsForNavigationAction,
-                          navigateToCaseDetailAction,
-                        ],
-                        yes: [
-                          setPdfPreviewUrlAction,
-                          gotoPrintPaperServiceSequence,
-                        ],
-                      },
-                    ],
+                    error: [openFileUploadErrorModal],
+                    success: savePaperFilingMultiDocketableFlow,
+                  },
+                ],
+              },
+            ],
+            yes: [
+              isFileAttachedAction,
+              {
+                no: savePaperFilingNotMultiDocketableFlow,
+                yes: [
+                  openFileUploadStatusModalAction,
+                  uploadDocketEntryFileAction,
+                  {
+                    error: [openFileUploadErrorModal],
+                    success: savePaperFilingNotMultiDocketableFlow,
                   },
                 ],
               },
