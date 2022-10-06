@@ -1,3 +1,4 @@
+import { BindedSelect } from '../../ustc-ui/BindedSelect/BindedSelect';
 import { Button } from '../../ustc-ui/Button/Button';
 import { OpenPrintableDocketRecordModal } from '../DocketRecord/OpenPrintableDocketRecordModal';
 import { connect } from '@cerebral/react';
@@ -6,6 +7,8 @@ import React from 'react';
 
 export const PublicDocketRecordHeader = connect(
   {
+    PUBLIC_DOCKET_RECORD_FILTER_OPTIONS:
+      state.constants.PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
     docketNumber: state.caseDetail.docketNumber,
     gotoPublicPrintableDocketRecordSequence:
       sequences.gotoPublicPrintableDocketRecordSequence,
@@ -15,6 +18,7 @@ export const PublicDocketRecordHeader = connect(
   function PublicDocketRecordHeader({
     docketNumber,
     gotoPublicPrintableDocketRecordSequence,
+    PUBLIC_DOCKET_RECORD_FILTER_OPTIONS,
     publicCaseDetailHelper,
     showModal,
   }) {
@@ -40,7 +44,31 @@ export const PublicDocketRecordHeader = connect(
         </div>
         <div className="grid-container padding-0 docket-record-header">
           <div className="grid-row margin-bottom-2">
-            <div className="tablet:grid-col-10">
+            <div className="tablet:grid-col-4">
+              <label
+                className="dropdown-label-serif margin-right-3"
+                htmlFor="inline-select"
+                id="docket-record-filter-label"
+              >
+                Filter by
+              </label>
+              <BindedSelect
+                aria-describedby="docket-record-filter-label"
+                aria-label="docket record filter"
+                bind="sessionMetadata.docketRecordFilter"
+                className="select-left inline-select"
+                name="docketRecordFilter"
+              >
+                {Object.entries(PUBLIC_DOCKET_RECORD_FILTER_OPTIONS).map(
+                  ([key, value]) => (
+                    <option key={`filter-${key}`} value={value}>
+                      {value}
+                    </option>
+                  ),
+                )}
+              </BindedSelect>
+            </div>
+            <div className="tablet:grid-col-8">
               <Button
                 link
                 aria-hidden="true"
