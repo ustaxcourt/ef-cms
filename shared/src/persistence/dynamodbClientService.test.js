@@ -4,7 +4,6 @@ const {
 const {
   batchDelete,
   batchGet,
-  delete: deleteObj,
   describeDeployTable,
   describeTable,
   get,
@@ -12,6 +11,7 @@ const {
   put,
   query,
   queryFull,
+  remove: deleteObj,
   scan,
   update,
   updateConsistent,
