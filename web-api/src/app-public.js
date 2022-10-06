@@ -31,7 +31,7 @@ app.use(async (req, res, next) => {
     set(currentInvoke, 'event.requestContext.identity.sourceIp', 'localhost');
     const {
       get,
-    } = require('../../shared/src/persistence/dynamodbClientService.js');
+    } = require('../../shared/src/persistence/dynamodbClientService.ts');
     const whitelist = await get({
       Key: {
         pk: 'allowed-terminal-ips',

@@ -1,7 +1,13 @@
-const { getUserById } = require('./getUserById');
-const { updateUserRecords } = require('./updateUserRecords');
+import { getUserById } from './getUserById';
+import { updateUserRecords } from './updateUserRecords';
 
-exports.updatePractitionerUser = async ({ applicationContext, user }) => {
+export const updatePractitionerUser = async ({
+  applicationContext,
+  user,
+}: {
+  applicationContext: IApplicationContext;
+  user: TUser;
+}) => {
   const { userId } = user;
 
   const oldUser = await getUserById({
