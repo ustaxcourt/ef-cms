@@ -162,7 +162,7 @@ describe('consolidated cases', () => {
       applicationContext: expect.anything(),
       clientConnectionId,
       message: expect.objectContaining({
-        action: 'file_and_serve_court_issued_document_complete',
+        action: 'serve_document_complete',
         alertSuccess: {
           message: 'Document served to selected cases in group. ',
           overwritable: false,

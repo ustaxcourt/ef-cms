@@ -6,9 +6,9 @@ import { generateTitleForPaperFilingAction } from '../actions/FileDocument/gener
 import { getComputedFormDateFactoryAction } from '../actions/getComputedFormDateFactoryAction';
 import { getDocketEntryAlertSuccessAction } from '../actions/DocketEntry/getDocketEntryAlertSuccessAction';
 import { getDocketNumbersForConsolidatedServiceAction } from '../actions/getDocketNumbersForConsolidatedServiceAction';
-import { getDocumentIdAction } from '../actions/getDocumentIdAction';
 import { getShouldGoToPaperServiceAction } from '../actions/DocketEntry/getShouldGoToPaperServiceAction';
 import { gotoPrintPaperServiceSequence } from './gotoPrintPaperServiceSequence';
+import { isEditingDocketEntryAction } from '../actions/CourtIssuedDocketEntry/isEditingDocketEntryAction';
 import { isFileAttachedAction } from '../actions/isFileAttachedAction';
 import { navigateToCaseDetailAction } from '../actions/navigateToCaseDetailAction';
 import { openFileUploadErrorModal } from '../actions/openFileUploadErrorModal';
@@ -17,7 +17,6 @@ import { setAlertErrorAction } from '../actions/setAlertErrorAction';
 import { setAlertSuccessAction } from '../actions/setAlertSuccessAction';
 import { setCaseAction } from '../actions/setCaseAction';
 import { setComputeFormDateFactoryAction } from '../actions/setComputeFormDateFactoryAction';
-import { setDocketEntryIdAction } from '../actions/setDocketEntryIdAction';
 import { setDocumentIsRequiredAction } from '../actions/DocketEntry/setDocumentIsRequiredAction';
 import { setFilersFromFilersMapAction } from '../actions/setFilersFromFilersMapAction';
 import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPreviewUrlAction';
@@ -25,7 +24,7 @@ import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNav
 import { setShowModalFactoryAction } from '../actions/setShowModalFactoryAction';
 import { setValidationAlertErrorsAction } from '../actions/setValidationAlertErrorsAction';
 import { setValidationErrorsAction } from '../actions/setValidationErrorsAction';
-import { showProgressSequenceDecorator } from '../utilities/showProgressSequenceDecorator';
+import { setWaitingForResponseAction } from '../actions/setWaitingForResponseAction';
 import { startShowValidationAction } from '../actions/startShowValidationAction';
 import { stopShowValidationAction } from '../actions/stopShowValidationAction';
 import { submitPaperFilingAction } from '../actions/DocketEntry/submitPaperFilingAction';
@@ -33,12 +32,17 @@ import { suggestSaveForLaterValidationAction } from '../actions/DocketEntry/sugg
 import { uploadDocketEntryFileAction } from '../actions/DocketEntry/uploadDocketEntryFileAction';
 import { validateDocketEntryAction } from '../actions/DocketEntry/validateDocketEntryAction';
 
-const savePaperFiling = showProgressSequenceDecorator([
+const savePaperFilingMultiDocketableFlow = [
+  closeFileUploadStatusModalAction,
+  setWaitingForResponseAction,
   getDocketNumbersForConsolidatedServiceAction,
+  submitPaperFilingAction,
+];
+
+const savePaperFilingNotMultiDocketableFlow = [
   submitPaperFilingAction,
   setCaseAction,
   closeFileUploadStatusModalAction,
-  setDocketEntryIdAction,
   getShouldGoToPaperServiceAction,
   {
     no: [
@@ -49,7 +53,7 @@ const savePaperFiling = showProgressSequenceDecorator([
     ],
     yes: [setPdfPreviewUrlAction, gotoPrintPaperServiceSequence],
   },
-]);
+];
 
 export const submitPaperFilingSequence = [
   checkForActiveBatchesAction,
@@ -77,16 +81,34 @@ export const submitPaperFilingSequence = [
         success: [
           stopShowValidationAction,
           clearAlertsAction,
-          isFileAttachedAction,
+          isEditingDocketEntryAction,
           {
-            no: savePaperFiling,
-            yes: [
-              openFileUploadStatusModalAction,
-              getDocumentIdAction,
-              uploadDocketEntryFileAction,
+            no: [
+              isFileAttachedAction,
               {
-                error: [openFileUploadErrorModal],
-                success: savePaperFiling,
+                no: savePaperFilingMultiDocketableFlow,
+                yes: [
+                  openFileUploadStatusModalAction,
+                  uploadDocketEntryFileAction,
+                  {
+                    error: [openFileUploadErrorModal],
+                    success: savePaperFilingMultiDocketableFlow,
+                  },
+                ],
+              },
+            ],
+            yes: [
+              isFileAttachedAction,
+              {
+                no: savePaperFilingNotMultiDocketableFlow,
+                yes: [
+                  openFileUploadStatusModalAction,
+                  uploadDocketEntryFileAction,
+                  {
+                    error: [openFileUploadErrorModal],
+                    success: savePaperFilingNotMultiDocketableFlow,
+                  },
+                ],
               },
             ],
           },
