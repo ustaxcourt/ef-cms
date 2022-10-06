@@ -13,7 +13,7 @@ import { setPdfPreviewUrlAction } from '../actions/CourtIssuedOrder/setPdfPrevie
 import { setSaveAlertsForNavigationAction } from '../actions/setSaveAlertsForNavigationAction';
 import { unsetWaitingForResponseAction } from '../actions/unsetWaitingForResponseAction';
 
-export const serveCourtIssuedDocumentCompleteSequence = [
+export const serveDocumentCompleteSequence = [
   setPdfPreviewUrlAction,
   setAlertSuccessAction,
   clearModalAction,

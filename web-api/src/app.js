@@ -610,7 +610,7 @@ const { validatePdfLambda } = require('./documents/validatePdfLambda');
   );
   app.post(
     '/case-documents/:docketNumber/paper-filing',
-    lambdaWrapper(addPaperFilingLambda),
+    lambdaWrapper(addPaperFilingLambda, { isAsync: true }),
   );
   app.post(
     '/case-documents/:docketNumber/court-issued-docket-entry',

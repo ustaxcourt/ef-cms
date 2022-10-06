@@ -5,6 +5,9 @@ import { submitPaperFilingAction } from './submitPaperFilingAction';
 
 describe('submitPaperFilingAction', () => {
   const docketNumbers = ['123-45'];
+  const clientConnectionId = '999999999';
+  const mockDocketEntryId = 'be944d7c-63ac-459b-8a72-1a3c9e71ef70';
+
   let caseDetail;
 
   beforeAll(() => {
@@ -16,124 +19,62 @@ describe('submitPaperFilingAction', () => {
     };
   });
 
-  it('file a new docket entry with an uploaded file', async () => {
-    applicationContext
-      .getUseCases()
-      .addPaperFilingInteractor.mockReturnValue({ caseDetail });
-
+  it('should make a call to add a new docket entry when state.isEditingDocketEntry is false', async () => {
     const result = await runAction(submitPaperFilingAction, {
       modules: {
         presenter,
       },
       props: {
-        docketNumbers,
-        primaryDocumentFileId: 'document-id-123',
+        primaryDocumentFileId: mockDocketEntryId,
       },
       state: {
         caseDetail,
-        document: '123-456-789-abc',
+        clientConnectionId,
         form: {
           primaryDocumentFile: {},
         },
       },
     });
 
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().addPaperFilingInteractor,
-    ).toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().validatePdfInteractor,
-    ).toHaveBeenCalled();
-
-    expect(
-      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
-    ).toHaveBeenCalled();
-    expect(result.output).toEqual({
-      caseDetail,
-      docketEntryId: 'document-id-123',
-      docketNumber: caseDetail.docketNumber,
-      overridePaperServiceAddress: true,
-    });
-  });
-
-  it('file a new docket entry with an uploaded file and return a paper service pdf url', async () => {
-    const mockPdfUrl = 'www.example.com';
-    applicationContext.getUseCases().addPaperFilingInteractor.mockReturnValue({
-      caseDetail,
-      paperServicePdfUrl: mockPdfUrl,
-    });
-
-    const result = await runAction(submitPaperFilingAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        docketNumbers,
-        primaryDocumentFileId: 'document-id-123',
-      },
-      state: {
-        caseDetail,
-        document: '123-456-789-abc',
-        form: {
-          primaryDocumentFile: {},
-        },
-      },
-    });
-
-    expect(result.output.pdfUrl).toEqual(mockPdfUrl);
-  });
-
-  it('file a new docket entry with an uploaded file, but does not generate a coversheet when saved for later', async () => {
-    applicationContext
-      .getUseCases()
-      .addPaperFilingInteractor.mockReturnValue({ caseDetail });
-
-    const result = await runAction(submitPaperFilingAction, {
-      modules: {
-        presenter,
-      },
-      props: {
-        docketNumbers,
-        isSavingForLater: true,
-        primaryDocumentFileId: 'document-id-123',
-      },
-      state: {
-        caseDetail,
-        document: '123-456-789-abc',
-        form: {
-          primaryDocumentFile: {},
-        },
-      },
-    });
-
-    expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
-    ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().addPaperFilingInteractor,
-    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
     ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addPaperFilingInteractor,
+    ).toHaveBeenCalled();
     expect(result.output).toEqual({
-      caseDetail,
-      docketEntryId: 'document-id-123',
+      caseDetail: {},
+      docketEntryId: mockDocketEntryId,
       docketNumber: caseDetail.docketNumber,
       overridePaperServiceAddress: true,
+      pdfUrl: undefined,
     });
   });
 
-  it('file a new docket entry without an uploaded file', async () => {
-    applicationContext
-      .getUseCases()
-      .addPaperFilingInteractor.mockReturnValue({ caseDetail });
+  it('should NOT return a paper service pdf url when adding a new paper filing because the URL will be returned via a websocket notification after all document proccessing has finished', async () => {
+    const result = await runAction(submitPaperFilingAction, {
+      modules: {
+        presenter,
+      },
+      props: {
+        primaryDocumentFileId: mockDocketEntryId,
+      },
+      state: {
+        caseDetail,
+        clientConnectionId,
+        form: {
+          primaryDocumentFile: {},
+        },
+      },
+    });
 
+    expect(result.output.pdfUrl).toBeUndefined();
+  });
+
+  it('should make a call to add a new docket entry even when a file has not been uploaded and the user is saving for later', async () => {
     const result = await runAction(submitPaperFilingAction, {
       modules: {
         presenter,
@@ -144,28 +85,30 @@ describe('submitPaperFilingAction', () => {
       },
       state: {
         caseDetail,
-        document: '123-456-789-abc',
+        clientConnectionId,
         form: {},
       },
     });
 
     expect(
-      applicationContext.getUseCases().addCoversheetInteractor,
+      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
     ).not.toHaveBeenCalled();
-    expect(
-      applicationContext.getUseCases().addPaperFilingInteractor,
-    ).toHaveBeenCalled();
     expect(
       applicationContext.getUseCases().validatePdfInteractor,
     ).not.toHaveBeenCalled();
     expect(
-      applicationContext.getUseCases().getStatusOfVirusScanInteractor,
+      applicationContext.getUseCases().addCoversheetInteractor,
     ).not.toHaveBeenCalled();
+    expect(
+      applicationContext.getUseCases().addPaperFilingInteractor.mock
+        .calls[0][1],
+    ).toMatchObject({ clientConnectionId });
     expect(result.output).toEqual({
-      caseDetail,
+      caseDetail: {},
       docketEntryId: expect.anything(),
       docketNumber: caseDetail.docketNumber, // uuidv4
       overridePaperServiceAddress: true,
+      pdfUrl: undefined,
     });
   });
 

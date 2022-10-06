@@ -1,9 +1,6 @@
-import { addCoverToPdf } from '../addCoverToPdf';
-
 const {
   aggregatePartiesForService,
 } = require('../../utilities/aggregatePartiesForService');
-const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 const {
   createISODateString,
   formatDateString,
@@ -16,6 +13,8 @@ const {
   isAuthorized,
   ROLE_PERMISSIONS,
 } = require('../../../authorization/authorizationClientService');
+const { addCoverToPdf } = require('../addCoverToPdf');
+const { ALLOWLIST_FEATURE_FLAGS } = require('../../entities/EntityConstants');
 const { Case } = require('../../entities/cases/Case');
 const { DocketEntry } = require('../../entities/DocketEntry');
 const { NotFoundError, UnauthorizedError } = require('../../../errors/errors');
@@ -26,6 +25,7 @@ const { omit } = require('lodash');
  *
  * @param {Object} applicationContext the application context
  * @param {Object} providers the providers object
+ * @param {object} providers.clientConnectionId the client connection Id
  * @param {String[]} providers.docketNumbers the docket numbers that this docket entry needs to be filed and served on, will be one or more docket numbers
  * @param {String} providers.docketEntryId the ID of the docket entry being filed and served
  * @param {String} providers.subjectCaseDocketNumber the docket number that initiated the filing and service
@@ -34,10 +34,12 @@ const { omit } = require('lodash');
 export const serveExternallyFiledDocumentInteractor = async (
   applicationContext: IApplicationContext,
   {
+    clientConnectionId,
     docketEntryId,
     docketNumbers,
     subjectCaseDocketNumber,
   }: {
+    clientConnectionId: string;
     docketEntryId: string;
     docketNumbers: string[];
     subjectCaseDocketNumber: string;
@@ -109,7 +111,7 @@ export const serveExternallyFiledDocumentInteractor = async (
       applicationContext,
       docketEntryId,
       documentBytes: pdfData,
-  });
+    });
 
   await applicationContext
     .getPersistenceGateway()
@@ -122,7 +124,7 @@ export const serveExternallyFiledDocumentInteractor = async (
 
   let caseEntities = [];
   let serviceResults;
-  let stampedPdf; 
+  let stampedPdf;
 
   try {
     for (const docketNumber of docketNumbers) {
@@ -141,7 +143,7 @@ export const serveExternallyFiledDocumentInteractor = async (
       fileDocumentOnOneCase({
         applicationContext,
         caseEntity,
-        numberOfPages: (numberOfPages + coversheetLength),
+        numberOfPages: numberOfPages + coversheetLength,
         originalSubjectDocketEntry,
         user,
       }),
@@ -193,6 +195,25 @@ export const serveExternallyFiledDocumentInteractor = async (
     applicationContext,
     document: stampedPdf,
     key: originalSubjectDocketEntry.docketEntryId,
+  });
+
+  const successMessage =
+    docketNumbers.length > 1
+      ? 'Document served to selected cases in group. '
+      : 'Your entry has been added to the docket record.';
+
+  await applicationContext.getNotificationGateway().sendNotificationToUser({
+    applicationContext,
+    clientConnectionId,
+    message: {
+      action: 'serve_document_complete',
+      alertSuccess: {
+        message: successMessage,
+        overwritable: false,
+      },
+      pdfUrl: serviceResults ? serviceResults.pdfUrl : undefined,
+    },
+    userId: user.userId,
   });
 
   return serviceResults;
